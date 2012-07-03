@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+
+    <net.sourceforge.subsonic.androidapp.util.MyViewFlipper
+                 android:id="@+id/download_playlist_flipper"
+                 android:layout_width="fill_parent"
+                 android:layout_height="0dip"
+                 android:layout_weight="1">
+
+        <RelativeLayout
+                android:id="@+id/download_album_art_layout"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/album_art_background">
+
+            <ImageButton
+                    android:id="@+id/download_repeat"
+                    android:src="@drawable/media_repeat_off"
+                    android:background="@android:color/transparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:paddingTop="24dip"
+                    android:paddingLeft="8dip"
+                    android:paddingBottom="12dip"/>
+
+            <Button
+                    android:id="@+id/download_jukebox"
+                    android:text="RC"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:background="@android:color/transparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:layout_below="@+id/download_repeat"
+                    android:paddingTop="12dip"
+                    android:paddingLeft="14dip"
+                    android:paddingBottom="15dip"/>
+
+            <Button
+                    android:id="@+id/download_equalizer"
+                    android:text="EQ"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:background="@android:color/transparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:layout_alignParentRight="true"
+                    android:paddingTop="24dip"
+                    android:paddingRight="16dip"
+                    android:paddingBottom="12dip"/>
+
+            <Button
+                    android:id="@+id/download_visualizer"
+                    android:text="VIS"
+                    android:textStyle="bold"
+                    android:textSize="22sp"
+                    android:background="@android:color/transparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/download_equalizer"
+                    android:layout_alignBottom="@+id/download_jukebox"
+                    android:paddingTop="12dip"
+                    android:paddingRight="12dip"
+                    android:paddingBottom="12dip"/>
+
+            <ImageView
+                    android:id="@+id/download_album_art_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="24dip"
+                    android:scaleType="fitCenter"/>
+
+            <TextView
+                    android:id="@+id/download_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#c0c0c0"/>
+
+            <TextView
+                    android:id="@+id/download_song_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_above="@+id/download_status"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
+                    android:singleLine="true"
+                    android:textColor="@color/mediaControlForeground"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:ellipsize="end"/>
+
+            <LinearLayout
+                    android:id="@+id/download_visualizer_view_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="80dip"
+                    android:layout_marginRight="80dip"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_above="@+id/download_song_title"/>
+
+        </RelativeLayout>
+
+        <include layout="@layout/download_playlist"/>
+
+    </net.sourceforge.subsonic.androidapp.util.MyViewFlipper>
+
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="0dip"
+                  android:background="@color/mediaControlBackground"
+                  android:paddingTop="0dip"
+                  android:paddingBottom="0dip">
+        <ImageButton
+                android:id="@+id/download_shuffle"
+                android:src="@drawable/media_shuffle"
+                android:background="@android:color/transparent"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical|left"
+                android:layout_weight="1"
+                android:paddingLeft="4dip"/>
+        <ImageButton
+                android:id="@+id/download_previous"
+                android:src="@drawable/media_backward"
+                android:background="@android:color/transparent"
+                android:padding="0dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        <ImageButton
+                android:id="@+id/download_pause"
+                android:src="@drawable/media_pause"
+                android:background="@android:color/transparent"
+                android:padding="0dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        <ImageButton
+                android:id="@+id/download_stop"
+                android:src="@drawable/media_stop"
+                android:background="@android:color/transparent"
+                android:padding="0dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        <ImageButton
+                android:id="@+id/download_start"
+                android:src="@drawable/media_start"
+                android:background="@android:color/transparent"
+                android:padding="0dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        <ImageButton
+                android:id="@+id/download_next"
+                android:src="@drawable/media_forward"
+                android:background="@android:color/transparent"
+                android:padding="0dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        <ImageButton
+                android:id="@+id/download_toggle_list"
+                android:src="@drawable/media_toggle_list"
+                android:background="@android:color/transparent"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical|right"
+                android:layout_weight="1"
+                android:paddingRight="4dip"/>
+    </LinearLayout>
+
+    <include layout="@layout/download_slider"/>
+
+    <include layout="@layout/download_button_bar_flipper"/>
+
+</LinearLayout>
+

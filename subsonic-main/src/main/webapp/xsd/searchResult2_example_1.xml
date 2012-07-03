@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<subsonic-response xmlns="http://subsonic.org/restapi"
+                   status="ok" version="1.4.0">
+
+    <searchResult2>
+        <artist id="1" name="ABBA"/>
+        <album id="11" parent="1" title="Arrival" artist="ABBA" isDir="true" coverArt="22"/>
+        <album id="12" parent="1" title="Super Trouper" artist="ABBA" isDir="true" coverArt="23"/>
+        <song id="112" parent="11" title="Money, Money, Money" isDir="false"
+              album="Arrival" artist="ABBA" track="7" year="1978" genre="Pop" coverArt="25"
+              size="4910028" contentType="audio/flac" suffix="flac"
+              transcodedContentType="audio/mpeg" transcodedSuffix="mp3"
+              path="ABBA/Arrival/Money, Money, Money.mp3"/>
+    </searchResult2>
+
+</subsonic-response>
+

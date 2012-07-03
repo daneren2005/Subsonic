@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<subsonic-response xmlns="http://subsonic.org/restapi"
+                   status="ok" version="1.7.0">
+
+    <user username="sindre" email="sindre@activeobjects.no" scrobblingEnabled="true" adminRole="false" settingsRole="true" downloadRole="true" uploadRole="false" playlistRole="true"
+          coverArtRole="true" commentRole="true" podcastRole="true" streamRole="true" jukeboxRole="true" shareRole="false"/>
+
+</subsonic-response>
+

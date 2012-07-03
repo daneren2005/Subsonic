@@ -1,0 +1,11 @@
+/*
+* Taken from http://yui.yahooapis.com/2.8.0r4/build/fonts/fonts.css
+*/
+body {
+    font: 13px / 1.231 arial, helvetica, clean, sans-serif;
+}
+
+table {
+    font-size:inherit;
+    font:100%;
+}

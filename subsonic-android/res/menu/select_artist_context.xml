@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item 
+        android:id="@+id/artist_menu_play_now"
+        android:title="@string/common.play_now"
+        />
+
+    <item 
+        android:id="@+id/artist_menu_play_last"
+        android:title="@string/common.play_last"
+        />
+
+    <item 
+        android:id="@+id/artist_menu_pin"
+        android:title="@string/common.pin"
+        />
+        
+</menu>

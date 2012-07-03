@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<subsonic-response xmlns="http://subsonic.org/restapi"
+                   status="ok" version="1.8.0">
+
+    <song id="48228" parent="48203" title="You Shook Me All Night Long" album="Back In Black" artist="AC/DC"
+          isDir="false" coverArt="48203" created="2004-11-08T23:33:11" duration="210" bitRate="112" size="2945619"
+          suffix="mp3" contentType="audio/mpeg" isVideo="false"
+          path="ACDC/Back in black/ACDC - You Shook Me All Night Long.mp3"/>
+
+</subsonic-response>

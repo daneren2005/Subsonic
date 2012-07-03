@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="?android:attr/listPreferredItemHeight">>
+
+    <ImageView
+            android:id="@+id/album_coverart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:paddingLeft="6dip"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="left|center_vertical"
+            android:paddingLeft="6dip"
+            android:paddingRight="3dip">
+
+        <TextView
+                android:id="@+id/album_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:singleLine="true"
+                android:ellipsize="marquee"/>
+
+        <TextView
+                android:id="@+id/album_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:singleLine="true"/>
+
+    </LinearLayout>
+
+    <ImageView
+            android:src="@drawable/list_item_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:paddingRight="6dip"/>
+
+</LinearLayout>

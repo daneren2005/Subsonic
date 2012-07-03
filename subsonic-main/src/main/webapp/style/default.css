@@ -1,0 +1,245 @@
+/*
+ * CSS styleshet for default theme.
+ *
+ * Note that attributes that are typically changed by theme authors are
+ * placed at the top.
+  *
+ * Author: Sindre Mehus
+ */
+
+/* The primary background color (light blue). */
+.bgcolor1 {
+    background-color: #EFEFEF;
+}
+
+/* The secondary background color (darker blue). */
+.bgcolor2, .ruleTableHeader, .log {
+    background-color: #DEE3E7
+}
+
+/* Put stuff here if you need to customize any of the frames. */
+.mainframe {
+}
+.topframe {
+}
+.leftframe {
+}
+.rightframe {
+}
+.playlistframe {
+}
+
+/* Background color for selected header. */
+.headerSelected {
+    background-color: lightyellow;
+}
+
+/* Background color for form controls (use default). */
+input, select {
+}
+
+/* Hover color for form controls (use default). */
+input:hover, select:hover {
+}
+
+/* The primary foreground color (black). */
+body {
+    color: black;
+}
+
+/* The secondary foreground color used for h1, details etc (gray). */
+h1, .detail, .albumComment {
+    color: #696969;
+}
+
+/* Foreground color used for h2, bold and tr. */
+h2, b, tr {
+    color: #333333;
+}
+
+/* Link color */
+a:link, a:active, a:visited, a:link *, a:active *, a:visited * {
+    color: #006699
+}
+
+/* Link hover color */
+a:hover, a:hover * {
+    text-decoration: underline;
+    color: #DD6900
+}
+
+/* Color for warning messages. */
+.warning {
+    color: red;
+}
+
+/* Simple dark border. */
+.border1, .ruleTableHeader, .ruleTableCell, .headerSelected, .log {
+    border: 1px solid black;
+}
+
+/* Scrollbar colors (supported on IE and Opera) */
+body {
+    scrollbar-face-color: #DEE3E7;
+    scrollbar-highlight-color: #FFFFFF;
+    scrollbar-shadow-color: #DEE3E7;
+    scrollbar-3dlight-color: #D1D7DC;
+    scrollbar-arrow-color: #006699;
+    scrollbar-track-color: #EFEFEF;
+    scrollbar-darkshadow-color: #98AAB1;
+}
+
+/* Font 1 */
+body, h2, form, label, table, a {
+    font-family: verdana, arial, sans-serif;
+}
+
+/* Font 2 */
+h1, h1 a, .logo {
+    font-family: arial, sans-serif;
+}
+
+/***************************************************************************************
+ * The rest of the CSS is typically not changed in other themes (but not necessarily so).
+ ***************************************************************************************/
+
+body {
+    padding:0;
+    border:0;
+    margin:0.75em;
+    font-size: 9pt;
+    line-height: 1.5em;
+}
+
+p {
+    padding:0;
+    border:0;
+    margin:0 0 1em 0;
+}
+
+.dense {
+    white-space: nowrap;
+    margin: 0;
+    line-height: 1.3em
+}
+
+h1 {
+    white-space: nowrap;
+    font-size: 140%;
+    padding: 0 0 0.2em 0;
+    border: 0;
+    margin: 0;
+}
+
+h2 {
+    white-space: nowrap;
+    font-size: 100%;
+    margin: 1em 0 0.2em 0;
+}
+
+form {
+    font-size: 100%;
+    line-height: 140%;
+    padding: 0;
+    border: 0;
+    margin: 0;
+}
+
+input, select, textarea {
+    font-size: 9pt;
+}
+
+label {
+    font-size: 100%;
+    line-height: 140%;
+}
+
+table {
+    font-size: 100%;
+    line-height: 140%;
+    padding: 0;
+    border: 0;
+    margin: 0 0 0.4em 0;
+}
+
+/* Table with some white space above it.*/
+table.indent {
+    margin: 1em 0 0.4em 0;
+}
+
+a {
+    font-size: 100%;
+    text-decoration: none
+}
+
+img {
+    border-style: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.headerSelected {
+    padding: 0.25em;
+}
+
+.detail {
+    white-space: nowrap;
+    font-size: 8pt;
+    line-height: 1.25em;
+}
+
+.warning {
+    white-space: nowrap;
+}
+
+.logo {
+    white-space: nowrap;
+    font-size: 16pt;
+}
+
+.back, .forward {
+    background-position:center left;
+    background-repeat:no-repeat;
+    padding-left: 16px;
+    line-height: 16px;
+}
+
+.back {
+    background-image:url("../icons/back.gif");
+}
+
+.forward {
+    background-image:url("../icons/forward.gif");
+}
+
+.albumComment {
+    width: 50em;
+    font-size: 8pt;
+    line-height: 1.4em;
+    padding-top: 0.25em;
+}
+
+.log {
+    white-space: nowrap;
+    font-size: 8pt;
+    line-height: 1em;
+}
+
+.checkbox {
+}
+
+/* Table with simple lines between the cells. */
+.ruleTable {
+    border-collapse: collapse;
+}
+
+.ruleTableHeader, .ruleTableCell {
+    margin: 5px;
+    padding: 5px;
+}
+
+.ruleTableHeader {
+    font-weight: bold;
+}

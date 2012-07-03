@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<net.sourceforge.subsonic.androidapp.util.HorizontalSlider
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/download_progress_bar"
+        android:indeterminate="false"
+        android:background="@color/mediaControlBackground"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="7dip"
+        android:paddingRight="7dip"
+        android:paddingTop="3dip"
+        android:paddingBottom="7dip"/>

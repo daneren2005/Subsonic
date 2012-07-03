@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common.appname">Subsonic</string>
+    <string name="common.ok">OK</string>
+    <string name="common.save">Enregistrer</string>
+    <string name="common.cancel">Annuler</string>
+
+    <string name="main.welcome_title">Bienvenue!</string>
+    <string name="main.welcome_text">Bienvenue dans Subsonic! L\'application est configurée pour utiliser le serveur démo de Subsonic.
+		Après avoir configuré votre serveur personnel (disponible à partir de <b>subsonic.org</b>), veuillez accéder aux <b>Paramètres</b> et modifier la configuration pour vous y connecter.</string>
+    <string name="main.select_server">Sélectionner un serveur</string>
+    <string name="main.shuffle">Lecture aléatoire</string>
+    <string name="main.offline">Hors-ligne</string>
+    <string name="main.settings">Paramètres</string>
+    <string name="main.albums_title">Albums</string>
+    <string name="main.albums_newest">Plus récents</string>
+    <string name="main.albums_random">Aléatoire</string>
+    <string name="main.albums_highest">Mieux cotés</string>
+    <string name="main.albums_recent">Récemment joués</string>
+    <string name="main.albums_frequent">Fréquemment joués</string>
+
+    <!--<string name="menu.exit">TODO: Exit</string>-->
+    <!--<string name="menu.settings">TODO: Settings</string>-->
+    <!--<string name="menu.help">TODO: Help</string>-->
+
+    <string name="playlist.label">Playlists</string>
+
+    <string name="help.label">Aide</string>
+    <string name="help.title">Bienvenue dans Subsonic!</string>
+    <string name="help.back">Retour</string>
+    <string name="help.close">Fermer</string>
+    <string name="help.url">file:///android_asset/html/fr/index.html</string>
+    <string name="help.loading">Chargement...</string>
+
+    <string name="play_video.loading">Chargement de la vidéo...</string>
+    <string name="play_video.noplugin">Veuillez installer Adobe Flash Player à partir du marché Android.</string>
+
+    <string name="search.label">Recherche</string>
+    <string name="search.title">Recherche</string>
+    <string name="search.search">Cliquer pour rechercher</string>
+    <string name="search.no_match">Aucun résultat, veuillez essayer à nouveau</string>
+    <string name="search.artists">Artistes</string>
+    <string name="search.albums">Albums</string>
+    <string name="search.songs">Pièces</string>
+    <string name="search.more">Afficher plus</string>
+
+    <string name="progress.wait">Veuillez patienter...</string>
+
+    <string name="music_library.label">Bibliothèque musicale</string>
+    <string name="music_library.label_offline">Musique hors-ligne</string>
+
+    <string name="select_album.empty">Aucune musique trouvée</string>
+    <string name="select_album.select">Tout sélectionner</string>
+    <!--<string name="select_album.n_selected">TODO: %d tracks selected.</string>-->
+    <!--<string name="select_album.n_unselected">TODO: %d tracks unselected.</string>-->
+    <string name="select_album.more">Plus</string>
+    <string name="select_album.offline">Hors-ligne</string>
+    <string name="select_album.searching">Recherche en cours...</string>
+    <string name="select_album.no_sdcard">Erreur: Aucune carte SD disponible.</string>
+    <string name="select_album.no_network">Avis: Aucun réseau disponible.</string>
+    <string name="select_album.not_licensed">Serveur sans licence. %d jours d\'essai restant.</string>
+    <string name="select_album.donate_dialog_message">Obtenez des téléchargements illimités en donnant à Subsonic.</string>
+    <string name="select_album.donate_dialog_now">Maintenant</string>
+    <string name="select_album.donate_dialog_later">Plus tard</string>
+    <string name="select_album.donate_dialog_0_trial_days_left">La période d\'essai est terminée</string>
+
+    <string name="select_playlist.empty">Aucune playlist sur le serveur</string>
+
+    <string name="download.empty">Playlist vide</string>
+    <string name="download.playerstate_downloading">Téléchargement - %s</string>
+    <string name="download.playerstate_buffering">Mise en tampon</string>
+    <string name="download.playerstate_playing_shuffle">En jeu aléatoire</string>
+    <string name="download.menu_show_album">Afficher l\'album</string>
+    <string name="download.menu_lyrics">Paroles</string>
+    <string name="download.menu_remove">Retirer la pièce</string>
+    <string name="download.menu_remove_all">Retirer tout</string>
+    <string name="download.menu_shuffle">Mélanger</string>
+    <string name="download.menu_save">Enregistrer la playlist</string>
+    <string name="download.menu_shuffle_notification">Playlist mélangée</string>
+    <string name="download.playlist_title">Enregistrer la playlist</string>
+    <string name="download.playlist_name">Saisissez le nom de la playlist:</string>
+    <string name="download.playlist_saving">Enregistrement de la playlist \"%s\"...</string>
+    <string name="download.playlist_done">Playlist enregistrée avec succès.</string>
+    <string name="download.playlist_error">Échec de l\'enregistrement de la playlist, veuillez réessayer plus tard.</string>
+
+    <string name="song_details.all">%2$s, %1$s</string>
+    <string name="song_details.kbps">%d Kb/s</string>
+
+    <string name="lyrics.nomatch">Aucune parole trouvée</string>
+
+    <string name="error.label">Erreur</string>
+
+    <string name="settings.title">Paramètres de Subsonic</string>
+    <string name="settings.test_connection_title">Tester la connexion</string>
+    <string name="settings.servers_title">Serveurs</string>
+    <string name="settings.server_unused1">Inutilisé 1</string>
+    <string name="settings.server_unused2">Inutilisé 2</string>
+    <string name="settings.server_name">Nom</string>
+    <string name="settings.server_address">Adresse du serveur</string>
+    <string name="settings.server_username">Nom d\'usager</string>
+    <string name="settings.server_password">Mot de passe</string>
+    <string name="settings.cache_title">Cache musicale</string>
+    <string name="settings.preload">Pièces à pré-charger</string>
+    <string name="settings.cache_size">Taille de la cache</string>
+    <string name="settings.testing_connection">Connexion en cours de test...</string>
+    <string name="settings.testing_ok">Connexion correcte</string>
+    <string name="settings.testing_unlicensed">Connection correcte. Serveur sans licence.</string>
+    <string name="settings.connection_failure">Connection échouée.</string>
+    <string name="settings.invalid_url">Veuillez spécifier un URL valide.</string>
+    <string name="settings.invalid_username">Veuillez spécifier un nom d\'usager valide (sans espace à la fin).</string>
+    <string name="settings.appearance_title">Apparence</string>
+    <string name="settings.theme_title">Thème</string>
+    <string name="settings.theme_wheat">Blé</string>
+    <string name="settings.theme_light">Clair</string>
+    <string name="settings.theme_dark">Sombre</string>
+    <string name="settings.network_title">Réseau</string>
+    <string name="settings.max_bitrate_wifi">Débit maximal - Wi-Fi</string>
+    <string name="settings.max_bitrate_mobile">Débit maximal - Mobile</string>
+    <string name="settings.max_bitrate_32">32 Kb/s</string>
+    <string name="settings.max_bitrate_64">64 Kb/s</string>
+    <string name="settings.max_bitrate_80">80 Kb/s</string>
+    <string name="settings.max_bitrate_96">96 Kb/s</string>
+    <string name="settings.max_bitrate_112">112 Kb/s</string>
+    <string name="settings.max_bitrate_128">128 Kb/s</string>
+    <string name="settings.max_bitrate_160">160 Kb/s</string>
+    <string name="settings.max_bitrate_192">192 Kb/s</string>
+    <string name="settings.max_bitrate_256">256 Kb/s</string>
+    <string name="settings.max_bitrate_320">320 Kb/s</string>
+    <string name="settings.max_bitrate_unlimited">Illimité</string>
+    <string name="settings.preload_1">1 pièce</string>
+    <string name="settings.preload_2">2 pièces</string>
+    <string name="settings.preload_3">3 pièces</string>
+    <string name="settings.preload_5">5 pièces</string>
+    <string name="settings.preload_10">10 pièces</string>
+    <string name="settings.preload_unlimited">Illimité</string>
+    <string name="settings.cache_size_100">100 Mo</string>
+    <string name="settings.cache_size_200">200 Mo</string>
+    <string name="settings.cache_size_500">500 Mo</string>
+    <string name="settings.cache_size_1000">1 Go</string>
+    <string name="settings.cache_size_2000">2 Go</string>
+    <string name="settings.cache_size_5000">5 Go</string>
+    <string name="settings.cache_size_10000">10 Go</string>
+    <string name="settings.cache_size_20000">20 Go</string>
+    <string name="settings.cache_size_unlimited">Illimité</string>
+    <string name="settings.clear_search_history">Effacer l\'historique des recherches</string>
+    <string name="settings.search_history_cleared">Historique des recherches effacé</string>
+    <string name="settings.other_title">Autres paramètres</string>
+    <!--<string name="settings.scrobble_title">TODO: Scrobble to Last.fm</string>-->
+    <!--<string name="settings.scrobble_summary">TODO: Remember to set up your Last.fm user and password on the Subsonic server</string>-->
+    <string name="settings.hide_media_title">Masquer aux autres</string>
+    <string name="settings.hide_media_summary">Masquer les fichiers musicaux et les couvertures d\'album aux autres applis (Gallerie, Musique, etc.)</string>
+    <string name="settings.hide_media_toast">Prendra effet la prochaine fois qu\'Android recensera les médias disponibles sur l\'appareil.</string>
+    <string name="settings.media_button_title">Boutons média</string>
+    <string name="settings.media_button_summary">Répondre au boutons média de l\'appareil, du casque et du Bluetooth</string>
+    <!--<string name="settings.screen_lit_title">TODO: Keep screen on</string>-->
+    <!--<string name="settings.screen_lit_summary">TODO: Keeping the screen on when downloading may improve download speed</string>-->
+
+    <string name="music_service.retry">Une erreur de réseau s\'est produite. Essai %1$d de %2$d.</string>
+
+    <string name="background_task.wait">Veuillez patienter...</string>
+    <string name="background_task.loading">Chargement.</string>
+    <string name="background_task.no_network">Cette application requiert un accès au réseau. Veuillez activer le Wi-Fi ou le réseau mobile.</string>
+    <string name="background_task.network_error">Une erreur réseau est survenue. Veuillez vérifier l\'adresse du serveur ou réessayer plus tard.</string>
+    <string name="background_task.not_found">Ressource non trouvée. Veuillez vérifier l\'adresse du serveur.</string>
+    <string name="background_task.parse_error">Réplique incomprise. Veuillez vérifier l\'adresse du serveur.</string>
+
+    <string name="service.connecting">Contact du serveur, veuillez patienter.</string>
+
+    <string name="parser.reading">Lecture du serveur.</string>
+    <string name="parser.reading_done">Lecture du serveur. Terminé!</string>
+    <string name="parser.upgrade_client">Versions incompatible. Veuillez mette à jour l\'application Android Subsonic.</string>
+    <string name="parser.upgrade_server">Versions incompatible. Veuillez mette à jour le serveur Subsonic.</string>
+    <string name="parser.not_authenticated">Mauvais nom d\'usager ou mot de passe.</string>
+    <string name="parser.artist_count">%d artistes récupérés.</string>
+
+    <string name="select_artist.refresh">Rafraîchir</string>
+    <string name="select_artist.folder">Sélectionner le dossier</string>
+    <string name="select_artist.all_folders">Tous les dossiers</string>
+
+    <string name="widget.initial_text">Touchez pour sélectionner une pièce</string>
+    <string name="widget.sdcard_busy">Carte SD non disponible</string>
+    <string name="widget.sdcard_missing">Aucune carte SD</string>
+
+    <string name="util.bytes_format.gigabyte">0.00 Go</string>
+    <string name="util.bytes_format.megabyte">0.00 Mo</string>
+    <string name="util.bytes_format.kilobyte">0 Ko</string>
+    <string name="util.bytes_format.byte">0 o</string>
+
+    <plurals name="select_album_n_songs">
+        <item quantity="zero">Aucune pièce</item>
+        <item quantity="one">Une pièce</item>
+        <item quantity="other">%d pièces</item>
+    </plurals>
+    <plurals name="select_album_n_songs_downloading">
+        <item quantity="one">Une pièce prévue pour téléchargement.</item>
+        <item quantity="other">%d pièces prévues pour téléchargement.</item>
+    </plurals>
+    <plurals name="select_album_n_songs_added">
+        <item quantity="one">Une pièce ajoutée à la file de lecture.</item>
+        <item quantity="other">%d pièces ajoutées à la file de lecture.</item>
+    </plurals>
+    <plurals name="select_album_donate_dialog_n_trial_days_left">
+        <item quantity="one">Un jour restant à la période d\'essai</item>
+        <item quantity="other">%d jours restant à la période d\'essai</item>
+    </plurals>
+
+</resources>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="net.sourceforge.subsonic.androidapp"
+          android:installLocation="auto"
+          android:versionCode="46"
+          android:versionName="3.3">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="10"/>
+
+    <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
+
+    <application android:label="@string/common.appname" android:icon="@drawable/launch" android:theme="@style/Wheat">
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.MainActivity"
+                  android:label="Subsonic"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:launchMode="standard">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.SelectArtistActivity"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:launchMode="standard"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.SelectAlbumActivity"
+                  android:configChanges="orientation|keyboardHidden"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.SearchActivity"
+                  android:label="@string/search.label"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.SelectPlaylistActivity"
+                  android:label="@string/playlist.label"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:launchMode="standard"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.DownloadActivity"
+                  android:configChanges="keyboardHidden"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.SettingsActivity"
+                  android:theme="@android:style/Theme"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.HelpActivity"
+                  android:label="@string/help.label"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.LyricsActivity"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.EqualizerActivity"
+                  android:label="@string/equalizer.label"
+                  android:configChanges="orientation|keyboardHidden"
+                  android:launchMode="singleTask"/>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.VoiceQueryReceiverActivity"
+                  android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="net.sourceforge.subsonic.androidapp.activity.QueryReceiverActivity"
+                  android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
+        </activity>
+
+        <service android:name="net.sourceforge.subsonic.androidapp.service.DownloadServiceImpl"
+                 android:label="Subsonic Download Service"/>
+
+        <receiver android:name="net.sourceforge.subsonic.androidapp.receiver.MediaButtonIntentReceiver">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="net.sourceforge.subsonic.androidapp.receiver.BluetoothIntentReceiver">
+            <intent-filter>
+                <action android:name="android.bluetooth.a2dp.action.SINK_STATE_CHANGED"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="net.sourceforge.subsonic.androidapp.provider.SubsonicAppWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info"/>
+        </receiver>
+
+        <provider android:name="net.sourceforge.subsonic.androidapp.provider.SearchSuggestionProvider"
+                  android:authorities="net.sourceforge.subsonic.androidapp.provider.SearchSuggestionProvider"/>
+
+        <meta-data android:name="android.app.default_searchable"
+                   android:value="net.sourceforge.subsonic.androidapp.activity.QueryReceiverActivity"/>
+
+    </application>
+
+</manifest>

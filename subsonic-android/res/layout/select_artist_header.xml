@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/select_artist_folder"
+        android:orientation="horizontal"
+        android:paddingTop="2dip"
+        android:paddingBottom="2dip"
+        android:paddingLeft="6dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/listPreferredItemHeight">
+
+    <ImageView
+            android:src="@drawable/select_artist_folder"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <TextView android:id="@+id/select_artist_folder_1"
+                  android:text="@string/select_artist.folder"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dip"
+                  android:layout_marginTop="6dip"
+                  android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <TextView android:id="@+id/select_artist_folder_2"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dip"
+                  android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="themeValues">
+        <item>wheat</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+    <string-array name="themeNames">
+        <item>@string/settings.theme_wheat</item>
+        <item>@string/settings.theme_light</item>
+        <item>@string/settings.theme_dark</item>
+    </string-array>
+
+    <string-array name="preloadCountValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="preloadCountNames">
+        <item>@string/settings.preload_1</item>
+        <item>@string/settings.preload_2</item>
+        <item>@string/settings.preload_3</item>
+        <item>@string/settings.preload_5</item>
+        <item>@string/settings.preload_10</item>
+        <item>@string/settings.preload_unlimited</item>
+    </string-array>
+
+    <string-array name="cacheSizeValues">
+        <item>100</item>
+        <item>200</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>5000</item>
+        <item>10000</item>
+        <item>20000</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="cacheSizeNames">
+        <item>@string/settings.cache_size_100</item>
+        <item>@string/settings.cache_size_200</item>
+        <item>@string/settings.cache_size_500</item>
+        <item>@string/settings.cache_size_1000</item>
+        <item>@string/settings.cache_size_2000</item>
+        <item>@string/settings.cache_size_5000</item>
+        <item>@string/settings.cache_size_10000</item>
+        <item>@string/settings.cache_size_20000</item>
+        <item>@string/settings.cache_size_unlimited</item>
+    </string-array>
+
+    <string-array name="maxBitrateValues">
+        <item>32</item>
+        <item>64</item>
+        <item>80</item>
+        <item>96</item>
+        <item>112</item>
+        <item>128</item>
+        <item>160</item>
+        <item>192</item>
+        <item>256</item>
+        <item>320</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="maxBitrateNames">
+        <item>@string/settings.max_bitrate_32</item>
+        <item>@string/settings.max_bitrate_64</item>
+        <item>@string/settings.max_bitrate_80</item>
+        <item>@string/settings.max_bitrate_96</item>
+        <item>@string/settings.max_bitrate_112</item>
+        <item>@string/settings.max_bitrate_128</item>
+        <item>@string/settings.max_bitrate_160</item>
+        <item>@string/settings.max_bitrate_192</item>
+        <item>@string/settings.max_bitrate_256</item>
+        <item>@string/settings.max_bitrate_320</item>
+        <item>@string/settings.max_bitrate_unlimited</item>
+    </string-array>
+
+</resources>

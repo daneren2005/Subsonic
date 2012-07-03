@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<subsonic-response xmlns="http://subsonic.org/restapi" status="ok" version="1.8.0">
+    <starred>
+        <artist name="Kvelertak" id="143408"/>
+        <artist name="Dimmu Borgir" id="143402"/>
+        <artist name="Iron Maiden" id="143403"/>
+        <album id="143862" parent="143410" title="Postcards From A Young Man" album="Postcards From A Young Man"
+               artist="Manic Street Preachers" isDir="true" coverArt="143862" created="2011-02-26T10:45:30"
+               starred="2012-04-05T18:40:08"/>
+        <album id="143888" parent="143412" title="Collapse Into Now" album="Collapse Into Now" artist="R.E.M."
+               isDir="true" created="2011-03-23T09:29:13" starred="2012-04-05T18:40:02"/>
+        <song id="143588" parent="143586" title="Born Treacherous" album="Abrahadabra" artist="Dimmu Borgir"
+              isDir="false" coverArt="143586" created="2010-09-27T20:52:23" starred="2012-04-02T17:17:01" duration="302"
+              bitRate="320" track="2" year="2010" genre="Scene-core" size="12087601" suffix="mp3"
+              contentType="audio/mpeg" isVideo="false" path="Dimmu Borgir/Abrahadabra/02 - Born Treacherous.mp3"
+              albumId="163" artistId="133" type="music"/>
+        <song id="143600" parent="143386" title="Satellite 15....The Final Frontier"
+              album="The Final Frontier (Mission Edition)" artist="Iron Maiden" isDir="false" coverArt="143386"
+              created="2010-08-16T21:08:01" starred="2012-04-02T14:12:54" duration="521" bitRate="320" track="1"
+              year="2010" genre="Heavy Metal" size="21855635" suffix="mp3" contentType="audio/mpeg" isVideo="false"
+              path="Iron Maiden/2010 The Final Frontier/01 Satellite 15....The Final Frontier.mp3" albumId="156"
+              artistId="126" type="music"/>
+        <song id="143604" parent="143386" title="The Alchemist" album="The Final Frontier (Mission Edition)"
+              artist="Iron Maiden" isDir="false" coverArt="143386" created="2010-08-16T21:07:51"
+              starred="2012-04-02T14:12:52" duration="269" bitRate="320" track="5" year="2010" genre="Heavy Metal"
+              size="11774455" suffix="mp3" contentType="audio/mpeg" isVideo="false"
+              path="Iron Maiden/2010 The Final Frontier/05 The Alchemist.mp3" albumId="156" artistId="126"
+              type="music"/>
+    </starred>
+</subsonic-response>

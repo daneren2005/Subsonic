@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="multiController" class="net.sourceforge.subsonic.backend.controller.MultiController">
+        <property name="daoHelper" ref="daoHelper"/>
+        <property name="paymentDao" ref="paymentDao"/>
+        <property name="whitelistGenerator" ref="whitelistGenerator"/>
+        <property name="licenseGenerator" ref="licenseGenerator"/>
+    </bean>
+
+    <bean id="redirectionController" class="net.sourceforge.subsonic.backend.controller.RedirectionController">
+         <property name="redirectionDao" ref="redirectionDao"/>
+    </bean>
+
+    <bean id="ipnController" class="net.sourceforge.subsonic.backend.controller.IPNController">
+        <property name="paymentDao" ref="paymentDao"/>
+    </bean>
+
+    <bean id="redirectionManagementController" class="net.sourceforge.subsonic.backend.controller.RedirectionManagementController">
+         <property name="redirectionDao" ref="redirectionDao"/>
+    </bean>
+
+    <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="alwaysUseFullPath" value="true"/>
+        <property name="mappings">
+            <props>
+                <prop key="/backend/version.view">multiController</prop>
+                <prop key="/backend/db.view">multiController</prop>
+                <prop key="/backend/payment.view">multiController</prop>
+                <prop key="/backend/sendMail.view">multiController</prop>
+                <prop key="/backend/requestLicense.view">multiController</prop>
+                <prop key="/backend/validateLicense.view">multiController</prop>
+                <prop key="/backend/whitelist.view">multiController</prop>
+                <prop key="/backend/ipn.view">ipnController</prop>
+                <prop key="/backend/redirect/register.view">redirectionManagementController</prop>
+                <prop key="/backend/redirect/unregister.view">redirectionManagementController</prop>
+                <prop key="/backend/redirect/get.view">redirectionManagementController</prop>
+                <prop key="/backend/redirect/test.view">redirectionManagementController</prop>
+                <prop key="/backend/redirect/dump.view">redirectionManagementController</prop>
+                <prop key="/**">redirectionController</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>

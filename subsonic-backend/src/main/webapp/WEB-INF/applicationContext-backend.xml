@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="redirectionDao" class="net.sourceforge.subsonic.backend.dao.RedirectionDao">
+        <property name="daoHelper" ref="daoHelper"/>
+    </bean>
+
+    <bean id="paymentDao" class="net.sourceforge.subsonic.backend.dao.PaymentDao">
+        <property name="daoHelper" ref="daoHelper"/>
+    </bean>
+
+    <bean id="daoHelper" class="net.sourceforge.subsonic.backend.dao.DaoHelper"/>
+
+    <bean id="licenseGenerator" class="net.sourceforge.subsonic.backend.service.LicenseGenerator" init-method="init">
+        <property name="paymentDao" ref="paymentDao"/>
+    </bean>
+
+    <bean id="whitelistGenerator" class="net.sourceforge.subsonic.backend.service.WhitelistGenerator">
+        <property name="paymentDao" ref="paymentDao"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Wheat" parent="android:Theme.Light">
+        <item name="android:windowBackground">@color/wheatBackground</item>
+        <item name="android:textColorPrimary">@color/wheatForeground1</item>
+        <item name="android:textColorSecondary">@color/wheatForeground2</item>
+        <item name="android:listViewStyle">@style/WheatListView</item>
+    </style>
+
+    <style name="WheatListView" parent="android:style/Widget.ListView.White">
+        <item name="android:cacheColorHint">@color/wheatBackground</item>
+    </style>
+
+</resources>

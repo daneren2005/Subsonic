@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="subsonic" default="build">
+
+    <property file="local.properties"/>
+
+    <taskdef resource="bb-ant-defs.xml" classpath="${bb-ant-tools.classpath}"/>
+
+    <target name="init">
+        <mkdir dir="target"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="target"/>
+    </target>
+
+    <target name="build" depends="init">
+        <rapc output="target/HelloWorldApp" srcdir="src" jdehome="${jde.home}">
+            <jdp title="Subsonic" vendor="RIM" version="1.0" type="cldc"/>
+        </rapc>
+    </target>
+
+
+    <target name="deploy">
+        <copydir src="target" dest="${sim.dir}"/>
+    </target>
+
+    <!--<target name="build_and_deploy" depends="test">-->
+    <!--<copydir src="${dest.dir}" dest="${sim.dir}" />-->
+    <!--</target>-->
+
+    <!--<target name="launch_simulator">-->
+    <!--<exec dir="${sim.dir}" executable="cmd">-->
+    <!--<arg value="/c"/>-->
+    <!--<arg value="8520.bat"/>-->
+    <!--<arg value="-p"/>-->
+    <!--</exec>-->
+    <!--</target>-->
+
+    <!--<target name="deploy_and_launch_simulator" depends="deploy, launch_simulator">-->
+    <!--</target>-->
+
+    <!--<target name="build_deploy_and_launch_simulator" depends="build_and_deploy, launch_simulator">-->
+    <!--</target>-->
+
+</project>

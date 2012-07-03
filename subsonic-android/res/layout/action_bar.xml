@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/menubar_button_disabled">
+
+    <ImageView
+            android:id="@+id/actionbar_home_icon"
+            android:src="@drawable/main_header_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:paddingLeft="4dip"
+            android:paddingRight="4dip"
+            android:paddingTop="2dip"
+            android:paddingBottom="2dip"
+            android:scaleType="centerInside"
+            />
+
+    <ImageButton
+            android:id="@+id/action_button_2"
+            android:src="@drawable/action_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:scaleType="center"
+            android:padding="5dp"
+            android:background="@drawable/actionbar_button"
+            />
+
+    <ImageButton
+            android:id="@+id/action_button_1"
+            android:src="@drawable/action_shuffle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/action_button_2"
+            android:scaleType="center"
+            android:padding="5dp"
+            android:background="@drawable/actionbar_button"
+            />
+
+    <TextView
+            android:id="@+id/actionbar_title_text"
+            android:text="Subsonic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/action_button_1"
+            android:layout_toRightOf="@id/actionbar_home_icon"
+            android:gravity="center_vertical"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:shadowColor="#000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
+            android:lineSpacingMultiplier="0.85"
+            android:ellipsize="middle"
+            android:inputType="none"
+            />
+
+</RelativeLayout>

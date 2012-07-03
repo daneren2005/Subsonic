@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@android:id/text1"
+          android:drawableRight="@drawable/list_item_artist"
+          android:drawablePadding="6dip"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:gravity="center_vertical"
+          android:paddingLeft="6dip"
+          android:paddingRight="6dip"
+          android:minHeight="50dip"/>

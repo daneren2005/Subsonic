@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/search_search"
+            android:text="@string/search.search"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="0dp"
+            android:drawableLeft="@drawable/search"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="center"
+            android:padding="12dp"/>
+
+    <TextView
+            android:id="@+id/search_artists"
+            android:text="@string/search.artists"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#EFEFEF"
+            android:textStyle="bold"
+            android:background="#A5A5A5"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dp"/>
+
+    <TextView
+            android:id="@+id/search_albums"
+            android:text="@string/search.albums"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#EFEFEF"
+            android:textStyle="bold"
+            android:background="#A5A5A5"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dp"/>
+
+    <TextView
+            android:id="@+id/search_songs"
+            android:text="@string/search.songs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#EFEFEF"
+            android:textStyle="bold"
+            android:background="#A5A5A5"
+            android:gravity="center_vertical"
+            android:paddingLeft="4dp"/>
+
+    <TextView
+            android:id="@+id/search_more_artists"
+            android:text="@string/search.more"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
+
+    <TextView
+            android:id="@+id/search_more_albums"
+            android:text="@string/search.more"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
+
+    <TextView
+            android:id="@+id/search_more_songs"
+            android:text="@string/search.more"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"/>
+
+</LinearLayout>
+

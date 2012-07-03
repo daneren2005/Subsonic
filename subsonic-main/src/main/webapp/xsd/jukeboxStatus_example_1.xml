@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<subsonic-response xmlns="http://subsonic.org/restapi"
+                   status="ok" version="1.7.0">
+
+    <jukeboxStatus currentIndex="7" playing="true" gain="0.9" position="67"/>
+
+</subsonic-response>
+

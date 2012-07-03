@@ -1,0 +1,56 @@
+# List of available themes.
+# Author: Sindre Mehus
+
+# The original Subsonic theme.
+default "Subsonic Default"
+
+# Theme with dark colors.
+midnight "2 Minutes To Midnight"
+
+# Theme with even darker colors.
+black "Back In Black"
+
+# Theme with sandy colors.
+sandstorm "Sandstorm"
+
+# Similar to HD, but with normal fonts.
+barents "Barents Sea"
+
+# Themes designed for large HDTV screens.
+hd720 "HD-720"
+hd768 "HD-768"
+hd1080 "HD-1080"
+
+# Default theme when pre-installed on Ripserver NAS.
+ripserver "Ripserver"
+
+# Midnight fun theme, courtesy of Don Pearson http://www.midnightfun.co.uk/
+midnightfun "Midnight Fun"
+
+# Theme by Dan Eriksen
+coolandclean "Cool and Clean"
+
+# Theme by David D.
+monochrome "Monochrome"
+
+# Theme by David D.
+monochrome_black "Monochrome (Black)"
+
+# Themes by Thomas Bruce Dyrud
+groove "Groove"
+groove_simple "Groove (Simple)"
+simplify "Simplify"
+pinkpanther "PinkPanther"
+denim "Denim"
+sonic "Sonic"
+sonic_blue "Sonic (Blue)"
+sonic_white "Sonic (White)"
+
+# Themes by Jeebs (Fisher Evans)
+slick "Slick"
+hicon "High Contrast"
+hiconi "High Contrast (Inverted)"
+hitech "High-Tech"
+
+# BUUF Theme by Fractal Systems - Based on icons by Paul Davey aka Mattahan. All rights reserved.
+buuftheme "BUUF Theme"

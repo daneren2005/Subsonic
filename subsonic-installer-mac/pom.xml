@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.sourceforge.subsonic</groupId>
+    <artifactId>subsonic-installer-mac</artifactId>
+    <packaging>pom</packaging>
+    <name>Subsonic Installer for Mac</name>
+
+    <parent>
+        <groupId>net.sourceforge.subsonic</groupId>
+        <artifactId>subsonic</artifactId>
+        <version>4.7.beta2</version>
+    </parent>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>net.sourceforge.subsonic</groupId>
+            <artifactId>subsonic-main</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.subsonic</groupId>
+            <artifactId>subsonic-booter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <target>
+                                        <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler"/>
+                                        <mkdir dir="${project.build.directory}"/>
+                                        <jarbundler dir="target"
+                                                    name="Subsonic"
+                                                    mainclass="net.sourceforge.subsonic.booter.Main"
+                                                    arguments="-mac"
+                                                    vmoptions="-Xmx150m"
+                                                    version="${project.version}"
+                                                    jvmversion="1.5+"
+                                                    jar="../subsonic-booter/target/subsonic-booter-jar-with-dependencies.jar"
+                                                    bundleid="net.sourceforge.subsonic"
+                                                    icon="src/subsonic.icns"
+                                                    helpbookfolder="foobar"
+                                                    verbose="true">
+                                            <resourcefilelist dir="../subsonic-main/target" files="subsonic.war"/>
+                                            <javaproperty name="subsonic.war" value="Subsonic.app/Contents/Resources/subsonic.war"/>
+                                            <javaproperty name="subsonic.home" value="/Library/Application Support/Subsonic"/>
+                                            <javaproperty name="subsonic.defaultMusicFolder" value="/Users/Shared/Music/iTunes/iTunes Media"/>
+                                            <javaproperty name="subsonic.defaultPodcastFolder" value="/Users/Shared/Podcasts"/>
+                                            <javaproperty name="subsonic.defaultPlaylistFolder" value="/Users/Shared/Playlists"/>
+                                            <javaproperty name="subsonic.port" value="4040"/>
+                                            <javaproperty name="subsonic.httpsPort" value="0"/>
+                                            <javaproperty name="subsonic.contextPath" value="/"/>
+                                        </jarbundler>
+                                        <replace file="target/Subsonic.app/Contents/Info.plist" token="CFBundleHelpBookFolder" value="LSUIElement"/>
+                                        <replace file="target/Subsonic.app/Contents/Info.plist" token="foobar" value="1"/>
+                                        <exec executable="/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker">
+                                            <arg value="--doc"/>
+                                            <arg value="${basedir}/src/subsonic.pmdoc"/>
+                                            <arg value="--version"/>
+                                            <arg value="${project.version}"/>
+                                            <arg value="--no-relocate"/>
+                                            <arg value="--out"/>
+                                            <arg value="${project.build.directory}/subsonic-${project.version}.pkg"/>
+                                            <arg value="--verbose"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>net.sourceforge.jarbundler</groupId>
+                                <artifactId>jarbundler</artifactId>
+                                <version>2.1.0</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
