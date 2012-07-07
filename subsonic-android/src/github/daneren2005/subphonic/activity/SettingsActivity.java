@@ -52,7 +52,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private ListPreference theme;
     private ListPreference maxBitrateWifi;
     private ListPreference maxBitrateMobile;
-    private ListPreference cacheSize;
+    private EditTextPreference cacheSize;
     private EditTextPreference cacheLocation;
     private ListPreference preloadCount;
 
@@ -64,7 +64,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         theme = (ListPreference) findPreference(Constants.PREFERENCES_KEY_THEME);
         maxBitrateWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
         maxBitrateMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);
-        cacheSize = (ListPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
+        cacheSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
         cacheLocation = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
         preloadCount = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT);
 
@@ -145,7 +145,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         theme.setSummary(theme.getEntry());
         maxBitrateWifi.setSummary(maxBitrateWifi.getEntry());
         maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
-        cacheSize.setSummary(cacheSize.getEntry());
+        cacheSize.setSummary(cacheSize.getText());
         cacheLocation.setSummary(cacheLocation.getText());
         preloadCount.setSummary(preloadCount.getEntry());
         for (ServerSettings ss : serverSettings.values()) {

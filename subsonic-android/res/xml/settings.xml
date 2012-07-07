@@ -143,12 +143,11 @@
     <PreferenceCategory
             android:title="@string/settings.cache_title">
 
-        <ListPreference
+        <EditTextPreference
                 android:title="@string/settings.cache_size"
                 android:key="cacheSize"
                 android:defaultValue="500"
-                android:entryValues="@array/cacheSizeValues"
-                android:entries="@array/cacheSizeNames"/>
+				android:digits="0123456789"/>
 
         <EditTextPreference
                 android:title="@string/settings.cache_location"
