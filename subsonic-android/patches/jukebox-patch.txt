@@ -3,12 +3,12 @@ Index: AndroidManifest.xml
 --- AndroidManifest.xml	(revision 2441)
 +++ AndroidManifest.xml	(working copy)
 @@ -114,7 +114,8 @@
-                   a:authorities="net.sourceforge.subsonic.androidapp.provider.SearchSuggestionProvider"/>
+                   a:authorities="github.daneren2005.subphonic.provider.SearchSuggestionProvider"/>
  
          <meta-data a:name="android.app.default_searchable"
--                   a:value="net.sourceforge.subsonic.androidapp.activity.QueryReceiverActivity"/>
-+                   a:value="net.sourceforge.subsonic.androidapp.activity.QueryReceiverActivity"/>
-+        <activity a:name="net.sourceforge.subsonic.androidapp.activity.JukeboxActivity" a:launchMode="singleTask" a:configChanges="keyboardHidden"></activity>
+-                   a:value="github.daneren2005.subphonic.activity.QueryReceiverActivity"/>
++                   a:value="github.daneren2005.subphonic.activity.QueryReceiverActivity"/>
++        <activity a:name="github.daneren2005.subphonic.activity.JukeboxActivity" a:launchMode="singleTask" a:configChanges="keyboardHidden"></activity>
  
      </application>
  
@@ -224,21 +224,21 @@ Index: src/net/sourceforge/subsonic/androidapp/activity/JukeboxActivity.java
 + Copyright 2009 (C) Sindre Mehus
 + */
 +
-+package net.sourceforge.subsonic.androidapp.activity;
++package github.daneren2005.subphonic.activity;
 +
 +import java.util.List;
 +
-+import net.sourceforge.subsonic.androidapp.R;
-+import net.sourceforge.subsonic.androidapp.domain.Jukebox;
-+import net.sourceforge.subsonic.androidapp.domain.MusicDirectory;
-+import net.sourceforge.subsonic.androidapp.domain.MusicDirectory.Entry;
-+import net.sourceforge.subsonic.androidapp.service.MusicService;
-+import net.sourceforge.subsonic.androidapp.service.MusicServiceFactory;
-+import net.sourceforge.subsonic.androidapp.util.BackgroundTask;
-+import net.sourceforge.subsonic.androidapp.util.JukeboxSongView;
-+import net.sourceforge.subsonic.androidapp.util.ProgressListener;
-+import net.sourceforge.subsonic.androidapp.util.TabActivityBackgroundTask;
-+import net.sourceforge.subsonic.androidapp.util.Util;
++import github.daneren2005.subphonic.R;
++import github.daneren2005.subphonic.domain.Jukebox;
++import github.daneren2005.subphonic.domain.MusicDirectory;
++import github.daneren2005.subphonic.domain.MusicDirectory.Entry;
++import github.daneren2005.subphonic.service.MusicService;
++import github.daneren2005.subphonic.service.MusicServiceFactory;
++import github.daneren2005.subphonic.util.BackgroundTask;
++import github.daneren2005.subphonic.util.JukeboxSongView;
++import github.daneren2005.subphonic.util.ProgressListener;
++import github.daneren2005.subphonic.util.TabActivityBackgroundTask;
++import github.daneren2005.subphonic.util.Util;
 +import android.os.Bundle;
 +import android.view.ContextMenu;
 +import android.view.MenuInflater;
@@ -485,16 +485,16 @@ Index: src/net/sourceforge/subsonic/androidapp/activity/SubsonicTabActivity.java
  import java.util.LinkedList;
  import java.util.List;
  
-+import net.sourceforge.subsonic.androidapp.R;
-+import net.sourceforge.subsonic.androidapp.domain.MusicDirectory;
-+import net.sourceforge.subsonic.androidapp.service.DownloadService;
-+import net.sourceforge.subsonic.androidapp.service.DownloadServiceImpl;
-+import net.sourceforge.subsonic.androidapp.service.MusicService;
-+import net.sourceforge.subsonic.androidapp.service.MusicServiceFactory;
-+import net.sourceforge.subsonic.androidapp.util.Constants;
-+import net.sourceforge.subsonic.androidapp.util.ImageLoader;
-+import net.sourceforge.subsonic.androidapp.util.ModalBackgroundTask;
-+import net.sourceforge.subsonic.androidapp.util.Util;
++import github.daneren2005.subphonic.R;
++import github.daneren2005.subphonic.domain.MusicDirectory;
++import github.daneren2005.subphonic.service.DownloadService;
++import github.daneren2005.subphonic.service.DownloadServiceImpl;
++import github.daneren2005.subphonic.service.MusicService;
++import github.daneren2005.subphonic.service.MusicServiceFactory;
++import github.daneren2005.subphonic.util.Constants;
++import github.daneren2005.subphonic.util.ImageLoader;
++import github.daneren2005.subphonic.util.ModalBackgroundTask;
++import github.daneren2005.subphonic.util.Util;
  import android.app.Activity;
  import android.content.Context;
  import android.content.Intent;
@@ -502,16 +502,16 @@ Index: src/net/sourceforge/subsonic/androidapp/activity/SubsonicTabActivity.java
  import android.view.View;
  import android.view.Window;
  import android.widget.TextView;
--import net.sourceforge.subsonic.androidapp.R;
--import net.sourceforge.subsonic.androidapp.domain.MusicDirectory;
--import net.sourceforge.subsonic.androidapp.service.DownloadService;
--import net.sourceforge.subsonic.androidapp.service.DownloadServiceImpl;
--import net.sourceforge.subsonic.androidapp.service.MusicService;
--import net.sourceforge.subsonic.androidapp.service.MusicServiceFactory;
--import net.sourceforge.subsonic.androidapp.util.Constants;
--import net.sourceforge.subsonic.androidapp.util.ImageLoader;
--import net.sourceforge.subsonic.androidapp.util.ModalBackgroundTask;
--import net.sourceforge.subsonic.androidapp.util.Util;
+-import github.daneren2005.subphonic.R;
+-import github.daneren2005.subphonic.domain.MusicDirectory;
+-import github.daneren2005.subphonic.service.DownloadService;
+-import github.daneren2005.subphonic.service.DownloadServiceImpl;
+-import github.daneren2005.subphonic.service.MusicService;
+-import github.daneren2005.subphonic.service.MusicServiceFactory;
+-import github.daneren2005.subphonic.util.Constants;
+-import github.daneren2005.subphonic.util.ImageLoader;
+-import github.daneren2005.subphonic.util.ModalBackgroundTask;
+-import github.daneren2005.subphonic.util.Util;
  
  /**
   * @author Sindre Mehus
@@ -653,7 +653,7 @@ Index: src/net/sourceforge/subsonic/androidapp/domain/Jukebox.java
 + Copyright 2009 (C) Sindre Mehus
 + */
 +
-+package net.sourceforge.subsonic.androidapp.domain;
++package github.daneren2005.subphonic.domain;
 +
 +import java.io.Serializable;
 +import java.util.List;
@@ -789,7 +789,7 @@ Index: src/net/sourceforge/subsonic/androidapp/domain/User.java
 + Copyright 2009 (C) Sindre Mehus
 + */
 +
-+package net.sourceforge.subsonic.androidapp.domain;
++package github.daneren2005.subphonic.domain;
 +
 +import java.io.Serializable;
 +
@@ -820,15 +820,15 @@ Index: src/net/sourceforge/subsonic/androidapp/service/CachedMusicService.java
 @@ -21,9 +21,11 @@
  import android.content.Context;
  import android.graphics.Bitmap;
- import net.sourceforge.subsonic.androidapp.domain.Indexes;
-+import net.sourceforge.subsonic.androidapp.domain.Jukebox;
- import net.sourceforge.subsonic.androidapp.domain.MusicDirectory;
- import net.sourceforge.subsonic.androidapp.domain.MusicFolder;
- import net.sourceforge.subsonic.androidapp.domain.Playlist;
-+import net.sourceforge.subsonic.androidapp.domain.User;
- import net.sourceforge.subsonic.androidapp.domain.Version;
- import net.sourceforge.subsonic.androidapp.domain.SearchResult;
- import net.sourceforge.subsonic.androidapp.domain.SearchCritera;
+ import github.daneren2005.subphonic.domain.Indexes;
++import github.daneren2005.subphonic.domain.Jukebox;
+ import github.daneren2005.subphonic.domain.MusicDirectory;
+ import github.daneren2005.subphonic.domain.MusicFolder;
+ import github.daneren2005.subphonic.domain.Playlist;
++import github.daneren2005.subphonic.domain.User;
+ import github.daneren2005.subphonic.domain.Version;
+ import github.daneren2005.subphonic.domain.SearchResult;
+ import github.daneren2005.subphonic.domain.SearchCritera;
 @@ -199,4 +201,17 @@
              restUrl = newUrl;
          }
@@ -854,15 +854,15 @@ Index: src/net/sourceforge/subsonic/androidapp/service/MusicService.java
 @@ -21,9 +21,11 @@
  import android.content.Context;
  import android.graphics.Bitmap;
- import net.sourceforge.subsonic.androidapp.domain.Indexes;
-+import net.sourceforge.subsonic.androidapp.domain.Jukebox;
- import net.sourceforge.subsonic.androidapp.domain.MusicDirectory;
- import net.sourceforge.subsonic.androidapp.domain.MusicFolder;
- import net.sourceforge.subsonic.androidapp.domain.Playlist;
-+import net.sourceforge.subsonic.androidapp.domain.User;
- import net.sourceforge.subsonic.androidapp.domain.Version;
- import net.sourceforge.subsonic.androidapp.domain.SearchResult;
- import net.sourceforge.subsonic.androidapp.domain.SearchCritera;
+ import github.daneren2005.subphonic.domain.Indexes;
++import github.daneren2005.subphonic.domain.Jukebox;
+ import github.daneren2005.subphonic.domain.MusicDirectory;
+ import github.daneren2005.subphonic.domain.MusicFolder;
+ import github.daneren2005.subphonic.domain.Playlist;
++import github.daneren2005.subphonic.domain.User;
+ import github.daneren2005.subphonic.domain.Version;
+ import github.daneren2005.subphonic.domain.SearchResult;
+ import github.daneren2005.subphonic.domain.SearchCritera;
 @@ -74,4 +76,8 @@
      Version getLatestVersion(Context context, ProgressListener progressListener) throws Exception;
  
@@ -879,33 +879,33 @@ Index: src/net/sourceforge/subsonic/androidapp/service/RESTMusicService.java
 +++ src/net/sourceforge/subsonic/androidapp/service/RESTMusicService.java	(working copy)
 @@ -28,6 +28,7 @@
  import android.util.Log;
- import net.sourceforge.subsonic.androidapp.R;
- import net.sourceforge.subsonic.androidapp.domain.Indexes;
-+import net.sourceforge.subsonic.androidapp.domain.Jukebox;
- import net.sourceforge.subsonic.androidapp.domain.Lyrics;
- import net.sourceforge.subsonic.androidapp.domain.MusicDirectory;
- import net.sourceforge.subsonic.androidapp.domain.MusicFolder;
+ import github.daneren2005.subphonic.R;
+ import github.daneren2005.subphonic.domain.Indexes;
++import github.daneren2005.subphonic.domain.Jukebox;
+ import github.daneren2005.subphonic.domain.Lyrics;
+ import github.daneren2005.subphonic.domain.MusicDirectory;
+ import github.daneren2005.subphonic.domain.MusicFolder;
 @@ -35,10 +36,12 @@
- import net.sourceforge.subsonic.androidapp.domain.SearchCritera;
- import net.sourceforge.subsonic.androidapp.domain.SearchResult;
- import net.sourceforge.subsonic.androidapp.domain.ServerInfo;
-+import net.sourceforge.subsonic.androidapp.domain.User;
- import net.sourceforge.subsonic.androidapp.domain.Version;
- import net.sourceforge.subsonic.androidapp.service.parser.AlbumListParser;
- import net.sourceforge.subsonic.androidapp.service.parser.ErrorParser;
- import net.sourceforge.subsonic.androidapp.service.parser.IndexesParser;
-+import net.sourceforge.subsonic.androidapp.service.parser.JukeboxParser;
- import net.sourceforge.subsonic.androidapp.service.parser.LicenseParser;
- import net.sourceforge.subsonic.androidapp.service.parser.LyricsParser;
- import net.sourceforge.subsonic.androidapp.service.parser.MusicDirectoryParser;
+ import github.daneren2005.subphonic.domain.SearchCritera;
+ import github.daneren2005.subphonic.domain.SearchResult;
+ import github.daneren2005.subphonic.domain.ServerInfo;
++import github.daneren2005.subphonic.domain.User;
+ import github.daneren2005.subphonic.domain.Version;
+ import github.daneren2005.subphonic.service.parser.AlbumListParser;
+ import github.daneren2005.subphonic.service.parser.ErrorParser;
+ import github.daneren2005.subphonic.service.parser.IndexesParser;
++import github.daneren2005.subphonic.service.parser.JukeboxParser;
+ import github.daneren2005.subphonic.service.parser.LicenseParser;
+ import github.daneren2005.subphonic.service.parser.LyricsParser;
+ import github.daneren2005.subphonic.service.parser.MusicDirectoryParser;
 @@ -48,6 +51,7 @@
- import net.sourceforge.subsonic.androidapp.service.parser.RandomSongsParser;
- import net.sourceforge.subsonic.androidapp.service.parser.SearchResult2Parser;
- import net.sourceforge.subsonic.androidapp.service.parser.SearchResultParser;
-+import net.sourceforge.subsonic.androidapp.service.parser.UserParser;
- import net.sourceforge.subsonic.androidapp.service.parser.VersionParser;
- import net.sourceforge.subsonic.androidapp.service.ssl.SSLSocketFactory;
- import net.sourceforge.subsonic.androidapp.service.ssl.TrustSelfSignedStrategy;
+ import github.daneren2005.subphonic.service.parser.RandomSongsParser;
+ import github.daneren2005.subphonic.service.parser.SearchResult2Parser;
+ import github.daneren2005.subphonic.service.parser.SearchResultParser;
++import github.daneren2005.subphonic.service.parser.UserParser;
+ import github.daneren2005.subphonic.service.parser.VersionParser;
+ import github.daneren2005.subphonic.service.ssl.SSLSocketFactory;
+ import github.daneren2005.subphonic.service.ssl.TrustSelfSignedStrategy;
 @@ -195,6 +199,53 @@
              Util.close(reader);
          }
@@ -1000,14 +1000,14 @@ Index: src/net/sourceforge/subsonic/androidapp/service/parser/JukeboxParser.java
 + Copyright 2009 (C) Sindre Mehus
 + */
 +
-+package net.sourceforge.subsonic.androidapp.service.parser;
++package github.daneren2005.subphonic.service.parser;
 +
 +import java.io.Reader;
 +
-+import net.sourceforge.subsonic.androidapp.R;
-+import net.sourceforge.subsonic.androidapp.domain.Jukebox;
-+import net.sourceforge.subsonic.androidapp.domain.MusicDirectory;
-+import net.sourceforge.subsonic.androidapp.util.ProgressListener;
++import github.daneren2005.subphonic.R;
++import github.daneren2005.subphonic.domain.Jukebox;
++import github.daneren2005.subphonic.domain.MusicDirectory;
++import github.daneren2005.subphonic.util.ProgressListener;
 +
 +import org.xmlpull.v1.XmlPullParser;
 +
@@ -1091,13 +1091,13 @@ Index: src/net/sourceforge/subsonic/androidapp/service/parser/UserParser.java
 + Copyright 2009 (C) Sindre Mehus
 + */
 +
-+package net.sourceforge.subsonic.androidapp.service.parser;
++package github.daneren2005.subphonic.service.parser;
 +
 +import java.io.Reader;
 +
-+import net.sourceforge.subsonic.androidapp.R;
-+import net.sourceforge.subsonic.androidapp.domain.User;
-+import net.sourceforge.subsonic.androidapp.util.ProgressListener;
++import github.daneren2005.subphonic.R;
++import github.daneren2005.subphonic.domain.User;
++import github.daneren2005.subphonic.util.ProgressListener;
 +
 +import org.xmlpull.v1.XmlPullParser;
 +
@@ -1163,10 +1163,10 @@ Index: src/net/sourceforge/subsonic/androidapp/util/JukeboxSongView.java
 + Copyright 2009 (C) Sindre Mehus
 + */
 +
-+package net.sourceforge.subsonic.androidapp.util;
++package github.daneren2005.subphonic.util;
 +
-+import net.sourceforge.subsonic.androidapp.R;
-+import net.sourceforge.subsonic.androidapp.domain.MusicDirectory;
++import github.daneren2005.subphonic.R;
++import github.daneren2005.subphonic.domain.MusicDirectory;
 +import android.content.Context;
 +import android.view.LayoutInflater;
 +import android.view.View;

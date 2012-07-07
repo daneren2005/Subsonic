@@ -4,7 +4,7 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
 
-    <net.sourceforge.subsonic.androidapp.util.MyViewFlipper
+    <github.daneren2005.subphonic.util.MyViewFlipper
                  android:id="@+id/download_playlist_flipper"
                  android:layout_width="fill_parent"
                  android:layout_height="0dip"
@@ -121,7 +121,7 @@
 
         <include layout="@layout/download_playlist"/>
 
-    </net.sourceforge.subsonic.androidapp.util.MyViewFlipper>
+    </github.daneren2005.subphonic.util.MyViewFlipper>
 
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
