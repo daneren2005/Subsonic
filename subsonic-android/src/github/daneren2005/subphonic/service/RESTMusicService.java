@@ -666,6 +666,12 @@ public class RESTMusicService implements MusicService {
                                           List<String> parameterNames, List<Object> parameterValues,
                                           List<Header> headers, ProgressListener progressListener, CancellableTask task) throws IOException {
         Log.i(TAG, "Using URL " + url);
+		
+		SharedPreferences prefs = Util.getPreferences(context);
+		int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "15000"));
+		HttpParams newParams = httpClient.getParams();
+		HttpConnectionParams.setSoTimeout(newParams, networkTimeout);
+		httpClient.setParams(newParams);
 
         final AtomicReference<Boolean> cancelled = new AtomicReference<Boolean>(false);
         int attempts = 0;
@@ -705,15 +711,11 @@ public class RESTMusicService implements MusicService {
             }
 
             // Set credentials to get through apache proxies that require authentication.
-            SharedPreferences prefs = Util.getPreferences(context);
             int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
             String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
             String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
             httpClient.getCredentialsProvider().setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
                     new UsernamePasswordCredentials(username, password));
-			
-			int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "10000"));
-			httpClient.getParams().setParameter("http.socket.timeout", networkTimeout);
 
             try {
                 HttpResponse response = httpClient.execute(request, httpContext);
