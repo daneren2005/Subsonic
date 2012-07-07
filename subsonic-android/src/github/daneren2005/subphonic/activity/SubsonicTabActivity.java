@@ -62,7 +62,6 @@ public class SubsonicTabActivity extends Activity {
     private boolean destroyed;
     private View homeButton;
     private View musicButton;
-    private View searchButton;
     private View playlistButton;
     private View nowPlayingButton;
 
@@ -100,16 +99,6 @@ public class SubsonicTabActivity extends Activity {
             }
         });
 
-        searchButton = findViewById(R.id.button_bar_search);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SubsonicTabActivity.this, SearchActivity.class);
-                intent.putExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, true);
-                Util.startActivityWithoutTransition(SubsonicTabActivity.this, intent);
-            }
-        });
-
         playlistButton = findViewById(R.id.button_bar_playlists);
         playlistButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,8 +121,6 @@ public class SubsonicTabActivity extends Activity {
             homeButton.setEnabled(false);
         } else if (this instanceof SelectAlbumActivity || this instanceof SelectArtistActivity) {
             musicButton.setEnabled(false);
-        } else if (this instanceof SearchActivity) {
-            searchButton.setEnabled(false);
         } else if (this instanceof SelectPlaylistActivity) {
             playlistButton.setEnabled(false);
         } else if (this instanceof DownloadActivity || this instanceof LyricsActivity) {
@@ -239,7 +226,6 @@ public class SubsonicTabActivity extends Activity {
 
     private void updateButtonVisibility() {
         int visibility = Util.isOffline(this) ? View.GONE : View.VISIBLE;
-        searchButton.setVisibility(visibility);
     }
 
     public void setProgressVisible(boolean visible) {

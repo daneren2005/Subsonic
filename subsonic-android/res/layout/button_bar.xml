@@ -32,14 +32,6 @@
                      android:layout_width="0dp"
                      android:layout_height="wrap_content"/>
 
-        <ImageButton android:id="@+id/button_bar_search"
-                     android:src="@drawable/menu_search"
-                     android:contentDescription="@string/button_bar.search"
-                     android:background="@drawable/menubar_button"
-                     android:layout_weight="1"
-                     android:layout_width="0dp"
-                     android:layout_height="wrap_content"/>
-
         <ImageButton android:id="@+id/button_bar_playlists"
                      android:src="@drawable/menu_playlists"
                      android:contentDescription="@string/button_bar.playlists"
