@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="net.sourceforge.subsonic.androidapp"
           android:installLocation="auto"
-          android:versionCode="46"
-          android:versionName="3.3">
+          android:versionCode="1"
+          android:versionName="3.3.1">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
@@ -13,14 +13,14 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 
-    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="10"/>
+    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="14"/>
 
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
     <application android:label="@string/common.appname" android:icon="@drawable/launch" android:theme="@style/Wheat">
 
         <activity android:name="net.sourceforge.subsonic.androidapp.activity.MainActivity"
-                  android:label="Subsonic"
+                  android:label="Subphonic"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="standard">
             <intent-filter>
