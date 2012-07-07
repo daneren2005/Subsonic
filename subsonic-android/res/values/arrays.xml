@@ -31,30 +31,6 @@
         <item>@string/settings.preload_unlimited</item>
     </string-array>
 
-    <string-array name="cacheSizeValues">
-        <item>100</item>
-        <item>200</item>
-        <item>500</item>
-        <item>1000</item>
-        <item>2000</item>
-        <item>5000</item>
-        <item>10000</item>
-        <item>20000</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="cacheSizeNames">
-        <item>@string/settings.cache_size_100</item>
-        <item>@string/settings.cache_size_200</item>
-        <item>@string/settings.cache_size_500</item>
-        <item>@string/settings.cache_size_1000</item>
-        <item>@string/settings.cache_size_2000</item>
-        <item>@string/settings.cache_size_5000</item>
-        <item>@string/settings.cache_size_10000</item>
-        <item>@string/settings.cache_size_20000</item>
-        <item>@string/settings.cache_size_unlimited</item>
-    </string-array>
-
     <string-array name="maxBitrateValues">
         <item>32</item>
         <item>64</item>

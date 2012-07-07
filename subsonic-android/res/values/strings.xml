@@ -162,16 +162,6 @@
     <string name="settings.preload_3">3 songs</string>
     <string name="settings.preload_5">5 songs</string>
     <string name="settings.preload_10">10 songs</string>
-    <string name="settings.preload_unlimited">Unlimited</string>
-    <string name="settings.cache_size_100">100 MB</string>
-    <string name="settings.cache_size_200">200 MB</string>
-    <string name="settings.cache_size_500">500 MB</string>
-    <string name="settings.cache_size_1000">1 GB</string>
-    <string name="settings.cache_size_2000">2 GB</string>
-    <string name="settings.cache_size_5000">5 GB</string>
-    <string name="settings.cache_size_10000">10 GB</string>
-    <string name="settings.cache_size_20000">20 GB</string>
-    <string name="settings.cache_size_unlimited">Unlimited</string>
     <string name="settings.clear_search_history">Clear search history</string>
     <string name="settings.search_history_cleared">Search history cleared</string>
     <string name="settings.other_title">Other settings</string>
