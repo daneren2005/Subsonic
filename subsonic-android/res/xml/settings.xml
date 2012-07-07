@@ -137,6 +137,13 @@
                 android:summary="@string/settings.wifi_required_summary"
                 android:key="wifiRequiredForDownload"
                 android:defaultValue="false"/>
+				
+		<ListPreference
+			android:title="@string/settings.network_timeout_title"
+			android:key="networkTimeout"
+			android:defaultValue="15000"
+			android:entryValues="@array/networkTimeoutValues"
+			android:entries="@array/networkTimeoutNames"/>
 
     </PreferenceCategory>
 

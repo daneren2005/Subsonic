@@ -711,6 +711,9 @@ public class RESTMusicService implements MusicService {
             String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
             httpClient.getCredentialsProvider().setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
                     new UsernamePasswordCredentials(username, password));
+			
+			int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "10000"));
+			httpClient.getParams().setParameter("http.socket.timeout", networkTimeout);
 
             try {
                 HttpResponse response = httpClient.execute(request, httpContext);

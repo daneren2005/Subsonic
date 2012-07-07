@@ -58,5 +58,20 @@
         <item>@string/settings.max_bitrate_320</item>
         <item>@string/settings.max_bitrate_unlimited</item>
     </string-array>
+	
+	<string-array name="networkTimeoutValues">
+		<item>10000</item>
+		<item>15000</item>
+		<item>30000</item>
+		<item>45000</item>
+		<item>60000</item>
+	</string-array>
+	<string-array name="networkTimeoutNames">
+		<item>@string/settings.network_timeout_10000</item>
+		<item>@string/settings.network_timeout_15000</item>
+		<item>@string/settings.network_timeout_30000</item>
+		<item>@string/settings.network_timeout_45000</item>
+		<item>@string/settings.network_timeout_60000</item>
+	</string-array>
 
 </resources>
