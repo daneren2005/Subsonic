@@ -21,6 +21,8 @@ package net.sourceforge.subsonic.androidapp.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,6 +43,7 @@ import net.sourceforge.subsonic.androidapp.domain.MusicFolder;
 import net.sourceforge.subsonic.androidapp.domain.Playlist;
 import net.sourceforge.subsonic.androidapp.domain.SearchCritera;
 import net.sourceforge.subsonic.androidapp.domain.SearchResult;
+import net.sourceforge.subsonic.androidapp.service.parser.PlaylistParser;
 import net.sourceforge.subsonic.androidapp.util.Constants;
 import net.sourceforge.subsonic.androidapp.util.FileUtil;
 import net.sourceforge.subsonic.androidapp.util.ProgressListener;
@@ -150,12 +153,38 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Playlists not available in offline mode");
+        List<Playlist> playlists = new ArrayList<Playlist>();
+        File root = FileUtil.getPlaylistDirectory();
+        for (File file : FileUtil.listFiles(root)) {
+			Playlist playlist = new Playlist(file.getName(), file.getName());
+			playlists.add(playlist);
+        }
+        return playlists;
     }
 
     @Override
-    public MusicDirectory getPlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Playlists not available in offline mode");
+    public MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception {
+		DownloadService downloadService = DownloadServiceImpl.getInstance();
+        if (downloadService == null) {
+            return new MusicDirectory();
+        }
+		
+        Reader reader = null;
+		try {
+			reader = new FileReader(FileUtil.getPlaylistFile(name));
+			MusicDirectory fullList = new PlaylistParser(context).parse(reader, progressListener);
+			MusicDirectory playlist = new MusicDirectory();
+			for(MusicDirectory.Entry song: fullList.getChildren()) {
+				DownloadFile downloadFile = downloadService.forSong(song);
+				File completeFile = downloadFile.getCompleteFile();
+				if(completeFile.exists()) {
+					playlist.addChild(song);
+				}
+			}
+			return playlist;
+		} finally {
+			Util.close(reader);
+		}
     }
 
     @Override

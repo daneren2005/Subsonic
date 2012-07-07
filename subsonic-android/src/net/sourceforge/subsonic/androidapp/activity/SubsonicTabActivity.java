@@ -240,7 +240,6 @@ public class SubsonicTabActivity extends Activity {
     private void updateButtonVisibility() {
         int visibility = Util.isOffline(this) ? View.GONE : View.VISIBLE;
         searchButton.setVisibility(visibility);
-        playlistButton.setVisibility(visibility);
     }
 
     public void setProgressVisible(boolean visible) {

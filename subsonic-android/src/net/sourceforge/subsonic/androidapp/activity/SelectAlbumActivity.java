@@ -279,13 +279,13 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         }.execute();
     }
 
-    private void getPlaylist(final String playlistId, String playlistName) {
+    private void getPlaylist(final String playlistId, final String playlistName) {
         setTitle(playlistName);
 
         new LoadTask() {
             @Override
             protected MusicDirectory load(MusicService service) throws Exception {
-                return service.getPlaylist(playlistId, SelectAlbumActivity.this, this);
+                return service.getPlaylist(playlistId, playlistName, SelectAlbumActivity.this, this);
             }
         }.execute();
     }

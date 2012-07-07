@@ -128,8 +128,8 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getPlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
-        return musicService.getPlaylist(id, context, progressListener);
+    public MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception {
+        return musicService.getPlaylist(id, name, context, progressListener);
     }
 
     @Override

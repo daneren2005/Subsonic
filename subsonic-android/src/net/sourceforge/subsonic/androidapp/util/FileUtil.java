@@ -70,6 +70,16 @@ public class FileUtil {
 
         return new File(dir, fileName.toString());
     }
+	
+	public static File getPlaylistFile(String id) {
+		File playlistDir = getPlaylistDirectory();
+		return new File(playlistDir, id);
+	}
+	public static File getPlaylistDirectory() {
+		File playlistDir = new File(getSubsonicDirectory(), "playlists");
+		ensureDirectoryExistsAndIsReadWritable(playlistDir);
+		return playlistDir;
+	}
 
     public static File getAlbumArtFile(Context context, MusicDirectory.Entry entry) {
         File albumDir = getAlbumDirectory(context, entry);

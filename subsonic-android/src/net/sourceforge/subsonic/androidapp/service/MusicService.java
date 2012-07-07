@@ -53,7 +53,7 @@ public interface MusicService {
 
     SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception;
 
-    MusicDirectory getPlaylist(String id, Context context, ProgressListener progressListener) throws Exception;
+    MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception;
 
     List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 

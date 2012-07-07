@@ -22,7 +22,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.FileReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -317,13 +319,28 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getPlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_PLAYLIST);
 
         Reader reader = getReader(context, progressListener, "getPlaylist", params, "id", id);
+		OutputStreamWriter out = null;
+		try {
+			out = new OutputStreamWriter(new FileOutputStream(FileUtil.getPlaylistFile(name)));
+			
+			char[] buff = new char[256];
+			int n;
+			while((n = reader.read(buff)) >= 0) {
+				out.write(buff, 0, n);
+			}
+		} finally {
+			Util.close(out);
+			Util.close(reader);
+		}
+
         try {
-            return new PlaylistParser(context).parse(reader, progressListener);
+			reader = new FileReader(FileUtil.getPlaylistFile(name));
+			return new PlaylistParser(context).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
