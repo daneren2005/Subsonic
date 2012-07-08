@@ -105,7 +105,9 @@ public class DownloadServiceLifecycleSupport {
             public void onReceive(Context context, Intent intent) {
                 Log.i(TAG, "Headset event for: " + intent.getExtras().get("name"));
                 if (intent.getExtras().getInt("state") == 0) {
-                    downloadService.pause();
+					if(!downloadService.isJukeboxEnabled()) {
+						downloadService.pause();
+					}
                 }
             }
         };
