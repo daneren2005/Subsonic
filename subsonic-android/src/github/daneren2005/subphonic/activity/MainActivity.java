@@ -249,9 +249,13 @@ public class MainActivity extends SubsonicTabActivity {
     }
 
     private void showAlbumList(String type) {
+		// Get users desired random playlist size
+		SharedPreferences prefs = Util.getPreferences(this);
+		int size = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "10"));
+		
         Intent intent = new Intent(this, SelectAlbumActivity.class);
         intent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
-        intent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
+        intent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, size);
         intent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
 		Util.startActivityWithoutTransition(this, intent);
 	}

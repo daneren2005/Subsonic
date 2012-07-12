@@ -56,6 +56,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private EditTextPreference cacheSize;
     private EditTextPreference cacheLocation;
     private ListPreference preloadCount;
+	private EditTextPreference randomSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         cacheSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
         cacheLocation = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
         preloadCount = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT);
+		randomSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_RANDOM_SIZE);
 
         findPreference("testConnection1").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -151,6 +153,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         cacheSize.setSummary(cacheSize.getText());
         cacheLocation.setSummary(cacheLocation.getText());
         preloadCount.setSummary(preloadCount.getEntry());
+		randomSize.setSummary(randomSize.getText());
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }
