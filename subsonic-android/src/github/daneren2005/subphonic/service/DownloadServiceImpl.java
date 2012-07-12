@@ -21,6 +21,7 @@ package github.daneren2005.subphonic.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -45,6 +46,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static github.daneren2005.subphonic.domain.PlayerState.*;
+import github.daneren2005.subphonic.util.*;
 
 /**
  * @author Sindre Mehus
@@ -232,10 +234,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     @Override
     public synchronized void setShufflePlayEnabled(boolean enabled) {
-        if (shufflePlay == enabled) {
-            return;
-        }
-
         shufflePlay = enabled;
         if (shufflePlay) {
             clear();
@@ -827,7 +825,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     private synchronized void checkShufflePlay() {
 
-        final int listSize = 20;
+       // Get users desired random playlist size
+		SharedPreferences prefs = Util.getPreferences(this);
+		int listSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20"));
         boolean wasEmpty = downloadList.isEmpty();
 
         long revisionBefore = revision;
