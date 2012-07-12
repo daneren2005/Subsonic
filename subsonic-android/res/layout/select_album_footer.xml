@@ -7,33 +7,6 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content">
 
-        <Button android:id="@+id/select_album_pin"
-                android:text="@string/common.pin"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"/>
-
-        <Button android:id="@+id/select_album_unpin"
-                android:text="@string/common.unpin"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"/>
-
-        <Button android:id="@+id/select_album_delete"
-                android:text="@string/common.delete"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="6dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"/>
-
         <Button android:id="@+id/select_album_more"
                 android:text="@string/select_album.more"
                 android:textAppearance="?android:attr/textAppearanceSmall"

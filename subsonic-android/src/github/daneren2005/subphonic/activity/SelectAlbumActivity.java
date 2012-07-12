@@ -101,10 +101,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         selectButton = (Button) findViewById(R.id.select_album_select);
         playNowButton = (Button) findViewById(R.id.select_album_play_now);
         playLastButton = (Button) findViewById(R.id.select_album_play_last);
-        pinButton = (Button) footer.findViewById(R.id.select_album_pin);
-        unpinButton = (Button) footer.findViewById(R.id.select_album_unpin);
-        unpinButton = (Button) footer.findViewById(R.id.select_album_unpin);
-        deleteButton = (Button) footer.findViewById(R.id.select_album_delete);
+        pinButton = (Button) findViewById(R.id.select_album_pin);
+        unpinButton = (Button) findViewById(R.id.select_album_unpin);
+        deleteButton = (Button) findViewById(R.id.select_album_delete);
         moreButton = (Button) footer.findViewById(R.id.select_album_more);
         emptyView = findViewById(R.id.select_album_empty);
 
@@ -313,9 +312,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             @Override
             protected void done(Pair<MusicDirectory, Boolean> result) {
                 if (!result.getFirst().getChildren().isEmpty()) {
-                    pinButton.setVisibility(View.GONE);
-                    unpinButton.setVisibility(View.GONE);
-                    deleteButton.setVisibility(View.GONE);
                     moreButton.setVisibility(View.VISIBLE);
                     entryList.addFooterView(footer);
 
@@ -550,6 +546,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 selectButton.setVisibility(View.VISIBLE);
                 playNowButton.setVisibility(View.VISIBLE);
                 playLastButton.setVisibility(View.VISIBLE);
+				pinButton.setVisibility(View.VISIBLE);
+				unpinButton.setVisibility(View.VISIBLE);
+				deleteButton.setVisibility(View.VISIBLE);
             }
 
             boolean isAlbumList = getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
