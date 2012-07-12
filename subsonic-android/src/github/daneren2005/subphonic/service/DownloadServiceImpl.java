@@ -681,6 +681,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     private synchronized void doPlay(final DownloadFile downloadFile, int position, boolean start) {
+		// TODO: Start play at curr pos on rebuffer instead of restart
         try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
             downloadFile.updateModificationDate();
