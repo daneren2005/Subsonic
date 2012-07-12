@@ -86,6 +86,7 @@
     <string name="download.menu_show_album">Show album</string>
     <string name="download.menu_lyrics">Lyrics</string>
     <string name="download.menu_remove">Remove song</string>
+	<string name="download.menu_delete">Delete song</string>
     <string name="download.menu_remove_all">Remove all</string>
     <string name="download.menu_screen_on">Screen on</string>
     <string name="download.menu_screen_off">Screen off</string>

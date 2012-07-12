@@ -74,6 +74,7 @@ import github.daneren2005.subphonic.util.Util;
 import github.daneren2005.subphonic.view.VisualizerView;
 
 import static github.daneren2005.subphonic.domain.PlayerState.*;
+import java.util.ArrayList;
 
 public class DownloadActivity extends SubsonicTabActivity implements OnGestureListener {
 
@@ -556,6 +557,13 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 getDownloadService().remove(song);
                 onDownloadListChanged();
                 return true;
+			case R.id.menu_delete:
+				getDownloadService().remove(song);
+				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(1);
+				songs.add(song.getSong());
+				getDownloadService().delete(songs);
+				onDownloadListChanged();
+				return true;
             case R.id.menu_remove_all:
                 getDownloadService().setShufflePlayEnabled(false);
                 getDownloadService().clear();

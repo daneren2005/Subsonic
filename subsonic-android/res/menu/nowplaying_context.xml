@@ -15,6 +15,11 @@
         android:id="@+id/menu_remove"
         android:title="@string/download.menu_remove"
         />
+		
+	<item 
+        android:id="@+id/menu_delete"
+        android:title="@string/download.menu_delete"
+        />
 
     <item 
         android:id="@+id/menu_remove_all"
