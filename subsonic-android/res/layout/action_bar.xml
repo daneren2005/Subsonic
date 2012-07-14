@@ -19,15 +19,41 @@
             android:paddingBottom="2dip"
             android:scaleType="centerInside"
             />
+			
+	<ImageButton
+            android:id="@+id/action_button_4"
+            android:src="@drawable/ic_menu_settings"
+            android:layout_width="44dip"
+            android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:scaleType="center"
+            android:padding="5dp"
+            android:background="@drawable/actionbar_button"
+            />
+			
+	<ImageButton
+            android:id="@+id/action_button_3"
+            android:src="@drawable/ic_menu_help"
+            android:layout_width="44dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+			android:layout_toLeftOf="@id/action_button_4"
+            android:scaleType="center"
+            android:padding="5dp"
+            android:background="@drawable/actionbar_button"
+            />
 
     <ImageButton
             android:id="@+id/action_button_2"
             android:src="@drawable/action_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
+			android:layout_toLeftOf="@id/action_button_3"
             android:scaleType="center"
             android:padding="5dp"
             android:background="@drawable/actionbar_button"

@@ -189,6 +189,24 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 refresh();
             }
         });
+		
+		// Button 3: Help
+        ImageButton actionHelpButton = (ImageButton)findViewById(R.id.action_button_3);
+        actionHelpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SelectAlbumActivity.this, HelpActivity.class));
+            }
+        });
+		
+		// Button 4: Settings
+        ImageButton actionSettingsButton = (ImageButton)findViewById(R.id.action_button_4);
+        actionSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            	startActivity(new Intent(SelectAlbumActivity.this, SettingsActivity.class));
+            }
+        });
     }
 
     private void playAll() {

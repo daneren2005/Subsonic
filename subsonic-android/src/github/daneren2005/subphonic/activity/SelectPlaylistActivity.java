@@ -73,6 +73,24 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 				refresh();
 			}
 		});
+		
+		// Button 3: Help
+        ImageButton actionHelpButton = (ImageButton)findViewById(R.id.action_button_3);
+        actionHelpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SelectPlaylistActivity.this, HelpActivity.class));
+            }
+        });
+		
+		// Button 4: Settings
+        ImageButton actionSettingsButton = (ImageButton)findViewById(R.id.action_button_4);
+        actionSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            	startActivity(new Intent(SelectPlaylistActivity.this, SettingsActivity.class));
+            }
+        });
 
         load();
     }

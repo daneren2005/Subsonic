@@ -140,6 +140,24 @@ public class MainActivity extends SubsonicTabActivity {
                 Util.startActivityWithoutTransition(MainActivity.this, intent);
             }
         });
+		
+		// Button 3: Help
+        ImageButton actionHelpButton = (ImageButton)findViewById(R.id.action_button_3);
+        actionHelpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, HelpActivity.class));
+            }
+        });
+		
+		// Button 4: Settings
+        ImageButton actionSettingsButton = (ImageButton)findViewById(R.id.action_button_4);
+        actionSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            	startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            }
+        });
 
         // Remember the current theme.
         theme = Util.getTheme(this);
