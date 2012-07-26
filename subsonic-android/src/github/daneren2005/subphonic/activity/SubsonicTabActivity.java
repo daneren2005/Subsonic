@@ -271,7 +271,7 @@ public class SubsonicTabActivity extends Activity {
         return IMAGE_LOADER;
     }
 
-    protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay) {
+    protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle) {
         ModalBackgroundTask<List<MusicDirectory.Entry>> task = new ModalBackgroundTask<List<MusicDirectory.Entry>>(this, false) {
 
             private static final int MAX_SONGS = 500;
@@ -309,7 +309,7 @@ public class SubsonicTabActivity extends Activity {
                         downloadService.clear();
                     }
                     warnIfNetworkOrStorageUnavailable();
-                    downloadService.download(songs, save, autoplay, false);
+                    downloadService.download(songs, save, autoplay, false, shuffle);
                     Util.startActivityWithoutTransition(SubsonicTabActivity.this, DownloadActivity.class);
                 }
             }

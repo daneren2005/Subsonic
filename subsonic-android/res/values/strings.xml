@@ -6,6 +6,7 @@
     <string name="common.save">Save</string>
     <string name="common.cancel">Cancel</string>
     <string name="common.play_now">Play now</string>
+	<string name="common.play_shuffled">Play shuffled</string>
     <string name="common.play_next">Play next</string>
     <string name="common.play_last">Play last</string>
     <string name="common.pin">Pin</string>

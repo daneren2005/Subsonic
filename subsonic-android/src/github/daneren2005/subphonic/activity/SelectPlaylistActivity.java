@@ -43,6 +43,7 @@ import java.util.List;
 public class SelectPlaylistActivity extends SubsonicTabActivity implements AdapterView.OnItemClickListener {
 
     private static final int MENU_ITEM_PLAY_ALL = 1;
+	private static final int MENU_ITEM_PLAY_SHUFFLED = 2;
 
     private ListView list;
     private View emptyTextView;
@@ -124,6 +125,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, view, menuInfo);
         menu.add(Menu.NONE, MENU_ITEM_PLAY_ALL, MENU_ITEM_PLAY_ALL, R.string.common_play_now);
+		menu.add(Menu.NONE, MENU_ITEM_PLAY_SHUFFLED, MENU_ITEM_PLAY_SHUFFLED, R.string.common_play_shuffled);
     }
 
     @Override
@@ -131,12 +133,21 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
         Playlist playlist = (Playlist) list.getItemAtPosition(info.position);
 
+		Intent intent;
         switch (menuItem.getItemId()) {
             case MENU_ITEM_PLAY_ALL:
-                Intent intent = new Intent(SelectPlaylistActivity.this, SelectAlbumActivity.class);
+                intent = new Intent(SelectPlaylistActivity.this, SelectAlbumActivity.class);
                 intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
                 intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
                 intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
+                Util.startActivityWithoutTransition(SelectPlaylistActivity.this, intent);
+                break;
+			case MENU_ITEM_PLAY_SHUFFLED:
+				intent = new Intent(SelectPlaylistActivity.this, SelectAlbumActivity.class);
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
+				intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
                 Util.startActivityWithoutTransition(SelectPlaylistActivity.this, intent);
                 break;
             default:

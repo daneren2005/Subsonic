@@ -179,7 +179,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     @Override
-    public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext) {
+    public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
         shufflePlay = false;
         int offset = 1;
 
@@ -204,6 +204,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             revision++;
         }
         updateJukeboxPlaylist();
+		
+		if(shuffle)
+			shuffle();
 
         if (autoplay) {
             play(0);
@@ -223,7 +226,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     public void restore(List<MusicDirectory.Entry> songs, int currentPlayingIndex, int currentPlayingPosition) {
-        download(songs, false, false, false);
+        download(songs, false, false, false, false);
         if (currentPlayingIndex != -1) {
             play(currentPlayingIndex, false);
             if (currentPlaying.isCompleteFileAvailable()) {

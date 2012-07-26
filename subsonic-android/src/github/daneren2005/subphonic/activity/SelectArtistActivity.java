@@ -220,13 +220,16 @@ public class SelectArtistActivity extends SubsonicTabActivity implements Adapter
         if (artist != null) {
             switch (menuItem.getItemId()) {
                 case R.id.artist_menu_play_now:
-                    downloadRecursively(artist.getId(), false, false, true);
+                    downloadRecursively(artist.getId(), false, false, true, false);
+                    break;
+				case R.id.artist_menu_play_shuffled:
+					downloadRecursively(artist.getId(), false, false, true, true);
                     break;
                 case R.id.artist_menu_play_last:
-                    downloadRecursively(artist.getId(), false, true, false);
+                    downloadRecursively(artist.getId(), false, true, false, false);
                     break;
                 case R.id.artist_menu_pin:
-                    downloadRecursively(artist.getId(), true, true, false);
+                    downloadRecursively(artist.getId(), true, true, false, false);
                     break;
                 default:
                     return super.onContextItemSelected(menuItem);

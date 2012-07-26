@@ -219,13 +219,16 @@ public class SearchActivity extends SubsonicTabActivity {
 
         switch (menuItem.getItemId()) {
             case R.id.album_menu_play_now:
-                downloadRecursively(id, false, false, true);
+                downloadRecursively(id, false, false, true, false);
                 break;
+			case R.id.album_menu_play_shuffled:
+				downloadRecursively(id, false, false, true, true);
+				break;
             case R.id.album_menu_play_last:
-                downloadRecursively(id, false, true, false);
+                downloadRecursively(id, false, true, false, false);
                 break;
             case R.id.album_menu_pin:
-                downloadRecursively(id, true, true, false);
+                downloadRecursively(id, true, true, false, false);
                 break;
             case R.id.song_menu_play_now:
                 onSongSelected(entry, false, false, true, false);
@@ -361,7 +364,7 @@ public class SearchActivity extends SubsonicTabActivity {
             if (!append) {
                 downloadService.clear();
             }
-            downloadService.download(Arrays.asList(song), save, false, playNext);
+            downloadService.download(Arrays.asList(song), save, false, playNext, false);
             if (autoplay) {
                 downloadService.play(downloadService.size() - 1);
             }
