@@ -159,7 +159,7 @@ public class OfflineMusicService extends RESTMusicService {
 					Artist artist = new Artist();
 					artist.setId(artistFile.getPath());
 					artist.setIndex(artistFile.getName().substring(0, 1));
-					artist.setName(artistFile.getName());
+					artist.setName(artistName);
 					artists.add(artist);
 				}
 				
@@ -167,13 +167,18 @@ public class OfflineMusicService extends RESTMusicService {
 					if(albumFile.isDirectory()) {
 						String albumName = getName(albumFile);
 						if(matchCriteria(criteria, albumName)) {
-							albums.add(createEntry(context, albumFile, albumName));
+							MusicDirectory.Entry album = createEntry(context, albumFile, albumName);
+							album.setArtist(artistName);
+							albums.add(album);
 						}
 						
 						for(File songFile : FileUtil.listMusicFiles(albumFile)) {
 							String songName = getName(songFile);
 							if(matchCriteria(criteria, songName)) {
-								songs.add(createEntry(context, albumFile, songName));
+								MusicDirectory.Entry song = createEntry(context, albumFile, songName);
+								song.setArtist(artistName);
+								song.setAlbum(albumName);
+								songs.add(song);
 							}
 						}
 					}
