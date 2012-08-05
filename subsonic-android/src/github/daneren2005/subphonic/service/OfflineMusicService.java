@@ -148,8 +148,55 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Search not available in offline mode");
+		List<Artist> artists = new ArrayList<Artist>();
+		List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
+		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+        File root = FileUtil.getMusicDirectory(context);
+        for (File artistFile : FileUtil.listFiles(root)) {
+			String artistName = artistFile.getName();
+            if (artistFile.isDirectory()) {
+				if(matchCriteria(criteria, artistName)) {
+					Artist artist = new Artist();
+					artist.setId(artistFile.getPath());
+					artist.setIndex(artistFile.getName().substring(0, 1));
+					artist.setName(artistFile.getName());
+					artists.add(artist);
+				}
+				
+				for(File albumFile : FileUtil.listMusicFiles(artistFile)) {
+					if(albumFile.isDirectory()) {
+						String albumName = getName(albumFile);
+						if(matchCriteria(criteria, albumName)) {
+							albums.add(createEntry(context, albumFile, albumName));
+						}
+						
+						for(File songFile : FileUtil.listMusicFiles(albumFile)) {
+							String songName = getName(songFile);
+							if(matchCriteria(criteria, songName)) {
+								songs.add(createEntry(context, albumFile, songName));
+							}
+						}
+					}
+				}
+            }
+        }
+		
+		return new SearchResult(artists, albums, songs);
     }
+	
+	private boolean matchCriteria(SearchCritera criteria, String name) {
+		String query = criteria.getQuery().toLowerCase();
+		String[] parts = query.split(" ");
+		name = name.toLowerCase();
+		
+		for(String part : parts) {
+			if(name.indexOf(part) != -1) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
     @Override
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
