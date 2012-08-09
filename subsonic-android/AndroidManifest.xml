@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.daneren2005.subphonic"
           android:installLocation="auto"
-          android:versionCode="5"
-          android:versionName="3.3.3">
+          android:versionCode="6"
+          android:versionName="3.3.3.1">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
