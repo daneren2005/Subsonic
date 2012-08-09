@@ -163,32 +163,47 @@ public class OfflineMusicService extends RESTMusicService {
 					artists.add(artist);
 				}
 				
-				for(File albumFile : FileUtil.listMusicFiles(artistFile)) {
-					if(albumFile.isDirectory()) {
-						String albumName = getName(albumFile);
-						if(matchCriteria(criteria, albumName)) {
-							MusicDirectory.Entry album = createEntry(context, albumFile, albumName);
-							album.setArtist(artistName);
-							albums.add(album);
-						}
-						
-						for(File songFile : FileUtil.listMusicFiles(albumFile)) {
-							String songName = getName(songFile);
-							if(matchCriteria(criteria, songName)) {
-								MusicDirectory.Entry song = createEntry(context, albumFile, songName);
-								song.setArtist(artistName);
-								song.setAlbum(albumName);
-								songs.add(song);
-							}
-						}
-					}
-				}
+				recursiveAlbumSearch(artistName, artistFile, criteria, context, albums, songs);
             }
         }
 		
 		return new SearchResult(artists, albums, songs);
     }
 	
+	private void recursiveAlbumSearch(String artistName, File file, SearchCritera criteria, Context context, List<MusicDirectory.Entry> albums, List<MusicDirectory.Entry> songs) {
+		for(File albumFile : FileUtil.listMusicFiles(file)) {
+			if(albumFile.isDirectory()) {
+				String albumName = getName(albumFile);
+				if(matchCriteria(criteria, albumName)) {
+					MusicDirectory.Entry album = createEntry(context, albumFile, albumName);
+					album.setArtist(artistName);
+					albums.add(album);
+				}
+
+				for(File songFile : FileUtil.listMusicFiles(albumFile)) {
+					String songName = getName(songFile);
+					if(songFile.isDirectory()) {
+						recursiveAlbumSearch(artistName, songFile, criteria, context, albums, songs);
+					}
+					else if(matchCriteria(criteria, songName)){
+						MusicDirectory.Entry song = createEntry(context, albumFile, songName);
+						song.setArtist(artistName);
+						song.setAlbum(albumName);
+						songs.add(song);
+					}
+				}
+			}
+			else {
+				String songName = getName(albumFile);
+				if(matchCriteria(criteria, songName)) {
+					MusicDirectory.Entry song = createEntry(context, albumFile, songName);
+					song.setArtist(artistName);
+					song.setAlbum(songName);
+					songs.add(song);
+				}
+			}
+		}
+	}
 	private boolean matchCriteria(SearchCritera criteria, String name) {
 		String query = criteria.getQuery().toLowerCase();
 		String[] parts = query.split(" ");
