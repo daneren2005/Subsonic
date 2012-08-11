@@ -66,6 +66,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
     private MediaPlayer mediaPlayer;
     private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
+	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
     private final Handler handler = new Handler();
     private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
     private final ShufflePlayBuffer shufflePlayBuffer = new ShufflePlayBuffer(this);
@@ -218,6 +219,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
         lifecycleSupport.serializeDownloadQueue();
     }
+	public synchronized void downloadBackground(List<MusicDirectory.Entry> songs, boolean save) {
+		for (MusicDirectory.Entry song : songs) {
+			DownloadFile downloadFile = new DownloadFile(this, song, save);
+			backgroundDownloadList.add(downloadFile);
+		}
+		
+		checkDownloads();
+		lifecycleSupport.serializeDownloadQueue();
+	}
 
     private void updateJukeboxPlaylist() {
         if (jukeboxEnabled) {
@@ -418,7 +428,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     @Override
     public synchronized List<DownloadFile> getDownloads() {
-        return new ArrayList<DownloadFile>(downloadList);
+		List<DownloadFile> temp = new ArrayList<DownloadFile>();
+		temp.addAll(downloadList);
+		temp.addAll(backgroundDownloadList);
+        return temp;
     }
 
     /** Plays either the current song (resume) or the first/next one in queue. */
@@ -774,7 +787,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             return;
         }
 
-        if (downloadList.isEmpty()) {
+        if (downloadList.isEmpty() && backgroundDownloadList.isEmpty()) {
             return;
         }
 
@@ -794,7 +807,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         // Find a suitable target for download.
-        else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed()) {
+        else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed() && !downloadList.isEmpty()) {
 
             int n = size();
             if (n == 0) {
@@ -821,6 +834,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 i = (i + 1) % n;
             } while (i != start);
         }
+		else if(!backgroundDownloadList.isEmpty()) {
+			for(int i = 0; i < backgroundDownloadList.size(); i++) {
+				DownloadFile downloadFile = backgroundDownloadList.get(i);
+				if (!downloadFile.isWorkDone() && downloadFile.shouldSave()) {
+					currentDownloading = downloadFile;
+					currentDownloading.download();
+					cleanupCandidates.add(currentDownloading);
+					break;
+                }
+			}
+		}
 
         // Delete obsolete .partial and .complete files.
         cleanup();

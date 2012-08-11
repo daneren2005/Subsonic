@@ -33,6 +33,7 @@ import github.daneren2005.subphonic.domain.RepeatMode;
 public interface DownloadService {
 
     void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle);
+	void downloadBackground(List<MusicDirectory.Entry> songs, boolean save);
 
     void setShufflePlayEnabled(boolean enabled);
 
