@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="common.appname">Subphonic</string>
+    <string name="common.appname">Sub Droid</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Save</string>
     <string name="common.cancel">Cancel</string>
@@ -13,14 +13,14 @@
     <string name="common.unpin">Unpin</string>
     <string name="common.delete">Delete</string>
 
-    <string name="button_bar.home">Subphonic home</string>
+    <string name="button_bar.home">Sub Droid home</string>
     <string name="button_bar.browse">Media library</string>
     <string name="button_bar.search">Search</string>
     <string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Now playing</string>
 
     <string name="main.welcome_title">Welcome!</string>
-    <string name="main.welcome_text">Welcome to Subphonic! The app is currently configured to use the Subsonic demo server. After you\'ve
+    <string name="main.welcome_text">Welcome to Sub Droid! The app is currently configured to use the Subsonic demo server. After you\'ve
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
     <string name="main.select_server">Select server</string>
     <string name="main.shuffle">Shuffle play</string>
@@ -40,7 +40,7 @@
     <string name="playlist.label">Playlists</string>
 
     <string name="help.label">Help</string>
-    <string name="help.title">Welcome to Subphonic!</string>
+    <string name="help.title">Welcome to Sub Droid!</string>
     <string name="help.back">Back</string>
     <string name="help.close">Close</string>
     <string name="help.url">file:///android_asset/html/en/index.html</string>
@@ -118,7 +118,7 @@
 
     <string name="error.label">Error</string>
 
-    <string name="settings.title">Subphonic settings</string>
+    <string name="settings.title">Sub Droid settings</string>
     <string name="settings.test_connection_title">Test connection</string>
     <string name="settings.servers_title">Servers</string>
     <string name="settings.server_unused1">Unused 1</string>
@@ -175,7 +175,7 @@
     <string name="settings.search_history_cleared">Search history cleared</string>
     <string name="settings.other_title">Other settings</string>
     <string name="settings.scrobble_title">Scrobble to Last.fm</string>
-    <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the Subphonic server</string>
+    <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the Sub Droid server</string>
     <string name="settings.hide_media_title">Hide from other</string>
     <string name="settings.hide_media_summary">Hide music files from other apps.</string>
     <string name="settings.hide_media_toast">Takes effect next time Android scans your phone for music.</string>
@@ -199,7 +199,7 @@
 
     <string name="parser.reading">Reading from server.</string>
     <string name="parser.reading_done">Reading from server. Done!</string>
-    <string name="parser.upgrade_client">Incompatible versions. Please upgrade Subphonic Android app.</string>
+    <string name="parser.upgrade_client">Incompatible versions. Please upgrade Sub Droid Android app.</string>
     <string name="parser.upgrade_server">Incompatible versions. Please upgrade Subsonic server.</string>
     <string name="parser.not_authenticated">Wrong username or password.</string>
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
