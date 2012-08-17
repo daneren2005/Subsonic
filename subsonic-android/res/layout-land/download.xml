@@ -165,7 +165,7 @@
 
         </RelativeLayout>
 
-        <github.daneren2005.subdroid.util.MyViewFlipper
+        <github.daneren2005.dsub.util.MyViewFlipper
                 android:id="@+id/download_playlist_flipper"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
@@ -196,7 +196,7 @@
 
             <include layout="@layout/download_playlist"/>
 
-        </github.daneren2005.subdroid.util.MyViewFlipper>
+        </github.daneren2005.dsub.util.MyViewFlipper>
 
     </RelativeLayout>
 

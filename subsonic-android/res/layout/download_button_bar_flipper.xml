@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<github.daneren2005.subdroid.util.MyViewFlipper
+<github.daneren2005.dsub.util.MyViewFlipper
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/download_button_bar_flipper"
         android:layout_width="fill_parent"
@@ -60,7 +60,7 @@
 
     <include layout="@layout/button_bar"/>
 
-</github.daneren2005.subdroid.util.MyViewFlipper>
+</github.daneren2005.dsub.util.MyViewFlipper>
 
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="github.daneren2005.subdroid"
+          package="github.daneren2005.dsub"
           android:installLocation="auto"
           android:versionCode="6"
           android:versionName="3.3.3.1">
@@ -20,8 +20,8 @@
 
     <application android:label="@string/common.appname" android:icon="@drawable/launch2" android:theme="@style/Wheat">
 
-        <activity android:name="github.daneren2005.subdroid.activity.MainActivity"
-                  android:label="Sub Droid"
+        <activity android:name="github.daneren2005.dsub.activity.MainActivity"
+                  android:label="DSub"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="standard">
             <intent-filter>
@@ -30,46 +30,46 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="github.daneren2005.subdroid.activity.SelectArtistActivity"
+        <activity android:name="github.daneren2005.dsub.activity.SelectArtistActivity"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="standard"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.SelectAlbumActivity"
+        <activity android:name="github.daneren2005.dsub.activity.SelectAlbumActivity"
                   android:configChanges="orientation|keyboardHidden"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.SearchActivity"
+        <activity android:name="github.daneren2005.dsub.activity.SearchActivity"
                   android:label="@string/search.label"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.SelectPlaylistActivity"
+        <activity android:name="github.daneren2005.dsub.activity.SelectPlaylistActivity"
                   android:label="@string/playlist.label"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="standard"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.DownloadActivity"
+        <activity android:name="github.daneren2005.dsub.activity.DownloadActivity"
                   android:configChanges="keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.SettingsActivity"
+        <activity android:name="github.daneren2005.dsub.activity.SettingsActivity"
                   android:theme="@android:style/Theme"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.HelpActivity"
+        <activity android:name="github.daneren2005.dsub.activity.HelpActivity"
                   android:label="@string/help.label"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.LyricsActivity"
+        <activity android:name="github.daneren2005.dsub.activity.LyricsActivity"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.EqualizerActivity"
+        <activity android:name="github.daneren2005.dsub.activity.EqualizerActivity"
                   android:label="@string/equalizer.label"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.daneren2005.subdroid.activity.VoiceQueryReceiverActivity"
+        <activity android:name="github.daneren2005.dsub.activity.VoiceQueryReceiverActivity"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
@@ -77,7 +77,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="github.daneren2005.subdroid.activity.QueryReceiverActivity"
+        <activity android:name="github.daneren2005.dsub.activity.QueryReceiverActivity"
                   android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
@@ -85,33 +85,33 @@
             <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
         </activity>
 
-        <service android:name="github.daneren2005.subdroid.service.DownloadServiceImpl"
+        <service android:name="github.daneren2005.dsub.service.DownloadServiceImpl"
                  android:label="Subsonic Download Service"/>
 
-        <receiver android:name="github.daneren2005.subdroid.receiver.MediaButtonIntentReceiver">
+        <receiver android:name="github.daneren2005.dsub.receiver.MediaButtonIntentReceiver">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name="github.daneren2005.subdroid.receiver.BluetoothIntentReceiver">
+        <receiver android:name="github.daneren2005.dsub.receiver.BluetoothIntentReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.a2dp.action.SINK_STATE_CHANGED"/>
             </intent-filter>
         </receiver>
 
-        <receiver android:name="github.daneren2005.subdroid.provider.SubsonicAppWidgetProvider1" >
+        <receiver android:name="github.daneren2005.dsub.provider.SubsonicAppWidgetProvider1" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info"/>
         </receiver>
 
-        <provider android:name="github.daneren2005.subdroid.provider.SearchSuggestionProvider1"
-                  android:authorities="github.daneren2005.subdroid.provider.SearchSuggestionProvider1"/>
+        <provider android:name="github.daneren2005.dsub.provider.SearchSuggestionProvider1"
+                  android:authorities="github.daneren2005.dsub.provider.SearchSuggestionProvider1"/>
 
         <meta-data android:name="android.app.default_searchable"
-                   android:value="github.daneren2005.subdroid.activity.QueryReceiverActivity"/>
+                   android:value="github.daneren2005.dsub.activity.QueryReceiverActivity"/>
 
     </application>
 
