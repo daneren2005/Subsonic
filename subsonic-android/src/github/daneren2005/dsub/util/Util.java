@@ -615,19 +615,19 @@ public final class Util {
         
         // Create actions for media buttons
         PendingIntent pendingIntent;
-        Intent prevIntent = new Intent("1");
+        Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
         prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
         prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
         pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
         contentView.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
         
-        Intent pauseIntent = new Intent("2");
+        Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
         pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
         pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
         pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
         contentView.setOnClickPendingIntent(R.id.control_pause, pendingIntent);
         
-        Intent nextIntent = new Intent("3");
+        Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
         nextIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
         nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT));
         pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
