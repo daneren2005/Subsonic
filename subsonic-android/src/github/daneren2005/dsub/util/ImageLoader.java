@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -28,6 +29,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.media.RemoteControlClient;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -49,6 +51,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  *
  * @author Sindre Mehus
  */
+@TargetApi(14)
 public class ImageLoader implements Runnable {
 
     private static final String TAG = ImageLoader.class.getSimpleName();
@@ -98,7 +101,23 @@ public class ImageLoader implements Runnable {
         if (!large) {
             setUnknownImage(view, large);
         }
-        queue.offer(new Task(view, entry, size, large, large, crossfade));
+        queue.offer(new Task(view.getContext(), view, null, entry, size, large, large, crossfade));
+    }
+
+    public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
+        if (entry == null || entry.getCoverArt() == null) {
+            setUnknownImage(remoteControl);
+            return;
+        }
+        
+        Drawable drawable = cache.get(getKey(entry.getCoverArt(), imageSizeDefault));
+        if (drawable != null) {
+            setImage(remoteControl, drawable);
+            return;
+        }
+
+        setUnknownImage(remoteControl);
+        queue.offer(new Task(context, null, remoteControl, entry, imageSizeDefault, false, false, false));
     }
 
     private String getKey(String coverArtId, int size) {
@@ -130,6 +149,15 @@ public class ImageLoader implements Runnable {
             }
         }
     }
+    
+	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
+    	Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
+    	remoteControl.editMetadata(false)
+    	.putBitmap(
+    			RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
+    			origBitmap.copy(origBitmap.getConfig(), true))
+    	.apply();
+    }
 
     private void setUnknownImage(View view, boolean large) {
         if (large) {
@@ -141,6 +169,10 @@ public class ImageLoader implements Runnable {
                 ((ImageView) view).setImageResource(R.drawable.unknown_album);
             }
         }
+    }
+    
+    private void setUnknownImage(RemoteControlClient remoteControl) {
+        setImage(remoteControl, largeUnknownImage);
     }
 
     public void clear() {
@@ -206,9 +238,11 @@ public class ImageLoader implements Runnable {
 
         return bitmapWithReflection;
     }
-
-    private class Task {
+    
+	private class Task {
+    	private final Context context;
         private final View view;
+        private final RemoteControlClient remoteControl;
         private final MusicDirectory.Entry entry;
         private final Handler handler;
         private final int size;
@@ -216,8 +250,10 @@ public class ImageLoader implements Runnable {
         private final boolean saveToFile;
         private final boolean crossfade;
 
-        public Task(View view, MusicDirectory.Entry entry, int size, boolean reflection, boolean saveToFile, boolean crossfade) {
-            this.view = view;
+        public Task(Context context, View view, RemoteControlClient remoteControl, MusicDirectory.Entry entry, int size, boolean reflection, boolean saveToFile, boolean crossfade) {
+        	this.context = context;
+        	this.view = view;
+        	this.remoteControl = remoteControl;
             this.entry = entry;
             this.size = size;
             this.reflection = reflection;
@@ -228,20 +264,24 @@ public class ImageLoader implements Runnable {
 
         public void execute() {
             try {
-                MusicService musicService = MusicServiceFactory.getMusicService(view.getContext());
-                Bitmap bitmap = musicService.getCoverArt(view.getContext(), entry, size, saveToFile, null);
+                MusicService musicService = MusicServiceFactory.getMusicService(context);
+                Bitmap bitmap = musicService.getCoverArt(context, entry, size, saveToFile, null);
 
                 if (reflection) {
                     bitmap = createReflection(bitmap);
                 }
 
-                final Drawable drawable = Util.createDrawableFromBitmap(view.getContext(), bitmap);
+                final Drawable drawable = Util.createDrawableFromBitmap(context, bitmap);
                 cache.put(getKey(entry.getCoverArt(), size), drawable);
 
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        setImage(view, drawable, crossfade);
+                    	if (view != null) {
+                    		setImage(view, drawable, crossfade);
+                    	} else if (remoteControl != null) {
+                    		setImage(remoteControl, drawable);
+                    	}
                     }
                 });
             } catch (Throwable x) {
