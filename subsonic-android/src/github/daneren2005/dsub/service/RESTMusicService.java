@@ -602,6 +602,17 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
     }
+    
+    @Override
+    public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+    	checkServerVersion(context, "1.8", "Starring is not supported.");
+    	Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, "id", id);
+    	try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+    }
 
     private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
         return getReader(context, progressListener, method, requestParams, Collections.<String>emptyList(), Collections.emptyList());

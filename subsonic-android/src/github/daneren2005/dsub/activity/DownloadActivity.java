@@ -45,6 +45,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
@@ -106,6 +107,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private Button visualizerButton;
     private Button jukeboxButton;
     private View toggleListButton;
+    private ImageButton starButton;
     private ScheduledExecutorService executorService;
     private DownloadFile currentPlaying;
     private long currentRevision;
@@ -154,6 +156,19 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         LinearLayout visualizerViewLayout = (LinearLayout) findViewById(R.id.download_visualizer_view_layout);
 
         toggleListButton = findViewById(R.id.download_toggle_list);
+        
+        starButton = (ImageButton) findViewById(R.id.download_star);
+        starButton.setVisibility(Util.isOffline(this) ? View.GONE : View.VISIBLE);
+        starButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
+				if (currentDownload != null) {
+					MusicDirectory.Entry currentSong = currentDownload.getSong();
+					toggleStarredInBackground(currentSong, starButton);
+				}
+			}
+		});
 
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
@@ -711,11 +726,13 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             albumTextView.setText(song.getAlbum());
             artistTextView.setText(song.getArtist());
             getImageLoader().loadImage(albumArtImageView, song, true, true);
+            starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
         } else {
             songTitleTextView.setText(null);
             albumTextView.setText(null);
             artistTextView.setText(null);
             getImageLoader().loadImage(albumArtImageView, null, true, false);
+            starButton.setImageResource(android.R.drawable.btn_star_big_off);
         }
     }
 

@@ -14,15 +14,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_alignParentRight="true"
-                android:background="@color/mediaControlBackground"
-                >
+                android:background="@color/mediaControlBackground">
 
             <LinearLayout
+                    android:id="@+id/download_play_controls_layout"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true">
+                    android:layout_centerHorizontal="true">
 
                 <ImageButton
                         android:id="@+id/download_previous"
@@ -87,7 +87,6 @@
                     android:id="@+id/download_song_title"
                     android:layout_width="150dip"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
                     android:layout_above="@+id/download_status"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="12dip"
@@ -99,6 +98,7 @@
                     android:textColor="@color/mediaControlForeground"/>
 
             <LinearLayout
+                    android:id="@+id/download_other_controls_layout"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,6 +111,7 @@
                         android:background="@android:color/transparent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/download_play_controls_layout"
                         android:padding="9dip"/>
                 <ImageButton
                         android:id="@+id/download_repeat"
@@ -119,6 +120,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="9dip"/>
+                <ImageButton
+                        android:id="@+id/download_star"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@null"
+                        android:src="@android:drawable/star_big_off"/>
                 <ImageButton
                         android:id="@+id/download_toggle_list"
                         android:src="@drawable/media_toggle_list"
