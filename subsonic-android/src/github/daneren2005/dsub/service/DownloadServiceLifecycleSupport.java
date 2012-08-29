@@ -29,6 +29,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.RemoteControlClient;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -209,28 +210,34 @@ public class DownloadServiceLifecycleSupport {
         }
 
         switch (event.getKeyCode()) {
-            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-            case KeyEvent.KEYCODE_HEADSETHOOK:
-            	downloadService.togglePlayPause();
-                break;
-            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                downloadService.previous();
-                break;
-            case KeyEvent.KEYCODE_MEDIA_NEXT:
-                if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
-                    downloadService.next();
-                }
-                break;
-            case KeyEvent.KEYCODE_MEDIA_STOP:
-                downloadService.reset();
-                break;
-			case KeyEvent.KEYCODE_MEDIA_PLAY:
-				downloadService.start();
-				break;
-			case KeyEvent.KEYCODE_MEDIA_PAUSE:
-				downloadService.pause();
-            default:
-                break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
+        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+        case KeyEvent.KEYCODE_HEADSETHOOK:
+        	downloadService.togglePlayPause();
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
+        case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+        	downloadService.previous();
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
+        case KeyEvent.KEYCODE_MEDIA_NEXT:
+        	if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
+        		downloadService.next();
+        	}
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_STOP:
+        case KeyEvent.KEYCODE_MEDIA_STOP:
+        	downloadService.reset();
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_PLAY:
+        case KeyEvent.KEYCODE_MEDIA_PLAY:
+        	downloadService.start();
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_PAUSE:
+        case KeyEvent.KEYCODE_MEDIA_PAUSE:
+        	downloadService.pause();
+        default:
+        	break;
         }
     }
 

@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -36,6 +37,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
@@ -731,6 +733,47 @@ public final class Util {
         } catch (Throwable x) {
             // Ignored.
         }
+    }
+    
+    @TargetApi(8)
+	public static void requestAudioFocus(Context context) {
+//    	// AudioManager.requestAudioFocus() was introduced in Android 2.2.
+//      // Use reflection to maintain compatibility with 1.5.
+//    	try {
+//    		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+//    		Class<?> onAudioFocusChangeListener = Class.forName("android.media.AudioManager.OnAudioFocuseChangeListener");
+//    		Method requestAudioFocus = AudioManager.class.getMethod(
+//    				"requestAudioFocus", onAudioFocusChangeListener, Integer.TYPE, Integer.TYPE); 
+//    		requestAudioFocus.invoke(audioManager, null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+////    	} catch (Throwable x) {
+////    		// Ignored.
+////    	}
+//    	} catch (ClassNotFoundException e) {
+//			Log.e(TAG, "ClassNotFoundException getting OnAudioFocusChangeListener.");
+//		} catch (NoSuchMethodException e) {
+//    		Log.e(TAG, "NoSuchMethodException getting requestAudioFocus.");
+//    	} catch (InvocationTargetException e){
+//    		// Unpack original exception when possible
+//            Throwable cause = e.getCause();
+//            if (cause instanceof RuntimeException) {
+//                throw (RuntimeException) cause;
+//            } else if (cause instanceof Error) {
+//                throw (Error) cause;
+//            } else {
+//                // Unexpected checked exception; wrap and re-throw
+//                throw new RuntimeException(e);
+//            }
+//    	} catch (IllegalArgumentException e) {
+//    		Log.e(TAG, "IllegalArgumentException invoking requestAudioFocus.");
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			Log.e(TAG, "IllegalAccessException invoking requestAudioFocus.");
+//			e.printStackTrace();
+//		}
+    	if (Build.VERSION.SDK_INT >= 8) {
+    		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    		audioManager.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    	}
     }
 
     private static void startForeground(Service service, int notificationId, Notification notification) {
