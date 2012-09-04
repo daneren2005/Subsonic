@@ -138,64 +138,59 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 return false;
             }
         });
-        
-//      try {
-//      	Class.forName("android.media.RemoteControlClient");
-      if (Build.VERSION.SDK_INT >= 14) {
-      	
-      	Util.requestAudioFocus(this);
-      	Util.registerMediaButtonEventReceiver(this);
-      	
-      	// Use the remote control APIs (if available) to set the playback state
-      	if (mRemoteControlClient == null) {
-      		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-      		ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
-//      		audioManager.registerMediaButtonEventReceiver(mediaButtonReceiverComponent);
-      		// build the PendingIntent for the remote control client
-      		Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-      		mediaButtonIntent.setComponent(mediaButtonReceiverComponent);
-      		PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
-      		// create and register the remote control client
-      		mRemoteControlClient = new RemoteControlClient(mediaPendingIntent);
-      		audioManager.registerRemoteControlClient(mRemoteControlClient);
-      	}
 
-      	mRemoteControlClient.setPlaybackState(
-      			RemoteControlClient.PLAYSTATE_STOPPED);
+		if (Build.VERSION.SDK_INT >= 14) {
 
-      	mRemoteControlClient.setTransportControlFlags(
-      			RemoteControlClient.FLAG_KEY_MEDIA_PLAY | 
-      			RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | 
-      			RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
-      			RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-      			RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-      			RemoteControlClient.FLAG_KEY_MEDIA_STOP);
-  	}
-//      } catch (ClassNotFoundException x) {
-//          // Ignored.
-//      }
+			Util.requestAudioFocus(this);
+			Util.registerMediaButtonEventReceiver(this);
 
-        if (equalizerAvailable) {
-            equalizerController = new EqualizerController(this, mediaPlayer);
-            if (!equalizerController.isAvailable()) {
-                equalizerController = null;
-            } else {
-                equalizerController.loadSettings();
-            }
-        }
-        if (visualizerAvailable) {
-            visualizerController = new VisualizerController(this, mediaPlayer);
-            if (!visualizerController.isAvailable()) {
-                visualizerController = null;
-            }
-        }
+			// Use the remote control APIs (if available) to set the playback state
+			if (mRemoteControlClient == null) {
+				AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
+				// audioManager.registerMediaButtonEventReceiver(mediaButtonReceiverComponent);
+				// build the PendingIntent for the remote control client
+				Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+				mediaButtonIntent.setComponent(mediaButtonReceiverComponent);
+				PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
+				// create and register the remote control client
+				mRemoteControlClient = new RemoteControlClient(mediaPendingIntent);
+				audioManager.registerRemoteControlClient(mRemoteControlClient);
+			}
 
-        PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
-        wakeLock.setReferenceCounted(false);
+			mRemoteControlClient.setPlaybackState(
+					RemoteControlClient.PLAYSTATE_STOPPED);
 
-        instance = this;
-        lifecycleSupport.onCreate();
+			mRemoteControlClient.setTransportControlFlags(
+					RemoteControlClient.FLAG_KEY_MEDIA_PLAY | 
+					RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | 
+					RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
+					RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
+					RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
+					RemoteControlClient.FLAG_KEY_MEDIA_STOP);
+		}
+
+		if (equalizerAvailable) {
+			equalizerController = new EqualizerController(this, mediaPlayer);
+			if (!equalizerController.isAvailable()) {
+				equalizerController = null;
+			} else {
+				equalizerController.loadSettings();
+			}
+		}
+		if (visualizerAvailable) {
+			visualizerController = new VisualizerController(this, mediaPlayer);
+			if (!visualizerController.isAvailable()) {
+				visualizerController = null;
+			}
+		}
+
+		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
+		wakeLock.setReferenceCounted(false);
+
+		instance = this;
+		lifecycleSupport.onCreate();
     }
 
     @Override
@@ -697,7 +692,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         boolean show = this.playerState == PAUSED && playerState == PlayerState.STARTED;
-        boolean hide = this.playerState == STARTED && playerState == PlayerState.PAUSED;
+        boolean hide = this.playerState == STARTED && (playerState == PlayerState.PAUSED || playerState == PlayerState.IDLE);
         Util.broadcastPlaybackStatusChange(this, playerState);
 
         this.playerState = playerState;
