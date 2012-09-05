@@ -692,7 +692,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         boolean show = this.playerState == PAUSED && playerState == PlayerState.STARTED;
-        boolean hide = this.playerState == STARTED && (playerState == PlayerState.PAUSED || playerState == PlayerState.IDLE);
+        boolean hide = this.playerState == STARTED && playerState == PlayerState.PAUSED;
         Util.broadcastPlaybackStatusChange(this, playerState);
 
         this.playerState = playerState;
@@ -702,8 +702,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         
         if (show) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			Log.d(TAG, "Showing");
         } else if (hide) {
             Util.hidePlayingNotification(this, this, handler);
+			Log.d(TAG, "Hiding");
         }
 
         if (playerState == STARTED) {
