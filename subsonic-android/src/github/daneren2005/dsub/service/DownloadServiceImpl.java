@@ -637,7 +637,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
         try {
             mediaPlayer.reset();
-			setPlayerState(PAUSED);
             setPlayerState(IDLE);
         } catch (Exception x) {
             handleError(x);
