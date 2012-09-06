@@ -10,4 +10,6 @@
     <color name="wheatBackground">#F1F0E6</color>
     <color name="wheatForeground1">#494B26</color>
     <color name="wheatForeground2">#830009</color>
+	
+	<color name="ics_opaque">#8033b5e5</color>
 </resources>

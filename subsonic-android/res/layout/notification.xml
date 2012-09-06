@@ -60,7 +60,7 @@
         <ImageButton
             android:id="@+id/control_previous"
             android:src="@drawable/notification_prev"
-            android:background="@android:color/transparent"
+            android:background="@drawable/btn_bg"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_gravity="center|right"
@@ -71,7 +71,7 @@
         <ImageButton
             android:id="@+id/control_pause"
             android:src="@drawable/notification_pause"
-            android:background="@android:color/transparent"
+            android:background="@drawable/btn_bg"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_gravity="center|right"
@@ -82,7 +82,7 @@
         <ImageButton
             android:id="@+id/control_next"
             android:src="@drawable/notification_next"
-            android:background="@android:color/transparent"
+            android:background="@drawable/btn_bg"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_gravity="center|right"
