@@ -18,22 +18,14 @@
  */
 package github.daneren2005.dsub.service;
 
-import android.annotation.TargetApi;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
-import android.media.RemoteControlClient;
-import android.os.Build;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.PowerManager;
-import android.util.Log;
+import static github.daneren2005.dsub.domain.PlayerState.COMPLETED;
+import static github.daneren2005.dsub.domain.PlayerState.DOWNLOADING;
+import static github.daneren2005.dsub.domain.PlayerState.IDLE;
+import static github.daneren2005.dsub.domain.PlayerState.PAUSED;
+import static github.daneren2005.dsub.domain.PlayerState.PREPARED;
+import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
+import static github.daneren2005.dsub.domain.PlayerState.STARTED;
+import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -41,10 +33,12 @@ import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.CancellableTask;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LRUCache;
 import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,8 +46,17 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import static github.daneren2005.dsub.domain.PlayerState.*;
-import github.daneren2005.dsub.util.*;
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.PowerManager;
+import android.util.Log;
 
 /**
  * @author Sindre Mehus
@@ -71,8 +74,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public static final String CMD_NEXT = "github.daneren2005.dsub.CMD_NEXT";
 
     
-    private RemoteControlClient mRemoteControlClient;
-    private ImageLoader imageLoader;
+    private RemoteControlClientHelper mRemoteControl;
     
     private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
     private MediaPlayer mediaPlayer;
@@ -121,12 +123,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
     }
 
-    @TargetApi(14)
 	@Override
     public void onCreate() {
         super.onCreate();
-        
-        imageLoader = new ImageLoader(this);
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
@@ -139,36 +138,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
         });
 
-		if (Build.VERSION.SDK_INT >= 14) {
+        Util.requestAudioFocus(this);
+        Util.registerMediaButtonEventReceiver(this);
 
-			Util.requestAudioFocus(this);
-			Util.registerMediaButtonEventReceiver(this);
-
-			// Use the remote control APIs (if available) to set the playback state
-			if (mRemoteControlClient == null) {
-				AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-				ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
-				// audioManager.registerMediaButtonEventReceiver(mediaButtonReceiverComponent);
-				// build the PendingIntent for the remote control client
-				Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-				mediaButtonIntent.setComponent(mediaButtonReceiverComponent);
-				PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
-				// create and register the remote control client
-				mRemoteControlClient = new RemoteControlClient(mediaPendingIntent);
-				audioManager.registerRemoteControlClient(mRemoteControlClient);
-			}
-
-			mRemoteControlClient.setPlaybackState(
-					RemoteControlClient.PLAYSTATE_STOPPED);
-
-			mRemoteControlClient.setTransportControlFlags(
-					RemoteControlClient.FLAG_KEY_MEDIA_PLAY | 
-					RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | 
-					RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
-					RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-					RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-					RemoteControlClient.FLAG_KEY_MEDIA_STOP);
-		}
+        if (mRemoteControl == null) {
+        	// Use the remote control APIs (if available) to set the playback state
+        	mRemoteControl = RemoteControlClientHelper.createInstance();
+        	ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
+        	mRemoteControl.register(this, mediaButtonReceiverComponent);
+        }
 
 		if (equalizerAvailable) {
 			equalizerController = new EqualizerController(this, mediaPlayer);
@@ -194,12 +172,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
         lifecycleSupport.onStart(intent);
+        return START_NOT_STICKY;
     }
 
-    @Override
+	@Override
     public void onDestroy() {
         super.onDestroy();
         lifecycleSupport.onDestroy();
@@ -210,6 +189,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
         if (visualizerController != null) {
             visualizerController.release();
+        }
+        if (mRemoteControl != null) {
+        	mRemoteControl.unregister(this);
+        	mRemoteControl = null;
         }
 
         instance = null;
@@ -440,7 +423,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
     }
 
-    @TargetApi(14)
 	synchronized void setCurrentPlaying(DownloadFile currentPlaying, boolean showNotification) {
         this.currentPlaying = currentPlaying;
 
@@ -457,23 +439,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             Util.hidePlayingNotification(this, this, handler);
         }
         
-        if (mRemoteControlClient != null) {
-        	MusicDirectory.Entry currentSong = currentPlaying == null ? null: currentPlaying.getSong();
-        	// Update the remote controls
-        	mRemoteControlClient.editMetadata(true)
-        	.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, currentSong == null ? null : currentSong.getArtist())
-        	.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, currentSong == null ? null : currentSong.getAlbum())
-        	.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, currentSong == null ? null : currentSong.getTitle())
-        	.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, currentSong == null ? 0 : currentSong.getDuration())
-        	.apply();
-        	if (currentSong == null) {
-        		mRemoteControlClient.editMetadata(true)
-            	.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
-            	.apply();
-        	} else {
-        		imageLoader.loadImage(this, mRemoteControlClient, currentSong);
-        	}
-        }
+        MusicDirectory.Entry currentSong = currentPlaying == null ? null: currentPlaying.getSong();
+        mRemoteControl.updateMetadata(this, currentSong);
     }
 
     @Override
@@ -683,7 +650,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         return playerState;
     }
 
-    @TargetApi(14)
 	synchronized void setPlayerState(PlayerState playerState) {
         Log.i(TAG, this.playerState.name() + " -> " + playerState.name() + " (" + currentPlaying + ")");
 
@@ -696,9 +662,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         Util.broadcastPlaybackStatusChange(this, playerState);
 
         this.playerState = playerState;
-        if (mRemoteControlClient != null) {
-        	mRemoteControlClient.setPlaybackState(playerState.getRemoteControlClientPlayState());
-		}
+        mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
         
         if (show) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
