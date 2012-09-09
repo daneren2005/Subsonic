@@ -4,12 +4,6 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
 
-    <include 
-            layout="@layout/action_bar"
-            android:layout_width="fill_parent"
-            android:layout_height="45dp"
-            />
-
     <View
             android:layout_width="fill_parent"
             android:layout_height="1px"

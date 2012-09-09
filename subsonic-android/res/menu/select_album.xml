@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">		
 	<item 
-		android:id="@+id/menu_search"
-		android:icon="@drawable/action_search"
-		android:title="@string/menu.search"
+		android:id="@+id/menu_play_all"
+		android:icon="@drawable/action_play_all"
+		android:title="@string/menu.play"
 		android:showAsAction="ifRoom|withText"/>
 	
 	<item 
-		android:id="@+id/menu_shuffle"
-		android:icon="@drawable/action_shuffle"
-		android:title="@string/menu.shuffle"
+		android:id="@+id/menu_refresh"
+		android:icon="@drawable/action_refresh"
+		android:title="@string/menu.refresh"
 		android:showAsAction="ifRoom|withText"/>
 
 	<item 
 		android:id="@+id/menu_help"
-		android:icon="@drawable/ic_menu_help"
+		android:icon="@drawable/action_help"
 		android:title="@string/menu.help"/>
 
 	<item 
 		android:id="@+id/menu_settings"
-		android:icon="@drawable/ic_menu_settings"
+		android:icon="@drawable/action_settings"
 		android:title="@string/menu.settings"/>
 
 	<item 
