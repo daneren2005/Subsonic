@@ -458,14 +458,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
         
         if (mRemoteControlClient != null) {
-        	MusicDirectory.Entry currentSong = currentPlaying == null ? null: currentPlaying.getSong();
+        	MusicDirectory.Entry currentSong = ((currentPlaying == null) ? null: currentPlaying.getSong());
         	// Update the remote controls
         	mRemoteControlClient.editMetadata(true)
         	.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, currentSong == null ? null : currentSong.getArtist())
         	.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, currentSong == null ? null : currentSong.getAlbum())
         	.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, currentSong == null ? null : currentSong.getTitle())
-        	.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, currentSong == null ? 0 : currentSong.getDuration())
-        	.apply();
+        	.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, (currentSong == null) ? 0 : ((currentSong.getDuration() == null) ? 0 : currentSong.getDuration()))
+        	 .apply();
         	if (currentSong == null) {
         		mRemoteControlClient.editMetadata(true)
             	.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
@@ -702,10 +702,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         
         if (show) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
-			Log.d(TAG, "Showing");
         } else if (hide) {
             Util.hidePlayingNotification(this, this, handler);
-			Log.d(TAG, "Hiding");
         }
 
         if (playerState == STARTED) {
