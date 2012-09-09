@@ -76,9 +76,6 @@ public class SubsonicTabActivity extends SherlockActivity {
     @Override
     protected void onPostCreate(Bundle bundle) {
         super.onPostCreate(bundle);
-		
-		ActionBar actionBar = getSupportActionBar();
-		// actionBar.setDisplayHomeAsUpEnabled(true);
 
         homeButton = findViewById(R.id.button_bar_home);
         homeButton.setOnClickListener(new View.OnClickListener() {
