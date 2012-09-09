@@ -34,12 +34,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -53,7 +54,7 @@ import github.daneren2005.dsub.util.Util;
 /**
  * @author Sindre Mehus
  */
-public class SubsonicTabActivity extends SherlockActivity {
+public class SubsonicTabActivity extends Activity {
 
     private static final String TAG = SubsonicTabActivity.class.getSimpleName();
     private static ImageLoader IMAGE_LOADER;
@@ -67,9 +68,9 @@ public class SubsonicTabActivity extends SherlockActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         setUncaughtExceptionHandler();
-        // applyTheme();
+        applyTheme();
         super.onCreate(bundle);
-        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         startService(new Intent(this, DownloadServiceImpl.class));
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
@@ -77,9 +78,6 @@ public class SubsonicTabActivity extends SherlockActivity {
     @Override
     protected void onPostCreate(Bundle bundle) {
         super.onPostCreate(bundle);
-		
-		ActionBar actionBar = getSupportActionBar();
-		// actionBar.setDisplayHomeAsUpEnabled(true);
 
         homeButton = findViewById(R.id.button_bar_home);
         homeButton.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +137,36 @@ public class SubsonicTabActivity extends SherlockActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.menu_exit:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
+                Util.startActivityWithoutTransition(this, intent);
+                return true;
+
+            case R.id.menu_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+
+            case R.id.menu_help:
+                startActivity(new Intent(this, HelpActivity.class));
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         destroyed = true;
@@ -164,6 +192,23 @@ public class SubsonicTabActivity extends SherlockActivity {
     public void finish() {
         super.finish();
         Util.disablePendingTransition(this);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+
+        // Set the font of title in the action bar.
+        TextView text = (TextView) findViewById(R.id.actionbar_title_text);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Storopia.ttf");
+        text.setTypeface(typeface);
+
+        text.setText(title);
+    }
+
+    @Override
+    public void setTitle(int titleId) {
+        setTitle(getString(titleId));
     }
 
     private void applyTheme() {

@@ -40,6 +40,9 @@ import android.view.Display;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,10 +58,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuInflater;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -488,7 +487,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.nowplaying, menu);
 		return true;
 	}
@@ -508,14 +507,14 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         return super.onPrepareOptionsMenu(menu);
     }
 
-    /*@Override
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, view, menuInfo);
         if (view == playlistView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
 
-            MenuInflater inflater = getSupportMenuInflater();
+            MenuInflater inflater = getMenuInflater();
     		inflater.inflate(R.menu.nowplaying_context, menu);
 
             if (downloadFile.getSong().getParent() == null) {
@@ -533,7 +532,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
         DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
         return menuItemSelected(menuItem.getItemId(), downloadFile) || super.onContextItemSelected(menuItem);
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {

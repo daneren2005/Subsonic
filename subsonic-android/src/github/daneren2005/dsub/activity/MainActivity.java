@@ -28,9 +28,6 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.FileUtil;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuInflater;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +35,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -117,52 +115,63 @@ public class MainActivity extends SubsonicTabActivity {
                 }
             }
         });
-		
-		// Title: Subsonic
+
+        // Title: Subsonic
         setTitle(R.string.common_appname);
+
+        // Button 1: shuffle
+        ImageButton actionShuffleButton = (ImageButton)findViewById(R.id.action_button_1);
+        actionShuffleButton.setImageResource(R.drawable.action_shuffle);
+        actionShuffleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, DownloadActivity.class);
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
+                Util.startActivityWithoutTransition(MainActivity.this, intent);
+            }
+        });
+
+        // Button 2: search
+        ImageButton actionSearchButton = (ImageButton)findViewById(R.id.action_button_2);
+        actionSearchButton.setImageResource(R.drawable.action_search);
+        actionSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            	Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            	intent.putExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, true);
+                Util.startActivityWithoutTransition(MainActivity.this, intent);
+            }
+        });
+		
+		// Button 3: Help
+        ImageButton actionHelpButton = (ImageButton)findViewById(R.id.action_button_3);
+        actionHelpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, HelpActivity.class));
+            }
+        });
+		
+		// Button 4: Settings
+        ImageButton actionSettingsButton = (ImageButton)findViewById(R.id.action_button_4);
+        actionSettingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            	startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+				
+				/*LayoutInflater inflater = (LayoutInflater)MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				PopupWindow pw = new PopupWindow(inflater.inflate(R.layout.overflow_menu, null, false), 100, 100, true);
+				pw.showAsDropDown(findViewById(R.id.action_button_4));*/
+				
+				/*PopupWindow window = new PopupWindow(findViewById(R.layout.overflow_menu));
+				window.showAsDropDown(findViewById(R.id.action_button_2));*/
+            }
+        });
 
         // Remember the current theme.
         theme = Util.getTheme(this);
 
         showInfoDialog();
-    }
-	
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
-        switch (item.getItemId()) {
-			case R.id.menu_shuffle:
-				intent = new Intent(MainActivity.this, DownloadActivity.class);
-                intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-                Util.startActivityWithoutTransition(MainActivity.this, intent);
-				return true;
-			case R.id.menu_search:
-				intent = new Intent(MainActivity.this, SearchActivity.class);
-            	intent.putExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, true);
-                Util.startActivityWithoutTransition(MainActivity.this, intent);
-				return true;
-            case R.id.menu_exit:
-                intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
-                Util.startActivityWithoutTransition(this, intent);
-                return true;
-            case R.id.menu_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-            case R.id.menu_help:
-                startActivity(new Intent(this, HelpActivity.class));
-                return true;
-        }
-
-        return false;
     }
 
     private void loadSettings() {
@@ -189,10 +198,10 @@ public class MainActivity extends SubsonicTabActivity {
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, view, menuInfo);
 
-        android.view.MenuItem menuItem1 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_1, MENU_ITEM_SERVER_1, Util.getServerName(this, 1));
-        android.view.MenuItem menuItem2 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_2, MENU_ITEM_SERVER_2, Util.getServerName(this, 2));
-        android.view.MenuItem menuItem3 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_3, MENU_ITEM_SERVER_3, Util.getServerName(this, 3));
-        android.view.MenuItem menuItem4 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_OFFLINE, MENU_ITEM_OFFLINE, Util.getServerName(this, 0));
+        MenuItem menuItem1 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_1, MENU_ITEM_SERVER_1, Util.getServerName(this, 1));
+        MenuItem menuItem2 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_2, MENU_ITEM_SERVER_2, Util.getServerName(this, 2));
+        MenuItem menuItem3 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_3, MENU_ITEM_SERVER_3, Util.getServerName(this, 3));
+        MenuItem menuItem4 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_OFFLINE, MENU_ITEM_OFFLINE, Util.getServerName(this, 0));
         menu.setGroupCheckable(MENU_GROUP_SERVER, true, true);
         menu.setHeaderTitle(R.string.main_select_server);
 
@@ -213,7 +222,7 @@ public class MainActivity extends SubsonicTabActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(android.view.MenuItem menuItem) {
+    public boolean onContextItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case MENU_ITEM_OFFLINE:
                 setActiveServer(0);
