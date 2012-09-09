@@ -2,7 +2,6 @@
 <resources>
 
     <string-array name="themeValues">
-        <item>wheat</item>
         <item>light</item>
         <item>dark</item>
     </string-array>
