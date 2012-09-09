@@ -64,9 +64,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private Button unpinButton;
     private Button deleteButton;
     private Button moreButton;
-    private ImageView coverArtView;
     private boolean licenseValid;
-    private ImageButton playAllButton;
 
     /**
      * Called when the activity is first created.
@@ -98,8 +96,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 }
             }
         });
-
-        coverArtView = (ImageView) findViewById(R.id.actionbar_home_icon);
+		
         selectButton = (Button) findViewById(R.id.select_album_select);
         playNowButton = (Button) findViewById(R.id.select_album_play_now);
 		playShuffledButton = (Button) findViewById(R.id.select_album_play_shuffled);
@@ -568,7 +565,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             }
 
             if (songCount > 0) {
-                getImageLoader().loadImage(coverArtView, entries.get(0), false, true);
+                getImageLoader().loadImage(getSupportActionBar(), entries.get(0));
                 entryList.addFooterView(footer);
                 selectButton.setVisibility(View.VISIBLE);
                 playNowButton.setVisibility(View.VISIBLE);
@@ -579,10 +576,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				deleteButton.setVisibility(View.VISIBLE);
             }
 
-            boolean isAlbumList = getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
-
             emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
-            playAllButton.setVisibility(isAlbumList || entries.isEmpty() ? View.GONE : View.VISIBLE);
             entryList.setAdapter(new EntryAdapter(SelectAlbumActivity.this, getImageLoader(), entries, true));
             licenseValid = result.getSecond();
 
