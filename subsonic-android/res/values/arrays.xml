@@ -8,7 +8,6 @@
     </string-array>
 
     <string-array name="themeNames">
-        <item>@string/settings.theme_wheat</item>
         <item>@string/settings.theme_light</item>
         <item>@string/settings.theme_dark</item>
     </string-array>

@@ -67,9 +67,8 @@ public class SubsonicTabActivity extends SherlockActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         setUncaughtExceptionHandler();
-        // applyTheme();
+        applyTheme();
         super.onCreate(bundle);
-        // requestWindowFeature(Window.FEATURE_NO_TITLE);
         startService(new Intent(this, DownloadServiceImpl.class));
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
@@ -169,10 +168,12 @@ public class SubsonicTabActivity extends SherlockActivity {
     private void applyTheme() {
         String theme = Util.getTheme(this);
         if ("dark".equals(theme)) {
-            setTheme(android.R.style.Theme);
+            setTheme(R.style.Theme_DSub_Dark);
         } else if ("light".equals(theme)) {
-            setTheme(android.R.style.Theme_Light);
-        }
+            setTheme(R.style.Theme_DSub_Light);
+        } else {
+			setTheme(R.style.Theme_DSub_Light);
+		}
     }
 
     public boolean isDestroyed() {

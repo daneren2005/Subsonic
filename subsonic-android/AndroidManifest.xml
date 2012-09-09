@@ -18,7 +18,7 @@
 
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
-    <application android:label="@string/common.appname" android:icon="@drawable/launch2" android:theme="@style/Theme.Sherlock.Light">
+    <application android:label="@string/common.appname" android:icon="@drawable/launch2" android:theme="@style/Theme.DSub.Light">
 
         <activity android:name="github.daneren2005.dsub.activity.MainActivity"
                   android:label="DSub"
