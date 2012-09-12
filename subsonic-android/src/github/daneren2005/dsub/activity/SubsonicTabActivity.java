@@ -57,6 +57,7 @@ public class SubsonicTabActivity extends SherlockActivity {
 
     private static final String TAG = SubsonicTabActivity.class.getSimpleName();
     private static ImageLoader IMAGE_LOADER;
+	private String theme;
 
     private boolean destroyed;
     private View homeButton;
@@ -131,7 +132,12 @@ public class SubsonicTabActivity extends SherlockActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Util.registerMediaButtonEventReceiver(this);
+		Util.registerMediaButtonEventReceiver(this);
+		
+		// Make sure to update theme
+        if (theme != null && !theme.equals(Util.getTheme(this))) {
+            restart();
+        }
     }
 
     @Override
@@ -155,6 +161,13 @@ public class SubsonicTabActivity extends SherlockActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+	
+	protected void restart() {
+        Intent intent = new Intent(this, this.getClass());
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtras(getIntent());
+        Util.startActivityWithoutTransition(this, intent);
+    }
 
     @Override
     public void finish() {
@@ -163,7 +176,7 @@ public class SubsonicTabActivity extends SherlockActivity {
     }
 
     private void applyTheme() {
-        String theme = Util.getTheme(this);
+        theme = Util.getTheme(this);
         if ("dark".equals(theme)) {
             setTheme(R.style.Theme_DSub_Dark);
         } else if ("light".equals(theme)) {

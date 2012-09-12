@@ -53,8 +53,6 @@ public class MainActivity extends SubsonicTabActivity {
     private static final int MENU_ITEM_SERVER_3 = 103;
     private static final int MENU_ITEM_OFFLINE = 104;
 
-    private String theme;
-
     private static boolean infoDialogDisplayed;
 
     /**
@@ -120,10 +118,6 @@ public class MainActivity extends SubsonicTabActivity {
 		
 		// Title: Subsonic
         setTitle(R.string.common_appname);
-
-        // Remember the current theme.
-        theme = Util.getTheme(this);
-
         showInfoDialog();
     }
 	
@@ -178,11 +172,6 @@ public class MainActivity extends SubsonicTabActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Restart activity if theme has changed.
-        if (theme != null && !theme.equals(Util.getTheme(this))) {
-            restart();
-        }
     }
 
     @Override
@@ -244,12 +233,6 @@ public class MainActivity extends SubsonicTabActivity {
             }
             Util.setActiveServer(this, instance);
         }
-    }
-
-    private void restart() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        Util.startActivityWithoutTransition(this, intent);
     }
 
     private void exit() {
