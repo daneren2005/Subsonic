@@ -11,6 +11,13 @@
 		<item name="android:textColorSecondary">@color/cyan</item>
 	</style>
 	
+	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	<style name="Theme.DSub.Dark.Fullscreen" parent="Theme.DSub.Dark">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	
 	<style name="Widget.DSub.ActionBarStyle" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
 		<item name="background">@drawable/menubar_button_disabled</item>
 		<item name="android:background">@drawable/menubar_button_disabled</item>
