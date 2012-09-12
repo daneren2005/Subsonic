@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.DSub.Wheat" parent="Theme.Sherlock.Light">
-		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
-		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
-	</style>
 	<style name="Theme.DSub.Light" parent="Theme.Sherlock.Light">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
+		<item name="android:textColorSecondary">@color/cyan</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.Sherlock">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
+		<item name="android:textColorSecondary">@color/cyan</item>
 	</style>
 	
 	<style name="Widget.DSub.ActionBarStyle" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
