@@ -36,6 +36,7 @@
 	<string name="menu.search">Search</string>
 	<string name="menu.shuffle">Shuffle</string>
 	<string name="menu.refresh">Refresh</string>
+	<string name="menu.select">Select All</string>
 	<string name="menu.play">Play</string>
     <string name="menu.exit">Exit</string>
     <string name="menu.settings">Settings</string>

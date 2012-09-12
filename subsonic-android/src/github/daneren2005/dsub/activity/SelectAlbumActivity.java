@@ -56,9 +56,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private ListView entryList;
     private View footer;
     private View emptyView;
-    private Button selectButton;
-    private Button playNowButton;
-	private Button playShuffledButton;
     private Button playLastButton;
     private Button pinButton;
     private Button unpinButton;
@@ -97,9 +94,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             }
         });
 		
-        selectButton = (Button) findViewById(R.id.select_album_select);
-        playNowButton = (Button) findViewById(R.id.select_album_play_now);
-		playShuffledButton = (Button) findViewById(R.id.select_album_play_shuffled);
         playLastButton = (Button) findViewById(R.id.select_album_play_last);
         pinButton = (Button) findViewById(R.id.select_album_pin);
         unpinButton = (Button) findViewById(R.id.select_album_unpin);
@@ -107,26 +101,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         moreButton = (Button) footer.findViewById(R.id.select_album_more);
         emptyView = findViewById(R.id.select_album_empty);
 
-        selectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectAllOrNone();
-            }
-        });
-        playNowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                download(false, false, true, false, false);
-                selectAll(false, false);
-            }
-        });
-		playShuffledButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                download(false, false, true, false, true);
-                selectAll(false, false);
-            }
-        });
         playLastButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,8 +162,14 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		Intent intent;
         switch (item.getItemId()) {
-			case R.id.menu_play_all:
-				playAll(false);
+			case R.id.menu_play_now:
+				playNow(false);
+				return true;
+			case R.id.menu_shuffle:
+				playNow(true);
+				return true;
+			case R.id.menu_select:
+				selectAllOrNone();
 				return true;
 			case R.id.menu_refresh:
 				refresh();
@@ -211,6 +191,15 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         return false;
     }
 
+	private void playNow(final boolean shuffle) {
+		if(getSelectedSongs().size() > 0) {
+			download(false, false, true, false, shuffle);
+			selectAll(false, false);
+		}
+		else {
+			playAll(shuffle);
+		}
+	}
     private void playAll(final boolean shuffle) {
         boolean hasSubFolders = false;
         for (int i = 0; i < entryList.getCount(); i++) {
@@ -411,8 +400,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             }
         }
 
-        playNowButton.setEnabled(enabled);
-		playShuffledButton.setEnabled(enabled);
         playLastButton.setEnabled(enabled);
         pinButton.setEnabled(enabled && !Util.isOffline(this));
         unpinButton.setEnabled(unpinEnabled);
@@ -567,9 +554,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             if (songCount > 0) {
                 getImageLoader().loadImage(getSupportActionBar(), entries.get(0));
                 entryList.addFooterView(footer);
-                selectButton.setVisibility(View.VISIBLE);
-                playNowButton.setVisibility(View.VISIBLE);
-				playShuffledButton.setVisibility(View.VISIBLE);
                 playLastButton.setVisibility(View.VISIBLE);
 				pinButton.setVisibility(View.VISIBLE);
 				unpinButton.setVisibility(View.VISIBLE);

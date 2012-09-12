@@ -24,7 +24,7 @@
 
 	<item 
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/ic_menu_exit"
+		android:icon="@drawable/action_exit"
 		android:title="@string/menu.exit"/>
 
 </menu>
