@@ -57,10 +57,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private View footer;
     private View emptyView;
 	private com.actionbarsherlock.view.MenuItem selectAll;
-    private Button playLastButton;
-    private Button pinButton;
-    private Button unpinButton;
-    private Button deleteButton;
+	private com.actionbarsherlock.view.MenuItem cache;
+	private com.actionbarsherlock.view.MenuItem delete;
+	private com.actionbarsherlock.view.MenuItem playLast;
     private Button moreButton;
     private boolean licenseValid;
 
@@ -88,52 +87,15 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                         Util.startActivityWithoutTransition(SelectAlbumActivity.this, intent);
                     } else if (entry.isVideo()) {
                         playVideo(entry);
-                    } else {
-                        enableButtons();
                     }
                 }
             }
         });
 		
-        playLastButton = (Button) findViewById(R.id.select_album_play_last);
-        pinButton = (Button) findViewById(R.id.select_album_pin);
-        unpinButton = (Button) findViewById(R.id.select_album_unpin);
-        deleteButton = (Button) findViewById(R.id.select_album_delete);
         moreButton = (Button) footer.findViewById(R.id.select_album_more);
         emptyView = findViewById(R.id.select_album_empty);
 
-        playLastButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                download(true, false, false, false, false);
-                selectAll(false, false);
-            }
-        });
-        pinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                download(true, true, false, false, false);
-                selectAll(false, false);
-            }
-        });
-        unpinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                unpin();
-                selectAll(false, false);
-            }
-        });
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                delete();
-                selectAll(false, false);
-            }
-        });
-
         registerForContextMenu(entryList);
-
-        enableButtons();
 
         String id = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ID);
         String name = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_NAME);
@@ -157,6 +119,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.select_album, menu);
 		selectAll = menu.findItem(R.id.menu_select);
+		cache = menu.findItem(R.id.menu_cache);
+		delete = menu.findItem(R.id.menu_delete);
+		playLast = menu.findItem(R.id.menu_play_last);
         return true;
     }
 
@@ -167,6 +132,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			case R.id.menu_play_now:
 				playNow(false);
 				return true;
+			case R.id.menu_play_last:
+				download(true, false, false, false, false);
+                selectAll(false, false);
+				return true;
 			case R.id.menu_shuffle:
 				playNow(true);
 				return true;
@@ -175,6 +144,14 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				return true;
 			case R.id.menu_refresh:
 				refresh();
+				return true;
+			case R.id.menu_cache:
+				download(true, true, false, false, false);
+                selectAll(false, false);
+				return true;
+			case R.id.menu_delete:
+				delete();
+                selectAll(false, false);
 				return true;
             case R.id.menu_exit:
                 intent = new Intent(this, MainActivity.class);
@@ -378,34 +355,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                                       : R.string.select_album_n_unselected;
             Util.toast(this, getString(toastResId, selectedCount));
         }
-
-        enableButtons();
-    }
-
-    private void enableButtons() {
-        if (getDownloadService() == null) {
-            return;
-        }
-
-        List<MusicDirectory.Entry> selection = getSelectedSongs();
-        boolean enabled = !selection.isEmpty();
-        boolean unpinEnabled = false;
-        boolean deleteEnabled = false;
-
-        for (MusicDirectory.Entry song : selection) {
-            DownloadFile downloadFile = getDownloadService().forSong(song);
-            if (downloadFile.isCompleteFileAvailable()) {
-                deleteEnabled = true;
-            }
-            if (downloadFile.isSaved()) {
-                unpinEnabled = true;
-            }
-        }
-
-        playLastButton.setEnabled(enabled);
-        pinButton.setEnabled(enabled && !Util.isOffline(this));
-        unpinButton.setEnabled(unpinEnabled);
-        deleteButton.setEnabled(deleteEnabled);
     }
 
     private List<MusicDirectory.Entry> getSelectedSongs() {
@@ -556,12 +505,11 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             if (songCount > 0) {
                 getImageLoader().loadImage(getSupportActionBar(), entries.get(0));
                 entryList.addFooterView(footer);
-                playLastButton.setVisibility(View.VISIBLE);
-				pinButton.setVisibility(View.VISIBLE);
-				unpinButton.setVisibility(View.VISIBLE);
-				deleteButton.setVisibility(View.VISIBLE);
             } else {
 				selectAll.setVisible(false);
+				cache.setVisible(false);
+				delete.setVisible(false);
+				playLast.setVisible(false);
 			}
 
             emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
