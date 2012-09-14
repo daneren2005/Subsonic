@@ -53,10 +53,11 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 	public void updateMetadata(final Context context, final MusicDirectory.Entry currentSong) {
 		// Update the remote controls
     	mRemoteControl.editMetadata(true)
-    	.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, currentSong == null ? null : currentSong.getArtist())
-    	.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, currentSong == null ? null : currentSong.getAlbum())
-    	.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, currentSong == null ? null : currentSong.getTitle())
-    	.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, currentSong == null ? 0 : currentSong.getDuration())
+    	.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
+    	.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
+    	.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, (currentSong) == null ? null : currentSong.getTitle())
+    	.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, (currentSong == null) ? 
+    			0 : ((currentSong.getDuration() == null) ? 0 : currentSong.getDuration()))
     	.apply();
     	if (currentSong == null) {
     		mRemoteControl.editMetadata(true)

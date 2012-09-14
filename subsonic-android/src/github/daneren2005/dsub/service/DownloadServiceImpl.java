@@ -439,8 +439,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             Util.hidePlayingNotification(this, this, handler);
         }
         
-        MusicDirectory.Entry currentSong = currentPlaying == null ? null: currentPlaying.getSong();
+        MusicDirectory.Entry currentSong = (currentPlaying == null) ? null: currentPlaying.getSong();
         mRemoteControl.updateMetadata(this, currentSong);
+
     }
 
     @Override
@@ -666,10 +667,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         
         if (show) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
-			Log.d(TAG, "Showing");
         } else if (hide) {
             Util.hidePlayingNotification(this, this, handler);
-			Log.d(TAG, "Hiding");
         }
 
         if (playerState == STARTED) {
