@@ -55,7 +55,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
@@ -510,14 +509,14 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         return super.onPrepareOptionsMenu(menu);
     }
 
-    /*@Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+    @Override
+    public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, view, menuInfo);
         if (view == playlistView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
 
-            MenuInflater inflater = getSupportMenuInflater();
+            android.view.MenuInflater inflater = getMenuInflater();
     		inflater.inflate(R.menu.nowplaying_context, menu);
 
             if (downloadFile.getSong().getParent() == null) {
@@ -531,11 +530,11 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem menuItem) {
+    public boolean onContextItemSelected(android.view.MenuItem menuItem) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
         DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
         return menuItemSelected(menuItem.getItemId(), downloadFile) || super.onContextItemSelected(menuItem);
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
