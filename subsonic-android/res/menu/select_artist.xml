@@ -4,13 +4,13 @@
 		android:id="@+id/menu_refresh"
 		android:icon="@drawable/action_refresh"
 		android:title="@string/menu.refresh"
-		android:showAsAction="ifRoom|withText"/>
+		android:showAsAction="always|withText"/>
 		
 	<item 
 		android:id="@+id/menu_shuffle"
 		android:icon="@drawable/action_shuffle"
 		android:title="@string/menu.shuffle"
-		android:showAsAction="ifRoom|withText"/>
+		android:showAsAction="always|withText"/>
 
 	<item 
 		android:id="@+id/menu_help"

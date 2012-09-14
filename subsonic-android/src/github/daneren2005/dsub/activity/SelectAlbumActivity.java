@@ -56,6 +56,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private ListView entryList;
     private View footer;
     private View emptyView;
+	private com.actionbarsherlock.view.MenuItem selectAll;
     private Button playLastButton;
     private Button pinButton;
     private Button unpinButton;
@@ -155,6 +156,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.select_album, menu);
+		selectAll = menu.findItem(R.id.menu_select);
         return true;
     }
 
@@ -503,23 +505,23 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         builder.setMessage(R.string.select_album_donate_dialog_message);
 
         builder.setPositiveButton(R.string.select_album_donate_dialog_now,
-                                  new DialogInterface.OnClickListener() {
-                                      @Override
-                                      public void onClick(DialogInterface dialogInterface, int i) {
-                                          startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
-                                      }
-                                  });
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
+				}
+			});
 
         builder.setNegativeButton(R.string.select_album_donate_dialog_later,
-                                  new DialogInterface.OnClickListener() {
-                                      @Override
-                                      public void onClick(DialogInterface dialogInterface, int i) {
-                                          dialogInterface.dismiss();
-                                          if (onValid != null) {
-                                              onValid.run();
-                                          }
-                                      }
-                                  });
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					dialogInterface.dismiss();
+					if (onValid != null) {
+						onValid.run();
+					}
+				}
+			});
 
         builder.create().show();
     }
@@ -558,7 +560,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				pinButton.setVisibility(View.VISIBLE);
 				unpinButton.setVisibility(View.VISIBLE);
 				deleteButton.setVisibility(View.VISIBLE);
-            }
+            } else {
+				selectAll.setVisible(false);
+			}
 
             emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
             entryList.setAdapter(new EntryAdapter(SelectAlbumActivity.this, getImageLoader(), entries, true));
