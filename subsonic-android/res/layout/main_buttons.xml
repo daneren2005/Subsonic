@@ -48,11 +48,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#EFEFEF"
-            android:textStyle="bold"
-            android:background="#A5A5A5"
+            android:textColor="@color/cyan"
             android:gravity="center_vertical"
-            android:paddingLeft="4dp"/>
+            android:paddingLeft="6dp"
+			android:textAllCaps="true"
+			android:textStyle="bold"
+			android:textSize="16sp"/>
 
     <TextView
             android:id="@+id/main_albums_newest"
