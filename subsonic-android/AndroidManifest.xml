@@ -52,7 +52,7 @@
                   android:launchMode="singleTask"/>
 
         <activity android:name="github.daneren2005.dsub.activity.SettingsActivity"
-                  android:theme="@android:style/Theme"
+                  android:theme="@style/Theme.DSub.Dark"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
