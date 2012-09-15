@@ -645,8 +645,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             buttonBarFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_down_in));
             buttonBarFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.push_down_out));
             buttonBarFlipper.setDisplayedChild(0);
-
-
+			getSupportActionBar().hide();
         } else {
             playlistFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_in));
             playlistFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_out));
@@ -654,6 +653,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             buttonBarFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_in));
             buttonBarFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_out));
             buttonBarFlipper.setDisplayedChild(1);
+			getSupportActionBar().show();
         }
     }
 
