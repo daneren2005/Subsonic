@@ -56,6 +56,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private ListView entryList;
     private View footer;
     private View emptyView;
+	private boolean hideButtons = false;
 	private com.actionbarsherlock.view.MenuItem selectAll;
 	private com.actionbarsherlock.view.MenuItem cache;
 	private com.actionbarsherlock.view.MenuItem delete;
@@ -122,6 +123,13 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 		cache = menu.findItem(R.id.menu_cache);
 		delete = menu.findItem(R.id.menu_delete);
 		playLast = menu.findItem(R.id.menu_play_last);
+		if(hideButtons) {
+			selectAll.setVisible(false);
+			cache.setVisible(false);
+			delete.setVisible(false);
+			playLast.setVisible(false);
+			hideButtons = false;
+		}
         return true;
     }
 
@@ -505,11 +513,13 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             if (songCount > 0) {
                 getImageLoader().loadImage(getSupportActionBar(), entries.get(0));
                 entryList.addFooterView(footer);
-            } else {
+            } else if(selectAll != null) {
 				selectAll.setVisible(false);
 				cache.setVisible(false);
 				delete.setVisible(false);
 				playLast.setVisible(false);
+			} else {
+				hideButtons = true;
 			}
 
             emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
