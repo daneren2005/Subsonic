@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<style name="Theme.DSub.Light" parent="Theme.Sherlock.Light">
-		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
-		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
+		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
+		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.Sherlock">
-		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
-		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle</item>
+		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
+		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
 	</style>
 	
@@ -18,8 +18,13 @@
 		<item name="android:windowFullscreen">true</item>
 	</style>
 	
-	<style name="Widget.DSub.ActionBarStyle" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-		<item name="background">@drawable/menubar_button_disabled</item>
-		<item name="android:background">@drawable/menubar_button_disabled</item>
+	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+		<item name="background">@drawable/menubar_button_normal</item>
+		<item name="android:background">@drawable/menubar_button_normal</item>
+	</style>
+	
+	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+		<item name="background">@drawable/menubar_button_normal</item>
+		<item name="android:background">@drawable/menubar_button_normal</item>
 	</style>
 </resources>
