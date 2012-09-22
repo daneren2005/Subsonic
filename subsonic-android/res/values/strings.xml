@@ -9,8 +9,7 @@
 	<string name="common.play_shuffled">Play shuffled</string>
     <string name="common.play_next">Play next</string>
     <string name="common.play_last">Play last</string>
-    <string name="common.pin">Pin</string>
-    <string name="common.unpin">Unpin</string>
+    <string name="common.pin">Cache</string>
     <string name="common.delete">Delete</string>
 
     <string name="button_bar.home">DSub home</string>
@@ -33,6 +32,12 @@
     <string name="main.albums_highest">Top rated</string>
     <string name="main.albums_random">Random</string>
 
+	<string name="menu.search">Search</string>
+	<string name="menu.shuffle">Shuffle</string>
+	<string name="menu.refresh">Refresh</string>
+	<string name="menu.select">Select All</string>
+	<string name="menu.play">Play</string>
+	<string name="menu.play_last">Play Last</string>
     <string name="menu.exit">Exit</string>
     <string name="menu.settings">Settings</string>
     <string name="menu.help">Help</string>
@@ -143,6 +148,8 @@
     <string name="settings.theme_wheat">Wheat</string>
     <string name="settings.theme_light">Light</string>
     <string name="settings.theme_dark">Dark</string>
+	<string name="settings.theme_light_fullscreen">Light Fullscreen</string>
+    <string name="settings.theme_dark_fullscreen">Dark Fullscreen</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max bitrate - Mobile</string>

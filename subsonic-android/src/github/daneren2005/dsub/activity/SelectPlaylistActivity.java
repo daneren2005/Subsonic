@@ -61,39 +61,38 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
         // Title: Playlists
         setTitle(R.string.playlist_label);
 
-        // Button 1: gone
-        ImageButton searchButton = (ImageButton)findViewById(R.id.action_button_1);
-        searchButton.setVisibility(View.GONE);
-
-		// Button 2: refresh
-        ImageButton refreshButton = (ImageButton) findViewById(R.id.action_button_2);
-		refreshButton.setImageResource(R.drawable.action_refresh);
-		refreshButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				refresh();
-			}
-		});
-		
-		// Button 3: Help
-        ImageButton actionHelpButton = (ImageButton)findViewById(R.id.action_button_3);
-        actionHelpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(SelectPlaylistActivity.this, HelpActivity.class));
-            }
-        });
-		
-		// Button 4: Settings
-        ImageButton actionSettingsButton = (ImageButton)findViewById(R.id.action_button_4);
-        actionSettingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            	startActivity(new Intent(SelectPlaylistActivity.this, SettingsActivity.class));
-            }
-        });
-
         load();
+    }
+	
+	@Override
+    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+        com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.select_playlist, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		Intent intent;
+        switch (item.getItemId()) {
+			case R.id.menu_refresh:
+				refresh();
+				return true;
+            case R.id.menu_exit:
+                intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
+                Util.startActivityWithoutTransition(this, intent);
+                return true;
+            case R.id.menu_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.menu_help:
+                startActivity(new Intent(this, HelpActivity.class));
+                return true;
+        }
+
+        return false;
     }
 
 	private void refresh() {

@@ -34,13 +34,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -54,10 +53,11 @@ import github.daneren2005.dsub.util.Util;
 /**
  * @author Sindre Mehus
  */
-public class SubsonicTabActivity extends Activity {
+public class SubsonicTabActivity extends SherlockActivity {
 
     private static final String TAG = SubsonicTabActivity.class.getSimpleName();
     private static ImageLoader IMAGE_LOADER;
+	private String theme;
 
     private boolean destroyed;
     private View homeButton;
@@ -70,7 +70,6 @@ public class SubsonicTabActivity extends Activity {
         setUncaughtExceptionHandler();
         applyTheme();
         super.onCreate(bundle);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         startService(new Intent(this, DownloadServiceImpl.class));
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
@@ -133,37 +132,12 @@ public class SubsonicTabActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Util.registerMediaButtonEventReceiver(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.menu_exit:
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
-                Util.startActivityWithoutTransition(this, intent);
-                return true;
-
-            case R.id.menu_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-
-            case R.id.menu_help:
-                startActivity(new Intent(this, HelpActivity.class));
-                return true;
+		Util.registerMediaButtonEventReceiver(this);
+		
+		// Make sure to update theme
+        if (theme != null && !theme.equals(Util.getTheme(this))) {
+            restart();
         }
-
-        return false;
     }
 
     @Override
@@ -187,6 +161,13 @@ public class SubsonicTabActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+	
+	protected void restart() {
+        Intent intent = new Intent(this, this.getClass());
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtras(getIntent());
+        Util.startActivityWithoutTransition(this, intent);
+    }
 
     @Override
     public void finish() {
@@ -194,30 +175,19 @@ public class SubsonicTabActivity extends Activity {
         Util.disablePendingTransition(this);
     }
 
-    @Override
-    public void setTitle(CharSequence title) {
-        super.setTitle(title);
-
-        // Set the font of title in the action bar.
-        TextView text = (TextView) findViewById(R.id.actionbar_title_text);
-        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Storopia.ttf");
-        text.setTypeface(typeface);
-
-        text.setText(title);
-    }
-
-    @Override
-    public void setTitle(int titleId) {
-        setTitle(getString(titleId));
-    }
-
     private void applyTheme() {
-        String theme = Util.getTheme(this);
+        theme = Util.getTheme(this);
         if ("dark".equals(theme)) {
-            setTheme(android.R.style.Theme);
+            setTheme(R.style.Theme_DSub_Dark);
         } else if ("light".equals(theme)) {
-            setTheme(android.R.style.Theme_Light);
-        }
+            setTheme(R.style.Theme_DSub_Light);
+        } else if ("dark_fullscreen".equals(theme)) {
+            setTheme(R.style.Theme_DSub_Dark_Fullscreen);
+        } else if ("light_fullscreen".equals(theme)) {
+            setTheme(R.style.Theme_DSub_Light_Fullscreen);
+        }else {
+			setTheme(R.style.Theme_DSub_Light);
+		}
     }
 
     public boolean isDestroyed() {
