@@ -121,6 +121,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		setTitle("Now Playing");
         setContentView(R.layout.download);
 		
 		getSupportActionBar().hide();
