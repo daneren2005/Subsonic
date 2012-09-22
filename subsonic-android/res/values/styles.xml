@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="Theme.DSub.Light" parent="Theme.Sherlock.Light">
+	<style name="Theme.DSub.Light" parent="Theme.Sherlock.Light.ForceOverflow">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
 	</style>
-	<style name="Theme.DSub.Dark" parent="Theme.Sherlock">
+	<style name="Theme.DSub.Dark" parent="Theme.Sherlock.ForceOverflow">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
