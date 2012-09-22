@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Wheat" parent="android:Theme.Light">
-        <item name="android:windowBackground">@color/wheatBackground</item>
-        <item name="android:textColorPrimary">@color/wheatForeground1</item>
-        <item name="android:textColorSecondary">@color/wheatForeground2</item>
-        <item name="android:listViewStyle">@style/WheatListView</item>
-    </style>
-
-    <style name="WheatListView" parent="android:style/Widget.ListView.White">
-        <item name="android:cacheColorHint">@color/wheatBackground</item>
-    </style>
-
+	<style name="Theme.DSub.Light" parent="Theme.Sherlock.Light">
+		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
+		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
+		<item name="android:textColorSecondary">@color/cyan</item>
+	</style>
+	<style name="Theme.DSub.Dark" parent="Theme.Sherlock">
+		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
+		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
+		<item name="android:textColorSecondary">@color/cyan</item>
+	</style>
+	
+	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	<style name="Theme.DSub.Dark.Fullscreen" parent="Theme.DSub.Dark">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	
+	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+		<item name="background">@drawable/menubar_button_normal</item>
+		<item name="android:background">@drawable/menubar_button_normal</item>
+	</style>
+	
+	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+		<item name="background">@drawable/menubar_button_normal</item>
+		<item name="android:background">@drawable/menubar_button_normal</item>
+	</style>
 </resources>

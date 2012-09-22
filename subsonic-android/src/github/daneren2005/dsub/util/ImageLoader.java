@@ -44,6 +44,8 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.actionbarsherlock.app.ActionBar;
+
 /**
  * Asynchronous loading of images, with caching.
  * <p/>
@@ -101,7 +103,7 @@ public class ImageLoader implements Runnable {
         if (!large) {
             setUnknownImage(view, large);
         }
-        queue.offer(new Task(view.getContext(), view, null, entry, size, large, large, crossfade));
+        queue.offer(new Task(view.getContext(), entry, size, large, large, new ViewTaskHandler(view, crossfade)));
     }
 
     public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
@@ -117,7 +119,23 @@ public class ImageLoader implements Runnable {
         }
 
         setUnknownImage(remoteControl);
-        queue.offer(new Task(context, null, remoteControl, entry, imageSizeDefault, false, false, false));
+        queue.offer(new Task(context, entry, imageSizeDefault, false, false, new RemoteControlClientTaskHandler(remoteControl)));
+    }
+
+    public void loadImage(ActionBar actionBar, MusicDirectory.Entry entry) {
+        if (entry == null || entry.getCoverArt() == null) {
+            setUnknownImage(actionBar);
+            return;
+        }
+        
+        Drawable drawable = cache.get(getKey(entry.getCoverArt(), imageSizeDefault));
+        if (drawable != null) {
+            setImage(actionBar, drawable);
+            return;
+        }
+
+        setUnknownImage(actionBar);
+        queue.offer(new Task(actionBar.getThemedContext(), entry, imageSizeDefault, false, false, new ActionBarTaskHandler(actionBar)));
     }
 
     private String getKey(String coverArtId, int size) {
@@ -158,6 +176,10 @@ public class ImageLoader implements Runnable {
     			origBitmap.copy(origBitmap.getConfig(), true))
     	.apply();
     }
+    
+	private void setImage(ActionBar actionBar, Drawable drawable) {
+    	actionBar.setIcon(drawable);
+    }
 
     private void setUnknownImage(View view, boolean large) {
         if (large) {
@@ -173,6 +195,10 @@ public class ImageLoader implements Runnable {
     
     private void setUnknownImage(RemoteControlClient remoteControl) {
         setImage(remoteControl, largeUnknownImage);
+    }
+    
+    private void setUnknownImage(ActionBar actionBar) {
+        setImage(actionBar, largeUnknownImage);
     }
 
     public void clear() {
@@ -240,53 +266,95 @@ public class ImageLoader implements Runnable {
     }
     
 	private class Task {
-    	private final Context context;
-        private final View view;
-        private final RemoteControlClient remoteControl;
-        private final MusicDirectory.Entry entry;
-        private final Handler handler;
-        private final int size;
-        private final boolean reflection;
-        private final boolean saveToFile;
-        private final boolean crossfade;
+    	private final Context mContext;
+        private final MusicDirectory.Entry mEntry;
+        private final Handler mHandler;
+        private final int mSize;
+        private final boolean mReflection;
+        private final boolean mSaveToFile;
+        private ImageLoaderTaskHandler mTaskHandler;
 
-        public Task(Context context, View view, RemoteControlClient remoteControl, MusicDirectory.Entry entry, int size, boolean reflection, boolean saveToFile, boolean crossfade) {
-        	this.context = context;
-        	this.view = view;
-        	this.remoteControl = remoteControl;
-            this.entry = entry;
-            this.size = size;
-            this.reflection = reflection;
-            this.saveToFile = saveToFile;
-            this.crossfade = crossfade;
-            handler = new Handler();
+        public Task(Context context, MusicDirectory.Entry entry, int size, boolean reflection, boolean saveToFile, ImageLoaderTaskHandler taskHandler) {
+        	mContext = context;
+            mEntry = entry;
+            mSize = size;
+            mReflection = reflection;
+            mSaveToFile = saveToFile;
+            mTaskHandler = taskHandler;
+            mHandler = new Handler();
         }
 
         public void execute() {
             try {
-                MusicService musicService = MusicServiceFactory.getMusicService(context);
-                Bitmap bitmap = musicService.getCoverArt(context, entry, size, saveToFile, null);
+                MusicService musicService = MusicServiceFactory.getMusicService(mContext);
+                Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, mSaveToFile, null);
 
-                if (reflection) {
+                if (mReflection) {
                     bitmap = createReflection(bitmap);
                 }
 
-                final Drawable drawable = Util.createDrawableFromBitmap(context, bitmap);
-                cache.put(getKey(entry.getCoverArt(), size), drawable);
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                    	if (view != null) {
-                    		setImage(view, drawable, crossfade);
-                    	} else if (remoteControl != null) {
-                    		setImage(remoteControl, drawable);
-                    	}
-                    }
-                });
+                final Drawable drawable = Util.createDrawableFromBitmap(mContext, bitmap);
+                cache.put(getKey(mEntry.getCoverArt(), mSize), drawable);
+                
+                mTaskHandler.setDrawable(drawable);
+                mHandler.post(mTaskHandler);
             } catch (Throwable x) {
                 Log.e(TAG, "Failed to download album art.", x);
             }
         }
     }
+	
+	private abstract class ImageLoaderTaskHandler implements Runnable {
+		
+		protected Drawable mDrawable;
+		
+		public void setDrawable(Drawable drawable) {
+			mDrawable = drawable;
+		}
+		
+	}
+	
+	private class ViewTaskHandler extends ImageLoaderTaskHandler {
+
+		protected boolean mCrossfade;
+		private View mView;
+		
+		public ViewTaskHandler(View view, boolean crossfade) {
+			mCrossfade = crossfade;
+			mView = view;
+		}
+		
+		@Override
+		public void run() {
+			setImage(mView, mDrawable, mCrossfade);
+		}
+	}
+	
+	private class RemoteControlClientTaskHandler extends ImageLoaderTaskHandler {
+		
+		private RemoteControlClient mRemoteControl;
+		
+		public RemoteControlClientTaskHandler(RemoteControlClient remoteControl) {
+			mRemoteControl = remoteControl;
+		}
+		
+		@Override
+		public void run() {
+			setImage(mRemoteControl, mDrawable);
+		}
+	}
+	
+	private class ActionBarTaskHandler extends ImageLoaderTaskHandler {
+		
+		private ActionBar mActionBar;
+		
+		public ActionBarTaskHandler(ActionBar actionBar) {
+			mActionBar = actionBar;
+		}
+		
+		@Override
+		public void run() {
+			setImage(mActionBar, mDrawable);
+		}
+	}
 }

@@ -1,39 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item 
-        android:id="@+id/menu_show_album"
-        android:title="@string/download.menu_show_album"
-        />
-
-    <item 
-        android:id="@+id/menu_lyrics"
-        android:title="@string/download.menu_lyrics"
-        />
-
-    <item 
-        android:id="@+id/menu_remove"
-        android:title="@string/download.menu_remove"
-        />
-		
 	<item 
-        android:id="@+id/menu_delete"
-        android:title="@string/download.menu_delete"
-        />
+		android:id="@+id/menu_show_album"
+		android:title="@string/download.menu_show_album"/>
 
-    <item 
-        android:id="@+id/menu_remove_all"
-        android:title="@string/download.menu_remove_all"
-        />
+	<item 
+		android:id="@+id/menu_lyrics"
+		android:title="@string/download.menu_lyrics"/>
 
-    <item 
-        android:id="@+id/menu_shuffle"
-        android:title="@string/download.menu_shuffle"
-        />
+	<item 
+		android:id="@+id/menu_remove"
+		android:title="@string/download.menu_remove"/>
 
-    <item 
-        android:id="@+id/menu_save_playlist"
-        android:title="@string/download.menu_save"
-        />
-        
+	<item 
+		android:id="@+id/menu_delete"
+		android:title="@string/download.menu_delete"/>        
 </menu>
