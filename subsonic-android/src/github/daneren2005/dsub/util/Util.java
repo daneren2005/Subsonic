@@ -54,7 +54,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.Version;
-import github.daneren2005.dsub.provider.SubsonicAppWidgetProvider1;
+import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import org.apache.http.HttpEntity;
@@ -644,7 +644,7 @@ public final class Util {
         });
 
         // Update widget
-        SubsonicAppWidgetProvider1.getInstance().notifyChange(context, downloadService, true);
+        DSubWidgetProvider.getInstance().notifyChange(context, downloadService, true);
     }
 
     public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
@@ -658,7 +658,7 @@ public final class Util {
         });
 
         // Update widget
-        SubsonicAppWidgetProvider1.getInstance().notifyChange(context, downloadService, false);
+        DSubWidgetProvider.getInstance().notifyChange(context, downloadService, false);
     }
 
     public static void sleepQuietly(long millis) {

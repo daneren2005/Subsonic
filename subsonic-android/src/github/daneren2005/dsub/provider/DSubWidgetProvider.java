@@ -53,14 +53,14 @@ import github.daneren2005.dsub.util.FileUtil;
  *
  * @author Sindre Mehus
  */
-public class SubsonicAppWidgetProvider1 extends AppWidgetProvider {
+public class DSubWidgetProvider extends AppWidgetProvider {
 
-    private static SubsonicAppWidgetProvider1 instance;
-    private static final String TAG = SubsonicAppWidgetProvider1.class.getSimpleName();
+    private static DSubWidgetProvider instance;
+    private static final String TAG = DSubWidgetProvider.class.getSimpleName();
 
-    public static synchronized SubsonicAppWidgetProvider1 getInstance() {
+    public static synchronized DSubWidgetProvider getInstance() {
         if (instance == null) {
-            instance = new SubsonicAppWidgetProvider1();
+            instance = new DSubWidgetProvider();
         }
         return instance;
     }

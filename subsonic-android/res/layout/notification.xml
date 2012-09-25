@@ -3,93 +3,101 @@
     android:id="@+id/statusbar"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
+		
+	<ImageView
+		android:id="@+id/notification_image"
+		android:layout_width="64.0dip"
+		android:layout_height="64.0dip"
+		android:layout_weight="0.0"
+		android:gravity="center" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="horizontal" >
+        android:orientation="vertical"
+		android:paddingLeft="11.0dip">
+			
+		<TextView
+			android:id="@+id/notification_title"
+			style="@android:style/TextAppearance.StatusBar.EventContent.Title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="left"
+			android:ellipsize="marquee"
+			android:focusable="true"
+			android:singleLine="true" />
+			
+		<LinearLayout
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:orientation="horizontal" >
 
-        <ImageView
-            android:id="@+id/notification_image"
-            android:layout_width="64.0dip"
-            android:layout_height="64.0dip"
-            android:layout_weight="0.0"
-            android:gravity="center" />
+			<LinearLayout
+				android:layout_width="0.0dp"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:layout_weight="1.0"
+				android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0.0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1.0"
-            android:orientation="vertical"
-            android:paddingLeft="11.0dip" >
+				<TextView
+					android:id="@+id/notification_artist"
+					style="@android:style/TextAppearance.StatusBar.EventContent"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="left"
+					android:ellipsize="end"
+					android:scrollHorizontally="true"
+					android:singleLine="true" />
 
-            <TextView
-                android:id="@+id/notification_title"
-                style="@android:style/TextAppearance.StatusBar.EventContent.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:singleLine="true" />
+				<TextView
+					android:id="@+id/notification_album"
+					style="@android:style/TextAppearance.StatusBar.EventContent"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="left"
+					android:ellipsize="end"
+					android:scrollHorizontally="true"
+					android:singleLine="true" />
+			</LinearLayout>
 
-            <TextView
-                android:id="@+id/notification_artist"
-                style="@android:style/TextAppearance.StatusBar.EventContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:ellipsize="end"
-                android:scrollHorizontally="true"
-                android:singleLine="true" />
+			<ImageButton
+				android:id="@+id/control_previous"
+				android:src="@drawable/notification_prev"
+				android:background="@drawable/btn_bg"
+				android:layout_width="34dip"
+				android:layout_height="34dip"
+				android:layout_gravity="center|right"
+				android:layout_marginRight="10dip"
+				android:layout_marginTop="2dip"
+				android:layout_weight="0.0"
+				android:scaleType="fitXY"/>
 
-            <TextView
-                android:id="@+id/notification_album"
-                style="@android:style/TextAppearance.StatusBar.EventContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:ellipsize="end"
-                android:scrollHorizontally="true"
-                android:singleLine="true" />
-        </LinearLayout>
+			<ImageButton
+				android:id="@+id/control_pause"
+				android:src="@drawable/notification_pause"
+				android:background="@drawable/btn_bg"
+				android:layout_width="34dip"
+				android:layout_height="34dip"
+				android:layout_gravity="center|right"
+				android:layout_marginRight="10dip"
+				android:layout_marginTop="2dip"
+				android:layout_weight="0.0"
+				android:scaleType="fitXY"/>
 
-        <ImageButton
-            android:id="@+id/control_previous"
-            android:src="@drawable/notification_prev"
-            android:background="@android:color/transparent"
-            android:layout_width="40dip"
-            android:layout_height="40dip"
-            android:layout_gravity="center|right"
-            android:layout_marginRight="5dip"
-            android:layout_marginTop="2dip"
-            android:layout_weight="0.0"/>
-
-        <ImageButton
-            android:id="@+id/control_pause"
-            android:src="@drawable/notification_pause"
-            android:background="@android:color/transparent"
-            android:layout_width="40dip"
-            android:layout_height="40dip"
-            android:layout_gravity="center|right"
-            android:layout_marginRight="5dip"
-            android:layout_marginTop="2dip"
-            android:layout_weight="0.0"/>
-
-        <ImageButton
-            android:id="@+id/control_next"
-            android:src="@drawable/notification_next"
-            android:background="@android:color/transparent"
-            android:layout_width="40dip"
-            android:layout_height="40dip"
-            android:layout_gravity="center|right"
-            android:layout_marginRight="5dip"
-            android:layout_marginTop="2dip"
-            android:layout_weight="0.0"/>
-
+			<ImageButton
+				android:id="@+id/control_next"
+				android:src="@drawable/notification_next"
+				android:background="@drawable/btn_bg"
+				android:layout_width="34dip"
+				android:layout_height="34dip"
+				android:layout_gravity="center|right"
+				android:layout_marginRight="10dip"
+				android:layout_marginTop="2dip"
+				android:layout_weight="0.0"
+				android:scaleType="fitXY"/>
+		</LinearLayout>
     </LinearLayout>
-
 </LinearLayout>
