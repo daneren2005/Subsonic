@@ -154,7 +154,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				refresh();
 				return true;
 			case R.id.menu_cache:
-				download(true, true, false, false, false);
+				downloadBackground(true);
                 selectAll(false, false);
 				return true;
 			case R.id.menu_delete:
@@ -409,6 +409,25 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
         checkLicenseAndTrialPeriod(onValid);
     }
+	private void downloadBackground(final boolean save) {
+		if (getDownloadService() == null) {
+			return;
+		}
+
+		final List<MusicDirectory.Entry> songs = getSelectedSongs();
+		Runnable onValid = new Runnable() {
+			@Override
+			public void run() {
+				warnIfNetworkOrStorageUnavailable();
+				getDownloadService().downloadBackground(songs, save);
+
+				Util.toast(SelectAlbumActivity.this,
+					getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+			}
+		};
+
+		checkLicenseAndTrialPeriod(onValid);
+	}
 
     private void delete() {
         if (getDownloadService() != null) {
