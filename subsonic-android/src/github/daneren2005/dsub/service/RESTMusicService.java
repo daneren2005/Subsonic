@@ -93,6 +93,7 @@ import github.daneren2005.dsub.service.parser.PlaylistsParser;
 import github.daneren2005.dsub.service.parser.RandomSongsParser;
 import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
+import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.VersionParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
 import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
@@ -409,6 +410,16 @@ public class RESTMusicService implements MusicService {
                                   null, Arrays.asList("type", "size", "offset"), Arrays.<Object>asList(type, size, offset));
         try {
             return new AlbumListParser(context).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
+        }
+    }
+
+    @Override
+    public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
+        Reader reader = getReader(context, progressListener, "getStarred", null);
+        try {
+            return new StarredListParser(context).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
