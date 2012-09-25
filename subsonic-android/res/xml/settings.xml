@@ -109,7 +109,7 @@
         <ListPreference
                 android:title="@string/settings.theme_title"
                 android:key="theme"
-                android:defaultValue="wheat"
+                android:defaultValue="light"
                 android:entryValues="@array/themeValues"
                 android:entries="@array/themeNames"/>
 

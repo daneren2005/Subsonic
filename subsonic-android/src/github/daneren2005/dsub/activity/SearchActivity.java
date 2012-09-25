@@ -36,6 +36,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.net.Uri;
+import com.actionbarsherlock.view.Menu;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -134,39 +135,38 @@ public class SearchActivity extends SubsonicTabActivity {
             }
         });
         registerForContextMenu(list);
-
-		// Button 1: gone
-		findViewById(R.id.action_button_1).setVisibility(View.GONE);
-
-        // Button 2: search
-        final ImageButton actionSearchButton = (ImageButton)findViewById(R.id.action_button_2);
-        actionSearchButton.setImageResource(R.drawable.action_search);
-        actionSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSearchRequested();
-            }
-        });
-		
-		// Button 3: Help
-        ImageButton actionHelpButton = (ImageButton)findViewById(R.id.action_button_3);
-        actionHelpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(SearchActivity.this, HelpActivity.class));
-            }
-        });
-		
-		// Button 4: Settings
-        ImageButton actionSettingsButton = (ImageButton)findViewById(R.id.action_button_4);
-        actionSettingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            	startActivity(new Intent(SearchActivity.this, SettingsActivity.class));
-            }
-        });
-
         onNewIntent(getIntent());
+    }
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.search, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		Intent intent;
+        switch (item.getItemId()) {
+			case R.id.menu_search:
+				onSearchRequested();
+				return true;
+            case R.id.menu_exit:
+                intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
+                Util.startActivityWithoutTransition(this, intent);
+                return true;
+            case R.id.menu_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.menu_help:
+                startActivity(new Intent(this, HelpActivity.class));
+                return true;
+        }
+
+        return false;
     }
 
     @Override

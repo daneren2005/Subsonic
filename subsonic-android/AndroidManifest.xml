@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.daneren2005.dsub"
           android:installLocation="auto"
-          android:versionCode="10"
-          android:versionName="3.3.5.1">
+          android:versionCode="11"
+          android:versionName="3.4">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
@@ -14,11 +14,11 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14"/>
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="15"/>
 
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
-    <application android:label="@string/common.appname" android:icon="@drawable/launch2" android:theme="@style/Wheat">
+    <application android:label="@string/common.appname" android:icon="@drawable/launch2" android:theme="@style/Theme.DSub.Light">
 
         <activity android:name="github.daneren2005.dsub.activity.MainActivity"
                   android:label="DSub"
@@ -52,7 +52,7 @@
                   android:launchMode="singleTask"/>
 
         <activity android:name="github.daneren2005.dsub.activity.SettingsActivity"
-                  android:theme="@android:style/Theme"
+                  android:theme="@style/Theme.DSub.Dark"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 

@@ -38,7 +38,7 @@
     </LinearLayout>
 
     <ImageView
-            android:src="@drawable/list_item_artist"
+            android:src="@drawable/list_item_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
