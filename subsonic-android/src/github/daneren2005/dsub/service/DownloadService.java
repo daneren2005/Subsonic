@@ -61,6 +61,8 @@ public interface DownloadService {
 
     void remove(DownloadFile downloadFile);
 
+	List<DownloadFile> getSongs();
+	
     List<DownloadFile> getDownloads();
 
     int getCurrentPlayingIndex();

@@ -616,7 +616,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             @Override
             protected Void doInBackground() throws Throwable {
                 List<MusicDirectory.Entry> entries = new LinkedList<MusicDirectory.Entry>();
-                for (DownloadFile downloadFile : getDownloadService().getDownloads()) {
+                for (DownloadFile downloadFile : getDownloadService().getSongs()) {
                     entries.add(downloadFile.getSong());
                 }
                 MusicService musicService = MusicServiceFactory.getMusicService(DownloadActivity.this);
@@ -681,7 +681,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             return;
         }
 
-        List<DownloadFile> list = downloadService.getDownloads();
+        List<DownloadFile> list = downloadService.getSongs();
 
         playlistView.setAdapter(new SongListAdapter(list));
         emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
