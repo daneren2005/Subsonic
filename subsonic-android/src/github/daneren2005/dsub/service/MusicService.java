@@ -53,6 +53,8 @@ public interface MusicService {
 
     SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception;
 
+    MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception;
+
     MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception;
 
     List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
@@ -88,4 +90,6 @@ public interface MusicService {
     JukeboxStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception;
 
     JukeboxStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception;
+    
+    void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception;
 }

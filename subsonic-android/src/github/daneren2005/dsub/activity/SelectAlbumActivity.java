@@ -305,7 +305,13 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         new LoadTask() {
             @Override
             protected MusicDirectory load(MusicService service) throws Exception {
-                return service.getAlbumList(albumListType, size, offset, SelectAlbumActivity.this, this);
+            	MusicDirectory result;
+            	if ("starred".equals(albumListType)) {
+            		result = service.getStarredList(SelectAlbumActivity.this, this);
+            	} else {
+            		result = service.getAlbumList(albumListType, size, offset, SelectAlbumActivity.this, this);
+            	}
+                return result;
             }
 
             @Override

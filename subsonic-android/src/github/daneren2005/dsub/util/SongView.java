@@ -25,9 +25,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.CheckedTextView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -46,13 +48,15 @@ public class SongView extends LinearLayout implements Checkable {
     private static final String TAG = SongView.class.getSimpleName();
     private static final WeakHashMap<SongView, ?> INSTANCES = new WeakHashMap<SongView, Object>();
     private static Handler handler;
+    
+    private MusicDirectory.Entry song;
 
     private CheckedTextView checkedTextView;
     private TextView titleTextView;
     private TextView artistTextView;
     private TextView durationTextView;
     private TextView statusTextView;
-    private MusicDirectory.Entry song;
+    private ImageButton starButton;
 
     public SongView(Context context) {
         super(context);
@@ -63,6 +67,15 @@ public class SongView extends LinearLayout implements Checkable {
         artistTextView = (TextView) findViewById(R.id.song_artist);
         durationTextView = (TextView) findViewById(R.id.song_duration);
         statusTextView = (TextView) findViewById(R.id.song_status);
+        starButton = (ImageButton) findViewById(R.id.song_star);
+        starButton.setVisibility(Util.isOffline(getContext()) ? View.GONE : View.VISIBLE);
+        starButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				SubsonicTabActivity activity = (SubsonicTabActivity) getContext();
+				activity.toggleStarredInBackground(song, starButton);
+			}
+		});
 
         INSTANCES.put(this, null);
         int instanceCount = INSTANCES.size();
@@ -96,6 +109,9 @@ public class SongView extends LinearLayout implements Checkable {
         artistTextView.setText(artist);
         durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
+        
+        starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+        starButton.setFocusable(false);
 
         update();
     }
