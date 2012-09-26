@@ -753,7 +753,14 @@ public class RESTMusicService implements MusicService {
     private void detectRedirect(String originalUrl, Context context, HttpContext httpContext) {
         HttpUriRequest request = (HttpUriRequest) httpContext.getAttribute(ExecutionContext.HTTP_REQUEST);
         HttpHost host = (HttpHost) httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-        String redirectedUrl = host.toURI() + request.getURI();
+		
+		// Sometimes the request doesn't contain the "http://host" part
+		String redirectedUrl;
+		if (request.getURI().getScheme() == null) {
+			redirectedUrl = host.toURI() + request.getURI();
+		} else {
+			redirectedUrl = request.getURI().toString();
+		}
 
         redirectFrom = originalUrl.substring(0, originalUrl.indexOf("/rest/"));
         redirectTo = redirectedUrl.substring(0, redirectedUrl.indexOf("/rest/"));
