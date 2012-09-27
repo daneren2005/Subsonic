@@ -353,6 +353,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 return downloadFile;
             }
         }
+		for (DownloadFile downloadFile : backgroundDownloadList) {
+            if (downloadFile.getSong().equals(song)) {
+                return downloadFile;
+            }
+        }
 
         DownloadFile downloadFile = downloadFileCache.get(song);
         if (downloadFile == null) {
