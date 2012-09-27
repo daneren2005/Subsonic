@@ -885,7 +885,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         // Find a suitable target for download.
-        else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed() && !downloadList.isEmpty()) {
+        else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed() && (!downloadList.isEmpty() || !backgroundDownloadList.isEmpty())) {
             int n = size();
             if (n == 0) {
                 return;
@@ -911,9 +911,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 i = (i + 1) % n;
             } while (i != start);
 			
-			// Log.d(TAG, "i: " + i + "\nPreloaded: " + preloaded + "\nSize: " + n);
-			if((i + 1 + preloaded == n) && !backgroundDownloadList.isEmpty()) {
-				// Log.d(TAG, "Download Background");
+			if((preloaded + 1 == n) && !backgroundDownloadList.isEmpty()) {
 				for(DownloadFile downloadFile : backgroundDownloadList) {
 					if(downloadFile.isWorkDone()) {
 						// Don't need to keep list like active song list
