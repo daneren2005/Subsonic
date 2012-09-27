@@ -58,6 +58,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private View emptyView;
 	private boolean hideButtons = false;
 	private com.actionbarsherlock.view.MenuItem selectAll;
+	private com.actionbarsherlock.view.MenuItem download;
 	private com.actionbarsherlock.view.MenuItem cache;
 	private com.actionbarsherlock.view.MenuItem delete;
 	private com.actionbarsherlock.view.MenuItem playLast;
@@ -120,6 +121,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.select_album, menu);
 		selectAll = menu.findItem(R.id.menu_select);
+		download = menu.findItem(R.id.menu_download);
 		cache = menu.findItem(R.id.menu_cache);
 		delete = menu.findItem(R.id.menu_delete);
 		playLast = menu.findItem(R.id.menu_play_last);
@@ -152,6 +154,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				return true;
 			case R.id.menu_refresh:
 				refresh();
+				return true;
+			case R.id.menu_download:
+				downloadBackground(false);
+                selectAll(false, false);
 				return true;
 			case R.id.menu_cache:
 				downloadBackground(true);
@@ -534,6 +540,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 entryList.addFooterView(footer);
             } else if(selectAll != null) {
 				selectAll.setVisible(false);
+				download.setVisible(false);
 				cache.setVisible(false);
 				delete.setVisible(false);
 				playLast.setVisible(false);

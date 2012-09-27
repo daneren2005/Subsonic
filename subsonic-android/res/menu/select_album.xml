@@ -25,6 +25,12 @@
 		android:showAsAction="ifRoom|withText"/>
 		
 	<item 
+		android:id="@+id/menu_download"
+		android:icon="@drawable/action_save"
+		android:title="@string/common.download"
+		android:showAsAction="ifRoom|withText"/>
+		
+	<item 
 		android:id="@+id/menu_cache"
 		android:icon="@drawable/action_save"
 		android:title="@string/common.pin"
