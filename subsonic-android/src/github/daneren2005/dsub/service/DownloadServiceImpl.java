@@ -856,7 +856,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     protected synchronized void checkDownloads() {
-		Log.d(TAG, "Check Download");
         if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable()) {
             return;
         }
@@ -887,7 +886,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
         // Find a suitable target for download.
         else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed() && !downloadList.isEmpty()) {
-			Log.d(TAG, "Download Foreground");
             int n = size();
             if (n == 0) {
                 return;
@@ -915,12 +913,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			
 			// Log.d(TAG, "i: " + i + "\nPreloaded: " + preloaded + "\nSize: " + n);
 			if((i + 1 + preloaded == n) && !backgroundDownloadList.isEmpty()) {
-				Log.d(TAG, "Download Background");
+				// Log.d(TAG, "Download Background");
 				for(DownloadFile downloadFile : backgroundDownloadList) {
 					if(downloadFile.isWorkDone()) {
 						// Don't need to keep list like active song list
 						backgroundDownloadList.remove(downloadFile);
-					} else if(downloadFile.shouldSave()) {
+					} else {
 						currentDownloading = downloadFile;
 						currentDownloading.download();
 						cleanupCandidates.add(currentDownloading);
