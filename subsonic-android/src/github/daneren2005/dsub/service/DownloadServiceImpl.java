@@ -912,10 +912,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             } while (i != start);
 			
 			if((preloaded + 1 == n || preloaded >= Util.getPreloadCount(this)) && !backgroundDownloadList.isEmpty()) {
-				for(DownloadFile downloadFile : backgroundDownloadList) {
+				for(i = 0; i < backgroundDownloadList.size(); i++) {
+					DownloadFile downloadFile = backgroundDownloadList.get(i);
 					if(downloadFile.isWorkDone()) {
 						// Don't need to keep list like active song list
 						backgroundDownloadList.remove(downloadFile);
+						i--;
 					} else {
 						currentDownloading = downloadFile;
 						currentDownloading.download();
