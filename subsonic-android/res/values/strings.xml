@@ -31,6 +31,7 @@
     <string name="main.albums_recent">Recently played</string>
     <string name="main.albums_frequent">Most played</string>
     <string name="main.albums_highest">Top rated</string>
+    <string name="main.albums_starred">Starred</string>
     <string name="main.albums_random">Random</string>
 
 	<string name="menu.search">Search</string>
@@ -116,6 +117,8 @@
     <string name="download.jukebox_server_too_old">Remote control is not supported. Please upgrade your Subsonic server.</string>
     <string name="download.jukebox_offline">Remote control is not available in offline mode.</string>
     <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your Subsonic server.</string>
+    
+    <string name="starring_content_error">Failed to update \"%s\", please try later.</string>
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>

@@ -79,6 +79,7 @@ public class MainActivity extends SubsonicTabActivity {
         final View albumsHighestButton = buttons.findViewById(R.id.main_albums_highest);
         final View albumsRecentButton = buttons.findViewById(R.id.main_albums_recent);
         final View albumsFrequentButton = buttons.findViewById(R.id.main_albums_frequent);
+        final View albumsStarredButton = buttons.findViewById(R.id.main_albums_starred);
 
         final View dummyView = findViewById(R.id.main_dummy);
 
@@ -92,7 +93,7 @@ public class MainActivity extends SubsonicTabActivity {
         adapter.addViews(Arrays.asList(serverButton), true);
         if (!Util.isOffline(this)) {
             adapter.addView(albumsTitle, false);
-            adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton, albumsHighestButton, albumsRecentButton, albumsFrequentButton), true);
+            adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton, albumsHighestButton, albumsStarredButton, albumsRecentButton, albumsFrequentButton), true);
         }
         list.setAdapter(adapter);
         registerForContextMenu(dummyView);
@@ -108,6 +109,8 @@ public class MainActivity extends SubsonicTabActivity {
                     showAlbumList("random");
                 } else if (view == albumsHighestButton) {
                     showAlbumList("highest");
+                } else if (view == albumsStarredButton) {
+                    showAlbumList("starred");
                 } else if (view == albumsRecentButton) {
                     showAlbumList("recent");
                 } else if (view == albumsFrequentButton) {

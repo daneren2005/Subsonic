@@ -164,6 +164,11 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
+    public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
+        return musicService.getStarredList(context, progressListener);
+    }
+
+    @Override
     public MusicDirectory getRandomSongs(int size, Context context, ProgressListener progressListener) throws Exception {
         return musicService.getRandomSongs(size, context, progressListener);
     }
@@ -222,6 +227,11 @@ public class CachedMusicService implements MusicService {
     public JukeboxStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception {
         return musicService.setJukeboxGain(gain, context, progressListener);
     }
+    
+	@Override
+	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+		musicService.setStarred(id, starred, context, progressListener);
+	}
 
     private void checkSettingsChanged(Context context) {
         String newUrl = Util.getRestUrl(context, null);
