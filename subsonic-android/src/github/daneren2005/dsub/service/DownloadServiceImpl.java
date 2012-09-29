@@ -911,7 +911,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 i = (i + 1) % n;
             } while (i != start);
 			
-			if((preloaded + 1 == n) && !backgroundDownloadList.isEmpty()) {
+			if((preloaded + 1 == n || preloaded >= Util.getPreloadCount(this)) && !backgroundDownloadList.isEmpty()) {
 				for(DownloadFile downloadFile : backgroundDownloadList) {
 					if(downloadFile.isWorkDone()) {
 						// Don't need to keep list like active song list
