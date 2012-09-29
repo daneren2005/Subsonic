@@ -182,7 +182,7 @@ public class DownloadServiceLifecycleSupport {
 
     public void serializeDownloadQueue() {
         State state = new State();
-        for (DownloadFile downloadFile : downloadService.getDownloads()) {
+        for (DownloadFile downloadFile : downloadService.getSongs()) {
             state.songs.add(downloadFile.getSong());
         }
         state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
