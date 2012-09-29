@@ -349,7 +349,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized DownloadFile forSong(MusicDirectory.Entry song) {
         for (DownloadFile downloadFile : downloadList) {
-            if (downloadFile.getSong().equals(song)) {
+            if (downloadFile.getSong().equals(song) &&
+					((downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && downloadFile.getPartialFile().exists())
+					|| downloadFile.getCompleteFile().exists())) {
                 return downloadFile;
             }
         }
