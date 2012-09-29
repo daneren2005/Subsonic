@@ -17,6 +17,11 @@
         />
 
     <item 
+        android:id="@+id/album_menu_download"
+        android:title="@string/common.download"
+        />
+		
+	<item 
         android:id="@+id/album_menu_pin"
         android:title="@string/common.pin"
         />

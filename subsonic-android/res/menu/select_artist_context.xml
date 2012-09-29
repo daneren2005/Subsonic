@@ -15,6 +15,11 @@
         android:id="@+id/artist_menu_play_last"
         android:title="@string/common.play_last"
         />
+		
+	<item 
+        android:id="@+id/artist_menu_download"
+        android:title="@string/common.download"
+        />
 
     <item 
         android:id="@+id/artist_menu_pin"

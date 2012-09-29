@@ -205,7 +205,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
         String id = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ID);
         if (hasSubFolders && id != null) {
-            downloadRecursively(id, false, false, true, shuffle);
+            downloadRecursively(id, false, false, true, shuffle, false);
         } else {
             selectAll(true, false);
             download(false, false, true, false, shuffle);
@@ -245,16 +245,19 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         songs.add((MusicDirectory.Entry) entryList.getItemAtPosition(info.position));
         switch (menuItem.getItemId()) {
             case R.id.album_menu_play_now:
-                downloadRecursively(entry.getId(), false, false, true, false);
+                downloadRecursively(entry.getId(), false, false, true, false, false);
                 break;
 			case R.id.album_menu_play_shuffled:
-                downloadRecursively(entry.getId(), false, false, true, true);
+                downloadRecursively(entry.getId(), false, false, true, true, false);
                 break;
             case R.id.album_menu_play_last:
-                downloadRecursively(entry.getId(), false, true, false, false);
+                downloadRecursively(entry.getId(), false, true, false, false, false);
+                break;
+			case R.id.album_menu_download:
+                downloadRecursively(entry.getId(), false, true, false, false, true);
                 break;
             case R.id.album_menu_pin:
-                downloadRecursively(entry.getId(), true, true, false, false);
+                downloadRecursively(entry.getId(), true, true, false, false, true);
                 break;
             case R.id.song_menu_play_now:
                 getDownloadService().download(songs, false, true, true, false);

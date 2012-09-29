@@ -27,7 +27,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,17 +34,14 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
 import github.daneren2005.dsub.util.Util;
@@ -241,7 +237,7 @@ public class SubsonicTabActivity extends SherlockActivity {
         return IMAGE_LOADER;
     }
 
-    protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle) {
+    protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
         ModalBackgroundTask<List<MusicDirectory.Entry>> task = new ModalBackgroundTask<List<MusicDirectory.Entry>>(this, false) {
 
             private static final int MAX_SONGS = 500;
@@ -279,8 +275,13 @@ public class SubsonicTabActivity extends SherlockActivity {
                         downloadService.clear();
                     }
                     warnIfNetworkOrStorageUnavailable();
-                    downloadService.download(songs, save, autoplay, false, shuffle);
-                    Util.startActivityWithoutTransition(SubsonicTabActivity.this, DownloadActivity.class);
+					if(!background) {
+						downloadService.download(songs, save, autoplay, false, shuffle);
+						Util.startActivityWithoutTransition(SubsonicTabActivity.this, DownloadActivity.class);
+					}
+					else {
+						downloadService.downloadBackground(songs, save);
+					}
                 }
             }
         };
