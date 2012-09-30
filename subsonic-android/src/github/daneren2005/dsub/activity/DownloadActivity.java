@@ -502,7 +502,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         savePlaylist.setEnabled(savePlaylistEnabled);
         savePlaylist.setVisible(savePlaylistEnabled);
         MenuItem screenOption = menu.findItem(R.id.menu_screen_on_off);
-        if (getDownloadService().getKeepScreenOn()) {
+        if (getDownloadService() != null && getDownloadService().getKeepScreenOn()) {
         	screenOption.setTitle(R.string.download_menu_screen_off);
         } else {
         	screenOption.setTitle(R.string.download_menu_screen_on);
