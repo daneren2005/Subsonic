@@ -308,11 +308,6 @@ public class OfflineMusicService extends RESTMusicService {
     public JukeboxStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception {
         throw new OfflineException("Jukebox not available in offline mode");
     }
-    
-    @Override
-    public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
-    	throw new OfflineException("Starring not available in offline mode");
-    }
 
     @Override
     public MusicDirectory getRandomSongs(int size, Context context, ProgressListener progressListener) throws Exception {
