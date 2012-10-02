@@ -238,14 +238,23 @@ public class SubsonicTabActivity extends SherlockActivity {
     }
 
     protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
-        ModalBackgroundTask<List<MusicDirectory.Entry>> task = new ModalBackgroundTask<List<MusicDirectory.Entry>>(this, false) {
-
+		downloadRecursively(id, "", true, save, append, autoplay, shuffle, background);
+    }
+	protected void downloadPlaylist(final String id, final String name, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
+		downloadRecursively(id, name, false, save, append, autoplay, shuffle, background);
+    }
+	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
+		ModalBackgroundTask<List<MusicDirectory.Entry>> task = new ModalBackgroundTask<List<MusicDirectory.Entry>>(this, false) {
             private static final int MAX_SONGS = 500;
 
             @Override
             protected List<MusicDirectory.Entry> doInBackground() throws Throwable {
                 MusicService musicService = MusicServiceFactory.getMusicService(SubsonicTabActivity.this);
-                MusicDirectory root = musicService.getMusicDirectory(id, false, SubsonicTabActivity.this, this);
+				MusicDirectory root;
+				if(isDirectory)
+					root = musicService.getMusicDirectory(id, false, SubsonicTabActivity.this, this);
+				else
+					root = musicService.getPlaylist(id, name, SubsonicTabActivity.this, this);
                 List<MusicDirectory.Entry> songs = new LinkedList<MusicDirectory.Entry>();
                 getSongsRecursively(root, songs);
                 return songs;
