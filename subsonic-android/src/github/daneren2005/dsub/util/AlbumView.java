@@ -21,9 +21,11 @@ package github.daneren2005.dsub.util;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 
 /**
@@ -32,10 +34,13 @@ import github.daneren2005.dsub.domain.MusicDirectory;
  * @author Sindre Mehus
  */
 public class AlbumView extends LinearLayout {
+	
+	private MusicDirectory.Entry album;
 
     private TextView titleView;
     private TextView artistView;
     private View coverArtView;
+    private ImageButton starButton;
 
     public AlbumView(Context context) {
         super(context);
@@ -44,12 +49,26 @@ public class AlbumView extends LinearLayout {
         titleView = (TextView) findViewById(R.id.album_title);
         artistView = (TextView) findViewById(R.id.album_artist);
         coverArtView = findViewById(R.id.album_coverart);
+        starButton = (ImageButton) findViewById(R.id.album_star);
+        starButton.setVisibility(Util.isOffline(getContext()) ? View.GONE : View.VISIBLE);
+        starButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				SubsonicTabActivity activity = (SubsonicTabActivity) getContext();
+				activity.toggleStarredInBackground(album, starButton);
+			}
+		});
     }
 
     public void setAlbum(MusicDirectory.Entry album, ImageLoader imageLoader) {
+    	this.album = album;
+        
         titleView.setText(album.getTitle());
         artistView.setText(album.getArtist());
         artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
         imageLoader.loadImage(coverArtView, album, false, true);
+        
+        starButton.setImageResource(album.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+        starButton.setFocusable(false);
     }
 }

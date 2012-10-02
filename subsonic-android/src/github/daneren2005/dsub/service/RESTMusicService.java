@@ -93,6 +93,7 @@ import github.daneren2005.dsub.service.parser.PlaylistsParser;
 import github.daneren2005.dsub.service.parser.RandomSongsParser;
 import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
+import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.VersionParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
 import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
@@ -415,6 +416,16 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
+    public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
+        Reader reader = getReader(context, progressListener, "getStarred", null);
+        try {
+            return new StarredListParser(context).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
+        }
+    }
+
+    @Override
     public MusicDirectory getRandomSongs(int size, Context context, ProgressListener progressListener) throws Exception {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
@@ -598,6 +609,17 @@ public class RESTMusicService implements MusicService {
         Reader reader = getReader(context, progressListener, "jukeboxControl", null, parameterNames, parameterValues);
         try {
             return new JukeboxStatusParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+    }
+    
+    @Override
+    public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+    	checkServerVersion(context, "1.8", "Starring is not supported.");
+    	Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, "id", id);
+    	try {
+            new ErrorParser(context).parse(reader);
         } finally {
             Util.close(reader);
         }
