@@ -15,5 +15,9 @@
         android:id="@+id/song_menu_play_last"
         android:title="@string/common.play_last"
         />
+		
+	<item 
+		android:id="@+id/song_menu_star"
+		android:title="@string/common.star"/>  
         
 </menu>

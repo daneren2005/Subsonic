@@ -162,16 +162,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         
         starButton = (ImageButton) findViewById(R.id.download_star);
         starButton.setVisibility(Util.isOffline(this) ? View.GONE : View.VISIBLE);
-        starButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
-				if (currentDownload != null) {
-					MusicDirectory.Entry currentSong = currentDownload.getSong();
-					toggleStarredInBackground(currentSong, starButton);
-				}
-			}
-		});
 
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
@@ -541,7 +531,10 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             if (Util.isOffline(this)) {
                 menu.findItem(R.id.menu_lyrics).setVisible(false);
                 menu.findItem(R.id.menu_save_playlist).setVisible(false);
-            }
+				menu.findItem(R.id.menu_star).setVisible(false);
+            } else {
+				menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
+			}
         }
     }
 
@@ -603,6 +596,9 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             case R.id.menu_save_playlist:
                 showDialog(DIALOG_SAVE_PLAYLIST);
                 return true;
+			case R.id.menu_star:
+				toggleStarred(song.getSong());
+				return true;
             default:
                 return false;
         }

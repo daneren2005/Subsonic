@@ -19,14 +19,16 @@
 package github.daneren2005.dsub.util;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import java.util.WeakHashMap;
 
 /**
  * Used to display albums in a {@code ListView}.
@@ -34,6 +36,9 @@ import github.daneren2005.dsub.domain.MusicDirectory;
  * @author Sindre Mehus
  */
 public class AlbumView extends LinearLayout {
+	private static final String TAG = AlbumView.class.getSimpleName();
+    private static final WeakHashMap<AlbumView, ?> INSTANCES = new WeakHashMap<AlbumView, Object>();
+    private static Handler handler;
 	
 	private MusicDirectory.Entry album;
 
@@ -50,14 +55,13 @@ public class AlbumView extends LinearLayout {
         artistView = (TextView) findViewById(R.id.album_artist);
         coverArtView = findViewById(R.id.album_coverart);
         starButton = (ImageButton) findViewById(R.id.album_star);
-        starButton.setVisibility(Util.isOffline(getContext()) ? View.GONE : View.VISIBLE);
-        starButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				SubsonicTabActivity activity = (SubsonicTabActivity) getContext();
-				activity.toggleStarredInBackground(album, starButton);
-			}
-		});
+		
+		INSTANCES.put(this, null);
+		int instanceCount = INSTANCES.size();
+        if (instanceCount > 50) {
+            Log.w(TAG, instanceCount + " live AlbumView instances");
+        }
+		startUpdater();
     }
 
     public void setAlbum(MusicDirectory.Entry album, ImageLoader imageLoader) {
@@ -68,7 +72,41 @@ public class AlbumView extends LinearLayout {
         artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
         imageLoader.loadImage(coverArtView, album, false, true);
         
-        starButton.setImageResource(album.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-        starButton.setFocusable(false);
+        starButton.setVisibility((Util.isOffline(getContext()) || !album.isStarred()) ? View.GONE : View.VISIBLE);
+		starButton.setFocusable(false);
+		
+		update();
+    }
+	
+	private void update() {
+		starButton.setVisibility((Util.isOffline(getContext()) || !album.isStarred()) ? View.GONE : View.VISIBLE);
+    }
+	
+	private static synchronized void startUpdater() {
+        if (handler != null) {
+            return;
+        }
+
+        handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                updateAll();
+                handler.postDelayed(this, 1000L);
+            }
+        };
+        handler.postDelayed(runnable, 1000L);
+    }
+	
+	private static void updateAll() {
+        try {
+            for (AlbumView view : INSTANCES.keySet()) {
+                if (view.isShown()) {
+                    view.update();
+                }
+            }
+        } catch (Throwable x) {
+            Log.w(TAG, "Error when updating song views.", x);
+        }
     }
 }

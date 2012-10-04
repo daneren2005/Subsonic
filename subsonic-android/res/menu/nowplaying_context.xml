@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
 	<item 
 		android:id="@+id/menu_show_album"
 		android:title="@string/download.menu_show_album"/>
@@ -15,5 +14,9 @@
 
 	<item 
 		android:id="@+id/menu_delete"
-		android:title="@string/download.menu_delete"/>        
+		android:title="@string/download.menu_delete"/>
+		
+	<item 
+		android:id="@+id/menu_star"
+		android:title="@string/common.star"/>  
 </menu>

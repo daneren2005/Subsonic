@@ -12,6 +12,8 @@
 	<string name="common.download">Download</string>
     <string name="common.pin">Cache</string>
     <string name="common.delete">Delete</string>
+	<string name="common.star">Star</string>
+	<string name="common.unstar">Unstar</string>
 
     <string name="button_bar.home">DSub home</string>
     <string name="button_bar.browse">Media library</string>
@@ -118,6 +120,8 @@
     <string name="download.jukebox_offline">Remote control is not available in offline mode.</string>
     <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your Subsonic server.</string>
     
+	<string name="starring_content_starred">Starred \"%s\"</string>
+	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
     <string name="starring_content_error">Failed to update \"%s\", please try later.</string>
 
     <string name="song_details.all">%1$s %2$s</string>

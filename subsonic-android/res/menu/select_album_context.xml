@@ -25,5 +25,9 @@
         android:id="@+id/album_menu_pin"
         android:title="@string/common.pin"
         />
+		
+	<item 
+		android:id="@+id/album_menu_star"
+		android:title="@string/common.star"/>  
         
 </menu>

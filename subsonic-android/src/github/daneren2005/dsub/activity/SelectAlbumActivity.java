@@ -235,6 +235,12 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.select_song_context, menu);
         }
+
+		if (Util.isOffline(this)) {
+			menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setVisible(false);
+		} else {
+			menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
+		}
     }
 
     @Override
@@ -259,6 +265,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             case R.id.album_menu_pin:
                 downloadRecursively(entry.getId(), true, true, false, false, true);
                 break;
+			case R.id.album_menu_star:
+                toggleStarred(entry);
+                break;
             case R.id.song_menu_play_now:
                 getDownloadService().download(songs, false, true, true, false);
                 break;
@@ -267,6 +276,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 break;
             case R.id.song_menu_play_last:
                 getDownloadService().download(songs, false, false, false, false);
+                break;
+			case R.id.song_menu_star:
+                toggleStarred(entry);
                 break;
             default:
                 return super.onContextItemSelected(menuItem);

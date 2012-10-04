@@ -44,7 +44,6 @@ import java.util.WeakHashMap;
  * @author Sindre Mehus
  */
 public class SongView extends LinearLayout implements Checkable {
-
     private static final String TAG = SongView.class.getSimpleName();
     private static final WeakHashMap<SongView, ?> INSTANCES = new WeakHashMap<SongView, Object>();
     private static Handler handler;
@@ -68,14 +67,6 @@ public class SongView extends LinearLayout implements Checkable {
         durationTextView = (TextView) findViewById(R.id.song_duration);
         statusTextView = (TextView) findViewById(R.id.song_status);
         starButton = (ImageButton) findViewById(R.id.song_star);
-        starButton.setVisibility(Util.isOffline(getContext()) ? View.GONE : View.VISIBLE);
-        starButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				SubsonicTabActivity activity = (SubsonicTabActivity) getContext();
-				activity.toggleStarredInBackground(song, starButton);
-			}
-		});
 
         INSTANCES.put(this, null);
         int instanceCount = INSTANCES.size();
@@ -109,9 +100,8 @@ public class SongView extends LinearLayout implements Checkable {
         artistTextView.setText(artist);
         durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
-        
-        starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-        starButton.setFocusable(false);
+		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
+		starButton.setFocusable(false);
 
         update();
     }
@@ -147,6 +137,7 @@ public class SongView extends LinearLayout implements Checkable {
         } else {
             titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
+		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
     }
 
     private static synchronized void startUpdater() {

@@ -40,12 +40,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import com.actionbarsherlock.app.SherlockActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
-import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.service.OfflineException;
-import github.daneren2005.dsub.service.ServerTooOldException;
+import github.daneren2005.dsub.service.*;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
@@ -127,8 +122,6 @@ public class SubsonicTabActivity extends SherlockActivity {
         } else if (this instanceof DownloadActivity || this instanceof LyricsActivity) {
             nowPlayingButton.setEnabled(false);
         }
-
-        updateButtonVisibility();
     }
 
     @Override
@@ -195,20 +188,12 @@ public class SubsonicTabActivity extends SherlockActivity {
     public boolean isDestroyed() {
         return destroyed;
     }
-
-    private void updateButtonVisibility() {
-        int visibility = Util.isOffline(this) ? View.GONE : View.VISIBLE;
-    }
     
-    public void toggleStarredInBackground(final MusicDirectory.Entry entry, final ImageButton button) {
-        
-    	final boolean starred = !entry.isStarred();
-    	
-    	button.setImageResource(starred ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-    	entry.setStarred(starred);
-    	
-        //        Util.toast(SubsonicTabActivity.this, getResources().getString(R.string.starring_content, entry.getTitle()));
-        new SilentBackgroundTask<Void>(this) {
+	public void toggleStarred(final MusicDirectory.Entry entry) {
+		final boolean starred = !entry.isStarred();
+		entry.setStarred(starred);
+		
+		new SilentBackgroundTask<Void>(this) {
             @Override
             protected Void doInBackground() throws Throwable {
                 MusicService musicService = MusicServiceFactory.getMusicService(SubsonicTabActivity.this);
@@ -218,12 +203,11 @@ public class SubsonicTabActivity extends SherlockActivity {
             
             @Override
             protected void done(Void result) {
-                //                Util.toast(SubsonicTabActivity.this, getResources().getString(R.string.starring_content_done, entry.getTitle()));
+                Util.toast(SubsonicTabActivity.this, getResources().getString(starred ? R.string.starring_content_starred : R.string.starring_content_unstarred, entry.getTitle()));
             }
             
             @Override
             protected void error(Throwable error) {
-            	button.setImageResource(!starred ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
             	entry.setStarred(!starred);
             	
             	String msg;
@@ -236,7 +220,7 @@ public class SubsonicTabActivity extends SherlockActivity {
         		Util.toast(SubsonicTabActivity.this, msg, false);
             }
         }.execute();
-    }
+	}
 
     public void setProgressVisible(boolean visible) {
         View view = findViewById(R.id.tab_progress);
