@@ -43,6 +43,15 @@
                     android:layout_gravity="right|center_vertical"
                     android:drawablePadding="1dip"
                     android:paddingRight="6dip"/>
+					
+			<ImageButton
+				android:id="@+id/song_star"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="right|center_vertical"
+				android:background="@null"
+				android:focusable="false"
+				android:src="@android:drawable/btn_star_big_off" />
         </LinearLayout>
 
         <LinearLayout android:orientation="horizontal"
@@ -72,15 +81,5 @@
                     android:paddingRight="9dip"/>
 
         </LinearLayout>
-    </LinearLayout>
-    
-    <ImageButton
-            android:id="@+id/song_star"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:background="@null"
-            android:focusable="false"
-            android:src="@android:drawable/btn_star_big_off" />
-    
+    </LinearLayout>    
 </LinearLayout>
