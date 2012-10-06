@@ -327,6 +327,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
         DownloadService downloadService = getDownloadService();
         if (downloadService != null && getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
+			getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE);
             warnIfNetworkOrStorageUnavailable();
             downloadService.setShufflePlayEnabled(true);
         }
