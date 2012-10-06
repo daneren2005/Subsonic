@@ -64,6 +64,8 @@ public interface DownloadService {
 	List<DownloadFile> getSongs();
 	
     List<DownloadFile> getDownloads();
+	
+	List<DownloadFile> getBackgroundDownloads();
 
     int getCurrentPlayingIndex();
 

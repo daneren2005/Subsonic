@@ -403,6 +403,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             setCurrentPlaying(null, false);
         }
         downloadList.remove(downloadFile);
+		backgroundDownloadList.remove(downloadFile);
         revision++;
         lifecycleSupport.serializeDownloadQueue();
         updateJukeboxPlaylist();
@@ -480,6 +481,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		temp.addAll(backgroundDownloadList);
         return temp;
     }
+	
+	@Override
+	public synchronized List<DownloadFile> getBackgroundDownloads() {
+		List<DownloadFile> temp = new ArrayList<DownloadFile>();
+		temp.addAll(backgroundDownloadList);
+        return temp;
+	}
 
     /** Plays either the current song (resume) or the first/next one in queue. */
     public synchronized void play()
