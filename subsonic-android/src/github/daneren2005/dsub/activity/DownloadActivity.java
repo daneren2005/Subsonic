@@ -116,6 +116,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private int swipeDistance;
     private int swipeVelocity;
     private VisualizerView visualizerView;
+	private boolean nowPlaying = true;
 
     /**
      * Called when the activity is first created.
@@ -123,7 +124,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		setTitle("Now Playing");
+		setTitle(nowPlaying ? "Now Playing" : "Downloading");
         setContentView(R.layout.download);
 		
 		getSupportActionBar().hide();
@@ -504,15 +505,18 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem savePlaylist = menu.findItem(R.id.menu_save_playlist);
-        boolean savePlaylistEnabled = !Util.isOffline(this);
-        savePlaylist.setEnabled(savePlaylistEnabled);
-        savePlaylist.setVisible(savePlaylistEnabled);
+        boolean enabled = !Util.isOffline(this);
+        savePlaylist.setEnabled(enabled);
+        savePlaylist.setVisible(enabled);
         MenuItem screenOption = menu.findItem(R.id.menu_screen_on_off);
         if (getDownloadService() != null && getDownloadService().getKeepScreenOn()) {
         	screenOption.setTitle(R.string.download_menu_screen_off);
         } else {
         	screenOption.setTitle(R.string.download_menu_screen_on);
         }
+		MenuItem togglePlaying = menu.findItem(R.id.menu_toggle_now_playing);
+		togglePlaying.setVisible(enabled);
+		togglePlaying.setTitle(nowPlaying ? R.string.download_show_downloading : R.string.download_show_now_playing);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -533,6 +537,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 menu.findItem(R.id.menu_lyrics).setVisible(false);
                 menu.findItem(R.id.menu_save_playlist).setVisible(false);
 				menu.findItem(R.id.menu_star).setVisible(false);
+				menu.findItem(R.id.menu_toggle_now_playing).setVisible(false);
             } else {
 				menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
@@ -599,6 +604,9 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 return true;
 			case R.id.menu_star:
 				toggleStarred(song.getSong());
+				return true;
+			case R.id.menu_toggle_now_playing:
+				toggleNowPlaying();
 				return true;
             default:
                 return false;
@@ -693,7 +701,11 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             return;
         }
 
-        List<DownloadFile> list = downloadService.getSongs();
+		List<DownloadFile> list;
+		if(nowPlaying)
+			list = downloadService.getSongs();
+		else
+			list = downloadService.getBackgroundDownloads();
 
         playlistView.setAdapter(new SongListAdapter(list));
         emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
@@ -878,6 +890,12 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
         return false;
     }
+	
+	private void toggleNowPlaying() {
+		nowPlaying = !nowPlaying;
+		setTitle(nowPlaying ? "Now Playing" : "Downloading");
+		onDownloadListChanged();
+	}
 
 	@Override
 	public void onLongPress(MotionEvent e) {

@@ -24,4 +24,8 @@
         android:icon="@drawable/action_screen_on_off"
         android:title="@string/download.menu_screen_on"
         android:showAsAction="ifRoom|withText"/>
+		
+	<item
+        android:id="@+id/menu_toggle_now_playing"
+        android:title="@string/download.show_downloading"/>
 </menu>
