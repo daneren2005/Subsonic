@@ -18,6 +18,8 @@
  */
 package github.daneren2005.dsub.util;
 
+import github.daneren2005.dsub.view.AlbumView;
+import github.daneren2005.dsub.view.SongView;
 import java.util.List;
 
 import android.view.View;

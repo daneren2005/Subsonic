@@ -16,29 +16,26 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.daneren2005.dsub.util;
+package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import java.util.WeakHashMap;
+import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.UpdateView;
 
 /**
  * Used to display albums in a {@code ListView}.
  *
  * @author Sindre Mehus
  */
-public class AlbumView extends LinearLayout {
+public class AlbumView extends UpdateView {
 	private static final String TAG = AlbumView.class.getSimpleName();
-    private static final WeakHashMap<AlbumView, ?> INSTANCES = new WeakHashMap<AlbumView, Object>();
-    private static Handler handler;
 	
 	private MusicDirectory.Entry album;
 
@@ -55,13 +52,6 @@ public class AlbumView extends LinearLayout {
         artistView = (TextView) findViewById(R.id.album_artist);
         coverArtView = findViewById(R.id.album_coverart);
         starButton = (ImageButton) findViewById(R.id.album_star);
-		
-		INSTANCES.put(this, null);
-		int instanceCount = INSTANCES.size();
-        if (instanceCount > 50) {
-            Log.w(TAG, instanceCount + " live AlbumView instances");
-        }
-		startUpdater();
     }
 
     public void setAlbum(MusicDirectory.Entry album, ImageLoader imageLoader) {
@@ -78,35 +68,8 @@ public class AlbumView extends LinearLayout {
 		update();
     }
 	
-	private void update() {
+	@Override
+	protected void update() {
 		starButton.setVisibility((Util.isOffline(getContext()) || !album.isStarred()) ? View.GONE : View.VISIBLE);
-    }
-	
-	private static synchronized void startUpdater() {
-        if (handler != null) {
-            return;
-        }
-
-        handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                updateAll();
-                handler.postDelayed(this, 1000L);
-            }
-        };
-        handler.postDelayed(runnable, 1000L);
-    }
-	
-	private static void updateAll() {
-        try {
-            for (AlbumView view : INSTANCES.keySet()) {
-                if (view.isShown()) {
-                    view.update();
-                }
-            }
-        } catch (Throwable x) {
-            Log.w(TAG, "Error when updating song views.", x);
-        }
     }
 }

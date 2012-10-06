@@ -203,6 +203,7 @@ public class SubsonicTabActivity extends SherlockActivity {
             
             @Override
             protected void done(Void result) {
+				// UpdateView
                 Util.toast(SubsonicTabActivity.this, getResources().getString(starred ? R.string.starring_content_starred : R.string.starring_content_unstarred, entry.getTitle()));
             }
             

@@ -70,7 +70,7 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.HorizontalSlider;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
-import github.daneren2005.dsub.util.SongView;
+import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.VisualizerView;
 

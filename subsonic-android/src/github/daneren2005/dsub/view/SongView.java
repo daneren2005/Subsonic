@@ -16,37 +16,32 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.daneren2005.dsub.util;
+package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
-import java.util.WeakHashMap;
 
 /**
  * Used to display songs in a {@code ListView}.
  *
  * @author Sindre Mehus
  */
-public class SongView extends LinearLayout implements Checkable {
+public class SongView extends UpdateView implements Checkable {
     private static final String TAG = SongView.class.getSimpleName();
-    private static final WeakHashMap<SongView, ?> INSTANCES = new WeakHashMap<SongView, Object>();
-    private static Handler handler;
     
     private MusicDirectory.Entry song;
 
@@ -67,13 +62,6 @@ public class SongView extends LinearLayout implements Checkable {
         durationTextView = (TextView) findViewById(R.id.song_duration);
         statusTextView = (TextView) findViewById(R.id.song_status);
         starButton = (ImageButton) findViewById(R.id.song_star);
-
-        INSTANCES.put(this, null);
-        int instanceCount = INSTANCES.size();
-        if (instanceCount > 50) {
-            Log.w(TAG, instanceCount + " live SongView instances");
-        }
-        startUpdater();
     }
 
     public void setSong(MusicDirectory.Entry song, boolean checkable) {
@@ -106,7 +94,8 @@ public class SongView extends LinearLayout implements Checkable {
         update();
     }
 
-    private void update() {
+	@Override
+    protected void update() {
         DownloadService downloadService = DownloadServiceImpl.getInstance();
         if (downloadService == null) {
             return;
@@ -138,34 +127,6 @@ public class SongView extends LinearLayout implements Checkable {
             titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
 		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
-    }
-
-    private static synchronized void startUpdater() {
-        if (handler != null) {
-            return;
-        }
-
-        handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                updateAll();
-                handler.postDelayed(this, 1000L);
-            }
-        };
-        handler.postDelayed(runnable, 1000L);
-    }
-
-    private static void updateAll() {
-        try {
-            for (SongView view : INSTANCES.keySet()) {
-                if (view.isShown()) {
-                    view.update();
-                }
-            }
-        } catch (Throwable x) {
-            Log.w(TAG, "Error when updating song views.", x);
-        }
     }
 
     @Override
