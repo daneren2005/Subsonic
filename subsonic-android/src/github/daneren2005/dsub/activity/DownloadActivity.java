@@ -610,6 +610,12 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 			case R.id.menu_toggle_now_playing:
 				toggleNowPlaying();
 				return true;
+			case R.id.menu_exit:
+				intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
+                Util.startActivityWithoutTransition(this, intent);
+				return true;
             default:
                 return false;
         }
