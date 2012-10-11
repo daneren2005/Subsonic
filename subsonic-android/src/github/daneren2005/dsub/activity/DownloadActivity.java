@@ -185,7 +185,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         albumArtImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleFullscreenAlbumArt();
+				toggleFullscreenAlbumArt();
             }
         });
 
@@ -317,10 +317,12 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                warnIfNetworkOrStorageUnavailable();
-                getDownloadService().play(position);
-                onCurrentChanged();
-                onProgressChanged();
+				if(nowPlaying) {
+					warnIfNetworkOrStorageUnavailable();
+					getDownloadService().play(position);
+					onCurrentChanged();
+					onProgressChanged();
+				}
             }
         });
 
