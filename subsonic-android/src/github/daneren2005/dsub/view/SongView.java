@@ -96,6 +96,7 @@ public class SongView extends UpdateView implements Checkable {
 
 	@Override
     protected void update() {
+		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
         DownloadService downloadService = DownloadServiceImpl.getInstance();
         if (downloadService == null) {
             return;
@@ -125,8 +126,7 @@ public class SongView extends UpdateView implements Checkable {
             titleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stat_notify_playing, 0, 0, 0);
         } else {
             titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        }
-		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
+		}
     }
 
     @Override
