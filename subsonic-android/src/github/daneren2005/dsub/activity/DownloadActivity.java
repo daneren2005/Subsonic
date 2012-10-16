@@ -163,6 +163,17 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         
         starButton = (ImageButton) findViewById(R.id.download_star);
         starButton.setVisibility(Util.isOffline(this) ? View.GONE : View.VISIBLE);
+		starButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
+				if (currentDownload != null) {
+					MusicDirectory.Entry currentSong = currentDownload.getSong();
+					toggleStarred(currentSong);
+					starButton.setImageResource(currentSong.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+				}
+			}
+		});
 
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
