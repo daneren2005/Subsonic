@@ -114,4 +114,10 @@ public interface DownloadService {
     void setJukeboxEnabled(boolean b);
 
     void adjustJukeboxVolume(boolean up);
+	
+	void setSleepTimerDuration(int duration);
+	
+	void setSleepTimerStatus(int status);
+	
+	void startSleepTimer();
 }

@@ -57,6 +57,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private EditTextPreference cacheLocation;
     private ListPreference preloadCount;
 	private EditTextPreference randomSize;
+	private ListPreference sleepTimer;
+	private EditTextPreference sleepTimerDuration;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         cacheLocation = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
         preloadCount = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT);
 		randomSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_RANDOM_SIZE);
+		sleepTimer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_SLEEP_TIMER);
+		sleepTimerDuration = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION);
 
         findPreference("testConnection1").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -139,6 +143,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         else if (Constants.PREFERENCES_KEY_CACHE_LOCATION.equals(key)) {
             setCacheLocation(sharedPreferences.getString(key, ""));
         }
+		else if(Constants.PREFERENCES_KEY_SLEEP_TIMER.equals(key)){
+			DownloadService downloadService = DownloadServiceImpl.getInstance();
+			downloadService.setSleepTimerStatus(Integer.parseInt(sharedPreferences.getString(key, "0")));
+		}
+		else if (Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION.equals(key)){
+			DownloadService downloadService = DownloadServiceImpl.getInstance();
+			downloadService.setSleepTimerDuration(Integer.parseInt(sharedPreferences.getString(key, "60")));
+		}
     }
 
     private void update() {
@@ -154,6 +166,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         cacheLocation.setSummary(cacheLocation.getText());
         preloadCount.setSummary(preloadCount.getEntry());
 		randomSize.setSummary(randomSize.getText());
+		sleepTimer.setSummary(sleepTimer.getEntry());
+		sleepTimerDuration.setSummary(sleepTimerDuration.getText());
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }

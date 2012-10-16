@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -105,6 +107,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private VisualizerController visualizerController;
     private boolean showVisualization;
     private boolean jukeboxEnabled;
+	
+	private Timer sleepTimer;
+	private int timerDuration;
+	private int timerStatus;
 
     static {
         try {
@@ -166,6 +172,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
 		wakeLock.setReferenceCounted(false);
+		
+		SharedPreferences prefs = Util.getPreferences(this);
+		timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "60"));
+		timerStatus = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER, "0"));
+		sleepTimer = null;
 
 		instance = this;
 		lifecycleSupport.onCreate();
@@ -181,6 +192,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public void onDestroy() {
         super.onDestroy();
+		if(sleepTimer != null){
+			sleepTimer.cancel();
+			sleepTimer.purge();
+		}
         lifecycleSupport.onDestroy();
         mediaPlayer.release();
         shufflePlayBuffer.shutdown();
@@ -609,6 +624,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized void start() {
         try {
+			if(timerStatus > 0)
+				startSleepTimer();
             if (jukeboxEnabled) {
                 jukeboxService.start();
             } else {
@@ -812,6 +829,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
 
             if (start) {
+				if(timerStatus > 0)
+					startSleepTimer();
                 mediaPlayer.start();
                 setPlayerState(STARTED);
             } else {
@@ -823,6 +842,42 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             handleError(x);
         }
     }
+	
+		@Override
+		public void setSleepTimerDuration(int duration){
+			timerDuration = duration;
+		}
+
+		@Override
+		public void setSleepTimerStatus(int status){
+			timerStatus = status;
+		}
+	
+	@Override
+	public void startSleepTimer(){
+		final SharedPreferences prefs = Util.getPreferences(this);
+		final SharedPreferences.Editor editor = prefs.edit();
+
+		if(sleepTimer != null){
+			sleepTimer.cancel();
+			sleepTimer.purge();
+		}
+
+		sleepTimer = new Timer();		
+
+		sleepTimer.schedule(new TimerTask() {			
+			@Override
+			public void run() {
+				pause();
+				if(timerStatus == 1){
+					timerStatus = 0;
+					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER, String.valueOf(timerStatus));
+					editor.commit();
+				}
+			}
+
+		}, timerDuration * 60 * 1000);
+	}
 
     private void handleError(Exception x) {
         Log.w(TAG, "Media player error: " + x, x);

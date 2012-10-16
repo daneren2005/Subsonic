@@ -14,6 +14,18 @@
 		<item>@string/settings.theme_light_fullscreen</item>
         <item>@string/settings.theme_dark_fullscreen</item>
     </string-array>
+	
+	<string-array name="sleepTimerValues">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+
+	<string-array name="sleepTimerNames">
+		<item>@string/settings.sleep_timer_off</item>
+		<item>@string/settings.sleep_timer_on</item>
+		<item>@string/settings.sleep_timer_always_on</item>
+	</string-array>
 
     <string-array name="preloadCountValues">
         <item>1</item>

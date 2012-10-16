@@ -76,6 +76,8 @@ public final class Constants {
     public static final String PREFERENCES_KEY_REPEAT_MODE = "repeatMode";
     public static final String PREFERENCES_KEY_WIFI_REQUIRED_FOR_DOWNLOAD = "wifiRequiredForDownload";
 	public static final String PREFERENCES_KEY_RANDOM_SIZE = "randomSize";
+	public static final String PREFERENCES_KEY_SLEEP_TIMER = "sleepTimer";
+	public static final String PREFERENCES_KEY_SLEEP_TIMER_DURATION = "sleepTimerDuration";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";
