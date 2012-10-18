@@ -517,6 +517,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     @Override
     public synchronized void play(int index) {
+		Log.d(TAG, "Play");
         play(index, true);
     }
 
@@ -846,14 +847,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
 	public void setSleepTimerDuration(int duration){
 		timerDuration = duration;
-		if(this.playerState == PlayerState.STARTED)
+		if(this.playerState == PlayerState.STARTED && timerStatus > 0)
 			startSleepTimer();
 	}
 
 	@Override
 	public void setSleepTimerStatus(int status){
 		timerStatus = status;
-		if(this.playerState == PlayerState.STARTED)
+		if(this.playerState == PlayerState.STARTED && timerStatus > 0)
 			startSleepTimer();
 	}
 	
