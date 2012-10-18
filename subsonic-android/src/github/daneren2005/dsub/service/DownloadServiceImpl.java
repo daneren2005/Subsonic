@@ -843,15 +843,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
     }
 	
-		@Override
-		public void setSleepTimerDuration(int duration){
-			timerDuration = duration;
-		}
+	@Override
+	public void setSleepTimerDuration(int duration){
+		timerDuration = duration;
+	}
 
-		@Override
-		public void setSleepTimerStatus(int status){
-			timerStatus = status;
-		}
+	@Override
+	public void setSleepTimerStatus(int status){
+		timerStatus = status;
+	}
 	
 	@Override
 	public void startSleepTimer(){
@@ -886,7 +886,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     protected synchronized void checkDownloads() {
-		Log.d(TAG, "Start");
         if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable()) {
             return;
         }
@@ -902,7 +901,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (downloadList.isEmpty() && backgroundDownloadList.isEmpty()) {
             return;
         }
-		Log.d(TAG, "Past Check");
 
         // Need to download current playing?
         if (currentPlaying != null && currentPlaying != currentDownloading && !currentPlaying.isCompleteFileAvailable()) {
