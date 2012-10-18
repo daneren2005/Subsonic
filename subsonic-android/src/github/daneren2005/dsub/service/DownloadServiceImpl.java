@@ -886,6 +886,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     protected synchronized void checkDownloads() {
+		Log.d(TAG, "Start");
         if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable()) {
             return;
         }
@@ -901,6 +902,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (downloadList.isEmpty() && backgroundDownloadList.isEmpty()) {
             return;
         }
+		Log.d(TAG, "Past Check");
 
         // Need to download current playing?
         if (currentPlaying != null && currentPlaying != currentDownloading && !currentPlaying.isCompleteFileAvailable()) {
@@ -917,32 +919,31 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         // Find a suitable target for download.
         else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed() && (!downloadList.isEmpty() || !backgroundDownloadList.isEmpty())) {
             int n = size();
-            if (n == 0) {
-                return;
-            }
 
             int preloaded = 0;
 
-            int start = currentPlaying == null ? 0 : getCurrentPlayingIndex();
-            int i = start;
-            do {
-                DownloadFile downloadFile = downloadList.get(i);
-                if (!downloadFile.isWorkDone()) {
-                    if (downloadFile.shouldSave() || preloaded < Util.getPreloadCount(this)) {
-                        currentDownloading = downloadFile;
-                        currentDownloading.download();
-                        cleanupCandidates.add(currentDownloading);
-                        break;
-                    }
-                } else if (currentPlaying != downloadFile) {
-                    preloaded++;
-                }
+			if(n != 0) {
+				int start = currentPlaying == null ? 0 : getCurrentPlayingIndex();
+				int i = start;
+				do {
+					DownloadFile downloadFile = downloadList.get(i);
+					if (!downloadFile.isWorkDone()) {
+						if (downloadFile.shouldSave() || preloaded < Util.getPreloadCount(this)) {
+							currentDownloading = downloadFile;
+							currentDownloading.download();
+							cleanupCandidates.add(currentDownloading);
+							break;
+						}
+					} else if (currentPlaying != downloadFile) {
+						preloaded++;
+					}
 
-                i = (i + 1) % n;
-            } while (i != start);
+					i = (i + 1) % n;
+				} while (i != start);
+			}
 			
-			if((preloaded + 1 == n || preloaded >= Util.getPreloadCount(this)) && !backgroundDownloadList.isEmpty()) {
-				for(i = 0; i < backgroundDownloadList.size(); i++) {
+			if((preloaded + 1 == n || preloaded >= Util.getPreloadCount(this) || downloadList.isEmpty()) && !backgroundDownloadList.isEmpty()) {
+				for(int i = 0; i < backgroundDownloadList.size(); i++) {
 					DownloadFile downloadFile = backgroundDownloadList.get(i);
 					if(downloadFile.isWorkDone()) {
 						// Don't need to keep list like active song list
