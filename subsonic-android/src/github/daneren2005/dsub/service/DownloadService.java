@@ -117,7 +117,9 @@ public interface DownloadService {
 	
 	void setSleepTimerDuration(int duration);
 	
-	void setSleepTimerStatus(int status);
-	
 	void startSleepTimer();
+	
+	void stopSleepTimer();
+	
+	boolean getSleepTimer();
 }

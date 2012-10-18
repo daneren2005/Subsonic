@@ -35,6 +35,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -78,6 +79,7 @@ import static github.daneren2005.dsub.domain.PlayerState.*;
 import java.util.ArrayList;
 
 public class DownloadActivity extends SubsonicTabActivity implements OnGestureListener {
+	private static final String TAG = DownloadActivity.class.getSimpleName();
 
     private static final int DIALOG_SAVE_PLAYLIST = 100;
     private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 5;
@@ -532,6 +534,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 		togglePlaying.setTitle(nowPlaying ? R.string.download_show_downloading : R.string.download_show_now_playing);
 		MenuItem shuffle = menu.findItem(R.id.menu_shuffle);
 		shuffle.setVisible(nowPlaying);
+		MenuItem timer = menu.findItem(R.id.menu_toggle_timer);
+		timer.setTitle(getDownloadService().getSleepTimer() ? R.string.download_stop_timer : R.string.download_start_timer);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -623,6 +627,13 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 			case R.id.menu_toggle_now_playing:
 				toggleNowPlaying();
 				invalidateOptionsMenu();
+				return true;
+			case R.id.menu_toggle_timer:
+				if(getDownloadService().getSleepTimer()) {
+					getDownloadService().stopSleepTimer();
+				} else {
+					getDownloadService().startSleepTimer();
+				}
 				return true;
 			case R.id.menu_exit:
 				intent = new Intent(this, MainActivity.class);

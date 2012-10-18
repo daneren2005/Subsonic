@@ -110,7 +110,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	private Timer sleepTimer;
 	private int timerDuration;
-	private int timerStatus;
 
     static {
         try {
@@ -175,7 +174,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		
 		SharedPreferences prefs = Util.getPreferences(this);
 		timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "60"));
-		timerStatus = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER, "0"));
 		sleepTimer = null;
 
 		instance = this;
@@ -517,7 +515,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     @Override
     public synchronized void play(int index) {
-		Log.d(TAG, "Play");
         play(index, true);
     }
 
@@ -625,8 +622,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized void start() {
         try {
-			if(timerStatus > 0)
-				startSleepTimer();
             if (jukeboxEnabled) {
                 jukeboxService.start();
             } else {
@@ -830,8 +825,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
 
             if (start) {
-				if(timerStatus > 0)
-					startSleepTimer();
                 mediaPlayer.start();
                 setPlayerState(STARTED);
             } else {
@@ -847,22 +840,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
 	public void setSleepTimerDuration(int duration){
 		timerDuration = duration;
-		if(this.playerState == PlayerState.STARTED && timerStatus > 0)
-			startSleepTimer();
-	}
-
-	@Override
-	public void setSleepTimerStatus(int status){
-		timerStatus = status;
-		if(this.playerState == PlayerState.STARTED && timerStatus > 0)
-			startSleepTimer();
 	}
 	
 	@Override
 	public void startSleepTimer(){
-		final SharedPreferences prefs = Util.getPreferences(this);
-		final SharedPreferences.Editor editor = prefs.edit();
-
 		if(sleepTimer != null){
 			sleepTimer.cancel();
 			sleepTimer.purge();
@@ -874,14 +855,26 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			@Override
 			public void run() {
 				pause();
-				if(timerStatus == 1){
-					timerStatus = 0;
-					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER, String.valueOf(timerStatus));
-					editor.commit();
-				}
+				sleepTimer.cancel();
+				sleepTimer.purge();
+				sleepTimer = null;
 			}
 
 		}, timerDuration * 60 * 1000);
+	}
+	
+	@Override
+	public void stopSleepTimer() {
+		if(sleepTimer != null){
+			sleepTimer.cancel();
+			sleepTimer.purge();
+		}
+		sleepTimer = null;
+	}
+	
+	@Override
+	public boolean getSleepTimer() {
+		return sleepTimer != null;
 	}
 
     private void handleError(Exception x) {

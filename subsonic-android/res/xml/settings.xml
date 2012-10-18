@@ -155,13 +155,6 @@
                 android:key="randomSize"
                 android:defaultValue="20"
 				android:digits="0123456789"/>
-				
-			<ListPreference
-				android:title="@string/settings.sleep_timer_title"
-				android:key="sleepTimer"
-				android:defaultValue="0"
-				android:entryValues="@array/sleepTimerValues"
-				android:entries="@array/sleepTimerNames"/>
 
 			<EditTextPreference
 				android:title="@string/settings.sleep_timer_duration_title"
