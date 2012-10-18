@@ -74,6 +74,7 @@ import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.JukeboxStatus;
 import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.SearchCritera;
@@ -624,6 +625,19 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
     }
+	
+	@Override
+	public void updatePlaylist(String id, String name, String comment, List<Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+		List<String> names = Arrays.asList("playListID", "name", "comment");
+		List<Object> values = Arrays.<Object>asList(id, name, comment);
+		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
+		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
+    	try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
 
     private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
         return getReader(context, progressListener, method, requestParams, Collections.<String>emptyList(), Collections.emptyList());

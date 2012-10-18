@@ -92,4 +92,6 @@ public interface MusicService {
     JukeboxStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception;
     
     void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception;
+	
+	void updatePlaylist(String id, String name, String comment, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception;
 }

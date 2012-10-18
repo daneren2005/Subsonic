@@ -24,10 +24,5 @@
     <item 
         android:id="@+id/artist_menu_pin"
         android:title="@string/common.pin"
-        />
-		
-	<item 
-		android:id="@+id/artist_menu_star"
-		android:title="@string/common.star"/>  
-        
+        />        
 </menu>
