@@ -519,8 +519,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem savePlaylist = menu.findItem(R.id.menu_save_playlist);
         boolean enabled = !Util.isOffline(this);
-        savePlaylist.setEnabled(enabled);
-        savePlaylist.setVisible(enabled);
+        savePlaylist.setEnabled(enabled && nowPlaying);
+        savePlaylist.setVisible(enabled && nowPlaying);
         MenuItem screenOption = menu.findItem(R.id.menu_screen_on_off);
         if (getDownloadService() != null && getDownloadService().getKeepScreenOn()) {
         	screenOption.setTitle(R.string.download_menu_screen_off);
@@ -530,6 +530,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 		MenuItem togglePlaying = menu.findItem(R.id.menu_toggle_now_playing);
 		togglePlaying.setVisible(enabled);
 		togglePlaying.setTitle(nowPlaying ? R.string.download_show_downloading : R.string.download_show_now_playing);
+		MenuItem shuffle = menu.findItem(R.id.menu_shuffle);
+		shuffle.setVisible(nowPlaying);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -620,6 +622,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				return true;
 			case R.id.menu_toggle_now_playing:
 				toggleNowPlaying();
+				invalidateOptionsMenu();
 				return true;
 			case R.id.menu_exit:
 				intent = new Intent(this, MainActivity.class);
