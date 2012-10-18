@@ -164,9 +164,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				delete();
                 selectAll(false, false);
 				return true;
-			case R.id.menu_add_playlist:
+			/*case R.id.menu_add_playlist:
 				
-				return true;
+				return true;*/
             case R.id.menu_exit:
                 intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -29,6 +29,7 @@ import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.JukeboxStatus;
 import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.SearchCritera;
@@ -231,6 +232,11 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		musicService.setStarred(id, starred, context, progressListener);
+	}
+	
+	@Override
+	public void updatePlaylist(String id, String name, String comment, List<Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+		musicService.updatePlaylist(id, name, comment, toAdd, context, progressListener);
 	}
 
     private void checkSettingsChanged(Context context) {
