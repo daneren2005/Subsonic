@@ -846,11 +846,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
 	public void setSleepTimerDuration(int duration){
 		timerDuration = duration;
+		if(this.playerState == PlayerState.STARTED)
+			startSleepTimer();
 	}
 
 	@Override
 	public void setSleepTimerStatus(int status){
 		timerStatus = status;
+		if(this.playerState == PlayerState.STARTED)
+			startSleepTimer();
 	}
 	
 	@Override
