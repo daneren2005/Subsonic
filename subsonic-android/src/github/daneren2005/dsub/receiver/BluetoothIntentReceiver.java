@@ -31,23 +31,41 @@ import github.daneren2005.dsub.util.Util;
  * @author Sindre Mehus
  */
 public class BluetoothIntentReceiver extends BroadcastReceiver {
-
-    private static final String TAG = BluetoothIntentReceiver.class.getSimpleName();
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        int state = intent.getIntExtra("android.bluetooth.a2dp.extra.SINK_STATE", -1);
-        Log.i(TAG, "android.bluetooth.a2dp.extra.SINK_STATE, state = " + state);
-        boolean connected = state == 2;  // android.bluetooth.BluetoothA2dp.STATE_CONNECTED
-        if (connected) {
-            Log.i(TAG, "Connected to Bluetooth A2DP, requesting media button focus.");
-            Util.registerMediaButtonEventReceiver(context);
-        }
-
-        boolean disconnected = state == 0; // android.bluetooth.BluetoothA2dp.STATE_DISCONNECTED
-        if (disconnected) {
-            Log.i(TAG, "Disconnected from Bluetooth A2DP, requesting pause.");
-            context.sendBroadcast(new Intent(DownloadServiceImpl.CMD_PAUSE));
-        }
-    }
-}
+	private static final String TAG = BluetoothIntentReceiver.class.getSimpleName();
+	// Same as constants in android.bluetooth.BluetoothProfile, which is API level 11.
+	private static final int STATE_DISCONNECTED = 0;
+	private static final int STATE_CONNECTED = 2;
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		Log.i(TAG, "GOT INTENT " + intent);
+		if (isConnected(intent)) {
+			Log.i(TAG, "Connected to Bluetooth A2DP, requesting media button focus.");
+			Util.registerMediaButtonEventReceiver(context);
+		} else if (isDisconnected(intent)) {
+			Log.i(TAG, "Disconnected from Bluetooth A2DP, requesting pause.");
+			context.sendBroadcast(new Intent(DownloadServiceImpl.CMD_PAUSE));
+		}
+	}
+	private boolean isConnected(Intent intent) {
+		if ("android.bluetooth.a2dp.action.SINK_STATE_CHANGED".equals(intent.getAction()) &&
+			intent.getIntExtra("android.bluetooth.a2dp.extra.SINK_STATE", -1) == STATE_CONNECTED) {
+			return true;
+		}
+		if ("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED".equals(intent.getAction()) &&
+			intent.getIntExtra("android.bluetooth.profile.extra.STATE", -1) == STATE_CONNECTED) {
+			return true;
+		}
+		return false;
+	}
+	private boolean isDisconnected(Intent intent) {
+		if ("android.bluetooth.a2dp.action.SINK_STATE_CHANGED".equals(intent.getAction()) &&
+			intent.getIntExtra("android.bluetooth.a2dp.extra.SINK_STATE", -1) == STATE_DISCONNECTED) {
+			return true;
+		}
+		if ("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED".equals(intent.getAction()) &&
+			intent.getIntExtra("android.bluetooth.profile.extra.STATE", -1) == STATE_DISCONNECTED) {
+			return true;
+		}
+		return false;
+	}
+} 
