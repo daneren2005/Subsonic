@@ -37,6 +37,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -892,4 +893,13 @@ public final class Util {
                 findNotificationTextColors((ViewGroup) group.getChildAt(i), title, content);
         }
     }
+	
+	public static WifiManager.WifiLock createWifiLock(Context context, String tag) {
+		WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		int lockType = WifiManager.WIFI_MODE_FULL;
+		if (Build.VERSION.SDK_INT >= 12) {
+			lockType = 3;
+		}
+		return wm.createWifiLock(lockType, tag);
+	}
 }

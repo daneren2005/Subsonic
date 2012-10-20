@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -194,6 +195,7 @@ public class DownloadFile {
             InputStream in = null;
             FileOutputStream out = null;
             PowerManager.WakeLock wakeLock = null;
+			WifiManager.WifiLock wifiLock = null;
             try {
 
                 if (Util.isScreenLitOnDownload(context)) {
@@ -202,6 +204,9 @@ public class DownloadFile {
                     wakeLock.acquire();
                     Log.i(TAG, "Acquired wake lock " + wakeLock);
                 }
+				
+				wifiLock = Util.createWifiLock(context, toString());
+				wifiLock.acquire();
 
                 if (saveFile.exists()) {
                     Log.i(TAG, saveFile + " already exists. Skipping.");
@@ -261,6 +266,9 @@ public class DownloadFile {
                     wakeLock.release();
                     Log.i(TAG, "Released wake lock " + wakeLock);
                 }
+				if (wifiLock != null) {
+					wifiLock.release();
+				}
                 new CacheCleaner(context, DownloadServiceImpl.getInstance()).clean();
             }
         }
