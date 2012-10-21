@@ -60,6 +60,8 @@ public interface MusicService {
     List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
     void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception;
+	
+	void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception;
 
     Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception;
 
@@ -92,6 +94,4 @@ public interface MusicService {
     JukeboxStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception;
     
     void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception;
-	
-	void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception;
 }
