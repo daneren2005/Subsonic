@@ -387,8 +387,10 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
-		List<String> names = Arrays.asList("playListID");
-		List<Object> values = Arrays.<Object>asList(id);
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+		names.add("playlistId");
+		values.add(id);
 		for(MusicDirectory.Entry song: toAdd) {
 			names.add("songIdToAdd");
 			values.add(song.getId());
