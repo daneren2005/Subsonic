@@ -161,11 +161,12 @@
     <string name="settings.invalid_username">Please specify a valid username (no trailing spaces).</string>
     <string name="settings.appearance_title">Appearance</string>
     <string name="settings.theme_title">Theme</string>
-    <string name="settings.theme_wheat">Wheat</string>
     <string name="settings.theme_light">Light</string>
     <string name="settings.theme_dark">Dark</string>
+	<string name="settings.theme_holo">Holo</string>
 	<string name="settings.theme_light_fullscreen">Light Fullscreen</string>
     <string name="settings.theme_dark_fullscreen">Dark Fullscreen</string>
+	<string name="settings.theme_holo_fullscreen">Holo Fullscreen</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max bitrate - Mobile</string>

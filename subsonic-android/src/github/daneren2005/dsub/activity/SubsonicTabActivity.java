@@ -180,6 +180,10 @@ public class SubsonicTabActivity extends SherlockActivity {
             setTheme(R.style.Theme_DSub_Dark_Fullscreen);
         } else if ("light_fullscreen".equals(theme)) {
             setTheme(R.style.Theme_DSub_Light_Fullscreen);
+		} else if("holo".equals(theme)) {
+			setTheme(R.style.Theme_DSub_Holo);
+        } else if("holo_fullscreen".equals(theme)) {
+			setTheme(R.style.Theme_DSub_Holo_Fullscreen);
         }else {
 			setTheme(R.style.Theme_DSub_Light);
 		}
