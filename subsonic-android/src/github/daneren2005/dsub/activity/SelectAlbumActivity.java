@@ -55,6 +55,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 	private com.actionbarsherlock.view.MenuItem download;
 	private com.actionbarsherlock.view.MenuItem cache;
 	private com.actionbarsherlock.view.MenuItem delete;
+	private com.actionbarsherlock.view.MenuItem addToPlaylist;
 	private com.actionbarsherlock.view.MenuItem playLast;
     private Button moreButton;
     private boolean licenseValid;
@@ -118,12 +119,14 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 		download = menu.findItem(R.id.menu_download);
 		cache = menu.findItem(R.id.menu_cache);
 		delete = menu.findItem(R.id.menu_delete);
+		addToPlaylist = menu.findItem(R.id.menu_add_playlist);
 		playLast = menu.findItem(R.id.menu_play_last);
 		if(hideButtons) {
 			selectAll.setVisible(false);
 			cache.setVisible(false);
 			delete.setVisible(false);
 			playLast.setVisible(false);
+			addToPlaylist.setVisible(false);
 			hideButtons = false;
 		}
         return true;
@@ -630,6 +633,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				cache.setVisible(false);
 				delete.setVisible(false);
 				playLast.setVisible(false);
+				addToPlaylist.setVisible(false);
 			} else {
 				hideButtons = true;
 			}
