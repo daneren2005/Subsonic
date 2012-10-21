@@ -235,8 +235,8 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	@Override
-	public void updatePlaylist(String id, String name, String comment, List<Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		musicService.updatePlaylist(id, name, comment, toAdd, context, progressListener);
+	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+		musicService.addToPlaylist(id, toAdd, context, progressListener);
 	}
 
     private void checkSettingsChanged(Context context) {

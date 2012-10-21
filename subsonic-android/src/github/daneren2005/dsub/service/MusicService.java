@@ -93,5 +93,5 @@ public interface MusicService {
     
     void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception;
 	
-	void updatePlaylist(String id, String name, String comment, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception;
+	void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception;
 }
