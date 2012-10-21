@@ -128,6 +128,9 @@
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
     <string name="starring_content_error">Failed to update \"%s\", please try later.</string>
+	
+	<string name="updated_playlist">Updated \"%s\"</string>
+    <string name="updated_playlist_error">Failed to update \"%s\", please try later.</string>
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>

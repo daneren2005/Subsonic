@@ -41,6 +41,10 @@
 		android:icon="@drawable/action_remove_all"
 		android:title="@string/common.delete"
 		android:showAsAction="ifRoom|withText"/>
+	
+	<item 
+		android:id="@+id/menu_add_playlist"
+		android:title="@string/menu.add_playlist"/>
 		
 	<item 
 		android:id="@+id/menu_play_last"

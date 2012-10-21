@@ -37,14 +37,14 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.EntryAdapter;
-import github.daneren2005.dsub.util.Pair;
-import github.daneren2005.dsub.util.TabActivityBackgroundTask;
-import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
+import github.daneren2005.dsub.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SelectAlbumActivity extends SubsonicTabActivity {
 
@@ -164,9 +164,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				delete();
                 selectAll(false, false);
 				return true;
-			/*case R.id.menu_add_playlist:
-				
-				return true;*/
+			case R.id.menu_add_playlist:
+				addToPlaylist();
+				return true;
             case R.id.menu_exit:
                 intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -467,6 +467,40 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             getDownloadService().unpin(getSelectedSongs());
         }
     }
+	
+	private void addToPlaylist() {
+		addToPlaylist("Test");
+	}
+	
+	private void addToPlaylist(final String playlist) {
+		final List<MusicDirectory.Entry> songs = getSelectedSongs();
+		
+		new SilentBackgroundTask<Void>(this) {
+            @Override
+            protected Void doInBackground() throws Throwable {
+                MusicService musicService = MusicServiceFactory.getMusicService(SelectAlbumActivity.this);
+				musicService.addToPlaylist(playlist, songs, SelectAlbumActivity.this, null);
+                return null;
+            }
+            
+            @Override
+            protected void done(Void result) {
+                Util.toast(SelectAlbumActivity.this, getResources().getString(R.string.updated_playlist, playlist));
+            }
+            
+            @Override
+            protected void error(Throwable error) {            	
+            	String msg;
+            	if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+            		msg = getErrorMessage(error);
+            	} else {
+            		msg = getResources().getString(R.string.updated_playlist_error, playlist) + " " + getErrorMessage(error);
+            	}
+            	
+        		Util.toast(SelectAlbumActivity.this, msg, false);
+            }
+        }.execute();
+	}
 
     private void playVideo(MusicDirectory.Entry entry) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
