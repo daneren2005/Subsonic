@@ -469,7 +469,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			return;
 		}
 		
-		new SilentBackgroundTask<List<Playlist>>(this) {
+		new TabActivityBackgroundTask<List<Playlist>>(this) {
             @Override
             protected List<Playlist> doInBackground() throws Throwable {
                 MusicService musicService = MusicServiceFactory.getMusicService(SelectAlbumActivity.this);
