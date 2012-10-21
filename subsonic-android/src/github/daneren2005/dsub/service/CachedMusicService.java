@@ -148,6 +148,16 @@ public class CachedMusicService implements MusicService {
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
         musicService.createPlaylist(id, name, entries, context, progressListener);
     }
+	
+	@Override
+	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
+		musicService.deletePlaylist(id, context, progressListener);
+	}
+	
+	@Override
+	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+		musicService.addToPlaylist(id, toAdd, context, progressListener);
+	}
 
     @Override
     public Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception {
@@ -232,11 +242,6 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		musicService.setStarred(id, starred, context, progressListener);
-	}
-	
-	@Override
-	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		musicService.addToPlaylist(id, toAdd, context, progressListener);
 	}
 
     private void checkSettingsChanged(Context context) {

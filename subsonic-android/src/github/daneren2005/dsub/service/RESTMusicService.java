@@ -385,6 +385,16 @@ public class RESTMusicService implements MusicService {
     }
 	
 	@Override
+	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {		
+		Reader reader = getReader(context, progressListener, "deletePlaylist", null, "id", id);
+		try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
 	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
 		List<String> names = new ArrayList<String>();

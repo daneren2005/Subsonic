@@ -19,6 +19,8 @@
 
 package github.daneren2005.dsub.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
@@ -28,11 +30,9 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.util.BackgroundTask;
-import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.PlaylistAdapter;
-import github.daneren2005.dsub.util.TabActivityBackgroundTask;
-import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
+import github.daneren2005.dsub.util.*;
 
 import java.util.List;
 
@@ -124,6 +124,10 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 		
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.select_playlist_context, menu);
+		
+		if (Util.isOffline(this)) {
+			menu.findItem(R.id.playlist_menu_delete).setVisible(false);
+		}
     }
 
     @Override
@@ -154,6 +158,9 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
                 Util.startActivityWithoutTransition(SelectPlaylistActivity.this, intent);
                 break;
+			case R.id.playlist_menu_delete:
+				deletePlaylist(playlist);
+				break;
             default:
                 return super.onContextItemSelected(menuItem);
         }
@@ -171,4 +178,44 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
         Util.startActivityWithoutTransition(SelectPlaylistActivity.this, intent);
     }
 
+	private void deletePlaylist(final Playlist playlist) {		
+		new AlertDialog.Builder(this)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle("Confirm")
+        .setMessage("Do you want to delete " + playlist.getName())
+        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+				new TabActivityBackgroundTask<Void>(SelectPlaylistActivity.this) {
+				@Override
+				protected Void doInBackground() throws Throwable {
+					MusicService musicService = MusicServiceFactory.getMusicService(SelectPlaylistActivity.this);
+					musicService.deletePlaylist(playlist.getId(), SelectPlaylistActivity.this, null);
+					return null;
+				}
+
+				@Override
+				protected void done(Void result) {
+					refresh();
+					Util.toast(SelectPlaylistActivity.this, getResources().getString(R.string.menu_deleted_playlist, playlist.getName()));
+				}
+
+				@Override
+				protected void error(Throwable error) {            	
+					String msg;
+					if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+						msg = getErrorMessage(error);
+					} else {
+						msg = getResources().getString(R.string.menu_deleted_playlist_error, playlist.getName()) + " " + getErrorMessage(error);
+					}
+
+					Util.toast(SelectPlaylistActivity.this, msg, false);
+				}
+			}.execute();
+            }
+
+        })
+        .setNegativeButton("Cancel", null)
+        .show();
+	}
 }

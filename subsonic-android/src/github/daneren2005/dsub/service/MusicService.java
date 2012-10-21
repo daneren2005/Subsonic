@@ -61,6 +61,8 @@ public interface MusicService {
 
     void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception;
 	
+	void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception;
+	
 	void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception;
 
     Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception;

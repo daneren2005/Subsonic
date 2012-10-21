@@ -258,6 +258,16 @@ public class OfflineMusicService extends RESTMusicService {
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
         throw new OfflineException("Playlists not available in offline mode");
     }
+	
+	@Override
+	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Playlists not available in offline mode");
+	}
+	
+	@Override
+	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Updating playlist not available in offline mode");
+	}
 
     @Override
     public Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception {
@@ -312,11 +322,6 @@ public class OfflineMusicService extends RESTMusicService {
 	@Override
 	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException("Starring not available in offline mode");
-	}
-	
-	@Override
-	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Updating playlist not available in offline mode");
 	}
 
     @Override
