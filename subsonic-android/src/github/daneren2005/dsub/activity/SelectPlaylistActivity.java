@@ -27,6 +27,7 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.MusicService;
@@ -37,12 +38,6 @@ import github.daneren2005.dsub.util.*;
 import java.util.List;
 
 public class SelectPlaylistActivity extends SubsonicTabActivity implements AdapterView.OnItemClickListener {
-
-    private static final int MENU_ITEM_PLAY_ALL = 1;
-	private static final int MENU_ITEM_PLAY_SHUFFLED = 2;
-	private static final int MENU_ITEM_DOWNLOAD = 3;
-	private static final int MENU_ITEM_CACHE = 4;
-
     private ListView list;
     private View emptyTextView;
 
@@ -161,6 +156,9 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 			case R.id.playlist_menu_delete:
 				deletePlaylist(playlist);
 				break;
+			case R.id.playlist_info:
+				displayPlaylistInfo(playlist);
+				break;
             default:
                 return super.onContextItemSelected(menuItem);
         }
@@ -178,7 +176,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
         Util.startActivityWithoutTransition(SelectPlaylistActivity.this, intent);
     }
 
-	private void deletePlaylist(final Playlist playlist) {		
+	private void deletePlaylist(final Playlist playlist) {
 		new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_alert)
         .setTitle("Confirm")
@@ -187,35 +185,45 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
             @Override
             public void onClick(DialogInterface dialog, int which) {
 				new TabActivityBackgroundTask<Void>(SelectPlaylistActivity.this) {
-				@Override
-				protected Void doInBackground() throws Throwable {
-					MusicService musicService = MusicServiceFactory.getMusicService(SelectPlaylistActivity.this);
-					musicService.deletePlaylist(playlist.getId(), SelectPlaylistActivity.this, null);
-					return null;
-				}
-
-				@Override
-				protected void done(Void result) {
-					refresh();
-					Util.toast(SelectPlaylistActivity.this, getResources().getString(R.string.menu_deleted_playlist, playlist.getName()));
-				}
-
-				@Override
-				protected void error(Throwable error) {            	
-					String msg;
-					if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-						msg = getErrorMessage(error);
-					} else {
-						msg = getResources().getString(R.string.menu_deleted_playlist_error, playlist.getName()) + " " + getErrorMessage(error);
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(SelectPlaylistActivity.this);
+						musicService.deletePlaylist(playlist.getId(), SelectPlaylistActivity.this, null);
+						return null;
 					}
 
-					Util.toast(SelectPlaylistActivity.this, msg, false);
-				}
-			}.execute();
-            }
+					@Override
+					protected void done(Void result) {
+						refresh();
+						Util.toast(SelectPlaylistActivity.this, getResources().getString(R.string.menu_deleted_playlist, playlist.getName()));
+					}
+
+					@Override
+					protected void error(Throwable error) {            	
+						String msg;
+						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+							msg = getErrorMessage(error);
+						} else {
+							msg = getResources().getString(R.string.menu_deleted_playlist_error, playlist.getName()) + " " + getErrorMessage(error);
+						}
+
+						Util.toast(SelectPlaylistActivity.this, msg, false);
+					}
+				}.execute();
+			}
 
         })
         .setNegativeButton("Cancel", null)
         .show();
+	}
+	
+	private void displayPlaylistInfo(final Playlist playlist) {
+		new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(playlist.getName())
+			.setMessage("Owner: " + playlist.getOwner() + "\nComments: " +
+				((playlist.getComment() == null) ? "" : playlist.getComment()) +
+				"\nSong Count: " + playlist.getSongCount() + "\nCreation Date: " + playlist.getCreated().replace('T', ' '))
+			.show();
 	}
 }
