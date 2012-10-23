@@ -158,6 +158,11 @@ public class CachedMusicService implements MusicService {
 	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		musicService.addToPlaylist(id, toAdd, context, progressListener);
 	}
+	
+	@Override
+	public void updatePlaylist(String id, String name, String comment, Context context, ProgressListener progressListener) throws Exception {
+		musicService.updatePlaylist(id, name, comment, context, progressListener);
+	}
 
     @Override
     public Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception {

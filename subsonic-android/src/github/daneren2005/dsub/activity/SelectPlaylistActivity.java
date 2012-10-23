@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -159,6 +160,9 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 			case R.id.playlist_info:
 				displayPlaylistInfo(playlist);
 				break;
+			case R.id.playlist_update_info:
+				updatePlaylistInfo(playlist);
+				break;
             default:
                 return super.onContextItemSelected(menuItem);
         }
@@ -199,7 +203,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 					}
 
 					@Override
-					protected void error(Throwable error) {            	
+					protected void error(Throwable error) {
 						String msg;
 						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 							msg = getErrorMessage(error);
@@ -224,6 +228,54 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 			.setMessage("Owner: " + playlist.getOwner() + "\nComments: " +
 				((playlist.getComment() == null) ? "" : playlist.getComment()) +
 				"\nSong Count: " + playlist.getSongCount() + "\nCreation Date: " + playlist.getCreated().replace('T', ' '))
+			.show();
+	}
+	
+	private void updatePlaylistInfo(final Playlist playlist) {
+		View dialogView = getLayoutInflater().inflate(R.layout.update_playlist, null);
+		final EditText nameBox = (EditText)dialogView.findViewById(R.id.get_playlist_name);
+		final EditText commentBox = (EditText)dialogView.findViewById(R.id.get_playlist_comment);
+		
+		nameBox.setText(playlist.getName());
+		commentBox.setText(playlist.getComment());
+		
+		new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(R.string.playlist_update_info)
+			.setView(dialogView)
+			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {					
+					new TabActivityBackgroundTask<Void>(SelectPlaylistActivity.this) {
+						@Override
+						protected Void doInBackground() throws Throwable {
+							MusicService musicService = MusicServiceFactory.getMusicService(SelectPlaylistActivity.this);
+							musicService.updatePlaylist(playlist.getId(), nameBox.getText().toString(), commentBox.getText().toString(), SelectPlaylistActivity.this, null);
+							return null;
+						}
+
+						@Override
+						protected void done(Void result) {
+							refresh();
+							Util.toast(SelectPlaylistActivity.this, getResources().getString(R.string.playlist_updated_info, playlist.getName()));
+						}
+
+						@Override
+						protected void error(Throwable error) {
+							String msg;
+							if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+								msg = getErrorMessage(error);
+							} else {
+								msg = getResources().getString(R.string.playlist_updated_info_error, playlist.getName()) + " " + getErrorMessage(error);
+							}
+
+							Util.toast(SelectPlaylistActivity.this, msg, false);
+						}
+					}.execute();
+				}
+
+			})
+			.setNegativeButton("Cancel", null)
 			.show();
 	}
 }
