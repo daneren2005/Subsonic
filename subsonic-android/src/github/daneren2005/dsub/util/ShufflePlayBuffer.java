@@ -44,6 +44,7 @@ public class ShufflePlayBuffer {
     private final List<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
     private Context context;
     private int currentServer;
+	private String currentFolder;
 
     public ShufflePlayBuffer(Context context) {
         this.context = context;
@@ -87,6 +88,7 @@ public class ShufflePlayBuffer {
             MusicService service = MusicServiceFactory.getMusicService(context);
             int n = CAPACITY - buffer.size();
 			String folder = Util.getSelectedMusicFolderId(context);
+			Log.d(TAG, folder == null ? "null" : folder);
             MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
 
             synchronized (buffer) {
@@ -100,8 +102,9 @@ public class ShufflePlayBuffer {
 
     private void clearBufferIfnecessary() {
         synchronized (buffer) {
-            if (currentServer != Util.getActiveServer(context)) {
+            if (currentServer != Util.getActiveServer(context) || currentFolder != Util.getSelectedMusicFolderId(context)) {
                 currentServer = Util.getActiveServer(context);
+				currentFolder = Util.getSelectedMusicFolderId(context);
                 buffer.clear();
             }
         }
