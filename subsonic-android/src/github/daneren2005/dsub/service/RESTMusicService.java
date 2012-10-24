@@ -467,11 +467,22 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getRandomSongs(int size, String folder, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getRandomSongs(int size, String musicFolderId, Context context, ProgressListener progressListener) throws Exception {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
+		
+		List<String> names = new ArrayList<String>();
+        List<Object> values = new ArrayList<Object>();
 
-        Reader reader = getReader(context, progressListener, "getRandomSongs", params, Arrays.asList("size", "musicFolderId"), Arrays.<Object>asList(size, folder));
+        names.add("size");
+        values.add(size);
+
+        if (musicFolderId != null) {
+            names.add("musicFolderId");
+            values.add(musicFolderId);
+        }
+
+        Reader reader = getReader(context, progressListener, "getRandomSongs", params, names, values);
         try {
             return new RandomSongsParser(context).parse(reader, progressListener);
         } finally {

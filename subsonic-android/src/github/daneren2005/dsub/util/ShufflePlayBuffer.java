@@ -86,7 +86,7 @@ public class ShufflePlayBuffer {
         try {
             MusicService service = MusicServiceFactory.getMusicService(context);
             int n = CAPACITY - buffer.size();
-            MusicDirectory songs = service.getRandomSongs(n, context, null);
+            MusicDirectory songs = service.getRandomSongs(n, null, context, null);
 
             synchronized (buffer) {
                 buffer.addAll(songs.getChildren());
