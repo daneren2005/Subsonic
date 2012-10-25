@@ -35,6 +35,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -96,6 +97,8 @@ public final class Util {
 
     public static final String EVENT_META_CHANGED = "github.daneren2005.dsub.EVENT_META_CHANGED";
     public static final String EVENT_PLAYSTATE_CHANGED = "github.daneren2005.dsub.EVENT_PLAYSTATE_CHANGED";
+	
+	private static boolean pauseFocus = false;
 
     private static final Map<Integer, Version> SERVER_REST_VERSIONS = new ConcurrentHashMap<Integer, Version>();
 
@@ -737,43 +740,25 @@ public final class Util {
     }
     
     @TargetApi(8)
-	public static void requestAudioFocus(Context context) {
-//    	// AudioManager.requestAudioFocus() was introduced in Android 2.2.
-//      // Use reflection to maintain compatibility with 1.5.
-//    	try {
-//    		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-//    		Class<?> onAudioFocusChangeListener = Class.forName("android.media.AudioManager.OnAudioFocuseChangeListener");
-//    		Method requestAudioFocus = AudioManager.class.getMethod(
-//    				"requestAudioFocus", onAudioFocusChangeListener, Integer.TYPE, Integer.TYPE); 
-//    		requestAudioFocus.invoke(audioManager, null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-////    	} catch (Throwable x) {
-////    		// Ignored.
-////    	}
-//    	} catch (ClassNotFoundException e) {
-//			Log.e(TAG, "ClassNotFoundException getting OnAudioFocusChangeListener.");
-//		} catch (NoSuchMethodException e) {
-//    		Log.e(TAG, "NoSuchMethodException getting requestAudioFocus.");
-//    	} catch (InvocationTargetException e){
-//    		// Unpack original exception when possible
-//            Throwable cause = e.getCause();
-//            if (cause instanceof RuntimeException) {
-//                throw (RuntimeException) cause;
-//            } else if (cause instanceof Error) {
-//                throw (Error) cause;
-//            } else {
-//                // Unexpected checked exception; wrap and re-throw
-//                throw new RuntimeException(e);
-//            }
-//    	} catch (IllegalArgumentException e) {
-//    		Log.e(TAG, "IllegalArgumentException invoking requestAudioFocus.");
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			Log.e(TAG, "IllegalAccessException invoking requestAudioFocus.");
-//			e.printStackTrace();
-//		}
+	public static void requestAudioFocus(final Context context) {
     	if (Build.VERSION.SDK_INT >= 8) {
     		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-    		audioManager.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    		audioManager.requestAudioFocus(new OnAudioFocusChangeListener() {
+				public void onAudioFocusChange(int focusChange) {
+					DownloadServiceImpl downloadService = (DownloadServiceImpl)context;
+					if(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+						if(downloadService.getPlayerState() == PlayerState.STARTED) {
+							pauseFocus = true;
+							downloadService.pause();
+						}
+					} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+						if(pauseFocus) {
+							pauseFocus = false;
+							downloadService.start();
+						}
+					}
+				}
+			}, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     	}
     }
 
