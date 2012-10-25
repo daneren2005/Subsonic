@@ -6,6 +6,11 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1">
+			
+	<View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:background="@color/dividerColor"/>
 
     <TextView
             android:id="@+id/download_empty"
