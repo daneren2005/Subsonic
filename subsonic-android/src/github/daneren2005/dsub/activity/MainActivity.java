@@ -141,9 +141,7 @@ public class MainActivity extends SubsonicTabActivity {
                 Util.startActivityWithoutTransition(MainActivity.this, intent);
 				return true;
 			case R.id.menu_search:
-				intent = new Intent(MainActivity.this, SearchActivity.class);
-            	intent.putExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, true);
-                Util.startActivityWithoutTransition(MainActivity.this, intent);
+				onSearchRequested();
 				return true;
             case R.id.menu_exit:
                 intent = new Intent(this, MainActivity.class);
