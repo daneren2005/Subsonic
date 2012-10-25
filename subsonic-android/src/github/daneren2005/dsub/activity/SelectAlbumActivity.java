@@ -51,12 +51,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private View footer;
     private View emptyView;
 	private boolean hideButtons = false;
-	private com.actionbarsherlock.view.MenuItem selectAll;
-	private com.actionbarsherlock.view.MenuItem download;
-	private com.actionbarsherlock.view.MenuItem cache;
-	private com.actionbarsherlock.view.MenuItem delete;
-	private com.actionbarsherlock.view.MenuItem addToPlaylist;
-	private com.actionbarsherlock.view.MenuItem playLast;
     private Button moreButton;
     private boolean licenseValid;
 
@@ -114,20 +108,14 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
-        inflater.inflate(R.menu.select_album, menu);
-		selectAll = menu.findItem(R.id.menu_select);
-		download = menu.findItem(R.id.menu_download);
-		cache = menu.findItem(R.id.menu_cache);
-		delete = menu.findItem(R.id.menu_delete);
-		addToPlaylist = menu.findItem(R.id.menu_add_playlist);
-		playLast = menu.findItem(R.id.menu_play_last);
 		if(hideButtons) {
-			selectAll.setVisible(false);
-			cache.setVisible(false);
-			delete.setVisible(false);
-			playLast.setVisible(false);
-			addToPlaylist.setVisible(false);
+			inflater.inflate(R.menu.select_album, menu);
 			hideButtons = false;
+		} else {
+			if(Util.isOffline(this))
+				inflater.inflate(R.menu.select_song_offline, menu);
+			else
+				inflater.inflate(R.menu.select_song, menu);
 		}
         return true;
     }
@@ -230,15 +218,19 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
         if (entry.isDirectory()) {
             MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.select_album_context, menu);
+			if(Util.isOffline(this))
+				inflater.inflate(R.menu.select_album_context_offline, menu);
+			else
+				inflater.inflate(R.menu.select_album_context, menu);
         } else {
             MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.select_song_context, menu);
+			if(Util.isOffline(this))
+				inflater.inflate(R.menu.select_song_context_offline, menu);
+			else
+				inflater.inflate(R.menu.select_song_context, menu);
         }
 
-		if (Util.isOffline(this)) {
-			menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setVisible(false);
-		} else {
+		if (!Util.isOffline(this)) {
 			menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 		}
     }
@@ -627,15 +619,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             if (songCount > 0) {
                 getImageLoader().loadImage(getSupportActionBar(), entries.get(0));
                 entryList.addFooterView(footer);
-            } else if(selectAll != null) {
-				selectAll.setVisible(false);
-				download.setVisible(false);
-				cache.setVisible(false);
-				delete.setVisible(false);
-				playLast.setVisible(false);
-				addToPlaylist.setVisible(false);
-			} else {
+            } else {
 				hideButtons = true;
+				invalidateOptionsMenu();
 			}
 
             emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);

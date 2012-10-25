@@ -118,12 +118,11 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, view, menuInfo);
 		
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.select_playlist_context, menu);
-		
-		if (Util.isOffline(this)) {
-			menu.findItem(R.id.playlist_menu_delete).setVisible(false);
-		}
+		MenuInflater inflater = getMenuInflater();		
+		if (Util.isOffline(this))
+			inflater.inflate(R.menu.select_playlist_context_offline, menu);
+		else
+			inflater.inflate(R.menu.select_playlist_context, menu);
     }
 
     @Override

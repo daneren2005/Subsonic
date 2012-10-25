@@ -513,31 +513,16 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.nowplaying, menu);
+		if(Util.isOffline(this)) {
+			inflater.inflate(R.menu.nowplaying_offline, menu);
+		} else {
+			if(nowPlaying)
+				inflater.inflate(R.menu.nowplaying, menu);
+			else
+				inflater.inflate(R.menu.nowplaying_downloading, menu);
+		}
 		return true;
 	}
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem savePlaylist = menu.findItem(R.id.menu_save_playlist);
-        boolean enabled = !Util.isOffline(this);
-        savePlaylist.setEnabled(enabled && nowPlaying);
-        savePlaylist.setVisible(enabled && nowPlaying);
-        MenuItem screenOption = menu.findItem(R.id.menu_screen_on_off);
-        if (getDownloadService() != null && getDownloadService().getKeepScreenOn()) {
-        	screenOption.setTitle(R.string.download_menu_screen_off);
-        } else {
-        	screenOption.setTitle(R.string.download_menu_screen_on);
-        }
-		MenuItem togglePlaying = menu.findItem(R.id.menu_toggle_now_playing);
-		togglePlaying.setVisible(enabled);
-		togglePlaying.setTitle(nowPlaying ? R.string.download_show_downloading : R.string.download_show_now_playing);
-		MenuItem shuffle = menu.findItem(R.id.menu_shuffle);
-		shuffle.setVisible(nowPlaying);
-		MenuItem timer = menu.findItem(R.id.menu_toggle_timer);
-		timer.setTitle(getDownloadService().getSleepTimer() ? R.string.download_stop_timer : R.string.download_start_timer);
-        return super.onPrepareOptionsMenu(menu);
-    }
 
     @Override
     public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
@@ -547,19 +532,16 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
 
             android.view.MenuInflater inflater = getMenuInflater();
-    		inflater.inflate(R.menu.nowplaying_context, menu);
+			if(Util.isOffline(this)) {
+				inflater.inflate(R.menu.nowplaying_context_offline, menu);
+			} else {
+				inflater.inflate(R.menu.nowplaying_context, menu);
+				menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
+			}
 
             if (downloadFile.getSong().getParent() == null) {
             	menu.findItem(R.id.menu_show_album).setVisible(false);
             }
-            if (Util.isOffline(this)) {
-                menu.findItem(R.id.menu_lyrics).setVisible(false);
-                menu.findItem(R.id.menu_save_playlist).setVisible(false);
-				menu.findItem(R.id.menu_star).setVisible(false);
-				menu.findItem(R.id.menu_toggle_now_playing).setVisible(false);
-            } else {
-				menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
-			}
         }
     }
 
