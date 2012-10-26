@@ -153,7 +153,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 selectAll(false, false);
 				return true;
 			case R.id.menu_add_playlist:
-				addToPlaylist();
+				addToPlaylist(getSelectedSongs());
 				return true;
             case R.id.menu_exit:
                 intent = new Intent(this, MainActivity.class);
@@ -453,80 +453,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             getDownloadService().delete(getSelectedSongs());
         }
     }
-	
-	private void addToPlaylist() {
-		final List<MusicDirectory.Entry> songs = getSelectedSongs();
-		if(songs.isEmpty()) {
-			Util.toast(this, "No songs selected");
-			return;
-		}
-		
-		new LoadingTask<List<Playlist>>(this, true) {
-            @Override
-            protected List<Playlist> doInBackground() throws Throwable {
-                MusicService musicService = MusicServiceFactory.getMusicService(SelectAlbumActivity.this);
-				return musicService.getPlaylists(false, SelectAlbumActivity.this, this);
-            }
-            
-            @Override
-            protected void done(final List<Playlist> playlists) {
-				List<String> names = new ArrayList<String>();
-				for(Playlist playlist: playlists) {
-					names.add(playlist.getName());
-				}
-				
-				AlertDialog.Builder builder = new AlertDialog.Builder(SelectAlbumActivity.this);
-				builder.setTitle("Add to Playlist")
-					.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						addToPlaylist(playlists.get(which), songs);
-					}
-				});
-				AlertDialog dialog = builder.create();
-				dialog.show();
-            }
-            
-            @Override
-            protected void error(Throwable error) {            	
-            	String msg;
-            	if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-            		msg = getErrorMessage(error);
-            	} else {
-            		msg = getResources().getString(R.string.playlist_error) + " " + getErrorMessage(error);
-            	}
-            	
-        		Util.toast(SelectAlbumActivity.this, msg, false);
-            }
-        }.execute();
-	}
-	
-	private void addToPlaylist(final Playlist playlist, final List<MusicDirectory.Entry> songs) {		
-		new SilentBackgroundTask<Void>(this) {
-            @Override
-            protected Void doInBackground() throws Throwable {
-                MusicService musicService = MusicServiceFactory.getMusicService(SelectAlbumActivity.this);
-				musicService.addToPlaylist(playlist.getId(), songs, SelectAlbumActivity.this, null);
-                return null;
-            }
-            
-            @Override
-            protected void done(Void result) {
-                Util.toast(SelectAlbumActivity.this, getResources().getString(R.string.updated_playlist, songs.size(), playlist.getName()));
-            }
-            
-            @Override
-            protected void error(Throwable error) {            	
-            	String msg;
-            	if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-            		msg = getErrorMessage(error);
-            	} else {
-            		msg = getResources().getString(R.string.updated_playlist_error, playlist.getName()) + " " + getErrorMessage(error);
-            	}
-            	
-        		Util.toast(SelectAlbumActivity.this, msg, false);
-            }
-        }.execute();
-	}
 
     private void playVideo(MusicDirectory.Entry entry) {
         Intent intent = new Intent(Intent.ACTION_VIEW);

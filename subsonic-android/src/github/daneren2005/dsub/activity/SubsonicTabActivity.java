@@ -24,7 +24,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.media.AudioManager;
@@ -40,12 +42,10 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import com.actionbarsherlock.app.SherlockActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.*;
-import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.ModalBackgroundTask;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
-import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.util.*;
+import java.util.ArrayList;
 
 /**
  * @author Sindre Mehus
@@ -330,6 +330,79 @@ public class SubsonicTabActivity extends SherlockActivity {
 
         task.execute();
     }
+	
+	protected void addToPlaylist(final List<MusicDirectory.Entry> songs) {
+		if(songs.isEmpty()) {
+			Util.toast(this, "No songs selected");
+			return;
+		}
+		
+		new LoadingTask<List<Playlist>>(this, true) {
+            @Override
+            protected List<Playlist> doInBackground() throws Throwable {
+                MusicService musicService = MusicServiceFactory.getMusicService(SubsonicTabActivity.this);
+				return musicService.getPlaylists(false, SubsonicTabActivity.this, this);
+            }
+            
+            @Override
+            protected void done(final List<Playlist> playlists) {
+				List<String> names = new ArrayList<String>();
+				for(Playlist playlist: playlists) {
+					names.add(playlist.getName());
+				}
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(SubsonicTabActivity.this);
+				builder.setTitle("Add to Playlist")
+					.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						addToPlaylist(playlists.get(which), songs);
+					}
+				});
+				AlertDialog dialog = builder.create();
+				dialog.show();
+            }
+            
+            @Override
+            protected void error(Throwable error) {            	
+            	String msg;
+            	if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+            		msg = getErrorMessage(error);
+            	} else {
+            		msg = getResources().getString(R.string.playlist_error) + " " + getErrorMessage(error);
+            	}
+            	
+        		Util.toast(SubsonicTabActivity.this, msg, false);
+            }
+        }.execute();
+	}
+	
+	private void addToPlaylist(final Playlist playlist, final List<MusicDirectory.Entry> songs) {		
+		new SilentBackgroundTask<Void>(this) {
+            @Override
+            protected Void doInBackground() throws Throwable {
+                MusicService musicService = MusicServiceFactory.getMusicService(SubsonicTabActivity.this);
+				musicService.addToPlaylist(playlist.getId(), songs, SubsonicTabActivity.this, null);
+                return null;
+            }
+            
+            @Override
+            protected void done(Void result) {
+                Util.toast(SubsonicTabActivity.this, getResources().getString(R.string.updated_playlist, songs.size(), playlist.getName()));
+            }
+            
+            @Override
+            protected void error(Throwable error) {            	
+            	String msg;
+            	if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+            		msg = getErrorMessage(error);
+            	} else {
+            		msg = getResources().getString(R.string.updated_playlist_error, playlist.getName()) + " " + getErrorMessage(error);
+            	}
+            	
+        		Util.toast(SubsonicTabActivity.this, msg, false);
+            }
+        }.execute();
+	}
 
     private void setUncaughtExceptionHandler() {
         Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
