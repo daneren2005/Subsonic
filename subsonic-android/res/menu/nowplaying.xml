@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/menu_shuffle"
         android:icon="@drawable/action_shuffle"
         android:title="@string/download.menu_shuffle"
-        android:showAsAction="always|withText"/>
+        android:showAsAction="ifRoom|withText"/>
 		
 	<item
         android:id="@+id/menu_remove_all"
         android:icon="@drawable/action_remove_all"
         android:title="@string/download.menu_remove_all"
-        android:showAsAction="always|withText"/>
+        android:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/menu_save_playlist"
@@ -24,6 +23,12 @@
         android:icon="@drawable/action_screen_on_off"
         android:title="@string/download.menu_screen_on"
         android:showAsAction="ifRoom|withText"/>
+		
+	<item
+        android:id="@+id/menu_toggle"
+        android:icon="@drawable/action_toggle_list"
+        android:title="@string/download.menu_toggle"
+        android:showAsAction="always|withText"/>
 		
 	<item
         android:id="@+id/menu_toggle_timer"

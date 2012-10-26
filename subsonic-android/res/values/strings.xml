@@ -110,6 +110,7 @@
     <string name="download.menu_screen_on">Screen on</string>
     <string name="download.menu_screen_off">Screen off</string>
     <string name="download.menu_shuffle">Shuffle</string>
+	<string name="download.menu_toggle">Toggle</string>
     <string name="download.menu_save">Save playlist</string>
     <string name="download.menu_shuffle_notification">Playlist was shuffled</string>
     <string name="download.playlist_title">Save playlist</string>

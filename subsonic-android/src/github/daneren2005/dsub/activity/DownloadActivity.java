@@ -128,8 +128,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         super.onCreate(savedInstanceState);
 		setTitle(nowPlaying ? "Now Playing" : "Downloading");
         setContentView(R.layout.download);
-		
-		getSupportActionBar().hide();
 
         WindowManager w = getWindowManager();
         Display d = w.getDefaultDisplay();
@@ -623,6 +621,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
                 Util.startActivityWithoutTransition(this, intent);
 				return true;
+			case R.id.menu_toggle:
+				toggleFullscreenAlbumArt();
             default:
                 return false;
         }
@@ -681,7 +681,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             buttonBarFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_down_in));
             buttonBarFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.push_down_out));
             buttonBarFlipper.setDisplayedChild(0);
-			getSupportActionBar().hide();
         } else {
             playlistFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_in));
             playlistFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_out));
@@ -689,7 +688,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             buttonBarFlipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_in));
             buttonBarFlipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.push_up_out));
             buttonBarFlipper.setDisplayedChild(1);
-			getSupportActionBar().show();
         }
     }
 
