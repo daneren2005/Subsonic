@@ -623,6 +623,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				return true;
 			case R.id.menu_toggle:
 				toggleFullscreenAlbumArt();
+				return true;
 			case R.id.menu_add_playlist:
 				songs = new ArrayList<MusicDirectory.Entry>(1);
 				songs.add(song.getSong());
