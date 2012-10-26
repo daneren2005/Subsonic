@@ -16,7 +16,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:background="@drawable/album_art_background">
+                android:background="@android:color/transparent">
 
             <ImageButton
                     android:id="@+id/download_repeat"
@@ -136,7 +136,7 @@
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:layout_marginTop="0dip"
-                  android:background="@color/mediaControlBackground"
+                  android:background="@android:color/transparent"
                   android:paddingTop="0dip"
                   android:paddingBottom="0dip">
         <ImageButton
