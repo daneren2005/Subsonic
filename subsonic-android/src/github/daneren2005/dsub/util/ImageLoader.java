@@ -174,7 +174,7 @@ public class ImageLoader implements Runnable {
 			remoteControl.editMetadata(false)
 			.putBitmap(
 					RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
-					origBitmap.copy(origBitmap.getConfig(), true))
+					origBitmap)
 			.apply();
 		}
     }
