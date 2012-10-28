@@ -169,12 +169,14 @@ public class ImageLoader implements Runnable {
     }
     
 	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
-    	Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
-    	remoteControl.editMetadata(false)
-    	.putBitmap(
-    			RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
-    			origBitmap.copy(origBitmap.getConfig(), true))
-    	.apply();
+		if(remoteControl != null) {
+			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
+			remoteControl.editMetadata(false)
+			.putBitmap(
+					RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
+					origBitmap.copy(origBitmap.getConfig(), true))
+			.apply();
+		}
     }
     
 	private void setImage(ActionBar actionBar, Drawable drawable) {
