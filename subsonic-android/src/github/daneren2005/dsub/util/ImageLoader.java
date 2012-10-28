@@ -112,14 +112,14 @@ public class ImageLoader implements Runnable {
             return;
         }
         
-        Drawable drawable = cache.get(getKey(entry.getCoverArt(), imageSizeDefault));
+        Drawable drawable = cache.get(getKey(entry.getCoverArt(), imageSizeLarge));
         if (drawable != null) {
             setImage(remoteControl, drawable);
             return;
         }
 
         setUnknownImage(remoteControl);
-        queue.offer(new Task(context, entry, imageSizeDefault, false, false, new RemoteControlClientTaskHandler(remoteControl)));
+        queue.offer(new Task(context, entry, imageSizeLarge, false, false, new RemoteControlClientTaskHandler(remoteControl)));
     }
 
     public void loadImage(ActionBar actionBar, MusicDirectory.Entry entry) {
