@@ -141,7 +141,7 @@
                   android:paddingBottom="0dip">
         <ImageButton
                 android:id="@+id/download_shuffle"
-                android:src="@drawable/media_shuffle"
+                android:src="@drawable/action_shuffle"
                 android:background="@android:color/transparent"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
@@ -190,7 +190,7 @@
                 android:layout_gravity="center_vertical"/>
         <ImageButton
                 android:id="@+id/download_toggle_list"
-                android:src="@drawable/media_toggle_list"
+                android:src="@drawable/action_toggle_list"
                 android:background="@android:color/transparent"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
