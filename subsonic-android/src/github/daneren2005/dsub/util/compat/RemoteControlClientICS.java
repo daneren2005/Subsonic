@@ -15,6 +15,7 @@ import android.media.RemoteControlClient;
 public class RemoteControlClientICS extends RemoteControlClientHelper {
 	
 	private RemoteControlClient mRemoteControl;
+	private ImageLoader imageLoader;
 	
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
 		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -37,6 +38,8 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 				RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
 				RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
 				RemoteControlClient.FLAG_KEY_MEDIA_STOP);
+		
+		imageLoader = new ImageLoader(context);
 	}
 	
 	public void unregister(final Context context) {
@@ -64,7 +67,7 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
         	.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
         	.apply();
     	} else {
-    		new ImageLoader(context).loadImage(context, mRemoteControl, currentSong);
+    		imageLoader.loadImage(context, mRemoteControl, currentSong);
     	}
 	}
 
