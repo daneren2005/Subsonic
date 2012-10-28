@@ -169,7 +169,7 @@ public class ImageLoader implements Runnable {
     }
     
 	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
-		if(remoteControl != null) {
+		if(remoteControl != null && drawable != null) {
 			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
 			remoteControl.editMetadata(false)
 			.putBitmap(
