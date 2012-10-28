@@ -63,7 +63,7 @@ public class ImageLoader implements Runnable {
     private final BlockingQueue<Task> queue;
     private final int imageSizeDefault;
     private final int imageSizeLarge;
-    private Drawable largeUnknownImage = null;
+    private Drawable largeUnknownImage;
 
     public ImageLoader(Context context) {
         queue = new LinkedBlockingQueue<Task>(500);
@@ -81,12 +81,10 @@ public class ImageLoader implements Runnable {
     }
 
     private void createLargeUnknownImage(Context context) {
-		if(largeUnknownImage == null) {
-			BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(R.drawable.unknown_album_large);
-			Bitmap bitmap = Bitmap.createScaledBitmap(drawable.getBitmap(), imageSizeLarge, imageSizeLarge, true);
-			bitmap = createReflection(bitmap);
-			largeUnknownImage = Util.createDrawableFromBitmap(context, bitmap);
-		}
+		BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(R.drawable.unknown_album_large);
+		Bitmap bitmap = Bitmap.createScaledBitmap(drawable.getBitmap(), imageSizeLarge, imageSizeLarge, true);
+		bitmap = createReflection(bitmap);
+		largeUnknownImage = Util.createDrawableFromBitmap(context, bitmap);
     }
 
     public void loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
