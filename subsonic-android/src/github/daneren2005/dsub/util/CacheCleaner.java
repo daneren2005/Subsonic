@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.os.StatFs;
 import github.daneren2005.dsub.service.DownloadFile;
@@ -32,31 +33,7 @@ public class CacheCleaner {
     }
 
     public void clean() {
-
-        Log.i(TAG, "Starting cache cleaning.");
-
-        if (downloadService == null) {
-            Log.e(TAG, "DownloadService not set. Aborting cache cleaning.");
-            return;
-        }
-
-        try {
-
-            List<File> files = new ArrayList<File>();
-            List<File> dirs = new ArrayList<File>();
-
-            findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, dirs);
-            sortByAscendingModificationTime(files);
-
-            Set<File> undeletable = findUndeletableFiles();
-
-            deleteFiles(files, undeletable);
-            deleteEmptyDirs(dirs, undeletable);
-            Log.i(TAG, "Completed cache cleaning.");
-
-        } catch (RuntimeException x) {
-            Log.e(TAG, "Error in cache cleaning.", x);
-        }
+		new BackgroundCleanup().execute();
     }
 
     private void deleteEmptyDirs(List<File> dirs, Set<File> undeletable) {
@@ -168,4 +145,31 @@ public class CacheCleaner {
         undeletable.add(FileUtil.getMusicDirectory(context));
         return undeletable;
     }
+	
+	private class BackgroundCleanup extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected Void doInBackground(Void... params) {
+			if (downloadService == null) {
+				Log.e(TAG, "DownloadService not set. Aborting cache cleaning.");
+				return null;
+			}
+
+			try {
+				List<File> files = new ArrayList<File>();
+				List<File> dirs = new ArrayList<File>();
+
+				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, dirs);
+				sortByAscendingModificationTime(files);
+
+				Set<File> undeletable = findUndeletableFiles();
+
+				deleteFiles(files, undeletable);
+				deleteEmptyDirs(dirs, undeletable);
+			} catch (RuntimeException x) {
+				Log.e(TAG, "Error in cache cleaning.", x);
+			}
+			
+			return null;
+		}
+	}
 }
