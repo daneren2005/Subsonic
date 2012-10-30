@@ -815,18 +815,18 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         switch (playerState) {
             case STARTED:
                 pauseButton.setVisibility(View.VISIBLE);
-                stopButton.setVisibility(View.GONE);
-                startButton.setVisibility(View.GONE);
+                stopButton.setVisibility(View.INVISIBLE);
+                startButton.setVisibility(View.INVISIBLE);
                 break;
             case DOWNLOADING:
             case PREPARING:
-                pauseButton.setVisibility(View.GONE);
+                pauseButton.setVisibility(View.INVISIBLE);
                 stopButton.setVisibility(View.VISIBLE);
-                startButton.setVisibility(View.GONE);
+                startButton.setVisibility(View.INVISIBLE);
                 break;
             default:
-                pauseButton.setVisibility(View.GONE);
-                stopButton.setVisibility(View.GONE);
+                pauseButton.setVisibility(View.INVISIBLE);
+                stopButton.setVisibility(View.INVISIBLE);
                 startButton.setVisibility(View.VISIBLE);
                 break;
         }

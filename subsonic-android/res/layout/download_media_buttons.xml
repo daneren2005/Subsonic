@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:background="@android:color/transparent">
+
+    <ImageButton
+            style="@style/PlaybackControl.Small"
+            android:id="@+id/download_shuffle"
+            android:src="@drawable/action_shuffle"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            />
+
+    <ImageButton
+            style="@style/PlaybackControl"
+            android:id="@+id/download_previous"
+            android:src="@drawable/media_backward"
+            android:layout_toLeftOf="@+id/download_pause"
+            android:layout_centerVertical="true"
+            />
+
+    <ImageButton
+            style="@style/PlaybackControl"
+            android:id="@+id/download_pause"
+            android:src="@drawable/media_pause"
+            android:layout_centerInParent="true"
+            />
+
+    <ImageButton
+            style="@style/PlaybackControl"
+            android:id="@+id/download_stop"
+            android:src="@drawable/media_stop"
+            android:layout_centerInParent="true"
+            />
+
+    <ImageButton
+            style="@style/PlaybackControl"
+            android:id="@+id/download_start"
+            android:src="@drawable/media_start"
+            android:layout_centerInParent="true"
+            />
+
+    <ImageButton
+            style="@style/PlaybackControl"
+            android:id="@+id/download_next"
+            android:src="@drawable/media_forward"
+            android:layout_toRightOf="@+id/download_start"
+            android:layout_centerVertical="true"
+            />
+
+    <ImageButton
+            style="@style/PlaybackControl.Small"
+			android:id="@+id/download_toggle_list"
+			android:src="@drawable/action_toggle_list"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+</RelativeLayout>

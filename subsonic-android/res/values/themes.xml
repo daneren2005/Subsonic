@@ -30,12 +30,12 @@
 	
 	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
 		<item name="background">@drawable/menubar_button_normal</item>
-		<item name="android:background">@drawable/menubar_button_normal</item>
+		<item name="android:background">@drawable/actionbar_background</item>
 	</style>
 	
 	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
 		<item name="background">@drawable/menubar_button_normal</item>
-		<item name="android:background">@drawable/menubar_button_normal</item>
+		<item name="android:background">@drawable/actionbar_background</item>
 	</style>
 	
 	<style name="Widget.DSub.ActionBarStyle.Holo" parent="Widget.Sherlock.ActionBar.Solid">

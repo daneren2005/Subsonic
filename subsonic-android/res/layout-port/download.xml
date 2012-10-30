@@ -132,72 +132,7 @@
 
     </github.daneren2005.dsub.util.MyViewFlipper>
 
-    <LinearLayout android:orientation="horizontal"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="0dip"
-                  android:background="@android:color/transparent"
-                  android:paddingTop="0dip"
-                  android:paddingBottom="0dip">
-        <ImageButton
-                android:id="@+id/download_shuffle"
-                android:src="@drawable/action_shuffle"
-                android:background="@android:color/transparent"
-                android:layout_width="0dip"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center_vertical|left"
-                android:layout_weight="1"
-                android:paddingLeft="4dip"/>
-        <ImageButton
-                android:id="@+id/download_previous"
-                android:src="@drawable/media_backward"
-                android:background="@android:color/transparent"
-                android:padding="0dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
-        <ImageButton
-                android:id="@+id/download_pause"
-                android:src="@drawable/media_pause"
-                android:background="@android:color/transparent"
-                android:padding="0dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
-        <ImageButton
-                android:id="@+id/download_stop"
-                android:src="@drawable/media_stop"
-                android:background="@android:color/transparent"
-                android:padding="0dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
-        <ImageButton
-                android:id="@+id/download_start"
-                android:src="@drawable/media_start"
-                android:background="@android:color/transparent"
-                android:padding="0dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
-        <ImageButton
-                android:id="@+id/download_next"
-                android:src="@drawable/media_forward"
-                android:background="@android:color/transparent"
-                android:padding="0dip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
-        <ImageButton
-                android:id="@+id/download_toggle_list"
-                android:src="@drawable/action_toggle_list"
-                android:background="@android:color/transparent"
-                android:layout_width="0dip"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center_vertical|right"
-                android:layout_weight="1"
-                android:paddingRight="4dip"/>
-    </LinearLayout>
+	<include layout="@layout/download_media_buttons"/>
 
     <include layout="@layout/download_slider"/>
 

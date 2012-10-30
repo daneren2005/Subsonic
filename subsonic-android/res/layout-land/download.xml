@@ -107,7 +107,7 @@
 
                 <ImageButton
                         android:id="@+id/download_shuffle"
-                        android:src="@drawable/media_shuffle"
+                        android:src="@drawable/action_shuffle"
                         android:background="@android:color/transparent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
                         android:src="@android:drawable/star_big_off"/>
                 <ImageButton
                         android:id="@+id/download_toggle_list"
-                        android:src="@drawable/media_toggle_list"
+                        android:src="@drawable/action_toggle_list"
                         android:background="@android:color/transparent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
