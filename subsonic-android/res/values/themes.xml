@@ -4,6 +4,7 @@
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
+		<item name="android:windowBackground">@color/lightBackground</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.Sherlock.ForceOverflow">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
