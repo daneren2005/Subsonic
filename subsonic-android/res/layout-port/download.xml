@@ -136,7 +136,7 @@
 
     <include layout="@layout/download_slider"/>
 
-    <include layout="@layout/download_button_bar_flipper"/>
+    <include layout="@layout/button_bar"/>
 
 </LinearLayout>
 
