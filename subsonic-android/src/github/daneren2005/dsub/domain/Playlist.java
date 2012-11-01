@@ -39,10 +39,10 @@ public class Playlist implements Serializable {
 	public Playlist(String id, String name, String owner, String comment, String songCount, String created) {
         this.id = id;
         this.name = name;
-		this.owner = owner;
-		this.comment = comment;
-		this.songCount = songCount;
-		this.created = created;
+		this.owner = (owner == null) ? "" : owner;
+		this.comment = (comment == null) ? "" : comment;
+		this.songCount = (songCount == null) ? "" : songCount;
+		this.created = (created == null) ? "" : created;
     }
 
     public String getId() {
