@@ -1,48 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/button_bar"
-              android:orientation="vertical"
               android:layout_gravity="bottom"
+              android:orientation="horizontal"
               android:layout_width="fill_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:background="@android:color/transparent">
 
-    <LinearLayout android:orientation="horizontal"
-                  android:layout_width="fill_parent"
-                  android:layout_height="48dp"
-                  android:gravity="center_horizontal">
+    <Button style="@style/MenuBarButton"
+            android:id="@+id/button_bar_home"
+            android:text="@string/button_bar.home"/>
 
-        <ImageButton android:id="@+id/button_bar_home"
-                     android:src="@drawable/menu_home"
-                     android:contentDescription="@string/button_bar.home"
-                     android:background="@drawable/menubar_button"
-					 android:layout_height="match_parent"
-                     android:layout_weight="1"
-                     android:layout_width="0dp"/>
+    <Button style="@style/MenuBarButton"
+            android:id="@+id/button_bar_music"
+            android:text="@string/button_bar.browse"/>
 
-        <ImageButton android:id="@+id/button_bar_music"
-                     android:src="@drawable/menu_browse"
-                     android:contentDescription="@string/button_bar.browse"
-                     android:background="@drawable/menubar_button"
-					 android:layout_height="match_parent"
-                     android:layout_weight="1"
-                     android:layout_width="0dp"/>
+    <Button style="@style/MenuBarButton"
+            android:id="@+id/button_bar_playlists"
+            android:text="@string/button_bar.playlists"/>
 
-        <ImageButton android:id="@+id/button_bar_playlists"
-                     android:src="@drawable/menu_playlists"
-                     android:contentDescription="@string/button_bar.playlists"
-                     android:background="@drawable/menubar_button"
-					 android:layout_height="match_parent"
-                     android:layout_weight="1"
-                     android:layout_width="0dp"/>
-
-        <ImageButton android:id="@+id/button_bar_now_playing"
-                     android:src="@drawable/menu_now_playing"
-                     android:contentDescription="@string/button_bar.now_playing"
-                     android:background="@drawable/menubar_button"
-					 android:layout_height="match_parent"
-                     android:layout_weight="1"
-                     android:layout_width="0dp"/>
-
-    </LinearLayout>
+    <Button style="@style/MenuBarButton"
+            android:id="@+id/button_bar_now_playing"
+            android:text="@string/button_bar.now_playing"/>
 </LinearLayout>
 

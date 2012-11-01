@@ -18,11 +18,11 @@
 	<string name="common.name">Name</string>
 	<string name="common.comment">Comment</string>
 
-    <string name="button_bar.home">DSub home</string>
-    <string name="button_bar.browse">Media library</string>
+    <string name="button_bar.home">Home</string>
+    <string name="button_bar.browse">Library</string>
     <string name="button_bar.search">Search</string>
     <string name="button_bar.playlists">Playlists</string>
-    <string name="button_bar.now_playing">Now playing</string>
+    <string name="button_bar.now_playing">Playing</string>
 
     <string name="main.welcome_title">Welcome!</string>
     <string name="main.welcome_text">Welcome to DSub! The app is currently configured to use the Subsonic demo server. After you\'ve

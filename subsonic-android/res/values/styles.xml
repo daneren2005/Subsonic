@@ -15,4 +15,13 @@
         <item name="android:layout_width">46dip</item>
         <item name="android:layout_height">46dip</item>
     </style>
+	
+	<style name="MenuBarButton">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">45dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/menubar_button</item>
+    </style>
 </resources>
