@@ -613,9 +613,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
                 Util.startActivityWithoutTransition(this, intent);
 				return true;
-			case R.id.menu_toggle:
-				toggleFullscreenAlbumArt();
-				return true;
 			case R.id.menu_add_playlist:
 				songs = new ArrayList<MusicDirectory.Entry>(1);
 				songs.add(song.getSong());

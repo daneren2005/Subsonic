@@ -25,12 +25,6 @@
         android:showAsAction="ifRoom|withText"/>
 		
 	<item
-        android:id="@+id/menu_toggle"
-        android:icon="@drawable/action_toggle_list"
-        android:title="@string/download.menu_toggle"
-        android:showAsAction="always|withText"/>
-		
-	<item
         android:id="@+id/menu_toggle_timer"
         android:title="@string/download.start_timer"/>
 		
