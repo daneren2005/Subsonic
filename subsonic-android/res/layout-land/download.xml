@@ -1,118 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 
-    <RelativeLayout android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dip"
-                    android:layout_weight="1">
+    <LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1">
+			
+		<github.daneren2005.dsub.util.MyViewFlipper
+			android:id="@+id/download_playlist_flipper"
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:layout_weight="1">
 
-        <RelativeLayout
-                android:id="@+id/download_control_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_alignParentRight="true"
-                android:background="@color/mediaControlBackground">
+			<ImageView
+				android:id="@+id/download_album_art_image"
+				android:src="@drawable/unknown_album_large"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:scaleType="centerCrop"/>
 
-            <LinearLayout
-                    android:id="@+id/download_play_controls_layout"
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true">
+			<include layout="@layout/download_playlist"/>
 
-                <ImageButton
-                        android:id="@+id/download_previous"
-                        android:src="@drawable/media_backward"
-                        android:background="@android:color/transparent"
-                        android:padding="0dip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        />
-                <ImageButton
-                        android:id="@+id/download_pause"
-                        android:src="@drawable/media_pause"
-                        android:background="@android:color/transparent"
-                        android:padding="0dip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        />
-                <ImageButton
-                        android:id="@+id/download_stop"
-                        android:src="@drawable/media_stop"
-                        android:background="@android:color/transparent"
-                        android:padding="0dip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        />
-                <ImageButton
-                        android:id="@+id/download_start"
-                        android:src="@drawable/media_start"
-                        android:background="@android:color/transparent"
-                        android:padding="0dip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        />
-                <ImageButton
-                        android:id="@+id/download_next"
-                        android:src="@drawable/media_forward"
-                        android:background="@android:color/transparent"
-                        android:padding="0dip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        />
-            </LinearLayout>
+        </github.daneren2005.dsub.util.MyViewFlipper>
 
-            <TextView
-                    android:id="@+id/download_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="8dip"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#c0c0c0"/>
-
-            <TextView
-                    android:id="@+id/download_song_title"
-                    android:layout_width="150dip"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/download_status"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="12dip"
-                    android:layout_marginRight="12dip"
-                    android:maxLines="2"
-                    android:ellipsize="end"
-                    android:gravity="center_horizontal"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/mediaControlForeground"/>
+        <LinearLayout android:orientation="vertical"
+			android:id="@+id/download_control_layout"
+			android:layout_width="0dp"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"
+			android:background="@android:color/transparent">
 
             <LinearLayout
                     android:id="@+id/download_other_controls_layout"
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true">
+                    android:layout_gravity="center_horizontal">
 
-                <ImageButton
-                        android:id="@+id/download_shuffle"
-                        android:src="@drawable/action_shuffle"
-                        android:background="@android:color/transparent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/download_play_controls_layout"
-                        android:padding="9dip"/>
                 <ImageButton
                         android:id="@+id/download_repeat"
                         android:src="@drawable/media_repeat_off"
@@ -127,13 +55,6 @@
                         android:layout_gravity="center_vertical"
                         android:background="@null"
                         android:src="@android:drawable/star_big_off"/>
-                <ImageButton
-                        android:id="@+id/download_toggle_list"
-                        android:src="@drawable/action_toggle_list"
-                        android:background="@android:color/transparent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="9dip"/>
                 <Button
                         android:id="@+id/download_equalizer"
                         android:text="EQ"
@@ -170,43 +91,44 @@
                         android:padding="9dip"
                         />
             </LinearLayout>
-
-        </RelativeLayout>
-
-        <github.daneren2005.dsub.util.MyViewFlipper
-                android:id="@+id/download_playlist_flipper"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@+id/download_control_layout"
-                >
-
-            <FrameLayout
-                    android:id="@+id/download_album_art_layout"
+			
+			<LinearLayout
+                    android:id="@+id/download_visualizer_view_layout"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="@drawable/album_art_background">
-                <ImageView
-                        android:id="@+id/download_album_art_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="20dip"
-                        android:scaleType="fitCenter"/>
-                <LinearLayout
-                        android:id="@+id/download_visualizer_view_layout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="60dip"
-                        android:layout_marginLeft="60dip"
-                        android:layout_marginRight="60dip"
-                        android:layout_gravity="bottom|center_horizontal"/>
-            </FrameLayout>
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="80dip"
+                    android:layout_marginRight="80dip"
+                    android:layout_gravity="center_horizontal"/>
+			
+			<TextView
+                    android:id="@+id/download_song_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="12dip"
+                    android:layout_marginRight="12dip"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+					android:textColor="?android:textColorPrimary"/>
+					
+			<TextView
+                    android:id="@+id/download_status"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="8dip"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+					android:textColor="?android:textColorPrimary" />
+			
+			<include layout="@layout/download_media_buttons"/>
 
-            <include layout="@layout/download_playlist"/>
+        </LinearLayout>
 
-        </github.daneren2005.dsub.util.MyViewFlipper>
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <include layout="@layout/download_slider"/>
 

@@ -100,7 +100,7 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#c0c0c0"/>
+                    android:textColor="?android:textColorPrimary"/>
 
             <TextView
                     android:id="@+id/download_song_title"
@@ -112,7 +112,7 @@
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:singleLine="true"
-                    android:textColor="@color/mediaControlForeground"
+                    android:textColor="?android:textColorPrimary"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:ellipsize="end"/>
