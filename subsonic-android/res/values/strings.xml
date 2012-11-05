@@ -29,7 +29,8 @@
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
     <string name="main.select_server">Select server</string>
     <string name="main.shuffle">Shuffle play</string>
-    <string name="main.offline">Offline</string>
+    <string name="main.offline">Go Offline</string>
+	<string name="main.online">Go Online</string>
     <string name="main.settings">Settings</string>
     <string name="main.albums_title">Albums</string>
     <string name="main.albums_newest">Recently added</string>

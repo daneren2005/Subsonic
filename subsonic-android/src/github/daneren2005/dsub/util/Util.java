@@ -112,8 +112,16 @@ public final class Util {
     }
 
     public static boolean isOffline(Context context) {
-        return getActiveServer(context) == 0;
+        SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false);
     }
+	
+	public static void setOffline(Context context, boolean offline) {
+		SharedPreferences prefs = getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, offline);
+		editor.commit();
+	}
 
     public static boolean isScreenLitOnDownload(Context context) {
         SharedPreferences prefs = getPreferences(context);
@@ -153,9 +161,6 @@ public final class Util {
     }
 
     public static String getServerName(Context context, int instance) {
-        if (instance == 0) {
-            return context.getResources().getString(R.string.main_offline);
-        }
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
     }

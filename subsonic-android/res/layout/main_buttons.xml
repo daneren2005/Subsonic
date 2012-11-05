@@ -41,6 +41,19 @@
 
         </LinearLayout>
     </LinearLayout>
+	
+	<TextView
+		android:id="@+id/main_offline"
+		android:text="@string/main.offline"
+		android:drawablePadding="12dip"
+		android:drawableLeft="@drawable/main_offline"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:paddingLeft="6dp"
+		android:paddingBottom="4dp"
+		android:minHeight="50dip"/>
 
     <TextView
             android:id="@+id/main_albums"
