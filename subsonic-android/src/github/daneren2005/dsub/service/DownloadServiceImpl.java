@@ -460,8 +460,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             Util.hidePlayingNotification(this, this, handler);
         }
         
-        MusicDirectory.Entry currentSong = (currentPlaying == null) ? null: currentPlaying.getSong();
-        mRemoteControl.updateMetadata(this, currentSong);
+		if(currentPlaying != null) {
+			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
+		}
 
     }
 
