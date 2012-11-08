@@ -566,7 +566,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 onDownloadListChanged();
                 return true;
 			case R.id.menu_delete:
-				getDownloadService().remove(song);
 				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(1);
 				songs.add(song.getSong());
 				getDownloadService().delete(songs);
