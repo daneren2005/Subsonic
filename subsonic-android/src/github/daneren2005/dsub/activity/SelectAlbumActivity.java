@@ -125,14 +125,13 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 		Intent intent;
         switch (item.getItemId()) {
 			case R.id.menu_play_now:
-				playNow(false);
+				playNow(false, false);
 				return true;
 			case R.id.menu_play_last:
-				download(true, false, false, false, false);
-                selectAll(false, false);
+				playNow(false, true);
 				return true;
 			case R.id.menu_shuffle:
-				playNow(true);
+				playNow(true, false);
 				return true;
 			case R.id.menu_select:
 				selectAllOrNone();
@@ -172,16 +171,16 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         return false;
     }
 
-	private void playNow(final boolean shuffle) {
+	private void playNow(final boolean shuffle, final boolean append) {
 		if(getSelectedSongs().size() > 0) {
-			download(false, false, true, false, shuffle);
+			download(append, false, !append, false, shuffle);
 			selectAll(false, false);
 		}
 		else {
-			playAll(shuffle);
+			playAll(shuffle, append);
 		}
 	}
-    private void playAll(final boolean shuffle) {
+    private void playAll(final boolean shuffle, final boolean append) {
         boolean hasSubFolders = false;
         for (int i = 0; i < entryList.getCount(); i++) {
             MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(i);
@@ -193,10 +192,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
         String id = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ID);
         if (hasSubFolders && id != null) {
-            downloadRecursively(id, false, false, true, shuffle, false);
+            downloadRecursively(id, false, append, !append, shuffle, false);
         } else {
             selectAll(true, false);
-            download(false, false, true, false, shuffle);
+            download(append, false, !append, false, shuffle);
             selectAll(false, false);
         }
     }
@@ -556,7 +555,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
             boolean playAll = getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
             if (playAll && songCount > 0) {
-                playAll(getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false));
+                playAll(getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
             }
         }
     }
