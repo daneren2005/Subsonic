@@ -98,6 +98,7 @@
         <receiver android:name="github.daneren2005.dsub.receiver.BluetoothIntentReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.a2dp.action.SINK_STATE_CHANGED"/>
+				<action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED"/> <!-- API Level 11 -->
             </intent-filter>
         </receiver>
 
