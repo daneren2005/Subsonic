@@ -41,6 +41,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import com.actionbarsherlock.app.SherlockActivity;
+import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.*;
@@ -220,6 +221,39 @@ public class SubsonicTabActivity extends SherlockActivity {
             		msg = getErrorMessage(error);
             	} else {
             		msg = getResources().getString(R.string.starring_content_error, entry.getTitle()) + " " + getErrorMessage(error);
+            	}
+            	
+        		Util.toast(SubsonicTabActivity.this, msg, false);
+            }
+        }.execute();
+	}
+	public void toggleStarred(final Artist entry) {
+		final boolean starred = !entry.isStarred();
+		entry.setStarred(starred);
+		
+		new SilentBackgroundTask<Void>(this) {
+            @Override
+            protected Void doInBackground() throws Throwable {
+                MusicService musicService = MusicServiceFactory.getMusicService(SubsonicTabActivity.this);
+				musicService.setStarred(entry.getId(), starred, SubsonicTabActivity.this, null);
+                return null;
+            }
+            
+            @Override
+            protected void done(Void result) {
+				// UpdateView
+                Util.toast(SubsonicTabActivity.this, getResources().getString(starred ? R.string.starring_content_starred : R.string.starring_content_unstarred, entry.getName()));
+            }
+            
+            @Override
+            protected void error(Throwable error) {
+            	entry.setStarred(!starred);
+            	
+            	String msg;
+            	if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+            		msg = getErrorMessage(error);
+            	} else {
+            		msg = getResources().getString(R.string.starring_content_error, entry.getName()) + " " + getErrorMessage(error);
             	}
             	
         		Util.toast(SubsonicTabActivity.this, msg, false);

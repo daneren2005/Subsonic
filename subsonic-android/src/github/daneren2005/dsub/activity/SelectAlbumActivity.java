@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.activity;
 
+import github.daneren2005.dsub.view.EntryAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,11 +34,8 @@ import android.widget.*;
 import com.actionbarsherlock.view.Menu;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.service.OfflineException;
-import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.*;
 
 import java.util.ArrayList;

@@ -28,6 +28,7 @@ public class Artist implements Serializable {
     private String id;
     private String name;
     private String index;
+	private boolean starred;
 
     public String getId() {
         return id;
@@ -52,6 +53,14 @@ public class Artist implements Serializable {
     public void setIndex(String index) {
         this.index = index;
     }
+	
+	public boolean isStarred() {
+		return starred;
+	}
+
+	public void setStarred(boolean starred) {
+		this.starred = starred;
+	}
 
     @Override
     public String toString() {

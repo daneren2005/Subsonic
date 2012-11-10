@@ -27,8 +27,6 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.UpdateView;
-
 /**
  * Used to display albums in a {@code ListView}.
  *

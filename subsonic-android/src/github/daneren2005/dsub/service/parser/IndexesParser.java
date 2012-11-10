@@ -69,6 +69,7 @@ public class IndexesParser extends AbstractParser {
                     artist.setId(get("id"));
                     artist.setName(get("name"));
                     artist.setIndex(index);
+					artist.setStarred(get("starred") != null);
                     artists.add(artist);
 
                     if (artists.size() % 10 == 0) {
@@ -80,6 +81,7 @@ public class IndexesParser extends AbstractParser {
                     shortcut.setId(get("id"));
                     shortcut.setName(get("name"));
                     shortcut.setIndex("*");
+					shortcut.setStarred(get("starred") != null);
                     shortcuts.add(shortcut);
                 } else if ("error".equals(name)) {
                     handleError();

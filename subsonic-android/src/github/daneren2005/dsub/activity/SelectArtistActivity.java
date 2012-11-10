@@ -36,7 +36,7 @@ import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.ArtistAdapter;
+import github.daneren2005.dsub.view.ArtistAdapter;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.TabActivityBackgroundTask;
