@@ -21,7 +21,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:layout_weight="1"
-				android:scaleType="centerCrop"/>
+				android:scaleType="fitXY"/>
 
 			<include layout="@layout/download_playlist"/>
 
@@ -41,13 +41,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal">
 
-                <ImageButton
-                        android:id="@+id/download_repeat"
-                        android:src="@drawable/media_repeat_off"
-                        android:background="@android:color/transparent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="9dip"/>
                 <ImageButton
                         android:id="@+id/download_star"
                         android:layout_width="wrap_content"
@@ -125,12 +118,12 @@
 					android:textColor="?android:textColorPrimary" />
 			
 			<include layout="@layout/download_media_buttons"/>
+			
+			<include layout="@layout/download_slider"/>
 
         </LinearLayout>
 
     </LinearLayout>
-
-    <include layout="@layout/download_slider"/>
 
     <include layout="@layout/button_bar"/>
 

@@ -18,78 +18,79 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent">
 
-            <ImageButton
-                    android:id="@+id/download_repeat"
-                    android:src="@drawable/media_repeat_off"
-                    android:background="@android:color/transparent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|right"
-                    android:paddingTop="24dip"
-                    android:paddingLeft="8dip"
-                    android:paddingBottom="12dip"/>
+			<RelativeLayout android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:layout_above="@+id/download_visualizer_view_layout">
+					
+				<ImageView
+					android:id="@+id/download_album_art_image"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_alignParentTop="true"
+					android:scaleType="centerCrop"/>
+					
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					android:id="@+id/download_overlay_buttons"
+					android:orientation="horizontal"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:background="@color/overlayColor"
+					android:layout_alignParentBottom="true">
+					
+					<Button
+						android:id="@+id/download_jukebox"
+						android:text="RC"
+						android:textStyle="bold"
+						android:textSize="22sp"
+						android:background="@android:color/transparent"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="bottom"
+						android:paddingTop="12dip"
+						android:paddingLeft="14dip"
+						android:paddingBottom="12dip"/>
+						
+					<Button
+						android:id="@+id/download_equalizer"
+						android:text="EQ"
+						android:textStyle="bold"
+						android:textSize="22sp"
+						android:background="@android:color/transparent"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="bottom"
+						android:paddingTop="12dip"
+						android:paddingLeft="14dip"
+						android:paddingBottom="12dip"/>
 
-            <Button
-                    android:id="@+id/download_jukebox"
-                    android:text="RC"
-                    android:textStyle="bold"
-                    android:textSize="22sp"
-                    android:background="@android:color/transparent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|right"
-                    android:layout_below="@+id/download_repeat"
-                    android:paddingTop="12dip"
-                    android:paddingLeft="14dip"
-                    android:paddingBottom="15dip"/>
-
-            <Button
-                    android:id="@+id/download_equalizer"
-                    android:text="EQ"
-                    android:textStyle="bold"
-                    android:textSize="22sp"
-                    android:background="@android:color/transparent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|right"
-                    android:layout_alignParentRight="true"
-                    android:paddingTop="24dip"
-                    android:paddingRight="16dip"
-                    android:paddingBottom="12dip"/>
-
-            <Button
-                    android:id="@+id/download_visualizer"
-                    android:text="VIS"
-                    android:textStyle="bold"
-                    android:textSize="22sp"
-                    android:background="@android:color/transparent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|right"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/download_equalizer"
-                    android:layout_alignBottom="@+id/download_jukebox"
-                    android:paddingTop="12dip"
-                    android:paddingRight="12dip"
-                    android:paddingBottom="12dip"/>
-            
-            <ImageButton
-                    android:id="@+id/download_star"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/download_repeat"
-                    android:layout_below="@+id/download_jukebox"
-                    android:background="@null"
-                    android:src="@android:drawable/star_big_off"/>
-
-            <ImageView
-                    android:id="@+id/download_album_art_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="24dip"
-                    android:scaleType="fitCenter"/>
+					<Button
+						android:id="@+id/download_visualizer"
+						android:text="VIS"
+						android:textStyle="bold"
+						android:textSize="22sp"
+						android:background="@android:color/transparent"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="bottom"
+						android:paddingTop="12dip"
+						android:paddingLeft="14dip"
+						android:paddingBottom="12dip"/>
+						
+					<ImageButton
+						android:id="@+id/download_star"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_below="@+id/download_jukebox"
+						android:background="@android:color/transparent"
+						android:src="@android:drawable/star_big_off"
+						android:paddingTop="12dip"
+						android:paddingLeft="14dip"
+						android:paddingBottom="12dip"/>
+				</LinearLayout>
+			</RelativeLayout>
 
             <TextView
                     android:id="@+id/download_status"

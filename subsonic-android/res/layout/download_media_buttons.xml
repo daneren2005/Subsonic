@@ -8,8 +8,8 @@
 
     <ImageButton
             style="@style/PlaybackControl.Small"
-            android:id="@+id/download_shuffle"
-            android:src="@drawable/action_shuffle"
+            android:id="@+id/download_repeat"
+            android:src="@drawable/media_repeat_off"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             />

@@ -21,11 +21,6 @@ package github.daneren2005.dsub.util;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -71,7 +66,7 @@ public class ImageLoader implements Runnable {
         // Determine the density-dependent image sizes.
         imageSizeDefault = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        imageSizeLarge = (int) Math.round(Math.min(metrics.widthPixels, metrics.heightPixels) * 0.6);
+        imageSizeLarge = (int) Math.round(Math.min(metrics.widthPixels, metrics.heightPixels));
 
         for (int i = 0; i < CONCURRENCY; i++) {
             new Thread(this, "ImageLoader").start();
@@ -83,7 +78,6 @@ public class ImageLoader implements Runnable {
     private void createLargeUnknownImage(Context context) {
 		BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(R.drawable.unknown_album_large);
 		Bitmap bitmap = Bitmap.createScaledBitmap(drawable.getBitmap(), imageSizeLarge, imageSizeLarge, true);
-		bitmap = createReflection(bitmap);
 		largeUnknownImage = Util.createDrawableFromBitmap(context, bitmap);
     }
 
@@ -103,7 +97,7 @@ public class ImageLoader implements Runnable {
         if (!large) {
             setUnknownImage(view, large);
         }
-        queue.offer(new Task(view.getContext(), entry, size, large, large, new ViewTaskHandler(view, crossfade)));
+        queue.offer(new Task(view.getContext(), entry, size, large, new ViewTaskHandler(view, crossfade)));
     }
 
     public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
@@ -119,7 +113,7 @@ public class ImageLoader implements Runnable {
         }
 
         setUnknownImage(remoteControl);
-        queue.offer(new Task(context, entry, imageSizeLarge, false, false, new RemoteControlClientTaskHandler(remoteControl)));
+        queue.offer(new Task(context, entry, imageSizeLarge, false, new RemoteControlClientTaskHandler(remoteControl)));
     }
 
     public void loadImage(ActionBar actionBar, MusicDirectory.Entry entry) {
@@ -135,7 +129,7 @@ public class ImageLoader implements Runnable {
         }
 
         setUnknownImage(actionBar);
-        queue.offer(new Task(actionBar.getThemedContext(), entry, imageSizeDefault, false, false, new ActionBarTaskHandler(actionBar)));
+        queue.offer(new Task(actionBar.getThemedContext(), entry, imageSizeDefault, false, new ActionBarTaskHandler(actionBar)));
     }
 
     private String getKey(String coverArtId, int size) {
@@ -218,69 +212,19 @@ public class ImageLoader implements Runnable {
             }
         }
     }
-
-    private Bitmap createReflection(Bitmap originalImage) {
-
-        int width = originalImage.getWidth();
-        int height = originalImage.getHeight();
-
-        // The gap we want between the reflection and the original image
-        final int reflectionGap = 4;
-
-        // This will not scale but will flip on the Y axis
-        Matrix matrix = new Matrix();
-        matrix.preScale(1, -1);
-
-        // Create a Bitmap with the flip matix applied to it.
-        // We only want the bottom half of the image
-        Bitmap reflectionImage = Bitmap.createBitmap(originalImage, 0, height / 2, width, height / 2, matrix, false);
-
-        // Create a new bitmap with same width but taller to fit reflection
-        Bitmap bitmapWithReflection = Bitmap.createBitmap(width, (height + height / 2), Bitmap.Config.ARGB_8888);
-
-        // Create a new Canvas with the bitmap that's big enough for
-        // the image plus gap plus reflection
-        Canvas canvas = new Canvas(bitmapWithReflection);
-
-        // Draw in the original image
-        canvas.drawBitmap(originalImage, 0, 0, null);
-
-        // Draw in the gap
-        Paint defaultPaint = new Paint();
-        canvas.drawRect(0, height, width, height + reflectionGap, defaultPaint);
-
-        // Draw in the reflection
-        canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
-
-        // Create a shader that is a linear gradient that covers the reflection
-        Paint paint = new Paint();
-        LinearGradient shader = new LinearGradient(0, originalImage.getHeight(), 0,
-                bitmapWithReflection.getHeight() + reflectionGap, 0x70000000, 0xff000000,
-                Shader.TileMode.CLAMP);
-
-        // Set the paint to use this shader (linear gradient)
-        paint.setShader(shader);
-
-        // Draw a rectangle using the paint with our linear gradient
-        canvas.drawRect(0, height, width, bitmapWithReflection.getHeight() + reflectionGap, paint);
-
-        return bitmapWithReflection;
-    }
     
 	private class Task {
     	private final Context mContext;
         private final MusicDirectory.Entry mEntry;
         private final Handler mHandler;
         private final int mSize;
-        private final boolean mReflection;
         private final boolean mSaveToFile;
         private ImageLoaderTaskHandler mTaskHandler;
 
-        public Task(Context context, MusicDirectory.Entry entry, int size, boolean reflection, boolean saveToFile, ImageLoaderTaskHandler taskHandler) {
+        public Task(Context context, MusicDirectory.Entry entry, int size, boolean saveToFile, ImageLoaderTaskHandler taskHandler) {
         	mContext = context;
             mEntry = entry;
             mSize = size;
-            mReflection = reflection;
             mSaveToFile = saveToFile;
             mTaskHandler = taskHandler;
             mHandler = new Handler();
@@ -290,10 +234,6 @@ public class ImageLoader implements Runnable {
             try {
                 MusicService musicService = MusicServiceFactory.getMusicService(mContext);
                 Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, mSaveToFile, null);
-
-                if (mReflection) {
-                    bitmap = createReflection(bitmap);
-                }
 
                 final Drawable drawable = Util.createDrawableFromBitmap(mContext, bitmap);
                 cache.put(getKey(mEntry.getCoverArt(), mSize), drawable);

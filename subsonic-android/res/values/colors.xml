@@ -8,7 +8,7 @@
     <color name="notificationArtist">#434343</color>
     <color name="notificationTitle">#000000</color>
 	<color name="background_holo_light">#ff33b5e5</color>
-	
+	<color name="overlayColor">#80000000</color>
 	<color name="ics_opaque">#8033b5e5</color>
 	<color name="cyan">#ff0099cc</color>
 </resources>

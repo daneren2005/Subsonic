@@ -76,7 +76,9 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.VisualizerView;
 
 import static github.daneren2005.dsub.domain.PlayerState.*;
+import github.daneren2005.dsub.util.*;
 import java.util.ArrayList;
+import java.util.concurrent.ScheduledFuture;
 
 public class DownloadActivity extends SubsonicTabActivity implements OnGestureListener {
 	private static final String TAG = DownloadActivity.class.getSimpleName();
@@ -100,7 +102,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private View pauseButton;
     private View stopButton;
     private View startButton;
-    private View shuffleButton;
     private ImageButton repeatButton;
     private Button equalizerButton;
     private Button visualizerButton;
@@ -116,6 +117,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private int swipeVelocity;
     private VisualizerView visualizerView;
 	private boolean nowPlaying = true;
+	private ScheduledFuture<?> hideControlsFuture;
 
     /**
      * Called when the activity is first created.
@@ -146,13 +148,11 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         pauseButton = findViewById(R.id.download_pause);
         stopButton = findViewById(R.id.download_stop);
         startButton = findViewById(R.id.download_start);
-        shuffleButton = findViewById(R.id.download_shuffle);
         repeatButton = (ImageButton) findViewById(R.id.download_repeat);
         equalizerButton = (Button) findViewById(R.id.download_equalizer);
         visualizerButton = (Button) findViewById(R.id.download_visualizer);
         jukeboxButton = (Button) findViewById(R.id.download_jukebox);
         LinearLayout visualizerViewLayout = (LinearLayout) findViewById(R.id.download_visualizer_view_layout);
-
         toggleListButton = findViewById(R.id.download_toggle_list);
         
         starButton = (ImageButton) findViewById(R.id.download_star);
@@ -185,13 +185,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         jukeboxButton.setOnTouchListener(touchListener);
         emptyTextView.setOnTouchListener(touchListener);
         albumArtImageView.setOnTouchListener(touchListener);
-
-        albumArtImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-				toggleFullscreenAlbumArt();
-            }
-        });
 
         previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,14 +236,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             }
         });
 
-        shuffleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getDownloadService().shuffle();
-                Util.toast(DownloadActivity.this, R.string.download_menu_shuffle_notification);
-            }
-        });
-
         repeatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -270,6 +255,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                     default:
                         break;
                 }
+				setControlsVisible(true);
             }
         });
 
@@ -277,6 +263,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(DownloadActivity.this, EqualizerActivity.class));
+				setControlsVisible(true);
             }
         });
 
@@ -288,6 +275,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 getDownloadService().setShowVisualization(visualizerView.isActive());
                 updateButtons();
                 Util.toast(DownloadActivity.this, active ? R.string.download_visualizer_on : R.string.download_visualizer_off);
+				setControlsVisible(true);
             }
         });
 
@@ -298,6 +286,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 getDownloadService().setJukeboxEnabled(jukeboxEnabled);
                 updateButtons();
                 Util.toast(DownloadActivity.this, jukeboxEnabled ? R.string.download_jukebox_on : R.string.download_jukebox_off, false);
+				setControlsVisible(true);
             }
         });
 
@@ -305,6 +294,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             @Override
             public void onClick(View view) {
                 toggleFullscreenAlbumArt();
+				setControlsVisible(true);
             }
         });
 
@@ -316,6 +306,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                     getDownloadService().seekTo(position);
                     onProgressChanged();
                 }
+				setControlsVisible(true);
             }
         });
         playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -388,6 +379,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
+		
+		setControlsVisible(true);
 
         DownloadService downloadService = getDownloadService();
         if (downloadService == null || downloadService.getCurrentPlaying() == null) {
@@ -409,6 +402,39 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         }
 
         updateButtons();
+    }
+	
+	private void scheduleHideControls() {
+        if (hideControlsFuture != null) {
+            hideControlsFuture.cancel(false);
+        }
+
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setControlsVisible(false);
+                    }
+                });
+            }
+        };
+        hideControlsFuture = executorService.schedule(runnable, 3000L, TimeUnit.MILLISECONDS);
+    }
+
+    private void setControlsVisible(boolean visible) {
+		try {
+			long duration = 1700L;
+			FadeOutAnimation.createAndStart(findViewById(R.id.download_overlay_buttons), !visible, duration);
+
+			if (visible) {
+				scheduleHideControls();
+			}
+		} catch(Exception e) {
+			
+		}
     }
 
     private void updateButtons() {
@@ -838,6 +864,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
 	@Override
 	public boolean onDown(MotionEvent me) {
+		setControlsVisible(true);
 		return false;
 	}
 
