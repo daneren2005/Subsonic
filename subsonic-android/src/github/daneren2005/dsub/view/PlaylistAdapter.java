@@ -14,77 +14,46 @@
  You should have received a copy of the GNU General Public License
  along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
 
- Copyright 2009 (C) Sindre Mehus
+ Copyright 2010 (C) Sindre Mehus
  */
 package github.daneren2005.dsub.view;
 
-import android.content.Context;
-import android.widget.ArrayAdapter;
-import android.widget.SectionIndexer;
 import github.daneren2005.dsub.R;
+import java.util.List;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.Playlist;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
-* @author Sindre Mehus
-* @version $Id$
-*/
-public class PlaylistAdapter extends ArrayAdapter<Playlist> implements SectionIndexer {
+ * @author Sindre Mehus
+ */
+public class PlaylistAdapter extends ArrayAdapter<Playlist> {
 
-    // Both arrays are indexed by section ID.
-    private final Object[] sections;
-    private final Integer[] positions;
+    private final SubsonicTabActivity activity;
 
-    /**
-     * Note: playlists must be sorted alphabetically.
-     */
-    public PlaylistAdapter(Context context, List<Playlist> playlists) {
-        super(context, R.layout.playlist_list_item, playlists);
-
-        Set<String> sectionSet = new LinkedHashSet<String>(30);
-        List<Integer> positionList = new ArrayList<Integer>(30);
-        for (int i = 0; i < playlists.size(); i++) {
-            Playlist playlist = playlists.get(i);
-            if (playlist.getName().length() > 0) {
-                String index = playlist.getName().substring(0, 1).toUpperCase();
-                if (!sectionSet.contains(index)) {
-                    sectionSet.add(index);
-                    positionList.add(i);
-                }
-            }
-        }
-        sections = sectionSet.toArray(new Object[sectionSet.size()]);
-        positions = positionList.toArray(new Integer[positionList.size()]);
+    public PlaylistAdapter(SubsonicTabActivity activity, List<Playlist> Playlists) {
+        super(activity, R.layout.playlist_list_item, Playlists);
+        this.activity = activity;
     }
 
     @Override
-    public Object[] getSections() {
-        return sections;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Playlist entry = getItem(position);
+		PlaylistView view;
+		if (convertView != null && convertView instanceof PlaylistView) {
+			view = (PlaylistView) convertView;
+		} else {
+			view = new PlaylistView(activity);
+		}
+		view.setPlaylist(entry);
+		return view;
     }
-
-    @Override
-    public int getPositionForSection(int section) {
-        section = Math.min(section, positions.length - 1);
-        return positions[section];
-    }
-
-    @Override
-    public int getSectionForPosition(int pos) {
-        for (int i = 0; i < sections.length - 1; i++) {
-            if (pos < positions[i + 1]) {
-                return i;
-            }
-        }
-        return sections.length - 1;
-    }
-
-    public static class PlaylistComparator implements Comparator<Playlist> {
+	
+	public static class PlaylistComparator implements Comparator<Playlist> {
         @Override
         public int compare(Playlist playlist1, Playlist playlist2) {
             return playlist1.getName().compareToIgnoreCase(playlist2.getName());

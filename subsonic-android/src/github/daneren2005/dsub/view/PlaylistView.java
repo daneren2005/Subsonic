@@ -21,33 +21,29 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.domain.Playlist;
 
 /**
  * Used to display albums in a {@code ListView}.
  *
  * @author Sindre Mehus
  */
-public class ArtistView extends UpdateView {
+public class PlaylistView extends UpdateView {
 	private static final String TAG = ArtistView.class.getSimpleName();
 	
-	private Artist artist;
+	private Playlist playlist;
 
     private TextView titleView;
-    private ImageButton starButton;
 	private ImageView moreButton;
 
-    public ArtistView(Context context) {
+    public PlaylistView(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
 
         titleView = (TextView) findViewById(R.id.artist_name);
-        starButton = (ImageButton) findViewById(R.id.artist_star);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -56,19 +52,9 @@ public class ArtistView extends UpdateView {
 		});
     }
 
-    public void setArtist(Artist artist) {
-    	this.artist = artist;
+    public void setPlaylist(Playlist playlist) {
+    	this.playlist = playlist;
         
-        titleView.setText(artist.getName());
-        
-        starButton.setVisibility((Util.isOffline(getContext()) || !artist.isStarred()) ? View.GONE : View.VISIBLE);
-		starButton.setFocusable(false);
-		
-		update();
-    }
-	
-	@Override
-	protected void update() {
-		starButton.setVisibility((Util.isOffline(getContext()) || !artist.isStarred()) ? View.GONE : View.VISIBLE);
+        titleView.setText(playlist.getName());
     }
 }

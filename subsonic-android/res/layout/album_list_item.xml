@@ -44,13 +44,15 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="right|center_vertical"
 			android:src="@drawable/ic_stat_star"
-			android:background="@null"
+			android:background="@android:color/transparent"
 			android:focusable="false"/>
 
     <ImageView
-            android:src="@drawable/list_item_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:paddingRight="6dip"/>
+		android:id="@+id/album_more"
+		android:src="@drawable/list_item_more"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:layout_gravity="right|center_vertical"
+		android:paddingRight="6dip"
+		android:background="@drawable/menubar_button"/>
 </LinearLayout>

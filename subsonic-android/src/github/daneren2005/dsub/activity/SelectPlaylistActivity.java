@@ -19,6 +19,7 @@
 
 package github.daneren2005.dsub.activity;
 
+import github.daneren2005.dsub.view.PlaylistAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;

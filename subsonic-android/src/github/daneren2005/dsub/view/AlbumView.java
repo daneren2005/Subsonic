@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -41,6 +42,7 @@ public class AlbumView extends UpdateView {
     private TextView artistView;
     private View coverArtView;
     private ImageButton starButton;
+	private ImageView moreButton;
 
     public AlbumView(Context context) {
         super(context);
@@ -50,6 +52,13 @@ public class AlbumView extends UpdateView {
         artistView = (TextView) findViewById(R.id.album_artist);
         coverArtView = findViewById(R.id.album_coverart);
         starButton = (ImageButton) findViewById(R.id.album_star);
+		
+		moreButton = (ImageView) findViewById(R.id.album_more);
+		moreButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				v.showContextMenu();
+			}
+		});
     }
 
     public void setAlbum(MusicDirectory.Entry album, ImageLoader imageLoader) {
