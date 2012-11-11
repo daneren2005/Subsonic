@@ -12,8 +12,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.os.StatFs;
+import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import java.util.*;
 
 /**
  * @author Sindre Mehus
@@ -35,6 +37,9 @@ public class CacheCleaner {
     public void clean() {
 		new BackgroundCleanup().execute();
     }
+	public void cleanPlaylists(List<Playlist> playlists) {
+		new BackgroundPlaylistsCleanup().execute(playlists);
+	}
 
     private void deleteEmptyDirs(List<File> dirs, Set<File> undeletable) {
         for (File dir : dirs) {
@@ -167,6 +172,27 @@ public class CacheCleaner {
 				deleteEmptyDirs(dirs, undeletable);
 			} catch (RuntimeException x) {
 				Log.e(TAG, "Error in cache cleaning.", x);
+			}
+			
+			return null;
+		}
+	}
+	
+	private class BackgroundPlaylistsCleanup extends AsyncTask<List<Playlist>, Void, Void> {
+		@Override
+		protected Void doInBackground(List<Playlist>... params) {
+			try {
+				SortedSet<File> playlistFiles = FileUtil.listFiles(FileUtil.getPlaylistDirectory());
+				List<Playlist> playlists = params[0];
+				for (Playlist playlist : playlists) {
+					playlistFiles.remove(FileUtil.getPlaylistFile(playlist.getName()));
+				}
+				
+				for(File playlist : playlistFiles) {
+					playlist.delete();
+				}
+			} catch (RuntimeException x) {
+				Log.e(TAG, "Error in playlist cache cleaning.", x);
 			}
 			
 			return null;

@@ -97,12 +97,16 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 	}
 
     private void load() {
+		final SelectPlaylistActivity me = this;
         BackgroundTask<List<Playlist>> task = new TabActivityBackgroundTask<List<Playlist>>(this) {
             @Override
             protected List<Playlist> doInBackground() throws Throwable {
                 MusicService musicService = MusicServiceFactory.getMusicService(SelectPlaylistActivity.this);
                 boolean refresh = getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_REFRESH, false);
-                return musicService.getPlaylists(refresh, SelectPlaylistActivity.this, this);
+                List<Playlist> playlists = musicService.getPlaylists(refresh, SelectPlaylistActivity.this, this);
+				if(!Util.isOffline(me))
+					new CacheCleaner(me, getDownloadService()).cleanPlaylists(playlists);
+				return playlists;
             }
 
             @Override
