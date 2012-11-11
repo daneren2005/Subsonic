@@ -426,11 +426,18 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         checkLicenseAndTrialPeriod(onValid);
     }
 	private void downloadBackground(final boolean save) {
+		List<MusicDirectory.Entry> songs = getSelectedSongs();
+		if(songs.isEmpty()) {
+			selectAll(true, false);
+			songs = getSelectedSongs();
+		}
+		downloadBackground(save, songs);
+	}
+	private void downloadBackground(final boolean save, final List<MusicDirectory.Entry> songs) {
 		if (getDownloadService() == null) {
 			return;
 		}
 
-		final List<MusicDirectory.Entry> songs = getSelectedSongs();
 		Runnable onValid = new Runnable() {
 			@Override
 			public void run() {
@@ -446,8 +453,13 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 	}
 
     private void delete() {
+		List<MusicDirectory.Entry> songs = getSelectedSongs();
+		if(songs.isEmpty()) {
+			selectAll(true, false);
+			songs = getSelectedSongs();
+		}
         if (getDownloadService() != null) {
-            getDownloadService().delete(getSelectedSongs());
+            getDownloadService().delete(songs);
         }
     }
 
