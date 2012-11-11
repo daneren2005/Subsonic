@@ -21,10 +21,7 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Checkable;
-import android.widget.CheckedTextView;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.*;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
@@ -51,6 +48,7 @@ public class SongView extends UpdateView implements Checkable {
     private TextView durationTextView;
     private TextView statusTextView;
     private ImageButton starButton;
+	private ImageView moreButton;
 
     public SongView(Context context) {
         super(context);
@@ -90,6 +88,13 @@ public class SongView extends UpdateView implements Checkable {
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
 		starButton.setFocusable(false);
+		
+		moreButton = (ImageView) findViewById(R.id.artist_more);
+		moreButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				v.showContextMenu();
+			}
+		});
 
         update();
     }
