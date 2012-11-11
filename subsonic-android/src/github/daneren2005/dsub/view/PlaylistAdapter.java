@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.daneren2005.dsub.util;
+package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
