@@ -34,6 +34,7 @@ import java.util.Set;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.JukeboxStatus;
@@ -48,11 +49,13 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
+import java.io.*;
 
 /**
  * @author Sindre Mehus
  */
 public class OfflineMusicService extends RESTMusicService {
+	private static final String TAG = OfflineMusicService.class.getSimpleName();
 
     @Override
     public boolean isLicenseValid(Context context, ProgressListener progressListener) throws Exception {
@@ -223,8 +226,19 @@ public class OfflineMusicService extends RESTMusicService {
         List<Playlist> playlists = new ArrayList<Playlist>();
         File root = FileUtil.getPlaylistDirectory();
         for (File file : FileUtil.listFiles(root)) {
-			Playlist playlist = new Playlist(file.getName(), file.getName());
-			playlists.add(playlist);
+			if(FileUtil.isPlaylistFile(file)) {
+				String id = file.getName();
+				String filename = FileUtil.getBaseName(id);
+				Playlist playlist = new Playlist(id, filename);
+				playlists.add(playlist);
+			} else {
+				// Delete legacy playlist files
+				try {
+					file.delete();
+				} catch(Exception e) {
+					Log.w(TAG, "Failed to delete old playlist file: " + file.getName());
+				}
+			}
         }
         return playlists;
     }
@@ -237,19 +251,27 @@ public class OfflineMusicService extends RESTMusicService {
         }
 		
         Reader reader = null;
+		BufferedReader buffer = null;
 		try {
-			reader = new FileReader(FileUtil.getPlaylistFile(name));
-			MusicDirectory fullList = new PlaylistParser(context).parse(reader, progressListener);
+			File playlistFile = FileUtil.getPlaylistFile(name);
+			reader = new FileReader(playlistFile);
+			buffer = new BufferedReader(reader);
+			
 			MusicDirectory playlist = new MusicDirectory();
-			for(MusicDirectory.Entry song: fullList.getChildren()) {
-				DownloadFile downloadFile = downloadService.forSong(song);
-				File completeFile = downloadFile.getCompleteFile();
-				if(completeFile.exists()) {
-					playlist.addChild(song);
+			String line = buffer.readLine();
+	    	if(!"#EXTM3U".equals(line)) return playlist;
+			
+			while( (line = buffer.readLine()) != null ){
+				File entryFile = new File(line);
+				String entryName = getName(entryFile);
+				if(entryFile.exists() && entryName != null){
+					playlist.addChild(createEntry(context, entryFile, entryName));
 				}
 			}
+			
 			return playlist;
 		} finally {
+			Util.close(buffer);
 			Util.close(reader);
 		}
     }

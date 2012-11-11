@@ -46,6 +46,7 @@ public class FileUtil {
     private static final String[] FILE_SYSTEM_UNSAFE = {"/", "\\", "..", ":", "\"", "?", "*", "<", ">", "|"};
     private static final String[] FILE_SYSTEM_UNSAFE_DIR = {"\\", "..", ":", "\"", "?", "*", "<", ">", "|"};
     private static final List<String> MUSIC_FILE_EXTENSIONS = Arrays.asList("mp3", "ogg", "aac", "flac", "m4a", "wav", "wma");
+	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Arrays.asList("m3u");
     private static final File DEFAULT_MUSIC_DIR = createDirectory("music");
 
     public static File getSongFile(Context context, MusicDirectory.Entry song) {
@@ -71,9 +72,13 @@ public class FileUtil {
         return new File(dir, fileName.toString());
     }
 	
-	public static File getPlaylistFile(String id) {
+	public static File getPlaylistFile(String name) {
 		File playlistDir = getPlaylistDirectory();
-		return new File(playlistDir, id);
+		return new File(playlistDir, name + ".m3u");
+	}
+	public static File getOldPlaylistFile(String name) {
+		File playlistDir = getPlaylistDirectory();
+		return new File(playlistDir, name);
 	}
 	public static File getPlaylistDirectory() {
 		File playlistDir = new File(getSubsonicDirectory(), "playlists");
@@ -248,6 +253,11 @@ public class FileUtil {
         String extension = getExtension(file.getName());
         return MUSIC_FILE_EXTENSIONS.contains(extension);
     }
+	
+	public static boolean isPlaylistFile(File file) {
+		String extension = getExtension(file.getName());
+		return PLAYLIST_FILE_EXTENSIONS.contains(extension);
+	}
 
     /**
      * Returns the extension (the substring after the last dot) of the given file. The dot

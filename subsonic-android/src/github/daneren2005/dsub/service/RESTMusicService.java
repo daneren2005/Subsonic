@@ -103,6 +103,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
+import java.io.*;
 
 /**
  * @author Sindre Mehus
@@ -326,23 +327,31 @@ public class RESTMusicService implements MusicService {
         HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_PLAYLIST);
 
         Reader reader = getReader(context, progressListener, "getPlaylist", params, "id", id);
-		OutputStreamWriter out = null;
-		try {
-			out = new OutputStreamWriter(new FileOutputStream(FileUtil.getPlaylistFile(name)));
-			
-			char[] buff = new char[256];
-			int n;
-			while((n = reader.read(buff)) >= 0) {
-				out.write(buff, 0, n);
-			}
-		} finally {
-			Util.close(out);
-			Util.close(reader);
-		}
-
         try {
-			reader = new FileReader(FileUtil.getPlaylistFile(name));
-			return new PlaylistParser(context).parse(reader, progressListener);
+			MusicDirectory playlist = new PlaylistParser(context).parse(reader, progressListener);
+			
+			File playlistFile = FileUtil.getPlaylistFile(name);
+			FileWriter fw = new FileWriter(playlistFile);
+			BufferedWriter bw = new BufferedWriter(fw);
+			try {
+				fw.write("#EXTM3U\n");
+				for (MusicDirectory.Entry e : playlist.getChildren()) {
+					String filePath = FileUtil.getSongFile(context, e).getAbsolutePath();
+					if(! new File(filePath).exists()){
+						String ext = FileUtil.getExtension(filePath);
+						String base = FileUtil.getBaseName(filePath);
+						filePath = base + ".complete." + ext;                
+					}
+					fw.write(filePath + "\n");
+				}
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to save playlist: " + name);
+			} finally {
+				bw.close();
+				fw.close();
+			}
+			
+			return playlist;
         } finally {
             Util.close(reader);
         }
