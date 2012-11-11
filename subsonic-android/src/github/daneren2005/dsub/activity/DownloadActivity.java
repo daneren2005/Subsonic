@@ -77,6 +77,7 @@ import github.daneren2005.dsub.view.VisualizerView;
 
 import static github.daneren2005.dsub.domain.PlayerState.*;
 import github.daneren2005.dsub.util.*;
+import github.daneren2005.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 
@@ -87,6 +88,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 5;
     private static final int COLOR_BUTTON_ENABLED = Color.rgb(129, 201, 54);
     private static final int COLOR_BUTTON_DISABLED = Color.rgb(164, 166, 158);
+	private static final int INCREMENT_TIME = 5000;
 
     private ViewFlipper playlistFlipper;
     private TextView emptyTextView;
@@ -97,8 +99,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private TextView durationTextView;
     private TextView statusTextView;
     private HorizontalSlider progressBar;
-    private View previousButton;
-    private View nextButton;
+    private AutoRepeatButton previousButton;
+    private AutoRepeatButton nextButton;
     private View pauseButton;
     private View stopButton;
     private View startButton;
@@ -143,8 +145,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         statusTextView = (TextView) findViewById(R.id.download_status);
         progressBar = (HorizontalSlider) findViewById(R.id.download_progress_bar);
         playlistView = (ListView) findViewById(R.id.download_list);
-        previousButton = findViewById(R.id.download_previous);
-        nextButton = findViewById(R.id.download_next);
+        previousButton = (AutoRepeatButton)findViewById(R.id.download_previous);
+        nextButton = (AutoRepeatButton)findViewById(R.id.download_next);
         pauseButton = findViewById(R.id.download_pause);
         stopButton = findViewById(R.id.download_stop);
         startButton = findViewById(R.id.download_start);
@@ -175,8 +177,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 return gestureScanner.onTouchEvent(me);
             }
         };
-        previousButton.setOnTouchListener(touchListener);
-        nextButton.setOnTouchListener(touchListener);
         pauseButton.setOnTouchListener(touchListener);
         stopButton.setOnTouchListener(touchListener);
         startButton.setOnTouchListener(touchListener);
@@ -193,8 +193,14 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 getDownloadService().previous();
                 onCurrentChanged();
                 onProgressChanged();
+				setControlsVisible(true);
             }
         });
+		previousButton.setOnRepeatListener(new Runnable() {
+			public void run() {
+				changeProgress(-INCREMENT_TIME);
+			}
+		});
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,8 +211,14 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                     onCurrentChanged();
                     onProgressChanged();
                 }
+				setControlsVisible(true);
             }
         });
+		nextButton.setOnRepeatListener(new Runnable() {
+			public void run() {
+				changeProgress(INCREMENT_TIME);
+			}
+		});
 
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -840,6 +852,25 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
         jukeboxButton.setTextColor(getDownloadService().isJukeboxEnabled() ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
     }
+	
+	private void changeProgress(Integer ms) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService == null) {
+			return;
+		}
+		
+		int msPlayed = Math.max(0, downloadService.getPlayerPosition());
+		Integer duration = getDownloadService().getPlayerDuration();
+		int msTotal = duration == null ? 0 : duration;
+		
+		if(msPlayed + ms > msTotal) {
+			progressBar.setProgress(msTotal);
+			downloadService.seekTo(msTotal);
+		} else {
+			progressBar.setProgress(msPlayed + ms);
+			downloadService.seekTo(msPlayed + ms);
+		}
+	}
 
     private class SongListAdapter extends ArrayAdapter<DownloadFile> {
         public SongListAdapter(List<DownloadFile> entries) {

@@ -14,7 +14,7 @@
             android:layout_centerVertical="true"
             />
 
-    <ImageButton
+    <github.daneren2005.dsub.view.AutoRepeatButton
             style="@style/PlaybackControl"
             android:id="@+id/download_previous"
             android:src="@drawable/media_backward"
@@ -43,7 +43,7 @@
             android:layout_centerInParent="true"
             />
 
-    <ImageButton
+    <github.daneren2005.dsub.view.AutoRepeatButton
             style="@style/PlaybackControl"
             android:id="@+id/download_next"
             android:src="@drawable/media_forward"
