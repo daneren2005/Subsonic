@@ -599,7 +599,10 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				return true;
             case R.id.menu_remove_all:
                 getDownloadService().setShufflePlayEnabled(false);
-                getDownloadService().clear();
+				if(nowPlaying)
+					getDownloadService().clear();
+				else
+					getDownloadService().clearBackground();
                 onDownloadListChanged();
                 return true;
             case R.id.menu_screen_on_off:

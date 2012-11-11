@@ -369,6 +369,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public synchronized void clear() {
         clear(true);
     }
+	
+	@Override
+	public synchronized void clearBackground() {
+		if(currentDownloading != null && backgroundDownloadList.contains(currentDownloading)) {
+			currentDownloading.cancelDownload();
+			currentDownloading = null;
+		}
+		backgroundDownloadList.clear();
+	}
 
     @Override
     public synchronized void clearIncomplete() {

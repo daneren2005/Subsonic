@@ -54,6 +54,8 @@ public interface DownloadService {
     void setShowVisualization(boolean showVisualization);
 
     void clear();
+	
+	void clearBackground();
 
     void clearIncomplete();
 
