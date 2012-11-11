@@ -32,7 +32,7 @@ import github.daneren2005.dsub.domain.Playlist;
  * @author Sindre Mehus
  */
 public class PlaylistView extends UpdateView {
-	private static final String TAG = ArtistView.class.getSimpleName();
+	private static final String TAG = PlaylistView.class.getSimpleName();
 	
 	private Playlist playlist;
 
@@ -41,10 +41,10 @@ public class PlaylistView extends UpdateView {
 
     public PlaylistView(Context context) {
         super(context);
-        LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
+        LayoutInflater.from(context).inflate(R.layout.playlist_list_item, this, true);
 
-        titleView = (TextView) findViewById(R.id.artist_name);
-		moreButton = (ImageView) findViewById(R.id.artist_more);
+        titleView = (TextView) findViewById(R.id.playlist_name);
+		moreButton = (ImageView) findViewById(R.id.playlist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				v.showContextMenu();
