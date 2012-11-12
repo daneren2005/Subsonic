@@ -161,6 +161,13 @@
 				android:key="sleepTimerDuration"
 				android:defaultValue="60"
 				android:digits="0123456789"/>
+				
+			<ListPreference
+				android:title="@string/settings.temp_loss_title"
+				android:key="tempLoss"
+				android:defaultValue="0"
+				android:entryValues="@array/tempLossValues"
+				android:entries="@array/tempLossNames"/>
 	</PreferenceCategory>
 	
 	<PreferenceCategory

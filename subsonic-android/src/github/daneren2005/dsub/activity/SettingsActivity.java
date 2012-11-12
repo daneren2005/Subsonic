@@ -58,6 +58,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private ListPreference preloadCount;
 	private EditTextPreference randomSize;
 	private EditTextPreference sleepTimerDuration;
+	private ListPreference tempLoss;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         preloadCount = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT);
 		randomSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_RANDOM_SIZE);
 		sleepTimerDuration = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION);
+		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 
         findPreference("testConnection1").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -161,6 +163,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         preloadCount.setSummary(preloadCount.getEntry());
 		randomSize.setSummary(randomSize.getText());
 		sleepTimerDuration.setSummary(sleepTimerDuration.getText());
+		tempLoss.setSummary(tempLoss.getEntry());
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }

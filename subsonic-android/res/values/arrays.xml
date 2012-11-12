@@ -91,5 +91,16 @@
 		<item>@string/settings.network_timeout_45000</item>
 		<item>@string/settings.network_timeout_60000</item>
 	</string-array>
+	
+	<string-array name="tempLossValues">
+		<item>0</item>
+		<item>2</item>
+		<item>4</item>
+	</string-array>
+	<string-array name="tempLossNames">
+		<item>@string/settings.temp_loss_pause</item>
+		<item>@string/settings.temp_loss_half</item>
+		<item>@string/settings.temp_loss_fourth</item>
+	</string-array>
 
 </resources>

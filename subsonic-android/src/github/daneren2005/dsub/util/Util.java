@@ -99,6 +99,8 @@ public final class Util {
     public static final String EVENT_PLAYSTATE_CHANGED = "github.daneren2005.dsub.EVENT_PLAYSTATE_CHANGED";
 	
 	private static boolean pauseFocus = false;
+	private static int currentVolume = 0;
+	private static int lossPref = 0;
 
     private static final Map<Integer, Version> SERVER_REST_VERSIONS = new ConcurrentHashMap<Integer, Version>();
 
@@ -746,20 +748,32 @@ public final class Util {
     
     @TargetApi(8)
 	public static void requestAudioFocus(final Context context) {
-    	if (Build.VERSION.SDK_INT >= 8) {
-    		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    	if (Build.VERSION.SDK_INT >= 8) {			
+    		final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     		audioManager.requestAudioFocus(new OnAudioFocusChangeListener() {
 				public void onAudioFocusChange(int focusChange) {
 					DownloadServiceImpl downloadService = (DownloadServiceImpl)context;
 					if(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
 						if(downloadService.getPlayerState() == PlayerState.STARTED) {
 							pauseFocus = true;
-							downloadService.pause();
+							
+							SharedPreferences prefs = getPreferences(context);
+							lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "0"));
+							if(lossPref > 0) {
+								currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+								audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)Math.ceil(currentVolume / (double)lossPref), 0);
+							} else {
+								downloadService.pause();
+							}
 						}
 					} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
 						if(pauseFocus) {
 							pauseFocus = false;
-							downloadService.start();
+							if(lossPref > 0) {
+								audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
+							} else {
+								downloadService.start();
+							}
 						}
 					}
 				}
