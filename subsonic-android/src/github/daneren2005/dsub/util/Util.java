@@ -99,8 +99,8 @@ public final class Util {
     public static final String EVENT_PLAYSTATE_CHANGED = "github.daneren2005.dsub.EVENT_PLAYSTATE_CHANGED";
 	
 	private static boolean pauseFocus = false;
+	private static boolean lowerFocus = false;
 	private static int currentVolume = 0;
-	private static int lossPref = 0;
 
     private static final Map<Integer, Version> SERVER_REST_VERSIONS = new ConcurrentHashMap<Integer, Version>();
 
@@ -754,26 +754,25 @@ public final class Util {
 				public void onAudioFocusChange(int focusChange) {
 					DownloadServiceImpl downloadService = (DownloadServiceImpl)context;
 					if(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-						if(downloadService.getPlayerState() == PlayerState.STARTED) {
-							pauseFocus = true;
-							
+						if(downloadService.getPlayerState() == PlayerState.STARTED) {							
 							SharedPreferences prefs = getPreferences(context);
-							lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "0"));
-							if(lossPref > 0) {
+							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "0"));
+							if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
+								lowerFocus = true;
 								currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-								audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)Math.ceil(currentVolume / (double)lossPref), 0);
-							} else {
+								audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)Math.ceil(currentVolume / 4.0), 0);
+							} else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
+								pauseFocus = true;
 								downloadService.pause();
 							}
 						}
 					} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
 						if(pauseFocus) {
 							pauseFocus = false;
-							if(lossPref > 0) {
-								audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
-							} else {
-								downloadService.start();
-							}
+							downloadService.start();
+						} else if(lowerFocus) {
+							lowerFocus = false;
+							audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
 						}
 					}
 				}

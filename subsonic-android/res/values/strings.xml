@@ -226,9 +226,10 @@
 	<string name="settings.sleep_timer_on">On</string>
 	<string name="settings.sleep_timer_always_on">Always On</string>
 	<string name="settings.temp_loss_title">Temperary Loss of Focus</string>
-	<string name="settings.temp_loss_pause">Pause Playback</string>
-	<string name="settings.temp_loss_half">Half volume</string>
-	<string name="settings.temp_loss_fourth">Fourth Volume</string>
+	<string name="settings.temp_loss_pause">Always Pause</string>
+	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
+	<string name="settings.temp_loss_lower">Always lower volume</string>
+	<string name="settings.temp_loss_nothing">Do Nothing</string>
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
 
