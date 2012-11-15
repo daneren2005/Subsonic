@@ -39,7 +39,9 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SelectAlbumActivity extends SubsonicTabActivity {
 
@@ -553,6 +555,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
             if (songCount > 0) {
                 getImageLoader().loadImage(getSupportActionBar(), entries.get(0));
+				entryList.addHeaderView(createHeader(entries), null, false);
                 entryList.addFooterView(footer);
             } else {
 				hideButtons = true;
@@ -568,5 +571,41 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 playAll(getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
             }
         }
+    }
+	
+	private View createHeader(List<MusicDirectory.Entry> entries) {
+        View header = LayoutInflater.from(this).inflate(R.layout.select_album_header, entryList, false);
+
+        View coverArtView = header.findViewById(R.id.select_album_art);
+        getImageLoader().loadImage(coverArtView, entries.get(0), true, true);
+
+        TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
+        titleView.setText(getTitle());
+
+        int songCount = 0;
+
+        Set<String> artists = new HashSet<String>();
+        for (MusicDirectory.Entry entry : entries) {
+            if (!entry.isDirectory()) {
+                songCount++;
+                if (entry.getArtist() != null) {
+                    artists.add(entry.getArtist());
+                }
+            }
+        }
+
+        TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
+        if (artists.size() == 1) {
+            artistView.setText(artists.iterator().next());
+            artistView.setVisibility(View.VISIBLE);
+        } else {
+            artistView.setVisibility(View.GONE);
+        }
+
+        TextView songCountView = (TextView) header.findViewById(R.id.select_album_song_count);
+        String s = getResources().getQuantityString(R.plurals.select_album_n_songs, songCount, songCount);
+        songCountView.setText(s.toUpperCase());
+
+        return header;
     }
 }
