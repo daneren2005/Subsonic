@@ -268,6 +268,18 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             case R.id.song_menu_play_last:
                 getDownloadService().download(songs, false, false, false, false);
                 break;
+			case R.id.song_menu_download:
+				getDownloadService().downloadBackground(songs, false);
+                break;
+            case R.id.song_menu_pin:
+				getDownloadService().downloadBackground(songs, true);
+                break;
+			case R.id.song_menu_delete:
+				getDownloadService().delete(songs);
+                break;
+			case R.id.song_menu_add_playlist:
+				addToPlaylist(songs);
+                break;
 			case R.id.song_menu_star:
                 toggleStarred(entry);
                 break;

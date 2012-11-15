@@ -17,6 +17,24 @@
         />
 		
 	<item 
+        android:id="@+id/song_menu_download"
+        android:title="@string/common.download"
+        />
+		
+	<item 
+        android:id="@+id/song_menu_pin"
+        android:title="@string/common.pin"
+        />
+		
+	<item 
+		android:id="@+id/song_menu_delete"
+		android:title="@string/common.delete"/>
+	
+	<item 
+		android:id="@+id/song_menu_add_playlist"
+		android:title="@string/menu.add_playlist"/>
+		
+	<item 
 		android:id="@+id/song_menu_star"
 		android:title="@string/common.star"/>  
         
