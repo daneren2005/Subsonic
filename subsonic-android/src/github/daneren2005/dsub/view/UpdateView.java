@@ -41,6 +41,11 @@ public class UpdateView extends LinearLayout {
 		startUpdater();
 	}
 	
+	@Override
+	public void setPressed(boolean pressed) {
+		
+	}
+	
 	private static synchronized void startUpdater() {
         if (handler != null) {
             return;
