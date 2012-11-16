@@ -74,7 +74,7 @@ public class FileUtil {
 	
 	public static File getPlaylistFile(String name) {
 		File playlistDir = getPlaylistDirectory();
-		return new File(playlistDir, name + ".m3u");
+		return new File(playlistDir, fileSystemSafe(name) + ".m3u");
 	}
 	public static File getOldPlaylistFile(String name) {
 		File playlistDir = getPlaylistDirectory();
