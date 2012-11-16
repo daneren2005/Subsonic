@@ -576,7 +576,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				if(showHeader) {
 					entryList.addHeaderView(createHeader(entries), null, false);
 				}
-                entryList.addFooterView(footer);
             } else {
 				hideButtons = true;
 				invalidateOptionsMenu();
