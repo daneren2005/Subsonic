@@ -53,6 +53,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 	private boolean hideButtons = false;
     private Button moreButton;
     private boolean licenseValid;
+	private boolean showHeader = true;
 
     /**
      * Called when the activity is first created.
@@ -313,6 +314,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     }
 
     private void getAlbumList(final String albumListType, final int size, final int offset) {
+		showHeader = false;
 
         if ("newest".equals(albumListType)) {
             setTitle(R.string.main_albums_newest);
@@ -324,6 +326,8 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             setTitle(R.string.main_albums_recent);
         } else if ("frequent".equals(albumListType)) {
             setTitle(R.string.main_albums_frequent);
+        } else if ("starred".equals(albumListType)) {
+            setTitle(R.string.main_albums_starred);
         }
 
         new LoadTask() {
@@ -341,8 +345,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             @Override
             protected void done(Pair<MusicDirectory, Boolean> result) {
                 if (!result.getFirst().getChildren().isEmpty()) {
-                    moreButton.setVisibility(View.VISIBLE);
-                    entryList.addFooterView(footer);
+					if (!("starred".equals(albumListType))) {
+						moreButton.setVisibility(View.VISIBLE);
+						entryList.addFooterView(footer);
+					}
 
                     moreButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -567,7 +573,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
             if (songCount > 0) {
                 getImageLoader().loadImage(getSupportActionBar(), entries.get(0));
-				entryList.addHeaderView(createHeader(entries), null, false);
+				if(showHeader) {
+					entryList.addHeaderView(createHeader(entries), null, false);
+				}
                 entryList.addFooterView(footer);
             } else {
 				hideButtons = true;
