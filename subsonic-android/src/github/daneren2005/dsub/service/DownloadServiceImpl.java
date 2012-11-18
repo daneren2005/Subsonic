@@ -459,8 +459,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (currentPlaying != null) {
         	Util.requestAudioFocus(this);
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
+        	Util.broadcastNewTrackInfoToA2DP(this, currentPlaying.getSong());
         } else {
             Util.broadcastNewTrackInfo(this, null);
+            Util.broadcastNewTrackInfoToA2DP(this, null);
         }
 
         if (currentPlaying != null && showNotification) {
@@ -706,6 +708,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         boolean show = this.playerState == PAUSED && playerState == PlayerState.STARTED;
         boolean hide = this.playerState == STARTED && playerState == PlayerState.PAUSED;
         Util.broadcastPlaybackStatusChange(this, playerState);
+        Util.broadcastPlaybackStatusChangeToA2DP(this, playerState);
 
         this.playerState = playerState;
         mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());

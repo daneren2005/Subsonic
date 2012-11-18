@@ -97,6 +97,8 @@ public final class Util {
 
     public static final String EVENT_META_CHANGED = "github.daneren2005.dsub.EVENT_META_CHANGED";
     public static final String EVENT_PLAYSTATE_CHANGED = "github.daneren2005.dsub.EVENT_PLAYSTATE_CHANGED";
+    public static final String A2DP_EVENT_META_CHANGED = "com.android.music.metachanged";
+    public static final String A2DP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
 	
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
@@ -802,6 +804,40 @@ public final class Util {
 
         context.sendBroadcast(intent);
     }
+    
+    public static void broadcastNewTrackInfoToA2DP(Context context, MusicDirectory.Entry song){
+    	            
+        //AVRCP 
+        Intent avrcpIntent = new Intent(A2DP_EVENT_META_CHANGED);
+ 
+        if (song != null) {
+        	//string data
+            avrcpIntent.putExtra("track", song.getTitle());
+            avrcpIntent.putExtra("artist", song.getArtist());
+            avrcpIntent.putExtra("album", song.getAlbum());
+            
+            //long data
+            avrcpIntent.putExtra("ListSize",(long) song.getTrack());
+            avrcpIntent.putExtra("id", (long) song.getTrack());
+            avrcpIntent.putExtra("duration", (long )song.getDuration());
+            //avrcpIntent.putExtra("position", (long) downloadService.getPlayerPosition());
+            
+        } else {
+        	//string data
+            avrcpIntent.putExtra("track", "");
+            avrcpIntent.putExtra("artist", "");
+            avrcpIntent.putExtra("album", "");
+            
+            //long data
+            avrcpIntent.putExtra("ListSize",(long)0);
+            avrcpIntent.putExtra("id", (long) 0);
+            avrcpIntent.putExtra("duration", (long )0);
+            //avrcpIntent.putExtra("position", (long) 0);  
+        }
+        
+        //send broadcast
+        context.sendBroadcast(avrcpIntent);
+    }
 
     /**
      * <p>Broadcasts the given player state as the one being set.</p>
@@ -827,6 +863,29 @@ public final class Util {
         }
 
         context.sendBroadcast(intent);
+    }
+    
+    public static void broadcastPlaybackStatusChangeToA2DP(Context context, PlayerState state){
+		
+        Intent avrcpIntent = new Intent(A2DP_PLAYSTATE_CHANGED);
+        
+        switch (state) {
+            case STARTED:
+            	avrcpIntent.putExtra("playing", true);
+                break;
+            case STOPPED:
+            	avrcpIntent.putExtra("playing", false);
+                break;
+            case PAUSED:
+            	avrcpIntent.putExtra("playing", false);
+                break;
+            case COMPLETED:
+            	avrcpIntent.putExtra("playing", false);
+                break;
+            default:
+                return; // No need to broadcast.
+        }
+        context.sendBroadcast(avrcpIntent);
     }
 
     /**
