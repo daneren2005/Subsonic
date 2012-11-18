@@ -28,7 +28,7 @@ import android.preference.PreferenceScreen;
 import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.provider.SearchSuggestionProvider1;
+import github.daneren2005.dsub.provider.DSubSearchProvider;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.MusicService;
@@ -103,7 +103,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         findPreference("clearSearchHistory").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SettingsActivity.this, SearchSuggestionProvider1.AUTHORITY, SearchSuggestionProvider1.MODE);
+                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SettingsActivity.this, DSubSearchProvider.AUTHORITY, DSubSearchProvider.MODE);
                 suggestions.clearHistory();
                 Util.toast(SettingsActivity.this, R.string.settings_search_history_cleared);
                 return false;
