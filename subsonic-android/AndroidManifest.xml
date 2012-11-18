@@ -109,8 +109,8 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info"/>
         </receiver>
 
-        <provider android:name="github.daneren2005.dsub.provider.SearchSuggestionProvider1"
-                  android:authorities="github.daneren2005.dsub.provider.SearchSuggestionProvider1"/>
+        <provider android:name="github.daneren2005.dsub.provider.DSubSearchProvider"
+                  android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
 
         <meta-data android:name="android.app.default_searchable"
                    android:value="github.daneren2005.dsub.activity.QueryReceiverActivity"/>

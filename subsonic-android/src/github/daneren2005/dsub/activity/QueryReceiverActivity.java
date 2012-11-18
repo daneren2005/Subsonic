@@ -26,7 +26,7 @@ import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.provider.SearchSuggestionProvider1;
+import github.daneren2005.dsub.provider.DSubSearchProvider;
 
 /**
  * Receives search queries and forwards to the SelectAlbumActivity.
@@ -42,8 +42,8 @@ public class QueryReceiverActivity extends Activity {
         String query = getIntent().getStringExtra(SearchManager.QUERY);
 
         if (query != null) {
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, SearchSuggestionProvider1.AUTHORITY,
-                                                                              SearchSuggestionProvider1.MODE);
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, DSubSearchProvider.AUTHORITY,
+                                                                              DSubSearchProvider.MODE);
             suggestions.saveRecentQuery(query, null);
 
             Intent intent = new Intent(QueryReceiverActivity.this, SearchActivity.class);
