@@ -819,7 +819,7 @@ public final class Util {
             //long data
             avrcpIntent.putExtra("ListSize",(long) queueSize);
             avrcpIntent.putExtra("id", (long) currentSongNumber);
-            avrcpIntent.putExtra("duration", (long) (song.getDuration()*1000));//convert to milliseconds
+            avrcpIntent.putExtra("position", (long) song.getDuration());
             //avrcpIntent.putExtra("position", (long) downloadService.getPlayerPosition());
             
         } else {
