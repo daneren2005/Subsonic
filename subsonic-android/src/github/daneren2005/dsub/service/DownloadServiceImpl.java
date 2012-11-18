@@ -459,10 +459,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (currentPlaying != null) {
         	Util.requestAudioFocus(this);
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
-        	Util.broadcastNewTrackInfoToA2DP(this, currentPlaying.getSong());
+        	Util.broadcastNewTrackInfoToA2DP(this, currentPlaying.getSong(),downloadList.size(),getCurrentPlayingIndex());
         } else {
             Util.broadcastNewTrackInfo(this, null);
-            Util.broadcastNewTrackInfoToA2DP(this, null);
+            Util.broadcastNewTrackInfoToA2DP(this, null,(int) 0,(int) 0);
         }
 
         if (currentPlaying != null && showNotification) {
