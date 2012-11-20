@@ -115,7 +115,7 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-					android:textColor="?android:textColorPrimary" />
+					android:textColor="?android:textColorSecondary" />
 			
 			<include layout="@layout/download_media_buttons"/>
 			

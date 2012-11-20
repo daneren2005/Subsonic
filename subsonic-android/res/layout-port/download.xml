@@ -101,7 +101,7 @@
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:textColorPrimary"/>
+                    android:textColor="?android:textColorSecondary"/>
 
             <TextView
                     android:id="@+id/download_song_title"
