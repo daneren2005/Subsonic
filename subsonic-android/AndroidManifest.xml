@@ -99,6 +99,8 @@
             <intent-filter>
                 <action android:name="android.bluetooth.a2dp.action.SINK_STATE_CHANGED"/>
 				<action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED"/> <!-- API Level 11 -->
+				<action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
+				<action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>
             </intent-filter>
         </receiver>
 
