@@ -353,16 +353,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         } else {
             visualizerView = new VisualizerView(this);
             visualizerViewLayout.addView(visualizerView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-
-            visualizerView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    visualizerView.setActive(!visualizerView.isActive());
-                    getDownloadService().setShowVisualization(visualizerView.isActive());
-                    updateButtons();
-                    return true;
-                }
-            });
         }
 
         // TODO: Extract to utility method and cache.
