@@ -213,6 +213,11 @@ public class CachedMusicService implements MusicService {
     public String getVideoUrl(Context context, String id) {
         return musicService.getVideoUrl(context, id);
     }
+	
+	@Override
+    public String getVideoStreamUrl(Context context, String id) {
+        return musicService.getVideoStreamUrl(context, id);
+    }
 
     @Override
     public JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {

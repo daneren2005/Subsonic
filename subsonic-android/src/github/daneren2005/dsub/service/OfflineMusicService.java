@@ -315,6 +315,11 @@ public class OfflineMusicService extends RESTMusicService {
     public String getVideoUrl(Context context, String id) {
         return null;
     }
+	
+	@Override
+    public String getVideoStreamUrl(Context context, String id) {
+        return null;
+    }
 
     @Override
     public JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {

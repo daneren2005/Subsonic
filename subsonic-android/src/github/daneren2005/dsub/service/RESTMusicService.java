@@ -619,6 +619,17 @@ public class RESTMusicService implements MusicService {
         Log.i(TAG, "Using video URL: " + url);
         return url;
     }
+	
+	@Override
+	public String getVideoStreamUrl(Context context, String id) {
+		StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "stream"));
+        builder.append("&id=").append(id);
+        builder.append("&maxBitRate=500");
+
+        String url = rewriteUrlWithRedirect(context, builder.toString());
+        Log.i(TAG, "Using video URL: " + url);
+        return url;
+	}
 
     @Override
     public JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {
