@@ -214,7 +214,7 @@ public class RESTMusicService implements MusicService {
             return cachedIndexes;
         }
 
-        long lastModified = cachedIndexes == null ? 0L : cachedIndexes.getLastModified();
+        long lastModified = (cachedIndexes == null || refresh) ? 0L : cachedIndexes.getLastModified();
 
         List<String> parameterNames = new ArrayList<String>();
         List<Object> parameterValues = new ArrayList<Object>();
