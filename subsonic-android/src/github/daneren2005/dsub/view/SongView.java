@@ -78,9 +78,13 @@ public class SongView extends UpdateView implements Checkable {
             fileFormat = song.getSuffix();
         }
 
-        artist.append(song.getArtist()).append(" (")
-              .append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat))
-              .append(")");
+		if(!song.isVideo()) {
+			artist.append(song.getArtist()).append(" (")
+				.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat))
+				.append(")");
+		} else {
+			artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
+		}
 
         titleTextView.setText(song.getTitle());
         artistTextView.setText(artist);
