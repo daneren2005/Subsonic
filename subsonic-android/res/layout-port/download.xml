@@ -38,7 +38,7 @@
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
 					android:background="@color/overlayColor"
-					android:layout_below="@id/download_album_art_image">
+					android:layout_alignParentBottom="true">
 					
 					<Button
 						android:id="@+id/download_jukebox"
@@ -98,7 +98,7 @@
                     android:layout_marginLeft="16dip"
                     android:layout_marginRight="16dip"
                     android:layout_gravity="center_horizontal"
-					android:layout_below="@id/download_album_art_image"/>
+					android:layout_alignParentBottom="true"/>
 			</RelativeLayout>
 
             <TextView
