@@ -462,10 +462,17 @@ public final class Util {
             return null;
         }
 
-        int minutes = seconds / 60;
+		int hours = seconds / 3600;
+        int minutes = (seconds / 60) % 60;
         int secs = seconds % 60;
 
-        StringBuilder builder = new StringBuilder(6);
+        StringBuilder builder = new StringBuilder(7);
+		if(hours > 0) {
+			builder.append(hours).append(":");
+			if(minutes < 10) {
+				builder.append("0");
+			}
+		}
         builder.append(minutes).append(":");
         if (secs < 10) {
             builder.append("0");
