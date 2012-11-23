@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item 
-		android:id="@+id/song_menu_webview"
-		android:title="@string/common.webview"
-		/>
-
-	<item 
-		android:id="@+id/song_menu_download"
-		android:title="@string/common.download"
-		/>
-
-	<item 
-		android:id="@+id/song_menu_pin"
-		android:title="@string/common.pin"
-		/>
-
-	<item 
-		android:id="@+id/song_menu_delete"
-		android:title="@string/common.delete"/>
-
-	<item 
-		android:id="@+id/song_menu_star"
-		android:title="@string/common.star"/> 
+		android:id="@+id/song_menu_play_external"
+		android:title="@string/common.play_external"/>
 </menu>

@@ -78,7 +78,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                         intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
                         Util.startActivityWithoutTransition(SelectAlbumActivity.this, intent);
                     } else if (entry.isVideo()) {
-                        playVideo(entry);
+                        playExternalPlayer(entry);
                     }
                 }
             }
@@ -291,7 +291,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 toggleStarred(entry);
                 break;
 			case R.id.song_menu_webview:
-				playVideo(entry);
+				playWebView(entry);
+				break;
+			case R.id.song_menu_play_external:
+				playExternalPlayer(entry);
 				break;
             default:
                 return super.onContextItemSelected(menuItem);
@@ -492,12 +495,17 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         }
     }
 
-    private void playVideo(MusicDirectory.Entry entry) {
+    private void playWebView(MusicDirectory.Entry entry) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(MusicServiceFactory.getMusicService(this).getVideoUrl(this, entry.getId())));
 		
         startActivity(intent);
     }
+	private void playExternalPlayer(MusicDirectory.Entry entry) {
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
+		startActivity(intent);
+	}
 
     private void checkLicenseAndTrialPeriod(Runnable onValid) {
         if (licenseValid) {

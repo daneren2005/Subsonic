@@ -18,6 +18,7 @@
 	<string name="common.name">Name</string>
 	<string name="common.comment">Comment</string>
 	<string name="common.webview">Play Web View (Flash)</string>
+	<string name="common.play_external">Play External Player</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
