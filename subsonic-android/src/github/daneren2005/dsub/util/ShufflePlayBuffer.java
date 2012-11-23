@@ -93,18 +93,7 @@ public class ShufflePlayBuffer {
       
             if (prefs.getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false)){
             	
-            	int n = CAPACITY - buffer.size();
-    			String folder = Util.getSelectedMusicFolderId(context);
-                MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
-                
-                synchronized (buffer) {
-                    buffer.addAll(songs.getChildren());
-                    Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildren().size() + " songs.");
-                }
-            	
-            }else{
-            	
-            	 MusicDirectory songs = service.getStarredList(context, new ProgressListener() {
+            	MusicDirectory songs = service.getStarredList(context, new ProgressListener() {
      				@Override
      				public void updateProgress(int messageId) {
      					// TODO Auto-generated method stub	
@@ -127,6 +116,18 @@ public class ShufflePlayBuffer {
                      }
                      Log.i(TAG, "Refilled shuffle play buffer with 30 starred songs.");
                  }
+            	
+            	
+            }else{
+            	
+            	int n = CAPACITY - buffer.size();
+    			String folder = Util.getSelectedMusicFolderId(context);
+                MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
+                
+                synchronized (buffer) {
+                    buffer.addAll(songs.getChildren());
+                    Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildren().size() + " songs.");
+                }
             	
             }
         } catch (Exception x) {
