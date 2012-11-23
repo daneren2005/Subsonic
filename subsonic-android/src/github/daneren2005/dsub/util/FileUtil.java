@@ -46,6 +46,7 @@ public class FileUtil {
     private static final String[] FILE_SYSTEM_UNSAFE = {"/", "\\", "..", ":", "\"", "?", "*", "<", ">", "|"};
     private static final String[] FILE_SYSTEM_UNSAFE_DIR = {"\\", "..", ":", "\"", "?", "*", "<", ">", "|"};
     private static final List<String> MUSIC_FILE_EXTENSIONS = Arrays.asList("mp3", "ogg", "aac", "flac", "m4a", "wav", "wma");
+	private static final List<String> VIDEO_FILE_EXTENSIONS = Arrays.asList("flv", "mp4", "m4v", "wmv", "avi", "mov", "mpg", "mkv");
 	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Arrays.asList("m3u");
     private static final File DEFAULT_MUSIC_DIR = createDirectory("music");
 
@@ -237,22 +238,31 @@ public class FileUtil {
         return new TreeSet<File>(Arrays.asList(files));
     }
 
-    public static SortedSet<File> listMusicFiles(File dir) {
+    public static SortedSet<File> listMediaFiles(File dir) {
         SortedSet<File> files = listFiles(dir);
         Iterator<File> iterator = files.iterator();
         while (iterator.hasNext()) {
             File file = iterator.next();
-            if (!file.isDirectory() && !isMusicFile(file)) {
+            if (!file.isDirectory() && !isMediaFile(file)) {
                 iterator.remove();
             }
         }
         return files;
     }
 
-    private static boolean isMusicFile(File file) {
+    private static boolean isMediaFile(File file) {
         String extension = getExtension(file.getName());
-        return MUSIC_FILE_EXTENSIONS.contains(extension);
+        return MUSIC_FILE_EXTENSIONS.contains(extension) || VIDEO_FILE_EXTENSIONS.contains(extension);
     }
+	
+	public static boolean isMusicFile(File file) {
+		String extension = getExtension(file.getName());
+        return MUSIC_FILE_EXTENSIONS.contains(extension);
+	}
+	public static boolean isVideoFile(File file) {
+		String extension = getExtension(file.getName());
+        return VIDEO_FILE_EXTENSIONS.contains(extension);
+	}
 	
 	public static boolean isPlaylistFile(File file) {
 		String extension = getExtension(file.getName());
