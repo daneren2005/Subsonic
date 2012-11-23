@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import android.content.Context;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 
@@ -88,10 +90,32 @@ public class ShufflePlayBuffer {
             MusicService service = MusicServiceFactory.getMusicService(context);
             int n = CAPACITY - buffer.size();
 			String folder = Util.getSelectedMusicFolderId(context);
-            MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
-
+            //MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
+            MusicDirectory songs = service.getStarredList(context, new ProgressListener() {
+				
+				@Override
+				public void updateProgress(int messageId) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void updateProgress(String message) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+            //only files??
+            List<Entry> starlist = songs.getChildren(false, true);
+            //shuffle the list
+            Collections.shuffle(starlist);
+            
             synchronized (buffer) {
-                buffer.addAll(songs.getChildren());
+                //buffer.addAll(songs.getChildren());
+                int i;
+				for (i=1;i<30;i++){
+                	buffer.add(starlist.get(i));
+                }
                 Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildren().size() + " songs.");
             }
         } catch (Exception x) {
@@ -99,7 +123,7 @@ public class ShufflePlayBuffer {
         }
     }
 
-    private void clearBufferIfnecessary() {
+	private void clearBufferIfnecessary() {
         synchronized (buffer) {
             if (currentServer != Util.getActiveServer(context) || currentFolder != Util.getSelectedMusicFolderId(context)) {
                 currentServer = Util.getActiveServer(context);
