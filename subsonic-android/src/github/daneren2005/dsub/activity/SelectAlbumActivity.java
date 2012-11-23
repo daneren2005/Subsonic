@@ -34,16 +34,11 @@ import android.widget.*;
 import com.actionbarsherlock.view.Menu;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.DownloadFile;
-import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.service.*;
 import github.daneren2005.dsub.util.*;
 import java.io.File;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class SelectAlbumActivity extends SubsonicTabActivity {
 
@@ -115,10 +110,17 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			inflater.inflate(R.menu.select_album, menu);
 			hideButtons = false;
 		} else {
-			if(Util.isOffline(this))
+			if(Util.isOffline(this)) {
 				inflater.inflate(R.menu.select_song_offline, menu);
-			else
+			}
+			else {
 				inflater.inflate(R.menu.select_song, menu);
+				
+				String playlistId = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
+				if(playlistId == null) {
+					menu.removeItem(R.id.menu_remove_playlist);
+				}
+			}
 		}
         return true;
     }
@@ -156,6 +158,11 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				return true;
 			case R.id.menu_add_playlist:
 				addToPlaylist(getSelectedSongs());
+				return true;
+			case R.id.menu_remove_playlist:
+				String playlistId = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
+				String playlistName = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
+				removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
 				return true;
             case R.id.menu_exit:
                 intent = new Intent(this, MainActivity.class);
@@ -226,10 +233,16 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				inflater.inflate(R.menu.select_album_context, menu);
         } else if(!entry.isVideo()) {
             MenuInflater inflater = getMenuInflater();
-			if(Util.isOffline(this))
+			if(Util.isOffline(this)) {
 				inflater.inflate(R.menu.select_song_context_offline, menu);
-			else
+			}
+			else {
 				inflater.inflate(R.menu.select_song_context, menu);
+				String playlistId = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
+				if(playlistId == null) {
+					menu.removeItem(R.id.song_menu_remove_playlist);
+				}
+			}
         } else {
 			MenuInflater inflater = getMenuInflater();
 			if(Util.isOffline(this))
@@ -297,6 +310,11 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				break;
 			case R.id.song_menu_play_external:
 				playExternalPlayer(entry);
+				break;
+			case R.id.song_menu_remove_playlist:
+				String playlistId = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
+				String playlistName = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
+				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(info.position - 1));
 				break;
             default:
                 return super.onContextItemSelected(menuItem);
@@ -425,6 +443,19 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         }
         return songs;
     }
+	
+	private List<Integer> getSelectedIndexes() {
+		List<Integer> indexes = new ArrayList<Integer>();
+		
+		int count = entryList.getCount();
+        for (int i = 0; i < count; i++) {
+            if (entryList.isItemChecked(i)) {
+                indexes.add(i - 1);
+            }
+        }
+		
+		return indexes;
+	}
 
     private void download(final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle) {
         if (getDownloadService() == null) {
@@ -651,4 +682,33 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
         return header;
     }
+	
+	public void removeFromPlaylist(final String id, final String name, final List<Integer> indexes) {
+		new LoadingTask<Void>(this, true) {
+            @Override
+            protected Void doInBackground() throws Throwable {				
+                MusicService musicService = MusicServiceFactory.getMusicService(SelectAlbumActivity.this);
+				musicService.removeFromPlaylist(id, indexes, SelectAlbumActivity.this, null);
+                return null;
+            }
+            
+            @Override
+            protected void done(Void result) {
+				refresh();
+                Util.toast(SelectAlbumActivity.this, getResources().getString(R.string.removed_playlist, indexes.size(), name));
+            }
+            
+            @Override
+            protected void error(Throwable error) {            	
+            	String msg;
+            	if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+            		msg = getErrorMessage(error);
+            	} else {
+            		msg = getResources().getString(R.string.updated_playlist_error, name) + " " + getErrorMessage(error);
+            	}
+            	
+        		Util.toast(SelectAlbumActivity.this, msg, false);
+            }
+        }.execute();
+	}
 }
