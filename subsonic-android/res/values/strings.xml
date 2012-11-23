@@ -136,6 +136,7 @@
 	<string name="download.show_now_playing">Show Now Playing</string>
 	<string name="download.start_timer">Start Timer</string>
 	<string name="download.stop_timer">Stop Timer</string>
+	<string name="download.need_download">Video needs to be downloaded first</string>
     
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>

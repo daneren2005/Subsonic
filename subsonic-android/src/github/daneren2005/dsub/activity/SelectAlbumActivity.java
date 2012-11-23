@@ -34,9 +34,11 @@ import android.widget.*;
 import com.actionbarsherlock.view.Menu;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.*;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -502,9 +504,14 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         startActivity(intent);
     }
 	private void playExternalPlayer(MusicDirectory.Entry entry) {
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
-		startActivity(intent);
+		DownloadFile check = new DownloadFile(this, entry, false);
+		if(!check.isCompleteFileAvailable()) {
+			Util.toast(this, R.string.download_need_download);
+		} else {
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
+			startActivity(intent);
+		}
 	}
 
     private void checkLicenseAndTrialPeriod(Runnable onValid) {
