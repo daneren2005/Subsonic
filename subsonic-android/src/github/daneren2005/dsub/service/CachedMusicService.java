@@ -146,6 +146,7 @@ public class CachedMusicService implements MusicService {
 
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
+		cachedPlaylists.clear();
         musicService.createPlaylist(id, name, entries, context, progressListener);
     }
 	
