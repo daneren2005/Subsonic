@@ -146,7 +146,6 @@ public class MainActivity extends SubsonicTabActivity {
 				intent = new Intent(MainActivity.this, DownloadActivity.class);
                 intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
                 Util.startActivityWithoutTransition(MainActivity.this, intent);
-                Log.d("dave", "shuffle button clicked");
 				return true;
 			case R.id.menu_search:
 				onSearchRequested();

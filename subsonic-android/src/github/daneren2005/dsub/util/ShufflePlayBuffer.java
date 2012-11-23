@@ -26,6 +26,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
@@ -88,35 +89,45 @@ public class ShufflePlayBuffer {
 
         try {
             MusicService service = MusicServiceFactory.getMusicService(context);
-            int n = CAPACITY - buffer.size();
-			String folder = Util.getSelectedMusicFolderId(context);
-            //MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
-            MusicDirectory songs = service.getStarredList(context, new ProgressListener() {
-				
-				@Override
-				public void updateProgress(int messageId) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void updateProgress(String message) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
-            //only files??
-            List<Entry> starlist = songs.getChildren(false, true);
-            //shuffle the list
-            Collections.shuffle(starlist);
-            
-            synchronized (buffer) {
-                //buffer.addAll(songs.getChildren());
-                int i;
-				for (i=1;i<30;i++){
-                	buffer.add(starlist.get(i));
+            SharedPreferences prefs = Util.getPreferences(context);
+      
+            if (prefs.getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false)){
+            	
+            	int n = CAPACITY - buffer.size();
+    			String folder = Util.getSelectedMusicFolderId(context);
+                MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
+                
+                synchronized (buffer) {
+                    buffer.addAll(songs.getChildren());
+                    Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildren().size() + " songs.");
                 }
-                Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildren().size() + " songs.");
+            	
+            }else{
+            	
+            	 MusicDirectory songs = service.getStarredList(context, new ProgressListener() {
+     				@Override
+     				public void updateProgress(int messageId) {
+     					// TODO Auto-generated method stub	
+     				}
+     				@Override
+     				public void updateProgress(String message) {
+     					// TODO Auto-generated method stub
+     				}
+     				});
+            	 
+                 //Only get music files
+            	 List<Entry> starlist = songs.getChildren(false, true);
+                 //shuffle the list
+                 Collections.shuffle(starlist);
+                 
+                 synchronized (buffer) {
+                    int i;
+     				for (i=1;i<30;i++){
+                     	buffer.add(starlist.get(i));
+                     }
+                     Log.i(TAG, "Refilled shuffle play buffer with 30 starred songs.");
+                 }
+            	
             }
         } catch (Exception x) {
             Log.w(TAG, "Failed to refill shuffle play buffer.", x);
