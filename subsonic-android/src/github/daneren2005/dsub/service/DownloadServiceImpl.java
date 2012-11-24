@@ -299,6 +299,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public synchronized boolean isShufflePlayEnabled() {
         return shufflePlay;
     }
+	
+	@Override
+	public void setShuffleParams(String genre, String startYear, String endYear) {
+		shufflePlayBuffer.setOptions(genre, startYear, endYear);
+	}
 
     @Override
     public synchronized void shuffle() {

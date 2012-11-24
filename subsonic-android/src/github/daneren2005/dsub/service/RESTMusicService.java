@@ -495,7 +495,7 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getRandomSongs(int size, String musicFolderId, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getRandomSongs(int size, String musicFolderId, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
 		
@@ -509,6 +509,18 @@ public class RESTMusicService implements MusicService {
             names.add("musicFolderId");
             values.add(musicFolderId);
         }
+		if(genre != null) {
+			names.add("genre");
+			values.add(genre);
+		}
+		if(startYear != null) {
+			names.add("fromYear");
+			values.add(startYear);
+		}
+		if(endYear != null) {
+			names.add("toYear");
+			values.add(endYear);
+		}
 
         Reader reader = getReader(context, progressListener, "getRandomSongs", params, names, values);
         try {

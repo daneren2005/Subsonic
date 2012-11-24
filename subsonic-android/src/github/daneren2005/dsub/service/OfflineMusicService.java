@@ -365,7 +365,7 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 
     @Override
-    public MusicDirectory getRandomSongs(int size, String folder, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         File root = FileUtil.getMusicDirectory(context);
         List<File> children = new LinkedList<File>();
         listFilesRecursively(root, children);
