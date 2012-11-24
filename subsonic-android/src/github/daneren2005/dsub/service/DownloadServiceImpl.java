@@ -32,6 +32,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
+import github.daneren2005.dsub.util.A2DPBroadcaster;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LRUCache;
@@ -107,6 +108,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private VisualizerController visualizerController;
     private boolean showVisualization;
     private boolean jukeboxEnabled;
+    
+    public A2DPBroadcaster BTBroadcaster;
 	
 	private Timer sleepTimer;
 	private int timerDuration;
@@ -131,6 +134,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public void onCreate() {
         super.onCreate();
+        
+        BTBroadcaster = new A2DPBroadcaster(getApplicationContext(), this);
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
@@ -177,6 +182,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		sleepTimer = null;
 
 		instance = this;
+		
+		
 		lifecycleSupport.onCreate();
     }
 
@@ -459,11 +466,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (currentPlaying != null) {
         	Util.requestAudioFocus(this);
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
-        	Util.broadcastNewTrackInfoToA2DP(this, currentPlaying.getSong(),downloadList.size(),getCurrentPlayingIndex());
         } else {
             Util.broadcastNewTrackInfo(this, null);
-            Util.broadcastNewTrackInfoToA2DP(this, null,(int) 0,(int) 0);
         }
+        
+        try{
+        	BTBroadcaster.broadcastMetadata();
+        }catch(Exception e){
+        	//do nothing
+        }
+        
+        
 
         if (currentPlaying != null && showNotification) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
@@ -708,9 +721,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         boolean show = this.playerState == PAUSED && playerState == PlayerState.STARTED;
         boolean hide = this.playerState == STARTED && playerState == PlayerState.PAUSED;
         Util.broadcastPlaybackStatusChange(this, playerState);
-        Util.broadcastPlaybackStatusChangeToA2DP(this, playerState);
-
+        
         this.playerState = playerState;
+        
+        try{
+        	BTBroadcaster.onPlayStateChanged();
+        }catch (Exception x){
+        	//do nothing
+        }
+        
+        
+        
         mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
         
         if (show) {
