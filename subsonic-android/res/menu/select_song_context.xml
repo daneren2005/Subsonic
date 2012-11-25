@@ -35,6 +35,10 @@
 		android:title="@string/menu.add_playlist"/>
 		
 	<item 
+		android:id="@+id/song_menu_remove_playlist"
+		android:title="@string/menu.remove_playlist"/>
+		
+	<item 
 		android:id="@+id/song_menu_star"
 		android:title="@string/common.star"/>  
         

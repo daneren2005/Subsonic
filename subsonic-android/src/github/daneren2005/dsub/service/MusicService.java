@@ -65,6 +65,8 @@ public interface MusicService {
 	
 	void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception;
 	
+	void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception;
+	
 	void updatePlaylist(String id, String name, String comment, Context context, ProgressListener progressListener) throws Exception;
 
     Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception;
@@ -73,7 +75,7 @@ public interface MusicService {
 
     MusicDirectory getAlbumList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception;
 
-    MusicDirectory getRandomSongs(int size, String folder, Context context, ProgressListener progressListener) throws Exception;
+    MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception;
 
     Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, boolean saveToFile, ProgressListener progressListener) throws Exception;
 
@@ -84,6 +86,8 @@ public interface MusicService {
     Version getLatestVersion(Context context, ProgressListener progressListener) throws Exception;
 
     String getVideoUrl(Context context, String id);
+	
+	String getVideoStreamUrl(Context context, String id);
 
     JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception;
 

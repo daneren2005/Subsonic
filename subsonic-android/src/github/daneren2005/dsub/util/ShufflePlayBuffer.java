@@ -45,6 +45,10 @@ public class ShufflePlayBuffer {
     private Context context;
     private int currentServer;
 	private String currentFolder;
+	
+	private String genre;
+	private String startYear;
+	private String endYear;
 
     public ShufflePlayBuffer(Context context) {
         this.context = context;
@@ -88,7 +92,7 @@ public class ShufflePlayBuffer {
             MusicService service = MusicServiceFactory.getMusicService(context);
             int n = CAPACITY - buffer.size();
 			String folder = Util.getSelectedMusicFolderId(context);
-            MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
+            MusicDirectory songs = service.getRandomSongs(n, folder, genre, startYear, endYear, context, null);
 
             synchronized (buffer) {
                 buffer.addAll(songs.getChildren());
@@ -108,5 +112,11 @@ public class ShufflePlayBuffer {
             }
         }
     }
+	
+	public void setOptions(String genre, String startYear, String endYear) {
+		this.genre = genre;
+		this.startYear = startYear;
+		this.endYear = endYear;
+	}
 
 }
