@@ -48,6 +48,7 @@ public class ShufflePlayBuffer {
     private Context context;
     private int currentServer;
 	private String currentFolder;
+	private boolean useStarred = false;
 
     public ShufflePlayBuffer(Context context) {
         this.context = context;
@@ -82,6 +83,8 @@ public class ShufflePlayBuffer {
 
         // Check if active server has changed.
         clearBufferIfnecessary();
+        
+//        Util.getPreferences(context).getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false);
 
         if (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context))) {
             return;
@@ -89,9 +92,10 @@ public class ShufflePlayBuffer {
 
         try {
             MusicService service = MusicServiceFactory.getMusicService(context);
-            SharedPreferences prefs = Util.getPreferences(context);
+            //prefs = Util.getPreferences(context);
       
-            if (prefs.getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false)){
+            if (useStarred){
+//            if (prefs.getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false)){
             	
             	MusicDirectory songs = service.getStarredList(context, new ProgressListener() {
      				@Override
@@ -111,8 +115,9 @@ public class ShufflePlayBuffer {
                  
                  synchronized (buffer) {
                     int i;
-     				for (i=1;i<30;i++){
+     				for (i=1;i<=30;i++){
                      	buffer.add(starlist.get(i));
+                     	
                      }
                      Log.i(TAG, "Refilled shuffle play buffer with 30 starred songs.");
                  }
@@ -137,10 +142,17 @@ public class ShufflePlayBuffer {
 
 	private void clearBufferIfnecessary() {
         synchronized (buffer) {
-            if (currentServer != Util.getActiveServer(context) || currentFolder != Util.getSelectedMusicFolderId(context)) {
+        	
+        	boolean prefsUsedStarred = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false);
+            
+        	if (currentServer != Util.getActiveServer(context) || currentFolder != Util.getSelectedMusicFolderId(context)) {
                 currentServer = Util.getActiveServer(context);
 				currentFolder = Util.getSelectedMusicFolderId(context);
                 buffer.clear();
+            }else if(useStarred != prefsUsedStarred){
+            	useStarred = prefsUsedStarred;
+            	Log.d(TAG, "Use starred songs preference changed buffer cleared");
+            	buffer.clear();
             }
         }
     }
