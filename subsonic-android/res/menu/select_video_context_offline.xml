@@ -3,4 +3,8 @@
 	<item 
 		android:id="@+id/song_menu_play_external"
 		android:title="@string/common.play_external"/>
+		
+	<item 
+		android:id="@+id/song_menu_delete"
+		android:title="@string/common.delete"/>
 </menu>
