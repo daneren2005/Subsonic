@@ -59,6 +59,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+import github.daneren2005.dsub.activity.SubsonicTabActivity;
 
 /**
  * @author Sindre Mehus
@@ -99,7 +100,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private static DownloadService instance;
     private String suggestedPlaylistName;
     private PowerManager.WakeLock wakeLock;
-    private boolean keepScreenOn = false;
+    private boolean keepScreenOn;
 
     private static boolean equalizerAvailable;
     private static boolean visualizerAvailable;
@@ -175,6 +176,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		SharedPreferences prefs = Util.getPreferences(this);
 		timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "60"));
 		sleepTimer = null;
+		
+		keepScreenOn = prefs.getBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, false);
 
 		instance = this;
 		lifecycleSupport.onCreate();
@@ -335,6 +338,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public void setKeepScreenOn(boolean keepScreenOn) {
     	this.keepScreenOn = keepScreenOn;
+		
+		SharedPreferences prefs = Util.getPreferences(this);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, keepScreenOn);
+		editor.commit();
     }
 
     @Override
