@@ -538,6 +538,13 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				inflater.inflate(R.menu.nowplaying, menu);
 			else
 				inflater.inflate(R.menu.nowplaying_downloading, menu);
+			
+			if(getDownloadService().getSleepTimer()) {
+				menu.findItem(R.id.menu_toggle_timer).setTitle(R.string.download_stop_timer);
+			}
+			if(getDownloadService().getKeepScreenOn()) {
+				menu.findItem(R.id.menu_screen_on_off).setTitle(R.string.download_menu_screen_off);
+			}
 		}
 		return true;
 	}
@@ -614,6 +621,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             		getDownloadService().setKeepScreenOn(true);
             	}
+				invalidateOptionsMenu();
                 return true;
             case R.id.menu_shuffle:
                 getDownloadService().shuffle();
@@ -635,6 +643,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				} else {
 					getDownloadService().startSleepTimer();
 				}
+				invalidateOptionsMenu();
 				return true;
 			case R.id.menu_exit:
 				intent = new Intent(this, MainActivity.class);
