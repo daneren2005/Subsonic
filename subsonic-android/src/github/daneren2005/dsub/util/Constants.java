@@ -80,6 +80,9 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SLEEP_TIMER_DURATION = "sleepTimerDuration";
 	public static final String PREFERENCES_KEY_OFFLINE = "offline";
 	public static final String PREFERENCES_KEY_TEMP_LOSS = "tempLoss";
+	public static final String PREFERENCES_KEY_SHUFFLE_START_YEAR = "startYear";
+	public static final String PREFERENCES_KEY_SHUFFLE_END_YEAR = "endYear";
+	public static final String PREFERENCES_KEY_SHUFFLE_GENRE = "genre";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";

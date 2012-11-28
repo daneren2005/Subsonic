@@ -94,9 +94,7 @@ public class SelectArtistActivity extends SubsonicTabActivity implements Adapter
 				refresh();
 				return true;
 			case R.id.menu_shuffle:
-				intent = new Intent(SelectArtistActivity.this, DownloadActivity.class);
-                intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-                Util.startActivityWithoutTransition(SelectArtistActivity.this, intent);
+				onShuffleRequested();
 				return true;
             case R.id.menu_exit:
                 intent = new Intent(this, MainActivity.class);

@@ -117,6 +117,10 @@ public class ShufflePlayBuffer {
 		this.genre = genre;
 		this.startYear = startYear;
 		this.endYear = endYear;
+		
+		synchronized (buffer) {
+			buffer.clear();
+		}
 	}
 
 }
