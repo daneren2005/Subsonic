@@ -540,10 +540,10 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 			else
 				inflater.inflate(R.menu.nowplaying_downloading, menu);
 			
-			if(getDownloadService().getSleepTimer()) {
+			if(getDownloadService() != null && getDownloadService().getSleepTimer()) {
 				menu.findItem(R.id.menu_toggle_timer).setTitle(R.string.download_stop_timer);
 			}
-			if(getDownloadService().getKeepScreenOn()) {
+			if(getDownloadService() != null && getDownloadService().getKeepScreenOn()) {
 				menu.findItem(R.id.menu_screen_on_off).setTitle(R.string.download_menu_screen_off);
 			}
 		}
