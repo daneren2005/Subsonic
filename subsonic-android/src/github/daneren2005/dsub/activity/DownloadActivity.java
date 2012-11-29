@@ -31,6 +31,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -640,10 +641,10 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 			case R.id.menu_toggle_timer:
 				if(getDownloadService().getSleepTimer()) {
 					getDownloadService().stopSleepTimer();
+					invalidateOptionsMenu();
 				} else {
-					getDownloadService().startSleepTimer();
+					startTimer();
 				}
-				invalidateOptionsMenu();
 				return true;
 			case R.id.menu_exit:
 				intent = new Intent(this, MainActivity.class);
@@ -704,6 +705,35 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             }
         }.execute();
     }
+	
+	protected void startTimer() {
+		View dialogView = getLayoutInflater().inflate(R.layout.start_timer, null);
+		final EditText lengthBox = (EditText)dialogView.findViewById(R.id.timer_length);
+		
+		final SharedPreferences prefs = Util.getPreferences(DownloadActivity.this);
+		lengthBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, ""));
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(DownloadActivity.this);
+		builder.setTitle("Set Timer")
+			.setView(dialogView)
+			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					String length = lengthBox.getText().toString();
+					
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, length);
+					editor.commit();
+					
+					getDownloadService().setSleepTimerDuration(Integer.parseInt(length));
+					getDownloadService().startSleepTimer();
+					invalidateOptionsMenu();
+				}
+			})
+			.setNegativeButton("Cancel", null);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
 
     private void toggleFullscreenAlbumArt() {
     	scrollToCurrent();
