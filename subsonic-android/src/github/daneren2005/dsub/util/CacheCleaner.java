@@ -24,7 +24,7 @@ import java.util.*;
 public class CacheCleaner {
 
     private static final String TAG = CacheCleaner.class.getSimpleName();
-    private static final double MAX_FILE_SYSTEM_USAGE = 0.95;
+	private static final long MIN_FREE_SPACE = 500 * 1024L * 1024L;
 
     private final Context context;
     private final DownloadService downloadService;
@@ -75,7 +75,7 @@ public class CacheCleaner {
         long bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
         long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
         long bytesUsedFs = bytesTotalFs - bytesAvailableFs;
-        long minFsAvailability = Math.round(MAX_FILE_SYSTEM_USAGE * (double) bytesTotalFs);
+        long minFsAvailability = bytesTotalFs - MIN_FREE_SPACE;
 
         long bytesToDeleteCacheLimit = Math.max(bytesUsedBySubsonic - cacheSizeBytes, 0L);
         long bytesToDeleteFsLimit = Math.max(bytesUsedFs - minFsAvailability, 0L);
