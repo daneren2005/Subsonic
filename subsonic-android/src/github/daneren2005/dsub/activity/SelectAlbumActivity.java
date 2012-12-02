@@ -22,6 +22,8 @@ import github.daneren2005.dsub.view.EntryAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -311,6 +313,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			case R.id.song_menu_play_external:
 				playExternalPlayer(entry);
 				break;
+			case R.id.song_menu_stream_external:
+				streamExternalPlayer(entry);
+				break;
 			case R.id.song_menu_remove_playlist:
 				String playlistId = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
 				String playlistName = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
@@ -542,6 +547,18 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
 			startActivity(intent);
+		}
+	}
+	private void streamExternalPlayer(MusicDirectory.Entry entry) {
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(this).getVideoStreamUrl(this, entry.getId())), "video/*");
+		
+		List<ResolveInfo> intents = getPackageManager()
+			.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+		if(intents != null && intents.size() > 0) {
+			startActivity(intent);
+		} else {
+			Util.toast(this, R.string.download_no_streaming_player);
 		}
 	}
 

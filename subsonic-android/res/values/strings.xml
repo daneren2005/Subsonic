@@ -19,6 +19,7 @@
 	<string name="common.comment">Comment</string>
 	<string name="common.webview">Play Web View (Flash)</string>
 	<string name="common.play_external">Play External Player</string>
+	<string name="common.stream_external">Stream External Player</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -139,6 +140,7 @@
 	<string name="download.start_timer">Start Timer</string>
 	<string name="download.stop_timer">Stop Timer</string>
 	<string name="download.need_download">Video needs to be downloaded first</string>
+	<string name="download.no_streaming_player">No player can play this stream</string>
     
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
