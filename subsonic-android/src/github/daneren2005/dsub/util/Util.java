@@ -329,6 +329,13 @@ public final class Util {
             delete(tmp);
         }
     }
+	public static void renameFile(File from, File to) throws IOException {
+		if(from.renameTo(to)) {
+			Log.i(TAG, "Renamed " + from + " to " + to);
+		} else {
+			atomicCopy(from, to);
+		}
+	}
 
     public static void close(Closeable closeable) {
         try {

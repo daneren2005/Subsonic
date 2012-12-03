@@ -56,6 +56,9 @@ public class DownloadFile {
     private boolean save;
     private boolean failed;
     private int bitRate;
+	private boolean isPlaying = false;
+	private boolean saveWhenDone = false;
+	private boolean completeWhenDone = false;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
         this.context = context;
@@ -181,6 +184,30 @@ public class DownloadFile {
             }
         }
     }
+	
+	public void setPlaying(boolean isPlaying) {
+		try {
+			if(saveWhenDone && isPlaying == false) {
+				Util.renameFile(completeFile, saveFile);
+				saveWhenDone = false;
+			} else if(completeWhenDone && isPlaying == false) {
+				if(save) {
+					Util.renameFile(partialFile, saveFile);
+                    mediaStoreService.saveInMediaStore(DownloadFile.this);
+				} else {
+					Util.renameFile(partialFile, completeFile);
+				}
+				completeWhenDone = false;
+			}
+		} catch(IOException ex) {
+			Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile);
+		}
+		
+		this.isPlaying = isPlaying;
+	}
+	public boolean getPlaying() {
+		return isPlaying;
+	}
 
     @Override
     public String toString() {
@@ -214,7 +241,11 @@ public class DownloadFile {
                 }
                 if (completeFile.exists()) {
                     if (save) {
-                        Util.atomicCopy(completeFile, saveFile);
+						if(isPlaying) {
+							saveWhenDone = true;
+						} else {
+							Util.renameFile(completeFile, saveFile);
+						}
                     } else {
                         Log.i(TAG, completeFile + " already exists. Skipping.");
                     }
@@ -243,12 +274,16 @@ public class DownloadFile {
 
                 downloadAndSaveCoverArt(musicService);
 
-                if (save) {
-                    Util.atomicCopy(partialFile, saveFile);
-                    mediaStoreService.saveInMediaStore(DownloadFile.this);
-                } else {
-                    Util.atomicCopy(partialFile, completeFile);
-                }
+				if(isPlaying) {
+					completeWhenDone = true;
+				} else {
+					if(save) {
+						Util.renameFile(partialFile, saveFile);
+						mediaStoreService.saveInMediaStore(DownloadFile.this);
+					} else {
+						Util.renameFile(partialFile, completeFile);
+					}
+				}
 
             } catch (Exception x) {
                 Util.close(out);

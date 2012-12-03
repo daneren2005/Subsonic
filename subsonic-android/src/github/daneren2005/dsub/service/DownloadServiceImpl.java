@@ -258,6 +258,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
             if (currentPlaying == null) {
                 currentPlaying = downloadList.get(0);
+				currentPlaying.setPlaying(true);
             }
             checkDownloads();
         }
@@ -467,11 +468,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
 	synchronized void setCurrentPlaying(DownloadFile currentPlaying, boolean showNotification) {
+		if(this.currentPlaying != null) {
+			this.currentPlaying.setPlaying(false);
+		}
         this.currentPlaying = currentPlaying;
 
         if (currentPlaying != null) {
         	Util.requestAudioFocus(this);
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
+			currentPlaying.setPlaying(true);
+			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
         } else {
             Util.broadcastNewTrackInfo(this, null);
         }
@@ -481,11 +487,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
             Util.hidePlayingNotification(this, this, handler);
         }
-        
-		if(currentPlaying != null) {
-			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
-		}
-
     }
 
     @Override
