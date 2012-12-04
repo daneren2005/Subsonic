@@ -125,7 +125,7 @@ public class DownloadFile {
     }
 
     public synchronized boolean isWorkDone() {
-        return saveFile.exists() || (completeFile.exists() && !save);
+        return saveFile.exists() || (completeFile.exists() && !save) || saveWhenDone || completeWhenDone;
     }
 
     public synchronized boolean isDownloading() {
@@ -304,7 +304,8 @@ public class DownloadFile {
 				if (wifiLock != null) {
 					wifiLock.release();
 				}
-                new CacheCleaner(context, DownloadServiceImpl.getInstance()).clean();
+				// TODO: Separate into cleanup space and full cleanup
+                // new CacheCleaner(context, DownloadServiceImpl.getInstance()).clean();
             }
         }
 

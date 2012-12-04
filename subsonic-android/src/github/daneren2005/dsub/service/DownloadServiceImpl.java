@@ -365,7 +365,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         for (DownloadFile downloadFile : downloadList) {
             if (downloadFile.getSong().equals(song) &&
 					((downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && downloadFile.getPartialFile().exists())
-					|| downloadFile.getCompleteFile().exists())) {
+					|| downloadFile.isWorkDone())) {
                 return downloadFile;
             }
         }

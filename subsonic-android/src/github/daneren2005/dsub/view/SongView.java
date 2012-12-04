@@ -112,14 +112,13 @@ public class SongView extends UpdateView implements Checkable {
         }
 
         DownloadFile downloadFile = downloadService.forSong(song);
-        File completeFile = downloadFile.getCompleteFile();
         File partialFile = downloadFile.getPartialFile();
 
         int leftImage = 0;
         int rightImage = 0;
 
-        if (completeFile.exists()) {
-            leftImage = downloadFile.isSaved() ? R.drawable.saved : R.drawable.downloaded;
+        if (downloadFile.isWorkDone()) {
+            leftImage = downloadFile.shouldSave() ? R.drawable.saved : R.drawable.downloaded;
         }
 
         if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFile.exists()) {
