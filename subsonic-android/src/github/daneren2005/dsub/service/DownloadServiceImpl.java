@@ -174,7 +174,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		wakeLock.setReferenceCounted(false);
 		
 		SharedPreferences prefs = Util.getPreferences(this);
-		timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "60"));
+		try {
+			timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5"));
+		} catch(Exception e) {
+			timerDuration = 5;
+		}
 		sleepTimer = null;
 		
 		keepScreenOn = prefs.getBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, false);
