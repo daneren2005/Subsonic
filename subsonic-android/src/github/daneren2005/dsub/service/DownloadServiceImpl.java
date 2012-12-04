@@ -929,7 +929,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         // Need to download current playing?
-        if (currentPlaying != null && currentPlaying != currentDownloading && !currentPlaying.isCompleteFileAvailable()) {
+        if (currentPlaying != null && currentPlaying != currentDownloading && !currentPlaying.isWorkDone()) {
             // Cancel current download, if necessary.
             if (currentDownloading != null) {
                 currentDownloading.cancelDownload();
