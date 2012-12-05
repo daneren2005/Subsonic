@@ -904,6 +904,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public boolean getSleepTimer() {
 		return sleepTimer != null;
 	}
+	
+	@Override
+	public void setVolume(float volume) {
+		if(mediaPlayer != null) {
+			mediaPlayer.setVolume(volume, volume);
+		}
+	}
 
     private void handleError(Exception x) {
         Log.w(TAG, "Media player error: " + x, x);

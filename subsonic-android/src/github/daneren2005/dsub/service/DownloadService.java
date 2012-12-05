@@ -126,4 +126,6 @@ public interface DownloadService {
 	void stopSleepTimer();
 	
 	boolean getSleepTimer();
+	
+	void setVolume(float volume);
 }

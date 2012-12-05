@@ -104,7 +104,6 @@ public final class Util {
 	
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
-	private static int currentVolume = 0;
 
     private static final Map<Integer, Version> SERVER_REST_VERSIONS = new ConcurrentHashMap<Integer, Version>();
 
@@ -777,8 +776,7 @@ public final class Util {
 							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "0"));
 							if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
 								lowerFocus = true;
-								currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-								audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)Math.ceil(currentVolume / 4.0), 0);
+								downloadService.setVolume(0.1f);
 							} else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
 								pauseFocus = true;
 								downloadService.pause();
@@ -790,7 +788,7 @@ public final class Util {
 							downloadService.start();
 						} else if(lowerFocus) {
 							lowerFocus = false;
-							audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
+							downloadService.setVolume(1.0f);
 						}
 					}
 				}
