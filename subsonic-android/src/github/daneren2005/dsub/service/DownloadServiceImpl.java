@@ -817,11 +817,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
                     setPlayerState(COMPLETED);
 
-                    // If COMPLETED and not playing partial file, we are *really" finished
-                    // with the song and can move on to the next.
-                    if (!file.equals(downloadFile.getPartialFile())) {
+                    // If COMPLETED and file is completely cached
+                    if (downloadFile.isWorkDone()) {
                         onSongCompleted();
-                        return;
                     }
 
                     // If file is not completely downloaded, restart the playback from the current position.
@@ -839,6 +837,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                             }
                         }
 
+						// 12-04 18:59:19.350 I/DownloadServiceImpl( 2761): Requesting restart from 0 of 261000
                         Log.i(TAG, "Requesting restart from " + pos  + " of " + duration);
                         reset();
                         bufferTask = new BufferTask(downloadFile, pos);
