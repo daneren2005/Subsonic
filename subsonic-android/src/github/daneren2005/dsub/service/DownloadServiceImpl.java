@@ -101,6 +101,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private String suggestedPlaylistName;
     private PowerManager.WakeLock wakeLock;
     private boolean keepScreenOn;
+	private int cachedPosition = 0;
 
     private static boolean equalizerAvailable;
     private static boolean visualizerAvailable;
@@ -681,9 +682,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 return 0;
             }
             if (jukeboxEnabled) {
-                return jukeboxService.getPositionSeconds() * 1000;
+                cachedPosition = jukeboxService.getPositionSeconds() * 1000;
+				return cachedPosition;
             } else {
-                return mediaPlayer.getCurrentPosition();
+				cachedPosition = mediaPlayer.getCurrentPosition();
+                return cachedPosition;
             }
         } catch (Exception x) {
             handleError(x);
@@ -820,12 +823,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                     // If COMPLETED and file is completely cached
                     if (downloadFile.isWorkDone()) {
                         onSongCompleted();
+						return;
                     }
 
                     // If file is not completely downloaded, restart the playback from the current position.
                     int pos = mediaPlayer.getCurrentPosition();
+					if(pos == 0) {
+						Log.w(TAG, "Using cached current position");
+						pos = cachedPosition;
+					}
                     synchronized (DownloadServiceImpl.this) {
-
                         // Work-around for apparent bug on certain phones: If close (less than ten seconds) to the end
                         // of the song, skip to the next rather than restarting it.
                         Integer duration = downloadFile.getSong().getDuration() == null ? null : downloadFile.getSong().getDuration() * 1000;
@@ -837,7 +844,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                             }
                         }
 
-						// 12-04 18:59:19.350 I/DownloadServiceImpl( 2761): Requesting restart from 0 of 261000
                         Log.i(TAG, "Requesting restart from " + pos  + " of " + duration);
                         reset();
                         bufferTask = new BufferTask(downloadFile, pos);
