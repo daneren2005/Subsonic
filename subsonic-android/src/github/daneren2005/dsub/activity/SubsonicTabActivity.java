@@ -468,8 +468,8 @@ public class SubsonicTabActivity extends SherlockActivity {
 					String genre = genreBox.getText().toString();
 					String startYear = startYearBox.getText().toString();
 					String endYear = endYearBox.getText().toString();
-					getDownloadService().setShuffleParams(genre.isEmpty() ? null : genre,
-							startYear.isEmpty() ? null : startYear, endYear.isEmpty() ? null : endYear);
+					getDownloadService().setShuffleParams((genre.length() == 0) ? null : genre,
+							(startYear.length() == 0) ? null : startYear, (endYear.length() == 0) ? null : endYear);
 					
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
