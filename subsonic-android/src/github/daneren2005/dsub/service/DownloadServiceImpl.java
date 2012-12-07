@@ -820,12 +820,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
                     setPlayerState(COMPLETED);
 
-                    // If COMPLETED and file is completely cached
-                    if (downloadFile.isWorkDone()) {
-                        onSongCompleted();
-						return;
-                    }
-
                     // If file is not completely downloaded, restart the playback from the current position.
                     int pos = mediaPlayer.getCurrentPosition();
 					if(pos == 0) {
@@ -833,21 +827,25 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						pos = cachedPosition;
 					}
                     synchronized (DownloadServiceImpl.this) {
-                        // Work-around for apparent bug on certain phones: If close (less than ten seconds) to the end
-                        // of the song, skip to the next rather than restarting it.
-                        Integer duration = downloadFile.getSong().getDuration() == null ? null : downloadFile.getSong().getDuration() * 1000;
-                        if (duration != null) {
-                            if (Math.abs(duration - pos) < 10000) {
-                                Log.i(TAG, "Skipping restart from " + pos  + " of " + duration);
-                                onSongCompleted();
-                                return;
-                            }
-                        }
-
-                        Log.i(TAG, "Requesting restart from " + pos  + " of " + duration);
-                        reset();
-                        bufferTask = new BufferTask(downloadFile, pos);
-                        bufferTask.start();
+						int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
+						if(downloadFile.isWorkDone()) {
+							// Reached the end of the song
+							if(Math.abs(duration - pos) < 10000) {
+								onSongCompleted();
+							// Complete was called early even though file is fully buffered
+							} else {
+								Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+								reset();
+								downloadFile.setPlaying(false);
+								doPlay(downloadFile, pos, true);
+								downloadFile.setPlaying(true);
+							}
+						} else {
+							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+							reset();
+							bufferTask = new BufferTask(downloadFile, pos);
+							bufferTask.start();
+						} 
                     }
                 }
             });
