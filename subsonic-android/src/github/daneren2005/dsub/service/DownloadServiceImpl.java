@@ -60,6 +60,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Sindre Mehus
@@ -109,6 +112,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private VisualizerController visualizerController;
     private boolean showVisualization;
     private boolean jukeboxEnabled;
+	private ScheduledExecutorService executorService;
 	
 	private Timer sleepTimer;
 	private int timerDuration;
@@ -186,6 +190,23 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 		instance = this;
 		lifecycleSupport.onCreate();
+		
+		final Handler updateHandler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                updateHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(mediaPlayer != null && playerState == PlayerState.STARTED) {
+							cachedPosition = mediaPlayer.getCurrentPosition();
+						}
+                    }
+                });
+            }
+        };
+		executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -682,11 +703,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 return 0;
             }
             if (jukeboxEnabled) {
-                cachedPosition = jukeboxService.getPositionSeconds() * 1000;
-				return cachedPosition;
+				return jukeboxService.getPositionSeconds() * 1000;
             } else {
-				cachedPosition = mediaPlayer.getCurrentPosition();
-                return cachedPosition;
+                return mediaPlayer.getCurrentPosition();
             }
         } catch (Exception x) {
             handleError(x);
