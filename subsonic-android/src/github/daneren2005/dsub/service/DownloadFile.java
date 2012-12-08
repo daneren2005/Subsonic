@@ -304,8 +304,7 @@ public class DownloadFile {
 				if (wifiLock != null) {
 					wifiLock.release();
 				}
-				// TODO: Separate into cleanup space and full cleanup
-                // new CacheCleaner(context, DownloadServiceImpl.getInstance()).clean();
+                new CacheCleaner(context, DownloadServiceImpl.getInstance()).cleanSpace();
             }
         }
 
