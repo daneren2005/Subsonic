@@ -94,6 +94,7 @@ public class CacheCleaner {
 
         long bytesDeleted = 0L;
         for (File file : files) {
+			if(!deletePartials && bytesDeleted > bytesToDelete) break;
 
             if (file.getName().equals(Constants.ALBUM_ART_FILE)) {
                 // Move artwork to new folder.
