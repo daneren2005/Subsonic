@@ -190,23 +190,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 		instance = this;
 		lifecycleSupport.onCreate();
-		
-		final Handler updateHandler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                updateHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(mediaPlayer != null && playerState == PlayerState.STARTED) {
-							cachedPosition = mediaPlayer.getCurrentPosition();
-						}
-                    }
-                });
-            }
-        };
-		executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -761,6 +744,28 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else if (playerState == COMPLETED) {
             scrobbler.scrobble(this, currentPlaying, true);
         }
+		
+		if(playerState == STARTED) {
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					handler.post(new Runnable() {
+						@Override
+						public void run() {
+							if(mediaPlayer != null) {
+								cachedPosition = mediaPlayer.getCurrentPosition();
+							}
+						}
+					});
+				}
+			};
+			executorService = Executors.newSingleThreadScheduledExecutor();
+			executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
+		} else {
+			if(executorService != null && !executorService.isShutdown()) {
+				executorService.shutdown();
+			}
+		}
     }
 
     @Override
@@ -841,6 +846,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
                     // If file is not completely downloaded, restart the playback from the current position.
                     int pos = mediaPlayer.getCurrentPosition();
+					Log.d(TAG, pos + " of " + cachedPosition);
 					if(pos == 0) {
 						Log.w(TAG, "Using cached current position");
 						pos = cachedPosition;
