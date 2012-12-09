@@ -159,7 +159,7 @@
 			<ListPreference
 				android:title="@string/settings.temp_loss_title"
 				android:key="tempLoss"
-				android:defaultValue="0"
+				android:defaultValue="1"
 				android:entryValues="@array/tempLossValues"
 				android:entries="@array/tempLossNames"/>
 	</PreferenceCategory>

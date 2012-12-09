@@ -773,7 +773,7 @@ public final class Util {
 					if(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
 						if(downloadService.getPlayerState() == PlayerState.STARTED) {							
 							SharedPreferences prefs = getPreferences(context);
-							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "0"));
+							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
 							if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
 								lowerFocus = true;
 								downloadService.setVolume(0.1f);
