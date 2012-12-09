@@ -745,7 +745,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             scrobbler.scrobble(this, currentPlaying, true);
         }
 		
-		if(playerState == STARTED) {
+		if(playerState == STARTED && (executorService == null || executorService.isShutdown())) {
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
@@ -846,7 +846,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
                     // If file is not completely downloaded, restart the playback from the current position.
                     int pos = mediaPlayer.getCurrentPosition();
-					Log.d(TAG, pos + " of " + cachedPosition);
 					if(pos == 0) {
 						Log.w(TAG, "Using cached current position");
 						pos = cachedPosition;
