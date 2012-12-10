@@ -746,6 +746,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 		
 		if(playerState == STARTED && (executorService == null || executorService.isShutdown())) {
+			cachedPosition = 0;
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
