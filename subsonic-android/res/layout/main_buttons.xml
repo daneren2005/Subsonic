@@ -46,7 +46,7 @@
 		android:id="@+id/main_offline"
 		android:text="@string/main.offline"
 		android:drawablePadding="12dip"
-		android:drawableLeft="@drawable/main_offline"
+		android:drawableLeft="?attr/offline_icon"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
