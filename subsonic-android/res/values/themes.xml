@@ -5,17 +5,20 @@
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="android:windowBackground">@color/lightBackground</item>
+		<item name="offline_icon">@drawable/main_offline_light</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.Sherlock.ForceOverflow">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
+		<item name="offline_icon">@drawable/main_offline</item>
 	</style>
 	<style name="Theme.DSub.Holo" parent="Theme.Sherlock.ForceOverflow">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="android:windowBackground">@drawable/background</item>
+		<item name="offline_icon">@drawable/main_offline</item>
 	</style>
 	
 	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
