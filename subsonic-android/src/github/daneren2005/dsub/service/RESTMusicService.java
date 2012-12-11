@@ -70,17 +70,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.domain.Indexes;
-import github.daneren2005.dsub.domain.JukeboxStatus;
-import github.daneren2005.dsub.domain.Lyrics;
-import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.*;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
-import github.daneren2005.dsub.domain.MusicFolder;
-import github.daneren2005.dsub.domain.Playlist;
-import github.daneren2005.dsub.domain.SearchCritera;
-import github.daneren2005.dsub.domain.SearchResult;
-import github.daneren2005.dsub.domain.ServerInfo;
-import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
 import github.daneren2005.dsub.service.parser.IndexesParser;
@@ -234,7 +225,11 @@ public class RESTMusicService implements MusicService {
                 writeCachedIndexes(context, indexes, musicFolderId);
                 return indexes;
             }
-            return cachedIndexes;
+			if(cachedIndexes != null) {
+				return cachedIndexes;
+			} else {
+				return new Indexes(0, new ArrayList<Artist>(), new ArrayList<Artist>());
+			}
         } finally {
             Util.close(reader);
         }
