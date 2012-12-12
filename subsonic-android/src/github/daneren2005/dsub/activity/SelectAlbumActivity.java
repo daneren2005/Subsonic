@@ -313,9 +313,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			case R.id.song_menu_play_external:
 				playExternalPlayer(entry);
 				break;
-			case R.id.song_menu_stream_external:
+			/*case R.id.song_menu_stream_external:
 				streamExternalPlayer(entry);
-				break;
+				break;*/
 			case R.id.song_menu_remove_playlist:
 				String playlistId = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
 				String playlistName = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
