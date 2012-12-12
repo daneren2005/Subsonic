@@ -81,7 +81,9 @@ public class DownloadFile {
      * Returns the effective bit rate.
      */
     public int getBitRate() {
-		bitRate = Util.getMaxBitrate(context);
+		if(!partialFile.exists()) {
+			bitRate = Util.getMaxBitrate(context);
+		}
         if (bitRate > 0) {
             return bitRate;
         }
