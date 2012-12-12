@@ -761,7 +761,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				}
 			};
 			executorService = Executors.newSingleThreadScheduledExecutor();
-			executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
+			executorService.scheduleWithFixedDelay(runnable, 0L, 200L, TimeUnit.MILLISECONDS);
 		} else {
 			if(executorService != null && !executorService.isShutdown()) {
 				executorService.shutdown();
@@ -851,6 +851,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						Log.w(TAG, "Using cached current position");
 						pos = cachedPosition;
 					}
+					Log.d(TAG, pos + " of " + cachedPosition);
                     synchronized (DownloadServiceImpl.this) {
 						int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
 						if(downloadFile.isWorkDone()) {
