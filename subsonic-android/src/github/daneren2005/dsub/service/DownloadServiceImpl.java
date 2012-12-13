@@ -843,6 +843,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                     wakeLock.acquire(60000);
 
                     setPlayerState(COMPLETED);
+					
+					if (!file.equals(downloadFile.getPartialFile())) {
+						onSongCompleted();
+						return;
+					}
 
                     // If file is not completely downloaded, restart the playback from the current position.
                     int pos = mediaPlayer.getCurrentPosition();
