@@ -36,9 +36,9 @@
 		<item name="android:background">@drawable/actionbar_background</item>
 	</style>
 	
-	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-		<item name="background">@drawable/menubar_button_normal</item>
-		<item name="android:background">@drawable/actionbar_background</item>
+	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.Sherlock.ActionBar.Solid">
+		<item name="background">@android:color/transparent</item>
+		<item name="android:background">@android:color/transparent</item>
 	</style>
 	
 	<style name="Widget.DSub.ActionBarStyle.Holo" parent="Widget.Sherlock.ActionBar.Solid">
