@@ -850,13 +850,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					}
 
                     // If file is not completely downloaded, restart the playback from the current position.
-                    int pos = mediaPlayer.getCurrentPosition();
-					if(pos == 0) {
-						Log.w(TAG, "Using cached current position");
-						pos = cachedPosition;
-					}
+                    int pos = cachedPosition;
                     synchronized (DownloadServiceImpl.this) {
 						int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
+						Log.i(TAG, "Ending position " + pos + " of " + duration);
 						if(downloadFile.isWorkDone()) {
 							// Reached the end of the song
 							if(Math.abs(duration - pos) < 10000) {
