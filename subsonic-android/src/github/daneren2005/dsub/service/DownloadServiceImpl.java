@@ -746,7 +746,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 		
 		if(playerState == STARTED && (executorService == null || executorService.isShutdown())) {
-			cachedPosition = 0;
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
@@ -851,7 +850,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						Log.w(TAG, "Using cached current position");
 						pos = cachedPosition;
 					}
-					Log.d(TAG, pos + " of " + cachedPosition);
                     synchronized (DownloadServiceImpl.this) {
 						int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
 						if(downloadFile.isWorkDone()) {
