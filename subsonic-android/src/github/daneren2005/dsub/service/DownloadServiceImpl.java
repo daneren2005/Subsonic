@@ -819,7 +819,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         bufferTask.start();
     }
 
-    private synchronized void doPlay(final DownloadFile downloadFile, int position, boolean start) {
+    private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
 		// TODO: Start play at curr pos on rebuffer instead of restart
         try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
@@ -830,8 +830,32 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setDataSource(file.getPath());
             setPlayerState(PREPARING);
-            mediaPlayer.prepare();
-            setPlayerState(PREPARED);
+			
+			mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+				public void onPrepared(MediaPlayer mp) {
+					try {
+						setPlayerState(PREPARED);
+
+						synchronized (DownloadServiceImpl.this) {
+							if (position != 0) {
+								Log.i(TAG, "Restarting player from position " + position);
+								mediaPlayer.seekTo(position);
+							}
+
+							if (start) {
+								mediaPlayer.start();
+								setPlayerState(STARTED);
+							} else {
+								setPlayerState(PAUSED);
+							}
+						}
+
+						lifecycleSupport.serializeDownloadQueue();
+					} catch (Exception x) {
+						handleError(x);
+					}
+				}
+			});
 
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -875,20 +899,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                     }
                 }
             });
-
-            if (position != 0) {
-                Log.i(TAG, "Restarting player from position " + position);
-                mediaPlayer.seekTo(position);
-            }
-
-            if (start) {
-                mediaPlayer.start();
-                setPlayerState(STARTED);
-            } else {
-                setPlayerState(PAUSED);
-            }
-            lifecycleSupport.serializeDownloadQueue();
-
+			
+			mediaPlayer.prepareAsync();
         } catch (Exception x) {
             handleError(x);
         }
