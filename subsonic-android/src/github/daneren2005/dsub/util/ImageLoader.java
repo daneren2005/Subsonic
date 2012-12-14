@@ -147,7 +147,11 @@ public class ImageLoader implements Runnable {
 
                 Drawable existingDrawable = imageView.getDrawable();
                 if (existingDrawable == null) {
-                    Bitmap emptyImage = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    if(drawable.getIntrinsicWidth() > 0 && drawable.getIntrinsicHeight() > 0) {
+                    	Bitmap emptyImage = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    } else {
+                    	Bitmap emptyImage = Bitmap.createBitmap(imageSizeDefault, imageSizeDefault, Bitmap.Config.ARGB_8888);
+                    }
                     existingDrawable = new BitmapDrawable(emptyImage);
                 }
 
