@@ -34,6 +34,7 @@ import java.util.Set;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
@@ -110,7 +111,7 @@ public class OfflineMusicService extends RESTMusicService {
         return FileUtil.getBaseName(name);
     }
 
-    private MusicDirectory.Entry createEntry(Context context, File file, String name) {
+    private MusicDirectory.Entry createEntry(Context context, File file, String name) {		
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         entry.setDirectory(file.isDirectory());
         entry.setId(file.getPath());
@@ -121,6 +122,18 @@ public class OfflineMusicService extends RESTMusicService {
         if (file.isFile()) {
             entry.setArtist(file.getParentFile().getParentFile().getName());
             entry.setAlbum(file.getParentFile().getName());
+			
+			try {
+				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+				metadata.setDataSource(file.getAbsolutePath());
+				entry.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
+				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+				entry.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
+				String year = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
+				entry.setYear(Integer.parseInt((year != null) ? year : "0"));
+			} catch(Exception e) {
+				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+			}
         }
         entry.setTitle(name);
         entry.setSuffix(FileUtil.getExtension(file.getName().replace(".complete", "")));

@@ -313,6 +313,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			case R.id.song_menu_play_external:
 				playExternalPlayer(entry);
 				break;
+			case R.id.song_menu_info:
+				displaySongInfo(entry);
+				break;
 			/*case R.id.song_menu_stream_external:
 				streamExternalPlayer(entry);
 				break;*/
@@ -727,5 +730,26 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         		Util.toast(SelectAlbumActivity.this, msg, false);
             }
         }.execute();
+	}
+	
+	private void displaySongInfo(final MusicDirectory.Entry song) {
+		String msg = "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
+		if(!song.getGenre().isEmpty()) {
+			msg += "\nGenre: " + song.getGenre();
+		}
+		if(song.getYear() != null && song.getYear() != 0) {
+			msg += "\nYear: " + song.getYear();
+		}
+		msg += "\nFormat: " + song.getSuffix();
+		if(song.getBitRate() != null && song.getBitRate() != 0) {
+			msg += "\nBitrate: " + song.getBitRate() + " kpbs";
+		}
+		msg += "\nSize: " + Util.formatBytes(song.getSize());
+		
+		new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(song.getTitle())
+			.setMessage(msg)
+			.show();
 	}
 }
