@@ -47,6 +47,7 @@ public class ShufflePlayBuffer {
     private final ScheduledExecutorService executorService;
     private final List<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
     private Context context;
+    private Context appContext;
     private int currentServer;
 	private String currentFolder;
 	private String genre;
@@ -56,6 +57,7 @@ public class ShufflePlayBuffer {
 
     public ShufflePlayBuffer(Context context) {
         this.context = context;
+        
         executorService = Executors.newSingleThreadScheduledExecutor();
         Runnable runnable = new Runnable() {
             @Override
@@ -64,7 +66,7 @@ public class ShufflePlayBuffer {
             }
         };
         executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
-        prefs = Util.getPreferences(context);
+        prefs = Util.getPreferences(context.getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
 			
 			@Override
@@ -157,8 +159,6 @@ public class ShufflePlayBuffer {
 	private void clearBufferIfnecessary() {
         synchronized (buffer) {
         	
-        	boolean prefsUsedStarred = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false);
-            
         	if (currentServer != Util.getActiveServer(context) || currentFolder != Util.getSelectedMusicFolderId(context)) {
                 currentServer = Util.getActiveServer(context);
 				currentFolder = Util.getSelectedMusicFolderId(context);
