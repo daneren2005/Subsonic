@@ -744,6 +744,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 		if(song.getBitRate() != null && song.getBitRate() != 0) {
 			msg += "\nBitrate: " + song.getBitRate() + " kpbs";
 		}
+		if(song.getDuration() != null && song.getDuration() != 0) {
+			msg += "\nLength: " + Util.formatDuration(song.getDuration());
+		}
 		msg += "\nSize: " + Util.formatBytes(song.getSize());
 		
 		new AlertDialog.Builder(this)
