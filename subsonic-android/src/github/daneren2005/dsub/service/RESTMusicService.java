@@ -210,8 +210,10 @@ public class RESTMusicService implements MusicService {
         List<String> parameterNames = new ArrayList<String>();
         List<Object> parameterValues = new ArrayList<Object>();
 
-        parameterNames.add("ifModifiedSince");
-        parameterValues.add(lastModified);
+		if(lastModified != 0L) {
+			parameterNames.add("ifModifiedSince");
+			parameterValues.add(lastModified);
+		}
 
         if (musicFolderId != null) {
             parameterNames.add("musicFolderId");
