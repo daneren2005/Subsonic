@@ -22,7 +22,7 @@
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:layout_weight="1"
-				android:layout_above="@+id/download_visualizer_view_layout">
+				android:layout_above="@+id/download_song_title">
 					
 				<ImageView
 					android:id="@+id/download_album_art_image"
@@ -49,9 +49,9 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_gravity="bottom"
-						android:paddingTop="12dip"
+						android:paddingTop="4dip"
 						android:paddingLeft="14dip"
-						android:paddingBottom="12dip"/>
+						android:paddingBottom="4dip"/>
 						
 					<Button
 						android:id="@+id/download_equalizer"
@@ -62,9 +62,9 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_gravity="bottom"
-						android:paddingTop="12dip"
+						android:paddingTop="4dip"
 						android:paddingLeft="14dip"
-						android:paddingBottom="12dip"/>
+						android:paddingBottom="4dip"/>
 
 					<Button
 						android:id="@+id/download_visualizer"
@@ -75,9 +75,9 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_gravity="bottom"
-						android:paddingTop="12dip"
+						android:paddingTop="4dip"
 						android:paddingLeft="14dip"
-						android:paddingBottom="12dip"/>
+						android:paddingBottom="4dip"/>
 						
 					<ImageButton
 						android:id="@+id/download_star"
@@ -86,10 +86,19 @@
 						android:layout_below="@+id/download_jukebox"
 						android:background="@android:color/transparent"
 						android:src="@android:drawable/star_big_off"
-						android:paddingTop="12dip"
+						android:paddingTop="4dip"
 						android:paddingLeft="14dip"
-						android:paddingBottom="12dip"/>
+						android:paddingBottom="4dip"/>
 				</LinearLayout>
+				
+				<LinearLayout
+                    android:id="@+id/download_visualizer_view_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
+                    android:layout_gravity="center_horizontal"
+					android:layout_alignParentBottom="true"/>
 			</RelativeLayout>
 
             <TextView
@@ -98,10 +107,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
+					android:layout_marginLeft="16dip"
+                    android:layout_marginRight="16dip"
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:textColorPrimary"/>
+                    android:textColor="?android:textColorSecondary"/>
 
             <TextView
                     android:id="@+id/download_song_title"
@@ -117,15 +128,6 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:ellipsize="end"/>
-
-            <LinearLayout
-                    android:id="@+id/download_visualizer_view_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="60dip"
-                    android:layout_marginLeft="80dip"
-                    android:layout_marginRight="80dip"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_above="@+id/download_song_title"/>
 
         </RelativeLayout>
 

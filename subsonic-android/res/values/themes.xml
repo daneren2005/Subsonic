@@ -5,17 +5,20 @@
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="android:windowBackground">@color/lightBackground</item>
+		<item name="offline_icon">@drawable/main_offline_light</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.Sherlock.ForceOverflow">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
+		<item name="offline_icon">@drawable/main_offline</item>
 	</style>
 	<style name="Theme.DSub.Holo" parent="Theme.Sherlock.ForceOverflow">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="android:windowBackground">@drawable/background</item>
+		<item name="offline_icon">@drawable/main_offline</item>
 	</style>
 	
 	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
@@ -33,9 +36,9 @@
 		<item name="android:background">@drawable/actionbar_background</item>
 	</style>
 	
-	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-		<item name="background">@drawable/menubar_button_normal</item>
-		<item name="android:background">@drawable/actionbar_background</item>
+	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.Sherlock.ActionBar.Solid">
+		<item name="background">@android:color/transparent</item>
+		<item name="android:background">@android:color/transparent</item>
 	</style>
 	
 	<style name="Widget.DSub.ActionBarStyle.Holo" parent="Widget.Sherlock.ActionBar.Solid">

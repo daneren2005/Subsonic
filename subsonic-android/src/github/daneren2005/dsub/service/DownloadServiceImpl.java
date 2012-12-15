@@ -32,7 +32,6 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
-import github.daneren2005.dsub.util.A2DPBroadcaster;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LRUCache;
@@ -48,6 +47,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -100,7 +102,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private static DownloadService instance;
     private String suggestedPlaylistName;
     private PowerManager.WakeLock wakeLock;
-    private boolean keepScreenOn = false;
+    private boolean keepScreenOn;
+	private int cachedPosition = 0;
 
     private static boolean equalizerAvailable;
     private static boolean visualizerAvailable;
@@ -108,8 +111,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private VisualizerController visualizerController;
     private boolean showVisualization;
     private boolean jukeboxEnabled;
-    
-    public A2DPBroadcaster BTBroadcaster;
+    //public A2DPBroadcaster BTBroadcaster;
+	private ScheduledExecutorService executorService;
 	
 	private Timer sleepTimer;
 	private int timerDuration;
@@ -135,7 +138,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public void onCreate() {
         super.onCreate();
         
-        BTBroadcaster = new A2DPBroadcaster(getApplicationContext(), this);
+//        BTBroadcaster = new A2DPBroadcaster(getApplicationContext(), this);
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
@@ -178,8 +181,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		wakeLock.setReferenceCounted(false);
 		
 		SharedPreferences prefs = Util.getPreferences(this);
-		timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "60"));
+		try {
+			timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5"));
+		} catch(Exception e) {
+			timerDuration = 5;
+		}
 		sleepTimer = null;
+		
+		keepScreenOn = prefs.getBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, false);
 
 		instance = this;
 		
@@ -262,6 +271,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
             if (currentPlaying == null) {
                 currentPlaying = downloadList.get(0);
+				currentPlaying.setPlaying(true);
             }
             checkDownloads();
         }
@@ -306,6 +316,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public synchronized boolean isShufflePlayEnabled() {
         return shufflePlay;
     }
+	
+	@Override
+	public void setShuffleParams(String genre, String startYear, String endYear) {
+		shufflePlayBuffer.setOptions(genre, startYear, endYear);
+	}
 
     @Override
     public synchronized void shuffle() {
@@ -337,6 +352,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public void setKeepScreenOn(boolean keepScreenOn) {
     	this.keepScreenOn = keepScreenOn;
+		
+		SharedPreferences prefs = Util.getPreferences(this);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, keepScreenOn);
+		editor.commit();
     }
 
     @Override
@@ -354,7 +374,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         for (DownloadFile downloadFile : downloadList) {
             if (downloadFile.getSong().equals(song) &&
 					((downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && downloadFile.getPartialFile().exists())
-					|| downloadFile.getCompleteFile().exists())) {
+					|| downloadFile.isWorkDone())) {
                 return downloadFile;
             }
         }
@@ -461,17 +481,22 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
 	synchronized void setCurrentPlaying(DownloadFile currentPlaying, boolean showNotification) {
+		if(this.currentPlaying != null) {
+			this.currentPlaying.setPlaying(false);
+		}
         this.currentPlaying = currentPlaying;
 
         if (currentPlaying != null) {
         	Util.requestAudioFocus(this);
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
+			currentPlaying.setPlaying(true);
+			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
         } else {
             Util.broadcastNewTrackInfo(this, null);
         }
         
         try{
-        	BTBroadcaster.broadcastMetadata();
+        	//BTBroadcaster.broadcastMetadata();
         }catch(Exception e){
         	//do nothing
         }
@@ -483,11 +508,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
             Util.hidePlayingNotification(this, this, handler);
         }
-        
-		if(currentPlaying != null) {
-			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
-		}
-
     }
 
     @Override
@@ -678,7 +698,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 return 0;
             }
             if (jukeboxEnabled) {
-                return jukeboxService.getPositionSeconds() * 1000;
+				return jukeboxService.getPositionSeconds() * 1000;
             } else {
                 return mediaPlayer.getCurrentPosition();
             }
@@ -725,7 +745,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         this.playerState = playerState;
         
         try{
-        	BTBroadcaster.onPlayStateChanged();
+        	//BTBroadcaster.onPlayStateChanged();
         }catch (Exception x){
         	//do nothing
         }
@@ -745,6 +765,28 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else if (playerState == COMPLETED) {
             scrobbler.scrobble(this, currentPlaying, true);
         }
+		
+		if(playerState == STARTED && (executorService == null || executorService.isShutdown())) {
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					handler.post(new Runnable() {
+						@Override
+						public void run() {
+							if(mediaPlayer != null) {
+								cachedPosition = mediaPlayer.getCurrentPosition();
+							}
+						}
+					});
+				}
+			};
+			executorService = Executors.newSingleThreadScheduledExecutor();
+			executorService.scheduleWithFixedDelay(runnable, 0L, 200L, TimeUnit.MILLISECONDS);
+		} else {
+			if(executorService != null && !executorService.isShutdown()) {
+				executorService.shutdown();
+			}
+		}
     }
 
     @Override
@@ -798,7 +840,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         bufferTask.start();
     }
 
-    private synchronized void doPlay(final DownloadFile downloadFile, int position, boolean start) {
+    private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
 		// TODO: Start play at curr pos on rebuffer instead of restart
         try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
@@ -809,8 +851,32 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setDataSource(file.getPath());
             setPlayerState(PREPARING);
-            mediaPlayer.prepare();
-            setPlayerState(PREPARED);
+			
+			mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+				public void onPrepared(MediaPlayer mp) {
+					try {
+						setPlayerState(PREPARED);
+
+						synchronized (DownloadServiceImpl.this) {
+							if (position != 0) {
+								Log.i(TAG, "Restarting player from position " + position);
+								mediaPlayer.seekTo(position);
+							}
+
+							if (start) {
+								mediaPlayer.start();
+								setPlayerState(STARTED);
+							} else {
+								setPlayerState(PAUSED);
+							}
+						}
+
+						lifecycleSupport.serializeDownloadQueue();
+					} catch (Exception x) {
+						handleError(x);
+					}
+				}
+			});
 
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -822,50 +888,40 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                     wakeLock.acquire(60000);
 
                     setPlayerState(COMPLETED);
-
-                    // If COMPLETED and not playing partial file, we are *really" finished
-                    // with the song and can move on to the next.
-                    if (!file.equals(downloadFile.getPartialFile())) {
-                        onSongCompleted();
-                        return;
-                    }
+					
+					if (!file.equals(downloadFile.getPartialFile())) {
+						onSongCompleted();
+						return;
+					}
 
                     // If file is not completely downloaded, restart the playback from the current position.
-                    int pos = mediaPlayer.getCurrentPosition();
+                    int pos = cachedPosition;
                     synchronized (DownloadServiceImpl.this) {
-
-                        // Work-around for apparent bug on certain phones: If close (less than ten seconds) to the end
-                        // of the song, skip to the next rather than restarting it.
-                        Integer duration = downloadFile.getSong().getDuration() == null ? null : downloadFile.getSong().getDuration() * 1000;
-                        if (duration != null) {
-                            if (Math.abs(duration - pos) < 10000) {
-                                Log.i(TAG, "Skipping restart from " + pos  + " of " + duration);
-                                onSongCompleted();
-                                return;
-                            }
-                        }
-
-                        Log.i(TAG, "Requesting restart from " + pos  + " of " + duration);
-                        reset();
-                        bufferTask = new BufferTask(downloadFile, pos);
-                        bufferTask.start();
+						int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
+						Log.i(TAG, "Ending position " + pos + " of " + duration);
+						if(downloadFile.isWorkDone()) {
+							// Reached the end of the song
+							if(Math.abs(duration - pos) < 10000) {
+								onSongCompleted();
+							// Complete was called early even though file is fully buffered
+							} else {
+								Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+								reset();
+								downloadFile.setPlaying(false);
+								doPlay(downloadFile, pos, true);
+								downloadFile.setPlaying(true);
+							}
+						} else {
+							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+							reset();
+							bufferTask = new BufferTask(downloadFile, pos);
+							bufferTask.start();
+						} 
                     }
                 }
             });
-
-            if (position != 0) {
-                Log.i(TAG, "Restarting player from position " + position);
-                mediaPlayer.seekTo(position);
-            }
-
-            if (start) {
-                mediaPlayer.start();
-                setPlayerState(STARTED);
-            } else {
-                setPlayerState(PAUSED);
-            }
-            lifecycleSupport.serializeDownloadQueue();
-
+			
+			mediaPlayer.prepareAsync();
         } catch (Exception x) {
             handleError(x);
         }
@@ -910,6 +966,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public boolean getSleepTimer() {
 		return sleepTimer != null;
 	}
+	
+	@Override
+	public void setVolume(float volume) {
+		if(mediaPlayer != null) {
+			mediaPlayer.setVolume(volume, volume);
+		}
+	}
 
     private void handleError(Exception x) {
         Log.w(TAG, "Media player error: " + x, x);
@@ -935,7 +998,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         // Need to download current playing?
-        if (currentPlaying != null && currentPlaying != currentDownloading && !currentPlaying.isCompleteFileAvailable()) {
+        if (currentPlaying != null && currentPlaying != currentDownloading && !currentPlaying.isWorkDone()) {
             // Cancel current download, if necessary.
             if (currentDownloading != null) {
                 currentDownloading.cancelDownload();

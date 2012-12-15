@@ -70,17 +70,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.domain.Indexes;
-import github.daneren2005.dsub.domain.JukeboxStatus;
-import github.daneren2005.dsub.domain.Lyrics;
-import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.*;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
-import github.daneren2005.dsub.domain.MusicFolder;
-import github.daneren2005.dsub.domain.Playlist;
-import github.daneren2005.dsub.domain.SearchCritera;
-import github.daneren2005.dsub.domain.SearchResult;
-import github.daneren2005.dsub.domain.ServerInfo;
-import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
 import github.daneren2005.dsub.service.parser.IndexesParser;
@@ -214,7 +205,7 @@ public class RESTMusicService implements MusicService {
             return cachedIndexes;
         }
 
-        long lastModified = cachedIndexes == null ? 0L : cachedIndexes.getLastModified();
+        long lastModified = (cachedIndexes == null || refresh) ? 0L : cachedIndexes.getLastModified();
 
         List<String> parameterNames = new ArrayList<String>();
         List<Object> parameterValues = new ArrayList<Object>();
@@ -234,7 +225,11 @@ public class RESTMusicService implements MusicService {
                 writeCachedIndexes(context, indexes, musicFolderId);
                 return indexes;
             }
-            return cachedIndexes;
+			if(cachedIndexes != null) {
+				return cachedIndexes;
+			} else {
+				return new Indexes(0, new ArrayList<Artist>(), new ArrayList<Artist>());
+			}
         } finally {
             Util.close(reader);
         }
@@ -423,6 +418,25 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
+	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+		names.add("playlistId");
+		values.add(id);
+		for(Integer song: toRemove) {
+			names.add("songIndexToRemove");
+			values.add(song);
+		}
+		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
+    	try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
 	public void updatePlaylist(String id, String name, String comment, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
 		Reader reader = getReader(context, progressListener, "updatePlaylist", null, Arrays.asList("playlistId", "name", "comment"), Arrays.<Object>asList(id, name, comment));
@@ -476,7 +490,7 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getRandomSongs(int size, String musicFolderId, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getRandomSongs(int size, String musicFolderId, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
 		
@@ -490,6 +504,18 @@ public class RESTMusicService implements MusicService {
             names.add("musicFolderId");
             values.add(musicFolderId);
         }
+		if(genre != null) {
+			names.add("genre");
+			values.add(genre);
+		}
+		if(startYear != null) {
+			names.add("fromYear");
+			values.add(startYear);
+		}
+		if(endYear != null) {
+			names.add("toYear");
+			values.add(endYear);
+		}
 
         Reader reader = getReader(context, progressListener, "getRandomSongs", params, names, values);
         try {
@@ -619,6 +645,17 @@ public class RESTMusicService implements MusicService {
         Log.i(TAG, "Using video URL: " + url);
         return url;
     }
+	
+	@Override
+	public String getVideoStreamUrl(Context context, String id) {
+		StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "stream"));
+        builder.append("&id=").append(id);
+        builder.append("&maxBitRate=500");
+
+        String url = rewriteUrlWithRedirect(context, builder.toString());
+        Log.i(TAG, "Using video URL: " + url);
+        return url;
+	}
 
     @Override
     public JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {

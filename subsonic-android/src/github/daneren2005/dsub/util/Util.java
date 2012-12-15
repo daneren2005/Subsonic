@@ -58,6 +58,7 @@ import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import org.apache.http.HttpEntity;
 
@@ -99,9 +100,11 @@ public final class Util {
     public static final String EVENT_PLAYSTATE_CHANGED = "github.daneren2005.dsub.EVENT_PLAYSTATE_CHANGED";
 
 	
+	public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
+	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
+	
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
-	private static int currentVolume = 0;
 
     private static final Map<Integer, Version> SERVER_REST_VERSIONS = new ConcurrentHashMap<Integer, Version>();
 
@@ -326,6 +329,13 @@ public final class Util {
             delete(tmp);
         }
     }
+	public static void renameFile(File from, File to) throws IOException {
+		if(from.renameTo(to)) {
+			Log.i(TAG, "Renamed " + from + " to " + to);
+		} else {
+			atomicCopy(from, to);
+		}
+	}
 
     public static void close(Closeable closeable) {
         try {
@@ -463,10 +473,17 @@ public final class Util {
             return null;
         }
 
-        int minutes = seconds / 60;
+		int hours = seconds / 3600;
+        int minutes = (seconds / 60) % 60;
         int secs = seconds % 60;
 
-        StringBuilder builder = new StringBuilder(6);
+        StringBuilder builder = new StringBuilder(7);
+		if(hours > 0) {
+			builder.append(hours).append(":");
+			if(minutes < 10) {
+				builder.append("0");
+			}
+		}
         builder.append(minutes).append(":");
         if (secs < 10) {
             builder.append("0");
@@ -757,11 +774,10 @@ public final class Util {
 					if(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
 						if(downloadService.getPlayerState() == PlayerState.STARTED) {							
 							SharedPreferences prefs = getPreferences(context);
-							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "0"));
+							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
 							if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
 								lowerFocus = true;
-								currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-								audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)Math.ceil(currentVolume / 4.0), 0);
+								downloadService.setVolume(0.1f);
 							} else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
 								pauseFocus = true;
 								downloadService.pause();
@@ -773,7 +789,7 @@ public final class Util {
 							downloadService.start();
 						} else if(lowerFocus) {
 							lowerFocus = false;
-							audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
+							downloadService.setVolume(1.0f);
 						}
 					}
 				}
@@ -785,7 +801,9 @@ public final class Util {
      * <p>Broadcasts the given song info as the new song being played.</p>
      */
     public static void broadcastNewTrackInfo(Context context, MusicDirectory.Entry song) {
+		DownloadService downloadService = (DownloadServiceImpl)context;
         Intent intent = new Intent(EVENT_META_CHANGED);
+		Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
 
         if (song != null) {
             intent.putExtra("title", song.getTitle());
@@ -794,14 +812,31 @@ public final class Util {
 
             File albumArtFile = FileUtil.getAlbumArtFile(context, song);
             intent.putExtra("coverart", albumArtFile.getAbsolutePath());
+			
+			avrcpIntent.putExtra("track", song.getTitle());
+			avrcpIntent.putExtra("artist", song.getArtist());
+			avrcpIntent.putExtra("album", song.getAlbum());
+			avrcpIntent.putExtra("ListSize",(long) downloadService.getSongs().size());
+			avrcpIntent.putExtra("id", (long) downloadService.getCurrentPlayingIndex()+1);
+			avrcpIntent.putExtra("duration", (long) downloadService.getPlayerDuration());
+			avrcpIntent.putExtra("position", (long) downloadService.getPlayerPosition());
         } else {
             intent.putExtra("title", "");
             intent.putExtra("artist", "");
             intent.putExtra("album", "");
             intent.putExtra("coverart", "");
+			
+			avrcpIntent.putExtra("track", "");
+			avrcpIntent.putExtra("artist", "");
+			avrcpIntent.putExtra("album", "");
+			avrcpIntent.putExtra("ListSize",(long)0);
+			avrcpIntent.putExtra("id", (long) 0);
+			avrcpIntent.putExtra("duration", (long )0);
+			avrcpIntent.putExtra("position", (long) 0);
         }
 
         context.sendBroadcast(intent);
+		context.sendBroadcast(avrcpIntent);
     }
     
     
@@ -811,25 +846,31 @@ public final class Util {
      */
     public static void broadcastPlaybackStatusChange(Context context, PlayerState state) {
         Intent intent = new Intent(EVENT_PLAYSTATE_CHANGED);
+		Intent avrcpIntent = new Intent(AVRCP_PLAYSTATE_CHANGED);
 
         switch (state) {
             case STARTED:
                 intent.putExtra("state", "play");
+				avrcpIntent.putExtra("playing", true);
                 break;
             case STOPPED:
                 intent.putExtra("state", "stop");
+				avrcpIntent.putExtra("playing", false);
                 break;
             case PAUSED:
                 intent.putExtra("state", "pause");
+				avrcpIntent.putExtra("playing", false);
                 break;
             case COMPLETED:
                 intent.putExtra("state", "complete");
+				avrcpIntent.putExtra("playing", false);
                 break;
             default:
                 return; // No need to broadcast.
         }
 
         context.sendBroadcast(intent);
+		context.sendBroadcast(avrcpIntent);
     }
     
     

@@ -28,6 +28,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.media.AudioManager;
 import android.os.Build;
@@ -37,6 +38,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -47,6 +49,7 @@ import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.*;
 import github.daneren2005.dsub.util.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Sindre Mehus
@@ -62,6 +65,11 @@ public class SubsonicTabActivity extends SherlockActivity {
     private View musicButton;
     private View playlistButton;
     private View nowPlayingButton;
+	
+	private static final int SHUFFLE_EVERYTHING = 0;
+	private static final int SHUFFLE_YEAR = 1;
+	private static final int SHUFFLE_YEAR_RANGE = 2;
+	private static final int SHUFFLE_GENRE = 3;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -186,7 +194,7 @@ public class SubsonicTabActivity extends SherlockActivity {
         } else if("holo_fullscreen".equals(theme)) {
 			setTheme(R.style.Theme_DSub_Holo_Fullscreen);
         }else {
-			setTheme(R.style.Theme_DSub_Light);
+			setTheme(R.style.Theme_DSub_Holo);
 		}
     }
 
@@ -436,6 +444,69 @@ public class SubsonicTabActivity extends SherlockActivity {
         		Util.toast(SubsonicTabActivity.this, msg, false);
             }
         }.execute();
+	}
+	
+	protected void onShuffleRequested() {
+		View dialogView = getLayoutInflater().inflate(R.layout.shuffle_dialog, null);
+		final EditText startYearBox = (EditText)dialogView.findViewById(R.id.start_year);
+		final EditText endYearBox = (EditText)dialogView.findViewById(R.id.end_year);
+		final EditText genreBox = (EditText)dialogView.findViewById(R.id.genre);
+		
+		final SharedPreferences prefs = Util.getPreferences(SubsonicTabActivity.this);
+		startYearBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, ""));
+		endYearBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, ""));
+		genreBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, ""));
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(SubsonicTabActivity.this);
+		builder.setTitle("Shuffle By")
+			.setView(dialogView)
+			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					Intent intent = new Intent(SubsonicTabActivity.this, DownloadActivity.class);
+					intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
+					String genre = genreBox.getText().toString();
+					String startYear = startYearBox.getText().toString();
+					String endYear = endYearBox.getText().toString();
+					getDownloadService().setShuffleParams((genre.length() == 0) ? null : genre,
+							(startYear.length() == 0) ? null : startYear, (endYear.length() == 0) ? null : endYear);
+					
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
+					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYear);
+					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
+					editor.commit();
+					
+					Util.startActivityWithoutTransition(SubsonicTabActivity.this, intent);
+				}
+			})
+			.setNegativeButton("Cancel", null);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	public void displaySongInfo(final MusicDirectory.Entry song) {
+		String msg = "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
+		if(!song.getGenre().isEmpty()) {
+			msg += "\nGenre: " + song.getGenre();
+		}
+		if(song.getYear() != null && song.getYear() != 0) {
+			msg += "\nYear: " + song.getYear();
+		}
+		msg += "\nFormat: " + song.getSuffix();
+		if(song.getBitRate() != null && song.getBitRate() != 0) {
+			msg += "\nBitrate: " + song.getBitRate() + " kpbs";
+		}
+		if(song.getDuration() != null && song.getDuration() != 0) {
+			msg += "\nLength: " + Util.formatDuration(song.getDuration());
+		}
+		msg += "\nSize: " + Util.formatBytes(song.getSize());
+		
+		new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(song.getTitle())
+			.setMessage(msg)
+			.show();
 	}
 
     private void setUncaughtExceptionHandler() {

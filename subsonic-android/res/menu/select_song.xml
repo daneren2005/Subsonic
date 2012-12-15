@@ -47,6 +47,10 @@
 		android:title="@string/menu.add_playlist"/>
 		
 	<item 
+		android:id="@+id/menu_remove_playlist"
+		android:title="@string/menu.remove_playlist"/>
+		
+	<item 
 		android:id="@+id/menu_play_last"
 		android:icon="@drawable/action_play_all"
 		android:title="@string/menu.play_last"

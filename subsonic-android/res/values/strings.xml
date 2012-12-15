@@ -17,6 +17,9 @@
 	<string name="common.info">Details</string>
 	<string name="common.name">Name</string>
 	<string name="common.comment">Comment</string>
+	<string name="common.webview">Play Web View (Flash)</string>
+	<string name="common.play_external">Play External Player</string>
+	<string name="common.stream_external">Stream External Player</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -50,6 +53,7 @@
     <string name="menu.settings">Settings</string>
     <string name="menu.help">Help</string>
 	<string name="menu.add_playlist">Add To Playlist</string>
+	<string name="menu.remove_playlist">Remove From Playlist</string>
 	<string name="menu.deleted_playlist">Deleted playlist %s</string>
 	<string name="menu.deleted_playlist_error">Failed to delete playlist %s</string>
 
@@ -132,8 +136,11 @@
     <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your Subsonic server.</string>
 	<string name="download.show_downloading">Show Downloading</string>
 	<string name="download.show_now_playing">Show Now Playing</string>
+	<string name="download.timer_length">Timer Length</string>
 	<string name="download.start_timer">Start Timer</string>
 	<string name="download.stop_timer">Stop Timer</string>
+	<string name="download.need_download">Video needs to be downloaded first</string>
+	<string name="download.no_streaming_player">No player can play this stream</string>
     
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
@@ -142,6 +149,7 @@
 	<string name="playlist_error">Failed to grab list of playlists</string>
 	<string name="updated_playlist">Added %1$s songs to \"%2$s\"</string>
     <string name="updated_playlist_error">Failed to update \"%s\", please try later.</string>
+	<string name="removed_playlist">Removed %1$s songs from \"%2$s\"</string>
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>
@@ -232,6 +240,10 @@
 	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
 	<string name="settings.temp_loss_lower">Always lower volume</string>
 	<string name="settings.temp_loss_nothing">Do Nothing</string>
+	
+	<string name="shuffle.startYear">Start Year:</string>
+	<string name="shuffle.endYear">End Year:</string>
+	<string name="shuffle.genre">Genre:</string>
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
 

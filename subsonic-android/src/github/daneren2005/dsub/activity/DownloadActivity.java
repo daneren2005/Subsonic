@@ -31,6 +31,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -353,16 +354,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         } else {
             visualizerView = new VisualizerView(this);
             visualizerViewLayout.addView(visualizerView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-
-            visualizerView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    visualizerView.setActive(!visualizerView.isActive());
-                    getDownloadService().setShowVisualization(visualizerView.isActive());
-                    updateButtons();
-                    return true;
-                }
-            });
         }
 
         // TODO: Extract to utility method and cache.
@@ -548,6 +539,13 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				inflater.inflate(R.menu.nowplaying, menu);
 			else
 				inflater.inflate(R.menu.nowplaying_downloading, menu);
+			
+			if(getDownloadService() != null && getDownloadService().getSleepTimer()) {
+				menu.findItem(R.id.menu_toggle_timer).setTitle(R.string.download_stop_timer);
+			}
+			if(getDownloadService() != null && getDownloadService().getKeepScreenOn()) {
+				menu.findItem(R.id.menu_screen_on_off).setTitle(R.string.download_menu_screen_off);
+			}
 		}
 		return true;
 	}
@@ -624,6 +622,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             		getDownloadService().setKeepScreenOn(true);
             	}
+				invalidateOptionsMenu();
                 return true;
             case R.id.menu_shuffle:
                 getDownloadService().shuffle();
@@ -642,8 +641,9 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 			case R.id.menu_toggle_timer:
 				if(getDownloadService().getSleepTimer()) {
 					getDownloadService().stopSleepTimer();
+					invalidateOptionsMenu();
 				} else {
-					getDownloadService().startSleepTimer();
+					startTimer();
 				}
 				return true;
 			case R.id.menu_exit:
@@ -656,6 +656,9 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				songs = new ArrayList<MusicDirectory.Entry>(1);
 				songs.add(song.getSong());
 				addToPlaylist(songs);
+				return true;
+			case R.id.menu_info:
+				displaySongInfo(song.getSong());
 				return true;
             default:
                 return false;
@@ -705,6 +708,35 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             }
         }.execute();
     }
+	
+	protected void startTimer() {
+		View dialogView = getLayoutInflater().inflate(R.layout.start_timer, null);
+		final EditText lengthBox = (EditText)dialogView.findViewById(R.id.timer_length);
+		
+		final SharedPreferences prefs = Util.getPreferences(DownloadActivity.this);
+		lengthBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, ""));
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(DownloadActivity.this);
+		builder.setTitle("Set Timer")
+			.setView(dialogView)
+			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					String length = lengthBox.getText().toString();
+					
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, length);
+					editor.commit();
+					
+					getDownloadService().setSleepTimerDuration(Integer.parseInt(length));
+					getDownloadService().startSleepTimer();
+					invalidateOptionsMenu();
+				}
+			})
+			.setNegativeButton("Cancel", null);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
 
     private void toggleFullscreenAlbumArt() {
     	scrollToCurrent();
@@ -800,7 +832,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             durationTextView.setText(Util.formatDuration(millisTotal / 1000));
             progressBar.setMax(millisTotal == 0 ? 100 : millisTotal); // Work-around for apparent bug.
             progressBar.setProgress(millisPlayed);
-            progressBar.setSlidingEnabled(currentPlaying.isCompleteFileAvailable() || getDownloadService().isJukeboxEnabled());
+            progressBar.setSlidingEnabled(currentPlaying.isWorkDone() || getDownloadService().isJukeboxEnabled());
         } else {
             positionTextView.setText("0:00");
             durationTextView.setText("-:--");
@@ -819,14 +851,10 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 statusTextView.setText(R.string.download_playerstate_buffering);
                 break;
             case STARTED:
-                if (getDownloadService().isShufflePlayEnabled()) {
-                    statusTextView.setText(R.string.download_playerstate_playing_shuffle);
-                } else {
-                    statusTextView.setText(null);
-                }
+				statusTextView.setText((currentPlaying != null) ? (currentPlaying.getSong().getArtist() + " - " + currentPlaying.getSong().getAlbum()) : null);
                 break;
             default:
-                statusTextView.setText(null);
+                statusTextView.setText((currentPlaying != null) ? (currentPlaying.getSong().getArtist() + " - " + currentPlaying.getSong().getAlbum()) : null);
                 break;
         }
 

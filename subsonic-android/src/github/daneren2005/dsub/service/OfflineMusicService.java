@@ -34,6 +34,7 @@ import java.util.Set;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
@@ -86,7 +87,7 @@ public class OfflineMusicService extends RESTMusicService {
 
         Set<String> names = new HashSet<String>();
 
-        for (File file : FileUtil.listMusicFiles(dir)) {
+        for (File file : FileUtil.listMediaFiles(dir)) {
             String name = getName(file);
             if (name != null & !names.contains(name)) {
                 names.add(name);
@@ -110,7 +111,7 @@ public class OfflineMusicService extends RESTMusicService {
         return FileUtil.getBaseName(name);
     }
 
-    private MusicDirectory.Entry createEntry(Context context, File file, String name) {
+    private MusicDirectory.Entry createEntry(Context context, File file, String name) {		
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         entry.setDirectory(file.isDirectory());
         entry.setId(file.getPath());
@@ -121,6 +122,20 @@ public class OfflineMusicService extends RESTMusicService {
         if (file.isFile()) {
             entry.setArtist(file.getParentFile().getParentFile().getName());
             entry.setAlbum(file.getParentFile().getName());
+			
+			try {
+				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+				metadata.setDataSource(file.getAbsolutePath());
+				entry.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
+				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+				entry.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
+				String year = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
+				entry.setYear(Integer.parseInt((year != null) ? year : "0"));
+				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+				entry.setDuration(Integer.parseInt(length) / 1000);
+			} catch(Exception e) {
+				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+			}
         }
         entry.setTitle(name);
         entry.setSuffix(FileUtil.getExtension(file.getName().replace(".complete", "")));
@@ -129,6 +144,9 @@ public class OfflineMusicService extends RESTMusicService {
         if (albumArt.exists()) {
             entry.setCoverArt(albumArt.getPath());
         }
+		if(FileUtil.isVideoFile(file)) {
+			entry.setVideo(true);
+		}
         return entry;
     }
 
@@ -174,7 +192,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 	
 	private void recursiveAlbumSearch(String artistName, File file, SearchCritera criteria, Context context, List<MusicDirectory.Entry> albums, List<MusicDirectory.Entry> songs) {
-		for(File albumFile : FileUtil.listMusicFiles(file)) {
+		for(File albumFile : FileUtil.listMediaFiles(file)) {
 			if(albumFile.isDirectory()) {
 				String albumName = getName(albumFile);
 				if(matchCriteria(criteria, albumName)) {
@@ -183,7 +201,7 @@ public class OfflineMusicService extends RESTMusicService {
 					albums.add(album);
 				}
 
-				for(File songFile : FileUtil.listMusicFiles(albumFile)) {
+				for(File songFile : FileUtil.listMediaFiles(albumFile)) {
 					String songName = getName(songFile);
 					if(songFile.isDirectory()) {
 						recursiveAlbumSearch(artistName, songFile, criteria, context, albums, songs);
@@ -292,6 +310,11 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 	
 	@Override
+	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Removing from playlist not available in offline mode");
+	}
+	
+	@Override
 	public void updatePlaylist(String id, String name, String comment, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException("Updating playlist not available in offline mode");
 	}
@@ -313,6 +336,11 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public String getVideoUrl(Context context, String id) {
+        return null;
+    }
+	
+	@Override
+    public String getVideoStreamUrl(Context context, String id) {
         return null;
     }
 
@@ -352,7 +380,7 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 
     @Override
-    public MusicDirectory getRandomSongs(int size, String folder, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         File root = FileUtil.getMusicDirectory(context);
         List<File> children = new LinkedList<File>();
         listFilesRecursively(root, children);
@@ -371,7 +399,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 
     private void listFilesRecursively(File parent, List<File> children) {
-        for (File file : FileUtil.listMusicFiles(parent)) {
+        for (File file : FileUtil.listMediaFiles(parent)) {
             if (file.isFile()) {
                 children.add(file);
             } else {

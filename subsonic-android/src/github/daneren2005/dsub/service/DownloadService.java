@@ -38,6 +38,8 @@ public interface DownloadService {
     void setShufflePlayEnabled(boolean enabled);
 
     boolean isShufflePlayEnabled();
+	
+	void setShuffleParams(String genre, String startYear, String endYear);
 
     void shuffle();
 
@@ -124,4 +126,6 @@ public interface DownloadService {
 	void stopSleepTimer();
 	
 	boolean getSleepTimer();
+	
+	void setVolume(float volume);
 }

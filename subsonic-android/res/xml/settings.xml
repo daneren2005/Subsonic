@@ -109,7 +109,7 @@
         <ListPreference
                 android:title="@string/settings.theme_title"
                 android:key="theme"
-                android:defaultValue="light"
+                android:defaultValue="holo"
                 android:entryValues="@array/themeValues"
                 android:entries="@array/themeNames"/>
 
@@ -161,17 +161,11 @@
                 android:key="randomSize"
                 android:defaultValue="20"
 				android:digits="0123456789"/>
-
-			<EditTextPreference
-				android:title="@string/settings.sleep_timer_duration_title"
-				android:key="sleepTimerDuration"
-				android:defaultValue="60"
-				android:digits="0123456789"/>
 				
 			<ListPreference
 				android:title="@string/settings.temp_loss_title"
 				android:key="tempLoss"
-				android:defaultValue="0"
+				android:defaultValue="1"
 				android:entryValues="@array/tempLossValues"
 				android:entries="@array/tempLossNames"/>
 			

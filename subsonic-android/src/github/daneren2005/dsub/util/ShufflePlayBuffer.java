@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
@@ -48,7 +49,10 @@ public class ShufflePlayBuffer {
     private Context context;
     private int currentServer;
 	private String currentFolder;
-	private boolean useStarred = false;
+	private String genre;
+	private String startYear;
+	private String endYear;
+	private SharedPreferences prefs;
 
     public ShufflePlayBuffer(Context context) {
         this.context = context;
@@ -60,6 +64,19 @@ public class ShufflePlayBuffer {
             }
         };
         executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
+        prefs = Util.getPreferences(context);
+        prefs.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+			
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				if (key.equals(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR)){
+					synchronized (buffer) {
+						buffer.clear();
+					}
+				}
+				
+			}
+		});
     }
 
     public List<MusicDirectory.Entry> get(int size) {
@@ -83,19 +100,17 @@ public class ShufflePlayBuffer {
 
         // Check if active server has changed.
         clearBufferIfnecessary();
-        
-//        Util.getPreferences(context).getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false);
 
         if (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context))) {
             return;
         }
 
         try {
+        	
             MusicService service = MusicServiceFactory.getMusicService(context);
-            //prefs = Util.getPreferences(context);
+            
       
-            if (useStarred){
-//            if (prefs.getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false)){
+            if (prefs.getBoolean(Constants.PREFERENCES_BUILD_RANDOM_FROM_STAR, false)){
             	
             	MusicDirectory songs = service.getStarredList(context, new ProgressListener() {
      				@Override
@@ -115,11 +130,11 @@ public class ShufflePlayBuffer {
                  
                  synchronized (buffer) {
                     int i;
-     				for (i=1;i<=30;i++){
+     				for (i=1;i<=200;i++){
                      	buffer.add(starlist.get(i));
                      	
                      }
-                     Log.i(TAG, "Refilled shuffle play buffer with 30 starred songs.");
+                     Log.i(TAG, "Refilled shuffle play buffer with 200 starred songs.");
                  }
             	
             	
@@ -127,13 +142,12 @@ public class ShufflePlayBuffer {
             	
             	int n = CAPACITY - buffer.size();
     			String folder = Util.getSelectedMusicFolderId(context);
-                MusicDirectory songs = service.getRandomSongs(n, folder, context, null);
+                MusicDirectory songs = service.getRandomSongs(n, folder, genre, startYear, endYear, context, null);
                 
                 synchronized (buffer) {
                     buffer.addAll(songs.getChildren());
                     Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildren().size() + " songs.");
                 }
-            	
             }
         } catch (Exception x) {
             Log.w(TAG, "Failed to refill shuffle play buffer.", x);
@@ -149,12 +163,18 @@ public class ShufflePlayBuffer {
                 currentServer = Util.getActiveServer(context);
 				currentFolder = Util.getSelectedMusicFolderId(context);
                 buffer.clear();
-            }else if(useStarred != prefsUsedStarred){
-            	useStarred = prefsUsedStarred;
-            	Log.d(TAG, "Use starred songs preference changed buffer cleared");
-            	buffer.clear();
             }
         }
     }
+	
+	public void setOptions(String genre, String startYear, String endYear) {
+		this.genre = genre;
+		this.startYear = startYear;
+		this.endYear = endYear;
+		
+		synchronized (buffer) {
+			buffer.clear();
+		}
+	}
 
 }

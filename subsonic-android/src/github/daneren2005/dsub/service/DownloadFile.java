@@ -56,6 +56,9 @@ public class DownloadFile {
     private boolean save;
     private boolean failed;
     private int bitRate;
+	private boolean isPlaying = false;
+	private boolean saveWhenDone = false;
+	private boolean completeWhenDone = false;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
         this.context = context;
@@ -64,7 +67,7 @@ public class DownloadFile {
         saveFile = FileUtil.getSongFile(context, song);
         bitRate = Util.getMaxBitrate(context);
         partialFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
-                "." + bitRate + ".partial." + FileUtil.getExtension(saveFile.getName()));
+                ".partial." + FileUtil.getExtension(saveFile.getName()));
         completeFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
                 ".complete." + FileUtil.getExtension(saveFile.getName()));
         mediaStoreService = new MediaStoreService(context);
@@ -78,6 +81,9 @@ public class DownloadFile {
      * Returns the effective bit rate.
      */
     public int getBitRate() {
+		if(!partialFile.exists()) {
+			bitRate = Util.getMaxBitrate(context);
+		}
         if (bitRate > 0) {
             return bitRate;
         }
@@ -122,7 +128,7 @@ public class DownloadFile {
     }
 
     public synchronized boolean isWorkDone() {
-        return saveFile.exists() || (completeFile.exists() && !save);
+        return saveFile.exists() || (completeFile.exists() && !save) || saveWhenDone || completeWhenDone;
     }
 
     public synchronized boolean isDownloading() {
@@ -181,6 +187,30 @@ public class DownloadFile {
             }
         }
     }
+	
+	public void setPlaying(boolean isPlaying) {
+		try {
+			if(saveWhenDone && isPlaying == false) {
+				Util.renameFile(completeFile, saveFile);
+				saveWhenDone = false;
+			} else if(completeWhenDone && isPlaying == false) {
+				if(save) {
+					Util.renameFile(partialFile, saveFile);
+                    mediaStoreService.saveInMediaStore(DownloadFile.this);
+				} else {
+					Util.renameFile(partialFile, completeFile);
+				}
+				completeWhenDone = false;
+			}
+		} catch(IOException ex) {
+			Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile);
+		}
+		
+		this.isPlaying = isPlaying;
+	}
+	public boolean getPlaying() {
+		return isPlaying;
+	}
 
     @Override
     public String toString() {
@@ -214,7 +244,11 @@ public class DownloadFile {
                 }
                 if (completeFile.exists()) {
                     if (save) {
-                        Util.atomicCopy(completeFile, saveFile);
+						if(isPlaying) {
+							saveWhenDone = true;
+						} else {
+							Util.renameFile(completeFile, saveFile);
+						}
                     } else {
                         Log.i(TAG, completeFile + " already exists. Skipping.");
                     }
@@ -243,12 +277,16 @@ public class DownloadFile {
 
                 downloadAndSaveCoverArt(musicService);
 
-                if (save) {
-                    Util.atomicCopy(partialFile, saveFile);
-                    mediaStoreService.saveInMediaStore(DownloadFile.this);
-                } else {
-                    Util.atomicCopy(partialFile, completeFile);
-                }
+				if(isPlaying) {
+					completeWhenDone = true;
+				} else {
+					if(save) {
+						Util.renameFile(partialFile, saveFile);
+						mediaStoreService.saveInMediaStore(DownloadFile.this);
+					} else {
+						Util.renameFile(partialFile, completeFile);
+					}
+				}
 
             } catch (Exception x) {
                 Util.close(out);
@@ -269,7 +307,7 @@ public class DownloadFile {
 				if (wifiLock != null) {
 					wifiLock.release();
 				}
-                new CacheCleaner(context, DownloadServiceImpl.getInstance()).clean();
+                new CacheCleaner(context, DownloadServiceImpl.getInstance()).cleanSpace();
             }
         }
 

@@ -53,7 +53,7 @@ public class CachedMusicService implements MusicService {
     private final LRUCache<String, TimeLimitedCache<MusicDirectory>> cachedMusicDirectories;
     private final TimeLimitedCache<Boolean> cachedLicenseValid = new TimeLimitedCache<Boolean>(120, TimeUnit.SECONDS);
     private final TimeLimitedCache<Indexes> cachedIndexes = new TimeLimitedCache<Indexes>(60 * 60, TimeUnit.SECONDS);
-    private final TimeLimitedCache<List<Playlist>> cachedPlaylists = new TimeLimitedCache<List<Playlist>>(60, TimeUnit.SECONDS);
+    private final TimeLimitedCache<List<Playlist>> cachedPlaylists = new TimeLimitedCache<List<Playlist>>(3600, TimeUnit.SECONDS);
     private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<List<MusicFolder>>(10 * 3600, TimeUnit.SECONDS);
     private String restUrl;
 
@@ -146,6 +146,7 @@ public class CachedMusicService implements MusicService {
 
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
+		cachedPlaylists.clear();
         musicService.createPlaylist(id, name, entries, context, progressListener);
     }
 	
@@ -157,6 +158,11 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		musicService.addToPlaylist(id, toAdd, context, progressListener);
+	}
+	
+	@Override
+	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
+		musicService.removeFromPlaylist(id, toRemove, context, progressListener);
 	}
 	
 	@Override
@@ -185,8 +191,8 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getRandomSongs(int size, String folder, Context context, ProgressListener progressListener) throws Exception {
-        return musicService.getRandomSongs(size, folder, context, progressListener);
+    public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
+        return musicService.getRandomSongs(size, folder, genre, startYear, endYear, context, progressListener);
     }
 
     @Override
@@ -212,6 +218,11 @@ public class CachedMusicService implements MusicService {
     @Override
     public String getVideoUrl(Context context, String id) {
         return musicService.getVideoUrl(context, id);
+    }
+	
+	@Override
+    public String getVideoStreamUrl(Context context, String id) {
+        return musicService.getVideoStreamUrl(context, id);
     }
 
     @Override

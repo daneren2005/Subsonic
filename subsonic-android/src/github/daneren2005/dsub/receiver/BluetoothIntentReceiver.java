@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.receiver;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,8 +52,11 @@ public class BluetoothIntentReceiver extends BroadcastReceiver {
 			intent.getIntExtra("android.bluetooth.a2dp.extra.SINK_STATE", -1) == STATE_CONNECTED) {
 			return true;
 		}
-		if ("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED".equals(intent.getAction()) &&
+		else if ("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED".equals(intent.getAction()) &&
 			intent.getIntExtra("android.bluetooth.profile.extra.STATE", -1) == STATE_CONNECTED) {
+			return true;
+		}
+		else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(intent.getAction())) {
 			return true;
 		}
 		return false;
@@ -62,8 +66,11 @@ public class BluetoothIntentReceiver extends BroadcastReceiver {
 			intent.getIntExtra("android.bluetooth.a2dp.extra.SINK_STATE", -1) == STATE_DISCONNECTED) {
 			return true;
 		}
-		if ("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED".equals(intent.getAction()) &&
+		else if ("android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED".equals(intent.getAction()) &&
 			intent.getIntExtra("android.bluetooth.profile.extra.STATE", -1) == STATE_DISCONNECTED) {
+			return true;
+		}
+		else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(intent.getAction())) {
 			return true;
 		}
 		return false;
