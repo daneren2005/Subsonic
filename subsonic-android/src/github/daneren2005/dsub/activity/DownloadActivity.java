@@ -657,6 +657,9 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				songs.add(song.getSong());
 				addToPlaylist(songs);
 				return true;
+			case R.id.menu_info:
+				displaySongInfo(song.getSong());
+				return true;
             default:
                 return false;
         }
