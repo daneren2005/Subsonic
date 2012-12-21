@@ -47,6 +47,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -59,10 +62,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Sindre Mehus
@@ -88,7 +87,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
     private final Handler handler = new Handler();
     private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
-    private final ShufflePlayBuffer shufflePlayBuffer = new ShufflePlayBuffer(this);
+    private ShufflePlayBuffer shufflePlayBuffer;
 
     private final LRUCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LRUCache<MusicDirectory.Entry, DownloadFile>(100);
     private final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
@@ -112,6 +111,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private VisualizerController visualizerController;
     private boolean showVisualization;
     private boolean jukeboxEnabled;
+    //public A2DPBroadcaster BTBroadcaster;
 	private ScheduledExecutorService executorService;
 	
 	private Timer sleepTimer;
@@ -137,6 +137,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public void onCreate() {
         super.onCreate();
+        
+//        BTBroadcaster = new A2DPBroadcaster(getApplicationContext(), this);
+        
+        shufflePlayBuffer = new ShufflePlayBuffer(this);
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
@@ -189,6 +193,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		keepScreenOn = prefs.getBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, false);
 
 		instance = this;
+		
+		
 		lifecycleSupport.onCreate();
     }
 
@@ -490,6 +496,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
             Util.broadcastNewTrackInfo(this, null);
         }
+        
+        try{
+        	//BTBroadcaster.broadcastMetadata();
+        }catch(Exception e){
+        	//do nothing
+        }
+        
+        
 
         if (currentPlaying != null && showNotification) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
@@ -729,8 +743,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         boolean show = this.playerState == PAUSED && playerState == PlayerState.STARTED;
         boolean hide = this.playerState == STARTED && playerState == PlayerState.PAUSED;
         Util.broadcastPlaybackStatusChange(this, playerState);
-
+        
         this.playerState = playerState;
+        
+        try{
+        	//BTBroadcaster.onPlayStateChanged();
+        }catch (Exception x){
+        	//do nothing
+        }
+        
+        
+        
         mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
         
         if (show) {

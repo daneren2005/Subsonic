@@ -178,6 +178,8 @@
     <string name="settings.connection_failure">Connection failure.</string>
     <string name="settings.invalid_url">Please specify a valid URL.</string>
     <string name="settings.invalid_username">Please specify a valid username (no trailing spaces).</string>
+    <string name="settings.bld_rndm_strd_title">Build Random from Starred</string>
+    <string name="settings.bld_rndm_strd_summary">Use only starred songs to create random playlist</string>
     <string name="settings.appearance_title">Appearance</string>
     <string name="settings.theme_title">Theme</string>
     <string name="settings.theme_light">Light</string>

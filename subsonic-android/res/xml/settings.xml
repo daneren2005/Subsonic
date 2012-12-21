@@ -150,6 +150,12 @@
 	<PreferenceCategory
             android:title="@string/settings.playlist_title">
 				
+			<CheckBoxPreference 
+			    android:key="useStarredSongsForRandom" 
+			    android:title="@string/settings.bld_rndm_strd_title"
+			    android:summary="@string/settings.bld_rndm_strd_summary" 
+			    android:defaultValue="false"/>
+			
 			<EditTextPreference
                 android:title="@string/settings.playlist_random_size_title"
                 android:key="randomSize"
@@ -162,6 +168,7 @@
 				android:defaultValue="1"
 				android:entryValues="@array/tempLossValues"
 				android:entries="@array/tempLossNames"/>
+			
 	</PreferenceCategory>
 	
 	<PreferenceCategory

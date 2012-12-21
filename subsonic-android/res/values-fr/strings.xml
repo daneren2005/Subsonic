@@ -109,6 +109,8 @@
     <string name="settings.connection_failure">Connection échouée.</string>
     <string name="settings.invalid_url">Veuillez spécifier un URL valide.</string>
     <string name="settings.invalid_username">Veuillez spécifier un nom d\'usager valide (sans espace à la fin).</string>
+    <string name="settings.bld_rndm_strd_title">Build Random from Starred</string>
+    <string name="settings.bld_rndm_strd_summary">Use only starred songs to create random playlist</string>
     <string name="settings.appearance_title">Apparence</string>
     <string name="settings.theme_title">Thème</string>
     <string name="settings.theme_wheat">Blé</string>
@@ -204,5 +206,7 @@
         <item quantity="one">Un jour restant à la période d\'essai</item>
         <item quantity="other">%d jours restant à la période d\'essai</item>
     </plurals>
+    
+    
 
 </resources>
