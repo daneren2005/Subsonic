@@ -170,7 +170,7 @@
         <EditTextPreference
                 android:title="@string/settings.cache_size"
                 android:key="cacheSize"
-                android:defaultValue="500"
+                android:defaultValue="2000"
 				android:digits="0123456789"/>
 
         <EditTextPreference
