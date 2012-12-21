@@ -23,19 +23,40 @@ import java.util.List;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.SectionIndexer;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.Artist;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Sindre Mehus
  */
-public class ArtistAdapter extends ArrayAdapter<Artist> {
+public class ArtistAdapter extends ArrayAdapter<Artist> implements SectionIndexer {
 
     private final SubsonicTabActivity activity;
+	
+	// Both arrays are indexed by section ID.
+    private final Object[] sections;
+    private final Integer[] positions;
 
     public ArtistAdapter(SubsonicTabActivity activity, List<Artist> artists) {
         super(activity, R.layout.artist_list_item, artists);
         this.activity = activity;
+		
+		Set<String> sectionSet = new LinkedHashSet<String>(30);
+        List<Integer> positionList = new ArrayList<Integer>(30);
+        for (int i = 0; i < artists.size(); i++) {
+            Artist artist = artists.get(i);
+            String index = artist.getIndex();
+            if (!sectionSet.contains(index)) {
+                sectionSet.add(index);
+                positionList.add(i);
+            }
+        }
+        sections = sectionSet.toArray(new Object[sectionSet.size()]);
+        positions = positionList.toArray(new Integer[positionList.size()]);
     }
 
     @Override
@@ -49,5 +70,26 @@ public class ArtistAdapter extends ArrayAdapter<Artist> {
 		}
 		view.setArtist(entry);
 		return view;
+    }
+	
+	@Override
+    public Object[] getSections() {
+        return sections;
+    }
+
+    @Override
+    public int getPositionForSection(int section) {
+        section = Math.min(section, positions.length - 1);
+        return positions[section];
+    }
+
+    @Override
+    public int getSectionForPosition(int pos) {
+        for (int i = 0; i < sections.length - 1; i++) {
+            if (pos < positions[i + 1]) {
+                return i;
+            }
+        }
+        return sections.length - 1;
     }
 }
