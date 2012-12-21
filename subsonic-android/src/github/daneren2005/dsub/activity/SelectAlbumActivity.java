@@ -286,6 +286,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             case R.id.song_menu_play_now:
 				getDownloadService().clear();
                 getDownloadService().download(songs, false, true, true, false);
+				Util.startActivityWithoutTransition(SelectAlbumActivity.this, DownloadActivity.class);
                 break;
             case R.id.song_menu_play_next:
                 getDownloadService().download(songs, false, false, true, false);
