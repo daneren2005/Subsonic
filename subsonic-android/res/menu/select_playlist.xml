@@ -5,11 +5,6 @@
 		android:icon="@drawable/action_refresh"
 		android:title="@string/menu.refresh"
 		android:showAsAction="always|withText"/>
-		
-	<item 
-		android:id="@+id/menu_help"
-		android:icon="@drawable/action_help"
-		android:title="@string/menu.help"/>
 
 	<item 
 		android:id="@+id/menu_settings"
