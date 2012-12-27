@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.daneren2005.dsub"
           android:installLocation="internalOnly"
-          android:versionCode="21"
-          android:versionName="3.6.1">
+          android:versionCode="22"
+          android:versionName="3.6.2">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
