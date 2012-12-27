@@ -30,6 +30,12 @@
     <string name="main.welcome_title">Welcome!</string>
     <string name="main.welcome_text">Welcome to DSub! The app is currently configured to use the Subsonic demo server. After you\'ve
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
+	<string name="main.about_title">About DSub</string>
+	<string name="main.about_text">Author: Scott Jackson
+		\nEmail: daneren2005@gmail.com
+		\nVersion: %1$s
+		\nUsed Space: %2$s of %3$s
+		\nAvailable Space: %4$s of %5$s</string>
     <string name="main.select_server">Select server</string>
     <string name="main.shuffle">Shuffle play</string>
     <string name="main.offline">Go Offline</string>
@@ -52,6 +58,7 @@
     <string name="menu.exit">Exit</string>
     <string name="menu.settings">Settings</string>
     <string name="menu.help">Help</string>
+	<string name="menu.about">About</string>
 	<string name="menu.add_playlist">Add To Playlist</string>
 	<string name="menu.remove_playlist">Remove From Playlist</string>
 	<string name="menu.deleted_playlist">Deleted playlist %s</string>

@@ -34,7 +34,10 @@ import com.actionbarsherlock.view.MenuInflater;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -44,6 +47,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.PopupWindow;
+import java.io.File;
 
 public class MainActivity extends SubsonicTabActivity {
 
@@ -159,6 +163,9 @@ public class MainActivity extends SubsonicTabActivity {
             case R.id.menu_help:
                 startActivity(new Intent(this, HelpActivity.class));
                 return true;
+			case R.id.menu_about:
+				showAboutDialog();
+				return true;
         }
 
         return false;
@@ -253,6 +260,26 @@ public class MainActivity extends SubsonicTabActivity {
             }
         }
     }
+	
+	private void showAboutDialog() {
+		try {
+			File rootFolder = FileUtil.getMusicDirectory(MainActivity.this);
+			StatFs stat = new StatFs(rootFolder.getPath());
+			long bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
+			long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+			
+			String msg = getResources().getString(R.string.main_about_text,
+				getPackageManager().getPackageInfo(getPackageName(), 0).versionName,
+				Util.formatBytes(FileUtil.getUsedSize(MainActivity.this, rootFolder)),
+				Util.formatBytes(Util.getCacheSizeMB(MainActivity.this) * 1024L * 1024L),
+				Util.formatBytes(bytesAvailableFs),
+				Util.formatBytes(bytesTotalFs));
+			Util.info(this, R.string.main_about_title, msg);
+		} catch(Exception e) {
+			Util.toast(MainActivity.this, "Failed to open dialog");
+		}
+		// Util.toast(MainActivity.this, "Size: " + Util.formatBytes(FileUtil.getUsedSize(MainActivity.this, FileUtil.getMusicDirectory(MainActivity.this))));
+	}
 
     private void showAlbumList(String type) {		
         Intent intent = new Intent(this, SelectAlbumActivity.class);

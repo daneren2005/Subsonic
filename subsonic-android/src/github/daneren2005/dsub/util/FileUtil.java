@@ -292,6 +292,19 @@ public class FileUtil {
         int index = name.lastIndexOf('.');
         return index == -1 ? name : name.substring(0, index);
     }
+	
+	public static long getUsedSize(Context context, File file) {
+		long size = 0L;
+		
+		if(file.isFile()) {
+			return file.length();
+		} else {
+			for (File child : FileUtil.listFiles(file)) {
+				size += getUsedSize(context, child);
+			}
+			return size;
+		}
+	}
 
     public static <T extends Serializable> boolean serialize(Context context, T obj, String fileName) {
         File file = new File(context.getCacheDir(), fileName);
