@@ -361,7 +361,9 @@ public class SubsonicTabActivity extends SherlockActivity {
                     warnIfNetworkOrStorageUnavailable();
 					if(!background) {
 						downloadService.download(songs, save, autoplay, false, shuffle);
-						Util.startActivityWithoutTransition(SubsonicTabActivity.this, DownloadActivity.class);
+						if(!append) {
+							Util.startActivityWithoutTransition(SubsonicTabActivity.this, DownloadActivity.class);
+						}
 					}
 					else {
 						downloadService.downloadBackground(songs, save);
