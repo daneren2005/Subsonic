@@ -95,7 +95,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private final Scrobbler scrobbler = new Scrobbler();
     private final JukeboxService jukeboxService = new JukeboxService(this);
     private DownloadFile currentPlaying;
-	private File currentPlayingFile;
     private DownloadFile currentDownloading;
     private CancellableTask bufferTask;
     private PlayerState playerState = IDLE;
@@ -824,7 +823,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		// TODO: Start play at curr pos on rebuffer instead of restart
         try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-			currentPlayingFile = file;
             downloadFile.updateModificationDate();
             mediaPlayer.setOnCompletionListener(null);
             mediaPlayer.reset();
@@ -904,7 +902,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			
 			mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 				public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-					Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + currentPlayingFile.getPath());
+					Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + file.getPath());
 					reset();
 					downloadFile.setPlaying(false);
 					doPlay(downloadFile, 0, true);
@@ -967,7 +965,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 
     private void handleError(Exception x) {
-		Log.w(TAG, "Media player error with file: " + currentPlayingFile.getPath());
         Log.w(TAG, "Media player error: " + x, x);
         mediaPlayer.reset();
         setPlayerState(IDLE);
