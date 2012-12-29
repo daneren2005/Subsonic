@@ -202,6 +202,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public void onDestroy() {
         super.onDestroy();
+		currentPlaying.setPlaying(false);
 		if(sleepTimer != null){
 			sleepTimer.cancel();
 			sleepTimer.purge();
@@ -1127,7 +1128,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             long byteCount = Math.max(100000, bitRate * 1024 / 8 * BUFFER_LENGTH_SECONDS);
 
             // Find out how large the file should grow before resuming playback.
-            expectedFileSize = partialFile.length() + byteCount;
+            expectedFileSize = (position * bitRate * 1024) + byteCount;
         }
 
         @Override
