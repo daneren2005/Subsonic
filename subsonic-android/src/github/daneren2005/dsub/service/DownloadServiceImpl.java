@@ -672,6 +672,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             bufferTask.cancel();
         }
         try {
+			mediaPlayer.setOnErrorListener(null);
+			mediaPlayer.setOnCompletionListener(null);
             mediaPlayer.reset();
             setPlayerState(IDLE);
         } catch (Exception x) {
@@ -824,7 +826,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
-		// TODO: Start play at curr pos on rebuffer instead of restart
         try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
             downloadFile.updateModificationDate();
@@ -906,7 +907,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			
 			mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 				public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-					Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + file.getPath());
+					Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
 					reset();
 					downloadFile.setPlaying(false);
 					doPlay(downloadFile, 0, true);
