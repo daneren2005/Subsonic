@@ -109,7 +109,12 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
 		if(hideButtons) {
-			inflater.inflate(R.menu.select_album, menu);
+			String albumListType = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
+			if(albumListType != null) {
+				inflater.inflate(R.menu.select_album_list, menu);
+			} else {
+				inflater.inflate(R.menu.select_album, menu);
+			}
 			hideButtons = false;
 		} else {
 			if(Util.isOffline(this)) {
