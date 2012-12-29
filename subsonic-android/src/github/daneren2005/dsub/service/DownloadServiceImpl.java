@@ -202,7 +202,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public void onDestroy() {
         super.onDestroy();
-		currentPlaying.setPlaying(false);
+		if(currentPlaying != null) currentPlaying.setPlaying(false);
 		if(sleepTimer != null){
 			sleepTimer.cancel();
 			sleepTimer.purge();
