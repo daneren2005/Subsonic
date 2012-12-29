@@ -258,24 +258,26 @@ public class DownloadFile {
                 MusicService musicService = MusicServiceFactory.getMusicService(context);
 
                 // Attempt partial HTTP GET, appending to the file if it exists.
-                HttpResponse response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
-                in = response.getEntity().getContent();
-                boolean partial = response.getStatusLine().getStatusCode() == HttpStatus.SC_PARTIAL_CONTENT;
-                if (partial) {
-                    Log.i(TAG, "Executed partial HTTP GET, skipping " + partialFile.length() + " bytes");
-                }
+				if((bitRate * song.getDuration() * 1000 / 8) > partialFile.length()) {
+					HttpResponse response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
+					in = response.getEntity().getContent();
+					boolean partial = response.getStatusLine().getStatusCode() == HttpStatus.SC_PARTIAL_CONTENT;
+					if (partial) {
+						Log.i(TAG, "Executed partial HTTP GET, skipping " + partialFile.length() + " bytes");
+					}
 
-                out = new FileOutputStream(partialFile, partial);
-                long n = copy(in, out);
-                Log.i(TAG, "Downloaded " + n + " bytes to " + partialFile);
-                out.flush();
-                out.close();
+					out = new FileOutputStream(partialFile, partial);
+					long n = copy(in, out);
+					Log.i(TAG, "Downloaded " + n + " bytes to " + partialFile);
+					out.flush();
+					out.close();
 
-                if (isCancelled()) {
-                    throw new Exception("Download of '" + song + "' was cancelled");
-                }
+					if (isCancelled()) {
+						throw new Exception("Download of '" + song + "' was cancelled");
+					}
 
-                downloadAndSaveCoverArt(musicService);
+					downloadAndSaveCoverArt(musicService);
+				}
 
 				if(isPlaying) {
 					completeWhenDone = true;
