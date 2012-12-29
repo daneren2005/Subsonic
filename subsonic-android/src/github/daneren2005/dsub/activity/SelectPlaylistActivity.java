@@ -112,7 +112,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 
             @Override
             protected void done(List<Playlist> result) {
-                list.setAdapter(new PlaylistAdapter(SelectPlaylistActivity.this, PlaylistAdapter.PlaylistComparator.sort(result)));
+                list.setAdapter(new PlaylistAdapter(SelectPlaylistActivity.this, result));
                 emptyTextView.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
             }
         };
