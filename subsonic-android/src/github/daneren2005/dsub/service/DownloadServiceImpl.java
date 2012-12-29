@@ -753,7 +753,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						@Override
 						public void run() {
 							if(mediaPlayer != null) {
-								cachedPosition = mediaPlayer.getCurrentPosition();
+								try {
+									cachedPosition = mediaPlayer.getCurrentPosition();
+								} catch(Exception e) {
+									executorService.shutdown();
+								}
 							}
 						}
 					});
