@@ -911,7 +911,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
 					reset();
 					downloadFile.setPlaying(false);
-					doPlay(downloadFile, 0, true);
+					doPlay(downloadFile, cachedPosition, true);
 					downloadFile.setPlaying(true);
 					return true;
 				}
