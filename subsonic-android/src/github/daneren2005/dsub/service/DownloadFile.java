@@ -257,8 +257,15 @@ public class DownloadFile {
 
                 MusicService musicService = MusicServiceFactory.getMusicService(context);
 
-                // Attempt partial HTTP GET, appending to the file if it exists.
-				if((bitRate * song.getDuration() * 1000 / 8) > partialFile.length()) {
+				// Some devices seem to throw error on partial file which doesn't exist
+				boolean compare;
+				try {
+					compare = (bitRate == 0) || (song.getDuration() == 0) || (partialFile.length() == 0) || (bitRate * song.getDuration() * 1000 / 8) > partialFile.length();
+				} catch(Exception e) {
+					compare = true;
+				}
+				if(compare) {
+					// Attempt partial HTTP GET, appending to the file if it exists.
 					HttpResponse response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
 					in = response.getEntity().getContent();
 					boolean partial = response.getStatusLine().getStatusCode() == HttpStatus.SC_PARTIAL_CONTENT;
