@@ -767,7 +767,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				}
 			};
 			executorService = Executors.newSingleThreadScheduledExecutor();
-			executorService.scheduleWithFixedDelay(runnable, 0L, 200L, TimeUnit.MILLISECONDS);
+			executorService.scheduleWithFixedDelay(runnable, 200L, 200L, TimeUnit.MILLISECONDS);
 		} else {
 			if(executorService != null && !executorService.isShutdown()) {
 				executorService.shutdown();
@@ -846,6 +846,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 							if (position != 0) {
 								Log.i(TAG, "Restarting player from position " + position);
 								mediaPlayer.seekTo(position);
+								cachedPosition = position;
 							}
 
 							if (start) {
