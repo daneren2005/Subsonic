@@ -489,7 +489,7 @@ public class SubsonicTabActivity extends SherlockActivity {
 	
 	public void displaySongInfo(final MusicDirectory.Entry song) {
 		String msg = "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
-		if(!song.getGenre().isEmpty()) {
+		if(song.getGenre() != null && !song.getGenre().isEmpty()) {
 			msg += "\nGenre: " + song.getGenre();
 		}
 		if(song.getYear() != null && song.getYear() != 0) {
@@ -503,7 +503,7 @@ public class SubsonicTabActivity extends SherlockActivity {
 			msg += "\nLength: " + Util.formatDuration(song.getDuration());
 		}
 		msg += "\nSize: " + Util.formatBytes(song.getSize());
-		
+
 		new AlertDialog.Builder(this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(song.getTitle())
