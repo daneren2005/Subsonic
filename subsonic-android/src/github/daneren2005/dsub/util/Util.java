@@ -806,6 +806,8 @@ public final class Util {
 							lowerFocus = false;
 							downloadService.setVolume(1.0f);
 						}
+					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+						downloadService.pause();
 					}
 				}
 			}, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
