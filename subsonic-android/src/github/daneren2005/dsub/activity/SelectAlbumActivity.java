@@ -556,7 +556,14 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 		} else {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
-			startActivity(intent);
+			
+			List<ResolveInfo> intents = getPackageManager()
+				.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+			if(intents != null && intents.size() > 0) {
+				startActivity(intent);
+			}else {
+				Util.toast(this, R.string.download_no_streaming_player);
+			}
 		}
 	}
 	private void streamExternalPlayer(MusicDirectory.Entry entry) {
