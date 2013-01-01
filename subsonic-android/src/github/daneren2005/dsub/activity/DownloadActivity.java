@@ -779,6 +779,11 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 			list = downloadService.getSongs();
 		else
 			list = downloadService.getBackgroundDownloads();
+		
+		if(downloadService.isShufflePlayEnabled())
+			emptyTextView.setText(R.string.download_shuffle_loading);
+		else
+			emptyTextView.setText(R.string.download_empty);
 
         playlistView.setAdapter(new SongListAdapter(list));
         emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);

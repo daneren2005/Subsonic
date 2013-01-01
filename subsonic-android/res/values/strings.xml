@@ -111,6 +111,7 @@
     <string name="select_playlist.empty">No saved playlists on server</string>
 
     <string name="download.empty">Playlist is empty</string>
+	<string name="download.shuffle_loading">Shuffle list is loading...</string>
     <string name="download.playerstate_downloading">Downloading - %s</string>
     <string name="download.playerstate_buffering">Buffering</string>
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
