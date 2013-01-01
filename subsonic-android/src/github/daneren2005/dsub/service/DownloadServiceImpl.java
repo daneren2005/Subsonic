@@ -658,6 +658,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             if (jukeboxEnabled) {
                 jukeboxService.start();
             } else {
+				Util.requestAudioFocus(this);
                 mediaPlayer.start();
             }
             setPlayerState(STARTED);
