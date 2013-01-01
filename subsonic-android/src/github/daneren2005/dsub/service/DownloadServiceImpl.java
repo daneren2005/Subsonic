@@ -149,7 +149,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
         });
 
-        Util.requestAudioFocus(this);
         Util.registerMediaButtonEventReceiver(this);
 
         if (mRemoteControl == null) {
