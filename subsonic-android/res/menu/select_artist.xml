@@ -11,6 +11,12 @@
 		android:icon="@drawable/action_shuffle"
 		android:title="@string/menu.shuffle"
 		android:showAsAction="always|withText"/>
+		
+	<item 
+		android:id="@+id/menu_search"
+		android:icon="@drawable/action_search"
+		android:title="@string/menu.search"
+		android:showAsAction="ifRoom|withText"/>
 
 	<item 
 		android:id="@+id/menu_settings"

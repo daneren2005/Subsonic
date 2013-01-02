@@ -85,6 +85,9 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
             case R.id.menu_help:
                 startActivity(new Intent(this, HelpActivity.class));
                 return true;
+			case R.id.menu_search:
+				onSearchRequested();
+				return true;
         }
 
         return false;

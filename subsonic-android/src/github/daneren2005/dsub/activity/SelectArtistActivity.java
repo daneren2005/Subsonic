@@ -108,6 +108,9 @@ public class SelectArtistActivity extends SubsonicTabActivity implements Adapter
             case R.id.menu_help:
                 startActivity(new Intent(this, HelpActivity.class));
                 return true;
+			case R.id.menu_search:
+				onSearchRequested();
+				return true;
         }
 
         return false;

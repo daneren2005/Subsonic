@@ -5,6 +5,12 @@
 		android:icon="@drawable/action_refresh"
 		android:title="@string/menu.refresh"
 		android:showAsAction="always|withText"/>
+		
+	<item 
+		android:id="@+id/menu_search"
+		android:icon="@drawable/action_search"
+		android:title="@string/menu.search"
+		android:showAsAction="always|withText"/>
 
 	<item 
 		android:id="@+id/menu_settings"
