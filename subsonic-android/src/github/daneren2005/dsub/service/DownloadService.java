@@ -38,8 +38,6 @@ public interface DownloadService {
     void setShufflePlayEnabled(boolean enabled);
 
     boolean isShufflePlayEnabled();
-	
-	void setShuffleParams(String genre, String startYear, String endYear);
 
     void shuffle();
 

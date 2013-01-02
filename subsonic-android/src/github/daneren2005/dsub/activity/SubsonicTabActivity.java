@@ -455,9 +455,13 @@ public class SubsonicTabActivity extends SherlockActivity {
 		final EditText genreBox = (EditText)dialogView.findViewById(R.id.genre);
 		
 		final SharedPreferences prefs = Util.getPreferences(SubsonicTabActivity.this);
-		startYearBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, ""));
-		endYearBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, ""));
-		genreBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, ""));
+		final String oldStartYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
+		final String oldEndYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
+		final String oldGenre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");
+		
+		startYearBox.setText(oldStartYear);
+		endYearBox.setText(oldEndYear);
+		genreBox.setText(oldGenre);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(SubsonicTabActivity.this);
 		builder.setTitle("Shuffle By")
@@ -470,8 +474,6 @@ public class SubsonicTabActivity extends SherlockActivity {
 					String genre = genreBox.getText().toString();
 					String startYear = startYearBox.getText().toString();
 					String endYear = endYearBox.getText().toString();
-					getDownloadService().setShuffleParams((genre.length() == 0) ? null : genre,
-							(startYear.length() == 0) ? null : startYear, (endYear.length() == 0) ? null : endYear);
 					
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);

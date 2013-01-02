@@ -502,19 +502,19 @@ public class RESTMusicService implements MusicService {
         names.add("size");
         values.add(size);
 
-        if (musicFolderId != null) {
+        if (musicFolderId != null && musicFolderId != "") {
             names.add("musicFolderId");
             values.add(musicFolderId);
         }
-		if(genre != null) {
+		if(genre != null && genre != "") {
 			names.add("genre");
 			values.add(genre);
 		}
-		if(startYear != null) {
+		if(startYear != null && startYear != "") {
 			names.add("fromYear");
 			values.add(startYear);
 		}
-		if(endYear != null) {
+		if(endYear != null && endYear != "") {
 			names.add("toYear");
 			values.add(endYear);
 		}

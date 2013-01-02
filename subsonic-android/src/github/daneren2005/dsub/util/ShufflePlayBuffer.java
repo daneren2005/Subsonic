@@ -25,7 +25,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -46,12 +48,12 @@ public class ShufflePlayBuffer {
     private int currentServer;
 	private String currentFolder;
 	
-	private String genre;
-	private String startYear;
-	private String endYear;
+	private String genre = "";
+	private String startYear = "";
+	private String endYear = "";
 
     public ShufflePlayBuffer(Context context) {
-        this.context = context;
+        this.context = context;		
         executorService = Executors.newSingleThreadScheduledExecutor();
         Runnable runnable = new Runnable() {
             @Override
@@ -105,22 +107,17 @@ public class ShufflePlayBuffer {
 
     private void clearBufferIfnecessary() {
         synchronized (buffer) {
-            if (currentServer != Util.getActiveServer(context) || currentFolder != Util.getSelectedMusicFolderId(context)) {
+			final SharedPreferences prefs = Util.getPreferences(context);
+            if (currentServer != Util.getActiveServer(context) || currentFolder != Util.getSelectedMusicFolderId(context)
+				|| genre != prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "") || startYear != prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "")
+				|| endYear != prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "")) {
                 currentServer = Util.getActiveServer(context);
 				currentFolder = Util.getSelectedMusicFolderId(context);
+				genre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");
+				startYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
+				endYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
                 buffer.clear();
             }
         }
     }
-	
-	public void setOptions(String genre, String startYear, String endYear) {
-		this.genre = genre;
-		this.startYear = startYear;
-		this.endYear = endYear;
-		
-		synchronized (buffer) {
-			buffer.clear();
-		}
-	}
-
 }
