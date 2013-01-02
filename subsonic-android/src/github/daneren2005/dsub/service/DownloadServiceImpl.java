@@ -478,7 +478,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         this.currentPlaying = currentPlaying;
 
         if (currentPlaying != null) {
-        	Util.requestAudioFocus(this);
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
 			currentPlaying.setPlaying(true);
 			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
@@ -728,13 +727,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         Util.broadcastPlaybackStatusChange(this, playerState);
 
         this.playerState = playerState;
-        mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
         
         if (show) {
+			Util.requestAudioFocus(this);
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
         } else if (hide) {
             Util.hidePlayingNotification(this, this, handler);
         }
+		mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
 
         if (playerState == STARTED) {
             scrobbler.scrobble(this, currentPlaying, false);

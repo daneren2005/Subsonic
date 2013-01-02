@@ -102,6 +102,7 @@ public final class Util {
 	public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
 	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
 	
+	private static boolean hasFocus = false;
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
 
@@ -781,8 +782,9 @@ public final class Util {
     
     @TargetApi(8)
 	public static void requestAudioFocus(final Context context) {
-    	if (Build.VERSION.SDK_INT >= 8) {			
+    	if (Build.VERSION.SDK_INT >= 8 && !hasFocus) {
     		final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+			hasFocus = true;
     		audioManager.requestAudioFocus(new OnAudioFocusChangeListener() {
 				public void onAudioFocusChange(int focusChange) {
 					DownloadServiceImpl downloadService = (DownloadServiceImpl)context;
@@ -807,6 +809,7 @@ public final class Util {
 							downloadService.setVolume(1.0f);
 						}
 					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+						hasFocus = false;
 						downloadService.pause();
 					}
 				}
