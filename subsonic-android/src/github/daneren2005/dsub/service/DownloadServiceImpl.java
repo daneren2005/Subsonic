@@ -666,10 +666,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             bufferTask.cancel();
         }
         try {
+			setPlayerState(IDLE);
 			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.setOnCompletionListener(null);
             mediaPlayer.reset();
-            setPlayerState(IDLE);
         } catch (Exception x) {
             handleError(x);
         }
