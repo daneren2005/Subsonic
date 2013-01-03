@@ -840,8 +840,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 							if (position != 0) {
 								Log.i(TAG, "Restarting player from position " + position);
 								mediaPlayer.seekTo(position);
-								cachedPosition = position;
 							}
+							cachedPosition = position;
 
 							if (start) {
 								mediaPlayer.start();
