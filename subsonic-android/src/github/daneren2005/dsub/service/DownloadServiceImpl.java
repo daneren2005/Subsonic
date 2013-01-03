@@ -749,7 +749,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
-							if(mediaPlayer != null) {
+							if(mediaPlayer != null && getPlayerState() == STARTED) {
 								try {
 									cachedPosition = mediaPlayer.getCurrentPosition();
 								} catch(Exception e) {
@@ -764,7 +764,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			executorService.scheduleWithFixedDelay(runnable, 200L, 200L, TimeUnit.MILLISECONDS);
 		} else {
 			if(executorService != null && !executorService.isShutdown()) {
-				executorService.shutdown();
+				executorService.shutdownNow();
 			}
 		}
     }
