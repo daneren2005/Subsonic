@@ -241,7 +241,7 @@
 	<string name="settings.sleep_timer_off">Off</string>
 	<string name="settings.sleep_timer_on">On</string>
 	<string name="settings.sleep_timer_always_on">Always On</string>
-	<string name="settings.temp_loss_title">Temperary Loss of Focus</string>
+	<string name="settings.temp_loss_title">Temporary Loss of Focus</string>
 	<string name="settings.temp_loss_pause">Always Pause</string>
 	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
 	<string name="settings.temp_loss_lower">Always lower volume</string>
