@@ -449,6 +449,13 @@ public class SubsonicTabActivity extends SherlockActivity {
 	}
 	
 	protected void onShuffleRequested() {
+		if(Util.isOffline(this)) {
+			Intent intent = new Intent(SubsonicTabActivity.this, DownloadActivity.class);
+			intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
+			Util.startActivityWithoutTransition(SubsonicTabActivity.this, intent);
+			return;
+		}
+		
 		View dialogView = getLayoutInflater().inflate(R.layout.shuffle_dialog, null);
 		final EditText startYearBox = (EditText)dialogView.findViewById(R.id.start_year);
 		final EditText endYearBox = (EditText)dialogView.findViewById(R.id.end_year);
