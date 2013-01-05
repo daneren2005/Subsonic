@@ -727,9 +727,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         Util.broadcastPlaybackStatusChange(this, playerState);
 
         this.playerState = playerState;
+		
+		if(playerState == STARTED) {
+			Util.requestAudioFocus(this);
+		}
         
         if (show) {
-			Util.requestAudioFocus(this);
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
         } else if (hide) {
             Util.hidePlayingNotification(this, this, handler);
