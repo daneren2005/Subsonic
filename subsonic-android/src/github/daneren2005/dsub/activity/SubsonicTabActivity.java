@@ -311,6 +311,12 @@ public class SubsonicTabActivity extends SherlockActivity {
         }
         return IMAGE_LOADER;
     }
+	public synchronized static ImageLoader getStaticImageLoader(Context context) {
+		if (IMAGE_LOADER == null) {
+            IMAGE_LOADER = new ImageLoader(context);
+        }
+		return IMAGE_LOADER;
+	}
 
     protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, "", true, save, append, autoplay, shuffle, background);

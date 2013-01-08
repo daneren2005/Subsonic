@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
+import github.daneren2005.dsub.activity.SubsonicTabActivity;
 
 @TargetApi(14)
 public class RemoteControlClientICS extends RemoteControlClientHelper {
@@ -39,7 +40,7 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 				RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
 				RemoteControlClient.FLAG_KEY_MEDIA_STOP);
 		
-		imageLoader = new ImageLoader(context);
+		imageLoader = SubsonicTabActivity.getStaticImageLoader(context);
 	}
 	
 	public void unregister(final Context context) {
@@ -54,6 +55,10 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 	}
 	
 	public void updateMetadata(final Context context, final MusicDirectory.Entry currentSong) {
+		if(imageLoader == null) {
+			imageLoader = SubsonicTabActivity.getStaticImageLoader(context);
+		}
+		
 		// Update the remote controls
     	mRemoteControl.editMetadata(true)
     	.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
@@ -62,7 +67,7 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
     	.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, (currentSong == null) ? 
     			0 : ((currentSong.getDuration() == null) ? 0 : currentSong.getDuration()))
     	.apply();
-    	if (currentSong == null) {
+    	if (currentSong == null || imageLoader == null) {
     		mRemoteControl.editMetadata(true)
         	.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
         	.apply();
