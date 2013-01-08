@@ -791,7 +791,11 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
         switch (downloadService.getRepeatMode()) {
             case OFF:
-                repeatButton.setImageResource(R.drawable.media_repeat_off);
+        		if("light".equals(theme) | "light_fullscreen".equals(theme)) {
+        			repeatButton.setImageResource(R.drawable.media_repeat_off_light);
+        		} else {
+        			repeatButton.setImageResource(R.drawable.media_repeat_off);
+        		}
                 break;
             case ALL:
                 repeatButton.setImageResource(R.drawable.media_repeat_all);
