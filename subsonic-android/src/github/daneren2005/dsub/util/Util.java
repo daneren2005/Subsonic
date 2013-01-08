@@ -614,71 +614,24 @@ public final class Util {
                 .show();
     }
 
-    public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler, MusicDirectory.Entry song) {
+	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler, MusicDirectory.Entry song) {
 
-        // Use the same text for the ticker and the expanded notification
-        String title = song.getTitle();
-        String arist = song.getArtist();
-        String album = song.getAlbum();
-        
         // Set the icon, scrolling text and timestamp
-        final Notification notification = new Notification(R.drawable.stat_notify_playing, title, System.currentTimeMillis());
+        final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 
-        RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.notification);
-
-        // Set the album art.
-        try {
-            int size = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
-            Bitmap bitmap = FileUtil.getAlbumArtBitmap(context, song, size);
-            if (bitmap == null) {
-		// set default album art
-		contentView.setImageViewResource(R.id.notification_image, R.drawable.unknown_album);
-            } else {
-		contentView.setImageViewBitmap(R.id.notification_image, bitmap);
-            }
-	} catch (Exception x) {
-            Log.w(TAG, "Failed to get notification cover art", x);
-            contentView.setImageViewResource(R.id.notification_image, R.drawable.unknown_album);
-	}
-
-		// set the text for the notifications
-        contentView.setTextViewText(R.id.notification_title, title);
-        contentView.setTextViewText(R.id.notification_artist, arist);
-        contentView.setTextViewText(R.id.notification_album, album);
-
-        Pair<Integer, Integer> colors = getNotificationTextColors(context);
-        if (colors.getFirst() != null) {
-            contentView.setTextColor(R.id.notification_title, colors.getFirst());
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
+         RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
+            setupViews(expandedContentView,context,song);
+            notification.bigContentView = expandedContentView;
         }
-        if (colors.getSecond() != null) {
-            contentView.setTextColor(R.id.notification_artist, colors.getSecond());
-        }
-
-        notification.contentView = contentView;
+        
+        RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
+        setupViews(smallContentView, context, song);
+        notification.contentView = smallContentView;
         
         Intent notificationIntent = new Intent(context, DownloadActivity.class);
         notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-        
-        // Create actions for media buttons
-        PendingIntent pendingIntent;
-        Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
-        prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
-        prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
-        pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-        contentView.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
-        
-        Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
-        pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
-        pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-        pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
-        contentView.setOnClickPendingIntent(R.id.control_pause, pendingIntent);
-        
-        Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
-        nextIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
-        nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT));
-        pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
-        contentView.setOnClickPendingIntent(R.id.control_next, pendingIntent);
 
         // Send the notification and put the service in the foreground.
         handler.post(new Runnable() {
@@ -690,6 +643,62 @@ public final class Util {
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, true);
+    }
+    
+    private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song){
+    
+     // Use the same text for the ticker and the expanded notification
+        String title = song.getTitle();
+        String arist = song.getArtist();
+        String album = song.getAlbum();
+    
+     // Set the album art.
+        try {
+            int size = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
+            Bitmap bitmap = FileUtil.getAlbumArtBitmap(context, song, size);
+            if (bitmap == null) {
+             // set default album art
+             rv.setImageViewResource(R.id.notification_image, R.drawable.unknown_album);
+            } else {
+             rv.setImageViewBitmap(R.id.notification_image, bitmap);
+            }
+        } catch (Exception x) {
+            Log.w(TAG, "Failed to get notification cover art", x);
+            rv.setImageViewResource(R.id.notification_image, R.drawable.unknown_album);
+        }
+        
+        // set the text for the notifications
+        rv.setTextViewText(R.id.notification_title, title);
+        rv.setTextViewText(R.id.notification_artist, arist);
+        rv.setTextViewText(R.id.notification_album, album);
+        
+        Pair<Integer, Integer> colors = getNotificationTextColors(context);
+        if (colors.getFirst() != null) {
+            rv.setTextColor(R.id.notification_title, colors.getFirst());
+        }
+        if (colors.getSecond() != null) {
+            rv.setTextColor(R.id.notification_artist, colors.getSecond());
+        }
+        
+        // Create actions for media buttons
+        PendingIntent pendingIntent;
+        Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
+        prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+        prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+        pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+        rv.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
+        
+        Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
+        pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+        pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+        pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
+        rv.setOnClickPendingIntent(R.id.control_pause, pendingIntent);
+        
+        Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
+        nextIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+        nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT));
+        pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
+        rv.setOnClickPendingIntent(R.id.control_next, pendingIntent);
     }
 
     public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {

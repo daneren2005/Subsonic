@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/statusbar"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+		
+	<ImageView
+	    android:id="@+id/notification_image"
+	    android:layout_width="128dp"
+	    android:layout_height="128dp"
+	    android:gravity="center" />
+
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="0.0"
+	    android:orientation="vertical"
+	    android:paddingLeft="11.0dip" >
+
+	    <TextView
+	        android:id="@+id/notification_title"
+	        style="@android:style/TextAppearance.StatusBar.EventContent.Title"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="left"
+	        android:ellipsize="marquee"
+	        android:focusable="true"
+	        android:singleLine="true" />
+
+	    <TextView
+	        android:id="@+id/notification_artist"
+	        style="@android:style/TextAppearance.StatusBar.EventContent"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="left"
+	        android:ellipsize="end"
+	        android:scrollHorizontally="true"
+	        android:singleLine="true" />
+
+	    <TextView
+	        android:id="@+id/notification_album"
+	        style="@android:style/TextAppearance.StatusBar.EventContent"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="left"
+	        android:ellipsize="end"
+	        android:scrollHorizontally="true"
+	        android:singleLine="true" />
+
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent" />
+	    
+	    <LinearLayout
+	        xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center|fill"
+	        android:gravity="center_horizontal"
+	        android:orientation="horizontal" >
+
+	        <ImageButton
+	            android:id="@+id/control_previous"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:layout_weight="0.0"
+	            android:background="@drawable/btn_bg"
+	            android:scaleType="fitXY"
+	            android:src="@drawable/notification_prev" />
+
+	        <ImageButton
+	            android:id="@+id/control_pause"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:layout_marginLeft="10dp"
+	            android:layout_marginRight="10dp"
+	            android:layout_weight="0.0"
+	            android:background="@drawable/btn_bg"
+	            android:scaleType="fitXY"
+	            android:src="@drawable/notification_pause" />
+
+	        <ImageButton
+	            android:id="@+id/control_next"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:layout_weight="0.0"
+	            android:background="@drawable/btn_bg"
+	            android:scaleType="fitXY"
+	            android:src="@drawable/notification_next" />
+	    </LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
