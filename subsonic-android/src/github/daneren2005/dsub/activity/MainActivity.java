@@ -36,6 +36,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
@@ -47,7 +48,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.PopupWindow;
+import github.daneren2005.dsub.util.*;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainActivity extends SubsonicTabActivity {
 
@@ -163,6 +170,9 @@ public class MainActivity extends SubsonicTabActivity {
             case R.id.menu_help:
                 startActivity(new Intent(this, HelpActivity.class));
                 return true;
+			case R.id.menu_log:
+				getLogs();
+				return true;
 			case R.id.menu_about:
 				showAboutDialog();
 				return true;
@@ -292,5 +302,50 @@ public class MainActivity extends SubsonicTabActivity {
 	private void toggleOffline() {
 		Util.setOffline(this, !Util.isOffline(this));
 		restart();
-	} 
+	}
+	
+	private void getLogs() {		
+		new ModalBackgroundTask<File>(this, false) {
+			@Override
+			protected File doInBackground() throws Throwable {
+				updateProgress("Gathering Logs");
+				File logcat = new File(FileUtil.getSubsonicDirectory(), "logcat.txt");
+				Process logcatProc = null;
+
+				try {
+					List<String> progs = new ArrayList<String>();
+					progs.add("logcat");
+					progs.add("-v");
+					progs.add("time");
+					progs.add("-d");
+					progs.add("-f");
+					progs.add(logcat.getPath());
+					progs.add("*:I");
+
+					logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[0]));
+					logcatProc.waitFor();
+				} catch(Exception e) {
+					Util.toast(MainActivity.this, "Failed to gather logs");
+				} finally {
+					if(logcatProc != null) {
+						logcatProc.destroy();
+					}
+				}
+
+				return logcat;
+			}
+
+			@Override
+			protected void done(File logcat) {
+				Intent email = new Intent(android.content.Intent.ACTION_SEND);
+				email.setType("text/plain");
+				email.putExtra(Intent.EXTRA_EMAIL, new String[] {"daneren2005@gmail.com"});
+				email.putExtra(Intent.EXTRA_SUBJECT, "DSub Error Logs");
+				email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here");
+				Uri attachment = Uri.fromFile(logcat);
+				email.putExtra(Intent.EXTRA_STREAM, attachment);
+				startActivity(email);
+			}
+		}.execute();
+	}
 }

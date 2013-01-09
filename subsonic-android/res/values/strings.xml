@@ -63,6 +63,7 @@
 	<string name="menu.remove_playlist">Remove From Playlist</string>
 	<string name="menu.deleted_playlist">Deleted playlist %s</string>
 	<string name="menu.deleted_playlist_error">Failed to delete playlist %s</string>
+	<string name="menu.log">Send Log</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
