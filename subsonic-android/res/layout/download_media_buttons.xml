@@ -9,7 +9,7 @@
     <ImageButton
             style="@style/PlaybackControl.Small"
             android:id="@+id/download_repeat"
-            android:src="@drawable/media_repeat_off"
+            android:src="?attr/media_button_repeat_off"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             />
@@ -17,7 +17,7 @@
     <github.daneren2005.dsub.view.AutoRepeatButton
             style="@style/PlaybackControl"
             android:id="@+id/download_previous"
-            android:src="@drawable/media_backward"
+            android:src="?attr/media_button_backward"
             android:layout_toLeftOf="@+id/download_pause"
             android:layout_centerVertical="true"
             />
@@ -25,28 +25,28 @@
     <ImageButton
             style="@style/PlaybackControl"
             android:id="@+id/download_pause"
-            android:src="@drawable/media_pause"
+            android:src="?attr/media_button_pause"
             android:layout_centerInParent="true"
             />
 
     <ImageButton
             style="@style/PlaybackControl"
             android:id="@+id/download_stop"
-            android:src="@drawable/media_stop"
+            android:src="?attr/media_button_stop"
             android:layout_centerInParent="true"
             />
 
     <ImageButton
             style="@style/PlaybackControl"
             android:id="@+id/download_start"
-            android:src="@drawable/media_start"
+            android:src="?attr/media_button_start"
             android:layout_centerInParent="true"
             />
 
     <github.daneren2005.dsub.view.AutoRepeatButton
             style="@style/PlaybackControl"
             android:id="@+id/download_next"
-            android:src="@drawable/media_forward"
+            android:src="?attr/media_button_forward"
             android:layout_toRightOf="@+id/download_start"
             android:layout_centerVertical="true"
             />

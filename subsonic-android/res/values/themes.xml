@@ -6,12 +6,24 @@
 		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="android:windowBackground">@color/lightBackground</item>
 		<item name="offline_icon">@drawable/main_offline_light</item>
+		<item name="media_button_backward">@drawable/media_backward_light</item>
+		<item name="media_button_forward">@drawable/media_forward_light</item>
+		<item name="media_button_pause">@drawable/media_pause_light</item>
+		<item name="media_button_repeat_off">@drawable/media_repeat_off_light</item>
+		<item name="media_button_start">@drawable/media_start_light</item>
+		<item name="media_button_stop">@drawable/media_stop_light</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.Sherlock">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="offline_icon">@drawable/main_offline</item>
+		<item name="media_button_backward">@drawable/media_backward</item>
+		<item name="media_button_forward">@drawable/media_forward</item>
+		<item name="media_button_pause">@drawable/media_pause</item>
+		<item name="media_button_repeat_off">@drawable/media_repeat_off</item>
+		<item name="media_button_start">@drawable/media_start</item>
+		<item name="media_button_stop">@drawable/media_stop</item>
 	</style>
 	<style name="Theme.DSub.Holo" parent="Theme.Sherlock">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
@@ -19,6 +31,12 @@
 		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="android:windowBackground">@drawable/background</item>
 		<item name="offline_icon">@drawable/main_offline</item>
+		<item name="media_button_backward">@drawable/media_backward</item>
+		<item name="media_button_forward">@drawable/media_forward</item>
+		<item name="media_button_pause">@drawable/media_pause</item>
+		<item name="media_button_repeat_off">@drawable/media_repeat_off</item>
+		<item name="media_button_start">@drawable/media_start</item>
+		<item name="media_button_stop">@drawable/media_stop</item>
 	</style>
 	
 	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
