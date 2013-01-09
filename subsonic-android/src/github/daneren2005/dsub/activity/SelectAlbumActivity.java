@@ -77,7 +77,11 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                         intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
                         Util.startActivityWithoutTransition(SelectAlbumActivity.this, intent);
                     } else if (entry.isVideo()) {
-                        playExternalPlayer(entry);
+						if(entryExists(entry)) {
+							playExternalPlayer(entry);
+						} else {
+							streamExternalPlayer(entry);
+						}
                     }
                 }
             }
@@ -542,6 +546,11 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             getDownloadService().delete(songs);
         }
     }
+	
+	private boolean entryExists(MusicDirectory.Entry entry) {
+		DownloadFile check = new DownloadFile(this, entry, false);
+		return check.isCompleteFileAvailable();
+	}
 
     private void playWebView(MusicDirectory.Entry entry) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -550,8 +559,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         startActivity(intent);
     }
 	private void playExternalPlayer(MusicDirectory.Entry entry) {
-		DownloadFile check = new DownloadFile(this, entry, false);
-		if(!check.isCompleteFileAvailable()) {
+		if(!entryExists(entry)) {
 			Util.toast(this, R.string.download_need_download);
 		} else {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
