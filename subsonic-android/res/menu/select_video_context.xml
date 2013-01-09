@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item 
+		android:id="@+id/song_menu_stream_external"
+		android:title="@string/common.stream_external"/>
+	
+	<item 
 		android:id="@+id/song_menu_play_external"
 		android:title="@string/common.play_external"/>
 	
