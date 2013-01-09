@@ -58,7 +58,7 @@ public class SubsonicTabActivity extends SherlockActivity {
 
     private static final String TAG = SubsonicTabActivity.class.getSimpleName();
     private static ImageLoader IMAGE_LOADER;
-	private String theme;
+	protected static String theme;
 
     private boolean destroyed;
     private View homeButton;
