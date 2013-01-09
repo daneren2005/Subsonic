@@ -907,9 +907,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 				public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
 					Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
+					int pos = cachedPosition;
 					reset();
 					downloadFile.setPlaying(false);
-					doPlay(downloadFile, cachedPosition, true);
+					doPlay(downloadFile, pos, true);
 					downloadFile.setPlaying(true);
 					return true;
 				}
