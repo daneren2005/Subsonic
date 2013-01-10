@@ -304,48 +304,51 @@ public class MainActivity extends SubsonicTabActivity {
 		restart();
 	}
 	
-	private void getLogs() {		
-		new ModalBackgroundTask<File>(this, false) {
-			@Override
-			protected File doInBackground() throws Throwable {
-				updateProgress("Gathering Logs");
-				File logcat = new File(FileUtil.getSubsonicDirectory(), "logcat.txt");
-				Process logcatProc = null;
+	private void getLogs() {
+		try {
+			final String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			new ModalBackgroundTask<File>(this, false) {
+				@Override
+				protected File doInBackground() throws Throwable {
+					updateProgress("Gathering Logs");
+					File logcat = new File(FileUtil.getSubsonicDirectory(), "logcat.txt");
+					Process logcatProc = null;
 
-				try {
-					List<String> progs = new ArrayList<String>();
-					progs.add("logcat");
-					progs.add("-v");
-					progs.add("time");
-					progs.add("-d");
-					progs.add("-f");
-					progs.add(logcat.getPath());
-					progs.add("*:I");
+					try {
+						List<String> progs = new ArrayList<String>();
+						progs.add("logcat");
+						progs.add("-v");
+						progs.add("time");
+						progs.add("-d");
+						progs.add("-f");
+						progs.add(logcat.getPath());
+						progs.add("*:I");
 
-					logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[0]));
-					logcatProc.waitFor();
-				} catch(Exception e) {
-					Util.toast(MainActivity.this, "Failed to gather logs");
-				} finally {
-					if(logcatProc != null) {
-						logcatProc.destroy();
+						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[0]));
+						logcatProc.waitFor();
+					} catch(Exception e) {
+						Util.toast(MainActivity.this, "Failed to gather logs");
+					} finally {
+						if(logcatProc != null) {
+							logcatProc.destroy();
+						}
 					}
+
+					return logcat;
 				}
 
-				return logcat;
-			}
-
-			@Override
-			protected void done(File logcat) {
-				Intent email = new Intent(android.content.Intent.ACTION_SEND);
-				email.setType("text/plain");
-				email.putExtra(Intent.EXTRA_EMAIL, new String[] {"daneren2005@gmail.com"});
-				email.putExtra(Intent.EXTRA_SUBJECT, "DSub Error Logs");
-				email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here");
-				Uri attachment = Uri.fromFile(logcat);
-				email.putExtra(Intent.EXTRA_STREAM, attachment);
-				startActivity(email);
-			}
-		}.execute();
+				@Override
+				protected void done(File logcat) {
+					Intent email = new Intent(android.content.Intent.ACTION_SEND);
+					email.setType("text/plain");
+					email.putExtra(Intent.EXTRA_EMAIL, new String[] {"daneren2005@gmail.com"});
+					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + version + " Error Logs");
+					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here");
+					Uri attachment = Uri.fromFile(logcat);
+					email.putExtra(Intent.EXTRA_STREAM, attachment);
+					startActivity(email);
+				}
+			}.execute();
+		} catch(Exception e) {}
 	}
 }
