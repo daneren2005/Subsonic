@@ -503,7 +503,11 @@ public class SubsonicTabActivity extends SherlockActivity {
 	}
 	
 	public void displaySongInfo(final MusicDirectory.Entry song) {
-		String msg = "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
+		
+		String msg = "";
+		if(!song.isVideo()) {
+			msg += "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
+		}
 		if(song.getGenre() != null && !song.getGenre().isEmpty()) {
 			msg += "\nGenre: " + song.getGenre();
 		}

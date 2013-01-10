@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:id="@+id/song_menu_info"
+		android:title="@string/common.info"/>
+	
 	<item 
 		android:id="@+id/song_menu_stream_external"
 		android:title="@string/common.stream_external"/>
@@ -19,15 +23,6 @@
 		/>
 
 	<item 
-		android:id="@+id/song_menu_pin"
-		android:title="@string/common.pin"
-		/>
-
-	<item 
 		android:id="@+id/song_menu_delete"
 		android:title="@string/common.delete"/>
-
-	<item 
-		android:id="@+id/song_menu_star"
-		android:title="@string/common.star"/> 
 </menu>

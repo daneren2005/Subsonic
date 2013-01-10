@@ -262,7 +262,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				inflater.inflate(R.menu.select_video_context, menu);
 		}
 
-		if (!Util.isOffline(this)) {
+		if (!Util.isOffline(this) && !entry.isVideo()) {
 			menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 		}
     }
