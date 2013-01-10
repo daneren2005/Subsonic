@@ -553,8 +553,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 	}
 
     private void playWebView(MusicDirectory.Entry entry) {
+		int maxBitrate = Util.getMaxVideoBitrate(this);
+		
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(MusicServiceFactory.getMusicService(this).getVideoUrl(this, entry.getId())));
+        intent.setData(Uri.parse(MusicServiceFactory.getMusicService(this).getVideoUrl(maxBitrate, this, entry.getId())));
 		
         startActivity(intent);
     }
@@ -575,8 +577,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 		}
 	}
 	private void streamExternalPlayer(MusicDirectory.Entry entry) {
+		int maxBitrate = Util.getMaxVideoBitrate(this);
+		
 		Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(this).getVideoStreamUrl(this, entry.getId())), "video/*");
+        intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(this).getVideoStreamUrl(maxBitrate, this, entry.getId())), "video/*");
 		
 		List<ResolveInfo> intents = getPackageManager()
 			.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);

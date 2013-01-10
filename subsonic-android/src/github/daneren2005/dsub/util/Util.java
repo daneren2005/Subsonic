@@ -209,6 +209,18 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return Integer.parseInt(prefs.getString(wifi ? Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI : Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE, "0"));
     }
+	
+	public static int getMaxVideoBitrate(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo == null) {
+            return 0;
+        }
+
+        boolean wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+        SharedPreferences prefs = getPreferences(context);
+        return Integer.parseInt(prefs.getString(wifi ? Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI : Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE, "0"));
+    }
 
     public static int getPreloadCount(Context context) {
         SharedPreferences prefs = getPreferences(context);

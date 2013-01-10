@@ -216,13 +216,13 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public String getVideoUrl(Context context, String id) {
-        return musicService.getVideoUrl(context, id);
+    public String getVideoUrl(int maxBitrate, Context context, String id) {
+        return musicService.getVideoUrl(maxBitrate, context, id);
     }
 	
 	@Override
-    public String getVideoStreamUrl(Context context, String id) {
-        return musicService.getVideoStreamUrl(context, id);
+    public String getVideoStreamUrl(int maxBitrate, Context context, String id) {
+        return musicService.getVideoStreamUrl(maxBitrate, context, id);
     }
 
     @Override

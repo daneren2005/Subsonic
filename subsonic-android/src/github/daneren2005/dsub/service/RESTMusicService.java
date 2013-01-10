@@ -637,10 +637,10 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public String getVideoUrl(Context context, String id) {
+    public String getVideoUrl(int maxBitrate, Context context, String id) {
         StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "videoPlayer"));
         builder.append("&id=").append(id);
-        builder.append("&maxBitRate=500");
+        builder.append("&maxBitRate=").append(maxBitrate);
         builder.append("&autoplay=true");
 
         String url = rewriteUrlWithRedirect(context, builder.toString());
@@ -649,10 +649,10 @@ public class RESTMusicService implements MusicService {
     }
 	
 	@Override
-	public String getVideoStreamUrl(Context context, String id) {
+	public String getVideoStreamUrl(int maxBitrate, Context context, String id) {
 		StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "stream"));
         builder.append("&id=").append(id);
-        builder.append("&maxBitRate=500");
+        builder.append("&maxBitRate=").append(maxBitrate);
 
         String url = rewriteUrlWithRedirect(context, builder.toString());
         Log.i(TAG, "Using video URL: " + url);

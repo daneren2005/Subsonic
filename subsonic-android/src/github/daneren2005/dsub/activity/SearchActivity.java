@@ -377,8 +377,10 @@ public class SearchActivity extends SubsonicTabActivity {
     }
 
     private void onVideoSelected(MusicDirectory.Entry entry) {
+		int maxBitrate = Util.getMaxVideoBitrate(this);
+		
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(MusicServiceFactory.getMusicService(this).getVideoUrl(this, entry.getId())));
+        intent.setData(Uri.parse(MusicServiceFactory.getMusicService(this).getVideoUrl(maxBitrate, this, entry.getId())));
         startActivity(intent);
     }
 

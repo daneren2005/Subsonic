@@ -52,6 +52,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private ListPreference theme;
     private ListPreference maxBitrateWifi;
     private ListPreference maxBitrateMobile;
+	private ListPreference maxVideoBitrateWifi;
+    private ListPreference maxVideoBitrateMobile;
 	private ListPreference networkTimeout;
     private EditTextPreference cacheSize;
     private EditTextPreference cacheLocation;
@@ -67,6 +69,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         theme = (ListPreference) findPreference(Constants.PREFERENCES_KEY_THEME);
         maxBitrateWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
         maxBitrateMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);
+		maxVideoBitrateWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
+        maxVideoBitrateMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
 		networkTimeout = (ListPreference) findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
         cacheSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
         cacheLocation = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
@@ -155,6 +159,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         theme.setSummary(theme.getEntry());
         maxBitrateWifi.setSummary(maxBitrateWifi.getEntry());
         maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
+		maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
+        maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
 		networkTimeout.setSummary(networkTimeout.getEntry());
         cacheSize.setSummary(cacheSize.getText());
         cacheLocation.setSummary(cacheLocation.getText());

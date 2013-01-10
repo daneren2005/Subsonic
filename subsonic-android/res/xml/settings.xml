@@ -131,6 +131,20 @@
                 android:defaultValue="0"
                 android:entryValues="@array/maxBitrateValues"
                 android:entries="@array/maxBitrateNames"/>
+				
+		<ListPreference
+			android:title="@string/settings.max_video_bitrate_wifi"
+			android:key="maxVideoBitrateWifi"
+			android:defaultValue="0"
+			android:entryValues="@array/maxVideoBitrateValues"
+			android:entries="@array/maxVideoBitrateNames"/>
+
+		<ListPreference
+			android:title="@string/settings.max_video_bitrate_mobile"
+			android:key="maxVideoBitrateMobile"
+			android:defaultValue="0"
+			android:entryValues="@array/maxVideoBitrateValues"
+			android:entries="@array/maxVideoBitrateNames"/>
 
         <CheckBoxPreference
                 android:title="@string/settings.wifi_required_title"
