@@ -18,7 +18,7 @@
 		
 	<item
         android:id="@+id/menu_toggle_now_playing"
-        android:title="@string/download.show_downloading"/>
+        android:title="@string/download.show_now_playing"/>
 		
 	<item 
 		android:id="@+id/menu_exit"
