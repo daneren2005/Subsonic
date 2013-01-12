@@ -25,6 +25,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Util;
+import java.io.File;
 
 /**
  * Used to display albums in a {@code ListView}.
@@ -56,5 +59,16 @@ public class PlaylistView extends UpdateView {
     	this.playlist = playlist;
         
         titleView.setText(playlist.getName());
+		update();
+    }
+	
+	@Override
+	protected void update() {
+		File file = FileUtil.getPlaylistFile(playlist.getName());
+		if(file.exists()) {
+			moreButton.setImageResource(R.drawable.list_item_more_shaded);
+		} else {
+			moreButton.setImageResource(R.drawable.list_item_more);
+		}
     }
 }

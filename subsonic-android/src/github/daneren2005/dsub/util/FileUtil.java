@@ -35,6 +35,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
+import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
 
 /**
@@ -112,15 +113,23 @@ public class FileUtil {
         ensureDirectoryExistsAndIsReadWritable(new File(albumArtDir, ".nomedia"));
         return albumArtDir;
     }
+	
+	public static File getArtistDirectory(Context context, Artist artist) {
+		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getName()));
+		return dir;
+	}
 
-    private static File getAlbumDirectory(Context context, MusicDirectory.Entry entry) {
+    public static File getAlbumDirectory(Context context, MusicDirectory.Entry entry) {
         File dir;
         if (entry.getPath() != null) {
             File f = new File(fileSystemSafeDir(entry.getPath()));
             dir = new File(getMusicDirectory(context).getPath() + "/" + (entry.isDirectory() ? f.getPath() : f.getParent()));
         } else {
             String artist = fileSystemSafe(entry.getArtist());
-            String album = fileSystemSafe(entry.getAlbum());
+			String album = fileSystemSafe(entry.getAlbum());
+			if("unnamed".equals(album)) {
+				album = fileSystemSafe(entry.getTitle());
+			}
             dir = new File(getMusicDirectory(context).getPath() + "/" + artist + "/" + album);
         }
         return dir;

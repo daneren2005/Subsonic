@@ -26,7 +26,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
+import java.io.File;
 
 /**
  * Used to display albums in a {@code ListView}.
@@ -36,6 +38,7 @@ import github.daneren2005.dsub.util.Util;
 public class ArtistView extends UpdateView {
 	private static final String TAG = ArtistView.class.getSimpleName();
 	
+	private Context context;
 	private Artist artist;
 
     private TextView titleView;
@@ -44,6 +47,7 @@ public class ArtistView extends UpdateView {
 
     public ArtistView(Context context) {
         super(context);
+		this.context = context;
         LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
 
         titleView = (TextView) findViewById(R.id.artist_name);
@@ -70,5 +74,11 @@ public class ArtistView extends UpdateView {
 	@Override
 	protected void update() {
 		starButton.setVisibility((Util.isOffline(getContext()) || !artist.isStarred()) ? View.GONE : View.VISIBLE);
+		File file = FileUtil.getArtistDirectory(context, artist);
+		if(file.exists()) {
+			moreButton.setImageResource(R.drawable.list_item_more_shaded);
+		} else {
+			moreButton.setImageResource(R.drawable.list_item_more);
+		}
     }
 }

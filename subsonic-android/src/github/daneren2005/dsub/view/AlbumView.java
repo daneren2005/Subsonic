@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -26,8 +27,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
+import java.io.File;
 /**
  * Used to display albums in a {@code ListView}.
  *
@@ -35,7 +38,8 @@ import github.daneren2005.dsub.util.Util;
  */
 public class AlbumView extends UpdateView {
 	private static final String TAG = AlbumView.class.getSimpleName();
-	
+
+	private Context context;
 	private MusicDirectory.Entry album;
 
     private TextView titleView;
@@ -46,6 +50,7 @@ public class AlbumView extends UpdateView {
 
     public AlbumView(Context context) {
         super(context);
+		this.context = context;
         LayoutInflater.from(context).inflate(R.layout.album_list_item, this, true);
 
         titleView = (TextView) findViewById(R.id.album_title);
@@ -78,5 +83,12 @@ public class AlbumView extends UpdateView {
 	@Override
 	protected void update() {
 		starButton.setVisibility((Util.isOffline(getContext()) || !album.isStarred()) ? View.GONE : View.VISIBLE);
+		File file = FileUtil.getAlbumDirectory(context, album);
+		Log.d(TAG, file.getPath());
+		if(file.exists()) {
+			moreButton.setImageResource(R.drawable.list_item_more_shaded);
+		} else {
+			moreButton.setImageResource(R.drawable.list_item_more);
+		}
     }
 }
