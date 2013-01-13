@@ -102,7 +102,9 @@ public class FileUtil {
         File albumArtFile = getAlbumArtFile(context, entry);
         if (albumArtFile.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(albumArtFile.getPath());
-            return bitmap == null ? null : Bitmap.createScaledBitmap(bitmap, size, size, true);
+			Bitmap scaledBitmap = (bitmap == null) ? null : Bitmap.createScaledBitmap(bitmap, size, size, true);
+			bitmap.recycle();
+            return scaledBitmap;
         }
         return null;
     }
