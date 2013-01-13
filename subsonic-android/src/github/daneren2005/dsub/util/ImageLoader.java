@@ -116,22 +116,6 @@ public class ImageLoader implements Runnable {
         queue.offer(new Task(context, entry, imageSizeLarge, false, new RemoteControlClientTaskHandler(remoteControl)));
     }
 
-    public void loadImage(ActionBar actionBar, MusicDirectory.Entry entry) {
-        if (entry == null || entry.getCoverArt() == null) {
-            setUnknownImage(actionBar);
-            return;
-        }
-        
-        Drawable drawable = cache.get(getKey(entry.getCoverArt(), imageSizeDefault));
-        if (drawable != null) {
-            setImage(actionBar, drawable);
-            return;
-        }
-
-        setUnknownImage(actionBar);
-        queue.offer(new Task(actionBar.getThemedContext(), entry, imageSizeDefault, false, new ActionBarTaskHandler(actionBar)));
-    }
-
     private String getKey(String coverArtId, int size) {
         return coverArtId + size;
     }

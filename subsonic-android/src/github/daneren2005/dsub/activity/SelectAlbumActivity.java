@@ -673,7 +673,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             }
 
             if (songCount > 0) {
-                getImageLoader().loadImage(getSupportActionBar(), entries.get(0));
 				if(showHeader) {
 					entryList.addHeaderView(createHeader(entries), null, false);
 				}
