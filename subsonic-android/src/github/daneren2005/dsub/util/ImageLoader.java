@@ -39,8 +39,6 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.actionbarsherlock.app.ActionBar;
-
 /**
  * Asynchronous loading of images, with caching.
  * <p/>
@@ -161,10 +159,6 @@ public class ImageLoader implements Runnable {
 			.apply();
 		}
     }
-    
-	private void setImage(ActionBar actionBar, Drawable drawable) {
-    	actionBar.setIcon(drawable);
-    }
 
     private void setUnknownImage(View view, boolean large) {
         if (large) {
@@ -180,10 +174,6 @@ public class ImageLoader implements Runnable {
     
     private void setUnknownImage(RemoteControlClient remoteControl) {
         setImage(remoteControl, largeUnknownImage);
-    }
-    
-    private void setUnknownImage(ActionBar actionBar) {
-        setImage(actionBar, largeUnknownImage);
     }
 
     public void clear() {
@@ -272,20 +262,6 @@ public class ImageLoader implements Runnable {
 		@Override
 		public void run() {
 			setImage(mRemoteControl, mDrawable);
-		}
-	}
-	
-	private class ActionBarTaskHandler extends ImageLoaderTaskHandler {
-		
-		private ActionBar mActionBar;
-		
-		public ActionBarTaskHandler(ActionBar actionBar) {
-			mActionBar = actionBar;
-		}
-		
-		@Override
-		public void run() {
-			setImage(mActionBar, mDrawable);
 		}
 	}
 }
