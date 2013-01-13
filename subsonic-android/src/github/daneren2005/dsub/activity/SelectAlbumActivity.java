@@ -51,7 +51,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private View emptyView;
 	private boolean hideButtons = false;
     private Button moreButton;
-    private boolean licenseValid;
+    private Boolean licenseValid;
 	private boolean showHeader = true;
 
     /**
@@ -112,7 +112,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         com.actionbarsherlock.view.MenuInflater inflater = getSupportMenuInflater();
-		if(hideButtons) {
+		if(licenseValid == null) {
+			inflater.inflate(R.menu.empty, menu);
+		}
+		else if(hideButtons) {
 			String albumListType = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			if(albumListType != null) {
 				inflater.inflate(R.menu.select_album_list, menu);
