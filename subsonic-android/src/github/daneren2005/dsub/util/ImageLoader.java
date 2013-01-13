@@ -211,6 +211,15 @@ public class ImageLoader implements Runnable {
 
         public void execute() {
             try {
+				loadImage();
+			} catch(OutOfMemoryError e) {
+				Log.w(TAG, "Ran out of memory trying to load image, try cleanup and retry");
+				cache.clear();
+				loadImage();
+			}
+        }
+		public void loadImage() {
+			try {
                 MusicService musicService = MusicServiceFactory.getMusicService(mContext);
                 Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, mSaveToFile, null);
 
@@ -222,7 +231,7 @@ public class ImageLoader implements Runnable {
             } catch (Throwable x) {
                 Log.e(TAG, "Failed to download album art.", x);
             }
-        }
+		}
     }
 	
 	private abstract class ImageLoaderTaskHandler implements Runnable {
