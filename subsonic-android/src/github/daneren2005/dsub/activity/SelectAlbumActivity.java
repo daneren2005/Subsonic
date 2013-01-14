@@ -681,12 +681,12 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 				}
             } else {
 				hideButtons = true;
-				invalidateOptionsMenu();
 			}
 
             emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
             entryList.setAdapter(new EntryAdapter(SelectAlbumActivity.this, getImageLoader(), entries, true));
             licenseValid = result.getSecond();
+			invalidateOptionsMenu();
 
             boolean playAll = getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
             if (playAll && songCount > 0) {
