@@ -215,6 +215,7 @@ public class ImageLoader implements Runnable {
 			} catch(OutOfMemoryError e) {
 				Log.w(TAG, "Ran out of memory trying to load image, try cleanup and retry");
 				cache.clear();
+				System.gc();
 				loadImage();
 			}
         }
