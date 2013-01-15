@@ -832,6 +832,7 @@ public final class Util {
 					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS) {
 						hasFocus = false;
 						downloadService.pause();
+						audioManager.abandonAudioFocus(this);
 					}
 				}
 			}, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
