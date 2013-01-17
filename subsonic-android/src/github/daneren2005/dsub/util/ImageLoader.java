@@ -28,7 +28,7 @@ import android.media.RemoteControlClient;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.LruCache;
+import android.support.v4.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -67,7 +67,7 @@ public class ImageLoader implements Runnable {
 		cache = new LruCache<String, Bitmap>(cacheSize) {
 			@Override
 			protected int sizeOf(String key, Bitmap bitmap) {
-				return bitmap.getByteCount() / 1024;
+				return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
 			}
 			
 			@Override
