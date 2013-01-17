@@ -28,6 +28,7 @@ import android.media.RemoteControlClient;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,13 +53,31 @@ public class ImageLoader implements Runnable {
     private static final String TAG = ImageLoader.class.getSimpleName();
     private static final int CONCURRENCY = 5;
 
-    private final LRUCache<String, Drawable> cache = new LRUCache<String, Drawable>(100);
+	private Context context;
+    private LruCache<String, Bitmap> cache;
     private final BlockingQueue<Task> queue;
     private final int imageSizeDefault;
     private final int imageSizeLarge;
     private Drawable largeUnknownImage;
 
     public ImageLoader(Context context) {
+		this.context = context;
+		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+		final int cacheSize = maxMemory / 4;
+		cache = new LruCache<String, Bitmap>(cacheSize) {
+			@Override
+			protected int sizeOf(String key, Bitmap bitmap) {
+				return bitmap.getByteCount() / 1024;
+			}
+			
+			@Override
+			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
+				if(evicted) {
+					oldBitmap.recycle();
+				}
+			}
+		};
+		
         queue = new LinkedBlockingQueue<Task>(500);
 
         // Determine the density-dependent image sizes.
@@ -86,8 +105,9 @@ public class ImageLoader implements Runnable {
         }
 
         int size = large ? imageSizeLarge : imageSizeDefault;
-        Drawable drawable = cache.get(getKey(entry.getCoverArt(), size));
-        if (drawable != null) {
+        Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), size));
+        if (bitmap != null) {
+			final Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
             setImage(view, drawable, large);
             return;
         }
@@ -104,8 +124,9 @@ public class ImageLoader implements Runnable {
             return;
         }
         
-        Drawable drawable = cache.get(getKey(entry.getCoverArt(), imageSizeLarge));
-        if (drawable != null) {
+        Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), imageSizeLarge));
+        if (bitmap != null) {
+			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
             setImage(remoteControl, drawable);
             return;
         }
@@ -214,7 +235,7 @@ public class ImageLoader implements Runnable {
 				loadImage();
 			} catch(OutOfMemoryError e) {
 				Log.w(TAG, "Ran out of memory trying to load image, try cleanup and retry");
-				cache.clear();
+				cache.evictAll();
 				System.gc();
 			}
         }
@@ -222,10 +243,9 @@ public class ImageLoader implements Runnable {
 			try {
                 MusicService musicService = MusicServiceFactory.getMusicService(mContext);
                 Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, mSaveToFile, null);
-
-                final Drawable drawable = Util.createDrawableFromBitmap(mContext, bitmap);
-                cache.put(getKey(mEntry.getCoverArt(), mSize), drawable);
+                cache.put(getKey(mEntry.getCoverArt(), mSize), bitmap);
                 
+				final Drawable drawable = Util.createDrawableFromBitmap(mContext, bitmap);
                 mTaskHandler.setDrawable(drawable);
                 mHandler.post(mTaskHandler);
             } catch (Throwable x) {
