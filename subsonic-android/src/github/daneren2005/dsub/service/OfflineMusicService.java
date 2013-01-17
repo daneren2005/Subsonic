@@ -227,12 +227,14 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 	private boolean matchCriteria(SearchCritera criteria, String name) {
 		String query = criteria.getQuery().toLowerCase();
-		String[] parts = query.split(" ");
-		name = name.toLowerCase();
+		String[] queryParts = query.split(" ");
+		String[] nameParts = name.toLowerCase().split(" ");
 		
-		for(String part : parts) {
-			if(name.indexOf(part) != -1) {
-				return true;
+		for(String queryPart : queryParts) {
+			for(String namePart : nameParts) {
+				if(namePart.equals(queryPart)) {
+					return true;
+				}
 			}
 		}
 		
