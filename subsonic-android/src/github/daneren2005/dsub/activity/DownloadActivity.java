@@ -519,7 +519,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         if (id == DIALOG_SAVE_PLAYLIST) {
-            String playlistName = getDownloadService().getSuggestedPlaylistName();
+            String playlistName = (getDownloadService() != null) ? getDownloadService().getSuggestedPlaylistName() : null;
             if (playlistName != null) {
                 playlistNameView.setText(playlistName);
             } else {
