@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import github.daneren2005.dsub.R;
@@ -229,12 +230,15 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 	}
 	
 	private void displayPlaylistInfo(final Playlist playlist) {
+		String message = "Owner: " + playlist.getOwner() + "\nComments: " +
+			((playlist.getComment() == null) ? "" : playlist.getComment()) +
+			"\nSong Count: " + playlist.getSongCount() +
+			((playlist.getPublic() == null) ? "" : ("\nPublic: " + playlist.getPublic())) +
+			"\nCreation Date: " + playlist.getCreated().replace('T', ' ');
 		new AlertDialog.Builder(this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(playlist.getName())
-			.setMessage("Owner: " + playlist.getOwner() + "\nComments: " +
-				((playlist.getComment() == null) ? "" : playlist.getComment()) +
-				"\nSong Count: " + playlist.getSongCount() + "\nCreation Date: " + playlist.getCreated().replace('T', ' '))
+			.setMessage(message)
 			.show();
 	}
 	
@@ -242,9 +246,16 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 		View dialogView = getLayoutInflater().inflate(R.layout.update_playlist, null);
 		final EditText nameBox = (EditText)dialogView.findViewById(R.id.get_playlist_name);
 		final EditText commentBox = (EditText)dialogView.findViewById(R.id.get_playlist_comment);
+		final CheckBox publicBox = (CheckBox)dialogView.findViewById(R.id.get_playlist_public);
 		
 		nameBox.setText(playlist.getName());
 		commentBox.setText(playlist.getComment());
+		Boolean pub = playlist.getPublic();
+		if(pub == null) {
+			publicBox.setEnabled(false);
+		} else {
+			publicBox.setChecked(pub);
+		}
 		
 		new AlertDialog.Builder(this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
@@ -257,7 +268,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 						@Override
 						protected Void doInBackground() throws Throwable {
 							MusicService musicService = MusicServiceFactory.getMusicService(SelectPlaylistActivity.this);
-							musicService.updatePlaylist(playlist.getId(), nameBox.getText().toString(), commentBox.getText().toString(), SelectPlaylistActivity.this, null);
+							musicService.updatePlaylist(playlist.getId(), nameBox.getText().toString(), commentBox.getText().toString(), publicBox.isChecked(), SelectPlaylistActivity.this, null);
 							return null;
 						}
 

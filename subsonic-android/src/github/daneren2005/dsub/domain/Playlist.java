@@ -31,18 +31,20 @@ public class Playlist implements Serializable {
 	private String comment;
 	private String songCount;
 	private String created;
+	private Boolean pub;
 
     public Playlist(String id, String name) {
         this.id = id;
         this.name = name;
     }
-	public Playlist(String id, String name, String owner, String comment, String songCount, String created) {
+	public Playlist(String id, String name, String owner, String comment, String songCount, String created, String pub) {
         this.id = id;
         this.name = name;
 		this.owner = (owner == null) ? "" : owner;
 		this.comment = (comment == null) ? "" : comment;
 		this.songCount = (songCount == null) ? "" : songCount;
 		this.created = (created == null) ? "" : created;
+		this.pub = (pub == null) ? null : (pub.equals("true"));
     }
 
     public String getId() {
@@ -91,6 +93,13 @@ public class Playlist implements Serializable {
 	
 	public void setCreated(String created) {
 		this.created = created;
+	}
+	
+	public Boolean getPublic() {
+		return this.pub;
+	}
+	public void setPublic(Boolean pub) {
+		this.pub = pub;
 	}
 
     @Override

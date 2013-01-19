@@ -317,7 +317,7 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 	
 	@Override
-	public void updatePlaylist(String id, String name, String comment, Context context, ProgressListener progressListener) throws Exception {
+	public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException("Updating playlist not available in offline mode");
 	}
 

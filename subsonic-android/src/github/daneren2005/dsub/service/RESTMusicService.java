@@ -439,9 +439,9 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
-	public void updatePlaylist(String id, String name, String comment, Context context, ProgressListener progressListener) throws Exception {
+	public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
-		Reader reader = getReader(context, progressListener, "updatePlaylist", null, Arrays.asList("playlistId", "name", "comment"), Arrays.<Object>asList(id, name, comment));
+		Reader reader = getReader(context, progressListener, "updatePlaylist", null, Arrays.asList("playlistId", "name", "comment", "public"), Arrays.<Object>asList(id, name, comment, pub));
 		try {
 			new ErrorParser(context).parse(reader);
 		} finally {
