@@ -29,6 +29,7 @@ public class Artist implements Serializable {
     private String name;
     private String index;
 	private boolean starred;
+	private int closeness;
 
     public String getId() {
         return id;
@@ -60,6 +61,14 @@ public class Artist implements Serializable {
 
 	public void setStarred(boolean starred) {
 		this.starred = starred;
+	}
+	
+	public int getCloseness() {
+		return closeness;
+	}
+	
+	public void setCloseness(int closeness) {
+		this.closeness = closeness;
 	}
 
     @Override

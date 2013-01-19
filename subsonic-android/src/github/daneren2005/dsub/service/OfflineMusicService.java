@@ -51,6 +51,7 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
 import java.io.*;
+import java.util.Comparator;
 
 /**
  * @author Sindre Mehus
@@ -173,14 +174,16 @@ public class OfflineMusicService extends RESTMusicService {
 		List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
 		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
         File root = FileUtil.getMusicDirectory(context);
+		int closeness = 0;
         for (File artistFile : FileUtil.listFiles(root)) {
 			String artistName = artistFile.getName();
             if (artistFile.isDirectory()) {
-				if(matchCriteria(criteria, artistName)) {
+				if((closeness = matchCriteria(criteria, artistName)) > 0) {
 					Artist artist = new Artist();
 					artist.setId(artistFile.getPath());
 					artist.setIndex(artistFile.getName().substring(0, 1));
 					artist.setName(artistName);
+					artist.setCloseness(closeness);
 					artists.add(artist);
 				}
 				
@@ -188,16 +191,58 @@ public class OfflineMusicService extends RESTMusicService {
             }
         }
 		
+		Collections.sort(artists, new Comparator<Artist>() {
+			public int compare(Artist lhs, Artist rhs) {
+				if(lhs.getCloseness() == rhs.getCloseness()) {
+					return 0;
+				}
+				else if(lhs.getCloseness() > rhs.getCloseness()) {
+					return -1;
+				}
+				else {
+					return 1;
+				}
+			}
+		});
+		Collections.sort(albums, new Comparator<MusicDirectory.Entry>() {
+			public int compare(MusicDirectory.Entry lhs, MusicDirectory.Entry rhs) {
+				if(lhs.getCloseness() == rhs.getCloseness()) {
+					return 0;
+				}
+				else if(lhs.getCloseness() > rhs.getCloseness()) {
+					return -1;
+				}
+				else {
+					return 1;
+				}
+			}
+		});
+		Collections.sort(songs, new Comparator<MusicDirectory.Entry>() {
+			public int compare(MusicDirectory.Entry lhs, MusicDirectory.Entry rhs) {
+				if(lhs.getCloseness() == rhs.getCloseness()) {
+					return 0;
+				}
+				else if(lhs.getCloseness() > rhs.getCloseness()) {
+					return -1;
+				}
+				else {
+					return 1;
+				}
+			}
+		});
+		
 		return new SearchResult(artists, albums, songs);
     }
 	
 	private void recursiveAlbumSearch(String artistName, File file, SearchCritera criteria, Context context, List<MusicDirectory.Entry> albums, List<MusicDirectory.Entry> songs) {
+		int closeness;
 		for(File albumFile : FileUtil.listMediaFiles(file)) {
 			if(albumFile.isDirectory()) {
 				String albumName = getName(albumFile);
-				if(matchCriteria(criteria, albumName)) {
+				if((closeness = matchCriteria(criteria, albumName)) > 0) {
 					MusicDirectory.Entry album = createEntry(context, albumFile, albumName);
 					album.setArtist(artistName);
+					album.setCloseness(closeness);
 					albums.add(album);
 				}
 
@@ -206,39 +251,42 @@ public class OfflineMusicService extends RESTMusicService {
 					if(songFile.isDirectory()) {
 						recursiveAlbumSearch(artistName, songFile, criteria, context, albums, songs);
 					}
-					else if(matchCriteria(criteria, songName)){
+					else if((closeness = matchCriteria(criteria, songName)) > 0){
 						MusicDirectory.Entry song = createEntry(context, albumFile, songName);
 						song.setArtist(artistName);
 						song.setAlbum(albumName);
+						song.setCloseness(closeness);
 						songs.add(song);
 					}
 				}
 			}
 			else {
 				String songName = getName(albumFile);
-				if(matchCriteria(criteria, songName)) {
+				if((closeness = matchCriteria(criteria, songName)) > 0) {
 					MusicDirectory.Entry song = createEntry(context, albumFile, songName);
 					song.setArtist(artistName);
 					song.setAlbum(songName);
+					song.setCloseness(closeness);
 					songs.add(song);
 				}
 			}
 		}
 	}
-	private boolean matchCriteria(SearchCritera criteria, String name) {
+	private int matchCriteria(SearchCritera criteria, String name) {
 		String query = criteria.getQuery().toLowerCase();
 		String[] queryParts = query.split(" ");
 		String[] nameParts = name.toLowerCase().split(" ");
 		
+		int closeness = 0;
 		for(String queryPart : queryParts) {
 			for(String namePart : nameParts) {
 				if(namePart.equals(queryPart)) {
-					return true;
+					closeness++;
 				}
 			}
 		}
 		
-		return false;
+		return closeness;
 	}
 
     @Override

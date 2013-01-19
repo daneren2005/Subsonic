@@ -81,6 +81,7 @@ public class MusicDirectory {
         private String path;
         private boolean video;
         private boolean starred;
+		private int closeness;
 
         public String getId() {
             return id;
@@ -241,6 +242,14 @@ public class MusicDirectory {
         public void setStarred(boolean starred) {
             this.starred = starred;
         }
+		
+		public int getCloseness() {
+			return closeness;
+		}
+
+		public void setCloseness(int closeness) {
+			this.closeness = closeness;
+		}
 
         @Override
         public boolean equals(Object o) {
