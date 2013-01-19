@@ -1145,7 +1145,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         private boolean bufferComplete() {
-            boolean completeFileAvailable = downloadFile.isCompleteFileAvailable();
+            boolean completeFileAvailable = downloadFile.isWorkDone();
             long size = partialFile.length();
 
             Log.i(TAG, "Buffering " + partialFile + " (" + size + "/" + expectedFileSize + ", " + completeFileAvailable + ")");
