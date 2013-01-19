@@ -506,15 +506,15 @@ public class RESTMusicService implements MusicService {
             names.add("musicFolderId");
             values.add(musicFolderId);
         }
-		if(genre != null && genre != "") {
+		if(genre != null && !genre.isEmpty()) {
 			names.add("genre");
 			values.add(genre);
 		}
-		if(startYear != null && startYear != "") {
+		if(startYear != null && !startYear.isEmpty()) {
 			names.add("fromYear");
 			values.add(startYear);
 		}
-		if(endYear != null && endYear != "") {
+		if(endYear != null && !endYear.isEmpty()) {
 			names.add("toYear");
 			values.add(endYear);
 		}
