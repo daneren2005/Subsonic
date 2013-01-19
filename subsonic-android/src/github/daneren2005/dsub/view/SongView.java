@@ -118,7 +118,7 @@ public class SongView extends UpdateView implements Checkable {
         int rightImage = 0;
 
         if (downloadFile.isWorkDone()) {
-            leftImage = downloadFile.shouldSave() ? R.drawable.saved : R.drawable.downloaded;
+            leftImage = downloadFile.isSaved() ? R.drawable.saved : R.drawable.downloaded;
 			moreButton.setImageResource(R.drawable.list_item_more_shaded);
         } else {
 			moreButton.setImageResource(R.drawable.list_item_more);

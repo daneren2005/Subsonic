@@ -1033,7 +1033,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			if((preloaded + 1 == n || preloaded >= Util.getPreloadCount(this) || downloadList.isEmpty()) && !backgroundDownloadList.isEmpty()) {
 				for(int i = 0; i < backgroundDownloadList.size(); i++) {
 					DownloadFile downloadFile = backgroundDownloadList.get(i);
-					if(downloadFile.isWorkDone()) {
+					if(downloadFile.isWorkDone() && (!downloadFile.shouldSave() || downloadFile.isSaved())) {
 						// Don't need to keep list like active song list
 						backgroundDownloadList.remove(downloadFile);
 						i--;
