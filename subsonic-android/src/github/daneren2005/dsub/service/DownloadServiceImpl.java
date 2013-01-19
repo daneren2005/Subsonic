@@ -1109,9 +1109,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     private class BufferTask extends CancellableTask {
-
-        private static final int BUFFER_LENGTH_SECONDS = 5;
-
         private final DownloadFile downloadFile;
         private final int position;
         private final long expectedFileSize;
@@ -1122,9 +1119,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             this.position = position;
             partialFile = downloadFile.getPartialFile();
 
+			SharedPreferences prefs = Util.getPreferences(DownloadServiceImpl.this);
+			long bufferLength = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_BUFFER_LENGTH, "5"));
+			if(bufferLength == 0) {
+				// Set to seconds in a day, basically infinity
+				bufferLength = 86400L;
+			}
+
             // Calculate roughly how many bytes BUFFER_LENGTH_SECONDS corresponds to.
             int bitRate = downloadFile.getBitRate();
-            long byteCount = Math.max(100000, bitRate * 1024 / 8 * BUFFER_LENGTH_SECONDS);
+            long byteCount = Math.max(100000, bitRate * 1024L / 8L * bufferLength);
 
             // Find out how large the file should grow before resuming playback.
 			Log.i(TAG, "Buffering from position " + position + " and bitrate " + bitRate);
