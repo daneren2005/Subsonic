@@ -97,7 +97,7 @@ public final class Constants {
     // URL for project donations.
     public static final String DONATION_URL = "http://subsonic.org/pages/android-donation.jsp";
 
-    public static final String ALBUM_ART_FILE = "folder.jpeg";
+    public static final String ALBUM_ART_FILE = "cover.jpeg";
 
     private Constants() {
     }

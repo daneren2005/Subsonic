@@ -94,8 +94,7 @@ public class FileUtil {
     }
 
     public static File getAlbumArtFile(File albumDir) {
-        File albumArtDir = getAlbumArtDirectory();
-        return new File(albumArtDir, Util.md5Hex(albumDir.getPath()) + ".jpeg");
+        return new File(albumDir, Constants.ALBUM_ART_FILE);
     }
 
     public static Bitmap getAlbumArtBitmap(Context context, MusicDirectory.Entry entry, int size) {
@@ -105,13 +104,6 @@ public class FileUtil {
 			return (bitmap == null) ? null : Bitmap.createScaledBitmap(bitmap, size, size, true);
         }
         return null;
-    }
-
-    public static File getAlbumArtDirectory() {
-        File albumArtDir = new File(getSubsonicDirectory(), "artwork");
-        ensureDirectoryExistsAndIsReadWritable(albumArtDir);
-        ensureDirectoryExistsAndIsReadWritable(new File(albumArtDir, ".nomedia"));
-        return albumArtDir;
     }
 	
 	public static File getArtistDirectory(Context context, Artist artist) {

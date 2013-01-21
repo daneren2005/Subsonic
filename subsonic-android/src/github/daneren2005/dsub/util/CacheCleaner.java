@@ -51,11 +51,16 @@ public class CacheCleaner {
             }
 
             File[] children = dir.listFiles();
+			
+			// No songs left in the folder
+			if(children.length == 1 && children[0].getPath().equals(FileUtil.getAlbumArtFile(dir).getPath())) {
+				Util.delete(FileUtil.getAlbumArtFile(dir));
+				children = dir.listFiles();
+			}
 
-            // Delete empty directory and associated album artwork.
+            // Delete empty directory
             if (children.length == 0) {
                 Util.delete(dir);
-                Util.delete(FileUtil.getAlbumArtFile(dir));
             }
         }
     }
@@ -96,12 +101,8 @@ public class CacheCleaner {
         for (File file : files) {
 			if(!deletePartials && bytesDeleted > bytesToDelete) break;
 
-            if (file.getName().equals(Constants.ALBUM_ART_FILE)) {
-                // Move artwork to new folder.
-                file.renameTo(FileUtil.getAlbumArtFile(file.getParentFile()));
-
-            } else if (bytesToDelete > bytesDeleted || (deletePartials && (file.getName().endsWith(".partial") || file.getName().contains(".partial.")))) {
-                if (!undeletable.contains(file)) {
+            if (bytesToDelete > bytesDeleted || (deletePartials && (file.getName().endsWith(".partial") || file.getName().contains(".partial.")))) {
+                if (!undeletable.contains(file) && !file.getName().equals(Constants.ALBUM_ART_FILE)) {
                     long size = file.length();
                     if (Util.delete(file)) {
                         bytesDeleted += size;
@@ -117,8 +118,7 @@ public class CacheCleaner {
         if (file.isFile()) {
             String name = file.getName();
             boolean isCacheFile = name.endsWith(".partial") || name.contains(".partial.") || name.endsWith(".complete") || name.contains(".complete.");
-            boolean isAlbumArtFile = name.equals(Constants.ALBUM_ART_FILE);
-            if (isCacheFile || isAlbumArtFile) {
+            if (isCacheFile) {
                 files.add(file);
             }
         } else {

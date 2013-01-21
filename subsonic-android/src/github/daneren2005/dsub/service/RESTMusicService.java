@@ -583,10 +583,11 @@ public class RESTMusicService implements MusicService {
 
                 byte[] bytes = Util.toByteArray(in);
 
-                if (saveToFile) {
+				File albumDir = FileUtil.getAlbumDirectory(context, entry);
+                if (saveToFile && albumDir.exists()) {
                     OutputStream out = null;
                     try {
-                        out = new FileOutputStream(FileUtil.getAlbumArtFile(context, entry));
+                        out = new FileOutputStream(FileUtil.getAlbumArtFile(albumDir));
                         out.write(bytes);
                     } finally {
                         Util.close(out);
