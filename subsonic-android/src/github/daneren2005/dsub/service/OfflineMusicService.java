@@ -152,7 +152,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 
     @Override
-    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, boolean saveToFile, ProgressListener progressListener) throws Exception {
+    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, int saveSize, ProgressListener progressListener) throws Exception {
         InputStream in = new FileInputStream(entry.getCoverArt());
         try {
             byte[] bytes = Util.toByteArray(in);

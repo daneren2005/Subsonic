@@ -36,6 +36,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import java.io.File;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -115,8 +116,8 @@ public class ImageLoader implements Runnable {
         if (!large) {
             setUnknownImage(view, large);
         }
-        queue.offer(new Task(view.getContext(), entry, size, large, new ViewTaskHandler(view, crossfade)));
-    }
+        queue.offer(new Task(view.getContext(), entry, size, imageSizeLarge, new ViewTaskHandler(view, crossfade)));
+	}
 
     public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
         if (entry == null || entry.getCoverArt() == null) {
@@ -132,7 +133,7 @@ public class ImageLoader implements Runnable {
         }
 
         setUnknownImage(remoteControl);
-        queue.offer(new Task(context, entry, imageSizeLarge, false, new RemoteControlClientTaskHandler(remoteControl)));
+        queue.offer(new Task(context, entry, imageSizeLarge, imageSizeLarge, new RemoteControlClientTaskHandler(remoteControl)));
     }
 
     private String getKey(String coverArtId, int size) {
@@ -218,14 +219,14 @@ public class ImageLoader implements Runnable {
         private final MusicDirectory.Entry mEntry;
         private final Handler mHandler;
         private final int mSize;
-        private final boolean mSaveToFile;
+        private final int mSaveSize;
         private ImageLoaderTaskHandler mTaskHandler;
 
-        public Task(Context context, MusicDirectory.Entry entry, int size, boolean saveToFile, ImageLoaderTaskHandler taskHandler) {
+        public Task(Context context, MusicDirectory.Entry entry, int size, int saveSize, ImageLoaderTaskHandler taskHandler) {
         	mContext = context;
             mEntry = entry;
             mSize = size;
-            mSaveToFile = saveToFile;
+            mSaveSize = saveSize;
             mTaskHandler = taskHandler;
             mHandler = new Handler();
         }
@@ -242,7 +243,7 @@ public class ImageLoader implements Runnable {
 		public void loadImage() {
 			try {
                 MusicService musicService = MusicServiceFactory.getMusicService(mContext);
-                Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, mSaveToFile, null);
+                Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, mSaveSize, null);
                 cache.put(getKey(mEntry.getCoverArt(), mSize), bitmap);
                 
 				final Drawable drawable = Util.createDrawableFromBitmap(mContext, bitmap);
