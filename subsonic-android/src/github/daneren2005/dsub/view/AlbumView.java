@@ -84,7 +84,6 @@ public class AlbumView extends UpdateView {
 	protected void update() {
 		starButton.setVisibility((Util.isOffline(getContext()) || !album.isStarred()) ? View.GONE : View.VISIBLE);
 		File file = FileUtil.getAlbumDirectory(context, album);
-		Log.d(TAG, file.getPath());
 		if(file.exists()) {
 			moreButton.setImageResource(R.drawable.list_item_more_shaded);
 		} else {
