@@ -47,7 +47,7 @@ public class AlbumListParser extends MusicDirectoryEntryParser {
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
                 if ("album".equals(name)) {
-                    dir.addChild(parseEntry());
+                    dir.addChild(parseEntry(""));
                 } else if ("error".equals(name)) {
                     handleError();
                 }

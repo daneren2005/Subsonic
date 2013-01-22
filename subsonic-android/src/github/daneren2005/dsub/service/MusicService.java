@@ -49,7 +49,7 @@ public interface MusicService {
 
     Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
-    MusicDirectory getMusicDirectory(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+    MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
     SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception;
 

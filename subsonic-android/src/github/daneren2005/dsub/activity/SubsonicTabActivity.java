@@ -333,7 +333,7 @@ public class SubsonicTabActivity extends SherlockActivity {
                 MusicService musicService = MusicServiceFactory.getMusicService(SubsonicTabActivity.this);
 				MusicDirectory root;
 				if(isDirectory)
-					root = musicService.getMusicDirectory(id, false, SubsonicTabActivity.this, this);
+					root = musicService.getMusicDirectory(id, name, false, SubsonicTabActivity.this, this);
 				else
 					root = musicService.getPlaylist(id, name, SubsonicTabActivity.this, this);
                 List<MusicDirectory.Entry> songs = new LinkedList<MusicDirectory.Entry>();
@@ -353,7 +353,7 @@ public class SubsonicTabActivity extends SherlockActivity {
                 }
                 for (MusicDirectory.Entry dir : parent.getChildren(true, false)) {
                     MusicService musicService = MusicServiceFactory.getMusicService(SubsonicTabActivity.this);
-                    getSongsRecursively(musicService.getMusicDirectory(dir.getId(), false, SubsonicTabActivity.this, this), songs);
+                    getSongsRecursively(musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, SubsonicTabActivity.this, this), songs);
                 }
             }
 

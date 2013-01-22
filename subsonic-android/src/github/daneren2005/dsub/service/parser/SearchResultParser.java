@@ -51,7 +51,7 @@ public class SearchResultParser extends MusicDirectoryEntryParser {
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
                 if ("match".equals(name)) {
-                    songs.add(parseEntry());
+                    songs.add(parseEntry(""));
                 } else if ("error".equals(name)) {
                     handleError();
                 }

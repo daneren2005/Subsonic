@@ -81,7 +81,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 
     @Override
-    public MusicDirectory getMusicDirectory(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getMusicDirectory(String id, String artistName, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         File dir = new File(id);
         MusicDirectory result = new MusicDirectory();
         result.setName(dir.getName());

@@ -30,7 +30,7 @@ public class MusicDirectoryEntryParser extends AbstractParser {
         super(context);
     }
 
-    protected MusicDirectory.Entry parseEntry() {
+    protected MusicDirectory.Entry parseEntry(String artist) {
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         entry.setId(get("id"));
         entry.setParent(get("parent"));
@@ -54,7 +54,9 @@ public class MusicDirectoryEntryParser extends AbstractParser {
             entry.setBitRate(getInteger("bitRate"));
             entry.setPath(get("path"));
             entry.setVideo(getBoolean("isVideo"));
-        }
+        } else if(!artist.isEmpty()) {
+			entry.setPath(artist + "/" + entry.getTitle());
+		}
         return entry;
     }
 }

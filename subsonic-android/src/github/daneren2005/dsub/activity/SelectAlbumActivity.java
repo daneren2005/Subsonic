@@ -344,14 +344,14 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         return true;
     }
 
-    private void getMusicDirectory(final String id, String name) {
+    private void getMusicDirectory(final String id, final String name) {
         setTitle(name);
 
         new LoadTask() {
             @Override
             protected MusicDirectory load(MusicService service) throws Exception {
                 boolean refresh = getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_REFRESH, false);
-                return service.getMusicDirectory(id, refresh, SelectAlbumActivity.this, this);
+                return service.getMusicDirectory(id, name, refresh, SelectAlbumActivity.this, this);
             }
         }.execute();
     }
