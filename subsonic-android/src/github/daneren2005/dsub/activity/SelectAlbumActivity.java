@@ -295,6 +295,9 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			case R.id.album_menu_star:
                 toggleStarred(entry);
                 break;
+			case R.id.album_menu_delete:
+				deleteRecursively(entry);
+                break;
             case R.id.song_menu_play_now:
 				getDownloadService().clear();
                 getDownloadService().download(songs, false, true, true, false);
@@ -591,6 +594,14 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			startActivity(intent);
 		} else {
 			Util.toast(this, R.string.download_no_streaming_player);
+		}
+	}
+	
+	public void deleteRecursively(MusicDirectory.Entry album) {
+		File dir = FileUtil.getAlbumDirectory(this, album);
+		Util.recursiveDelete(dir);
+		if(Util.isOffline(this)) {
+			refresh();
 		}
 	}
 

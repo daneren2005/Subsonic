@@ -25,6 +25,10 @@
         android:id="@+id/album_menu_pin"
         android:title="@string/common.pin"
         />
+
+	<item 
+		android:id="@+id/album_menu_delete"
+		android:title="@string/common.delete"/>
 		
 	<item 
 		android:id="@+id/album_menu_star"

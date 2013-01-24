@@ -14,5 +14,9 @@
     <item 
         android:id="@+id/artist_menu_play_last"
         android:title="@string/common.play_last"
-        />       
+        />
+
+	<item 
+		android:id="@+id/artist_menu_delete"
+		android:title="@string/common.delete"/>
 </menu>

@@ -39,8 +39,10 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.view.ArtistAdapter;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.TabActivityBackgroundTask;
 import github.daneren2005.dsub.util.Util;
+import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,6 +128,14 @@ public class SelectArtistActivity extends SubsonicTabActivity implements Adapter
     private void selectFolder() {
         folderButton.showContextMenu();
     }
+	
+	public void deleteRecursively(Artist artist) {
+		File dir = FileUtil.getArtistDirectory(this, artist);
+		Util.recursiveDelete(dir);
+		if(Util.isOffline(this)) {
+			refresh();
+		}
+	}
 
     private void load() {
         BackgroundTask<Indexes> task = new TabActivityBackgroundTask<Indexes>(this) {
@@ -232,6 +242,9 @@ public class SelectArtistActivity extends SubsonicTabActivity implements Adapter
                     break;
                 case R.id.artist_menu_pin:
                     downloadRecursively(artist.getId(), true, true, false, false, true);
+                    break;
+				case R.id.artist_menu_delete:
+                    deleteRecursively(artist);
                     break;
                 default:
                     return super.onContextItemSelected(menuItem);

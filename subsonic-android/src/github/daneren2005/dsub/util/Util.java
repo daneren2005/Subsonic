@@ -369,6 +369,23 @@ public final class Util {
         }
         return true;
     }
+	public static boolean recursiveDelete(File dir) {
+		if (dir != null && dir.exists()) {
+			for(File file: dir.listFiles()) {
+				if(file.isDirectory()) {
+					if(!recursiveDelete(file)) {
+						return false;
+					}
+				} else if(file.exists()) {
+					if(!file.delete()) {
+						return false;
+					}
+				}
+			}
+			return dir.delete();
+		}
+		return false;
+	}
 
     public static void toast(Context context, int messageId) {
         toast(context, messageId, true);
