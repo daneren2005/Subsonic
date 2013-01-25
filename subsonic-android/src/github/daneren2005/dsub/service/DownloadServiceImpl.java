@@ -84,6 +84,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     
     private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
     private MediaPlayer mediaPlayer;
+	private MediaPlayer nextMediaPlayer;
     private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
     private final Handler handler = new Handler();
@@ -95,9 +96,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private final Scrobbler scrobbler = new Scrobbler();
     private final JukeboxService jukeboxService = new JukeboxService(this);
     private DownloadFile currentPlaying;
+	private DownloadFile nextPlaying;
     private DownloadFile currentDownloading;
     private CancellableTask bufferTask;
+	private CancellableTask nextPlayingTask;
     private PlayerState playerState = IDLE;
+	private PlayerState nextPlayerState = IDLE;
     private boolean shufflePlay;
     private long revision;
     private static DownloadService instance;
@@ -145,6 +149,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             @Override
             public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
                 handleError(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
+                return false;
+            }
+        });
+		
+		nextMediaPlayer = new MediaPlayer();
+        nextMediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
+
+        nextMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
+                handleErrorNext(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
                 return false;
             }
         });
@@ -208,6 +223,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
         lifecycleSupport.onDestroy();
         mediaPlayer.release();
+		nextMediaPlayer.release();
         shufflePlayBuffer.shutdown();
         if (equalizerController != null) {
             equalizerController.release();
@@ -550,8 +566,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             reset();
             setCurrentPlaying(null, false);
         } else {
+			if(nextPlayingTask != null) {
+				nextPlayingTask.cancel();
+			}
             setCurrentPlaying(index, start);
             checkDownloads();
+			nextPlayingTask = new CheckCompletionTask(nextPlaying);
+			nextPlayingTask.start();
             if (start) {
                 if (jukeboxEnabled) {
                     jukeboxService.skip(getCurrentPlayingIndex(), 0);
@@ -771,6 +792,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			}
 		}
     }
+	
+	synchronized void setNextPlayerState(PlayerState playerState) {
+        Log.i(TAG, "Next: " + this.playerState.name() + " -> " + playerState.name() + " (" + currentPlaying + ")");
+        this.nextPlayerState = playerState;
+    }
 
     @Override
     public void setSuggestedPlaylistName(String name) {
@@ -922,6 +948,40 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
     }
 	
+	private synchronized void setupNext(final DownloadFile downloadFile) {
+		try {
+            final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
+            downloadFile.updateModificationDate();
+            nextMediaPlayer.setOnCompletionListener(null);
+            nextMediaPlayer.reset();
+            setNextPlayerState(IDLE);
+            nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            nextMediaPlayer.setDataSource(file.getPath());
+            setNextPlayerState(PREPARING);
+			
+			nextMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+				public void onPrepared(MediaPlayer mediaPlayer) {
+					try {
+						setNextPlayerState(PREPARED);
+					} catch (Exception x) {
+						handleErrorNext(x);
+					}
+				}
+			});
+			
+			nextMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+				public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
+					Log.w(TAG, "Error on playing next " + "(" + what + ", " + extra + "): " + downloadFile);
+					return true;
+				}
+			});
+			
+			nextMediaPlayer.prepareAsync();
+        } catch (Exception x) {
+            handleErrorNext(x);
+        }
+	}
+	
 	@Override
 	public void setSleepTimerDuration(int duration){
 		timerDuration = duration;
@@ -974,6 +1034,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         mediaPlayer.reset();
         setPlayerState(IDLE);
     }
+	private void handleErrorNext(Exception x) {
+		Log.w(TAG, "Next Media player error: " + x, x);
+        nextMediaPlayer.reset();
+		setNextPlayerState(IDLE);
+	}
 
     protected synchronized void checkDownloads() {
         if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable()) {
@@ -1020,6 +1085,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 							currentDownloading = downloadFile;
 							currentDownloading.download();
 							cleanupCandidates.add(currentDownloading);
+							if(i == (start + 1)) {
+								setNextPlayerState(DOWNLOADING);
+							}
 							break;
 						}
 					} else if (currentPlaying != downloadFile) {
@@ -1159,6 +1227,40 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         @Override
         public String toString() {
             return "BufferTask (" + downloadFile + ")";
+        }
+    }
+	
+	private class CheckCompletionTask extends CancellableTask {
+        private final DownloadFile downloadFile;
+        private final File partialFile;
+
+        public CheckCompletionTask(DownloadFile downloadFile) {
+            this.downloadFile = downloadFile;
+            partialFile = downloadFile.getPartialFile();
+        }
+
+        @Override
+        public void execute() {
+            while (!bufferComplete()) {
+                Util.sleepQuietly(1000L);
+                if (isCancelled()) {
+                    return;
+                }
+            }
+            
+			// Do something
+			setupNext(downloadFile);
+        }
+
+        private boolean bufferComplete() {
+            boolean completeFileAvailable = downloadFile.isWorkDone();
+            Log.i(TAG, "Buffering next " + partialFile + " (" + partialFile.length() + ")");
+            return completeFileAvailable;
+        }
+
+        @Override
+        public String toString() {
+            return "CheckCompletionTask (" + downloadFile + ")";
         }
     }
 }
