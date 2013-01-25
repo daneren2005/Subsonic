@@ -108,9 +108,11 @@ public class ShufflePlayBuffer {
     private void clearBufferIfnecessary() {
         synchronized (buffer) {
 			final SharedPreferences prefs = Util.getPreferences(context);
-            if (currentServer != Util.getActiveServer(context) || !currentFolder.equals(Util.getSelectedMusicFolderId(context))
-				|| !genre.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "")) || !startYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, ""))
-				|| !endYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, ""))) {
+            if (currentServer != Util.getActiveServer(context)
+				|| (currentFolder != null && !currentFolder.equals(Util.getSelectedMusicFolderId(context)))
+				|| (genre != null && !genre.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "")))
+				|| (startYear != null && !startYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "")))
+				|| (endYear != null && !endYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "")))) {
                 currentServer = Util.getActiveServer(context);
 				currentFolder = Util.getSelectedMusicFolderId(context);
 				genre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");
