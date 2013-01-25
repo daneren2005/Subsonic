@@ -46,7 +46,7 @@ public class ShufflePlayBuffer {
     private final List<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
     private Context context;
     private int currentServer;
-	private String currentFolder;
+	private String currentFolder = "";
 	
 	private String genre = "";
 	private String startYear = "";
