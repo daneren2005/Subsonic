@@ -139,6 +139,8 @@ public class MainActivity extends SubsonicTabActivity {
 		// Title: Subsonic
         setTitle(R.string.common_appname);
         showInfoDialog();
+		
+		checkUpdates();
     }
 	
 	@Override

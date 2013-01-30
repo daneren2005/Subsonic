@@ -47,6 +47,7 @@ import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.*;
+import github.daneren2005.dsub.updates.Updater;
 import github.daneren2005.dsub.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -527,6 +528,18 @@ public class SubsonicTabActivity extends SherlockActivity {
 			.setTitle(song.getTitle())
 			.setMessage(msg)
 			.show();
+	}
+	
+	public void checkUpdates() {
+		try {
+			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			int ver = Integer.parseInt(version.replace(".", ""));
+			Updater updater = new Updater(ver);
+			updater.checkUpdates(SubsonicTabActivity.this);
+		}
+		catch(Exception e) {
+			
+		}
 	}
 
     private void setUncaughtExceptionHandler() {
