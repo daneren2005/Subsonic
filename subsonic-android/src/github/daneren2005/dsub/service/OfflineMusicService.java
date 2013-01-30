@@ -77,6 +77,25 @@ public class OfflineMusicService extends RESTMusicService {
                 artists.add(artist);
             }
         }
+		
+		Collections.sort(artists, new Comparator<Artist>() {
+			public int compare(Artist lhsArtist, Artist rhsArtist) {
+				String lhs = lhsArtist.getName().toLowerCase();
+				String rhs = rhsArtist.getName().toLowerCase();
+				
+				char lhs1 = lhs.charAt(0);
+				char rhs1 = rhs.charAt(0);
+				
+				if(Character.isDigit(lhs1) && !Character.isDigit(rhs1)) {
+					return 1;
+				} else if(Character.isDigit(rhs1) && !Character.isDigit(lhs1)) {
+					return -1;
+				}
+				
+				return lhs.compareTo(rhs);
+			}
+		});
+		
         return new Indexes(0L, Collections.<Artist>emptyList(), artists);
     }
 
