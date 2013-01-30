@@ -92,6 +92,15 @@ public class OfflineMusicService extends RESTMusicService {
 					return -1;
 				}
 				
+				int index = lhs.indexOf("The ");
+				if(index == 0) {
+					lhs = lhs.substring(4, 0);
+				}
+				index = rhs.indexOf("The ");
+				if(index == 0) {
+					rhs = rhs.substring(4, 0);
+				}
+				
 				return lhs.compareTo(rhs);
 			}
 		});
