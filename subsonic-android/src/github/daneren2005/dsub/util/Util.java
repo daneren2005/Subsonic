@@ -929,6 +929,12 @@ public final class Util {
         context.sendBroadcast(intent);
 		context.sendBroadcast(avrcpIntent);
     }
+	
+	public static void broadcastCurrentPosition(Context context, int currentPosition){
+		Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
+		avrcpIntent.putExtra("position", (long)currentPosition);
+		context.sendBroadcast(avrcpIntent);
+	}
 
     /**
      * Resolves the default text color for notifications.
