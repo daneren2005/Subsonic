@@ -31,6 +31,7 @@ public final class Constants {
     // Note: Keep it as low as possible to maintain compatibility with older servers.
     public static final String REST_PROTOCOL_VERSION = "1.2.0";
     public static final String REST_CLIENT_ID = "DSub";
+	public static final String LAST_VERSION = "subsonic.version";
 
     // Names for intent extras.
     public static final String INTENT_EXTRA_NAME_ID = "subsonic.id";
@@ -97,7 +98,7 @@ public final class Constants {
     // URL for project donations.
     public static final String DONATION_URL = "http://subsonic.org/pages/android-donation.jsp";
 
-    public static final String ALBUM_ART_FILE = "cover.jpeg";
+    public static final String ALBUM_ART_FILE = "cover.jpg";
 
     private Constants() {
     }

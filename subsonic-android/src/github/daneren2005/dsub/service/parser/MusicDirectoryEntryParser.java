@@ -54,7 +54,7 @@ public class MusicDirectoryEntryParser extends AbstractParser {
             entry.setBitRate(getInteger("bitRate"));
             entry.setPath(get("path"));
             entry.setVideo(getBoolean("isVideo"));
-        } else if(!artist.isEmpty()) {
+        } else if(!"".equals(artist)) {
 			entry.setPath(artist + "/" + entry.getTitle());
 		}
         return entry;
