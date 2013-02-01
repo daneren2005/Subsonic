@@ -879,6 +879,7 @@ public final class Util {
 			avrcpIntent.putExtra("id", (long) downloadService.getCurrentPlayingIndex()+1);
 			avrcpIntent.putExtra("duration", (long) downloadService.getPlayerDuration());
 			avrcpIntent.putExtra("position", (long) downloadService.getPlayerPosition());
+			avrcpIntent.putExtra("coverart", albumArtFile.getAbsolutePath());
         } else {
             intent.putExtra("title", "");
             intent.putExtra("artist", "");
@@ -892,6 +893,7 @@ public final class Util {
 			avrcpIntent.putExtra("id", (long) 0);
 			avrcpIntent.putExtra("duration", (long )0);
 			avrcpIntent.putExtra("position", (long) 0);
+			avrcpIntent.putExtra("coverart", "");
         }
 
         context.sendBroadcast(intent);
@@ -929,12 +931,6 @@ public final class Util {
         context.sendBroadcast(intent);
 		context.sendBroadcast(avrcpIntent);
     }
-	
-	public static void broadcastCurrentPosition(Context context, int currentPosition){
-		Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
-		avrcpIntent.putExtra("position", (long)currentPosition);
-		context.sendBroadcast(avrcpIntent);
-	}
 
     /**
      * Resolves the default text color for notifications.
