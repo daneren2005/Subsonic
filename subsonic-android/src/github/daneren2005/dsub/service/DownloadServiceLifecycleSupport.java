@@ -253,7 +253,7 @@ public class DownloadServiceLifecycleSupport {
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                 case TelephonyManager.CALL_STATE_OFFHOOK:
-                    if (downloadService.getPlayerState() == PlayerState.STARTED) {
+                    if (downloadService.getPlayerState() == PlayerState.STARTED && !downloadService.isJukeboxEnabled()) {
                         resumeAfterCall = true;
                         downloadService.pause();
                     }

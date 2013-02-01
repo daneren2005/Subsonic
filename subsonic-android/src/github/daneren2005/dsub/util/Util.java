@@ -826,7 +826,7 @@ public final class Util {
     		audioManager.requestAudioFocus(new OnAudioFocusChangeListener() {
 				public void onAudioFocusChange(int focusChange) {
 					DownloadServiceImpl downloadService = (DownloadServiceImpl)context;
-					if(focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+					if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isJukeboxEnabled()) {
 						if(downloadService.getPlayerState() == PlayerState.STARTED) {							
 							SharedPreferences prefs = getPreferences(context);
 							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
@@ -846,7 +846,7 @@ public final class Util {
 							lowerFocus = false;
 							downloadService.setVolume(1.0f);
 						}
-					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isJukeboxEnabled()) {
 						hasFocus = false;
 						downloadService.pause();
 						audioManager.abandonAudioFocus(this);
@@ -879,6 +879,7 @@ public final class Util {
 			avrcpIntent.putExtra("id", (long) downloadService.getCurrentPlayingIndex()+1);
 			avrcpIntent.putExtra("duration", (long) downloadService.getPlayerDuration());
 			avrcpIntent.putExtra("position", (long) downloadService.getPlayerPosition());
+			avrcpIntent.putExtra("coverart", albumArtFile.getAbsolutePath());
         } else {
             intent.putExtra("title", "");
             intent.putExtra("artist", "");
@@ -892,6 +893,7 @@ public final class Util {
 			avrcpIntent.putExtra("id", (long) 0);
 			avrcpIntent.putExtra("duration", (long )0);
 			avrcpIntent.putExtra("position", (long) 0);
+			avrcpIntent.putExtra("coverart", "");
         }
 
         context.sendBroadcast(intent);

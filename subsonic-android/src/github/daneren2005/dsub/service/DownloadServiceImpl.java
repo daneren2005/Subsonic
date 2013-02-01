@@ -795,6 +795,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 							if(mediaPlayer != null && getPlayerState() == STARTED) {
 								try {
 									cachedPosition = mediaPlayer.getCurrentPosition();
+									Util.broadcastNewTrackInfo(DownloadServiceImpl.this, currentPlaying.getSong());
 								} catch(Exception e) {
 									executorService.shutdown();
 								}
