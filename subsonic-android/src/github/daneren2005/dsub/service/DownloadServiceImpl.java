@@ -509,15 +509,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 	
 	synchronized void setNextPlaying(int index) {
-		if(currentPlaying == nextPlaying) {
-			// Swap the media players since nextMediaPlayer is ready to play
-			MediaPlayer tmp = mediaPlayer;
-			mediaPlayer = nextMediaPlayer;
-			nextMediaPlayer = tmp;
-			setPlayerState(nextPlayerState);
-		}
-		
-		if(index < size()) {
+		if((index + 1) < size()) {
 			nextPlaying = downloadList.get(index + 1);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.start();
@@ -590,8 +582,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				nextPlayingTask.cancel();
 			}
             setCurrentPlaying(index, start);
-            checkDownloads();
-			setNextPlaying(index);
+			if(currentPlaying == nextPlaying) {
+				// Swap the media players since nextMediaPlayer is ready to play
+				MediaPlayer tmp = mediaPlayer;
+				mediaPlayer = nextMediaPlayer;
+				nextMediaPlayer = tmp;
+				setPlayerState(nextPlayerState);
+			}
             if (start) {
                 if (jukeboxEnabled) {
                     jukeboxService.skip(getCurrentPlayingIndex(), 0);
@@ -600,12 +597,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                     bufferAndPlay();
                 }
             }
+			checkDownloads();
+			setNextPlaying(index);
         }
     }
 
     /** Plays or resumes the playback, depending on the current player state. */
-    public synchronized void togglePlayPause()
-    {
+    public synchronized void togglePlayPause() {
         if (playerState == PAUSED || playerState == COMPLETED) {
             start();
         } else if (playerState == STOPPED || playerState == IDLE) {
@@ -876,6 +874,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
         try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
+			final boolean isPartial = file.equals(downloadFile.getPartialFile());
             downloadFile.updateModificationDate();
 			
 			if(playerState == PlayerState.PREPARED) {
@@ -943,7 +942,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					// and allow the device to go to sleep.
 					wakeLock.acquire(60000);
 
-					if (!file.equals(downloadFile.getPartialFile())) {
+					if (!isPartial) {
 						onSongCompleted();
 						return;
 					}
@@ -1285,7 +1284,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			}
 			
             while (!bufferComplete()) {
-                Util.sleepQuietly(1000L);
+                Util.sleepQuietly(2000L);
                 if (isCancelled()) {
                     return;
                 }
