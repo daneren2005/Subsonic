@@ -87,8 +87,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
     private static final int DIALOG_SAVE_PLAYLIST = 100;
     private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 5;
-    private static final int COLOR_BUTTON_ENABLED = Color.rgb(129, 201, 54);
-    private static final int COLOR_BUTTON_DISABLED = Color.rgb(164, 166, 158);
+    private static final int COLOR_BUTTON_ENABLED = Color.rgb(51, 181, 229);
+    private static final int COLOR_BUTTON_DISABLED = Color.rgb(206, 213, 211);
 	private static final int INCREMENT_TIME = 5000;
 
     private ViewFlipper playlistFlipper;
