@@ -518,6 +518,12 @@ public class SubsonicTabActivity extends SherlockActivity {
 				bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
 				format = FileUtil.getExtension(file.getName());
 				size = file.length();
+				
+				if(Util.isOffline(SubsonicTabActivity.this)) {
+					song.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
+					String year = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
+					song.setYear(Integer.parseInt((year != null) ? year : "0"));
+				}
 			}
 		} catch(Exception e) {
 			Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");

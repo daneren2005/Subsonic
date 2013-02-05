@@ -19,6 +19,8 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
+import android.media.MediaMetadataRetriever;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -40,6 +42,7 @@ import java.io.File;
 public class SongView extends UpdateView implements Checkable {
     private static final String TAG = SongView.class.getSimpleName();
     
+	private Context context;
     private MusicDirectory.Entry song;
 
     private CheckedTextView checkedTextView;
@@ -52,6 +55,7 @@ public class SongView extends UpdateView implements Checkable {
 
     public SongView(Context context) {
         super(context);
+		this.context = context;
         LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
         checkedTextView = (CheckedTextView) findViewById(R.id.song_check);
@@ -64,6 +68,24 @@ public class SongView extends UpdateView implements Checkable {
 
     public void setSong(MusicDirectory.Entry song, boolean checkable) {
         this.song = song;
+		
+		if(Util.isOffline(context)) {
+			DownloadFile downloadFile = new DownloadFile(context, song, false);
+			File file = downloadFile.getCompleteFile();
+			if(file.exists()) {
+				try {
+					MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+					metadata.setDataSource(file.getAbsolutePath());
+					String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+					song.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
+					String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+					song.setDuration(Integer.parseInt(length) / 1000);
+				} catch(Exception e) {
+					Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+				}
+			}
+		}
+		
         StringBuilder artist = new StringBuilder(40);
 
         String bitRate = null;
