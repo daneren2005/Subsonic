@@ -148,6 +148,7 @@ public class OfflineMusicService extends RESTMusicService {
         entry.setSize(file.length());
         String root = FileUtil.getMusicDirectory(context).getPath();
         entry.setPath(file.getPath().replaceFirst("^" + root + "/" , ""));
+		String title = name;
         if (file.isFile()) {
             entry.setArtist(file.getParentFile().getParentFile().getName());
             entry.setAlbum(file.getParentFile().getName());
@@ -165,8 +166,11 @@ public class OfflineMusicService extends RESTMusicService {
 			} catch(Exception e) {
 				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
 			}
+			
+			title = title.substring(title.indexOf('-') + 1);
         }
-        entry.setTitle(name);
+		
+        entry.setTitle(title);
         entry.setSuffix(FileUtil.getExtension(file.getName().replace(".complete", "")));
 
         File albumArt = FileUtil.getAlbumArtFile(context, entry);
