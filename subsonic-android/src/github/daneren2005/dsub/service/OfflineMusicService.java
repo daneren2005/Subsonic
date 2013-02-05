@@ -167,6 +167,7 @@ public class OfflineMusicService extends RESTMusicService {
 				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
 			}
 			
+			entry.setTrack(Integer.parseInt(name.substring(0, name.indexOf('-'))));
 			title = title.substring(title.indexOf('-') + 1);
         }
 		

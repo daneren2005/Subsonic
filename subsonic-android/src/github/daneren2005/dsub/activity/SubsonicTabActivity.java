@@ -508,6 +508,9 @@ public class SubsonicTabActivity extends SherlockActivity {
 		if(!song.isVideo()) {
 			msg += "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
 		}
+		if(song.getTrack() != null && song.getTrack() != 0) {
+			msg += "\nTrack: " + song.getTrack();
+		}
 		if(song.getGenre() != null && !"".equals(song.getGenre())) {
 			msg += "\nGenre: " + song.getGenre();
 		}
