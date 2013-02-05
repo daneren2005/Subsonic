@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -504,6 +505,24 @@ public class SubsonicTabActivity extends SherlockActivity {
 	}
 	
 	public void displaySongInfo(final MusicDirectory.Entry song) {
+		Integer bitrate = null;
+		String format = null;
+		long size = 0;
+		try {
+			DownloadFile downloadFile = new DownloadFile(SubsonicTabActivity.this, song, false);
+			File file = downloadFile.getCompleteFile();
+			if(file.exists()) {
+				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+				metadata.setDataSource(file.getAbsolutePath());
+				String tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+				bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
+				format = FileUtil.getExtension(file.getName());
+				size = file.length();
+			}
+		} catch(Exception e) {
+			Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+		}
+		
 		String msg = "";
 		if(!song.isVideo()) {
 			msg += "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
@@ -517,14 +536,24 @@ public class SubsonicTabActivity extends SherlockActivity {
 		if(song.getYear() != null && song.getYear() != 0) {
 			msg += "\nYear: " + song.getYear();
 		}
-		msg += "\nFormat: " + song.getSuffix();
-		if(song.getBitRate() != null && song.getBitRate() != 0) {
-			msg += "\nBitrate: " + song.getBitRate() + " kpbs";
+		if(!Util.isOffline(SubsonicTabActivity.this)) {
+			msg += "\nServer Format: " + song.getSuffix();
+			if(song.getBitRate() != null && song.getBitRate() != 0) {
+				msg += "\nServer Bitrate: " + song.getBitRate() + " kpbs";
+			}
+		}
+		if(format != null && !"".equals(format)) {
+			msg += "\nCached Format: " + format;
+		}
+		if(bitrate != null && bitrate != 0) {
+			msg += "\nCached Bitrate: " + bitrate + " kpbs";
+		}
+		if(size != 0) {
+			msg += "\nSize: " + Util.formatBytes(size);
 		}
 		if(song.getDuration() != null && song.getDuration() != 0) {
 			msg += "\nLength: " + Util.formatDuration(song.getDuration());
 		}
-		msg += "\nSize: " + Util.formatBytes(song.getSize());
 
 		new AlertDialog.Builder(this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
