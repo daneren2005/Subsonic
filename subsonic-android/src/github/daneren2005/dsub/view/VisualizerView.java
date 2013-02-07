@@ -45,14 +45,14 @@ public class VisualizerView extends View {
 
     private byte[] data;
     private float[] points;
-    private boolean active;
+    private boolean active = false;
 
     public VisualizerView(Context context) {
         super(context);
 
         paint.setStrokeWidth(2f);
         paint.setAntiAlias(true);
-        paint.setColor(Color.rgb(129, 201, 54));
+        paint.setColor(Color.rgb(51, 181, 229));
     }
 
     public boolean isActive() {

@@ -54,6 +54,7 @@ public class VisualizerController {
     }
 
     public VisualizerController(Context context, MediaPlayer mediaPlayer) {
+		Log.d(TAG, "Setting up visualizer");
         this.context = context;
         try {
             visualizer = new Visualizer(mediaPlayer.getAudioSessionId());

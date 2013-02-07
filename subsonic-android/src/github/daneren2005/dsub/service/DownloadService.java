@@ -106,6 +106,10 @@ public interface DownloadService {
     void setSuggestedPlaylistName(String name);
 
     String getSuggestedPlaylistName();
+	
+	boolean getEqualizerAvailable();
+
+    boolean getVisualizerAvailable();
 
     EqualizerController getEqualizerController();
 

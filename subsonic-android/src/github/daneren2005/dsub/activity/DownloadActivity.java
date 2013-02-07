@@ -343,8 +343,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             downloadService.setShufflePlayEnabled(true);
         }
 
-        boolean visualizerAvailable = downloadService != null && downloadService.getVisualizerController() != null;
-        boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerController() != null;
+        boolean visualizerAvailable = downloadService != null && downloadService.getVisualizerAvailable();
+        boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
 
         if (!equalizerAvailable) {
             equalizerButton.setVisibility(View.GONE);
@@ -400,8 +400,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
-        if (visualizerView != null) {
-            visualizerView.setActive(downloadService != null && downloadService.getShowVisualization());
+        if (visualizerView != null && downloadService != null && downloadService.getShowVisualization()) {
+            visualizerView.setActive(true);
         }
 
         updateButtons();
