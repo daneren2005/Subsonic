@@ -285,9 +285,14 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             public void onClick(View view) {
                 boolean active = !visualizerView.isActive();
                 visualizerView.setActive(active);
-                getDownloadService().setShowVisualization(visualizerView.isActive());
+				boolean isActive = visualizerView.isActive();
+                getDownloadService().setShowVisualization(isActive);
                 updateButtons();
-                Util.toast(DownloadActivity.this, active ? R.string.download_visualizer_on : R.string.download_visualizer_off);
+				if(active == isActive) {
+					Util.toast(DownloadActivity.this, active ? R.string.download_visualizer_on : R.string.download_visualizer_off);
+				} else {
+					Util.toast(DownloadActivity.this, "Failed to start visualizer.  Try restarting.");
+				}
 				setControlsVisible(true);
             }
         });
