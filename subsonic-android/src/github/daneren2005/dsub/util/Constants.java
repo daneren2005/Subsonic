@@ -88,6 +88,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SHUFFLE_GENRE = "genre";
 	public static final String PREFERENCES_KEY_KEEP_SCREEN_ON = "keepScreenOn";
 	public static final String PREFERENCES_KEY_BUFFER_LENGTH = "bufferLength";
+	public static final String PREFERENCES_EQUALIZER_ON = "equalizerOn";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";

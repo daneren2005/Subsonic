@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.media.audiofx.Equalizer;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -36,6 +37,8 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
+import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * Equalizer controls.
@@ -114,6 +117,10 @@ public class EqualizerActivity extends Activity {
     }
 
     private void setEqualizerEnabled(boolean enabled) {
+		SharedPreferences prefs = Util.getPreferences(EqualizerActivity.this);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(Constants.PREFERENCES_EQUALIZER_ON, enabled);
+		editor.commit();
         equalizer.setEnabled(enabled);
         updateBars();
     }

@@ -174,6 +174,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 		instance = this;
 		lifecycleSupport.onCreate();
+
+		if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
+			getEqualizerController();
+		}
     }
 
     @Override

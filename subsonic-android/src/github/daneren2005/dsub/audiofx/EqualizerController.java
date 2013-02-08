@@ -56,7 +56,6 @@ public class EqualizerController {
     }
 
     public EqualizerController(Context context, MediaPlayer mediaPlayer) {
-		Log.d(TAG, "Setting up equalizer");
         this.context = context;
         try {
             equalizer = new Equalizer(0, mediaPlayer.getAudioSessionId());

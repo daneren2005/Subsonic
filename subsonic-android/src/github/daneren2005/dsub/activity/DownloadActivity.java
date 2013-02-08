@@ -119,6 +119,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private int swipeDistance;
     private int swipeVelocity;
     private VisualizerView visualizerView;
+	private boolean equalizerOn;
 	private boolean nowPlaying = true;
 	private ScheduledFuture<?> hideControlsFuture;
 
@@ -275,6 +276,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         equalizerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+				equalizerOn = true;
                 startActivity(new Intent(DownloadActivity.this, EqualizerActivity.class));
 				setControlsVisible(true);
             }
@@ -353,7 +355,10 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
         if (!equalizerAvailable) {
             equalizerButton.setVisibility(View.GONE);
-        }
+        } else {
+			SharedPreferences prefs = Util.getPreferences(DownloadActivity.this);
+			equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
+		}
         if (!visualizerAvailable) {
             visualizerButton.setVisibility(View.GONE);
         } else {
@@ -446,10 +451,13 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     }
 
     private void updateButtons() {
-        boolean eqEnabled = getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
-                getDownloadService().getEqualizerController().isEnabled();
-        equalizerButton.setTextColor(eqEnabled ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
-
+		if(equalizerOn && getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
+                getDownloadService().getEqualizerController().isEnabled()) {
+			equalizerButton.setTextColor(COLOR_BUTTON_ENABLED);
+		} else {
+			equalizerButton.setTextColor(COLOR_BUTTON_DISABLED);
+		}
+        
         if (visualizerView != null) {
             visualizerButton.setTextColor(visualizerView.isActive() ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
         }
