@@ -119,7 +119,6 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private int swipeDistance;
     private int swipeVelocity;
     private VisualizerView visualizerView;
-	private boolean equalizerOn;
 	private boolean nowPlaying = true;
 	private ScheduledFuture<?> hideControlsFuture;
 
@@ -276,9 +275,14 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         equalizerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-				equalizerOn = true;
-                startActivity(new Intent(DownloadActivity.this, EqualizerActivity.class));
-				setControlsVisible(true);
+				DownloadService downloadService = getDownloadService();
+				if(downloadService != null && downloadService.getEqualizerController() != null
+						&& downloadService.getEqualizerController().getEqualizer() != null) {
+					startActivity(new Intent(DownloadActivity.this, EqualizerActivity.class));
+					setControlsVisible(true);
+				} else {
+					Util.toast(DownloadActivity.this, "Failed to start equalizer.  Try restarting.");
+				}
             }
         });
 
@@ -355,10 +359,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
         if (!equalizerAvailable) {
             equalizerButton.setVisibility(View.GONE);
-        } else {
-			SharedPreferences prefs = Util.getPreferences(DownloadActivity.this);
-			equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
-		}
+        }
         if (!visualizerAvailable) {
             visualizerButton.setVisibility(View.GONE);
         } else {
@@ -451,6 +452,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     }
 
     private void updateButtons() {
+		SharedPreferences prefs = Util.getPreferences(DownloadActivity.this);
+		boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
 		if(equalizerOn && getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
                 getDownloadService().getEqualizerController().isEnabled()) {
 			equalizerButton.setTextColor(COLOR_BUTTON_ENABLED);

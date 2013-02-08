@@ -38,6 +38,8 @@ public class EqualizerController {
 
     private final Context context;
     private Equalizer equalizer;
+	private boolean released = false;
+	private int audioSessionId = 0;
 
     // Class initialization fails when this throws an exception.
     static {
@@ -58,7 +60,8 @@ public class EqualizerController {
     public EqualizerController(Context context, MediaPlayer mediaPlayer) {
         this.context = context;
         try {
-            equalizer = new Equalizer(0, mediaPlayer.getAudioSessionId());
+			audioSessionId = mediaPlayer.getAudioSessionId();
+            equalizer = new Equalizer(0, audioSessionId);
         } catch (Throwable x) {
             Log.w(TAG, "Failed to create equalizer.", x);
         }
@@ -97,11 +100,21 @@ public class EqualizerController {
 
     public void release() {
         if (isAvailable()) {
+			released = true;
             equalizer.release();
         }
     }
 
     public Equalizer getEqualizer() {
+		if(released) {
+			released = false;
+			try {
+				equalizer = new Equalizer(0, audioSessionId);
+			} catch (Throwable x) {
+				equalizer = null;
+				Log.w(TAG, "Failed to create equalizer.", x);
+			}
+		}
         return equalizer;
     }
 

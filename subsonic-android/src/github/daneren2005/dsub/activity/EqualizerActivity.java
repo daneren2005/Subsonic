@@ -86,6 +86,10 @@ public class EqualizerActivity extends Activity {
     protected void onPause() {
         super.onPause();
         equalizerController.saveSettings();
+		
+		if(!equalizer.getEnabled()) {
+			equalizerController.release();
+		}
     }
 
     @Override
