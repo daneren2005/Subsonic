@@ -159,6 +159,7 @@ public class StreamProxy implements Runnable {
 
 		@Override
         protected Integer doInBackground(String... params) {
+			DownloadFile downloadFile = downloadService.getCurrentPlaying();
 			long fileSize = downloadService.getCurrentPlaying().getSong().getSize();
             // long fileSize = downloadService.getCurrentPlaying().getSize();
 			Log.i(TAG, "Streaming fileSize: " + fileSize);
@@ -206,6 +207,11 @@ public class StreamProxy implements Runnable {
                         }
                         input.close();
                     }
+					
+					// Done regardless of whether or not it thinks it is
+					if(downloadFile.isWorkDone()) {
+						break;
+					}
 
                     // If we did nothing this batch, block for a second
                     if (cbSentThisBatch == 0) {

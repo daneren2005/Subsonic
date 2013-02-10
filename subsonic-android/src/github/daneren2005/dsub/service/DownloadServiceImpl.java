@@ -202,7 +202,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public void onDestroy() {
         super.onDestroy();
-		proxy.stop();
+		if(proxy != null) {
+			proxy.stop();
+		}
 		if(currentPlaying != null) currentPlaying.setPlaying(false);
 		if(sleepTimer != null){
 			sleepTimer.cancel();
@@ -667,6 +669,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (bufferTask != null) {
             bufferTask.cancel();
         }
+		if(proxy != null) {
+			proxy.stop();
+			proxy = null;
+		}
         try {
 			setPlayerState(IDLE);
 			mediaPlayer.setOnErrorListener(null);
