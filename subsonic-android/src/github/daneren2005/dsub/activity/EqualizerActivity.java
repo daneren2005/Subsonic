@@ -93,6 +93,13 @@ public class EqualizerActivity extends Activity {
 			equalizerController.release();
 		}
     }
+	
+	@Override
+    protected void onResume() {
+        super.onResume();
+        equalizerController = DownloadServiceImpl.getInstance().getEqualizerController();
+        equalizer = equalizerController.getEqualizer();
+    }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
