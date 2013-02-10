@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.media.audiofx.Equalizer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ import github.daneren2005.dsub.util.Util;
  * @version $Id$
  */
 public class EqualizerActivity extends Activity {
+	private static final String TAG = EqualizerActivity.class.getSimpleName();
 
     private static final int MENU_GROUP_PRESET = 100;
 
@@ -135,8 +137,10 @@ public class EqualizerActivity extends Activity {
             short band = entry.getKey();
             SeekBar bar = entry.getValue();
             bar.setEnabled(equalizer.getEnabled());
-            short minEQLevel = equalizer.getBandLevelRange()[0];
-            bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+			if(band >= (short)0) {
+				short minEQLevel = equalizer.getBandLevelRange()[0];
+				bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+			}
         }
     }
 
@@ -145,6 +149,9 @@ public class EqualizerActivity extends Activity {
 
         final short minEQLevel = equalizer.getBandLevelRange()[0];
         final short maxEQLevel = equalizer.getBandLevelRange()[1];
+		
+		// Setup Pregain
+		initPregain(layout, equalizer.getBandLevel((short)0), minEQLevel, maxEQLevel);
 
         for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
             final short band = i;
@@ -184,6 +191,41 @@ public class EqualizerActivity extends Activity {
             layout.addView(bandBar);
         }
     }
+	
+	private void initPregain(LinearLayout layout, short level, final short minEQLevel, final short maxEQLevel) {
+		View bandBar = LayoutInflater.from(this).inflate(R.layout.equalizer_bar, null);
+		TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
+		final TextView levelTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
+		SeekBar bar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+
+		freqTextView.setText("Master");
+
+		bars.put((short)-1, bar);
+		bar.setMax(maxEQLevel - minEQLevel);
+		bar.setProgress(level - minEQLevel);
+		bar.setEnabled(equalizer.getEnabled());
+		updateLevelText(levelTextView, (short)0);
+
+		bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				short level = (short) (progress + minEQLevel);
+				/*if (fromUser) {
+					equalizer.setBandLevel(band, level);
+				}*/
+				updateLevelText(levelTextView, level);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
+		layout.addView(bandBar);
+	}
 
     private void updateLevelText(TextView levelTextView, short level) {
         levelTextView.setText((level > 0 ? "+" : "") + level / 100 + " dB");
