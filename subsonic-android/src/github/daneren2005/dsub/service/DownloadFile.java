@@ -59,6 +59,7 @@ public class DownloadFile {
 	private boolean isPlaying = false;
 	private boolean saveWhenDone = false;
 	private boolean completeWhenDone = false;
+	private long size = 0;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
         this.context = context;
@@ -211,6 +212,10 @@ public class DownloadFile {
 	public boolean getPlaying() {
 		return isPlaying;
 	}
+	
+	public long getSize() {
+		return size;
+	}
 
     @Override
     public String toString() {
@@ -268,6 +273,7 @@ public class DownloadFile {
 					// Attempt partial HTTP GET, appending to the file if it exists.
 					HttpResponse response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
 					in = response.getEntity().getContent();
+					size = response.getEntity().getContentLength();
 					boolean partial = response.getStatusLine().getStatusCode() == HttpStatus.SC_PARTIAL_CONTENT;
 					if (partial) {
 						Log.i(TAG, "Executed partial HTTP GET, skipping " + partialFile.length() + " bytes");

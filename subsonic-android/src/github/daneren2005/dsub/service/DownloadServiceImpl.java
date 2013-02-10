@@ -113,6 +113,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private boolean showVisualization;
     private boolean jukeboxEnabled;
 	private ScheduledExecutorService executorService;
+	private StreamProxy proxy;
 	
 	private Timer sleepTimer;
 	private int timerDuration;
@@ -201,6 +202,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public void onDestroy() {
         super.onDestroy();
+		proxy.stop();
 		if(currentPlaying != null) currentPlaying.setPlaying(false);
 		if(sleepTimer != null){
 			sleepTimer.cancel();
@@ -826,12 +828,22 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
         try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
+			final boolean isPartial = file.equals(downloadFile.getPartialFile());
             downloadFile.updateModificationDate();
             mediaPlayer.setOnCompletionListener(null);
             mediaPlayer.reset();
             setPlayerState(IDLE);
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(file.getPath());
+			String dataSource = file.getPath();
+			if(isPartial) {
+				if (proxy == null) {
+					proxy = new StreamProxy(this);
+					proxy.start();
+				}
+				dataSource = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), dataSource);
+				Log.i(TAG, "Data Source: " + dataSource);
+			}
+			mediaPlayer.setDataSource(dataSource);
             setPlayerState(PREPARING);
 			
 			mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -913,6 +925,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					doPlay(downloadFile, pos, true);
 					downloadFile.setPlaying(true);
 					return true;
+				}
+			});
+			
+			mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+				@Override
+				public void onBufferingUpdate(MediaPlayer mp, int percent) {
+					Log.i(TAG, "Buffered " + percent + "%");
 				}
 			});
 			
