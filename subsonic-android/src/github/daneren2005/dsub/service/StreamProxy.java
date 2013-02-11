@@ -24,6 +24,7 @@ import org.apache.http.message.BasicHttpRequest;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.util.Log;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.Constants;
 
 public class StreamProxy implements Runnable {
@@ -160,8 +161,8 @@ public class StreamProxy implements Runnable {
 		@Override
         protected Integer doInBackground(String... params) {
 			DownloadFile downloadFile = downloadService.getCurrentPlaying();
-			long fileSize = downloadService.getCurrentPlaying().getSong().getSize();
-            // long fileSize = downloadService.getCurrentPlaying().getSize();
+			MusicDirectory.Entry song = downloadFile.getSong();
+			long fileSize = downloadFile.getBitRate() * song.getDuration() * 1000 / 8;
 			Log.i(TAG, "Streaming fileSize: " + fileSize);
 
             // Create HTTP header
