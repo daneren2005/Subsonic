@@ -55,6 +55,7 @@ public class EqualizerActivity extends Activity {
     private final Map<Short, SeekBar> bars = new HashMap<Short, SeekBar>();
     private EqualizerController equalizerController;
     private Equalizer equalizer;
+	private short masterLevel = 0;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -139,16 +140,27 @@ public class EqualizerActivity extends Activity {
     }
 
     private void updateBars() {
-
+		boolean isEnabled = equalizer.getEnabled();
+		short minEQLevel = equalizer.getBandLevelRange()[0];
         for (Map.Entry<Short, SeekBar> entry : bars.entrySet()) {
             short band = entry.getKey();
             SeekBar bar = entry.getValue();
-            bar.setEnabled(equalizer.getEnabled());
+            bar.setEnabled(isEnabled);
 			if(band >= (short)0) {
-				short minEQLevel = equalizer.getBandLevelRange()[0];
+				equalizer.setBandLevel(band, (short)(equalizer.getBandLevel(band) - masterLevel));
 				bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+			} else if(!isEnabled) {
+				bar.setProgress(-minEQLevel);
 			}
         }
+		
+		if(!isEnabled) {
+			masterLevel = 0;
+			SharedPreferences prefs = Util.getPreferences(EqualizerActivity.this);
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
+			editor.commit();
+		}
     }
 
     private void initEqualizer() {
@@ -158,7 +170,9 @@ public class EqualizerActivity extends Activity {
         final short maxEQLevel = equalizer.getBandLevelRange()[1];
 		
 		// Setup Pregain
-		initPregain(layout, equalizer.getBandLevel((short)0), minEQLevel, maxEQLevel);
+		SharedPreferences prefs = Util.getPreferences(this);
+		masterLevel = (short)prefs.getInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, 0);
+		initPregain(layout, minEQLevel, maxEQLevel);
 
         for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
             final short band = i;
@@ -173,6 +187,9 @@ public class EqualizerActivity extends Activity {
             bars.put(band, bar);
             bar.setMax(maxEQLevel - minEQLevel);
             short level = equalizer.getBandLevel(band);
+			if(equalizer.getEnabled()) {
+				level = (short) (level - masterLevel);
+			}
             bar.setProgress(level - minEQLevel);
             bar.setEnabled(equalizer.getEnabled());
             updateLevelText(levelTextView, level);
@@ -182,7 +199,7 @@ public class EqualizerActivity extends Activity {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     short level = (short) (progress + minEQLevel);
                     if (fromUser) {
-                        equalizer.setBandLevel(band, level);
+                        equalizer.setBandLevel(band, (short)(level + masterLevel));
                     }
                     updateLevelText(levelTextView, level);
                 }
@@ -199,7 +216,7 @@ public class EqualizerActivity extends Activity {
         }
     }
 	
-	private void initPregain(LinearLayout layout, short level, final short minEQLevel, final short maxEQLevel) {
+	private void initPregain(LinearLayout layout, final short minEQLevel, final short maxEQLevel) {
 		View bandBar = LayoutInflater.from(this).inflate(R.layout.equalizer_bar, null);
 		TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
 		final TextView levelTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
@@ -209,18 +226,25 @@ public class EqualizerActivity extends Activity {
 
 		bars.put((short)-1, bar);
 		bar.setMax(maxEQLevel - minEQLevel);
-		bar.setProgress(level - minEQLevel);
+		bar.setProgress(masterLevel - minEQLevel);
 		bar.setEnabled(equalizer.getEnabled());
-		updateLevelText(levelTextView, (short)0);
+		updateLevelText(levelTextView, masterLevel);
 
 		bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				short level = (short) (progress + minEQLevel);
-				/*if (fromUser) {
-					equalizer.setBandLevel(band, level);
-				}*/
-				updateLevelText(levelTextView, level);
+				masterLevel = (short) (progress + minEQLevel);
+				if (fromUser) {
+					SharedPreferences prefs = Util.getPreferences(EqualizerActivity.this);
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
+					editor.commit();
+					for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
+						short level = (short) ((bars.get(i).getProgress() + minEQLevel) + masterLevel);
+						equalizer.setBandLevel(i, level);
+					}
+				}
+				updateLevelText(levelTextView, masterLevel);
 			}
 
 			@Override
