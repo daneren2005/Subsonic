@@ -64,7 +64,7 @@ public class ImageLoader implements Runnable {
     public ImageLoader(Context context) {
 		this.context = context;
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-		final int cacheSize = maxMemory / 4;
+		final int cacheSize = maxMemory / 2;
 		cache = new LruCache<String, Bitmap>(cacheSize) {
 			@Override
 			protected int sizeOf(String key, Bitmap bitmap) {
