@@ -126,7 +126,7 @@ public class EqualizerActivity extends Activity {
     public boolean onContextItemSelected(MenuItem menuItem) {
         short preset = (short) menuItem.getItemId();
         equalizer.usePreset(preset);
-        updateBars();
+        updateBars(false);
         return true;
     }
 
@@ -136,10 +136,10 @@ public class EqualizerActivity extends Activity {
 		editor.putBoolean(Constants.PREFERENCES_EQUALIZER_ON, enabled);
 		editor.commit();
         equalizer.setEnabled(enabled);
-        updateBars();
+        updateBars(true);
     }
 
-    private void updateBars() {
+    private void updateBars(boolean changedEnabled) {
 		boolean isEnabled = equalizer.getEnabled();
 		short minEQLevel = equalizer.getBandLevelRange()[0];
         for (Map.Entry<Short, SeekBar> entry : bars.entrySet()) {
@@ -147,8 +147,13 @@ public class EqualizerActivity extends Activity {
             SeekBar bar = entry.getValue();
             bar.setEnabled(isEnabled);
 			if(band >= (short)0) {
-				equalizer.setBandLevel(band, (short)(equalizer.getBandLevel(band) - masterLevel));
-				bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+				if(changedEnabled) {
+					equalizer.setBandLevel(band, (short)(equalizer.getBandLevel(band) - masterLevel));
+					bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+				} else {
+					bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+					equalizer.setBandLevel(band, (short)(equalizer.getBandLevel(band) + masterLevel));
+				}
 			} else if(!isEnabled) {
 				bar.setProgress(-minEQLevel);
 			}
