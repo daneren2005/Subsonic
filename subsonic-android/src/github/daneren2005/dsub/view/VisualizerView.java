@@ -45,14 +45,14 @@ public class VisualizerView extends View {
 
     private byte[] data;
     private float[] points;
-    private boolean active;
+    private boolean active = false;
 
     public VisualizerView(Context context) {
         super(context);
 
         paint.setStrokeWidth(2f);
         paint.setAntiAlias(true);
-        paint.setColor(Color.rgb(129, 201, 54));
+        paint.setColor(Color.rgb(51, 181, 229));
     }
 
     public boolean isActive() {
@@ -61,8 +61,10 @@ public class VisualizerView extends View {
 
     public void setActive(boolean active) {
         this.active = active;
-        Visualizer visualizer = getVizualiser();
+        VisualizerController visualizerController = getVizualiser();
+		Visualizer visualizer = visualizerController == null ? null : visualizerController.getVisualizer();
         if (visualizer == null) {
+			this.active = false;
             return;
         }
 
@@ -83,13 +85,16 @@ public class VisualizerView extends View {
         }
 
         visualizer.setEnabled(active);
+		if(!active) {
+			visualizerController.release();
+		}
         invalidate();
     }
 
-    private Visualizer getVizualiser() {
+    private VisualizerController getVizualiser() {
         DownloadService downloadService = DownloadServiceImpl.getInstance();
         VisualizerController visualizerController = downloadService == null ? null : downloadService.getVisualizerController();
-        return visualizerController == null ? null : visualizerController.getVisualizer();
+        return visualizerController;
     }
 
     private void updateVisualizer(byte[] waveform) {

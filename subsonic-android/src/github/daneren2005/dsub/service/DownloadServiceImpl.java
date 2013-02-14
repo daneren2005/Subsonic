@@ -158,21 +158,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         	mRemoteControl.register(this, mediaButtonReceiverComponent);
         }
 
-		if (equalizerAvailable) {
-			equalizerController = new EqualizerController(this, mediaPlayer);
-			if (!equalizerController.isAvailable()) {
-				equalizerController = null;
-			} else {
-				equalizerController.loadSettings();
-			}
-		}
-		if (visualizerAvailable) {
-			visualizerController = new VisualizerController(this, mediaPlayer);
-			if (!visualizerController.isAvailable()) {
-				visualizerController = null;
-			}
-		}
-
 		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
 		wakeLock.setReferenceCounted(false);
@@ -189,6 +174,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 		instance = this;
 		lifecycleSupport.onCreate();
+
+		if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
+			getEqualizerController();
+		}
     }
 
     @Override
@@ -781,14 +770,38 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public String getSuggestedPlaylistName() {
         return suggestedPlaylistName;
     }
+	
+	@Override
+    public boolean getEqualizerAvailable() {
+        return equalizerAvailable;
+    }
+
+    @Override
+    public boolean getVisualizerAvailable() {
+        return visualizerAvailable;
+    }
 
     @Override
     public EqualizerController getEqualizerController() {
+		if (equalizerAvailable && equalizerController == null) {
+			equalizerController = new EqualizerController(this, mediaPlayer);
+			if (!equalizerController.isAvailable()) {
+				equalizerController = null;
+			} else {
+				equalizerController.loadSettings();
+			}
+		}
         return equalizerController;
     }
 
     @Override
     public VisualizerController getVisualizerController() {
+		if (visualizerAvailable && visualizerController == null) {
+			visualizerController = new VisualizerController(this, mediaPlayer);
+			if (!visualizerController.isAvailable()) {
+				visualizerController = null;
+			}
+		}
         return visualizerController;
     }
 
