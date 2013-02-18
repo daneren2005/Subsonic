@@ -352,6 +352,13 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				onDownloadListChanged();
 			}
 		});
+		playlistView.setRemoveListener(new DragSortListView.RemoveListener() {
+			@Override
+			public void remove(int which) {
+				getDownloadService().remove(which);
+				onDownloadListChanged();
+			}
+		});
 
         registerForContextMenu(playlistView);
 

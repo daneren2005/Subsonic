@@ -60,6 +60,8 @@ public interface DownloadService {
     void clearIncomplete();
 
     int size();
+	
+	void remove(int which);
 
     void remove(DownloadFile downloadFile);
 

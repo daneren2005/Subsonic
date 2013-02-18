@@ -420,6 +420,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
         updateJukeboxPlaylist();
     }
+	
+	@Override
+    public synchronized void remove(int which) {
+		downloadList.remove(which);
+	}
 
     @Override
     public synchronized void remove(DownloadFile downloadFile) {
@@ -983,7 +988,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 	
 	@Override
-	public void swap(int from, int to) {
+	public synchronized void swap(int from, int to) {
 		int max = size();
 		if(to >= max) {
 			to = max - 1;
