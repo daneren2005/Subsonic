@@ -130,4 +130,6 @@ public interface DownloadService {
 	boolean getSleepTimer();
 	
 	void setVolume(float volume);
+	
+	void swap(int from, int to);
 }

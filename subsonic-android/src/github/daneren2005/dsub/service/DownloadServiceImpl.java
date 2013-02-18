@@ -981,6 +981,22 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			mediaPlayer.setVolume(volume, volume);
 		}
 	}
+	
+	@Override
+	public void swap(int from, int to) {
+		int max = size();
+		if(to >= max) {
+			to = max - 1;
+		}
+		else if(to < 0) {
+			to = 0;
+		}
+		
+		downloadList.add(to, downloadList.remove(from));
+		if(jukeboxEnabled) {
+			updateJukeboxPlaylist();
+		}
+	}
 
     private void handleError(Exception x) {
         Log.w(TAG, "Media player error: " + x, x);

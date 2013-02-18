@@ -81,6 +81,7 @@ import github.daneren2005.dsub.util.*;
 import github.daneren2005.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
+import com.mobeta.android.dslv.*;
 
 public class DownloadActivity extends SubsonicTabActivity implements OnGestureListener {
 	private static final String TAG = DownloadActivity.class.getSimpleName();
@@ -95,7 +96,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private TextView emptyTextView;
     private TextView songTitleTextView;
     private ImageView albumArtImageView;
-    private ListView playlistView;
+    private DragSortListView playlistView;
     private TextView positionTextView;
     private TextView durationTextView;
     private TextView statusTextView;
@@ -145,7 +146,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         durationTextView = (TextView) findViewById(R.id.download_duration);
         statusTextView = (TextView) findViewById(R.id.download_status);
         progressBar = (HorizontalSlider) findViewById(R.id.download_progress_bar);
-        playlistView = (ListView) findViewById(R.id.download_list);
+        playlistView = (DragSortListView) findViewById(R.id.download_list);
         previousButton = (AutoRepeatButton)findViewById(R.id.download_previous);
         nextButton = (AutoRepeatButton)findViewById(R.id.download_next);
         pauseButton = findViewById(R.id.download_pause);
@@ -344,6 +345,13 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				}
             }
         });
+		playlistView.setDropListener(new DragSortListView.DropListener() {
+			@Override
+			public void drop(int from, int to) {
+				getDownloadService().swap(from, to);
+				onDownloadListChanged();
+			}
+		});
 
         registerForContextMenu(playlistView);
 
