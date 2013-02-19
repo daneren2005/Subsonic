@@ -1,3 +1,13 @@
+Basic Instructions
+Run these commands to grab dependent libraries:
+git submodule init
+git submodule update
+
+Go to both ActionBarSherlock/library and DragSortListView/library and build project files with:
+android update project --path ./
+
+
+
 Roadmap of major planned features in rough order that I plan to work on them in (little features get sprinkled in wherever):
 
 Gapless Playback (may not be possible to get perfect)

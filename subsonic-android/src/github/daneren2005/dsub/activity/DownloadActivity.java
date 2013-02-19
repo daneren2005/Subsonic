@@ -87,8 +87,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
     private static final int DIALOG_SAVE_PLAYLIST = 100;
     private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 5;
-    private static final int COLOR_BUTTON_ENABLED = Color.rgb(129, 201, 54);
-    private static final int COLOR_BUTTON_DISABLED = Color.rgb(164, 166, 158);
+    private static final int COLOR_BUTTON_ENABLED = Color.rgb(51, 181, 229);
+    private static final int COLOR_BUTTON_DISABLED = Color.rgb(206, 213, 211);
 	private static final int INCREMENT_TIME = 5000;
 
     private ViewFlipper playlistFlipper;
@@ -275,8 +275,14 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         equalizerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DownloadActivity.this, EqualizerActivity.class));
-				setControlsVisible(true);
+				DownloadService downloadService = getDownloadService();
+				if(downloadService != null && downloadService.getEqualizerController() != null
+						&& downloadService.getEqualizerController().getEqualizer() != null) {
+					startActivity(new Intent(DownloadActivity.this, EqualizerActivity.class));
+					setControlsVisible(true);
+				} else {
+					Util.toast(DownloadActivity.this, "Failed to start equalizer.  Try restarting.");
+				}
             }
         });
 
@@ -285,9 +291,14 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             public void onClick(View view) {
                 boolean active = !visualizerView.isActive();
                 visualizerView.setActive(active);
-                getDownloadService().setShowVisualization(visualizerView.isActive());
+				boolean isActive = visualizerView.isActive();
+                getDownloadService().setShowVisualization(isActive);
                 updateButtons();
-                Util.toast(DownloadActivity.this, active ? R.string.download_visualizer_on : R.string.download_visualizer_off);
+				if(active == isActive) {
+					Util.toast(DownloadActivity.this, active ? R.string.download_visualizer_on : R.string.download_visualizer_off);
+				} else {
+					Util.toast(DownloadActivity.this, "Failed to start visualizer.  Try restarting.");
+				}
 				setControlsVisible(true);
             }
         });
@@ -343,8 +354,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             downloadService.setShufflePlayEnabled(true);
         }
 
-        boolean visualizerAvailable = downloadService != null && downloadService.getVisualizerController() != null;
-        boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerController() != null;
+        boolean visualizerAvailable = downloadService != null && downloadService.getVisualizerAvailable();
+        boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
 
         if (!equalizerAvailable) {
             equalizerButton.setVisibility(View.GONE);
@@ -400,8 +411,8 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
-        if (visualizerView != null) {
-            visualizerView.setActive(downloadService != null && downloadService.getShowVisualization());
+        if (visualizerView != null && downloadService != null && downloadService.getShowVisualization()) {
+            visualizerView.setActive(true);
         }
 
         updateButtons();
@@ -441,10 +452,15 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     }
 
     private void updateButtons() {
-        boolean eqEnabled = getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
-                getDownloadService().getEqualizerController().isEnabled();
-        equalizerButton.setTextColor(eqEnabled ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
-
+		SharedPreferences prefs = Util.getPreferences(DownloadActivity.this);
+		boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
+		if(equalizerOn && getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
+                getDownloadService().getEqualizerController().isEnabled()) {
+			equalizerButton.setTextColor(COLOR_BUTTON_ENABLED);
+		} else {
+			equalizerButton.setTextColor(COLOR_BUTTON_DISABLED);
+		}
+        
         if (visualizerView != null) {
             visualizerButton.setTextColor(visualizerView.isActive() ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
         }

@@ -148,25 +148,23 @@ public class OfflineMusicService extends RESTMusicService {
         entry.setSize(file.length());
         String root = FileUtil.getMusicDirectory(context).getPath();
         entry.setPath(file.getPath().replaceFirst("^" + root + "/" , ""));
+		String title = name;
         if (file.isFile()) {
             entry.setArtist(file.getParentFile().getParentFile().getName());
             entry.setAlbum(file.getParentFile().getName());
 			
-			try {
-				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-				metadata.setDataSource(file.getAbsolutePath());
-				entry.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
-				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-				entry.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
-				String year = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
-				entry.setYear(Integer.parseInt((year != null) ? year : "0"));
-				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-				entry.setDuration(Integer.parseInt(length) / 1000);
-			} catch(Exception e) {
-				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+			int index = name.indexOf('-');
+			if(index != -1) {
+				try {
+					entry.setTrack(Integer.parseInt(name.substring(0, index)));
+					title = title.substring(index + 1);
+				} catch(Exception e) {
+					// Failed parseInt, just means track filled out
+				}
 			}
         }
-        entry.setTitle(name);
+		
+        entry.setTitle(title);
         entry.setSuffix(FileUtil.getExtension(file.getName().replace(".complete", "")));
 
         File albumArt = FileUtil.getAlbumArtFile(context, entry);
