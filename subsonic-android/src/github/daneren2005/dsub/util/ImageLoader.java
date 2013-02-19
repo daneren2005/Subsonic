@@ -158,6 +158,15 @@ public class ImageLoader implements Runnable {
                     	emptyImage = Bitmap.createBitmap(imageSizeDefault, imageSizeDefault, Bitmap.Config.ARGB_8888);
                     }
                     existingDrawable = new BitmapDrawable(emptyImage);
+                } else {
+                	// Try to get rid of old transitions
+                	try {
+                		TransitionDrawable tmp = (TransitionDrawable) existingDrawable;
+                		int layers = tmp.getNumberOfLayers();
+                		existingDrawable = tmp.getDrawable(layers - 1;)
+                	} catch(Exception e) {
+                		// Do nothing, just means that the drawable is a flat image
+                	}
                 }
 
                 Drawable[] layers = new Drawable[]{existingDrawable, drawable};
