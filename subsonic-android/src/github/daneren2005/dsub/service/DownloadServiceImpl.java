@@ -224,6 +224,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         	mRemoteControl.unregister(this);
         	mRemoteControl = null;
         }
+		
+		if(bufferTask != null) {
+			bufferTask.cancel();
+		}
+		if(nextPlayingTask != null) {
+			nextPlayingTask.cancel();
+		}
 
         instance = null;
     }
@@ -497,9 +504,25 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
     }
 	
-	synchronized void setNextPlaying(int index) {
-		if((index + 1) < size()) {
-			nextPlaying = downloadList.get(index + 1);
+	synchronized void setNextPlaying() {
+		int index = getCurrentPlayingIndex();
+		if (index != -1) {
+            switch (getRepeatMode()) {
+                case OFF:
+                    index = index + 1;
+                    break;
+                case ALL:
+					index = (index + 1) % size();
+                    break;
+                case SINGLE:
+                    break;
+                default:
+                    break;
+            }
+        }
+		
+		if(index < size()) {
+			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.start();
 		} else {
@@ -571,13 +594,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				nextPlayingTask.cancel();
 			}
             setCurrentPlaying(index, start);
-			if(currentPlaying == nextPlaying) {
-				// Swap the media players since nextMediaPlayer is ready to play
-				MediaPlayer tmp = mediaPlayer;
-				mediaPlayer = nextMediaPlayer;
-				nextMediaPlayer = tmp;
-				setPlayerState(nextPlayerState);
-			}
             if (start) {
                 if (jukeboxEnabled) {
                     jukeboxService.skip(getCurrentPlayingIndex(), 0);
@@ -587,9 +603,21 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 }
             }
 			checkDownloads();
-			setNextPlaying(index);
+			setNextPlaying();
         }
     }
+	
+	private synchronized void playNext() {
+		// Swap the media players since nextMediaPlayer is ready to play
+		nextMediaPlayer.start();
+		MediaPlayer tmp = mediaPlayer;
+		mediaPlayer = nextMediaPlayer;
+		nextMediaPlayer = tmp;
+		currentPlaying = nextPlaying;
+		setPlayerState(PlayerState.STARTED);
+		setupHandlers(currentPlaying, false);
+		setNextPlaying();
+	}
 
     /** Plays or resumes the playback, depending on the current player state. */
     public synchronized void togglePlayPause() {
@@ -931,60 +959,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					}
 				});
 			}
-			
-			mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-				public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-					Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
-					int pos = cachedPosition;
-					reset();
-					downloadFile.setPlaying(false);
-					doPlay(downloadFile, pos, true);
-					downloadFile.setPlaying(true);
-					return true;
-				}
-			});
 
-			mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-				@Override
-				public void onCompletion(MediaPlayer mediaPlayer) {
-					setPlayerState(COMPLETED);
-
-					// Acquire a temporary wakelock, since when we return from
-					// this callback the MediaPlayer will release its wakelock
-					// and allow the device to go to sleep.
-					wakeLock.acquire(60000);
-
-					if (!isPartial) {
-						onSongCompleted();
-						return;
-					}
-
-					// If file is not completely downloaded, restart the playback from the current position.
-					int pos = cachedPosition;
-					synchronized (DownloadServiceImpl.this) {
-						int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
-						Log.i(TAG, "Ending position " + pos + " of " + duration);
-						if(downloadFile.isWorkDone()) {
-							// Reached the end of the song
-							if(Math.abs(duration - pos) < 10000) {
-								onSongCompleted();
-							// Complete was called early even though file is fully buffered
-							} else {
-								Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
-								reset();
-								downloadFile.setPlaying(false);
-								doPlay(downloadFile, pos, true);
-								downloadFile.setPlaying(true);
-							}
-						} else {
-							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
-							reset();
-							bufferTask = new BufferTask(downloadFile, pos);
-							bufferTask.start();
-						} 
-					}
-				}
-			});
+			setupHandlers(downloadFile, isPartial);
 			
 			if(playerState == PREPARING) {
 				mediaPlayer.prepareAsync();
@@ -1025,6 +1001,65 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } catch (Exception x) {
             handleErrorNext(x);
         }
+	}
+	
+	private synchronized void setupHandlers(final DownloadFile downloadFile, final boolean isPartial) {
+		mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
+				Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
+				int pos = cachedPosition;
+				reset();
+				downloadFile.setPlaying(false);
+				doPlay(downloadFile, pos, true);
+				downloadFile.setPlaying(true);
+				return true;
+			}
+		});
+		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+			@Override
+			public void onCompletion(MediaPlayer mediaPlayer) {
+				setPlayerState(COMPLETED);
+
+				// Acquire a temporary wakelock, since when we return from
+				// this callback the MediaPlayer will release its wakelock
+				// and allow the device to go to sleep.
+				wakeLock.acquire(60000);
+
+				if (!isPartial) {
+					if(nextPlaying != null) {
+						playNext();
+					} else {
+						onSongCompleted();
+					}
+					return;
+				}
+
+				// If file is not completely downloaded, restart the playback from the current position.
+				int pos = cachedPosition;
+				synchronized (DownloadServiceImpl.this) {
+					int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
+					Log.i(TAG, "Ending position " + pos + " of " + duration);
+					if(downloadFile.isWorkDone()) {
+						// Reached the end of the song
+						if(Math.abs(duration - pos) < 10000) {
+							onSongCompleted();
+						// Complete was called early even though file is fully buffered
+						} else {
+							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+							reset();
+							downloadFile.setPlaying(false);
+							doPlay(downloadFile, pos, true);
+							downloadFile.setPlaying(true);
+						}
+					} else {
+						Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+						reset();
+						bufferTask = new BufferTask(downloadFile, pos);
+						bufferTask.start();
+					} 
+				}
+			}
+		});
 	}
 	
 	@Override
