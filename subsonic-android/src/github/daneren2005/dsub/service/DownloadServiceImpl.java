@@ -770,7 +770,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         return playerState;
     }
 
-	synchronized void setPlayerState(PlayerState playerState) {
+	public synchronized void setPlayerState(PlayerState playerState) {
         Log.i(TAG, this.playerState.name() + " -> " + playerState.name() + " (" + currentPlaying + ")");
 
         if (playerState == PAUSED) {
@@ -827,7 +827,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
     }
 	
-	synchronized void setNextPlayerState(PlayerState playerState) {
+	private synchronized void setPlayerStateCompleted() {
+		Log.i(TAG, this.playerState.name() + " -> " + PlayerState.COMPLETED + " (" + currentPlaying + ")");
+		this.playerState = PlayerState.COMPLETED;
+		scrobbler.scrobble(this, currentPlaying, true);
+	}
+	
+	private synchronized void setNextPlayerState(PlayerState playerState) {
         Log.i(TAG, "Next: " + this.nextPlayerState.name() + " -> " + playerState.name() + " (" + nextPlaying + ")");
         this.nextPlayerState = playerState;
     }
@@ -1018,7 +1024,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mediaPlayer) {
-				setPlayerState(COMPLETED);
+				// setPlayerState(COMPLETED);
+				setPlayerStateCompleted();
 
 				// Acquire a temporary wakelock, since when we return from
 				// this callback the MediaPlayer will release its wakelock
@@ -1026,7 +1033,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				wakeLock.acquire(60000);
 
 				if (!isPartial) {
-					if(nextPlaying != null) {
+					if(nextPlaying != null && nextPlayerState == PlayerState.PREPARED) {
 						playNext();
 					} else {
 						onSongCompleted();
