@@ -60,10 +60,18 @@ public class Updater {
 		}
 	}
 	
+	public String getName() {
+		return this.TAG;
+	}
+	
 	private class BackgroundUpdate extends AsyncTask<Updater, Void, Void> {
 		@Override
 		protected Void doInBackground(Updater... params) {
-			params[0].update(context);
+			try {
+				params[0].update(context);
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to run update for " + params[0].getName());
+			}
 			return null;
 		}
 	}
