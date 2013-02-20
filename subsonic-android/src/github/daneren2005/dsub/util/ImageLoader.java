@@ -163,7 +163,7 @@ public class ImageLoader implements Runnable {
                 	try {
                 		TransitionDrawable tmp = (TransitionDrawable) existingDrawable;
                 		int layers = tmp.getNumberOfLayers();
-                		existingDrawable = tmp.getDrawable(layers - 1;)
+                		existingDrawable = tmp.getDrawable(layers - 1);
                 	} catch(Exception e) {
                 		// Do nothing, just means that the drawable is a flat image
                 	}
