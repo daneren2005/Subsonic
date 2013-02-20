@@ -335,6 +335,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         revision++;
         lifecycleSupport.serializeDownloadQueue();
         updateJukeboxPlaylist();
+		setNextPlaying();
     }
 
     @Override
@@ -345,6 +346,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public void setRepeatMode(RepeatMode repeatMode) {
         Util.setRepeatMode(this, repeatMode);
+		setNextPlaying();
     }
 
     @Override
@@ -442,6 +444,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             lifecycleSupport.serializeDownloadQueue();
         }
         updateJukeboxPlaylist();
+		setNextPlaying();
     }
 
     @Override
@@ -459,6 +462,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         revision++;
         lifecycleSupport.serializeDownloadQueue();
         updateJukeboxPlaylist();
+		if(downloadFile == nextPlaying) {
+			setNextPlaying();
+		}
     }
 
     @Override
@@ -521,12 +527,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
         }
 		
-		if(index < size()) {
+		if(index < size() && index != -1) {
 			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.start();
 		} else {
 			nextPlaying = null;
+			if(nextPlayingTask != null) {
+				nextPlayingTask.cancel();
+			}
 			nextPlayingTask = null;
 			setNextPlayerState(IDLE);
 		}
