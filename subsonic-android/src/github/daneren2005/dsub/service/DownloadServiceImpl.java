@@ -1030,10 +1030,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				return true;
 			}
 		});
+		
+		final int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
 		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mediaPlayer) {
-				// setPlayerState(COMPLETED);
 				setPlayerStateCompleted();
 
 				// Acquire a temporary wakelock, since when we return from
@@ -1041,7 +1042,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				// and allow the device to go to sleep.
 				wakeLock.acquire(60000);
 
-				if (!isPartial) {
+				int pos = cachedPosition;
+				Log.i(TAG, "Ending position " + pos + " of " + duration);
+				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
 					if(nextPlaying != null && nextPlayerState == PlayerState.PREPARED) {
 						playNext();
 					} else {
@@ -1051,22 +1054,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				}
 
 				// If file is not completely downloaded, restart the playback from the current position.
-				int pos = cachedPosition;
 				synchronized (DownloadServiceImpl.this) {
-					int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
-					Log.i(TAG, "Ending position " + pos + " of " + duration);
 					if(downloadFile.isWorkDone()) {
-						// Reached the end of the song
-						if(Math.abs(duration - pos) < 10000) {
-							onSongCompleted();
 						// Complete was called early even though file is fully buffered
-						} else {
-							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
-							reset();
-							downloadFile.setPlaying(false);
-							doPlay(downloadFile, pos, true);
-							downloadFile.setPlaying(true);
-						}
+						Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+						reset();
+						downloadFile.setPlaying(false);
+						doPlay(downloadFile, pos, true);
+						downloadFile.setPlaying(true);
 					} else {
 						Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
 						reset();
@@ -1347,7 +1342,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			}
 			
             while (!bufferComplete()) {
-                Util.sleepQuietly(2000L);
+                Util.sleepQuietly(5000L);
                 if (isCancelled()) {
                     return;
                 }
