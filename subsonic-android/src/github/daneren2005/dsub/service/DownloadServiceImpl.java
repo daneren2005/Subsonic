@@ -622,7 +622,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		MediaPlayer tmp = mediaPlayer;
 		mediaPlayer = nextMediaPlayer;
 		nextMediaPlayer = tmp;
-		currentPlaying = nextPlaying;
+		setCurrentPlaying(nextPlaying, true);
 		setPlayerState(PlayerState.STARTED);
 		setupHandlers(currentPlaying, false);
 		setNextPlaying();
