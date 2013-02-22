@@ -817,16 +817,9 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 		else
 			emptyTextView.setText(R.string.download_empty);
 
-		// Save old position
-		Parcelable state = playlistView.onSaveInstanceState();
-		// Set new items
         playlistView.setAdapter(new SongListAdapter(list));
-		
         emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
         currentRevision = downloadService.getDownloadListUpdateRevision();
-		
-		// Restore old position
-		playlistView.onRestoreInstanceState(state);
 
         switch (downloadService.getRepeatMode()) {
             case OFF:
