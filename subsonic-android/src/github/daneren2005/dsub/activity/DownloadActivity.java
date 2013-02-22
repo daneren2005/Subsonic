@@ -121,6 +121,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private VisualizerView visualizerView;
 	private boolean nowPlaying = true;
 	private ScheduledFuture<?> hideControlsFuture;
+	private SongListAdapter songListAdapter;
 
     /**
      * Called when the activity is first created.
@@ -783,25 +784,35 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             }
         }
     }
-
-    private void onDownloadListChanged() {
+	private void onDownloadListChanged() {
+		onDownloadListChanged(false);
+	}
+    private void onDownloadListChanged(boolean refresh) {
         DownloadService downloadService = getDownloadService();
         if (downloadService == null) {
             return;
         }
 
 		List<DownloadFile> list;
-		if(nowPlaying)
+		if(nowPlaying) {
 			list = downloadService.getSongs();
-		else
+		}
+		else {
 			list = downloadService.getBackgroundDownloads();
+		}
 		
-		if(downloadService.isShufflePlayEnabled())
+		if(downloadService.isShufflePlayEnabled()) {
 			emptyTextView.setText(R.string.download_shuffle_loading);
-		else
+		}
+		else {
 			emptyTextView.setText(R.string.download_empty);
+		}
 
-        playlistView.setAdapter(new SongListAdapter(list));
+		if(songListAdapter == null || refresh) {
+			playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
+		} else {
+			songListAdapter.notifyDataSetChanged();
+		}
         emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
         currentRevision = downloadService.getDownloadListUpdateRevision();
 
@@ -1004,7 +1015,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 	private void toggleNowPlaying() {
 		nowPlaying = !nowPlaying;
 		setTitle(nowPlaying ? "Now Playing" : "Downloading");
-		onDownloadListChanged();
+		onDownloadListChanged(true);
 	}
 
 	@Override
