@@ -503,9 +503,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	@Override
 	public synchronized List<DownloadFile> getSongs() {
-		List<DownloadFile> temp = new ArrayList<DownloadFile>();
-		temp.addAll(downloadList);
-        return temp;
+		return downloadList;
 	}
 
     @Override
@@ -518,9 +516,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	@Override
 	public synchronized List<DownloadFile> getBackgroundDownloads() {
-		List<DownloadFile> temp = new ArrayList<DownloadFile>();
-		temp.addAll(backgroundDownloadList);
-        return temp;
+		return backgroundDownloadList;
 	}
 
     /** Plays either the current song (resume) or the first/next one in queue. */

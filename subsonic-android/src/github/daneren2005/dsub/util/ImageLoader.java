@@ -64,7 +64,7 @@ public class ImageLoader implements Runnable {
     public ImageLoader(Context context) {
 		this.context = context;
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-		final int cacheSize = maxMemory / 2;
+		final int cacheSize = maxMemory / 4;
 		cache = new LruCache<String, Bitmap>(cacheSize) {
 			@Override
 			protected int sizeOf(String key, Bitmap bitmap) {
@@ -158,6 +158,15 @@ public class ImageLoader implements Runnable {
                     	emptyImage = Bitmap.createBitmap(imageSizeDefault, imageSizeDefault, Bitmap.Config.ARGB_8888);
                     }
                     existingDrawable = new BitmapDrawable(emptyImage);
+                } else {
+                	// Try to get rid of old transitions
+                	try {
+                		TransitionDrawable tmp = (TransitionDrawable) existingDrawable;
+                		int layers = tmp.getNumberOfLayers();
+                		existingDrawable = tmp.getDrawable(layers - 1);
+                	} catch(Exception e) {
+                		// Do nothing, just means that the drawable is a flat image
+                	}
                 }
 
                 Drawable[] layers = new Drawable[]{existingDrawable, drawable};
@@ -244,7 +253,10 @@ public class ImageLoader implements Runnable {
 			try {
                 MusicService musicService = MusicServiceFactory.getMusicService(mContext);
                 Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, mSaveSize, null);
-                cache.put(getKey(mEntry.getCoverArt(), mSize), bitmap);
+                String key = getKey(mEntry.getCoverArt(), mSize);
+                cache.put(key, bitmap);
+                // Make sure key is the most recently "used"
+                cache.get(key);
                 
 				final Drawable drawable = Util.createDrawableFromBitmap(mContext, bitmap);
                 mTaskHandler.setDrawable(drawable);

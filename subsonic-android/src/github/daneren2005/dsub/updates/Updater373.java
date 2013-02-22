@@ -29,9 +29,10 @@ import java.io.File;
  *
  * @author Scott
  */
-public class Updater373 extends Updater {
+public class Updater373 extends Updater {	
 	public Updater373() {
 		super(373);
+		TAG = Updater373.class.getSimpleName();
 	}
 	
 	@Override
@@ -39,7 +40,9 @@ public class Updater373 extends Updater {
 		// Rename cover.jpeg to cover.jpg
 		Log.i(TAG, "Running Updater373: updating cover.jpeg to cover.jpg");
 		File dir = FileUtil.getMusicDirectory(context);
-		moveArt(dir);
+		if(dir != null) {
+			moveArt(dir);
+		}
 	}
 	
 	private void moveArt(File dir) {
