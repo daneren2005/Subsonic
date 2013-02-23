@@ -2,5 +2,4 @@ subsonic-android/.classpath
 subsonic-android/.project
 subsonic-android/bin/*
 subsonic-android/gen/*
-/subsonic-android/libs/ActionBarSherlock/gen/
-/subsonic-android/private/*
+subsonic-android/private/*
