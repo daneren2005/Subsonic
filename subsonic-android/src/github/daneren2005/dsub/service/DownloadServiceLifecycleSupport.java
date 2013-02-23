@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.RemoteControlClient;
+import android.os.AsyncTask;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -181,15 +182,7 @@ public class DownloadServiceLifecycleSupport {
     }
 
     public void serializeDownloadQueue() {
-        State state = new State();
-        for (DownloadFile downloadFile : downloadService.getSongs()) {
-            state.songs.add(downloadFile.getSong());
-        }
-        state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
-        state.currentPlayingPosition = downloadService.getPlayerPosition();
-
-        Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
-        FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
+		new SerializeTask().execute();
     }
 
     private void deserializeDownloadQueue() {
@@ -277,4 +270,22 @@ public class DownloadServiceLifecycleSupport {
         private int currentPlayingIndex;
         private int currentPlayingPosition;
     }
+	
+	private class SerializeTask extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected Void doInBackground(Void... params) {
+			List<DownloadFile> songs = new ArrayList<DownloadFile>(downloadService.getSongs());
+			State state = new State();
+			for (DownloadFile downloadFile : songs) {
+				state.songs.add(downloadFile.getSong());
+			}
+			state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
+			state.currentPlayingPosition = downloadService.getPlayerPosition();
+
+			Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
+			FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
+			
+			return null;
+		}
+	}
 }

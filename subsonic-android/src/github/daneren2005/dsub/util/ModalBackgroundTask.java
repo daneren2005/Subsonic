@@ -129,11 +129,13 @@ public abstract class ModalBackgroundTask<T> extends BackgroundTask<T> {
 
     @Override
     public void updateProgress(final String message) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.setMessage(message);
-            }
-        });
+		if(!cancelled) {
+			getHandler().post(new Runnable() {
+				@Override
+				public void run() {
+					progressDialog.setMessage(message);
+				}
+			});
+		}
     }
 }

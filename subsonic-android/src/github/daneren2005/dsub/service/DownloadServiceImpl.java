@@ -159,21 +159,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         	mRemoteControl.register(this, mediaButtonReceiverComponent);
         }
 
-		if (equalizerAvailable) {
-			equalizerController = new EqualizerController(this, mediaPlayer);
-			if (!equalizerController.isAvailable()) {
-				equalizerController = null;
-			} else {
-				equalizerController.loadSettings();
-			}
-		}
-		if (visualizerAvailable) {
-			visualizerController = new VisualizerController(this, mediaPlayer);
-			if (!visualizerController.isAvailable()) {
-				visualizerController = null;
-			}
-		}
-
 		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
 		wakeLock.setReferenceCounted(false);
@@ -190,6 +175,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 		instance = this;
 		lifecycleSupport.onCreate();
+
+		if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
+			getEqualizerController();
+		}
     }
 
     @Override
@@ -435,6 +424,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
         updateJukeboxPlaylist();
     }
+	
+	@Override
+    public synchronized void remove(int which) {
+		downloadList.remove(which);
+	}
 
     @Override
     public synchronized void remove(DownloadFile downloadFile) {
@@ -513,9 +507,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	@Override
 	public synchronized List<DownloadFile> getSongs() {
-		List<DownloadFile> temp = new ArrayList<DownloadFile>();
-		temp.addAll(downloadList);
-        return temp;
+		return downloadList;
 	}
 
     @Override
@@ -528,9 +520,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	@Override
 	public synchronized List<DownloadFile> getBackgroundDownloads() {
-		List<DownloadFile> temp = new ArrayList<DownloadFile>();
-		temp.addAll(backgroundDownloadList);
-        return temp;
+		return backgroundDownloadList;
 	}
 
     /** Plays either the current song (resume) or the first/next one in queue. */
@@ -789,14 +779,38 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public String getSuggestedPlaylistName() {
         return suggestedPlaylistName;
     }
+	
+	@Override
+    public boolean getEqualizerAvailable() {
+        return equalizerAvailable;
+    }
+
+    @Override
+    public boolean getVisualizerAvailable() {
+        return visualizerAvailable;
+    }
 
     @Override
     public EqualizerController getEqualizerController() {
+		if (equalizerAvailable && equalizerController == null) {
+			equalizerController = new EqualizerController(this, mediaPlayer);
+			if (!equalizerController.isAvailable()) {
+				equalizerController = null;
+			} else {
+				equalizerController.loadSettings();
+			}
+		}
         return equalizerController;
     }
 
     @Override
     public VisualizerController getVisualizerController() {
+		if (visualizerAvailable && visualizerController == null) {
+			visualizerController = new VisualizerController(this, mediaPlayer);
+			if (!visualizerController.isAvailable()) {
+				visualizerController = null;
+			}
+		}
         return visualizerController;
     }
 
@@ -991,6 +1005,22 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public void setVolume(float volume) {
 		if(mediaPlayer != null) {
 			mediaPlayer.setVolume(volume, volume);
+		}
+	}
+	
+	@Override
+	public synchronized void swap(int from, int to) {
+		int max = size();
+		if(to >= max) {
+			to = max - 1;
+		}
+		else if(to < 0) {
+			to = 0;
+		}
+		
+		downloadList.add(to, downloadList.remove(from));
+		if(jukeboxEnabled) {
+			updateJukeboxPlaylist();
 		}
 	}
 

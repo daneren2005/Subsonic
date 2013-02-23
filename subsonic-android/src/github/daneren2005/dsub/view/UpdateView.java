@@ -21,6 +21,8 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import java.util.WeakHashMap;
 
@@ -31,6 +33,10 @@ public class UpdateView extends LinearLayout {
 	
 	public UpdateView(Context context) {
 		super(context);
+		
+		setLayoutParams(new LinearLayout.LayoutParams(
+			LinearLayout.LayoutParams.FILL_PARENT,
+			LinearLayout.LayoutParams.WRAP_CONTENT));
 		
 		INSTANCES.put(this, null);
         int instanceCount = INSTANCES.size();

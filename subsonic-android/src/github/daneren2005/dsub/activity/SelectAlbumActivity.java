@@ -53,6 +53,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private Button moreButton;
     private Boolean licenseValid;
 	private boolean showHeader = true;
+	private EntryAdapter entryAdapter;
 
     /**
      * Called when the activity is first created.
@@ -695,7 +696,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 			}
 
             emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
-            entryList.setAdapter(new EntryAdapter(SelectAlbumActivity.this, getImageLoader(), entries, true));
+            entryList.setAdapter(entryAdapter = new EntryAdapter(SelectAlbumActivity.this, getImageLoader(), entries, true));
             licenseValid = result.getSecond();
 			invalidateOptionsMenu();
 
@@ -753,12 +754,16 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             
             @Override
             protected void done(Void result) {
-				refresh();
+				for(int i = indexes.size() - 1; i >= 0; i--) {
+					entryList.setItemChecked(indexes.get(i) + 1, false);
+					entryAdapter.removeAt(indexes.get(i));
+				}
+				entryAdapter.notifyDataSetChanged();
                 Util.toast(SelectAlbumActivity.this, getResources().getString(R.string.removed_playlist, indexes.size(), name));
             }
             
             @Override
-            protected void error(Throwable error) {            	
+            protected void error(Throwable error) {
             	String msg;
             	if (error instanceof OfflineException || error instanceof ServerTooOldException) {
             		msg = getErrorMessage(error);

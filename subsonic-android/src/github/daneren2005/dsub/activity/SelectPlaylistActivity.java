@@ -43,6 +43,7 @@ import java.util.List;
 public class SelectPlaylistActivity extends SubsonicTabActivity implements AdapterView.OnItemClickListener {
     private ListView list;
     private View emptyTextView;
+	private PlaylistAdapter playlistAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 
             @Override
             protected void done(List<Playlist> result) {
-                list.setAdapter(new PlaylistAdapter(SelectPlaylistActivity.this, result));
+                list.setAdapter(playlistAdapter = new PlaylistAdapter(SelectPlaylistActivity.this, result));
                 emptyTextView.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
             }
         };
@@ -206,7 +207,8 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 
 					@Override
 					protected void done(Void result) {
-						refresh();
+						playlistAdapter.remove(playlist);
+						playlistAdapter.notifyDataSetChanged();
 						Util.toast(SelectPlaylistActivity.this, getResources().getString(R.string.menu_deleted_playlist, playlist.getName()));
 					}
 

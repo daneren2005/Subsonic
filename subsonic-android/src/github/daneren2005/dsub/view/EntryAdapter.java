@@ -37,13 +37,19 @@ public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
     private final SubsonicTabActivity activity;
     private final ImageLoader imageLoader;
     private final boolean checkable;
+	private List<MusicDirectory.Entry> entries;
 
     public EntryAdapter(SubsonicTabActivity activity, ImageLoader imageLoader, List<MusicDirectory.Entry> entries, boolean checkable) {
         super(activity, android.R.layout.simple_list_item_1, entries);
+		this.entries = entries;
         this.activity = activity;
         this.imageLoader = imageLoader;
         this.checkable = checkable;
     }
+	
+	public void removeAt(int position) {
+		entries.remove(position);
+	}
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -51,12 +57,7 @@ public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 
         if (entry.isDirectory()) {
             AlbumView view;
-  // TODO: Reuse AlbumView objects once cover art loading is working.
-//            if (convertView != null && convertView instanceof AlbumView) {
-//                view = (AlbumView) convertView;
-//            } else {
-                view = new AlbumView(activity);
-//            }
+			view = new AlbumView(activity);
             view.setAlbum(entry, imageLoader);
             return view;
 

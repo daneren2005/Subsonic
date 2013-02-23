@@ -60,6 +60,8 @@ public interface DownloadService {
     void clearIncomplete();
 
     int size();
+	
+	void remove(int which);
 
     void remove(DownloadFile downloadFile);
 
@@ -106,6 +108,10 @@ public interface DownloadService {
     void setSuggestedPlaylistName(String name);
 
     String getSuggestedPlaylistName();
+	
+	boolean getEqualizerAvailable();
+
+    boolean getVisualizerAvailable();
 
     EqualizerController getEqualizerController();
 
@@ -126,4 +132,6 @@ public interface DownloadService {
 	boolean getSleepTimer();
 	
 	void setVolume(float volume);
+	
+	void swap(int from, int to);
 }
