@@ -25,4 +25,21 @@
         <item name="android:background">@drawable/menubar_button</item>
 		<item name="android:textColor">?android:textColorPrimary</item>
     </style>
+
+	<style name="DragDropListView">
+		xmlns:dslv="http://schemas.android.com/apk/res/github.daneren2005.dsub"
+		dslv:drag_enabled="true"
+		dslv:collapsed_height="1dp"
+		dslv:drag_scroll_start="1.0"
+		dslv:max_drag_scroll_speed="2.0"
+		dslv:float_alpha="0.6"
+		dslv:slide_shuffle_speed="0.3"
+		dslv:track_drag_sort="false"
+		dslv:use_default_controller="true"
+		dslv:drag_handle_id="@id/drag_handle"
+		dslv:sort_enabled="true"
+		dslv:remove_enabled="false"
+		dslv:remove_mode="flingRemove"
+		dslv:drag_start_mode="onLongPress"
+	</style>
 </resources>
