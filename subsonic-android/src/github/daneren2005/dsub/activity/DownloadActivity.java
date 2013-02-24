@@ -36,6 +36,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
@@ -81,6 +82,7 @@ import github.daneren2005.dsub.util.*;
 import github.daneren2005.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
+import com.mobeta.android.dslv.*;
 
 public class DownloadActivity extends SubsonicTabActivity implements OnGestureListener {
 	private static final String TAG = DownloadActivity.class.getSimpleName();
@@ -95,7 +97,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private TextView emptyTextView;
     private TextView songTitleTextView;
     private ImageView albumArtImageView;
-    private ListView playlistView;
+    private DragSortListView playlistView;
     private TextView positionTextView;
     private TextView durationTextView;
     private TextView statusTextView;
@@ -121,6 +123,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private VisualizerView visualizerView;
 	private boolean nowPlaying = true;
 	private ScheduledFuture<?> hideControlsFuture;
+	private SongListAdapter songListAdapter;
 
     /**
      * Called when the activity is first created.
@@ -145,7 +148,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         durationTextView = (TextView) findViewById(R.id.download_duration);
         statusTextView = (TextView) findViewById(R.id.download_status);
         progressBar = (HorizontalSlider) findViewById(R.id.download_progress_bar);
-        playlistView = (ListView) findViewById(R.id.download_list);
+        playlistView = (DragSortListView) findViewById(R.id.download_list);
         previousButton = (AutoRepeatButton)findViewById(R.id.download_previous);
         nextButton = (AutoRepeatButton)findViewById(R.id.download_next);
         pauseButton = findViewById(R.id.download_pause);
@@ -344,6 +347,20 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				}
             }
         });
+		playlistView.setDropListener(new DragSortListView.DropListener() {
+			@Override
+			public void drop(int from, int to) {
+				getDownloadService().swap(from, to);
+				onDownloadListChanged();
+			}
+		});
+		playlistView.setRemoveListener(new DragSortListView.RemoveListener() {
+			@Override
+			public void remove(int which) {
+				getDownloadService().remove(which);
+				onDownloadListChanged();
+			}
+		});
 
         registerForContextMenu(playlistView);
 
@@ -783,25 +800,35 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             }
         }
     }
-
-    private void onDownloadListChanged() {
+	private void onDownloadListChanged() {
+		onDownloadListChanged(false);
+	}
+    private void onDownloadListChanged(boolean refresh) {
         DownloadService downloadService = getDownloadService();
         if (downloadService == null) {
             return;
         }
 
 		List<DownloadFile> list;
-		if(nowPlaying)
+		if(nowPlaying) {
 			list = downloadService.getSongs();
-		else
+		}
+		else {
 			list = downloadService.getBackgroundDownloads();
+		}
 		
-		if(downloadService.isShufflePlayEnabled())
+		if(downloadService.isShufflePlayEnabled()) {
 			emptyTextView.setText(R.string.download_shuffle_loading);
-		else
+		}
+		else {
 			emptyTextView.setText(R.string.download_empty);
+		}
 
-        playlistView.setAdapter(new SongListAdapter(list));
+		if(songListAdapter == null || refresh) {
+			playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
+		} else {
+			songListAdapter.notifyDataSetChanged();
+		}
         emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
         currentRevision = downloadService.getDownloadListUpdateRevision();
 
@@ -1004,7 +1031,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 	private void toggleNowPlaying() {
 		nowPlaying = !nowPlaying;
 		setTitle(nowPlaying ? "Now Playing" : "Downloading");
-		onDownloadListChanged();
+		onDownloadListChanged(true);
 	}
 
 	@Override

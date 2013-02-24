@@ -446,6 +446,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         updateJukeboxPlaylist();
 		setNextPlaying();
     }
+	
+	@Override
+    public synchronized void remove(int which) {
+		downloadList.remove(which);
+	}
 
     @Override
     public synchronized void remove(DownloadFile downloadFile) {
@@ -558,9 +563,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	@Override
 	public synchronized List<DownloadFile> getSongs() {
-		List<DownloadFile> temp = new ArrayList<DownloadFile>();
-		temp.addAll(downloadList);
-        return temp;
+		return downloadList;
 	}
 
     @Override
@@ -573,9 +576,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	@Override
 	public synchronized List<DownloadFile> getBackgroundDownloads() {
-		List<DownloadFile> temp = new ArrayList<DownloadFile>();
-		temp.addAll(backgroundDownloadList);
-        return temp;
+		return backgroundDownloadList;
 	}
 
     /** Plays either the current song (resume) or the first/next one in queue. */
@@ -1117,6 +1118,22 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public void setVolume(float volume) {
 		if(mediaPlayer != null) {
 			mediaPlayer.setVolume(volume, volume);
+		}
+	}
+	
+	@Override
+	public synchronized void swap(int from, int to) {
+		int max = size();
+		if(to >= max) {
+			to = max - 1;
+		}
+		else if(to < 0) {
+			to = 0;
+		}
+		
+		downloadList.add(to, downloadList.remove(from));
+		if(jukeboxEnabled) {
+			updateJukeboxPlaylist();
 		}
 	}
 

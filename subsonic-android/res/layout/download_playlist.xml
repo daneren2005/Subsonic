@@ -19,11 +19,12 @@
             android:layout_height="wrap_content"
             android:padding="10dip"/>
 
-    <ListView
-            android:id="@+id/download_list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:cacheColorHint="#00000000"/>
+    <com.mobeta.android.dslv.DragSortListView
+		style="@style/DragDropListView"
+		android:id="@+id/download_list"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:cacheColorHint="#00000000"/>
 
 </LinearLayout>
