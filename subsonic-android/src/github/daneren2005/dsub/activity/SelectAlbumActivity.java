@@ -38,6 +38,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.*;
 import github.daneren2005.dsub.util.*;
+import com.mobeta.android.dslv.*;
 import java.io.File;
 
 import java.util.*;
@@ -46,7 +47,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
     private static final String TAG = SelectAlbumActivity.class.getSimpleName();
 
-    private ListView entryList;
+    private DragSortListView entryList;
     private View footer;
     private View emptyView;
 	private boolean hideButtons = false;
@@ -54,6 +55,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     private Boolean licenseValid;
 	private boolean showHeader = true;
 	private EntryAdapter entryAdapter;
+	private List<MusicDirectory.Entry> entries;
 
     /**
      * Called when the activity is first created.
@@ -63,7 +65,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.select_album);
 
-        entryList = (ListView) findViewById(R.id.select_album_entries);
+        entryList = (DragSortListView) findViewById(R.id.select_album_entries);
 
         footer = LayoutInflater.from(this).inflate(R.layout.select_album_footer, entryList, false);
         entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -87,6 +89,20 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
                 }
             }
         });
+		entryList.setDropListener(new DragSortListView.DropListener() {
+			@Override
+			public void drop(int from, int to) {
+				int max = entries.size();
+				if(to >= max) {
+					to = max - 1;
+				}
+				else if(to < 0) {
+					to = 0;
+				}
+				entries.add(to, entries.remove(from));
+				entryAdapter.notifyDataSetChanged();
+			}
+		});
 		
         moreButton = (Button) footer.findViewById(R.id.select_album_more);
         emptyView = findViewById(R.id.select_album_empty);
@@ -678,7 +694,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
 
         @Override
         protected void done(Pair<MusicDirectory, Boolean> result) {
-            List<MusicDirectory.Entry> entries = result.getFirst().getChildren();
+            entries = result.getFirst().getChildren();
 
             int songCount = 0;
             for (MusicDirectory.Entry entry : entries) {
