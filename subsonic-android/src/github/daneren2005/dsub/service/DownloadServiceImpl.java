@@ -55,6 +55,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -85,6 +86,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
     private MediaPlayer mediaPlayer;
 	private MediaPlayer nextMediaPlayer;
+	private boolean nextSetup = false;
+	private boolean isPartial = true;
     private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
     private final Handler handler = new Handler();
@@ -617,9 +620,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
     }
 	
-	private synchronized void playNext() {
+	private synchronized void playNext(boolean start) {
 		// Swap the media players since nextMediaPlayer is ready to play
-		nextMediaPlayer.start();
+		if(start) {
+			nextMediaPlayer.start();
+		} else {
+			Log.i(TAG, "nextMediaPlayer already playing");
+		}
 		MediaPlayer tmp = mediaPlayer;
 		mediaPlayer = nextMediaPlayer;
 		nextMediaPlayer = tmp;
@@ -930,7 +937,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
         try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-			final boolean isPartial = file.equals(downloadFile.getPartialFile());
+			isPartial = file.equals(downloadFile.getPartialFile());
             downloadFile.updateModificationDate();
 			
 			if(playerState == PlayerState.PREPARED) {
@@ -1000,6 +1007,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				public void onPrepared(MediaPlayer mediaPlayer) {
 					try {
 						setNextPlayerState(PREPARED);
+						// TODO: Whenever the completing early issue is fixed, remove !isPartial to get gapless playback on streams as well
+						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && playerState == PlayerState.STARTED && !isPartial) {
+							DownloadServiceImpl.this.mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
+							nextSetup = true;
+						}
 					} catch (Exception x) {
 						handleErrorNext(x);
 					}
@@ -1047,7 +1059,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
 					if(nextPlaying != null && nextPlayerState == PlayerState.PREPARED) {
-						playNext();
+						if(!nextSetup) {
+							playNext(true);
+						} else {
+							nextSetup = false;
+							playNext(false);
+						}
 					} else {
 						onSongCompleted();
 					}
