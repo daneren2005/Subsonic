@@ -167,7 +167,7 @@ public class DownloadServiceLifecycleSupport {
 
     public void onDestroy() {
         executorService.shutdown();
-        serializeDownloadQueue();
+        serializeDownloadQueueNow();
         downloadService.clear(false);
         downloadService.unregisterReceiver(ejectEventReceiver);
         downloadService.unregisterReceiver(headsetEventReceiver);
@@ -183,6 +183,19 @@ public class DownloadServiceLifecycleSupport {
 
     public void serializeDownloadQueue() {
 		new SerializeTask().execute();
+    }
+    
+    public void serializeDownloadQueueNow() {
+    	List<DownloadFile> songs = new ArrayList<DownloadFile>(downloadService.getSongs());
+	State state = new State();
+	for (DownloadFile downloadFile : songs) {
+		state.songs.add(downloadFile.getSong());
+	}
+	state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
+	state.currentPlayingPosition = downloadService.getPlayerPosition();
+
+	Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
+	FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
     }
 
     private void deserializeDownloadQueue() {
@@ -274,17 +287,7 @@ public class DownloadServiceLifecycleSupport {
 	private class SerializeTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			List<DownloadFile> songs = new ArrayList<DownloadFile>(downloadService.getSongs());
-			State state = new State();
-			for (DownloadFile downloadFile : songs) {
-				state.songs.add(downloadFile.getSong());
-			}
-			state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
-			state.currentPlayingPosition = downloadService.getPlayerPosition();
-
-			Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
-			FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
-			
+			serializeDownloadQueueNow();
 			return null;
 		}
 	}
