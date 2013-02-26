@@ -317,6 +317,9 @@ public class DownloadFile {
 					wifiLock.release();
 				}
                 new CacheCleaner(context, DownloadServiceImpl.getInstance()).cleanSpace();
+				if(DownloadServiceImpl.getInstance() != null) {
+					((DownloadServiceImpl)DownloadServiceImpl.getInstance()).checkDownloads();
+				}
             }
         }
 

@@ -1181,7 +1181,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (downloadList.isEmpty() && backgroundDownloadList.isEmpty()) {
             return;
         }
-
+		
         // Need to download current playing?
         if (currentPlaying != null && currentPlaying != currentDownloading && !currentPlaying.isWorkDone()) {
             // Cancel current download, if necessary.
@@ -1196,6 +1196,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
         // Find a suitable target for download.
         else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed() && (!downloadList.isEmpty() || !backgroundDownloadList.isEmpty())) {
+			currentDownloading = null;
             int n = size();
 
             int preloaded = 0;
