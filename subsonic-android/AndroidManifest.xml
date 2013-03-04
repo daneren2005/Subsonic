@@ -22,7 +22,7 @@
 
     <application android:label="@string/common.appname" android:icon="@drawable/launch2" android:theme="@style/Theme.DSub.Holo">
 
-        <activity android:name="github.daneren2005.dsub.activity.MainActivity"
+        <activity android:name="github.daneren2005.dsub.activity.MusicActivity"
                   android:label="DSub"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="standard">
