@@ -17,7 +17,10 @@ import github.daneren2005.dsub.util.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
 import java.util.Arrays;
 
-public class MainFragment extends SubsonicTabFragment {	
+public class MainFragment extends SubsonicTabFragment {
+	private View rootView;
+	private LayoutInflater inflater;
+	
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
@@ -25,10 +28,31 @@ public class MainFragment extends SubsonicTabFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		View view = inflater.inflate(R.layout.main, container, false);
+		this.inflater = inflater;
+		this.rootView = inflater.inflate(R.layout.main, container, false);
 
 		loadSettings();
+		createLayout();
+		
+		return rootView;
+	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+	}
+	
+	@Override
+	protected void refresh() {
+		createLayout();
+	}
+	
+	private void createLayout() {
 		View buttons = inflater.inflate(R.layout.main_buttons, null);
 
 		final View serverButton = buttons.findViewById(R.id.main_select_server);
@@ -44,13 +68,13 @@ public class MainFragment extends SubsonicTabFragment {
 		final View albumsFrequentButton = buttons.findViewById(R.id.main_albums_frequent);
 		final View albumsStarredButton = buttons.findViewById(R.id.main_albums_starred);
 
-		final View dummyView = view.findViewById(R.id.main_dummy);
+		final View dummyView = rootView.findViewById(R.id.main_dummy);
 
 		int instance = Util.getActiveServer(context);
 		String name = Util.getServerName(context, instance);
 		serverTextView.setText(name);
 
-		ListView list = (ListView) view.findViewById(R.id.main_list);
+		ListView list = (ListView) rootView.findViewById(R.id.main_list);
 
 		MergeAdapter adapter = new MergeAdapter();
 		if (!Util.isOffline(context)) {
@@ -86,18 +110,6 @@ public class MainFragment extends SubsonicTabFragment {
 				}
 			}
 		});
-		
-		return view;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 	}
 
 	private void loadSettings() {
@@ -118,7 +130,7 @@ public class MainFragment extends SubsonicTabFragment {
 	}
 	
 	private void toggleOffline() {
-		Util.setOffline(this, !Util.isOffline(context));
-		restart();
+		Util.setOffline(context, !Util.isOffline(context));
+		refresh();
 	}
 }

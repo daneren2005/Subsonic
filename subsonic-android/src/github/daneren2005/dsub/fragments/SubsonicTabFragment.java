@@ -89,7 +89,7 @@ public class SubsonicTabFragment extends SherlockFragment {
 		context = activity;
 	}
 	
-	protected void restart() {
+	protected void refresh() {
         
     }
 }
