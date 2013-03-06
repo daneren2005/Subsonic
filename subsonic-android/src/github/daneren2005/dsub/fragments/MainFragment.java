@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.MergeAdapter;
@@ -20,6 +22,11 @@ import java.util.Arrays;
 public class MainFragment extends SubsonicTabFragment {
 	private View rootView;
 	private LayoutInflater inflater;
+	
+	private static final int MENU_GROUP_SERVER = 10;
+    private static final int MENU_ITEM_SERVER_1 = 101;
+    private static final int MENU_ITEM_SERVER_2 = 102;
+    private static final int MENU_ITEM_SERVER_3 = 103;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -46,6 +53,48 @@ public class MainFragment extends SubsonicTabFragment {
 	public void onDestroy() {
 		super.onDestroy();
 	}
+	
+	@Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+
+        android.view.MenuItem menuItem1 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_1, MENU_ITEM_SERVER_1, Util.getServerName(context, 1));
+        android.view.MenuItem menuItem2 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_2, MENU_ITEM_SERVER_2, Util.getServerName(context, 2));
+        android.view.MenuItem menuItem3 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_3, MENU_ITEM_SERVER_3, Util.getServerName(context, 3));
+        menu.setGroupCheckable(MENU_GROUP_SERVER, true, true);
+        menu.setHeaderTitle(R.string.main_select_server);
+
+        switch (Util.getActiveServer(context)) {
+            case 1:
+                menuItem1.setChecked(true);
+                break;
+            case 2:
+                menuItem2.setChecked(true);
+                break;
+            case 3:
+                menuItem3.setChecked(true);
+                break;
+        }
+    }
+	
+	@Override
+    public boolean onContextItemSelected(android.view.MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case MENU_ITEM_SERVER_1:
+                setActiveServer(1);
+                break;
+            case MENU_ITEM_SERVER_2:
+                setActiveServer(2);
+                break;
+            case MENU_ITEM_SERVER_3:
+                setActiveServer(3);
+                break;
+            default:
+                return super.onContextItemSelected(menuItem);
+        }
+
+        return true;
+    }
 	
 	@Override
 	protected void refresh() {
@@ -128,6 +177,16 @@ public class MainFragment extends SubsonicTabFragment {
 			editor.commit();
 		} 
 	}
+	
+	private void setActiveServer(int instance) {
+        if (Util.getActiveServer(context) != instance) {
+            DownloadService service = getDownloadService();
+            if (service != null) {
+                service.clearIncomplete();
+            }
+            Util.setActiveServer(context, instance);
+        }
+    }
 	
 	private void toggleOffline() {
 		Util.setOffline(context, !Util.isOffline(context));

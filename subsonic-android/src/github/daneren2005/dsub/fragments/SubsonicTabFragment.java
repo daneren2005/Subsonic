@@ -38,6 +38,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
+import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -66,7 +67,7 @@ import java.util.List;
 public class SubsonicTabFragment extends SherlockFragment {
 	private static final String TAG = SubsonicTabActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
-	protected Context context;
+	protected SubsonicActivity context;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -86,7 +87,11 @@ public class SubsonicTabFragment extends SherlockFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		context = activity;
+		context = (SubsonicActivity)activity;
+	}
+	
+	public DownloadService getDownloadService() {
+		return context != null ? context.getDownloadService() : null;
 	}
 	
 	protected void refresh() {
