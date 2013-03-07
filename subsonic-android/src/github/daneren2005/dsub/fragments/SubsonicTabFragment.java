@@ -68,6 +68,7 @@ public class SubsonicTabFragment extends SherlockFragment {
 	private static final String TAG = SubsonicTabActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected SubsonicActivity context;
+	protected View rootView;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -96,5 +97,19 @@ public class SubsonicTabFragment extends SherlockFragment {
 	
 	protected void refresh() {
         
+    }
+	
+	public void setProgressVisible(boolean visible) {
+        View view = rootView.findViewById(R.id.tab_progress);
+        if (view != null) {
+            view.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    public void updateProgress(String message) {
+        TextView view = (TextView) rootView.findViewById(R.id.tab_progress_message);
+        if (view != null) {
+            view.setText(message);
+        }
     }
 }

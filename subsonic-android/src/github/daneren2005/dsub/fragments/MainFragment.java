@@ -20,7 +20,6 @@ import github.daneren2005.dsub.util.Util;
 import java.util.Arrays;
 
 public class MainFragment extends SubsonicTabFragment {
-	private View rootView;
 	private LayoutInflater inflater;
 	
 	private static final int MENU_GROUP_SERVER = 10;
@@ -36,7 +35,7 @@ public class MainFragment extends SubsonicTabFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		this.inflater = inflater;
-		this.rootView = inflater.inflate(R.layout.main, container, false);
+		rootView = inflater.inflate(R.layout.main, container, false);
 
 		loadSettings();
 		createLayout();

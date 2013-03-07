@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.MainFragment;
+import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SubsonicTabFragment;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
@@ -118,9 +119,8 @@ public class MusicActivity extends SubsonicActivity {
 				case 0:
 					fragment = new MainFragment();
 					break;
-
 				case 1:
-					fragment = new MainFragment();
+					fragment = new SelectArtistFragment();
 					break;
 				default:
 					fragment = null;
