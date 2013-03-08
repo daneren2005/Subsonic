@@ -24,7 +24,6 @@ import java.util.List;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.Playlist;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,16 +33,16 @@ import java.util.Comparator;
  */
 public class PlaylistAdapter extends ArrayAdapter<Playlist> {
 
-    private final Context activity;
+	private final Context activity;
 
-    public PlaylistAdapter(Context activity, List<Playlist> Playlists) {
-        super(activity, R.layout.playlist_list_item, Playlists);
-        this.activity = activity;
-    }
+	public PlaylistAdapter(Context activity, List<Playlist> Playlists) {
+		super(activity, R.layout.playlist_list_item, Playlists);
+		this.activity = activity;
+	}
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Playlist entry = getItem(position);
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		Playlist entry = getItem(position);
 		PlaylistView view;
 		if (convertView != null && convertView instanceof PlaylistView) {
 			view = (PlaylistView) convertView;
@@ -52,18 +51,18 @@ public class PlaylistAdapter extends ArrayAdapter<Playlist> {
 		}
 		view.setPlaylist(entry);
 		return view;
-    }
-	
+	}
+
 	public static class PlaylistComparator implements Comparator<Playlist> {
-        @Override
-        public int compare(Playlist playlist1, Playlist playlist2) {
-            return playlist1.getName().compareToIgnoreCase(playlist2.getName());
-        }
+		@Override
+		public int compare(Playlist playlist1, Playlist playlist2) {
+			return playlist1.getName().compareToIgnoreCase(playlist2.getName());
+		}
 
-        public static List<Playlist> sort(List<Playlist> playlists) {
-            Collections.sort(playlists, new PlaylistComparator());
-            return playlists;
-        }
+		public static List<Playlist> sort(List<Playlist> playlists) {
+			Collections.sort(playlists, new PlaylistComparator());
+			return playlists;
+		}
 
-    }
+	}
 }

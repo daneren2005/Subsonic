@@ -19,9 +19,9 @@ public class MusicActivity extends SubsonicActivity {
 	private static final String TAG = MusicActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
 	private MainActivityPagerAdapter pagerAdapter;
-    private ViewPager viewPager;
+	private ViewPager viewPager;
 	private SubsonicTabFragment prevPageFragment;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,94 +29,94 @@ public class MusicActivity extends SubsonicActivity {
 			exit();
 		}
 		setContentView(R.layout.music);
-		
-		pagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-        	@Override
-        	public void onPageSelected(int position) {
-        		notifyFragmentOnPageSelected(position);
-        	}
-        });
-        
-        if (savedInstanceState == null) {
-        	int position = Util.isOffline(this) ? 0 : 2;
-        	if (position == viewPager.getCurrentItem()) {
-        		notifyFragmentOnPageSelected(position);
-        	} else {
-        		viewPager.setCurrentItem(position);
-        	}
-        }
-        
-        handleIntentAction(getIntent());
-	}
-	
-	@Override
-    protected void onPostCreate(Bundle bundle) {
-        super.onPostCreate(bundle);
-        
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(false);
 
-        showInfoDialog();
-    }
-	
+		pagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		viewPager.setAdapter(pagerAdapter);
+		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				notifyFragmentOnPageSelected(position);
+			}
+		});
+
+		if (savedInstanceState == null) {
+			int position = Util.isOffline(this) ? 0 : 2;
+			if (position == viewPager.getCurrentItem()) {
+				notifyFragmentOnPageSelected(position);
+			} else {
+				viewPager.setCurrentItem(position);
+			}
+		}
+
+		handleIntentAction(getIntent());
+	}
+
 	@Override
-    public void onResume() {
-    	super.onResume();
-    }
-	
+	protected void onPostCreate(Bundle bundle) {
+		super.onPostCreate(bundle);
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		getSupportActionBar().setHomeButtonEnabled(false);
+
+		showInfoDialog();
+	}
+
 	@Override
-    protected void onNewIntent(Intent intent) {
-    	handleIntentAction(intent);
-    	// mPagerAdapter.notifyDataSetChanged();
-    }
-	
+	public void onResume() {
+		super.onResume();
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		handleIntentAction(intent);
+		// mPagerAdapter.notifyDataSetChanged();
+	}
+
 	private void handleIntentAction(Intent intent) {
-    	if (intent.hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
-    		exit();
-    	}
-    }
-	
+		if (intent.hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
+			exit();
+		}
+	}
+
 	private void exit() {
-        stopService(new Intent(this, DownloadServiceImpl.class));
-        finish();
-    }
-	
+		stopService(new Intent(this, DownloadServiceImpl.class));
+		finish();
+	}
+
 	private void showInfoDialog() {
-        if (!infoDialogDisplayed) {
-            infoDialogDisplayed = true;
-            if (Util.getRestUrl(this, null).contains("demo.subsonic.org")) {
-                Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
-            }
-        }
-    }
-	
+		if (!infoDialogDisplayed) {
+			infoDialogDisplayed = true;
+			if (Util.getRestUrl(this, null).contains("demo.subsonic.org")) {
+				Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
+			}
+		}
+	}
+
 	private void notifyFragmentOnPageSelected(int position) {
-    	/*if (prevPageFragment != null) {
-    		prevPageFragment.onPageDeselected();
-    	}
+		/*if (prevPageFragment != null) {
+			prevPageFragment.onPageDeselected();
+		}
 		prevPageFragment = (SubsonicTabFragment) pagerAdapter.instantiateItem(viewPager, position);
 		prevPageFragment.onPageSelected();*/
-    }
-	
-	public class MainActivityPagerAdapter extends FragmentPagerAdapter {
-    	
-    	private final String [] titles = new String [] {
-    			"Home", 
-    			"Library",
-				"Playlists"
-    	};
-    	
-    	public MainActivityPagerAdapter(FragmentManager fm) {
-    		super(fm);
-    	}
+	}
 
-    	@Override
-    	public Fragment getItem(int i) {
-    		Fragment fragment;
-    		Bundle args = new Bundle();
+	public class MainActivityPagerAdapter extends FragmentPagerAdapter {
+
+		private final String [] titles = new String [] {
+				"Home", 
+				"Library",
+				"Playlists"
+		};
+
+		public MainActivityPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int i) {
+			Fragment fragment;
+			Bundle args = new Bundle();
 			switch(i) {
 				case 0:
 					fragment = new MainFragment();
@@ -130,22 +130,22 @@ public class MusicActivity extends SubsonicActivity {
 				default:
 					fragment = null;
 			}
-    		
-    		if (fragment != null) {
-    			fragment.setArguments(args);
-    		}
-    		
-    		return fragment;
-    	}
 
-    	@Override
-    	public int getCount() {
-    		return 3;
-    	}
+			if (fragment != null) {
+				fragment.setArguments(args);
+			}
 
-    	@Override
-    	public CharSequence getPageTitle(int position) {
-    		return titles[position];
-    	}
-    }
+			return fragment;
+		}
+
+		@Override
+		public int getCount() {
+			return 3;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return titles[position];
+		}
+	}
 }

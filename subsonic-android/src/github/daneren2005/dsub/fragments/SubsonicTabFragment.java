@@ -19,50 +19,16 @@
 package github.daneren2005.dsub.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
-import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.Playlist;
-import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
-import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.service.OfflineException;
-import github.daneren2005.dsub.service.ServerTooOldException;
-import github.daneren2005.dsub.updates.Updater;
-import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.LoadingTask;
-import github.daneren2005.dsub.util.ModalBackgroundTask;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
-import github.daneren2005.dsub.util.Util;
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class SubsonicTabFragment extends SherlockFragment {
 	private static final String TAG = SubsonicTabActivity.class.getSimpleName();
@@ -90,26 +56,26 @@ public class SubsonicTabFragment extends SherlockFragment {
 		super.onAttach(activity);
 		context = (SubsonicActivity)activity;
 	}
-	
+
 	public DownloadService getDownloadService() {
 		return context != null ? context.getDownloadService() : null;
 	}
-	
-	protected void refresh() {
-        
-    }
-	
-	public void setProgressVisible(boolean visible) {
-        View view = rootView.findViewById(R.id.tab_progress);
-        if (view != null) {
-            view.setVisibility(visible ? View.VISIBLE : View.GONE);
-        }
-    }
 
-    public void updateProgress(String message) {
-        TextView view = (TextView) rootView.findViewById(R.id.tab_progress_message);
-        if (view != null) {
-            view.setText(message);
-        }
-    }
+	protected void refresh() {
+
+	}
+
+	public void setProgressVisible(boolean visible) {
+		View view = rootView.findViewById(R.id.tab_progress);
+		if (view != null) {
+			view.setVisibility(visible ? View.VISIBLE : View.GONE);
+		}
+	}
+
+	public void updateProgress(String message) {
+		TextView view = (TextView) rootView.findViewById(R.id.tab_progress_message);
+		if (view != null) {
+			view.setText(message);
+		}
+	}
 }

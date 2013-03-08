@@ -21,12 +21,12 @@ import java.util.Arrays;
 
 public class MainFragment extends SubsonicTabFragment {
 	private LayoutInflater inflater;
-	
+
 	private static final int MENU_GROUP_SERVER = 10;
-    private static final int MENU_ITEM_SERVER_1 = 101;
-    private static final int MENU_ITEM_SERVER_2 = 102;
-    private static final int MENU_ITEM_SERVER_3 = 103;
-	
+	private static final int MENU_ITEM_SERVER_1 = 101;
+	private static final int MENU_ITEM_SERVER_2 = 102;
+	private static final int MENU_ITEM_SERVER_3 = 103;
+
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
@@ -39,7 +39,7 @@ public class MainFragment extends SubsonicTabFragment {
 
 		loadSettings();
 		createLayout();
-		
+
 		return rootView;
 	}
 
@@ -52,54 +52,54 @@ public class MainFragment extends SubsonicTabFragment {
 	public void onDestroy() {
 		super.onDestroy();
 	}
-	
+
 	@Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, view, menuInfo);
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo);
 
-        android.view.MenuItem menuItem1 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_1, MENU_ITEM_SERVER_1, Util.getServerName(context, 1));
-        android.view.MenuItem menuItem2 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_2, MENU_ITEM_SERVER_2, Util.getServerName(context, 2));
-        android.view.MenuItem menuItem3 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_3, MENU_ITEM_SERVER_3, Util.getServerName(context, 3));
-        menu.setGroupCheckable(MENU_GROUP_SERVER, true, true);
-        menu.setHeaderTitle(R.string.main_select_server);
+		android.view.MenuItem menuItem1 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_1, MENU_ITEM_SERVER_1, Util.getServerName(context, 1));
+		android.view.MenuItem menuItem2 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_2, MENU_ITEM_SERVER_2, Util.getServerName(context, 2));
+		android.view.MenuItem menuItem3 = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_3, MENU_ITEM_SERVER_3, Util.getServerName(context, 3));
+		menu.setGroupCheckable(MENU_GROUP_SERVER, true, true);
+		menu.setHeaderTitle(R.string.main_select_server);
 
-        switch (Util.getActiveServer(context)) {
-            case 1:
-                menuItem1.setChecked(true);
-                break;
-            case 2:
-                menuItem2.setChecked(true);
-                break;
-            case 3:
-                menuItem3.setChecked(true);
-                break;
-        }
-    }
-	
+		switch (Util.getActiveServer(context)) {
+			case 1:
+				menuItem1.setChecked(true);
+				break;
+			case 2:
+				menuItem2.setChecked(true);
+				break;
+			case 3:
+				menuItem3.setChecked(true);
+				break;
+		}
+	}
+
 	@Override
-    public boolean onContextItemSelected(android.view.MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case MENU_ITEM_SERVER_1:
-                setActiveServer(1);
-                break;
-            case MENU_ITEM_SERVER_2:
-                setActiveServer(2);
-                break;
-            case MENU_ITEM_SERVER_3:
-                setActiveServer(3);
-                break;
-            default:
-                return super.onContextItemSelected(menuItem);
-        }
+	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case MENU_ITEM_SERVER_1:
+				setActiveServer(1);
+				break;
+			case MENU_ITEM_SERVER_2:
+				setActiveServer(2);
+				break;
+			case MENU_ITEM_SERVER_3:
+				setActiveServer(3);
+				break;
+			default:
+				return super.onContextItemSelected(menuItem);
+		}
 
-        return true;
-    }
-	
+		return true;
+	}
+
 	@Override
 	protected void refresh() {
 		createLayout();
 	}
-	
+
 	private void createLayout() {
 		View buttons = inflater.inflate(R.layout.main_buttons, null);
 
@@ -140,20 +140,20 @@ public class MainFragment extends SubsonicTabFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (view == serverButton) {
-                    dummyView.showContextMenu();
-                } else if (view == offlineButton) {
-                    toggleOffline();
+					dummyView.showContextMenu();
+				} else if (view == offlineButton) {
+					toggleOffline();
 				} else if (view == albumsNewestButton) {
-                    // showAlbumList("newest");
-                } else if (view == albumsRandomButton) {
-                    // showAlbumList("random");
-                } else if (view == albumsHighestButton) {
-                    // showAlbumList("highest");
-                } else if (view == albumsRecentButton) {
-                    // showAlbumList("recent");
-                } else if (view == albumsFrequentButton) {
-                    // showAlbumList("frequent");
-                } else if (view == albumsStarredButton) {
+					// showAlbumList("newest");
+				} else if (view == albumsRandomButton) {
+					// showAlbumList("random");
+				} else if (view == albumsHighestButton) {
+					// showAlbumList("highest");
+				} else if (view == albumsRecentButton) {
+					// showAlbumList("recent");
+				} else if (view == albumsFrequentButton) {
+					// showAlbumList("frequent");
+				} else if (view == albumsStarredButton) {
 					// showAlbumList("starred");
 				}
 			}
@@ -176,17 +176,17 @@ public class MainFragment extends SubsonicTabFragment {
 			editor.commit();
 		} 
 	}
-	
+
 	private void setActiveServer(int instance) {
-        if (Util.getActiveServer(context) != instance) {
-            DownloadService service = getDownloadService();
-            if (service != null) {
-                service.clearIncomplete();
-            }
-            Util.setActiveServer(context, instance);
-        }
-    }
-	
+		if (Util.getActiveServer(context) != instance) {
+			DownloadService service = getDownloadService();
+			if (service != null) {
+				service.clearIncomplete();
+			}
+			Util.setActiveServer(context, instance);
+		}
+	}
+
 	private void toggleOffline() {
 		Util.setOffline(context, !Util.isOffline(context));
 		refresh();
