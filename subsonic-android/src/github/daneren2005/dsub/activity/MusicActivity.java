@@ -20,36 +20,15 @@ public class MusicActivity extends SubsonicActivity {
 	private static boolean infoDialogDisplayed;
 	private MainActivityPagerAdapter pagerAdapter;
 	private ViewPager viewPager;
-	private SubsonicTabFragment prevPageFragment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
-			exit();
-		}
 		setContentView(R.layout.music);
 
 		pagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(pagerAdapter);
-		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				notifyFragmentOnPageSelected(position);
-			}
-		});
-
-		if (savedInstanceState == null) {
-			int position = Util.isOffline(this) ? 0 : 2;
-			if (position == viewPager.getCurrentItem()) {
-				notifyFragmentOnPageSelected(position);
-			} else {
-				viewPager.setCurrentItem(position);
-			}
-		}
-
-		handleIntentAction(getIntent());
 	}
 
 	@Override
@@ -67,18 +46,6 @@ public class MusicActivity extends SubsonicActivity {
 		super.onResume();
 	}
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		handleIntentAction(intent);
-		// mPagerAdapter.notifyDataSetChanged();
-	}
-
-	private void handleIntentAction(Intent intent) {
-		if (intent.hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
-			exit();
-		}
-	}
-
 	private void exit() {
 		stopService(new Intent(this, DownloadServiceImpl.class));
 		finish();
@@ -91,14 +58,6 @@ public class MusicActivity extends SubsonicActivity {
 				Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
 			}
 		}
-	}
-
-	private void notifyFragmentOnPageSelected(int position) {
-		/*if (prevPageFragment != null) {
-			prevPageFragment.onPageDeselected();
-		}
-		prevPageFragment = (SubsonicTabFragment) pagerAdapter.instantiateItem(viewPager, position);
-		prevPageFragment.onPageSelected();*/
 	}
 
 	public class MainActivityPagerAdapter extends FragmentPagerAdapter {
