@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.MainFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
+import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
 import github.daneren2005.dsub.fragments.SubsonicTabFragment;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
@@ -104,7 +105,8 @@ public class MusicActivity extends SubsonicActivity {
     	
     	private final String [] titles = new String [] {
     			"Home", 
-    			"Library"
+    			"Library",
+				"Playlists"
     	};
     	
     	public MainActivityPagerAdapter(FragmentManager fm) {
@@ -122,6 +124,9 @@ public class MusicActivity extends SubsonicActivity {
 				case 1:
 					fragment = new SelectArtistFragment();
 					break;
+				case 2:
+					fragment = new SelectPlaylistFragment();
+					break;
 				default:
 					fragment = null;
 			}
@@ -135,7 +140,7 @@ public class MusicActivity extends SubsonicActivity {
 
     	@Override
     	public int getCount() {
-    		return 2;
+    		return 3;
     	}
 
     	@Override

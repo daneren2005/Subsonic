@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.view;
 
+import android.content.Context;
 import github.daneren2005.dsub.R;
 import java.util.List;
 import android.view.View;
@@ -33,9 +34,9 @@ import java.util.Comparator;
  */
 public class PlaylistAdapter extends ArrayAdapter<Playlist> {
 
-    private final SubsonicTabActivity activity;
+    private final Context activity;
 
-    public PlaylistAdapter(SubsonicTabActivity activity, List<Playlist> Playlists) {
+    public PlaylistAdapter(Context activity, List<Playlist> Playlists) {
         super(activity, R.layout.playlist_list_item, Playlists);
         this.activity = activity;
     }
