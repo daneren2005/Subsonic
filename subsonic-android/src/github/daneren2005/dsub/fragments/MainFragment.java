@@ -35,7 +35,7 @@ public class MainFragment extends SubsonicTabFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		this.inflater = inflater;
-		rootView = inflater.inflate(R.layout.main, container, false);
+		rootView = inflater.inflate(R.layout.home, container, false);
 
 		loadSettings();
 		createLayout();

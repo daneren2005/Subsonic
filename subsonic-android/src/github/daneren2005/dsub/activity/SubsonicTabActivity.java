@@ -124,9 +124,9 @@ public class SubsonicTabActivity extends SherlockActivity {
             }
         });
 
-        if (this instanceof MainActivity) {
+        /*if (this instanceof MainActivity) {
             homeButton.setEnabled(false);
-        } else if (this instanceof SelectAlbumActivity || this instanceof SelectArtistActivity) {
+        } else*/ if (this instanceof SelectAlbumActivity || this instanceof SelectArtistActivity) {
             musicButton.setEnabled(false);
         } else if (this instanceof SelectPlaylistActivity) {
             playlistButton.setEnabled(false);

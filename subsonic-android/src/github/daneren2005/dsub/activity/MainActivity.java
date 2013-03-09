@@ -22,7 +22,7 @@ public class MainActivity extends SubsonicActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.music);
+		setContentView(R.layout.main);
 
 		pagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
 		viewPager = (ViewPager) findViewById(R.id.pager);
