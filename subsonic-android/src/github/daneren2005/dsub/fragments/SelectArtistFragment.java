@@ -146,8 +146,8 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
 			
 			final FragmentTransaction trans = getFragmentManager().beginTransaction();
-			trans.replace(0, fragment);
-			trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			trans.replace(R.id.select_artist_layout, fragment);
+			trans.addToBackStack(null);
 			trans.commit();
 		}
 	}
