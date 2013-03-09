@@ -2,6 +2,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistAdapter;
@@ -138,10 +140,15 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 			selectFolder();
 		} else {
 			Artist artist = (Artist) parent.getItemAtPosition(position);
-			/*Intent intent = new Intent(this, SelectAlbumActivity.class);
-			intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
-			intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
-			Util.startActivityWithoutTransition(this, intent);*/
+			SubsonicTabFragment fragment = new SelectDirectoryFragment();
+			Bundle args = new Bundle();
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
+			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+			
+			final FragmentTransaction trans = getFragmentManager().beginTransaction();
+			trans.replace(0, fragment);
+			trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			trans.commit();
 		}
 	}
 
