@@ -106,7 +106,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		return destroyed;
 	}
 
-	protected synchronized ImageLoader getImageLoader() {
+	public synchronized ImageLoader getImageLoader() {
 		if (IMAGE_LOADER == null) {
 			IMAGE_LOADER = new ImageLoader(this);
 		}

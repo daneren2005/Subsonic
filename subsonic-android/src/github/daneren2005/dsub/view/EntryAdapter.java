@@ -18,14 +18,12 @@
  */
 package github.daneren2005.dsub.view;
 
-import github.daneren2005.dsub.view.AlbumView;
-import github.daneren2005.dsub.view.SongView;
+import android.content.Context;
 import java.util.List;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.ImageLoader;
 
@@ -34,12 +32,12 @@ import github.daneren2005.dsub.util.ImageLoader;
  */
 public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 
-    private final SubsonicTabActivity activity;
+    private final Context activity;
     private final ImageLoader imageLoader;
     private final boolean checkable;
 	private List<MusicDirectory.Entry> entries;
 
-    public EntryAdapter(SubsonicTabActivity activity, ImageLoader imageLoader, List<MusicDirectory.Entry> entries, boolean checkable) {
+    public EntryAdapter(Context activity, ImageLoader imageLoader, List<MusicDirectory.Entry> entries, boolean checkable) {
         super(activity, android.R.layout.simple_list_item_1, entries);
 		this.entries = entries;
         this.activity = activity;

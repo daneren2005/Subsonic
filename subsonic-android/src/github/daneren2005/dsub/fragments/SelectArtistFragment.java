@@ -144,6 +144,7 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+			fragment.setArguments(args);
 			
 			final FragmentTransaction trans = getFragmentManager().beginTransaction();
 			trans.replace(R.id.select_artist_layout, fragment);

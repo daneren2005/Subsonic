@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +33,6 @@ import github.daneren2005.dsub.util.ImageLoader;
 
 public class SubsonicTabFragment extends SherlockFragment {
 	private static final String TAG = SubsonicTabActivity.class.getSimpleName();
-	private static ImageLoader IMAGE_LOADER;
 	protected SubsonicActivity context;
 	protected View rootView;
 
@@ -77,5 +77,12 @@ public class SubsonicTabFragment extends SherlockFragment {
 		if (view != null) {
 			view.setText(message);
 		}
+	}
+	
+	protected synchronized ImageLoader getImageLoader() {
+        return context.getImageLoader();
+    }
+	public synchronized static ImageLoader getStaticImageLoader(Context context) {
+		return SubsonicActivity.getStaticImageLoader(context);
 	}
 }
