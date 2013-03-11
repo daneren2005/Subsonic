@@ -50,6 +50,7 @@ public class Updater {
 		if(version > lastVersion) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putInt(Constants.LAST_VERSION, version);
+			editor.commit();
 			
 			Log.i(TAG, "Updating from version " + lastVersion + " to " + version);
 			for(Updater updater: updaters) {
