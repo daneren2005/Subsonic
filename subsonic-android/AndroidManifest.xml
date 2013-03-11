@@ -15,6 +15,8 @@
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.BLUETOOTH"/>
 	<uses-permission android:name="android.permission.READ_LOGS"/>
+	
+	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
 
