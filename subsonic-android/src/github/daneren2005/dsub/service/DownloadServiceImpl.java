@@ -125,20 +125,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private int timerDuration;
 
     static {
-        try {
-            EqualizerController.checkAvailable();
-            equalizerAvailable = true;
-        } catch (Throwable t) {
-            equalizerAvailable = false;
-        }
-    }
-    static {
-        try {
-            VisualizerController.checkAvailable();
-            visualizerAvailable = true;
-        } catch (Throwable t) {
-            visualizerAvailable = false;
-        }
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+			equalizerAvailable = true;
+			visualizerAvailable = true;
+		}
     }
 
 	@Override
