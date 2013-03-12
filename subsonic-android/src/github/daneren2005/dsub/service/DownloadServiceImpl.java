@@ -644,6 +644,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 jukeboxService.skip(getCurrentPlayingIndex(), position / 1000);
             } else {
                 mediaPlayer.seekTo(position);
+				cachedPosition = position;
             }
         } catch (Exception x) {
             handleError(x);
@@ -746,7 +747,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             if (jukeboxEnabled) {
 				return jukeboxService.getPositionSeconds() * 1000;
             } else {
-                return mediaPlayer.getCurrentPosition();
+                return cachedPosition;
             }
         } catch (Exception x) {
             handleError(x);
