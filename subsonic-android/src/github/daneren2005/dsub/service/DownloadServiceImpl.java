@@ -777,7 +777,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         return playerState;
     }
 
-	public synchronized void setPlayerState(PlayerState playerState) {
+	public synchronized void setPlayerState(final PlayerState playerState) {
         Log.i(TAG, this.playerState.name() + " -> " + playerState.name() + " (" + currentPlaying + ")");
 
         if (playerState == PAUSED) {
@@ -811,7 +811,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
-					if(mediaPlayer != null && getPlayerState() == STARTED) {
+					if(mediaPlayer != null && playerState == STARTED) {
 						try {
 							cachedPosition = mediaPlayer.getCurrentPosition();
 						} catch(Exception e) {
@@ -822,7 +822,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			};
 			executorService = Executors.newSingleThreadScheduledExecutor();
 			executorService.scheduleWithFixedDelay(runnable, 200L, 200L, TimeUnit.MILLISECONDS);
-		} else {
+		} else if(playerState != STARTED) {
 			if(executorService != null && !executorService.isShutdown()) {
 				executorService.shutdownNow();
 			}
