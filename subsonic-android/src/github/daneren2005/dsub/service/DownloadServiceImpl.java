@@ -811,18 +811,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
-					handler.post(new Runnable() {
-						@Override
-						public void run() {
-							if(mediaPlayer != null && getPlayerState() == STARTED) {
-								try {
-									cachedPosition = mediaPlayer.getCurrentPosition();
-								} catch(Exception e) {
-									executorService.shutdown();
-								}
-							}
+					if(mediaPlayer != null && getPlayerState() == STARTED) {
+						try {
+							cachedPosition = mediaPlayer.getCurrentPosition();
+						} catch(Exception e) {
+							executorService.shutdown();
 						}
-					});
+					}
 				}
 			};
 			executorService = Executors.newSingleThreadScheduledExecutor();
