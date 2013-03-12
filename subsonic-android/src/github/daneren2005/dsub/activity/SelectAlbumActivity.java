@@ -403,6 +403,10 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
         } else if ("starred".equals(albumListType)) {
             setTitle(R.string.main_albums_starred);
         }
+		
+		if (!"starred".equals(albumListType)) {
+			entryList.setDragEnabled(false);
+		}
 
         new LoadTask() {
             @Override
