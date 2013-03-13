@@ -526,6 +526,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
         }
 		
+		nextSetup = false;
 		if(index < size() && index != -1) {
 			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
