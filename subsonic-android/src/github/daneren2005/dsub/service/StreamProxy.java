@@ -169,10 +169,6 @@ public class StreamProxy implements Runnable {
             String headers = "HTTP/1.0 200 OK\r\n";
             headers += "Content-Type: " + "application/octet-stream" + "\r\n";
             
-            if (fileSize > 0) {
-            	headers += "Content-Length: " + fileSize  + "\r\n";
-            }
-            
             headers += "Connection: close\r\n";
             headers += "\r\n";
 
