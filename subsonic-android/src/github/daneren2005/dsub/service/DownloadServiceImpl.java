@@ -947,6 +947,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					}
 					dataSource = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), dataSource);
 					Log.i(TAG, "Data Source: " + dataSource);
+				} else {
+					proxy.stop();
+					proxy = null;
 				}
 				mediaPlayer.setDataSource(dataSource);
 				setPlayerState(PREPARING);
