@@ -927,69 +927,60 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			isPartial = file.equals(downloadFile.getPartialFile());
             downloadFile.updateModificationDate();
 			
-			if(playerState == PlayerState.PREPARED) {
-				if (start) {
-					mediaPlayer.start();
-					setPlayerState(STARTED);
-				} else {
-					setPlayerState(PAUSED);
+			mediaPlayer.setOnCompletionListener(null);
+			mediaPlayer.reset();
+			setPlayerState(IDLE);
+			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			String dataSource = file.getPath();
+			if(isPartial) {
+				if (proxy == null) {
+					proxy = new StreamProxy(this);
+					proxy.start();
 				}
-			} else {
-				mediaPlayer.setOnCompletionListener(null);
-				mediaPlayer.reset();
-				setPlayerState(IDLE);
-				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-				String dataSource = file.getPath();
-				if(isPartial) {
-					if (proxy == null) {
-						proxy = new StreamProxy(this);
-						proxy.start();
-					}
-					dataSource = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), dataSource);
-					Log.i(TAG, "Data Source: " + dataSource);
-				} else if(proxy != null) {
-					proxy.stop();
-					proxy = null;
-				}
-				mediaPlayer.setDataSource(dataSource);
-				setPlayerState(PREPARING);
-				
-				mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-					public void onBufferingUpdate(MediaPlayer mp, int percent) {
-						Log.i(TAG, "Buffered " + percent + "%");
-						if(percent == 100) {
-							mediaPlayer.setOnBufferingUpdateListener(null);
-						}
-					}
-				});
-
-				mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-					public void onPrepared(MediaPlayer mediaPlayer) {
-						try {
-							setPlayerState(PREPARED);
-
-							synchronized (DownloadServiceImpl.this) {
-								if (position != 0) {
-									Log.i(TAG, "Restarting player from position " + position);
-									mediaPlayer.seekTo(position);
-								}
-								cachedPosition = position;
-
-								if (start) {
-									mediaPlayer.start();
-									setPlayerState(STARTED);
-								} else {
-									setPlayerState(PAUSED);
-								}
-							}
-
-							lifecycleSupport.serializeDownloadQueue();
-						} catch (Exception x) {
-							handleError(x);
-						}
-					}
-				});
+				dataSource = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), dataSource);
+				Log.i(TAG, "Data Source: " + dataSource);
+			} else if(proxy != null) {
+				proxy.stop();
+				proxy = null;
 			}
+			mediaPlayer.setDataSource(dataSource);
+			setPlayerState(PREPARING);
+
+			mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+				public void onBufferingUpdate(MediaPlayer mp, int percent) {
+					Log.i(TAG, "Buffered " + percent + "%");
+					if(percent == 100) {
+						mediaPlayer.setOnBufferingUpdateListener(null);
+					}
+				}
+			});
+
+			mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+				public void onPrepared(MediaPlayer mediaPlayer) {
+					try {
+						setPlayerState(PREPARED);
+
+						synchronized (DownloadServiceImpl.this) {
+							if (position != 0) {
+								Log.i(TAG, "Restarting player from position " + position);
+								mediaPlayer.seekTo(position);
+							}
+							cachedPosition = position;
+
+							if (start) {
+								mediaPlayer.start();
+								setPlayerState(STARTED);
+							} else {
+								setPlayerState(PAUSED);
+							}
+						}
+
+						lifecycleSupport.serializeDownloadQueue();
+					} catch (Exception x) {
+						handleError(x);
+					}
+				}
+			});
 
 			setupHandlers(downloadFile, isPartial);
 			
