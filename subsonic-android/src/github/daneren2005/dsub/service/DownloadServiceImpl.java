@@ -1375,6 +1375,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				return;
 			}
 			
+			// Do an initial sleep so this prepare can't compete with main prepare
+			Util.sleepQuietly(5000L);
             while (!bufferComplete()) {
                 Util.sleepQuietly(5000L);
                 if (isCancelled()) {
