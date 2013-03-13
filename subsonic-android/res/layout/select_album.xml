@@ -19,13 +19,14 @@
             android:layout_height="wrap_content"
             android:padding="10dip"/>
 
-    <ListView android:id="@+id/select_album_entries"
-              android:textFilterEnabled="true"
-              android:layout_width="fill_parent"
-              android:layout_height="0dip"
-              android:layout_weight="1.0"
-              android:fastScrollEnabled="true"
-            />
+    <com.mobeta.android.dslv.DragSortListView
+		style="@style/DragDropListView"
+		android:id="@+id/select_album_entries"
+		android:textFilterEnabled="true"
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1.0"
+		android:fastScrollEnabled="true"/>
 
     <include layout="@layout/button_bar"/>
 

@@ -34,9 +34,9 @@ public class UpdateView extends LinearLayout {
 	public UpdateView(Context context) {
 		super(context);
 		
-		setLayoutParams(new LinearLayout.LayoutParams(
-			LinearLayout.LayoutParams.FILL_PARENT,
-			LinearLayout.LayoutParams.WRAP_CONTENT));
+		setLayoutParams(new AbsListView.LayoutParams(
+			ViewGroup.LayoutParams.FILL_PARENT,
+			ViewGroup.LayoutParams.WRAP_CONTENT));
 		
 		INSTANCES.put(this, null);
         int instanceCount = INSTANCES.size();

@@ -93,6 +93,9 @@ public class DownloadFile {
     public synchronized void download() {
         FileUtil.createDirectoryForParent(saveFile);
         failed = false;
+		if(!partialFile.exists()) {
+			bitRate = Util.getMaxBitrate(context);
+		}
         downloadTask = new DownloadTask();
         downloadTask.start();
     }
@@ -317,6 +320,9 @@ public class DownloadFile {
 					wifiLock.release();
 				}
                 new CacheCleaner(context, DownloadServiceImpl.getInstance()).cleanSpace();
+				if(DownloadServiceImpl.getInstance() != null) {
+					((DownloadServiceImpl)DownloadServiceImpl.getInstance()).checkDownloads();
+				}
             }
         }
 

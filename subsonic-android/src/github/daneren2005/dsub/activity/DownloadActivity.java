@@ -83,12 +83,13 @@ import github.daneren2005.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 import com.mobeta.android.dslv.*;
+import github.daneren2005.dsub.service.DownloadServiceImpl;
 
 public class DownloadActivity extends SubsonicTabActivity implements OnGestureListener {
 	private static final String TAG = DownloadActivity.class.getSimpleName();
 
     private static final int DIALOG_SAVE_PLAYLIST = 100;
-    private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 5;
+    private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 10;
     private static final int COLOR_BUTTON_ENABLED = Color.rgb(51, 181, 229);
     private static final int COLOR_BUTTON_DISABLED = Color.rgb(206, 213, 211);
 	private static final int INCREMENT_TIME = 5000;
@@ -983,50 +984,50 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-        DownloadService downloadService = getDownloadService();
-        if (downloadService == null) {
-            return false;
-        }
+		DownloadService downloadService = getDownloadService();
+		if (downloadService == null) {
+			return false;
+		}
 
 		// Right to Left swipe
 		if (e1.getX() - e2.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
-            warnIfNetworkOrStorageUnavailable();
-            if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
-                downloadService.next();
-                onCurrentChanged();
-                onProgressChanged();
-            }
+			warnIfNetworkOrStorageUnavailable();
+			if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
+				downloadService.next();
+				onCurrentChanged();
+				onProgressChanged();
+			}
 			return true;
 		}
 
 		// Left to Right swipe
-        if (e2.getX() - e1.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
-            warnIfNetworkOrStorageUnavailable();
-            downloadService.previous();
-            onCurrentChanged();
-            onProgressChanged();
+		else if (e2.getX() - e1.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
+			warnIfNetworkOrStorageUnavailable();
+			downloadService.previous();
+			onCurrentChanged();
+			onProgressChanged();
 			return true;
 		}
 
-        // Top to Bottom swipe
-         if (e2.getY() - e1.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
-             warnIfNetworkOrStorageUnavailable();
-             downloadService.seekTo(downloadService.getPlayerPosition() + 30000);
-             onProgressChanged();
-             return true;
-         }
+		// Top to Bottom swipe
+		 else if (e2.getY() - e1.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
+			 warnIfNetworkOrStorageUnavailable();
+			 downloadService.pause();
+			 onProgressChanged();
+			 return true;
+		 }
 
-        // Bottom to Top swipe
-        if (e1.getY() - e2.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
-            warnIfNetworkOrStorageUnavailable();
-            downloadService.seekTo(downloadService.getPlayerPosition() - 8000);
-            onProgressChanged();
-            return true;
-        }
+		// Bottom to Top swipe
+		else if (e1.getY() - e2.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
+			warnIfNetworkOrStorageUnavailable();
+			start();
+			onCurrentChanged();
+			onProgressChanged();
+			return true;
+		}
 
-        return false;
-    }
+		return false;
+	}
 	
 	private void toggleNowPlaying() {
 		nowPlaying = !nowPlaying;
