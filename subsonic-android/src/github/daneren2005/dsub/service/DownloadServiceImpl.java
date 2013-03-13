@@ -954,6 +954,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
 					public void onBufferingUpdate(MediaPlayer mp, int percent) {
 						Log.i(TAG, "Buffered " + percent + "%");
+						if(percent == 100) {
+							mediaPlayer.setOnBufferingUpdateListener(null);
+						}
 					}
 				});
 
