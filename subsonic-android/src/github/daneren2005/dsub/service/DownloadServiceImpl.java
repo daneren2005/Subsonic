@@ -625,6 +625,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		setPlayerState(PlayerState.STARTED);
 		setupHandlers(currentPlaying, false);
 		setNextPlaying();
+		
+		// Proxy should not be being used here since the next player was already setup to play
+		if(proxy != null) {
+			proxy.stop();
+			proxy = null;
+		}
 	}
 
     /** Plays or resumes the playback, depending on the current player state. */
