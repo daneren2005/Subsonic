@@ -1013,8 +1013,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				public void onPrepared(MediaPlayer mediaPlayer) {
 					try {
 						setNextPlayerState(PREPARED);
-						// TODO: Whenever the completing early issue is fixed, remove !isPartial to get gapless playback on streams as well
-						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && playerState == PlayerState.STARTED && !isPartial) {
+						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && playerState == PlayerState.STARTED) {
 							DownloadServiceImpl.this.mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
