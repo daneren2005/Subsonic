@@ -126,9 +126,8 @@ public class StreamProxy implements Runnable {
 			StringTokenizer st = new StringTokenizer(firstLine);
 			String method = st.nextToken();
 			String uri = st.nextToken();
-			Log.d(TAG, uri);
 			String realUri = uri.substring(1);
-			Log.d(TAG, realUri);
+			Log.i(TAG, realUri);
 			request = new BasicHttpRequest(method, realUri);
 			return request;
 		}
@@ -140,7 +139,7 @@ public class StreamProxy implements Runnable {
 			}
 			
 			// Read HTTP headers
-			Log.d(TAG, "Processing request");
+			Log.i(TAG, "Processing request");
 
 			try {
 				localPath = URLDecoder.decode(request.getRequestLine().getUri(), Constants.UTF_8);
@@ -179,43 +178,47 @@ public class StreamProxy implements Runnable {
                 output = new BufferedOutputStream(client.getOutputStream(), 32*1024);                           
                 output.write(headers.getBytes());
 
-                // Loop as long as there's stuff to send
-                while (isRunning && !client.isClosed()) {
+				if(!downloadFile.isWorkDone()) {
+					// Loop as long as there's stuff to send
+					while (isRunning && !client.isClosed()) {
 
-                    // See if there's more to send
-                    File file = new File(localPath);
-                    int cbSentThisBatch = 0;
-                    if (file.exists()) {
-                        FileInputStream input = new FileInputStream(file);
-                        input.skip(cbSkip);
-                        int cbToSendThisBatch = input.available();
-                        while (cbToSendThisBatch > 0) {
-                            int cbToRead = Math.min(cbToSendThisBatch, buff.length);
-                            int cbRead = input.read(buff, 0, cbToRead);
-                            if (cbRead == -1) {
-                                break;
-                            }
-                            cbToSendThisBatch -= cbRead;
-                            cbToSend -= cbRead;
-                            output.write(buff, 0, cbRead);
-                            output.flush();
-                            cbSkip += cbRead;
-                            cbSentThisBatch += cbRead;
-                        }
-                        input.close();
-                    }
-					
-					// Done regardless of whether or not it thinks it is
-					if(downloadFile.isWorkDone()) {
-						break;
+						// See if there's more to send
+						File file = new File(localPath);
+						int cbSentThisBatch = 0;
+						if (file.exists()) {
+							FileInputStream input = new FileInputStream(file);
+							input.skip(cbSkip);
+							int cbToSendThisBatch = input.available();
+							while (cbToSendThisBatch > 0) {
+								int cbToRead = Math.min(cbToSendThisBatch, buff.length);
+								int cbRead = input.read(buff, 0, cbToRead);
+								if (cbRead == -1) {
+									break;
+								}
+								cbToSendThisBatch -= cbRead;
+								cbToSend -= cbRead;
+								output.write(buff, 0, cbRead);
+								output.flush();
+								cbSkip += cbRead;
+								cbSentThisBatch += cbRead;
+							}
+							input.close();
+						}
+
+						// Done regardless of whether or not it thinks it is
+						if(downloadFile.isWorkDone()) {
+							break;
+						}
+
+						// If we did nothing this batch, block for a second
+						if (cbSentThisBatch == 0) {
+							Log.d(TAG, "Blocking until more data appears (" + cbToSend + ")");
+							Thread.sleep(1000);
+						}
 					}
-
-                    // If we did nothing this batch, block for a second
-                    if (cbSentThisBatch == 0) {
-                        Log.d(TAG, "Blocking until more data appears (" + cbToSend + ")");
-                        Thread.sleep(1000);
-                    }
-                }
+				} else {
+					Log.w(TAG, "Requesting data for completely downloaded file");
+				}
             }
             catch (SocketException socketException) {
                 Log.e(TAG, "SocketException() thrown, proxy client has probably closed. This can exit harmlessly");
