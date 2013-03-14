@@ -61,6 +61,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
+import java.net.URLEncoder;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -944,7 +945,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					proxy = new StreamProxy(this);
 					proxy.start();
 				}
-				dataSource = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), dataSource);
+				dataSource = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), URLEncoder.encode(dataSource, Constants.UTF_8));
 				Log.i(TAG, "Data Source: " + dataSource);
 			} else if(proxy != null) {
 				proxy.stop();
