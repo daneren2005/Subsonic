@@ -991,9 +991,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 			setupHandlers(downloadFile, isPartial);
 			
-			if(playerState == PREPARING) {
-				mediaPlayer.prepareAsync();
-			}
+			mediaPlayer.prepareAsync();
         } catch (Exception x) {
             handleError(x);
         }
