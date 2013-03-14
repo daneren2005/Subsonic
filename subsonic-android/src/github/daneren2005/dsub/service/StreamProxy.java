@@ -180,7 +180,7 @@ public class StreamProxy implements Runnable {
                 output.write(headers.getBytes());
 
                 // Loop as long as there's stuff to send
-                while (isRunning && cbToSend>0 && !client.isClosed()) {
+                while (isRunning && !downloadFile.isWorkDone() && !client.isClosed()) {
 
                     // See if there's more to send
                     File file = new File(localPath);
@@ -204,11 +204,6 @@ public class StreamProxy implements Runnable {
                         }
                         input.close();
                     }
-					
-					// Done regardless of whether or not it thinks it is
-					if(downloadFile.isWorkDone()) {
-						break;
-					}
 
                     // If we did nothing this batch, block for a second
                     if (cbSentThisBatch == 0) {
