@@ -497,7 +497,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
         if (currentPlaying != null) {
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
-			currentPlaying.setPlaying(true);
 			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
         } else {
             Util.broadcastNewTrackInfo(this, null);
@@ -931,6 +930,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
         try {
+			downloadFile.setPlaying(true);
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
 			isPartial = file.equals(downloadFile.getPartialFile());
             downloadFile.updateModificationDate();
