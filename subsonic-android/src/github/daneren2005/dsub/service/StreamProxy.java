@@ -206,7 +206,7 @@ public class StreamProxy implements Runnable {
 						}
 
 						// Done regardless of whether or not it thinks it is
-						if(downloadFile.isWorkDone()) {
+						if(downloadFile.isWorkDone() && cbSkip >= file.length()) {
 							break;
 						}
 
