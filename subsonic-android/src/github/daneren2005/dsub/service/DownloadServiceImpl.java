@@ -61,6 +61,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
+import java.net.URLEncoder;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -120,25 +121,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private boolean showVisualization;
     private boolean jukeboxEnabled;
 	private ScheduledExecutorService executorService;
+	private StreamProxy proxy;
 	
 	private Timer sleepTimer;
 	private int timerDuration;
 
     static {
-        try {
-            EqualizerController.checkAvailable();
-            equalizerAvailable = true;
-        } catch (Throwable t) {
-            equalizerAvailable = false;
-        }
-    }
-    static {
-        try {
-            VisualizerController.checkAvailable();
-            visualizerAvailable = true;
-        } catch (Throwable t) {
-            visualizerAvailable = false;
-        }
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+			equalizerAvailable = true;
+			visualizerAvailable = true;
+		}
     }
 
 	@Override
@@ -505,7 +497,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
         if (currentPlaying != null) {
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
-			currentPlaying.setPlaying(true);
 			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
         } else {
             Util.broadcastNewTrackInfo(this, null);
@@ -535,6 +526,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
         }
 		
+		nextSetup = false;
 		if(index < size() && index != -1) {
 			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
@@ -634,6 +626,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		setPlayerState(PlayerState.STARTED);
 		setupHandlers(currentPlaying, false);
 		setNextPlaying();
+		
+		// Proxy should not be being used here since the next player was already setup to play
+		if(proxy != null) {
+			proxy.stop();
+			proxy = null;
+		}
 	}
 
     /** Plays or resumes the playback, depending on the current player state. */
@@ -654,6 +652,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 jukeboxService.skip(getCurrentPlayingIndex(), position / 1000);
             } else {
                 mediaPlayer.seekTo(position);
+				cachedPosition = position;
             }
         } catch (Exception x) {
             handleError(x);
@@ -756,7 +755,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             if (jukeboxEnabled) {
 				return jukeboxService.getPositionSeconds() * 1000;
             } else {
-                return mediaPlayer.getCurrentPosition();
+                return cachedPosition;
             }
         } catch (Exception x) {
             handleError(x);
@@ -787,7 +786,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         return playerState;
     }
 
-	public synchronized void setPlayerState(PlayerState playerState) {
+	public synchronized void setPlayerState(final PlayerState playerState) {
         Log.i(TAG, this.playerState.name() + " -> " + playerState.name() + " (" + currentPlaying + ")");
 
         if (playerState == PAUSED) {
@@ -821,23 +820,18 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
-					handler.post(new Runnable() {
-						@Override
-						public void run() {
-							if(mediaPlayer != null && getPlayerState() == STARTED) {
-								try {
-									cachedPosition = mediaPlayer.getCurrentPosition();
-								} catch(Exception e) {
-									executorService.shutdown();
-								}
-							}
+					if(mediaPlayer != null && playerState == STARTED) {
+						try {
+							cachedPosition = mediaPlayer.getCurrentPosition();
+						} catch(Exception e) {
+							executorService.shutdown();
 						}
-					});
+					}
 				}
 			};
 			executorService = Executors.newSingleThreadScheduledExecutor();
 			executorService.scheduleWithFixedDelay(runnable, 200L, 200L, TimeUnit.MILLISECONDS);
-		} else {
+		} else if(playerState != STARTED) {
 			if(executorService != null && !executorService.isShutdown()) {
 				executorService.shutdownNow();
 			}
@@ -936,58 +930,69 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
         try {
+			downloadFile.setPlaying(true);
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
 			isPartial = file.equals(downloadFile.getPartialFile());
             downloadFile.updateModificationDate();
 			
-			if(playerState == PlayerState.PREPARED) {
-				if (start) {
-					mediaPlayer.start();
-					setPlayerState(STARTED);
-				} else {
-					setPlayerState(PAUSED);
+			mediaPlayer.setOnCompletionListener(null);
+			mediaPlayer.reset();
+			setPlayerState(IDLE);
+			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			String dataSource = file.getPath();
+			if(isPartial) {
+				if (proxy == null) {
+					proxy = new StreamProxy(this);
+					proxy.start();
 				}
-			} else {
-				mediaPlayer.setOnCompletionListener(null);
-				mediaPlayer.reset();
-				setPlayerState(IDLE);
-				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-				mediaPlayer.setDataSource(file.getPath());
-				setPlayerState(PREPARING);
-
-				mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-					public void onPrepared(MediaPlayer mediaPlayer) {
-						try {
-							setPlayerState(PREPARED);
-
-							synchronized (DownloadServiceImpl.this) {
-								if (position != 0) {
-									Log.i(TAG, "Restarting player from position " + position);
-									mediaPlayer.seekTo(position);
-								}
-								cachedPosition = position;
-
-								if (start) {
-									mediaPlayer.start();
-									setPlayerState(STARTED);
-								} else {
-									setPlayerState(PAUSED);
-								}
-							}
-
-							lifecycleSupport.serializeDownloadQueue();
-						} catch (Exception x) {
-							handleError(x);
-						}
-					}
-				});
+				dataSource = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), URLEncoder.encode(dataSource, Constants.UTF_8));
+				Log.i(TAG, "Data Source: " + dataSource);
+			} else if(proxy != null) {
+				proxy.stop();
+				proxy = null;
 			}
+			mediaPlayer.setDataSource(dataSource);
+			setPlayerState(PREPARING);
+
+			mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+				public void onBufferingUpdate(MediaPlayer mp, int percent) {
+					Log.i(TAG, "Buffered " + percent + "%");
+					if(percent == 100) {
+						mediaPlayer.setOnBufferingUpdateListener(null);
+					}
+				}
+			});
+
+			mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+				public void onPrepared(MediaPlayer mediaPlayer) {
+					try {
+						setPlayerState(PREPARED);
+
+						synchronized (DownloadServiceImpl.this) {
+							if (position != 0) {
+								Log.i(TAG, "Restarting player from position " + position);
+								mediaPlayer.seekTo(position);
+							}
+							cachedPosition = position;
+
+							if (start) {
+								mediaPlayer.start();
+								setPlayerState(STARTED);
+							} else {
+								setPlayerState(PAUSED);
+							}
+						}
+
+						lifecycleSupport.serializeDownloadQueue();
+					} catch (Exception x) {
+						handleError(x);
+					}
+				}
+			});
 
 			setupHandlers(downloadFile, isPartial);
 			
-			if(playerState == PREPARING) {
-				mediaPlayer.prepareAsync();
-			}
+			mediaPlayer.prepareAsync();
         } catch (Exception x) {
             handleError(x);
         }
@@ -1007,8 +1012,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				public void onPrepared(MediaPlayer mediaPlayer) {
 					try {
 						setNextPlayerState(PREPARED);
-						// TODO: Whenever the completing early issue is fixed, remove !isPartial to get gapless playback on streams as well
-						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && playerState == PlayerState.STARTED && !isPartial) {
+						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && playerState == PlayerState.STARTED) {
 							DownloadServiceImpl.this.mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
@@ -1376,6 +1380,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				return;
 			}
 			
+			// Do an initial sleep so this prepare can't compete with main prepare
+			Util.sleepQuietly(5000L);
             while (!bufferComplete()) {
                 Util.sleepQuietly(5000L);
                 if (isCancelled()) {

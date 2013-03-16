@@ -237,7 +237,9 @@ public class DownloadServiceLifecycleSupport {
         	break;
         case RemoteControlClient.FLAG_KEY_MEDIA_PLAY:
         case KeyEvent.KEYCODE_MEDIA_PLAY:
-        	downloadService.start();
+        	if(downloadService.getPlayerState() != PlayerState.STARTED) {
+        		downloadService.start();
+        	}
         	break;
         case RemoteControlClient.FLAG_KEY_MEDIA_PAUSE:
         case KeyEvent.KEYCODE_MEDIA_PAUSE:
