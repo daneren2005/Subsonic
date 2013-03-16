@@ -2,6 +2,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.CacheCleaner;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistAdapter;
@@ -106,11 +108,17 @@ public class SelectPlaylistFragment extends SubsonicTabFragment implements Adapt
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Playlist playlist = (Playlist) parent.getItemAtPosition(position);
+		
+		SubsonicTabFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
+		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
+		fragment.setArguments(args);
 
-		/*Intent intent = new Intent(SelectPlaylistActivity.this, SelectAlbumActivity.class);
-		intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
-		intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-		Util.startActivityWithoutTransition(SelectPlaylistActivity.this, intent);*/
+		final FragmentTransaction trans = getFragmentManager().beginTransaction();
+		trans.replace(R.id.select_playlist_layout, fragment);
+		trans.addToBackStack(null);
+		trans.commit();
 	}
 
 	@Override

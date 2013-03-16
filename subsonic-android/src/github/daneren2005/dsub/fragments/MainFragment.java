@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,17 +145,17 @@ public class MainFragment extends SubsonicTabFragment {
 				} else if (view == offlineButton) {
 					toggleOffline();
 				} else if (view == albumsNewestButton) {
-					// showAlbumList("newest");
+					showAlbumList("newest");
 				} else if (view == albumsRandomButton) {
-					// showAlbumList("random");
+					showAlbumList("random");
 				} else if (view == albumsHighestButton) {
-					// showAlbumList("highest");
+					showAlbumList("highest");
 				} else if (view == albumsRecentButton) {
-					// showAlbumList("recent");
+					showAlbumList("recent");
 				} else if (view == albumsFrequentButton) {
-					// showAlbumList("frequent");
+					showAlbumList("frequent");
 				} else if (view == albumsStarredButton) {
-					// showAlbumList("starred");
+					showAlbumList("starred");
 				}
 			}
 		});
@@ -190,5 +191,19 @@ public class MainFragment extends SubsonicTabFragment {
 	private void toggleOffline() {
 		Util.setOffline(context, !Util.isOffline(context));
 		refresh();
+	}
+	
+	private void showAlbumList(String type) {
+		SubsonicTabFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
+		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
+		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
+		fragment.setArguments(args);
+
+		final FragmentTransaction trans = getFragmentManager().beginTransaction();
+		trans.replace(R.id.home_layout, fragment);
+		trans.addToBackStack(null);
+		trans.commit();
 	}
 }
