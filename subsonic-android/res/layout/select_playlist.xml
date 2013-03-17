@@ -26,7 +26,5 @@
 		android:layout_weight="1.0"
 		android:fastScrollEnabled="true"/>
 
-	<include layout="@layout/button_bar"/>
-
 </LinearLayout>
 

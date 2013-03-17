@@ -2,6 +2,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,14 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 	private boolean showHeader = true;
 	private EntryAdapter entryAdapter;
 	private List<MusicDirectory.Entry> entries;
+	
+	String id;
+	String name;
+	String playlistId;
+	String playlistName;
+	String albumListType;
+	int albumListSize;
+	int albumListOffset;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -68,6 +77,17 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 		emptyView = rootView.findViewById(R.id.select_album_empty);
 
 		registerForContextMenu(entryList);
+		
+		Bundle args = getArguments();
+		if(args != null) {
+			id = args.getString(Constants.INTENT_EXTRA_NAME_ID);
+			name = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
+			playlistId = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
+			playlistName = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
+			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
+			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
+			albumListOffset = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
+		}
 		load(false);
 
 		return rootView;
@@ -77,18 +97,24 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (position >= 0) {
 			MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
-			/*if (entry.isDirectory()) {
-				Intent intent = new Intent(SelectAlbumActivity.this, SelectAlbumActivity.class);
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
-				Util.startActivityWithoutTransition(SelectAlbumActivity.this, intent);
+			if (entry.isDirectory()) {
+				SubsonicTabFragment fragment = new SelectDirectoryFragment();
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
+				fragment.setArguments(args);
+
+				final FragmentTransaction trans = getFragmentManager().beginTransaction();
+				trans.replace(R.id.select_album_layout, fragment);
+				trans.addToBackStack(null);
+				trans.commit();
 			} else if (entry.isVideo()) {
-				if(entryExists(entry)) {
+				/*if(entryExists(entry)) {
 					playExternalPlayer(entry);
 				} else {
 					streamExternalPlayer(entry);
-				}
-			}*/
+				}*/
+			}
 		}
 	}
 
@@ -98,23 +124,14 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 	}
 
 	private void load(boolean refresh) {
-		Bundle args = getArguments();
-		if(args != null) {
-			String id = args.getString(Constants.INTENT_EXTRA_NAME_ID);
-			String name = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
-			String playlistId = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
-			String playlistName = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
-			String albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
-			int albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
-			int albumListOffset = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
-
-			if (playlistId != null) {
-				getPlaylist(playlistId, playlistName);
-			} else if (albumListType != null) {
-				getAlbumList(albumListType, albumListSize, albumListOffset);
-			} else {
-				getMusicDirectory(id, name, refresh);
-			}
+		entryList.setVisibility(View.INVISIBLE);
+		emptyView.setVisibility(View.INVISIBLE);
+		if (playlistId != null) {
+			getPlaylist(playlistId, playlistName);
+		} else if (albumListType != null) {
+			getAlbumList(albumListType, albumListSize, albumListOffset);
+		} else {
+			getMusicDirectory(id, name, refresh);
 		}
 	}
 
@@ -174,21 +191,16 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 				if (!result.getFirst().getChildren().isEmpty()) {
 					if (!("starred".equals(albumListType))) {
 						moreButton.setVisibility(View.VISIBLE);
-						entryList.addFooterView(footer);
+						if(entryList.getFooterViewsCount() == 0) {
+							entryList.addFooterView(footer);
+						}
 					}
 
 					moreButton.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View view) {
-							/*Intent intent = new Intent(SelectAlbumActivity.this, SelectAlbumActivity.class);
-							String type = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
-							int size = getIntent().getIntExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
-							int offset = getIntent().getIntExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0) + size;
-
-							intent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
-							intent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, size);
-							intent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, offset);
-							Util.startActivityWithoutTransition(SelectAlbumActivity.this, intent);*/
+							albumListOffset += albumListSize;
+							refresh();
 						}
 					});
 				}
@@ -234,6 +246,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 
 			emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
 			entryList.setAdapter(entryAdapter = new EntryAdapter(context, getImageLoader(), entries, true));
+			entryList.setVisibility(View.VISIBLE);
 			licenseValid = result.getSecond();
 			// invalidateOptionsMenu();
 
@@ -251,7 +264,11 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 		getImageLoader().loadImage(coverArtView, entries.get(0), true, true);
 
 		TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
-		// titleView.setText(getTitle());
+		if(playlistName != null) {
+			titleView.setText(playlistName);
+		} else if(name != null) {
+			titleView.setText(name);
+		}
 
 		int songCount = 0;
 
