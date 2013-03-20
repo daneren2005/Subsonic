@@ -233,7 +233,7 @@ public class DownloadServiceLifecycleSupport {
         	break;
         case RemoteControlClient.FLAG_KEY_MEDIA_STOP:
         case KeyEvent.KEYCODE_MEDIA_STOP:
-        	downloadService.reset();
+        	downloadService.stop();
         	break;
         case RemoteControlClient.FLAG_KEY_MEDIA_PLAY:
         case KeyEvent.KEYCODE_MEDIA_PLAY:

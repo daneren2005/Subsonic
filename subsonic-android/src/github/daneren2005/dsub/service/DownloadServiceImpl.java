@@ -501,12 +501,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
             Util.broadcastNewTrackInfo(this, null);
         }
-
-        if (currentPlaying != null && showNotification) {
-            Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
-        } else {
-            Util.hidePlayingNotification(this, this, handler);
-        }
     }
 	
 	synchronized void setNextPlaying() {
@@ -716,6 +710,24 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             handleError(x);
         }
     }
+	
+	@Override
+	public synchronized void stop() {
+		try {
+			if (playerState == STARTED) {
+                if (jukeboxEnabled) {
+                    jukeboxService.stop();
+                } else {
+                    mediaPlayer.pause();
+                }
+                setPlayerState(STOPPED);
+            } else if(playerState == PAUSED) {
+				setPlayerState(STOPPED);
+			}
+		} catch(Exception x) {
+			handleError(x);
+		}
+	}
 
     @Override
     public synchronized void start() {
@@ -793,8 +805,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             lifecycleSupport.serializeDownloadQueue();
         }
 
-        boolean show = this.playerState == PAUSED && playerState == PlayerState.STARTED;
-        boolean hide = this.playerState == STARTED && playerState == PlayerState.PAUSED;
+        boolean show = playerState == PlayerState.STARTED;
+        boolean pause = this.playerState == STARTED && playerState == PlayerState.PAUSED;
+		boolean hide = playerState == PlayerState.STOPPED;
         Util.broadcastPlaybackStatusChange(this, playerState);
 
         this.playerState = playerState;
@@ -805,9 +818,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         
         if (show) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
-        } else if (hide) {
-            Util.hidePlayingNotification(this, this, handler);
-        }
+        } else if (pause) {
+			Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+        } else if(hide) {
+			Util.hidePlayingNotification(this, this, handler);
+		}
 		mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
 
         if (playerState == STARTED) {
