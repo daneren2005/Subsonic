@@ -42,6 +42,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -84,7 +85,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version $Id$
  */
 public final class Util {
-
     private static final String TAG = Util.class.getSimpleName();
 
     private static final DecimalFormat GIGA_BYTE_FORMAT = new DecimalFormat("0.00 GB");
@@ -113,6 +113,7 @@ public final class Util {
 
     private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
     private static Toast toast;
+	private static int notificationID = 123512383;
 
     private Util() {
     }
@@ -644,7 +645,6 @@ public final class Util {
     }
 
 	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler, MusicDirectory.Entry song) {
-
         // Set the icon, scrolling text and timestamp
         final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
@@ -662,14 +662,8 @@ public final class Util {
         
         Intent notificationIntent = new Intent(context, DownloadActivity.class);
         notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-
-        // Send the notification and put the service in the foreground.
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                downloadService.startForeground(Constants.NOTIFICATION_ID_PLAYING, notification);
-            }
-        });
+		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		manager.notify(notificationID, notification);
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, true);
@@ -745,14 +739,8 @@ public final class Util {
     }
 
     public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
-
-        // Remove notification and remove the service from the foreground
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                downloadService.stopForeground(true);
-            }
-        });
+		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		manager.cancel(notificationID);
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, false);
