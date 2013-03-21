@@ -788,7 +788,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private void start() {
         DownloadService service = getDownloadService();
         PlayerState state = service.getPlayerState();
-        if (state == PAUSED || state == COMPLETED) {
+        if (state == PAUSED || state == COMPLETED || state == STOPPED) {
             service.start();
         } else if (state == STOPPED || state == IDLE) {
             warnIfNetworkOrStorageUnavailable();

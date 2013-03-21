@@ -630,7 +630,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     /** Plays or resumes the playback, depending on the current player state. */
     public synchronized void togglePlayPause() {
-        if (playerState == PAUSED || playerState == COMPLETED) {
+        if (playerState == PAUSED || playerState == COMPLETED || playerState == STOPPED) {
             start();
         } else if (playerState == STOPPED || playerState == IDLE) {
         	play();
