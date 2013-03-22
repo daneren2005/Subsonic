@@ -819,7 +819,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (show) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
         } else if (pause) {
-			Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			SharedPreferences prefs = Util.getPreferences(this);
+			if(prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+				Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			} else {
+				Util.hidePlayingNotification(this, this, handler);
+			}
         } else if(hide) {
 			Util.hidePlayingNotification(this, this, handler);
 		}
