@@ -161,7 +161,7 @@ public class StreamProxy implements Runnable {
         protected Integer doInBackground(String... params) {
 			DownloadFile downloadFile = downloadService.getCurrentPlaying();
 			MusicDirectory.Entry song = downloadFile.getSong();
-			long fileSize = downloadFile.getBitRate() * song.getDuration() * 1000 / 8;
+			long fileSize = downloadFile.getBitRate() * ((song.getDuration() != null) ? song.getDuration() : 0) * 1000 / 8;
 			Log.i(TAG, "Streaming fileSize: " + fileSize);
 
             // Create HTTP header
