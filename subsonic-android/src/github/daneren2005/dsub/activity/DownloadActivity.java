@@ -512,7 +512,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     protected void onPause() {
         super.onPause();
         executorService.shutdown();
-        if (visualizerView != null) {
+        if (visualizerView != null && visualizerView.isActive()) {
             visualizerView.setActive(false);
         }
     }
