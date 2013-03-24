@@ -120,7 +120,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private VisualizerController visualizerController;
     private boolean showVisualization;
     private boolean jukeboxEnabled;
-	private ScheduledExecutorService executorService;
+	private PositionCache positionCache;
 	private StreamProxy proxy;
 	
 	private Timer sleepTimer;
@@ -836,27 +836,38 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             scrobbler.scrobble(this, currentPlaying, true);
         }
 		
-		if(playerState == STARTED && (executorService == null || executorService.isShutdown())) {
-			Runnable runnable = new Runnable() {
-				@Override
-				public void run() {
-					if(mediaPlayer != null && playerState == STARTED) {
-						try {
-							cachedPosition = mediaPlayer.getCurrentPosition();
-						} catch(Exception e) {
-							executorService.shutdown();
-						}
-					}
-				}
-			};
-			executorService = Executors.newSingleThreadScheduledExecutor();
-			executorService.scheduleWithFixedDelay(runnable, 200L, 200L, TimeUnit.MILLISECONDS);
-		} else if(playerState != STARTED) {
-			if(executorService != null && !executorService.isShutdown()) {
-				executorService.shutdownNow();
-			}
+		if(playerState == STARTED && positionCache == null) {
+			positionCache = new PositionCache();
+			Thread thread = new Thread(positionCache);
+			thread.start();
+		} else if(playerState != STARTED && positionCache != null) {
+			positionCache.stop();
+			positionCache = null;
 		}
     }
+	
+	private class PositionCache implements Runnable {
+		boolean isRunning = true;
+
+		public void stop() {
+			isRunning = false;
+		}
+
+		@Override
+		public void run() {
+			while(isRunning) {
+				try {
+					if(mediaPlayer != null && playerState == STARTED) {
+						cachedPosition = mediaPlayer.getCurrentPosition();
+					}
+					Thread.sleep(200L);
+				}
+				catch(Exception e) {
+					isRunning = false;
+				}
+			}
+		}
+	}
 	
 	private synchronized void setPlayerStateCompleted() {
 		Log.i(TAG, this.playerState.name() + " -> " + PlayerState.COMPLETED + " (" + currentPlaying + ")");
