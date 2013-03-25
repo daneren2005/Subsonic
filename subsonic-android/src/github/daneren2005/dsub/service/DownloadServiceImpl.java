@@ -228,6 +228,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		if(nextPlayingTask != null) {
 			nextPlayingTask.cancel();
 		}
+		Util.hidePlayingNotification(this, this, handler);
 
         instance = null;
     }
