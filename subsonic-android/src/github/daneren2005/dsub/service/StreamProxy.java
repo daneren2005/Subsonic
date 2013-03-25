@@ -148,6 +148,7 @@ public class StreamProxy implements Runnable {
 				return false;
 			}
 			
+			Log.i(TAG, "Processing request for file " + localPath);
 			File file = new File(localPath);
 			if (!file.exists()) {
 				Log.e(TAG, "File " + localPath + " does not exist");
@@ -159,6 +160,7 @@ public class StreamProxy implements Runnable {
 
 		@Override
         protected Integer doInBackground(String... params) {
+			Log.i(TAG, "Streaming song in background");
 			DownloadFile downloadFile = downloadService.getCurrentPlaying();
 			MusicDirectory.Entry song = downloadFile.getSong();
 			long fileSize = downloadFile.getBitRate() * ((song.getDuration() != null) ? song.getDuration() : 0) * 1000 / 8;
