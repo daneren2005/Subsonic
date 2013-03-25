@@ -740,7 +740,7 @@ public final class Util {
 
     public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
 		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		manager.cancel(notificationID);
+		manager.cancelAll();
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, false);
