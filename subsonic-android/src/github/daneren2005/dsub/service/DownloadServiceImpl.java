@@ -207,7 +207,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
         lifecycleSupport.onDestroy();
         mediaPlayer.release();
-		nextMediaPlayer.release();
+        if(nextMediaPlayer != null) {
+			nextMediaPlayer.release();
+        }
         shufflePlayBuffer.shutdown();
         if (equalizerController != null) {
             equalizerController.release();
