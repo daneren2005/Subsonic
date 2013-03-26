@@ -79,7 +79,7 @@ public class StreamProxy implements Runnable {
 				if (client == null) {
 					continue;
 				}
-				Log.d(TAG, "client connected");
+				Log.i(TAG, "client connected");
 
 				StreamToMediaPlayerTask task = new StreamToMediaPlayerTask(client);
 				if (task.processRequest()) {
@@ -91,8 +91,11 @@ public class StreamProxy implements Runnable {
 			} catch (IOException e) {
 				Log.e(TAG, "Error connecting to client", e);
 			}
+			
+			// Prevent heavy CPU pegging
+			Thread.sleep(100);
 		}
-		Log.d(TAG, "Proxy interrupted. Shutting down.");
+		Log.i(TAG, "Proxy interrupted. Shutting down.");
 	}
 
 	private class StreamToMediaPlayerTask extends AsyncTask<String, Void, Integer> {
