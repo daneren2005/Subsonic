@@ -503,6 +503,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
         } else {
             Util.broadcastNewTrackInfo(this, null);
+			Util.hidePlayingNotification(this, this, handler);
         }
     }
 	
