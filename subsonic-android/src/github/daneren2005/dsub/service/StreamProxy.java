@@ -62,11 +62,6 @@ public class StreamProxy implements Runnable {
 	public void stop() {
 		isRunning = false;
 		thread.interrupt();
-		try {
-			thread.join(5000);
-		} catch (InterruptedException e) {
-			Log.e(TAG, "Exception stopping server", e);
-		}
 	}
 
 	@Override
