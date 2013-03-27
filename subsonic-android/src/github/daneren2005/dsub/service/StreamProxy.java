@@ -71,7 +71,6 @@ public class StreamProxy implements Runnable {
 
 	@Override
 	public void run() {
-		Looper.prepare();
 		isRunning = true;
 		while (isRunning) {
 			try {
@@ -83,7 +82,7 @@ public class StreamProxy implements Runnable {
 
 				StreamToMediaPlayerTask task = new StreamToMediaPlayerTask(client);
 				if (task.processRequest()) {
-					task.execute();
+					new Thread(task).start();
 				}
 
 			} catch (SocketTimeoutException e) {
@@ -91,14 +90,11 @@ public class StreamProxy implements Runnable {
 			} catch (IOException e) {
 				Log.e(TAG, "Error connecting to client", e);
 			}
-			
-			// Prevent heavy CPU pegging
-			Thread.sleep(100);
 		}
 		Log.i(TAG, "Proxy interrupted. Shutting down.");
 	}
 
-	private class StreamToMediaPlayerTask extends AsyncTask<String, Void, Integer> {
+	private class StreamToMediaPlayerTask implements Runnable {
 
 		String localPath;
 		Socket client;
@@ -162,7 +158,7 @@ public class StreamProxy implements Runnable {
 		}
 
 		@Override
-        protected Integer doInBackground(String... params) {
+		public void run() {
 			Log.i(TAG, "Streaming song in background");
 			DownloadFile downloadFile = downloadService.getCurrentPlaying();
 			MusicDirectory.Entry song = downloadFile.getSong();
@@ -244,8 +240,6 @@ public class StreamProxy implements Runnable {
                 Log.e(TAG, "IOException while cleaning up streaming task:");                
                 Log.e(TAG, e.getClass().getName() + " : " + e.getLocalizedMessage());
             }
-
-            return 1;
         }
 	}
 }
