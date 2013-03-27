@@ -489,18 +489,18 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
     // Scroll to current playing/downloading.
     private void scrollToCurrent() {
-        if (getDownloadService() == null) {
+        if (getDownloadService() == null || songListAdapter == null) {
             return;
         }
 
-        for (int i = 0; i < playlistView.getAdapter().getCount(); i++) {
+        for (int i = 0; i < songListAdapter.getCount(); i++) {
             if (currentPlaying == playlistView.getItemAtPosition(i)) {
                 playlistView.setSelectionFromTop(i, 40);
                 return;
             }
         }
         DownloadFile currentDownloading = getDownloadService().getCurrentDownloading();
-        for (int i = 0; i < playlistView.getAdapter().getCount(); i++) {
+        for (int i = 0; i < songListAdapter.getCount(); i++) {
             if (currentDownloading == playlistView.getItemAtPosition(i)) {
                 playlistView.setSelectionFromTop(i, 40);
                 return;
