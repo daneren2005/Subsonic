@@ -45,7 +45,16 @@ public class ServerTooOldException extends Exception {
             builder.append(text).append(" ");
         }
         builder.append("Server API version too old. ");
-        builder.append("Requires ").append(requiredVersion).append(" but is ").append(serverVersion).append(".");
+        builder.append("Requires server version ")
+			.append(requiredVersion.getVersion())
+			.append(", but it is version ")
+			.append(serverVersion.getVersion())
+			.append(".");
         return builder.toString();
     }
+	
+	@Override
+	public String getMessage() {
+		return this.toString();
+	}
 }

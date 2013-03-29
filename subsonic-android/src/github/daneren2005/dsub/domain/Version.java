@@ -55,6 +55,35 @@ public class Version implements Comparable<Version> {
     public int getMinor() {
         return minor;
     }
+	
+	public String getVersion() {
+		switch(major) {
+			case 1:
+				switch(minor) {
+					case 0:
+						return "3.8";
+					case 1:
+						return "3.9";
+					case 2:
+						return "4.0";
+					case 3:
+						return "4.1";
+					case 4:
+						return "4.2";
+					case 5:
+						return "4.3.1";
+					case 6:
+						return "4.5";
+					case 7:
+						return "4.6";
+					case 8:
+						return "4.7";
+					case 9:
+						return "4.8";
+				}
+		}
+		return "";
+	}
 
     /**
      * Return whether this object is equal to another.
