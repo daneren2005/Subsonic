@@ -120,7 +120,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private VisualizerController visualizerController;
     private boolean showVisualization;
     private boolean jukeboxEnabled;
-	private ScheduledExecutorService executorService;
+	private PositionCache positionCache;
 	private StreamProxy proxy;
 	
 	private Timer sleepTimer;
@@ -207,7 +207,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
         lifecycleSupport.onDestroy();
         mediaPlayer.release();
-		nextMediaPlayer.release();
+        if(nextMediaPlayer != null) {
+			nextMediaPlayer.release();
+        }
         shufflePlayBuffer.shutdown();
         if (equalizerController != null) {
             equalizerController.release();
@@ -226,6 +228,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		if(nextPlayingTask != null) {
 			nextPlayingTask.cancel();
 		}
+		Util.hidePlayingNotification(this, this, handler);
 
         instance = null;
     }
@@ -500,12 +503,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
         } else {
             Util.broadcastNewTrackInfo(this, null);
-        }
-
-        if (currentPlaying != null && showNotification) {
-            Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
-        } else {
-            Util.hidePlayingNotification(this, this, handler);
+			Util.hidePlayingNotification(this, this, handler);
         }
     }
 	
@@ -636,7 +634,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     /** Plays or resumes the playback, depending on the current player state. */
     public synchronized void togglePlayPause() {
-        if (playerState == PAUSED || playerState == COMPLETED) {
+        if (playerState == PAUSED || playerState == COMPLETED || playerState == STOPPED) {
             start();
         } else if (playerState == STOPPED || playerState == IDLE) {
         	play();
@@ -716,6 +714,24 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             handleError(x);
         }
     }
+	
+	@Override
+	public synchronized void stop() {
+		try {
+			if (playerState == STARTED) {
+                if (jukeboxEnabled) {
+                    jukeboxService.stop();
+                } else {
+                    mediaPlayer.pause();
+                }
+                setPlayerState(STOPPED);
+            } else if(playerState == PAUSED) {
+				setPlayerState(STOPPED);
+			}
+		} catch(Exception x) {
+			handleError(x);
+		}
+	}
 
     @Override
     public synchronized void start() {
@@ -793,8 +809,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             lifecycleSupport.serializeDownloadQueue();
         }
 
-        boolean show = this.playerState == PAUSED && playerState == PlayerState.STARTED;
-        boolean hide = this.playerState == STARTED && playerState == PlayerState.PAUSED;
+        boolean show = playerState == PlayerState.STARTED;
+        boolean pause = this.playerState == STARTED && playerState == PlayerState.PAUSED;
+		boolean hide = playerState == PlayerState.STOPPED;
         Util.broadcastPlaybackStatusChange(this, playerState);
 
         this.playerState = playerState;
@@ -805,9 +822,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         
         if (show) {
             Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
-        } else if (hide) {
-            Util.hidePlayingNotification(this, this, handler);
-        }
+        } else if (pause) {
+			SharedPreferences prefs = Util.getPreferences(this);
+			if(prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+				Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			} else {
+				Util.hidePlayingNotification(this, this, handler);
+			}
+        } else if(hide) {
+			Util.hidePlayingNotification(this, this, handler);
+		}
 		mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
 
         if (playerState == STARTED) {
@@ -816,27 +840,38 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             scrobbler.scrobble(this, currentPlaying, true);
         }
 		
-		if(playerState == STARTED && (executorService == null || executorService.isShutdown())) {
-			Runnable runnable = new Runnable() {
-				@Override
-				public void run() {
-					if(mediaPlayer != null && playerState == STARTED) {
-						try {
-							cachedPosition = mediaPlayer.getCurrentPosition();
-						} catch(Exception e) {
-							executorService.shutdown();
-						}
-					}
-				}
-			};
-			executorService = Executors.newSingleThreadScheduledExecutor();
-			executorService.scheduleWithFixedDelay(runnable, 200L, 200L, TimeUnit.MILLISECONDS);
-		} else if(playerState != STARTED) {
-			if(executorService != null && !executorService.isShutdown()) {
-				executorService.shutdownNow();
-			}
+		if(playerState == STARTED && positionCache == null) {
+			positionCache = new PositionCache();
+			Thread thread = new Thread(positionCache);
+			thread.start();
+		} else if(playerState != STARTED && positionCache != null) {
+			positionCache.stop();
+			positionCache = null;
 		}
     }
+	
+	private class PositionCache implements Runnable {
+		boolean isRunning = true;
+
+		public void stop() {
+			isRunning = false;
+		}
+
+		@Override
+		public void run() {
+			while(isRunning) {
+				try {
+					if(mediaPlayer != null && playerState == STARTED) {
+						cachedPosition = mediaPlayer.getCurrentPosition();
+					}
+					Thread.sleep(200L);
+				}
+				catch(Exception e) {
+					isRunning = false;
+				}
+			}
+		}
+	}
 	
 	private synchronized void setPlayerStateCompleted() {
 		Log.i(TAG, this.playerState.name() + " -> " + PlayerState.COMPLETED + " (" + currentPlaying + ")");

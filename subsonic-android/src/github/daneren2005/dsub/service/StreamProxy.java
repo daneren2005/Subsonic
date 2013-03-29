@@ -62,16 +62,10 @@ public class StreamProxy implements Runnable {
 	public void stop() {
 		isRunning = false;
 		thread.interrupt();
-		try {
-			thread.join(5000);
-		} catch (InterruptedException e) {
-			Log.e(TAG, "Exception stopping server", e);
-		}
 	}
 
 	@Override
 	public void run() {
-		Looper.prepare();
 		isRunning = true;
 		while (isRunning) {
 			try {
@@ -79,11 +73,11 @@ public class StreamProxy implements Runnable {
 				if (client == null) {
 					continue;
 				}
-				Log.d(TAG, "client connected");
+				Log.i(TAG, "client connected");
 
 				StreamToMediaPlayerTask task = new StreamToMediaPlayerTask(client);
 				if (task.processRequest()) {
-					task.execute();
+					new Thread(task).start();
 				}
 
 			} catch (SocketTimeoutException e) {
@@ -92,10 +86,10 @@ public class StreamProxy implements Runnable {
 				Log.e(TAG, "Error connecting to client", e);
 			}
 		}
-		Log.d(TAG, "Proxy interrupted. Shutting down.");
+		Log.i(TAG, "Proxy interrupted. Shutting down.");
 	}
 
-	private class StreamToMediaPlayerTask extends AsyncTask<String, Void, Integer> {
+	private class StreamToMediaPlayerTask implements Runnable {
 
 		String localPath;
 		Socket client;
@@ -148,6 +142,7 @@ public class StreamProxy implements Runnable {
 				return false;
 			}
 			
+			Log.i(TAG, "Processing request for file " + localPath);
 			File file = new File(localPath);
 			if (!file.exists()) {
 				Log.e(TAG, "File " + localPath + " does not exist");
@@ -158,10 +153,11 @@ public class StreamProxy implements Runnable {
 		}
 
 		@Override
-        protected Integer doInBackground(String... params) {
+		public void run() {
+			Log.i(TAG, "Streaming song in background");
 			DownloadFile downloadFile = downloadService.getCurrentPlaying();
 			MusicDirectory.Entry song = downloadFile.getSong();
-			long fileSize = downloadFile.getBitRate() * song.getDuration() * 1000 / 8;
+			long fileSize = downloadFile.getBitRate() * ((song.getDuration() != null) ? song.getDuration() : 0) * 1000 / 8;
 			Log.i(TAG, "Streaming fileSize: " + fileSize);
 
             // Create HTTP header
@@ -239,8 +235,6 @@ public class StreamProxy implements Runnable {
                 Log.e(TAG, "IOException while cleaning up streaming task:");                
                 Log.e(TAG, e.getClass().getName() + " : " + e.getLocalizedMessage());
             }
-
-            return 1;
         }
 	}
 }

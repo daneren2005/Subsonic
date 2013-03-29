@@ -179,14 +179,11 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, int saveSize, ProgressListener progressListener) throws Exception {
-        InputStream in = new FileInputStream(entry.getCoverArt());
-        try {
-            byte[] bytes = Util.toByteArray(in);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            return Bitmap.createScaledBitmap(bitmap, size, size, true);
-        } finally {
-            Util.close(in);
-        }
+		try {
+			return FileUtil.getAlbumArtBitmap(context, entry, size);
+		} catch(Exception e) {
+			return null;
+		}
     }
 
     @Override

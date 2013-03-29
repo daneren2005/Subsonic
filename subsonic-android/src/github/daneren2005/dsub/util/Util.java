@@ -42,6 +42,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -84,7 +85,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version $Id$
  */
 public final class Util {
-
     private static final String TAG = Util.class.getSimpleName();
 
     private static final DecimalFormat GIGA_BYTE_FORMAT = new DecimalFormat("0.00 GB");
@@ -113,6 +113,7 @@ public final class Util {
 
     private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
     private static Toast toast;
+	private static int notificationID = 123512383;
 
     private Util() {
     }
@@ -644,37 +645,31 @@ public final class Util {
     }
 
 	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler, MusicDirectory.Entry song) {
-
         // Set the icon, scrolling text and timestamp
         final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 
+		boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
         if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
-         RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-            setupViews(expandedContentView,context,song);
+			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
+            setupViews(expandedContentView,context,song, playing);
             notification.bigContentView = expandedContentView;
         }
         
         RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
-        setupViews(smallContentView, context, song);
+        setupViews(smallContentView, context, song, playing);
         notification.contentView = smallContentView;
         
         Intent notificationIntent = new Intent(context, DownloadActivity.class);
         notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-
-        // Send the notification and put the service in the foreground.
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                downloadService.startForeground(Constants.NOTIFICATION_ID_PLAYING, notification);
-            }
-        });
+		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		manager.notify(notificationID, notification);
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, true);
     }
     
-    private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song){
+    private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean playing){
     
      // Use the same text for the ticker and the expanded notification
         String title = song.getTitle();
@@ -708,14 +703,27 @@ public final class Util {
         if (colors.getSecond() != null) {
             rv.setTextColor(R.id.notification_artist, colors.getSecond());
         }
+		
+		if(!playing) {
+			rv.setImageViewResource(R.id.control_pause, R.drawable.notification_play);
+			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_stop);
+		}
         
         // Create actions for media buttons
         PendingIntent pendingIntent;
-        Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
-        prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
-        prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
-        pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-        rv.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
+		if(playing) {
+			Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
+			prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+			rv.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
+		} else {
+			Intent prevIntent = new Intent("KEYCODE_MEDIA_STOP");
+			prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_STOP));
+			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+			rv.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
+		}
         
         Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
         pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
@@ -731,14 +739,8 @@ public final class Util {
     }
 
     public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
-
-        // Remove notification and remove the service from the foreground
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                downloadService.stopForeground(true);
-            }
-        });
+		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		manager.cancelAll();
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, false);

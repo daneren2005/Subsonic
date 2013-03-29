@@ -90,6 +90,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_BUFFER_LENGTH = "bufferLength";
 	public static final String PREFERENCES_EQUALIZER_ON = "equalizerOn";
 	public static final String PREFERENCES_EQUALIZER_SETTINGS = "equalizerSettings";
+	public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";

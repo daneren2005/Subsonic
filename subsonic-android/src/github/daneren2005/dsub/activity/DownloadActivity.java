@@ -489,18 +489,18 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
     // Scroll to current playing/downloading.
     private void scrollToCurrent() {
-        if (getDownloadService() == null) {
+        if (getDownloadService() == null || songListAdapter == null) {
             return;
         }
 
-        for (int i = 0; i < playlistView.getAdapter().getCount(); i++) {
+        for (int i = 0; i < songListAdapter.getCount(); i++) {
             if (currentPlaying == playlistView.getItemAtPosition(i)) {
                 playlistView.setSelectionFromTop(i, 40);
                 return;
             }
         }
         DownloadFile currentDownloading = getDownloadService().getCurrentDownloading();
-        for (int i = 0; i < playlistView.getAdapter().getCount(); i++) {
+        for (int i = 0; i < songListAdapter.getCount(); i++) {
             if (currentDownloading == playlistView.getItemAtPosition(i)) {
                 playlistView.setSelectionFromTop(i, 40);
                 return;
@@ -512,7 +512,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     protected void onPause() {
         super.onPause();
         executorService.shutdown();
-        if (visualizerView != null) {
+        if (visualizerView != null && visualizerView.isActive()) {
             visualizerView.setActive(false);
         }
     }
@@ -788,7 +788,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     private void start() {
         DownloadService service = getDownloadService();
         PlayerState state = service.getPlayerState();
-        if (state == PAUSED || state == COMPLETED) {
+        if (state == PAUSED || state == COMPLETED || state == STOPPED) {
             service.start();
         } else if (state == STOPPED || state == IDLE) {
             warnIfNetworkOrStorageUnavailable();
@@ -1012,7 +1012,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 		// Top to Bottom swipe
 		 else if (e2.getY() - e1.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
 			 warnIfNetworkOrStorageUnavailable();
-			 downloadService.pause();
+			 downloadService.seekTo(downloadService.getPlayerPosition() + 30000); 
 			 onProgressChanged();
 			 return true;
 		 }
@@ -1020,8 +1020,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 		// Bottom to Top swipe
 		else if (e1.getY() - e2.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
 			warnIfNetworkOrStorageUnavailable();
-			start();
-			onCurrentChanged();
+			downloadService.seekTo(downloadService.getPlayerPosition() - 8000);
 			onProgressChanged();
 			return true;
 		}
