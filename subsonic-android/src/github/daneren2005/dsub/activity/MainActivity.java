@@ -1,10 +1,15 @@
 package github.daneren2005.dsub.activity;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.ActionBar.TabListener;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.MainFragment;
@@ -12,6 +17,8 @@ import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Util;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends SubsonicActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -23,10 +30,15 @@ public class MainActivity extends SubsonicActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		pagerAdapter = new MainActivityPagerAdapter(getSupportFragmentManager());
+		
 		viewPager = (ViewPager) findViewById(R.id.pager);
+		pagerAdapter = new MainActivityPagerAdapter(this, viewPager);
 		viewPager.setAdapter(pagerAdapter);
+		viewPager.setOnPageChangeListener(pagerAdapter);
+		
+		addTab("Home", MainFragment.class, null);
+		addTab("Library", SelectArtistFragment.class, null);
+		addTab("Playlists", SelectPlaylistFragment.class, null);
 	}
 
 	@Override
@@ -35,6 +47,7 @@ public class MainActivity extends SubsonicActivity {
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		getSupportActionBar().setHomeButtonEnabled(false);
+		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		showInfoDialog();
 	}
@@ -42,6 +55,13 @@ public class MainActivity extends SubsonicActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+	}
+
+	protected void addTab(int titleRes, Class fragmentClass, Bundle args) {
+		pagerAdapter.addTab(getString(titleRes), fragmentClass, args);
+	}
+	protected void addTab(CharSequence title, Class fragmentClass, Bundle args) {
+		pagerAdapter.addTab(title, fragmentClass, args);
 	}
 
 	private void exit() {
@@ -58,51 +78,74 @@ public class MainActivity extends SubsonicActivity {
 		}
 	}
 
-	public class MainActivityPagerAdapter extends FragmentPagerAdapter {
 
-		private final String [] titles = new String [] {
-				"Home", 
-				"Library",
-				"Playlists"
-		};
 
-		public MainActivityPagerAdapter(FragmentManager fm) {
-			super(fm);
+	public class MainActivityPagerAdapter extends FragmentPagerAdapter implements TabListener, ViewPager.OnPageChangeListener {
+		private SherlockFragmentActivity activity;
+		private ViewPager pager;
+		private ActionBar actionBar;
+		private List tabs = new ArrayList();
+
+		public MainActivityPagerAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+			super(activity.getSupportFragmentManager());
+			this.activity = activity;
+			this.actionBar = activity.getSupportActionBar();
+			this.pager = pager;
 		}
 
 		@Override
 		public Fragment getItem(int i) {
-			Fragment fragment;
-			Bundle args = new Bundle();
-			switch(i) {
-				case 0:
-					fragment = new MainFragment();
-					break;
-				case 1:
-					fragment = new SelectArtistFragment();
-					break;
-				case 2:
-					fragment = new SelectPlaylistFragment();
-					break;
-				default:
-					fragment = null;
-			}
-
-			if (fragment != null) {
-				fragment.setArguments(args);
-			}
-
-			return fragment;
+			final TabInfo tabInfo = (TabInfo)tabs.get(i);
+            return (Fragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args );
 		}
 
 		@Override
 		public int getCount() {
-			return 3;
+			return tabs.size();
+		}
+		
+		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+            TabInfo tabInfo = (TabInfo) tab.getTag();
+            for (int i = 0; i < tabs.size(); i++) {
+                if ( tabs.get(i) == tabInfo ) {
+                    pager.setCurrentItem(i);
+                }
+            }
+        }
+ 
+        public void onTabUnselected(Tab tab, FragmentTransaction ft) {}
+ 
+        public void onTabReselected(Tab tab, FragmentTransaction ft) {}
+		
+		public void onPageScrollStateChanged(int arg0) {}
+ 
+        public void onPageScrolled(int arg0, float arg1, int arg2) {}
+ 
+        public void onPageSelected(int position) {
+            actionBar.setSelectedNavigationItem(position);
+        }
+
+		public void addTab(CharSequence title, Class fragmentClass, Bundle args) {
+			final TabInfo tabInfo = new TabInfo(fragmentClass, args);
+
+			Tab tab = actionBar.newTab();
+			tab.setText(title);
+			tab.setTabListener(this);
+			tab.setTag(tabInfo);
+
+			tabs.add(tabInfo);
+
+			actionBar.addTab(tab);
+			notifyDataSetChanged();
 		}
 
-		@Override
-		public CharSequence getPageTitle(int position) {
-			return titles[position];
+		private class TabInfo {
+			public final Class fragmentClass;
+			public final Bundle args;
+			public TabInfo(Class fragmentClass, Bundle args) {
+				this.fragmentClass = fragmentClass;
+				this.args = args;
+			}
 		}
 	}
 }
