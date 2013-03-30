@@ -592,6 +592,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (index < 0 || index >= size()) {
             reset();
             setCurrentPlaying(null, false);
+			lifecycleSupport.serializeDownloadQueue();
         } else {
 			if(nextPlayingTask != null) {
 				nextPlayingTask.cancel();
