@@ -24,9 +24,6 @@ import github.daneren2005.dsub.util.Util;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
-import github.daneren2005.dsub.activity.HelpActivity;
-import github.daneren2005.dsub.activity.MainActivity;
-import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
 import java.io.File;
 import java.util.ArrayList;
@@ -74,23 +71,11 @@ public class MainFragment extends LibraryFunctionsFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
+		if(super.onOptionsItemSelected(item)) {
+			return true;
+		}
+
 		switch (item.getItemId()) {
-			case R.id.menu_shuffle:
-				onShuffleRequested();
-				return true;
-			case R.id.menu_search:
-				context.onSearchRequested();
-				return true;
-			case R.id.menu_exit:
-				exit();
-				return true;
-			case R.id.menu_settings:
-				startActivity(new Intent(context, SettingsActivity.class));
-				return true;
-			case R.id.menu_help:
-				startActivity(new Intent(context, HelpActivity.class));
-				return true;
 			case R.id.menu_log:
 				getLogs();
 				return true;

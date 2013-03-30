@@ -10,8 +10,38 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import github.daneren2005.dsub.activity.HelpActivity;
+import github.daneren2005.dsub.activity.SettingsActivity;
 
 public class LibraryFunctionsFragment extends SubsonicTabFragment {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_refresh:
+				refresh();
+				return true;
+			case R.id.menu_shuffle:
+				onShuffleRequested();
+				return true;
+			case R.id.menu_search:
+				context.onSearchRequested();
+				return true;
+			case R.id.menu_exit:
+				exit();
+				return true;
+			case R.id.menu_settings:
+				startActivity(new Intent(context, SettingsActivity.class));
+				return true;
+			case R.id.menu_help:
+				startActivity(new Intent(context, HelpActivity.class));
+				return true;
+		}
+
+		return false;
+	}
+
 	protected void onShuffleRequested() {
 		if(Util.isOffline(context)) {
 			Intent intent = new Intent(context, DownloadActivity.class);
