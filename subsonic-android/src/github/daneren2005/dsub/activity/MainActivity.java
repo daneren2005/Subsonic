@@ -30,12 +30,12 @@ public class MainActivity extends SubsonicActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		pagerAdapter = new MainActivityPagerAdapter(this, viewPager);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setOnPageChangeListener(pagerAdapter);
-		
+
 		addTab("Home", MainFragment.class, null);
 		addTab("Library", SelectArtistFragment.class, null);
 		addTab("Playlists", SelectPlaylistFragment.class, null);
@@ -96,34 +96,34 @@ public class MainActivity extends SubsonicActivity {
 		@Override
 		public Fragment getItem(int i) {
 			final TabInfo tabInfo = (TabInfo)tabs.get(i);
-            return (Fragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args );
+			return (Fragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args );
 		}
 
 		@Override
 		public int getCount() {
 			return tabs.size();
 		}
-		
+
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-            TabInfo tabInfo = (TabInfo) tab.getTag();
-            for (int i = 0; i < tabs.size(); i++) {
-                if ( tabs.get(i) == tabInfo ) {
-                    pager.setCurrentItem(i);
-                }
-            }
-        }
- 
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {}
- 
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {}
-		
+			TabInfo tabInfo = (TabInfo) tab.getTag();
+			for (int i = 0; i < tabs.size(); i++) {
+				if ( tabs.get(i) == tabInfo ) {
+					pager.setCurrentItem(i);
+				}
+			}
+		}
+
+		public void onTabUnselected(Tab tab, FragmentTransaction ft) {}
+
+		public void onTabReselected(Tab tab, FragmentTransaction ft) {}
+
 		public void onPageScrollStateChanged(int arg0) {}
- 
-        public void onPageScrolled(int arg0, float arg1, int arg2) {}
- 
-        public void onPageSelected(int position) {
-            actionBar.setSelectedNavigationItem(position);
-        }
+
+		public void onPageScrolled(int arg0, float arg1, int arg2) {}
+
+		public void onPageSelected(int position) {
+			actionBar.setSelectedNavigationItem(position);
+		}
 
 		public void addTab(CharSequence title, Class fragmentClass, Bundle args) {
 			final TabInfo tabInfo = new TabInfo(fragmentClass, args);

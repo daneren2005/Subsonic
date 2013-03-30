@@ -20,6 +20,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +30,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.ImageLoader;
 
 public class SubsonicTabFragment extends SherlockFragment {
@@ -39,6 +41,7 @@ public class SubsonicTabFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -65,6 +68,11 @@ public class SubsonicTabFragment extends SherlockFragment {
 
 	}
 
+	protected void exit() {
+		context.stopService(new Intent(context, DownloadServiceImpl.class));
+		context.finish();
+	}
+
 	public void setProgressVisible(boolean visible) {
 		View view = rootView.findViewById(R.id.tab_progress);
 		if (view != null) {
@@ -78,10 +86,10 @@ public class SubsonicTabFragment extends SherlockFragment {
 			view.setText(message);
 		}
 	}
-	
+
 	protected synchronized ImageLoader getImageLoader() {
-        return context.getImageLoader();
-    }
+		return context.getImageLoader();
+	}
 	public synchronized static ImageLoader getStaticImageLoader(Context context) {
 		return SubsonicActivity.getStaticImageLoader(context);
 	}

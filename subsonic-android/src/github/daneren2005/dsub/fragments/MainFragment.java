@@ -1,8 +1,11 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.ContextMenu;
@@ -18,9 +21,19 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuInflater;
+import github.daneren2005.dsub.activity.HelpActivity;
+import github.daneren2005.dsub.activity.MainActivity;
+import github.daneren2005.dsub.activity.SettingsActivity;
+import github.daneren2005.dsub.util.ModalBackgroundTask;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class MainFragment extends SubsonicTabFragment {
+public class MainFragment extends LibraryFunctionsFragment {
 	private LayoutInflater inflater;
 
 	private static final int MENU_GROUP_SERVER = 10;
@@ -52,6 +65,41 @@ public class MainFragment extends SubsonicTabFragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		menuInflater.inflate(R.menu.main, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch (item.getItemId()) {
+			case R.id.menu_shuffle:
+				onShuffleRequested();
+				return true;
+			case R.id.menu_search:
+				context.onSearchRequested();
+				return true;
+			case R.id.menu_exit:
+				exit();
+				return true;
+			case R.id.menu_settings:
+				startActivity(new Intent(context, SettingsActivity.class));
+				return true;
+			case R.id.menu_help:
+				startActivity(new Intent(context, HelpActivity.class));
+				return true;
+			case R.id.menu_log:
+				getLogs();
+				return true;
+			case R.id.menu_about:
+				showAboutDialog();
+				return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -192,7 +240,7 @@ public class MainFragment extends SubsonicTabFragment {
 		Util.setOffline(context, !Util.isOffline(context));
 		refresh();
 	}
-	
+
 	private void showAlbumList(String type) {
 		SubsonicTabFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
@@ -205,5 +253,72 @@ public class MainFragment extends SubsonicTabFragment {
 		trans.replace(R.id.home_layout, fragment);
 		trans.addToBackStack(null);
 		trans.commit();
+	}
+
+	private void showAboutDialog() {
+		try {
+			File rootFolder = FileUtil.getMusicDirectory(context);
+			StatFs stat = new StatFs(rootFolder.getPath());
+			long bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
+			long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+
+			String msg = getResources().getString(R.string.main_about_text,
+				context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName,
+				Util.formatBytes(FileUtil.getUsedSize(context, rootFolder)),
+				Util.formatBytes(Util.getCacheSizeMB(context) * 1024L * 1024L),
+				Util.formatBytes(bytesAvailableFs),
+				Util.formatBytes(bytesTotalFs));
+			Util.info(context, R.string.main_about_title, msg);
+		} catch(Exception e) {
+			Util.toast(context, "Failed to open dialog");
+		}
+	}
+
+	private void getLogs() {
+		try {
+			final String version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+			new ModalBackgroundTask<File>(context, false) {
+				@Override
+				protected File doInBackground() throws Throwable {
+					updateProgress("Gathering Logs");
+					File logcat = new File(FileUtil.getSubsonicDirectory(), "logcat.txt");
+					Process logcatProc = null;
+
+					try {
+						List<String> progs = new ArrayList<String>();
+						progs.add("logcat");
+						progs.add("-v");
+						progs.add("time");
+						progs.add("-d");
+						progs.add("-f");
+						progs.add(logcat.getPath());
+						progs.add("*:I");
+
+						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[0]));
+						logcatProc.waitFor();
+					} catch(Exception e) {
+						Util.toast(context, "Failed to gather logs");
+					} finally {
+						if(logcatProc != null) {
+							logcatProc.destroy();
+						}
+					}
+
+					return logcat;
+				}
+
+				@Override
+				protected void done(File logcat) {
+					Intent email = new Intent(android.content.Intent.ACTION_SEND);
+					email.setType("text/plain");
+					email.putExtra(Intent.EXTRA_EMAIL, new String[] {"daneren2005@gmail.com"});
+					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + version + " Error Logs");
+					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here");
+					Uri attachment = Uri.fromFile(logcat);
+					email.putExtra(Intent.EXTRA_STREAM, attachment);
+					startActivity(email);
+				}
+			}.execute();
+		} catch(Exception e) {}
 	}
 }
