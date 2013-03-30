@@ -21,6 +21,7 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.TabBackgroundTask;
+import github.daneren2005.dsub.util.Util;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -92,6 +93,74 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 
 		return rootView;
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+		if(licenseValid == null) {
+			menuInflater.inflate(R.menu.empty, menu);
+		}
+		else if(hideButtons) {
+			if(albumListType != null) {
+				menuInflater.inflate(R.menu.select_album_list, menu);
+			} else {
+				menuInflater.inflate(R.menu.select_album, menu);
+			}
+			hideButtons = false;
+		} else {
+			if(Util.isOffline(context)) {
+				menuInflater.inflate(R.menu.select_song_offline, menu);
+			}
+			else {
+				menuInflater.inflate(R.menu.select_song, menu);
+				
+				if(playlistId == null) {
+					menu.removeItem(R.id.menu_remove_playlist);
+				}
+			}
+		}
+	}
+	
+	@Override
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        /*switch (item.getItemId()) {
+			case R.id.menu_play_now:
+				playNow(false, false);
+				return true;
+			case R.id.menu_play_last:
+				playNow(false, true);
+				return true;
+			case R.id.menu_shuffle:
+				playNow(true, false);
+				return true;
+			case R.id.menu_select:
+				selectAllOrNone();
+				return true;
+			case R.id.menu_download:
+				downloadBackground(false);
+                selectAll(false, false);
+				return true;
+			case R.id.menu_cache:
+				downloadBackground(true);
+                selectAll(false, false);
+				return true;
+			case R.id.menu_delete:
+				delete();
+                selectAll(false, false);
+				return true;
+			case R.id.menu_add_playlist:
+				addToPlaylist(getSelectedSongs());
+				return true;
+			case R.id.menu_remove_playlist:
+				removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
+				return true;
+        }*/
+		
+		if(super.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+        return false;
+    }
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -136,7 +205,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 	}
 
 	private void getMusicDirectory(final String id, final String name, final boolean refresh) {
-		// setTitle(name);
+		setTitle(name);
 
 		new LoadTask() {
 			@Override
@@ -147,7 +216,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 	}
 
 	private void getPlaylist(final String playlistId, final String playlistName) {
-		// setTitle(playlistName);
+		setTitle(playlistName);
 
 		new LoadTask() {
 			@Override
@@ -160,7 +229,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 	private void getAlbumList(final String albumListType, final int size, final int offset) {
 		showHeader = false;
 
-		/*if ("newest".equals(albumListType)) {
+		if ("newest".equals(albumListType)) {
 			setTitle(R.string.main_albums_newest);
 		} else if ("random".equals(albumListType)) {
 			setTitle(R.string.main_albums_random);
@@ -172,7 +241,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 			setTitle(R.string.main_albums_frequent);
 		} else if ("starred".equals(albumListType)) {
 			setTitle(R.string.main_albums_starred);
-		}*/
+		}
 
 		new LoadTask() {
 			@Override
@@ -248,7 +317,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 			entryList.setAdapter(entryAdapter = new EntryAdapter(context, getImageLoader(), entries, true));
 			entryList.setVisibility(View.VISIBLE);
 			licenseValid = result.getSecond();
-			// invalidateOptionsMenu();
+			context.invalidateOptionsMenu();
 
 			/*boolean playAll = getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
 			if (playAll && songCount > 0) {

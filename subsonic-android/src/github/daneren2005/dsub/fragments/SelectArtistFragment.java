@@ -8,6 +8,7 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import com.actionbarsherlock.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,7 +28,7 @@ import github.daneren2005.dsub.view.ArtistAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectArtistFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
+public class SelectArtistFragment extends LibraryFunctionsFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectArtistFragment.class.getSimpleName();
 	private static final int MENU_GROUP_MUSIC_FOLDER = 10;
 
@@ -59,6 +60,20 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 		load(false);
 
 		return rootView;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+		menuInflater.inflate(R.menu.select_artist, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		if(super.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -145,7 +160,7 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
 			fragment.setArguments(args);
-			
+
 			final FragmentTransaction trans = getFragmentManager().beginTransaction();
 			trans.replace(R.id.select_artist_layout, fragment);
 			trans.addToBackStack(null);

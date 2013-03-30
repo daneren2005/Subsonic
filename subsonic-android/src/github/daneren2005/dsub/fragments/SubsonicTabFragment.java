@@ -93,4 +93,11 @@ public class SubsonicTabFragment extends SherlockFragment {
 	public synchronized static ImageLoader getStaticImageLoader(Context context) {
 		return SubsonicActivity.getStaticImageLoader(context);
 	}
+
+	protected void setTitle(CharSequence title) {
+		context.setTitle(title);
+	}
+	protected void setTitle(int title) {
+		context.setTitle(title);
+	}
 }

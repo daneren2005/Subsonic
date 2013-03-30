@@ -24,7 +24,7 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistAdapter;
 import java.util.List;
 
-public class SelectPlaylistFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
+public class SelectPlaylistFragment extends LibraryFunctionsFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
 	private ListView list;
@@ -47,6 +47,20 @@ public class SelectPlaylistFragment extends SubsonicTabFragment implements Adapt
 		load(false);
 
 		return rootView;
+	}
+
+	@Override
+	public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+		menuInflater.inflate(R.menu.select_playlist, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		if(super.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -108,7 +122,7 @@ public class SelectPlaylistFragment extends SubsonicTabFragment implements Adapt
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Playlist playlist = (Playlist) parent.getItemAtPosition(position);
-		
+
 		SubsonicTabFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
