@@ -862,8 +862,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		public void run() {
 			while(isRunning) {
 				try {
-					if(mediaPlayer != null && playerState == STARTED) {
-						cachedPosition = mediaPlayer.getCurrentPosition();
+					if(mediaPlayer != null && playerState == STARTED){
+						// Add a monitor for not running while mediaPlayer state is changing
+						synchronized(DownloadServiceImpl.this) {
+							cachedPosition = mediaPlayer.getCurrentPosition();
+						}
 					}
 					Thread.sleep(200L);
 				}
