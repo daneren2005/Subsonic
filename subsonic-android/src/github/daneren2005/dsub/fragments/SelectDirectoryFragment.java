@@ -1,6 +1,11 @@
 package github.daneren2005.dsub.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -16,16 +21,21 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.view.EntryAdapter;
 import java.util.List;
 import com.mobeta.android.dslv.*;
+import github.daneren2005.dsub.activity.DownloadActivity;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SelectDirectoryFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
+public class SelectDirectoryFragment extends LibraryFunctionsFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private DragSortListView entryList;
@@ -37,7 +47,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 	private boolean showHeader = true;
 	private EntryAdapter entryAdapter;
 	private List<MusicDirectory.Entry> entries;
-	
+
 	String id;
 	String name;
 	String playlistId;
@@ -78,7 +88,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 		emptyView = rootView.findViewById(R.id.select_album_empty);
 
 		registerForContextMenu(entryList);
-		
+
 		Bundle args = getArguments();
 		if(args != null) {
 			id = args.getString(Constants.INTENT_EXTRA_NAME_ID);
@@ -93,7 +103,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 
 		return rootView;
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
 		if(licenseValid == null) {
@@ -112,17 +122,17 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 			}
 			else {
 				menuInflater.inflate(R.menu.select_song, menu);
-				
+
 				if(playlistId == null) {
 					menu.removeItem(R.id.menu_remove_playlist);
 				}
 			}
 		}
 	}
-	
+
 	@Override
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
-        /*switch (item.getItemId()) {
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		switch (item.getItemId()) {
 			case R.id.menu_play_now:
 				playNow(false, false);
 				return true;
@@ -137,30 +147,30 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 				return true;
 			case R.id.menu_download:
 				downloadBackground(false);
-                selectAll(false, false);
+				selectAll(false, false);
 				return true;
 			case R.id.menu_cache:
 				downloadBackground(true);
-                selectAll(false, false);
+				selectAll(false, false);
 				return true;
 			case R.id.menu_delete:
 				delete();
-                selectAll(false, false);
+				selectAll(false, false);
 				return true;
 			case R.id.menu_add_playlist:
-				addToPlaylist(getSelectedSongs());
+				// addToPlaylist(getSelectedSongs());
 				return true;
 			case R.id.menu_remove_playlist:
-				removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
+				// removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
 				return true;
-        }*/
-		
+		}
+
 		if(super.onOptionsItemSelected(item)) {
 			return true;
 		}
 
-        return false;
-    }
+		return false;
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -178,11 +188,11 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 				trans.addToBackStack(null);
 				trans.commit();
 			} else if (entry.isVideo()) {
-				/*if(entryExists(entry)) {
+				if(entryExists(entry)) {
 					playExternalPlayer(entry);
 				} else {
 					streamExternalPlayer(entry);
-				}*/
+				}
 			}
 		}
 	}
@@ -324,6 +334,265 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 				playAll(getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
 			}*/
 		}
+	}
+
+	private void playNow(final boolean shuffle, final boolean append) {
+		if(getSelectedSongs().size() > 0) {
+			download(append, false, !append, false, shuffle);
+			selectAll(false, false);
+		}
+		else {
+			playAll(shuffle, append);
+		}
+	}
+	private void playAll(final boolean shuffle, final boolean append) {
+		boolean hasSubFolders = false;
+		for (int i = 0; i < entryList.getCount(); i++) {
+			MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(i);
+			if (entry != null && entry.isDirectory()) {
+				hasSubFolders = true;
+				break;
+			}
+		}
+
+		if (hasSubFolders && id != null) {
+			downloadRecursively(id, false, append, !append, shuffle, false);
+		} else {
+			selectAll(true, false);
+			download(append, false, !append, false, shuffle);
+			selectAll(false, false);
+		}
+	}
+
+	private void selectAllOrNone() {
+		boolean someUnselected = false;
+		int count = entryList.getCount();
+		for (int i = 0; i < count; i++) {
+			if (!entryList.isItemChecked(i) && entryList.getItemAtPosition(i) instanceof MusicDirectory.Entry) {
+				someUnselected = true;
+				break;
+			}
+		}
+		selectAll(someUnselected, true);
+	}
+
+	private void selectAll(boolean selected, boolean toast) {
+		int count = entryList.getCount();
+		int selectedCount = 0;
+		for (int i = 0; i < count; i++) {
+			MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(i);
+			if (entry != null && !entry.isDirectory() && !entry.isVideo()) {
+				entryList.setItemChecked(i, selected);
+				selectedCount++;
+			}
+		}
+
+		// Display toast: N tracks selected / N tracks unselected
+		if (toast) {
+			int toastResId = selected ? R.string.select_album_n_selected
+									  : R.string.select_album_n_unselected;
+			Util.toast(context, context.getString(toastResId, selectedCount));
+		}
+	}
+
+	private List<MusicDirectory.Entry> getSelectedSongs() {
+		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(10);
+		int count = entryList.getCount();
+		for (int i = 0; i < count; i++) {
+			if (entryList.isItemChecked(i)) {
+				songs.add((MusicDirectory.Entry) entryList.getItemAtPosition(i));
+			}
+		}
+		return songs;
+	}
+
+	private List<Integer> getSelectedIndexes() {
+		List<Integer> indexes = new ArrayList<Integer>();
+
+		int count = entryList.getCount();
+		for (int i = 0; i < count; i++) {
+			if (entryList.isItemChecked(i)) {
+				indexes.add(i - 1);
+			}
+		}
+
+		return indexes;
+	}
+
+	private void download(final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle) {
+		if (getDownloadService() == null) {
+			return;
+		}
+
+		final List<MusicDirectory.Entry> songs = getSelectedSongs();
+		Runnable onValid = new Runnable() {
+			@Override
+			public void run() {
+				if (!append) {
+					getDownloadService().clear();
+				}
+
+				warnIfNetworkOrStorageUnavailable();
+				getDownloadService().download(songs, save, autoplay, playNext, shuffle);
+				if (playlistName != null) {
+					getDownloadService().setSuggestedPlaylistName(playlistName);
+				}
+				if (autoplay) {
+					Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				} else if (save) {
+					Util.toast(context,
+							   context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+				} else if (append) {
+					Util.toast(context,
+							   context.getResources().getQuantityString(R.plurals.select_album_n_songs_added, songs.size(), songs.size()));
+				}
+			}
+		};
+
+		checkLicenseAndTrialPeriod(onValid);
+	}
+	private void downloadBackground(final boolean save) {
+		List<MusicDirectory.Entry> songs = getSelectedSongs();
+		if(songs.isEmpty()) {
+			selectAll(true, false);
+			songs = getSelectedSongs();
+		}
+		downloadBackground(save, songs);
+	}
+	private void downloadBackground(final boolean save, final List<MusicDirectory.Entry> songs) {
+		if (getDownloadService() == null) {
+			return;
+		}
+
+		Runnable onValid = new Runnable() {
+			@Override
+			public void run() {
+				warnIfNetworkOrStorageUnavailable();
+				getDownloadService().downloadBackground(songs, save);
+
+				Util.toast(context,
+					context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+			}
+		};
+
+		checkLicenseAndTrialPeriod(onValid);
+	}
+
+	private void delete() {
+		List<MusicDirectory.Entry> songs = getSelectedSongs();
+		if(songs.isEmpty()) {
+			selectAll(true, false);
+			songs = getSelectedSongs();
+		}
+		if (getDownloadService() != null) {
+			getDownloadService().delete(songs);
+		}
+	}
+
+	private boolean entryExists(MusicDirectory.Entry entry) {
+		DownloadFile check = new DownloadFile(context, entry, false);
+		return check.isCompleteFileAvailable();
+	}
+
+	private void playWebView(MusicDirectory.Entry entry) {
+		int maxBitrate = Util.getMaxVideoBitrate(context);
+
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoUrl(maxBitrate, context, entry.getId())));
+
+		startActivity(intent);
+	}
+	private void playExternalPlayer(MusicDirectory.Entry entry) {
+		if(!entryExists(entry)) {
+			Util.toast(context, R.string.download_need_download);
+		} else {
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
+
+			List<ResolveInfo> intents = context.getPackageManager()
+				.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+			if(intents != null && intents.size() > 0) {
+				startActivity(intent);
+			}else {
+				Util.toast(context, R.string.download_no_streaming_player);
+			}
+		}
+	}
+	private void streamExternalPlayer(MusicDirectory.Entry entry) {
+		int maxBitrate = Util.getMaxVideoBitrate(context);
+
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoStreamUrl(maxBitrate, context, entry.getId())), "video/*");
+
+		List<ResolveInfo> intents = context.getPackageManager()
+			.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+		if(intents != null && intents.size() > 0) {
+			startActivity(intent);
+		} else {
+			Util.toast(context, R.string.download_no_streaming_player);
+		}
+	}
+
+	public void deleteRecursively(MusicDirectory.Entry album) {
+		File dir = FileUtil.getAlbumDirectory(context, album);
+		Util.recursiveDelete(dir);
+		if(Util.isOffline(context)) {
+			refresh();
+		}
+	}
+
+	private void checkLicenseAndTrialPeriod(Runnable onValid) {
+		if (licenseValid) {
+			onValid.run();
+			return;
+		}
+
+		int trialDaysLeft = Util.getRemainingTrialDays(context);
+		Log.i(TAG, trialDaysLeft + " trial days left.");
+
+		if (trialDaysLeft == 0) {
+			showDonationDialog(trialDaysLeft, null);
+		} else if (trialDaysLeft < Constants.FREE_TRIAL_DAYS / 2) {
+			showDonationDialog(trialDaysLeft, onValid);
+		} else {
+			Util.toast(context, context.getResources().getString(R.string.select_album_not_licensed, trialDaysLeft));
+			onValid.run();
+		}
+	}
+
+	private void showDonationDialog(int trialDaysLeft, final Runnable onValid) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setIcon(android.R.drawable.ic_dialog_info);
+
+		if (trialDaysLeft == 0) {
+			builder.setTitle(R.string.select_album_donate_dialog_0_trial_days_left);
+		} else {
+			builder.setTitle(context.getResources().getQuantityString(R.plurals.select_album_donate_dialog_n_trial_days_left,
+															  trialDaysLeft, trialDaysLeft));
+		}
+
+		builder.setMessage(R.string.select_album_donate_dialog_message);
+
+		builder.setPositiveButton(R.string.select_album_donate_dialog_now,
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DONATION_URL)));
+				}
+			});
+
+		builder.setNegativeButton(R.string.select_album_donate_dialog_later,
+			new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					dialogInterface.dismiss();
+					if (onValid != null) {
+						onValid.run();
+					}
+				}
+			});
+
+		builder.create().show();
 	}
 
 	private View createHeader(List<MusicDirectory.Entry> entries) {
