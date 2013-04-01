@@ -158,10 +158,10 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 				selectAll(false, false);
 				return true;
 			case R.id.menu_add_playlist:
-				// addToPlaylist(getSelectedSongs());
+				addToPlaylist(getSelectedSongs());
 				return true;
 			case R.id.menu_remove_playlist:
-				// removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
+				removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
 				return true;
 		}
 
@@ -539,6 +539,39 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 		if(Util.isOffline(context)) {
 			refresh();
 		}
+	}
+
+	public void removeFromPlaylist(final String id, final String name, final List<Integer> indexes) {
+		/*new LoadingTask<Void>(this, true) {
+			@Override
+			protected Void doInBackground() throws Throwable {				
+				MusicService musicService = MusicServiceFactory.getMusicService(SelectAlbumActivity.this);
+				musicService.removeFromPlaylist(id, indexes, SelectAlbumActivity.this, null);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				for(int i = indexes.size() - 1; i >= 0; i--) {
+					entryList.setItemChecked(indexes.get(i) + 1, false);
+					entryAdapter.removeAt(indexes.get(i));
+				}
+				entryAdapter.notifyDataSetChanged();
+				Util.toast(SelectAlbumActivity.this, getResources().getString(R.string.removed_playlist, indexes.size(), name));
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = getResources().getString(R.string.updated_playlist_error, name) + " " + getErrorMessage(error);
+				}
+
+				Util.toast(SelectAlbumActivity.this, msg, false);
+			}
+		}.execute();*/
 	}
 
 	private void checkLicenseAndTrialPeriod(Runnable onValid) {
