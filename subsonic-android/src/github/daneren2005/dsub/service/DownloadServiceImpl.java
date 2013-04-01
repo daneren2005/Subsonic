@@ -1188,9 +1188,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			to = 0;
 		}
 		
-		downloadList.add(to, downloadList.remove(from));
+		int currentPlayingIndex = getCurrentPlayingIndex();
+		DownloadFile movedSong = downloadList.remove(from);
+		downloadList.add(to, movedSong);
 		if(jukeboxEnabled) {
 			updateJukeboxPlaylist();
+		} else if(movedSong == nextPlaying || (currentPlayingIndex + 1) == to) {
+			// Moving next playing or moving a song to be next playing
+			setNextPlaying();
 		}
 	}
 
