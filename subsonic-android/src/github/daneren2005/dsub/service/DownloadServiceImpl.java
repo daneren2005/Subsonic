@@ -872,6 +872,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				}
 				catch(Exception e) {
 					isRunning = false;
+					positionCache = null;
 				}
 			}
 		}
