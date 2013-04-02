@@ -58,6 +58,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
@@ -85,6 +86,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private RemoteControlClientHelper mRemoteControl;
     
     private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
+	private Looper mediaPlayerLooper;
+	private Handler mediaPlayerHandler;
     private MediaPlayer mediaPlayer;
 	private MediaPlayer nextMediaPlayer;
 	private boolean nextSetup = false;
@@ -137,27 +140,37 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public void onCreate() {
         super.onCreate();
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
+		new Thread(new Runnable() {
+			public void run() {
+				Looper.prepare();
+				
+				mediaPlayer = new MediaPlayer();
+				mediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
 
-        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
-                handleError(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
-                return false;
-            }
-        });
-		
-		nextMediaPlayer = new MediaPlayer();
-        nextMediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
+				mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+					@Override
+					public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
+						handleError(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
+						return false;
+					}
+				});
 
-        nextMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
-                handleErrorNext(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
-                return false;
-            }
-        });
+				nextMediaPlayer = new MediaPlayer();
+				nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
+
+				nextMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+					@Override
+					public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
+						handleErrorNext(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
+						return false;
+					}
+				});
+				
+				mediaPlayerLooper = Looper.myLooper();
+				mediaPlayerHandler = new Handler(mediaPlayerLooper);
+				Looper.loop();
+			}
+		}).start();
 
         Util.registerMediaButtonEventReceiver(this);
 
@@ -210,6 +223,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if(nextMediaPlayer != null) {
 			nextMediaPlayer.release();
         }
+		mediaPlayerLooper.quit();
         shufflePlayBuffer.shutdown();
         if (equalizerController != null) {
             equalizerController.release();
@@ -871,6 +885,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					Thread.sleep(200L);
 				}
 				catch(Exception e) {
+					Log.w(TAG, "Crashed getting current position", e);
 					isRunning = false;
 					positionCache = null;
 				}
