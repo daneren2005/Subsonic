@@ -644,7 +644,7 @@ public final class Util {
                 .show();
     }
 
-	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler, MusicDirectory.Entry song) {
+	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, MusicDirectory.Entry song) {
         // Set the icon, scrolling text and timestamp
         final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
@@ -738,7 +738,7 @@ public final class Util {
         rv.setOnClickPendingIntent(R.id.control_next, pendingIntent);
     }
 
-    public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
+    public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService) {
 		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		manager.cancelAll();
 
