@@ -10,16 +10,16 @@ android update project --path ./
 
 Roadmap of major planned features in rough order that I plan to work on them in (little features get sprinkled in wherever):
 
+UI Redesign
+	-Fragments
+	-Native tabs
+	-Tablets: side by side fragments
 HLS Video
 	-Display video where album art is currently (double tap to fullscreen)
 	-Videos can play inline with songs
 Background Sync
 	-Mark playlists as 'offline', syncs changes
 	-Do things like star songs in offline mode that sync later
-UI Redesign
-	-Fragments
-	-Native tabs
-	-Tablets: side by side fragments
 New Tabs
 	-Podcasts
 	-Admin functions
