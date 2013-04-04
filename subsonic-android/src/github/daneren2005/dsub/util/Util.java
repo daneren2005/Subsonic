@@ -113,7 +113,6 @@ public final class Util {
 
     private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
     private static Toast toast;
-	private static int notificationID = 123512383;
 
     private Util() {
     }
@@ -644,7 +643,7 @@ public final class Util {
                 .show();
     }
 
-	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, MusicDirectory.Entry song) {
+	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler, MusicDirectory.Entry song) {
         // Set the icon, scrolling text and timestamp
         final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
@@ -662,8 +661,13 @@ public final class Util {
         
         Intent notificationIntent = new Intent(context, DownloadActivity.class);
         notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		manager.notify(notificationID, notification);
+        
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				downloadService.startForeground(Constants.NOTIFICATION_ID_PLAYING, notification);
+			}
+		});
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, true);
@@ -738,9 +742,14 @@ public final class Util {
         rv.setOnClickPendingIntent(R.id.control_next, pendingIntent);
     }
 
-    public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService) {
-		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		manager.cancelAll();
+    public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
+		// Remove notification and remove the service from the foreground
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				downloadService.stopForeground(true);
+			}
+		}); 
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, false);
