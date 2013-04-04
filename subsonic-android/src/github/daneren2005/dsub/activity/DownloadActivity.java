@@ -195,9 +195,19 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             @Override
             public void onClick(View view) {
                 warnIfNetworkOrStorageUnavailable();
-                getDownloadService().previous();
-                onCurrentChanged();
-                onProgressChanged();
+				new SilentBackgroundTask<Void>(DownloadActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().previous();
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						onCurrentChanged();
+						onProgressChanged();
+					}
+				}.execute();
 				setControlsVisible(true);
             }
         });
@@ -211,11 +221,25 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             @Override
             public void onClick(View view) {
                 warnIfNetworkOrStorageUnavailable();
-                if (getDownloadService().getCurrentPlayingIndex() < getDownloadService().size() - 1) {
-                    getDownloadService().next();
-                    onCurrentChanged();
-                    onProgressChanged();
-                }
+				new SilentBackgroundTask<Boolean>(DownloadActivity.this) {
+					@Override
+					protected Boolean doInBackground() throws Throwable {
+						if (getDownloadService().getCurrentPlayingIndex() < getDownloadService().size() - 1) {
+							getDownloadService().next();
+							return true;
+						} else {
+							return false;
+						}
+					}
+
+					@Override
+					protected void done(Boolean result) {
+						if(result) {
+							onCurrentChanged();
+							onProgressChanged();
+						}
+					}
+				}.execute();
 				setControlsVisible(true);
             }
         });
@@ -229,17 +253,27 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             @Override
             public void onClick(View view) {
                 getDownloadService().pause();
-                onCurrentChanged();
-                onProgressChanged();
+                // onCurrentChanged();
+                // onProgressChanged();
             }
         });
 
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDownloadService().reset();
-                onCurrentChanged();
-                onProgressChanged();
+				new SilentBackgroundTask<Void>(DownloadActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().reset();
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						onCurrentChanged();
+						onProgressChanged();
+					}
+				}.execute();
             }
         });
 
@@ -247,9 +281,19 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
             @Override
             public void onClick(View view) {
                 warnIfNetworkOrStorageUnavailable();
-                start();
-                onCurrentChanged();
-                onProgressChanged();
+				new SilentBackgroundTask<Void>(DownloadActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						start();
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						onCurrentChanged();
+						onProgressChanged();
+					}
+				}.execute();
             }
         });
 
@@ -328,23 +372,43 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 
         progressBar.setOnSliderChangeListener(new HorizontalSlider.OnSliderChangeListener() {
             @Override
-            public void onSliderChanged(View view, int position, boolean inProgress) {
+            public void onSliderChanged(View view, final int position, boolean inProgress) {
                 Util.toast(DownloadActivity.this, Util.formatDuration(position / 1000), true);
                 if (!inProgress) {
-                    getDownloadService().seekTo(position);
-                    onProgressChanged();
+					new SilentBackgroundTask<Void>(DownloadActivity.this) {
+						@Override
+						protected Void doInBackground() throws Throwable {
+							 getDownloadService().seekTo(position);
+							return null;
+						}
+
+						@Override
+						protected void done(Void result) {
+							onProgressChanged();
+						}
+					}.execute();
                 }
 				setControlsVisible(true);
             }
         });
         playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 				if(nowPlaying) {
 					warnIfNetworkOrStorageUnavailable();
-					getDownloadService().play(position);
-					onCurrentChanged();
-					onProgressChanged();
+					new SilentBackgroundTask<Void>(DownloadActivity.this) {
+						@Override
+						protected Void doInBackground() throws Throwable {
+							getDownloadService().play(position);
+							return null;
+						}
+
+						@Override
+						protected void done(Void result) {
+							onCurrentChanged();
+							onProgressChanged();
+						}
+					}.execute();
 				}
             }
         });
@@ -617,7 +681,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         return menuItemSelected(menuItem.getItemId(), null) || super.onOptionsItemSelected(menuItem);
     }
 
-    private boolean menuItemSelected(int menuItemId, DownloadFile song) {
+    private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
         switch (menuItemId) {
             case R.id.menu_show_album:
                 Intent intent = new Intent(this, SelectAlbumActivity.class);
@@ -632,8 +696,18 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
                 Util.startActivityWithoutTransition(this, intent);
                 return true;
             case R.id.menu_remove:
-                getDownloadService().remove(song);
-                onDownloadListChanged();
+				new SilentBackgroundTask<Void>(DownloadActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().remove(song);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						onDownloadListChanged();
+					}
+				}.execute();
                 return true;
 			case R.id.menu_delete:
 				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(1);
@@ -641,12 +715,24 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				getDownloadService().delete(songs);
 				return true;
             case R.id.menu_remove_all:
-                getDownloadService().setShufflePlayEnabled(false);
-				if(nowPlaying)
-					getDownloadService().clear();
-				else
-					getDownloadService().clearBackground();
-                onDownloadListChanged();
+				new SilentBackgroundTask<Void>(DownloadActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().setShufflePlayEnabled(false);
+						if(nowPlaying) {
+							getDownloadService().clear();
+						}
+						else {
+							getDownloadService().clearBackground();
+						}
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						onDownloadListChanged();
+					}
+				}.execute();
                 return true;
             case R.id.menu_screen_on_off:
                 if (getDownloadService().getKeepScreenOn()) {
@@ -659,8 +745,18 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				invalidateOptionsMenu();
                 return true;
             case R.id.menu_shuffle:
-                getDownloadService().shuffle();
-                Util.toast(this, R.string.download_menu_shuffle_notification);
+				new SilentBackgroundTask<Void>(DownloadActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().shuffle();
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						Util.toast(DownloadActivity.this, R.string.download_menu_shuffle_notification);
+					}
+				}.execute();
                 return true;
             case R.id.menu_save_playlist:
                 showDialog(DIALOG_SAVE_PLAYLIST);
