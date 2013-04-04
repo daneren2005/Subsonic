@@ -93,6 +93,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private boolean isPartial = true;
     private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
+	private final Handler handler = new Handler(); 
     private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
     private final ShufflePlayBuffer shufflePlayBuffer = new ShufflePlayBuffer(this);
 
@@ -239,7 +240,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		if(nextPlayingTask != null) {
 			nextPlayingTask.cancel();
 		}
-		Util.hidePlayingNotification(this, this);
+		Util.hidePlayingNotification(this, this, handler);
 
         instance = null;
     }
@@ -514,7 +515,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
         } else {
             Util.broadcastNewTrackInfo(this, null);
-			Util.hidePlayingNotification(this, this);
+			Util.hidePlayingNotification(this, this, handler);
         }
     }
 	
@@ -833,16 +834,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
         
         if (show) {
-            Util.showPlayingNotification(this, this, currentPlaying.getSong());
+            Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
         } else if (pause) {
 			SharedPreferences prefs = Util.getPreferences(this);
 			if(prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
-				Util.showPlayingNotification(this, this, currentPlaying.getSong());
+				Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
 			} else {
-				Util.hidePlayingNotification(this, this);
+				Util.hidePlayingNotification(this, this, handler);
 			}
         } else if(hide) {
-			Util.hidePlayingNotification(this, this);
+			Util.hidePlayingNotification(this, this, handler);
 		}
 		mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
 
