@@ -608,6 +608,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
 			if(nextPlayingTask != null) {
 				nextPlayingTask.cancel();
+				nextPlayingTask = null;
 			}
             setCurrentPlaying(index, start);
             if (start) {
