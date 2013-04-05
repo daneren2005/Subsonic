@@ -343,7 +343,7 @@ public class MainActivity extends SubsonicTabActivity {
 				protected void done(File logcat) {
 					Intent email = new Intent(android.content.Intent.ACTION_SEND);
 					email.setType("text/plain");
-					email.putExtra(Intent.EXTRA_EMAIL, new String[] {"daneren2005@gmail.com"});
+					email.putExtra(Intent.EXTRA_EMAIL, new String[] {"dsub.android@gmail.com"});
 					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + version + " Error Logs");
 					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here");
 					Uri attachment = Uri.fromFile(logcat);
