@@ -1,5 +1,7 @@
 package github.daneren2005.dsub.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
@@ -56,6 +58,32 @@ public class MainActivity extends SubsonicActivity {
 	public void onResume() {
 		super.onResume();
 	}
+	
+	@Override
+	public void onBackPressed() {
+		int backStack = getSupportFragmentManager().getBackStackEntryCount();
+		int currentTab = viewPager.getCurrentItem();
+		
+		if(backStack == 0) {
+			if(currentTab == 0) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+				builder.setTitle("Confirm Exit")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int id) {
+							MainActivity.super.onBackPressed();
+						}
+					})
+					.setNegativeButton("Cancel", null);
+				AlertDialog dialog = builder.create();
+				dialog.show();
+			} else {
+				viewPager.setCurrentItem(0);
+			}
+		} else {
+			super.onBackPressed();
+		}
+	}
 
 	protected void addTab(int titleRes, Class fragmentClass, Bundle args) {
 		pagerAdapter.addTab(getString(titleRes), fragmentClass, args);
@@ -109,6 +137,7 @@ public class MainActivity extends SubsonicActivity {
 			for (int i = 0; i < tabs.size(); i++) {
 				if ( tabs.get(i) == tabInfo ) {
 					pager.setCurrentItem(i);
+					break;
 				}
 			}
 		}
