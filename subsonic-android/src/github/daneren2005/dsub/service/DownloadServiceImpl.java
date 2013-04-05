@@ -537,16 +537,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 		
 		nextSetup = false;
+		if(nextPlayingTask != null) {
+			nextPlayingTask.cancel();
+			nextPlayingTask = null;
+		}
 		if(index < size() && index != -1) {
 			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.start();
 		} else {
 			nextPlaying = null;
-			if(nextPlayingTask != null) {
-				nextPlayingTask.cancel();
-			}
-			nextPlayingTask = null;
 			setNextPlayerState(IDLE);
 		}
 	}
