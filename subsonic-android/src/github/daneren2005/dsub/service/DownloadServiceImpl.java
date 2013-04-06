@@ -537,16 +537,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 		
 		nextSetup = false;
+		if(nextPlayingTask != null) {
+			nextPlayingTask.cancel();
+			nextPlayingTask = null;
+		}
 		if(index < size() && index != -1) {
 			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.start();
 		} else {
 			nextPlaying = null;
-			if(nextPlayingTask != null) {
-				nextPlayingTask.cancel();
-			}
-			nextPlayingTask = null;
 			setNextPlayerState(IDLE);
 		}
 	}
@@ -608,6 +608,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
 			if(nextPlayingTask != null) {
 				nextPlayingTask.cancel();
+				nextPlayingTask = null;
 			}
             setCurrentPlaying(index, start);
             if (start) {
@@ -1103,12 +1104,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mediaPlayer) {
-				setPlayerStateCompleted();
-
 				// Acquire a temporary wakelock, since when we return from
 				// this callback the MediaPlayer will release its wakelock
 				// and allow the device to go to sleep.
 				wakeLock.acquire(60000);
+				
+				setPlayerStateCompleted();
 
 				int pos = cachedPosition;
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
