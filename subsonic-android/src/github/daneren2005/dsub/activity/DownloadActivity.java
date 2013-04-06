@@ -252,9 +252,19 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getDownloadService().pause();
-                // onCurrentChanged();
-                // onProgressChanged();
+				new SilentBackgroundTask<Void>(DownloadActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().pause();
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						onCurrentChanged();
+						onProgressChanged();
+					}
+				}.execute();
             }
         });
 
