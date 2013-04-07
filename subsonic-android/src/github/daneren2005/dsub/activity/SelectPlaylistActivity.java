@@ -192,9 +192,9 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 	private void deletePlaylist(final Playlist playlist) {
 		new AlertDialog.Builder(this)
         .setIcon(android.R.drawable.ic_dialog_alert)
-        .setTitle("Confirm")
-        .setMessage("Do you want to delete " + playlist.getName())
-        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        .setTitle(R.string.common_confirm)
+        .setMessage(getResources().getString(R.string.delete_playlist, playlist.getName()))
+        .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 				new LoadingTask<Void>(SelectPlaylistActivity.this, false) {
@@ -227,7 +227,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 			}
 
         })
-        .setNegativeButton("Cancel", null)
+        .setNegativeButton(R.string.common_cancel, null)
         .show();
 	}
 	
@@ -263,7 +263,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(R.string.playlist_update_info)
 			.setView(dialogView)
-			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {					
 					new LoadingTask<Void>(SelectPlaylistActivity.this, false) {
@@ -295,7 +295,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 				}
 
 			})
-			.setNegativeButton("Cancel", null)
+			.setNegativeButton(R.string.common_cancel, null)
 			.show();
 	}
 }

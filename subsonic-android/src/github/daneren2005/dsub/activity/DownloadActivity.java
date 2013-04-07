@@ -859,9 +859,9 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 		lengthBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, ""));
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(DownloadActivity.this);
-		builder.setTitle("Set Timer")
+		builder.setTitle(R.string.menu_set_timer)
 			.setView(dialogView)
-			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					String length = lengthBox.getText().toString();
@@ -875,7 +875,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 					invalidateOptionsMenu();
 				}
 			})
-			.setNegativeButton("Cancel", null);
+			.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}

@@ -481,7 +481,7 @@ public class SubsonicTabActivity extends SherlockActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(SubsonicTabActivity.this);
 		builder.setTitle("Shuffle By")
 			.setView(dialogView)
-			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					Intent intent = new Intent(SubsonicTabActivity.this, DownloadActivity.class);
@@ -499,7 +499,7 @@ public class SubsonicTabActivity extends SherlockActivity {
 					Util.startActivityWithoutTransition(SubsonicTabActivity.this, intent);
 				}
 			})
-			.setNegativeButton("Cancel", null);
+			.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
