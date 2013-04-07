@@ -6,14 +6,14 @@
     <string name="common.save">Сохранить</string>
     <string name="common.cancel">Отмена</string>
     <string name="common.play_now">Воспроизвести сейчас</string>
-	<string name="common.play_shuffled">Воспроизвести в случайном порядке</string>
+	<string name="common.play_shuffled">Случайное воспроизведение</string>
     <string name="common.play_next">Воспроизвести следующим</string>
     <string name="common.play_last">Воспроизвести последним</string>
 	<string name="common.download">Скачать</string>
     <string name="common.pin">Кешировать</string>
     <string name="common.delete">Удалить</string>
 	<string name="common.star">Добавить в закладки</string>
-	<string name="common.unstar">Убрать из закладок</string>
+	<string name="common.unstar">Удалить из закладок</string>
 	<string name="common.info">Информация</string>
 	<string name="common.name">Название</string>
 	<string name="common.comment">Комментарий</string>
@@ -23,13 +23,13 @@
 	<string name="common.stream_external">Воспроизвести поток во внешнем плеере</string>
 
     <string name="button_bar.home">Домой</string>
-    <string name="button_bar.browse">Библиотека</string>
+    <string name="button_bar.browse">Медиатека</string>
     <string name="button_bar.search">Поиск</string>
     <string name="button_bar.playlists">Списки</string>
-    <string name="button_bar.now_playing">Воспроизводится</string>
+    <string name="button_bar.now_playing">Плеер</string>
 
     <string name="main.welcome_title">Здравствуйте!</string>
-    <string name="main.welcome_text">Добро пожаловать в DSub! Это приложение настроено на использование с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
+    <string name="main.welcome_text">Добро пожаловать в DSub! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
 	
 	<string name="main.about_title">О программе DSub</string>
 	<string name="main.about_text">Автор: Scott Jackson
@@ -46,7 +46,7 @@
     <string name="main.albums_newest">Недавно добавленные</string>
     <string name="main.albums_recent">Недавно прослушанные</string>
     <string name="main.albums_frequent">Часто прослушиваемые</string>
-    <string name="main.albums_highest">Максимально оцененные</string>
+    <string name="main.albums_highest">Максимальный рейтинг</string>
     <string name="main.albums_starred">Закладки</string>
     <string name="main.albums_random">Случайные</string>
 
@@ -55,18 +55,18 @@
 	<string name="menu.refresh">Обновить</string>
 	<string name="menu.select">Выбрать все</string>
 	<string name="menu.play">Воспроизвести</string>
-	<string name="menu.play_last">В конец списка воспроизведения</string>
+	<string name="menu.play_last">Воспроизвести последним</string>
     <string name="menu.exit">Выход</string>
     <string name="menu.settings">Настройки</string>
     <string name="menu.help">Помощь</string>
 	<string name="menu.about">О программе</string>
-	<string name="menu.add_playlist">Добавить в список воспроизведения</string>
-	<string name="menu.remove_playlist">Убрать из списка воспроизведения</string>
+	<string name="menu.add_playlist">Добавить в список</string>
+	<string name="menu.remove_playlist">Удалить из списка</string>
 	<string name="menu.deleted_playlist">Список воспроизведения %s удален</string>
-	<string name="menu.deleted_playlist_error">Не удается удалить плейлист %s</string>
+	<string name="menu.deleted_playlist_error">Не удалось удалить список %s</string>
 	<string name="menu.log">Отправить журнал событий</string>
 
-    <string name="playlist.label">Списки воспроизведения</string>
+    <string name="playlist.label">Списки</string>
 	<string name="playlist.update_info">Изменить информацию</string>
 	<string name="playlist.updated_info">Информация для списка воспроизведения %s обновлена</string>
 	<string name="playlist.updated_info_error">Не удалось обновить информацию для списка воспроизведения %s</string>
@@ -87,7 +87,7 @@
     <string name="search.no_match">Ничего не найдено, пожалуйста, попробуйте снова</string>
     <string name="search.artists">Исполнители</string>
     <string name="search.albums">Альбомы</string>
-    <string name="search.songs">Песни</string>
+    <string name="search.songs">Композиции</string>
     <string name="search.more">Показать еще</string>
 
     <string name="progress.wait">Пожалуйста, подождите...</string>
@@ -102,7 +102,7 @@
     <string name="select_album.more">Еще</string>
     <string name="select_album.offline">Оффлайн</string>
     <string name="select_album.searching">Выполняется поиск...</string>
-    <string name="select_album.no_sdcard">Ошибка: SD карта недоступна.</string>
+    <string name="select_album.no_sdcard">Ошибка: SD карта недоступна</string>
     <string name="select_album.no_network">Внимание: сеть недоступна.</string>
     <string name="select_album.not_licensed">Сервер не лицензирован. %d дней до окончания пробного периода.</string>
     <string name="select_album.donate_dialog_message">Осуществите пожертвование для Subsonic и получите возможность неограниченного скачивания.</string>
@@ -113,39 +113,39 @@
     <string name="select_playlist.empty">Нет сохраненных списков воспроизведения на сервере</string>
 
     <string name="download.empty">Список воспроизведения пуст</string>
-	<string name="download.shuffle_loading">Случайный список загружается...</string>
+	<string name="download.shuffle_loading">Загружается случайный список...</string>
     <string name="download.playerstate_downloading">Загрузка - %s</string>
     <string name="download.playerstate_buffering">Буферизация</string>
     <string name="download.playerstate_playing_shuffle">Воспроизводится случайно</string>
     <string name="download.menu_show_album">Показать альбом</string>
     <string name="download.menu_lyrics">Текст</string>
     <string name="download.menu_remove">Убрать из очереди</string>
-	<string name="download.menu_delete">0Удалить кэш</string>
+	<string name="download.menu_delete">Удалить кэш</string>
     <string name="download.menu_remove_all">Очистить</string>
     <string name="download.menu_screen_on">Включить подсветку</string>
     <string name="download.menu_screen_off">Отключать подсветку</string>
     <string name="download.menu_shuffle">Перемешать</string>
 	<string name="download.menu_toggle">Переключатель</string>
-    <string name="download.menu_save">Сохранить список воспроизведения</string>
+    <string name="download.menu_save">Сохранить список</string>
     <string name="download.menu_shuffle_notification">Список воспроизведения был перемешан</string>
     <string name="download.playlist_title">Сохранение списка воспроизведения</string>
-    <string name="download.playlist_name">Введите название списка воспроизведения:</string>
+    <string name="download.playlist_name">Введите название:</string>
     <string name="download.playlist_saving">Сохранение списка воспроизведения \"%s\"...</string>
-    <string name="download.playlist_done">Список воспроизведения сохранен.</string>
+    <string name="download.playlist_done">Список воспроизведения сохранен</string>
     <string name="download.playlist_error">Не удалось сохранить список воспроизведения, пожалуйста, попробуйте позже.</string>
     <string name="download.repeat_off">Повторение отключено</string>
     <string name="download.repeat_all">Повторять все</string>
     <string name="download.repeat_single">Повторять композицию</string>
-    <string name="download.visualizer_on">Визуализация включена.</string>
-    <string name="download.visualizer_off">Визуализация отключена.</string>
+    <string name="download.visualizer_on">Визуализация включена</string>
+    <string name="download.visualizer_off">Визуализация отключена</string>
     <string name="download.jukebox_on">Удаленное управление включено. Музыка воспроизводится на компьютере.</string>
     <string name="download.jukebox_off">Удаленное управление отключено. Музыка воспроизводится на устройстве.</string>
     <string name="download.jukebox_volume">Удаленное управление громкостью</string>
     <string name="download.jukebox_server_too_old">Удаленное управление не поддерживается. Пожалуйста, обновите Ваш сервер Subsonic.</string>
     <string name="download.jukebox_offline">Удаленное управление не поддерживается в оффлайн режиме.</string>
     <string name="download.jukebox_not_authorized">Удаленное управление запрещено. Пожалуйста, активируйте режим jukebox в разделе <b>Настройки &gt; Проигрыватели</b> на вашем сервере Subsonic.</string>
-	<string name="download.show_downloading">Показать список загружаемого</string>
-	<string name="download.show_now_playing">Показать список воспроизведения</string>
+	<string name="download.show_downloading">Показать закачки</string>
+	<string name="download.show_now_playing">Показать воспроизведение</string>
 	<string name="download.timer_length">Длительность</string>
 	<string name="download.start_timer">Запустить таймер</string>
 	<string name="download.stop_timer">Остановить таймер</string>
@@ -179,15 +179,15 @@
     <string name="settings.server_password">Пароль</string>
     <string name="settings.cache_title">Кэш музыки</string>
     <string name="settings.preload">Композиций для предзагрузки</string>
-    <string name="settings.cache_size">Размер кэша(Мб)</string>
+    <string name="settings.cache_size">Размер кэша (Мб)</string>
     <string name="settings.cache_location">Путь кэша</string>
     <string name="settings.cache_location_error">Некорректный путь. Используем путь по умолчанию.</string>
     <string name="settings.testing_connection">Проверка соединения...</string>
-    <string name="settings.testing_ok">Подключение прошло успешно</string>
+    <string name="settings.testing_ok">Подключение прошло успешно!</string>
     <string name="settings.testing_unlicensed">Подключение прошло успешно. Сервер нелицензирован.</string>
     <string name="settings.connection_failure">Не удалось подключиться.</string>
-    <string name="settings.invalid_url">Пожалуйста, укажите правильный адрес.</string>
-    <string name="settings.invalid_username">Пожалуйста, укажите правильное имя пользователя (не должно быть пробелов в конце).</string>
+    <string name="settings.invalid_url">Пожалуйста, укажите правильный адрес</string>
+    <string name="settings.invalid_username">Пожалуйста, укажите правильное имя пользователя (не должно быть пробелов в конце)</string>
     <string name="settings.appearance_title">Внешний вид</string>
     <string name="settings.theme_title">Тема</string>
     <string name="settings.theme_light">Светлая</string>
@@ -197,8 +197,8 @@
     <string name="settings.theme_dark_fullscreen">Темная во весь экран</string>
 	<string name="settings.theme_holo_fullscreen">Holo во весь экран</string>
     <string name="settings.network_title">Сеть</string>
-    <string name="settings.max_bitrate_wifi">Максимальный битрейт аудио через Wi-Fi</string>
-    <string name="settings.max_bitrate_mobile">Максимальный битрейт аудио через мобильный интернет</string>
+    <string name="settings.max_bitrate_wifi">Макс. битрейт аудио по Wi-Fi</string>
+    <string name="settings.max_bitrate_mobile">Макс. битрейт видео по сети</string>
     <string name="settings.max_bitrate_32">32 Kbps</string>
     <string name="settings.max_bitrate_64">64 Kbps</string>
     <string name="settings.max_bitrate_80">80 Kbps</string>
@@ -209,8 +209,8 @@
     <string name="settings.max_bitrate_192">192 Kbps</string>
     <string name="settings.max_bitrate_256">256 Kbps</string>
     <string name="settings.max_bitrate_320">320 Kbps</string>
-	<string name="settings.max_video_bitrate_wifi">Максимальный битрейт видео через Wi-Fi</string>
-    <string name="settings.max_video_bitrate_mobile">Максимальный битрейт видео через мобильный интернет</string>
+	<string name="settings.max_video_bitrate_wifi">Макс. битрейт видео по Wi-Fi</string>
+    <string name="settings.max_video_bitrate_mobile">Макс. битрейт видео по сети</string>
 	<string name="settings.max_video_bitrate_200">200 Kbps</string>
     <string name="settings.max_video_bitrate_300">300 Kbps</string>
     <string name="settings.max_video_bitrate_400">400 Kbps</string>
@@ -222,7 +222,7 @@
     <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
     <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
     <string name="settings.max_bitrate_unlimited">Неограничен</string>
-    <string name="settings.wifi_required_title">Потоковое воспроизведение только через Wi-Fi</string>
+    <string name="settings.wifi_required_title">Поток по Wi-Fi</string>
     <string name="settings.wifi_required_summary">Потокое воспроизведение будет работать только при подключении через Wi-Fi</string>
 	<string name="settings.network_timeout_title">Таймаут сети</string>
 	<string name="settings.network_timeout_10000">10 секунд</string>
@@ -242,8 +242,8 @@
     <string name="settings.scrobble_title">Скробблинг на Last.fm</string>
     <string name="settings.scrobble_summary">Не забудьте установить логин и пароль от Last.fm на сервере DSub</string>
     <string name="settings.hide_media_title">Прятать от других</string>
-    <string name="settings.hide_media_summary">Прятать музыкальные файлы от других приложений.</string>
-    <string name="settings.hide_media_toast">Изменения вступят в силу при следующем поиске музыки ОС Android на Вашем устройстве.</string>
+    <string name="settings.hide_media_summary">Прятать музыкальные файлы от других приложений</string>
+    <string name="settings.hide_media_toast">Изменения вступят в силу при следующем поиске музыки на Вашем устройстве.</string>
     <string name="settings.media_button_title">Кнопки управления</string>
     <string name="settings.media_button_summary">Разрешить управление кнопками мультимедиа на устройстве и гарнитуре</string>
     <string name="settings.screen_lit_title">Держать экран включенным</string>
@@ -258,7 +258,7 @@
 	<string name="settings.sleep_timer_always_on">Всегда включен</string>
 	<string name="settings.temp_loss_title">Временная потеря связи</string>
 	<string name="settings.temp_loss_pause">Всегда останавливать</string>
-	<string name="settings.temp_loss_pause_lower">Останавливать, понижать громкость когда требуется</string>
+	<string name="settings.temp_loss_pause_lower">Останавливать, понижать громкость, если требуется</string>
 	<string name="settings.temp_loss_lower">Всегда понижать громкость</string>
 	<string name="settings.temp_loss_nothing">Ничего не делать</string>
 	<string name="settings.persistent_title">Непрерывное уведомление</string>
@@ -271,11 +271,11 @@
     <string name="music_service.retry">Ошибка подключения. Попытка %1$d из %2$d.</string>
 
     <string name="background_task.wait">Пожалуйста, подождите...</string>
-    <string name="background_task.loading">Загрузка.</string>
-    <string name="background_task.no_network">Эта программа требует доступ к сети. Пожалуйста, включите Wi-Fi или мобильный интернет.</string>
-    <string name="background_task.network_error">Ошибка сети. Пожалуйста, проверьте адрес сервера и попробуйте снова.</string>
-    <string name="background_task.not_found">Ресурс не найден. Пожалуйста, проверьте адрес сервера.</string>
-    <string name="background_task.parse_error">Неизвестный ответ. Пожалуйста, проверьте адрес сервера.</string>
+    <string name="background_task.loading">Загрузка</string>
+    <string name="background_task.no_network">Эта программа требует доступ к сети. Пожалуйста, включите Wi-Fi или мобильный интернет</string>
+    <string name="background_task.network_error">Ошибка сети. Пожалуйста, проверьте адрес сервера и попробуйте снова</string>
+    <string name="background_task.not_found">Ресурс не найден. Пожалуйста, проверьте адрес сервера</string>
+    <string name="background_task.parse_error">Неизвестный ответ. Пожалуйста, проверьте адрес сервера</string>
 
     <string name="service.connecting">Подключение к серверу. Пожалуйста, подождите.</string>
 
@@ -306,19 +306,19 @@
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Нет композиций</item>
-        <item quantity="one">Одна композиция</item>
+        <item quantity="one">1 композиция</item>
         <item quantity="other">%d композиций</item>
     </plurals>
     <plurals name="select_album_n_songs_downloading">
-        <item quantity="one">Одна композиция запланирована для скачивания.</item>
-        <item quantity="other">%d композиций запланировано для скачивания.</item>
+        <item quantity="one">1 композиция запланирована для скачивания</item>
+        <item quantity="other">%d композиций запланировано для скачивания</item>
     </plurals>
     <plurals name="select_album_n_songs_added">
-        <item quantity="one">Одна песня добавлена в очередь воспроизведения.</item>
-        <item quantity="other">%d композиций добавлено в очередь воспроизведения.</item>
+        <item quantity="one">1 композиция добавлена в очередь воспроизведения</item>
+        <item quantity="other">%d композиций добавлено в очередь воспроизведения</item>
     </plurals>
     <plurals name="select_album_donate_dialog_n_trial_days_left">
-        <item quantity="one">Один день до конца пробного периода</item>
+        <item quantity="one">1 день до конца пробного периода</item>
         <item quantity="other">%d дней до конца пробного периода</item>
     </plurals>
 
