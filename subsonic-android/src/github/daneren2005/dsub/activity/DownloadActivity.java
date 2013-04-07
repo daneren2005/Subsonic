@@ -36,6 +36,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -980,82 +981,114 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
         if (getDownloadService() == null) {
             return;
         }
+		
+		new SilentBackgroundTask<Void>(this) {
+			DownloadService downloadService;
+			boolean isJukeboxEnabled;
+			int millisPlayed;
+			Integer duration;
+			PlayerState playerState;
+			
+			@Override
+            protected Void doInBackground() throws Throwable {
+                downloadService = getDownloadService();
+				isJukeboxEnabled = downloadService.isJukeboxEnabled();
+				millisPlayed = Math.max(0, downloadService.getPlayerPosition());
+				duration = downloadService.getPlayerDuration();
+				playerState = getDownloadService().getPlayerState();
+                return null;
+            }
+            
+            @Override
+            protected void done(Void result) {
+				if (currentPlaying != null) {
+					int millisTotal = duration == null ? 0 : duration;
 
-        if (currentPlaying != null) {
+					positionTextView.setText(Util.formatDuration(millisPlayed / 1000));
+					durationTextView.setText(Util.formatDuration(millisTotal / 1000));
+					progressBar.setMax(millisTotal == 0 ? 100 : millisTotal); // Work-around for apparent bug.
+					progressBar.setProgress(millisPlayed);
+					progressBar.setSlidingEnabled(currentPlaying.isWorkDone() || isJukeboxEnabled);
+				} else {
+					positionTextView.setText("0:00");
+					durationTextView.setText("-:--");
+					progressBar.setProgress(0);
+					progressBar.setSlidingEnabled(false);
+				}
 
-            int millisPlayed = Math.max(0, getDownloadService().getPlayerPosition());
-            Integer duration = getDownloadService().getPlayerDuration();
-            int millisTotal = duration == null ? 0 : duration;
+				switch (playerState) {
+					case DOWNLOADING:
+						long bytes = currentPlaying.getPartialFile().length();
+						statusTextView.setText(getResources().getString(R.string.download_playerstate_downloading, Util.formatLocalizedBytes(bytes, DownloadActivity.this)));
+						break;
+					case PREPARING:
+						statusTextView.setText(R.string.download_playerstate_buffering);
+						break;
+					case STARTED:
+						statusTextView.setText((currentPlaying != null) ? (currentPlaying.getSong().getArtist() + " - " + currentPlaying.getSong().getAlbum()) : null);
+						break;
+					default:
+						statusTextView.setText((currentPlaying != null) ? (currentPlaying.getSong().getArtist() + " - " + currentPlaying.getSong().getAlbum()) : null);
+						break;
+				}
 
-            positionTextView.setText(Util.formatDuration(millisPlayed / 1000));
-            durationTextView.setText(Util.formatDuration(millisTotal / 1000));
-            progressBar.setMax(millisTotal == 0 ? 100 : millisTotal); // Work-around for apparent bug.
-            progressBar.setProgress(millisPlayed);
-            progressBar.setSlidingEnabled(currentPlaying.isWorkDone() || getDownloadService().isJukeboxEnabled());
-        } else {
-            positionTextView.setText("0:00");
-            durationTextView.setText("-:--");
-            progressBar.setProgress(0);
-            progressBar.setSlidingEnabled(false);
-        }
+				switch (playerState) {
+					case STARTED:
+						pauseButton.setVisibility(View.VISIBLE);
+						stopButton.setVisibility(View.INVISIBLE);
+						startButton.setVisibility(View.INVISIBLE);
+						break;
+					case DOWNLOADING:
+					case PREPARING:
+						pauseButton.setVisibility(View.INVISIBLE);
+						stopButton.setVisibility(View.VISIBLE);
+						startButton.setVisibility(View.INVISIBLE);
+						break;
+					default:
+						pauseButton.setVisibility(View.INVISIBLE);
+						stopButton.setVisibility(View.INVISIBLE);
+						startButton.setVisibility(View.VISIBLE);
+						break;
+				}
 
-        PlayerState playerState = getDownloadService().getPlayerState();
-
-        switch (playerState) {
-            case DOWNLOADING:
-                long bytes = currentPlaying.getPartialFile().length();
-                statusTextView.setText(getResources().getString(R.string.download_playerstate_downloading, Util.formatLocalizedBytes(bytes, this)));
-                break;
-            case PREPARING:
-                statusTextView.setText(R.string.download_playerstate_buffering);
-                break;
-            case STARTED:
-				statusTextView.setText((currentPlaying != null) ? (currentPlaying.getSong().getArtist() + " - " + currentPlaying.getSong().getAlbum()) : null);
-                break;
-            default:
-                statusTextView.setText((currentPlaying != null) ? (currentPlaying.getSong().getArtist() + " - " + currentPlaying.getSong().getAlbum()) : null);
-                break;
-        }
-
-        switch (playerState) {
-            case STARTED:
-                pauseButton.setVisibility(View.VISIBLE);
-                stopButton.setVisibility(View.INVISIBLE);
-                startButton.setVisibility(View.INVISIBLE);
-                break;
-            case DOWNLOADING:
-            case PREPARING:
-                pauseButton.setVisibility(View.INVISIBLE);
-                stopButton.setVisibility(View.VISIBLE);
-                startButton.setVisibility(View.INVISIBLE);
-                break;
-            default:
-                pauseButton.setVisibility(View.INVISIBLE);
-                stopButton.setVisibility(View.INVISIBLE);
-                startButton.setVisibility(View.VISIBLE);
-                break;
-        }
-
-        jukeboxButton.setTextColor(getDownloadService().isJukeboxEnabled() ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
+				jukeboxButton.setTextColor(isJukeboxEnabled ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
+            }
+		}.execute();
     }
 	
-	private void changeProgress(Integer ms) {
-		DownloadService downloadService = getDownloadService();
+	private void changeProgress(final int ms) {
+		final DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;
 		}
 		
-		int msPlayed = Math.max(0, downloadService.getPlayerPosition());
-		Integer duration = getDownloadService().getPlayerDuration();
-		int msTotal = duration == null ? 0 : duration;
-		
-		if(msPlayed + ms > msTotal) {
-			progressBar.setProgress(msTotal);
-			downloadService.seekTo(msTotal);
-		} else {
-			progressBar.setProgress(msPlayed + ms);
-			downloadService.seekTo(msPlayed + ms);
-		}
+		new SilentBackgroundTask<Void>(this) {
+			boolean isJukeboxEnabled;
+			int msPlayed;
+			Integer duration;
+			PlayerState playerState;
+			int seekTo;
+			
+			@Override
+            protected Void doInBackground() throws Throwable {
+				msPlayed = Math.max(0, downloadService.getPlayerPosition());
+				duration = downloadService.getPlayerDuration();
+				playerState = getDownloadService().getPlayerState();
+				int msTotal = duration == null ? 0 : duration;
+				if(msPlayed + ms > msTotal) {
+					seekTo = msTotal;
+				} else {
+					seekTo = msPlayed + ms;
+				}
+				downloadService.seekTo(seekTo);
+                return null;
+            }
+            
+            @Override
+            protected void done(Void result) {
+				progressBar.setProgress(seekTo);
+			}
+		}.execute();
 	}
 
     private class SongListAdapter extends ArrayAdapter<DownloadFile> {
