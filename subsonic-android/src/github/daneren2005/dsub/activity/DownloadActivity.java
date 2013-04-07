@@ -126,6 +126,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 	private boolean nowPlaying = true;
 	private ScheduledFuture<?> hideControlsFuture;
 	private SongListAdapter songListAdapter;
+	private SilentBackgroundTask<Void> onProgressChangedTask;
 
     /**
      * Called when the activity is first created.
@@ -978,11 +979,12 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
     }
 
     private void onProgressChanged() {
-        if (getDownloadService() == null) {
+		// Make sure to only be trying to run one of these at a time
+        if (getDownloadService() == null || onProgressChangedTask != null) {
             return;
         }
 		
-		new SilentBackgroundTask<Void>(this) {
+		onProgressChangedTask = new SilentBackgroundTask<Void>(this) {
 			DownloadService downloadService;
 			boolean isJukeboxEnabled;
 			int millisPlayed;
@@ -1052,8 +1054,10 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 				}
 
 				jukeboxButton.setTextColor(isJukeboxEnabled ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
+				onProgressChangedTask = null;
             }
-		}.execute();
+		};
+		onProgressChangedTask.execute();
     }
 	
 	private void changeProgress(final int ms) {
