@@ -98,7 +98,7 @@ public class DownloadServiceLifecycleSupport {
             }
         };
 
-        executorService = Executors.newScheduledThreadPool(2);
+        executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleWithFixedDelay(downloadChecker, 5, 5, TimeUnit.SECONDS);
 
         // Pause when headset is unplugged.
