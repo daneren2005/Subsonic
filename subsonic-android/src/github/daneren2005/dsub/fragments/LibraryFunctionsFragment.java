@@ -89,7 +89,7 @@ public class LibraryFunctionsFragment extends SubsonicTabFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Shuffle By")
 			.setView(dialogView)
-			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					Intent intent = new Intent(context, DownloadActivity.class);
@@ -107,7 +107,7 @@ public class LibraryFunctionsFragment extends SubsonicTabFragment {
 					Util.startActivityWithoutTransition(context, intent);
 				}
 			})
-			.setNegativeButton("Cancel", null);
+			.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}

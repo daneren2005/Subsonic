@@ -67,14 +67,14 @@ public class MainActivity extends SubsonicActivity {
 		if(backStack == 0) {
 			if(currentTab == 0) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-				builder.setTitle("Confirm Exit")
-					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				builder.setTitle(R.string.common_confirm)
+					.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int id) {
 							MainActivity.super.onBackPressed();
 						}
 					})
-					.setNegativeButton("Cancel", null);
+					.setNegativeButton(R.string.common_cancel, null);
 				AlertDialog dialog = builder.create();
 				dialog.show();
 			} else {
