@@ -36,7 +36,6 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import java.io.File;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -54,6 +53,7 @@ public class ImageLoader implements Runnable {
     private static final String TAG = ImageLoader.class.getSimpleName();
     private static final int CONCURRENCY = 5;
 
+	private Handler mHandler = new Handler();
 	private Context context;
     private LruCache<String, Bitmap> cache;
     private final BlockingQueue<Task> queue;
@@ -226,7 +226,6 @@ public class ImageLoader implements Runnable {
 	private class Task {
     	private final Context mContext;
         private final MusicDirectory.Entry mEntry;
-        private final Handler mHandler;
         private final int mSize;
         private final int mSaveSize;
         private ImageLoaderTaskHandler mTaskHandler;
@@ -237,7 +236,6 @@ public class ImageLoader implements Runnable {
             mSize = size;
             mSaveSize = saveSize;
             mTaskHandler = taskHandler;
-            mHandler = new Handler();
         }
 
         public void execute() {

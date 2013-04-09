@@ -37,7 +37,7 @@ public abstract class CancellableTask {
     private final AtomicReference<OnCancelListener> cancelListener = new AtomicReference<OnCancelListener>();
 
     public void cancel() {
-        Log.d(TAG, "Cancelling " + CancellableTask.this);
+        Log.i(TAG, "Cancelling " + CancellableTask.this);
         cancelled.set(true);
 
         OnCancelListener listener = cancelListener.get();
@@ -69,12 +69,12 @@ public abstract class CancellableTask {
             @Override
             public void run() {
                 running.set(true);
-                Log.d(TAG, "Starting thread for " + CancellableTask.this);
+                Log.i(TAG, "Starting thread for " + CancellableTask.this);
                 try {
                     execute();
                 } finally {
                     running.set(false);
-                    Log.d(TAG, "Stopping thread for " + CancellableTask.this);
+                    Log.i(TAG, "Stopping thread for " + CancellableTask.this);
                 }
             }
         });

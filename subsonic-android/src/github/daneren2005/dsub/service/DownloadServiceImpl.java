@@ -58,6 +58,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
@@ -85,13 +86,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private RemoteControlClientHelper mRemoteControl;
     
     private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
+	private Looper mediaPlayerLooper;
     private MediaPlayer mediaPlayer;
 	private MediaPlayer nextMediaPlayer;
 	private boolean nextSetup = false;
 	private boolean isPartial = true;
     private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
-    private final Handler handler = new Handler();
+	private final Handler handler = new Handler(); 
     private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
     private final ShufflePlayBuffer shufflePlayBuffer = new ShufflePlayBuffer(this);
 
@@ -137,27 +139,36 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public void onCreate() {
         super.onCreate();
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
+		new Thread(new Runnable() {
+			public void run() {
+				Looper.prepare();
+				
+				mediaPlayer = new MediaPlayer();
+				mediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
 
-        mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
-                handleError(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
-                return false;
-            }
-        });
-		
-		nextMediaPlayer = new MediaPlayer();
-        nextMediaPlayer.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
+				mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+					@Override
+					public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
+						handleError(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
+						return false;
+					}
+				});
 
-        nextMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
-                handleErrorNext(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
-                return false;
-            }
-        });
+				nextMediaPlayer = new MediaPlayer();
+				nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
+
+				nextMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+					@Override
+					public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
+						handleErrorNext(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
+						return false;
+					}
+				});
+				
+				mediaPlayerLooper = Looper.myLooper();
+				Looper.loop();
+			}
+		}).start();
 
         Util.registerMediaButtonEventReceiver(this);
 
@@ -210,6 +221,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if(nextMediaPlayer != null) {
 			nextMediaPlayer.release();
         }
+		mediaPlayerLooper.quit();
         shufflePlayBuffer.shutdown();
         if (equalizerController != null) {
             equalizerController.release();
@@ -525,16 +537,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 		
 		nextSetup = false;
+		if(nextPlayingTask != null) {
+			nextPlayingTask.cancel();
+			nextPlayingTask = null;
+		}
 		if(index < size() && index != -1) {
 			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.start();
 		} else {
 			nextPlaying = null;
-			if(nextPlayingTask != null) {
-				nextPlayingTask.cancel();
-			}
-			nextPlayingTask = null;
 			setNextPlayerState(IDLE);
 		}
 	}
@@ -592,9 +604,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (index < 0 || index >= size()) {
             reset();
             setCurrentPlaying(null, false);
+			lifecycleSupport.serializeDownloadQueue();
         } else {
 			if(nextPlayingTask != null) {
 				nextPlayingTask.cancel();
+				nextPlayingTask = null;
 			}
             setCurrentPlaying(index, start);
             if (start) {
@@ -861,13 +875,18 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		public void run() {
 			while(isRunning) {
 				try {
-					if(mediaPlayer != null && playerState == STARTED) {
-						cachedPosition = mediaPlayer.getCurrentPosition();
+					// Add a monitor for not running while mediaPlayer state is changing
+					synchronized(DownloadServiceImpl.this) {
+						if(mediaPlayer != null && playerState == STARTED) {
+							cachedPosition = mediaPlayer.getCurrentPosition();
+						}
 					}
 					Thread.sleep(200L);
 				}
 				catch(Exception e) {
+					Log.w(TAG, "Crashed getting current position", e);
 					isRunning = false;
+					positionCache = null;
 				}
 			}
 		}
@@ -1087,12 +1106,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mediaPlayer) {
-				setPlayerStateCompleted();
-
 				// Acquire a temporary wakelock, since when we return from
 				// this callback the MediaPlayer will release its wakelock
 				// and allow the device to go to sleep.
 				wakeLock.acquire(60000);
+				
+				setPlayerStateCompleted();
 
 				int pos = cachedPosition;
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
@@ -1187,9 +1206,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			to = 0;
 		}
 		
-		downloadList.add(to, downloadList.remove(from));
+		int currentPlayingIndex = getCurrentPlayingIndex();
+		DownloadFile movedSong = downloadList.remove(from);
+		downloadList.add(to, movedSong);
 		if(jukeboxEnabled) {
 			updateJukeboxPlaylist();
+		} else if(movedSong == nextPlaying || (currentPlayingIndex + 1) == to) {
+			// Moving next playing or moving a song to be next playing
+			setNextPlaying();
 		}
 	}
 

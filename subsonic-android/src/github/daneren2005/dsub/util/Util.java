@@ -113,7 +113,6 @@ public final class Util {
 
     private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
     private static Toast toast;
-	private static int notificationID = 123512383;
 
     private Util() {
     }
@@ -662,8 +661,13 @@ public final class Util {
         
         Intent notificationIntent = new Intent(context, DownloadActivity.class);
         notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		manager.notify(notificationID, notification);
+        
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				downloadService.startForeground(Constants.NOTIFICATION_ID_PLAYING, notification);
+			}
+		});
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, true);
@@ -739,8 +743,13 @@ public final class Util {
     }
 
     public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
-		NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		manager.cancelAll();
+		// Remove notification and remove the service from the foreground
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				downloadService.stopForeground(true);
+			}
+		}); 
 
         // Update widget
         DSubWidgetProvider.getInstance().notifyChange(context, downloadService, false);
