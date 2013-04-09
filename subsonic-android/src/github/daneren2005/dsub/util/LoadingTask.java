@@ -2,7 +2,7 @@ package github.daneren2005.dsub.util;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
+import github.daneren2005.dsub.activity.SubsonicActivity;
 
 /**
  * @author Sindre Mehus
@@ -10,11 +10,11 @@ import github.daneren2005.dsub.activity.SubsonicTabActivity;
  */
 public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
-    private final SubsonicTabActivity tabActivity;
+    private final SubsonicActivity tabActivity;
 	private final boolean cancellable;
 	private boolean cancelled = false;
 
-    public LoadingTask(SubsonicTabActivity activity, final boolean cancellable) {
+    public LoadingTask(SubsonicActivity activity, final boolean cancellable) {
         super(activity);
         tabActivity = activity;
 		this.cancellable = cancellable;

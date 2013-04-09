@@ -25,8 +25,11 @@ import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
@@ -329,10 +332,11 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 			licenseValid = result.getSecond();
 			context.invalidateOptionsMenu();
 
-			/*boolean playAll = getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+			Bundle args = getArguments();
+			boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
 			if (playAll && songCount > 0) {
-				playAll(getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
-			}*/
+				playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
+			}
 		}
 	}
 
@@ -542,11 +546,11 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 	}
 
 	public void removeFromPlaylist(final String id, final String name, final List<Integer> indexes) {
-		/*new LoadingTask<Void>(this, true) {
+		new LoadingTask<Void>(context, true) {
 			@Override
 			protected Void doInBackground() throws Throwable {				
-				MusicService musicService = MusicServiceFactory.getMusicService(SelectAlbumActivity.this);
-				musicService.removeFromPlaylist(id, indexes, SelectAlbumActivity.this, null);
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.removeFromPlaylist(id, indexes, context, null);
 				return null;
 			}
 
@@ -557,7 +561,7 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 					entryAdapter.removeAt(indexes.get(i));
 				}
 				entryAdapter.notifyDataSetChanged();
-				Util.toast(SelectAlbumActivity.this, getResources().getString(R.string.removed_playlist, indexes.size(), name));
+				Util.toast(context, context.getResources().getString(R.string.removed_playlist, indexes.size(), name));
 			}
 
 			@Override
@@ -566,12 +570,12 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
 				} else {
-					msg = getResources().getString(R.string.updated_playlist_error, name) + " " + getErrorMessage(error);
+					msg = context.getResources().getString(R.string.updated_playlist_error, name) + " " + getErrorMessage(error);
 				}
 
-				Util.toast(SelectAlbumActivity.this, msg, false);
+				Util.toast(context, msg, false);
 			}
-		}.execute();*/
+		}.execute();
 	}
 
 	private void checkLicenseAndTrialPeriod(Runnable onValid) {

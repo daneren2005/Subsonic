@@ -389,7 +389,7 @@ public class SubsonicTabActivity extends SherlockActivity {
 			return;
 		}
 		
-		new LoadingTask<List<Playlist>>(this, true) {
+		/*new LoadingTask<List<Playlist>>(this, true) {
             @Override
             protected List<Playlist> doInBackground() throws Throwable {
                 MusicService musicService = MusicServiceFactory.getMusicService(SubsonicTabActivity.this);
@@ -425,7 +425,7 @@ public class SubsonicTabActivity extends SherlockActivity {
             	
         		Util.toast(SubsonicTabActivity.this, msg, false);
             }
-        }.execute();
+        }.execute();*/
 	}
 	
 	private void addToPlaylist(final Playlist playlist, final List<MusicDirectory.Entry> songs) {		

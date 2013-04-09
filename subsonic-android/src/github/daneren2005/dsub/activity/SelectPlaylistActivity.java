@@ -197,7 +197,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
         .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-				new LoadingTask<Void>(SelectPlaylistActivity.this, false) {
+				/*new LoadingTask<Void>(SelectPlaylistActivity.this, false) {
 					@Override
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(SelectPlaylistActivity.this);
@@ -223,7 +223,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 
 						Util.toast(SelectPlaylistActivity.this, msg, false);
 					}
-				}.execute();
+				}.execute();*/
 			}
 
         })
@@ -266,7 +266,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {					
-					new LoadingTask<Void>(SelectPlaylistActivity.this, false) {
+					/*new LoadingTask<Void>(SelectPlaylistActivity.this, false) {
 						@Override
 						protected Void doInBackground() throws Throwable {
 							MusicService musicService = MusicServiceFactory.getMusicService(SelectPlaylistActivity.this);
@@ -291,7 +291,7 @@ public class SelectPlaylistActivity extends SubsonicTabActivity implements Adapt
 
 							Util.toast(SelectPlaylistActivity.this, msg, false);
 						}
-					}.execute();
+					}.execute();*/
 				}
 
 			})

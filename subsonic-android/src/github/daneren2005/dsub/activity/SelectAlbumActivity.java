@@ -764,7 +764,7 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
     }
 	
 	public void removeFromPlaylist(final String id, final String name, final List<Integer> indexes) {
-		new LoadingTask<Void>(this, true) {
+		/*new LoadingTask<Void>(this, true) {
             @Override
             protected Void doInBackground() throws Throwable {				
                 MusicService musicService = MusicServiceFactory.getMusicService(SelectAlbumActivity.this);
@@ -793,6 +793,6 @@ public class SelectAlbumActivity extends SubsonicTabActivity {
             	
         		Util.toast(SelectAlbumActivity.this, msg, false);
             }
-        }.execute();
+        }.execute();*/
 	}
 }

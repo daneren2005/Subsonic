@@ -1,5 +1,7 @@
 package github.daneren2005.dsub.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -11,14 +13,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.CacheCleaner;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistAdapter;
@@ -81,8 +88,10 @@ public class SelectPlaylistFragment extends LibraryFunctionsFragment implements 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Playlist playlist = (Playlist) list.getItemAtPosition(info.position);
 
-		Intent intent;
-		/*switch (menuItem.getItemId()) {
+		SubsonicTabFragment fragment;
+		Bundle args;
+		FragmentTransaction trans;
+		switch (menuItem.getItemId()) {
 			case R.id.playlist_menu_download:
 				downloadPlaylist(playlist.getId(), playlist.getName(), false, true, false, false, true);
 				break;
@@ -90,19 +99,29 @@ public class SelectPlaylistFragment extends LibraryFunctionsFragment implements 
 				downloadPlaylist(playlist.getId(), playlist.getName(), true, true, false, false, true);
 				break;
 			case R.id.playlist_menu_play_now:
-				intent = new Intent(SelectPlaylistActivity.this, SelectAlbumActivity.class);
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
-				Util.startActivityWithoutTransition(SelectPlaylistActivity.this, intent);
+				fragment = new SelectDirectoryFragment();
+				args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
+				fragment.setArguments(args);
+
+				trans = getFragmentManager().beginTransaction();
+				trans.replace(R.id.select_playlist_layout, fragment);
+				trans.addToBackStack(null);
+				trans.commit();
 				break;
 			case R.id.playlist_menu_play_shuffled:
-				intent = new Intent(SelectPlaylistActivity.this, SelectAlbumActivity.class);
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-				Util.startActivityWithoutTransition(SelectPlaylistActivity.this, intent);
+				fragment = new SelectDirectoryFragment();
+				args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
+				args.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
+				fragment.setArguments(args);
+
+				trans = getFragmentManager().beginTransaction();
+				trans.replace(R.id.select_playlist_layout, fragment);
+				trans.addToBackStack(null);
+				trans.commit();
 				break;
 			case R.id.playlist_menu_delete:
 				deletePlaylist(playlist);
@@ -114,8 +133,8 @@ public class SelectPlaylistFragment extends LibraryFunctionsFragment implements 
 				updatePlaylistInfo(playlist);
 				break;
 			default:
-				return super.onContextItemSelected(menuItem);
-		}*/
+				return false;
+		}
 		return true;
 	}
 
@@ -129,7 +148,7 @@ public class SelectPlaylistFragment extends LibraryFunctionsFragment implements 
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
 		fragment.setArguments(args);
 
-		final FragmentTransaction trans = getFragmentManager().beginTransaction();
+		FragmentTransaction trans = getFragmentManager().beginTransaction();
 		trans.replace(R.id.select_playlist_layout, fragment);
 		trans.addToBackStack(null);
 		trans.commit();
@@ -159,5 +178,115 @@ public class SelectPlaylistFragment extends LibraryFunctionsFragment implements 
 			}
 		};
 		task.execute();
+	}
+
+	private void deletePlaylist(final Playlist playlist) {
+		new AlertDialog.Builder(context)
+		.setIcon(android.R.drawable.ic_dialog_alert)
+		.setTitle(R.string.common_confirm)
+		.setMessage(context.getResources().getString(R.string.delete_playlist, playlist.getName()))
+		.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new LoadingTask<Void>(context, false) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						musicService.deletePlaylist(playlist.getId(), context, null);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						playlistAdapter.remove(playlist);
+						playlistAdapter.notifyDataSetChanged();
+						Util.toast(context, context.getResources().getString(R.string.menu_deleted_playlist, playlist.getName()));
+					}
+
+					@Override
+					protected void error(Throwable error) {
+						String msg;
+						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+							msg = getErrorMessage(error);
+						} else {
+							msg = context.getResources().getString(R.string.menu_deleted_playlist_error, playlist.getName()) + " " + getErrorMessage(error);
+						}
+
+						Util.toast(context, msg, false);
+					}
+				}.execute();
+			}
+
+		})
+		.setNegativeButton(R.string.common_cancel, null)
+		.show();
+	}
+
+	private void displayPlaylistInfo(final Playlist playlist) {
+		String message = "Owner: " + playlist.getOwner() + "\nComments: " +
+			((playlist.getComment() == null) ? "" : playlist.getComment()) +
+			"\nSong Count: " + playlist.getSongCount() +
+			((playlist.getPublic() == null) ? "" : ("\nPublic: " + playlist.getPublic())) +
+			"\nCreation Date: " + playlist.getCreated().replace('T', ' ');
+		new AlertDialog.Builder(context)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(playlist.getName())
+			.setMessage(message)
+			.show();
+	}
+
+	private void updatePlaylistInfo(final Playlist playlist) {
+		View dialogView = context.getLayoutInflater().inflate(R.layout.update_playlist, null);
+		final EditText nameBox = (EditText)dialogView.findViewById(R.id.get_playlist_name);
+		final EditText commentBox = (EditText)dialogView.findViewById(R.id.get_playlist_comment);
+		final CheckBox publicBox = (CheckBox)dialogView.findViewById(R.id.get_playlist_public);
+
+		nameBox.setText(playlist.getName());
+		commentBox.setText(playlist.getComment());
+		Boolean pub = playlist.getPublic();
+		if(pub == null) {
+			publicBox.setEnabled(false);
+		} else {
+			publicBox.setChecked(pub);
+		}
+
+		new AlertDialog.Builder(context)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(R.string.playlist_update_info)
+			.setView(dialogView)
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {					
+					new LoadingTask<Void>(context, false) {
+						@Override
+						protected Void doInBackground() throws Throwable {
+							MusicService musicService = MusicServiceFactory.getMusicService(context);
+							musicService.updatePlaylist(playlist.getId(), nameBox.getText().toString(), commentBox.getText().toString(), publicBox.isChecked(), context, null);
+							return null;
+						}
+
+						@Override
+						protected void done(Void result) {
+							refresh();
+							Util.toast(context, context.getResources().getString(R.string.playlist_updated_info, playlist.getName()));
+						}
+
+						@Override
+						protected void error(Throwable error) {
+							String msg;
+							if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+								msg = getErrorMessage(error);
+							} else {
+								msg = context.getResources().getString(R.string.playlist_updated_info_error, playlist.getName()) + " " + getErrorMessage(error);
+							}
+
+							Util.toast(context, msg, false);
+						}
+					}.execute();
+				}
+
+			})
+			.setNegativeButton(R.string.common_cancel, null)
+			.show();
 	}
 }
