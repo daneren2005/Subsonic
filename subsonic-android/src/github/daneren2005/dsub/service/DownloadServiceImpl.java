@@ -1056,6 +1056,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
             nextMediaPlayer.setOnCompletionListener(null);
+            nextMediaPlayer.setNextMediaPlayer(null);
             nextMediaPlayer.reset();
             setNextPlayerState(IDLE);
             nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
