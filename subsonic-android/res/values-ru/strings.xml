@@ -21,6 +21,7 @@
 	<string name="common.webview">Воспроизвести в браузере (флэш)</string>
 	<string name="common.play_external">Воспроизвести во внешнем плеере</string>
 	<string name="common.stream_external">Воспроизвести поток во внешнем плеере</string>
+	<string name="common.confirm">Подтверждение</string>
 
     <string name="button_bar.home">Домой</string>
     <string name="button_bar.browse">Медиатека</string>
@@ -65,6 +66,7 @@
 	<string name="menu.deleted_playlist">Список воспроизведения %s удален</string>
 	<string name="menu.deleted_playlist_error">Не удалось удалить список %s</string>
 	<string name="menu.log">Отправить журнал событий</string>
+	<string name="menu.set_timer">Установить таймер</string>
 
     <string name="playlist.label">Списки</string>
 	<string name="playlist.update_info">Изменить информацию</string>
@@ -160,6 +162,7 @@
 	<string name="updated_playlist">Добавлено %1$s композиций в \"%2$s\"</string>
     <string name="updated_playlist_error">Не удалось обновить \"%s\", пожалуйста, попробуйте позже.</string>
 	<string name="removed_playlist">Удалено %1$s из \"%2$s\" композиций</string>
+	<string name="delete_playlist">Удалить %1$s?</string>
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>
