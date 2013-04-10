@@ -182,23 +182,26 @@ public class DownloadServiceLifecycleSupport {
     }
 
     public void serializeDownloadQueue() {
-		new SerializeTask().execute();
+		new SerializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
     
     public void serializeDownloadQueueNow() {
     	List<DownloadFile> songs = new ArrayList<DownloadFile>(downloadService.getSongs());
-	State state = new State();
-	for (DownloadFile downloadFile : songs) {
-		state.songs.add(downloadFile.getSong());
-	}
-	state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
-	state.currentPlayingPosition = downloadService.getPlayerPosition();
+		State state = new State();
+		for (DownloadFile downloadFile : songs) {
+			state.songs.add(downloadFile.getSong());
+		}
+		state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
+		state.currentPlayingPosition = downloadService.getPlayerPosition();
 
-	Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
-	FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
+		Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
+		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
     }
 
-    private void deserializeDownloadQueue() {
+	private void deserializeDownloadQueue() {
+		new DeserializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+	}
+    private void deserializeDownloadQueueNow() {
        State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER);
         if (state == null) {
             return;
@@ -290,6 +293,13 @@ public class DownloadServiceLifecycleSupport {
 		@Override
 		protected Void doInBackground(Void... params) {
 			serializeDownloadQueueNow();
+			return null;
+		}
+	}
+	private class DeserializeTask extends AsyncTask<Void, Void, Void> {
+		@Override
+		protected Void doInBackground(Void... params) {
+			deserializeDownloadQueueNow();
 			return null;
 		}
 	}
