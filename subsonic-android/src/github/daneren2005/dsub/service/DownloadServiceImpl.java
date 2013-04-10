@@ -1056,7 +1056,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
             nextMediaPlayer.setOnCompletionListener(null);
-            nextMediaPlayer.setNextMediaPlayer(null);
+			try {
+				nextMediaPlayer.setNextMediaPlayer(null);
+			} catch(Exception e) {
+				// Don't care, should only reach here if this is happening from uninitialized media player
+			}
             nextMediaPlayer.reset();
             setNextPlayerState(IDLE);
             nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -1064,11 +1068,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             setNextPlayerState(PREPARING);
 			
 			nextMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-				public void onPrepared(MediaPlayer mediaPlayer) {
+				public void onPrepared(MediaPlayer mp) {
 					try {
 						setNextPlayerState(PREPARED);
 						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && playerState == PlayerState.STARTED) {
-							DownloadServiceImpl.this.mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
+							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
 					} catch (Exception x) {
