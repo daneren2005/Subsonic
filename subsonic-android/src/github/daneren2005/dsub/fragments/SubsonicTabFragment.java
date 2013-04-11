@@ -41,7 +41,6 @@ public class SubsonicTabFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -92,6 +91,14 @@ public class SubsonicTabFragment extends SherlockFragment {
 	}
 	public synchronized static ImageLoader getStaticImageLoader(Context context) {
 		return SubsonicActivity.getStaticImageLoader(context);
+	}
+	
+	public void setPrimaryFragment(boolean primary) {
+		if(primary) {
+			setHasOptionsMenu(true);
+		} else {
+			setHasOptionsMenu(false);
+		}
 	}
 
 	protected void setTitle(CharSequence title) {

@@ -8,6 +8,7 @@ import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import com.actionbarsherlock.app.SherlockFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,6 +18,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.MainFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
+import github.daneren2005.dsub.fragments.SubsonicTabFragment;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Util;
 import java.util.ArrayList;
@@ -112,7 +114,9 @@ public class MainActivity extends SubsonicActivity {
 		private SherlockFragmentActivity activity;
 		private ViewPager pager;
 		private ActionBar actionBar;
+		private SubsonicTabFragment currentFragment;
 		private List tabs = new ArrayList();
+		private List frags = new ArrayList();
 
 		public MainActivityPagerAdapter(SherlockFragmentActivity activity, ViewPager pager) {
 			super(activity.getSupportFragmentManager());
@@ -124,7 +128,9 @@ public class MainActivity extends SubsonicActivity {
 		@Override
 		public Fragment getItem(int i) {
 			final TabInfo tabInfo = (TabInfo)tabs.get(i);
-			return (Fragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args );
+			SherlockFragment frag = (SherlockFragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args);
+			frags.add(i, frag);
+			return frag;
 		}
 
 		@Override
@@ -152,6 +158,13 @@ public class MainActivity extends SubsonicActivity {
 
 		public void onPageSelected(int position) {
 			actionBar.setSelectedNavigationItem(position);
+			if(currentFragment != null) {
+				currentFragment.setPrimaryFragment(false);
+			}
+			currentFragment = (SubsonicTabFragment) frags.get(position);
+			if(currentFragment != null) {
+				currentFragment.setPrimaryFragment(true);
+			}
 		}
 
 		public void addTab(CharSequence title, Class fragmentClass, Bundle args) {
