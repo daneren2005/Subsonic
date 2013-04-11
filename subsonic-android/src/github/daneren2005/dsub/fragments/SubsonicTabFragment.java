@@ -97,7 +97,9 @@ public class SubsonicTabFragment extends SherlockFragment {
 	public void setPrimaryFragment(boolean primary) {
 		if(primary) {
 			setHasOptionsMenu(true);
-			context.setTitle(title);
+			if(context != null) {
+				context.setTitle(title);
+			}
 		} else {
 			setHasOptionsMenu(false);
 		}

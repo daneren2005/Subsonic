@@ -130,6 +130,10 @@ public class MainActivity extends SubsonicActivity {
 			final TabInfo tabInfo = (TabInfo)tabs.get(i);
 			SherlockFragment frag = (SherlockFragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args);
 			frags.add(i, frag);
+			if(currentFragment == null) {
+				currentFragment = (SubsonicTabFragment) frag;
+				currentFragment.setPrimaryFragment(true);
+			}
 			return frag;
 		}
 
