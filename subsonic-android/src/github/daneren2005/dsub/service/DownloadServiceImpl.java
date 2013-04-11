@@ -93,7 +93,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private boolean isPartial = true;
     private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
-	private final Handler handler = new Handler(); 
+	private final Handler handler = new Handler();
+	private Handler mediaPlayerHandler;
     private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
     private final ShufflePlayBuffer shufflePlayBuffer = new ShufflePlayBuffer(this);
 
@@ -153,19 +154,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						return false;
 					}
 				});
-
-				nextMediaPlayer = new MediaPlayer();
-				nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
-
-				nextMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-					@Override
-					public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
-						handleErrorNext(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
-						return false;
-					}
-				});
 				
 				mediaPlayerLooper = Looper.myLooper();
+				mediaPlayerHandler = new Handler(mediaPlayerLooper);
 				Looper.loop();
 			}
 		}).start();
@@ -1055,14 +1046,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-            nextMediaPlayer.setOnCompletionListener(null);
-			try {
-				nextMediaPlayer.setNextMediaPlayer(null);
-			} catch(Exception e) {
-				// Don't care, should only reach here if this is happening from uninitialized media player
-			}
-            nextMediaPlayer.reset();
-            setNextPlayerState(IDLE);
+            if(nextMediaPlayer != null) {
+            	nextMediaPlayer.setOnCompletionListener(null);
+            	nextMediaPlayer.release();
+            	nextMediaPlayer = null;
+            }
+            nextMediaPlayer = new MediaPlayer();
+			nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
             nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             nextMediaPlayer.setDataSource(file.getPath());
             setNextPlayerState(PREPARING);
@@ -1453,8 +1443,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 }
             }
             
-			// Do something
-			setupNext(downloadFile);
+			// Start the setup of the next media player
+			mediaPlayerHandler.post(new Runnable() {
+				public void run() {
+					setupNext(downloadFile);
+				}
+			});
         }
 
         private boolean bufferComplete() {
