@@ -1053,7 +1053,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
             nextMediaPlayer = new MediaPlayer();
 			nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
-            nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            nextMediaPlayer.setAudioSessionId(mediaPlayer.getAudioSessionId());
             nextMediaPlayer.setDataSource(file.getPath());
             setNextPlayerState(PREPARING);
 			
