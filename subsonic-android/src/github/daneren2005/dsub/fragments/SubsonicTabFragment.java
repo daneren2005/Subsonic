@@ -36,6 +36,7 @@ import github.daneren2005.dsub.util.ImageLoader;
 public class SubsonicTabFragment extends SherlockFragment {
 	private static final String TAG = SubsonicTabActivity.class.getSimpleName();
 	protected SubsonicActivity context;
+	protected CharSequence title = "DSub";
 	protected View rootView;
 
 	@Override
@@ -96,15 +97,18 @@ public class SubsonicTabFragment extends SherlockFragment {
 	public void setPrimaryFragment(boolean primary) {
 		if(primary) {
 			setHasOptionsMenu(true);
+			context.setTitle(title);
 		} else {
 			setHasOptionsMenu(false);
 		}
 	}
 
 	protected void setTitle(CharSequence title) {
+		this.title = title;
 		context.setTitle(title);
 	}
 	protected void setTitle(int title) {
-		context.setTitle(title);
+		this.title = context.getResources().getString(title);
+		context.setTitle(this.title);
 	}
 }
