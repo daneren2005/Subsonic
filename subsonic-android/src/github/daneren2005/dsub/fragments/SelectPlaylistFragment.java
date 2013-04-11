@@ -57,7 +57,7 @@ public class SelectPlaylistFragment extends LibraryFunctionsFragment implements 
 	}
 
 	@Override
-	public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+	public void onSupportCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.select_playlist, menu);
 	}
 

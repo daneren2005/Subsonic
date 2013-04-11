@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
@@ -38,10 +39,12 @@ public class SubsonicTabFragment extends SherlockFragment {
 	protected SubsonicActivity context;
 	protected CharSequence title = "DSub";
 	protected View rootView;
+	private boolean primaryFragment = false;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -58,6 +61,16 @@ public class SubsonicTabFragment extends SherlockFragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		context = (SubsonicActivity)activity;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+		if(primaryFragment) {
+			onSupportCreateOptionsMenu(menu, menuInflater);
+		}
+	}
+	public void onSupportCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+		
 	}
 
 	public DownloadService getDownloadService() {
@@ -96,12 +109,12 @@ public class SubsonicTabFragment extends SherlockFragment {
 	
 	public void setPrimaryFragment(boolean primary) {
 		if(primary) {
-			setHasOptionsMenu(true);
+			primaryFragment = true;
 			if(context != null) {
 				context.setTitle(title);
 			}
 		} else {
-			setHasOptionsMenu(false);
+			primaryFragment = false;
 		}
 	}
 
