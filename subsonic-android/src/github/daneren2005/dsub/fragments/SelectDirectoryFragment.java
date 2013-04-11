@@ -186,10 +186,7 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
 				fragment.setArguments(args);
 
-				final FragmentTransaction trans = getFragmentManager().beginTransaction();
-				trans.replace(R.id.select_album_layout, fragment);
-				trans.addToBackStack(null);
-				trans.commit();
+				replaceFragment(fragment, R.id.select_album_layout);
 			} else if (entry.isVideo()) {
 				if(entryExists(entry)) {
 					playExternalPlayer(entry);

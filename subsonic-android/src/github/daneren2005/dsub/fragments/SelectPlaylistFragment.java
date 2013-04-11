@@ -148,10 +148,7 @@ public class SelectPlaylistFragment extends LibraryFunctionsFragment implements 
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
 		fragment.setArguments(args);
 
-		FragmentTransaction trans = getFragmentManager().beginTransaction();
-		trans.replace(R.id.select_playlist_layout, fragment);
-		trans.addToBackStack(null);
-		trans.commit();
+		replaceFragment(fragment, R.id.select_playlist_layout);
 	}
 
 	@Override

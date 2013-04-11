@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -80,6 +81,16 @@ public class SubsonicTabFragment extends SherlockFragment {
 	protected void refresh() {
 
 	}
+	
+	public void replaceFragment(SubsonicTabFragment fragment, int id) {
+		this.setPrimaryFragment(false);
+		fragment.setPrimaryFragment(true);
+		
+		FragmentTransaction trans = getFragmentManager().beginTransaction();
+		trans.replace(id, fragment);
+		trans.addToBackStack(null);
+		trans.commit();
+	}
 
 	protected void exit() {
 		context.stopService(new Intent(context, DownloadServiceImpl.class));
@@ -108,13 +119,11 @@ public class SubsonicTabFragment extends SherlockFragment {
 	}
 	
 	public void setPrimaryFragment(boolean primary) {
+		primaryFragment = primary;
 		if(primary) {
-			primaryFragment = true;
 			if(context != null) {
 				context.setTitle(title);
 			}
-		} else {
-			primaryFragment = false;
 		}
 	}
 

@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -234,10 +233,7 @@ public class MainFragment extends LibraryFunctionsFragment {
 		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
 		fragment.setArguments(args);
 
-		final FragmentTransaction trans = getFragmentManager().beginTransaction();
-		trans.replace(R.id.home_layout, fragment);
-		trans.addToBackStack(null);
-		trans.commit();
+		replaceFragment(fragment, R.id.home_layout);
 	}
 
 	private void showAboutDialog() {

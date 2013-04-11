@@ -161,10 +161,7 @@ public class SelectArtistFragment extends LibraryFunctionsFragment implements Ad
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
 			fragment.setArguments(args);
 
-			final FragmentTransaction trans = getFragmentManager().beginTransaction();
-			trans.replace(R.id.select_artist_layout, fragment);
-			trans.addToBackStack(null);
-			trans.commit();
+			replaceFragment(fragment, R.id.select_artist_layout);
 		}
 	}
 
