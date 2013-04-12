@@ -155,6 +155,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					}
 				});
 				
+				Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
+				i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+				i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+				sendBroadcast(i);
+				
 				mediaPlayerLooper = Looper.myLooper();
 				mediaPlayerHandler = new Handler(mediaPlayerLooper);
 				Looper.loop();
@@ -208,6 +213,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			sleepTimer.purge();
 		}
         lifecycleSupport.onDestroy();
+
+		Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
+		i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+		i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+		sendBroadcast(i);
+        
         mediaPlayer.release();
         if(nextMediaPlayer != null) {
 			nextMediaPlayer.release();
