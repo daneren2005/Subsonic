@@ -45,7 +45,6 @@ public class SubsonicTabFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -64,16 +63,6 @@ public class SubsonicTabFragment extends SherlockFragment {
 		context = (SubsonicActivity)activity;
 	}
 	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
-		if(primaryFragment) {
-			onSupportCreateOptionsMenu(menu, menuInflater);
-		}
-	}
-	public void onSupportCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
-		
-	}
-
 	public DownloadService getDownloadService() {
 		return context != null ? context.getDownloadService() : null;
 	}
@@ -85,6 +74,7 @@ public class SubsonicTabFragment extends SherlockFragment {
 	public void replaceFragment(SubsonicTabFragment fragment, int id) {
 		this.setPrimaryFragment(false);
 		fragment.setPrimaryFragment(true);
+		context.getPagerAdapter().replaceCurrent(fragment);
 		
 		FragmentTransaction trans = getFragmentManager().beginTransaction();
 		trans.replace(id, fragment);

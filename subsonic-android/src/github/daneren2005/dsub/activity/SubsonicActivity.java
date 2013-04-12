@@ -7,14 +7,21 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.Window;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.fragments.SubsonicTabFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.updates.Updater;
@@ -22,12 +29,16 @@ import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubsonicActivity extends SherlockFragmentActivity {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
 	private boolean destroyed = false;
+	protected TabPagerAdapter pagerAdapter;
+	protected ViewPager viewPager;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -74,6 +85,13 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	protected void addTab(int titleRes, Class fragmentClass, Bundle args) {
+		pagerAdapter.addTab(getString(titleRes), fragmentClass, args);
+	}
+	protected void addTab(CharSequence title, Class fragmentClass, Bundle args) {
+		pagerAdapter.addTab(title, fragmentClass, args);
 	}
 
 	protected void restart() {
@@ -132,6 +150,13 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		}
 		return DownloadServiceImpl.getInstance();
 	}
+	
+	public ViewPager getViewPager() {
+		return viewPager;
+	}
+	public TabPagerAdapter getPagerAdapter() {
+		return pagerAdapter;
+	}
 
 	private void setUncaughtExceptionHandler() {
 		Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
@@ -189,6 +214,135 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		}
 		catch(Exception e) {
 
+		}
+	}
+	
+	public class TabPagerAdapter extends FragmentPagerAdapter implements TabListener, ViewPager.OnPageChangeListener {
+		private SherlockFragmentActivity activity;
+		private ViewPager pager;
+		private ActionBar actionBar;
+		private SubsonicTabFragment currentFragment;
+		private List tabs = new ArrayList();
+		private List frags = new ArrayList();
+		private int currentPosition;
+
+		public TabPagerAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+			super(activity.getSupportFragmentManager());
+			this.activity = activity;
+			this.actionBar = activity.getSupportActionBar();
+			this.pager = pager;
+			this.currentPosition = 0;
+		}
+
+		@Override
+		public Fragment getItem(int i) {
+			final TabInfo tabInfo = (TabInfo)tabs.get(i);
+			SherlockFragment frag = (SherlockFragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args);
+			List fragStack = new ArrayList();
+			fragStack.add(frag);
+			frags.add(i, fragStack);
+			if(currentFragment == null) {
+				currentFragment = (SubsonicTabFragment) frag;
+				currentFragment.setPrimaryFragment(true);
+			}
+			return frag;
+		}
+
+		@Override
+		public int getCount() {
+			return tabs.size();
+		}
+		
+		public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+			if(currentFragment != null) {
+				currentFragment.onCreateOptionsMenu(menu, menuInflater);
+			}
+		}
+		public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+			if(currentFragment != null) {
+				return currentFragment.onOptionsItemSelected(item);
+			} else {
+				return false;
+			}
+		}
+
+		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+			TabInfo tabInfo = (TabInfo) tab.getTag();
+			for (int i = 0; i < tabs.size(); i++) {
+				if ( tabs.get(i) == tabInfo ) {
+					pager.setCurrentItem(i);
+					break;
+				}
+			}
+		}
+
+		public void onTabUnselected(Tab tab, FragmentTransaction ft) {}
+
+		public void onTabReselected(Tab tab, FragmentTransaction ft) {}
+
+		public void onPageScrollStateChanged(int arg0) {}
+
+		public void onPageScrolled(int arg0, float arg1, int arg2) {}
+
+		public void onPageSelected(int position) {
+			currentPosition = position;
+			actionBar.setSelectedNavigationItem(position);
+			if(currentFragment != null) {
+				currentFragment.setPrimaryFragment(false);
+			}
+			List fragStack = (List)frags.get(position);
+			currentFragment = (SubsonicTabFragment) fragStack.get(fragStack.size() - 1);
+			if(currentFragment != null) {
+				currentFragment.setPrimaryFragment(true);
+			}
+			activity.invalidateOptionsMenu();
+		}
+
+		public void addTab(CharSequence title, Class fragmentClass, Bundle args) {
+			final TabInfo tabInfo = new TabInfo(fragmentClass, args);
+
+			Tab tab = actionBar.newTab();
+			tab.setText(title);
+			tab.setTabListener(this);
+			tab.setTag(tabInfo);
+
+			tabs.add(tabInfo);
+
+			actionBar.addTab(tab);
+			notifyDataSetChanged();
+		}
+		
+		public void replaceCurrent(SubsonicTabFragment fragment) {
+			if(currentFragment != null) {
+				currentFragment.setPrimaryFragment(false);
+			}
+			List fragStack = (List)frags.get(currentPosition);
+			fragStack.add(fragment);
+			
+			currentFragment = fragment;
+			currentFragment.setPrimaryFragment(true);
+			activity.invalidateOptionsMenu();
+		}
+		
+		public void removeCurrent() {
+			if(currentFragment != null) {
+				currentFragment.setPrimaryFragment(false);
+			}
+			List fragStack = (List)frags.get(currentPosition);
+			fragStack.remove(fragStack.size() - 1);
+			
+			currentFragment = (SubsonicTabFragment) fragStack.get(fragStack.size() - 1);
+			currentFragment.setPrimaryFragment(true);
+			activity.invalidateOptionsMenu();
+		}
+
+		private class TabInfo {
+			public final Class fragmentClass;
+			public final Bundle args;
+			public TabInfo(Class fragmentClass, Bundle args) {
+				this.fragmentClass = fragmentClass;
+				this.args = args;
+			}
 		}
 	}
 }

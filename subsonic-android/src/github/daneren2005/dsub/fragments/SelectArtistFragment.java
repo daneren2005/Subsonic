@@ -63,7 +63,7 @@ public class SelectArtistFragment extends LibraryFunctionsFragment implements Ad
 	}
 
 	@Override
-	public void onSupportCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+	public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.select_artist, menu);
 	}
 

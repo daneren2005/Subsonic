@@ -108,7 +108,7 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 	}
 
 	@Override
-	public void onSupportCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+	public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
 		if(licenseValid == null) {
 			menuInflater.inflate(R.menu.empty, menu);
 		}

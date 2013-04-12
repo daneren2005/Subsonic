@@ -64,7 +64,7 @@ public class MainFragment extends LibraryFunctionsFragment {
 	}
 
 	@Override
-	public void onSupportCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.main, menu);
 	}
 
