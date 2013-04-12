@@ -868,13 +868,19 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	private class PositionCache implements Runnable {
 		boolean isRunning = true;
+		Thread thread;
 
 		public void stop() {
 			isRunning = false;
+			if(thread != null) {
+				// Make it stop right NOW
+				thread.interrupt();
+			}
 		}
 
 		@Override
 		public void run() {
+			thread = Thread.currentThread();
 			while(isRunning) {
 				try {
 					// Add a monitor for not running while mediaPlayer state is changing
