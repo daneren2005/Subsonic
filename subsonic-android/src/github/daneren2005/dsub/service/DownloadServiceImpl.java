@@ -745,7 +745,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 jukeboxService.start();
             } else {
                 mediaPlayer.start();
-            }
+			}
             setPlayerState(STARTED);
         } catch (Exception x) {
             handleError(x);
@@ -1061,7 +1061,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				public void onPrepared(MediaPlayer mp) {
 					try {
 						setNextPlayerState(PREPARED);
-						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && playerState == PlayerState.STARTED) {
+						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
 							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
