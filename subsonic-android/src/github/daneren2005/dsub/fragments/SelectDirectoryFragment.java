@@ -118,7 +118,6 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 			} else {
 				menuInflater.inflate(R.menu.select_album, menu);
 			}
-			hideButtons = false;
 		} else {
 			if(Util.isOffline(context)) {
 				menuInflater.inflate(R.menu.select_song_offline, menu);

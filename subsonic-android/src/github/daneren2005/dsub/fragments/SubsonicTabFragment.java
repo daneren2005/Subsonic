@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -74,12 +73,7 @@ public class SubsonicTabFragment extends SherlockFragment {
 	public void replaceFragment(SubsonicTabFragment fragment, int id) {
 		this.setPrimaryFragment(false);
 		fragment.setPrimaryFragment(true);
-		context.getPagerAdapter().replaceCurrent(fragment);
-		
-		FragmentTransaction trans = getFragmentManager().beginTransaction();
-		trans.replace(id, fragment);
-		trans.addToBackStack(null);
-		trans.commit();
+		context.getPagerAdapter().replaceCurrent(fragment, id);
 	}
 
 	protected void exit() {

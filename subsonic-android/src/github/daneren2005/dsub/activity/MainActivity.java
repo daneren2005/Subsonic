@@ -52,28 +52,18 @@ public class MainActivity extends SubsonicActivity {
 	
 	@Override
 	public void onBackPressed() {
-		int backStack = getSupportFragmentManager().getBackStackEntryCount();
-		int currentTab = viewPager.getCurrentItem();
-		
-		if(backStack == 0) {
-			if(currentTab == 0) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-				builder.setTitle(R.string.common_confirm)
-					.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int id) {
-							MainActivity.super.onBackPressed();
-						}
-					})
-					.setNegativeButton(R.string.common_cancel, null);
-				AlertDialog dialog = builder.create();
-				dialog.show();
-			} else {
-				viewPager.setCurrentItem(0);
-			}
-		} else {
-			super.onBackPressed();
-			pagerAdapter.removeCurrent();
+		if(pagerAdapter.onBackPressed()) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+			builder.setTitle(R.string.menu_exit)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						MainActivity.super.onBackPressed();
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null);
+			AlertDialog dialog = builder.create();
+			dialog.show();
 		}
 	}
 	

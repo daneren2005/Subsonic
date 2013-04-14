@@ -224,6 +224,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		private SubsonicTabFragment currentFragment;
 		private List tabs = new ArrayList();
 		private List frags = new ArrayList();
+		private List ids = new ArrayList();
 		private int currentPosition;
 
 		public TabPagerAdapter(SherlockFragmentActivity activity, ViewPager pager) {
@@ -241,6 +242,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			List fragStack = new ArrayList();
 			fragStack.add(frag);
 			frags.add(i, fragStack);
+			ids.add(i, 0);
 			if(currentFragment == null) {
 				currentFragment = (SubsonicTabFragment) frag;
 				currentFragment.setPrimaryFragment(true);
@@ -312,7 +314,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			notifyDataSetChanged();
 		}
 		
-		public void replaceCurrent(SubsonicTabFragment fragment) {
+		public void replaceCurrent(SubsonicTabFragment fragment, int id) {
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
@@ -322,6 +324,11 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			currentFragment = fragment;
 			currentFragment.setPrimaryFragment(true);
 			activity.invalidateOptionsMenu();
+			
+			ids.add(currentPosition, id);
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.add(id, fragment);
+			trans.commit();
 		}
 		
 		public void removeCurrent() {
@@ -329,11 +336,30 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 				currentFragment.setPrimaryFragment(false);
 			}
 			List fragStack = (List)frags.get(currentPosition);
-			fragStack.remove(fragStack.size() - 1);
+			Fragment oldFrag = (Fragment)fragStack.remove(fragStack.size() - 1);
 			
 			currentFragment = (SubsonicTabFragment) fragStack.get(fragStack.size() - 1);
 			currentFragment.setPrimaryFragment(true);
 			activity.invalidateOptionsMenu();
+			
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.remove(oldFrag);
+			trans.commit();
+		}
+		
+		public boolean onBackPressed() {
+			List fragStack = (List)frags.get(currentPosition);
+			if(fragStack.size() > 1) {
+				removeCurrent();
+				return false;
+			} else {
+				if(currentPosition == 0) {
+					return true;
+				} else {
+					viewPager.setCurrentItem(0);
+					return false;
+				}
+			}
 		}
 
 		private class TabInfo {
