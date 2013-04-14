@@ -1108,7 +1108,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 	}
 	
-	private synchronized void setupHandlers(final DownloadFile downloadFile, final boolean isPartial) {
+	private void setupHandlers(final DownloadFile downloadFile, final boolean isPartial) {
 		mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
 				Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
