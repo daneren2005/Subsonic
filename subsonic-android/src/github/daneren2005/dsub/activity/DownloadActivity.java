@@ -427,7 +427,7 @@ public class DownloadActivity extends SubsonicTabActivity implements OnGestureLi
 		playlistView.setDropListener(new DragSortListView.DropListener() {
 			@Override
 			public void drop(int from, int to) {
-				getDownloadService().swap(from, to);
+				getDownloadService().swap(nowPlaying, from, to);
 				onDownloadListChanged();
 			}
 		});

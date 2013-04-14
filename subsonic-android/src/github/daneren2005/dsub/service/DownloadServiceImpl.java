@@ -55,6 +55,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.AudioEffect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -93,7 +94,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private boolean isPartial = true;
     private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
-	private final Handler handler = new Handler(); 
+	private final Handler handler = new Handler();
+	private Handler mediaPlayerHandler;
     private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
     private final ShufflePlayBuffer shufflePlayBuffer = new ShufflePlayBuffer(this);
 
@@ -153,19 +155,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						return false;
 					}
 				});
-
-				nextMediaPlayer = new MediaPlayer();
-				nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
-
-				nextMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-					@Override
-					public boolean onError(MediaPlayer mediaPlayer, int what, int more) {
-						handleErrorNext(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
-						return false;
-					}
-				});
+				
+				Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
+				i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+				i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+				sendBroadcast(i);
 				
 				mediaPlayerLooper = Looper.myLooper();
+				mediaPlayerHandler = new Handler(mediaPlayerLooper);
 				Looper.loop();
 			}
 		}).start();
@@ -217,6 +214,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			sleepTimer.purge();
 		}
         lifecycleSupport.onDestroy();
+
+		Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
+		i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+		i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+		sendBroadcast(i);
+        
         mediaPlayer.release();
         if(nextMediaPlayer != null) {
 			nextMediaPlayer.release();
@@ -754,7 +757,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 jukeboxService.start();
             } else {
                 mediaPlayer.start();
-            }
+			}
             setPlayerState(STARTED);
         } catch (Exception x) {
             handleError(x);
@@ -866,22 +869,30 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	private class PositionCache implements Runnable {
 		boolean isRunning = true;
+		Thread thread;
 
 		public void stop() {
 			isRunning = false;
+			if(thread != null) {
+				// Make it stop right NOW
+				thread.interrupt();
+			}
 		}
 
 		@Override
 		public void run() {
+			thread = Thread.currentThread();
 			while(isRunning) {
 				try {
-					// Add a monitor for not running while mediaPlayer state is changing
-					synchronized(DownloadServiceImpl.this) {
-						if(mediaPlayer != null && playerState == STARTED) {
-							cachedPosition = mediaPlayer.getCurrentPosition();
-						}
+					if(mediaPlayer != null && playerState == STARTED) {
+						cachedPosition = mediaPlayer.getCurrentPosition();
 					}
 					Thread.sleep(200L);
+				}
+				catch (InterruptedException e) {
+					// Purposely interrupted, don't log error
+					isRunning = false;
+					positionCache = null;
 				}
 				catch(Exception e) {
 					Log.w(TAG, "Crashed getting current position", e);
@@ -892,9 +903,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
 	}
 	
-	private synchronized void setPlayerStateCompleted() {
+	private void setPlayerStateCompleted() {
 		Log.i(TAG, this.playerState.name() + " -> " + PlayerState.COMPLETED + " (" + currentPlaying + ")");
 		this.playerState = PlayerState.COMPLETED;
+		if(positionCache != null) {
+			positionCache.stop();
+			positionCache = null;
+		}
 		scrobbler.scrobble(this, currentPlaying, true);
 	}
 	
@@ -1055,19 +1070,23 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-            nextMediaPlayer.setOnCompletionListener(null);
-            nextMediaPlayer.reset();
-            setNextPlayerState(IDLE);
-            nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            if(nextMediaPlayer != null) {
+            	nextMediaPlayer.setOnCompletionListener(null);
+            	nextMediaPlayer.release();
+            	nextMediaPlayer = null;
+            }
+            nextMediaPlayer = new MediaPlayer();
+			nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
+            nextMediaPlayer.setAudioSessionId(mediaPlayer.getAudioSessionId());
             nextMediaPlayer.setDataSource(file.getPath());
             setNextPlayerState(PREPARING);
 			
 			nextMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-				public void onPrepared(MediaPlayer mediaPlayer) {
+				public void onPrepared(MediaPlayer mp) {
 					try {
 						setNextPlayerState(PREPARED);
-						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && playerState == PlayerState.STARTED) {
-							DownloadServiceImpl.this.mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
+						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
+							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
 					} catch (Exception x) {
@@ -1089,7 +1108,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 	}
 	
-	private synchronized void setupHandlers(final DownloadFile downloadFile, final boolean isPartial) {
+	private void setupHandlers(final DownloadFile downloadFile, final boolean isPartial) {
 		mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
 				Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
@@ -1197,8 +1216,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 	
 	@Override
-	public synchronized void swap(int from, int to) {
-		int max = size();
+	public synchronized void swap(boolean mainList, int from, int to) {
+		List<DownloadFile> list = mainList ? downloadList : backgroundDownloadList;
+		int max = list.size();
 		if(to >= max) {
 			to = max - 1;
 		}
@@ -1207,11 +1227,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
 		
 		int currentPlayingIndex = getCurrentPlayingIndex();
-		DownloadFile movedSong = downloadList.remove(from);
-		downloadList.add(to, movedSong);
-		if(jukeboxEnabled) {
+		DownloadFile movedSong = list.remove(from);
+		list.add(to, movedSong);
+		if(jukeboxEnabled && mainList) {
 			updateJukeboxPlaylist();
-		} else if(movedSong == nextPlaying || (currentPlayingIndex + 1) == to) {
+		} else if(mainList && (movedSong == nextPlaying || (currentPlayingIndex + 1) == to)) {
 			// Moving next playing or moving a song to be next playing
 			setNextPlaying();
 		}
@@ -1448,8 +1468,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 }
             }
             
-			// Do something
-			setupNext(downloadFile);
+			// Start the setup of the next media player
+			mediaPlayerHandler.post(new Runnable() {
+				public void run() {
+					setupNext(downloadFile);
+				}
+			});
         }
 
         private boolean bufferComplete() {

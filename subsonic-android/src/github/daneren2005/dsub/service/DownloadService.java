@@ -135,5 +135,5 @@ public interface DownloadService {
 	
 	void setVolume(float volume);
 	
-	void swap(int from, int to);
+	void swap(boolean mainList, int from, int to);
 }

@@ -883,6 +883,7 @@ public final class Util {
             File albumArtFile = FileUtil.getAlbumArtFile(context, song);
             intent.putExtra("coverart", albumArtFile.getAbsolutePath());
 			
+			avrcpIntent.putExtra("playing", true);
 			avrcpIntent.putExtra("track", song.getTitle());
 			avrcpIntent.putExtra("artist", song.getArtist());
 			avrcpIntent.putExtra("album", song.getAlbum());
@@ -897,6 +898,7 @@ public final class Util {
             intent.putExtra("album", "");
             intent.putExtra("coverart", "");
 			
+			avrcpIntent.putExtra("playing", false);
 			avrcpIntent.putExtra("track", "");
 			avrcpIntent.putExtra("artist", "");
 			avrcpIntent.putExtra("album", "");
