@@ -1216,8 +1216,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 	
 	@Override
-	public synchronized void swap(int from, int to) {
-		int max = size();
+	public synchronized void swap(boolean mainList, int from, int to) {
+		List<DownloadFile> list = mainList ? downloadList : backgroundDownloadList;
+		int max = list.size();
 		if(to >= max) {
 			to = max - 1;
 		}
@@ -1226,11 +1227,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
 		
 		int currentPlayingIndex = getCurrentPlayingIndex();
-		DownloadFile movedSong = downloadList.remove(from);
-		downloadList.add(to, movedSong);
-		if(jukeboxEnabled) {
+		DownloadFile movedSong = list.remove(from);
+		list.add(to, movedSong);
+		if(jukeboxEnabled && mainList) {
 			updateJukeboxPlaylist();
-		} else if(movedSong == nextPlaying || (currentPlayingIndex + 1) == to) {
+		} else if(mainList && (movedSong == nextPlaying || (currentPlayingIndex + 1) == to)) {
 			// Moving next playing or moving a song to be next playing
 			setNextPlaying();
 		}
