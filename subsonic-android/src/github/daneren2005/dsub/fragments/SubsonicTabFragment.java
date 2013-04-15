@@ -109,7 +109,6 @@ public class SubsonicTabFragment extends SherlockFragment {
 				context.setTitle(title);
 			}
 		}
-		Log.d(TAG, "Primary (" + this.getClass().getName() + ": " + primaryFragment);
 	}
 
 	protected void setTitle(CharSequence title) {
