@@ -9,7 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,6 +38,7 @@ import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -172,6 +176,124 @@ public class SelectDirectoryFragment extends LibraryFunctionsFragment implements
 		}
 
 		return false;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo);
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+		MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
+
+		MenuInflater inflater = context.getMenuInflater();
+		if (entry.isDirectory()) {
+			if(Util.isOffline(context)) {
+				inflater.inflate(R.menu.select_album_context_offline, menu);
+			}
+			else {
+				inflater.inflate(R.menu.select_album_context, menu);
+			}
+		} else if(!entry.isVideo()) {
+			if(Util.isOffline(context)) {
+				inflater.inflate(R.menu.select_song_context_offline, menu);
+			}
+			else {
+				inflater.inflate(R.menu.select_song_context, menu);
+				if(playlistId == null) {
+					menu.removeItem(R.id.song_menu_remove_playlist);
+				}
+			}
+		} else {
+			if(Util.isOffline(context)) {
+				inflater.inflate(R.menu.select_video_context_offline, menu);
+			}
+			else {
+				inflater.inflate(R.menu.select_video_context, menu);
+			}
+		}
+
+		if (!Util.isOffline(context) && !entry.isVideo()) {
+			menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem) {
+		if(!primaryFragment) {
+			return false;
+		}
+
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+		MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
+		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(10);
+		songs.add((MusicDirectory.Entry) entryList.getItemAtPosition(info.position));
+		switch (menuItem.getItemId()) {
+			case R.id.album_menu_play_now:
+				downloadRecursively(entry.getId(), false, false, true, false, false);
+				break;
+			case R.id.album_menu_play_shuffled:
+				downloadRecursively(entry.getId(), false, false, true, true, false);
+				break;
+			case R.id.album_menu_play_last:
+				downloadRecursively(entry.getId(), false, true, false, false, false);
+				break;
+			case R.id.album_menu_download:
+				downloadRecursively(entry.getId(), false, true, false, false, true);
+				break;
+			case R.id.album_menu_pin:
+				downloadRecursively(entry.getId(), true, true, false, false, true);
+				break;
+			case R.id.album_menu_star:
+				toggleStarred(entry);
+				break;
+			case R.id.album_menu_delete:
+				deleteRecursively(entry);
+				break;
+			case R.id.song_menu_play_now:
+				getDownloadService().clear();
+				getDownloadService().download(songs, false, true, true, false);
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				break;
+			case R.id.song_menu_play_next:
+				getDownloadService().download(songs, false, false, true, false);
+				break;
+			case R.id.song_menu_play_last:
+				getDownloadService().download(songs, false, false, false, false);
+				break;
+			case R.id.song_menu_download:
+				getDownloadService().downloadBackground(songs, false);
+				break;
+			case R.id.song_menu_pin:
+				getDownloadService().downloadBackground(songs, true);
+				break;
+			case R.id.song_menu_delete:
+				getDownloadService().delete(songs);
+				break;
+			case R.id.song_menu_add_playlist:
+				addToPlaylist(songs);
+				break;
+			case R.id.song_menu_star:
+				toggleStarred(entry);
+				break;
+			case R.id.song_menu_webview:
+				playWebView(entry);
+				break;
+			case R.id.song_menu_play_external:
+				playExternalPlayer(entry);
+				break;
+			case R.id.song_menu_info:
+				displaySongInfo(entry);
+				break;
+			case R.id.song_menu_stream_external:
+				streamExternalPlayer(entry);
+				break;
+			case R.id.song_menu_remove_playlist:
+				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(info.position - 1));
+				break;
+			default:
+				return super.onContextItemSelected(menuItem);
+		}
+		return true;
 	}
 
 	@Override

@@ -22,9 +22,11 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistAdapter;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,10 +86,12 @@ public class SelectArtistFragment extends LibraryFunctionsFragment implements Ad
 
 		if (artistList.getItemAtPosition(info.position) instanceof Artist) {
 			MenuInflater inflater = context.getMenuInflater();
-			if(Util.isOffline(context))
+			if(Util.isOffline(context)) {
 				inflater.inflate(R.menu.select_artist_context_offline, menu);
-			else
+			}
+			else {
 				inflater.inflate(R.menu.select_artist_context, menu);
+			}
 		} else if (info.position == 0) {
 			String musicFolderId = Util.getSelectedMusicFolderId(context);
 			MenuItem menuItem = menu.add(MENU_GROUP_MUSIC_FOLDER, -1, 0, R.string.select_artist_all_folders);
@@ -112,7 +116,7 @@ public class SelectArtistFragment extends LibraryFunctionsFragment implements Ad
 		if(!primaryFragment) {
 			return false;
 		}
-		
+
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 
 		Artist artist = (Artist) artistList.getItemAtPosition(info.position);
@@ -120,25 +124,25 @@ public class SelectArtistFragment extends LibraryFunctionsFragment implements Ad
 		if (artist != null) {
 			switch (menuItem.getItemId()) {
 				case R.id.artist_menu_play_now:
-					// downloadRecursively(artist.getId(), false, false, true, false, false);
+					downloadRecursively(artist.getId(), false, false, true, false, false);
 					break;
 				case R.id.artist_menu_play_shuffled:
-					// downloadRecursively(artist.getId(), false, false, true, true, false);
+					downloadRecursively(artist.getId(), false, false, true, true, false);
 					break;
 				case R.id.artist_menu_play_last:
-					// downloadRecursively(artist.getId(), false, true, false, false, false);
+					downloadRecursively(artist.getId(), false, true, false, false, false);
 					break;
 				case R.id.artist_menu_download:
-					// downloadRecursively(artist.getId(), false, true, false, false, true);
+					downloadRecursively(artist.getId(), false, true, false, false, true);
 					break;
 				case R.id.artist_menu_pin:
-					// downloadRecursively(artist.getId(), true, true, false, false, true);
+					downloadRecursively(artist.getId(), true, true, false, false, true);
 					break;
 				case R.id.artist_menu_delete:
-					// deleteRecursively(artist);
+					deleteRecursively(artist);
 					break;
 				default:
-					// return super.onContextItemSelected(menuItem);
+					return super.onContextItemSelected(menuItem);
 			}
 		} else if (info.position == 0) {
 			MusicFolder selectedFolder = menuItem.getItemId() == -1 ? null : musicFolders.get(menuItem.getItemId());
@@ -217,5 +221,13 @@ public class SelectArtistFragment extends LibraryFunctionsFragment implements Ad
 
 	private void selectFolder() {
 		folderButton.showContextMenu();
+	}
+
+	public void deleteRecursively(Artist artist) {
+		File dir = FileUtil.getArtistDirectory(context, artist);
+		Util.recursiveDelete(dir);
+		if(Util.isOffline(context)) {
+			refresh();
+		}
 	}
 }
