@@ -111,6 +111,10 @@ public class MainFragment extends LibraryFunctionsFragment {
 
 	@Override
 	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
+		if(!primaryFragment) {
+			return false;
+		}
+		
 		switch (menuItem.getItemId()) {
 			case MENU_ITEM_SERVER_1:
 				setActiveServer(1);
@@ -125,6 +129,7 @@ public class MainFragment extends LibraryFunctionsFragment {
 				return super.onContextItemSelected(menuItem);
 		}
 
+		refresh();
 		return true;
 	}
 

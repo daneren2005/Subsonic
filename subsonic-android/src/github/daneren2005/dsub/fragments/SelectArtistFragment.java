@@ -109,6 +109,10 @@ public class SelectArtistFragment extends LibraryFunctionsFragment implements Ad
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
+		if(!primaryFragment) {
+			return false;
+		}
+		
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 
 		Artist artist = (Artist) artistList.getItemAtPosition(info.position);

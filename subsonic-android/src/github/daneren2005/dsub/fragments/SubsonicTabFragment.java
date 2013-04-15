@@ -39,7 +39,7 @@ public class SubsonicTabFragment extends SherlockFragment {
 	protected SubsonicActivity context;
 	protected CharSequence title = "DSub";
 	protected View rootView;
-	private boolean primaryFragment = false;
+	protected boolean primaryFragment = false;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -109,6 +109,7 @@ public class SubsonicTabFragment extends SherlockFragment {
 				context.setTitle(title);
 			}
 		}
+		Log.d(TAG, "Primary (" + this.getClass().getName() + ": " + primaryFragment);
 	}
 
 	protected void setTitle(CharSequence title) {

@@ -85,6 +85,10 @@ public class SelectPlaylistFragment extends LibraryFunctionsFragment implements 
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
+		if(!primaryFragment) {
+			return false;
+		}
+		
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Playlist playlist = (Playlist) list.getItemAtPosition(info.position);
 
