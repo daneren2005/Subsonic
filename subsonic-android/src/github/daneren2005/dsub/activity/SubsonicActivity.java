@@ -157,6 +157,22 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 	public TabPagerAdapter getPagerAdapter() {
 		return pagerAdapter;
 	}
+	
+	public void checkUpdates() {
+		try {
+			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			int ver = Integer.parseInt(version.replace(".", ""));
+			Updater updater = new Updater(ver);
+			updater.checkUpdates(SubsonicActivity.this);
+		}
+		catch(Exception e) {
+
+		}
+	}
+	
+	public static String getThemeName() {
+		return theme;
+	}
 
 	private void setUncaughtExceptionHandler() {
 		Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
@@ -202,18 +218,6 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 				}
 
 			}
-		}
-	}
-
-	public void checkUpdates() {
-		try {
-			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-			int ver = Integer.parseInt(version.replace(".", ""));
-			Updater updater = new Updater(ver);
-			updater.checkUpdates(SubsonicActivity.this);
-		}
-		catch(Exception e) {
-
 		}
 	}
 	

@@ -31,6 +31,7 @@ import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.Util;
 
 public class SubsonicFragment extends SherlockFragment {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
@@ -100,5 +101,13 @@ public class SubsonicFragment extends SherlockFragment {
 	protected void setTitle(int title) {
 		this.title = context.getResources().getString(title);
 		context.setTitle(this.title);
+	}
+
+	protected void warnIfNetworkOrStorageUnavailable() {
+		if (!Util.isExternalStoragePresent()) {
+			Util.toast(context, R.string.select_album_no_sdcard);
+		} else if (!Util.isOffline(context) && !Util.isNetworkConnected(context)) {
+			Util.toast(context, R.string.select_album_no_network);
+		}
 	}
 }
