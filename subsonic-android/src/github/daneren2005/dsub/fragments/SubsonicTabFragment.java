@@ -18,88 +18,14 @@
  */
 package github.daneren2005.dsub.fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SubsonicActivity;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
-import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
-import github.daneren2005.dsub.util.ImageLoader;
-
-public class SubsonicTabFragment extends SherlockFragment {
-	private static final String TAG = SubsonicTabActivity.class.getSimpleName();
-	protected SubsonicActivity context;
-	protected CharSequence title = "DSub";
-	protected View rootView;
+public class SubsonicTabFragment extends SubsonicFragment {
+	private static final String TAG = SubsonicTabFragment.class.getSimpleName();
 	protected boolean primaryFragment = false;
-
-	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		context = (SubsonicActivity)activity;
-	}
-	
-	public DownloadService getDownloadService() {
-		return context != null ? context.getDownloadService() : null;
-	}
-
-	protected void refresh() {
-
-	}
 	
 	public void replaceFragment(SubsonicTabFragment fragment, int id) {
 		this.setPrimaryFragment(false);
 		fragment.setPrimaryFragment(true);
 		context.getPagerAdapter().replaceCurrent(fragment, id);
-	}
-
-	protected void exit() {
-		context.stopService(new Intent(context, DownloadServiceImpl.class));
-		context.finish();
-	}
-
-	public void setProgressVisible(boolean visible) {
-		View view = rootView.findViewById(R.id.tab_progress);
-		if (view != null) {
-			view.setVisibility(visible ? View.VISIBLE : View.GONE);
-		}
-	}
-
-	public void updateProgress(String message) {
-		TextView view = (TextView) rootView.findViewById(R.id.tab_progress_message);
-		if (view != null) {
-			view.setText(message);
-		}
-	}
-
-	protected synchronized ImageLoader getImageLoader() {
-		return context.getImageLoader();
-	}
-	public synchronized static ImageLoader getStaticImageLoader(Context context) {
-		return SubsonicActivity.getStaticImageLoader(context);
 	}
 	
 	public void setPrimaryFragment(boolean primary) {
@@ -109,14 +35,5 @@ public class SubsonicTabFragment extends SherlockFragment {
 				context.setTitle(title);
 			}
 		}
-	}
-
-	protected void setTitle(CharSequence title) {
-		this.title = title;
-		context.setTitle(title);
-	}
-	protected void setTitle(int title) {
-		this.title = context.getResources().getString(title);
-		context.setTitle(this.title);
 	}
 }
