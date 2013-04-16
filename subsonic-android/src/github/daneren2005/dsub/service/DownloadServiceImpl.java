@@ -334,7 +334,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     @Override
-    public synchronized boolean isShufflePlayEnabled() {
+    public boolean isShufflePlayEnabled() {
         return shufflePlay;
     }
 
@@ -570,7 +570,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 	
 	@Override
-	public synchronized List<DownloadFile> getSongs() {
+	public List<DownloadFile> getSongs() {
 		return downloadList;
 	}
 
@@ -583,7 +583,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 	
 	@Override
-	public synchronized List<DownloadFile> getBackgroundDownloads() {
+	public List<DownloadFile> getBackgroundDownloads() {
 		return backgroundDownloadList;
 	}
 
