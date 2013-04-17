@@ -138,8 +138,5 @@
 	<include layout="@layout/download_media_buttons"/>
 
     <include layout="@layout/download_slider"/>
-
-    <include layout="@layout/button_bar"/>
-
 </LinearLayout>
 

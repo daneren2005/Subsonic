@@ -454,7 +454,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 		return rootView;
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		if(Util.isOffline(context)) {
@@ -475,16 +475,16 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			menu.findItem(R.id.menu_screen_on_off).setTitle(R.string.download_menu_screen_off);
 		}
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		if(super.onOptionsItemSelected(menuItem)) {
 			return true;
 		}
-		
+
 		return menuItemSelected(menuItem.getItemId(), null);
 	}
-	
+
 	@Override
 	public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
@@ -505,7 +505,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
@@ -628,8 +628,8 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		return false;
 	}
 
-	/*@Override
-	protected void onResume() {
+	@Override
+	public void onResume() {
 		super.onResume();
 
 		final Handler handler = new Handler();
@@ -660,9 +660,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		onProgressChanged();
 		scrollToCurrent();
 		if (downloadService != null && downloadService.getKeepScreenOn()) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		} else {
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			context.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 
 		if (visualizerView != null && downloadService != null && downloadService.getShowVisualization()) {
@@ -670,7 +670,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 
 		updateButtons();
-	}*/
+	}
 
 	private void scheduleHideControls() {
 		if (hideControlsFuture != null) {
@@ -744,14 +744,14 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 	}
 
-	/*@Override
-	protected void onPause() {
+	@Override
+	public void onPause() {
 		super.onPause();
 		executorService.shutdown();
 		if (visualizerView != null && visualizerView.isActive()) {
 			visualizerView.setActive(false);
 		}
-	}*/
+	}
 
 	/*@Override
 	protected Dialog onCreateDialog(int id) {

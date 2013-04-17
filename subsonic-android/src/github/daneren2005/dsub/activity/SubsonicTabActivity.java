@@ -130,9 +130,9 @@ public class SubsonicTabActivity extends SherlockActivity {
             musicButton.setEnabled(false);
         } else if (this instanceof SelectPlaylistActivity) {
             playlistButton.setEnabled(false);
-        } else if (this instanceof DownloadActivity || this instanceof LyricsActivity) {
+        } /*else if (this instanceof DownloadActivity || this instanceof LyricsActivity) {
             nowPlayingButton.setEnabled(false);
-        }
+        }*/
     }
 
     @Override

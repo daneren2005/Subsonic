@@ -3,7 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:background="@android:color/transparent">
+        android:background="@android:color/transparent"
+		android:paddingBottom="10dip">
 			
 	<TextView
             android:id="@+id/download_position"
