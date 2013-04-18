@@ -120,6 +120,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.download, container, false);
+		setHasOptionsMenu(true);
 		setTitle(nowPlaying ? "Now Playing" : "Downloading");
 
 		WindowManager w = context.getWindowManager();
@@ -671,6 +672,15 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 		updateButtons();
 	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		executorService.shutdown();
+		if (visualizerView != null && visualizerView.isActive()) {
+			visualizerView.setActive(false);
+		}
+	}
 
 	private void scheduleHideControls() {
 		if (hideControlsFuture != null) {
@@ -741,15 +751,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				playlistView.setSelectionFromTop(i, 40);
 				return;
 			}
-		}
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		executorService.shutdown();
-		if (visualizerView != null && visualizerView.isActive()) {
-			visualizerView.setActive(false);
 		}
 	}
 
