@@ -20,6 +20,7 @@ package github.daneren2005.dsub.activity;
 
 import github.daneren2005.dsub.R;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import github.daneren2005.dsub.fragments.DownloadFragment;
 
 public class DownloadActivity extends SubsonicActivity {
@@ -37,6 +38,15 @@ public class DownloadActivity extends SubsonicActivity {
 		if (findViewById(R.id.download_container) != null && savedInstanceState == null) {
 			fragment = new DownloadFragment();
 			getSupportFragmentManager().beginTransaction().add(R.id.download_container, fragment).commit();
+		}
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent me) {
+		if(fragment != null) {
+			return fragment.getGestureDetector().onTouchEvent(me);
+		} else {
+			return false;
 		}
 	}
 }

@@ -1107,15 +1107,14 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 	}
 
-	/*@Override
-	public boolean onTouchEvent(MotionEvent me) {
-		return gestureScanner.onTouchEvent(me);
-	}*/
-
 	@Override
 	public boolean onDown(MotionEvent me) {
 		setControlsVisible(true);
 		return false;
+	}
+	
+	public GestureDetector getGestureDetector() {
+		return gestureScanner;
 	}
 
 	@Override
@@ -1124,6 +1123,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		if (downloadService == null) {
 			return false;
 		}
+		Log.d(TAG, "onFling");
 
 		// Right to Left swipe
 		if (e1.getX() - e2.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
