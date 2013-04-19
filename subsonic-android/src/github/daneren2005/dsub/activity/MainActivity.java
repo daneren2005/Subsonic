@@ -48,14 +48,16 @@ public class MainActivity extends SubsonicActivity {
 		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
 		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
 
-		viewPager = (ViewPager) findViewById(R.id.pager);
-		pagerAdapter = new TabPagerAdapter(this, viewPager);
-		viewPager.setAdapter(pagerAdapter);
-		viewPager.setOnPageChangeListener(pagerAdapter);
+		if (savedInstanceState == null) {
+			viewPager = (ViewPager) findViewById(R.id.pager);
+			pagerAdapter = new TabPagerAdapter(this, viewPager);
+			viewPager.setAdapter(pagerAdapter);
+			viewPager.setOnPageChangeListener(pagerAdapter);
 
-		addTab("Home", MainFragment.class, null);
-		addTab("Library", SelectArtistFragment.class, null);
-		addTab("Playlists", SelectPlaylistFragment.class, null);
+			addTab("Home", MainFragment.class, null);
+			addTab("Library", SelectArtistFragment.class, null);
+			addTab("Playlists", SelectPlaylistFragment.class, null);
+		}
 	}
 
 	@Override
