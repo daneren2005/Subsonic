@@ -885,7 +885,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			int duration = currentPlaying.getSong().getDuration() == null ? mediaPlayer.getDuration() : currentPlaying.getSong().getDuration() * 1000;
 			cachedPosition = 0;
 			// Stop checking position before the song reaches completion
-			while(isRunning && (Math.abs(duration - cachedPosition) < 1000)) {
+			while(isRunning && (Math.abs(duration - cachedPosition) > 1000)) {
 				try {
 					if(mediaPlayer != null && playerState == STARTED) {
 						cachedPosition = mediaPlayer.getCurrentPosition();
