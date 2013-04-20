@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainFragment extends LibraryFunctionsFragment {
+public class MainFragment extends SubsonicTabFragment {
 	private LayoutInflater inflater;
 
 	private static final int MENU_GROUP_SERVER = 10;

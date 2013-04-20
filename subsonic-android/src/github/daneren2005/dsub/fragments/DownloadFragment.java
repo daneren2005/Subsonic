@@ -1,8 +1,5 @@
 package github.daneren2005.dsub.fragments;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -10,7 +7,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -64,13 +60,14 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.EqualizerActivity;
+import github.daneren2005.dsub.activity.LyricsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 
 public class DownloadFragment extends SubsonicFragment implements OnGestureListener {
 	private static final String TAG = DownloadFragment.class.getSimpleName();
 
-	private static final int DIALOG_SAVE_PLAYLIST = 100;
+	public static final int DIALOG_SAVE_PLAYLIST = 100;
 	private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 10;
 	private static final int COLOR_BUTTON_ENABLED = Color.rgb(51, 181, 229);
 	private static final int COLOR_BUTTON_DISABLED = Color.rgb(206, 213, 211);
@@ -99,7 +96,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private ScheduledExecutorService executorService;
 	private DownloadFile currentPlaying;
 	private long currentRevision;
-	private EditText playlistNameView;
 	private GestureDetector gestureScanner;
 	private int swipeDistance;
 	private int swipeVelocity;
@@ -515,12 +511,13 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	}
 
 	private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
-		/*switch (menuItemId) {
+		Intent intent;
+		switch (menuItemId) {
 			case R.id.menu_show_album:
-				Intent intent = new Intent(context, SelectAlbumActivity.class);
+				/*Intent intent = new Intent(context, SelectAlbumActivity.class);
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, song.getSong().getParent());
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, song.getSong().getAlbum());
-				Util.startActivityWithoutTransition(context, intent);
+				Util.startActivityWithoutTransition(context, intent);*/
 				return true;
 			case R.id.menu_lyrics:
 				intent = new Intent(context, LyricsActivity.class);
@@ -569,10 +566,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				return true;
 			case R.id.menu_screen_on_off:
 				if (getDownloadService().getKeepScreenOn()) {
-					getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+					context.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 					getDownloadService().setKeepScreenOn(false);
 				} else {
-					getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+					context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 					getDownloadService().setKeepScreenOn(true);
 				}
 				context.invalidateOptionsMenu();
@@ -592,7 +589,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				}.execute();
 				return true;
 			case R.id.menu_save_playlist:
-				showDialog(DIALOG_SAVE_PLAYLIST);
+				context.showDialog(DIALOG_SAVE_PLAYLIST);
 				return true;
 			case R.id.menu_star:
 				toggleStarred(song.getSong());
@@ -610,10 +607,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				}
 				return true;
 			case R.id.menu_exit:
-				intent = new Intent(context, MainActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
-				Util.startActivityWithoutTransition(context, intent);
+				exit();
 				return true;
 			case R.id.menu_add_playlist:
 				songs = new ArrayList<MusicDirectory.Entry>(1);
@@ -625,8 +619,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				return true;
 			default:
 				return false;
-		}*/
-		return false;
+		}
 	}
 
 	@Override
@@ -672,7 +665,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 		updateButtons();
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -754,52 +747,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 	}
 
-	/*@Override
-	protected Dialog onCreateDialog(int id) {
-		if (id == DIALOG_SAVE_PLAYLIST) {
-			AlertDialog.Builder builder;
-
-			LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-			final View layout = inflater.inflate(R.layout.save_playlist, (ViewGroup)rootView.findViewById(R.id.save_playlist_root));
-			playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
-
-			builder = new AlertDialog.Builder(context);
-			builder.setTitle(R.string.download_playlist_title);
-			builder.setMessage(R.string.download_playlist_name);
-			builder.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					savePlaylistInBackground(String.valueOf(playlistNameView.getText()));
-				}
-			});
-			builder.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-			});
-			builder.setView(layout);
-			builder.setCancelable(true);
-
-			return builder.create();
-		} else {
-			return super.onCreateDialog(id);
-		}
-	}*/
-
-	/*@Override
-	protected void onPrepareDialog(int id, Dialog dialog) {
-		if (id == DIALOG_SAVE_PLAYLIST) {
-			String playlistName = (getDownloadService() != null) ? getDownloadService().getSuggestedPlaylistName() : null;
-			if (playlistName != null) {
-				playlistNameView.setText(playlistName);
-			} else {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-				playlistNameView.setText(dateFormat.format(new Date()));
-			}
-		}
-	}*/
-
 	private void update() {
 		if (getDownloadService() == null) {
 			return;
@@ -814,34 +761,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 
 		onProgressChanged();
-	}
-
-	private void savePlaylistInBackground(final String playlistName) {
-		Util.toast(context, context.getResources().getString(R.string.download_playlist_saving, playlistName));
-		getDownloadService().setSuggestedPlaylistName(playlistName);
-		new SilentBackgroundTask<Void>(context) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				List<MusicDirectory.Entry> entries = new LinkedList<MusicDirectory.Entry>();
-				for (DownloadFile downloadFile : getDownloadService().getSongs()) {
-					entries.add(downloadFile.getSong());
-				}
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.createPlaylist(null, playlistName, entries, context, null);
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				Util.toast(context, R.string.download_playlist_done);
-			}
-
-			@Override
-			protected void error(Throwable error) {
-				String msg = context.getResources().getString(R.string.download_playlist_error) + " " + getErrorMessage(error);
-				Util.toast(context, msg);
-			}
-		}.execute();
 	}
 
 	protected void startTimer() {
@@ -1112,7 +1031,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		setControlsVisible(true);
 		return false;
 	}
-	
+
 	public GestureDetector getGestureDetector() {
 		return gestureScanner;
 	}

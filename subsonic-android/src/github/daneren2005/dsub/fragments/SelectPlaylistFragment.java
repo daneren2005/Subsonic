@@ -31,7 +31,7 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistAdapter;
 import java.util.List;
 
-public class SelectPlaylistFragment extends LibraryFunctionsFragment implements AdapterView.OnItemClickListener {
+public class SelectPlaylistFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
 	private ListView list;

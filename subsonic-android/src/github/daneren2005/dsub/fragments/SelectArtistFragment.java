@@ -30,7 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectArtistFragment extends LibraryFunctionsFragment implements AdapterView.OnItemClickListener {
+public class SelectArtistFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectArtistFragment.class.getSimpleName();
 	private static final int MENU_GROUP_MUSIC_FOLDER = 10;
 

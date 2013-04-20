@@ -42,7 +42,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SelectDirectoryFragment extends LibraryFunctionsFragment implements AdapterView.OnItemClickListener {
+public class SelectDirectoryFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private DragSortListView entryList;
