@@ -154,7 +154,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
 				if (currentDownload != null) {
 					MusicDirectory.Entry currentSong = currentDownload.getSong();
-					// toggleStarred(currentSong);
+					toggleStarred(currentSong);
 					starButton.setImageResource(currentSong.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
 				}
 			}
@@ -424,11 +424,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		registerForContextMenu(playlistView);
 
 		DownloadService downloadService = getDownloadService();
-		/*if (downloadService != null && getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
+		if (downloadService != null && context.getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
 			context.getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE);
 			warnIfNetworkOrStorageUnavailable();
 			downloadService.setShufflePlayEnabled(true);
-		}*/
+		}
 
 		boolean visualizerAvailable = downloadService != null && downloadService.getVisualizerAvailable();
 		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();

@@ -30,8 +30,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
-import android.view.ViewGroup;
+import com.actionbarsherlock.view.MenuItem;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.MusicService;
@@ -57,6 +58,22 @@ public class DownloadActivity extends SubsonicActivity {
 		if (findViewById(R.id.download_container) != null && savedInstanceState == null) {
 			fragment = new DownloadFragment();
 			getSupportFragmentManager().beginTransaction().add(R.id.download_container, fragment).commit();
+		}
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == android.R.id.home) {
+			Intent i = new Intent();
+			i.setClass(this, MainActivity.class);
+			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -114,7 +131,7 @@ public class DownloadActivity extends SubsonicActivity {
 			}
 		}
 	}
-	
+
 	private void savePlaylistInBackground(final String playlistName) {
 		Util.toast(this, getResources().getString(R.string.download_playlist_saving, playlistName));
 		getDownloadService().setSuggestedPlaylistName(playlistName);
