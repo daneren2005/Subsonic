@@ -86,7 +86,7 @@ public class SubsonicTabActivity extends SherlockActivity {
     protected void onPostCreate(Bundle bundle) {
         super.onPostCreate(bundle);
 
-        homeButton = findViewById(R.id.button_bar_home);
+        /*homeButton = findViewById(R.id.button_bar_home);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,11 +126,11 @@ public class SubsonicTabActivity extends SherlockActivity {
 
         /*if (this instanceof MainActivity) {
             homeButton.setEnabled(false);
-        } else*/ if (this instanceof SelectAlbumActivity || this instanceof SelectArtistActivity) {
+        } else if (this instanceof SelectAlbumActivity || this instanceof SelectArtistActivity) {
             musicButton.setEnabled(false);
         } else if (this instanceof SelectPlaylistActivity) {
             playlistButton.setEnabled(false);
-        } /*else if (this instanceof DownloadActivity || this instanceof LyricsActivity) {
+        } else if (this instanceof DownloadActivity || this instanceof LyricsActivity) {
             nowPlayingButton.setEnabled(false);
         }*/
     }
