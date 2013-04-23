@@ -1289,6 +1289,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 			if(n != 0) {
 				int start = currentPlaying == null ? 0 : getCurrentPlayingIndex();
+				if(start == -1) {
+					start = 0;
+				}
 				int i = start;
 				do {
 					DownloadFile downloadFile = downloadList.get(i);
