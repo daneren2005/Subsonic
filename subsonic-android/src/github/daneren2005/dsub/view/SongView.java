@@ -125,6 +125,7 @@ public class SongView extends UpdateView implements Checkable {
 			}
 		});
 
+		updateBackground();
         update();
     }
 	
