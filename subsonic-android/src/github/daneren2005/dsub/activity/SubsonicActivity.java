@@ -228,7 +228,6 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		private SubsonicTabFragment currentFragment;
 		private List tabs = new ArrayList();
 		private List frags = new ArrayList();
-		private List ids = new ArrayList();
 		private int currentPosition;
 
 		public TabPagerAdapter(SherlockFragmentActivity activity, ViewPager pager) {
@@ -246,7 +245,6 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			List fragStack = new ArrayList();
 			fragStack.add(frag);
 			frags.add(i, fragStack);
-			ids.add(i, 0);
 			if(currentFragment == null) {
 				currentFragment = (SubsonicTabFragment) frag;
 				currentFragment.setPrimaryFragment(true);
@@ -329,7 +327,6 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			currentFragment.setPrimaryFragment(true);
 			activity.invalidateOptionsMenu();
 			
-			ids.add(currentPosition, id);
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.add(id, fragment);
 			trans.commit();

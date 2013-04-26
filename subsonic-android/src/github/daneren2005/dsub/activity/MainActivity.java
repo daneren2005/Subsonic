@@ -48,16 +48,14 @@ public class MainActivity extends SubsonicActivity {
 		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
 		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
 
-		if (savedInstanceState == null) {
-			viewPager = (ViewPager) findViewById(R.id.pager);
-			pagerAdapter = new TabPagerAdapter(this, viewPager);
-			viewPager.setAdapter(pagerAdapter);
-			viewPager.setOnPageChangeListener(pagerAdapter);
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		pagerAdapter = new TabPagerAdapter(this, viewPager);
+		viewPager.setAdapter(pagerAdapter);
+		viewPager.setOnPageChangeListener(pagerAdapter);
 
-			addTab("Home", MainFragment.class, null);
-			addTab("Library", SelectArtistFragment.class, null);
-			addTab("Playlists", SelectPlaylistFragment.class, null);
-		}
+		addTab("Home", MainFragment.class, null);
+		addTab("Library", SelectArtistFragment.class, null);
+		addTab("Playlists", SelectPlaylistFragment.class, null);
 	}
 
 	@Override
@@ -74,7 +72,7 @@ public class MainActivity extends SubsonicActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 		final Handler handler = new Handler();
 		Runnable runnable = new Runnable() {
 			@Override
@@ -91,7 +89,7 @@ public class MainActivity extends SubsonicActivity {
 		executorService = Executors.newSingleThreadScheduledExecutor();
 		executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
 	}
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -117,15 +115,17 @@ public class MainActivity extends SubsonicActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		com.actionbarsherlock.view.MenuInflater menuInflater = getSupportMenuInflater();
-		pagerAdapter.onCreateOptionsMenu(menu, menuInflater);
+		if(pagerAdapter != null) {
+			com.actionbarsherlock.view.MenuInflater menuInflater = getSupportMenuInflater();
+			pagerAdapter.onCreateOptionsMenu(menu, menuInflater);
+		}
 		return true;
 	}
 	@Override
 	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		return pagerAdapter.onOptionsItemSelected(item);
 	}
-	
+
 	private void update() {
 		if (getDownloadService() == null) {
 			return;
@@ -138,7 +138,7 @@ public class MainActivity extends SubsonicActivity {
 			getImageLoader().loadImage(coverArtView, null, false, false);
 			return;
 		}
-		
+
 		MusicDirectory.Entry song = current.getSong();
 		trackView.setText(song.getTitle());
 		artistView.setText(song.getArtist());
