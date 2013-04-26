@@ -50,6 +50,25 @@ public class FileUtil {
 	private static final List<String> VIDEO_FILE_EXTENSIONS = Arrays.asList("flv", "mp4", "m4v", "wmv", "avi", "mov", "mpg", "mkv");
 	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Arrays.asList("m3u");
     private static final File DEFAULT_MUSIC_DIR = createDirectory("music");
+	
+	public static File getAnySong(Context context) {
+		File dir = getMusicDirectory(context);
+		return getAnySong(context, dir);
+	}
+	private static File getAnySong(Context context, File dir) {
+		for(File file: dir.listFiles()) {
+			if(file.isDirectory()) {
+				return getAnySong(context, file);
+			}
+			
+			String extension = getExtension(file.getName());
+			if(MUSIC_FILE_EXTENSIONS.contains(extension)) {
+				return file;
+			}
+		}
+		
+		return null;
+	}
 
     public static File getSongFile(Context context, MusicDirectory.Entry song) {
         File dir = getAlbumDirectory(context, song);

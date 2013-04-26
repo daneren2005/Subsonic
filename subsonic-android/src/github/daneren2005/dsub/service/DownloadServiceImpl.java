@@ -63,6 +63,7 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
+import github.daneren2005.dsub.util.FileUtil;
 import java.net.URLEncoder;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -88,6 +89,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     
     private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
 	private Looper mediaPlayerLooper;
+	private MediaPlayer lpaPlayer;
     private MediaPlayer mediaPlayer;
 	private MediaPlayer nextMediaPlayer;
 	private boolean nextSetup = false;
@@ -144,6 +146,19 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		new Thread(new Runnable() {
 			public void run() {
 				Looper.prepare();
+				
+				// LPA Player on some devices causes weird issues, hold a default media player to mask them
+				try {
+					File randomSong = FileUtil.getAnySong(DownloadServiceImpl.this);
+					
+					lpaPlayer = new MediaPlayer();
+					lpaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+					lpaPlayer.setDataSource(randomSong.getPath());
+					lpaPlayer.prepareAsync();
+				} catch(Exception e) {
+					// Failed to setup, ignore
+					Log.w(TAG, "Failed to setup redirect media player", e);
+				}
 				
 				mediaPlayer = new MediaPlayer();
 				mediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
@@ -220,6 +235,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
 		sendBroadcast(i);
         
+		lpaPlayer.release();
         mediaPlayer.release();
         if(nextMediaPlayer != null) {
 			nextMediaPlayer.release();
