@@ -44,7 +44,7 @@ import java.util.List;
 
 public class DownloadActivity extends SubsonicActivity {
 	private static final String TAG = DownloadActivity.class.getSimpleName();
-	private DownloadFragment fragment;
+	private static DownloadFragment fragment;
 	private EditText playlistNameView;
 
 	/**
