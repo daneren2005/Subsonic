@@ -52,20 +52,25 @@ public class MainActivity extends SubsonicActivity {
 		pagerAdapter = new TabPagerAdapter(this, viewPager);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setOnPageChangeListener(pagerAdapter);
-
+		
 		addTab("Home", MainFragment.class, null);
 		addTab("Library", SelectArtistFragment.class, null);
 		addTab("Playlists", SelectPlaylistFragment.class, null);
 	}
-
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		
+	}
+	
 	@Override
 	protected void onPostCreate(Bundle bundle) {
 		super.onPostCreate(bundle);
-
+	
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		getSupportActionBar().setHomeButtonEnabled(false);
 		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
+		
 		showInfoDialog();
 	}
 
