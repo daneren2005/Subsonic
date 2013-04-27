@@ -18,9 +18,12 @@
  */
 package github.daneren2005.dsub.fragments;
 
+import android.util.Log;
+
 public class SubsonicTabFragment extends SubsonicFragment {
 	private static final String TAG = SubsonicTabFragment.class.getSimpleName();
 	protected boolean primaryFragment = false;
+	protected boolean invalidated = false;
 	
 	public void replaceFragment(SubsonicTabFragment fragment, int id) {
 		this.setPrimaryFragment(false);
@@ -34,6 +37,18 @@ public class SubsonicTabFragment extends SubsonicFragment {
 			if(context != null) {
 				context.setTitle(title);
 			}
+			if(invalidated) {
+				invalidated = false;
+				refresh();
+			}
+		}
+	}
+	
+	public void invalidate() {
+		if(primaryFragment) {
+			refresh();
+		} else {
+			invalidated = true;
 		}
 	}
 }

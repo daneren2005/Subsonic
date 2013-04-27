@@ -362,6 +362,14 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 				}
 			}
 		}
+		
+		public void invalidate() {
+			for (int i = 0; i < frags.size(); i++) {
+				List fragStack = (List)frags.get(i);
+				SubsonicTabFragment frag = (SubsonicTabFragment)fragStack.get(fragStack.size() - 1);
+				frag.invalidate();
+			}
+		}
 
 		private class TabInfo {
 			public final Class fragmentClass;

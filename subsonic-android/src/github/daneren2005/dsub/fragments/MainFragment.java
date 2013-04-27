@@ -129,7 +129,7 @@ public class MainFragment extends SubsonicTabFragment {
 				return super.onContextItemSelected(menuItem);
 		}
 
-		refresh();
+		context.getPagerAdapter().invalidate();
 		return true;
 	}
 
@@ -227,7 +227,7 @@ public class MainFragment extends SubsonicTabFragment {
 
 	private void toggleOffline() {
 		Util.setOffline(context, !Util.isOffline(context));
-		refresh();
+		context.getPagerAdapter().invalidate();
 	}
 
 	private void showAlbumList(String type) {
