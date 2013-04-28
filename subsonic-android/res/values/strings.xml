@@ -50,6 +50,7 @@
     <string name="main.albums_highest">Top rated</string>
     <string name="main.albums_starred">Starred</string>
     <string name="main.albums_random">Random</string>
+	<string name="main.back_confirm">Press back again to exit</string>
 
 	<string name="menu.search">Search</string>
 	<string name="menu.shuffle">Shuffle</string>

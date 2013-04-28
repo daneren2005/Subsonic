@@ -37,6 +37,7 @@ public class MainActivity extends SubsonicActivity {
 	private TextView trackView;
 	private TextView artistView;
 	private ImageButton startButton;
+	private long lastBackPressTime = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -184,17 +185,12 @@ public class MainActivity extends SubsonicActivity {
 	@Override
 	public void onBackPressed() {
 		if(pagerAdapter.onBackPressed()) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-			builder.setTitle(R.string.menu_exit)
-				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						MainActivity.super.onBackPressed();
-					}
-				})
-				.setNegativeButton(R.string.common_cancel, null);
-			AlertDialog dialog = builder.create();
-			dialog.show();
+			if(lastBackPressTime < (System.currentTimeMillis() - 4000)) {
+				lastBackPressTime = System.currentTimeMillis();
+				Util.toast(this, R.string.main_back_confirm);
+			} else {
+				super.onBackPressed();
+			}
 		}
 	}
 
