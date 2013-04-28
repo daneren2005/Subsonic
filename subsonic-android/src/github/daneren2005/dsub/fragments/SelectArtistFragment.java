@@ -174,8 +174,8 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 	}
 
 	@Override
-	protected void refresh() {
-		load(true);
+	protected void refresh(boolean refresh) {
+		load(refresh);
 	}
 
 	private void load(final boolean refresh) {

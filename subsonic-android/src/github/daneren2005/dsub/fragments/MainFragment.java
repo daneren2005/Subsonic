@@ -134,7 +134,7 @@ public class MainFragment extends SubsonicTabFragment {
 	}
 
 	@Override
-	protected void refresh() {
+	protected void refresh(boolean refresh) {
 		createLayout();
 	}
 

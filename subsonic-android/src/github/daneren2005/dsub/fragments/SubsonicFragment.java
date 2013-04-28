@@ -89,7 +89,7 @@ public class SubsonicFragment extends SherlockFragment {
 	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_refresh:
-				refresh();
+				refresh(true);
 				return true;
 			case R.id.menu_shuffle:
 				onShuffleRequested();
@@ -116,6 +116,9 @@ public class SubsonicFragment extends SherlockFragment {
 	}
 
 	protected void refresh() {
+		refresh(true);
+	}
+	protected void refresh(boolean refresh) {
 
 	}
 

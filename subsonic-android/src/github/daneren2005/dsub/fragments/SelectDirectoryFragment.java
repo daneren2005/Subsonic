@@ -319,8 +319,8 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 	}
 
 	@Override
-	protected void refresh() {
-		load(true);
+	protected void refresh(boolean refresh) {
+		load(refresh);
 	}
 
 	private void load(boolean refresh) {

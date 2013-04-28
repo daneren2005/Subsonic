@@ -39,14 +39,14 @@ public class SubsonicTabFragment extends SubsonicFragment {
 			}
 			if(invalidated) {
 				invalidated = false;
-				refresh();
+				refresh(false);
 			}
 		}
 	}
 	
 	public void invalidate() {
 		if(primaryFragment) {
-			refresh();
+			refresh(false);
 		} else {
 			invalidated = true;
 		}

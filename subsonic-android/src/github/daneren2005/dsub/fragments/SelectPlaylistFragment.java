@@ -152,8 +152,8 @@ public class SelectPlaylistFragment extends SubsonicTabFragment implements Adapt
 	}
 
 	@Override
-	protected void refresh() {
-		load(true);
+	protected void refresh(boolean refresh) {
+		load(refresh);
 	}
 
 	private void load(final boolean refresh) {
