@@ -51,8 +51,10 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -344,7 +346,7 @@ public class SubsonicFragment extends SherlockFragment {
 			return;
 		}
 
-		/*new LoadingTask<List<Playlist>>(context, true) {
+		new LoadingTask<List<Playlist>>(context, true) {
 			@Override
 			protected List<Playlist> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
@@ -380,7 +382,7 @@ public class SubsonicFragment extends SherlockFragment {
 
 				Util.toast(context, msg, false);
 			}
-		}.execute();*/
+		}.execute();
 	}
 
 	private void addToPlaylist(final Playlist playlist, final List<MusicDirectory.Entry> songs) {		
