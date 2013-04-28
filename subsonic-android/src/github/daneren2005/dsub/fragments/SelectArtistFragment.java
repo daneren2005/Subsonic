@@ -59,7 +59,7 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 		}
 
 		registerForContextMenu(artistList);
-		load(false);
+		invalidated = true;
 
 		return rootView;
 	}

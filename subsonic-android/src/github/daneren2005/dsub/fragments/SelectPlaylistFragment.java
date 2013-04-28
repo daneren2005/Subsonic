@@ -51,7 +51,7 @@ public class SelectPlaylistFragment extends SubsonicTabFragment implements Adapt
 		emptyTextView = rootView.findViewById(R.id.select_playlist_empty);
 		list.setOnItemClickListener(this);
 		registerForContextMenu(list);
-		load(false);
+		invalidated = true;
 
 		return rootView;
 	}
