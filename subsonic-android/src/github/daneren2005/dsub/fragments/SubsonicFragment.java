@@ -39,6 +39,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.HelpActivity;
+import github.daneren2005.dsub.activity.MainActivity;
 import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.domain.Artist;
@@ -116,13 +117,13 @@ public class SubsonicFragment extends SherlockFragment {
 
 		return false;
 	}
-	
+
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
 		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
 		MusicDirectory.Entry entry = selectedItem instanceof MusicDirectory.Entry ? (MusicDirectory.Entry) selectedItem : null;
 		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(10);
 		songs.add(entry);
-		
+
 		switch (menuItem.getItemId()) {
 			case R.id.album_menu_play_now:
 				downloadRecursively(entry.getId(), false, false, true, false, false);
@@ -186,7 +187,7 @@ public class SubsonicFragment extends SherlockFragment {
 			default:
 				return false;
 		}
-		
+
 		return true;
 	}
 
@@ -202,8 +203,15 @@ public class SubsonicFragment extends SherlockFragment {
 	}
 
 	protected void exit() {
-		context.stopService(new Intent(context, DownloadServiceImpl.class));
-		context.finish();
+		if(context.getClass() != MainActivity.class) {
+			Intent intent = new Intent(context, MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
+			Util.startActivityWithoutTransition(context, intent);
+		} else {
+			context.stopService(new Intent(context, DownloadServiceImpl.class));
+			context.finish();
+		}
 	}
 
 	public void setProgressVisible(boolean visible) {
@@ -558,7 +566,7 @@ public class SubsonicFragment extends SherlockFragment {
 			.setMessage(msg)
 			.show();
 	}
-	
+
 	protected void playWebView(MusicDirectory.Entry entry) {
 		int maxBitrate = Util.getMaxVideoBitrate(context);
 
@@ -597,12 +605,12 @@ public class SubsonicFragment extends SherlockFragment {
 			Util.toast(context, R.string.download_no_streaming_player);
 		}
 	}
-	
+
 	protected boolean entryExists(MusicDirectory.Entry entry) {
 		DownloadFile check = new DownloadFile(context, entry, false);
 		return check.isCompleteFileAvailable();
 	}
-	
+
 	public void deleteRecursively(MusicDirectory.Entry album) {
 		File dir = FileUtil.getAlbumDirectory(context, album);
 		Util.recursiveDelete(dir);

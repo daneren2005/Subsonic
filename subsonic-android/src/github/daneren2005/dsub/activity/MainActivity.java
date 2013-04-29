@@ -23,6 +23,7 @@ import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import java.util.concurrent.Executors;
@@ -42,6 +43,10 @@ public class MainActivity extends SubsonicActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
+            stopService(new Intent(this, DownloadServiceImpl.class));
+			finish();
+        }
 		setContentView(R.layout.main);
 
 		View bottomBar = findViewById(R.id.bottom_bar);
