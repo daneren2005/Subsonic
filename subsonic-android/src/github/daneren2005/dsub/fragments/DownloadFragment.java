@@ -475,11 +475,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
-		if(super.onOptionsItemSelected(menuItem)) {
+		if(menuItemSelected(menuItem.getItemId(), null)) {
 			return true;
 		}
-
-		return menuItemSelected(menuItem.getItemId(), null);
+		
+		return super.onOptionsItemSelected(menuItem);
 	}
 
 	@Override
@@ -605,9 +605,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				} else {
 					startTimer();
 				}
-				return true;
-			case R.id.menu_exit:
-				exit();
 				return true;
 			case R.id.menu_add_playlist:
 				songs = new ArrayList<MusicDirectory.Entry>(1);
