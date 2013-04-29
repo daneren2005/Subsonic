@@ -24,10 +24,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -55,6 +60,7 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -109,6 +115,79 @@ public class SubsonicFragment extends SherlockFragment {
 		}
 
 		return false;
+	}
+	
+	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
+		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
+		MusicDirectory.Entry entry = selectedItem instanceof MusicDirectory.Entry ? (MusicDirectory.Entry) selectedItem : null;
+		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(10);
+		songs.add(entry);
+		
+		switch (menuItem.getItemId()) {
+			case R.id.album_menu_play_now:
+				downloadRecursively(entry.getId(), false, false, true, false, false);
+				break;
+			case R.id.album_menu_play_shuffled:
+				downloadRecursively(entry.getId(), false, false, true, true, false);
+				break;
+			case R.id.album_menu_play_last:
+				downloadRecursively(entry.getId(), false, true, false, false, false);
+				break;
+			case R.id.album_menu_download:
+				downloadRecursively(entry.getId(), false, true, false, false, true);
+				break;
+			case R.id.album_menu_pin:
+				downloadRecursively(entry.getId(), true, true, false, false, true);
+				break;
+			case R.id.album_menu_star:
+				toggleStarred(entry);
+				break;
+			case R.id.album_menu_delete:
+				deleteRecursively(entry);
+				break;
+			case R.id.song_menu_play_now:
+				getDownloadService().clear();
+				getDownloadService().download(songs, false, true, true, false);
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				break;
+			case R.id.song_menu_play_next:
+				getDownloadService().download(songs, false, false, true, false);
+				break;
+			case R.id.song_menu_play_last:
+				getDownloadService().download(songs, false, false, false, false);
+				break;
+			case R.id.song_menu_download:
+				getDownloadService().downloadBackground(songs, false);
+				break;
+			case R.id.song_menu_pin:
+				getDownloadService().downloadBackground(songs, true);
+				break;
+			case R.id.song_menu_delete:
+				getDownloadService().delete(songs);
+				break;
+			case R.id.song_menu_add_playlist:
+				addToPlaylist(songs);
+				break;
+			case R.id.song_menu_star:
+				toggleStarred(entry);
+				break;
+			case R.id.song_menu_webview:
+				playWebView(entry);
+				break;
+			case R.id.song_menu_play_external:
+				playExternalPlayer(entry);
+				break;
+			case R.id.song_menu_info:
+				displaySongInfo(entry);
+				break;
+			case R.id.song_menu_stream_external:
+				streamExternalPlayer(entry);
+				break;
+			default:
+				return false;
+		}
+		
+		return true;
 	}
 
 	public DownloadService getDownloadService() {
@@ -478,5 +557,57 @@ public class SubsonicFragment extends SherlockFragment {
 			.setTitle(song.getTitle())
 			.setMessage(msg)
 			.show();
+	}
+	
+	protected void playWebView(MusicDirectory.Entry entry) {
+		int maxBitrate = Util.getMaxVideoBitrate(context);
+
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoUrl(maxBitrate, context, entry.getId())));
+
+		startActivity(intent);
+	}
+	protected void playExternalPlayer(MusicDirectory.Entry entry) {
+		if(!entryExists(entry)) {
+			Util.toast(context, R.string.download_need_download);
+		} else {
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
+
+			List<ResolveInfo> intents = context.getPackageManager()
+				.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+			if(intents != null && intents.size() > 0) {
+				startActivity(intent);
+			}else {
+				Util.toast(context, R.string.download_no_streaming_player);
+			}
+		}
+	}
+	protected void streamExternalPlayer(MusicDirectory.Entry entry) {
+		int maxBitrate = Util.getMaxVideoBitrate(context);
+
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoStreamUrl(maxBitrate, context, entry.getId())), "video/*");
+
+		List<ResolveInfo> intents = context.getPackageManager()
+			.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+		if(intents != null && intents.size() > 0) {
+			startActivity(intent);
+		} else {
+			Util.toast(context, R.string.download_no_streaming_player);
+		}
+	}
+	
+	protected boolean entryExists(MusicDirectory.Entry entry) {
+		DownloadFile check = new DownloadFile(context, entry, false);
+		return check.isCompleteFileAvailable();
+	}
+	
+	public void deleteRecursively(MusicDirectory.Entry album) {
+		File dir = FileUtil.getAlbumDirectory(context, album);
+		Util.recursiveDelete(dir);
+		if(Util.isOffline(context)) {
+			refresh();
+		}
 	}
 }

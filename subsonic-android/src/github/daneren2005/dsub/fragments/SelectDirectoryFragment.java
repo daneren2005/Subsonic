@@ -219,80 +219,19 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(!primaryFragment) {
-			return false;
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+		Object selectedItem = entries.get(info.position);
+		
+		if(super.onContextItemSelected(menuItem, selectedItem)) {
+			return true;
 		}
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
-		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(10);
-		songs.add((MusicDirectory.Entry) entryList.getItemAtPosition(info.position));
 		switch (menuItem.getItemId()) {
-			case R.id.album_menu_play_now:
-				downloadRecursively(entry.getId(), false, false, true, false, false);
-				break;
-			case R.id.album_menu_play_shuffled:
-				downloadRecursively(entry.getId(), false, false, true, true, false);
-				break;
-			case R.id.album_menu_play_last:
-				downloadRecursively(entry.getId(), false, true, false, false, false);
-				break;
-			case R.id.album_menu_download:
-				downloadRecursively(entry.getId(), false, true, false, false, true);
-				break;
-			case R.id.album_menu_pin:
-				downloadRecursively(entry.getId(), true, true, false, false, true);
-				break;
-			case R.id.album_menu_star:
-				toggleStarred(entry);
-				break;
-			case R.id.album_menu_delete:
-				deleteRecursively(entry);
-				break;
-			case R.id.song_menu_play_now:
-				getDownloadService().clear();
-				getDownloadService().download(songs, false, true, true, false);
-				Util.startActivityWithoutTransition(context, DownloadActivity.class);
-				break;
-			case R.id.song_menu_play_next:
-				getDownloadService().download(songs, false, false, true, false);
-				break;
-			case R.id.song_menu_play_last:
-				getDownloadService().download(songs, false, false, false, false);
-				break;
-			case R.id.song_menu_download:
-				getDownloadService().downloadBackground(songs, false);
-				break;
-			case R.id.song_menu_pin:
-				getDownloadService().downloadBackground(songs, true);
-				break;
-			case R.id.song_menu_delete:
-				getDownloadService().delete(songs);
-				break;
-			case R.id.song_menu_add_playlist:
-				addToPlaylist(songs);
-				break;
-			case R.id.song_menu_star:
-				toggleStarred(entry);
-				break;
-			case R.id.song_menu_webview:
-				playWebView(entry);
-				break;
-			case R.id.song_menu_play_external:
-				playExternalPlayer(entry);
-				break;
-			case R.id.song_menu_info:
-				displaySongInfo(entry);
-				break;
-			case R.id.song_menu_stream_external:
-				streamExternalPlayer(entry);
-				break;
 			case R.id.song_menu_remove_playlist:
 				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(info.position - 1));
 				break;
-			default:
-				return super.onContextItemSelected(menuItem);
 		}
+		
 		return true;
 	}
 
@@ -608,58 +547,6 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 		}
 		if (getDownloadService() != null) {
 			getDownloadService().delete(songs);
-		}
-	}
-
-	private boolean entryExists(MusicDirectory.Entry entry) {
-		DownloadFile check = new DownloadFile(context, entry, false);
-		return check.isCompleteFileAvailable();
-	}
-
-	private void playWebView(MusicDirectory.Entry entry) {
-		int maxBitrate = Util.getMaxVideoBitrate(context);
-
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoUrl(maxBitrate, context, entry.getId())));
-
-		startActivity(intent);
-	}
-	private void playExternalPlayer(MusicDirectory.Entry entry) {
-		if(!entryExists(entry)) {
-			Util.toast(context, R.string.download_need_download);
-		} else {
-			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
-
-			List<ResolveInfo> intents = context.getPackageManager()
-				.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-			if(intents != null && intents.size() > 0) {
-				startActivity(intent);
-			}else {
-				Util.toast(context, R.string.download_no_streaming_player);
-			}
-		}
-	}
-	private void streamExternalPlayer(MusicDirectory.Entry entry) {
-		int maxBitrate = Util.getMaxVideoBitrate(context);
-
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoStreamUrl(maxBitrate, context, entry.getId())), "video/*");
-
-		List<ResolveInfo> intents = context.getPackageManager()
-			.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-		if(intents != null && intents.size() > 0) {
-			startActivity(intent);
-		} else {
-			Util.toast(context, R.string.download_no_streaming_player);
-		}
-	}
-
-	public void deleteRecursively(MusicDirectory.Entry album) {
-		File dir = FileUtil.getAlbumDirectory(context, album);
-		Util.recursiveDelete(dir);
-		if(Util.isOffline(context)) {
-			refresh();
 		}
 	}
 

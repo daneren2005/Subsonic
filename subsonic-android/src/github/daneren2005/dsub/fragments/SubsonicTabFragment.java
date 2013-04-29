@@ -19,11 +19,21 @@
 package github.daneren2005.dsub.fragments;
 
 import android.util.Log;
+import android.view.MenuItem;
 
 public class SubsonicTabFragment extends SubsonicFragment {
 	private static final String TAG = SubsonicTabFragment.class.getSimpleName();
 	protected boolean primaryFragment = false;
 	protected boolean invalidated = false;
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
+		if(!primaryFragment) {
+			return true;
+		}
+		
+		return super.onContextItemSelected(menuItem, selectedItem);
+	}
 	
 	public void replaceFragment(SubsonicTabFragment fragment, int id) {
 		this.setPrimaryFragment(false);

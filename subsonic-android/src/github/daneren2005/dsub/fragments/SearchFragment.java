@@ -32,14 +32,12 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.view.ArtistAdapter;
 import github.daneren2005.dsub.util.BackgroundTask;
-import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.view.EntryAdapter;
 import github.daneren2005.dsub.util.MergeAdapter;
-import github.daneren2005.dsub.util.TabActivityBackgroundTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 
-public class SearchFragment extends SubsonicTabFragment {
+public class SearchFragment extends SubsonicFragment {
 	private static final int DEFAULT_ARTISTS = 3;
 	private static final int DEFAULT_ALBUMS = 5;
 	private static final int DEFAULT_SONGS = 10;
@@ -131,19 +129,8 @@ public class SearchFragment extends SubsonicTabFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.menu_search:
-				context.onSearchRequested();
-				return true;
-			case R.id.menu_exit:
-				exit();
-				return true;
-			case R.id.menu_settings:
-				startActivity(new Intent(context, SettingsActivity.class));
-				return true;
-			case R.id.menu_help:
-				startActivity(new Intent(context, HelpActivity.class));
-				return true;
+		if(super.onOptionsItemSelected(item)) {
+			return true;
 		}
 
 		return false;
@@ -173,38 +160,9 @@ public class SearchFragment extends SubsonicTabFragment {
 	public boolean onContextItemSelected(MenuItem menuItem) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Object selectedItem = list.getItemAtPosition(info.position);
-
-		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
-		MusicDirectory.Entry entry = selectedItem instanceof MusicDirectory.Entry ? (MusicDirectory.Entry) selectedItem : null;
-		String id = artist != null ? artist.getId() : entry.getId();
-
-		switch (menuItem.getItemId()) {
-			case R.id.album_menu_play_now:
-				downloadRecursively(id, false, false, true, false, false);
-				break;
-			case R.id.album_menu_play_shuffled:
-				downloadRecursively(id, false, false, true, true, false);
-				break;
-			case R.id.album_menu_play_last:
-				downloadRecursively(id, false, true, false, false, false);
-				break;
-			case R.id.album_menu_download:
-				downloadRecursively(id, false, true, false, false, true);
-				break;
-			case R.id.album_menu_pin:
-				downloadRecursively(id, true, true, false, false, true);
-				break;
-			case R.id.song_menu_play_now:
-				onSongSelected(entry, false, false, true, false);
-				break;
-			case R.id.song_menu_play_next:
-				onSongSelected(entry, false, true, false, true);
-				break;
-			case R.id.song_menu_play_last:
-				onSongSelected(entry, false, true, false, false);
-				break;
-			default:
-				return super.onContextItemSelected(menuItem);
+		
+		if(super.onContextItemSelected(menuItem, selectedItem)) {
+			return true;
 		}
 
 		return true;
