@@ -1,7 +1,6 @@
 package github.daneren2005.dsub.util;
 
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
-import github.daneren2005.dsub.fragments.SubsonicTabFragment;
+import github.daneren2005.dsub.fragments.SubsonicFragment;
 
 /**
  * @author Sindre Mehus
@@ -9,9 +8,9 @@ import github.daneren2005.dsub.fragments.SubsonicTabFragment;
  */
 public abstract class TabBackgroundTask<T> extends BackgroundTask<T> {
 
-    private final SubsonicTabFragment tabFragment;
+    private final SubsonicFragment tabFragment;
 
-    public TabBackgroundTask(SubsonicTabFragment fragment) {
+    public TabBackgroundTask(SubsonicFragment fragment) {
         super(fragment.getActivity());
         tabFragment = fragment;
     }
