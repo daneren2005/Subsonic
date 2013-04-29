@@ -89,7 +89,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     
     private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
 	private Looper mediaPlayerLooper;
-	private MediaPlayer lpaPlayer;
     private MediaPlayer mediaPlayer;
 	private MediaPlayer nextMediaPlayer;
 	private boolean nextSetup = false;
@@ -146,19 +145,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		new Thread(new Runnable() {
 			public void run() {
 				Looper.prepare();
-				
-				// LPA Player on some devices causes weird issues, hold a default media player to mask them
-				try {
-					File randomSong = FileUtil.getAnySong(DownloadServiceImpl.this);
-					
-					lpaPlayer = new MediaPlayer();
-					lpaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-					lpaPlayer.setDataSource(randomSong.getPath());
-					lpaPlayer.prepareAsync();
-				} catch(Exception e) {
-					// Failed to setup, ignore
-					Log.w(TAG, "Failed to setup redirect media player", e);
-				}
 				
 				mediaPlayer = new MediaPlayer();
 				mediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
@@ -235,7 +221,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
 		sendBroadcast(i);
         
-		lpaPlayer.release();
         mediaPlayer.release();
         if(nextMediaPlayer != null) {
 			nextMediaPlayer.release();
@@ -885,33 +870,20 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	private class PositionCache implements Runnable {
 		boolean isRunning = true;
-		Thread thread;
 
 		public void stop() {
 			isRunning = false;
-			if(thread != null) {
-				// Make it stop right NOW
-				thread.interrupt();
-			}
 		}
 
 		@Override
 		public void run() {
-			thread = Thread.currentThread();
-			int duration = currentPlaying.getSong().getDuration() == null ? mediaPlayer.getDuration() : currentPlaying.getSong().getDuration() * 1000;
-			cachedPosition = 0;
 			// Stop checking position before the song reaches completion
-			while(isRunning && (Math.abs(duration - cachedPosition) > 1000)) {
+			while(isRunning) {
 				try {
 					if(mediaPlayer != null && playerState == STARTED) {
 						cachedPosition = mediaPlayer.getCurrentPosition();
 					}
 					Thread.sleep(200L);
-				}
-				catch (InterruptedException e) {
-					// Purposely interrupted, don't log error
-					isRunning = false;
-					positionCache = null;
 				}
 				catch(Exception e) {
 					Log.w(TAG, "Crashed getting current position", e);
