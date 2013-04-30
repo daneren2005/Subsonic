@@ -31,7 +31,6 @@ public class SubsonicTabFragment extends SubsonicFragment {
 	}
 	
 	public void setPrimaryFragment(boolean primary) {
-		Log.i(TAG, this.getClass().getName() + ": " + primary);
 		primaryFragment = primary;
 		if(primary) {
 			if(context != null) {
