@@ -192,10 +192,14 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Object selectedItem = entries.get(info.position);
+		if(!primaryFragment) {
+			return false;
+		}
 		
-		if(super.onContextItemSelected(menuItem, selectedItem)) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+		Object selectedItem = entries.get(showHeader ? (info.position - 1) : info.position);
+		
+		if(onContextItemSelected(menuItem, selectedItem)) {
 			return true;
 		}
 
@@ -353,6 +357,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 					entryList.addHeaderView(createHeader(entries), null, false);
 				}
 			} else {
+				showHeader = false;
 				hideButtons = true;
 			}
 

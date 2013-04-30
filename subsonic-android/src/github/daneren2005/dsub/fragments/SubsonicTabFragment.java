@@ -26,22 +26,12 @@ public class SubsonicTabFragment extends SubsonicFragment {
 	protected boolean primaryFragment = false;
 	protected boolean invalidated = false;
 	
-	@Override
-	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
-		if(!primaryFragment) {
-			return true;
-		}
-		
-		return super.onContextItemSelected(menuItem, selectedItem);
-	}
-	
 	public void replaceFragment(SubsonicTabFragment fragment, int id) {
-		this.setPrimaryFragment(false);
-		fragment.setPrimaryFragment(true);
 		context.getPagerAdapter().replaceCurrent(fragment, id);
 	}
 	
 	public void setPrimaryFragment(boolean primary) {
+		Log.i(TAG, this.getClass().getName() + ": " + primary);
 		primaryFragment = primary;
 		if(primary) {
 			if(context != null) {

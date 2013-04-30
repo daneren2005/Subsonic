@@ -150,7 +150,7 @@ public class SearchFragment extends SubsonicFragment {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Object selectedItem = list.getItemAtPosition(info.position);
 		
-		if(super.onContextItemSelected(menuItem, selectedItem)) {
+		if(onContextItemSelected(menuItem, selectedItem)) {
 			return true;
 		}
 
