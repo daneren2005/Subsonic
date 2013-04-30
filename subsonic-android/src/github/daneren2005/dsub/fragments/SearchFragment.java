@@ -143,6 +143,9 @@ public class SearchFragment extends SubsonicFragment {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		Object selectedItem = list.getItemAtPosition(info.position);
 		onCreateContextMenu(menu, view, menuInfo, selectedItem);
+		if(selectedItem instanceof MusicDirectory.Entry && !((MusicDirectory.Entry) selectedItem).isVideo() && !Util.isOffline(context)) {
+			menu.removeItem(R.id.song_menu_remove_playlist);
+		}
 	}
 
 	@Override
