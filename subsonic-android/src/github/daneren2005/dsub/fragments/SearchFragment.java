@@ -142,18 +142,7 @@ public class SearchFragment extends SubsonicFragment {
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		Object selectedItem = list.getItemAtPosition(info.position);
-
-		boolean isArtist = selectedItem instanceof Artist;
-		boolean isAlbum = selectedItem instanceof MusicDirectory.Entry && ((MusicDirectory.Entry) selectedItem).isDirectory();
-		boolean isSong = selectedItem instanceof MusicDirectory.Entry && (!((MusicDirectory.Entry) selectedItem).isDirectory())
-				&& (!((MusicDirectory.Entry) selectedItem).isVideo());
-
-		MenuInflater inflater = context.getMenuInflater();
-		if (isArtist || isAlbum) {
-			inflater.inflate(R.menu.select_album_context, menu);
-		} else if (isSong) {
-			inflater.inflate(R.menu.select_song_context, menu);
-		}
+		onCreateContextMenu(menu, view, menuInfo, selectedItem);
 	}
 
 	@Override

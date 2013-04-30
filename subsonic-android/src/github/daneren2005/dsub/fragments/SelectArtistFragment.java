@@ -83,15 +83,10 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 		super.onCreateContextMenu(menu, view, menuInfo);
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		Object entry = artistList.getItemAtPosition(info.position);
 
-		if (artistList.getItemAtPosition(info.position) instanceof Artist) {
-			MenuInflater inflater = context.getMenuInflater();
-			if(Util.isOffline(context)) {
-				inflater.inflate(R.menu.select_artist_context_offline, menu);
-			}
-			else {
-				inflater.inflate(R.menu.select_artist_context, menu);
-			}
+		if (entry instanceof Artist) {
+			onCreateContextMenu(menu, view, menuInfo, entry);
 		} else if (info.position == 0) {
 			String musicFolderId = Util.getSelectedMusicFolderId(context);
 			MenuItem menuItem = menu.add(MENU_GROUP_MUSIC_FOLDER, -1, 0, R.string.select_artist_all_folders);

@@ -184,36 +184,9 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
 		MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
-
-		MenuInflater inflater = context.getMenuInflater();
-		if (entry.isDirectory()) {
-			if(Util.isOffline(context)) {
-				inflater.inflate(R.menu.select_album_context_offline, menu);
-			}
-			else {
-				inflater.inflate(R.menu.select_album_context, menu);
-			}
-		} else if(!entry.isVideo()) {
-			if(Util.isOffline(context)) {
-				inflater.inflate(R.menu.select_song_context_offline, menu);
-			}
-			else {
-				inflater.inflate(R.menu.select_song_context, menu);
-				if(playlistId == null) {
-					menu.removeItem(R.id.song_menu_remove_playlist);
-				}
-			}
-		} else {
-			if(Util.isOffline(context)) {
-				inflater.inflate(R.menu.select_video_context_offline, menu);
-			}
-			else {
-				inflater.inflate(R.menu.select_video_context, menu);
-			}
-		}
-
-		if (!Util.isOffline(context) && !entry.isVideo()) {
-			menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
+		onCreateContextMenu(menu, view, menuInfo, entry);
+		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null) {
+			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
 	}
 

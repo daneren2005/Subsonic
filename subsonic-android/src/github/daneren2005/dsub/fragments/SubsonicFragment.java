@@ -30,6 +30,8 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -116,6 +118,47 @@ public class SubsonicFragment extends SherlockFragment {
 		}
 
 		return false;
+	}
+	
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo, Object selected) {
+		MenuInflater inflater = context.getMenuInflater();
+		
+		if(selected instanceof MusicDirectory.Entry) {
+			MusicDirectory.Entry entry = (MusicDirectory.Entry) selected;
+			if (entry.isDirectory()) {
+				if(Util.isOffline(context)) {
+					inflater.inflate(R.menu.select_album_context_offline, menu);
+				}
+				else {
+					inflater.inflate(R.menu.select_album_context, menu);
+				}
+			} else if(!entry.isVideo()) {
+				if(Util.isOffline(context)) {
+					inflater.inflate(R.menu.select_song_context_offline, menu);
+				}
+				else {
+					inflater.inflate(R.menu.select_song_context, menu);
+				}
+			} else {
+				if(Util.isOffline(context)) {
+					inflater.inflate(R.menu.select_video_context_offline, menu);
+				}
+				else {
+					inflater.inflate(R.menu.select_video_context, menu);
+				}
+			}
+
+			if (!Util.isOffline(context) && !entry.isVideo()) {
+				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
+			}
+		} else if(selected instanceof Artist) {
+			if(Util.isOffline(context)) {
+				inflater.inflate(R.menu.select_artist_context_offline, menu);
+			}
+			else {
+				inflater.inflate(R.menu.select_artist_context, menu);
+			}
+		}
 	}
 
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
