@@ -237,7 +237,7 @@ public class SubsonicFragment extends SherlockFragment {
 	}
 	
 	public void replaceFragment(SubsonicFragment fragment, int id) {
-		context.getPagerAdapter().replaceCurrent(fragment, id);
+		context.replaceFragment(fragment, id);
 	}
 	
 	public void setPrimaryFragment(boolean primary) {

@@ -63,4 +63,11 @@ public class SearchActivity extends SubsonicActivity {
 	public void onSupportNewIntent(Intent intent) {
 		onNewIntent(intent);
 	}
+	
+	@Override
+	public void onBackPressed() {
+		if(onBackPressedSupport()) {
+			super.onBackPressed();
+		}
+	}
 }

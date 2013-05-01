@@ -39,6 +39,8 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 	private boolean destroyed = false;
 	protected TabPagerAdapter pagerAdapter;
 	protected ViewPager viewPager;
+	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
+	protected SubsonicFragment currentFragment;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -85,6 +87,49 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	public boolean onBackPressedSupport() {
+		if(pagerAdapter != null) {
+			return pagerAdapter.onBackPressed();
+		} else {
+			if(backStack.size() > 0) {
+				if(currentFragment != null) {
+					currentFragment.setPrimaryFragment(false);
+				}
+				Fragment oldFrag = (Fragment)currentFragment;
+
+				currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
+				currentFragment.setPrimaryFragment(true);
+				invalidateOptionsMenu();
+
+				FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+				trans.remove(oldFrag);
+				trans.commit();
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+	
+	public void replaceFragment(SubsonicFragment fragment, int id) {
+		if(pagerAdapter != null) {
+			pagerAdapter.replaceCurrent(fragment, id);
+		} else {
+			if(currentFragment != null) {
+				currentFragment.setPrimaryFragment(false);
+			}
+			backStack.add(fragment);
+			
+			currentFragment = fragment;
+			currentFragment.setPrimaryFragment(true);
+			invalidateOptionsMenu();
+			
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.add(id, fragment);
+			trans.commit();
+		}
 	}
 	
 	protected void addTab(int titleRes, Class fragmentClass, Bundle args) {

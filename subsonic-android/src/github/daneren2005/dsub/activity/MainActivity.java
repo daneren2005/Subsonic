@@ -189,7 +189,7 @@ public class MainActivity extends SubsonicActivity {
 
 	@Override
 	public void onBackPressed() {
-		if(pagerAdapter.onBackPressed()) {
+		if(onBackPressedSupport()) {
 			if(lastBackPressTime < (System.currentTimeMillis() - 4000)) {
 				lastBackPressTime = System.currentTimeMillis();
 				Util.toast(this, R.string.main_back_confirm);
