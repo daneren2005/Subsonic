@@ -22,21 +22,20 @@ package github.daneren2005.dsub.activity;
 import github.daneren2005.dsub.R;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.MergeAdapter;
+import com.actionbarsherlock.view.MenuItem;
 
 public class SearchActivity extends SubsonicActivity {
-	SearchFragment fragment;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.download_activity);
 
 		if (findViewById(R.id.download_container) != null && savedInstanceState == null) {
-			fragment = new SearchFragment();
-			getSupportFragmentManager().beginTransaction().add(R.id.download_container, fragment).commit();
+			currentFragment = new SearchFragment();
+			getSupportFragmentManager().beginTransaction().add(R.id.download_container, currentFragment).commit();
 		}
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -51,12 +50,25 @@ public class SearchActivity extends SubsonicActivity {
 		boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
 
 		if (query != null) {
-			fragment.search(query, autoplay);
+			((SearchFragment)currentFragment).search(query, autoplay);
 		} else {
-			fragment.populateList();
+			((SearchFragment)currentFragment).populateList();
 			if (requestsearch) {
 				onSearchRequested();
 			}
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == android.R.id.home) {
+			Intent i = new Intent();
+			i.setClass(this, MainActivity.class);
+			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+			return true;
+		} else {
+			return super.onOptionsItemSelected(item);
 		}
 	}
 	

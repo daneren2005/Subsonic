@@ -71,8 +71,6 @@ public class SearchFragment extends SubsonicFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.search, container, false);
-		setHasOptionsMenu(true);
-
 		setTitle(R.string.search_title);
 
 		View buttons = inflater.inflate(R.layout.search_buttons, null);

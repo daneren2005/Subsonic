@@ -74,6 +74,26 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		super.finish();
 		Util.disablePendingTransition(this);
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		com.actionbarsherlock.view.MenuInflater menuInflater = getSupportMenuInflater();
+		if(pagerAdapter != null) {
+			pagerAdapter.onCreateOptionsMenu(menu, menuInflater);
+		} else if(currentFragment != null) {
+			currentFragment.onCreateOptionsMenu(menu, menuInflater);
+		}
+		return true;
+	}
+	@Override
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		if(pagerAdapter != null) {
+			return pagerAdapter.onOptionsItemSelected(item);
+		} else if(currentFragment != null) {
+			return currentFragment.onOptionsItemSelected(item);
+		}
+		return true;
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -120,7 +140,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
-			backStack.add(fragment);
+			backStack.add(currentFragment);
 			
 			currentFragment = fragment;
 			currentFragment.setPrimaryFragment(true);

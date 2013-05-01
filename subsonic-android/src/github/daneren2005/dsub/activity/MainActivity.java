@@ -199,19 +199,6 @@ public class MainActivity extends SubsonicActivity {
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		if(pagerAdapter != null) {
-			com.actionbarsherlock.view.MenuInflater menuInflater = getSupportMenuInflater();
-			pagerAdapter.onCreateOptionsMenu(menu, menuInflater);
-		}
-		return true;
-	}
-	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
-		return pagerAdapter.onOptionsItemSelected(item);
-	}
-
 	private void update() {
 		if (getDownloadService() == null) {
 			return;
