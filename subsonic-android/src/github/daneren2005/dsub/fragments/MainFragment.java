@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainFragment extends SubsonicTabFragment {
+public class MainFragment extends SubsonicFragment {
 	private LayoutInflater inflater;
 
 	private static final int MENU_GROUP_SERVER = 10;
@@ -231,7 +231,7 @@ public class MainFragment extends SubsonicTabFragment {
 	}
 
 	private void showAlbumList(String type) {
-		SubsonicTabFragment fragment = new SelectDirectoryFragment();
+		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
 		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);

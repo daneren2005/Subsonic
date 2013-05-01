@@ -21,7 +21,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.fragments.SubsonicTabFragment;
+import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.updates.Updater;
@@ -225,7 +225,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		private SherlockFragmentActivity activity;
 		private ViewPager pager;
 		private ActionBar actionBar;
-		private SubsonicTabFragment currentFragment;
+		private SubsonicFragment currentFragment;
 		private List tabs = new ArrayList();
 		private List frags = new ArrayList();
 		private int currentPosition;
@@ -246,7 +246,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			fragStack.add(frag);
 			frags.add(i, fragStack);
 			if(currentFragment == null) {
-				currentFragment = (SubsonicTabFragment) frag;
+				currentFragment = (SubsonicFragment) frag;
 				currentFragment.setPrimaryFragment(true);
 			}
 			return frag;
@@ -295,7 +295,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 				currentFragment.setPrimaryFragment(false);
 			}
 			List fragStack = (List)frags.get(position);
-			currentFragment = (SubsonicTabFragment) fragStack.get(fragStack.size() - 1);
+			currentFragment = (SubsonicFragment) fragStack.get(fragStack.size() - 1);
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(true);
 			}
@@ -316,7 +316,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			notifyDataSetChanged();
 		}
 		
-		public void replaceCurrent(SubsonicTabFragment fragment, int id) {
+		public void replaceCurrent(SubsonicFragment fragment, int id) {
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
@@ -339,7 +339,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			List fragStack = (List)frags.get(currentPosition);
 			Fragment oldFrag = (Fragment)fragStack.remove(fragStack.size() - 1);
 			
-			currentFragment = (SubsonicTabFragment) fragStack.get(fragStack.size() - 1);
+			currentFragment = (SubsonicFragment) fragStack.get(fragStack.size() - 1);
 			currentFragment.setPrimaryFragment(true);
 			activity.invalidateOptionsMenu();
 			
@@ -366,7 +366,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		public void invalidate() {
 			for (int i = 0; i < frags.size(); i++) {
 				List fragStack = (List)frags.get(i);
-				SubsonicTabFragment frag = (SubsonicTabFragment)fragStack.get(fragStack.size() - 1);
+				SubsonicFragment frag = (SubsonicFragment)fragStack.get(fragStack.size() - 1);
 				frag.invalidate();
 			}
 		}

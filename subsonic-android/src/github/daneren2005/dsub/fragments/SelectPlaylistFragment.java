@@ -31,7 +31,7 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistAdapter;
 import java.util.List;
 
-public class SelectPlaylistFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
+public class SelectPlaylistFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
 	private ListView list;
@@ -92,7 +92,7 @@ public class SelectPlaylistFragment extends SubsonicTabFragment implements Adapt
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Playlist playlist = (Playlist) list.getItemAtPosition(info.position);
 
-		SubsonicTabFragment fragment;
+		SubsonicFragment fragment;
 		Bundle args;
 		FragmentTransaction trans;
 		switch (menuItem.getItemId()) {
@@ -142,7 +142,7 @@ public class SelectPlaylistFragment extends SubsonicTabFragment implements Adapt
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Playlist playlist = (Playlist) parent.getItemAtPosition(position);
 
-		SubsonicTabFragment fragment = new SelectDirectoryFragment();
+		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());

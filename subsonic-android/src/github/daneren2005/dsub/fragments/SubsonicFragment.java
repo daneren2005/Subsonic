@@ -72,6 +72,8 @@ public class SubsonicFragment extends SherlockFragment {
 	protected SubsonicActivity context;
 	protected CharSequence title = "DSub";
 	protected View rootView;
+	protected boolean primaryFragment = false;
+	protected boolean invalidated = false;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -232,6 +234,31 @@ public class SubsonicFragment extends SherlockFragment {
 		}
 
 		return true;
+	}
+	
+	public void replaceFragment(SubsonicFragment fragment, int id) {
+		context.getPagerAdapter().replaceCurrent(fragment, id);
+	}
+	
+	public void setPrimaryFragment(boolean primary) {
+		primaryFragment = primary;
+		if(primary) {
+			if(context != null) {
+				context.setTitle(title);
+			}
+			if(invalidated) {
+				invalidated = false;
+				refresh(false);
+			}
+		}
+	}
+	
+	public void invalidate() {
+		if(primaryFragment) {
+			refresh(false);
+		} else {
+			invalidated = true;
+		}
 	}
 
 	public DownloadService getDownloadService() {

@@ -17,12 +17,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.net.Uri;
+import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 import com.actionbarsherlock.view.Menu;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.HelpActivity;
 import github.daneren2005.dsub.activity.SearchActivity;
-import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.SearchCritera;
@@ -32,6 +31,7 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.view.ArtistAdapter;
 import github.daneren2005.dsub.util.BackgroundTask;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.view.EntryAdapter;
 import github.daneren2005.dsub.util.MergeAdapter;
 import github.daneren2005.dsub.util.TabBackgroundTask;
@@ -261,18 +261,23 @@ public class SearchFragment extends SubsonicFragment {
 	}
 
 	private void onArtistSelected(Artist artist) {
-		/*Intent intent = new Intent(context, SelectAlbumActivity.class);
-		intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
-		intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
-		Util.startActivityWithoutTransition(context, intent);*/
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
+		args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, R.id.search_layout);
 	}
 
 	private void onAlbumSelected(MusicDirectory.Entry album, boolean autoplay) {
-		/*Intent intent = new Intent(context, SelectAlbumActivity.class);
-		intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, album.getId());
-		intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, album.getTitle());
-		intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, autoplay);
-		Util.startActivityWithoutTransition(context, intent);*/
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_ID, album.getId());
+		args.putString(Constants.INTENT_EXTRA_NAME_NAME, album.getTitle());
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, R.id.search_layout);
 	}
 
 	private void onSongSelected(MusicDirectory.Entry song, boolean save, boolean append, boolean autoplay, boolean playNext) {

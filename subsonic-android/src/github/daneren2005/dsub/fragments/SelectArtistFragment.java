@@ -30,7 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectArtistFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
+public class SelectArtistFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectArtistFragment.class.getSimpleName();
 	private static final int MENU_GROUP_MUSIC_FOLDER = 10;
 
@@ -158,7 +158,7 @@ public class SelectArtistFragment extends SubsonicTabFragment implements Adapter
 			selectFolder();
 		} else {
 			Artist artist = (Artist) parent.getItemAtPosition(position);
-			SubsonicTabFragment fragment = new SelectDirectoryFragment();
+			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());

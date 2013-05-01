@@ -42,7 +42,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SelectDirectoryFragment extends SubsonicTabFragment implements AdapterView.OnItemClickListener {
+public class SelectDirectoryFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private DragSortListView entryList;
@@ -217,7 +217,7 @@ public class SelectDirectoryFragment extends SubsonicTabFragment implements Adap
 		if (position >= 0) {
 			MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
 			if (entry.isDirectory()) {
-				SubsonicTabFragment fragment = new SelectDirectoryFragment();
+				SubsonicFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
