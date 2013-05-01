@@ -113,32 +113,10 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 		}
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-
 		Artist artist = (Artist) artistList.getItemAtPosition(info.position);
 
 		if (artist != null) {
-			switch (menuItem.getItemId()) {
-				case R.id.artist_menu_play_now:
-					downloadRecursively(artist.getId(), false, false, true, false, false);
-					break;
-				case R.id.artist_menu_play_shuffled:
-					downloadRecursively(artist.getId(), false, false, true, true, false);
-					break;
-				case R.id.artist_menu_play_last:
-					downloadRecursively(artist.getId(), false, true, false, false, false);
-					break;
-				case R.id.artist_menu_download:
-					downloadRecursively(artist.getId(), false, true, false, false, true);
-					break;
-				case R.id.artist_menu_pin:
-					downloadRecursively(artist.getId(), true, true, false, false, true);
-					break;
-				case R.id.artist_menu_delete:
-					deleteRecursively(artist);
-					break;
-				default:
-					return super.onContextItemSelected(menuItem);
-			}
+			return onContextItemSelected(menuItem, artist);
 		} else if (info.position == 0) {
 			MusicFolder selectedFolder = menuItem.getItemId() == -1 ? null : musicFolders.get(menuItem.getItemId());
 			String musicFolderId = selectedFolder == null ? null : selectedFolder.getId();
@@ -216,13 +194,5 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 	private void selectFolder() {
 		folderButton.showContextMenu();
-	}
-
-	public void deleteRecursively(Artist artist) {
-		File dir = FileUtil.getArtistDirectory(context, artist);
-		Util.recursiveDelete(dir);
-		if(Util.isOffline(context)) {
-			refresh();
-		}
 	}
 }

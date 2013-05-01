@@ -171,6 +171,24 @@ public class SubsonicFragment extends SherlockFragment {
 		songs.add(entry);
 
 		switch (menuItem.getItemId()) {
+			case R.id.artist_menu_play_now:
+				downloadRecursively(artist.getId(), false, false, true, false, false);
+				break;
+			case R.id.artist_menu_play_shuffled:
+				downloadRecursively(artist.getId(), false, false, true, true, false);
+				break;
+			case R.id.artist_menu_play_last:
+				downloadRecursively(artist.getId(), false, true, false, false, false);
+				break;
+			case R.id.artist_menu_download:
+				downloadRecursively(artist.getId(), false, true, false, false, true);
+				break;
+			case R.id.artist_menu_pin:
+				downloadRecursively(artist.getId(), true, true, false, false, true);
+				break;
+			case R.id.artist_menu_delete:
+				deleteRecursively(artist);
+				break;
 			case R.id.album_menu_play_now:
 				downloadRecursively(entry.getId(), false, false, true, false, false);
 				break;
@@ -688,6 +706,14 @@ public class SubsonicFragment extends SherlockFragment {
 		return check.isCompleteFileAvailable();
 	}
 
+	public void deleteRecursively(Artist artist) {
+		File dir = FileUtil.getArtistDirectory(context, artist);
+		Util.recursiveDelete(dir);
+		if(Util.isOffline(context)) {
+			refresh();
+		}
+	}
+	
 	public void deleteRecursively(MusicDirectory.Entry album) {
 		File dir = FileUtil.getAlbumDirectory(context, album);
 		Util.recursiveDelete(dir);
