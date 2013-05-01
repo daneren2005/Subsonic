@@ -56,6 +56,7 @@ public class DownloadActivity extends SubsonicActivity {
 
 		if (findViewById(R.id.download_container) != null && savedInstanceState == null) {
 			currentFragment = new DownloadFragment();
+			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.download_container, currentFragment).commit();
 		}
 
