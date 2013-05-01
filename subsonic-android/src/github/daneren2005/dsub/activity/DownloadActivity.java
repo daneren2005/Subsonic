@@ -44,7 +44,6 @@ import java.util.List;
 
 public class DownloadActivity extends SubsonicActivity {
 	private static final String TAG = DownloadActivity.class.getSimpleName();
-	private static DownloadFragment fragment;
 	private EditText playlistNameView;
 
 	/**
@@ -56,8 +55,8 @@ public class DownloadActivity extends SubsonicActivity {
 		setContentView(R.layout.download_activity);
 
 		if (findViewById(R.id.download_container) != null && savedInstanceState == null) {
-			fragment = new DownloadFragment();
-			getSupportFragmentManager().beginTransaction().add(R.id.download_container, fragment).commit();
+			currentFragment = new DownloadFragment();
+			getSupportFragmentManager().beginTransaction().add(R.id.download_container, currentFragment).commit();
 		}
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -73,14 +72,14 @@ public class DownloadActivity extends SubsonicActivity {
 			startActivity(i);
 			return true;
 		} else {
-			return false;
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent me) {
-		if(fragment != null) {
-			return fragment.getGestureDetector().onTouchEvent(me);
+		if(currentFragment != null) {
+			return ((DownloadFragment)currentFragment).getGestureDetector().onTouchEvent(me);
 		} else {
 			return false;
 		}

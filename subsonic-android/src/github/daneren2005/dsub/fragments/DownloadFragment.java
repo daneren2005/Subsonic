@@ -116,7 +116,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.download, container, false);
-		setHasOptionsMenu(true);
 		setTitle(nowPlaying ? "Now Playing" : "Downloading");
 
 		WindowManager w = context.getWindowManager();
