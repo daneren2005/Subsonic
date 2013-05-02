@@ -157,10 +157,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					}
 				});
 				
-				Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
-				i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
-				i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
-				sendBroadcast(i);
+				try {
+					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
+					i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+					i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+					sendBroadcast(i);
+				} catch(Exception e) {
+					// Froyo or lower
+				}
 				
 				mediaPlayerLooper = Looper.myLooper();
 				mediaPlayerHandler = new Handler(mediaPlayerLooper);
@@ -216,10 +220,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
         lifecycleSupport.onDestroy();
 
-		Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
-		i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
-		i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
-		sendBroadcast(i);
+		try {
+			Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
+			i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+			i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+			sendBroadcast(i);
+		} catch(Exception e) {
+			// Froyo or lower
+		}
         
         mediaPlayer.release();
         if(nextMediaPlayer != null) {
@@ -1068,7 +1076,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
             nextMediaPlayer = new MediaPlayer();
 			nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
-            nextMediaPlayer.setAudioSessionId(mediaPlayer.getAudioSessionId());
+			try {
+            	nextMediaPlayer.setAudioSessionId(mediaPlayer.getAudioSessionId());
+			} catch(Exception e) {
+				nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			}
             nextMediaPlayer.setDataSource(file.getPath());
             setNextPlayerState(PREPARING);
 			
