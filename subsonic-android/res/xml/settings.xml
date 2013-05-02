@@ -239,6 +239,12 @@
                 android:key="screenLitOnDownload"
                 android:defaultValue="true"/>
 
+		<CheckBoxPreference
+			android:title="@string/settings.gapless_playback"
+			android:summary="@string/settings.gapless_playback_summary"
+			android:key="gaplessPlayback"
+			android:defaultValue="true"/>
+
         <Preference
                 android:key="clearSearchHistory"
                 android:title="@string/settings.clear_search_history"
