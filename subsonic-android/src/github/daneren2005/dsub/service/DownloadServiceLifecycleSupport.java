@@ -223,51 +223,42 @@ public class DownloadServiceLifecycleSupport {
     }
 
     private void handleKeyEvent(KeyEvent event) {
-		if(event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() > 0) {
-			switch (event.getKeyCode()) {
-				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
-				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-					downloadService.seekTo(downloadService.getPlayerPosition() - 10000);
-					break;
-				case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
-				case KeyEvent.KEYCODE_MEDIA_NEXT:
-					downloadService.seekTo(downloadService.getPlayerPosition() + 10000); 
-					break;
-			}
-		} else if(event.getAction() == KeyEvent.ACTION_UP) {
-			switch (event.getKeyCode()) {
-				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
-				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-				case KeyEvent.KEYCODE_HEADSETHOOK:
-					downloadService.togglePlayPause();
-					break;
-				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
-				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-					downloadService.previous();
-					break;
-				case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
-				case KeyEvent.KEYCODE_MEDIA_NEXT:
-					if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
-						downloadService.next();
-					}
-					break;
-				case RemoteControlClient.FLAG_KEY_MEDIA_STOP:
-				case KeyEvent.KEYCODE_MEDIA_STOP:
-					downloadService.stop();
-					break;
-				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY:
-				case KeyEvent.KEYCODE_MEDIA_PLAY:
-					if(downloadService.getPlayerState() != PlayerState.STARTED) {
-						downloadService.start();
-					}
-					break;
-				case RemoteControlClient.FLAG_KEY_MEDIA_PAUSE:
-				case KeyEvent.KEYCODE_MEDIA_PAUSE:
-					downloadService.pause();
-				default:
-					break;
-			}
-		}
+		if (event.getAction() != KeyEvent.ACTION_DOWN || event.getRepeatCount() > 0) {
+            return;
+        }
+
+        switch (event.getKeyCode()) {
+        case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
+        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+        case KeyEvent.KEYCODE_HEADSETHOOK:
+        	downloadService.togglePlayPause();
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
+        case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+        	downloadService.previous();
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
+        case KeyEvent.KEYCODE_MEDIA_NEXT:
+        	if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
+        		downloadService.next();
+        	}
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_STOP:
+        case KeyEvent.KEYCODE_MEDIA_STOP:
+        	downloadService.stop();
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_PLAY:
+        case KeyEvent.KEYCODE_MEDIA_PLAY:
+        	if(downloadService.getPlayerState() != PlayerState.STARTED) {
+        		downloadService.start();
+        	}
+        	break;
+        case RemoteControlClient.FLAG_KEY_MEDIA_PAUSE:
+        case KeyEvent.KEYCODE_MEDIA_PAUSE:
+        	downloadService.pause();
+        default:
+        	break;
+        }
     }
 
     /**
