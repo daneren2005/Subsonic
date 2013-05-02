@@ -60,9 +60,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.EqualizerActivity;
-import github.daneren2005.dsub.activity.LyricsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 
 public class DownloadFragment extends SubsonicFragment implements OnGestureListener {
 	private static final String TAG = DownloadFragment.class.getSimpleName();
@@ -504,13 +502,16 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 	@Override
 	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
+		if(!primaryFragment) {
+			return false;
+		}
+		
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
 		return menuItemSelected(menuItem.getItemId(), downloadFile) || super.onContextItemSelected(menuItem);
 	}
 
 	private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
-		Intent intent;
 		switch (menuItemId) {
 			case R.id.menu_show_album:
 				/*Intent intent = new Intent(context, SelectAlbumActivity.class);
@@ -519,10 +520,13 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				Util.startActivityWithoutTransition(context, intent);*/
 				return true;
 			case R.id.menu_lyrics:
-				intent = new Intent(context, LyricsActivity.class);
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, song.getSong().getArtist());
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_TITLE, song.getSong().getTitle());
-				Util.startActivityWithoutTransition(context, intent);
+				SubsonicFragment fragment = new LyricsFragment();
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_ARTIST, song.getSong().getArtist());
+				args.putString(Constants.INTENT_EXTRA_NAME_TITLE, song.getSong().getTitle());
+				fragment.setArguments(args);
+				
+				replaceFragment(fragment, R.id.download_layout);
 				return true;
 			case R.id.menu_remove:
 				new SilentBackgroundTask<Void>(context) {

@@ -131,6 +131,13 @@ public class DownloadActivity extends SubsonicActivity {
 			}
 		}
 	}
+	
+	@Override
+	public void onBackPressed() {
+		if(onBackPressedSupport()) {
+			super.onBackPressed();
+		}
+	}
 
 	private void savePlaylistInBackground(final String playlistName) {
 		Util.toast(this, getResources().getString(R.string.download_playlist_saving, playlistName));
