@@ -25,7 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.SectionIndexer;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.Artist;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

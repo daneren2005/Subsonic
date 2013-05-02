@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
+import github.daneren2005.dsub.activity.SubsonicActivity;
 
 @TargetApi(14)
 public class RemoteControlClientICS extends RemoteControlClientHelper {
@@ -40,7 +40,7 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 				RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
 				RemoteControlClient.FLAG_KEY_MEDIA_STOP);
 		
-		imageLoader = SubsonicTabActivity.getStaticImageLoader(context);
+		imageLoader = SubsonicActivity.getStaticImageLoader(context);
 	}
 	
 	public void unregister(final Context context) {
@@ -56,7 +56,7 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 	
 	public void updateMetadata(final Context context, final MusicDirectory.Entry currentSong) {
 		if(imageLoader == null) {
-			imageLoader = SubsonicTabActivity.getStaticImageLoader(context);
+			imageLoader = SubsonicActivity.getStaticImageLoader(context);
 		}
 		
 		// Update the remote controls

@@ -62,12 +62,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
-import github.daneren2005.dsub.util.FileUtil;
 import java.net.URLEncoder;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Sindre Mehus
