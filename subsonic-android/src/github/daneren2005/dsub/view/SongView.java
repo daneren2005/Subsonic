@@ -52,6 +52,9 @@ public class SongView extends UpdateView implements Checkable {
     private TextView statusTextView;
     private ImageButton starButton;
 	private ImageView moreButton;
+	
+	private DownloadService downloadService;
+	private DownloadFile downloadFile;
 
     public SongView(Context context) {
         super(context);
@@ -122,18 +125,29 @@ public class SongView extends UpdateView implements Checkable {
 			}
 		});
 
+		updateBackground();
         update();
     }
+	
+	@Override
+	protected void updateBackground() {
+        if (downloadService == null) {
+			downloadService = DownloadServiceImpl.getInstance();
+			if(downloadService == null) {
+				return;
+			}
+        }
+		
+		downloadFile = downloadService.forSong(song);
+	}
 
 	@Override
     protected void update() {
-		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
-        DownloadService downloadService = DownloadServiceImpl.getInstance();
         if (downloadService == null) {
             return;
         }
-
-        DownloadFile downloadFile = downloadService.forSong(song);
+		
+		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
         File partialFile = downloadFile.getPartialFile();
 
         int leftImage = 0;

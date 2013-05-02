@@ -63,6 +63,7 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
 import github.daneren2005.dsub.activity.SubsonicTabActivity;
+import github.daneren2005.dsub.util.FileUtil;
 import java.net.URLEncoder;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -334,7 +335,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     @Override
-    public synchronized boolean isShufflePlayEnabled() {
+    public boolean isShufflePlayEnabled() {
         return shufflePlay;
     }
 
@@ -570,7 +571,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 	
 	@Override
-	public synchronized List<DownloadFile> getSongs() {
+	public List<DownloadFile> getSongs() {
 		return downloadList;
 	}
 
@@ -583,7 +584,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 	
 	@Override
-	public synchronized List<DownloadFile> getBackgroundDownloads() {
+	public List<DownloadFile> getBackgroundDownloads() {
 		return backgroundDownloadList;
 	}
 
@@ -869,30 +870,20 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	private class PositionCache implements Runnable {
 		boolean isRunning = true;
-		Thread thread;
 
 		public void stop() {
 			isRunning = false;
-			if(thread != null) {
-				// Make it stop right NOW
-				thread.interrupt();
-			}
 		}
 
 		@Override
 		public void run() {
-			thread = Thread.currentThread();
+			// Stop checking position before the song reaches completion
 			while(isRunning) {
 				try {
 					if(mediaPlayer != null && playerState == STARTED) {
 						cachedPosition = mediaPlayer.getCurrentPosition();
 					}
 					Thread.sleep(200L);
-				}
-				catch (InterruptedException e) {
-					// Purposely interrupted, don't log error
-					isRunning = false;
-					positionCache = null;
 				}
 				catch(Exception e) {
 					Log.w(TAG, "Crashed getting current position", e);
@@ -1085,7 +1076,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				public void onPrepared(MediaPlayer mp) {
 					try {
 						setNextPlayerState(PREPARED);
-						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
+						
+						SharedPreferences prefs = Util.getPreferences(DownloadServiceImpl.this);
+						boolean gaplessPlayback = prefs.getBoolean(Constants.PREFERENCES_KEY_GAPLESS_PLAYBACK, true);
+						if(gaplessPlayback && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
 							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
@@ -1286,6 +1280,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 			if(n != 0) {
 				int start = currentPlaying == null ? 0 : getCurrentPlayingIndex();
+				if(start == -1) {
+					start = 0;
+				}
 				int i = start;
 				do {
 					DownloadFile downloadFile = downloadList.get(i);
