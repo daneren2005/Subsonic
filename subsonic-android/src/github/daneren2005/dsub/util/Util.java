@@ -52,7 +52,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.DownloadActivity;
+import github.daneren2005.dsub.activity.MainActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
@@ -659,7 +659,9 @@ public final class Util {
         setupViews(smallContentView, context, song, playing);
         notification.contentView = smallContentView;
         
-        Intent notificationIntent = new Intent(context, DownloadActivity.class);
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
         
 		handler.post(new Runnable() {

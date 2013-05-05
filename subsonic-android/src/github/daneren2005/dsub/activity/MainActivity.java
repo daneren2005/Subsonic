@@ -46,7 +46,11 @@ public class MainActivity extends SubsonicActivity {
 		if (getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
             stopService(new Intent(this, DownloadServiceImpl.class));
 			finish();
-        }
+        } else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
+			Intent intent = new Intent();
+			intent.setClass(this, DownloadActivity.class);
+			startActivity(intent);
+		}
 		setContentView(R.layout.main);
 
 		View bottomBar = findViewById(R.id.bottom_bar);
