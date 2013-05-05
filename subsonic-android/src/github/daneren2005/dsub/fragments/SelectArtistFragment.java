@@ -51,12 +51,8 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 		artistList = (ListView) rootView.findViewById(R.id.select_artist_list);
 		artistList.setOnItemClickListener(this);
 
-		folderButton = inflater.inflate(R.layout.select_artist_header, artistList, false);
+		folderButton = rootView.findViewById(R.id.select_artist_folder);
 		folderName = (TextView) folderButton.findViewById(R.id.select_artist_folder_2);
-
-		if (!Util.isOffline(context)) {
-			artistList.addHeaderView(folderButton);
-		}
 
 		registerForContextMenu(artistList);
 		invalidated = true;
@@ -152,6 +148,11 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	}
 
 	private void load(final boolean refresh) {
+		if (Util.isOffline(context)) {
+			folderButton.setVisibility(View.GONE);
+		} else {
+			folderButton.setVisibility(View.VISIBLE);
+		}
 		artistList.setVisibility(View.INVISIBLE);
 
 		BackgroundTask<Indexes> task = new TabBackgroundTask<Indexes>(this) {

@@ -10,6 +10,7 @@
 		android:layout_height="1px"
 		android:background="@color/dividerColor"/>
 
+	<include layout="@layout/select_artist_header"/>
 	<include layout="@layout/tab_progress"/>
 
 	<ListView android:id="@+id/select_artist_list"
