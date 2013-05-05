@@ -189,7 +189,7 @@ public class MainActivity extends SubsonicActivity {
 				lastBackPressTime = System.currentTimeMillis();
 				Util.toast(this, R.string.main_back_confirm);
 			} else {
-				super.onBackPressed();
+				finish();
 			}
 		}
 	}
