@@ -44,8 +44,6 @@ import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.HorizontalSlider;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
@@ -526,7 +524,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				args.putString(Constants.INTENT_EXTRA_NAME_TITLE, song.getSong().getTitle());
 				fragment.setArguments(args);
 				
-				replaceFragment(fragment, R.id.download_layout);
+				replaceFragment(fragment, R.id.download_container);
 				return true;
 			case R.id.menu_remove:
 				new SilentBackgroundTask<Void>(context) {
@@ -672,6 +670,18 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		executorService.shutdown();
 		if (visualizerView != null && visualizerView.isActive()) {
 			visualizerView.setActive(false);
+		}
+	}
+	
+	@Override
+	public void setPrimaryFragment(boolean primary) {
+		super.setPrimaryFragment(primary);
+		if(rootView != null) {
+			if(primary) {
+				rootView.setVisibility(View.VISIBLE);
+			} else {
+				rootView.setVisibility(View.GONE);
+			}
 		}
 	}
 
