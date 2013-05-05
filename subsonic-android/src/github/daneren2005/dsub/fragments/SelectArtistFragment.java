@@ -51,8 +51,10 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 		artistList = (ListView) rootView.findViewById(R.id.select_artist_list);
 		artistList.setOnItemClickListener(this);
 
-		folderButton = rootView.findViewById(R.id.select_artist_folder);
+		folderButton = inflater.inflate(R.layout.select_artist_header, artistList, false);
 		folderName = (TextView) folderButton.findViewById(R.id.select_artist_folder_2);
+		artistList.addHeaderView(folderButton);
+		folderButton = folderButton.findViewById(R.id.select_artist_folder);
 
 		registerForContextMenu(artistList);
 		invalidated = true;
