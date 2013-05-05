@@ -43,6 +43,7 @@ import github.daneren2005.dsub.activity.MainActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 
 /**
@@ -217,19 +218,19 @@ public class DSubWidgetProvider extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.appwidget_top, pendingIntent);
         
         // Emulate media button clicks.
-        intent = new Intent("1");
+        intent = new Intent("DSub.PLAY_PAUSE");
         intent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
         intent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
         pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_play, pendingIntent);
 
-        intent = new Intent("2");  // Use a unique action name to ensure a different PendingIntent to be created.
+        intent = new Intent("DSub.NEXT");  // Use a unique action name to ensure a different PendingIntent to be created.
         intent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
         intent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT));
         pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_next, pendingIntent);
         
-        intent = new Intent("3");  // Use a unique action name to ensure a different PendingIntent to be created.
+        intent = new Intent("DSub.PREVIOUS");  // Use a unique action name to ensure a different PendingIntent to be created.
         intent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
         intent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
         pendingIntent = PendingIntent.getService(context, 0, intent, 0);
