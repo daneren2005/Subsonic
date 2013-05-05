@@ -186,8 +186,8 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 							}
 						}
 					}
-					artistList.setVisibility(View.VISIBLE);
 				}
+				artistList.setVisibility(View.VISIBLE);
 			}
 		};
 		task.execute();
