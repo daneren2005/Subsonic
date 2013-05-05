@@ -145,11 +145,6 @@ public class MainActivity extends SubsonicActivity {
 	}
 	
 	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		
-	}
-	
-	@Override
 	protected void onPostCreate(Bundle bundle) {
 		super.onPostCreate(bundle);
 	

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -25,6 +26,7 @@ import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.updates.Updater;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
@@ -40,7 +42,9 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 	protected TabPagerAdapter pagerAdapter;
 	protected ViewPager viewPager;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
+	protected List<Integer> backStackId = new ArrayList<Integer>();
 	protected SubsonicFragment currentFragment;
+	protected int currentFragmentId;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -73,6 +77,35 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 	public void finish() {
 		super.finish();
 		Util.disablePendingTransition(this);
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		if(viewPager == null) {
+			super.onSaveInstanceState(savedInstanceState);
+			int[] ids = new int[backStackId.size() + 1];
+			ids[0] = currentFragmentId;
+			int i = 1;
+			for(Integer id: backStackId) {
+				ids[i] = id;
+				i++;
+			}
+			savedInstanceState.putIntArray(Constants.MAIN_BACK_STACK, ids);
+			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE, backStackId.size() + 1);
+		}
+	}
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		if(viewPager == null) {
+			super.onRestoreInstanceState(savedInstanceState);
+			
+			int size = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE);
+			int[] ids = savedInstanceState.getIntArray(Constants.MAIN_BACK_STACK);
+			FragmentManager fm = getSupportFragmentManager();
+			currentFragment = (SubsonicFragment)fm.findFragmentById(ids[0]);
+			currentFragmentId = ids[0];
+			currentFragment.setPrimaryFragment(true);
+		}
 	}
 	
 	@Override
@@ -120,6 +153,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 				Fragment oldFrag = (Fragment)currentFragment;
 
 				currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
+				backStackId.remove(backStackId.size() - 1);
 				currentFragment.setPrimaryFragment(true);
 				invalidateOptionsMenu();
 
@@ -141,9 +175,11 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 				currentFragment.setPrimaryFragment(false);
 			}
 			backStack.add(currentFragment);
+			backStackId.add(currentFragmentId);
 			
 			currentFragment = fragment;
 			currentFragment.setPrimaryFragment(true);
+			currentFragmentId = id;
 			invalidateOptionsMenu();
 			
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
