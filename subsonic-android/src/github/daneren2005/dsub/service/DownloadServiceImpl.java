@@ -162,7 +162,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
 					i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
 					sendBroadcast(i);
-				} catch(Exception e) {
+				} catch(Throwable e) {
 					// Froyo or lower
 				}
 				
@@ -188,7 +188,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		SharedPreferences prefs = Util.getPreferences(this);
 		try {
 			timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5"));
-		} catch(Exception e) {
+		} catch(Throwable e) {
 			timerDuration = 5;
 		}
 		sleepTimer = null;
@@ -225,7 +225,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
 			i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
 			sendBroadcast(i);
-		} catch(Exception e) {
+		} catch(Throwable e) {
 			// Froyo or lower
 		}
         
@@ -1078,7 +1078,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
 			try {
             	nextMediaPlayer.setAudioSessionId(mediaPlayer.getAudioSessionId());
-			} catch(Exception e) {
+			} catch(Throwable e) {
 				nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			}
             nextMediaPlayer.setDataSource(file.getPath());
