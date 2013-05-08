@@ -157,7 +157,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 				Fragment oldFrag = (Fragment)currentFragment;
 
 				currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
-				backStackId.remove(backStackId.size() - 1);
+				currentFragmentId = backStackId.remove(backStackId.size() - 1);
 				currentFragment.setPrimaryFragment(true);
 				invalidateOptionsMenu();
 
