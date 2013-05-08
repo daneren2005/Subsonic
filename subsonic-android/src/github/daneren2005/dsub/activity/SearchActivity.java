@@ -28,6 +28,8 @@ import github.daneren2005.dsub.util.Constants;
 import com.actionbarsherlock.view.MenuItem;
 
 public class SearchActivity extends SubsonicActivity {
+	private static final String TAG = SearchActivity.class.getSimpleName();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,16 +49,19 @@ public class SearchActivity extends SubsonicActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
-		boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-		boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
+		
+		if(currentFragment != null && currentFragment instanceof SearchFragment) {
+			String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
+			boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+			boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
 
-		if (query != null) {
-			((SearchFragment)currentFragment).search(query, autoplay);
-		} else {
-			((SearchFragment)currentFragment).populateList();
-			if (requestsearch) {
-				onSearchRequested();
+			if (query != null) {
+				((SearchFragment)currentFragment).search(query, autoplay);
+			} else {
+				((SearchFragment)currentFragment).populateList();
+				if (requestsearch) {
+					onSearchRequested();
+				}
 			}
 		}
 	}

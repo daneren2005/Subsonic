@@ -161,6 +161,14 @@ public class SearchFragment extends SubsonicFragment {
 
 		return true;
 	}
+	
+	@Override
+	public void setPrimaryFragment(boolean primary) {
+		super.setPrimaryFragment(primary);
+		if(rootView != null && primary) {
+			((SearchActivity)context).onSupportNewIntent(context.getIntent());
+		}
+	}
 
 	public void search(final String query, final boolean autoplay) {
 		mergeAdapter = new MergeAdapter();
