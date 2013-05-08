@@ -89,6 +89,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private Button jukeboxButton;
 	private View toggleListButton;
 	private ImageButton starButton;
+	private View mainLayout;
 	private ScheduledExecutorService executorService;
 	private DownloadFile currentPlaying;
 	private long currentRevision;
@@ -113,6 +114,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.download, container, false);
 		setTitle(nowPlaying ? "Now Playing" : "Downloading");
+		
+		mainLayout = rootView.findViewById(R.id.download_layout);
+		if(!primaryFragment) {
+			mainLayout.setVisibility(View.GONE);
+		}
 
 		WindowManager w = context.getWindowManager();
 		Display d = w.getDefaultDisplay();
@@ -524,7 +530,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				args.putString(Constants.INTENT_EXTRA_NAME_TITLE, song.getSong().getTitle());
 				fragment.setArguments(args);
 				
-				replaceFragment(fragment, R.id.download_container);
+				replaceFragment(fragment, R.id.download_layout_container);
 				return true;
 			case R.id.menu_remove:
 				new SilentBackgroundTask<Void>(context) {
@@ -678,9 +684,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		super.setPrimaryFragment(primary);
 		if(rootView != null) {
 			if(primary) {
-				rootView.setVisibility(View.VISIBLE);
+				mainLayout.setVisibility(View.VISIBLE);
 			} else {
-				rootView.setVisibility(View.GONE);
+				mainLayout.setVisibility(View.GONE);
 			}
 		}
 	}
