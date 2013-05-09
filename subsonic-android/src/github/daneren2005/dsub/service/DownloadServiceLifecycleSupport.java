@@ -310,14 +310,18 @@ public class DownloadServiceLifecycleSupport {
 	private class SerializeTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			serializeDownloadQueueNow();
+			synchronized(DownloadServiceLifecycleSupport.this) {
+				serializeDownloadQueueNow();
+			}
 			return null;
 		}
 	}
 	private class DeserializeTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			deserializeDownloadQueueNow();
+			synchronized(DownloadServiceLifecycleSupport.this) {
+				deserializeDownloadQueueNow();
+			}
 			return null;
 		}
 	}
