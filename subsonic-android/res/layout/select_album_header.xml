@@ -55,6 +55,19 @@
 		android:textSize="10sp"
 		android:singleLine="true"
 		android:ellipsize="none"/>
+
+	<TextView
+		android:text="0:00"
+		android:id="@+id/select_album_song_length"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/select_album_song_count"
+		android:layout_toRightOf="@+id/select_album_art"
+		android:paddingRight="4dip"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:textSize="10sp"
+		android:singleLine="true"
+		android:ellipsize="none"/>
 </RelativeLayout>
 
 

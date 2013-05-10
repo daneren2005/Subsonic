@@ -643,11 +643,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		int songCount = 0;
 
 		Set<String> artists = new HashSet<String>();
+		Integer totalDuration = 0;
 		for (MusicDirectory.Entry entry : entries) {
 			if (!entry.isDirectory()) {
 				songCount++;
 				if (entry.getArtist() != null) {
 					artists.add(entry.getArtist());
+				}
+				Integer duration = entry.getDuration();
+				if(duration != null) {
+					totalDuration += duration;
 				}
 			}
 		}
@@ -663,6 +668,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		TextView songCountView = (TextView) header.findViewById(R.id.select_album_song_count);
 		String s = context.getResources().getQuantityString(R.plurals.select_album_n_songs, songCount, songCount);
 		songCountView.setText(s.toUpperCase());
+		
+		TextView songLengthView = (TextView) header.findViewById(R.id.select_album_song_length);
+		songLengthView.setText(Util.formatDuration(totalDuration));
 
 		if(add) {
 			return header;
