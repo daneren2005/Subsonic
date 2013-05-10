@@ -39,6 +39,7 @@ import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
+import github.daneren2005.dsub.provider.DSubWidgetProvider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -855,7 +856,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			} else {
 				Util.hidePlayingNotification(this, this, handler);
 			}
-        } else if(hide) {
+        } else if(playerState == PlayerState.PAUSED) {
+        	DSubWidgetProvider.getInstance().notifyChange(context, downloadService, true);
+       	} else if(hide) {
 			Util.hidePlayingNotification(this, this, handler);
 		}
 		mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
