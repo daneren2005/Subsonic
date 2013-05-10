@@ -37,6 +37,7 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.AlbumListAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +63,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	String playlistName;
 	String albumListType;
 	int albumListSize;
-	int albumListOffset;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -105,7 +105,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			playlistName = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
-			albumListOffset = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
 		}
 		load(false);
 
@@ -246,7 +245,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if (playlistId != null) {
 			getPlaylist(playlistId, playlistName);
 		} else if (albumListType != null) {
-			getAlbumList(albumListType, albumListSize, albumListOffset);
+			getAlbumList(albumListType, albumListSize);
 		} else {
 			getMusicDirectory(id, name, refresh);
 		}
@@ -274,7 +273,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}.execute();
 	}
 
-	private void getAlbumList(final String albumListType, final int size, final int offset) {
+	private void getAlbumList(final String albumListType, final int size) {
 		showHeader = false;
 
 		if ("newest".equals(albumListType)) {
@@ -298,30 +297,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				if ("starred".equals(albumListType)) {
 					result = service.getStarredList(context, this);
 				} else {
-					result = service.getAlbumList(albumListType, size, offset, context, this);
+					result = service.getAlbumList(albumListType, size, 0, context, this);
 				}
 				return result;
-			}
-
-			@Override
-			protected void done(Pair<MusicDirectory, Boolean> result) {
-				if (!result.getFirst().getChildren().isEmpty()) {
-					if (!("starred".equals(albumListType))) {
-						moreButton.setVisibility(View.VISIBLE);
-						if(entryList.getFooterViewsCount() == 0) {
-							entryList.addFooterView(footer);
-						}
-					}
-
-					moreButton.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View view) {
-							albumListOffset += albumListSize;
-							refresh();
-						}
-					});
-				}
-				super.done(result);
 			}
 		}.execute();
 	}
@@ -366,7 +344,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 
 			emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
-			entryList.setAdapter(entryAdapter = new EntryAdapter(context, getImageLoader(), entries, true));
+			entryAdapter = new EntryAdapter(context, getImageLoader(), entries, true);
+			if(albumListType == null || "starred".equals(albumListType)) {
+				entryList.setAdapter(entryAdapter);
+			} else {
+				entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListSize));
+			}
 			entryList.setVisibility(View.VISIBLE);
 			licenseValid = result.getSecond();
 			context.invalidateOptionsMenu();
