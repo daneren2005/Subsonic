@@ -67,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class SubsonicFragment extends SherlockFragment {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
@@ -75,6 +76,7 @@ public class SubsonicFragment extends SherlockFragment {
 	protected View rootView;
 	protected boolean primaryFragment = false;
 	protected boolean invalidated = false;
+	protected static Random random = new Random();
 
 	@Override
 	public void onCreate(Bundle bundle) {
