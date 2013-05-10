@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -56,6 +57,7 @@ public class DownloadServiceLifecycleSupport {
     private BroadcastReceiver ejectEventReceiver;
     private PhoneStateListener phoneStateListener;
     private boolean externalStorageAvailable= true;
+    private ReentrantLock lock = new ReentrantLock();
 
     /**
      * This receiver manages the intent that could come from other applications.
@@ -310,8 +312,9 @@ public class DownloadServiceLifecycleSupport {
 	private class SerializeTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			synchronized(DownloadServiceLifecycleSupport.this) {
+			if(lock.tryLock()) {
 				serializeDownloadQueueNow();
+				lock.unlock();
 			}
 			return null;
 		}
@@ -319,9 +322,9 @@ public class DownloadServiceLifecycleSupport {
 	private class DeserializeTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			synchronized(DownloadServiceLifecycleSupport.this) {
-				deserializeDownloadQueueNow();
-			}
+			lock.lock();
+			deserializeDownloadQueueNow();
+			lock.unlock();
 			return null;
 		}
 	}
