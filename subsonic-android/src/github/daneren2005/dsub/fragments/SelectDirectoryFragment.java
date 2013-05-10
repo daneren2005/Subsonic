@@ -355,7 +355,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 			if (songCount > 0) {
 				if(showHeader) {
-					entryList.addHeaderView(createHeader(entries), null, false);
+					View header = createHeader(entries);
+					if(header != null) {
+						entryList.addHeaderView(header, null, false);
+					}
 				}
 			} else {
 				showHeader = false;
@@ -620,8 +623,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	private View createHeader(List<MusicDirectory.Entry> entries) {
-		View header = LayoutInflater.from(context).inflate(R.layout.select_album_header, entryList, false);
-
+		View header = entryList.findViewById(R.id.select_album_header);
+		boolean add = false;
+		if(header == null) {
+			header = LayoutInflater.from(context).inflate(R.layout.select_album_header, entryList, false);
+			add = true;
+		}
+		
 		View coverArtView = header.findViewById(R.id.select_album_art);
 		getImageLoader().loadImage(coverArtView, entries.get(random.nextInt(entries.size())), true, true);
 
@@ -656,6 +664,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		String s = context.getResources().getQuantityString(R.plurals.select_album_n_songs, songCount, songCount);
 		songCountView.setText(s.toUpperCase());
 
-		return header;
+		if(add) {
+			return header;
+		} else {
+			return null;
+		}
 	}
 }
