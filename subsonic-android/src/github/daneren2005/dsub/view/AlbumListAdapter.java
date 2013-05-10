@@ -69,6 +69,8 @@ public class AlbumListAdapter extends EndlessAdapter {
 	
 	@Override
 	protected View getPendingView(ViewGroup parent) {
-		return LayoutInflater.from(context).inflate(R.layout.tab_progress, null);
+		View progress = LayoutInflater.from(context).inflate(R.layout.tab_progress, null);
+		progress.setVisibility(View.VISIBLE);
+		return progress;
 	}
 }
