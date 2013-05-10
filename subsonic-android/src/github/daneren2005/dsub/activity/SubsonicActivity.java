@@ -105,6 +105,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			currentFragment = (SubsonicFragment)fm.findFragmentById(ids[0]);
 			currentFragmentId = ids[0];
 			currentFragment.setPrimaryFragment(true);
+			invalidateOptionsMenu();
 			for(int i = 1; i < size; i++) {
 				backStack.add((SubsonicFragment)fm.findFragmentById(ids[i]));
 				backStackId.add(ids[i]);
