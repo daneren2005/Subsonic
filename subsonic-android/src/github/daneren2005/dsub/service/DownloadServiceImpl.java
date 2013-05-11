@@ -125,6 +125,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	private Timer sleepTimer;
 	private int timerDuration;
+	private boolean autoPlayStart = false;
 
     static {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -152,10 +153,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					}
 				});
 				
-				Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
-				i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
-				i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
-				sendBroadcast(i);
+				try {
+					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
+					i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+					i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+					sendBroadcast(i);
+				} catch(Throwable e) {
+					// Froyo or lower
+				}
 				
 				mediaPlayerLooper = Looper.myLooper();
 				mediaPlayerHandler = new Handler(mediaPlayerLooper);
@@ -179,7 +184,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		SharedPreferences prefs = Util.getPreferences(this);
 		try {
 			timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5"));
-		} catch(Exception e) {
+		} catch(Throwable e) {
 			timerDuration = 5;
 		}
 		sleepTimer = null;
@@ -211,10 +216,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
         lifecycleSupport.onDestroy();
 
-		Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
-		i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
-		i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
-		sendBroadcast(i);
+		try {
+			Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
+			i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+			i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
+			sendBroadcast(i);
+		} catch(Throwable e) {
+			// Froyo or lower
+		}
         
         mediaPlayer.release();
         if(nextMediaPlayer != null) {
@@ -313,10 +322,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public void restore(List<MusicDirectory.Entry> songs, int currentPlayingIndex, int currentPlayingPosition) {
         download(songs, false, false, false, false);
         if (currentPlayingIndex != -1) {
-            play(currentPlayingIndex, false);
+            play(currentPlayingIndex, autoPlayStart);
             if (currentPlaying.isCompleteFileAvailable()) {
-                doPlay(currentPlaying, currentPlayingPosition, false);
+                doPlay(currentPlaying, currentPlayingPosition, autoPlayStart);
             }
+			autoPlayStart = false;
         }
     }
 
@@ -650,6 +660,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (playerState == PAUSED || playerState == COMPLETED || playerState == STOPPED) {
             start();
         } else if (playerState == STOPPED || playerState == IDLE) {
+			autoPlayStart = true;
         	play();
         } else if (playerState == STARTED) {
             pause();
@@ -823,7 +834,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         boolean show = playerState == PlayerState.STARTED;
-        boolean pause = this.playerState == STARTED && playerState == PlayerState.PAUSED;
+        boolean pause = playerState == PlayerState.PAUSED;
 		boolean hide = playerState == PlayerState.STOPPED;
         Util.broadcastPlaybackStatusChange(this, playerState);
 
@@ -1063,7 +1074,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
             nextMediaPlayer = new MediaPlayer();
 			nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
-            nextMediaPlayer.setAudioSessionId(mediaPlayer.getAudioSessionId());
+			try {
+            	nextMediaPlayer.setAudioSessionId(mediaPlayer.getAudioSessionId());
+			} catch(Throwable e) {
+				nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			}
             nextMediaPlayer.setDataSource(file.getPath());
             setNextPlayerState(PREPARING);
 			

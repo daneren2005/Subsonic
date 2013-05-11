@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,6 +32,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.RemoteControlClient;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -55,6 +57,7 @@ public class DownloadServiceLifecycleSupport {
     private BroadcastReceiver ejectEventReceiver;
     private PhoneStateListener phoneStateListener;
     private boolean externalStorageAvailable= true;
+    private ReentrantLock lock = new ReentrantLock();
 
     /**
      * This receiver manages the intent that could come from other applications.
@@ -182,7 +185,11 @@ public class DownloadServiceLifecycleSupport {
     }
 
     public void serializeDownloadQueue() {
-		new SerializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			new SerializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		} else {
+			new SerializeTask().execute();
+		}
     }
     
     public void serializeDownloadQueueNow() {
@@ -199,7 +206,11 @@ public class DownloadServiceLifecycleSupport {
     }
 
 	private void deserializeDownloadQueue() {
-		new DeserializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			new DeserializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		} else {
+			new DeserializeTask().execute();
+		}
 	}
     private void deserializeDownloadQueueNow() {
        State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER);
@@ -214,42 +225,51 @@ public class DownloadServiceLifecycleSupport {
     }
 
     private void handleKeyEvent(KeyEvent event) {
-        if (event.getAction() != KeyEvent.ACTION_DOWN || event.getRepeatCount() > 0) {
-            return;
-        }
-
-        switch (event.getKeyCode()) {
-        case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
-        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-        case KeyEvent.KEYCODE_HEADSETHOOK:
-        	downloadService.togglePlayPause();
-        	break;
-        case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
-        case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-        	downloadService.previous();
-        	break;
-        case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
-        case KeyEvent.KEYCODE_MEDIA_NEXT:
-        	if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
-        		downloadService.next();
-        	}
-        	break;
-        case RemoteControlClient.FLAG_KEY_MEDIA_STOP:
-        case KeyEvent.KEYCODE_MEDIA_STOP:
-        	downloadService.stop();
-        	break;
-        case RemoteControlClient.FLAG_KEY_MEDIA_PLAY:
-        case KeyEvent.KEYCODE_MEDIA_PLAY:
-        	if(downloadService.getPlayerState() != PlayerState.STARTED) {
-        		downloadService.start();
-        	}
-        	break;
-        case RemoteControlClient.FLAG_KEY_MEDIA_PAUSE:
-        case KeyEvent.KEYCODE_MEDIA_PAUSE:
-        	downloadService.pause();
-        default:
-        	break;
-        }
+		if(event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() > 0) {
+			switch (event.getKeyCode()) {
+				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
+				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+					downloadService.seekTo(downloadService.getPlayerPosition() - 10000);
+					break;
+				case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
+				case KeyEvent.KEYCODE_MEDIA_NEXT:
+					downloadService.seekTo(downloadService.getPlayerPosition() + 10000); 
+					break;
+			}
+		} else if(event.getAction() == KeyEvent.ACTION_UP) {
+			switch (event.getKeyCode()) {
+				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
+				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+				case KeyEvent.KEYCODE_HEADSETHOOK:
+					downloadService.togglePlayPause();
+					break;
+				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
+				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+					downloadService.previous();
+					break;
+				case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
+				case KeyEvent.KEYCODE_MEDIA_NEXT:
+					if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
+						downloadService.next();
+					}
+					break;
+				case RemoteControlClient.FLAG_KEY_MEDIA_STOP:
+				case KeyEvent.KEYCODE_MEDIA_STOP:
+					downloadService.stop();
+					break;
+				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY:
+				case KeyEvent.KEYCODE_MEDIA_PLAY:
+					if(downloadService.getPlayerState() != PlayerState.STARTED) {
+						downloadService.start();
+					}
+					break;
+				case RemoteControlClient.FLAG_KEY_MEDIA_PAUSE:
+				case KeyEvent.KEYCODE_MEDIA_PAUSE:
+					downloadService.pause();
+				default:
+					break;
+			}
+		}
     }
 
     /**
@@ -292,14 +312,25 @@ public class DownloadServiceLifecycleSupport {
 	private class SerializeTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			serializeDownloadQueueNow();
+			if(lock.tryLock()) {
+				try {
+					serializeDownloadQueueNow();
+				} finally {
+					lock.unlock();
+				}
+			}
 			return null;
 		}
 	}
 	private class DeserializeTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			deserializeDownloadQueueNow();
+			try {
+				lock.lock();
+				deserializeDownloadQueueNow();
+			} finally {
+				lock.unlock();
+			}
 			return null;
 		}
 	}

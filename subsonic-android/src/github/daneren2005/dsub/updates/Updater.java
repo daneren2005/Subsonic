@@ -46,8 +46,13 @@ public class Updater {
 		updaters.add(new Updater373());
 		
 		SharedPreferences prefs = Util.getPreferences(context);
-		int lastVersion = prefs.getInt(Constants.LAST_VERSION, 372);
-		if(version > lastVersion) {
+		int lastVersion = prefs.getInt(Constants.LAST_VERSION, 0);
+		if(lastVersion == 0) {
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putInt(Constants.LAST_VERSION, version);
+			editor.commit();
+		}
+		else if(version > lastVersion) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putInt(Constants.LAST_VERSION, version);
 			editor.commit();

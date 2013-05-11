@@ -9,8 +9,8 @@
 	<string name="common.play_shuffled">Play shuffled</string>
     <string name="common.play_next">Play next</string>
     <string name="common.play_last">Play last</string>
-	<string name="common.download">Download</string>
-    <string name="common.pin">Cache</string>
+	<string name="common.download">Cache</string>
+    <string name="common.pin">Permanent Cache</string>
     <string name="common.delete">Delete</string>
 	<string name="common.star">Star</string>
 	<string name="common.unstar">Unstar</string>
