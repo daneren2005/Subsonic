@@ -130,6 +130,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	
 	private Timer sleepTimer;
 	private int timerDuration;
+	private boolean autoPlayStart = false;
 
     static {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -326,10 +327,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public void restore(List<MusicDirectory.Entry> songs, int currentPlayingIndex, int currentPlayingPosition) {
         download(songs, false, false, false, false);
         if (currentPlayingIndex != -1) {
-            play(currentPlayingIndex, false);
+            play(currentPlayingIndex, autoPlayStart);
             if (currentPlaying.isCompleteFileAvailable()) {
-                doPlay(currentPlaying, currentPlayingPosition, false);
+                doPlay(currentPlaying, currentPlayingPosition, autoPlayStart);
             }
+			autoPlayStart = false;
         }
     }
 
@@ -663,6 +665,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         if (playerState == PAUSED || playerState == COMPLETED || playerState == STOPPED) {
             start();
         } else if (playerState == STOPPED || playerState == IDLE) {
+			autoPlayStart = true;
         	play();
         } else if (playerState == STARTED) {
             pause();
