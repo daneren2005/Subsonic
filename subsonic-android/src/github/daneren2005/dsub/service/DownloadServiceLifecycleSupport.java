@@ -313,8 +313,11 @@ public class DownloadServiceLifecycleSupport {
 		@Override
 		protected Void doInBackground(Void... params) {
 			if(lock.tryLock()) {
-				serializeDownloadQueueNow();
-				lock.unlock();
+				try {
+					serializeDownloadQueueNow();
+				} finally {
+					lock.unlock();
+				}
 			}
 			return null;
 		}
@@ -322,9 +325,12 @@ public class DownloadServiceLifecycleSupport {
 	private class DeserializeTask extends AsyncTask<Void, Void, Void> {
 		@Override
 		protected Void doInBackground(Void... params) {
-			lock.lock();
-			deserializeDownloadQueueNow();
-			lock.unlock();
+			try {
+				lock.lock();
+				deserializeDownloadQueueNow();
+			} finally {
+				lock.unlock();
+			}
 			return null;
 		}
 	}
