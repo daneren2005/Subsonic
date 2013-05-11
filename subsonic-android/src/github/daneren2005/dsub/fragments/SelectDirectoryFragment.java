@@ -114,6 +114,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		} else {
 			invalidated = true;
 		}
+		if(name != null) {
+			setTitle(name);
+		}
 
 		return rootView;
 	}
@@ -224,6 +227,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if (position >= 0) {
 			MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
 			if (entry.isDirectory()) {
+				if(albumListType != null) {
+					SubsonicFragment parentFragment = new SelectDirectoryFragment();
+					Bundle args = new Bundle();
+					args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+					args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+					parentFragment.setArguments(args);
+
+					replaceFragment(parentFragment, R.id.select_album_layout);
+				}
+				
 				SubsonicFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
