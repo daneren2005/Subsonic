@@ -14,6 +14,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
@@ -34,7 +39,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubsonicActivity extends SherlockFragmentActivity {
+public class SubsonicActivity extends SherlockFragmentActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
@@ -45,6 +50,8 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 	protected List<Integer> backStackId = new ArrayList<Integer>();
 	protected SubsonicFragment currentFragment;
 	protected int currentFragmentId;
+	Spinner actionBarSpinner;
+	ArrayAdapter<CharSequence> spinnerAdapter;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -53,6 +60,20 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		super.onCreate(bundle);
 		startService(new Intent(this, DownloadServiceImpl.class));
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+	}
+	
+	@Override
+	protected void onPostCreate(Bundle bundle) {
+		super.onPostCreate(bundle);
+		
+		View actionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
+		actionBarSpinner = (Spinner)actionbar.findViewById(R.id.spinner);
+		spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		actionBarSpinner.setOnItemSelectedListener(this);
+		actionBarSpinner.setAdapter(spinnerAdapter);
+
+		getSupportActionBar().setCustomView(actionbar);
 	}
 
 	@Override
@@ -147,24 +168,40 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	@Override
+	public void setTitle(CharSequence title) {
+		if(pagerAdapter != null) {
+			pagerAdapter.recreateSpinner();
+		} else {
+			recreateSpinner();
+		}
+	}
+	
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+		int top = spinnerAdapter.getCount() - 1;
+		if(position < top) {
+			for(int i = top; i > position; i--) {
+				if(pagerAdapter != null) {
+					pagerAdapter.removeCurrent();
+				} else {
+					removeCurrent();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		
+	}
+	
 	public boolean onBackPressedSupport() {
 		if(pagerAdapter != null) {
 			return pagerAdapter.onBackPressed();
 		} else {
 			if(backStack.size() > 0) {
-				if(currentFragment != null) {
-					currentFragment.setPrimaryFragment(false);
-				}
-				Fragment oldFrag = (Fragment)currentFragment;
-
-				currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
-				currentFragmentId = backStackId.remove(backStackId.size() - 1);
-				currentFragment.setPrimaryFragment(true);
-				invalidateOptionsMenu();
-
-				FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-				trans.remove(oldFrag);
-				trans.commit();
+				removeCurrent();
 				return false;
 			} else {
 				return true;
@@ -190,6 +227,38 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.add(id, fragment);
 			trans.commit();
+			recreateSpinner();
+		}
+	}
+	private void removeCurrent() {
+		if(currentFragment != null) {
+			currentFragment.setPrimaryFragment(false);
+		}
+		Fragment oldFrag = (Fragment)currentFragment;
+
+		currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
+		currentFragmentId = backStackId.remove(backStackId.size() - 1);
+		currentFragment.setPrimaryFragment(true);
+		invalidateOptionsMenu();
+
+		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+		trans.remove(oldFrag);
+		trans.commit();
+		recreateSpinner();
+	}
+	
+	private void recreateSpinner() {
+		if(backStack.size() > 0) {
+			spinnerAdapter.clear();
+			for(int i = 0; i < backStack.size(); i++) {
+				spinnerAdapter.add(backStack.get(i).getTitle());
+			}
+			spinnerAdapter.add(currentFragment.getTitle());
+			spinnerAdapter.notifyDataSetChanged();
+			actionBarSpinner.setSelection(spinnerAdapter.getCount() - 1);
+			getSupportActionBar().setDisplayShowCustomEnabled(true);
+		} else {
+			getSupportActionBar().setDisplayShowCustomEnabled(false);
 		}
 	}
 	
@@ -406,6 +475,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 				currentFragment.setPrimaryFragment(true);
 			}
 			activity.invalidateOptionsMenu();
+			recreateSpinner();
 		}
 
 		public void addTab(CharSequence title, Class fragmentClass, Bundle args) {
@@ -436,6 +506,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.add(id, fragment);
 			trans.commit();
+			recreateSpinner();
 		}
 		
 		public void removeCurrent() {
@@ -458,6 +529,7 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 			List fragStack = (List)frags.get(currentPosition);
 			if(fragStack.size() > 1) {
 				removeCurrent();
+				recreateSpinner();
 				return false;
 			} else {
 				if(currentPosition == 0) {
@@ -466,6 +538,22 @@ public class SubsonicActivity extends SherlockFragmentActivity {
 					viewPager.setCurrentItem(0);
 					return false;
 				}
+			}
+		}
+		
+		private void recreateSpinner() {
+			List fragStack = (List)frags.get(currentPosition);
+			if(fragStack.size() > 1) {
+				spinnerAdapter.clear();
+				for(int i = 0; i < fragStack.size(); i++) {
+					SubsonicFragment frag = (SubsonicFragment)fragStack.get(i);
+					spinnerAdapter.add(frag.getTitle());
+				}
+				spinnerAdapter.notifyDataSetChanged();
+				actionBarSpinner.setSelection(spinnerAdapter.getCount() - 1);
+				actionBar.setDisplayShowCustomEnabled(true);
+			} else {
+				actionBar.setDisplayShowCustomEnabled(false);
 			}
 		}
 		

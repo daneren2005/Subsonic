@@ -329,13 +329,16 @@ public class SubsonicFragment extends SherlockFragment {
 		return SubsonicActivity.getStaticImageLoader(context);
 	}
 
-	protected void setTitle(CharSequence title) {
+	public void setTitle(CharSequence title) {
 		this.title = title;
 		context.setTitle(title);
 	}
-	protected void setTitle(int title) {
+	public void setTitle(int title) {
 		this.title = context.getResources().getString(title);
 		context.setTitle(this.title);
+	}
+	public CharSequence getTitle() {
+		return this.title;
 	}
 
 	protected void warnIfNetworkOrStorageUnavailable() {
