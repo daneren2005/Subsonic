@@ -282,13 +282,18 @@ public class SearchFragment extends SubsonicFragment {
 	}
 
 	private void onAlbumSelected(MusicDirectory.Entry album, boolean autoplay) {
-		SubsonicFragment parentFragment = new SelectDirectoryFragment();
-		Bundle args = new Bundle();
-		args.putString(Constants.INTENT_EXTRA_NAME_ID, album.getParent());
-		args.putString(Constants.INTENT_EXTRA_NAME_NAME, album.getArtist());
-		parentFragment.setArguments(args);
+		int id = R.id.search_layout;
+		Bundle args;
+		if(album.getParent() != null) {
+			SubsonicFragment parentFragment = new SelectDirectoryFragment();
+			args = new Bundle();
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, album.getParent());
+			args.putString(Constants.INTENT_EXTRA_NAME_NAME, album.getArtist());
+			parentFragment.setArguments(args);
 
-		replaceFragment(parentFragment, R.id.search_layout);
+			replaceFragment(parentFragment, R.id.search_layout);
+			id = R.id.select_album_layout;
+		}
 		
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		args = new Bundle();
@@ -296,7 +301,7 @@ public class SearchFragment extends SubsonicFragment {
 		args.putString(Constants.INTENT_EXTRA_NAME_NAME, album.getTitle());
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.select_album_layout);
+		replaceFragment(fragment, id);
 	}
 
 	private void onSongSelected(MusicDirectory.Entry song, boolean save, boolean append, boolean autoplay, boolean playNext) {
