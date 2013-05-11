@@ -72,6 +72,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.select_album, container, false);
+		if(!primaryFragment) {
+			((ViewGroup)rootView).getChildAt(0).setVisibility(View.GONE);
+		}
 
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
 		footer = LayoutInflater.from(context).inflate(R.layout.select_album_footer, entryList, false);
@@ -106,7 +109,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 		}
-		load(false);
+		if(primaryFragment) {
+			load(false);
+		} else {
+			invalidated = true;
+		}
 
 		return rootView;
 	}
@@ -230,6 +237,18 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				} else {
 					streamExternalPlayer(entry);
 				}
+			}
+		}
+	}
+	
+	@Override
+	public void setPrimaryFragment(boolean primary) {
+		super.setPrimaryFragment(primary);
+		if(rootView != null) {
+			if(primary) {
+				((ViewGroup)rootView).getChildAt(0).setVisibility(View.VISIBLE);
+			} else {
+				((ViewGroup)rootView).getChildAt(0).setVisibility(View.GONE);
 			}
 		}
 	}
