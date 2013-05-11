@@ -41,6 +41,7 @@ public final class LyricsFragment extends SubsonicFragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		setTitle(R.string.download_menu_lyrics);
 	}
 
 	@Override

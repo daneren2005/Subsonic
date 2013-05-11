@@ -42,6 +42,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		setTitle(R.string.search_artists);
 	}
 
 	@Override

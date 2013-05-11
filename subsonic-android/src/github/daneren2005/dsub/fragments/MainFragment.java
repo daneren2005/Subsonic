@@ -40,6 +40,7 @@ public class MainFragment extends SubsonicFragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		setTitle(R.string.button_bar_home);
 	}
 
 	@Override

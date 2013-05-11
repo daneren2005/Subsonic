@@ -41,6 +41,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		setTitle(R.string.playlist_label);
 	}
 
 	@Override

@@ -66,6 +66,7 @@ public class SearchFragment extends SubsonicFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTitle(R.string.button_bar_search);
 	}
 
 	@Override
