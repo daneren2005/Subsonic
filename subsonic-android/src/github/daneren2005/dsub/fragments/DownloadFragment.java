@@ -959,11 +959,16 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					case PREPARING:
 						statusTextView.setText(R.string.download_playerstate_buffering);
 						break;
-					case STARTED:
-						statusTextView.setText((currentPlaying != null) ? (currentPlaying.getSong().getArtist() + " - " + currentPlaying.getSong().getAlbum()) : null);
-						break;
 					default:
-						statusTextView.setText((currentPlaying != null) ? (currentPlaying.getSong().getArtist() + " - " + currentPlaying.getSong().getAlbum()) : null);
+						if(currentPlaying != null) {
+							String artist = "";
+							if(currentPlaying.getSong().getArtist() != null) {
+								artist = currentPlaying.getSong().getArtist() + " - ";
+							}
+							statusTextView.setText(artist + currentPlaying.getSong().getAlbum());
+						} else {
+							statusTextView.setText(null);
+						}
 						break;
 				}
 
