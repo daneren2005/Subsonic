@@ -73,6 +73,7 @@ public class SubsonicFragment extends SherlockFragment {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
 	protected SubsonicActivity context;
 	protected CharSequence title = "DSub";
+	protected CharSequence subtitle = null;
 	protected View rootView;
 	protected boolean primaryFragment = false;
 	protected boolean invalidated = false;
@@ -269,6 +270,7 @@ public class SubsonicFragment extends SherlockFragment {
 		if(primary) {
 			if(context != null) {
 				context.setTitle(title);
+				context.setSubtitle(subtitle);
 			}
 			if(invalidated) {
 				invalidated = false;
@@ -336,6 +338,10 @@ public class SubsonicFragment extends SherlockFragment {
 	public void setTitle(int title) {
 		this.title = context.getResources().getString(title);
 		context.setTitle(this.title);
+	}
+	public void setSubtitle(CharSequence title) {
+		this.subtitle = title;
+		context.setSubtitle(title);
 	}
 	public CharSequence getTitle() {
 		return this.title;

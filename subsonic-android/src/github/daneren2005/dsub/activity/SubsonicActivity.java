@@ -177,6 +177,9 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			recreateSpinner();
 		}
 	}
+	public void setSubtitle(CharSequence title) {
+		getSupportActionBar().setSubtitle(title);
+	}
 	
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
