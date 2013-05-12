@@ -170,6 +170,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 	
 	@Override
 	public void setTitle(CharSequence title) {
+		super.setTitle(title);
 		if(pagerAdapter != null) {
 			pagerAdapter.recreateSpinner();
 		} else {
