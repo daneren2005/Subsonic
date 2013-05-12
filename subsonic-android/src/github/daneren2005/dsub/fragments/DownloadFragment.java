@@ -886,23 +886,28 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			default:
 				break;
 		}
+		
+		setSubtitle(context.getResources().getString(R.string.download_playing_out_of, downloadService.getCurrentPlayingIndex(), downloadService.size()));
 	}
 
 	private void onCurrentChanged() {
-		if (getDownloadService() == null) {
+		DownloadService downloadService = getDownloadService();
+		if (downloadService == null) {
 			return;
 		}
 
-		currentPlaying = getDownloadService().getCurrentPlaying();
+		currentPlaying = downloadService.getCurrentPlaying();
 		if (currentPlaying != null) {
 			MusicDirectory.Entry song = currentPlaying.getSong();
 			songTitleTextView.setText(song.getTitle());
 			getImageLoader().loadImage(albumArtImageView, song, true, true);
 			starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, downloadService.getCurrentPlayingIndex(), downloadService.size()));
 		} else {
 			songTitleTextView.setText(null);
 			getImageLoader().loadImage(albumArtImageView, null, true, false);
 			starButton.setImageResource(android.R.drawable.btn_star_big_off);
+			setSubtitle(null);
 		}
 	}
 
