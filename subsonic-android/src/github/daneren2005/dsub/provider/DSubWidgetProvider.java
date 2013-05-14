@@ -211,8 +211,11 @@ public class DSubWidgetProvider extends AppWidgetProvider {
      *                     otherwise we launch {@link MainActivity}.
      */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
-
-        Intent intent = new Intent(context, playerActive ? DownloadActivity.class : MainActivity.class);
+		Intent intent = new Intent(context, MainActivity.class);
+		if(playerActive) {
+			intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		}
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.appwidget_coverart, pendingIntent);
         views.setOnClickPendingIntent(R.id.appwidget_top, pendingIntent);
