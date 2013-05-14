@@ -887,7 +887,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				break;
 		}
 		
-		setSubtitle(context.getResources().getString(R.string.download_playing_out_of, downloadService.getCurrentPlayingIndex(), downloadService.size()));
+		setSubtitle(context.getResources().getString(R.string.download_playing_out_of, downloadService.getCurrentPlayingIndex() + 1, downloadService.size()));
 	}
 
 	private void onCurrentChanged() {
@@ -902,7 +902,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			songTitleTextView.setText(song.getTitle());
 			getImageLoader().loadImage(albumArtImageView, song, true, true);
 			starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, downloadService.getCurrentPlayingIndex(), downloadService.size()));
+			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, downloadService.getCurrentPlayingIndex() + 1, downloadService.size()));
 		} else {
 			songTitleTextView.setText(null);
 			getImageLoader().loadImage(albumArtImageView, null, true, false);
