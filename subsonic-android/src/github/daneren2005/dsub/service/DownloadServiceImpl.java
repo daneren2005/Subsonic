@@ -328,7 +328,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         download(songs, false, false, false, false);
         if (currentPlayingIndex != -1) {
             play(currentPlayingIndex, autoPlayStart);
-            if (currentPlaying.isCompleteFileAvailable()) {
+            if (currentPlaying != null && currentPlaying.isCompleteFileAvailable()) {
                 doPlay(currentPlaying, currentPlayingPosition, autoPlayStart);
             }
 			autoPlayStart = false;
