@@ -42,7 +42,6 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setTitle(R.string.search_artists);
 	}
 
 	@Override
@@ -151,6 +150,8 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	}
 
 	private void load(final boolean refresh) {
+		setTitle(R.string.search_artists);
+		
 		if (Util.isOffline(context)) {
 			folderButton.setVisibility(View.GONE);
 		} else {

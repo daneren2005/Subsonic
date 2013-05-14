@@ -41,7 +41,6 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setTitle(R.string.playlist_label);
 	}
 
 	@Override
@@ -158,6 +157,8 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	}
 
 	private void load(final boolean refresh) {
+		setTitle(R.string.playlist_label);
+		
 		BackgroundTask<List<Playlist>> task = new TabBackgroundTask<List<Playlist>>(this) {
 			@Override
 			protected List<Playlist> doInBackground() throws Throwable {
