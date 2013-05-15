@@ -35,6 +35,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	private static final int MENU_GROUP_MUSIC_FOLDER = 10;
 
 	private ListView artistList;
+	private View folderButtonParent;
 	private View folderButton;
 	private TextView folderName;
 	private List<MusicFolder> musicFolders = null;
@@ -51,10 +52,10 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 		artistList = (ListView) rootView.findViewById(R.id.select_artist_list);
 		artistList.setOnItemClickListener(this);
 
-		folderButton = inflater.inflate(R.layout.select_artist_header, artistList, false);
-		folderName = (TextView) folderButton.findViewById(R.id.select_artist_folder_2);
-		artistList.addHeaderView(folderButton);
-		folderButton = folderButton.findViewById(R.id.select_artist_folder);
+		folderButtonParent = inflater.inflate(R.layout.select_artist_header, artistList, false);
+		folderName = (TextView) folderButtonParent.findViewById(R.id.select_artist_folder_2);
+		artistList.addHeaderView(folderButtonParent);
+		folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
 
 		registerForContextMenu(artistList);
 		invalidated = true;
@@ -130,7 +131,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		if (view == folderButton) {
+		if (view == folderButtonParent) {
 			selectFolder();
 		} else {
 			Artist artist = (Artist) parent.getItemAtPosition(position);
