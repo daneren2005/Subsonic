@@ -71,6 +71,9 @@ import java.util.Random;
 
 public class SubsonicFragment extends SherlockFragment {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
+	private static int TAG_INC = 10;
+	private int tag;
+	
 	protected SubsonicActivity context;
 	protected CharSequence title = "DSub";
 	protected CharSequence subtitle = null;
@@ -78,6 +81,11 @@ public class SubsonicFragment extends SherlockFragment {
 	protected boolean primaryFragment = false;
 	protected boolean invalidated = false;
 	protected static Random random = new Random();
+	
+	public SubsonicFragment() {
+		super();
+		tag = TAG_INC++;
+	}
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -262,7 +270,14 @@ public class SubsonicFragment extends SherlockFragment {
 	}
 	
 	public void replaceFragment(SubsonicFragment fragment, int id) {
-		context.replaceFragment(fragment, id);
+		context.replaceFragment(fragment, id, fragment.getSupportTag());
+	}
+	
+	public void setSupportTag(int tag) {
+		this.tag = tag;
+	}
+	public int getSupportTag() {
+		return tag;
 	}
 	
 	public void setPrimaryFragment(boolean primary) {

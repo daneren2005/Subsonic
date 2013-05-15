@@ -38,8 +38,7 @@ public class SearchActivity extends SubsonicActivity {
 		if (findViewById(R.id.download_container) != null && savedInstanceState == null) {
 			currentFragment = new SearchFragment();
 			currentFragment.setPrimaryFragment(true);
-			currentFragmentId = R.id.download_container;
-			getSupportFragmentManager().beginTransaction().add(R.id.download_container, currentFragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.download_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 		}
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);

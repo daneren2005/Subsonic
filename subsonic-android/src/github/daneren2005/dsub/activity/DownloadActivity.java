@@ -31,6 +31,7 @@ import java.util.Date;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import com.actionbarsherlock.view.MenuItem;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -57,8 +58,7 @@ public class DownloadActivity extends SubsonicActivity {
 		if (findViewById(R.id.download_container) != null && savedInstanceState == null) {
 			currentFragment = new DownloadFragment();
 			currentFragment.setPrimaryFragment(true);
-			currentFragmentId = R.id.download_container;
-			getSupportFragmentManager().beginTransaction().add(R.id.download_container, currentFragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.download_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 		}
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);

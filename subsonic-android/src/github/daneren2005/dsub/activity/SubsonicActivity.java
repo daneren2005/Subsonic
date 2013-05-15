@@ -47,9 +47,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 	protected TabPagerAdapter pagerAdapter;
 	protected ViewPager viewPager;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
-	protected List<Integer> backStackId = new ArrayList<Integer>();
 	protected SubsonicFragment currentFragment;
-	protected int currentFragmentId;
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
 
@@ -60,11 +58,6 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		super.onCreate(bundle);
 		startService(new Intent(this, DownloadServiceImpl.class));
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-	}
-	
-	@Override
-	protected void onPostCreate(Bundle bundle) {
-		super.onPostCreate(bundle);
 		
 		View actionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
 		actionBarSpinner = (Spinner)actionbar.findViewById(R.id.spinner);
@@ -104,15 +97,15 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		if(viewPager == null) {
 			super.onSaveInstanceState(savedInstanceState);
-			int[] ids = new int[backStackId.size() + 1];
-			ids[0] = currentFragmentId;
+			int[] ids = new int[backStack.size() + 1];
+			ids[0] = currentFragment.getSupportTag();
 			int i = 1;
-			for(Integer id: backStackId) {
-				ids[i] = id;
+			for(SubsonicFragment frag: backStack) {
+				ids[i] = frag.getSupportTag();
 				i++;
 			}
 			savedInstanceState.putIntArray(Constants.MAIN_BACK_STACK, ids);
-			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE, backStackId.size() + 1);
+			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE, backStack.size() + 1);
 		}
 	}
 	@Override
@@ -123,14 +116,16 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			int size = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE);
 			int[] ids = savedInstanceState.getIntArray(Constants.MAIN_BACK_STACK);
 			FragmentManager fm = getSupportFragmentManager();
-			currentFragment = (SubsonicFragment)fm.findFragmentById(ids[0]);
-			currentFragmentId = ids[0];
+			currentFragment = (SubsonicFragment)fm.findFragmentByTag(ids[0] + "");
+			currentFragment.setSupportTag(ids[0]);
 			currentFragment.setPrimaryFragment(true);
 			invalidateOptionsMenu();
 			for(int i = 1; i < size; i++) {
-				backStack.add((SubsonicFragment)fm.findFragmentById(ids[i]));
-				backStackId.add(ids[i]);
+				SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[i] + "");
+				frag.setSupportTag(ids[i]);
+				backStack.add(frag);
 			}
+			recreateSpinner();
 		}
 	}
 	
@@ -213,23 +208,21 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		}
 	}
 	
-	public void replaceFragment(SubsonicFragment fragment, int id) {
+	public void replaceFragment(SubsonicFragment fragment, int id, int tag) {
 		if(pagerAdapter != null) {
-			pagerAdapter.replaceCurrent(fragment, id);
+			pagerAdapter.replaceCurrent(fragment, id, tag);
 		} else {
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
 			backStack.add(currentFragment);
-			backStackId.add(currentFragmentId);
 			
 			currentFragment = fragment;
 			currentFragment.setPrimaryFragment(true);
-			currentFragmentId = id;
 			invalidateOptionsMenu();
 			
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-			trans.add(id, fragment);
+			trans.add(id, fragment, tag + "");
 			trans.commit();
 			recreateSpinner();
 		}
@@ -241,7 +234,6 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		Fragment oldFrag = (Fragment)currentFragment;
 
 		currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
-		currentFragmentId = backStackId.remove(backStackId.size() - 1);
 		currentFragment.setPrimaryFragment(true);
 		invalidateOptionsMenu();
 
@@ -496,7 +488,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			notifyDataSetChanged();
 		}
 		
-		public void replaceCurrent(SubsonicFragment fragment, int id) {
+		public void replaceCurrent(SubsonicFragment fragment, int id, int tag) {
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
@@ -508,7 +500,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			activity.invalidateOptionsMenu();
 			
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-			trans.add(id, fragment);
+			trans.add(id, fragment, tag + "");
 			trans.commit();
 			recreateSpinner();
 		}
