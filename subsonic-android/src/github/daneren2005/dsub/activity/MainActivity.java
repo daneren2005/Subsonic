@@ -26,6 +26,7 @@ import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.ChangeLog;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -147,6 +148,11 @@ public class MainActivity extends SubsonicActivity {
 		addTab("Home", MainFragment.class, null);
 		addTab("Library", SelectArtistFragment.class, null);
 		addTab("Playlists", SelectPlaylistFragment.class, null);
+		
+		ChangeLog changeLog = new ChangeLog(this, Util.getPreferences(this));
+		if(changeLog.isFirstRun()) {
+			changeLog.getLogDialog().show();
+		}
 	}
 	
 	@Override

@@ -24,6 +24,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
+import github.daneren2005.dsub.view.ChangeLog;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,6 +82,9 @@ public class MainFragment extends SubsonicFragment {
 			case R.id.menu_about:
 				showAboutDialog();
 				return true;
+			case R.id.menu_changelog:
+				ChangeLog changeLog = new ChangeLog(context, Util.getPreferences(context));
+				changeLog.getFullLogDialog().show();
 		}
 
 		return false;
