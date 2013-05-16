@@ -149,21 +149,21 @@ public class MainActivity extends SubsonicActivity {
 		addTab("Library", SelectArtistFragment.class, null);
 		addTab("Playlists", SelectPlaylistFragment.class, null);
 		
-		ChangeLog changeLog = new ChangeLog(this, Util.getPreferences(this));
-		if(changeLog.isFirstRun()) {
-			changeLog.getLogDialog().show();
-		}
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		getSupportActionBar().setHomeButtonEnabled(false);
+		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	}
 	
 	@Override
 	protected void onPostCreate(Bundle bundle) {
 		super.onPostCreate(bundle);
-	
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-		getSupportActionBar().setHomeButtonEnabled(false);
-		getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		
 		showInfoDialog();
+		
+		ChangeLog changeLog = new ChangeLog(this, Util.getPreferences(this));
+		if(changeLog.isFirstRun()) {
+			changeLog.getLogDialog().show();
+		}
 	}
 
 	@Override

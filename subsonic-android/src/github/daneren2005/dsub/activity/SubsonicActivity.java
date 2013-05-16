@@ -95,8 +95,8 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
 		if(viewPager == null) {
-			super.onSaveInstanceState(savedInstanceState);
 			int[] ids = new int[backStack.size() + 1];
 			ids[0] = currentFragment.getSupportTag();
 			int i = 1;
@@ -106,13 +106,14 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			}
 			savedInstanceState.putIntArray(Constants.MAIN_BACK_STACK, ids);
 			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE, backStack.size() + 1);
+		} else {
+			pagerAdapter.onSaveInstanceState(savedInstanceState);
 		}
 	}
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		if(viewPager == null) {
 			super.onRestoreInstanceState(savedInstanceState);
-			
 			int size = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE);
 			int[] ids = savedInstanceState.getIntArray(Constants.MAIN_BACK_STACK);
 			FragmentManager fm = getSupportFragmentManager();
@@ -126,6 +127,9 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 				backStack.add(frag);
 			}
 			recreateSpinner();
+		} else {
+			pagerAdapter.onRestoreInstanceState(savedInstanceState);
+			super.onRestoreInstanceState(savedInstanceState);
 		}
 	}
 	
@@ -538,6 +542,10 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		}
 		
 		private void recreateSpinner() {
+			if(frags.isEmpty()) {
+				return;
+			}
+			
 			List fragStack = (List)frags.get(currentPosition);
 			if(fragStack.size() > 1) {
 				spinnerAdapter.clear();
@@ -559,6 +567,43 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 				SubsonicFragment frag = (SubsonicFragment)fragStack.get(fragStack.size() - 1);
 				frag.invalidate();
 			}
+		}
+		
+		public void onSaveInstanceState(Bundle savedInstanceState) {
+			for(int i = 0; i < frags.size(); i++) {
+				List fragStack = (List)frags.get(i);
+				String[] ids = new String[fragStack.size()];
+				
+				for(int j = 0; j < fragStack.size(); j++) {
+					ids[j] = ((SubsonicFragment)fragStack.get(j)).getTag();
+				}
+				savedInstanceState.putStringArray(Constants.MAIN_BACK_STACK + i, ids);
+				savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE + i, fragStack.size());
+			}
+			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_TABS, frags.size());
+			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_POSITION, currentPosition);
+		}
+		
+		public void onRestoreInstanceState(Bundle savedInstanceState) {
+			int tabCount = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_TABS);
+			FragmentManager fm = activity.getSupportFragmentManager();
+			for(int i = 0; i < tabCount; i++) {
+				int stackSize = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE + i);
+				String[] ids = savedInstanceState.getStringArray(Constants.MAIN_BACK_STACK + i);
+				List fragStack = new ArrayList();
+				
+				for(int j = 0; j < stackSize; j++) {
+					SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[j]);
+					fragStack.add(frag);
+				}
+				
+				frags.add(i, fragStack);
+			}
+			currentPosition = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_POSITION);
+			List fragStack = (List)frags.get(currentPosition);
+			currentFragment = (SubsonicFragment)fragStack.get(fragStack.size() - 1);
+			currentFragment.setPrimaryFragment(true);
+			activity.invalidateOptionsMenu();
 		}
 
 		private class TabInfo {

@@ -96,6 +96,8 @@ public final class Constants {
 	
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";
+	public static final String MAIN_BACK_STACK_TABS = "backStackTabs";
+	public static final String MAIN_BACK_STACK_POSITION = "backStackPosition";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";
