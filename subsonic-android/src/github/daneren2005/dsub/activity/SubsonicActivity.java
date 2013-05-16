@@ -97,14 +97,14 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 		if(viewPager == null) {
-			int[] ids = new int[backStack.size() + 1];
-			ids[0] = currentFragment.getSupportTag();
+			String[] ids = new String[backStack.size() + 1];
+			ids[0] = currentFragment.getTag();
 			int i = 1;
 			for(SubsonicFragment frag: backStack) {
-				ids[i] = frag.getSupportTag();
+				ids[i] = frag.getTag();
 				i++;
 			}
-			savedInstanceState.putIntArray(Constants.MAIN_BACK_STACK, ids);
+			savedInstanceState.putStringArray(Constants.MAIN_BACK_STACK, ids);
 			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE, backStack.size() + 1);
 		} else {
 			pagerAdapter.onSaveInstanceState(savedInstanceState);
@@ -115,15 +115,13 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		if(viewPager == null) {
 			super.onRestoreInstanceState(savedInstanceState);
 			int size = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE);
-			int[] ids = savedInstanceState.getIntArray(Constants.MAIN_BACK_STACK);
+			String[] ids = savedInstanceState.getStringArray(Constants.MAIN_BACK_STACK);
 			FragmentManager fm = getSupportFragmentManager();
-			currentFragment = (SubsonicFragment)fm.findFragmentByTag(ids[0] + "");
-			currentFragment.setSupportTag(ids[0]);
+			currentFragment = (SubsonicFragment)fm.findFragmentByTag(ids[0]);
 			currentFragment.setPrimaryFragment(true);
 			invalidateOptionsMenu();
 			for(int i = 1; i < size; i++) {
-				SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[i] + "");
-				frag.setSupportTag(ids[i]);
+				SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[i]);
 				backStack.add(frag);
 			}
 			recreateSpinner();

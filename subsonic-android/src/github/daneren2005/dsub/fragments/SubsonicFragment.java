@@ -273,9 +273,6 @@ public class SubsonicFragment extends SherlockFragment {
 		context.replaceFragment(fragment, id, fragment.getSupportTag());
 	}
 	
-	public void setSupportTag(int tag) {
-		this.tag = tag;
-	}
 	public int getSupportTag() {
 		return tag;
 	}
