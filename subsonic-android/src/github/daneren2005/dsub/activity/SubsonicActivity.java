@@ -399,8 +399,8 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		private ViewPager pager;
 		private ActionBar actionBar;
 		private SubsonicFragment currentFragment;
-		private List tabs = new ArrayList();
-		private List frags = new ArrayList();
+		private List<TabInfo> tabs = new ArrayList<TabInfo>();
+		private List<List<SubsonicFragment>> frags = new ArrayList<List<SubsonicFragment>>();
 		private int currentPosition;
 
 		public TabPagerAdapter(SherlockFragmentActivity activity, ViewPager pager) {
@@ -413,13 +413,13 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 
 		@Override
 		public Fragment getItem(int i) {
-			final TabInfo tabInfo = (TabInfo)tabs.get(i);
-			SherlockFragment frag = (SherlockFragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args);
-			List fragStack = new ArrayList();
+			final TabInfo tabInfo = tabs.get(i);
+			SubsonicFragment frag = (SubsonicFragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args);
+			List<SubsonicFragment> fragStack = new ArrayList<SubsonicFragment>();
 			fragStack.add(frag);
 			frags.add(i, fragStack);
 			if(currentFragment == null) {
-				currentFragment = (SubsonicFragment) frag;
+				currentFragment = frag;
 				currentFragment.setPrimaryFragment(true);
 			}
 			return frag;
@@ -467,8 +467,8 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
-			List fragStack = (List)frags.get(position);
-			currentFragment = (SubsonicFragment) fragStack.get(fragStack.size() - 1);
+			List<SubsonicFragment> fragStack = frags.get(position);
+			currentFragment = fragStack.get(fragStack.size() - 1);
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(true);
 			}
@@ -494,7 +494,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
-			List fragStack = (List)frags.get(currentPosition);
+			List<SubsonicFragment> fragStack = frags.get(currentPosition);
 			fragStack.add(fragment);
 			
 			currentFragment = fragment;
@@ -511,10 +511,10 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
-			List fragStack = (List)frags.get(currentPosition);
+			List<SubsonicFragment> fragStack = frags.get(currentPosition);
 			Fragment oldFrag = (Fragment)fragStack.remove(fragStack.size() - 1);
 			
-			currentFragment = (SubsonicFragment) fragStack.get(fragStack.size() - 1);
+			currentFragment = fragStack.get(fragStack.size() - 1);
 			currentFragment.setPrimaryFragment(true);
 			activity.invalidateOptionsMenu();
 			
@@ -524,7 +524,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		}
 		
 		public boolean onBackPressed() {
-			List fragStack = (List)frags.get(currentPosition);
+			List<SubsonicFragment> fragStack = frags.get(currentPosition);
 			if(fragStack.size() > 1) {
 				removeCurrent();
 				recreateSpinner();
@@ -544,11 +544,11 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 				return;
 			}
 			
-			List fragStack = (List)frags.get(currentPosition);
+			List<SubsonicFragment> fragStack = frags.get(currentPosition);
 			if(fragStack.size() > 1) {
 				spinnerAdapter.clear();
 				for(int i = 0; i < fragStack.size(); i++) {
-					SubsonicFragment frag = (SubsonicFragment)fragStack.get(i);
+					SubsonicFragment frag = fragStack.get(i);
 					spinnerAdapter.add(frag.getTitle());
 				}
 				spinnerAdapter.notifyDataSetChanged();
@@ -569,11 +569,11 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		
 		public void onSaveInstanceState(Bundle savedInstanceState) {
 			for(int i = 0; i < frags.size(); i++) {
-				List fragStack = (List)frags.get(i);
+				List<SubsonicFragment> fragStack = frags.get(i);
 				String[] ids = new String[fragStack.size()];
 				
 				for(int j = 0; j < fragStack.size(); j++) {
-					ids[j] = ((SubsonicFragment)fragStack.get(j)).getTag();
+					ids[j] = fragStack.get(j).getTag();
 				}
 				savedInstanceState.putStringArray(Constants.MAIN_BACK_STACK + i, ids);
 				savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE + i, fragStack.size());
@@ -588,7 +588,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			for(int i = 0; i < tabCount; i++) {
 				int stackSize = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE + i);
 				String[] ids = savedInstanceState.getStringArray(Constants.MAIN_BACK_STACK + i);
-				List fragStack = new ArrayList();
+				List<SubsonicFragment> fragStack = new ArrayList<SubsonicFragment>();
 				
 				for(int j = 0; j < stackSize; j++) {
 					SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[j]);
@@ -598,8 +598,8 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 				frags.add(i, fragStack);
 			}
 			currentPosition = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_POSITION);
-			List fragStack = (List)frags.get(currentPosition);
-			currentFragment = (SubsonicFragment)fragStack.get(fragStack.size() - 1);
+			List<SubsonicFragment> fragStack = frags.get(currentPosition);
+			currentFragment = fragStack.get(fragStack.size() - 1);
 			currentFragment.setPrimaryFragment(true);
 			activity.invalidateOptionsMenu();
 		}
