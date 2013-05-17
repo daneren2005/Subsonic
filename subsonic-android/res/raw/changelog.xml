@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.0.0" versioncode="46" >
+	<release version="4.0.0" versioncode="46" releasedate="5/16/2013">
         <change>Converted everything to fragments!</change>
 		<change>Swipe to switch tabs</change>
 		<change>Breadcrumb trail when going down several levels</change>
+		<change>Require double tapping back to exit app</change>
 		<change>Change log dialog for new versions</change>
 		<change>Endless loading on album lists (ie: Random, Recently Added, etc...) instead of pressing more</change>
 		<change>Look at what is now playing from main tabs</change>
@@ -11,5 +12,6 @@
 		<change>When clicking on a album in search, the parent is also added to the back stack</change>
 		<change>Added total time to playlist/album headers</change>
 		<change>Fixed a lot of the menu items not working when using search</change>
+		<change>Update to Light/Dark themes</change>
     </release>
 </changelog>

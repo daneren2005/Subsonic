@@ -5,8 +5,12 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import android.support.v4.view.ViewPager;
@@ -23,7 +27,9 @@ import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
+import github.daneren2005.dsub.updates.Updater;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ChangeLog;
@@ -54,6 +60,7 @@ public class MainActivity extends SubsonicActivity {
 			startActivity(intent);
 		}
 		setContentView(R.layout.main);
+		loadSettings();
 
 		View bottomBar = findViewById(R.id.bottom_bar);
 		bottomBar.setOnClickListener(new View.OnClickListener() {
@@ -159,6 +166,7 @@ public class MainActivity extends SubsonicActivity {
 		super.onPostCreate(bundle);
 		
 		showInfoDialog();
+		checkUpdates();
 		
 		ChangeLog changeLog = new ChangeLog(this, Util.getPreferences(this));
 		if(changeLog.isFirstRun()) {
@@ -222,12 +230,46 @@ public class MainActivity extends SubsonicActivity {
 		trackView.setText(song.getTitle());
 		artistView.setText(song.getArtist());
 		getImageLoader().loadImage(coverArtView, song, false, false);
-		startButton.setImageResource((getDownloadService().getPlayerState() == PlayerState.STARTED) ?  R.drawable.media_pause : R.drawable.media_start);
+		int[] attrs = new int[] {(getDownloadService().getPlayerState() == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
+		TypedArray typedArray = this.obtainStyledAttributes(attrs);
+		Drawable drawable = typedArray.getDrawable(0);
+		startButton.setImageDrawable(drawable);
+		typedArray.recycle();
+	}
+	
+	public void checkUpdates() {
+		try {
+			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			int ver = Integer.parseInt(version.replace(".", ""));
+			Updater updater = new Updater(ver);
+			updater.checkUpdates(this);
+		}
+		catch(Exception e) {
+
+		}
+	}
+	
+	private void loadSettings() {
+		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
+		SharedPreferences prefs = Util.getPreferences(this);
+		if (!prefs.contains(Constants.PREFERENCES_KEY_CACHE_LOCATION)) {
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory().getPath());
+			editor.commit();
+		}
+
+		if (!prefs.contains(Constants.PREFERENCES_KEY_OFFLINE)) {
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, false);
+			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+			editor.commit();
+		} 
 	}
 
 	private void showInfoDialog() {
 		if (!infoDialogDisplayed) {
 			infoDialogDisplayed = true;
+			Log.i(TAG, Util.getRestUrl(this, null));
 			if (Util.getRestUrl(this, null).contains("demo.subsonic.org")) {
 				Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
 			}

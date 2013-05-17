@@ -80,7 +80,8 @@ public class ChangeLog {
      * Default CSS styles used to format the change log.
      */
     private static final String DEFAULT_CSS =
-            "h1 { margin-left: 0px; font-size: 1.2em;}" +
+            "div.title { margin-left: 0px; font-size: 1.2em; text-align: center;}" +
+			"div.subtitle {margin-left: 0px; font-size: .8em; text-align: center;}" +
             "li { margin-left: 0px;}" +
             "ul { padding-left: 2em;}";
 
@@ -125,6 +126,7 @@ public class ChangeLog {
         static final String NAME = "release";
         static final String ATTRIBUTE_VERSION = "version";
         static final String ATTRIBUTE_VERSION_CODE = "versioncode";
+		static final String ATTRIBUTE_RELEASE_DATE = "releasedate";
     }
 
     /**
@@ -406,9 +408,15 @@ public class ChangeLog {
             // if necessary.
             ReleaseItem release = changelog.get(key, defaultChangelog.get(key));
 
-            sb.append("<h1>");
+            sb.append("<div class='title'>");
             sb.append(String.format(versionFormat, release.versionName));
-            sb.append("</h1><ul>");
+			sb.append("</div>");
+			if(release.releaseDate != null) {
+				sb.append("<div class='subtitle'>");
+				sb.append(release.releaseDate);
+				sb.append("</div>");
+			}
+            sb.append("<ul>");
             for (String change : release.changes) {
                 sb.append("<li>");
                 sb.append(change);
@@ -489,6 +497,8 @@ public class ChangeLog {
         } catch (NumberFormatException e) {
             versionCode = NO_VERSION;
         }
+		
+		String releaseDate = xml.getAttributeValue(null, ReleaseTag.ATTRIBUTE_RELEASE_DATE);
 
         if (!full && versionCode <= mLastVersionCode) {
             return true;
@@ -505,7 +515,7 @@ public class ChangeLog {
             eventType = xml.next();
         }
 
-        ReleaseItem release = new ReleaseItem(versionCode, version, changes);
+        ReleaseItem release = new ReleaseItem(versionCode, version, releaseDate, changes);
         changelog.put(versionCode, release);
 
         return false;
@@ -524,15 +534,18 @@ public class ChangeLog {
          * Version name of the release.
          */
         public final String versionName;
+		
+		public final String releaseDate;
 
         /**
          * List of changes introduced with that release.
          */
         public final List<String> changes;
 
-        ReleaseItem(int versionCode, String versionName, List<String> changes) {
+        ReleaseItem(int versionCode, String versionName, String releaseDate, List<String> changes) {
             this.versionCode = versionCode;
             this.versionName = versionName;
+			this.releaseDate = releaseDate;
             this.changes = changes;
         }
     }

@@ -2,11 +2,9 @@ package github.daneren2005.dsub.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +46,6 @@ public class MainFragment extends SubsonicFragment {
 		this.inflater = inflater;
 		rootView = inflater.inflate(R.layout.home, container, false);
 
-		loadSettings();
 		createLayout();
 
 		return rootView;
@@ -200,23 +197,6 @@ public class MainFragment extends SubsonicFragment {
 				}
 			}
 		});
-	}
-
-	private void loadSettings() {
-		PreferenceManager.setDefaultValues(context, R.xml.settings, false);
-		SharedPreferences prefs = Util.getPreferences(context);
-		if (!prefs.contains(Constants.PREFERENCES_KEY_CACHE_LOCATION)) {
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory().getPath());
-			editor.commit();
-		}
-
-		if (!prefs.contains(Constants.PREFERENCES_KEY_OFFLINE)) {
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putBoolean(Constants.PREFERENCES_KEY_OFFLINE, false);
-			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-			editor.commit();
-		} 
 	}
 
 	private void setActiveServer(int instance) {
