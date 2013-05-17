@@ -30,7 +30,6 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
-import github.daneren2005.dsub.updates.Updater;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
@@ -329,18 +328,6 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 	}
 	public TabPagerAdapter getPagerAdapter() {
 		return pagerAdapter;
-	}
-	
-	public void checkUpdates() {
-		try {
-			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-			int ver = Integer.parseInt(version.replace(".", ""));
-			Updater updater = new Updater(ver);
-			updater.checkUpdates(SubsonicActivity.this);
-		}
-		catch(Exception e) {
-
-		}
 	}
 	
 	public static String getThemeName() {
