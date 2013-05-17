@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.0.0" versioncode="46" releasedate="5/16/2013">
+	<release version="4.0.0" versioncode="48" releasedate="5/16/2013">
         <change>Converted everything to fragments!</change>
 		<change>Swipe to switch tabs</change>
 		<change>Breadcrumb trail when going down several levels</change>
