@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -228,7 +230,11 @@ public class MainActivity extends SubsonicActivity {
 		trackView.setText(song.getTitle());
 		artistView.setText(song.getArtist());
 		getImageLoader().loadImage(coverArtView, song, false, false);
-		startButton.setImageResource((getDownloadService().getPlayerState() == PlayerState.STARTED) ?  R.drawable.media_pause : R.drawable.media_start);
+		int[] attrs = new int[] {(getDownloadService().getPlayerState() == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
+		TypedArray typedArray = this.obtainStyledAttributes(attrs);
+		Drawable drawable = typedArray.getDrawable(0);
+		startButton.setImageDrawable(drawable);
+		typedArray.recycle();
 	}
 	
 	public void checkUpdates() {
