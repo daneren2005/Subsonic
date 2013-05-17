@@ -18,13 +18,13 @@
  */
 package github.daneren2005.dsub.view;
 
+import android.content.Context;
 import github.daneren2005.dsub.R;
 import java.util.List;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.SectionIndexer;
-import github.daneren2005.dsub.activity.SubsonicTabActivity;
 import github.daneren2005.dsub.domain.Artist;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -35,13 +35,13 @@ import java.util.Set;
  */
 public class ArtistAdapter extends ArrayAdapter<Artist> implements SectionIndexer {
 
-    private final SubsonicTabActivity activity;
+    private final Context activity;
 	
 	// Both arrays are indexed by section ID.
     private final Object[] sections;
     private final Integer[] positions;
 
-    public ArtistAdapter(SubsonicTabActivity activity, List<Artist> artists) {
+    public ArtistAdapter(Context activity, List<Artist> artists) {
         super(activity, R.layout.artist_list_item, artists);
         this.activity = activity;
 		

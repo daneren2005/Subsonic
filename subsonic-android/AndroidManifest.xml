@@ -35,22 +35,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="github.daneren2005.dsub.activity.SelectArtistActivity"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:launchMode="standard"/>
-
-        <activity android:name="github.daneren2005.dsub.activity.SelectAlbumActivity"
-                  android:configChanges="orientation|keyboardHidden"/>
-
         <activity android:name="github.daneren2005.dsub.activity.SearchActivity"
                   android:label="@string/search.label"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
-
-        <activity android:name="github.daneren2005.dsub.activity.SelectPlaylistActivity"
-                  android:label="@string/playlist.label"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:launchMode="standard"/>
 
         <activity android:name="github.daneren2005.dsub.activity.DownloadActivity"
                   android:configChanges="keyboardHidden"
@@ -63,10 +51,6 @@
 
         <activity android:name="github.daneren2005.dsub.activity.HelpActivity"
                   android:label="@string/help.label"
-                  android:launchMode="singleTask"/>
-
-        <activity android:name="github.daneren2005.dsub.activity.LyricsActivity"
-                  android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
         <activity android:name="github.daneren2005.dsub.activity.EqualizerActivity"

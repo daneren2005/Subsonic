@@ -50,6 +50,7 @@
     <string name="main.albums_highest">Top rated</string>
     <string name="main.albums_starred">Starred</string>
     <string name="main.albums_random">Random</string>
+	<string name="main.back_confirm">Press back again to exit</string>
 
 	<string name="menu.search">Search</string>
 	<string name="menu.shuffle">Shuffle</string>
@@ -153,6 +154,7 @@
 	<string name="download.stop_timer">Stop Timer</string>
 	<string name="download.need_download">Video needs to be downloaded first</string>
 	<string name="download.no_streaming_player">No player can play this stream</string>
+	<string name="download.playing_out_of">Playing: %1$d/%2$d</string>
     
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
@@ -308,6 +310,13 @@
     <string name="util.bytes_format.megabyte">0.00 MB</string>
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
+
+	<string name="changelog_full_title">Change Log</string>
+    <string name="changelog_title">What\'s New</string>
+    <string name="changelog_ok_button">OK</string>
+    <string name="changelog_show_full">More…</string>
+
+    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>

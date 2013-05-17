@@ -1,33 +1,23 @@
 package github.daneren2005.dsub.util;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import github.daneren2005.dsub.activity.SubsonicActivity;
+import github.daneren2005.dsub.fragments.SubsonicFragment;
 
 /**
  * @author Sindre Mehus
  * @version $Id$
  */
-public abstract class LoadingTask<T> extends BackgroundTask<T> {
+public abstract class TabBackgroundTask<T> extends BackgroundTask<T> {
 
-    private final SubsonicActivity tabActivity;
-	private final boolean cancellable;
-	private boolean cancelled = false;
+    private final SubsonicFragment tabFragment;
 
-    public LoadingTask(SubsonicActivity activity, final boolean cancellable) {
-        super(activity);
-        tabActivity = activity;
-		this.cancellable = cancellable;
+    public TabBackgroundTask(SubsonicFragment fragment) {
+        super(fragment.getActivity());
+        tabFragment = fragment;
     }
 
     @Override
     public void execute() {
-        final ProgressDialog loading = ProgressDialog.show(tabActivity, "", "Loading. Please Wait...", true, cancellable, new DialogInterface.OnCancelListener() {
-			public void onCancel(DialogInterface dialog) {
-				cancelled = true;
-			}
-			
-		});
+        tabFragment.setProgressVisible(true);
 
         new Thread() {
             @Override
@@ -41,19 +31,18 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
                     getHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            loading.cancel();
+                            tabFragment.setProgressVisible(false);
                             done(result);
                         }
                     });
                 } catch (final Throwable t) {
-					if (isCancelled()) {
+                    if (isCancelled()) {
                         return;
                     }
-					
                     getHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            loading.cancel();
+                            tabFragment.setProgressVisible(false);
                             error(t);
                         }
                     });
@@ -63,15 +52,15 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
     }
 
     private boolean isCancelled() {
-        return tabActivity.isDestroyed() || cancelled;
+        return !tabFragment.isAdded();
     }
-	
-	@Override
+
+    @Override
     public void updateProgress(final String message) {
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                
+                tabFragment.updateProgress(message);
             }
         });
     }

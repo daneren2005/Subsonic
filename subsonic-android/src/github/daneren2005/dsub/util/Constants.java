@@ -50,6 +50,7 @@ public final class Constants {
     public static final String INTENT_EXTRA_NAME_REFRESH = "subsonic.refresh";
     public static final String INTENT_EXTRA_REQUEST_SEARCH = "subsonic.requestsearch";
     public static final String INTENT_EXTRA_NAME_EXIT = "subsonic.exit" ;
+	public static final String INTENT_EXTRA_NAME_DOWNLOAD = "subsonic.download";
 
     // Notification IDs.
     public static final int NOTIFICATION_ID_PLAYING = 100;
@@ -92,6 +93,11 @@ public final class Constants {
 	public static final String PREFERENCES_EQUALIZER_SETTINGS = "equalizerSettings";
 	public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";
 	public static final String PREFERENCES_KEY_GAPLESS_PLAYBACK = "gaplessPlayback";
+	
+	public static final String MAIN_BACK_STACK = "backStackIds";
+	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";
+	public static final String MAIN_BACK_STACK_TABS = "backStackTabs";
+	public static final String MAIN_BACK_STACK_POSITION = "backStackPosition";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";

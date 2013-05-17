@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/select_artist_layout"
+	android:id="@+id/home_layout"
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
@@ -10,13 +10,14 @@
 		android:layout_height="1px"
 		android:background="@color/dividerColor"/>
 
-	<include layout="@layout/tab_progress"/>
-
-	<ListView android:id="@+id/select_artist_list"
-		android:textFilterEnabled="true"
-		android:fastScrollEnabled="true"
+	<ListView
+		android:id="@+id/main_list"
 		android:layout_width="fill_parent"
-		android:layout_height="0dip"
-		android:layout_weight="1.0"/>
+		android:layout_height="0px"
+		android:layout_weight="1"/>
+
+	<View android:id="@+id/main_dummy"
+		android:layout_width="0px"
+		android:layout_height="0px"/>
 </LinearLayout>
 

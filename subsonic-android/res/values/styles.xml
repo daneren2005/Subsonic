@@ -12,6 +12,7 @@
     </style>
 	
 	<style name="PlaybackControl.Small" parent="@style/PlaybackControl">
+		<item name="android:padding">4dip</item>
         <item name="android:layout_width">46dip</item>
         <item name="android:layout_height">46dip</item>
     </style>
