@@ -302,6 +302,8 @@
     <string name="equalizer.enabled">Enabled</string>
     <string name="equalizer.preset">Select preset</string>
 
+	<string name="widget.4x1">DSub (4x1)</string>
+	<string name="widget.4x2">DSub (4x2)</string>
     <string name="widget.initial_text">Touch to select music</string>
     <string name="widget.sdcard_busy">SD card unavailable</string>
     <string name="widget.sdcard_missing">No SD card</string>

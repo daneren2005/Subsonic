@@ -672,7 +672,7 @@ public final class Util {
 		});
 
         // Update widget
-        DSubWidgetProvider.getInstance().notifyChange(context, downloadService, true);
+        DSubWidgetProvider.notifyInstances(context, downloadService, true);
     }
     
     private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean playing){
@@ -754,7 +754,7 @@ public final class Util {
 		}); 
 
         // Update widget
-        DSubWidgetProvider.getInstance().notifyChange(context, downloadService, false);
+        DSubWidgetProvider.notifyInstances(context, downloadService, false);
     }
 
     public static void sleepQuietly(long millis) {
