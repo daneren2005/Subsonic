@@ -3,7 +3,6 @@
 	<style name="Theme.DSub.Light" parent="Theme.Sherlock.Light">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
-		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="offline_icon">@drawable/main_offline_light</item>
 		<item name="media_button_backward">@drawable/media_backward_light</item>
 		<item name="media_button_forward">@drawable/media_forward_light</item>
