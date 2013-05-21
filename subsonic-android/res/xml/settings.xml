@@ -4,102 +4,12 @@
                   android:title="@string/settings.title">
 
     <PreferenceCategory
+			android:key="server"
             android:title="@string/settings.servers_title">
 
-        <PreferenceScreen
-                android:key="server1">
-
-            <EditTextPreference
-                    android:key="serverName1"
-                    android:title="@string/settings.server_name"
-                    android:defaultValue="Subsonic demo"/>
-
-            <EditTextPreference
-                    android:key="serverUrl1"
-                    android:title="@string/settings.server_address"
-                    android:defaultValue="http://demo.subsonic.org"
-                    android:inputType="textUri"/>
-
-            <EditTextPreference
-                    android:key="username1"
-                    android:title="@string/settings.server_username"
-                    android:defaultValue="android-guest"/>
-
-            <EditTextPreference
-                    android:key="password1"
-                    android:title="@string/settings.server_password"
-                    android:password="true"
-                    android:defaultValue="guest"
-                    android:summary="****"/>
-
-            <Preference
-                    android:key="testConnection1"
-                    android:title="@string/settings.test_connection_title"
-                    android:persistent="false"/>
-
-        </PreferenceScreen>
-
-        <PreferenceScreen
-                android:key="server2">
-
-            <EditTextPreference
-                    android:key="serverName2"
-                    android:title="@string/settings.server_name"
-                    android:defaultValue="@string/settings.server_unused1"/>
-
-            <EditTextPreference
-                    android:key="serverUrl2"
-                    android:title="@string/settings.server_address"
-                    android:defaultValue="http://yourhost"
-                    android:inputType="textUri"/>
-
-            <EditTextPreference
-                    android:key="username2"
-                    android:title="@string/settings.server_username"/>
-
-            <EditTextPreference
-                    android:key="password2"
-                    android:title="@string/settings.server_password"
-                    android:password="true"
-                    android:summary="****"/>
-
-            <Preference
-                    android:key="testConnection2"
-                    android:title="@string/settings.test_connection_title"
-                    android:persistent="false"/>
-
-        </PreferenceScreen>
-
-        <PreferenceScreen
-                android:key="server3">
-
-            <EditTextPreference
-                    android:key="serverName3"
-                    android:title="@string/settings.server_name"
-                    android:defaultValue="@string/settings.server_unused2"/>
-
-            <EditTextPreference
-                    android:key="serverUrl3"
-                    android:title="@string/settings.server_address"
-                    android:defaultValue="http://yourhost"
-                    android:inputType="textUri"/>
-
-            <EditTextPreference
-                    android:key="username3"
-                    android:title="@string/settings.server_username"/>
-
-            <EditTextPreference
-                    android:key="password3"
-                    android:title="@string/settings.server_password"
-                    android:password="true"
-                    android:summary="****"/>
-
-            <Preference
-                    android:key="testConnection3"
-                    android:title="@string/settings.test_connection_title"
-                    android:persistent="false"/>
-
-        </PreferenceScreen>
+		<Preference
+                android:key="serverAdd"
+                android:title="@string/settings.servers_add"/>
 
     </PreferenceCategory>
 

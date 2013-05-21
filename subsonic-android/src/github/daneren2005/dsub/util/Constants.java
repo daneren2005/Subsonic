@@ -57,9 +57,14 @@ public final class Constants {
     public static final int NOTIFICATION_ID_ERROR = 101;
 
     // Preferences keys.
+	public static final String PREFERENCES_KEY_SERVER_KEY = "server";
+	public static final String PREFERENCES_KEY_SERVER_COUNT = "serverCount";
+	public static final String PREFERENCES_KEY_SERVER_ADD = "serverAdd";
+	public static final String PREFERENCES_KEY_SERVER_REMOVE = "serverRemove";
     public static final String PREFERENCES_KEY_SERVER_INSTANCE = "serverInstanceId";
     public static final String PREFERENCES_KEY_SERVER_NAME = "serverName";
     public static final String PREFERENCES_KEY_SERVER_URL = "serverUrl";
+	public static final String PREFERENCES_KEY_TEST_CONNECTION = "serverTestConnection";
     public static final String PREFERENCES_KEY_MUSIC_FOLDER_ID = "musicFolderId";
     public static final String PREFERENCES_KEY_USERNAME = "username";
     public static final String PREFERENCES_KEY_PASSWORD = "password";

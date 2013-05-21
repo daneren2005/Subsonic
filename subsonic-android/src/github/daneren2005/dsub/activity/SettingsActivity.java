@@ -20,12 +20,15 @@ package github.daneren2005.dsub.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.provider.SearchRecentSuggestions;
+import android.text.InputType;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.provider.DSubSearchProvider;
@@ -62,6 +65,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private EditTextPreference randomSize;
 	private ListPreference tempLoss;
 	private EditTextPreference bufferLength;
+	private Preference addServerPreference;
+	private PreferenceCategory serversCategory;
+	private int serverCount = 3;
+	
+	private SharedPreferences settings;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,30 +89,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		randomSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_RANDOM_SIZE);
 		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		bufferLength = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_BUFFER_LENGTH);
-
-        findPreference("testConnection1").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                testConnection(1);
-                return false;
-            }
-        });
-
-        findPreference("testConnection2").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                testConnection(2);
-                return false;
-            }
-        });
-
-        findPreference("testConnection3").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                testConnection(3);
-                return false;
-            }
-        });
+		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
+		
+		settings = Util.getPreferences(this);
+		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
 
         findPreference("clearSearchHistory").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -115,11 +104,35 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return false;
             }
         });
+		
+		addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+				serverCount++;
+            	String instance = String.valueOf(serverCount);
 
-        for (int i = 1; i <= 3; i++) {
+            	Preference addServerPreference = findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+            	serversCategory.removePreference(addServerPreference);
+            	serversCategory.addPreference(addServer(serverCount));
+            	serversCategory.addPreference(addServerPreference);
+				
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
+				editor.commit();
+				
+				serverSettings.put(instance, new ServerSettings(instance));
+            	
+                return true;
+            }
+        });
+
+		serversCategory.removePreference(addServerPreference);
+        for (int i = 1; i <= serverCount; i++) {
             String instance = String.valueOf(i);
+			serversCategory.addPreference(addServer(i));
             serverSettings.put(instance, new ServerSettings(instance));
         }
+		serversCategory.addPreference(addServerPreference);
 
         SharedPreferences prefs = Util.getPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -177,6 +190,99 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             ss.update();
         }
     }
+	
+	private PreferenceScreen addServer(final int instance) {
+		final PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(this);
+		screen.setTitle(R.string.settings_server_unused);
+		screen.setKey(Constants.PREFERENCES_KEY_SERVER_KEY + instance);
+
+		final EditTextPreference serverNamePreference = new EditTextPreference(this);
+		serverNamePreference.setKey(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
+		serverNamePreference.setDefaultValue(getResources().getString(R.string.settings_server_unused));
+		serverNamePreference.setTitle(R.string.settings_server_name);
+
+		if (serverNamePreference.getText() == null) {
+			serverNamePreference.setText(getResources().getString(R.string.settings_server_unused));
+		}
+
+		serverNamePreference.setSummary(serverNamePreference.getText());
+
+		final EditTextPreference serverUrlPreference = new EditTextPreference(this);
+		serverUrlPreference.setKey(Constants.PREFERENCES_KEY_SERVER_URL + instance);
+		serverUrlPreference.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_URI);
+		serverUrlPreference.setDefaultValue("http://yourhost");
+		serverUrlPreference.setTitle(R.string.settings_server_address);
+
+		if (serverUrlPreference.getText() == null) {
+			serverUrlPreference.setText("http://yourhost");
+		}
+
+		serverUrlPreference.setSummary(serverUrlPreference.getText());
+
+		screen.setSummary(serverUrlPreference.getText());
+
+		final EditTextPreference serverUsernamePreference = new EditTextPreference(this);
+		serverUsernamePreference.setKey(Constants.PREFERENCES_KEY_USERNAME + instance);
+		serverUsernamePreference.setTitle(R.string.settings_server_username);
+
+		final EditTextPreference serverPasswordPreference = new EditTextPreference(this);
+		serverPasswordPreference.setKey(Constants.PREFERENCES_KEY_PASSWORD + instance);
+		serverPasswordPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+		serverPasswordPreference.setSummary("***");
+		serverPasswordPreference.setTitle(R.string.settings_server_password);
+
+		Preference serverRemoveServerPreference = new Preference(this);
+		serverRemoveServerPreference.setKey(Constants.PREFERENCES_KEY_SERVER_REMOVE + instance);
+		serverRemoveServerPreference.setPersistent(false);
+		serverRemoveServerPreference.setTitle(R.string.settings_servers_remove);
+
+		serverRemoveServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				// Reset values to null so when we ask for them again they are new
+				serverNamePreference.setText(null);
+				serverUrlPreference.setText(null);
+				serverUsernamePreference.setText(null);
+				serverPasswordPreference.setText(null);
+				
+				int activeServer = Util.getActiveServer(SettingsActivity.this);
+				for (int i = instance; i <= serverCount; i++) {
+					Util.removeInstanceName(SettingsActivity.this, i, activeServer);
+				}
+				
+				serverCount--;
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
+				editor.commit();
+
+				serversCategory.removePreference(screen);
+				screen.getDialog().dismiss();
+
+				return true;
+			}
+		});
+
+		Preference serverTestConnectionPreference = new Preference(this);
+		serverTestConnectionPreference.setKey(Constants.PREFERENCES_KEY_TEST_CONNECTION + instance);
+		serverTestConnectionPreference.setPersistent(false);
+		serverTestConnectionPreference.setTitle(R.string.settings_test_connection_title);
+		serverTestConnectionPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				testConnection(instance);
+				return false;
+			}
+		});
+
+		screen.addPreference(serverNamePreference);
+		screen.addPreference(serverUrlPreference);
+		screen.addPreference(serverUsernamePreference);
+		screen.addPreference(serverPasswordPreference);
+		screen.addPreference(serverRemoveServerPreference);
+		screen.addPreference(serverTestConnectionPreference);
+
+		return screen;
+	}
 
     private void setHideMedia(boolean hide) {
         File nomediaDir = new File(FileUtil.getSubsonicDirectory(), ".nomedia");

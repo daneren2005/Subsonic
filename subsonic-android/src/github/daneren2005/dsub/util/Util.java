@@ -165,6 +165,45 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
     }
+	
+	public static int getServerCount(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
+	}
+
+	public static void removeInstanceName(Context context, int instance, int activeInstance) {
+		SharedPreferences prefs = getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+
+		int newInstance = instance + 1;
+
+		String server = prefs.getString(Constants.PREFERENCES_KEY_SERVER_KEY + newInstance, null);
+		String serverName = prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + newInstance, null);
+		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
+		String userName = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
+		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
+
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_KEY + instance, server);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, serverName);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + instance, serverUrl);
+		editor.putString(Constants.PREFERENCES_KEY_USERNAME + instance, userName);
+		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + instance, password);
+
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_KEY + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
+		editor.commit();
+
+		if (instance == activeInstance) {
+			Util.setActiveServer(context, 0);
+		}
+
+		if (newInstance == activeInstance) {
+			Util.setActiveServer(context, instance);
+		}
+	}
 
     public static String getServerName(Context context, int instance) {
         SharedPreferences prefs = getPreferences(context);
