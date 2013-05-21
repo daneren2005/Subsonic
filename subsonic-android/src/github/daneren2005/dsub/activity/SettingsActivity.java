@@ -18,7 +18,9 @@
  */
 package github.daneren2005.dsub.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -230,6 +232,18 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverPasswordPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		serverPasswordPreference.setSummary("***");
 		serverPasswordPreference.setTitle(R.string.settings_server_password);
+		
+		final Preference serverOpenBrowser = new Preference(this);
+		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
+		serverOpenBrowser.setPersistent(false);
+		serverOpenBrowser.setTitle(R.string.settings_server_open_browser);
+		serverOpenBrowser.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				openInBrowser(instance);
+				return true;
+			}
+		});
 
 		Preference serverRemoveServerPreference = new Preference(this);
 		serverRemoveServerPreference.setKey(Constants.PREFERENCES_KEY_SERVER_REMOVE + instance);
@@ -280,6 +294,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverRemoveServerPreference);
 		screen.addPreference(serverTestConnectionPreference);
+		screen.addPreference(serverOpenBrowser);
 
 		return screen;
 	}
@@ -391,6 +406,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         };
         task.execute();
+    }
+	
+	private void openInBrowser(final int instance) {
+    	SharedPreferences prefs = Util.getPreferences(this);  
+    	String url = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+    	Uri uriServer = Uri.parse(url);
+    	
+    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, uriServer);            	
+    	startActivity(browserIntent);
     }
 
     private class ServerSettings {

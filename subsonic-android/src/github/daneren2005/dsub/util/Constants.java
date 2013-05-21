@@ -65,6 +65,7 @@ public final class Constants {
     public static final String PREFERENCES_KEY_SERVER_NAME = "serverName";
     public static final String PREFERENCES_KEY_SERVER_URL = "serverUrl";
 	public static final String PREFERENCES_KEY_TEST_CONNECTION = "serverTestConnection";
+	public static final String PREFERENCES_KEY_OPEN_BROWSER = "openBrowser";
     public static final String PREFERENCES_KEY_MUSIC_FOLDER_ID = "musicFolderId";
     public static final String PREFERENCES_KEY_USERNAME = "username";
     public static final String PREFERENCES_KEY_PASSWORD = "password";
