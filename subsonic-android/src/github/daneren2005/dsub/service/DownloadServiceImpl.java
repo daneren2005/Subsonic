@@ -322,6 +322,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public void restore(List<MusicDirectory.Entry> songs, int currentPlayingIndex, int currentPlayingPosition) {
         download(songs, false, false, false, false);
         if (currentPlayingIndex != -1) {
+        	while(mediaPlayer == null) {
+        		Util.sleepQuietly(50L);
+        	}
+        	
             play(currentPlayingIndex, autoPlayStart);
             if (currentPlaying != null && currentPlaying.isCompleteFileAvailable()) {
                 doPlay(currentPlaying, currentPlayingPosition, autoPlayStart);

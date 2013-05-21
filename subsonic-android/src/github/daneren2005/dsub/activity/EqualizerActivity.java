@@ -142,18 +142,26 @@ public class EqualizerActivity extends Activity {
     private void updateBars(boolean changedEnabled) {
 		boolean isEnabled = equalizer.getEnabled();
 		short minEQLevel = equalizer.getBandLevelRange()[0];
+		short maxEQLevel = equalizer.getBandLevelRange()[1];
         for (Map.Entry<Short, SeekBar> entry : bars.entrySet()) {
             short band = entry.getKey();
             SeekBar bar = entry.getValue();
             bar.setEnabled(isEnabled);
 			if(band >= (short)0) {
+				short setLevel;
 				if(changedEnabled) {
-					equalizer.setBandLevel(band, (short)(equalizer.getBandLevel(band) - masterLevel));
+					setLevel = (short)(equalizer.getBandLevel(band) - masterLevel);
 					bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
 				} else {
 					bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
-					equalizer.setBandLevel(band, (short)(equalizer.getBandLevel(band) + masterLevel));
+					setLevel = (short)(equalizer.getBandLevel(band) + masterLevel);
 				}
+				if(setLevel < minEQLevel) {
+					setLevel = minEQLevel;
+				} else if(setLevel > maxEQLevel) {
+					setLevel = maxEQLevel;
+				}
+				equalizer.setBandLevel(band, setLevel);
 			} else if(!isEnabled) {
 				bar.setProgress(-minEQLevel);
 			}
