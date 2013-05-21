@@ -48,7 +48,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
-
     private static final String TAG = SettingsActivity.class.getSimpleName();
     private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<String, ServerSettings>();
     private boolean testingConnection;
@@ -67,12 +66,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private EditTextPreference bufferLength;
 	private Preference addServerPreference;
 	private PreferenceCategory serversCategory;
-	private int serverCount = 3;
 	
+	private int serverCount = 3;
 	private SharedPreferences settings;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+		applyTheme();
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
 
@@ -139,8 +139,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         update();
     }
-
-    @Override
+	
+	@Override
     protected void onDestroy() {
         super.onDestroy();
 
@@ -282,6 +282,25 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		screen.addPreference(serverTestConnectionPreference);
 
 		return screen;
+	}
+	
+	private void applyTheme() {
+		String activeTheme = Util.getTheme(this);
+		if ("dark".equals(activeTheme)) {
+			setTheme(R.style.Theme_DSub_Dark);
+		} else if ("light".equals(activeTheme)) {
+			setTheme(R.style.Theme_DSub_Light);
+		} else if ("dark_fullscreen".equals(activeTheme)) {
+			setTheme(R.style.Theme_DSub_Dark_Fullscreen);
+		} else if ("light_fullscreen".equals(activeTheme)) {
+			setTheme(R.style.Theme_DSub_Light_Fullscreen);
+		} else if("holo".equals(activeTheme)) {
+			setTheme(R.style.Theme_DSub_Holo);
+		} else if("holo_fullscreen".equals(activeTheme)) {
+			setTheme(R.style.Theme_DSub_Holo_Fullscreen);
+		}else {
+			setTheme(R.style.Theme_DSub_Holo);
+		}
 	}
 
     private void setHideMedia(boolean hide) {
