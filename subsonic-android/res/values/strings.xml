@@ -183,7 +183,8 @@
     <string name="settings.server_username">Username</string>
     <string name="settings.server_password">Password</string>
     <string name="settings.cache_title">Music cache</string>
-    <string name="settings.preload">Songs to preload</string>
+    <string name="settings.preload_wifi">Songs to preload (Wifi)</string>
+	<string name="settings.preload_mobile">Songs to preload (Mobile)</string>
     <string name="settings.cache_size">Cache size (MB)</string>
     <string name="settings.cache_location">Cache location</string>
     <string name="settings.cache_location_error">Invalid cache location. Using default.</string>

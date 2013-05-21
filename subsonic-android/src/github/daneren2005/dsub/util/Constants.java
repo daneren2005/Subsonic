@@ -72,7 +72,8 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_NETWORK_TIMEOUT = "networkTimeout";
     public static final String PREFERENCES_KEY_CACHE_SIZE = "cacheSize";
     public static final String PREFERENCES_KEY_CACHE_LOCATION = "cacheLocation";
-    public static final String PREFERENCES_KEY_PRELOAD_COUNT = "preloadCount";
+    public static final String PREFERENCES_KEY_PRELOAD_COUNT_WIFI = "preloadCountWifi";
+	public static final String PREFERENCES_KEY_PRELOAD_COUNT_MOBILE = "preloadCountMobile";
     public static final String PREFERENCES_KEY_HIDE_MEDIA = "hideMedia";
     public static final String PREFERENCES_KEY_MEDIA_BUTTONS = "mediaButtons";
     public static final String PREFERENCES_KEY_SCREEN_LIT_ON_DOWNLOAD = "screenLitOnDownload";

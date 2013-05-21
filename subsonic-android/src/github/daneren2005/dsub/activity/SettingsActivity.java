@@ -57,7 +57,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private ListPreference networkTimeout;
     private EditTextPreference cacheSize;
     private EditTextPreference cacheLocation;
-    private ListPreference preloadCount;
+    private ListPreference preloadCountWifi;
+	private ListPreference preloadCountMobile;
 	private EditTextPreference randomSize;
 	private ListPreference tempLoss;
 	private EditTextPreference bufferLength;
@@ -75,7 +76,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		networkTimeout = (ListPreference) findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
         cacheSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
         cacheLocation = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
-        preloadCount = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT);
+        preloadCountWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
+		preloadCountMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE);
 		randomSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_RANDOM_SIZE);
 		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		bufferLength = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_BUFFER_LENGTH);
@@ -166,7 +168,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		networkTimeout.setSummary(networkTimeout.getEntry());
         cacheSize.setSummary(cacheSize.getText());
         cacheLocation.setSummary(cacheLocation.getText());
-        preloadCount.setSummary(preloadCount.getEntry());
+        preloadCountWifi.setSummary(preloadCountWifi.getEntry());
+		preloadCountMobile.setSummary(preloadCountMobile.getEntry());
 		randomSize.setSummary(randomSize.getText());
 		tempLoss.setSummary(tempLoss.getEntry());
 		bufferLength.setSummary(bufferLength.getText() + " seconds");

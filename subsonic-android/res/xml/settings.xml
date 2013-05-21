@@ -204,8 +204,15 @@
                 android:key="cacheLocation"/>
 
         <ListPreference
-                android:title="@string/settings.preload"
-                android:key="preloadCount"
+                android:title="@string/settings.preload_wifi"
+                android:key="preloadCountWifi"
+                android:defaultValue="3"
+                android:entryValues="@array/preloadCountValues"
+                android:entries="@array/preloadCountNames"/>
+
+		<ListPreference
+                android:title="@string/settings.preload_mobile"
+                android:key="preloadCountMobile"
                 android:defaultValue="3"
                 android:entryValues="@array/preloadCountValues"
                 android:entries="@array/preloadCountNames"/>

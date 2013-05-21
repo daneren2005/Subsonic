@@ -223,8 +223,15 @@ public final class Util {
     }
 
     public static int getPreloadCount(Context context) {
+		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo == null) {
+            return 3;
+        }
+		
         SharedPreferences prefs = getPreferences(context);
-        int preloadCount = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PRELOAD_COUNT, "-1"));
+		boolean wifi = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+        int preloadCount = Integer.parseInt(prefs.getString(wifi ? Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI : Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE, "-1"));
         return preloadCount == -1 ? Integer.MAX_VALUE : preloadCount;
     }
 
