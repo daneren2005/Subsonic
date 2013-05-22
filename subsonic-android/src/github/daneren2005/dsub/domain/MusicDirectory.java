@@ -80,6 +80,7 @@ public class MusicDirectory {
         private Integer bitRate;
         private String path;
         private boolean video;
+		private Integer discNumber;
         private boolean starred;
 		private int closeness;
 
@@ -234,6 +235,14 @@ public class MusicDirectory {
         public void setVideo(boolean video) {
             this.video = video;
         }
+		
+		public Integer getDiscNumber() {
+			return discNumber;
+		}
+		
+		public void setDiscNumber(Integer discNumber) {
+			this.discNumber = discNumber;
+		}
         
         public boolean isStarred() {
             return starred;

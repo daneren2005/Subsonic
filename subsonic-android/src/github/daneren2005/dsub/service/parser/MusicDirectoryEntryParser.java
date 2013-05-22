@@ -25,7 +25,6 @@ import github.daneren2005.dsub.domain.MusicDirectory;
  * @author Sindre Mehus
  */
 public class MusicDirectoryEntryParser extends AbstractParser {
-
     public MusicDirectoryEntryParser(Context context) {
         super(context);
     }
@@ -54,6 +53,7 @@ public class MusicDirectoryEntryParser extends AbstractParser {
             entry.setBitRate(getInteger("bitRate"));
             entry.setPath(get("path"));
             entry.setVideo(getBoolean("isVideo"));
+			entry.setDiscNumber(getInteger("discNumber"));
         } else if(!"".equals(artist)) {
 			entry.setPath(artist + "/" + entry.getTitle());
 		}
