@@ -25,10 +25,10 @@
 
 		<ImageView
 			android:id="@+id/album_art"
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
+			android:layout_width="50dip"
+			android:layout_height="50dip"
 			android:layout_gravity="left|center"
-			android:scaleType="fitXY"
+			android:scaleType="fitStart"
 			android:src="@drawable/unknown_album"/>
 
 		<LinearLayout
