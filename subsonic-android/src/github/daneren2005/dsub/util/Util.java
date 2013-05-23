@@ -209,6 +209,14 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
     }
+	
+	public static String getUserName(Context context, int instance) {
+		if (instance == 0) {
+			return context.getResources().getString(R.string.main_offline);
+		}
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
+	}
 
     public static void setServerRestVersion(Context context, Version version) {
         SERVER_REST_VERSIONS.put(getActiveServer(context), version);
@@ -634,6 +642,10 @@ public final class Util {
             throw new RuntimeException(x.getMessage(), x);
         }
     }
+	
+	public static boolean isNullOrWhiteSpace(String string) { 
+		return string == null || string.isEmpty() || string.trim().isEmpty();
+	}
 
     public static boolean isNetworkConnected(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

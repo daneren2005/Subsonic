@@ -28,6 +28,7 @@
     <string name="button_bar.search">Search</string>
     <string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Playing</string>
+	<string name="button_bar.chat">Chat</string>
 
     <string name="main.welcome_title">Welcome!</string>
     <string name="main.welcome_text">Welcome to DSub! The app is currently configured to use the Subsonic demo server. After you\'ve
@@ -318,6 +319,8 @@
     <string name="changelog_title">What\'s New</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">More…</string>
+
+	<string name="chat.send_a_message">Send a message</string> 
 
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
 

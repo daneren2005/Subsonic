@@ -1,9 +1,6 @@
 package github.daneren2005.dsub.activity;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -15,13 +12,13 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
@@ -155,6 +152,7 @@ public class MainActivity extends SubsonicActivity {
 		addTab("Home", MainFragment.class, null);
 		addTab("Library", SelectArtistFragment.class, null);
 		addTab("Playlists", SelectPlaylistFragment.class, null);
+		addTab("Chat", ChatFragment.class, null);
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		getSupportActionBar().setHomeButtonEnabled(false);

@@ -25,15 +25,16 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.JukeboxStatus;
 import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
+import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.LRUCache;
@@ -258,6 +259,21 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		musicService.setStarred(id, starred, context, progressListener);
+	}
+	
+	@Override
+	public List<Share> getShares(Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getShares(context, progressListener);	
+	}
+
+	@Override
+	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getChatMessages(since, context, progressListener);
+	}
+
+	@Override
+	public void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception {
+		musicService.addChatMessage(message, context, progressListener);
 	}
 
     private void checkSettingsChanged(Context context) {

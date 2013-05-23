@@ -73,6 +73,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
+import github.daneren2005.dsub.service.parser.ChatMessageParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
 import github.daneren2005.dsub.service.parser.IndexesParser;
 import github.daneren2005.dsub.service.parser.JukeboxStatusParser;
@@ -85,6 +86,7 @@ import github.daneren2005.dsub.service.parser.PlaylistsParser;
 import github.daneren2005.dsub.service.parser.RandomSongsParser;
 import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
+import github.daneren2005.dsub.service.parser.ShareParser;
 import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.VersionParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
@@ -729,6 +731,62 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
     }
+	
+	@Override
+	public List<Share> getShares(Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.6", "Shares not supported.");
+
+		Reader reader = getReader(context, progressListener, "getShares", null);
+		try {
+			return new ShareParser(context).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.2", "Chat not supported.");
+
+		HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
+
+		List<String> parameterNames = new ArrayList<String>();
+		List<Object> parameterValues = new ArrayList<Object>();
+
+		parameterNames.add("since");
+		parameterValues.add(since);
+
+		Reader reader = getReader(context, progressListener, "getChatMessages", params, parameterNames, parameterValues);
+
+		try {
+			return new ChatMessageParser(context).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.2", "Chat not supported.");
+
+		HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
+
+		List<String> parameterNames = new ArrayList<String>();
+		List<Object> parameterValues = new ArrayList<Object>();
+
+		parameterNames.add("message");
+		parameterValues.add(message);
+
+		Reader reader = getReader(context, progressListener, "addChatMessage", params, parameterNames, parameterValues);
+
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
 
     private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
         return getReader(context, progressListener, method, requestParams, Collections.<String>emptyList(), Collections.emptyList());
