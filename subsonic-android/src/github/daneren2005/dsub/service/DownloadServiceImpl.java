@@ -209,6 +209,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public void onDestroy() {
         super.onDestroy();
+		instance = null;
+		
 		if(currentPlaying != null) currentPlaying.setPlaying(false);
 		if(sleepTimer != null){
 			sleepTimer.cancel();
@@ -249,8 +251,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			nextPlayingTask.cancel();
 		}
 		Util.hidePlayingNotification(this, this, handler);
-
-        instance = null;
     }
 
     public static DownloadService getInstance() {
