@@ -100,6 +100,7 @@ public final class Constants {
 	public static final String PREFERENCES_EQUALIZER_SETTINGS = "equalizerSettings";
 	public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";
 	public static final String PREFERENCES_KEY_GAPLESS_PLAYBACK = "gaplessPlayback";
+	public static final String PREFERENCES_KEY_SHUFFLE_MODE = "shuffleMode";
 	
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";

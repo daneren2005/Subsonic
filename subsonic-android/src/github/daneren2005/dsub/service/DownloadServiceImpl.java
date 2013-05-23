@@ -264,7 +264,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     @Override
     public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
-        shufflePlay = false;
+        setShufflePlayEnabled(false);
         int offset = 1;
 
         if (songs.isEmpty()) {
@@ -320,7 +320,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     public void restore(List<MusicDirectory.Entry> songs, int currentPlayingIndex, int currentPlayingPosition) {
+		SharedPreferences prefs = Util.getPreferences(this);
+		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
         download(songs, false, false, false, false);
+		if(startShufflePlay) {
+			shufflePlay = true;
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, true);
+			editor.commit();
+		}
         if (currentPlayingIndex != -1) {
         	while(mediaPlayer == null) {
         		Util.sleepQuietly(50L);
@@ -341,6 +349,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             clear();
             checkDownloads();
         }
+		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, enabled);
+		editor.commit();
     }
 
     @Override
