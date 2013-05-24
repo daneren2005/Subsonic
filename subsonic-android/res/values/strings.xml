@@ -274,7 +274,8 @@
 	<string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>
 	<string name="settings.gapless_playback">Gapless Playback</string>
 	<string name="settings.gapless_playback_summary">The Galaxy S3 seems to be experiencing freezes/other weird issue since the introduction of gapless playback.  Turn this off to fix the issue.</string>
-	
+	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
+
 	<string name="shuffle.startYear">Start Year:</string>
 	<string name="shuffle.endYear">End Year:</string>
 	<string name="shuffle.genre">Genre:</string>

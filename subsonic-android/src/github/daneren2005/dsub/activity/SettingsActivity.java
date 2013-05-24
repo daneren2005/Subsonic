@@ -68,6 +68,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private EditTextPreference bufferLength;
 	private Preference addServerPreference;
 	private PreferenceCategory serversCategory;
+	private EditTextPreference chatRefreshRate;
 	
 	private int serverCount = 3;
 	private SharedPreferences settings;
@@ -93,6 +94,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		bufferLength = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_BUFFER_LENGTH);
 		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
+		chatRefreshRate = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CHAT_REFRESH);
 		
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
@@ -188,6 +190,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		randomSize.setSummary(randomSize.getText());
 		tempLoss.setSummary(tempLoss.getEntry());
 		bufferLength.setSummary(bufferLength.getText() + " seconds");
+		chatRefreshRate.setSummary(chatRefreshRate.getText());
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }

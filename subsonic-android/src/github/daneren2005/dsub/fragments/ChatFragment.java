@@ -1,12 +1,15 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,16 +30,22 @@ import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ChatAdapter;
 import com.actionbarsherlock.view.Menu;
+import github.daneren2005.dsub.util.Constants;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joshua Bahnsen
  */
 public class ChatFragment extends SubsonicFragment {
+	private static final String TAG = ChatFragment.class.getSimpleName();
 	private ListView chatListView;
 	private EditText messageEditText;
 	private ImageButton sendButton;
 	private Long lastChatMessageTime = (long) 0;
 	private ArrayList<ChatMessage> messageList = new ArrayList<ChatMessage>();
+	private ScheduledExecutorService executorService;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -93,6 +102,39 @@ public class ChatFragment extends SubsonicFragment {
 	}
 	
 	@Override
+	public void onResume() {
+		super.onResume();
+		
+		final Handler handler = new Handler();
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						if(primaryFragment) {
+							load(false);
+						} else {
+							invalidated = true;
+						}
+					}
+				});
+			}
+		};
+
+		SharedPreferences prefs = Util.getPreferences(context);
+		long refreshRate = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_CHAT_REFRESH, "30"));
+		executorService = Executors.newSingleThreadScheduledExecutor();
+		executorService.scheduleWithFixedDelay(runnable, refreshRate * 1000L, refreshRate * 1000L, TimeUnit.MILLISECONDS);
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		executorService.shutdown();
+	}
+	
+	@Override
 	public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.empty, menu);
 	}
@@ -108,21 +150,26 @@ public class ChatFragment extends SubsonicFragment {
 	
 	@Override
 	protected void refresh(boolean refresh) {
-		load();
+		load(refresh);
 	}
 	
-	private synchronized void load() {
+	private synchronized void load(final boolean refresh) {
+		Log.i(TAG, "Loading: " + refresh);
 		setTitle(R.string.button_bar_chat);
 		BackgroundTask<List<ChatMessage>> task = new TabBackgroundTask<List<ChatMessage>>(this) {
 			@Override
 			protected List<ChatMessage> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				return musicService.getChatMessages(lastChatMessageTime, context, this);
+				return musicService.getChatMessages(refresh ? 0L : lastChatMessageTime, context, this);
 			}
 
 			@Override
 			protected void done(List<ChatMessage> result) {
 				if (result != null && !result.isEmpty()) {
+					if(refresh) {
+						messageList.clear();
+					}
+					
 					// Reset lastChatMessageTime if we have a newer message
 					for (ChatMessage message : result) {
 						if (message.getTime() > lastChatMessageTime) {
@@ -161,7 +208,7 @@ public class ChatFragment extends SubsonicFragment {
 
 				@Override
 				protected void done(Void result) {
-					load();
+					load(false);
 				}
 			};
 

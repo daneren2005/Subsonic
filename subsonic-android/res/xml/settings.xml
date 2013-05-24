@@ -129,6 +129,16 @@
 
     </PreferenceCategory>
 
+	<PreferenceCategory
+		android:title="@string/button_bar.chat">
+		
+		<EditTextPreference
+                android:title="@string/settings.chat_refresh"
+                android:key="chatRefreshRate"
+                android:defaultValue="30"
+				android:digits="0123456789"/>
+	</PreferenceCategory>
+
     <PreferenceCategory
             android:title="@string/settings.other_title">
 
