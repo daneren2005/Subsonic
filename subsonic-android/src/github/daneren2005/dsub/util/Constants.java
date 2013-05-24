@@ -102,6 +102,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_GAPLESS_PLAYBACK = "gaplessPlayback";
 	public static final String PREFERENCES_KEY_SHUFFLE_MODE = "shuffleMode";
 	public static final String PREFERENCES_KEY_CHAT_REFRESH = "chatRefreshRate";
+	public static final String PREFERENCES_KEY_CHAT_ENABLED = "chatEnabled";
 	
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";

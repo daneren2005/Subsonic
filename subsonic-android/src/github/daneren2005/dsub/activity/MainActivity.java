@@ -152,7 +152,10 @@ public class MainActivity extends SubsonicActivity {
 		addTab("Home", MainFragment.class, null);
 		addTab("Library", SelectArtistFragment.class, null);
 		addTab("Playlists", SelectPlaylistFragment.class, null);
-		addTab("Chat", ChatFragment.class, null);
+		SharedPreferences prefs = Util.getPreferences(this);
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true)) {
+			addTab("Chat", ChatFragment.class, null);
+		}
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		getSupportActionBar().setHomeButtonEnabled(false);
