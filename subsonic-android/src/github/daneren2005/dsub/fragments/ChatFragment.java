@@ -1,5 +1,6 @@
 package github.daneren2005.dsub.fragments;
 
+import android.content.Context;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -146,6 +148,8 @@ public class ChatFragment extends SubsonicFragment {
 
 		if (!Util.isNullOrWhiteSpace(message)) {
 			messageEditText.setText("");
+			InputMethodManager mgr = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+			mgr.hideSoftInputFromWindow(messageEditText.getWindowToken(), 0);
 
 			BackgroundTask<Void> task = new TabBackgroundTask<Void>(this) {
 				@Override
