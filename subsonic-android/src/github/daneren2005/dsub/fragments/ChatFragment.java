@@ -136,7 +136,7 @@ public class ChatFragment extends SubsonicFragment {
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.empty, menu);
+		menuInflater.inflate(R.menu.chat, menu);
 	}
 
 	@Override
