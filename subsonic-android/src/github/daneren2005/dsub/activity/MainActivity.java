@@ -269,7 +269,12 @@ public class MainActivity extends SubsonicActivity {
 			editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, "guest");
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 			editor.commit();
-		} 
+		}
+		if(prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, -1) < 0) {
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 0);
+			editor.commit();
+		}
 	}
 
 	private void showInfoDialog() {
