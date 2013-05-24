@@ -277,10 +277,14 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		theme = Util.getTheme(this);
 		if ("dark".equals(theme)) {
 			setTheme(R.style.Theme_DSub_Dark);
+		} else if ("black".equals(theme)) {
+			setTheme(R.style.Theme_DSub_Black);
 		} else if ("light".equals(theme)) {
 			setTheme(R.style.Theme_DSub_Light);
 		} else if ("dark_fullscreen".equals(theme)) {
 			setTheme(R.style.Theme_DSub_Dark_Fullscreen);
+		} else if ("black_fullscreen".equals(theme)) {
+			setTheme(R.style.Theme_DSub_Black_Fullscreen);
 		} else if ("light_fullscreen".equals(theme)) {
 			setTheme(R.style.Theme_DSub_Light_Fullscreen);
 		} else if("holo".equals(theme)) {

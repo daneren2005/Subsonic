@@ -201,9 +201,11 @@
     <string name="settings.theme_title">Theme</string>
     <string name="settings.theme_light">Light</string>
     <string name="settings.theme_dark">Dark</string>
+	<string name="settings.theme_black">Black</string>
 	<string name="settings.theme_holo">Holo</string>
 	<string name="settings.theme_light_fullscreen">Light Fullscreen</string>
     <string name="settings.theme_dark_fullscreen">Dark Fullscreen</string>
+	<string name="settings.theme_black_fullscreen">Black Fullscreen</string>
 	<string name="settings.theme_holo_fullscreen">Holo Fullscreen</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>

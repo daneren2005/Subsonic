@@ -306,10 +306,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		String activeTheme = Util.getTheme(this);
 		if ("dark".equals(activeTheme)) {
 			setTheme(R.style.Theme_DSub_Dark);
+		} else if ("black".equals(activeTheme)) {
+			setTheme(R.style.Theme_DSub_Black);
 		} else if ("light".equals(activeTheme)) {
 			setTheme(R.style.Theme_DSub_Light);
 		} else if ("dark_fullscreen".equals(activeTheme)) {
 			setTheme(R.style.Theme_DSub_Dark_Fullscreen);
+		} else if ("black_fullscreen".equals(activeTheme)) {
+			setTheme(R.style.Theme_DSub_Black_Fullscreen);
 		} else if ("light_fullscreen".equals(activeTheme)) {
 			setTheme(R.style.Theme_DSub_Light_Fullscreen);
 		} else if("holo".equals(activeTheme)) {

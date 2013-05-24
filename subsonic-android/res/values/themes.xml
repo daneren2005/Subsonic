@@ -17,7 +17,6 @@
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
-		<item name="android:windowBackground">@android:color/black</item>
 		<item name="offline_icon">@drawable/main_offline</item>
 		<item name="media_button_backward">@drawable/media_backward</item>
 		<item name="media_button_forward">@drawable/media_forward</item>
@@ -27,6 +26,9 @@
 		<item name="media_button_stop">@drawable/media_stop</item>
 		<item name="chat">@drawable/ic_menu_chat_dark</item> 
 		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item> 
+	</style>
+	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
+		<item name="android:windowBackground">@android:color/black</item>
 	</style>
 	<style name="Theme.DSub.Holo" parent="Theme.Sherlock">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
@@ -48,6 +50,9 @@
 		<item name="android:windowFullscreen">true</item>
 	</style>
 	<style name="Theme.DSub.Dark.Fullscreen" parent="Theme.DSub.Dark">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	<style name="Theme.DSub.Black.Fullscreen" parent="Theme.DSub.Black">
 		<item name="android:windowFullscreen">true</item>
 	</style>
 	<style name="Theme.DSub.Holo.Fullscreen" parent="Theme.DSub.Holo">
