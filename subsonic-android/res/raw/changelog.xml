@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.0.1" versioncode="49" releasedate="5/23/2013">
+	<release version="4.0.2" versioncode="51" releasedate="5/24/2013">
+		<change>Fix if you set chat refresh rate to 0, will just not refresh</change>
+		<change>Revert dark theme modification</change>
+		<change>New Theme called black which is the pure black background</change>
+		<change>Option to disable chat menu, need to exit app and reenter for now</change>
+	</release>
+
+	<release version="4.0.1" versioncode="50" releasedate="5/23/2013">
 		<change>New: Chat Tab (Set chat auto refresh rate from settings)</change>
 		<change>New: Dynamic servers, add as many, or remove all but the ones you are using</change>
 		<change>New: Added separate setting for songs to preload for Wifi/Mobile</change>
