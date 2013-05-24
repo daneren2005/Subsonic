@@ -270,9 +270,9 @@ public class MainActivity extends SubsonicActivity {
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 			editor.commit();
 		}
-		if(prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, -1) < 0) {
+		if(!prefs.contains(Constants.PREFERENCES_KEY_SERVER_COUNT)) {
 			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 0);
+			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
 			editor.commit();
 		}
 	}
