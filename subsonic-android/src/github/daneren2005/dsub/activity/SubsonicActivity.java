@@ -404,7 +404,14 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			SubsonicFragment frag = (SubsonicFragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args);
 			List<SubsonicFragment> fragStack = new ArrayList<SubsonicFragment>();
 			fragStack.add(frag);
-			frags.add(i, fragStack);
+			while(i > frags.size()) {
+				frags.add(null);
+			}
+			if(i == frags.size()) {
+				frags.add(i, fragStack);
+			} else {
+				frags.set(i, fragStack);
+			}
 			if(currentFragment == null) {
 				currentFragment = frag;
 				currentFragment.setPrimaryFragment(true);
