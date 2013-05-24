@@ -124,14 +124,19 @@ public class ChatFragment extends SubsonicFragment {
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		long refreshRate = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_CHAT_REFRESH, "30"));
-		executorService = Executors.newSingleThreadScheduledExecutor();
-		executorService.scheduleWithFixedDelay(runnable, refreshRate * 1000L, refreshRate * 1000L, TimeUnit.MILLISECONDS);
+		if(refreshRate > 0) {
+			executorService = Executors.newSingleThreadScheduledExecutor();
+			executorService.scheduleWithFixedDelay(runnable, refreshRate * 1000L, refreshRate * 1000L, TimeUnit.MILLISECONDS);
+		}
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-		executorService.shutdown();
+		if(executorService != null) {
+			executorService.shutdown();
+			executorService = null;
+		}
 	}
 	
 	@Override
