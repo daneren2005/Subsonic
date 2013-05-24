@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.0.1" versioncode="49" releasedate="5/23/2013">
+		<change>New: Chat Tab (Set chat auto refresh rate from settings)</change>
+		<change>New: Dynamic servers, add as many, or remove all but the ones you are using</change>
+		<change>New: Added separate setting for songs to preload for Wifi/Mobile</change>
+		<change>Improvement: The infinite playlist while shuffling is now persistent between startups</change>
+		<change>Theme: White is now more white, got rid of blue text for white theme only</change>
+		<change>Theme: Black is now a flat black due to popular request</change>
+		<change>Theme: Apply the current theme to settings screen</change>
+		<change>Fix: Don't stretch album art on bottom of main tabs</change>
+		<change>Fix: Possible fix for some who were having crash on starting EQ</change>
+	</release>
+
 	<release version="4.0.0" versioncode="48" releasedate="5/16/2013">
-        <change>Converted everything to fragments!</change>
+		<change>Converted everything to fragments!</change>
 		<change>Swipe to switch tabs</change>
 		<change>Breadcrumb trail when going down several levels</change>
 		<change>Require double tapping back to exit app</change>
@@ -13,5 +25,5 @@
 		<change>Added total time to playlist/album headers</change>
 		<change>Fixed a lot of the menu items not working when using search</change>
 		<change>Update to Light/Dark themes</change>
-    </release>
+	</release>
 </changelog>
