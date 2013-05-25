@@ -639,7 +639,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 		
 		View coverArtView = header.findViewById(R.id.select_album_art);
-		getImageLoader().loadImage(coverArtView, entries.get(random.nextInt(entries.size())), true, true);
+		getImageLoader().loadImage(coverArtView, entries.get(random.nextInt(entries.size())), false, true);
 
 		TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
 		if(playlistName != null) {
