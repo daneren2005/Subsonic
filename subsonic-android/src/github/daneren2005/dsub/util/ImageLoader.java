@@ -56,6 +56,7 @@ public class ImageLoader implements Runnable {
 	private Handler mHandler = new Handler();
 	private Context context;
     private LruCache<String, Bitmap> cache;
+	private Bitmap nowPlaying;
     private final BlockingQueue<Task> queue;
     private final int imageSizeDefault;
     private final int imageSizeLarge;
@@ -73,7 +74,7 @@ public class ImageLoader implements Runnable {
 			
 			@Override
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
-				if(evicted) {
+				if(evicted && oldBitmap != nowPlaying) {
 					oldBitmap.recycle();
 				}
 			}
@@ -110,13 +111,16 @@ public class ImageLoader implements Runnable {
         if (bitmap != null) {
 			final Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
             setImage(view, drawable, large);
+			if(large) {
+				nowPlaying = bitmap;
+			}
             return;
         }
 
         if (!large) {
             setUnknownImage(view, large);
         }
-        queue.offer(new Task(view.getContext(), entry, size, imageSizeLarge, new ViewTaskHandler(view, crossfade)));
+        queue.offer(new Task(view.getContext(), entry, size, imageSizeLarge, large, new ViewTaskHandler(view, crossfade)));
 	}
 
     public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
@@ -133,7 +137,7 @@ public class ImageLoader implements Runnable {
         }
 
         setUnknownImage(remoteControl);
-        queue.offer(new Task(context, entry, imageSizeLarge, imageSizeLarge, new RemoteControlClientTaskHandler(remoteControl)));
+        queue.offer(new Task(context, entry, imageSizeLarge, imageSizeLarge, false, new RemoteControlClientTaskHandler(remoteControl)));
     }
 
     private String getKey(String coverArtId, int size) {
@@ -228,13 +232,15 @@ public class ImageLoader implements Runnable {
         private final MusicDirectory.Entry mEntry;
         private final int mSize;
         private final int mSaveSize;
+		private final boolean mIsNowPlaying;
         private ImageLoaderTaskHandler mTaskHandler;
 
-        public Task(Context context, MusicDirectory.Entry entry, int size, int saveSize, ImageLoaderTaskHandler taskHandler) {
+        public Task(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, ImageLoaderTaskHandler taskHandler) {
         	mContext = context;
             mEntry = entry;
             mSize = size;
             mSaveSize = saveSize;
+			mIsNowPlaying = isNowPlaying;
             mTaskHandler = taskHandler;
         }
 
@@ -255,6 +261,9 @@ public class ImageLoader implements Runnable {
                 cache.put(key, bitmap);
                 // Make sure key is the most recently "used"
                 cache.get(key);
+				if(mIsNowPlaying) {
+					nowPlaying = bitmap;
+				}
                 
 				final Drawable drawable = Util.createDrawableFromBitmap(mContext, bitmap);
                 mTaskHandler.setDrawable(drawable);
