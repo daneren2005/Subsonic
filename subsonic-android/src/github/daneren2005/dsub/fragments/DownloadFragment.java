@@ -653,9 +653,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			playlistFlipper.setDisplayedChild(1);
 		}
 
-		onDownloadListChanged();
-		onCurrentChanged();
-		onProgressChanged();
 		scrollToCurrent();
 		if (downloadService != null && downloadService.getKeepScreenOn()) {
 			context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
