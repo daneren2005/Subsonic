@@ -149,12 +149,12 @@ public class MainActivity extends SubsonicActivity {
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setOnPageChangeListener(pagerAdapter);
 		
-		addTab("Home", MainFragment.class, null);
-		addTab("Library", SelectArtistFragment.class, null);
-		addTab("Playlists", SelectPlaylistFragment.class, null);
+		addTab(R.string.button_bar_home, MainFragment.class, null);
+		addTab(R.string.button_bar_browse, SelectArtistFragment.class, null);
+		addTab(R.string.button_bar_playlists, SelectPlaylistFragment.class, null);
 		SharedPreferences prefs = Util.getPreferences(this);
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true)) {
-			addTab("Chat", ChatFragment.class, null);
+			addTab(R.string.button_bar_chat, ChatFragment.class, null);
 		}
 		
 		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
