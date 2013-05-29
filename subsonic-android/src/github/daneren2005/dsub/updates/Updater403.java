@@ -29,16 +29,16 @@ import java.io.File;
  *
  * @author Scott
  */
-public class Updater373 extends Updater {	
-	public Updater373() {
-		super(373);
-		TAG = Updater373.class.getSimpleName();
+public class Updater403 extends Updater {	
+	public Updater403() {
+		super(403);
+		TAG = Updater403.class.getSimpleName();
 	}
 	
 	@Override
 	public void update(Context context) {
 		// Rename cover.jpeg to cover.jpg
-		Log.i(TAG, "Running Updater373: updating cover.jpeg to cover.jpg");
+		Log.i(TAG, "Running Updater403: updating cover.jpg to albumart.jpg");
 		File dir = FileUtil.getMusicDirectory(context);
 		if(dir != null) {
 			moveArt(dir);
@@ -49,7 +49,7 @@ public class Updater373 extends Updater {
 		for(File file: dir.listFiles()) {
 			if(file.isDirectory()) {
 				moveArt(file);
-			} else if("cover.jpeg".equals(file.getName())) {
+			} else if("cover.jpg".equals(file.getName()) || "cover.jpeg".equals(file.getName())) {
 				File renamed = new File(dir, Constants.ALBUM_ART_FILE);
 				file.renameTo(renamed);
 			}

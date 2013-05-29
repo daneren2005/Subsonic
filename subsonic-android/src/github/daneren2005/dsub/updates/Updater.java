@@ -43,7 +43,7 @@ public class Updater {
 	public void checkUpdates(Context context) {
 		this.context = context;
 		List<Updater> updaters = new ArrayList<Updater>();
-		updaters.add(new Updater373());
+		updaters.add(new Updater403());
 		
 		SharedPreferences prefs = Util.getPreferences(context);
 		int lastVersion = prefs.getInt(Constants.LAST_VERSION, 0);
