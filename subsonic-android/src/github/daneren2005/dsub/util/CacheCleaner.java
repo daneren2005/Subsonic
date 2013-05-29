@@ -54,7 +54,7 @@ public class CacheCleaner {
 			
 			// No songs left in the folder
 			if(children.length == 1 && children[0].getPath().equals(FileUtil.getAlbumArtFile(dir).getPath())) {
-				Util.delete(FileUtil.getAlbumArtFile(dir));
+				Util.delete(children[0]);
 				children = dir.listFiles();
 			}
 
