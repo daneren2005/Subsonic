@@ -21,6 +21,8 @@ package github.daneren2005.dsub.domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * @author Sindre Mehus
@@ -28,7 +30,7 @@ import java.io.Serializable;
 public class MusicDirectory {
 
     private String name;
-    private final List<Entry> children = new ArrayList<Entry>();
+    private List<Entry> children = new ArrayList<Entry>();
 
     public String getName() {
         return name;
@@ -59,6 +61,10 @@ public class MusicDirectory {
         }
         return result;
     }
+	
+	public void sortChildren() {
+		EntryComparator.sort(children);
+	}
 
     public static class Entry implements Serializable {
         private String id;
@@ -283,4 +289,43 @@ public class MusicDirectory {
             return title;
         }
     }
+	
+	public static class EntryComparator implements Comparator<Entry> {
+		public int compare(Entry lhs, Entry rhs) {
+			Integer lhsDisc = lhs.getDiscNumber();
+			Integer rhsDisc = rhs.getDiscNumber();
+			
+			if(lhsDisc != null && rhsDisc != null) {
+				if(lhsDisc < rhsDisc) {
+					return -1;
+				} else if(lhsDisc > rhsDisc) {
+					return 1;
+				}
+			} else if(lhsDisc != null) {
+				return 1;
+			} else if(rhsDisc != null) {
+				return -1;
+			}
+			
+			Integer lhsTrack = lhs.getTrack();
+			Integer rhsTrack = rhs.getTrack();
+			if(lhsTrack != null && rhsTrack != null) {
+				if(lhsTrack < rhsTrack) {
+					return -1;
+				} else if(lhsTrack > rhsTrack) {
+					return 1;
+				}
+			} else if(lhsDisc != null) {
+				return 1;
+			} else if(rhsDisc != null) {
+				return -1;
+			}
+			
+			return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+		}
+		
+		public static void sort(List<Entry> entries) {
+			Collections.sort(entries, new EntryComparator());
+		}
+	}
 }

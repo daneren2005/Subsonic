@@ -62,6 +62,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 
         validate();
         updateProgress(progressListener, R.string.parser_reading_done);
+		dir.sortChildren();
 
         long t1 = System.currentTimeMillis();
         Log.d(TAG, "Got music directory in " + (t1 - t0) + "ms.");
