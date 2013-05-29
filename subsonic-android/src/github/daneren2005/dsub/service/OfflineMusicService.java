@@ -123,6 +123,7 @@ public class OfflineMusicService extends RESTMusicService {
                 result.addChild(createEntry(context, file, name));
             }
         }
+		result.sortChildren();
         return result;
     }
 
