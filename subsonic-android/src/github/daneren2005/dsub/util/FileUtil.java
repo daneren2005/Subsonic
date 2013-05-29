@@ -129,6 +129,10 @@ public class FileUtil {
 		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getName()));
 		return dir;
 	}
+	public static File getArtistDirectory(Context context, MusicDirectory.Entry artist) {
+		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getTitle()));
+		return dir;
+	}
 
     public static File getAlbumDirectory(Context context, MusicDirectory.Entry entry) {
         File dir;

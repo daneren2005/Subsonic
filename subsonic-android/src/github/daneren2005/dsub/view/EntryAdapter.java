@@ -54,11 +54,16 @@ public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
         MusicDirectory.Entry entry = getItem(position);
 
         if (entry.isDirectory()) {
-            AlbumView view;
-			view = new AlbumView(activity);
-            view.setAlbum(entry, imageLoader);
-            return view;
-
+			if(entry.getParent() != null) {
+				AlbumView view;
+				view = new AlbumView(activity);
+				view.setAlbum(entry, imageLoader);
+				return view;
+			} else {
+				ArtistEntryView view = new ArtistEntryView(activity);
+				view.setArtist(entry);
+				return view;
+			}
         } else {
             SongView view;
             if (convertView != null && convertView instanceof SongView) {

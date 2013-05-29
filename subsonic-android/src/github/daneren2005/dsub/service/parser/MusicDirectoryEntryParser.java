@@ -59,4 +59,16 @@ public class MusicDirectoryEntryParser extends AbstractParser {
 		}
         return entry;
     }
+	
+	protected MusicDirectory.Entry parseArtist() {
+		MusicDirectory.Entry entry = new MusicDirectory.Entry();
+		
+		entry.setId(get("id"));
+		entry.setTitle(get("name"));
+		entry.setPath(entry.getTitle());
+		entry.setStarred(true);
+		entry.setDirectory(true);
+		
+		return entry;
+	}
 }

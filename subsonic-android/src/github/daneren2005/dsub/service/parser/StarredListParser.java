@@ -49,7 +49,7 @@ public class StarredListParser extends MusicDirectoryEntryParser {
                 if ("album".equals(name) || "song".equals(name)) {
                     dir.addChild(parseEntry(""));
                 } else if("artist".equals(name)) {
-					
+					dir.addChild(parseArtist());
 				} else if ("error".equals(name)) {
                     handleError();
                 }
