@@ -21,6 +21,8 @@ package github.daneren2005.dsub.util;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import github.daneren2005.dsub.activity.MainActivity;
 import github.daneren2005.dsub.R;
 
 /**
@@ -43,7 +45,7 @@ public class ErrorDialog {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 if (finishActivityOnClose) {
-                    activity.finish();
+                     restart(activity);
                 }
             }
         });
@@ -51,11 +53,17 @@ public class ErrorDialog {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (finishActivityOnClose) {
-                    activity.finish();
+                    restart(activity);
                 }
             }
         });
 
         builder.create().show();
     }
+    
+	private void restart(Activity context) {
+		Intent intent = new Intent(context, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Util.startActivityWithoutTransition(context, intent);
+	}
 }
