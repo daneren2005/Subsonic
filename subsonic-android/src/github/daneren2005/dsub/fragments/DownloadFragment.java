@@ -519,10 +519,17 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
 		switch (menuItemId) {
 			case R.id.menu_show_album:
+				MusicDirectory.Entry entry = song.getSong();
+				
 				Intent intent = new Intent(context, MainActivity.class);
 				intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, song.getSong().getParent());
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, song.getSong().getAlbum());
+				intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, entry.getAlbum());
+				
+				if(entry.getGrandParent() != null) {
+					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID, entry.getGrandParent());
+					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME, entry.getArtist());
+				}
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				Util.startActivityWithoutTransition(context, intent);
 				return true;

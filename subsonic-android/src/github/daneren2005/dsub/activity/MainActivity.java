@@ -197,13 +197,25 @@ public class MainActivity extends SubsonicActivity {
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
 			viewPager.setCurrentItem(1);
 			
+			int fragmentID = R.id.select_artist_layout;
+			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID)) {
+				SubsonicFragment fragment = new SelectDirectoryFragment();
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID));
+				args.putString(Constants.INTENT_EXTRA_NAME_NAME, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME));
+				fragment.setArguments(args);
+
+				pagerAdapter.queueFragment(fragment, R.id.select_artist_layout);
+				fragmentID = R.id.select_album_layout;
+			}
+			
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ID));
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_NAME));
 			fragment.setArguments(args);
 
-			pagerAdapter.queueFragment(fragment, R.id.select_artist_layout);
+			pagerAdapter.queueFragment(fragment, fragmentID);
 		}
 
 		executorService = Executors.newSingleThreadScheduledExecutor();

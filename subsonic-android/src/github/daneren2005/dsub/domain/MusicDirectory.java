@@ -30,6 +30,8 @@ import java.util.Comparator;
 public class MusicDirectory {
 
     private String name;
+	private String id;
+	private String parent;
     private List<Entry> children = new ArrayList<Entry>();
 
     public String getName() {
@@ -39,6 +41,22 @@ public class MusicDirectory {
     public void setName(String name) {
         this.name = name;
     }
+	
+	 public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
 
     public void addChild(Entry child) {
         children.add(child);
@@ -69,6 +87,7 @@ public class MusicDirectory {
     public static class Entry implements Serializable {
         private String id;
         private String parent;
+		private String grandParent;
         private boolean directory;
         private String title;
         private String album;
@@ -104,6 +123,14 @@ public class MusicDirectory {
 
         public void setParent(String parent) {
             this.parent = parent;
+        }
+		
+		public String getGrandParent() {
+            return grandParent;
+        }
+
+        public void setGrandParent(String grandParent) {
+            this.grandParent = grandParent;
         }
 
         public boolean isDirectory() {
