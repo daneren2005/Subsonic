@@ -21,7 +21,9 @@ import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
+import github.daneren2005.dsub.fragments.SelectDirectoryFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
+import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.updates.Updater;
@@ -191,6 +193,18 @@ public class MainActivity extends SubsonicActivity {
 				});
 			}
 		};
+		
+		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
+			viewPager.setCurrentItem(1);
+			
+			SubsonicFragment fragment = new SelectDirectoryFragment();
+			Bundle args = new Bundle();
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ID));
+			args.putString(Constants.INTENT_EXTRA_NAME_NAME, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_NAME));
+			fragment.setArguments(args);
+
+			pagerAdapter.queueFragment(fragment, R.id.select_artist_layout);
+		}
 
 		executorService = Executors.newSingleThreadScheduledExecutor();
 		executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);

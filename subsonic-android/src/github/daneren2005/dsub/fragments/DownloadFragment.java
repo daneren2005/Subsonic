@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.EqualizerActivity;
+import github.daneren2005.dsub.activity.MainActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
 public class DownloadFragment extends SubsonicFragment implements OnGestureListener {
@@ -518,10 +519,12 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
 		switch (menuItemId) {
 			case R.id.menu_show_album:
-				/*Intent intent = new Intent(context, SelectAlbumActivity.class);
+				Intent intent = new Intent(context, MainActivity.class);
+				intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, song.getSong().getParent());
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, song.getSong().getAlbum());
-				Util.startActivityWithoutTransition(context, intent);*/
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				Util.startActivityWithoutTransition(context, intent);
 				return true;
 			case R.id.menu_lyrics:
 				SubsonicFragment fragment = new LyricsFragment();

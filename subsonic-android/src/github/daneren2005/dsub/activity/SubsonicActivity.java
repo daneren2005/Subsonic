@@ -392,6 +392,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		private SubsonicFragment currentFragment;
 		private List<TabInfo> tabs = new ArrayList<TabInfo>();
 		private List<List<SubsonicFragment>> frags = new ArrayList<List<SubsonicFragment>>();
+		private List<QueuedFragment> queue = new ArrayList<QueuedFragment>();
 		private int currentPosition;
 
 		public TabPagerAdapter(SherlockFragmentActivity activity, ViewPager pager) {
@@ -431,6 +432,13 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
 			if(currentFragment != null) {
 				currentFragment.onCreateOptionsMenu(menu, menuInflater);
+				
+				for(QueuedFragment addFragment: queue) {
+					replaceFragment(addFragment.fragment, addFragment.id, currentFragment.getSupportTag());
+					currentFragment = addFragment.fragment;
+				}
+				currentFragment.setPrimaryFragment(true);
+				queue.clear();
 			}
 		}
 		public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
@@ -489,7 +497,12 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			actionBar.addTab(tab);
 			notifyDataSetChanged();
 		}
-		
+		public void queueFragment(SubsonicFragment fragment, int id) {
+			QueuedFragment frag = new QueuedFragment();
+			frag.fragment = fragment;
+			frag.id = id;
+			queue.add(frag);
+		}
 		public void replaceCurrent(SubsonicFragment fragment, int id, int tag) {
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
@@ -611,6 +624,10 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 				this.fragmentClass = fragmentClass;
 				this.args = args;
 			}
+		}
+		private class QueuedFragment {
+			public SubsonicFragment fragment;
+			public int id;
 		}
 	}
 }
