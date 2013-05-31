@@ -573,11 +573,19 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		}
 		
 		public void invalidate() {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			for (int i = 0; i < frags.size(); i++) {
-				List fragStack = (List)frags.get(i);
-				SubsonicFragment frag = (SubsonicFragment)fragStack.get(fragStack.size() - 1);
+				List<SubsonicFragment> fragStack = frags.get(i);
+				
+				for(int j = fragStack.size() - 1; j > 0; j--) {
+					SubsonicFragment oldFrag = fragStack.remove(j);
+					trans.remove((Fragment)oldFrag);
+				}
+				
+				SubsonicFragment frag = (SubsonicFragment)fragStack.get(0);
 				frag.invalidate();
 			}
+			trans.commit();
 		}
 		
 		public void onSaveInstanceState(Bundle savedInstanceState) {
