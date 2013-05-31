@@ -58,7 +58,11 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 		folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
 
 		registerForContextMenu(artistList);
-		invalidated = true;
+		if(!primaryFragment) {
+			invalidated = true;
+		} else {
+			refresh(false);
+		}
 
 		return rootView;
 	}

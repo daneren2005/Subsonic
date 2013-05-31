@@ -416,7 +416,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			} else {
 				frags.set(i, fragStack);
 			}
-			if(currentFragment == null) {
+			if(currentFragment == null || currentPosition == i) {
 				currentFragment = frag;
 				currentFragment.setPrimaryFragment(true);
 			}
@@ -465,13 +465,15 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			if(currentFragment != null) {
 				currentFragment.setPrimaryFragment(false);
 			}
-			List<SubsonicFragment> fragStack = frags.get(position);
-			currentFragment = fragStack.get(fragStack.size() - 1);
-			if(currentFragment != null) {
-				currentFragment.setPrimaryFragment(true);
+			if(position <= frags.size()) {
+				List<SubsonicFragment> fragStack = frags.get(position);
+				currentFragment = fragStack.get(fragStack.size() - 1);
+				if(currentFragment != null) {
+					currentFragment.setPrimaryFragment(true);
+				}
+				activity.invalidateOptionsMenu();
+				recreateSpinner();
 			}
-			activity.invalidateOptionsMenu();
-			recreateSpinner();
 		}
 
 		public void addTab(CharSequence title, Class fragmentClass, Bundle args) {
