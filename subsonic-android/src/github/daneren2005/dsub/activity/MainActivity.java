@@ -216,6 +216,7 @@ public class MainActivity extends SubsonicActivity {
 			fragment.setArguments(args);
 
 			pagerAdapter.queueFragment(fragment, fragmentID);
+			getIntent().removeExtra(Constants.INTENT_EXTRA_VIEW_ALBUM);
 		}
 
 		executorService = Executors.newSingleThreadScheduledExecutor();
