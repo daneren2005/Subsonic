@@ -25,20 +25,26 @@ import java.util.ArrayList;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.util.ProgressListener;
 import android.util.Log;
+import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * @author Sindre Mehus
  */
 public class IndexesParser extends AbstractParser {
     private static final String TAG = IndexesParser.class.getSimpleName();
+	
+	private Context context;
 
     public IndexesParser(Context context) {
         super(context);
+		this.context = context;
     }
 
     public Indexes parse(Reader reader, ProgressListener progressListener) throws Exception {
@@ -52,6 +58,7 @@ public class IndexesParser extends AbstractParser {
         Long lastModified = null;
         int eventType;
         String index = "#";
+		String ignoredArticles = null;
         boolean changed = false;
 
         do {
@@ -61,6 +68,7 @@ public class IndexesParser extends AbstractParser {
                 if ("indexes".equals(name)) {
                     changed = true;
                     lastModified = getLong("lastModified");
+					ignoredArticles = get("ignoredArticles");
                 } else if ("index".equals(name)) {
                     index = get("name");
 
@@ -90,6 +98,12 @@ public class IndexesParser extends AbstractParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
+		
+		if(ignoredArticles != null) {
+			SharedPreferences.Editor prefs = Util.getPreferences(context).edit();
+			prefs.putString(Constants.CACHE_KEY_IGNORE, ignoredArticles);
+			prefs.commit();
+		}
 
         if (!changed) {
             return null;

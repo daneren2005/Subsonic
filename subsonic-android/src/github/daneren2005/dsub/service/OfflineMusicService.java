@@ -32,6 +32,7 @@ import java.util.Random;
 import java.util.Set;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -78,6 +79,10 @@ public class OfflineMusicService extends RESTMusicService {
             }
         }
 		
+		SharedPreferences prefs = Util.getPreferences(context);
+		String ignoredArticlesString = prefs.getString(Constants.CACHE_KEY_IGNORE, "The El La Los Las Le Les");
+		final String[] ignoredArticles = ignoredArticlesString.split(" ");
+		
 		Collections.sort(artists, new Comparator<Artist>() {
 			public int compare(Artist lhsArtist, Artist rhsArtist) {
 				String lhs = lhsArtist.getName().toLowerCase();
@@ -92,13 +97,15 @@ public class OfflineMusicService extends RESTMusicService {
 					return -1;
 				}
 				
-				int index = lhs.indexOf("The ");
-				if(index == 0) {
-					lhs = lhs.substring(4, 0);
-				}
-				index = rhs.indexOf("The ");
-				if(index == 0) {
-					rhs = rhs.substring(4, 0);
+				for(String article: ignoredArticles) {
+					int index = lhs.indexOf(article.toLowerCase());
+					if(index == 0) {
+						lhs = lhs.substring(article.length() + 1);
+					}
+					index = rhs.indexOf(article.toLowerCase());
+					if(index == 0) {
+						rhs = rhs.substring(article.length() + 1);
+					}
 				}
 				
 				return lhs.compareTo(rhs);

@@ -105,6 +105,8 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_CHAT_REFRESH = "chatRefreshRate";
 	public static final String PREFERENCES_KEY_CHAT_ENABLED = "chatEnabled";
 	
+	public static final String CACHE_KEY_IGNORE = "ignoreArticles";
+	
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";
 	public static final String MAIN_BACK_STACK_TABS = "backStackTabs";
