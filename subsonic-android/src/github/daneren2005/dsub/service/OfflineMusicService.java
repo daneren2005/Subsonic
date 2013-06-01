@@ -38,6 +38,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.JukeboxStatus;
 import github.daneren2005.dsub.domain.Lyrics;
@@ -479,6 +480,16 @@ public class OfflineMusicService extends RESTMusicService {
 	@Override
 	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException("Starring not available in offline mode");
+	}
+	
+	@Override
+	public List<Genre> getGenres(Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Getting Genres not available in offline mode");
+	}
+	
+	@Override
+	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Getting Songs By Genre not available in offline mode");
 	}
 
     @Override

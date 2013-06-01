@@ -35,6 +35,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -46,8 +47,10 @@ import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -379,15 +382,70 @@ public class SubsonicFragment extends SherlockFragment {
 		final EditText startYearBox = (EditText)dialogView.findViewById(R.id.start_year);
 		final EditText endYearBox = (EditText)dialogView.findViewById(R.id.end_year);
 		final EditText genreBox = (EditText)dialogView.findViewById(R.id.genre);
+		final Button genreCombo = (Button)dialogView.findViewById(R.id.genre_combo);
 
 		final SharedPreferences prefs = Util.getPreferences(context);
 		final String oldStartYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
 		final String oldEndYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
 		final String oldGenre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");
+		
+		Version version = Util.getServerRestVersion(context);
+		Version genreVersion = new Version("1.9.0");
+		boolean _useCombo = false;
+		if(version.compareTo(genreVersion) >= 0) {
+			genreBox.setVisibility(View.GONE);
+			genreCombo.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					new LoadingTask<List<Genre>>(context, true) {
+						@Override
+						protected List<Genre> doInBackground() throws Throwable {
+							MusicService musicService = MusicServiceFactory.getMusicService(context);
+							return musicService.getGenres(context, this);
+						}
+
+						@Override
+						protected void done(final List<Genre> genres) {
+							List<String> names = new ArrayList<String>();
+							for(Genre genre: genres) {
+								names.add(genre.getName());
+							}
+							final List<String> finalNames = names;
+
+							AlertDialog.Builder builder = new AlertDialog.Builder(context);
+							builder.setTitle(R.string.shuffle_pick_genre)
+								.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									genreCombo.setText(finalNames.get(which));
+								}
+							});
+							AlertDialog dialog = builder.create();
+							dialog.show();
+						}
+
+						@Override
+						protected void error(Throwable error) {            	
+							String msg;
+							if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+								msg = getErrorMessage(error);
+							} else {
+								msg = context.getResources().getString(R.string.playlist_error) + " " + getErrorMessage(error);
+							}
+
+							Util.toast(context, msg, false);
+						}
+					}.execute();
+				}
+			});
+			_useCombo = true;
+		} else {
+			genreCombo.setVisibility(View.GONE);
+		}
+		final boolean useCombo = _useCombo;
 
 		startYearBox.setText(oldStartYear);
 		endYearBox.setText(oldEndYear);
 		genreBox.setText(oldGenre);
+		genreCombo.setText(oldGenre);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("Shuffle By")
@@ -397,7 +455,12 @@ public class SubsonicFragment extends SherlockFragment {
 				public void onClick(DialogInterface dialog, int id) {
 					Intent intent = new Intent(context, DownloadActivity.class);
 					intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-					String genre = genreBox.getText().toString();
+					String genre;
+					if(useCombo) {
+						genre = genreCombo.getText().toString();
+					} else {
+						genre = genreBox.getText().toString();
+					}
 					String startYear = startYearBox.getText().toString();
 					String endYear = endYearBox.getText().toString();
 

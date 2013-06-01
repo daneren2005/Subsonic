@@ -26,6 +26,7 @@ import org.apache.http.HttpResponse;
 import android.content.Context;
 import android.graphics.Bitmap;
 import github.daneren2005.dsub.domain.ChatMessage;
+import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.JukeboxStatus;
 import github.daneren2005.dsub.domain.Lyrics;
@@ -56,6 +57,7 @@ public class CachedMusicService implements MusicService {
     private final TimeLimitedCache<Indexes> cachedIndexes = new TimeLimitedCache<Indexes>(60 * 60, TimeUnit.SECONDS);
     private final TimeLimitedCache<List<Playlist>> cachedPlaylists = new TimeLimitedCache<List<Playlist>>(3600, TimeUnit.SECONDS);
     private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<List<MusicFolder>>(10 * 3600, TimeUnit.SECONDS);
+	private final TimeLimitedCache<List<Genre>> cachedGenres = new TimeLimitedCache<List<Genre>>(10 * 3600, TimeUnit.SECONDS);
     private String restUrl;
 
     public CachedMusicService(MusicService musicService) {
@@ -274,6 +276,24 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception {
 		musicService.addChatMessage(message, context, progressListener);
+	}
+	
+	@Override
+	public List<Genre> getGenres(Context context, ProgressListener progressListener) throws Exception {
+		checkSettingsChanged(context);
+		List<Genre> result = cachedGenres.get();
+
+		if (result == null) {
+			result = musicService.getGenres(context, progressListener);
+			cachedGenres.set(result);
+		}
+
+		return result;
+	}
+
+	@Override
+	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getSongsByGenre(genre, count, offset, context, progressListener);
 	}
 
     private void checkSettingsChanged(Context context) {

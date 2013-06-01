@@ -25,6 +25,7 @@ import org.apache.http.HttpResponse;
 import android.content.Context;
 import android.graphics.Bitmap;
 import github.daneren2005.dsub.domain.ChatMessage;
+import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.JukeboxStatus;
 import github.daneren2005.dsub.domain.Lyrics;
@@ -110,4 +111,8 @@ public interface MusicService {
     List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception;
     
     void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception;
+	
+	List<Genre> getGenres(Context context, ProgressListener progressListener) throws Exception;
+	
+	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
 }

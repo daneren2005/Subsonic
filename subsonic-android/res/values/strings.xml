@@ -283,6 +283,7 @@
 	<string name="shuffle.startYear">Start Year:</string>
 	<string name="shuffle.endYear">End Year:</string>
 	<string name="shuffle.genre">Genre:</string>
+	<string name="shuffle.pick_genre">Pick a genre</string>
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
 

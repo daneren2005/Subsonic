@@ -75,6 +75,7 @@ import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
 import github.daneren2005.dsub.service.parser.ChatMessageParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
+import github.daneren2005.dsub.service.parser.GenreParser;
 import github.daneren2005.dsub.service.parser.IndexesParser;
 import github.daneren2005.dsub.service.parser.JukeboxStatusParser;
 import github.daneren2005.dsub.service.parser.LicenseParser;
@@ -783,6 +784,44 @@ public class RESTMusicService implements MusicService {
 
 		try {
 			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+	
+	@Override
+	public List<Genre> getGenres(Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.9", "Genres not supported.");
+		
+        Reader reader = getReader(context, progressListener, "getGenres", null);
+        try {
+            return new GenreParser(context).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
+        }
+	}
+
+	@Override
+	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.9", "Genres not supported.");
+
+		HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
+
+		List<String> parameterNames = new ArrayList<String>();
+		List<Object> parameterValues = new ArrayList<Object>();
+
+		parameterNames.add("genre");
+		parameterValues.add(genre);
+		parameterNames.add("count");
+		parameterValues.add(count);
+		parameterNames.add("offset");
+		parameterValues.add(offset);
+
+		Reader reader = getReader(context, progressListener, "getSongsByGenre", params, parameterNames, parameterValues);
+
+		try {
+			return new RandomSongsParser(context).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
