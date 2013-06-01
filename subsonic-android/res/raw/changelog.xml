@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.0.3" versioncode="52" releasedate="5/31/2013">
+		<change>Sort by disc number if specified in tags</change>
+		<change>Show starred artists in starred list</change>
+		<change>Change folder.jpg to albumart.jpg which galleries shouldn't display</change>
+		<change>Fix Show Album</change>
+		<change>Added support for server Ignored Articles (future server version) + defaults to server's defaults</change>
+		<change>On network error return to front of the app instead of exiting all the way</change>
+		<change>Fix occasional crash when going back into app after running for a while</change>
+		<change>Various minor bugfixes</change>
+	</release>
 	<release version="4.0.2" versioncode="51" releasedate="5/24/2013">
 		<change>Fix if you set chat refresh rate to 0, will just not refresh</change>
 		<change>Revert dark theme modification</change>
