@@ -307,6 +307,23 @@
     <string name="util.bytes_format.kilobyte">0 КБ</string>
     <string name="util.bytes_format.byte">0 Б</string>
 
+	<string name="button_bar.chat">Чат</string>
+	<string name="main.back_confirm">Нажмите "назад" еще раз для выхода</string>
+	<string name="download.playing_out_of">Воспроизведение: %1$d/%2$d</string>
+	<string name="settings.persistent_title">Постоянное уведомление</string>
+    <string name="settings.persistent_summary">Показывать уведомление даже во время паузы. Остановка воспроизведения уберет это уведомление.</string>
+    <string name="settings.gapless_playback">Непрерывное воспроизведение</string>
+    <string name="settings.gapless_playback_summary">Galaxy S3 может зависать или испытывать прочие трудности с момента начала непрерывного воспроизведения. Выключите эту функцию для исправления данной проблемы.</string>
+    <string name="settings.chat_refresh">Частота обновления чата (сек)</string>
+    <string name="settings.chat_enabled">Чат активен</string>
+    <string name="settings.chat_enabled_summary">Показывать или нет вкладку чата</string>
+	<string name="changelog_full_title">Журнал изменений</string>
+    <string name="changelog_title">Что нового</string>
+    <string name="changelog_ok_button">OK</string>
+    <string name="changelog_show_full">Еще…</string>
+	<string name="chat.send_a_message">Отправить сообщение</string>
+
+
     <plurals name="select_album_n_songs">
         <item quantity="zero">Нет композиций</item>
         <item quantity="one">1 композиция</item>
