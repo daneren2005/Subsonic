@@ -22,7 +22,9 @@ import android.content.Context;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.Util;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
@@ -33,13 +35,14 @@ import java.io.Reader;
 public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 
     private static final String TAG = MusicDirectoryParser.class.getSimpleName();
+	private Context context;
 
     public MusicDirectoryParser(Context context) {
         super(context);
+		this.context = context;
     }
 
     public MusicDirectory parse(String artist, Reader reader, ProgressListener progressListener) throws Exception {
-
         long t0 = System.currentTimeMillis();
         updateProgress(progressListener, R.string.parser_reading);
         init(reader);
@@ -66,7 +69,13 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 
         validate();
         updateProgress(progressListener, R.string.parser_reading_done);
-		dir.sortChildren();
+		
+		// Only apply sorting on server version 4.7 and greater, where disc is supported
+		Version version = Util.getServerRestVersion(context);
+		Version discVersion = new Version("1.8.0");
+		if(version.compareTo(discVersion) >= 0) {
+			dir.sortChildren();
+		}
 
         long t1 = System.currentTimeMillis();
         Log.d(TAG, "Got music directory in " + (t1 - t0) + "ms.");
