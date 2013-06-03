@@ -55,6 +55,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	String playlistId;
 	String playlistName;
 	String albumListType;
+	String albumListExtra;
 	int albumListSize;
 
 	@Override
@@ -100,6 +101,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			playlistId = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
 			playlistName = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
+			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 		}
 		if(primaryFragment) {
@@ -313,6 +315,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			setTitle(R.string.main_albums_frequent);
 		} else if ("starred".equals(albumListType)) {
 			setTitle(R.string.main_albums_starred);
+		} else if("genres".equals(albumListType)) {
+			setTitle(albumListExtra);
 		}
 
 		new LoadTask() {
@@ -321,6 +325,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				MusicDirectory result;
 				if ("starred".equals(albumListType)) {
 					result = service.getStarredList(context, this);
+				} else if("genres".equals(albumListType)) {
+					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
 				} else {
 					result = service.getAlbumList(albumListType, size, 0, context, this);
 				}
@@ -373,7 +379,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			if(albumListType == null || "starred".equals(albumListType)) {
 				entryList.setAdapter(entryAdapter);
 			} else {
-				entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListSize));
+				entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
 			}
 			entryList.setVisibility(View.VISIBLE);
 			licenseValid = result.getSecond();

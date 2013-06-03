@@ -34,15 +34,17 @@ public class AlbumListAdapter extends EndlessAdapter {
 	Context context;
 	ArrayAdapter<MusicDirectory.Entry> adapter;
 	String type;
+	String extra;
 	int size;
 	int offset;
 	List<MusicDirectory.Entry> entries;
 	
-	public AlbumListAdapter(Context context, ArrayAdapter<MusicDirectory.Entry> adapter, String type, int size) {
+	public AlbumListAdapter(Context context, ArrayAdapter<MusicDirectory.Entry> adapter, String type, String extra, int size) {
 		super(adapter);
 		this.context = context;
 		this.adapter = adapter;
 		this.type = type;
+		this.extra = extra;
 		this.size = size;
 		this.offset = size;
 	}
@@ -50,7 +52,12 @@ public class AlbumListAdapter extends EndlessAdapter {
 	@Override
 	protected boolean cacheInBackground() throws Exception {
 		MusicService service = MusicServiceFactory.getMusicService(context);
-		MusicDirectory result = service.getAlbumList(type, size, offset, context, null);
+		MusicDirectory result;
+		if("genres".equals(type)) {
+			result = service.getSongsByGenre(extra, size, offset, context, null);
+		} else {
+			result = service.getAlbumList(type, size, offset, context, null);
+		}
 		entries = result.getChildren();
 		if(entries.size() > 0) {
 			return true;

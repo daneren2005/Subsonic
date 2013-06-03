@@ -51,6 +51,7 @@
     <string name="main.albums_highest">Top rated</string>
     <string name="main.albums_starred">Starred</string>
     <string name="main.albums_random">Random</string>
+	<string name="main.albums_genres">Genres</string>
 	<string name="main.back_confirm">Press back again to exit</string>
 
 	<string name="menu.search">Search</string>
@@ -113,6 +114,8 @@
     <string name="select_album.donate_dialog_now">Now</string>
     <string name="select_album.donate_dialog_later">Later</string>
     <string name="select_album.donate_dialog_0_trial_days_left">Trial period is over</string>
+
+	<string name="select_genre.empty">No genres found</string>
 
     <string name="select_playlist.empty">No saved playlists on server</string>
 

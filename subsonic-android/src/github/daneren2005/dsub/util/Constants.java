@@ -46,6 +46,7 @@ public final class Constants {
     public static final String INTENT_EXTRA_NAME_PLAYLIST_ID = "subsonic.playlist.id";
     public static final String INTENT_EXTRA_NAME_PLAYLIST_NAME = "subsonic.playlist.name";
     public static final String INTENT_EXTRA_NAME_ALBUM_LIST_TYPE = "subsonic.albumlisttype";
+	public static final String INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA = "subsonic.albumlistextra";
     public static final String INTENT_EXTRA_NAME_ALBUM_LIST_SIZE = "subsonic.albumlistsize";
     public static final String INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET = "subsonic.albumlistoffset";
     public static final String INTENT_EXTRA_NAME_SHUFFLE = "subsonic.shuffle";

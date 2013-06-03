@@ -133,6 +133,7 @@ public class MainFragment extends SubsonicFragment {
 		final View albumsRecentButton = buttons.findViewById(R.id.main_albums_recent);
 		final View albumsFrequentButton = buttons.findViewById(R.id.main_albums_frequent);
 		final View albumsStarredButton = buttons.findViewById(R.id.main_albums_starred);
+		final View albumsGenresButton = buttons.findViewById(R.id.main_albums_genres);
 
 		final View dummyView = rootView.findViewById(R.id.main_dummy);
 
@@ -149,7 +150,7 @@ public class MainFragment extends SubsonicFragment {
 		adapter.addView(offlineButton, true);
 		if (!Util.isOffline(context)) {
 			adapter.addView(albumsTitle, false);
-			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton, albumsHighestButton, albumsStarredButton, albumsRecentButton, albumsFrequentButton), true);
+			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton, albumsHighestButton, albumsStarredButton, albumsGenresButton, albumsRecentButton, albumsFrequentButton), true);
 		}
 		list.setAdapter(adapter);
 		registerForContextMenu(dummyView);
@@ -173,6 +174,8 @@ public class MainFragment extends SubsonicFragment {
 					showAlbumList("frequent");
 				} else if (view == albumsStarredButton) {
 					showAlbumList("starred");
+				} else if(view == albumsGenresButton) {
+					showAlbumList("genres");
 				}
 			}
 		});
@@ -194,14 +197,19 @@ public class MainFragment extends SubsonicFragment {
 	}
 
 	private void showAlbumList(String type) {
-		SubsonicFragment fragment = new SelectDirectoryFragment();
-		Bundle args = new Bundle();
-		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
-		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
-		args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
-		fragment.setArguments(args);
+		if("genres".equals(type)) {
+			SubsonicFragment fragment = new SelectGenreFragment();
+			replaceFragment(fragment, R.id.home_layout);
+		} else {
+			SubsonicFragment fragment = new SelectDirectoryFragment();
+			Bundle args = new Bundle();
+			args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
+			args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
+			args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
+			fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.home_layout);
+			replaceFragment(fragment, R.id.home_layout);
+		}
 	}
 
 	private void showAboutDialog() {
