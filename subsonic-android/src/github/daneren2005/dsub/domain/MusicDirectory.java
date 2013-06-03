@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.domain;
 
+import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
@@ -28,6 +29,7 @@ import java.util.Comparator;
  * @author Sindre Mehus
  */
 public class MusicDirectory {
+	private static final String TAG = MusicDirectory.class.getSimpleName();
 
     private String name;
 	private String id;
@@ -319,6 +321,12 @@ public class MusicDirectory {
 	
 	public static class EntryComparator implements Comparator<Entry> {
 		public int compare(Entry lhs, Entry rhs) {
+			if(lhs.isDirectory() && !rhs.isDirectory()) {
+				return -1;
+			} else if(!lhs.isDirectory() && rhs.isDirectory()) {
+				return 1;
+			}
+			
 			Integer lhsDisc = lhs.getDiscNumber();
 			Integer rhsDisc = rhs.getDiscNumber();
 			
@@ -329,9 +337,9 @@ public class MusicDirectory {
 					return 1;
 				}
 			} else if(lhsDisc != null) {
-				return 1;
-			} else if(rhsDisc != null) {
 				return -1;
+			} else if(rhsDisc != null) {
+				return 1;
 			}
 			
 			Integer lhsTrack = lhs.getTrack();
@@ -342,17 +350,21 @@ public class MusicDirectory {
 				} else if(lhsTrack > rhsTrack) {
 					return 1;
 				}
-			} else if(lhsDisc != null) {
-				return 1;
-			} else if(rhsDisc != null) {
+			} else if(lhsTrack != null) {
 				return -1;
+			} else if(rhsTrack != null) {
+				return 1;
 			}
 			
 			return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
 		}
 		
 		public static void sort(List<Entry> entries) {
-			Collections.sort(entries, new EntryComparator());
+			try {
+				Collections.sort(entries, new EntryComparator());
+			} catch (Exception e) {
+				Log.w(TAG, "Failed to sort MusicDirectory");
+			}
 		}
 	}
 }
