@@ -59,6 +59,8 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     private static final String TAG = DSubWidgetProvider.class.getSimpleName();
 	private static DSubWidget4x1 instance4x1;
 	private static DSubWidget4x2 instance4x2;
+	private static DSubWidget4x3 instance4x3;
+	private static DSubWidget4x4 instance4x4;
 
 	public static synchronized void notifyInstances(Context context, DownloadService service, boolean playing) {
 		if(instance4x1 == null) {
@@ -67,9 +69,17 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 		if(instance4x2 == null) {
 			instance4x2 = new DSubWidget4x2();
 		}
+		if(instance4x3 == null) {
+			instance4x3 = new DSubWidget4x3();
+		}
+		if(instance4x4 == null) {
+			instance4x4 = new DSubWidget4x4();
+		}
 		
 		instance4x1.notifyChange(context, service, playing);
 		instance4x2.notifyChange(context, service, playing);
+		instance4x3.notifyChange(context, service, playing);
+		instance4x4.notifyChange(context, service, playing);
 	}
 
     @Override
@@ -90,7 +100,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
         final RemoteViews views = new RemoteViews(context.getPackageName(), getLayout());
 
         views.setTextViewText(R.id.artist, res.getText(R.string.widget_initial_text));
-		if(getLayout() != R.layout.appwidget4x1) {
+		if(getLayout() == R.layout.appwidget4x2) {
 			views.setTextViewText(R.id.album, "");
 		}
 

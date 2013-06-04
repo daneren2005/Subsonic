@@ -21,9 +21,9 @@ package github.daneren2005.dsub.provider;
 import android.appwidget.AppWidgetManager;
 import github.daneren2005.dsub.R;
 
-public class DSubWidget4x2 extends DSubWidgetProvider {
+public class DSubWidget4x4 extends DSubWidgetProvider {
 	@Override
 	protected int getLayout() {
-		return R.layout.appwidget4x2;
+		return R.layout.appwidget4x4;
 	}
 }

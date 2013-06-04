@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.provider;
 
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import github.daneren2005.dsub.R;
 
 public class DSubWidget4x1 extends DSubWidgetProvider {

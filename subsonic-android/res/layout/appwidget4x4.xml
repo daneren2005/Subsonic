@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:minWidth="250dp"
-    android:minHeight="110dp"
-    android:background="@drawable/appwidget_bg"
-    android:orientation="horizontal" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/appwidget_bg" >
 
     <ImageView
         android:id="@+id/appwidget_coverart"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center_vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:scaleType="fitCenter"
+		android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
         android:clickable="true"
         android:focusable="true"
+        android:layout_margin="6dip"
+        android:paddingTop="6dip"
+        android:paddingBottom="6dip"
         android:src="@drawable/appwidget_art_default" />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+       <LinearLayout
             android:id="@+id/appwidget_top"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -41,15 +44,14 @@
                 android:fadingEdge="horizontal"
                 android:fadingEdgeLength="20dip"
                 android:minHeight="16sp"
-                android:paddingLeft="4dip"
-                android:paddingRight="4dip"
-                android:paddingTop="4dip"
-				android:paddingBottom="2dip"
+                android:paddingLeft="5dip"
+                android:paddingRight="5dip"
                 android:singleLine="true"
-                android:gravity="center_horizontal"
-                android:text="Title"
                 android:textColor="@color/appwidget_text"
                 android:textSize="16sp"
+                android:text="Title"
+                android:layout_gravity="center_horizontal"
+            	android:gravity="center"
                 android:textStyle="bold" />
 
             <TextView
@@ -60,47 +62,29 @@
                 android:fadingEdge="horizontal"
                 android:fadingEdgeLength="10dip"
                 android:minHeight="12sp"
-                android:paddingLeft="4dip"
-                android:paddingRight="4dip"
-				android:paddingBottom="2dip"
-                android:singleLine="true"
-                android:gravity="center_horizontal"
-                android:text="Artist"
-                android:textColor="@color/appwidget_text"
-                android:textSize="12sp" />
-            
-          <TextView
-                android:id="@+id/album"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="none"
-                android:fadingEdge="horizontal"
-                android:fadingEdgeLength="10dip"
-                android:minHeight="12sp"
                 android:paddingBottom="2dip"
-                android:paddingLeft="4dip"
-                android:paddingRight="4dip"
+                android:paddingLeft="5dip"
                 android:singleLine="true"
-                android:gravity="center_horizontal"
-                android:text="Album"
+                android:text="Artist"
+                android:layout_gravity="center_horizontal"
+            	android:gravity="center"
                 android:textColor="@color/appwidget_text"
                 android:textSize="12sp" />
-          
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:gravity="bottom"
+            android:orientation="horizontal"
             android:paddingBottom="4dip"
-            android:paddingTop="4dip" >"
+            android:paddingTop="4dip" >
 
             <ImageButton
                 android:id="@+id/control_previous"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="56dip"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:background="@drawable/media_button"          
@@ -109,7 +93,7 @@
             <ImageButton
                 android:id="@+id/control_play"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="56dip"
                 android:layout_weight="1"
                 android:scaleType="center"              
                 android:src="@drawable/ic_appwidget_music_play"
@@ -118,12 +102,13 @@
             <ImageButton
                 android:id="@+id/control_next"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="56dip"
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:src="@drawable/ic_appwidget_music_next"
 				android:background="@drawable/media_button" />
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

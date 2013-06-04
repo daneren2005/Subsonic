@@ -114,6 +114,22 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x2"/>
         </receiver>
+		<receiver
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x3"
+			android:label="@string/widget.4x3">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x3"/>
+        </receiver>
+		<receiver
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x4"
+			android:label="@string/widget.4x4">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x4"/>
+        </receiver>
 
         <provider android:name="github.daneren2005.dsub.provider.DSubSearchProvider"
                   android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
