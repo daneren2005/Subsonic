@@ -400,7 +400,7 @@ public class SubsonicFragment extends SherlockFragment {
 						@Override
 						protected List<Genre> doInBackground() throws Throwable {
 							MusicService musicService = MusicServiceFactory.getMusicService(context);
-							return musicService.getGenres(context, this);
+							return musicService.getGenres(false, context, this);
 						}
 
 						@Override

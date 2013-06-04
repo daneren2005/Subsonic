@@ -790,7 +790,7 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
-	public List<Genre> getGenres(Context context, ProgressListener progressListener) throws Exception {
+	public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Genres not supported.");
 		
         Reader reader = getReader(context, progressListener, "getGenres", null);

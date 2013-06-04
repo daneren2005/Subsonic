@@ -483,7 +483,7 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 	
 	@Override
-	public List<Genre> getGenres(Context context, ProgressListener progressListener) throws Exception {
+	public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException("Getting Genres not available in offline mode");
 	}
 	

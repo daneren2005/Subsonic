@@ -112,7 +112,7 @@ public interface MusicService {
     
     void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception;
 	
-	List<Genre> getGenres(Context context, ProgressListener progressListener) throws Exception;
+	List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 	
 	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
 }

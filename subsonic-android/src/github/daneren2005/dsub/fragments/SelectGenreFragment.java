@@ -89,10 +89,10 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 
 	@Override
 	protected void refresh(boolean refresh) {
-		load();
+		load(refresh);
 	}
 
-	private void load() {
+	private void load(final boolean refresh) {
 		setTitle(R.string.main_albums_genres);
 		
 		BackgroundTask<List<Genre>> task = new TabBackgroundTask<List<Genre>>(this) {
@@ -103,7 +103,7 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 				List<Genre> genres = new ArrayList<Genre>(); 
 
 				try {
-					genres = musicService.getGenres(context, this);
+					genres = musicService.getGenres(refresh, context, this);
 				} catch (Exception x) {
 					Log.e(TAG, "Failed to load genres", x);
 				}
