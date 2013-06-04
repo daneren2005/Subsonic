@@ -45,6 +45,7 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import java.util.HashMap;
 
 /**
  * Simple widget to show currently playing album art along
@@ -55,21 +56,40 @@ import github.daneren2005.dsub.util.FileUtil;
  * @author Sindre Mehus
  */
 public class DSubWidgetProvider extends AppWidgetProvider {
-
-    private static DSubWidgetProvider instance;
     private static final String TAG = DSubWidgetProvider.class.getSimpleName();
+	private static DSubWidget4x1 instance4x1;
+	private static DSubWidget4x2 instance4x2;
+	private static DSubWidget4x3 instance4x3;
+	private static DSubWidget4x4 instance4x4;
 
-    public static synchronized DSubWidgetProvider getInstance() {
-        if (instance == null) {
-            instance = new DSubWidgetProvider();
-        }
-        return instance;
-    }
+	public static synchronized void notifyInstances(Context context, DownloadService service, boolean playing) {
+		if(instance4x1 == null) {
+			instance4x1 = new DSubWidget4x1();
+		}
+		if(instance4x2 == null) {
+			instance4x2 = new DSubWidget4x2();
+		}
+		if(instance4x3 == null) {
+			instance4x3 = new DSubWidget4x3();
+		}
+		if(instance4x4 == null) {
+			instance4x4 = new DSubWidget4x4();
+		}
+		
+		instance4x1.notifyChange(context, service, playing);
+		instance4x2.notifyChange(context, service, playing);
+		instance4x3.notifyChange(context, service, playing);
+		instance4x4.notifyChange(context, service, playing);
+	}
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         defaultAppWidget(context, appWidgetIds);
     }
+	
+	protected int getLayout() {
+		return 0;
+	}
 
     /**
      * Initialize given widgets to default state, where we launch Subsonic on default click
@@ -77,9 +97,12 @@ public class DSubWidgetProvider extends AppWidgetProvider {
      */
     private void defaultAppWidget(Context context, int[] appWidgetIds) {
         final Resources res = context.getResources();
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget);
+        final RemoteViews views = new RemoteViews(context.getPackageName(), getLayout());
 
         views.setTextViewText(R.id.artist, res.getText(R.string.widget_initial_text));
+		if(getLayout() == R.layout.appwidget4x2) {
+			views.setTextViewText(R.id.album, "");
+		}
 
         linkButtons(context, views, false);
         pushUpdate(context, appWidgetIds, views);
@@ -118,11 +141,12 @@ public class DSubWidgetProvider extends AppWidgetProvider {
      */
     private void performUpdate(Context context, DownloadService service, int[] appWidgetIds, boolean playing) {
         final Resources res = context.getResources();
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget);
+        final RemoteViews views = new RemoteViews(context.getPackageName(), getLayout());
 
         MusicDirectory.Entry currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
         String title = currentPlaying == null ? null : currentPlaying.getTitle();
         CharSequence artist = currentPlaying == null ? null : currentPlaying.getArtist();
+		CharSequence album = currentPlaying == null ? null : currentPlaying.getAlbum();
         CharSequence errorState = null;
 
         // Show error message?
@@ -140,11 +164,17 @@ public class DSubWidgetProvider extends AppWidgetProvider {
             // Show error state to user
         	views.setTextViewText(R.id.title,null);
             views.setTextViewText(R.id.artist, errorState);
-            views.setImageViewResource(R.id.appwidget_coverart, R.drawable.appwidget_art_default);
+			views.setTextViewText(R.id.album, "");
+			if(getLayout() != R.layout.appwidget4x1) {
+				views.setImageViewResource(R.id.appwidget_coverart, R.drawable.appwidget_art_default);
+			}
         } else {
             // No error, so show normal titles
             views.setTextViewText(R.id.title, title);
             views.setTextViewText(R.id.artist, artist);
+			if(getLayout() != R.layout.appwidget4x1) {
+				views.setTextViewText(R.id.album, album);
+			}
         }
 
         // Set correct drawable for pause state

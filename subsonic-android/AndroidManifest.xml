@@ -98,11 +98,37 @@
 			</intent-filter>
 		</receiver>
 
-        <receiver android:name="github.daneren2005.dsub.provider.DSubWidgetProvider" >
+        <receiver
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x1"
+			android:label="@string/widget.4x1">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget_info"/>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x1"/>
+        </receiver>
+		<receiver
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x2"
+			android:label="@string/widget.4x2">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x2"/>
+        </receiver>
+		<receiver
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x3"
+			android:label="@string/widget.4x3">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x3"/>
+        </receiver>
+		<receiver
+			android:name="github.daneren2005.dsub.provider.DSubWidget4x4"
+			android:label="@string/widget.4x4">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/appwidget4x4"/>
         </receiver>
 
         <provider android:name="github.daneren2005.dsub.provider.DSubSearchProvider"
