@@ -125,6 +125,8 @@ public final class Constants {
     public static final String DONATION_URL = "http://subsonic.org/pages/android-donation.jsp";
 
     public static final String ALBUM_ART_FILE = "albumart.jpg";
+    
+    public static final String OFFLINE_SCROBBLES_FILE = "offline_scrobbles.log";
 
     private Constants() {
     }

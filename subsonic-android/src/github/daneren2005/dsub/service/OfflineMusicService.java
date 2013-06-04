@@ -36,6 +36,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.os.Environment;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
@@ -429,7 +430,27 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Scrobbling not available in offline mode");
+
+      if(!submission)
+        return;      
+      
+      SharedPreferences prefs = Util.getPreferences(context);
+      String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+      
+      File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
+      
+      String scrobbleSearchCriteria = id.replace(cacheLocn, "");
+      if(scrobbleSearchCriteria.startsWith("/"))
+    	  scrobbleSearchCriteria = scrobbleSearchCriteria.substring(1);
+      
+      scrobbleSearchCriteria = scrobbleSearchCriteria.replace(".complete", "").replace(".partial", "");
+      scrobbleSearchCriteria = scrobbleSearchCriteria.replace("/", " ").replace("-", "\\-").replace(".", "\\.");
+
+      BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile));
+      bw.write(scrobbleSearchCriteria + "," + System.currentTimeMillis());
+      bw.newLine();
+      bw.flush();
+      bw.close();
     }
 
     @Override

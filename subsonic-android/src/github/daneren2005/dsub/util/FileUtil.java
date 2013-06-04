@@ -149,6 +149,11 @@ public class FileUtil {
         }
         return dir;
     }
+    
+    public static File getOfflineScrobblesFile(){
+    	File offlineScrobblesFile = new File(getSubsonicDirectory(), fileSystemSafe(Constants.OFFLINE_SCROBBLES_FILE));
+    	return offlineScrobblesFile;
+    }
 
     public static void createDirectoryForParent(File file) {
         File dir = file.getParentFile();
