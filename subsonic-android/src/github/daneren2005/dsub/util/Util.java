@@ -158,6 +158,7 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, instance);
+		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
         editor.commit();
     }
 
