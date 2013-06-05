@@ -606,7 +606,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				}.execute();
 				return true;
 			case R.id.menu_save_playlist:
-				context.showDialog(DIALOG_SAVE_PLAYLIST);
+				List<MusicDirectory.Entry> entries = new LinkedList<MusicDirectory.Entry>();
+				for (DownloadFile downloadFile : getDownloadService().getSongs()) {
+					entries.add(downloadFile.getSong());
+				}
+				createNewPlaylist(entries, true);
 				return true;
 			case R.id.menu_star:
 				toggleStarred(song.getSong());

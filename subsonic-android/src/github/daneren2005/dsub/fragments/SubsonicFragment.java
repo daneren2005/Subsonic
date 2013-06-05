@@ -66,8 +66,11 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -640,7 +643,7 @@ public class SubsonicFragment extends SherlockFragment {
 						if(which > 0) {
 							addToPlaylist(playlists.get(which - 1), songs);
 						} else {
-							createNewPlaylist(songs);
+							createNewPlaylist(songs, false);
 						}
 					}
 				});
@@ -690,9 +693,21 @@ public class SubsonicFragment extends SherlockFragment {
 		}.execute();
 	}
 	
-	protected void createNewPlaylist(final List<MusicDirectory.Entry> songs) {
+	protected void createNewPlaylist(final List<MusicDirectory.Entry> songs, boolean getSuggestion) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
+		if(getSuggestion) {
+			String playlistName = (getDownloadService() != null) ? getDownloadService().getSuggestedPlaylistName() : null;
+			if (playlistName != null) {
+				playlistNameView.setText(playlistName);
+			} else {
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				playlistNameView.setText(dateFormat.format(new Date()));
+			}
+		} else {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			playlistNameView.setText(dateFormat.format(new Date()));
+		}
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.download_playlist_title)
