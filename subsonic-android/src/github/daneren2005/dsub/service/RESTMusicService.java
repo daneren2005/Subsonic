@@ -183,7 +183,6 @@ public class RESTMusicService implements MusicService {
           line = lines.get(i);
           String filename = line.substring(0, line.lastIndexOf(','));	        
 		        
-          Log.i(TAG, "Searching for id of file" + filename);
           try{
             long time = Long.parseLong(line.substring(line.lastIndexOf(',')+1));
             SearchCritera critera = new SearchCritera(filename, 0, 0, 1);
@@ -192,6 +191,9 @@ public class RESTMusicService implements MusicService {
               Log.i(TAG, "Query '" + filename + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
               Log.i(TAG, "Scrobbling " + result.getSongs().get(0).getId() + " with time " + time);
               scrobble(result.getSongs().get(0).getId(), true, time, context, progressListener);
+            }
+            else{
+              throw new Exception("Song not found on server");
             }
           }
           catch(Exception e){
