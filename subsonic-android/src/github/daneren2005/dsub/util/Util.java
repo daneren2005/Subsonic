@@ -197,10 +197,12 @@ public final class Util {
 		editor.commit();
 
 		if (instance == activeInstance) {
-			Util.setActiveServer(context, 0);
-		}
-
-		if (newInstance == activeInstance) {
+			if(instance != 1) {
+				Util.setActiveServer(context, 1);
+			} else {
+				Util.setOffline(context, true);
+			}
+		} else if (newInstance == activeInstance) {
 			Util.setActiveServer(context, instance);
 		}
 	}
