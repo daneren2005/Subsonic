@@ -690,7 +690,7 @@ public class SubsonicFragment extends SherlockFragment {
 		}.execute();
 	}
 	
-	private void createNewPlaylist(final List<MusicDirectory.Entry> songs) {
+	protected void createNewPlaylist(final List<MusicDirectory.Entry> songs) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
 
