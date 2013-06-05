@@ -19,8 +19,6 @@
 package github.daneren2005.dsub.service;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -34,9 +32,6 @@ import java.util.Set;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
-import android.os.Environment;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
@@ -48,7 +43,6 @@ import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
-import github.daneren2005.dsub.service.parser.PlaylistParser;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -515,6 +509,11 @@ public class OfflineMusicService extends RESTMusicService {
         }
 
         return result;
+    }
+    
+    @Override
+    public boolean hasOfflineScrobbles(){
+      return false;
     }
 
     private void listFilesRecursively(File parent, List<File> children) {

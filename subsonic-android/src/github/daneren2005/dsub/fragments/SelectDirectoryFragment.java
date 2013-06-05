@@ -347,6 +347,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		protected Pair<MusicDirectory, Boolean> doInBackground() throws Throwable {
 			MusicService musicService = MusicServiceFactory.getMusicService(context);
 			MusicDirectory dir = load(musicService);
+			//this may be done better elsewhere but i'm guessing licence is checked infrequently enough for it to be ok here
+			if(musicService.hasOfflineScrobbles()){
+			  
+			}
+
 			boolean valid = musicService.isLicenseValid(context, this);
 			return new Pair<MusicDirectory, Boolean>(dir, valid);
 		}

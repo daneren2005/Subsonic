@@ -162,57 +162,7 @@ public class RESTMusicService implements MusicService {
             Log.e(TAG, "Failed to create custom SSL socket factory, using default.", x);
             return org.apache.http.conn.ssl.SSLSocketFactory.getSocketFactory();
         }
-    }
-    
-    public void processOfflineScrobbles(final Context context, final ProgressListener progressListener){
-      File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
-      try{
-    		
-        BufferedReader br = new BufferedReader(new FileReader(offlineScrobblesFile));
-        String line;
-	
-        ArrayList<String> lines = new ArrayList<String>();
-        while ((line = br.readLine()) != null) {
-          lines.add(line);
-        }
-        br.close();
-        offlineScrobblesFile.delete();
-
-        //TODO make a prompt: "Found " + lines.size() + " offline scrobbles. Scrobble? Ignore? Clear File?"
-        for(int i = 0; i < lines.size(); i++){
-          line = lines.get(i);
-          String filename = line.substring(0, line.lastIndexOf(','));	        
-		        
-          try{
-            long time = Long.parseLong(line.substring(line.lastIndexOf(',')+1));
-            SearchCritera critera = new SearchCritera(filename, 0, 0, 1);
-            SearchResult result = searchNew(critera, context, progressListener);
-            if(result.getSongs().size() == 1){
-              Log.i(TAG, "Query '" + filename + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
-              Log.i(TAG, "Scrobbling " + result.getSongs().get(0).getId() + " with time " + time);
-              scrobble(result.getSongs().get(0).getId(), true, time, context, progressListener);
-            }
-            else{
-              throw new Exception("Song not found on server");
-            }
-          }
-          catch(Exception e){
-            Log.e(TAG, e.toString());
-            BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
-            bw.write(line);
-            bw.newLine();
-            bw.flush();
-            bw.close();
-          }
-        }
-    	}
-      catch(FileNotFoundException fnfe){
-        //ignore, we dont care
-      }
-      catch(Exception e){
-        Log.e(TAG, e.toString());
-    	}
-    }
+    }    
 
     @Override
     public void ping(Context context, ProgressListener progressListener) throws Exception {
@@ -891,6 +841,62 @@ public class RESTMusicService implements MusicService {
 			Util.close(reader);
 		}
 	}
+	
+	@Override
+	public boolean hasOfflineScrobbles(){
+	  return FileUtil.getOfflineScrobblesFile().exists();
+	}
+	
+	public void processOfflineScrobbles(final Context context, final ProgressListener progressListener){
+    File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
+    try{
+      
+      BufferedReader br = new BufferedReader(new FileReader(offlineScrobblesFile));
+      String line;
+
+      ArrayList<String> lines = new ArrayList<String>();
+      while ((line = br.readLine()) != null) {
+        lines.add(line);
+      }
+      br.close();
+      offlineScrobblesFile.delete();
+
+      for(int i = 0; i < lines.size(); i++){
+        line = lines.get(i);
+        String filename = line.substring(0, line.lastIndexOf(','));         
+          
+        try{
+          long time = Long.parseLong(line.substring(line.lastIndexOf(',')+1));
+          SearchCritera critera = new SearchCritera(filename, 0, 0, 1);
+          SearchResult result = searchNew(critera, context, progressListener);
+          if(result.getSongs().size() == 1){
+            Log.i(TAG, "Query '" + filename + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
+            Log.i(TAG, "Scrobbling " + result.getSongs().get(0).getId() + " with time " + time);
+            scrobble(result.getSongs().get(0).getId(), true, time, context, progressListener);
+          }
+          else{
+            throw new Exception("Song not found on server");
+          }
+        }
+        catch(Exception e){
+          Log.e(TAG, e.toString());
+          BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
+          bw.write(line);
+          bw.newLine();
+          bw.flush();
+          bw.close();
+        }
+      }
+    }
+    catch(FileNotFoundException fnfe){
+      //ignore, we dont care
+    }
+    catch(Exception e){
+      Log.e(TAG, e.toString());
+    }
+  }
+	
+	
 
     private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
         return getReader(context, progressListener, method, requestParams, Collections.<String>emptyList(), Collections.emptyList());
