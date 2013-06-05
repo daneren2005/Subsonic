@@ -627,6 +627,7 @@ public class SubsonicFragment extends SherlockFragment {
 			@Override
 			protected void done(final List<Playlist> playlists) {
 				List<String> names = new ArrayList<String>();
+				names.add("Create New");
 				for(Playlist playlist: playlists) {
 					names.add(playlist.getName());
 				}
@@ -635,7 +636,12 @@ public class SubsonicFragment extends SherlockFragment {
 				builder.setTitle("Add to Playlist")
 					.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						addToPlaylist(playlists.get(which), songs);
+						
+						if(which > 0) {
+							addToPlaylist(playlists.get(which - 1), songs);
+						} else {
+							createNewPlaylist(songs);
+						}
 					}
 				});
 				AlertDialog dialog = builder.create();
@@ -680,6 +686,53 @@ public class SubsonicFragment extends SherlockFragment {
 				}
 
 				Util.toast(context, msg, false);
+			}
+		}.execute();
+	}
+	
+	private void createNewPlaylist(final List<MusicDirectory.Entry> songs) {
+		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
+		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.download_playlist_title)
+			.setMessage(R.string.download_playlist_name)
+			.setView(layout)
+			.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					createNewPlaylist(songs, String.valueOf(playlistNameView.getText()));
+				}
+			})
+			.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			})
+			.setCancelable(true);
+		
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	private void createNewPlaylist(final List<MusicDirectory.Entry> songs, final String name) {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.createPlaylist(null, name, songs, context, null);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, R.string.download_playlist_done);
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg = context.getResources().getString(R.string.download_playlist_error) + " " + getErrorMessage(error);
+				Util.toast(context, msg);
 			}
 		}.execute();
 	}
