@@ -118,7 +118,7 @@
     <string name="select_album.offline_scrobbles_dialog_message">Process offline scrobbles file?</string>
     <string name="select_album.offline_scrobbles_dialog_yes">Yes</string>
     <string name="select_album.offline_scrobbles_dialog_no">No</string>
-    <string name="select_album.offline_scrobbles_dialog_delete">Delete file<string>
+    <string name="select_album.offline_scrobbles_dialog_delete">Delete file</string>
 
 	<string name="select_genre.empty">No genres found</string>
 
