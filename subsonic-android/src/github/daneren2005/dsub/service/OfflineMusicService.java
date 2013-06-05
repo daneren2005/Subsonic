@@ -446,7 +446,7 @@ public class OfflineMusicService extends RESTMusicService {
       scrobbleSearchCriteria = scrobbleSearchCriteria.replace(".complete", "").replace(".partial", "");
       scrobbleSearchCriteria = scrobbleSearchCriteria.replace("/", " ").replace("-", "\\-").replace(".", "\\.");
 
-      BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile));
+      BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
       bw.write(scrobbleSearchCriteria + "," + System.currentTimeMillis());
       bw.newLine();
       bw.flush();

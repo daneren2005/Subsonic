@@ -196,7 +196,7 @@ public class RESTMusicService implements MusicService {
           }
           catch(Exception e){
             Log.e(TAG, e.toString());
-            BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
             bw.write(line);
             bw.newLine();
             bw.flush();
