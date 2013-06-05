@@ -117,4 +117,6 @@ public interface MusicService {
 	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
 
   boolean hasOfflineScrobbles();
+  
+  void processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception;
 }

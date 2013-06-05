@@ -515,6 +515,11 @@ public class OfflineMusicService extends RESTMusicService {
     public boolean hasOfflineScrobbles(){
       return false;
     }
+    
+    @Override
+    public void processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+      throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
+    }
 
     private void listFilesRecursively(File parent, List<File> children) {
         for (File file : FileUtil.listMediaFiles(parent)) {

@@ -177,10 +177,7 @@ public class RESTMusicService implements MusicService {
     @Override
     public boolean isLicenseValid(Context context, ProgressListener progressListener) throws Exception {
       
-      //TODO run on a thread  
-      processOfflineScrobbles(context, progressListener);
-    	 	
-    	Reader reader = getReader(context, progressListener, "getLicense", null);
+      Reader reader = getReader(context, progressListener, "getLicense", null);
         try {
             ServerInfo serverInfo = new LicenseParser(context).parse(reader);
             return serverInfo.isLicenseValid();
@@ -847,7 +844,8 @@ public class RESTMusicService implements MusicService {
 	  return FileUtil.getOfflineScrobblesFile().exists();
 	}
 	
-	public void processOfflineScrobbles(final Context context, final ProgressListener progressListener){
+	@Override
+	public void processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
     File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
     try{
       
