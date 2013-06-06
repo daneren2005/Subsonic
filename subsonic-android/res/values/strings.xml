@@ -18,9 +18,8 @@
 	<string name="common.name">Name</string>
 	<string name="common.comment">Comment</string>
 	<string name="common.public">Public</string>
-	<string name="common.webview">Play Web View (Flash)</string>
-	<string name="common.play_external">Play External Player</string>
-	<string name="common.stream_external">Stream External Player</string>
+	<string name="common.play_external">Play Video</string>
+	<string name="common.stream_external">Stream Video</string>
 	<string name="common.confirm">Confirm</string>
 
     <string name="button_bar.home">Home</string>
@@ -283,6 +282,11 @@
 	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
 	<string name="settings.chat_enabled">Chat Enabled</string>
 	<string name="settings.chat_enabled_summary">Whether or not to display the chat tab.  Restart app after changing.</string>
+	<string name="settings.video_title">Video</string>
+	<string name="settings.video_player">Video Player</string>
+	<string name="settings.video_raw">Raw</string>
+	<string name="settings.video_transcode">Direct Transcode</string>
+	<string name="settings.video_flash">Flash</string>
 
 	<string name="shuffle.startYear">Start Year:</string>
 	<string name="shuffle.endYear">End Year:</string>

@@ -229,8 +229,8 @@ public class CachedMusicService implements MusicService {
     }
 	
 	@Override
-    public String getVideoStreamUrl(int maxBitrate, Context context, String id) {
-        return musicService.getVideoStreamUrl(maxBitrate, context, id);
+    public String getVideoStreamUrl(String format, int maxBitrate, Context context, String id) throws Exception {
+        return musicService.getVideoStreamUrl(format, maxBitrate, context, id);
     }
 
     @Override

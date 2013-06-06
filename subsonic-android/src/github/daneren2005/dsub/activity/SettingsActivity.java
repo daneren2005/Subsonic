@@ -69,6 +69,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private Preference addServerPreference;
 	private PreferenceCategory serversCategory;
 	private EditTextPreference chatRefreshRate;
+	private ListPreference videoPlayer;
 	
 	private int serverCount = 3;
 	private SharedPreferences settings;
@@ -95,6 +96,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
 		chatRefreshRate = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CHAT_REFRESH);
+		videoPlayer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
@@ -191,6 +193,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		tempLoss.setSummary(tempLoss.getEntry());
 		bufferLength.setSummary(bufferLength.getText() + " seconds");
 		chatRefreshRate.setSummary(chatRefreshRate.getText());
+		videoPlayer.setSummary(videoPlayer.getEntry());
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }

@@ -682,10 +682,14 @@ public class RESTMusicService implements MusicService {
     }
 	
 	@Override
-	public String getVideoStreamUrl(int maxBitrate, Context context, String id) {
+	public String getVideoStreamUrl(String format, int maxBitrate, Context context, String id) throws Exception {
 		StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "stream"));
         builder.append("&id=").append(id);
-        builder.append("&maxBitRate=").append(maxBitrate);
+		if(!"raw".equals(format)) {
+			checkServerVersion(context, "1.9", "Video streaming not supported.");
+			builder.append("&maxBitRate=").append(maxBitrate);
+		}
+		builder.append("&format=").append(format);
 
         String url = rewriteUrlWithRedirect(context, builder.toString());
         Log.i(TAG, "Using video URL: " + url);

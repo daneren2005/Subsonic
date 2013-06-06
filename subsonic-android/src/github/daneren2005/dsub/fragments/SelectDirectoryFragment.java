@@ -240,11 +240,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 				replaceFragment(fragment, R.id.select_album_layout);
 			} else if (entry.isVideo()) {
-				if(entryExists(entry)) {
-					playExternalPlayer(entry);
-				} else {
-					streamExternalPlayer(entry);
-				}
+				playVideo(entry);
 			}
 		}
 	}

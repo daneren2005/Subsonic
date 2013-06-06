@@ -92,7 +92,7 @@ public interface MusicService {
 
     String getVideoUrl(int maxBitrate, Context context, String id);
 	
-	String getVideoStreamUrl(int Bitrate, Context context, String id);
+	String getVideoStreamUrl(String format, int Bitrate, Context context, String id) throws Exception;
 
     JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception;
 

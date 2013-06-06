@@ -255,9 +255,6 @@ public class SubsonicFragment extends SherlockFragment {
 			case R.id.song_menu_star:
 				toggleStarred(entry);
 				break;
-			case R.id.song_menu_webview:
-				playWebView(entry);
-				break;
 			case R.id.song_menu_play_external:
 				playExternalPlayer(entry);
 				break;
@@ -858,6 +855,19 @@ public class SubsonicFragment extends SherlockFragment {
 			.setMessage(msg)
 			.show();
 	}
+	
+	protected void playVideo(MusicDirectory.Entry entry) {
+		String videoPlayerType = Util.getVideoPlayerType(context);
+		if(entryExists(entry)) {
+			playExternalPlayer(entry);
+		} else {
+			if("flash".equals(videoPlayerType)) {
+				playWebView(entry);
+			} else {
+				streamExternalPlayer(entry, "raw".equals(videoPlayerType) ? "raw" : entry.getTranscodedSuffix());
+			}
+		}
+	}
 
 	protected void playWebView(MusicDirectory.Entry entry) {
 		int maxBitrate = Util.getMaxVideoBitrate(context);
@@ -884,17 +894,32 @@ public class SubsonicFragment extends SherlockFragment {
 		}
 	}
 	protected void streamExternalPlayer(MusicDirectory.Entry entry) {
-		int maxBitrate = Util.getMaxVideoBitrate(context);
+		String videoPlayerType = Util.getVideoPlayerType(context);
+		streamExternalPlayer(entry, "raw".equals(videoPlayerType) ? "raw" : entry.getTranscodedSuffix());
+	}
+	protected void streamExternalPlayer(MusicDirectory.Entry entry, String format) {
+		try {
+			int maxBitrate = Util.getMaxVideoBitrate(context);
 
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoStreamUrl(maxBitrate, context, entry.getId())), "video/*");
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoStreamUrl(format, maxBitrate, context, entry.getId())), "video/*");
+			intent.putExtra("title", entry.getTitle());
 
-		List<ResolveInfo> intents = context.getPackageManager()
-			.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-		if(intents != null && intents.size() > 0) {
-			startActivity(intent);
-		} else {
-			Util.toast(context, R.string.download_no_streaming_player);
+			List<ResolveInfo> intents = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+			if(intents != null && intents.size() > 0) {
+				startActivity(intent);
+			} else {
+				Util.toast(context, R.string.download_no_streaming_player);
+			}
+		} catch(Exception error) {
+			String msg;
+			if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+				msg = error.getMessage();
+			} else {
+				msg = context.getResources().getString(R.string.download_no_streaming_player) + " " + error.getMessage();
+			}
+
+			Util.toast(context, msg, false);
 		}
 	}
 

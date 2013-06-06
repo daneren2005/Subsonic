@@ -137,4 +137,15 @@
 		<item>@string/settings.temp_loss_nothing</item>
 	</string-array>
 
+	<string-array name="videoPlayerValues">
+		<item>raw</item>
+		<item>transcode</item>
+		<item>flash</item>
+	</string-array>
+	<string-array name="videoPlayerNames">
+		<item>@string/settings.video_raw</item>
+		<item>@string/settings.video_transcode</item>
+		<item>@string/settings.video_flash</item>
+	</string-array>
+
 </resources>

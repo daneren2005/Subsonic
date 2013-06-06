@@ -448,7 +448,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 	
 	@Override
-    public String getVideoStreamUrl(int maxBitrate, Context context, String id) {
+    public String getVideoStreamUrl(String format, int maxBitrate, Context context, String id) throws Exception {
         return null;
     }
 

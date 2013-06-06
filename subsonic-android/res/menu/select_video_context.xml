@@ -11,11 +11,6 @@
 	<item 
 		android:id="@+id/song_menu_play_external"
 		android:title="@string/common.play_external"/>
-	
-	<item 
-		android:id="@+id/song_menu_webview"
-		android:title="@string/common.webview"
-		/>
 
 	<item 
 		android:id="@+id/song_menu_download"

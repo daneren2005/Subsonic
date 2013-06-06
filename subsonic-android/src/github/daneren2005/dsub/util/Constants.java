@@ -107,6 +107,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SHUFFLE_MODE = "shuffleMode";
 	public static final String PREFERENCES_KEY_CHAT_REFRESH = "chatRefreshRate";
 	public static final String PREFERENCES_KEY_CHAT_ENABLED = "chatEnabled";
+	public static final String PREFERENCES_KEY_VIDEO_PLAYER = "videoPlayer";
 	
 	public static final String CACHE_KEY_IGNORE = "ignoreArticles";
 	

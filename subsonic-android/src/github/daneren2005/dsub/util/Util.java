@@ -316,6 +316,11 @@ public final class Util {
 
         return builder.toString();
     }
+	
+	public static String getVideoPlayerType(Context context) {
+		SharedPreferences prefs = getPreferences(context); 
+		return prefs.getString(Constants.PREFERENCES_KEY_VIDEO_PLAYER, "raw"); 
+	}
 
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, 0);
