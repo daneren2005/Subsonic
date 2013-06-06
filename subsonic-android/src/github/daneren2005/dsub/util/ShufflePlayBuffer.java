@@ -43,6 +43,7 @@ public class ShufflePlayBuffer {
 
     private final ScheduledExecutorService executorService;
     private final List<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
+	private int lastCount = -1;
     private Context context;
     private int currentServer;
 	private String currentFolder = "";
@@ -57,8 +58,8 @@ public class ShufflePlayBuffer {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                refill();
-            }
+				refill();
+			}
         };
         executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
     }
@@ -85,7 +86,7 @@ public class ShufflePlayBuffer {
         // Check if active server has changed.
         clearBufferIfnecessary();
 
-        if (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context))) {
+        if (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0) {
             return;
         }
 
@@ -97,7 +98,8 @@ public class ShufflePlayBuffer {
 
             synchronized (buffer) {
                 buffer.addAll(songs.getChildren());
-                Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildren().size() + " songs.");
+                Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildrenSize() + " songs.");
+				lastCount = songs.getChildrenSize();
             }
         } catch (Exception x) {
             Log.w(TAG, "Failed to refill shuffle play buffer.", x);
@@ -112,6 +114,7 @@ public class ShufflePlayBuffer {
 				|| (genre != null && !genre.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "")))
 				|| (startYear != null && !startYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "")))
 				|| (endYear != null && !endYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "")))) {
+				lastCount = -1;
                 currentServer = Util.getActiveServer(context);
 				currentFolder = Util.getSelectedMusicFolderId(context);
 				genre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");

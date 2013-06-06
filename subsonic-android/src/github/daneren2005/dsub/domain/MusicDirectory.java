@@ -82,6 +82,10 @@ public class MusicDirectory {
         return result;
     }
 	
+	public int getChildrenSize() {
+		return children.size();
+	}
+	
 	public void sortChildren() {
 		EntryComparator.sort(children);
 	}
