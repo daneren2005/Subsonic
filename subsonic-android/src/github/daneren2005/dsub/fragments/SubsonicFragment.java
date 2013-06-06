@@ -34,8 +34,8 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -69,7 +69,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -696,10 +695,21 @@ public class SubsonicFragment extends SherlockFragment {
 	protected void createNewPlaylist(final List<MusicDirectory.Entry> songs, boolean getSuggestion) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
+		final CheckBox overwriteCheckBox = (CheckBox) layout.findViewById(R.id.save_playlist_overwrite);
 		if(getSuggestion) {
 			String playlistName = (getDownloadService() != null) ? getDownloadService().getSuggestedPlaylistName() : null;
 			if (playlistName != null) {
 				playlistNameView.setText(playlistName);
+				Version version = Util.getServerRestVersion(context);
+				Version updatePlaylistVersion = new Version("1.8.0");
+				try {
+					if(version.compareTo(updatePlaylistVersion) >= 0 && Integer.parseInt(getDownloadService().getSuggestedPlaylistId()) != -1) {
+						overwriteCheckBox.setChecked(true);
+						overwriteCheckBox.setVisibility(View.VISIBLE);
+					}
+				} catch(Exception e) {
+					Log.d(TAG, "Playlist id isn't a integer, probably MusicCabinet");
+				}
 			} else {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				playlistNameView.setText(dateFormat.format(new Date()));
@@ -716,7 +726,11 @@ public class SubsonicFragment extends SherlockFragment {
 			.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
-					createNewPlaylist(songs, String.valueOf(playlistNameView.getText()));
+					if(overwriteCheckBox.isChecked()) {
+						overwritePlaylist(songs, String.valueOf(playlistNameView.getText()), getDownloadService().getSuggestedPlaylistId());
+					} else {
+						createNewPlaylist(songs, String.valueOf(playlistNameView.getText()));
+					}
 				}
 			})
 			.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
@@ -748,6 +762,35 @@ public class SubsonicFragment extends SherlockFragment {
 			protected void error(Throwable error) {
 				String msg = context.getResources().getString(R.string.download_playlist_error) + " " + getErrorMessage(error);
 				Util.toast(context, msg);
+			}
+		}.execute();
+	}
+	private void overwritePlaylist(final List<MusicDirectory.Entry> songs, final String name, final String id) {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				MusicDirectory playlist = musicService.getPlaylist(id, name, context, null);
+				List<MusicDirectory.Entry> toDelete = playlist.getChildren();
+				musicService.overwritePlaylist(id, name, toDelete.size(), songs, context, null);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, R.string.download_playlist_done);
+			}
+
+			@Override
+			protected void error(Throwable error) {            	
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(R.string.download_playlist_error) + " " + getErrorMessage(error);
+				}
+
+				Util.toast(context, msg, false);
 			}
 		}.execute();
 	}

@@ -442,6 +442,31 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
+	public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+		names.add("playlistId");
+		values.add(id);
+		names.add("name");
+		values.add(name);
+		for(MusicDirectory.Entry song: toAdd) {
+			names.add("songIdToAdd");
+			values.add(song.getId());
+		}
+		for(int i = 0; i < toRemove; i++) {
+			names.add("songIndexToRemove");
+			values.add(i);
+		}
+		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
+    	try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
 	public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
 		Reader reader = getReader(context, progressListener, "updatePlaylist", null, Arrays.asList("playlistId", "name", "comment", "public"), Arrays.<Object>asList(id, name, comment, pub));

@@ -492,7 +492,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				warnIfNetworkOrStorageUnavailable();
 				getDownloadService().download(songs, save, autoplay, playNext, shuffle);
 				if (playlistName != null) {
-					getDownloadService().setSuggestedPlaylistName(playlistName);
+					getDownloadService().setSuggestedPlaylistName(playlistName, playlistId);
+				} else {
+					getDownloadService().setSuggestedPlaylistName(null, null);
 				}
 				if (autoplay) {
 					Util.startActivityWithoutTransition(context, DownloadActivity.class);

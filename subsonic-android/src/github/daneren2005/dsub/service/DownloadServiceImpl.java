@@ -110,6 +110,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private long revision;
     private static DownloadService instance;
     private String suggestedPlaylistName;
+	private String suggestedPlaylistId;
     private PowerManager.WakeLock wakeLock;
     private boolean keepScreenOn;
 	private int cachedPosition = 0;
@@ -931,14 +932,20 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     @Override
-    public void setSuggestedPlaylistName(String name) {
+    public void setSuggestedPlaylistName(String name, String id) {
         this.suggestedPlaylistName = name;
+		this.suggestedPlaylistId = id;
     }
 
     @Override
     public String getSuggestedPlaylistName() {
         return suggestedPlaylistName;
     }
+	
+	@Override
+	public String getSuggestedPlaylistId() {
+		return suggestedPlaylistId;
+	}
 	
 	@Override
     public boolean getEqualizerAvailable() {

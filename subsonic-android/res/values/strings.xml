@@ -75,6 +75,7 @@
 	<string name="playlist.update_info">Update Information</string>
 	<string name="playlist.updated_info">Updated playlist information for %s</string>
 	<string name="playlist.updated_info_error">Failed to update playlist information for %s</string>
+	<string name="playlist.overwrite">Overwrite existing playlist</string>
 
     <string name="help.label">Help</string>
     <string name="help.title">Welcome to DSub!</string>

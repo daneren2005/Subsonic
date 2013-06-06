@@ -107,9 +107,11 @@ public interface DownloadService {
 
     long getDownloadListUpdateRevision();
 
-    void setSuggestedPlaylistName(String name);
+    void setSuggestedPlaylistName(String name, String id);
 
     String getSuggestedPlaylistName();
+	
+	String getSuggestedPlaylistId();
 	
 	boolean getEqualizerAvailable();
 
