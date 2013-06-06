@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
+import android.util.Log;
 import java.util.List;
 
 import android.view.View;
@@ -31,7 +32,7 @@ import github.daneren2005.dsub.util.ImageLoader;
  * @author Sindre Mehus
  */
 public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
-
+	private final static String TAG = EntryAdapter.class.getSimpleName();
     private final Context activity;
     private final ImageLoader imageLoader;
     private final boolean checkable;
@@ -54,7 +55,7 @@ public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
         MusicDirectory.Entry entry = getItem(position);
 
         if (entry.isDirectory()) {
-			if(entry.getParent() != null) {
+			if(entry.getArtist() != null) {
 				AlbumView view;
 				view = new AlbumView(activity);
 				view.setAlbum(entry, imageLoader);
