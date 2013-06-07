@@ -4,3 +4,5 @@ subsonic-android/bin/*
 subsonic-android/gen/*
 subsonic-android/private/*
 subsonic-android/nbandroid/*
+subsonic-android/.idea
+subsonic-android/subsonic-android.iml
