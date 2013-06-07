@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.0.4" versioncode="53" releasedate="6/6/2013">
+		<change>Added Genre parsing (thanks archrival)</change>
+		<change>Changed Genre to combo selection on 4.8+ servers</change>
+		<change>Added video choice similar to Subsonic (Raw is the same as MX but you can choose which player to use)</change>
+		<change>Added 4x2, 4x3, 4x4 widgets (thanks archrival)</change>
+		<change>Add option to create new playlist when adding song to playlists</change>
+		<change>Added option to overwrite existing playlist on 4.7+ servers</change>
+		<change>Fix when removing the current server</change>
+		<change>Fix edge case in new sort</change>
+	</release>
 	<release version="4.0.3" versioncode="52" releasedate="5/31/2013">
 		<change>Sort by disc number if specified in tags</change>
 		<change>Show starred artists in starred list</change>

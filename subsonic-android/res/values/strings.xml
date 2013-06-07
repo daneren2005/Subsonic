@@ -285,7 +285,7 @@
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video Player</string>
 	<string name="settings.video_raw">Raw (Requires Subsonic 4.8+)</string>
-	<string name="settings.video_transcode">Direct Transcode</string>
+	<string name="settings.video_transcode">Direct Transcode (Requires video -> mp4 or similar setup on Server)</string>
 	<string name="settings.video_flash">Flash (Requires Plugin)</string>
 
 	<string name="shuffle.startYear">Start Year:</string>
