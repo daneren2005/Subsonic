@@ -391,7 +391,7 @@ public class SubsonicFragment extends SherlockFragment {
 		Version version = Util.getServerRestVersion(context);
 		Version genreVersion = new Version("1.9.0");
 		boolean _useCombo = false;
-		if(version.compareTo(genreVersion) >= 0) {
+		if(version != null && version.compareTo(genreVersion) >= 0) {
 			genreBox.setVisibility(View.GONE);
 			genreCombo.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
