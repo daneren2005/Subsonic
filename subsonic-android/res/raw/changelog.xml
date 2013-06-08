@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.0.5" versioncode="54" releasedate="6/7/2013">
+		<change>Fix album art on old Subsonic/MusicCabinet servers</change>
+	</release>
 	<release version="4.0.4" versioncode="53" releasedate="6/6/2013">
 		<change>Added Genre parsing (thanks archrival)</change>
 		<change>Changed Genre to combo selection on 4.8+ servers</change>
