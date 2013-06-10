@@ -32,6 +32,7 @@ import java.util.Set;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
