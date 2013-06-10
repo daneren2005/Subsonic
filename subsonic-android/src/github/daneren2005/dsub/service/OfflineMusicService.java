@@ -19,8 +19,6 @@
 package github.daneren2005.dsub.service;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -34,8 +32,6 @@ import java.util.Set;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
@@ -47,7 +43,6 @@ import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
-import github.daneren2005.dsub.service.parser.PlaylistParser;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -170,27 +165,6 @@ public class OfflineMusicService extends RESTMusicService {
 				} catch(Exception e) {
 					// Failed parseInt, just means track filled out
 				}
-			}
-			
-			try {
-				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-				metadata.setDataSource(file.getAbsolutePath());
-				String discNumber = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER);
-				if(discNumber == null) {
-					discNumber = "1/1";
-				}
-				int slashIndex = discNumber.indexOf("/");
-				if(slashIndex > 0) {
-					discNumber = discNumber.substring(0, slashIndex);
-				}
-				entry.setDiscNumber(Integer.parseInt(discNumber));
-				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-				entry.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
-				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-				entry.setDuration(Integer.parseInt(length) / 1000);
-				metadata.release();
-			} catch(Exception e) {
-				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
 			}
         }
 		
@@ -434,7 +408,33 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Scrobbling not available in offline mode");
+
+      if(!submission)
+        return;      
+      
+      SharedPreferences prefs = Util.getPreferences(context);
+      String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+      
+      File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
+      
+      String scrobbleSearchCriteria = id.replace(cacheLocn, "");
+      if(scrobbleSearchCriteria.startsWith("/"))
+    	  scrobbleSearchCriteria = scrobbleSearchCriteria.substring(1);
+      
+      scrobbleSearchCriteria = scrobbleSearchCriteria.replace(".complete", "").replace(".partial", "").replace(".mp3", "");
+      String[] details = scrobbleSearchCriteria.split("/");
+
+      //last.fm only uses artist and track title so broaden the search by just using those. doesn't matter if it find the track on a different album
+      String artist = "artist:\""+details[0]+"\"";
+      String title = "title:\""+details[2].substring(details[2].indexOf('-')+1)+"\"";
+
+      scrobbleSearchCriteria = artist + " AND " + title; 
+
+      BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
+      bw.write(scrobbleSearchCriteria + "," + System.currentTimeMillis());
+      bw.newLine();
+      bw.flush();
+      bw.close();
     }
 
     @Override
@@ -514,6 +514,16 @@ public class OfflineMusicService extends RESTMusicService {
         }
 
         return result;
+    }
+    
+    @Override
+    public boolean hasOfflineScrobbles(){
+      return false;
+    }
+    
+    @Override
+    public void processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+      throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
     }
 
     private void listFilesRecursively(File parent, List<File> children) {

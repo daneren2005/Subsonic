@@ -27,6 +27,7 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.TabBackgroundTask;
@@ -272,6 +273,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		} else {
 			getMusicDirectory(id, name, refresh);
 		}
+		
+		//this may be done better elsewhere but it works for now :) 
+    MusicService musicService = MusicServiceFactory.getMusicService(context);
+    if(musicService.hasOfflineScrobbles()){
+      showOfflineScrobblesDialog();
+    }
 	}
 
 	private void getMusicDirectory(final String id, final String name, final boolean refresh) {
@@ -341,9 +348,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		@Override
 		protected Pair<MusicDirectory, Boolean> doInBackground() throws Throwable {
-			MusicService musicService = MusicServiceFactory.getMusicService(context);
+		  MusicService musicService = MusicServiceFactory.getMusicService(context);
 			MusicDirectory dir = load(musicService);
-			boolean valid = musicService.isLicenseValid(context, this);
+			boolean valid = musicService.isLicenseValid(context, this);	
 			return new Pair<MusicDirectory, Boolean>(dir, valid);
 		}
 
@@ -633,6 +640,56 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		builder.create().show();
 	}
+	
+	private void showOfflineScrobblesDialog() {
+	  
+	  
+    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    builder.setIcon(android.R.drawable.ic_dialog_info);
+
+    builder.setTitle(R.string.select_album_offline_scrobbles_dialog_title);    
+
+    builder.setMessage(R.string.select_album_offline_scrobbles_dialog_message);
+
+    //want this on the left and delete on the right hence the backwards button types
+    builder.setNegativeButton(R.string.select_album_offline_scrobbles_dialog_yes,
+
+      new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+          new Thread("Scrobble offline") {
+            @Override
+            public void run() {
+              try {
+                MusicService musicService = MusicServiceFactory.getMusicService(context);
+                musicService.processOfflineScrobbles(context, null);
+              } catch (Exception x) {
+                Log.i(TAG, "Failed to process offline sc/robbles");
+              }
+            }
+          }.start();
+        }
+      });
+
+    builder.setPositiveButton(R.string.select_album_offline_scrobbles_dialog_delete,
+      new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+          dialogInterface.dismiss();
+          FileUtil.getOfflineScrobblesFile().delete();
+        }
+      });
+    
+    builder.setNeutralButton(R.string.select_album_offline_scrobbles_dialog_no,
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            dialogInterface.dismiss();
+          }
+        });
+
+    builder.create().show();
+  }
 
 	private View createHeader(List<MusicDirectory.Entry> entries) {
 		View header = entryList.findViewById(R.id.select_album_header);
