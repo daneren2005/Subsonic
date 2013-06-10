@@ -147,9 +147,6 @@ public final class Util {
     }
 
     public static boolean isScrobblingEnabled(Context context) {
-        /*if (isOffline(context)) {
-            return false;
-        }*/
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, false);
     }

@@ -275,10 +275,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 		
 		//this may be done better elsewhere but it works for now :) 
-    MusicService musicService = MusicServiceFactory.getMusicService(context);
-    if(musicService.hasOfflineScrobbles()){
-      showOfflineScrobblesDialog();
-    }
+		MusicService musicService = MusicServiceFactory.getMusicService(context);
+		if(musicService.hasOfflineScrobbles()){
+			showOfflineScrobblesDialog();
+		}
 	}
 
 	private void getMusicDirectory(final String id, final String name, final boolean refresh) {

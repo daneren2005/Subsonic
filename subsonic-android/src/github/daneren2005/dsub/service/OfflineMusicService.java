@@ -429,33 +429,34 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
+		if(!submission) {
+		  return;
+		}
 
-      if(!submission)
-        return;      
-      
-      SharedPreferences prefs = Util.getPreferences(context);
-      String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-      
-      File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
-      
-      String scrobbleSearchCriteria = id.replace(cacheLocn, "");
-      if(scrobbleSearchCriteria.startsWith("/"))
-    	  scrobbleSearchCriteria = scrobbleSearchCriteria.substring(1);
-      
-      scrobbleSearchCriteria = scrobbleSearchCriteria.replace(".complete", "").replace(".partial", "").replace(".mp3", "");
-      String[] details = scrobbleSearchCriteria.split("/");
+		SharedPreferences prefs = Util.getPreferences(context);
+		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 
-      //last.fm only uses artist and track title so broaden the search by just using those. doesn't matter if it find the track on a different album
-      String artist = "artist:\""+details[0]+"\"";
-      String title = "title:\""+details[2].substring(details[2].indexOf('-')+1)+"\"";
+		File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
 
-      scrobbleSearchCriteria = artist + " AND " + title; 
+		String scrobbleSearchCriteria = id.replace(cacheLocn, "");
+		if(scrobbleSearchCriteria.startsWith("/")) {
+			scrobbleSearchCriteria = scrobbleSearchCriteria.substring(1);
+		}
 
-      BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
-      bw.write(scrobbleSearchCriteria + "," + System.currentTimeMillis());
-      bw.newLine();
-      bw.flush();
-      bw.close();
+		scrobbleSearchCriteria = scrobbleSearchCriteria.replace(".complete", "").replace(".partial", "").replace(".mp3", "");
+		String[] details = scrobbleSearchCriteria.split("/");
+
+		//last.fm only uses artist and track title so broaden the search by just using those. doesn't matter if it find the track on a different album
+		String artist = "artist:\""+details[0]+"\"";
+		String title = "title:\""+details[2].substring(details[2].indexOf('-')+1)+"\"";
+
+		scrobbleSearchCriteria = artist + " AND " + title; 
+
+		BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
+		bw.write(scrobbleSearchCriteria + "," + System.currentTimeMillis());
+		bw.newLine();
+		bw.flush();
+		bw.close();
     }
 
     @Override
