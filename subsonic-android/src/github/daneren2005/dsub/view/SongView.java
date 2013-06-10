@@ -79,15 +79,6 @@ public class SongView extends UpdateView implements Checkable {
 				try {
 					MediaMetadataRetriever metadata = new MediaMetadataRetriever();
 					metadata.setDataSource(file.getAbsolutePath());
-          String discNumber = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER);
-          if(discNumber == null) {
-            discNumber = "1/1";
-          }
-          int slashIndex = discNumber.indexOf("/");
-          if(slashIndex > 0) {
-            discNumber = discNumber.substring(0, slashIndex);
-          }
-          song.setDiscNumber(Integer.parseInt(discNumber));
 					String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
 					song.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
 					String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
