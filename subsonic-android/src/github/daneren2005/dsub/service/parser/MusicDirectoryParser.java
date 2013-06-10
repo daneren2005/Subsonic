@@ -71,9 +71,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
         updateProgress(progressListener, R.string.parser_reading_done);
 		
 		// Only apply sorting on server version 4.7 and greater, where disc is supported
-		Version version = Util.getServerRestVersion(context);
-		Version discVersion = new Version("1.8.0");
-		if(version.compareTo(discVersion) >= 0) {
+		if(Util.checkServerVersion(context, "1.8.0")) {
 			dir.sortChildren();
 		}
 

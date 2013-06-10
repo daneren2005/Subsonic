@@ -387,11 +387,9 @@ public class SubsonicFragment extends SherlockFragment {
 		final String oldStartYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
 		final String oldEndYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
 		final String oldGenre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");
-		
-		Version version = Util.getServerRestVersion(context);
-		Version genreVersion = new Version("1.9.0");
+
 		boolean _useCombo = false;
-		if(version != null && version.compareTo(genreVersion) >= 0) {
+		if(Util.checkServerVersion(context, "1.9.0")) {
 			genreBox.setVisibility(View.GONE);
 			genreCombo.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
@@ -697,10 +695,8 @@ public class SubsonicFragment extends SherlockFragment {
 			String playlistName = (getDownloadService() != null) ? getDownloadService().getSuggestedPlaylistName() : null;
 			if (playlistName != null) {
 				playlistNameView.setText(playlistName);
-				Version version = Util.getServerRestVersion(context);
-				Version updatePlaylistVersion = new Version("1.8.0");
 				try {
-					if(version.compareTo(updatePlaylistVersion) >= 0 && Integer.parseInt(getDownloadService().getSuggestedPlaylistId()) != -1) {
+					if(Util.checkServerVersion(context, "1.8.0") && Integer.parseInt(getDownloadService().getSuggestedPlaylistId()) != -1) {
 						overwriteCheckBox.setChecked(true);
 						overwriteCheckBox.setVisibility(View.VISIBLE);
 					}
