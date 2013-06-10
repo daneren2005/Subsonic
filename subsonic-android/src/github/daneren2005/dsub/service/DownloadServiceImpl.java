@@ -648,7 +648,18 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			setNextPlaying();
         }
     }
-	
+	private synchronized void playNext() {
+		if(nextPlaying != null && nextPlayerState == PlayerState.PREPARED) {
+			if(!nextSetup) {
+				playNext(true);
+			} else {
+				nextSetup = false;
+				playNext(false);
+			}
+		} else {
+			onSongCompleted();
+		}
+	}
 	private synchronized void playNext(boolean start) {
 		// Swap the media players since nextMediaPlayer is ready to play
 		if(start) {
@@ -1135,19 +1146,23 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 	
 	private void setupHandlers(final DownloadFile downloadFile, final boolean isPartial) {
+		final int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
 		mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
 				Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
 				int pos = cachedPosition;
 				reset();
-				downloadFile.setPlaying(false);
-				doPlay(downloadFile, pos, true);
-				downloadFile.setPlaying(true);
+				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
+					playNext();
+				} else {
+					downloadFile.setPlaying(false);
+					doPlay(downloadFile, pos, true);
+					downloadFile.setPlaying(true);
+				}
 				return true;
 			}
 		});
 		
-		final int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
 		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mediaPlayer) {
@@ -1161,16 +1176,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				int pos = cachedPosition;
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
-					if(nextPlaying != null && nextPlayerState == PlayerState.PREPARED) {
-						if(!nextSetup) {
-							playNext(true);
-						} else {
-							nextSetup = false;
-							playNext(false);
-						}
-					} else {
-						onSongCompleted();
-					}
+					playNext();
 					return;
 				}
 
