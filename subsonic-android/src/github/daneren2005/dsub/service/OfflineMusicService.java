@@ -166,6 +166,27 @@ public class OfflineMusicService extends RESTMusicService {
 					// Failed parseInt, just means track filled out
 				}
 			}
+			
+			try {
+				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+				metadata.setDataSource(file.getAbsolutePath());
+				String discNumber = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER);
+				if(discNumber == null) {
+					discNumber = "1/1";
+				}
+				int slashIndex = discNumber.indexOf("/");
+				if(slashIndex > 0) {
+					discNumber = discNumber.substring(0, slashIndex);
+				}
+				entry.setDiscNumber(Integer.parseInt(discNumber));
+				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+				entry.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
+				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+				entry.setDuration(Integer.parseInt(length) / 1000);
+				metadata.release();
+			} catch(Exception e) {
+				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+			}
         }
 		
         entry.setTitle(title);

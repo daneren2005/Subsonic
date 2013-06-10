@@ -72,23 +72,6 @@ public class SongView extends UpdateView implements Checkable {
     public void setSong(MusicDirectory.Entry song, boolean checkable) {
         this.song = song;
 		
-		if(Util.isOffline(context)) {
-			DownloadFile downloadFile = new DownloadFile(context, song, false);
-			File file = downloadFile.getCompleteFile();
-			if(file.exists()) {
-				try {
-					MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-					metadata.setDataSource(file.getAbsolutePath());
-					String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-					song.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
-					String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-					song.setDuration(Integer.parseInt(length) / 1000);
-				} catch(Exception e) {
-					Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
-				}
-			}
-		}
-		
         StringBuilder artist = new StringBuilder(40);
 
         String bitRate = null;
