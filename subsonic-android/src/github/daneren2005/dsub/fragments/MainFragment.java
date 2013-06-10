@@ -27,6 +27,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.ChangeLog;
 import java.io.File;
 import java.util.ArrayList;
@@ -228,44 +229,42 @@ public class MainFragment extends SubsonicFragment {
 	
 	private void showOfflineScrobblesDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setIcon(android.R.drawable.ic_dialog_info);
-
-		builder.setTitle(R.string.select_album_offline_scrobbles_dialog_title);    
-		builder.setMessage(R.string.select_album_offline_scrobbles_dialog_message);
-
-		//want this on the left and delete on the right hence the backwards button types
-		builder.setNegativeButton(R.string.select_album_offline_scrobbles_dialog_yes,
-			new DialogInterface.OnClickListener() {
+		builder.setIcon(android.R.drawable.ic_dialog_info)
+			.setTitle(R.string.offline_scrobbles_dialog_title)
+			.setMessage(R.string.offline_scrobbles_dialog_message)
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialogInterface, int i) {
-					new Thread("Scrobble offline") {
+					new SilentBackgroundTask<Void>(context) {
 						@Override
-						public void run() {
-							try {
-								MusicService musicService = MusicServiceFactory.getMusicService(context);
-								musicService.processOfflineScrobbles(context, null);
-							} catch (Exception x) {
-								Log.i(TAG, "Failed to process offline sc/robbles");
-							}
+						protected Void doInBackground() throws Throwable {
+							MusicService musicService = MusicServiceFactory.getMusicService(context);
+							musicService.processOfflineScrobbles(context, null);
+							return null;
 						}
-					}.start();
-				}
-			});
 
-		builder.setPositiveButton(R.string.select_album_offline_scrobbles_dialog_delete,
-			new DialogInterface.OnClickListener() {
+						@Override
+						protected void done(Void result) {
+							Util.toast(context, R.string.offline_scrobbles_success);
+						}
+
+						@Override
+						protected void error(Throwable error) {
+							String msg = context.getResources().getString(R.string.offline_scrobbles_error) + " " + getErrorMessage(error);
+							Util.toast(context, msg);
+						}
+					}.execute();
+				}
+			}).setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					dialogInterface.dismiss();
+				}
+			}).setNegativeButton(R.string.common_delete, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialogInterface, int i) {
 					dialogInterface.dismiss();
 					FileUtil.getOfflineScrobblesFile().delete();
-				}
-			});
-
-		builder.setNeutralButton(R.string.select_album_offline_scrobbles_dialog_no,
-			new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i) {
-					dialogInterface.dismiss();
 				}
 			});
 
