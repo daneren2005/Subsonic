@@ -853,15 +853,10 @@ public class SubsonicFragment extends SherlockFragment {
 	}
 	
 	protected void playVideo(MusicDirectory.Entry entry) {
-		String videoPlayerType = Util.getVideoPlayerType(context);
 		if(entryExists(entry)) {
 			playExternalPlayer(entry);
 		} else {
-			if("flash".equals(videoPlayerType)) {
-				playWebView(entry);
-			} else {
-				streamExternalPlayer(entry, "raw".equals(videoPlayerType) ? "raw" : entry.getTranscodedSuffix());
-			}
+			streamExternalPlayer(entry);
 		}
 	}
 
@@ -891,7 +886,11 @@ public class SubsonicFragment extends SherlockFragment {
 	}
 	protected void streamExternalPlayer(MusicDirectory.Entry entry) {
 		String videoPlayerType = Util.getVideoPlayerType(context);
-		streamExternalPlayer(entry, "raw".equals(videoPlayerType) ? "raw" : entry.getTranscodedSuffix());
+		if("flash".equals(videoPlayerType)) {
+			playWebView(entry);
+		} else {
+			streamExternalPlayer(entry, "raw".equals(videoPlayerType) ? "raw" : entry.getTranscodedSuffix());
+		}
 	}
 	protected void streamExternalPlayer(MusicDirectory.Entry entry, String format) {
 		try {
