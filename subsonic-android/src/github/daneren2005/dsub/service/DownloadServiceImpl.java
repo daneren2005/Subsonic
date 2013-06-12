@@ -309,6 +309,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			DownloadFile downloadFile = new DownloadFile(this, song, save);
 			backgroundDownloadList.add(downloadFile);
 		}
+		revision++;
 		
 		checkDownloads();
 		lifecycleSupport.serializeDownloadQueue();
@@ -1347,7 +1348,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					DownloadFile downloadFile = backgroundDownloadList.get(i);
 					if(downloadFile.isWorkDone() && (!downloadFile.shouldSave() || downloadFile.isSaved())) {
 						// Don't need to keep list like active song list
-						backgroundDownloadList.remove(downloadFile);
+						backgroundDownloadList.remove(i);
 						i--;
 					} else {
 						currentDownloading = downloadFile;
