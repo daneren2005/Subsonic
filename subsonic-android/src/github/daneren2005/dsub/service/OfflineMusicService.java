@@ -346,15 +346,25 @@ public class OfflineMusicService extends RESTMusicService {
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         List<Playlist> playlists = new ArrayList<Playlist>();
         File root = FileUtil.getPlaylistDirectory();
+		String lastServer = null;
+		boolean removeServer = true;
         for (File folder : FileUtil.listFiles(root)) {
 			if(folder.isDirectory()) {
+				String server = folder.getName();
 				for(File file: FileUtil.listFiles(folder)) {
 					if(FileUtil.isPlaylistFile(file)) {
 						String id = file.getName();
-						String filename = folder.getName() + ": " + FileUtil.getBaseName(id);
-						Playlist playlist = new Playlist(id, filename);
+						String filename = server + ": " + FileUtil.getBaseName(id);
+						Playlist playlist = new Playlist(server, filename);
 						playlists.add(playlist);
 					}
+				}
+				
+				if(!server.equals(lastServer)) {
+					if(lastServer != null) {
+						removeServer = false;
+					}
+					lastServer = server;
 				}
 			} else {
 				// Delete legacy playlist files
@@ -365,6 +375,12 @@ public class OfflineMusicService extends RESTMusicService {
 				}
 			}
         }
+		
+		if(removeServer) {
+			for(Playlist playlist: playlists) {
+				playlist.setName(playlist.getName().substring(playlist.getId().length() + 2));
+			}
+		}
         return playlists;
     }
 
@@ -378,11 +394,12 @@ public class OfflineMusicService extends RESTMusicService {
         Reader reader = null;
 		BufferedReader buffer = null;
 		try {
-			int firstIndex = name.indexOf(": ");
-			String server = name.substring(0, firstIndex);
-			name = name.substring(firstIndex + 2);
+			int firstIndex = name.indexOf(id);
+			if(firstIndex != -1) {
+				name = name.substring(id.length() + 2);
+			}
 			
-			File playlistFile = FileUtil.getPlaylistFile(server, name);
+			File playlistFile = FileUtil.getPlaylistFile(id, name);
 			reader = new FileReader(playlistFile);
 			buffer = new BufferedReader(reader);
 			
