@@ -1349,6 +1349,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					if(downloadFile.isWorkDone() && (!downloadFile.shouldSave() || downloadFile.isSaved())) {
 						// Don't need to keep list like active song list
 						backgroundDownloadList.remove(i);
+						revision++;
 						i--;
 					} else {
 						currentDownloading = downloadFile;
