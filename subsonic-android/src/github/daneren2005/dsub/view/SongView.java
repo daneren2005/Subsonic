@@ -93,8 +93,14 @@ public class SongView extends UpdateView implements Checkable {
 		} else {
 			artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
 		}
+		
+		String title = song.getTitle();
+		Integer track = song.getTrack();
+		if(track != null && Util.getDisplayTrack(context)) {
+			title = String.format("%02d", track) + " " + title;
+		}
 
-        titleTextView.setText(song.getTitle());
+        titleTextView.setText(title);
         artistTextView.setText(artist);
         durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);

@@ -23,6 +23,12 @@
                 android:entryValues="@array/themeValues"
                 android:entries="@array/themeNames"/>
 
+		<CheckBoxPreference
+			android:title="@string/settings.track_title"
+			android:summary="@string/settings.track_summary"
+			android:key="displayTrack"
+			android:defaultValue="false"/>
+
     </PreferenceCategory>
 
 	<PreferenceCategory

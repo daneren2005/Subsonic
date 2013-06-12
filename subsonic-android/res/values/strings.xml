@@ -210,6 +210,8 @@
     <string name="settings.theme_dark_fullscreen">Dark Fullscreen</string>
 	<string name="settings.theme_black_fullscreen">Black Fullscreen</string>
 	<string name="settings.theme_holo_fullscreen">Holo Fullscreen</string>
+	<string name="settings.track_title">Display Track #</string>
+	<string name="settings.track_summary">Display Track # in front of songs if one exists</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobile</string>
