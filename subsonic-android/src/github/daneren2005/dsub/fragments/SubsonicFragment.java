@@ -403,6 +403,7 @@ public class SubsonicFragment extends SherlockFragment {
 						@Override
 						protected void done(final List<Genre> genres) {
 							List<String> names = new ArrayList<String>();
+							names.add("Blank");
 							for(Genre genre: genres) {
 								names.add(genre.getName());
 							}
@@ -455,6 +456,9 @@ public class SubsonicFragment extends SherlockFragment {
 					String genre;
 					if(useCombo) {
 						genre = genreCombo.getText().toString();
+						if(genre == null || "Blank".equals(genre)) {
+							genre = "";
+						}
 					} else {
 						genre = genreBox.getText().toString();
 					}
