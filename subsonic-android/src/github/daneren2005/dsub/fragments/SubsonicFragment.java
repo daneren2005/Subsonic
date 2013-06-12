@@ -403,7 +403,8 @@ public class SubsonicFragment extends SherlockFragment {
 						@Override
 						protected void done(final List<Genre> genres) {
 							List<String> names = new ArrayList<String>();
-							names.add("Blank");
+							String blank = context.getResources().getString(R.string.select_genre_blank);
+							names.add(blank);
 							for(Genre genre: genres) {
 								names.add(genre.getName());
 							}
@@ -413,7 +414,11 @@ public class SubsonicFragment extends SherlockFragment {
 							builder.setTitle(R.string.shuffle_pick_genre)
 								.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int which) {
-									genreCombo.setText(finalNames.get(which));
+									if(which == 0) {
+										genreCombo.setText("");
+									} else {
+										genreCombo.setText(finalNames.get(which));
+									}
 								}
 							});
 							AlertDialog dialog = builder.create();
@@ -446,7 +451,7 @@ public class SubsonicFragment extends SherlockFragment {
 		genreCombo.setText(oldGenre);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("Shuffle By")
+		builder.setTitle(R.string.shuffle_title)
 			.setView(dialogView)
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
@@ -456,9 +461,6 @@ public class SubsonicFragment extends SherlockFragment {
 					String genre;
 					if(useCombo) {
 						genre = genreCombo.getText().toString();
-						if(genre == null || "Blank".equals(genre)) {
-							genre = "";
-						}
 					} else {
 						genre = genreBox.getText().toString();
 					}
@@ -628,13 +630,14 @@ public class SubsonicFragment extends SherlockFragment {
 			@Override
 			protected void done(final List<Playlist> playlists) {
 				List<String> names = new ArrayList<String>();
-				names.add("Create New");
+				String createNew = context.getResources().getString(R.string.playlist_create_new);
+				names.add(createNew);
 				for(Playlist playlist: playlists) {
 					names.add(playlist.getName());
 				}
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
-				builder.setTitle("Add to Playlist")
+				builder.setTitle(R.string.playlist_add_to)
 					.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						

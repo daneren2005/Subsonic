@@ -75,6 +75,8 @@
 	<string name="playlist.updated_info">Updated playlist information for %s</string>
 	<string name="playlist.updated_info_error">Failed to update playlist information for %s</string>
 	<string name="playlist.overwrite">Overwrite existing playlist</string>
+	<string name="playlist.add_to">Add to Playlist</string>
+	<string name="playlist.create_new">Create New</string>
 
     <string name="help.label">Help</string>
     <string name="help.title">Welcome to DSub!</string>
@@ -116,6 +118,7 @@
     <string name="select_album.donate_dialog_0_trial_days_left">Trial period is over</string>
 
 	<string name="select_genre.empty">No genres found</string>
+	<string name="select_genre.blank">Blank</string>
 
     <string name="select_playlist.empty">No saved playlists on server</string>
 
@@ -290,6 +293,7 @@
 	<string name="settings.video_transcode">Direct Transcode (Requires video -> mp4 or similar setup on Server)</string>
 	<string name="settings.video_flash">Flash (Requires Plugin)</string>
 
+	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
 	<string name="shuffle.endYear">End Year:</string>
 	<string name="shuffle.genre">Genre:</string>
