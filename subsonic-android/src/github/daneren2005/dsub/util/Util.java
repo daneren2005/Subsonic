@@ -237,11 +237,28 @@ public final class Util {
 	}
 
     public static void setServerRestVersion(Context context, Version version) {
-        SERVER_REST_VERSIONS.put(getActiveServer(context), version);
+		int instance = getActiveServer(context);
+		Version current = SERVER_REST_VERSIONS.get(instance);
+		if(current != version) {
+			SERVER_REST_VERSIONS.put(instance, version);
+			SharedPreferences.Editor editor = getPreferences(context).edit();
+			editor.putString(Constants.PREFERENCES_KEY_SERVER_VERSION + instance, version.getVersion());
+			editor.commit();
+		}
     }
 
     public static Version getServerRestVersion(Context context) {
-        return SERVER_REST_VERSIONS.get(getActiveServer(context));
+		int instance = getActiveServer(context);
+        Version version = SERVER_REST_VERSIONS.get(instance);
+		if(version == null) {
+			SharedPreferences prefs = getPreferences(context);
+			String versionString = prefs.getString(Constants.PREFERENCES_KEY_SERVER_VERSION + instance, null);
+			if(versionString != null) {
+				version = new Version(versionString);
+				SERVER_REST_VERSIONS.put(instance, version);
+			}
+		}
+		return version;
     }
 
     public static void setSelectedMusicFolderId(Context context, String musicFolderId) {
