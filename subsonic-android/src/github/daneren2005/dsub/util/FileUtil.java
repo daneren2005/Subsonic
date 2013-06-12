@@ -93,16 +93,17 @@ public class FileUtil {
         return new File(dir, fileName.toString());
     }
 	
-	public static File getPlaylistFile(String name) {
-		File playlistDir = getPlaylistDirectory();
+	public static File getPlaylistFile(String server, String name) {
+		File playlistDir = getPlaylistDirectory(server);
 		return new File(playlistDir, fileSystemSafe(name) + ".m3u");
-	}
-	public static File getOldPlaylistFile(String name) {
-		File playlistDir = getPlaylistDirectory();
-		return new File(playlistDir, name);
 	}
 	public static File getPlaylistDirectory() {
 		File playlistDir = new File(getSubsonicDirectory(), "playlists");
+		ensureDirectoryExistsAndIsReadWritable(playlistDir);
+		return playlistDir;
+	}
+	public static File getPlaylistDirectory(String server) {
+		File playlistDir = new File(getPlaylistDirectory(), server);
 		ensureDirectoryExistsAndIsReadWritable(playlistDir);
 		return playlistDir;
 	}

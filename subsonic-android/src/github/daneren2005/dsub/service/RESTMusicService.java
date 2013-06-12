@@ -330,7 +330,7 @@ public class RESTMusicService implements MusicService {
         try {
 			MusicDirectory playlist = new PlaylistParser(context).parse(reader, progressListener);
 			
-			File playlistFile = FileUtil.getPlaylistFile(name);
+			File playlistFile = FileUtil.getPlaylistFile(Util.getServerName(context), name);
 			FileWriter fw = new FileWriter(playlistFile);
 			BufferedWriter bw = new BufferedWriter(fw);
 			try {

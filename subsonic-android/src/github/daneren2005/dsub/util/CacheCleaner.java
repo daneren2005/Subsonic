@@ -219,10 +219,11 @@ public class CacheCleaner {
 		@Override
 		protected Void doInBackground(List<Playlist>... params) {
 			try {
-				SortedSet<File> playlistFiles = FileUtil.listFiles(FileUtil.getPlaylistDirectory());
+				String server = Util.getServerName(context);
+				SortedSet<File> playlistFiles = FileUtil.listFiles(FileUtil.getPlaylistDirectory(server));
 				List<Playlist> playlists = params[0];
 				for (Playlist playlist : playlists) {
-					playlistFiles.remove(FileUtil.getPlaylistFile(playlist.getName()));
+					playlistFiles.remove(FileUtil.getPlaylistFile(server, playlist.getName()));
 				}
 				
 				for(File playlist : playlistFiles) {

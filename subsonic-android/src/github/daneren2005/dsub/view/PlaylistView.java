@@ -37,6 +37,7 @@ import java.io.File;
 public class PlaylistView extends UpdateView {
 	private static final String TAG = PlaylistView.class.getSimpleName();
 
+	private Context context;
 	private Playlist playlist;
 
 	private TextView titleView;
@@ -44,6 +45,7 @@ public class PlaylistView extends UpdateView {
 
 	public PlaylistView(Context context) {
 		super(context);
+		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.playlist_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.playlist_name);
@@ -64,8 +66,8 @@ public class PlaylistView extends UpdateView {
 
 	@Override
 	protected void update() {
-		File file = FileUtil.getPlaylistFile(playlist.getName());
-		if(file.exists()) {
+		File file = FileUtil.getPlaylistFile(Util.getServerName(context), playlist.getName());
+		if(file.exists() || Util.isOffline(context)) {
 			moreButton.setImageResource(R.drawable.list_item_more_shaded);
 		} else {
 			moreButton.setImageResource(R.drawable.list_item_more);

@@ -218,6 +218,11 @@ public final class Util {
 		}
 	}
 
+	public static String getServerName(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+        return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
+	}
     public static String getServerName(Context context, int instance) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);

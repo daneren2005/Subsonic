@@ -346,18 +346,22 @@ public class OfflineMusicService extends RESTMusicService {
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         List<Playlist> playlists = new ArrayList<Playlist>();
         File root = FileUtil.getPlaylistDirectory();
-        for (File file : FileUtil.listFiles(root)) {
-			if(FileUtil.isPlaylistFile(file)) {
-				String id = file.getName();
-				String filename = FileUtil.getBaseName(id);
-				Playlist playlist = new Playlist(id, filename);
-				playlists.add(playlist);
+        for (File folder : FileUtil.listFiles(root)) {
+			if(folder.isDirectory()) {
+				for(File file: FileUtil.listFiles(folder)) {
+					if(FileUtil.isPlaylistFile(file)) {
+						String id = file.getName();
+						String filename = folder.getName() + ": " + FileUtil.getBaseName(id);
+						Playlist playlist = new Playlist(id, filename);
+						playlists.add(playlist);
+					}
+				}
 			} else {
 				// Delete legacy playlist files
 				try {
-					file.delete();
+					folder.delete();
 				} catch(Exception e) {
-					Log.w(TAG, "Failed to delete old playlist file: " + file.getName());
+					Log.w(TAG, "Failed to delete old playlist file: " + folder.getName());
 				}
 			}
         }
@@ -374,7 +378,11 @@ public class OfflineMusicService extends RESTMusicService {
         Reader reader = null;
 		BufferedReader buffer = null;
 		try {
-			File playlistFile = FileUtil.getPlaylistFile(name);
+			int firstIndex = name.indexOf(": ");
+			String server = name.substring(0, firstIndex);
+			name = name.substring(firstIndex + 2);
+			
+			File playlistFile = FileUtil.getPlaylistFile(server, name);
 			reader = new FileReader(playlistFile);
 			buffer = new BufferedReader(reader);
 			
