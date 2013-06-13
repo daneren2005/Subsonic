@@ -186,7 +186,12 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 
         // Set the cover art
         try {
-            int size = context.getResources().getDrawable(R.drawable.appwidget_art_default).getIntrinsicHeight();
+            int size;
+			if(getLayout() != R.layout.appwidget4x1 && getLayout() != R.layout.appwidget4x2) {
+				size = context.getResources().getDrawable(R.drawable.unknown_album_large).getIntrinsicHeight();
+			} else {
+				size = context.getResources().getDrawable(R.drawable.appwidget_art_default).getIntrinsicHeight();
+			}
             Bitmap bitmap = currentPlaying == null ? null : FileUtil.getAlbumArtBitmap(context, currentPlaying, size);
 
             if (bitmap == null) {
