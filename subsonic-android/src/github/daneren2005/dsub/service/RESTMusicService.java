@@ -491,7 +491,19 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
-        scrobble(id, submission, 0, context, progressListener);
+		SharedPreferences prefs = Util.getPreferences(context);
+		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+		
+		if(id.indexOf(cacheLocn) != -1 && submission) {
+			String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+			SearchCritera critera = new SearchCritera(scrobbleSearchCriteria, 0, 0, 1);
+			SearchResult result = searchNew(critera, context, progressListener);
+			if(result.getSongs().size() == 1){
+				scrobble(result.getSongs().get(0).getId(), true, 0, context, progressListener);
+			}
+		} else {
+			scrobble(id, submission, 0, context, progressListener);
+		}
     }
     
     public void scrobble(String id, boolean submission, long time, Context context, ProgressListener progressListener) throws Exception {
