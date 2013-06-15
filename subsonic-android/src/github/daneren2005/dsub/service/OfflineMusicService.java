@@ -431,36 +431,42 @@ public class OfflineMusicService extends RESTMusicService {
     @Override
     public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
 		if(!submission) {
-		  return;
+			return;
 		}
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 
-		File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
+		SharedPreferences offline = Util.getOfflineSync(context);
+		int scrobbles = offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		scrobbles++;
+		SharedPreferences.Editor offlineEditor = offline.edit();
+		
+		if(id.indexOf(cacheLocn) != -1) {
+			String scrobbleSearchCriteria = id.replace(cacheLocn, "");
+			if(scrobbleSearchCriteria.startsWith("/")) {
+				scrobbleSearchCriteria = scrobbleSearchCriteria.substring(1);
+			}
 
-		String scrobbleSearchCriteria = id.replace(cacheLocn, "");
-		if(scrobbleSearchCriteria.startsWith("/")) {
-			scrobbleSearchCriteria = scrobbleSearchCriteria.substring(1);
+			scrobbleSearchCriteria = scrobbleSearchCriteria.replace(".complete", "").replace(".partial", "");
+			int index = scrobbleSearchCriteria.lastIndexOf(".");
+			scrobbleSearchCriteria = index == -1 ? scrobbleSearchCriteria : scrobbleSearchCriteria.substring(0, index);
+			String[] details = scrobbleSearchCriteria.split("/");
+
+			//last.fm only uses artist and track title so broaden the search by just using those. doesn't matter if it find the track on a different album
+			String artist = "artist:\"" + details[0] + "\"";
+			String title = details[details.length - 1];
+			title = "title:\"" + title.substring(title.indexOf('-') + 1) + "\"";
+
+			scrobbleSearchCriteria = artist + " AND " + title;
+			offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles, scrobbleSearchCriteria);
+		} else {
+			offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, id);
 		}
-
-		scrobbleSearchCriteria = scrobbleSearchCriteria.replace(".complete", "").replace(".partial", "");
-		int index = scrobbleSearchCriteria.lastIndexOf(".");
-		scrobbleSearchCriteria = index == -1 ? scrobbleSearchCriteria : scrobbleSearchCriteria.substring(0, index);
-		String[] details = scrobbleSearchCriteria.split("/");
-
-		//last.fm only uses artist and track title so broaden the search by just using those. doesn't matter if it find the track on a different album
-		String artist = "artist:\"" + details[0] + "\"";
-		String title = details[details.length - 1];
-		title = "title:\"" + title.substring(title.indexOf('-') + 1) + "\"";
-
-		scrobbleSearchCriteria = artist + " AND " + title; 
-
-		BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
-		bw.write(scrobbleSearchCriteria + "," + System.currentTimeMillis());
-		bw.newLine();
-		bw.flush();
-		bw.close();
+		
+		offlineEditor.putLong(Constants.OFFLINE_SCROBBLE_TIME + scrobbles, System.currentTimeMillis());
+		offlineEditor.putInt(Constants.OFFLINE_SCROBBLE_COUNT, scrobbles);
+		offlineEditor.commit();
     }
 
     @Override
@@ -543,13 +549,8 @@ public class OfflineMusicService extends RESTMusicService {
     }
     
     @Override
-    public boolean hasOfflineScrobbles(){
-      return false;
-    }
-    
-    @Override
-    public void processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
-      throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
+    public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+		throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
     }
 
     private void listFilesRecursively(File parent, List<File> children) {

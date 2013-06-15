@@ -332,6 +332,14 @@ public final class Util {
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, 0);
     }
+	public static SharedPreferences getOfflineSync(Context context) {
+		return context.getSharedPreferences(Constants.OFFLINE_SYNC_NAME, 0);
+	}
+	
+	public static int offlineScrobblesCount(Context context) {
+		SharedPreferences offline = getOfflineSync(context);
+		return offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+	}
 
     public static String getContentType(HttpEntity entity) {
         if (entity == null || entity.getContentType() == null) {

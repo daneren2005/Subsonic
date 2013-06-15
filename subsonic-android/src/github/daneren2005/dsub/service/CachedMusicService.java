@@ -303,14 +303,9 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	@Override
-  public boolean hasOfflineScrobbles(){
-    return musicService.hasOfflineScrobbles();
-  }
-	
-	@Override
-  public void processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
-    musicService.processOfflineScrobbles(context, progressListener);
-  }
+	public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+		return musicService.processOfflineScrobbles(context, progressListener);
+	}
   
   
 

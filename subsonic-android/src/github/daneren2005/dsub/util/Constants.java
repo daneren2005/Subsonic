@@ -109,6 +109,11 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_CHAT_ENABLED = "chatEnabled";
 	public static final String PREFERENCES_KEY_VIDEO_PLAYER = "videoPlayer";
 	
+	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
+	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
+	public static final String OFFLINE_SCROBBLE_SEARCH = "scrobbleTitle";
+	public static final String OFFLINE_SCROBBLE_TIME = "scrobbleTime";
+	
 	public static final String CACHE_KEY_IGNORE = "ignoreArticles";
 	
 	public static final String MAIN_BACK_STACK = "backStackIds";
@@ -118,6 +123,7 @@ public final class Constants {
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";
+	public static final String OFFLINE_SYNC_NAME = "github.daneren2005.dsub.offline";
 
     // Number of free trial days for non-licensed servers.
     public static final int FREE_TRIAL_DAYS = 30;
@@ -126,8 +132,6 @@ public final class Constants {
     public static final String DONATION_URL = "http://subsonic.org/pages/android-donation.jsp";
 
     public static final String ALBUM_ART_FILE = "albumart.jpg";
-    
-    public static final String OFFLINE_SCROBBLES_FILE = "offline_scrobbles.log";
 
     private Constants() {
     }

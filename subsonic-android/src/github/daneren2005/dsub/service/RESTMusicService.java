@@ -869,35 +869,23 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
-	public boolean hasOfflineScrobbles(){
-		return FileUtil.getOfflineScrobblesFile().exists();
-	}
-	
-	@Override
-	public void processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
-		File offlineScrobblesFile = FileUtil.getOfflineScrobblesFile();
-		try{
-
-			BufferedReader br = new BufferedReader(new FileReader(offlineScrobblesFile));
-			String line;
-
-			ArrayList<String> lines = new ArrayList<String>();
-			while ((line = br.readLine()) != null) {
-			  lines.add(line);
-			}
-			br.close();
-			offlineScrobblesFile.delete();
-
-			for(int i = 0; i < lines.size(); i++){
-				line = lines.get(i);
-				String filename = line.substring(0, line.lastIndexOf(','));         
-
+	public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+		SharedPreferences offline = Util.getOfflineSync(context);
+		SharedPreferences.Editor offlineEditor = offline.edit();
+		int count = offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		int retry = 0;
+		for(int i = 1; i <= count; i++) {
+			String id = offline.getString(Constants.OFFLINE_SCROBBLE_ID + i, null);
+			long time = offline.getLong(Constants.OFFLINE_SCROBBLE_TIME + i, 0);
+			if(id != null) {
+				scrobble(id, true, time, context, progressListener);
+			} else {
+				String search = offline.getString(Constants.OFFLINE_SCROBBLE_SEARCH + i, "");
 				try{
-					long time = Long.parseLong(line.substring(line.lastIndexOf(',')+1));
-					SearchCritera critera = new SearchCritera(filename, 0, 0, 1);
+					SearchCritera critera = new SearchCritera(search, 0, 0, 1);
 					SearchResult result = searchNew(critera, context, progressListener);
 					if(result.getSongs().size() == 1){
-						Log.i(TAG, "Query '" + filename + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
+						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
 						Log.i(TAG, "Scrobbling " + result.getSongs().get(0).getId() + " with time " + time);
 						scrobble(result.getSongs().get(0).getId(), true, time, context, progressListener);
 					}
@@ -907,20 +895,17 @@ public class RESTMusicService implements MusicService {
 				}
 				catch(Exception e){
 					Log.e(TAG, e.toString());
-					BufferedWriter bw = new BufferedWriter(new FileWriter(offlineScrobblesFile, true));
-					bw.write(line);
-					bw.newLine();
-					bw.flush();
-					bw.close();
+					retry++;
+					offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + retry, search);
+					offlineEditor.putLong(Constants.OFFLINE_SCROBBLE_TIME + retry, time);
 				}
 			}
 		}
-		catch(FileNotFoundException fnfe){
-			//ignore, we dont care
-		}
-		catch(Exception e){
-			Log.e(TAG, e.toString());
-		}
+
+		offlineEditor.putInt(Constants.OFFLINE_SCROBBLE_COUNT, retry);
+		offlineEditor.commit();
+
+		return count - retry;
 	}
 
     private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
@@ -204,9 +205,9 @@ public class MainFragment extends SubsonicFragment {
 		context.getPagerAdapter().invalidate();
 		
 		if(isOffline) {
-			MusicService musicService = MusicServiceFactory.getMusicService(context);
-			if(musicService.hasOfflineScrobbles()){
-				showOfflineScrobblesDialog();
+			int count = Util.offlineScrobblesCount(context);
+			if(count > 0){
+				showOfflineScrobblesDialog(count);
 			}
 		}
 	}
@@ -227,7 +228,7 @@ public class MainFragment extends SubsonicFragment {
 		}
 	}
 	
-	private void showOfflineScrobblesDialog() {
+	private void showOfflineScrobblesDialog(final int count) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(R.string.offline_scrobbles_dialog_title)
@@ -235,17 +236,20 @@ public class MainFragment extends SubsonicFragment {
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialogInterface, int i) {
-					new SilentBackgroundTask<Void>(context) {
+					new SilentBackgroundTask<Integer>(context) {
 						@Override
-						protected Void doInBackground() throws Throwable {
+						protected Integer doInBackground() throws Throwable {
 							MusicService musicService = MusicServiceFactory.getMusicService(context);
-							musicService.processOfflineScrobbles(context, null);
-							return null;
+							return musicService.processOfflineScrobbles(context, null);
 						}
 
 						@Override
-						protected void done(Void result) {
-							Util.toast(context, R.string.offline_scrobbles_success);
+						protected void done(Integer result) {
+							if(result == count) {
+								Util.toast(context, context.getResources().getString(R.string.offline_scrobbles_success, result));
+							} else {
+								Util.toast(context, context.getResources().getString(R.string.offline_scrobbles_partial, result, count));
+							}
 						}
 
 						@Override
@@ -264,7 +268,9 @@ public class MainFragment extends SubsonicFragment {
 				@Override
 				public void onClick(DialogInterface dialogInterface, int i) {
 					dialogInterface.dismiss();
-					FileUtil.getOfflineScrobblesFile().delete();
+					SharedPreferences.Editor offline = Util.getOfflineSync(context).edit();
+					offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+					offline.commit();
 				}
 			});
 
