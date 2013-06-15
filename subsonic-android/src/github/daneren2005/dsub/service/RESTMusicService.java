@@ -162,7 +162,7 @@ public class RESTMusicService implements MusicService {
             Log.e(TAG, "Failed to create custom SSL socket factory, using default.", x);
             return org.apache.http.conn.ssl.SSLSocketFactory.getSocketFactory();
         }
-    }
+    }    
 
     @Override
     public void ping(Context context, ProgressListener progressListener) throws Exception {
@@ -176,7 +176,8 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public boolean isLicenseValid(Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReader(context, progressListener, "getLicense", null);
+      
+      Reader reader = getReader(context, progressListener, "getLicense", null);
         try {
             ServerInfo serverInfo = new LicenseParser(context).parse(reader);
             return serverInfo.isLicenseValid();
@@ -186,6 +187,7 @@ public class RESTMusicService implements MusicService {
     }
 
     public List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+       
         List<MusicFolder> cachedMusicFolders = readCachedMusicFolders(context);
         if (cachedMusicFolders != null && !refresh) {
             return cachedMusicFolders;
@@ -489,8 +491,30 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
+		SharedPreferences prefs = Util.getPreferences(context);
+		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+		
+		if(id.indexOf(cacheLocn) != -1 && submission) {
+			String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+			SearchCritera critera = new SearchCritera(scrobbleSearchCriteria, 0, 0, 1);
+			SearchResult result = searchNew(critera, context, progressListener);
+			if(result.getSongs().size() == 1){
+				scrobble(result.getSongs().get(0).getId(), true, 0, context, progressListener);
+			}
+		} else {
+			scrobble(id, submission, 0, context, progressListener);
+		}
+    }
+    
+    public void scrobble(String id, boolean submission, long time, Context context, ProgressListener progressListener) throws Exception {
         checkServerVersion(context, "1.5", "Scrobbling not supported.");
-        Reader reader = getReader(context, progressListener, "scrobble", null, Arrays.asList("id", "submission"), Arrays.<Object>asList(id, submission));
+        Reader reader;
+        if(time > 0){
+        	checkServerVersion(context, "1.8", "Scrobbling with a time not supported.");
+        	reader = getReader(context, progressListener, "scrobble", null, Arrays.asList("id", "submission", "time"), Arrays.<Object>asList(id, submission, time));
+        }
+        else
+        	reader = getReader(context, progressListener, "scrobble", null, Arrays.asList("id", "submission"), Arrays.<Object>asList(id, submission));
         try {
             new ErrorParser(context).parse(reader);
         } finally {
@@ -854,6 +878,46 @@ public class RESTMusicService implements MusicService {
 		} finally {
 			Util.close(reader);
 		}
+	}
+	
+	@Override
+	public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+		SharedPreferences offline = Util.getOfflineSync(context);
+		SharedPreferences.Editor offlineEditor = offline.edit();
+		int count = offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		int retry = 0;
+		for(int i = 1; i <= count; i++) {
+			String id = offline.getString(Constants.OFFLINE_SCROBBLE_ID + i, null);
+			long time = offline.getLong(Constants.OFFLINE_SCROBBLE_TIME + i, 0);
+			if(id != null) {
+				scrobble(id, true, time, context, progressListener);
+			} else {
+				String search = offline.getString(Constants.OFFLINE_SCROBBLE_SEARCH + i, "");
+				try{
+					SearchCritera critera = new SearchCritera(search, 0, 0, 1);
+					SearchResult result = searchNew(critera, context, progressListener);
+					if(result.getSongs().size() == 1){
+						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
+						Log.i(TAG, "Scrobbling " + result.getSongs().get(0).getId() + " with time " + time);
+						scrobble(result.getSongs().get(0).getId(), true, time, context, progressListener);
+					}
+					else{
+						throw new Exception("Song not found on server");
+					}
+				}
+				catch(Exception e){
+					Log.e(TAG, e.toString());
+					retry++;
+					offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + retry, search);
+					offlineEditor.putLong(Constants.OFFLINE_SCROBBLE_TIME + retry, time);
+				}
+			}
+		}
+
+		offlineEditor.putInt(Constants.OFFLINE_SCROBBLE_COUNT, retry);
+		offlineEditor.commit();
+
+		return count - retry;
 	}
 
     private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {

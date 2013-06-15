@@ -147,9 +147,6 @@ public final class Util {
     }
 
     public static boolean isScrobblingEnabled(Context context) {
-        if (isOffline(context)) {
-			return false;
-		}
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, false);
     }
@@ -362,6 +359,33 @@ public final class Util {
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(Constants.PREFERENCES_FILE_NAME, 0);
     }
+	public static SharedPreferences getOfflineSync(Context context) {
+		return context.getSharedPreferences(Constants.OFFLINE_SYNC_NAME, 0);
+	}
+	
+	public static int offlineScrobblesCount(Context context) {
+		SharedPreferences offline = getOfflineSync(context);
+		return offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+	}
+	
+	public static String parseOfflineIDSearch(Context context, String id, String cacheLocation) {
+		String name = id.replace(cacheLocation, "");
+		if(name.startsWith("/")) {
+			name = name.substring(1);
+		}
+		name = name.replace(".complete", "").replace(".partial", "");
+		int index = name.lastIndexOf(".");
+		name = index == -1 ? name : name.substring(0, index);
+		String[] details = name.split("/");
+		
+		String artist = "artist:\"" + details[0] + "\"";
+		String title = details[details.length - 1];
+		title = "title:\"" + title.substring(title.indexOf('-') + 1) + "\"";
+		
+		name = artist + " AND " + title;
+		
+		return name;
+	}
 
     public static String getContentType(HttpEntity entity) {
         if (entity == null || entity.getContentType() == null) {

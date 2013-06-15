@@ -38,6 +38,7 @@ import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.CancellableTask;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LRUCache;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TimeLimitedCache;
@@ -300,6 +301,13 @@ public class CachedMusicService implements MusicService {
 	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getSongsByGenre(genre, count, offset, context, progressListener);
 	}
+	
+	@Override
+	public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+		return musicService.processOfflineScrobbles(context, progressListener);
+	}
+  
+  
 
     private void checkSettingsChanged(Context context) {
         String newUrl = Util.getRestUrl(context, null);

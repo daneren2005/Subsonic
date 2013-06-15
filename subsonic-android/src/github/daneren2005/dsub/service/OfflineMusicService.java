@@ -19,8 +19,6 @@
 package github.daneren2005.dsub.service;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -34,7 +32,6 @@ import java.util.Set;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
@@ -47,7 +44,6 @@ import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
-import github.daneren2005.dsub.service.parser.PlaylistParser;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -459,7 +455,30 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Scrobbling not available in offline mode");
+		if(!submission) {
+			return;
+		}
+
+		SharedPreferences prefs = Util.getPreferences(context);
+		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+
+		SharedPreferences offline = Util.getOfflineSync(context);
+		int scrobbles = offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		scrobbles++;
+		SharedPreferences.Editor offlineEditor = offline.edit();
+		
+		if(id.indexOf(cacheLocn) != -1) {
+			String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+			offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles, scrobbleSearchCriteria);
+			offlineEditor.remove(Constants.OFFLINE_SCROBBLE_ID + scrobbles);
+		} else {
+			offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, id);
+			offlineEditor.remove(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles);
+		}
+		
+		offlineEditor.putLong(Constants.OFFLINE_SCROBBLE_TIME + scrobbles, System.currentTimeMillis());
+		offlineEditor.putInt(Constants.OFFLINE_SCROBBLE_COUNT, scrobbles);
+		offlineEditor.commit();
     }
 
     @Override
@@ -539,6 +558,11 @@ public class OfflineMusicService extends RESTMusicService {
         }
 
         return result;
+    }
+    
+    @Override
+    public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+		throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
     }
 
     private void listFilesRecursively(File parent, List<File> children) {

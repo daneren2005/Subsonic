@@ -341,9 +341,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		@Override
 		protected Pair<MusicDirectory, Boolean> doInBackground() throws Throwable {
-			MusicService musicService = MusicServiceFactory.getMusicService(context);
+		  MusicService musicService = MusicServiceFactory.getMusicService(context);
 			MusicDirectory dir = load(musicService);
-			boolean valid = musicService.isLicenseValid(context, this);
+			boolean valid = musicService.isLicenseValid(context, this);	
 			return new Pair<MusicDirectory, Boolean>(dir, valid);
 		}
 

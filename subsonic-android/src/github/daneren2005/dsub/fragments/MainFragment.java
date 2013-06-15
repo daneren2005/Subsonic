@@ -1,10 +1,14 @@
 package github.daneren2005.dsub.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +25,10 @@ import github.daneren2005.dsub.util.Util;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
+import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.ChangeLog;
 import java.io.File;
 import java.util.ArrayList;
@@ -29,6 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainFragment extends SubsonicFragment {
+	private static final String TAG = MainFragment.class.getSimpleName();
 	private LayoutInflater inflater;
 
 	private static final int MENU_GROUP_SERVER = 10;
@@ -192,8 +200,16 @@ public class MainFragment extends SubsonicFragment {
 	}
 
 	private void toggleOffline() {
-		Util.setOffline(context, !Util.isOffline(context));
+		boolean isOffline = Util.isOffline(context);
+		Util.setOffline(context, !isOffline);
 		context.getPagerAdapter().invalidate();
+		
+		if(isOffline) {
+			int count = Util.offlineScrobblesCount(context);
+			if(count > 0){
+				showOfflineScrobblesDialog(count);
+			}
+		}
 	}
 
 	private void showAlbumList(String type) {
@@ -211,6 +227,55 @@ public class MainFragment extends SubsonicFragment {
 			replaceFragment(fragment, R.id.home_layout);
 		}
 	}
+	
+	private void showOfflineScrobblesDialog(final int count) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setIcon(android.R.drawable.ic_dialog_info)
+			.setTitle(R.string.offline_scrobbles_dialog_title)
+			.setMessage(R.string.offline_scrobbles_dialog_message)
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					new SilentBackgroundTask<Integer>(context) {
+						@Override
+						protected Integer doInBackground() throws Throwable {
+							MusicService musicService = MusicServiceFactory.getMusicService(context);
+							return musicService.processOfflineScrobbles(context, null);
+						}
+
+						@Override
+						protected void done(Integer result) {
+							if(result == count) {
+								Util.toast(context, context.getResources().getString(R.string.offline_scrobbles_success, result));
+							} else {
+								Util.toast(context, context.getResources().getString(R.string.offline_scrobbles_partial, result, count));
+							}
+						}
+
+						@Override
+						protected void error(Throwable error) {
+							String msg = context.getResources().getString(R.string.offline_scrobbles_error) + " " + getErrorMessage(error);
+							Util.toast(context, msg);
+						}
+					}.execute();
+				}
+			}).setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					dialogInterface.dismiss();
+				}
+			}).setNegativeButton(R.string.common_delete, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialogInterface, int i) {
+					dialogInterface.dismiss();
+					SharedPreferences.Editor offline = Util.getOfflineSync(context).edit();
+					offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+					offline.commit();
+				}
+			});
+
+		builder.create().show();
+  }
 
 	private void showAboutDialog() {
 		try {
