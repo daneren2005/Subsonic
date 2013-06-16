@@ -282,16 +282,22 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
             revision++;
         } else {
+			int size = size();
+			int index = getCurrentPlayingIndex();
             for (MusicDirectory.Entry song : songs) {
                 DownloadFile downloadFile = new DownloadFile(this, song, save);
                 downloadList.add(downloadFile);
             }
+			if(!autoplay && (size - 1) == index) {
+				setNextPlaying();
+			}
             revision++;
         }
         updateJukeboxPlaylist();
 		
-		if(shuffle)
+		if(shuffle) {
 			shuffle();
+		}
 
         if (autoplay) {
             play(0);
