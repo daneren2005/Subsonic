@@ -1090,7 +1090,9 @@ public class RESTMusicService implements MusicService {
         redirectFrom = originalUrl.substring(0, originalUrl.indexOf("/rest/"));
         redirectTo = redirectedUrl.substring(0, redirectedUrl.indexOf("/rest/"));
 
-        Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
+		if(redirectFrom.compareTo(redirectTo) != 0) {
+        	Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
+		}
         redirectionLastChecked = System.currentTimeMillis();
         redirectionNetworkType = getCurrentNetworkType(context);
     }
