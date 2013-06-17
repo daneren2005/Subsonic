@@ -157,12 +157,20 @@ public class StreamProxy implements Runnable {
 			Log.i(TAG, "Streaming song in background");
 			DownloadFile downloadFile = downloadService.getCurrentPlaying();
 			MusicDirectory.Entry song = downloadFile.getSong();
-			long fileSize = downloadFile.getBitRate() * ((song.getDuration() != null) ? song.getDuration() : 0) * 1000 / 8;
-			Log.i(TAG, "Streaming fileSize: " + fileSize);
 
             // Create HTTP header
             String headers = "HTTP/1.0 200 OK\r\n";
             headers += "Content-Type: " + "application/octet-stream" + "\r\n";
+			
+			Integer contentLength = downloadFile.getContentLength();
+			long fileSize;
+			if(contentLength == null) {
+				fileSize = downloadFile.getBitRate() * ((song.getDuration() != null) ? song.getDuration() : 0) * 1000 / 8;
+			} else {
+				fileSize = contentLength;
+				headers += "Content-Length: " + fileSize + "\r\n";
+			}
+			Log.i(TAG, "Streaming fileSize: " + fileSize);
             
             headers += "Connection: close\r\n";
             headers += "\r\n";

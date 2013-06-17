@@ -34,6 +34,7 @@ import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.CacheCleaner;
+import org.apache.http.Header;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -59,6 +60,7 @@ public class DownloadFile {
 	private boolean isPlaying = false;
 	private boolean saveWhenDone = false;
 	private boolean completeWhenDone = false;
+	private Integer contentLength = null;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
         this.context = context;
@@ -89,6 +91,10 @@ public class DownloadFile {
         }
         return song.getBitRate() == null ? 160 : song.getBitRate();
     }
+	
+	public Integer getContentLength() {
+		return contentLength;
+	}
 
     public synchronized void download() {
         FileUtil.createDirectoryForParent(saveFile);
@@ -270,6 +276,14 @@ public class DownloadFile {
 				if(compare) {
 					// Attempt partial HTTP GET, appending to the file if it exists.
 					HttpResponse response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
+					Header contentLengthHeader = response.getFirstHeader("Content-Length");
+					if(contentLengthHeader != null) {
+						String contentLengthString = contentLengthHeader.getValue();
+						if(contentLengthString != null) {
+							Log.i(TAG, "Content Length: " + contentLengthString);
+							contentLength = Integer.parseInt(contentLengthString);
+						}
+					}
 					in = response.getEntity().getContent();
 					boolean partial = response.getStatusLine().getStatusCode() == HttpStatus.SC_PARTIAL_CONTENT;
 					if (partial) {
