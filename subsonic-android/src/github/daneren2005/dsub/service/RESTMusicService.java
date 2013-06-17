@@ -983,7 +983,7 @@ public class RESTMusicService implements MusicService {
                                           List<String> parameterNames, List<Object> parameterValues,
                                           List<Header> headers, ProgressListener progressListener, CancellableTask task) throws IOException {
 		// Strip out sensitive information from log
-        Log.i(TAG, "Using URL " + url.substring(0, url.indexOf("&u")) + url.substring(url.indexOf("&v")));
+        Log.i(TAG, "Using URL " + url.substring(0, url.indexOf("?u=") + 1) + url.substring(url.indexOf("&v=") + 1));
 		
 		SharedPreferences prefs = Util.getPreferences(context);
 		int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "15000"));
