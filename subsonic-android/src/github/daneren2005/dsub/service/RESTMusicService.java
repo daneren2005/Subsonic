@@ -982,7 +982,8 @@ public class RESTMusicService implements MusicService {
     private HttpResponse executeWithRetry(Context context, String url, String originalUrl, HttpParams requestParams,
                                           List<String> parameterNames, List<Object> parameterValues,
                                           List<Header> headers, ProgressListener progressListener, CancellableTask task) throws IOException {
-        Log.i(TAG, "Using URL " + url);
+		// Strip out sensitive information from log
+        Log.i(TAG, "Using URL " + url.substring(0, url.indexOf("&u")) + url.substring(url.indexOf("&v")));
 		
 		SharedPreferences prefs = Util.getPreferences(context);
 		int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "15000"));
