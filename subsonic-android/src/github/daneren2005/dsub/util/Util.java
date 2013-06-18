@@ -378,11 +378,21 @@ public final class Util {
 		name = index == -1 ? name : name.substring(0, index);
 		String[] details = name.split("/");
 		
-		String artist = "artist:\"" + details[0] + "\"";
 		String title = details[details.length - 1];
-		title = "title:\"" + title.substring(title.indexOf('-') + 1) + "\"";
-		
-		name = artist + " AND " + title;
+		if(index == -1) {
+			if(details.length > 1) {
+				String artist = "artist:\"" + details[details.length - 2] + "\"";
+				String simpleArtist = "artist:\"" + title + "\"";
+				title = "album:\"" + title + "\"";
+				name = "(" + artist + " AND " + title + ")" + " OR " + simpleArtist;
+			} else {
+				name = "artist:\"" + title + "\"";
+			}
+		} else {
+			String artist = "artist:\"" + details[details.length - 3] + "\"";
+			title = "title:\"" + title.substring(title.indexOf('-') + 1) + "\"";
+			name = artist + " AND " + title;
+		}
 		
 		return name;
 	}
