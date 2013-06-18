@@ -24,7 +24,6 @@
 		android:paddingTop="20dip"
 		android:paddingBottom="8dip"
 		android:paddingRight="4dip"
-		android:textColor="@color/mediaControlForeground"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:textStyle="bold"
 		android:singleLine="true"

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="lightBackground">#F1F0E6</color>
-    <color name="mediaControlBackground">#000000</color>
-    <color name="mediaControlForeground">#F0F0F0</color>
     <color name="dividerColor">#FF33B5E5</color>
     <color name="appwidget_text">#FFFFFF</color>
     <color name="notificationArtist">#434343</color>
