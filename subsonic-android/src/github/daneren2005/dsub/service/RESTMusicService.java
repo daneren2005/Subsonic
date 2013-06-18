@@ -982,7 +982,8 @@ public class RESTMusicService implements MusicService {
     private HttpResponse executeWithRetry(Context context, String url, String originalUrl, HttpParams requestParams,
                                           List<String> parameterNames, List<Object> parameterValues,
                                           List<Header> headers, ProgressListener progressListener, CancellableTask task) throws IOException {
-        Log.i(TAG, "Using URL " + url);
+		// Strip out sensitive information from log
+        Log.i(TAG, "Using URL " + url.substring(0, url.indexOf("?u=") + 1) + url.substring(url.indexOf("&v=") + 1));
 		
 		SharedPreferences prefs = Util.getPreferences(context);
 		int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "15000"));
@@ -1090,7 +1091,9 @@ public class RESTMusicService implements MusicService {
         redirectFrom = originalUrl.substring(0, originalUrl.indexOf("/rest/"));
         redirectTo = redirectedUrl.substring(0, redirectedUrl.indexOf("/rest/"));
 
-        Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
+		if(redirectFrom.compareTo(redirectTo) != 0) {
+        	Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
+		}
         redirectionLastChecked = System.currentTimeMillis();
         redirectionNetworkType = getCurrentNetworkType(context);
     }
