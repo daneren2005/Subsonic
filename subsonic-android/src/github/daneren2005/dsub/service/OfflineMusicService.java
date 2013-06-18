@@ -152,6 +152,9 @@ public class OfflineMusicService extends RESTMusicService {
         entry.setParent(file.getParent());
         entry.setSize(file.length());
         String root = FileUtil.getMusicDirectory(context).getPath();
+		if(!file.getParentFile().getParentFile().getPath().equals(root)) {
+			entry.setGrandParent(file.getParentFile().getParent());
+		}
         entry.setPath(file.getPath().replaceFirst("^" + root + "/" , ""));
 		String title = name;
         if (file.isFile()) {
