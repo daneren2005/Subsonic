@@ -40,6 +40,7 @@ public class MainActivity extends SubsonicActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
 	private ScheduledExecutorService executorService;
+	private View bottomBar;
 	private View coverArtView;
 	private TextView trackView;
 	private TextView artistView;
@@ -61,7 +62,7 @@ public class MainActivity extends SubsonicActivity {
 		setContentView(R.layout.main);
 		loadSettings();
 
-		View bottomBar = findViewById(R.id.bottom_bar);
+		bottomBar = findViewById(R.id.bottom_bar);
 		bottomBar.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent();
@@ -248,12 +249,11 @@ public class MainActivity extends SubsonicActivity {
 
 		DownloadFile current = getDownloadService().getCurrentPlaying();
 		if(current == null) {
-			trackView.setText("Title");
-			artistView.setText("Artist");
-			getImageLoader().loadImage(coverArtView, null, false, false);
+			bottomBar.setVisibility(View.GONE);
 			return;
 		}
 
+		bottomBar.setVisibility(View.VISIBLE);
 		MusicDirectory.Entry song = current.getSong();
 		trackView.setText(song.getTitle());
 		artistView.setText(song.getArtist());

@@ -21,7 +21,8 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:background="@drawable/media_button"
-		android:orientation="horizontal" >
+		android:orientation="horizontal"
+		android:visibility="gone">
 
 		<ImageView
 			android:id="@+id/album_art"
