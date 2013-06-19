@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -58,6 +59,7 @@ public class DownloadServiceLifecycleSupport {
     private PhoneStateListener phoneStateListener;
     private boolean externalStorageAvailable= true;
     private ReentrantLock lock = new ReentrantLock();
+    private final AtomicBoolean setup = new AtomicBoolean(false);
 
     /**
      * This receiver manages the intent that could come from other applications.
@@ -185,6 +187,10 @@ public class DownloadServiceLifecycleSupport {
     }
 
     public void serializeDownloadQueue() {
+    	if(!setup.get()) {
+    		return;
+    	}
+    	
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			new SerializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
@@ -328,6 +334,7 @@ public class DownloadServiceLifecycleSupport {
 			try {
 				lock.lock();
 				deserializeDownloadQueueNow();
+				setup.set(true);
 			} finally {
 				lock.unlock();
 			}
