@@ -530,6 +530,23 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID, entry.getGrandParent());
 					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME, entry.getArtist());
 				}
+				
+				if(Util.isOffline(context)) {
+					try {
+						// This should only be succesful if this is a online song in offline mode
+						Integer.parseInt(entry.getParent());
+						String root = FileUtil.getMusicDirectory(context).getPath();
+						String id = root + "/" + entry.getPath();
+						id = id.substring(0, id.lastIndexOf("/"));
+						intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, id);
+						id = id.substring(0, id.lastIndexOf("/"));
+						intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID, id);
+						intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME, entry.getArtist());
+					} catch(Exception e) {
+						// Do nothing, entry.getParent() is fine
+					}
+				}
+				
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				Util.startActivityWithoutTransition(context, intent);
 				return true;
