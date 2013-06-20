@@ -837,12 +837,12 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	}
 
 	private void toggleFullscreenAlbumArt() {
-		scrollToCurrent();
 		if (playlistFlipper.getDisplayedChild() == 1) {
 			playlistFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.push_down_in));
 			playlistFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.push_down_out));
 			playlistFlipper.setDisplayedChild(0);
 		} else {
+			scrollToCurrent();
 			playlistFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_in));
 			playlistFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_out));
 			playlistFlipper.setDisplayedChild(1);
