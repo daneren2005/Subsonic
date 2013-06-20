@@ -384,7 +384,11 @@ public final class Util {
 				String artist = "artist:\"" + details[details.length - 2] + "\"";
 				String simpleArtist = "artist:\"" + title + "\"";
 				title = "album:\"" + title + "\"";
-				name = "(" + artist + " AND " + title + ")" + " OR " + simpleArtist;
+				if(details[details.length - 1].equals(details[details.length - 2])) {
+					name = title;
+				} else {
+					name = "(" + artist + " AND " + title + ")" + " OR " + simpleArtist;
+				}
 			} else {
 				name = "artist:\"" + title + "\"";
 			}
