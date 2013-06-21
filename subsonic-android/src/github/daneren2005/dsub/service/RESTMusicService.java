@@ -397,7 +397,7 @@ public class RESTMusicService implements MusicService {
         }
         for (MusicDirectory.Entry entry : entries) {
             parameterNames.add("songId");
-            parameterValues.add(entry.getId());
+            parameterValues.add(getOfflineSongId(entry.getId(), context, progressListener));
         }
 
         Reader reader = getReader(context, progressListener, "createPlaylist", null, parameterNames, parameterValues);
