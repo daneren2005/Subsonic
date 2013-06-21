@@ -393,7 +393,12 @@ public final class Util {
 				name = "artist:\"" + title + "\" OR album:\"" + title + "\"";
 			}
 		} else {
-			String artist = "artist:\"" + details[details.length - 3] + "\"";
+			String artist;
+			if(details.length > 2) {
+				artist = "artist:\"" + details[details.length - 3] + "\"";
+			} else {
+				artist = "(artist:\"" + details[0] + "\" OR album:\"" + details[0] + "\")";
+			}
 			title = "title:\"" + title.substring(title.indexOf('-') + 1) + "\"";
 			name = artist + " AND " + title;
 		}
