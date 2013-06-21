@@ -158,8 +158,14 @@ public class OfflineMusicService extends RESTMusicService {
         entry.setPath(file.getPath().replaceFirst("^" + root + "/" , ""));
 		String title = name;
         if (file.isFile()) {
-            entry.setArtist(file.getParentFile().getParentFile().getName());
-            entry.setAlbum(file.getParentFile().getName());
+			File artistFolder = file.getParentFile().getParentFile();
+			File albumFolder = file.getParentFile();
+			if(artistFolder.getPath().equals(root)) {
+				entry.setArtist(albumFolder.getName());
+			} else {
+				entry.setArtist(artistFolder.getName());
+			}
+            entry.setAlbum(albumFolder.getName());
 			
 			int index = name.indexOf('-');
 			if(index != -1) {
