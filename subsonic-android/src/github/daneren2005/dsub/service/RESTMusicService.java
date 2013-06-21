@@ -427,7 +427,7 @@ public class RESTMusicService implements MusicService {
 		values.add(id);
 		for(MusicDirectory.Entry song: toAdd) {
 			names.add("songIdToAdd");
-			values.add(song.getId());
+			values.add(getOfflineSongId(song.getId(), context, progressListener));
 		}
 		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
     	try {
@@ -504,19 +504,8 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
-		SharedPreferences prefs = Util.getPreferences(context);
-		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		
-		if(id.indexOf(cacheLocn) != -1 && submission) {
-			String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
-			SearchCritera critera = new SearchCritera(scrobbleSearchCriteria, 0, 0, 1);
-			SearchResult result = searchNew(critera, context, progressListener);
-			if(result.getSongs().size() == 1){
-				scrobble(result.getSongs().get(0).getId(), true, 0, context, progressListener);
-			}
-		} else {
-			scrobble(id, submission, 0, context, progressListener);
-		}
+		id = getOfflineSongId(id, context, progressListener);
+		scrobble(id, submission, 0, context, progressListener);
     }
     
     public void scrobble(String id, boolean submission, long time, Context context, ProgressListener progressListener) throws Exception {
@@ -791,17 +780,7 @@ public class RESTMusicService implements MusicService {
     @Override
     public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
-		
-		SharedPreferences prefs = Util.getPreferences(context);
-		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(id.indexOf(cacheLocn) != -1) {
-			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
-			SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
-			SearchResult result = searchNew(critera, context, progressListener);
-			if(result.getSongs().size() == 1){
-				id = result.getSongs().get(0).getId();
-			}
-		}
+		id = getOfflineSongId(id, context, progressListener);
 		
 		Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, "id", id);
     	try {
@@ -943,6 +922,21 @@ public class RESTMusicService implements MusicService {
 		offlineEditor.commit();
 
 		return count - retry;
+	}
+	
+	private String getOfflineSongId(String id, Context context, ProgressListener progressListener) throws Exception {
+		SharedPreferences prefs = Util.getPreferences(context);
+		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+		if(id.indexOf(cacheLocn) != -1) {
+			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+			SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
+			SearchResult result = searchNew(critera, context, progressListener);
+			if(result.getSongs().size() == 1){
+				id = result.getSongs().get(0).getId();
+			}
+		}
+		
+		return id;
 	}
 
     private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
