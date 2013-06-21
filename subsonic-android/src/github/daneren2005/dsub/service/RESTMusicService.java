@@ -791,7 +791,19 @@ public class RESTMusicService implements MusicService {
     @Override
     public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
-    	Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, "id", id);
+		
+		SharedPreferences prefs = Util.getPreferences(context);
+		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+		if(id.indexOf(cacheLocn) != -1) {
+			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+			SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
+			SearchResult result = searchNew(critera, context, progressListener);
+			if(result.getSongs().size() == 1){
+				id = result.getSongs().get(0).getId();
+			}
+		}
+		
+		Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, "id", id);
     	try {
             new ErrorParser(context).parse(reader);
         } finally {
