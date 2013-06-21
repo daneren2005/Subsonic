@@ -390,7 +390,7 @@ public final class Util {
 					name = "(" + artist + " AND " + title + ")" + " OR " + simpleArtist;
 				}
 			} else {
-				name = "artist:\"" + title + "\"";
+				name = "artist:\"" + title + "\" OR album:\"" + title + "\"";
 			}
 		} else {
 			String artist = "artist:\"" + details[details.length - 3] + "\"";
