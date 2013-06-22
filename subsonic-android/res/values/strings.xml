@@ -117,11 +117,12 @@
     <string name="select_album.donate_dialog_later">Later</string>
     <string name="select_album.donate_dialog_0_trial_days_left">Trial period is over</string>
 
-    <string name="offline.scrobbles_dialog_title">Offline scrobbles file found.</string>
-    <string name="offline.scrobbles_dialog_message">Process offline scrobbles file?</string>
-	<string name="offline.scrobbles_success">Successfully scrobbled %1$d songs</string>
-	<string name="offline.scrobbles_partial">Successfully scrobbled %1$d of %2$d songs.  Try the rest on a different server.</string>
-	<string name="offline.scrobbles_error">Failed to scrobble songs</string>
+    <string name="offline.sync_dialog_title">Offline songs waiting to be synced</string>
+    <string name="offline.sync_dialog_message">Process %1$d offline scrobbles?</string>
+	<string name="offline.sync_dialog_default">Use action as default</string>
+	<string name="offline.sync_success">Successfully scrobbled %1$d songs</string>
+	<string name="offline.sync_partial">Successfully scrobbled %1$d of %2$d songs</string>
+	<string name="offline.sync_error">Failed to sync songs</string>
 
 	<string name="select_genre.empty">No genres found</string>
 	<string name="select_genre.blank">Blank</string>

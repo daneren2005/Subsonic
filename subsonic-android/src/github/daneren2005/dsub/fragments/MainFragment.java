@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -207,7 +208,7 @@ public class MainFragment extends SubsonicFragment {
 		if(isOffline) {
 			int count = Util.offlineScrobblesCount(context);
 			if(count > 0){
-				showOfflineScrobblesDialog(count);
+				showOfflineSyncDialog(count);
 			}
 		}
 	}
@@ -228,36 +229,33 @@ public class MainFragment extends SubsonicFragment {
 		}
 	}
 	
-	private void showOfflineScrobblesDialog(final int count) {
+	private void showOfflineSyncDialog(final int scrobbleCount) {
+		String syncDefault = Util.getSyncDefault(context);
+		if(syncDefault != null) {
+			if("sync".equals(syncDefault)) {
+				syncOffline(scrobbleCount);
+				return;
+			} else if("delete".equals(syncDefault)) {
+				deleteOffline();
+				return;
+			}
+		}
+		
+		View checkBoxView = context.getLayoutInflater().inflate(R.layout.sync_dialog, null);
+		final CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.sync_default);
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(android.R.drawable.ic_dialog_info)
-			.setTitle(R.string.offline_scrobbles_dialog_title)
-			.setMessage(R.string.offline_scrobbles_dialog_message)
+			.setTitle(R.string.offline_sync_dialog_title)
+			.setMessage(context.getResources().getString(R.string.offline_sync_dialog_message, scrobbleCount))
+			.setView(checkBoxView)
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialogInterface, int i) {
-					new SilentBackgroundTask<Integer>(context) {
-						@Override
-						protected Integer doInBackground() throws Throwable {
-							MusicService musicService = MusicServiceFactory.getMusicService(context);
-							return musicService.processOfflineScrobbles(context, null);
-						}
-
-						@Override
-						protected void done(Integer result) {
-							if(result == count) {
-								Util.toast(context, context.getResources().getString(R.string.offline_scrobbles_success, result));
-							} else {
-								Util.toast(context, context.getResources().getString(R.string.offline_scrobbles_partial, result, count));
-							}
-						}
-
-						@Override
-						protected void error(Throwable error) {
-							String msg = context.getResources().getString(R.string.offline_scrobbles_error) + " " + getErrorMessage(error);
-							Util.toast(context, msg);
-						}
-					}.execute();
+					if(checkBox.isChecked()) {
+						Util.setSyncDefault(context, "sync");
+					}
+					syncOffline(scrobbleCount);
 				}
 			}).setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
 				@Override
@@ -267,15 +265,45 @@ public class MainFragment extends SubsonicFragment {
 			}).setNegativeButton(R.string.common_delete, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialogInterface, int i) {
-					dialogInterface.dismiss();
-					SharedPreferences.Editor offline = Util.getOfflineSync(context).edit();
-					offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
-					offline.commit();
+					if(checkBox.isChecked()) {
+						Util.setSyncDefault(context, "delete");
+					}
+					deleteOffline();
 				}
 			});
 
 		builder.create().show();
-  }
+	}
+	
+	private void syncOffline(final int scrobbleCount) {
+		new SilentBackgroundTask<Integer>(context) {
+			@Override
+			protected Integer doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				return musicService.processOfflineScrobbles(context, null);
+			}
+
+			@Override
+			protected void done(Integer result) {
+				if(result == scrobbleCount) {
+					Util.toast(context, context.getResources().getString(R.string.offline_sync_success, result));
+				} else {
+					Util.toast(context, context.getResources().getString(R.string.offline_sync_partial, result, scrobbleCount));
+				}
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg = context.getResources().getString(R.string.offline_sync_error) + " " + getErrorMessage(error);
+				Util.toast(context, msg);
+			}
+		}.execute();
+	}
+	private void deleteOffline() {
+		SharedPreferences.Editor offline = Util.getOfflineSync(context).edit();
+		offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		offline.commit();
+	}
 
 	private void showAboutDialog() {
 		try {

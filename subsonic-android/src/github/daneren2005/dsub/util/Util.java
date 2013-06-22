@@ -363,6 +363,16 @@ public final class Util {
 		return context.getSharedPreferences(Constants.OFFLINE_SYNC_NAME, 0);
 	}
 	
+	public static String getSyncDefault(Context context) {
+		SharedPreferences prefs = Util.getOfflineSync(context);
+		return prefs.getString(Constants.OFFLINE_SYNC_DEFAULT, null);
+	}
+	public static void setSyncDefault(Context context, String defaultValue) {
+		SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
+		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
+		editor.commit();
+	}
+	
 	public static int offlineScrobblesCount(Context context) {
 		SharedPreferences offline = getOfflineSync(context);
 		return offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
