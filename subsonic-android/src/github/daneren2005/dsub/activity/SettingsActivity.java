@@ -331,9 +331,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private void setHideMedia(boolean hide) {
         File nomediaDir = new File(FileUtil.getSubsonicDirectory(), ".nomedia");
         if (hide && !nomediaDir.exists()) {
-            if (!nomediaDir.createNewFile()) {
-                Log.w(TAG, "Failed to create " + nomediaDir);
-            }
+			try {
+				if (!nomediaDir.createNewFile()) {
+					Log.w(TAG, "Failed to create " + nomediaDir);
+				}
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to create " + nomediaDir);
+			}
         } else if (nomediaDir.exists()) {
             if (!nomediaDir.delete()) {
                 Log.w(TAG, "Failed to delete " + nomediaDir);
