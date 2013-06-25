@@ -206,9 +206,10 @@ public class MainFragment extends SubsonicFragment {
 		context.getPagerAdapter().invalidate();
 		
 		if(isOffline) {
-			int count = Util.offlineScrobblesCount(context);
-			if(count > 0){
-				showOfflineSyncDialog(count);
+			int scrobblesCount = Util.offlineScrobblesCount(context);
+			int starsCount = Util.offlineStarsCount(context);
+			if(scrobblesCount > 0 || starsCount > 0){
+				showOfflineSyncDialog(scrobblesCount, starsCount);
 			}
 		}
 	}
@@ -229,11 +230,11 @@ public class MainFragment extends SubsonicFragment {
 		}
 	}
 	
-	private void showOfflineSyncDialog(final int scrobbleCount) {
+	private void showOfflineSyncDialog(final int scrobbleCount, final int starsCount) {
 		String syncDefault = Util.getSyncDefault(context);
 		if(syncDefault != null) {
 			if("sync".equals(syncDefault)) {
-				syncOffline(scrobbleCount);
+				syncOffline(scrobbleCount, starsCount);
 				return;
 			} else if("delete".equals(syncDefault)) {
 				deleteOffline();
@@ -247,7 +248,7 @@ public class MainFragment extends SubsonicFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(R.string.offline_sync_dialog_title)
-			.setMessage(context.getResources().getString(R.string.offline_sync_dialog_message, scrobbleCount))
+			.setMessage(context.getResources().getString(R.string.offline_sync_dialog_message, scrobbleCount, starsCount))
 			.setView(checkBoxView)
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
@@ -255,7 +256,7 @@ public class MainFragment extends SubsonicFragment {
 					if(checkBox.isChecked()) {
 						Util.setSyncDefault(context, "sync");
 					}
-					syncOffline(scrobbleCount);
+					syncOffline(scrobbleCount, starsCount);
 				}
 			}).setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
 				@Override
@@ -275,12 +276,12 @@ public class MainFragment extends SubsonicFragment {
 		builder.create().show();
 	}
 	
-	private void syncOffline(final int scrobbleCount) {
+	private void syncOffline(final int scrobbleCount, final int starsCount) {
 		new SilentBackgroundTask<Integer>(context) {
 			@Override
 			protected Integer doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				return musicService.processOfflineScrobbles(context, null);
+				return musicService.processOfflineSyncs(context, null);
 			}
 
 			@Override
@@ -288,7 +289,7 @@ public class MainFragment extends SubsonicFragment {
 				if(result == scrobbleCount) {
 					Util.toast(context, context.getResources().getString(R.string.offline_sync_success, result));
 				} else {
-					Util.toast(context, context.getResources().getString(R.string.offline_sync_partial, result, scrobbleCount));
+					Util.toast(context, context.getResources().getString(R.string.offline_sync_partial, result, scrobbleCount + starsCount));
 				}
 			}
 

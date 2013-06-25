@@ -885,7 +885,11 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
-	public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
+		return processOfflineScrobbles(context, progressListener) + processOfflineStars(context, progressListener);
+	}
+	
+	public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception {
 		SharedPreferences offline = Util.getOfflineSync(context);
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		int count = offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
@@ -912,13 +916,47 @@ public class RESTMusicService implements MusicService {
 				catch(Exception e){
 					Log.e(TAG, e.toString());
 					retry++;
-					offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + retry, search);
-					offlineEditor.putLong(Constants.OFFLINE_SCROBBLE_TIME + retry, time);
 				}
 			}
 		}
 
-		offlineEditor.putInt(Constants.OFFLINE_SCROBBLE_COUNT, retry);
+		offlineEditor.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		offlineEditor.commit();
+
+		return count - retry;
+	}
+	
+	public int processOfflineStars(final Context context, final ProgressListener progressListener) throws Exception {
+		SharedPreferences offline = Util.getOfflineSync(context);
+		SharedPreferences.Editor offlineEditor = offline.edit();
+		int count = offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
+		int retry = 0;
+		for(int i = 1; i <= count; i++) {
+			String id = offline.getString(Constants.OFFLINE_STAR_ID + i, null);
+			boolean starred = offline.getBoolean(Constants.OFFLINE_STAR_SETTING + i, false);
+			if(id != null) {
+				setStarred(id, starred, context, progressListener);
+			} else {
+				String search = offline.getString(Constants.OFFLINE_STAR_SEARCH + i, "");
+				try{
+					SearchCritera critera = new SearchCritera(search, 0, 0, 1);
+					SearchResult result = searchNew(critera, context, progressListener);
+					if(result.getSongs().size() == 1){
+						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
+						setStarred(result.getSongs().get(0).getId(), starred, context, progressListener);
+					}
+					else{
+						throw new Exception("Song not found on server");
+					}
+				}
+				catch(Exception e){
+					Log.e(TAG, e.toString());
+					retry++;
+				}
+			}
+		}
+
+		offlineEditor.putInt(Constants.OFFLINE_STAR_COUNT, 0);
 		offlineEditor.commit();
 
 		return count - retry;

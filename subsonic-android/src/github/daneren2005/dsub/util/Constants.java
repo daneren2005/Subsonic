@@ -115,6 +115,10 @@ public final class Constants {
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
 	public static final String OFFLINE_SCROBBLE_SEARCH = "scrobbleTitle";
 	public static final String OFFLINE_SCROBBLE_TIME = "scrobbleTime";
+	public static final String OFFLINE_STAR_COUNT = "starCount";
+	public static final String OFFLINE_STAR_ID = "starID";
+	public static final String OFFLINE_STAR_SEARCH = "starTitle";
+	public static final String OFFLINE_STAR_SETTING = "starSetting";
 	
 	public static final String CACHE_KEY_IGNORE = "ignoreArticles";
 	

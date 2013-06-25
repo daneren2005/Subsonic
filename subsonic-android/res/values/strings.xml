@@ -118,10 +118,12 @@
     <string name="select_album.donate_dialog_0_trial_days_left">Trial period is over</string>
 
     <string name="offline.sync_dialog_title">Offline songs waiting to be synced</string>
-    <string name="offline.sync_dialog_message">Process %1$d offline scrobbles?</string>
+    <string name="offline.sync_dialog_message">Process %1$d offline scrobbles?
+		\nProcess %2$d offline stars?
+	</string>
 	<string name="offline.sync_dialog_default">Use action as default</string>
-	<string name="offline.sync_success">Successfully scrobbled %1$d songs</string>
-	<string name="offline.sync_partial">Successfully scrobbled %1$d of %2$d songs</string>
+	<string name="offline.sync_success">Successfully synced %1$d songs</string>
+	<string name="offline.sync_partial">Successfully synced %1$d of %2$d songs</string>
 	<string name="offline.sync_error">Failed to sync songs</string>
 
 	<string name="select_genre.empty">No genres found</string>

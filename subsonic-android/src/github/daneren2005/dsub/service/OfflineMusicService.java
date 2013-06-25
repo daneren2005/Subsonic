@@ -545,7 +545,26 @@ public class OfflineMusicService extends RESTMusicService {
 	
 	@Override
 	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Starring not available in offline mode");
+		SharedPreferences prefs = Util.getPreferences(context);
+		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+
+		SharedPreferences offline = Util.getOfflineSync(context);
+		int stars = offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
+		stars++;
+		SharedPreferences.Editor offlineEditor = offline.edit();
+		
+		if(id.indexOf(cacheLocn) != -1) {
+			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+			offlineEditor.putString(Constants.OFFLINE_STAR_SEARCH + stars, searchCriteria);
+			offlineEditor.remove(Constants.OFFLINE_STAR_ID + stars);
+		} else {
+			offlineEditor.putString(Constants.OFFLINE_STAR_ID + stars, id);
+			offlineEditor.remove(Constants.OFFLINE_STAR_SEARCH + stars);
+		}
+		
+		offlineEditor.putBoolean(Constants.OFFLINE_STAR_SETTING + stars, starred);
+		offlineEditor.putInt(Constants.OFFLINE_STAR_COUNT, stars);
+		offlineEditor.commit();
 	}
 	
 	@Override
@@ -578,7 +597,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
     
     @Override
-    public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception{
+    public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
     }
 

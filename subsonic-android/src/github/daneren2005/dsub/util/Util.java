@@ -377,6 +377,10 @@ public final class Util {
 		SharedPreferences offline = getOfflineSync(context);
 		return offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
 	}
+	public static int offlineStarsCount(Context context) {
+		SharedPreferences offline = getOfflineSync(context);
+		return offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
+	}
 	
 	public static String parseOfflineIDSearch(Context context, String id, String cacheLocation) {
 		String name = id.replace(cacheLocation, "");

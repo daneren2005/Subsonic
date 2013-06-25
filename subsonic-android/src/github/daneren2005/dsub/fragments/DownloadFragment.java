@@ -149,7 +149,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
 
 		starButton = (ImageButton)rootView.findViewById(R.id.download_star);
-		starButton.setVisibility(Util.isOffline(context) ? View.GONE : View.VISIBLE);
 		starButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
