@@ -193,6 +193,14 @@ public class OfflineMusicService extends RESTMusicService {
 				entry.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
 				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
 				entry.setDuration(Integer.parseInt(length) / 1000);
+				String artist = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+				if(artist != null) {
+					entry.setArtist(artist);
+				}
+				String album = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+				if(album != null) {
+					entry.setAlbum(album);
+				}
 				metadata.release();
 			} catch(Exception e) {
 				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
