@@ -104,7 +104,7 @@ public class SongView extends UpdateView implements Checkable {
         artistTextView.setText(artist);
         durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
-		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
+		starButton.setVisibility(!song.isStarred() ? View.GONE : View.VISIBLE);
 		starButton.setFocusable(false);
 		
 		moreButton = (ImageView) findViewById(R.id.artist_more);
@@ -136,7 +136,7 @@ public class SongView extends UpdateView implements Checkable {
             return;
         }
 		
-		starButton.setVisibility((Util.isOffline(getContext()) || !song.isStarred()) ? View.GONE : View.VISIBLE);
+		starButton.setVisibility(!song.isStarred() ? View.GONE : View.VISIBLE);
         File partialFile = downloadFile.getPartialFile();
 
         int leftImage = 0;
