@@ -939,11 +939,14 @@ public class RESTMusicService implements MusicService {
 			} else {
 				String search = offline.getString(Constants.OFFLINE_STAR_SEARCH + i, "");
 				try{
-					SearchCritera critera = new SearchCritera(search, 0, 0, 1);
+					SearchCritera critera = new SearchCritera(search, 0, 1, 1);
 					SearchResult result = searchNew(critera, context, progressListener);
 					if(result.getSongs().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
 						setStarred(result.getSongs().get(0).getId(), starred, context, progressListener);
+					} else if(result.getAlbums().size() == 1){
+						Log.i(TAG, "Query '" + search + "' returned song " + result.getAlbums().get(0).getTitle() + " by " + result.getAlbums().get(0).getArtist() + " with id " + result.getAlbums().get(0).getId());
+						setStarred(result.getAlbums().get(0).getId(), starred, context, progressListener);
 					}
 					else{
 						throw new Exception("Song not found on server");

@@ -167,7 +167,7 @@ public class SubsonicFragment extends SherlockFragment {
 				}
 			}
 
-			if (!Util.isOffline(context) && !entry.isVideo()) {
+			if (!entry.isVideo()) {
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
 		} else if(selected instanceof Artist) {

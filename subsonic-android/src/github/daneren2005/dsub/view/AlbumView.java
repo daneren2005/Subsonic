@@ -74,7 +74,7 @@ public class AlbumView extends UpdateView {
         artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
         imageLoader.loadImage(coverArtView, album, false, true);
         
-        starButton.setVisibility((Util.isOffline(getContext()) || !album.isStarred()) ? View.GONE : View.VISIBLE);
+        starButton.setVisibility(!album.isStarred() ? View.GONE : View.VISIBLE);
 		starButton.setFocusable(false);
 		
 		update();
@@ -82,7 +82,7 @@ public class AlbumView extends UpdateView {
 	
 	@Override
 	protected void update() {
-		starButton.setVisibility((Util.isOffline(getContext()) || !album.isStarred()) ? View.GONE : View.VISIBLE);
+		starButton.setVisibility(!album.isStarred() ? View.GONE : View.VISIBLE);
 		File file = FileUtil.getAlbumDirectory(context, album);
 		if(file.exists()) {
 			moreButton.setImageResource(R.drawable.list_item_more_shaded);

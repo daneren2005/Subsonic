@@ -18,4 +18,8 @@
 	<item 
 		android:id="@+id/album_menu_delete"
 		android:title="@string/common.delete"/>
+
+	<item 
+		android:id="@+id/album_menu_star"
+		android:title="@string/common.star"/>
 </menu>
