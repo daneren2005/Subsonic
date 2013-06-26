@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.0.6" versioncode="55" releasedate="6/25/2013">
+		<change>Scrobble and star songs and sync changes back when going online (has trouble when tags don't match folders)</change>
+		<change>Fix cases where operations didn't work in online mode when originally added in offline mode and vice versa</change>
+		<change>Added blank option to genre picker in the shuffle dialog</change>
+		<change>Added option to show track # in front of song (off by default)</change>
+		<change>Separate cached playlists from different servers in separate folders so they don't interfere with each other</change>
+		<change>Fix for some music files which throw errors at the end not proceeding to the next song</change>
+		<change>Fix flash preference not being obeyed for the Play External option</change>
+		<change>As songs are downloaded in background list, automatically remove them</change>
+		<change>Fix low quality album artwork in large widgets</change>
+		<change>Fix a rare case that can cause a song to be played twice</change>
+		<change>Fix for some who listen to untranscoded flac songs</change>
+		<change>Remove bottom bar if nothing is in the queue</change>
+		<change>Use .nomedia file instead of folder for more compatibility</change>
+		<change>Clean some sensitive info from the logs</change>
+	</release>
 	<release version="4.0.5" versioncode="54" releasedate="6/7/2013">
 		<change>Fix album art on old Subsonic/MusicCabinet servers</change>
 	</release>
