@@ -257,7 +257,6 @@ public class MainActivity extends SubsonicActivity {
 			return;
 		}
 
-		bottomBar.setVisibility(View.VISIBLE);
 		MusicDirectory.Entry song = current.getSong();
 		trackView.setText(song.getTitle());
 		artistView.setText(song.getArtist());
