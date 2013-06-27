@@ -248,10 +248,6 @@ public class MainActivity extends SubsonicActivity {
 		}
 
 		DownloadFile current = getDownloadService().getCurrentPlaying();
-		if(current == null) {
-			bottomBar.setVisibility(View.GONE);
-			return;
-		}
 
 		bottomBar.setVisibility(View.VISIBLE);
 		MusicDirectory.Entry song = current.getSong();
