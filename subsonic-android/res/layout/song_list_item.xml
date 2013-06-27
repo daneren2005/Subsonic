@@ -79,7 +79,7 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:singleLine="true"
                     android:paddingLeft="3dip"
-                    android:paddingRight="9dip"/>
+                    android:paddingRight="4dip"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -139,12 +139,10 @@ public class SongView extends UpdateView implements Checkable {
 		starButton.setVisibility(!song.isStarred() ? View.GONE : View.VISIBLE);
         File partialFile = downloadFile.getPartialFile();
 
-        int leftImage = 0;
         int rightImage = 0;
 
         if (downloadFile.isWorkDone()) {
-            leftImage = downloadFile.isSaved() ? R.drawable.saved : R.drawable.downloaded;
-			moreButton.setImageResource(R.drawable.list_item_more_shaded);
+			moreButton.setImageResource(downloadFile.isSaved() ? R.drawable.list_item_more_saved : R.drawable.list_item_more_shaded);
         } else {
 			moreButton.setImageResource(R.drawable.list_item_more);
 		}
@@ -155,7 +153,7 @@ public class SongView extends UpdateView implements Checkable {
         } else {
             statusTextView.setText(null);
         }
-        statusTextView.setCompoundDrawablesWithIntrinsicBounds(leftImage, 0, rightImage, 0);
+        statusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, rightImage, 0);
 
         boolean playing = downloadService.getCurrentPlaying() == downloadFile;
         if (playing) {
