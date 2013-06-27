@@ -23,6 +23,7 @@ import github.daneren2005.dsub.fragments.MainFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectDirectoryFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
+import github.daneren2005.dsub.fragments.SelectPodcastsFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -155,6 +156,7 @@ public class MainActivity extends SubsonicActivity {
 		addTab(R.string.button_bar_home, MainFragment.class, null);
 		addTab(R.string.button_bar_browse, SelectArtistFragment.class, null);
 		addTab(R.string.button_bar_playlists, SelectPlaylistFragment.class, null);
+		// addTab(R.string.button_bar_podcasts, SelectPodcastsFragment.class, null);
 		SharedPreferences prefs = Util.getPreferences(this);
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true)) {
 			addTab(R.string.button_bar_chat, ChatFragment.class, null);
@@ -248,6 +250,12 @@ public class MainActivity extends SubsonicActivity {
 		}
 
 		DownloadFile current = getDownloadService().getCurrentPlaying();
+		if(current == null) { 
+			trackView.setText("Title"); 
+			artistView.setText("Artist"); 
+			getImageLoader().loadImage(coverArtView, null, false, false); 
+			return;
+		}
 
 		bottomBar.setVisibility(View.VISIBLE);
 		MusicDirectory.Entry song = current.getSong();
