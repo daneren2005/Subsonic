@@ -26,13 +26,14 @@ import android.view.View;
 import android.widget.*;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
+import java.text.DateFormat;
 
 /**
  * Used to display songs in a {@code ListView}.
@@ -89,6 +90,10 @@ public class SongView extends UpdateView implements Checkable {
 		if(!song.isVideo()) {
 			if(song.getArtist() != null) {
 				artist.append(song.getArtist());
+			} else if(song instanceof PodcastEpisode) {
+				String date = ((PodcastEpisode)song).getDate();
+				int index = date.indexOf(" ");
+				artist.append(date.substring(0, index != -1 ? index : date.length()));
 			}
 			artist.append(" (")
 				.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat))
