@@ -32,6 +32,8 @@ import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
@@ -116,7 +118,11 @@ public interface MusicService {
 	
 	List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 	
-	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
+	MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
+	
+	List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+	
+	MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 }

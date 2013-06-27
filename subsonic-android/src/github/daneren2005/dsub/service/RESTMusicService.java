@@ -84,6 +84,8 @@ import github.daneren2005.dsub.service.parser.MusicDirectoryParser;
 import github.daneren2005.dsub.service.parser.MusicFoldersParser;
 import github.daneren2005.dsub.service.parser.PlaylistParser;
 import github.daneren2005.dsub.service.parser.PlaylistsParser;
+import github.daneren2005.dsub.service.parser.PodcastChannelParser;
+import github.daneren2005.dsub.service.parser.PodcastEntryParser;
 import github.daneren2005.dsub.service.parser.RandomSongsParser;
 import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
@@ -882,6 +884,26 @@ public class RESTMusicService implements MusicService {
 		} finally {
 			Util.close(reader);
 		}
+	}
+	
+	@Override
+	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("includeEpisodes"), Arrays.<Object>asList("false"));
+        try {
+            return new PodcastChannelParser(context).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
+	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("id"), Arrays.<Object>asList(id));
+        try {
+            return new PodcastEntryParser(context).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
+        }
 	}
 	
 	@Override

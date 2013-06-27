@@ -54,6 +54,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	String name;
 	String playlistId;
 	String playlistName;
+	String podcastId;
+	String podcastName;
+	String podcastDescription;
 	String albumListType;
 	String albumListExtra;
 	int albumListSize;
@@ -100,6 +103,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			name = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
 			playlistId = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
 			playlistName = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
+			podcastId = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_ID);
+			podcastName = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_NAME);
+			podcastDescription = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_DESCRIPTION);
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
@@ -267,6 +273,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		emptyView.setVisibility(View.INVISIBLE);
 		if (playlistId != null) {
 			getPlaylist(playlistId, playlistName);
+		} else if(podcastId != null) {
+			getPodcast(podcastId, podcastName);
 		} else if (albumListType != null) {
 			getAlbumList(albumListType, albumListSize);
 		} else {
@@ -292,6 +300,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return service.getPlaylist(playlistId, playlistName, context, this);
+			}
+		}.execute();
+	}
+	
+	private void getPodcast(final String podcastId, final String podcastName) {
+		setTitle(podcastName);
+
+		new LoadTask() {
+			@Override
+			protected MusicDirectory load(MusicService service) throws Exception {
+				return service.getPodcastEpisodes(podcastId, context, this);
 			}
 		}.execute();
 	}
@@ -648,6 +667,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
 		if(playlistName != null) {
 			titleView.setText(playlistName);
+		} else if(podcastName != null) {
+			titleView.setText(podcastName);
+			titleView.setPadding(0, 6, 4, 8);
 		} else if(name != null) {
 			titleView.setText(name);
 		}
@@ -673,16 +695,24 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if (artists.size() == 1) {
 			artistView.setText(artists.iterator().next());
 			artistView.setVisibility(View.VISIBLE);
+		} else if(podcastDescription != null) {
+			artistView.setText(podcastDescription);
+			artistView.setSingleLine(false);
+			artistView.setLines(5);
 		} else {
 			artistView.setVisibility(View.GONE);
 		}
 
 		TextView songCountView = (TextView) header.findViewById(R.id.select_album_song_count);
-		String s = context.getResources().getQuantityString(R.plurals.select_album_n_songs, songCount, songCount);
-		songCountView.setText(s.toUpperCase());
-		
 		TextView songLengthView = (TextView) header.findViewById(R.id.select_album_song_length);
-		songLengthView.setText(Util.formatDuration(totalDuration));
+		if(podcastDescription == null) {
+			String s = context.getResources().getQuantityString(R.plurals.select_album_n_songs, songCount, songCount);
+			songCountView.setText(s.toUpperCase());
+			songLengthView.setText(Util.formatDuration(totalDuration));
+		} else {
+			songCountView.setVisibility(View.GONE);
+			songLengthView.setVisibility(View.GONE);
+		}
 
 		if(add) {
 			return header;

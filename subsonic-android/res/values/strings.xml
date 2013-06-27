@@ -27,6 +27,7 @@
     <string name="button_bar.search">Search</string>
     <string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Playing</string>
+	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.chat">Chat</string>
 
     <string name="main.welcome_title">Welcome!</string>
@@ -128,6 +129,8 @@
 
 	<string name="select_genre.empty">No genres found</string>
 	<string name="select_genre.blank">Blank</string>
+
+	<string name="select_podcasts.empty">No podcasts found</string>
 
     <string name="select_playlist.empty">No saved playlists on server</string>
 

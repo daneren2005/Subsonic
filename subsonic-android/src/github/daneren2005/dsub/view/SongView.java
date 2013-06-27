@@ -87,7 +87,10 @@ public class SongView extends UpdateView implements Checkable {
         }
 
 		if(!song.isVideo()) {
-			artist.append(song.getArtist()).append(" (")
+			if(song.getArtist() != null) {
+				artist.append(song.getArtist());
+			}
+			artist.append(" (")
 				.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat))
 				.append(")");
 		} else {
@@ -101,7 +104,7 @@ public class SongView extends UpdateView implements Checkable {
 		}
 
         titleTextView.setText(title);
-        artistTextView.setText(artist);
+		artistTextView.setText(artist);
         durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 		starButton.setVisibility(!song.isStarred() ? View.GONE : View.VISIBLE);

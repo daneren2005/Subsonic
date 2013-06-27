@@ -33,6 +33,8 @@ import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
@@ -59,6 +61,7 @@ public class CachedMusicService implements MusicService {
     private final TimeLimitedCache<List<Playlist>> cachedPlaylists = new TimeLimitedCache<List<Playlist>>(3600, TimeUnit.SECONDS);
     private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<List<MusicFolder>>(10 * 3600, TimeUnit.SECONDS);
 	private final TimeLimitedCache<List<Genre>> cachedGenres = new TimeLimitedCache<List<Genre>>(10 * 3600, TimeUnit.SECONDS);
+	private final TimeLimitedCache<List<PodcastChannel>> cachedPodcastChannels = new TimeLimitedCache<List<PodcastChannel>>(10 * 3600, TimeUnit.SECONDS);
     private String restUrl;
 
     public CachedMusicService(MusicService musicService) {
@@ -300,6 +303,23 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getSongsByGenre(genre, count, offset, context, progressListener);
+	}
+	
+	@Override
+	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		List<PodcastChannel> result = refresh ? null : cachedPodcastChannels.get();
+
+		if (result == null) {
+			result = musicService.getPodcastChannels(refresh, context, progressListener);
+			cachedPodcastChannels.set(result);
+		}
+
+		return result;
+	}
+	
+	@Override
+	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getPodcastEpisodes(id, context, progressListener);
 	}
 	
 	@Override

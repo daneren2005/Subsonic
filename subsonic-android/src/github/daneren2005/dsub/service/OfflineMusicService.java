@@ -42,6 +42,8 @@ import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.util.Constants;
@@ -595,6 +597,16 @@ public class OfflineMusicService extends RESTMusicService {
 
         return result;
     }
+	
+	@Override
+	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Getting Podcasts not available in offline mode");
+	}
+	
+	@Override
+	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Getting Podcasts not available in offline mode");
+	}
     
     @Override
     public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
