@@ -900,7 +900,7 @@ public class RESTMusicService implements MusicService {
 	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("id"), Arrays.<Object>asList(id));
         try {
-            return new PodcastEntryParser(context).parse(reader, progressListener);
+            return new PodcastEntryParser(context).parse(id, reader, progressListener);
         } finally {
             Util.close(reader);
         }

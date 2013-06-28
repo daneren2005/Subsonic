@@ -37,26 +37,34 @@ public class PodcastEntryParser extends AbstractParser {
         super(context);
     }
 	
-	public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
+	public MusicDirectory parse(String channel, Reader reader, ProgressListener progressListener) throws Exception {
 		updateProgress(progressListener, R.string.parser_reading);
 		init(reader);
 
 		MusicDirectory episodes = new MusicDirectory();
 		int eventType;
+		boolean valid = false;
 		do {
 			eventType = nextParseEvent();
 			if (eventType == XmlPullParser.START_TAG) {
 				String name = getElementName();
 				if ("channel".equals(name)) {
-					episodes.setId(get("id"));
-					episodes.setName(get("title"));
+					String id = get("id");
+					if(id.equals(channel)) {
+						episodes.setId(id);
+						episodes.setName(get("title"));
+						valid = true;
+					} else {
+						valid = false;
+					}
 				}
-				else if ("episode".equals(name)) {
+				else if ("episode".equals(name) && valid) {
 					PodcastEpisode episode = new PodcastEpisode();
 					episode.setEpisodeId(get("id"));
 					episode.setId(get("streamId"));
 					episode.setTitle(get("title"));
-					episode.setDescription(get("description"));
+					episode.setArtist(episodes.getName());
+					episode.setAlbum(get("description"));
 					episode.setDate(get("publishDate"));
 					episode.setStatus(get("status"));
 					episode.setCoverArt(get("coverArt"));
