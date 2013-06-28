@@ -88,16 +88,25 @@ public class SongView extends UpdateView implements Checkable {
         }
 
 		if(!song.isVideo()) {
-			if(song.getArtist() != null) {
-				artist.append(song.getArtist());
-			} else if(song instanceof PodcastEpisode) {
+			if(song instanceof PodcastEpisode) {
 				String date = ((PodcastEpisode)song).getDate();
 				int index = date.indexOf(" ");
 				artist.append(date.substring(0, index != -1 ? index : date.length()));
 			}
-			artist.append(" (")
-				.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat))
-				.append(")");
+			else if(song.getArtist() != null) {
+				artist.append(song.getArtist());
+			}
+			
+			String status = (song instanceof PodcastEpisode) ? ((PodcastEpisode)song).getStatus() : "";
+			artist.append(" (");
+			if("error".equals(status)) {
+				artist.append(getContext().getString(R.string.song_details_error));
+			} else if("skipped".equals(status)) {
+				artist.append(getContext().getString(R.string.song_details_skipped));
+			} else {
+				artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
+			}
+			artist.append(")");
 		} else {
 			artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
 		}

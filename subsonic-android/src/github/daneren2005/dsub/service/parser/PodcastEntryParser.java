@@ -33,6 +33,8 @@ import org.xmlpull.v1.XmlPullParser;
  * @author Scott
  */
 public class PodcastEntryParser extends AbstractParser {
+	private static int bogusId = -1;
+	
 	public PodcastEntryParser(Context context) {
         super(context);
     }
@@ -74,6 +76,11 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setDuration(getInteger("duration"));
 					episode.setBitRate(getInteger("bitRate"));
 					episode.setPath(get("path"));
+					
+					if("error".equals(episode.getStatus()) || "skipped".equals(episode.getStatus())) {
+						episode.setId(String.valueOf(bogusId));
+						bogusId--;
+					}
 					episodes.addChild(episode);
 				} else if ("error".equals(name)) {
 					handleError();

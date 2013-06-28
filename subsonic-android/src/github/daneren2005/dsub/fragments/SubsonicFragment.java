@@ -50,7 +50,7 @@ import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
-import github.daneren2005.dsub.domain.Version;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -144,13 +144,22 @@ public class SubsonicFragment extends SherlockFragment {
 		
 		if(selected instanceof MusicDirectory.Entry) {
 			MusicDirectory.Entry entry = (MusicDirectory.Entry) selected;
-			if (entry.isDirectory()) {
+			if(entry instanceof PodcastEpisode) {
+				if(Util.isOffline(context)) {
+					inflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
+				}
+				else {
+					inflater.inflate(R.menu.select_podcast_episode_context, menu);
+				}
+			}
+			else if (entry.isDirectory()) {
 				if(Util.isOffline(context)) {
 					inflater.inflate(R.menu.select_album_context_offline, menu);
 				}
 				else {
 					inflater.inflate(R.menu.select_album_context, menu);
 				}
+				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else if(!entry.isVideo()) {
 				if(Util.isOffline(context)) {
 					inflater.inflate(R.menu.select_song_context_offline, menu);
@@ -158,6 +167,7 @@ public class SubsonicFragment extends SherlockFragment {
 				else {
 					inflater.inflate(R.menu.select_song_context, menu);
 				}
+				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else {
 				if(Util.isOffline(context)) {
 					inflater.inflate(R.menu.select_video_context_offline, menu);
@@ -165,10 +175,6 @@ public class SubsonicFragment extends SherlockFragment {
 				else {
 					inflater.inflate(R.menu.select_video_context, menu);
 				}
-			}
-
-			if (!entry.isVideo()) {
-				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
 		} else if(selected instanceof Artist) {
 			if(Util.isOffline(context)) {
@@ -822,7 +828,11 @@ public class SubsonicFragment extends SherlockFragment {
 
 		String msg = "";
 		if(!song.isVideo()) {
-			msg += "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
+			if(song instanceof PodcastEpisode) {
+				msg += "Podcast: " + song.getArtist() + "\nStatus: " + ((PodcastEpisode)song).getStatus();
+			} else {
+				msg += "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
+			}
 		}
 		if(song.getTrack() != null && song.getTrack() != 0) {
 			msg += "\nTrack: " + song.getTrack();
@@ -833,7 +843,7 @@ public class SubsonicFragment extends SherlockFragment {
 		if(song.getYear() != null && song.getYear() != 0) {
 			msg += "\nYear: " + song.getYear();
 		}
-		if(!Util.isOffline(context)) {
+		if(!Util.isOffline(context) && song.getSuffix() != null) {
 			msg += "\nServer Format: " + song.getSuffix();
 			if(song.getBitRate() != null && song.getBitRate() != 0) {
 				msg += "\nServer Bitrate: " + song.getBitRate() + " kpbs";

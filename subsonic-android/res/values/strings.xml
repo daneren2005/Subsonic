@@ -131,6 +131,8 @@
 	<string name="select_genre.blank">Blank</string>
 
 	<string name="select_podcasts.empty">No podcasts found</string>
+	<string name="select_podcasts.error">This podcast had an error while downloading on the server.  The server must download it first.</string>
+	<string name="select_podcasts.skipped">This podcast has not been downloaded on the server.  The server must download it first.</string>
 
     <string name="select_playlist.empty">No saved playlists on server</string>
 
@@ -187,6 +189,8 @@
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>
+	<string name="song_details.error">Error</string>
+	<string name="song_details.skipped">Skipped</string>
 
     <string name="lyrics.nomatch">No lyrics found</string>
 

@@ -24,7 +24,6 @@ package github.daneren2005.dsub.domain;
  */
 public class PodcastEpisode extends MusicDirectory.Entry {
 	private String episodeId;
-	private String description;
 	private String date;
 	private String status;
 	
@@ -37,13 +36,6 @@ public class PodcastEpisode extends MusicDirectory.Entry {
 	}
 	public void setEpisodeId(String episodeId) {
 		this.episodeId = episodeId;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
 	}
 	
 	public String getDate() {

@@ -22,6 +22,7 @@ import java.util.List;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SearchActivity;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
@@ -134,14 +135,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				menuInflater.inflate(R.menu.select_album, menu);
 			}
 		} else {
-			if(Util.isOffline(context)) {
-				menuInflater.inflate(R.menu.select_song_offline, menu);
-			}
-			else {
-				menuInflater.inflate(R.menu.select_song, menu);
+			if(podcastId == null) {
+				if(Util.isOffline(context)) {
+					menuInflater.inflate(R.menu.select_song_offline, menu);
+				}
+				else {
+					menuInflater.inflate(R.menu.select_song, menu);
 
-				if(playlistId == null) {
-					menu.removeItem(R.id.menu_remove_playlist);
+					if(playlistId == null) {
+						menu.removeItem(R.id.menu_remove_playlist);
+					}
+				}
+			} else {
+				if(Util.isOffline(context)) {
+					menuInflater.inflate(R.menu.select_podcast_episode_offline, menu);
+				}
+				else {
+					menuInflater.inflate(R.menu.select_podcast_episode, menu);
 				}
 			}
 		}
@@ -196,7 +206,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
 		onCreateContextMenu(menu, view, menuInfo, entry);
-		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null) {
+		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null && podcastId != null) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
 	}
@@ -247,6 +257,21 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				replaceFragment(fragment, R.id.select_album_layout);
 			} else if (entry.isVideo()) {
 				playVideo(entry);
+			} else if(entry instanceof PodcastEpisode) {
+				String status = ((PodcastEpisode)entry).getStatus();
+				if("error".equals(status)) {
+					Util.toast(context, R.string.select_podcasts_error);
+					return;
+				} else if("skipped".equals(status)) {
+					Util.toast(context, R.string.select_podcasts_skipped);
+					return;
+				}
+				
+				getDownloadService().clear();
+				List<MusicDirectory.Entry> podcasts = new ArrayList<MusicDirectory.Entry>(1);
+				podcasts.add(entry);
+				getDownloadService().download(podcasts, false, true, true, false);
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
 			}
 		}
 	}
@@ -390,7 +415,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 
 			emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
-			entryAdapter = new EntryAdapter(context, getImageLoader(), entries, true);
+			entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null) ? true : false);
 			if(albumListType == null || "starred".equals(albumListType)) {
 				entryList.setAdapter(entryAdapter);
 			} else {
@@ -692,13 +717,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
-		if (artists.size() == 1) {
-			artistView.setText(artists.iterator().next());
-			artistView.setVisibility(View.VISIBLE);
-		} else if(podcastDescription != null) {
+		if(podcastDescription != null) {
 			artistView.setText(podcastDescription);
 			artistView.setSingleLine(false);
 			artistView.setLines(5);
+		} else if (artists.size() == 1) {
+			artistView.setText(artists.iterator().next());
+			artistView.setVisibility(View.VISIBLE);
 		} else {
 			artistView.setVisibility(View.GONE);
 		}
