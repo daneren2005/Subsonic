@@ -97,11 +97,11 @@ public class OfflineMusicService extends RESTMusicService {
 				}
 				
 				for(String article: ignoredArticles) {
-					int index = lhs.indexOf(article.toLowerCase());
+					int index = lhs.indexOf(article.toLowerCase() + " ");
 					if(index == 0) {
 						lhs = lhs.substring(article.length() + 1);
 					}
-					index = rhs.indexOf(article.toLowerCase());
+					index = rhs.indexOf(article.toLowerCase() + " ");
 					if(index == 0) {
 						rhs = rhs.substring(article.length() + 1);
 					}
