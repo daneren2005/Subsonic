@@ -42,10 +42,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private DragSortListView entryList;
+	int rootId;
 	private View footer;
 	private View emptyView;
 	private boolean hideButtons = false;
-	private Button moreButton;
 	private Boolean licenseValid;
 	private boolean showHeader = true;
 	private EntryAdapter entryAdapter;
@@ -61,6 +61,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	String albumListType;
 	String albumListExtra;
 	int albumListSize;
+	
+	
+	SelectDirectoryFragment() {
+		super();
+		rootId = getNewId();
+	}
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -70,6 +76,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.select_album, container, false);
+		rootView.setId(rootId);
 		if(!primaryFragment) {
 			((ViewGroup)rootView).getChildAt(0).setVisibility(View.GONE);
 		}
@@ -93,7 +100,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 		});
 
-		moreButton = (Button) footer.findViewById(R.id.select_album_more);
 		emptyView = rootView.findViewById(R.id.select_album_empty);
 
 		registerForContextMenu(entryList);
@@ -238,6 +244,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if (position >= 0) {
 			MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
 			if (entry.isDirectory()) {
+				int fragId = rootId;
 				if(albumListType != null && entry.getParent() != null) {
 					SubsonicFragment parentFragment = new SelectDirectoryFragment();
 					Bundle args = new Bundle();
@@ -245,7 +252,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
 					parentFragment.setArguments(args);
 
-					replaceFragment(parentFragment, R.id.select_album_layout);
+					replaceFragment(parentFragment, fragId);
+					fragId = parentFragment.getRootId();
 				}
 				
 				SubsonicFragment fragment = new SelectDirectoryFragment();
@@ -254,7 +262,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, R.id.select_album_layout);
+				replaceFragment(fragment, fragId);
 			} else if (entry.isVideo()) {
 				playVideo(entry);
 			} else if(entry instanceof PodcastEpisode) {
@@ -291,6 +299,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	protected void refresh(boolean refresh) {
 		load(refresh);
+	}
+	
+	@Override
+	public int getRootId() {
+		return rootId;
 	}
 
 	private void load(boolean refresh) {

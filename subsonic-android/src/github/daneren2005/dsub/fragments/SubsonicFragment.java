@@ -76,6 +76,7 @@ import java.util.Random;
 
 public class SubsonicFragment extends SherlockFragment {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
+	private static int internalID = Integer.MAX_VALUE;
 	private static int TAG_INC = 10;
 	private int tag;
 	
@@ -279,6 +280,14 @@ public class SubsonicFragment extends SherlockFragment {
 	
 	public void replaceFragment(SubsonicFragment fragment, int id) {
 		context.replaceFragment(fragment, id, fragment.getSupportTag());
+	}
+	
+	protected int getNewId() {
+		internalID--;
+		return internalID;
+	}
+	public int getRootId() {
+		return rootView.getId();
 	}
 	
 	public int getSupportTag() {
