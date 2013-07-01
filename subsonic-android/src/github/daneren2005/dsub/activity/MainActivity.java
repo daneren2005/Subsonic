@@ -149,6 +149,7 @@ public class MainActivity extends SubsonicActivity {
 		});
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
+		viewPager.setOffscreenPageLimit(4);
 		pagerAdapter = new TabPagerAdapter(this, viewPager);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setOnPageChangeListener(pagerAdapter);
