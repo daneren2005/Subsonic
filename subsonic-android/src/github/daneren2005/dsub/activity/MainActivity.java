@@ -209,7 +209,7 @@ public class MainActivity extends SubsonicActivity {
 				fragment.setArguments(args);
 
 				pagerAdapter.queueFragment(fragment, R.id.select_artist_layout);
-				fragmentID = R.id.select_album_layout;
+				fragmentID = fragment.getRootId();
 			}
 			
 			SubsonicFragment fragment = new SelectDirectoryFragment();

@@ -291,7 +291,7 @@ public class SearchFragment extends SubsonicFragment {
 			parentFragment.setArguments(args);
 
 			replaceFragment(parentFragment, R.id.search_layout);
-			id = R.id.select_album_layout;
+			id = parentFragment.getRootId();
 		}
 		
 		SubsonicFragment fragment = new SelectDirectoryFragment();

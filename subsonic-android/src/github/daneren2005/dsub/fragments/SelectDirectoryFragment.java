@@ -63,7 +63,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	int albumListSize;
 	
 	
-	SelectDirectoryFragment() {
+	public SelectDirectoryFragment() {
 		super();
 		rootId = getNewId();
 	}
@@ -287,13 +287,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public void setPrimaryFragment(boolean primary) {
 		super.setPrimaryFragment(primary);
-		if(rootView != null) {
-			if(primary) {
-				((ViewGroup)rootView).getChildAt(0).setVisibility(View.VISIBLE);
-			} else {
-				((ViewGroup)rootView).getChildAt(0).setVisibility(View.GONE);
-			}
-		}
 	}
 
 	@Override
