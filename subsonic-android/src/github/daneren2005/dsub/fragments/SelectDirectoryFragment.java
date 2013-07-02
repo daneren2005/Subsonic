@@ -77,9 +77,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.select_album, container, false);
 		rootView.setId(rootId);
-		if(!primaryFragment) {
-			((ViewGroup)rootView).getChildAt(0).setVisibility(View.GONE);
-		}
 
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
 		footer = LayoutInflater.from(context).inflate(R.layout.select_album_footer, entryList, false);
@@ -282,11 +279,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				Util.startActivityWithoutTransition(context, DownloadActivity.class);
 			}
 		}
-	}
-	
-	@Override
-	public void setPrimaryFragment(boolean primary) {
-		super.setPrimaryFragment(primary);
 	}
 
 	@Override

@@ -59,8 +59,13 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 
 		podcastListView = (ListView)rootView.findViewById(R.id.select_podcasts_list);
 		podcastListView.setOnItemClickListener(this);
+		registerForContextMenu(podcastListView);
 		emptyView = rootView.findViewById(R.id.select_podcasts_empty);
-		refresh();
+		if(!primaryFragment) {
+			invalidated = true;
+		} else {
+			refresh(false);
+		}
 
 		return rootView;
 	}
@@ -77,18 +82,6 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 		}
 
 		return false;
-	}
-	
-	@Override
-	public void setPrimaryFragment(boolean primary) {
-		super.setPrimaryFragment(primary);
-		if(rootView != null) {
-			if(primary) {
-				((ViewGroup)rootView).getChildAt(0).setVisibility(View.VISIBLE);
-			} else {
-				((ViewGroup)rootView).getChildAt(0).setVisibility(View.GONE);
-			}
-		}
 	}
 	
 	@Override
