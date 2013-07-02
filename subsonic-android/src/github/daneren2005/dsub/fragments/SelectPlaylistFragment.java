@@ -184,11 +184,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	}
 
 	private void deletePlaylist(final Playlist playlist) {
-		new AlertDialog.Builder(context)
-		.setIcon(android.R.drawable.ic_dialog_alert)
-		.setTitle(R.string.common_confirm)
-		.setMessage(context.getResources().getString(R.string.delete_playlist, playlist.getName()))
-		.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+		Util.confirmDialog(context, R.string.common_delete, playlist.getName(), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				new LoadingTask<Void>(context, false) {
@@ -219,10 +215,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 					}
 				}.execute();
 			}
-
-		})
-		.setNegativeButton(R.string.common_cancel, null)
-		.show();
+		});
 	}
 
 	private void displayPlaylistInfo(final Playlist playlist) {

@@ -22,9 +22,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -565,6 +563,19 @@ public final class Util {
         }
         toast.show();
     }
+	
+	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
+		Util.confirmDialog(context, context.getResources().getString(action), subject, onClick);
+	}
+	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick) {
+		new AlertDialog.Builder(context)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(R.string.common_confirm)
+			.setMessage(context.getResources().getString(R.string.common_confirm_message, action, subject))
+			.setPositiveButton(R.string.common_ok, onClick)
+			.setNegativeButton(R.string.common_cancel, null)
+			.show();
+	}
 
     /**
      * Converts a byte-count to a formatted string suitable for display to the user.

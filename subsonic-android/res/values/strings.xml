@@ -21,6 +21,7 @@
 	<string name="common.play_external">Play Video</string>
 	<string name="common.stream_external">Stream Video</string>
 	<string name="common.confirm">Confirm</string>
+	<string name="common.confirm_message">Do you want to %1$s %2$s</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -185,7 +186,6 @@
 	<string name="updated_playlist">Added %1$s songs to \"%2$s\"</string>
     <string name="updated_playlist_error">Failed to update \"%s\", please try later.</string>
 	<string name="removed_playlist">Removed %1$s songs from \"%2$s\"</string>
-	<string name="delete_playlist">Do you want to delete %1$s</string>
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>
