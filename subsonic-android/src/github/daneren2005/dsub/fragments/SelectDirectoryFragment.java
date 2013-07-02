@@ -71,6 +71,18 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		if(bundle != null) {
+			int tmp = bundle.getInt(Constants.FRAGMENT_ID, -1);
+			if(tmp > 0) {
+				rootId = tmp;
+			}
+		}
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(Constants.FRAGMENT_ID, rootId);
 	}
 
 	@Override
