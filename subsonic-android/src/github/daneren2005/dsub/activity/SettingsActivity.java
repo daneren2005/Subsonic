@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -259,25 +260,30 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverRemoveServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				// Reset values to null so when we ask for them again they are new
-				serverNamePreference.setText(null);
-				serverUrlPreference.setText(null);
-				serverUsernamePreference.setText(null);
-				serverPasswordPreference.setText(null);
-				
-				int activeServer = Util.getActiveServer(SettingsActivity.this);
-				for (int i = instance; i <= serverCount; i++) {
-					Util.removeInstanceName(SettingsActivity.this, i, activeServer);
-				}
-				
-				serverCount--;
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
-				editor.commit();
+				Util.confirmDialog(SettingsActivity.this, R.string.common_delete, screen.getTitle().toString(), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Reset values to null so when we ask for them again they are new
+						serverNamePreference.setText(null);
+						serverUrlPreference.setText(null);
+						serverUsernamePreference.setText(null);
+						serverPasswordPreference.setText(null);
 
-				serversCategory.removePreference(screen);
-				screen.getDialog().dismiss();
+						int activeServer = Util.getActiveServer(SettingsActivity.this);
+						for (int i = instance; i <= serverCount; i++) {
+							Util.removeInstanceName(SettingsActivity.this, i, activeServer);
+						}
 
+						serverCount--;
+						SharedPreferences.Editor editor = settings.edit();
+						editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
+						editor.commit();
+
+						serversCategory.removePreference(screen);
+						screen.getDialog().dismiss();
+					}
+				});
+				
 				return true;
 			}
 		});
