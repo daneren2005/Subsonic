@@ -74,6 +74,7 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"
-			android:text="@string/shuffle.genre"/>
+			android:text="@string/shuffle.genre"
+			style="?android:attr/spinnerStyle"/>
 	</LinearLayout>
 </LinearLayout>
