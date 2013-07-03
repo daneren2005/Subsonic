@@ -323,6 +323,31 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	@Override
+	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
+		musicService.refreshPodcasts(context, progressListener);
+	}
+	
+	@Override
+	public void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception{
+		musicService.createPodcastChannel(url, context, progressListener);
+	}
+	
+	@Override
+	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception{
+		musicService.deletePodcastChannel(id, context, progressListener);
+	}
+	
+	@Override
+	public void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+		musicService.downloadPodcastEpisode(id, context, progressListener);
+	}
+	
+	@Override
+	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+		musicService.deletePodcastEpisode(id, context, progressListener);
+	}
+	
+	@Override
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return musicService.processOfflineSyncs(context, progressListener);
 	}

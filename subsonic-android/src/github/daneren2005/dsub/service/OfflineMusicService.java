@@ -607,6 +607,31 @@ public class OfflineMusicService extends RESTMusicService {
 	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException("Getting Podcasts not available in offline mode");
 	}
+	
+	@Override
+	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Getting Podcasts not available in offline mode");
+	}
+	
+	@Override
+	public void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception{
+		throw new OfflineException("Getting Podcasts not available in offline mode");
+	}
+	
+	@Override
+	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception{
+		throw new OfflineException("Getting Podcasts not available in offline mode");
+	}
+	
+	@Override
+	public void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+		throw new OfflineException("Getting Podcasts not available in offline mode");
+	}
+	
+	@Override
+	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+		throw new OfflineException("Getting Podcasts not available in offline mode");
+	}
     
     @Override
     public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{

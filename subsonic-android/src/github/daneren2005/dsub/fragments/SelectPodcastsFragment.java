@@ -34,7 +34,9 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
+import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PodcastChannelAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +81,12 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(super.onOptionsItemSelected(item)) {
 			return true;
+		}
+		
+		switch (item.getItemId()) {
+			case R.id.menu_check:
+				refreshPodcasts();
+				break;
 		}
 
 		return false;
@@ -129,5 +137,26 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 		fragment.setArguments(args);
 
 		replaceFragment(fragment, R.id.select_podcasts_layout);
+	}
+	
+	public void refreshPodcasts() {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {				
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.refreshPodcasts(context, null);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, R.string.select_podcasts_refreshing);
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				Util.toast(context, getErrorMessage(error), false);
+			}
+		}.execute();
 	}
 }

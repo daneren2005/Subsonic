@@ -224,6 +224,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null && podcastId != null) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
+		if(podcastId != null) {
+			String status = ((PodcastEpisode)entry).getStatus();
+			if("completed".equals(status)) {
+				menu.removeItem(R.id.song_menu_server_download);
+			}
+		}
 	}
 
 	@Override
@@ -242,6 +248,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		switch (menuItem.getItemId()) {
 			case R.id.song_menu_remove_playlist:
 				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(info.position - 1));
+				break;
+			case R.id.song_menu_server_download:
+				downloadPodcastEpisode((PodcastEpisode)selectedItem);
+				break;
+			case R.id.song_menu_server_delete:
+				deletePodcastEpisode((PodcastEpisode)selectedItem);
 				break;
 		}
 		
@@ -279,7 +291,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				if("error".equals(status)) {
 					Util.toast(context, R.string.select_podcasts_error);
 					return;
-				} else if("skipped".equals(status)) {
+				} else if(!"completed".equals(status)) {
 					Util.toast(context, R.string.select_podcasts_skipped);
 					return;
 				}
@@ -632,6 +644,54 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				Util.toast(context, msg, false);
 			}
 		}.execute();
+	}
+	
+	public void downloadPodcastEpisode(final PodcastEpisode episode) {
+		new LoadingTask<Void>(context, true) {
+			@Override
+			protected Void doInBackground() throws Throwable {				
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.downloadPodcastEpisode(episode.getEpisodeId(), context, null);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, context.getResources().getString(R.string.select_podcasts_downloading, episode.getTitle()));
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				Util.toast(context, getErrorMessage(error), false);
+			}
+		}.execute();
+	}
+	
+	public void deletePodcastEpisode(final PodcastEpisode episode) {
+		Util.confirmDialog(context, R.string.common_delete, episode.getTitle(), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new LoadingTask<Void>(context, true) {
+					@Override
+					protected Void doInBackground() throws Throwable {				
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						musicService.deletePodcastEpisode(episode.getEpisodeId(), context, null);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						entries.remove(episode);
+						entryAdapter.notifyDataSetChanged();
+					}
+
+					@Override
+					protected void error(Throwable error) {
+						Util.toast(context, getErrorMessage(error), false);
+					}
+				}.execute();
+			}
+		});
 	}
 
 	private void checkLicenseAndTrialPeriod(Runnable onValid) {

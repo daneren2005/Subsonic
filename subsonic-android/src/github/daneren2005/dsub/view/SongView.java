@@ -103,6 +103,8 @@ public class SongView extends UpdateView implements Checkable {
 				artist.append(getContext().getString(R.string.song_details_error));
 			} else if("skipped".equals(status)) {
 				artist.append(getContext().getString(R.string.song_details_skipped));
+			} else if("downloading".equals(status)) {
+				artist.append(getContext().getString(R.string.song_details_downloading));
 			} else {
 				artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
 			}

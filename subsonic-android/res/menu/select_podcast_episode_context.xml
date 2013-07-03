@@ -25,4 +25,11 @@
 		android:id="@+id/song_menu_delete"
 		android:title="@string/common.delete"/>
         
+	<item 
+		android:id="@+id/song_menu_server_download"
+		android:title="@string/select_podcasts.server_download"/>
+
+	<item 
+		android:id="@+id/song_menu_server_delete"
+		android:title="@string/select_podcasts.server_delete"/>
 </menu>

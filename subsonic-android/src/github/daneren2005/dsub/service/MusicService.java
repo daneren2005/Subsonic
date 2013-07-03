@@ -124,5 +124,15 @@ public interface MusicService {
 	
 	MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception;
 	
+	void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception;
+	
+	void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception;
+	
+	void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception;
+	
+	void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception;
+	
+	void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception;
+	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 }

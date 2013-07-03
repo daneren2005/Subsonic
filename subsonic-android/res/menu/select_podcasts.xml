@@ -7,6 +7,11 @@
 		android:showAsAction="always|withText"/>
 
 	<item 
+		android:id="@+id/menu_check"
+		android:icon="@drawable/action_refresh"
+		android:title="@string/menu.check_podcasts"/>
+
+	<item 
 		android:id="@+id/menu_settings"
 		android:icon="@drawable/action_settings"
 		android:title="@string/menu.settings"/>

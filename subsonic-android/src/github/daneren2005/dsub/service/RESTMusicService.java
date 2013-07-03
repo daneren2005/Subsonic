@@ -907,6 +907,56 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
+	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "refreshPodcasts", null);
+		try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
+	public void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception{
+		Reader reader = getReader(context, progressListener, "createPodcastChannel", null, "url", url);
+		try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
+	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception{
+		Reader reader = getReader(context, progressListener, "deletePodcastChannel", null, "id", id);
+		try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
+	public void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+		Reader reader = getReader(context, progressListener, "downloadPodcastEpisode", null, "id", id);
+		try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
+	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+		Reader reader = getReader(context, progressListener, "deletePodcastEpisode", null, "id", id);
+		try {
+            new ErrorParser(context).parse(reader);
+        } finally {
+            Util.close(reader);
+        }
+	}
+	
+	@Override
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return processOfflineScrobbles(context, progressListener) + processOfflineStars(context, progressListener);
 	}
