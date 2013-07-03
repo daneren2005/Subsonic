@@ -307,6 +307,7 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		checkSettingsChanged(context);
 		List<PodcastChannel> result = refresh ? null : cachedPodcastChannels.get();
 
 		if (result == null) {
@@ -362,6 +363,7 @@ public class CachedMusicService implements MusicService {
             cachedLicenseValid.clear();
             cachedIndexes.clear();
             cachedPlaylists.clear();
+			cachedPodcastChannels.clear();
             restUrl = newUrl;
         }
     }
