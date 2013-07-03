@@ -888,6 +888,8 @@ public class RESTMusicService implements MusicService {
 	
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.9", "Podcasts not supported.");
+		
 		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("includeEpisodes"), Arrays.<Object>asList("false"));
         try {
             return new PodcastChannelParser(context).parse(reader, progressListener);

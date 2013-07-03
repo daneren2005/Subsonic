@@ -162,6 +162,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 
 	private void load(final boolean refresh) {
 		setTitle(R.string.playlist_label);
+		list.setVisibility(View.INVISIBLE);
 		
 		BackgroundTask<List<Playlist>> task = new TabBackgroundTask<List<Playlist>>(this) {
 			@Override
@@ -178,6 +179,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 			protected void done(List<Playlist> result) {
 				list.setAdapter(playlistAdapter = new PlaylistAdapter(context, result));
 				emptyTextView.setVisibility(result.isEmpty() ? View.VISIBLE : View.GONE);
+				list.setVisibility(View.VISIBLE);
 			}
 		};
 		task.execute();

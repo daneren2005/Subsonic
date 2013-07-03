@@ -94,6 +94,7 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 
 	private void load(final boolean refresh) {
 		setTitle(R.string.main_albums_genres);
+		genreListView.setVisibility(View.INVISIBLE);
 		
 		BackgroundTask<List<Genre>> task = new TabBackgroundTask<List<Genre>>(this) {
 			@Override
@@ -117,8 +118,8 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 
 				if (result != null) {
 					genreListView.setAdapter(new GenreAdapter(context, result));
+					genreListView.setVisibility(View.VISIBLE);
 				}
-
 			}
 		};
 		task.execute();
