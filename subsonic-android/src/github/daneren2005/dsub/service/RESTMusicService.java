@@ -908,6 +908,8 @@ public class RESTMusicService implements MusicService {
 	
 	@Override
 	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.9", "Refresh podcasts not supported.");
+		
 		Reader reader = getReader(context, progressListener, "refreshPodcasts", null);
 		try {
             new ErrorParser(context).parse(reader);
@@ -918,6 +920,8 @@ public class RESTMusicService implements MusicService {
 	
 	@Override
 	public void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception{
+		checkServerVersion(context, "1.9", "Creating podcasts not supported.");
+		
 		Reader reader = getReader(context, progressListener, "createPodcastChannel", null, "url", url);
 		try {
             new ErrorParser(context).parse(reader);
@@ -927,7 +931,9 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
-	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception{
+	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.9", "Deleting podcasts not supported.");
+		
 		Reader reader = getReader(context, progressListener, "deletePodcastChannel", null, "id", id);
 		try {
             new ErrorParser(context).parse(reader);
@@ -938,6 +944,8 @@ public class RESTMusicService implements MusicService {
 	
 	@Override
 	public void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+		checkServerVersion(context, "1.9", "Downloading podcasts not supported.");
+		
 		Reader reader = getReader(context, progressListener, "downloadPodcastEpisode", null, "id", id);
 		try {
             new ErrorParser(context).parse(reader);
@@ -948,6 +956,8 @@ public class RESTMusicService implements MusicService {
 	
 	@Override
 	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+		checkServerVersion(context, "1.9", "Deleting podcasts not supported.");
+		
 		Reader reader = getReader(context, progressListener, "deletePodcastEpisode", null, "id", id);
 		try {
             new ErrorParser(context).parse(reader);
