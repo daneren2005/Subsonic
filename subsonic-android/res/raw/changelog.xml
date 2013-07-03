@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.0.7" versioncode="56" releasedate="7/2/2013">
+		<change>Added offline starring to library view instead of just now playing</change>
+		<change>Remove * to show downloading, go off of whether arrow is blue or green for cached/perma cached</change>
+		<change>Go back to always showing bottom bar so downloading list is accessible </change>
+		<change>Fix offline mode matching first letters against ignore list (ie: the), instead of first word</change>
+		<change>Add prompt for removing a server</change>
+		<change>Fix some cases where list would incorrectly show up blank</change>
+	</release>
 	<release version="4.0.6" versioncode="55" releasedate="6/25/2013">
 		<change>Scrobble and star songs and sync changes back when going online (has trouble when tags don't match folders)</change>
 		<change>Fix cases where operations didn't work in online mode when originally added in offline mode and vice versa</change>
