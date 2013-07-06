@@ -342,7 +342,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         		Util.sleepQuietly(50L);
         	}
         	
-            play(currentPlayingIndex, autoPlayStart);
+            play(currentPlayingIndex, false);
             if (currentPlaying != null && currentPlaying.isCompleteFileAvailable()) {
                 doPlay(currentPlaying, currentPlayingPosition, autoPlayStart);
             }
