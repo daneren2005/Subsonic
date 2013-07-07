@@ -41,6 +41,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -797,17 +800,22 @@ public final class Util {
 		showDialog(context, icon, context.getResources().getString(titleId), message);
 	}
 	private static void showDialog(Context context, int icon, String title, String message) {
-        new AlertDialog.Builder(context)
-                .setIcon(icon)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+		SpannableString ss = new SpannableString(message);
+		Linkify.addLinks(ss, Linkify.ALL);
+		
+		AlertDialog dialog = new AlertDialog.Builder(context)
+			.setIcon(icon)
+			.setTitle(title)
+			.setMessage(ss)
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int i) {
+					dialog.dismiss();
+				}
+			})
+			.show();
+		
+		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler, MusicDirectory.Entry song) {
