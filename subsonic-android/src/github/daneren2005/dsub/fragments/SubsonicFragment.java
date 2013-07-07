@@ -871,11 +871,7 @@ public class SubsonicFragment extends SherlockFragment {
 			msg += "\nLength: " + Util.formatDuration(song.getDuration());
 		}
 
-		new AlertDialog.Builder(context)
-			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle(song.getTitle())
-			.setMessage(msg)
-			.show();
+		Util.info(context, song.getTitle(), msg);
 	}
 	
 	protected void playVideo(MusicDirectory.Entry entry) {

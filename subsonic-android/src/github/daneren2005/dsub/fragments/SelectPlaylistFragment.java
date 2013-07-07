@@ -226,11 +226,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 			"\nSong Count: " + playlist.getSongCount() +
 			((playlist.getPublic() == null) ? "" : ("\nPublic: " + playlist.getPublic())) +
 			"\nCreation Date: " + playlist.getCreated().replace('T', ' ');
-		new AlertDialog.Builder(context)
-			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setTitle(playlist.getName())
-			.setMessage(message)
-			.show();
+		Util.info(context, playlist.getName(), message);
 	}
 
 	private void updatePlaylistInfo(final Playlist playlist) {

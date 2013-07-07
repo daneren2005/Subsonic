@@ -786,24 +786,20 @@ public final class Util {
 	public static void info(Context context, int titleId, String message) {
 		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message);
 	}
+	public static void info(Context context, String title, String message) {
+		showDialog(context, android.R.drawable.ic_dialog_info, title, message);
+	}
 
-    private static void showDialog(Context context, int icon, int titleId, int messageId) {
-        new AlertDialog.Builder(context)
-                .setIcon(icon)
-                .setTitle(titleId)
-                .setMessage(messageId)
-                .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
+	private static void showDialog(Context context, int icon, int titleId, int messageId) {
+		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId));
+	}
 	private static void showDialog(Context context, int icon, int titleId, String message) {
+		showDialog(context, icon, context.getResources().getString(titleId), message);
+	}
+	private static void showDialog(Context context, int icon, String title, String message) {
         new AlertDialog.Builder(context)
                 .setIcon(icon)
-                .setTitle(titleId)
+                .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
                     @Override
