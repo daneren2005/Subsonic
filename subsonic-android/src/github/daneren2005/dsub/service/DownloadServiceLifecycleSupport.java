@@ -60,6 +60,7 @@ public class DownloadServiceLifecycleSupport {
     private boolean externalStorageAvailable= true;
     private ReentrantLock lock = new ReentrantLock();
     private final AtomicBoolean setup = new AtomicBoolean(false);
+	private long lastPressTime = 0;
 
     /**
      * This receiver manages the intent that could come from other applications.
@@ -245,9 +246,16 @@ public class DownloadServiceLifecycleSupport {
 		} else if(event.getAction() == KeyEvent.ACTION_UP) {
 			switch (event.getKeyCode()) {
 				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
+					downloadService.togglePlayPause();
+					break;
 				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
 				case KeyEvent.KEYCODE_HEADSETHOOK:
-					downloadService.togglePlayPause();
+					if(lastPressTime < (System.currentTimeMillis() - 500)) {
+						lastPressTime = System.currentTimeMillis();
+						downloadService.togglePlayPause();
+					} else {
+						downloadService.next();
+					}
 					break;
 				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
 				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
