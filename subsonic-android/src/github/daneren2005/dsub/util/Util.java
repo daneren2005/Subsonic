@@ -565,7 +565,7 @@ public final class Util {
     }
 	
 	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
-		Util.confirmDialog(context, context.getResources().getString(action), subject, onClick);
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick);
 	}
 	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick) {
 		new AlertDialog.Builder(context)
