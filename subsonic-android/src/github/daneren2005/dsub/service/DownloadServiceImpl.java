@@ -552,6 +552,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 	
 	synchronized void setNextPlaying() {
+		SharedPreferences prefs = Util.getPreferences(DownloadServiceImpl.this);
+		boolean gaplessPlayback = prefs.getBoolean(Constants.PREFERENCES_KEY_GAPLESS_PLAYBACK, true);
+		if(!gaplessPlayback) {
+			return;
+		}
+		
 		int index = getCurrentPlayingIndex();
 		if (index != -1) {
             switch (getRepeatMode()) {
@@ -1127,9 +1133,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					try {
 						setNextPlayerState(PREPARED);
 						
-						SharedPreferences prefs = Util.getPreferences(DownloadServiceImpl.this);
-						boolean gaplessPlayback = prefs.getBoolean(Constants.PREFERENCES_KEY_GAPLESS_PLAYBACK, true);
-						if(gaplessPlayback && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
+						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
 							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
