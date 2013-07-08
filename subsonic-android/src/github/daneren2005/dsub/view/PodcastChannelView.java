@@ -31,23 +31,24 @@ public class PodcastChannelView extends UpdateView {
 	private static final String TAG = PodcastChannelView.class.getSimpleName();
 
 	private TextView titleView;
-	private ImageButton starButton;
-	private ImageView moreButton;
 
 	public PodcastChannelView(Context context) {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.artist_name);
-		starButton = (ImageButton) findViewById(R.id.artist_star);
-		moreButton = (ImageView) findViewById(R.id.artist_more);
-		moreButton.setClickable(false);
+		ImageButton starButton = (ImageButton) findViewById(R.id.artist_star);
+		starButton.setVisibility(View.GONE);
+		starButton.setFocusable(false);
+		ImageView moreButton = (ImageView) findViewById(R.id.artist_more);
+		moreButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				v.showContextMenu();
+			}
+		});
 	}
 
 	public void setPodcastChannel(PodcastChannel podcastChannel) {
 		titleView.setText(podcastChannel.getName());
-
-		starButton.setVisibility(View.GONE);
-		starButton.setFocusable(false);
 	}
 }

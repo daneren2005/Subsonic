@@ -30,6 +30,7 @@ public class PodcastChannel implements Serializable {
 	private String url;
 	private String description;
 	private String status;
+	private String errorMessage;
 	
 	public PodcastChannel() {
 		
@@ -68,5 +69,12 @@ public class PodcastChannel implements Serializable {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 }

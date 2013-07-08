@@ -53,10 +53,7 @@ public class PodcastChannelParser extends AbstractParser {
 					channel.setName(get("title"));
 					channel.setDescription(get("description"));
 					channel.setStatus(get("status"));
-					
-					if("error".equals(channel.getStatus())) {
-						channel.setStatus(get("errorMessage"));
-					}
+					channel.setErrorMessage(get("errorMessage"));
 					channels.add(channel);
 				} else if ("error".equals(name)) {
 					handleError();
