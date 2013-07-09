@@ -555,6 +555,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		SharedPreferences prefs = Util.getPreferences(DownloadServiceImpl.this);
 		boolean gaplessPlayback = prefs.getBoolean(Constants.PREFERENCES_KEY_GAPLESS_PLAYBACK, true);
 		if(!gaplessPlayback) {
+			nextPlaying = null;
+			nextPlayerState = IDLE;
 			return;
 		}
 		
