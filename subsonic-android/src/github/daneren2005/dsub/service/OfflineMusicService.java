@@ -52,6 +52,7 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
 import java.io.*;
 import java.util.Comparator;
+import java.util.SortedSet;
 
 /**
  * @author Sindre Mehus
@@ -366,7 +367,8 @@ public class OfflineMusicService extends RESTMusicService {
         for (File folder : FileUtil.listFiles(root)) {
 			if(folder.isDirectory()) {
 				String server = folder.getName();
-				for(File file: FileUtil.listFiles(folder)) {
+				SortedSet<File> fileList = FileUtil.listFiles(folder);
+				for(File file: fileList) {
 					if(FileUtil.isPlaylistFile(file)) {
 						String id = file.getName();
 						String filename = server + ": " + FileUtil.getBaseName(id);
@@ -375,7 +377,7 @@ public class OfflineMusicService extends RESTMusicService {
 					}
 				}
 				
-				if(!server.equals(lastServer)) {
+				if(!server.equals(lastServer) && fileList.size() > 0) {
 					if(lastServer != null) {
 						removeServer = false;
 					}
