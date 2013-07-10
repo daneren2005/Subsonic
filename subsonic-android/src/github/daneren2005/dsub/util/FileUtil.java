@@ -37,6 +37,7 @@ import android.os.Environment;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.PodcastChannel;
 
 /**
  * @author Sindre Mehus
@@ -150,6 +151,11 @@ public class FileUtil {
         }
         return dir;
     }
+	
+	public static File getPodcastDirectory(Context context, PodcastChannel channel) {
+		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel.getName()));
+		return dir;
+	}
 
     public static void createDirectoryForParent(File file) {
         File dir = file.getParentFile();

@@ -26,21 +26,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.util.FileUtil;
+import java.io.File;
 
 public class PodcastChannelView extends UpdateView {
 	private static final String TAG = PodcastChannelView.class.getSimpleName();
 
+	private Context context;
+	private PodcastChannel channel;
+	
 	private TextView titleView;
+	private ImageView moreButton;
 
 	public PodcastChannelView(Context context) {
 		super(context);
+		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.artist_name);
 		ImageButton starButton = (ImageButton) findViewById(R.id.artist_star);
 		starButton.setVisibility(View.GONE);
 		starButton.setFocusable(false);
-		ImageView moreButton = (ImageView) findViewById(R.id.artist_more);
+		moreButton = (ImageView) findViewById(R.id.artist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				v.showContextMenu();
@@ -49,6 +56,17 @@ public class PodcastChannelView extends UpdateView {
 	}
 
 	public void setPodcastChannel(PodcastChannel podcastChannel) {
+		channel = podcastChannel;
 		titleView.setText(podcastChannel.getName());
 	}
+	
+	@Override
+	protected void update() {
+		File file = FileUtil.getPodcastDirectory(context, channel);
+		if(file.exists()) {
+			moreButton.setImageResource(R.drawable.list_item_more_shaded);
+		} else {
+			moreButton.setImageResource(R.drawable.list_item_more);
+		}
+    }
 }
