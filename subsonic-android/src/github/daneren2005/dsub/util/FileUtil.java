@@ -152,8 +152,21 @@ public class FileUtil {
         return dir;
     }
 	
+	public static File getPodcastFile(Context context, String server) {
+		File dir = getPodcastDirectory(context);
+		return new File(dir.getPath() + "/" +  fileSystemSafe(server));
+	}
+	public static File getPodcastDirectory(Context context) {
+		File dir = new File(getSubsonicDirectory(), "podcasts");
+		ensureDirectoryExistsAndIsReadWritable(dir);
+		return dir;
+	}
 	public static File getPodcastDirectory(Context context, PodcastChannel channel) {
 		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel.getName()));
+		return dir;
+	}
+	public static File getPodcastDirectory(Context context, String channel) {
+		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel));
 		return dir;
 	}
 

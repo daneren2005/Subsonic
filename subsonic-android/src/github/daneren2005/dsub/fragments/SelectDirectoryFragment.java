@@ -221,10 +221,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
 		onCreateContextMenu(menu, view, menuInfo, entry);
-		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null && podcastId != null) {
+		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null && (podcastId != null  || Util.isOffline(context) && podcastId == null)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
-		if(podcastId != null) {
+		if(podcastId != null && !Util.isOffline(context)) {
 			String status = ((PodcastEpisode)entry).getStatus();
 			if("completed".equals(status)) {
 				menu.removeItem(R.id.song_menu_server_download);

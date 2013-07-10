@@ -892,7 +892,19 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("includeEpisodes"), Arrays.<Object>asList("false"));
         try {
-            return new PodcastChannelParser(context).parse(reader, progressListener);
+            List<PodcastChannel> channels = new PodcastChannelParser(context).parse(reader, progressListener);
+			
+			String content = "";
+			for(PodcastChannel channel: channels) {
+				content += channel.getName() + "\n";
+			}
+			
+			File file = FileUtil.getPodcastFile(context, Util.getServerName(context));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			bw.write(content);
+			bw.close();
+			
+			return channels;
         } finally {
             Util.close(reader);
         }

@@ -602,12 +602,31 @@ public class OfflineMusicService extends RESTMusicService {
 	
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Getting Podcasts not available in offline mode");
+		List<PodcastChannel> channels = new ArrayList<PodcastChannel>();
+		
+		File dir = FileUtil.getPodcastDirectory(context);
+		String line;
+		for(File file: dir.listFiles()) {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			while ((line = br.readLine()) != null && !"".equals(line)) {
+				PodcastChannel channel = new PodcastChannel();
+				channel.setId(line);
+				channel.setName(line);
+				channel.setStatus("completed");
+				
+				if(FileUtil.getPodcastDirectory(context, channel).exists()) { 
+					channels.add(channel);
+				}
+			}
+			br.close();
+		}
+		
+		return channels;
 	}
 	
 	@Override
 	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Getting Podcasts not available in offline mode");
+		return getMusicDirectory(FileUtil.getPodcastDirectory(context, id).getPath(), null, false, context, progressListener);
 	}
 	
 	@Override
