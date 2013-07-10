@@ -92,7 +92,7 @@
             </intent-filter>
         </receiver>
 		
-		<receiver android:name="net.sourceforge.subsonic.androidapp.receiver.A2dpIntentReceiver">
+		<receiver android:name="github.daneren2005.dsub.receiver.A2dpIntentReceiver">
 			<intent-filter>
 				<action android:name="android.music.playstatusrequest"/>
 			</intent-filter>
