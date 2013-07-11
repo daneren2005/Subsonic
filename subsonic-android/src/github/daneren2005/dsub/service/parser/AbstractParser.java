@@ -34,7 +34,7 @@ import github.daneren2005.dsub.util.Util;
  */
 public abstract class AbstractParser {
 
-    private final Context context;
+    protected final Context context;
     private XmlPullParser parser;
     private boolean rootElementFound;
 

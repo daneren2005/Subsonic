@@ -22,10 +22,9 @@ import android.content.Context;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 
 /**
@@ -76,6 +75,9 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setDuration(getInteger("duration"));
 					episode.setBitRate(getInteger("bitRate"));
 					episode.setPath(get("path"));
+					if(episode.getPath() == null) {
+						episode.setPath(FileUtil.getPodcastPath(context, episode));
+					}
 					
 					if("error".equals(episode.getStatus()) || "skipped".equals(episode.getStatus())) {
 						episode.setId(String.valueOf(bogusId));

@@ -38,6 +38,7 @@ import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 
 /**
  * @author Sindre Mehus
@@ -152,6 +153,9 @@ public class FileUtil {
         return dir;
     }
 	
+	public static String getPodcastPath(Context context, PodcastEpisode episode) {
+		return getMusicDirectory(context).getPath() + "/" + fileSystemSafe(episode.getArtist()) + "/" + fileSystemSafe(episode.getTitle());
+	}
 	public static File getPodcastFile(Context context, String server) {
 		File dir = getPodcastDirectory(context);
 		return new File(dir.getPath() + "/" +  fileSystemSafe(server));
