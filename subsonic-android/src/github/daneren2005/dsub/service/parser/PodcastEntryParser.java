@@ -74,6 +74,7 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setSuffix(get("suffix"));
 					episode.setDuration(getInteger("duration"));
 					episode.setBitRate(getInteger("bitRate"));
+					episode.setVideo(getBoolean("isVideo"));
 					episode.setPath(get("path"));
 					if(episode.getPath() == null) {
 						episode.setPath(FileUtil.getPodcastPath(context, episode));

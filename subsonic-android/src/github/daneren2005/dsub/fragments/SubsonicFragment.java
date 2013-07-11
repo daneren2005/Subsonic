@@ -145,7 +145,7 @@ public class SubsonicFragment extends SherlockFragment {
 		
 		if(selected instanceof MusicDirectory.Entry) {
 			MusicDirectory.Entry entry = (MusicDirectory.Entry) selected;
-			if(entry instanceof PodcastEpisode) {
+			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
 				if(Util.isOffline(context)) {
 					inflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
 				}
@@ -836,12 +836,10 @@ public class SubsonicFragment extends SherlockFragment {
 		}
 
 		String msg = "";
-		if(!song.isVideo()) {
-			if(song instanceof PodcastEpisode) {
-				msg += "Podcast: " + song.getArtist() + "\nStatus: " + ((PodcastEpisode)song).getStatus();
-			} else {
-				msg += "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
-			}
+		if(song instanceof PodcastEpisode) {
+			msg += "Podcast: " + song.getArtist() + "\nStatus: " + ((PodcastEpisode)song).getStatus();
+		} else if(!song.isVideo()) {
+			msg += "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
 		}
 		if(song.getTrack() != null && song.getTrack() != 0) {
 			msg += "\nTrack: " + song.getTrack();
