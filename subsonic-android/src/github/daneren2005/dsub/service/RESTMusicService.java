@@ -730,7 +730,9 @@ public class RESTMusicService implements MusicService {
 		
 		StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "hls"));
         builder.append("&id=").append(id);
-		builder.append("&bitRate=").append(bitRate);
+		if(bitRate > 0) {
+			builder.append("&bitRate=").append(bitRate);
+		}
 
         String url = rewriteUrlWithRedirect(context, builder.toString());
         Log.i(TAG, "Using hls URL: " + url);
