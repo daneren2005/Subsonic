@@ -723,6 +723,19 @@ public class RESTMusicService implements MusicService {
         Log.i(TAG, "Using video URL: " + url);
         return url;
 	}
+	
+	@Override
+	public String getHlsUrl(String id, int bitRate, Context context) throws Exception {
+		checkServerVersion(context, "1.9", "HLS video streaming not supported.");
+		
+		StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "hls"));
+        builder.append("&id=").append(id);
+		builder.append("&bitRate=").append(bitRate);
+
+        String url = rewriteUrlWithRedirect(context, builder.toString());
+        Log.i(TAG, "Using hls URL: " + url);
+        return url;
+	}
 
     @Override
     public JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {

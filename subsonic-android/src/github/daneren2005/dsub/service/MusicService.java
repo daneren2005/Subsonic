@@ -95,6 +95,8 @@ public interface MusicService {
     String getVideoUrl(int maxBitrate, Context context, String id);
 	
 	String getVideoStreamUrl(String format, int Bitrate, Context context, String id) throws Exception;
+	
+	String getHlsUrl(String id, int bitRate, Context context) throws Exception;
 
     JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception;
 

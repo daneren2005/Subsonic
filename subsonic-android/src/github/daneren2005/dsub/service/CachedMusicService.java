@@ -236,6 +236,11 @@ public class CachedMusicService implements MusicService {
     public String getVideoStreamUrl(String format, int maxBitrate, Context context, String id) throws Exception {
         return musicService.getVideoStreamUrl(format, maxBitrate, context, id);
     }
+	
+	@Override
+	public String getHlsUrl(String id, int bitRate, Context context) throws Exception {
+		return musicService.getHlsUrl(id, bitRate, context);
+	}
 
     @Override
     public JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {

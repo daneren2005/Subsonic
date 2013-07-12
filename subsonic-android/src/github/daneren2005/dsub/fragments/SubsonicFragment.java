@@ -908,8 +908,12 @@ public class SubsonicFragment extends SherlockFragment {
 		String videoPlayerType = Util.getVideoPlayerType(context);
 		if("flash".equals(videoPlayerType)) {
 			playWebView(entry);
+		} else if("hls".equals(videoPlayerType)) {
+			streamExternalPlayer(entry, "hls");
+		} else if("raw".equals(videoPlayerType)) {
+			streamExternalPlayer(entry, "raw");
 		} else {
-			streamExternalPlayer(entry, "raw".equals(videoPlayerType) ? "raw" : entry.getTranscodedSuffix());
+			streamExternalPlayer(entry, entry.getTranscodedSuffix());
 		}
 	}
 	protected void streamExternalPlayer(MusicDirectory.Entry entry, String format) {
@@ -917,7 +921,11 @@ public class SubsonicFragment extends SherlockFragment {
 			int maxBitrate = Util.getMaxVideoBitrate(context);
 
 			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoStreamUrl(format, maxBitrate, context, entry.getId())), "video/*");
+			if("hls".equals(format)) {
+				intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getHlsUrl(entry.getId(), maxBitrate, context)), "video/*");
+			} else {
+				intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoStreamUrl(format, maxBitrate, context, entry.getId())), "video/*");
+			}
 			intent.putExtra("title", entry.getTitle());
 
 			List<ResolveInfo> intents = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
