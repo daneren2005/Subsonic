@@ -18,18 +18,15 @@
 			android:textColor="?android:textColorPrimary"
 			android:paddingBottom="4dip"/>
 
-	<github.daneren2005.dsub.util.HorizontalSlider
-			xmlns:android="http://schemas.android.com/apk/res/android"
-			style="?android:attr/progressBarStyleHorizontal"
-			android:id="@+id/download_progress_bar"
-			android:indeterminate="false"
-			android:background="@android:color/transparent"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingLeft="55dip"
-			android:paddingRight="55dip"
-			android:paddingTop="3dip"
-			android:paddingBottom="7dip"/>
+    <SeekBar
+            android:id="@+id/download_progress_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:paddingLeft="55dip"
+            android:paddingRight="55dip"
+            android:paddingTop="3dip"
+            android:paddingBottom="7dip" />
 			
 	<TextView
             android:id="@+id/download_duration"

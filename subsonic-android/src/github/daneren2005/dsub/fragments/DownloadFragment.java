@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import com.actionbarsherlock.view.Menu;
@@ -78,7 +79,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private TextView positionTextView;
 	private TextView durationTextView;
 	private TextView statusTextView;
-	private HorizontalSlider progressBar;
+	private SeekBar progressBar;
 	private AutoRepeatButton previousButton;
 	private AutoRepeatButton nextButton;
 	private View pauseButton;
@@ -134,7 +135,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		positionTextView = (TextView)rootView.findViewById(R.id.download_position);
 		durationTextView = (TextView)rootView.findViewById(R.id.download_duration);
 		statusTextView = (TextView)rootView.findViewById(R.id.download_status);
-		progressBar = (HorizontalSlider)rootView.findViewById(R.id.download_progress_bar);
+		progressBar = (SeekBar)rootView.findViewById(R.id.download_progress_bar);
 		playlistView = (DragSortListView)rootView.findViewById(R.id.download_list);
 		previousButton = (AutoRepeatButton)rootView.findViewById(R.id.download_previous);
 		nextButton = (AutoRepeatButton)rootView.findViewById(R.id.download_next);
@@ -365,26 +366,32 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			}
 		});
 
-		progressBar.setOnSliderChangeListener(new HorizontalSlider.OnSliderChangeListener() {
-			@Override
-			public void onSliderChanged(View view, final int position, boolean inProgress) {
-				Util.toast(context, Util.formatDuration(position / 1000), true);
-				if (!inProgress) {
-					new SilentBackgroundTask<Void>(context) {
-						@Override
-						protected Void doInBackground() throws Throwable {
-							 getDownloadService().seekTo(position);
-							return null;
-						}
+		progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onStopTrackingTouch(final SeekBar seekBar) {
+                new SilentBackgroundTask<Void>(context) {
+                    @Override
+                    protected Void doInBackground() throws Throwable {
+                        getDownloadService().seekTo(progressBar.getProgress());
+                        return null;
+                    }
 
-						@Override
-						protected void done(Void result) {
-							onProgressChanged();
-						}
-					}.execute();
-				}
-				setControlsVisible(true);
-			}
+                    @Override
+                    protected void done(Void result) {
+                        DownloadFragment.this.onProgressChanged();
+                    }
+                }.execute();
+            }
+
+            @Override
+            public void onStartTrackingTouch(final SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
+
+            }
 		});
 		playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -970,12 +977,12 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					durationTextView.setText(Util.formatDuration(millisTotal / 1000));
 					progressBar.setMax(millisTotal == 0 ? 100 : millisTotal); // Work-around for apparent bug.
 					progressBar.setProgress(millisPlayed);
-					progressBar.setSlidingEnabled(currentPlaying.isWorkDone() || isJukeboxEnabled);
+					progressBar.setEnabled(currentPlaying.isWorkDone() || isJukeboxEnabled);
 				} else {
 					positionTextView.setText("0:00");
 					durationTextView.setText("-:--");
 					progressBar.setProgress(0);
-					progressBar.setSlidingEnabled(false);
+					progressBar.setEnabled(false);
 				}
 
 				switch (playerState) {
