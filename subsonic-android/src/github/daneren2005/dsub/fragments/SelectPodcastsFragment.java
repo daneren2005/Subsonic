@@ -176,7 +176,7 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 		
 		if("error".equals(channel.getStatus())) {
 			Util.toast(context, context.getResources().getString(R.string.select_podcasts_invalid_podcast_channel, channel.getErrorMessage() == null ? "error" : channel.getErrorMessage()));
-		} else {
+		} else if(!"downloading".equals(channel.getStatus())) {
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, channel.getId());
