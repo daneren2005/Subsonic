@@ -51,7 +51,7 @@
 							android:text="RC"
 							android:textStyle="bold"
 							android:textSize="22sp"
-							android:background="@android:color/transparent"
+							android:background="@drawable/menubar_button"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_gravity="bottom"
@@ -64,12 +64,13 @@
 							android:text="EQ"
 							android:textStyle="bold"
 							android:textSize="22sp"
-							android:background="@android:color/transparent"
+							android:background="@drawable/menubar_button"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_gravity="bottom"
 							android:paddingTop="4dip"
-							android:paddingLeft="14dip"
+							android:paddingLeft="7dip"
+							android:paddingRight="7dip"
 							android:paddingBottom="4dip"/>
 
 						<Button
@@ -77,12 +78,13 @@
 							android:text="VIS"
 							android:textStyle="bold"
 							android:textSize="22sp"
-							android:background="@android:color/transparent"
+							android:background="@drawable/menubar_button"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_gravity="bottom"
 							android:paddingTop="4dip"
-							android:paddingLeft="14dip"
+							android:paddingLeft="7dip"
+							android:paddingRight="7dip"
 							android:paddingBottom="4dip"/>
 
 						<ImageButton
@@ -90,11 +92,12 @@
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:layout_below="@+id/download_jukebox"
-							android:background="@android:color/transparent"
+							android:background="@drawable/menubar_button"
 							android:src="@android:drawable/star_big_off"
-							android:paddingTop="4dip"
-							android:paddingLeft="14dip"
-							android:paddingBottom="4dip"/>
+							android:paddingTop="8dip"
+							android:paddingLeft="10dip"
+							android:paddingRight="10dip"
+							android:paddingBottom="8dip"/>
 					</LinearLayout>
 
 					<LinearLayout
