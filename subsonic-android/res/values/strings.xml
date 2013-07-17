@@ -136,6 +136,7 @@
 	<string name="select_podcasts.empty">No podcasts found</string>
 	<string name="select_podcasts.error">This podcast had an error while downloading on the server.  The server must download it first.</string>
 	<string name="select_podcasts.skipped">This podcast has not been downloaded on the server.  The server must download it first.</string>
+    <string name="select_podcasts.initializing">This podcast channel is being initialized on the server.  Please reload after a moment.</string>
 	<string name="select_podcasts.server_download">Download on server</string>
 	<string name="select_podcasts.server_delete">Delete from server</string>
 	<string name="select_podcasts.downloading">Now downloading %s on the server</string>
