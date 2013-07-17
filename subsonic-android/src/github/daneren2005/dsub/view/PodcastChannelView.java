@@ -57,7 +57,11 @@ public class PodcastChannelView extends UpdateView {
 
 	public void setPodcastChannel(PodcastChannel podcastChannel) {
 		channel = podcastChannel;
-		titleView.setText(podcastChannel.getName());
+		if(podcastChannel.getName() != null) {
+			titleView.setText(podcastChannel.getName());
+		} else {
+			titleView.setText(podcastChannel.getUrl());
+		}
 	}
 	
 	@Override
