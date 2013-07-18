@@ -67,6 +67,9 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setArtist(episodes.getName());
 					episode.setAlbum(get("description"));
 					episode.setDate(get("publishDate"));
+					if(episode.getDate() == null) {
+						episode.setDate(get("created"));
+					}
 					episode.setStatus(get("status"));
 					episode.setCoverArt(get("coverArt"));
 					episode.setSize(getLong("size"));
