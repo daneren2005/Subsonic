@@ -70,6 +70,9 @@ public class PodcastEntryParser extends AbstractParser {
 					if(episode.getDate() == null) {
 						episode.setDate(get("created"));
 					}
+					if(episode.getDate() != null && episode.getDate().indexOf("T") != -1) {
+						episode.setDate(episode.getDate().replace("T", " "));
+					}
 					episode.setStatus(get("status"));
 					episode.setCoverArt(get("coverArt"));
 					episode.setSize(getLong("size"));
@@ -81,6 +84,8 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setPath(get("path"));
 					if(episode.getPath() == null) {
 						episode.setPath(FileUtil.getPodcastPath(context, episode));
+					} else if(episode.getPath().indexOf("Podcasts/") == 0) {
+						episode.setPath(episode.getPath().substring("Podcasts/".length()));
 					}
 					
 					if("error".equals(episode.getStatus()) || "skipped".equals(episode.getStatus())) {
