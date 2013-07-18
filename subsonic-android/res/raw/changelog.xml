@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.1.0" versioncode="57" releasedate="7/17/2013">
+		<change>Added Podcast Tab (4.5+)</change>
+		<change>Add/Delete Podcast Channels.  Manage server status of Podcast Episodes (4.8+)</change>
+		<change>Double press pause on headset to skip to next song</change>
+		<change>Added HLS as a option under external video players (4.8+).  Skipping doesn't seem to work for me.</change>
+		<change>Fix pressing play from widget from sometimes starting song over</change>
+		<change>Various minor UI tweaks to make things look nicer</change>
+		<change>Gapless Playback setting: if off now acts more like base Subsonic app to hopefully fix some issues</change>
+	</release>
 	<release version="4.0.7" versioncode="56" releasedate="7/2/2013">
 		<change>Added offline starring to library view instead of just now playing</change>
 		<change>Remove * to show downloading, go off of whether arrow is blue or green for cached/perma cached</change>
