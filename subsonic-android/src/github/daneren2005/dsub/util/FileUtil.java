@@ -154,7 +154,7 @@ public class FileUtil {
     }
 	
 	public static String getPodcastPath(Context context, PodcastEpisode episode) {
-		return getMusicDirectory(context).getPath() + "/" + fileSystemSafe(episode.getArtist()) + "/" + fileSystemSafe(episode.getTitle());
+		return fileSystemSafe(episode.getArtist()) + "/" + fileSystemSafe(episode.getTitle());
 	}
 	public static File getPodcastFile(Context context, String server) {
 		File dir = getPodcastDirectory(context);
