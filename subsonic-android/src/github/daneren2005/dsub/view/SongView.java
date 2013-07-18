@@ -90,8 +90,10 @@ public class SongView extends UpdateView implements Checkable {
 		if(!song.isVideo()) {
 			if(song instanceof PodcastEpisode) {
 				String date = ((PodcastEpisode)song).getDate();
-				int index = date.indexOf(" ");
-				artist.append(date.substring(0, index != -1 ? index : date.length()));
+				if(date != null) {
+					int index = date.indexOf(" ");
+					artist.append(date.substring(0, index != -1 ? index : date.length()));
+				}
 			}
 			else if(song.getArtist() != null) {
 				artist.append(song.getArtist());
