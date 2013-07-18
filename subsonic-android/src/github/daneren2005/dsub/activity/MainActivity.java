@@ -157,7 +157,7 @@ public class MainActivity extends SubsonicActivity {
 		addTab(R.string.button_bar_home, MainFragment.class, null);
 		addTab(R.string.button_bar_browse, SelectArtistFragment.class, null);
 		addTab(R.string.button_bar_playlists, SelectPlaylistFragment.class, null);
-		// addTab(R.string.button_bar_podcasts, SelectPodcastsFragment.class, null);
+		addTab(R.string.button_bar_podcasts, SelectPodcastsFragment.class, null);
 		SharedPreferences prefs = Util.getPreferences(this);
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true)) {
 			addTab(R.string.button_bar_chat, ChatFragment.class, null);
