@@ -34,7 +34,6 @@ import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.LRUCache;
 import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.Util;
@@ -62,6 +61,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.util.Log;
+import android.support.v4.util.LruCache;
 import java.net.URLEncoder;
 
 /**
@@ -95,7 +95,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
     private final ShufflePlayBuffer shufflePlayBuffer = new ShufflePlayBuffer(this);
 
-    private final LRUCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LRUCache<MusicDirectory.Entry, DownloadFile>(100);
+    private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<MusicDirectory.Entry, DownloadFile>(100);
     private final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
     private final Scrobbler scrobbler = new Scrobbler();
     private final JukeboxService jukeboxService = new JukeboxService(this);

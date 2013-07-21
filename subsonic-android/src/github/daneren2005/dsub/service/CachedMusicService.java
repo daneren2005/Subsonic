@@ -25,6 +25,7 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.util.LruCache;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
@@ -34,14 +35,11 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastChannel;
-import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.CancellableTask;
-import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.LRUCache;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TimeLimitedCache;
 import github.daneren2005.dsub.util.Util;
@@ -55,7 +53,7 @@ public class CachedMusicService implements MusicService {
     private static final int TTL_MUSIC_DIR = 5 * 60; // Five minutes
 
     private final MusicService musicService;
-    private final LRUCache<String, TimeLimitedCache<MusicDirectory>> cachedMusicDirectories;
+    private final LruCache<String, TimeLimitedCache<MusicDirectory>> cachedMusicDirectories;
     private final TimeLimitedCache<Boolean> cachedLicenseValid = new TimeLimitedCache<Boolean>(120, TimeUnit.SECONDS);
     private final TimeLimitedCache<Indexes> cachedIndexes = new TimeLimitedCache<Indexes>(60 * 60, TimeUnit.SECONDS);
     private final TimeLimitedCache<List<Playlist>> cachedPlaylists = new TimeLimitedCache<List<Playlist>>(3600, TimeUnit.SECONDS);
@@ -66,7 +64,7 @@ public class CachedMusicService implements MusicService {
 
     public CachedMusicService(MusicService musicService) {
         this.musicService = musicService;
-        cachedMusicDirectories = new LRUCache<String, TimeLimitedCache<MusicDirectory>>(MUSIC_DIR_CACHE_SIZE);
+        cachedMusicDirectories = new LruCache<String, TimeLimitedCache<MusicDirectory>>(MUSIC_DIR_CACHE_SIZE);
     }
 
     @Override
@@ -106,7 +104,7 @@ public class CachedMusicService implements MusicService {
         if (refresh) {
             cachedIndexes.clear();
             cachedMusicFolders.clear();
-            cachedMusicDirectories.clear();
+            cachedMusicDirectories.evictAll();
         }
         Indexes result = cachedIndexes.get();
         if (result == null) {
@@ -364,7 +362,7 @@ public class CachedMusicService implements MusicService {
         String newUrl = Util.getRestUrl(context, null);
         if (!Util.equals(newUrl, restUrl)) {
             cachedMusicFolders.clear();
-            cachedMusicDirectories.clear();
+            cachedMusicDirectories.evictAll();
             cachedLicenseValid.clear();
             cachedIndexes.clear();
             cachedPlaylists.clear();
