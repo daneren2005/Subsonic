@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -43,6 +42,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ErrorDialog;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
@@ -111,6 +111,34 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return false;
             }
         });
+		findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				Util.confirmDialog(SettingsActivity.this, R.string.common_delete, "cache", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						new ModalBackgroundTask<Void>(SettingsActivity.this) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								FileUtil.deleteMusicDirectory(SettingsActivity.this);
+								return null;
+							}
+
+							@Override
+							protected void done(Void result) {
+								Util.toast(SettingsActivity.this, R.string.settings_cache_clear_complete);
+							}
+
+							@Override
+							protected void error(Throwable error) {
+								Util.toast(SettingsActivity.this, getErrorMessage(error), false);
+							}
+						}.execute();
+					}
+				});
+				return false;
+			}
+		});
 		
 		addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override

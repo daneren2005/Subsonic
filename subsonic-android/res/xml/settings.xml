@@ -144,6 +144,10 @@
                 android:entryValues="@array/preloadCountValues"
                 android:entries="@array/preloadCountNames"/>
 
+		<Preference
+				android:key="clearCache"
+				android:title="@string/settings.cache_clear"
+				android:persistent="false"/>
     </PreferenceCategory>
 
 	<PreferenceCategory

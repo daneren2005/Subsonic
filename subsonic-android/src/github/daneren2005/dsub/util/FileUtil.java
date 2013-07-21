@@ -204,6 +204,10 @@ public class FileUtil {
         File dir = new File(path);
         return ensureDirectoryExistsAndIsReadWritable(dir) ? dir : getDefaultMusicDirectory();
     }
+	public static boolean deleteMusicDirectory(Context context) {
+		File musicDirectory = FileUtil.getMusicDirectory(context);
+		return Util.recursiveDelete(musicDirectory);
+	}
 
     public static boolean ensureDirectoryExistsAndIsReadWritable(File dir) {
         if (dir == null) {
