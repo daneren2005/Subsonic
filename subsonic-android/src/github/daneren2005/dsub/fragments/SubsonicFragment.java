@@ -61,7 +61,6 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.ModalBackgroundTask;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
@@ -570,7 +569,7 @@ public class SubsonicFragment extends SherlockFragment {
 		downloadRecursively(id, name, false, save, append, autoplay, shuffle, background);
 	}
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
-		ModalBackgroundTask<List<MusicDirectory.Entry>> task = new ModalBackgroundTask<List<MusicDirectory.Entry>>(context, false) {
+		LoadingTask<List<MusicDirectory.Entry>> task = new LoadingTask<List<MusicDirectory.Entry>>(context) {
 			private static final int MAX_SONGS = 500;
 
 			@Override

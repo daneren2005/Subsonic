@@ -1,7 +1,9 @@
 package github.daneren2005.dsub.util;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
 /**
@@ -10,11 +12,18 @@ import github.daneren2005.dsub.activity.SubsonicActivity;
  */
 public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
-    private final SubsonicActivity tabActivity;
+    private final Activity tabActivity;
+	private ProgressDialog loading;
+	private Thread thread;
 	private final boolean cancellable;
 	private boolean cancelled = false;
 
-    public LoadingTask(SubsonicActivity activity, final boolean cancellable) {
+	public LoadingTask(Activity activity) {
+		super(activity);
+		tabActivity = activity;
+		this.cancellable = true;
+	}
+    public LoadingTask(Activity activity, final boolean cancellable) {
         super(activity);
         tabActivity = activity;
 		this.cancellable = cancellable;
@@ -22,14 +31,14 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
     @Override
     public void execute() {
-        final ProgressDialog loading = ProgressDialog.show(tabActivity, "", "Loading. Please Wait...", true, cancellable, new DialogInterface.OnCancelListener() {
+        loading = ProgressDialog.show(tabActivity, "", "Loading. Please Wait...", true, cancellable, new DialogInterface.OnCancelListener() {
 			public void onCancel(DialogInterface dialog) {
-				cancelled = true;
+				cancel();
 			}
 			
 		});
 
-        new Thread() {
+		thread = new Thread() {
             @Override
             public void run() {
                 try {
@@ -59,20 +68,30 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
                     });
                 }
             }
-        }.start();
+        };
+		thread.start();
     }
 
+	protected void cancel() {
+		cancelled = true;
+		if (thread != null) {
+			thread.interrupt();
+		}
+	}
+
     private boolean isCancelled() {
-        return tabActivity.isDestroyed() || cancelled;
+        return (tabActivity instanceof SubsonicActivity && ((SubsonicActivity)tabActivity).isDestroyed()) || cancelled;
     }
 	
 	@Override
     public void updateProgress(final String message) {
-        getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                
-            }
-        });
+		if(!cancelled) {
+			getHandler().post(new Runnable() {
+				@Override
+				public void run() {
+						loading.setMessage(message);
+				}
+			});
+		}
     }
 }

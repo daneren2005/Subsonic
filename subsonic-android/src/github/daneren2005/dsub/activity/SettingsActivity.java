@@ -39,9 +39,9 @@ import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.view.ErrorDialog;
 import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.ModalBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
@@ -116,7 +116,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 				Util.confirmDialog(SettingsActivity.this, R.string.common_delete, "cache", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						new ModalBackgroundTask<Void>(SettingsActivity.this) {
+						new LoadingTask<Void>(SettingsActivity.this, false) {
 							@Override
 							protected Void doInBackground() throws Throwable {
 								FileUtil.deleteMusicDirectory(SettingsActivity.this);
@@ -410,7 +410,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     private void testConnection(final int instance) {
-        ModalBackgroundTask<Boolean> task = new ModalBackgroundTask<Boolean>(this, false) {
+		LoadingTask<Boolean> task = new LoadingTask<Boolean>(this) {
             private int previousInstance;
 
             @Override

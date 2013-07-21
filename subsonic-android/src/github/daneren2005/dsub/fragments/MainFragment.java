@@ -19,6 +19,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.view.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
 import com.actionbarsherlock.view.Menu;
@@ -26,7 +27,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.ModalBackgroundTask;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.ChangeLog;
 import java.io.File;
@@ -326,7 +326,7 @@ public class MainFragment extends SubsonicFragment {
 	private void getLogs() {
 		try {
 			final String version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-			new ModalBackgroundTask<File>(context, false) {
+			new LoadingTask<File>(context) {
 				@Override
 				protected File doInBackground() throws Throwable {
 					updateProgress("Gathering Logs");
