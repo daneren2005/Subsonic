@@ -47,6 +47,7 @@ import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.view.FadeOutAnimation;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.VisualizerView;

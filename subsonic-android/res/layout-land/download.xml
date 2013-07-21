@@ -15,7 +15,7 @@
 			android:layout_height="0dip"
 			android:layout_weight="1">
 
-			<github.daneren2005.dsub.util.MyViewFlipper
+			<github.daneren2005.dsub.view.MyViewFlipper
 				android:id="@+id/download_playlist_flipper"
 				android:layout_width="0dp"
 				android:layout_height="fill_parent"
@@ -31,7 +31,7 @@
 
 				<include layout="@layout/download_playlist"/>
 
-			</github.daneren2005.dsub.util.MyViewFlipper>
+			</github.daneren2005.dsub.view.MyViewFlipper>
 
 			<LinearLayout android:orientation="vertical"
 				android:id="@+id/download_control_layout"

@@ -16,7 +16,7 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
-package github.daneren2005.dsub.util;
+package github.daneren2005.dsub.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import github.daneren2005.dsub.activity.MainActivity;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * @author Sindre Mehus

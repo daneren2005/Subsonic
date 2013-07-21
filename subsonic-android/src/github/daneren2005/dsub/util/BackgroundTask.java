@@ -27,6 +27,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.view.ErrorDialog;
 
 /**
  * @author Sindre Mehus

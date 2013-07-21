@@ -10,7 +10,7 @@
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent">
 
-		<github.daneren2005.dsub.util.MyViewFlipper
+		<github.daneren2005.dsub.view.MyViewFlipper
 					 android:id="@+id/download_playlist_flipper"
 					 android:layout_width="fill_parent"
 					 android:layout_height="0dip"
@@ -142,7 +142,7 @@
 
 			<include layout="@layout/download_playlist"/>
 
-		</github.daneren2005.dsub.util.MyViewFlipper>
+		</github.daneren2005.dsub.view.MyViewFlipper>
 
 		<include layout="@layout/download_media_buttons"/>
 

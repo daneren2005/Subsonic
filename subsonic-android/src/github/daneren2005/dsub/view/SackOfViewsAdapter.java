@@ -12,7 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-package github.daneren2005.dsub.util;
+package github.daneren2005.dsub.view;
 
 import android.view.View;
 import android.view.ViewGroup;

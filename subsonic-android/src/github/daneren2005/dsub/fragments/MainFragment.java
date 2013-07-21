@@ -1,14 +1,12 @@
 package github.daneren2005.dsub.fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +19,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.MergeAdapter;
+import github.daneren2005.dsub.view.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;

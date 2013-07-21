@@ -13,7 +13,7 @@
  limitations under the License.
  */
 
-package github.daneren2005.dsub.util;
+package github.daneren2005.dsub.view;
 
 import android.database.DataSetObserver;
 import android.view.View;
@@ -24,6 +24,8 @@ import android.widget.ListAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+
+import github.daneren2005.dsub.view.SackOfViewsAdapter;
 
 /**
  * Adapter that merges multiple child adapters and views

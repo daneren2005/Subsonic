@@ -39,10 +39,9 @@ import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.ErrorDialog;
+import github.daneren2005.dsub.view.ErrorDialog;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ModalBackgroundTask;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
