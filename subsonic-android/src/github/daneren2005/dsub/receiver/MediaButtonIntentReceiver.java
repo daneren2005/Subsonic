@@ -40,11 +40,13 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
         Intent serviceIntent = new Intent(context, DownloadServiceImpl.class);
         serviceIntent.putExtra(Intent.EXTRA_KEY_EVENT, event);
         context.startService(serviceIntent);
-        
+        if (isOrderedBroadcast())
+	{
 		try {
 			abortBroadcast();
 		} catch (Exception x) {
 			// Ignored.
 		}
+	}
     }
 }
