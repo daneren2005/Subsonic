@@ -108,7 +108,7 @@ public class ImageLoader implements Runnable {
 
         int size = large ? imageSizeLarge : imageSizeDefault;
         Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), size));
-        if (bitmap != null) {
+        if (bitmap != null && !bitmap.isRecycled()) {
 			final Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
             setImage(view, drawable, large);
 			if(large) {
@@ -130,7 +130,7 @@ public class ImageLoader implements Runnable {
         }
         
         Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), imageSizeLarge));
-        if (bitmap != null) {
+        if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
             setImage(remoteControl, drawable);
             return;
@@ -172,15 +172,18 @@ public class ImageLoader implements Runnable {
                 		// Do nothing, just means that the drawable is a flat image
                 	}
                 }
-
+		if (!(((BitmapDrawable)existingDrawable).getBitmap().isRecycled()))
+		{ // We will flow through to the non-transition if the old image is recycled... Yay 4.3
                 Drawable[] layers = new Drawable[]{existingDrawable, drawable};
 
                 TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
                 imageView.setImageDrawable(transitionDrawable);
                 transitionDrawable.startTransition(250);
-            } else {
-                imageView.setImageDrawable(drawable);
+		return;
+		}
             }
+            imageView.setImageDrawable(drawable);
+            return;
         }
     }
 
@@ -194,7 +197,8 @@ public class ImageLoader implements Runnable {
                                                 origBitmap)
                                 .apply();
                         } else  {
-                        remoteControl.editMetadata(true)
+			Log.e(TAG, "Tried to load a recycled bitmap.");
+                        remoteControl.editMetadata(false)
                         .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
                         .apply();
                         }
