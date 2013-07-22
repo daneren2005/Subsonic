@@ -101,14 +101,17 @@ public class ImageLoader implements Runnable {
     }
 
     public void loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
-        if (entry == null || entry.getCoverArt() == null) {
+        if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled())
+		createLargeUnknownImage(view.getContext());
+
+	if (entry == null || entry.getCoverArt() == null) {
             setUnknownImage(view, large);
             return;
         }
 
         int size = large ? imageSizeLarge : imageSizeDefault;
         Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), size));
-        if (bitmap != null) {
+        if (bitmap != null && !bitmap.isRecycled()) {
 			final Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
             setImage(view, drawable, large);
 			if(large) {
@@ -116,21 +119,24 @@ public class ImageLoader implements Runnable {
 			}
             return;
         }
-
-        if (!large) {
+	
+	if (!large) {
             setUnknownImage(view, large);
         }
         queue.offer(new Task(view.getContext(), entry, size, imageSizeLarge, large, new ViewTaskHandler(view, crossfade)));
 	}
 
     public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
-        if (entry == null || entry.getCoverArt() == null) {
+        if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled())
+	createLargeUnknownImage(context);
+
+	if (entry == null || entry.getCoverArt() == null) {
             setUnknownImage(remoteControl);
             return;
         }
         
         Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), imageSizeLarge));
-        if (bitmap != null) {
+        if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
             setImage(remoteControl, drawable);
             return;
@@ -172,28 +178,38 @@ public class ImageLoader implements Runnable {
                 		// Do nothing, just means that the drawable is a flat image
                 	}
                 }
-
+		if (!(((BitmapDrawable)existingDrawable).getBitmap().isRecycled()))
+		{ // We will flow through to the non-transition if the old image is recycled... Yay 4.3
                 Drawable[] layers = new Drawable[]{existingDrawable, drawable};
 
                 TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
                 imageView.setImageDrawable(transitionDrawable);
                 transitionDrawable.startTransition(250);
-            } else {
-                imageView.setImageDrawable(drawable);
+		return;
+		}
             }
+            imageView.setImageDrawable(drawable);
+            return;
         }
     }
-    
-	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
-		if(remoteControl != null && drawable != null) {
-			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
-			remoteControl.editMetadata(false)
-			.putBitmap(
-					RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
-					origBitmap)
-			.apply();
-		}
-    }
+
+        private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
+                if(remoteControl != null && drawable != null) {
+                        Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
+                        if ( origBitmap != null && !origBitmap.isRecycled()) {
+                                remoteControl.editMetadata(false)
+                                .putBitmap(
+                                        RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
+                                                origBitmap)
+                                .apply();
+                        } else  {
+			Log.e(TAG, "Tried to load a recycled bitmap.");
+                        remoteControl.editMetadata(false)
+                        .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
+                        .apply();
+                        }
+                }
+        }
 
     private void setUnknownImage(View view, boolean large) {
         if (large) {
