@@ -101,7 +101,10 @@ public class ImageLoader implements Runnable {
     }
 
     public void loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
-        if (entry == null || entry.getCoverArt() == null) {
+        if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled())
+		createLargeUnknownImage(view.getContext());
+
+	if (entry == null || entry.getCoverArt() == null) {
             setUnknownImage(view, large);
             return;
         }
@@ -116,15 +119,18 @@ public class ImageLoader implements Runnable {
 			}
             return;
         }
-
-        if (!large) {
+	
+	if (!large) {
             setUnknownImage(view, large);
         }
         queue.offer(new Task(view.getContext(), entry, size, imageSizeLarge, large, new ViewTaskHandler(view, crossfade)));
 	}
 
     public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
-        if (entry == null || entry.getCoverArt() == null) {
+        if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled())
+	createLargeUnknownImage(context);
+
+	if (entry == null || entry.getCoverArt() == null) {
             setUnknownImage(remoteControl);
             return;
         }
