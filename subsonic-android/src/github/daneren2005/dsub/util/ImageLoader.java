@@ -183,17 +183,23 @@ public class ImageLoader implements Runnable {
             }
         }
     }
-    
-	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
-		if(remoteControl != null && drawable != null) {
-			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
-			remoteControl.editMetadata(false)
-			.putBitmap(
-					RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
-					origBitmap)
-			.apply();
-		}
-    }
+
+        private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
+                if(remoteControl != null && drawable != null) {
+                        Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
+                        if ( origBitmap != null && !origBitmap.isRecycled()) {
+                                remoteControl.editMetadata(false)
+                                .putBitmap(
+                                        RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK,
+                                                origBitmap)
+                                .apply();
+                        } else  {
+                        remoteControl.editMetadata(true)
+                        .putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
+                        .apply();
+                        }
+                }
+        }
 
     private void setUnknownImage(View view, boolean large) {
         if (large) {
