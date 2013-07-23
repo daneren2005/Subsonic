@@ -143,6 +143,7 @@ public class SongView extends UpdateView implements Checkable {
         durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
+		revision = 0;
 		updateBackground();
         update();
     }
