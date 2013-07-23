@@ -19,11 +19,14 @@
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 	<uses-feature android:name="android.hardware.microphone" android:required="false" />
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="17"/>
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17"/>
 
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
-    <application android:label="@string/common.appname" android:icon="@drawable/launch2" android:theme="@style/Theme.DSub.Holo">
+    <application android:label="@string/common.appname"
+    	android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
+    	android:icon="@drawable/launch2"
+    	android:theme="@style/Theme.DSub.Holo">
 
         <activity android:name="github.daneren2005.dsub.activity.MainActivity"
                   android:label="DSub"
@@ -136,6 +139,9 @@
 
         <meta-data android:name="android.app.default_searchable"
                    android:value="github.daneren2005.dsub.activity.QueryReceiverActivity"/>
+                   
+        <meta-data android:name="com.google.android.backup.api_key"
+        	android:value="AEdPqrEAAAAIUhOMtwa_eG-f0oYUHnetl_Cz7cO9zae8ZXOK5w"/>
 
     </application>
 
