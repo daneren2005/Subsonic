@@ -200,6 +200,24 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 			DownloadService downloadService = DownloadServiceImpl.getInstance();
 			downloadService.setSleepTimerDuration(Integer.parseInt(sharedPreferences.getString(key, "60")));
 		}
+		
+		scheduleBackup();
+    }
+    
+    private void scheduleBackup() {
+		try {
+			Class managerClass = Class.forName("android.app.backup.BackupManager");
+			Constructor managerConstructor = managerClass.getConstructor(Context.class);
+			Object manager = managerConstructor.newInstance(this);
+			Method m = managerClass.getMethod("dataChanged");
+			m.invoke(manager);
+			Log.d(TAG, "Backup requested");
+		} catch(ClassNotFoundException e) {
+			Log.d(TAG, "No backup manager found");
+		} catch(Throwable t) {
+			Log.d(TAG, "Scheduling backup failed " + t);
+			t.printStackTrace();
+		}
     }
 
     private void update() {
