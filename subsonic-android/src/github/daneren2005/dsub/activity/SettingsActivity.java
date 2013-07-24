@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,6 +46,8 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;

@@ -16,13 +16,15 @@
 	
 	Copyright 2009 (C) Sindre Mehus
 */
+package github.daneren2005.dsub.util;
 
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
 import github.daneren2005.dsub.util.Constants;
 
 public class SettingsBackupAgent extends BackupAgentHelper {
-	void onCreate() {
+	public void onCreate() {
+		super.onCreate();
 		SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, Constants.PREFERENCES_FILE_NAME);
 		addHelper("mypreferences", helper);
 	}
