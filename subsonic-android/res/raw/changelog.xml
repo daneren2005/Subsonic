@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.1.2" versioncode="59" releasedate="7/24/2013">
+		<change>Added option to clear cache from settings</change>
+		<change>Added cloud settings backup so when you reinstall on the same device your settings are still there</change>
+		<change>Fixed Android 4.3 crash</change>
+		<change>Performance enhancements</change>
+	</release>
 	<release version="4.1.1" versioncode="58" releasedate="7/18/2013">
 		<change>Fix some podcasts causing errors</change>
 	</release>
