@@ -143,7 +143,7 @@ public class SongView extends UpdateView implements Checkable {
         durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
-		revision = 0;
+		revision = -1;
 		updateBackground();
         update();
     }
@@ -158,7 +158,7 @@ public class SongView extends UpdateView implements Checkable {
         }
 
 		long newRevision = downloadService.getDownloadListUpdateRevision();
-		if(revision != newRevision) {
+		if(revision != newRevision || downloadFile == null) {
 			downloadFile = downloadService.forSong(song);
 			revision = newRevision;
 		}
