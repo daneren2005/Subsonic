@@ -1,8 +1,8 @@
-subsonic-android/.classpath
-subsonic-android/.project
-subsonic-android/bin/*
-subsonic-android/gen/*
-subsonic-android/private/*
-subsonic-android/nbandroid/*
-subsonic-android/.idea
-subsonic-android/subsonic-android.iml
+.classpath
+.project
+bin/*
+gen/*
+private/*
+nbandroid/*
+.idea
+subsonic-android.iml
