@@ -25,7 +25,7 @@
 
     <application android:label="@string/common.appname"
     	android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
-    	android:icon="@drawable/launch2"
+    	android:icon="@drawable/launch"
     	android:theme="@style/Theme.DSub.Holo">
 
         <activity android:name="github.daneren2005.dsub.activity.MainActivity"
