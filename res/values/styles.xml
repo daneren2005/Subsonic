@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PlaybackControl">
+        <item name="android:background">@drawable/media_button</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:padding">6dip</item>
+        <item name="android:layout_marginLeft">4dip</item>
+        <item name="android:layout_marginRight">4dip</item>
+        <item name="android:layout_width">54dip</item>
+        <item name="android:layout_height">54dip</item>
+        <item name="android:contentDescription">@null</item>
+    </style>
+	
+	<style name="PlaybackControl.Small" parent="@style/PlaybackControl">
+		<item name="android:padding">4dip</item>
+        <item name="android:layout_width">46dip</item>
+        <item name="android:layout_height">46dip</item>
+    </style>
+	
+	<style name="MenuBarButton">
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_height">45dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/menubar_button</item>
+		<item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+	<style name="DragDropListView">
+		<item name="drag_enabled">true</item>
+		<item name="collapsed_height">1dp</item>
+		<item name="drag_scroll_start">1.0</item>
+		<item name="max_drag_scroll_speed">2.0</item>
+		<item name="float_alpha">0.6</item>
+		<item name="slide_shuffle_speed">0.3</item>
+		<item name="track_drag_sort">false</item>
+		<item name="use_default_controller">true</item>
+		<item name="drag_handle_id">@id/drag_handle</item>
+		<item name="sort_enabled">true</item>
+		<item name="remove_enabled">false</item>
+		<item name="remove_mode">flingRemove</item>
+		<item name="drag_start_mode">onLongPress</item>
+	</style>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item 
+		android:id="@+id/menu_search"
+		android:icon="@drawable/action_search"
+		android:title="@string/menu.search"
+		android:showAsAction="always|withText"/>
+	
+	<item 
+		android:id="@+id/menu_shuffle"
+		android:icon="@drawable/action_shuffle"
+		android:title="@string/menu.shuffle"
+		android:showAsAction="always|withText"/>
+
+	<item 
+		android:id="@+id/menu_help"
+		android:icon="@drawable/action_help"
+		android:title="@string/menu.help"/>
+		
+	<item 
+		android:id="@+id/menu_about"
+		android:icon="@drawable/action_help"
+		android:title="@string/menu.about"/>
+		
+	<item 
+		android:id="@+id/menu_log"
+		android:title="@string/menu.log"/>
+
+	<item 
+		android:id="@+id/menu_changelog"
+		android:title="@string/changelog_full_title"/>
+
+	<item 
+		android:id="@+id/menu_settings"
+		android:icon="@drawable/action_settings"
+		android:title="@string/menu.settings"/>
+
+	<item 
+		android:id="@+id/menu_exit"
+		android:icon="@drawable/action_exit"
+		android:title="@string/menu.exit"/>
+
+</menu>

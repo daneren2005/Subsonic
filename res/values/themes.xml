@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="Theme.DSub.Light" parent="Theme.Sherlock.Light">
+		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
+		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
+		<item name="offline_icon">@drawable/main_offline_light</item>
+		<item name="media_button_backward">@drawable/media_backward_light</item>
+		<item name="media_button_forward">@drawable/media_forward_light</item>
+		<item name="media_button_pause">@drawable/media_pause_light</item>
+		<item name="media_button_repeat_off">@drawable/media_repeat_off_light</item>
+		<item name="media_button_start">@drawable/media_start_light</item>
+		<item name="media_button_stop">@drawable/media_stop_light</item>
+		<item name="chat">@drawable/ic_menu_chat_light</item> 
+		<item name="chat_send">@drawable/ic_menu_chat_send_light</item> 
+	</style>
+	<style name="Theme.DSub.Dark" parent="Theme.Sherlock">
+		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
+		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
+		<item name="android:textColorSecondary">@color/cyan</item>
+		<item name="offline_icon">@drawable/main_offline</item>
+		<item name="media_button_backward">@drawable/media_backward</item>
+		<item name="media_button_forward">@drawable/media_forward</item>
+		<item name="media_button_pause">@drawable/media_pause</item>
+		<item name="media_button_repeat_off">@drawable/media_repeat_off</item>
+		<item name="media_button_start">@drawable/media_start</item>
+		<item name="media_button_stop">@drawable/media_stop</item>
+		<item name="chat">@drawable/ic_menu_chat_dark</item> 
+		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item> 
+	</style>
+	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
+		<item name="android:windowBackground">@android:color/black</item>
+	</style>
+	<style name="Theme.DSub.Holo" parent="Theme.Sherlock">
+		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
+		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
+		<item name="android:textColorSecondary">@color/cyan</item>
+		<item name="android:windowBackground">@drawable/background</item>
+		<item name="offline_icon">@drawable/main_offline</item>
+		<item name="media_button_backward">@drawable/media_backward</item>
+		<item name="media_button_forward">@drawable/media_forward</item>
+		<item name="media_button_pause">@drawable/media_pause</item>
+		<item name="media_button_repeat_off">@drawable/media_repeat_off</item>
+		<item name="media_button_start">@drawable/media_start</item>
+		<item name="media_button_stop">@drawable/media_stop</item>
+		<item name="chat">@drawable/ic_menu_chat_dark</item> 
+		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
+	</style>
+	
+	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	<style name="Theme.DSub.Dark.Fullscreen" parent="Theme.DSub.Dark">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	<style name="Theme.DSub.Black.Fullscreen" parent="Theme.DSub.Black">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	<style name="Theme.DSub.Holo.Fullscreen" parent="Theme.DSub.Holo">
+		<item name="android:windowFullscreen">true</item>
+	</style>
+	
+	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.Sherlock.Light.ActionBar.Solid">
+		<item name="background">@android:color/transparent</item>
+		<item name="android:background">@android:color/transparent</item>
+		<item name="backgroundStacked">@android:color/transparent</item>
+		<item name="android:backgroundStacked">@android:color/transparent</item>
+	</style>
+	
+	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.Sherlock.ActionBar.Solid">
+		<item name="background">@android:color/transparent</item>
+		<item name="android:background">@android:color/transparent</item>
+		<item name="backgroundStacked">@android:color/transparent</item>
+		<item name="android:backgroundStacked">@android:color/transparent</item>
+	</style>
+	
+	<style name="Widget.DSub.ActionBarStyle.Holo" parent="Widget.Sherlock.ActionBar.Solid">
+		<item name="background">@android:color/transparent</item>
+		<item name="android:background">@android:color/transparent</item>
+		<item name="backgroundStacked">@android:color/transparent</item>
+		<item name="android:backgroundStacked">@android:color/transparent</item>
+	</style>
+</resources>

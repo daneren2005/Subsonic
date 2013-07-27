@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="offline_icon" format="reference"/>
+    <attr name="media_button_backward" format="reference"/>
+    <attr name="media_button_forward" format="reference"/>
+    <attr name="media_button_pause" format="reference"/>
+    <attr name="media_button_repeat_off" format="reference"/>
+    <attr name="media_button_start" format="reference"/>
+    <attr name="media_button_stop" format="reference"/>
+	<attr name="chat" format="reference"/> 
+	<attr name="chat_send" format="reference" /> 
+</resources>

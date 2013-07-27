@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:title="@string/settings.title">
+
+    <PreferenceCategory
+			android:key="server"
+            android:title="@string/settings.servers_title">
+
+		<Preference
+                android:key="serverAdd"
+                android:title="@string/settings.servers_add"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="@string/settings.appearance_title">
+
+        <ListPreference
+                android:title="@string/settings.theme_title"
+                android:key="theme"
+                android:defaultValue="holo"
+                android:entryValues="@array/themeValues"
+                android:entries="@array/themeNames"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.track_title"
+			android:summary="@string/settings.track_summary"
+			android:key="displayTrack"
+			android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.video_title">
+
+		<ListPreference
+			android:title="@string/settings.video_player"
+			android:key="videoPlayer"
+			android:defaultValue="raw"
+			android:entryValues="@array/videoPlayerValues"
+			android:entries="@array/videoPlayerNames"/>
+	</PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="@string/settings.network_title">
+
+        <ListPreference
+                android:title="@string/settings.max_bitrate_wifi"
+                android:key="maxBitrateWifi"
+                android:defaultValue="0"
+                android:entryValues="@array/maxBitrateValues"
+                android:entries="@array/maxBitrateNames"/>
+
+        <ListPreference
+                android:title="@string/settings.max_bitrate_mobile"
+                android:key="maxBitrateMobile"
+                android:defaultValue="0"
+                android:entryValues="@array/maxBitrateValues"
+                android:entries="@array/maxBitrateNames"/>
+				
+		<ListPreference
+			android:title="@string/settings.max_video_bitrate_wifi"
+			android:key="maxVideoBitrateWifi"
+			android:defaultValue="0"
+			android:entryValues="@array/maxVideoBitrateValues"
+			android:entries="@array/maxVideoBitrateNames"/>
+
+		<ListPreference
+			android:title="@string/settings.max_video_bitrate_mobile"
+			android:key="maxVideoBitrateMobile"
+			android:defaultValue="0"
+			android:entryValues="@array/maxVideoBitrateValues"
+			android:entries="@array/maxVideoBitrateNames"/>
+
+        <CheckBoxPreference
+                android:title="@string/settings.wifi_required_title"
+                android:summary="@string/settings.wifi_required_summary"
+                android:key="wifiRequiredForDownload"
+                android:defaultValue="false"/>
+				
+		<ListPreference
+			android:title="@string/settings.network_timeout_title"
+			android:key="networkTimeout"
+			android:defaultValue="15000"
+			android:entryValues="@array/networkTimeoutValues"
+			android:entries="@array/networkTimeoutNames"/>
+
+    </PreferenceCategory>
+	
+	<PreferenceCategory
+            android:title="@string/settings.playlist_title">
+
+			<EditTextPreference
+                android:title="@string/settings.buffer_length"
+                android:key="bufferLength"
+                android:defaultValue="5"
+				android:digits="0123456789"/>
+				
+			<EditTextPreference
+                android:title="@string/settings.playlist_random_size_title"
+                android:key="randomSize"
+                android:defaultValue="20"
+				android:digits="0123456789"/>
+				
+			<ListPreference
+				android:title="@string/settings.temp_loss_title"
+				android:key="tempLoss"
+				android:defaultValue="1"
+				android:entryValues="@array/tempLossValues"
+				android:entries="@array/tempLossNames"/>
+
+			<CheckBoxPreference
+                android:title="@string/settings.persistent_title"
+                android:summary="@string/settings.persistent_summary"
+                android:key="persistentNotification"
+                android:defaultValue="false"/>
+	</PreferenceCategory>
+	
+	<PreferenceCategory
+            android:title="@string/settings.cache_title">
+
+        <EditTextPreference
+                android:title="@string/settings.cache_size"
+                android:key="cacheSize"
+                android:defaultValue="2000"
+				android:digits="0123456789"/>
+
+        <EditTextPreference
+                android:title="@string/settings.cache_location"
+                android:key="cacheLocation"/>
+
+        <ListPreference
+                android:title="@string/settings.preload_wifi"
+                android:key="preloadCountWifi"
+                android:defaultValue="3"
+                android:entryValues="@array/preloadCountValues"
+                android:entries="@array/preloadCountNames"/>
+
+		<ListPreference
+                android:title="@string/settings.preload_mobile"
+                android:key="preloadCountMobile"
+                android:defaultValue="3"
+                android:entryValues="@array/preloadCountValues"
+                android:entries="@array/preloadCountNames"/>
+
+		<Preference
+				android:key="clearCache"
+				android:title="@string/settings.cache_clear"
+				android:persistent="false"/>
+    </PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/button_bar.chat">
+
+		<CheckBoxPreference
+                android:title="@string/settings.chat_enabled"
+                android:summary="@string/settings.chat_enabled_summary"
+                android:key="chatEnabled"
+                android:defaultValue="true"/>
+		
+		<EditTextPreference
+                android:title="@string/settings.chat_refresh"
+                android:key="chatRefreshRate"
+                android:defaultValue="30"
+				android:digits="0123456789"/>
+	</PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="@string/settings.other_title">
+
+        <CheckBoxPreference
+                android:title="@string/settings.scrobble_title"
+                android:summary="@string/settings.scrobble_summary"
+                android:key="scrobble"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:title="@string/settings.hide_media_title"
+                android:summary="@string/settings.hide_media_summary"
+                android:key="hideMedia"
+                android:defaultValue="false"/>
+
+        <CheckBoxPreference
+                android:title="@string/settings.media_button_title"
+                android:summary="@string/settings.media_button_summary"
+                android:key="mediaButtons"
+                android:defaultValue="true"/>
+
+        <CheckBoxPreference
+                android:title="@string/settings.screen_lit_title"
+                android:summary="@string/settings.screen_lit_summary"
+                android:key="screenLitOnDownload"
+                android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.gapless_playback"
+			android:summary="@string/settings.gapless_playback_summary"
+			android:key="gaplessPlayback"
+			android:defaultValue="true"/>
+
+        <Preference
+                android:key="clearSearchHistory"
+                android:title="@string/settings.clear_search_history"
+                android:persistent="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

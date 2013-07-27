@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<item
+		android:id="@+id/song_menu_info"
+		android:title="@string/common.info"
+		/>
+
+    <item 
+        android:id="@+id/song_menu_play_now"
+        android:title="@string/common.play_now"
+        />
+
+    <item 
+        android:id="@+id/song_menu_play_last"
+        android:title="@string/common.play_last"
+        />
+		
+	<item 
+        android:id="@+id/song_menu_download"
+        android:title="@string/common.download"
+        />
+		
+	<item 
+		android:id="@+id/song_menu_delete"
+		android:title="@string/common.delete"/>
+        
+	<item 
+		android:id="@+id/song_menu_server_download"
+		android:title="@string/select_podcasts.server_download"/>
+
+	<item 
+		android:id="@+id/song_menu_server_delete"
+		android:title="@string/select_podcasts.server_delete"/>
+</menu>

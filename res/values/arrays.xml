@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="themeValues">
+        <item>light</item>
+        <item>dark</item>
+		<item>black</item>
+		<item>holo</item>
+		<item>light_fullscreen</item>
+		<item>dark_fullscreen</item>
+		<item>black_fullscreen</item>
+		<item>holo_fullscreen</item>
+    </string-array>
+
+    <string-array name="themeNames">
+        <item>@string/settings.theme_light</item>
+        <item>@string/settings.theme_dark</item>
+		<item>@string/settings.theme_black</item>
+		<item>@string/settings.theme_holo</item>
+		<item>@string/settings.theme_light_fullscreen</item>
+        <item>@string/settings.theme_dark_fullscreen</item>
+		<item>@string/settings.theme_black_fullscreen</item>
+		<item>@string/settings.theme_holo_fullscreen</item>
+    </string-array>
+	
+	<string-array name="sleepTimerValues">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+
+	<string-array name="sleepTimerNames">
+		<item>@string/settings.sleep_timer_off</item>
+		<item>@string/settings.sleep_timer_on</item>
+		<item>@string/settings.sleep_timer_always_on</item>
+	</string-array>
+
+    <string-array name="preloadCountValues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="preloadCountNames">
+        <item>@string/settings.preload_1</item>
+        <item>@string/settings.preload_2</item>
+        <item>@string/settings.preload_3</item>
+        <item>@string/settings.preload_5</item>
+        <item>@string/settings.preload_10</item>
+        <item>@string/settings.preload_unlimited</item>
+    </string-array>
+
+    <string-array name="maxBitrateValues">
+        <item>32</item>
+        <item>64</item>
+        <item>80</item>
+        <item>96</item>
+        <item>112</item>
+        <item>128</item>
+        <item>160</item>
+        <item>192</item>
+        <item>256</item>
+        <item>320</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="maxBitrateNames">
+        <item>@string/settings.max_bitrate_32</item>
+        <item>@string/settings.max_bitrate_64</item>
+        <item>@string/settings.max_bitrate_80</item>
+        <item>@string/settings.max_bitrate_96</item>
+        <item>@string/settings.max_bitrate_112</item>
+        <item>@string/settings.max_bitrate_128</item>
+        <item>@string/settings.max_bitrate_160</item>
+        <item>@string/settings.max_bitrate_192</item>
+        <item>@string/settings.max_bitrate_256</item>
+        <item>@string/settings.max_bitrate_320</item>
+        <item>@string/settings.max_bitrate_unlimited</item>
+    </string-array>
+	
+	<string-array name="maxVideoBitrateValues">
+		<item>200</item>
+		<item>300</item>
+		<item>400</item>
+		<item>500</item>
+		<item>700</item>
+		<item>1000</item>
+		<item>1500</item>
+		<item>2000</item>
+		<item>3000</item>
+		<item>5000</item>
+		<item>0</item>
+	</string-array>
+	
+	<string-array name="maxVideoBitrateNames">
+		<item>@string/settings.max_video_bitrate_200</item>
+		<item>@string/settings.max_video_bitrate_300</item>
+		<item>@string/settings.max_video_bitrate_400</item>
+		<item>@string/settings.max_video_bitrate_500</item>
+		<item>@string/settings.max_video_bitrate_700</item>
+		<item>@string/settings.max_video_bitrate_1000</item>
+		<item>@string/settings.max_video_bitrate_1500</item>
+		<item>@string/settings.max_video_bitrate_2000</item>
+		<item>@string/settings.max_video_bitrate_3000</item>
+		<item>@string/settings.max_video_bitrate_5000</item>
+		<item>@string/settings.max_bitrate_unlimited</item>
+	</string-array>
+	
+	<string-array name="networkTimeoutValues">
+		<item>10000</item>
+		<item>15000</item>
+		<item>30000</item>
+		<item>45000</item>
+		<item>60000</item>
+	</string-array>
+	<string-array name="networkTimeoutNames">
+		<item>@string/settings.network_timeout_10000</item>
+		<item>@string/settings.network_timeout_15000</item>
+		<item>@string/settings.network_timeout_30000</item>
+		<item>@string/settings.network_timeout_45000</item>
+		<item>@string/settings.network_timeout_60000</item>
+	</string-array>
+	
+	<string-array name="tempLossValues">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+	<string-array name="tempLossNames">
+		<item>@string/settings.temp_loss_pause</item>
+		<item>@string/settings.temp_loss_pause_lower</item>
+		<item>@string/settings.temp_loss_lower</item>
+		<item>@string/settings.temp_loss_nothing</item>
+	</string-array>
+
+	<string-array name="videoPlayerValues">
+		<item>raw</item>
+		<item>hls</item>
+		<item>transcode</item>
+		<item>flash</item>
+	</string-array>
+	<string-array name="videoPlayerNames">
+		<item>@string/settings.video_raw</item>
+		<item>@string/settings.video_hls</item>
+		<item>@string/settings.video_transcode</item>
+		<item>@string/settings.video_flash</item>
+	</string-array>
+
+</resources>

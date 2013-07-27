@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item 
+		android:id="@+id/menu_refresh"
+		android:icon="@drawable/action_refresh"
+		android:title="@string/menu.refresh"
+		android:showAsAction="always|withText"/>
+
+	<item 
+		android:id="@+id/menu_delete"
+		android:icon="@drawable/action_remove_all"
+		android:title="@string/common.delete"/>
+</menu>

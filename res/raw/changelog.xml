@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog>
+	<release version="4.1.2" versioncode="59" releasedate="7/24/2013">
+		<change>Added option to clear cache from settings</change>
+		<change>Added cloud settings backup so when you reinstall on the same device your settings are still there</change>
+		<change>Fixed Android 4.3 crash</change>
+		<change>Performance enhancements</change>
+	</release>
+	<release version="4.1.1" versioncode="58" releasedate="7/18/2013">
+		<change>Fix some podcasts causing errors</change>
+	</release>
+	<release version="4.1.0" versioncode="57" releasedate="7/17/2013">
+		<change>Added Podcast Tab (4.5+)</change>
+		<change>Add/Delete Podcast Channels.  Manage server status of Podcast Episodes (4.8+)</change>
+		<change>Double press pause on headset to skip to next song</change>
+		<change>Added HLS as a option under external video players (4.8+).  Skipping doesn't seem to work for me.</change>
+		<change>Fix pressing play from widget from sometimes starting song over</change>
+		<change>Various minor UI tweaks to make things look nicer</change>
+		<change>Gapless Playback setting: if off now acts more like base Subsonic app to hopefully fix some issues</change>
+	</release>
+	<release version="4.0.7" versioncode="56" releasedate="7/2/2013">
+		<change>Added offline starring to library view instead of just now playing</change>
+		<change>Remove * to show downloading, go off of whether arrow is blue or green for cached/perma cached</change>
+		<change>Go back to always showing bottom bar so downloading list is accessible </change>
+		<change>Fix offline mode matching first letters against ignore list (ie: the), instead of first word</change>
+		<change>Add prompt for removing a server</change>
+		<change>Fix some cases where list would incorrectly show up blank</change>
+	</release>
+	<release version="4.0.6" versioncode="55" releasedate="6/25/2013">
+		<change>Scrobble and star songs and sync changes back when going online (has trouble when tags don't match folders)</change>
+		<change>Fix cases where operations didn't work in online mode when originally added in offline mode and vice versa</change>
+		<change>Added blank option to genre picker in the shuffle dialog</change>
+		<change>Added option to show track # in front of song (off by default)</change>
+		<change>Separate cached playlists from different servers in separate folders so they don't interfere with each other</change>
+		<change>Fix for some music files which throw errors at the end not proceeding to the next song</change>
+		<change>Fix flash preference not being obeyed for the Play External option</change>
+		<change>As songs are downloaded in background list, automatically remove them</change>
+		<change>Fix low quality album artwork in large widgets</change>
+		<change>Fix a rare case that can cause a song to be played twice</change>
+		<change>Fix for some who listen to untranscoded flac songs</change>
+		<change>Remove bottom bar if nothing is in the queue</change>
+		<change>Use .nomedia file instead of folder for more compatibility</change>
+		<change>Clean some sensitive info from the logs</change>
+	</release>
+	<release version="4.0.5" versioncode="54" releasedate="6/7/2013">
+		<change>Fix album art on old Subsonic/MusicCabinet servers</change>
+	</release>
+	<release version="4.0.4" versioncode="53" releasedate="6/6/2013">
+		<change>Added Genre parsing (thanks archrival)</change>
+		<change>Changed Genre to combo selection on 4.8+ servers</change>
+		<change>Added video choice similar to Subsonic (Raw is the same as MX but you can choose which player to use)</change>
+		<change>Added 4x2, 4x3, 4x4 widgets (thanks archrival)</change>
+		<change>Add option to create new playlist when adding song to playlists</change>
+		<change>Added option to overwrite existing playlist on 4.7+ servers</change>
+		<change>Fix when removing the current server</change>
+		<change>Fix edge case in new sort</change>
+	</release>
+	<release version="4.0.3" versioncode="52" releasedate="5/31/2013">
+		<change>Sort by disc number if specified in tags</change>
+		<change>Show starred artists in starred list</change>
+		<change>Change folder.jpg to albumart.jpg which galleries shouldn't display</change>
+		<change>Fix Show Album</change>
+		<change>Added support for server Ignored Articles (future server version) + defaults to server's defaults</change>
+		<change>On network error return to front of the app instead of exiting all the way</change>
+		<change>Fix occasional crash when going back into app after running for a while</change>
+		<change>Various minor bugfixes</change>
+	</release>
+	<release version="4.0.2" versioncode="51" releasedate="5/24/2013">
+		<change>Fix if you set chat refresh rate to 0, will just not refresh</change>
+		<change>Revert dark theme modification</change>
+		<change>New Theme called black which is the pure black background</change>
+		<change>Option to disable chat menu, need to exit app and reenter for now</change>
+	</release>
+
+	<release version="4.0.1" versioncode="50" releasedate="5/23/2013">
+		<change>New: Chat Tab (Set chat auto refresh rate from settings)</change>
+		<change>New: Dynamic servers, add as many, or remove all but the ones you are using</change>
+		<change>New: Added separate setting for songs to preload for Wifi/Mobile</change>
+		<change>Improvement: The infinite playlist while shuffling is now persistent between startups</change>
+		<change>Theme: White is now more white, got rid of blue text for white theme only</change>
+		<change>Theme: Black is now a flat black due to popular request</change>
+		<change>Theme: Apply the current theme to settings screen</change>
+		<change>Fix: Don't stretch album art on bottom of main tabs</change>
+		<change>Fix: Possible fix for some who were having crash on starting EQ</change>
+	</release>
+
+	<release version="4.0.0" versioncode="48" releasedate="5/16/2013">
+		<change>Converted everything to fragments!</change>
+		<change>Swipe to switch tabs</change>
+		<change>Breadcrumb trail when going down several levels</change>
+		<change>Require double tapping back to exit app</change>
+		<change>Change log dialog for new versions</change>
+		<change>Endless loading on album lists (ie: Random, Recently Added, etc...) instead of pressing more</change>
+		<change>Look at what is now playing from main tabs</change>
+		<change>Added Playing: Track/Total to Now Playing action bar</change>
+		<change>When clicking on a album in search, the parent is also added to the back stack</change>
+		<change>Added total time to playlist/album headers</change>
+		<change>Fixed a lot of the menu items not working when using search</change>
+		<change>Update to Light/Dark themes</change>
+	</release>
+</changelog>

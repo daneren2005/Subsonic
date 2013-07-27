@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="notificationArtist">#bababa</color>
+    <color name="notificationTitle">#dddddd</color>
+</resources>
