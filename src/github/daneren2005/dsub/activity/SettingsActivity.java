@@ -504,7 +504,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     try {
                         String url = (String) value;
                         new URL(url);
-                        if (!url.equals(url.trim()) || url.contains("@") || url.contains("_")) {
+                        if (url.contains(" ") || url.contains("@") || url.contains("_")) {
                             throw new Exception();
                         }
                     } catch (Exception x) {
