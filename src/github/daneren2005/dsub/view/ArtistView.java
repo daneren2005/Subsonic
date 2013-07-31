@@ -40,10 +40,15 @@ public class ArtistView extends UpdateView {
 	
 	private Context context;
 	private Artist artist;
+	private File file;
 
     private TextView titleView;
     private ImageButton starButton;
 	private ImageView moreButton;
+	
+	private boolean exists = false;
+	private boolean shaded = false;
+	private boolean starred = true;
 
     public ArtistView(Context context) {
         super(context);
@@ -62,23 +67,41 @@ public class ArtistView extends UpdateView {
 
     public void setArtist(Artist artist) {
     	this.artist = artist;
-        
         titleView.setText(artist.getName());
-        
-        starButton.setVisibility((Util.isOffline(getContext()) || !artist.isStarred()) ? View.GONE : View.VISIBLE);
-		starButton.setFocusable(false);
-		
+		file = FileUtil.getArtistDirectory(context, artist);
+		updateBackground();
 		update();
     }
+    
+    @Override
+	protected void updateBackground() {
+		exists = file.exists(); 
+	}
 	
 	@Override
 	protected void update() {
-		starButton.setVisibility((Util.isOffline(getContext()) || !artist.isStarred()) ? View.GONE : View.VISIBLE);
-		File file = FileUtil.getArtistDirectory(context, artist);
-		if(file.exists()) {
-			moreButton.setImageResource(R.drawable.list_item_more_shaded);
+		if(artist.isStarred()) {
+			if(!starred) {
+				starButton.setVisibility(View.VISIBLE);
+				starred = true;
+			}
 		} else {
-			moreButton.setImageResource(R.drawable.list_item_more);
+			if(starred) {
+				starButton.setVisibility(View.GONE);
+				starred = false;
+			}
 		}
-    }
+		
+		if(exists) {
+			if(!shaded) {
+				moreButton.setImageResource(R.drawable.list_item_more_shaded);
+				shaded = true;
+			}
+		} else {
+			if(shaded) {
+				moreButton.setImageResource(R.drawable.list_item_more);
+				shaded = false;
+			}
+		}
+	}
 }
