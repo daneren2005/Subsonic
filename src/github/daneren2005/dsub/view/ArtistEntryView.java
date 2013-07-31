@@ -44,12 +44,6 @@ public class ArtistEntryView extends UpdateView {
 	private File file;
 
     private TextView titleView;
-	private ImageButton starButton;
-	private ImageView moreButton;
-	
-	private boolean exists = false;
-	private boolean shaded = false;
-	private boolean starred = true;
 
     public ArtistEntryView(Context context) {
         super(context);
@@ -65,44 +59,16 @@ public class ArtistEntryView extends UpdateView {
 			}
 		});
     }
-
-    public void setArtist(MusicDirectory.Entry artist) {
-    	this.artist = artist;
-        titleView.setText(artist.getTitle());
+    
+    protected void setObjectImpl(Object obj) {
+    	this.artist = (MusicDirectory.Entry) obj;
+    	titleView.setText(artist.getTitle());
 		file = FileUtil.getArtistDirectory(context, artist);
-		updateBackground();
-		update();
     }
     
 	@Override
 	protected void updateBackground() {
-		exists = file.exists(); 
-	}
-	
-	@Override
-	protected void update() {
-		if(artist.isStarred()) {
-			if(!starred) {
-				starButton.setVisibility(View.VISIBLE);
-				starred = true;
-			}
-		} else {
-			if(starred) {
-				starButton.setVisibility(View.GONE);
-				starred = false;
-			}
-		}
-		
-		if(exists) {
-			if(!shaded) {
-				moreButton.setImageResource(R.drawable.list_item_more_shaded);
-				shaded = true;
-			}
-		} else {
-			if(shaded) {
-				moreButton.setImageResource(R.drawable.list_item_more);
-				shaded = false;
-			}
-		}
+		exists = file.exists();
+		isStarred = artist.isStarred();
 	}
 }
