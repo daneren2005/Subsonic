@@ -39,9 +39,13 @@ public class PlaylistView extends UpdateView {
 
 	private Context context;
 	private Playlist playlist;
+	private File file;
 
 	private TextView titleView;
 	private ImageView moreButton;
+	
+	private boolean exists = false;
+	private boolean shaded = false;
 
 	public PlaylistView(Context context) {
 		super(context);
@@ -61,16 +65,28 @@ public class PlaylistView extends UpdateView {
 		this.playlist = playlist;
 
 		titleView.setText(playlist.getName());
+		file = FileUtil.getPlaylistFile(Util.getServerName(context), playlist.getName());
+		updateBackground();
 		update();
+	}
+	
+	@Override
+	protected void updateBackground() {
+		exists = file.exists();
 	}
 
 	@Override
 	protected void update() {
-		File file = FileUtil.getPlaylistFile(Util.getServerName(context), playlist.getName());
-		if(file.exists() || Util.isOffline(context)) {
-			moreButton.setImageResource(R.drawable.list_item_more_shaded);
+		if(exists || Util.isOffline(context)) {
+			if(!shaded) {
+				moreButton.setImageResource(R.drawable.list_item_more_shaded);
+				shaded = true;
+			}
 		} else {
-			moreButton.setImageResource(R.drawable.list_item_more);
+			if(shaded) {
+				moreButton.setImageResource(R.drawable.list_item_more);
+				shaded = false;
+			}
 		}
 	}
 }
