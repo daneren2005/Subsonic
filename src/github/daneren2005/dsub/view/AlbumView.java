@@ -41,12 +41,17 @@ public class AlbumView extends UpdateView {
 
 	private Context context;
 	private MusicDirectory.Entry album;
+	private File file;
 
     private TextView titleView;
     private TextView artistView;
     private View coverArtView;
     private ImageButton starButton;
 	private ImageView moreButton;
+	
+	private boolean exists = false;
+	private boolean shaded = false;
+	private boolean starred = true;
 
     public AlbumView(Context context) {
         super(context);
@@ -77,17 +82,40 @@ public class AlbumView extends UpdateView {
         starButton.setVisibility(!album.isStarred() ? View.GONE : View.VISIBLE);
 		starButton.setFocusable(false);
 		
+		file = FileUtil.getAlbumDirectory(context, album);
+		updateBackground();
 		update();
     }
+    
+    @Override
+	protected void updateBackground() {
+		exists = file.exists(); 
+	}
 	
 	@Override
 	protected void update() {
-		starButton.setVisibility(!album.isStarred() ? View.GONE : View.VISIBLE);
-		File file = FileUtil.getAlbumDirectory(context, album);
-		if(file.exists()) {
-			moreButton.setImageResource(R.drawable.list_item_more_shaded);
+		if(album.isStarred()) {
+			if(!starred) {
+				starButton.setVisibility(View.VISIBLE);
+				starred = true;
+			}
 		} else {
-			moreButton.setImageResource(R.drawable.list_item_more);
+			if(starred) {
+				starButton.setVisibility(View.GONE);
+				starred = false;
+			}
+		}
+		
+		if(exists) {
+			if(!shaded) {
+				moreButton.setImageResource(R.drawable.list_item_more_shaded);
+				shaded = true;
+			}
+		} else {
+			if(shaded) {
+				moreButton.setImageResource(R.drawable.list_item_more);
+				shaded = false;
+			}
 		}
     }
 }
