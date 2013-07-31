@@ -31,8 +31,6 @@ public class GenreView extends UpdateView {
 	private static final String TAG = GenreView.class.getSimpleName();
 
 	private TextView titleView;
-	private ImageButton starButton;
-	private ImageView moreButton;
 
 	public GenreView(Context context) {
 		super(context);
@@ -44,10 +42,7 @@ public class GenreView extends UpdateView {
 		moreButton.setClickable(false);
 	}
 
-	public void setGenre(Genre genre) {
-		titleView.setText(genre.getName());
-
-		starButton.setVisibility(View.GONE);
-		starButton.setFocusable(false);
+	public void setObjectImpl(Object obj) {
+		titleView.setText(((Genre)genre).getName());
 	}
 }
