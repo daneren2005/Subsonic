@@ -37,6 +37,14 @@ public class UpdateView extends LinearLayout {
 	private static Handler uiHandler;
 	private static Runnable updateRunnable;
 	
+	protected ImageButton starButton;
+	protected ImageView moreButton;
+	
+	protected boolean exists = false;
+	protected boolean shaded = false;
+	protected boolean starred = true;
+	protected boolean isStarred = false;
+	
 	public UpdateView(Context context) {
 		super(context);
 		
@@ -45,16 +53,20 @@ public class UpdateView extends LinearLayout {
 			ViewGroup.LayoutParams.WRAP_CONTENT));
 		
 		INSTANCES.put(this, null);
-        int instanceCount = INSTANCES.size();
-        if (instanceCount > 50) {
-            Log.w(TAG, instanceCount + " live UpdateView instances");
-        }
-		
 		startUpdater();
 	}
 	
 	@Override
 	public void setPressed(boolean pressed) {
+		
+	}
+	
+	public void setObject(Object obj) {
+		setObjectImpl(obj);
+		updateBackground();
+		update();
+	}
+	protected void setObjectImpl(Object obj) {
 		
 	}
 	
@@ -128,6 +140,32 @@ public class UpdateView extends LinearLayout {
 		
 	}
 	protected void update() {
+		if(moreButton != null) {
+			if(exists) {
+				if(!shaded) {
+					moreButton.setImageResource(R.drawable.list_item_more_shaded);
+					shaded = true;
+				}
+			} else {
+				if(shaded) {
+					moreButton.setImageResource(R.drawable.list_item_more);
+					shaded = false;
+				}
+			}
+		}
 		
+		if(starButton != null) {
+			if(isStarred) {
+				if(!starred) {
+					starButton.setVisibility(View.VISIBLE);
+					starred = true;
+				}
+			} else {
+				if(starred) {
+					starButton.setVisibility(View.GONE);
+					starred = false;
+				}
+			}
+		}
 	}
 }
