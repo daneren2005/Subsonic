@@ -52,7 +52,7 @@ public class PodcastChannelView extends UpdateView {
 		});
 	}
 
-	public void setPodcastChannel(Object obj) {
+	protected void setObjectImpl(Object obj) {
 		channel = (PodcastChannel) obj;
 		if(channel.getName() != null) {
 			titleView.setText(channel.getName());
