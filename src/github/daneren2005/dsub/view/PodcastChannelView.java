@@ -36,7 +36,6 @@ public class PodcastChannelView extends UpdateView {
 	private PodcastChannel channel;
 	
 	private TextView titleView;
-	private ImageView moreButton;
 
 	public PodcastChannelView(Context context) {
 		super(context);
@@ -45,8 +44,6 @@ public class PodcastChannelView extends UpdateView {
 
 		titleView = (TextView) findViewById(R.id.artist_name);
 		ImageButton starButton = (ImageButton) findViewById(R.id.artist_star);
-		starButton.setVisibility(View.GONE);
-		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -55,22 +52,18 @@ public class PodcastChannelView extends UpdateView {
 		});
 	}
 
-	public void setPodcastChannel(PodcastChannel podcastChannel) {
-		channel = podcastChannel;
-		if(podcastChannel.getName() != null) {
-			titleView.setText(podcastChannel.getName());
+	public void setPodcastChannel(Object obj) {
+		channel = (PodcastChannel) obj;
+		if(channel.getName() != null) {
+			titleView.setText(channel.getName());
 		} else {
-			titleView.setText(podcastChannel.getUrl());
+			titleView.setText(channel.getUrl());
 		}
+		file = FileUtil.getPodcastDirectory(context, channel);
 	}
 	
 	@Override
-	protected void update() {
-		File file = FileUtil.getPodcastDirectory(context, channel);
-		if(file.exists()) {
-			moreButton.setImageResource(R.drawable.list_item_more_shaded);
-		} else {
-			moreButton.setImageResource(R.drawable.list_item_more);
-		}
-    }
+	protected void updateBackground() {
+		exists = file.exists();
+	}
 }
