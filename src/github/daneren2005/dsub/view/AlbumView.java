@@ -46,12 +46,6 @@ public class AlbumView extends UpdateView {
     private TextView titleView;
     private TextView artistView;
     private View coverArtView;
-    private ImageButton starButton;
-	private ImageView moreButton;
-	
-	private boolean exists = false;
-	private boolean shaded = false;
-	private boolean starred = true;
 
     public AlbumView(Context context) {
         super(context);
@@ -70,49 +64,19 @@ public class AlbumView extends UpdateView {
 			}
 		});
     }
-
-    public void setAlbum(MusicDirectory.Entry album, ImageLoader imageLoader) {
-    	this.album = album;
-        
-        titleView.setText(album.getTitle());
+    
+    protected void setObjectImpl(Object obj) {
+    	this.album = (MusicDirectory.Entry) obj;
+    	titleView.setText(album.getTitle());
         artistView.setText(album.getArtist());
         artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
         imageLoader.loadImage(coverArtView, album, false, true);
-		
-		file = FileUtil.getAlbumDirectory(context, album);
-		updateBackground();
-		update();
+        file = FileUtil.getAlbumDirectory(context, album);
     }
     
     @Override
 	protected void updateBackground() {
-		exists = file.exists(); 
+		exists = file.exists();
+		isStarred = album.isStarred(); 
 	}
-	
-	@Override
-	protected void update() {
-		if(album.isStarred()) {
-			if(!starred) {
-				starButton.setVisibility(View.VISIBLE);
-				starred = true;
-			}
-		} else {
-			if(starred) {
-				starButton.setVisibility(View.GONE);
-				starred = false;
-			}
-		}
-		
-		if(exists) {
-			if(!shaded) {
-				moreButton.setImageResource(R.drawable.list_item_more_shaded);
-				shaded = true;
-			}
-		} else {
-			if(shaded) {
-				moreButton.setImageResource(R.drawable.list_item_more);
-				shaded = false;
-			}
-		}
-    }
 }
