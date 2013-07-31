@@ -78,9 +78,6 @@ public class AlbumView extends UpdateView {
         artistView.setText(album.getArtist());
         artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
         imageLoader.loadImage(coverArtView, album, false, true);
-        
-        starButton.setVisibility(!album.isStarred() ? View.GONE : View.VISIBLE);
-		starButton.setFocusable(false);
 		
 		file = FileUtil.getAlbumDirectory(context, album);
 		updateBackground();
