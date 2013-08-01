@@ -49,7 +49,7 @@ public class PlaylistAdapter extends ArrayAdapter<Playlist> {
 		} else {
 			view = new PlaylistView(activity);
 		}
-		view.setPlaylist(entry);
+		view.setObject(entry);
 		return view;
 	}
 

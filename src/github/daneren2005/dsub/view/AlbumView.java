@@ -65,12 +65,12 @@ public class AlbumView extends UpdateView {
 		});
     }
     
-    protected void setObjectImpl(Object obj) {
-    	this.album = (MusicDirectory.Entry) obj;
+    protected void setObjectImpl(Object obj1, Object obj2) {
+    	this.album = (MusicDirectory.Entry) obj1;
     	titleView.setText(album.getTitle());
         artistView.setText(album.getArtist());
         artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
-        imageLoader.loadImage(coverArtView, album, false, true);
+		((ImageLoader)obj2).loadImage(coverArtView, album, false, true);
         file = FileUtil.getAlbumDirectory(context, album);
     }
     

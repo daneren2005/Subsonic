@@ -22,12 +22,17 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
+
+import github.daneren2005.dsub.R;
 
 public class UpdateView extends LinearLayout {
 	private static final String TAG = UpdateView.class.getSimpleName();
@@ -66,8 +71,16 @@ public class UpdateView extends LinearLayout {
 		updateBackground();
 		update();
 	}
+	public void setObject(Object obj1, Object obj2) {
+		setObjectImpl(obj1, obj2);
+		updateBackground();
+		update();
+	}
 	protected void setObjectImpl(Object obj) {
 		
+	}
+	protected void setObjectImpl(Object obj1, Object obj2) {
+
 	}
 	
 	private static synchronized void startUpdater() {

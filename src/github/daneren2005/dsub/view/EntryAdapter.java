@@ -58,11 +58,11 @@ public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 			if(entry.getArtist() != null || entry.getParent() != null) {
 				AlbumView view;
 				view = new AlbumView(activity);
-				view.setAlbum(entry, imageLoader);
+				view.setObject(entry, imageLoader);
 				return view;
 			} else {
 				ArtistEntryView view = new ArtistEntryView(activity);
-				view.setArtist(entry);
+				view.setObject(entry);
 				return view;
 			}
         } else {
@@ -72,7 +72,7 @@ public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
             } else {
                 view = new SongView(activity);
             }
-            view.setSong(entry, checkable);
+            view.setObject(entry, checkable);
             return view;
         }
     }

@@ -44,8 +44,7 @@
 				android:layout_gravity="right|center_vertical"
 				android:src="@drawable/ic_stat_star"
 				android:background="@null"
-				android:focusable="false"
-				android:visibility="gone"/>
+				android:focusable="false"/>
 
             <TextView
                     android:id="@+id/song_status"

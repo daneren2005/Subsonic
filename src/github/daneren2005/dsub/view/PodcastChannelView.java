@@ -34,6 +34,7 @@ public class PodcastChannelView extends UpdateView {
 
 	private Context context;
 	private PodcastChannel channel;
+	private File file;
 	
 	private TextView titleView;
 
@@ -43,7 +44,7 @@ public class PodcastChannelView extends UpdateView {
 		LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.artist_name);
-		ImageButton starButton = (ImageButton) findViewById(R.id.artist_star);
+		starButton = (ImageButton) findViewById(R.id.artist_star);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {

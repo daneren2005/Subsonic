@@ -53,7 +53,7 @@ public class GenreAdapter extends ArrayAdapter<Genre>{
 		} else {
 			view = new GenreView(activity);
 		}
-		view.setGenre(genre);
+		view.setObject(genre);
 		return view;
     }
 }

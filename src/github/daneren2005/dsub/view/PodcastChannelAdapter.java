@@ -53,7 +53,7 @@ public class PodcastChannelAdapter extends ArrayAdapter<PodcastChannel>{
 		} else {
 			view = new PodcastChannelView(activity);
 		}
-		view.setPodcastChannel(podcast);
+		view.setObject(podcast);
 		return view;
     }
 }

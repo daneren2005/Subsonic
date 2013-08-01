@@ -1081,7 +1081,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				view = new SongView(context);
 			}
 			DownloadFile downloadFile = getItem(position);
-			view.setSong(downloadFile.getSong(), false);
+			view.setObject(downloadFile.getSong(), false);
 			return view;
 		}
 	}

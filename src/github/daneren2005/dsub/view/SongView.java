@@ -51,8 +51,6 @@ public class SongView extends UpdateView implements Checkable {
     private TextView artistTextView;
     private TextView durationTextView;
     private TextView statusTextView;
-    private ImageButton starButton;
-	private ImageView moreButton;
 	
 	private DownloadService downloadService;
 	private long revision = -1;
@@ -61,7 +59,6 @@ public class SongView extends UpdateView implements Checkable {
 	private boolean playing = false;
 	private int rightImage = 0;
 	private int moreImage = 0;
-	private boolean starred = false;
 	private boolean isWorkDone = false;
 	private boolean isSaved = false;
 	private File partialFile;
@@ -78,7 +75,6 @@ public class SongView extends UpdateView implements Checkable {
         durationTextView = (TextView) findViewById(R.id.song_duration);
         statusTextView = (TextView) findViewById(R.id.song_status);
         starButton = (ImageButton) findViewById(R.id.song_star);
-		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -87,8 +83,9 @@ public class SongView extends UpdateView implements Checkable {
 		});
     }
 
-    public void setSong(MusicDirectory.Entry song, boolean checkable) {
-        this.song = song;
+    public void setObjectImpl(Object obj1, Object obj2) {
+        this.song = (MusicDirectory.Entry) obj1;
+		boolean checkable = (Boolean) obj2;
 		
         StringBuilder artist = new StringBuilder(40);
 
@@ -144,8 +141,6 @@ public class SongView extends UpdateView implements Checkable {
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
 		revision = -1;
-		updateBackground();
-        update();
     }
 	
 	@Override
@@ -167,6 +162,7 @@ public class SongView extends UpdateView implements Checkable {
 		isSaved = downloadFile.isSaved();
 		partialFile = downloadFile.getPartialFile();
 		partialFileExists = partialFile.exists();
+		isStarred = song.isStarred();
 	}
 
 	@Override

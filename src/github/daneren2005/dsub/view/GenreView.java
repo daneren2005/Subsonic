@@ -43,6 +43,6 @@ public class GenreView extends UpdateView {
 	}
 
 	public void setObjectImpl(Object obj) {
-		titleView.setText(((Genre)genre).getName());
+		titleView.setText(((Genre)obj).getName());
 	}
 }

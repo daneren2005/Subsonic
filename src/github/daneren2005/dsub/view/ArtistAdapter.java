@@ -68,7 +68,7 @@ public class ArtistAdapter extends ArrayAdapter<Artist> implements SectionIndexe
 		} else {
 			view = new ArtistView(activity);
 		}
-		view.setArtist(entry);
+		view.setObject(entry);
 		return view;
     }
 	

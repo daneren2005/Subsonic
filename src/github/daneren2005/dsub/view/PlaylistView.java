@@ -58,7 +58,7 @@ public class PlaylistView extends UpdateView {
 	}
 
 	protected void setObjectImpl(Object obj) {
-		this.playlist = (Playlist) playlist;
+		this.playlist = (Playlist) obj;
 		titleView.setText(playlist.getName());
 		file = FileUtil.getPlaylistFile(Util.getServerName(context), playlist.getName());
 	}
