@@ -140,6 +140,7 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 	protected void refresh(final boolean refresh) {
 		setTitle(R.string.button_bar_podcasts);
 		podcastListView.setVisibility(View.INVISIBLE);
+		emptyView.setVisibility(View.GONE);
 		
 		BackgroundTask<List<PodcastChannel>> task = new TabBackgroundTask<List<PodcastChannel>>(this) {
 			@Override
