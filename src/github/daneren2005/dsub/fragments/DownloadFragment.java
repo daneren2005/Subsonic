@@ -103,6 +103,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private ScheduledFuture<?> hideControlsFuture;
 	private SongListAdapter songListAdapter;
 	private SilentBackgroundTask<Void> onProgressChangedTask;
+	private boolean seekInProgress = false;
 
 	/**
 	 * Called when the activity is first created.
@@ -378,6 +379,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
                     @Override
                     protected void done(Void result) {
+                    	seekInProgress = false;
                         DownloadFragment.this.onProgressChanged();
                     }
                 }.execute();
@@ -385,12 +387,15 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
             @Override
             public void onStartTrackingTouch(final SeekBar seekBar) {
-
+				seekInProgress = true;
             }
 
             @Override
-            public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
-
+            public void onProgressChanged(final SeekBar seekBar, final int position, final boolean fromUser) {
+				if (fromUser) {
+					Util.toast(context, Util.formatDuration(position / 1000), true);
+					setControlsVisible(true);
+				}
             }
 		});
 		playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -976,7 +981,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					positionTextView.setText(Util.formatDuration(millisPlayed / 1000));
 					durationTextView.setText(Util.formatDuration(millisTotal / 1000));
 					progressBar.setMax(millisTotal == 0 ? 100 : millisTotal); // Work-around for apparent bug.
-					progressBar.setProgress(millisPlayed);
+					if(!seekInProgress) {
+						progressBar.setProgress(millisPlayed);
+					}
 					progressBar.setEnabled(currentPlaying.isWorkDone() || isJukeboxEnabled);
 				} else {
 					positionTextView.setText("0:00");
