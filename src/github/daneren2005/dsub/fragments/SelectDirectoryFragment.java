@@ -205,6 +205,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			case R.id.menu_remove_playlist:
 				removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
 				return true;
+			case R.id.menu_download_all:
+				downloadAllPodcastEpisodes();
+				return true;
 		}
 
 		if(super.onOptionsItemSelected(item)) {
@@ -642,6 +645,32 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 
 				Util.toast(context, msg, false);
+			}
+		}.execute();
+	}
+	
+	public void downloadAllPodcastEpisodes() {
+		new LoadingTask<Void>(context, true) {
+			@Override
+			protected Void doInBackground() throws Throwable {				
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				
+				int count = entryList.getCount();
+				for(int i = 0; i < count; i++) {
+					PodcastEpisode episode = (PodcastEpisode) entryList.getItemAtPosition(i);
+					musicService.downloadPodcastEpisode(episode.getEpisodeId(), context, null);
+				}
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, context.getResources().getString(R.string.select_podcasts_downloading, podcastName));
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				Util.toast(context, getErrorMessage(error), false);
 			}
 		}.execute();
 	}
