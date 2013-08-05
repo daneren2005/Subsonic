@@ -163,6 +163,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	private void load(final boolean refresh) {
 		setTitle(R.string.playlist_label);
 		list.setVisibility(View.INVISIBLE);
+		emptyTextView.setVisibility(View.GONE);
 		
 		BackgroundTask<List<Playlist>> task = new TabBackgroundTask<List<Playlist>>(this) {
 			@Override
