@@ -5,6 +5,10 @@
 		android:icon="@drawable/action_refresh"
 		android:title="@string/menu.refresh"
 		android:showAsAction="always|withText"/>
+		
+	<item
+		android:id="@+id/menu_download_all"
+		android:title="@string/select_podcasts.server_download"/>
 
 	<item 
 		android:id="@+id/menu_delete"
