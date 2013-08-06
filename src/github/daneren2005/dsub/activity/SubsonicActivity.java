@@ -23,9 +23,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
@@ -155,10 +154,10 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		boolean isVolumeDown = keyCode == KeyEvent.KEYCODE_VOLUME_DOWN;
 		boolean isVolumeUp = keyCode == KeyEvent.KEYCODE_VOLUME_UP;
 		boolean isVolumeAdjust = isVolumeDown || isVolumeUp;
-		boolean isJukebox = getDownloadService() != null && getDownloadService().isJukeboxEnabled();
+		boolean isJukebox = getDownloadService() != null && getDownloadService().isRemoteEnabled();
 
 		if (isVolumeAdjust && isJukebox) {
-			getDownloadService().adjustJukeboxVolume(isVolumeUp);
+			getDownloadService().setRemoteVolume(isVolumeUp);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);

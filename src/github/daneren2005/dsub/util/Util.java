@@ -40,7 +40,6 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -1014,7 +1013,7 @@ public final class Util {
     		audioManager.requestAudioFocus(new OnAudioFocusChangeListener() {
 				public void onAudioFocusChange(int focusChange) {
 					DownloadServiceImpl downloadService = (DownloadServiceImpl)context;
-					if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isJukeboxEnabled()) {
+					if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isRemoteEnabled()) {
 						if(downloadService.getPlayerState() == PlayerState.STARTED) {							
 							SharedPreferences prefs = getPreferences(context);
 							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
@@ -1034,7 +1033,7 @@ public final class Util {
 							lowerFocus = false;
 							downloadService.setVolume(1.0f);
 						}
-					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isJukeboxEnabled()) {
+					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isRemoteEnabled()) {
 						hasFocus = false;
 						downloadService.pause();
 						audioManager.abandonAudioFocus(this);

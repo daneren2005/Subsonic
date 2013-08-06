@@ -113,7 +113,7 @@ public class DownloadServiceLifecycleSupport {
             public void onReceive(Context context, Intent intent) {
                 Log.i(TAG, "Headset event for: " + intent.getExtras().get("name"));
                 if (intent.getExtras().getInt("state") == 0) {
-					if(!downloadService.isJukeboxEnabled()) {
+					if(!downloadService.isRemoteEnabled()) {
 						downloadService.pause();
 					}
                 }
@@ -298,7 +298,7 @@ public class DownloadServiceLifecycleSupport {
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                 case TelephonyManager.CALL_STATE_OFFHOOK:
-                    if (downloadService.getPlayerState() == PlayerState.STARTED && !downloadService.isJukeboxEnabled()) {
+                    if (downloadService.getPlayerState() == PlayerState.STARTED && !downloadService.isRemoteEnabled()) {
                         resumeAfterCall = true;
                         downloadService.pause();
                     }

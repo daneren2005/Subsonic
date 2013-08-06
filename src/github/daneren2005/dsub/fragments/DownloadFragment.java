@@ -42,6 +42,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
@@ -351,8 +352,8 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		jukeboxButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				boolean jukeboxEnabled = !getDownloadService().isJukeboxEnabled();
-				getDownloadService().setJukeboxEnabled(jukeboxEnabled);
+				boolean jukeboxEnabled = !getDownloadService().isRemoteEnabled();
+				getDownloadService().setRemoteEnabled(jukeboxEnabled ? RemoteControlState.JUKEBOX_SERVER : RemoteControlState.LOCAL);
 				updateButtons();
 				Util.toast(context, jukeboxEnabled ? R.string.download_jukebox_on : R.string.download_jukebox_off, false);
 				setControlsVisible(true);
@@ -777,7 +778,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			visualizerButton.setTextColor(visualizerView.isActive() ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
 		}
 
-		boolean jukeboxEnabled = getDownloadService() != null && getDownloadService().isJukeboxEnabled();
+		boolean jukeboxEnabled = getDownloadService() != null && getDownloadService().isRemoteEnabled();
 		jukeboxButton.setTextColor(jukeboxEnabled ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
 	}
 
@@ -966,7 +967,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			@Override
 			protected Void doInBackground() throws Throwable {
 				downloadService = getDownloadService();
-				isJukeboxEnabled = downloadService.isJukeboxEnabled();
+				isJukeboxEnabled = downloadService.isRemoteEnabled();
 				millisPlayed = Math.max(0, downloadService.getPlayerPosition());
 				duration = downloadService.getPlayerDuration();
 				playerState = getDownloadService().getPlayerState();

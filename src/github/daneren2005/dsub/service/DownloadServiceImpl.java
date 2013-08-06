@@ -30,6 +30,7 @@ import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.CancellableTask;
@@ -120,7 +121,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private EqualizerController equalizerController;
     private VisualizerController visualizerController;
     private boolean showVisualization;
-    private boolean jukeboxEnabled;
+    private RemoteControlState remoteState = RemoteControlState.LOCAL;
 	private PositionCache positionCache;
 	private StreamProxy proxy;
 	
@@ -322,7 +323,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 
     private void updateJukeboxPlaylist() {
-        if (jukeboxEnabled) {
+        if (remoteState != RemoteControlState.LOCAL) {
             jukeboxService.updatePlaylist();
         }
     }
@@ -652,7 +653,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			}
             setCurrentPlaying(index, start);
             if (start) {
-                if (jukeboxEnabled) {
+                if (remoteState != RemoteControlState.LOCAL) {
                     jukeboxService.skip(getCurrentPlayingIndex(), 0);
                     setPlayerState(STARTED);
                 } else {
@@ -712,7 +713,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized void seekTo(int position) {
         try {
-            if (jukeboxEnabled) {
+            if (remoteState != RemoteControlState.LOCAL) {
                 jukeboxService.skip(getCurrentPlayingIndex(), position / 1000);
             } else {
                 mediaPlayer.seekTo(position);
@@ -769,7 +770,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public synchronized void pause() {
         try {
             if (playerState == STARTED) {
-                if (jukeboxEnabled) {
+                if (remoteState != RemoteControlState.LOCAL) {
                     jukeboxService.stop();
                 } else {
                     mediaPlayer.pause();
@@ -785,7 +786,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public synchronized void stop() {
 		try {
 			if (playerState == STARTED) {
-                if (jukeboxEnabled) {
+                if (remoteState != RemoteControlState.LOCAL) {
                     jukeboxService.stop();
                 } else {
                     mediaPlayer.pause();
@@ -802,7 +803,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized void start() {
         try {
-            if (jukeboxEnabled) {
+            if (remoteState != RemoteControlState.LOCAL) {
                 jukeboxService.start();
             } else {
                 mediaPlayer.start();
@@ -834,7 +835,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             if (playerState == IDLE || playerState == DOWNLOADING || playerState == PREPARING) {
                 return 0;
             }
-            if (jukeboxEnabled) {
+            if (remoteState != RemoteControlState.LOCAL) {
 				return jukeboxService.getPositionSeconds() * 1000;
             } else {
                 return cachedPosition;
@@ -1008,15 +1009,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     @Override
-    public boolean isJukeboxEnabled() {
-        return jukeboxEnabled;
+    public boolean isRemoteEnabled() {
+        return remoteState != RemoteControlState.LOCAL;
     }
 
     @Override
-    public void setJukeboxEnabled(boolean jukeboxEnabled) {
-        this.jukeboxEnabled = jukeboxEnabled;
-        jukeboxService.setEnabled(jukeboxEnabled);
-        if (jukeboxEnabled) {
+    public void setRemoteEnabled(RemoteControlState newState) {
+		remoteState = newState;
+        jukeboxService.setEnabled(remoteState != RemoteControlState.LOCAL);
+        if (remoteState != RemoteControlState.LOCAL) {
             reset();
             
             // Cancel current download, if necessary.
@@ -1027,7 +1028,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     @Override
-    public void adjustJukeboxVolume(boolean up) {
+    public void setRemoteVolume(boolean up) {
         jukeboxService.adjustVolume(up);
     }
 
@@ -1274,7 +1275,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		int currentPlayingIndex = getCurrentPlayingIndex();
 		DownloadFile movedSong = list.remove(from);
 		list.add(to, movedSong);
-		if(jukeboxEnabled && mainList) {
+		if(remoteState != RemoteControlState.LOCAL && mainList) {
 			updateJukeboxPlaylist();
 		} else if(mainList && (movedSong == nextPlaying || (currentPlayingIndex + 1) == to)) {
 			// Moving next playing or moving a song to be next playing
@@ -1302,7 +1303,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             checkShufflePlay();
         }
 
-        if (jukeboxEnabled || !Util.isNetworkConnected(this)) {
+        if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this)) {
             return;
         }
 

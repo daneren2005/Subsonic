@@ -29,6 +29,7 @@ import android.widget.Toast;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.JukeboxStatus;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.Util;
 
@@ -145,7 +146,7 @@ public class JukeboxService {
                 Util.toast(downloadService, resourceId, false);
             }
         });
-        downloadService.setJukeboxEnabled(false);
+        downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
     }
 
     public void updatePlaylist() {

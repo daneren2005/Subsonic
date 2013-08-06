@@ -24,6 +24,7 @@ import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 
 /**
@@ -121,11 +122,11 @@ public interface DownloadService {
 
     VisualizerController getVisualizerController();
 
-    boolean isJukeboxEnabled();
+    boolean isRemoteEnabled();
 
-    void setJukeboxEnabled(boolean b);
+    void setRemoteEnabled(RemoteControlState newState);
 
-    void adjustJukeboxVolume(boolean up);
+    void setRemoteVolume(boolean up);
 	
 	void setSleepTimerDuration(int duration);
 	
