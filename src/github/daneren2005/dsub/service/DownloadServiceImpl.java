@@ -330,6 +330,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     public void restore(List<MusicDirectory.Entry> songs, int currentPlayingIndex, int currentPlayingPosition) {
 		SharedPreferences prefs = Util.getPreferences(this);
+		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
+		if(remoteState == RemoteControlState.JUKEBOX_SERVER) {
+			jukeboxService.setEnabled(true);
+		}
 		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
         download(songs, false, false, false, false);
 		if(startShufflePlay) {
@@ -1016,7 +1020,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public void setRemoteEnabled(RemoteControlState newState) {
 		remoteState = newState;
-        jukeboxService.setEnabled(remoteState != RemoteControlState.LOCAL);
+        jukeboxService.setEnabled(remoteState == RemoteControlState.JUKEBOX_SERVER);
         if (remoteState != RemoteControlState.LOCAL) {
             reset();
             
@@ -1025,6 +1029,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 currentDownloading.cancelDownload();
             }
         }
+        
+    	SharedPreferences.Editor editor = Util.getPreferences(this).edit();
+		editor.putInt(Constants.PREFERENCES_KEY_CONTROL_MODE, newState.getValue());
+		editor.commit();
     }
 
     @Override
