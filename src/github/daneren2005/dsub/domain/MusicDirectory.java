@@ -329,6 +329,8 @@ public class MusicDirectory {
 				return -1;
 			} else if(!lhs.isDirectory() && rhs.isDirectory()) {
 				return 1;
+			} else if(lhs.isDirectory() && rhs.isDirectory()) {
+				return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
 			}
 			
 			Integer lhsDisc = lhs.getDiscNumber();
@@ -340,20 +342,12 @@ public class MusicDirectory {
 				} else if(lhsDisc > rhsDisc) {
 					return 1;
 				}
-			} else if(lhsDisc != null) {
-				return -1;
-			} else if(rhsDisc != null) {
-				return 1;
 			}
 			
 			Integer lhsTrack = lhs.getTrack();
 			Integer rhsTrack = rhs.getTrack();
 			if(lhsTrack != null && rhsTrack != null) {
-				if(lhsTrack < rhsTrack) {
-					return -1;
-				} else if(lhsTrack > rhsTrack) {
-					return 1;
-				}
+				return lhsTrack.compareTo(rhsTrack);
 			} else if(lhsTrack != null) {
 				return -1;
 			} else if(rhsTrack != null) {
