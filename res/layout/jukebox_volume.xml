@@ -1,29 +1,46 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/toast_layout_root"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="@drawable/toast_frame">
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+		android:background="@drawable/toast_frame"
+		android:padding="20dip"
+		android:layout_height="fill_parent"
+		android:layout_width="fill_parent"
+		android:orientation="vertical"
+		android:id="@+id/toast_layout_root"
+		xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/download.jukebox_volume"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#ffffffff"
-            android:shadowColor="#bb000000"
-            android:shadowRadius="2.75"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp"
-            android:paddingBottom="12dp"
-            />
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:id="@+id/jukebox_volume_title"
+		android:paddingBottom="12dp"
+		android:paddingRight="32dp"
+		android:paddingLeft="32dp"
+		android:shadowRadius="2.75"
+		android:shadowColor="#bb000000"
+		android:textColor="#ffffffff"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="@string/download.jukebox_volume"
+		android:gravity="center_horizontal"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentLeft="true"/>
 
-    <ProgressBar android:id="@+id/jukebox_volume_progress_bar"
-                 style="@android:style/Widget.ProgressBar.Horizontal"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:paddingBottom="3dp"
-            />
+	<ImageView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:id="@+id/jukebox_volume_image"
+		android:paddingRight="12dip"
+		android:layout_alignParentLeft="true"
+		android:layout_below="@+id/jukebox_volume_title"
+		android:src="@drawable/volume"/>
 
-</LinearLayout>
+	<SeekBar
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:id="@+id/jukebox_volume_progress_bar"
+		android:paddingBottom="3dp"
+		android:layout_alignParentRight="true"
+		android:layout_below="@+id/jukebox_volume_title"
+		android:layout_toRightOf="@+id/jukebox_volume_image"
+		android:indeterminate="false"/>
+</RelativeLayout>
