@@ -654,11 +654,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			@Override
 			protected Void doInBackground() throws Throwable {				
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				
-				int count = entryList.getCount();
-				for(int i = 0; i < count; i++) {
-					PodcastEpisode episode = (PodcastEpisode) entryList.getItemAtPosition(i);
-					musicService.downloadPodcastEpisode(episode.getEpisodeId(), context, null);
+
+				for(int i = 0; i < entries.size(); i++) {
+					PodcastEpisode episode = (PodcastEpisode) entries.get(i);
+					if("skipped".equals(episode.getStatus())) {
+						musicService.downloadPodcastEpisode(episode.getEpisodeId(), context, null);
+					}
 				}
 				return null;
 			}
