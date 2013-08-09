@@ -19,28 +19,36 @@
 
 package github.daneren2005.dsub.service;
 
-public class RemoteController {
+import android.content.Context;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+import github.daneren2005.dsub.R;
+
+public abstract class RemoteController {
 	protected DownloadServiceImpl downloadService;
 	private VolumeToast volumeToast;
 	
 	public abstract void start();
 	public abstract void stop();
 	
-	public abstract public abstract void updatePlaylist();
+	public abstract void updatePlaylist();
 	public abstract void changePosition(int seconds);
 	public abstract void changeTrack(int index, DownloadFile song);
-	public abstract void setVolume(float gain);
+	public abstract void setVolume(boolean up);
 	
 	public abstract int getRemotePosition();
 	
 	protected VolumeToast getVolumeToast() {
 		if(volumeToast == null) {
-			volumeToast == new VolumeToast(downloadService);
+			volumeToast = new VolumeToast(downloadService);
 		}
 		return volumeToast;
 	}
 	
-	private static class VolumeToast extends Toast {
+	public static class VolumeToast extends Toast {
 		private final ProgressBar progressBar;
 		
 		public VolumeToast(Context context) {

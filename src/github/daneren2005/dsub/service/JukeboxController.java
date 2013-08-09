@@ -114,14 +114,11 @@ public class JukeboxController extends RemoteController {
 		tasks.remove(Start.class);
 		
 		startStatusUpdate();
-		if (jukeboxStatus != null) {
-			jukeboxStatus.setPositionSeconds(seconds);
-		}
 		tasks.add(new Skip(index, 0));
 		downloadService.setPlayerState(PlayerState.STARTED);
 	}
 	@Override
-	public void setVolume(float up) {
+	public void setVolume(boolean up) {
 		float delta = up ? 0.1f : -0.1f;
 		gain += delta;
 		gain = Math.max(gain, 0.0f);
