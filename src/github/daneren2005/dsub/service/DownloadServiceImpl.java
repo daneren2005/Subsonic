@@ -423,17 +423,26 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     @Override
     public synchronized DownloadFile forSong(MusicDirectory.Entry song) {
+    	DownloadFile returnFile = null;
         for (DownloadFile downloadFile : downloadList) {
-            if (downloadFile.getSong().equals(song) &&
-					((downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && downloadFile.getPartialFile().exists())
-					|| downloadFile.isWorkDone())) {
-                return downloadFile;
+            if (downloadFile.getSong().equals(song)) {
+            	if(((downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && downloadFile.getPartialFile().exists()) || downloadFile.isWorkDone())) {
+            		// If downloading, return immediately
+                	return downloadFile;
+				} else {
+					// Otherwise, check to make sure there isn't a background download going on first
+					returnFile = downloadFile;
+				}
             }
         }
 		for (DownloadFile downloadFile : backgroundDownloadList) {
             if (downloadFile.getSong().equals(song)) {
                 return downloadFile;
             }
+        }
+        
+        if(returnFile != null) {
+        	return returnFile;
         }
 
         DownloadFile downloadFile = downloadFileCache.get(song);
