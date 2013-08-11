@@ -27,13 +27,12 @@ import android.graphics.Bitmap;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
-import github.daneren2005.dsub.domain.JukeboxStatus;
+import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastChannel;
-import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
@@ -98,17 +97,17 @@ public interface MusicService {
 	
 	String getHlsUrl(String id, int bitRate, Context context) throws Exception;
 
-    JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception;
+    RemoteStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception;
 
-    JukeboxStatus skipJukebox(int index, int offsetSeconds, Context context, ProgressListener progressListener) throws Exception;
+    RemoteStatus skipJukebox(int index, int offsetSeconds, Context context, ProgressListener progressListener) throws Exception;
 
-    JukeboxStatus stopJukebox(Context context, ProgressListener progressListener) throws Exception;
+    RemoteStatus stopJukebox(Context context, ProgressListener progressListener) throws Exception;
 
-    JukeboxStatus startJukebox(Context context, ProgressListener progressListener) throws Exception;
+    RemoteStatus startJukebox(Context context, ProgressListener progressListener) throws Exception;
 
-    JukeboxStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception;
+    RemoteStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception;
 
-    JukeboxStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception;
+    RemoteStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception;
     
     void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception;
 	

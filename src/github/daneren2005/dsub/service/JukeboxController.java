@@ -15,16 +15,11 @@
 
 package github.daneren2005.dsub.service;
 
-import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.domain.JukeboxStatus;
+import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
@@ -41,15 +36,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class JukeboxController extends RemoteController {
-	private static final String TAG = JukeboxService.class.getSimpleName();
+	private static final String TAG = JukeboxController.class.getSimpleName();
 	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 5L;
 	
 	private final Handler handler = new Handler();
+	private boolean running = false;
 	private final TaskQueue tasks = new TaskQueue();
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	private ScheduledFuture<?> statusUpdateFuture;
 	private final AtomicLong timeOfLastUpdate = new AtomicLong();
-	private JukeboxStatus jukeboxStatus;
+	private RemoteStatus jukeboxStatus;
 	private float gain = 0.5f;
     
     public JukeboxController(DownloadServiceImpl downloadService) {
@@ -57,10 +53,10 @@ public class JukeboxController extends RemoteController {
         new Thread() {
             @Override
             public void run() {
+				running = true;
                 processTasks();
             }
         }.start();
-        downloadService.setPlayerState(PlayerState.IDLE);
         updatePlaylist();
     }
 
@@ -80,6 +76,10 @@ public class JukeboxController extends RemoteController {
 		stopStatusUpdate();
 		tasks.add(new Stop());
 	}
+	@Override
+	public void shutdown() {
+		running = false;
+	}
 	
 	@Override
 	public void updatePlaylist() {
@@ -95,8 +95,7 @@ public class JukeboxController extends RemoteController {
 	}
 	@Override
 	public void changePosition(int seconds) {
-		// TODO: Break down into changePosition/changeTrack
-		/*tasks.remove(Skip.class);
+		tasks.remove(Skip.class);
 		tasks.remove(Stop.class);
 		tasks.remove(Start.class);
 		
@@ -104,8 +103,8 @@ public class JukeboxController extends RemoteController {
 		if (jukeboxStatus != null) {
 			jukeboxStatus.setPositionSeconds(seconds);
 		}
-		tasks.add(new Skip(index, seconds));
-		downloadService.setPlayerState(PlayerState.STARTED);*/
+		tasks.add(new Skip(-1, seconds));
+		downloadService.setPlayerState(PlayerState.STARTED);
 	}
 	@Override
 	public void changeTrack(int index, DownloadFile song) {
@@ -144,12 +143,14 @@ public class JukeboxController extends RemoteController {
 	}
 	
 	private void processTasks() {
-		while (true) {
-			JukeboxTask task = null;
+		while (running) {
+			RemoteTask task = null;
 			try {
 				task = tasks.take();
-				JukeboxStatus status = task.execute();
-				onStatusUpdate(status);
+				RemoteStatus status = task.execute();
+				if(status != null) {
+					onStatusUpdate(status);
+				}
 			} catch (Throwable x) {
 				onError(task, x);
 			}
@@ -176,7 +177,7 @@ public class JukeboxController extends RemoteController {
 		}
 	}
     
-	private void onStatusUpdate(JukeboxStatus jukeboxStatus) {
+	private void onStatusUpdate(RemoteStatus jukeboxStatus) {
 		timeOfLastUpdate.set(System.currentTimeMillis());
 		this.jukeboxStatus = jukeboxStatus;
 		
@@ -189,7 +190,7 @@ public class JukeboxController extends RemoteController {
 		}
 	}
 
-	private void onError(JukeboxTask task, Throwable x) {
+	private void onError(RemoteTask task, Throwable x) {
 		if (x instanceof ServerTooOldException && !(task instanceof Stop)) {
 			disableJukeboxOnError(x, R.string.download_jukebox_server_too_old);
 		} else if (x instanceof OfflineException && !(task instanceof Stop)) {
@@ -215,54 +216,15 @@ public class JukeboxController extends RemoteController {
 	private MusicService getMusicService() {
 		return MusicServiceFactory.getMusicService(downloadService);
 	}
-	
-	private static class TaskQueue {
-		private final LinkedBlockingQueue<JukeboxTask> queue = new LinkedBlockingQueue<JukeboxTask>();
-		
-		void add(JukeboxTask jukeboxTask) {
-			queue.add(jukeboxTask);
-		}
-		
-		JukeboxTask take() throws InterruptedException {
-			return queue.take();
-		}
-		
-		void remove(Class<? extends JukeboxTask> clazz) {
-			try {
-				Iterator<JukeboxTask> iterator = queue.iterator();
-				while (iterator.hasNext()) {
-					JukeboxTask task = iterator.next();
-					if (clazz.equals(task.getClass())) {
-						iterator.remove();
-					}
-				}
-			} catch (Throwable x) {
-				Log.w(TAG, "Failed to clean-up task queue.", x);
-			}
-		}
-		
-		void clear() {
-			queue.clear();
-		}
-	}
 
-	private abstract class JukeboxTask {
-		abstract JukeboxStatus execute() throws Exception;
-		
+	private class GetStatus extends RemoteTask {
 		@Override
-		public String toString() {
-			return getClass().getSimpleName();
-		}
-	}
-
-	private class GetStatus extends JukeboxTask {
-		@Override
-		JukeboxStatus execute() throws Exception {
+		RemoteStatus execute() throws Exception {
 			return getMusicService().getJukeboxStatus(downloadService, null);
 		}
 	}
 
-	private class SetPlaylist extends JukeboxTask {
+	private class SetPlaylist extends RemoteTask {
 		private final List<String> ids;
 		
 		SetPlaylist(List<String> ids) {
@@ -270,12 +232,12 @@ public class JukeboxController extends RemoteController {
 		}
 		
 		@Override
-		JukeboxStatus execute() throws Exception {
+		RemoteStatus execute() throws Exception {
 			return getMusicService().updateJukeboxPlaylist(ids, downloadService, null);
 		}
 	}
 
-	private class Skip extends JukeboxTask {
+	private class Skip extends RemoteTask {
 		private final int index;
 		private final int offsetSeconds;
 		
@@ -285,26 +247,26 @@ public class JukeboxController extends RemoteController {
 		}
 		
 		@Override
-		JukeboxStatus execute() throws Exception {
+		RemoteStatus execute() throws Exception {
 			return getMusicService().skipJukebox(index, offsetSeconds, downloadService, null);
 		}
 	}
 
-	private class Stop extends JukeboxTask {
+	private class Stop extends RemoteTask {
 		@Override
-		JukeboxStatus execute() throws Exception {
+		RemoteStatus execute() throws Exception {
 			return getMusicService().stopJukebox(downloadService, null);
 		}
 	}
 
-	private class Start extends JukeboxTask {
+	private class Start extends RemoteTask {
 		@Override
-		JukeboxStatus execute() throws Exception {
+		RemoteStatus execute() throws Exception {
 			return getMusicService().startJukebox(downloadService, null);
 		}
 	}
 
-	private class SetGain extends JukeboxTask {
+	private class SetGain extends RemoteTask {
 		private final float gain;
 		
 		private SetGain(float gain) {
@@ -312,8 +274,15 @@ public class JukeboxController extends RemoteController {
 		}
 		
 		@Override
-		JukeboxStatus execute() throws Exception {
+		RemoteStatus execute() throws Exception {
 			return getMusicService().setJukeboxGain(gain, downloadService, null);
+		}
+	}
+
+	private class ShutdownTask extends RemoteTask {
+		@Override
+		RemoteStatus execute() throws Exception {
+			return null;
 		}
 	}
 }

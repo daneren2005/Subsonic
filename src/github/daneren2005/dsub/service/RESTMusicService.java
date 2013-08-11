@@ -22,9 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.FileReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -71,7 +69,6 @@ import android.net.NetworkInfo;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
-import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
 import github.daneren2005.dsub.service.parser.ChatMessageParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
@@ -740,7 +737,7 @@ public class RESTMusicService implements MusicService {
 	}
 
     @Override
-    public JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {
         int n = ids.size();
         List<String> parameterNames = new ArrayList<String>(n + 1);
         parameterNames.add("action");
@@ -755,36 +752,40 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public JukeboxStatus skipJukebox(int index, int offsetSeconds, Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus skipJukebox(int index, int offsetSeconds, Context context, ProgressListener progressListener) throws Exception {
         List<String> parameterNames = Arrays.asList("action", "index", "offset");
         List<Object> parameterValues = Arrays.<Object>asList("skip", index, offsetSeconds);
+		if(index < 0) {
+			parameterNames.remove(1);
+			parameterValues.remove(1);
+		}
         return executeJukeboxCommand(context, progressListener, parameterNames, parameterValues);
     }
 
     @Override
-    public JukeboxStatus stopJukebox(Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus stopJukebox(Context context, ProgressListener progressListener) throws Exception {
         return executeJukeboxCommand(context, progressListener, Arrays.asList("action"), Arrays.<Object>asList("stop"));
     }
 
     @Override
-    public JukeboxStatus startJukebox(Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus startJukebox(Context context, ProgressListener progressListener) throws Exception {
         return executeJukeboxCommand(context, progressListener, Arrays.asList("action"), Arrays.<Object>asList("start"));
     }
 
     @Override
-    public JukeboxStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception {
         return executeJukeboxCommand(context, progressListener, Arrays.asList("action"), Arrays.<Object>asList("status"));
     }
 
     @Override
-    public JukeboxStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception {
         List<String> parameterNames = Arrays.asList("action", "gain");
         List<Object> parameterValues = Arrays.<Object>asList("setGain", gain);
         return executeJukeboxCommand(context, progressListener, parameterNames, parameterValues);
 
     }
 
-    private JukeboxStatus executeJukeboxCommand(Context context, ProgressListener progressListener, List<String> parameterNames, List<Object> parameterValues) throws Exception {
+    private RemoteStatus executeJukeboxCommand(Context context, ProgressListener progressListener, List<String> parameterNames, List<Object> parameterValues) throws Exception {
         checkServerVersion(context, "1.7", "Jukebox not supported.");
         Reader reader = getReader(context, progressListener, "jukeboxControl", null, parameterNames, parameterValues);
         try {

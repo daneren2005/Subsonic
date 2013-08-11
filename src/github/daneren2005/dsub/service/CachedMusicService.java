@@ -29,7 +29,7 @@ import android.support.v4.util.LruCache;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
-import github.daneren2005.dsub.domain.JukeboxStatus;
+import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
@@ -241,32 +241,32 @@ public class CachedMusicService implements MusicService {
 	}
 
     @Override
-    public JukeboxStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {
         return musicService.updateJukeboxPlaylist(ids, context, progressListener);
     }
 
     @Override
-    public JukeboxStatus skipJukebox(int index, int offsetSeconds, Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus skipJukebox(int index, int offsetSeconds, Context context, ProgressListener progressListener) throws Exception {
         return musicService.skipJukebox(index, offsetSeconds, context, progressListener);
     }
 
     @Override
-    public JukeboxStatus stopJukebox(Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus stopJukebox(Context context, ProgressListener progressListener) throws Exception {
         return musicService.stopJukebox(context, progressListener);
     }
 
     @Override
-    public JukeboxStatus startJukebox(Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus startJukebox(Context context, ProgressListener progressListener) throws Exception {
         return musicService.startJukebox(context, progressListener);
     }
 
     @Override
-    public JukeboxStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception {
         return musicService.getJukeboxStatus(context, progressListener);
     }
 
     @Override
-    public JukeboxStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception {
+    public RemoteStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception {
         return musicService.setJukeboxGain(gain, context, progressListener);
     }
     

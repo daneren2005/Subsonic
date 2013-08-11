@@ -23,7 +23,7 @@ import java.io.Reader;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
-import github.daneren2005.dsub.domain.JukeboxStatus;
+import github.daneren2005.dsub.domain.RemoteStatus;
 
 /**
  * @author Sindre Mehus
@@ -34,11 +34,11 @@ public class JukeboxStatusParser extends AbstractParser {
         super(context);
     }
 
-    public JukeboxStatus parse(Reader reader) throws Exception {
+    public RemoteStatus parse(Reader reader) throws Exception {
 
         init(reader);
 
-        JukeboxStatus jukeboxStatus = new JukeboxStatus();
+        RemoteStatus jukeboxStatus = new RemoteStatus();
         int eventType;
         do {
             eventType = nextParseEvent();

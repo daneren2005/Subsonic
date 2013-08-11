@@ -20,19 +20,27 @@
 package github.daneren2005.dsub.service;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import java.util.Iterator;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.RemoteStatus;
 
 public abstract class RemoteController {
+	private static final String TAG = RemoteController.class.getSimpleName();
 	protected DownloadServiceImpl downloadService;
 	private VolumeToast volumeToast;
-	
+
 	public abstract void start();
 	public abstract void stop();
+	public abstract void shutdown();
 	
 	public abstract void updatePlaylist();
 	public abstract void changePosition(int seconds);
@@ -40,6 +48,45 @@ public abstract class RemoteController {
 	public abstract void setVolume(boolean up);
 	
 	public abstract int getRemotePosition();
+
+	protected abstract class RemoteTask {
+		abstract RemoteStatus execute() throws Exception;
+
+		@Override
+		public String toString() {
+			return getClass().getSimpleName();
+		}
+	}
+
+	protected static class TaskQueue {
+		private final LinkedBlockingQueue<RemoteTask> queue = new LinkedBlockingQueue<RemoteTask>();
+
+		void add(RemoteTask jukeboxTask) {
+			queue.add(jukeboxTask);
+		}
+
+		RemoteTask take() throws InterruptedException {
+			return queue.take();
+		}
+
+		void remove(Class<? extends RemoteTask> clazz) {
+			try {
+				Iterator<RemoteTask> iterator = queue.iterator();
+				while (iterator.hasNext()) {
+					RemoteTask task = iterator.next();
+					if (clazz.equals(task.getClass())) {
+						iterator.remove();
+					}
+				}
+			} catch (Throwable x) {
+				Log.w(TAG, "Failed to clean-up task queue.", x);
+			}
+		}
+
+		void clear() {
+			queue.clear();
+		}
+	}
 	
 	protected VolumeToast getVolumeToast() {
 		if(volumeToast == null) {
@@ -48,7 +95,7 @@ public abstract class RemoteController {
 		return volumeToast;
 	}
 	
-	public static class VolumeToast extends Toast {
+	protected static class VolumeToast extends Toast {
 		private final ProgressBar progressBar;
 		
 		public VolumeToast(Context context) {

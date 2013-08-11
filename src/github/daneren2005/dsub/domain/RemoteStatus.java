@@ -22,7 +22,7 @@ package github.daneren2005.dsub.domain;
  * @author Sindre Mehus
  * @version $Id$
  */
-public class JukeboxStatus {
+public class RemoteStatus {
 
     private Integer positionSeconds;
     private Integer currentPlayingIndex;
