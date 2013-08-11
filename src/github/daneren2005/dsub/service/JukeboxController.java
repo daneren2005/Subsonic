@@ -149,7 +149,7 @@ public class JukeboxController extends RemoteController {
 			try {
 				task = tasks.take();
 				RemoteStatus status = task.execute();
-				if(status != null) {
+				if(status != null && running) {
 					onStatusUpdate(status);
 				}
 			} catch (Throwable x) {

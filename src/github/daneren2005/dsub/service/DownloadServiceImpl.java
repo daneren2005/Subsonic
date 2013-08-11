@@ -252,6 +252,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		if(nextPlayingTask != null) {
 			nextPlayingTask.cancel();
 		}
+		if(remoteController != null) {
+			remoteController.stop();
+			remoteController.shutdown();
+		}
 		Util.hidePlayingNotification(this, this, handler);
     }
 
@@ -348,7 +352,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         	}
         	
             play(currentPlayingIndex, false);
-            if (currentPlaying != null && currentPlaying.isCompleteFileAvailable()) {
+            if (currentPlaying != null && currentPlaying.isCompleteFileAvailable() && remoteState == RemoteControlState.LOCAL) {
                 doPlay(currentPlaying, currentPlayingPosition, autoPlayStart);
             }
 			autoPlayStart = false;
@@ -673,8 +677,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                     bufferAndPlay();
                 }
             }
-			checkDownloads();
-			setNextPlaying();
+			if (remoteState == RemoteControlState.LOCAL) {
+				checkDownloads();
+				setNextPlaying();
+			}
         }
     }
 	private synchronized void playNext() {
