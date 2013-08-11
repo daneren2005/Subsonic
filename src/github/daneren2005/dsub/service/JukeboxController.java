@@ -39,7 +39,7 @@ public class JukeboxController extends RemoteController {
 	private static final String TAG = JukeboxController.class.getSimpleName();
 	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 5L;
 	
-	private final Handler handler = new Handler();
+	private final Handler handler;
 	private boolean running = false;
 	private final TaskQueue tasks = new TaskQueue();
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -48,8 +48,9 @@ public class JukeboxController extends RemoteController {
 	private RemoteStatus jukeboxStatus;
 	private float gain = 0.5f;
     
-    public JukeboxController(DownloadServiceImpl downloadService) {
+    public JukeboxController(DownloadServiceImpl downloadService, Handler handler) {
     	this.downloadService = downloadService;
+		this.handler = handler;
         new Thread() {
             @Override
             public void run() {

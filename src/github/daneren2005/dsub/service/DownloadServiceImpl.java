@@ -1045,7 +1045,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		remoteState = newState;
 		switch(newState) {
 			case JUKEBOX_SERVER:
-				remoteController = new JukeboxController(this);
+				remoteController = new JukeboxController(this, handler);
 				break;
 			case LOCAL: default:
 				break;
