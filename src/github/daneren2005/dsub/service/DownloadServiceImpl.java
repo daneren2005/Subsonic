@@ -671,7 +671,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             setCurrentPlaying(index, start);
             if (start) {
                 if (remoteState != RemoteControlState.LOCAL) {
-					remoteController.changeTrack(getCurrentPlayingIndex(), currentPlaying);
+					remoteController.changeTrack(index, downloadList.get(index));
                     setPlayerState(STARTED);
                 } else {
                     bufferAndPlay();
