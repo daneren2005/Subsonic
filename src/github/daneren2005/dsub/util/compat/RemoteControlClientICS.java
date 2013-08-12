@@ -10,15 +10,19 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
+import android.os.Build;
 import github.daneren2005.dsub.activity.SubsonicActivity;
+import github.daneren2005.dsub.service.DownloadService;
 
 @TargetApi(14)
 public class RemoteControlClientICS extends RemoteControlClientHelper {
 	
 	private RemoteControlClient mRemoteControl;
 	private ImageLoader imageLoader;
+	private DownloadService downloadService;
 	
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
+		downloadService = (DownloadService) context;
 		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
 		// build the PendingIntent for the remote control client
@@ -31,16 +35,23 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 		audioManager.registerRemoteControlClient(mRemoteControl);
 
 		mRemoteControl.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
-
-		mRemoteControl.setTransportControlFlags(
-				RemoteControlClient.FLAG_KEY_MEDIA_PLAY | 
-				RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | 
-				RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
-				RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
-				RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
-				RemoteControlClient.FLAG_KEY_MEDIA_STOP);
-		
+		mRemoteControl.setTransportControlFlags(getTransportFlags());
 		imageLoader = SubsonicActivity.getStaticImageLoader(context);
+		
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			mRemoteControl.setOnGetPlaybackPositionListener(new RemoteControlClient.OnGetPlaybackPositionListener() {
+				@Override
+				long onGetPlaybackPosition() {
+					return downloadService.getPlayerPosition();
+				}
+			});
+			mRemoteControl.setPlaybackPositionUpdateListener(new RemoteControlClient.OnPlaybackPositionUpdateListener() {
+				@Override
+				void onPlaybackPositionUpdate(long newPosition) {
+					downloadService.seekTo(newPosition);
+				}
+			});
+		}
 	}
 	
 	public void unregister(final Context context) {
@@ -51,7 +62,15 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 	}
 	
 	public void setPlaybackState(final int state) {
-		mRemoteControl.setPlaybackState(state);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			long position = -1;
+			if(state == RemoteControlClient.PLAYSTATE_PLAYING || state == RemoteControlClient.PLAYSTATE_PAUSED) {
+				position = downloadService.getPlayerPosition();
+			}
+			mRemoteControl.setPlaybackState(state, position, 1.0f);
+		} else {
+			mRemoteControl.setPlaybackState(state);
+		}
 	}
 	
 	public void updateMetadata(final Context context, final MusicDirectory.Entry currentSong) {
@@ -78,6 +97,21 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
     	} else {
     		imageLoader.loadImage(context, mRemoteControl, currentSong);
     	}
+	}
+	
+	private int getTransportFlags() {
+		int flags = RemoteControlClient.FLAG_KEY_MEDIA_PLAY | 
+			RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | 
+			RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
+			RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
+			RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
+			RemoteControlClient.FLAG_KEY_MEDIA_STOP;
+			
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			flags = flags | RemoteControlClient.FLAG_KEY_MEDIA_POSITION_UPDATE;
+		}
+		
+		return flags;
 	}
 
 }
