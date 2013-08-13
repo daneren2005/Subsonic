@@ -20,6 +20,7 @@ package github.daneren2005.dsub.activity;
 
 import github.daneren2005.dsub.R;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import github.daneren2005.dsub.fragments.DownloadFragment;
 import android.app.Dialog;
@@ -33,7 +34,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
-import com.actionbarsherlock.view.MenuItem;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.MusicService;

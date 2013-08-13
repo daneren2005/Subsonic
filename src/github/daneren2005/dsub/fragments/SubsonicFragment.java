@@ -29,6 +29,7 @@ import android.content.pm.ResolveInfo;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -38,7 +39,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockFragment;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.HelpActivity;
@@ -74,7 +74,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SubsonicFragment extends SherlockFragment {
+public class SubsonicFragment extends Fragment {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
 	private static final AtomicInteger nextGeneratedId = new AtomicInteger(1);
 	private static int TAG_INC = 10;
@@ -115,7 +115,7 @@ public class SubsonicFragment extends SherlockFragment {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_refresh:
 				refresh(true);

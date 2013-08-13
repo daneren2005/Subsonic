@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.AdapterView;
@@ -16,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.net.Uri;
 import android.view.ViewGroup;
-import com.actionbarsherlock.view.Menu;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.domain.Artist;
@@ -118,12 +119,12 @@ public class SearchFragment extends SubsonicFragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.search, menu);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		if(super.onOptionsItemSelected(item)) {
 			return true;
 		}

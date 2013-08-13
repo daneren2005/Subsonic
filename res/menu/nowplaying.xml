@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:compat="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_shuffle"
         android:icon="@drawable/action_shuffle"
         android:title="@string/download.menu_shuffle"
-        android:showAsAction="ifRoom|withText"/>
+        compat:showAsAction="ifRoom|withText"/>
 		
 	<item
         android:id="@+id/menu_remove_all"
         android:icon="@drawable/action_remove_all"
         android:title="@string/download.menu_remove_all"
-        android:showAsAction="ifRoom|withText"/>
+        compat:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/menu_save_playlist"
         android:icon="@drawable/action_save"
         android:title="@string/download.menu_save"
-        android:showAsAction="ifRoom|withText"/>
+        compat:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/menu_screen_on_off"
         android:icon="@drawable/action_screen_on_off"
         android:title="@string/download.menu_screen_on"
-        android:showAsAction="ifRoom|withText"/>
+        compat:showAsAction="ifRoom|withText"/>
 		
 	<item
         android:id="@+id/menu_toggle_timer"

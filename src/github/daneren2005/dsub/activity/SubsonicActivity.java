@@ -12,18 +12,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.ActionBar.TabListener;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
@@ -37,7 +37,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubsonicActivity extends SherlockFragmentActivity implements OnItemSelectedListener {
+public class SubsonicActivity extends ActionBarActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
@@ -131,7 +131,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		com.actionbarsherlock.view.MenuInflater menuInflater = getSupportMenuInflater();
+		MenuInflater menuInflater = getMenuInflater();
 		if(pagerAdapter != null) {
 			pagerAdapter.onCreateOptionsMenu(menu, menuInflater);
 		} else if(currentFragment != null) {
@@ -140,7 +140,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		return true;
 	}
 	@Override
-	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		if(pagerAdapter != null) {
 			return pagerAdapter.onOptionsItemSelected(item);
 		} else if(currentFragment != null) {
@@ -384,8 +384,8 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		}
 	}
 	
-	public class TabPagerAdapter extends FragmentPagerAdapter implements TabListener, ViewPager.OnPageChangeListener {
-		private SherlockFragmentActivity activity;
+	public class TabPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
+		private ActionBarActivity activity;
 		private ViewPager pager;
 		private ActionBar actionBar;
 		private SubsonicFragment currentFragment;
@@ -394,7 +394,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		private List<QueuedFragment> queue = new ArrayList<QueuedFragment>();
 		private int currentPosition;
 
-		public TabPagerAdapter(SherlockFragmentActivity activity, ViewPager pager) {
+		public TabPagerAdapter(ActionBarActivity activity, ViewPager pager) {
 			super(activity.getSupportFragmentManager());
 			this.activity = activity;
 			this.actionBar = activity.getSupportActionBar();
@@ -428,7 +428,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			return tabs.size();
 		}
 		
-		public void onCreateOptionsMenu(Menu menu, com.actionbarsherlock.view.MenuInflater menuInflater) {
+		public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 			if(currentFragment != null) {
 				currentFragment.onCreateOptionsMenu(menu, menuInflater);
 				
@@ -440,7 +440,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 				queue.clear();
 			}
 		}
-		public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		public boolean onOptionsItemSelected(MenuItem item) {
 			if(currentFragment != null) {
 				return currentFragment.onOptionsItemSelected(item);
 			} else {
@@ -448,7 +448,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			}
 		}
 
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
 			TabInfo tabInfo = (TabInfo) tab.getTag();
 			for (int i = 0; i < tabs.size(); i++) {
 				if ( tabs.get(i) == tabInfo ) {
@@ -458,9 +458,9 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 			}
 		}
 
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {}
+		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
 
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {}
+		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {}
 
 		public void onPageScrollStateChanged(int arg0) {}
 
@@ -486,7 +486,7 @@ public class SubsonicActivity extends SherlockFragmentActivity implements OnItem
 		public void addTab(CharSequence title, Class fragmentClass, Bundle args) {
 			final TabInfo tabInfo = new TabInfo(fragmentClass, args);
 
-			Tab tab = actionBar.newTab();
+			ActionBar.Tab tab = actionBar.newTab();
 			tab.setText(title);
 			tab.setTabListener(this);
 			tab.setTag(tabInfo);

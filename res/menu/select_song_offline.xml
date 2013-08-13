@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">		
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_play_now"
 		android:icon="@drawable/action_play_all"
 		android:title="@string/menu.play"
-		android:showAsAction="always|withText"/>
+		compat:showAsAction="always|withText"/>
 		
 	<item 
 		android:id="@+id/menu_refresh"
 		android:icon="@drawable/action_refresh"
 		android:title="@string/menu.refresh"
-		android:showAsAction="always|withText"/>
+		compat:showAsAction="always|withText"/>
 		
 	<item 
 		android:id="@+id/menu_shuffle"
 		android:icon="@drawable/action_shuffle"
 		android:title="@string/menu.shuffle"
-		android:showAsAction="ifRoom|withText"/>
+		compat:showAsAction="ifRoom|withText"/>
 		
 	<item 
 		android:id="@+id/menu_select"
 		android:icon="@drawable/action_select"
 		android:title="@string/menu.select"
-		android:showAsAction="ifRoom|withText"/>
+		compat:showAsAction="ifRoom|withText"/>
 		
 	<item 
 		android:id="@+id/menu_delete"
 		android:icon="@drawable/action_remove_all"
 		android:title="@string/common.delete"
-		android:showAsAction="ifRoom|withText"/>
+		compat:showAsAction="ifRoom|withText"/>
 		
 	<item 
 		android:id="@+id/menu_play_last"
 		android:icon="@drawable/action_play_all"
 		android:title="@string/menu.play_last"
-		android:showAsAction="ifRoom|withText"/>
+		compat:showAsAction="ifRoom|withText"/>
 </menu>

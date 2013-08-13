@@ -23,9 +23,10 @@ import github.daneren2005.dsub.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+
 import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.util.Constants;
-import com.actionbarsherlock.view.MenuItem;
 
 public class SearchActivity extends SubsonicActivity {
 	private static final String TAG = SearchActivity.class.getSimpleName();
