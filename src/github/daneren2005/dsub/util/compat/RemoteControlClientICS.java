@@ -41,14 +41,14 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 			mRemoteControl.setOnGetPlaybackPositionListener(new RemoteControlClient.OnGetPlaybackPositionListener() {
 				@Override
-				long onGetPlaybackPosition() {
+				public long onGetPlaybackPosition() {
 					return downloadService.getPlayerPosition();
 				}
 			});
 			mRemoteControl.setPlaybackPositionUpdateListener(new RemoteControlClient.OnPlaybackPositionUpdateListener() {
 				@Override
-				void onPlaybackPositionUpdate(long newPosition) {
-					downloadService.seekTo(newPosition);
+				public void onPlaybackPositionUpdate(long newPosition) {
+					downloadService.seekTo((int) newPosition);
 				}
 			});
 		}
