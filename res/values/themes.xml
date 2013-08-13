@@ -13,7 +13,7 @@
 		<item name="chat">@drawable/ic_menu_chat_light</item> 
 		<item name="chat_send">@drawable/ic_menu_chat_send_light</item> 
 	</style>
-	<style name="Theme.DSub.Dark" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+	<style name="Theme.DSub.Dark" parent="@style/Theme.AppCompat">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
