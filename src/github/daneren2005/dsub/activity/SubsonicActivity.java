@@ -117,7 +117,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			FragmentManager fm = getSupportFragmentManager();
 			currentFragment = (SubsonicFragment)fm.findFragmentByTag(ids[0]);
 			currentFragment.setPrimaryFragment(true);
-			invalidateOptionsMenu();
+			supportInvalidateOptionsMenu();
 			for(int i = 1; i < size; i++) {
 				SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[i]);
 				backStack.add(frag);
@@ -219,7 +219,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			
 			currentFragment = fragment;
 			currentFragment.setPrimaryFragment(true);
-			invalidateOptionsMenu();
+			supportInvalidateOptionsMenu();
 			
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.add(id, fragment, tag + "");
@@ -235,7 +235,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 		currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
 		currentFragment.setPrimaryFragment(true);
-		invalidateOptionsMenu();
+		supportInvalidateOptionsMenu();
 
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 		trans.remove(oldFrag);
@@ -478,7 +478,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				if(currentFragment != null) {
 					currentFragment.setPrimaryFragment(true);
 				}
-				activity.invalidateOptionsMenu();
+				activity.supportInvalidateOptionsMenu();
 				recreateSpinner();
 			}
 		}
@@ -511,7 +511,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			
 			currentFragment = fragment;
 			currentFragment.setPrimaryFragment(true);
-			activity.invalidateOptionsMenu();
+			activity.supportInvalidateOptionsMenu();
 			
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.add(id, fragment, tag + "");
@@ -528,7 +528,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			
 			currentFragment = fragStack.get(fragStack.size() - 1);
 			currentFragment.setPrimaryFragment(true);
-			activity.invalidateOptionsMenu();
+			activity.supportInvalidateOptionsMenu();
 			
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.remove(oldFrag);
@@ -621,7 +621,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			List<SubsonicFragment> fragStack = frags.get(currentPosition);
 			currentFragment = fragStack.get(fragStack.size() - 1);
 			currentFragment.setPrimaryFragment(true);
-			activity.invalidateOptionsMenu();
+			activity.supportInvalidateOptionsMenu();
 		}
 
 		private class TabInfo {

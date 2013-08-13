@@ -450,7 +450,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 			entryList.setVisibility(View.VISIBLE);
 			licenseValid = result.getSecond();
-			context.invalidateOptionsMenu();
+			context.supportInvalidateOptionsMenu();
 
 			Bundle args = getArguments();
 			boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);

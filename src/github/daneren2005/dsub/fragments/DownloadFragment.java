@@ -618,7 +618,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 					getDownloadService().setKeepScreenOn(true);
 				}
-				context.invalidateOptionsMenu();
+				context.supportInvalidateOptionsMenu();
 				return true;
 			case R.id.menu_shuffle:
 				new SilentBackgroundTask<Void>(context) {
@@ -646,12 +646,12 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				return true;
 			case R.id.menu_toggle_now_playing:
 				toggleNowPlaying();
-				context.invalidateOptionsMenu();
+				context.supportInvalidateOptionsMenu();
 				return true;
 			case R.id.menu_toggle_timer:
 				if(getDownloadService().getSleepTimer()) {
 					getDownloadService().stopSleepTimer();
-					context.invalidateOptionsMenu();
+					context.supportInvalidateOptionsMenu();
 				} else {
 					startTimer();
 				}
@@ -840,7 +840,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 					getDownloadService().setSleepTimerDuration(Integer.parseInt(length));
 					getDownloadService().startSleepTimer();
-					context.invalidateOptionsMenu();
+					context.supportInvalidateOptionsMenu();
 				}
 			})
 			.setNegativeButton(R.string.common_cancel, null);
