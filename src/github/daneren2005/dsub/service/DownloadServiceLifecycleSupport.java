@@ -164,9 +164,22 @@ public class DownloadServiceLifecycleSupport {
 
     public void onStart(Intent intent) {
         if (intent != null && intent.getExtras() != null) {
-            KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+            final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
             if (event != null) {
-                handleKeyEvent(event);
+				new Thread(new Runnable(){
+					@Override
+					public void run() {
+						try {
+							// Make sure everything is ready to go before handling event
+							if(!setup.get()) {
+								lock.lock();
+							}
+   							handleKeyEvent(event);
+						} finally {
+							lock.unlock();
+						}
+					}
+				});
             }
         }
     }
