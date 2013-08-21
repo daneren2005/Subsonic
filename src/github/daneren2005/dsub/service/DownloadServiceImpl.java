@@ -1325,7 +1325,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     private void handleError(Exception x) {
         Log.w(TAG, "Media player error: " + x, x);
-        mediaPlayer.reset();
+        if(mediaPlayer != null) {
+        	mediaPlayer.reset();
+        }
         setPlayerState(IDLE);
     }
 	private void handleErrorNext(Exception x) {
