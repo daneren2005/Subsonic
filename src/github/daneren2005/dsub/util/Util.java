@@ -250,7 +250,7 @@ public final class Util {
 		if(version == null) {
 			SharedPreferences prefs = getPreferences(context);
 			String versionString = prefs.getString(Constants.PREFERENCES_KEY_SERVER_VERSION + instance, null);
-			if(versionString != null) {
+			if(versionString != null && versionString != "") {
 				version = new Version(versionString);
 				SERVER_REST_VERSIONS.put(instance, version);
 			}
