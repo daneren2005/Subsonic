@@ -34,6 +34,8 @@ import android.content.IntentFilter;
 import android.media.RemoteControlClient;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -53,6 +55,8 @@ public class DownloadServiceLifecycleSupport {
     private static final String FILENAME_DOWNLOADS_SER = "downloadstate.ser";
 
     private final DownloadServiceImpl downloadService;
+    private Looper eventLooper;
+    private Handler eventHandler;
     private ScheduledExecutorService executorService;
     private BroadcastReceiver headsetEventReceiver;
     private BroadcastReceiver ejectEventReceiver;
@@ -106,6 +110,16 @@ public class DownloadServiceLifecycleSupport {
 
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleWithFixedDelay(downloadChecker, 5, 5, TimeUnit.SECONDS);
+        
+        @Override
+		new Thread(new Runnable() {
+			public void run() {
+				Looper.prepare();
+				eventLooper = Looper.myLooper();
+				eventHandler = new Handler(mediaPlayerLooper);
+				Looper.loop();
+			}
+		}).start();
 
         // Pause when headset is unplugged.
         headsetEventReceiver = new BroadcastReceiver() {
@@ -166,7 +180,7 @@ public class DownloadServiceLifecycleSupport {
         if (intent != null && intent.getExtras() != null) {
             final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
             if (event != null) {
-				new Thread(new Runnable(){
+				eventHandler.post(new Runnable() {
 					@Override
 					public void run() {
 						if(!setup.get()) {
@@ -176,13 +190,14 @@ public class DownloadServiceLifecycleSupport {
 						}
 						handleKeyEvent(event);
 					}
-				}).start();
+				});
             }
         }
     }
 
     public void onDestroy() {
         executorService.shutdown();
+        eventLooper.quit();
         serializeDownloadQueueNow();
         downloadService.clear(false);
         downloadService.unregisterReceiver(ejectEventReceiver);
