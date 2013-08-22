@@ -169,17 +169,21 @@ public class DownloadServiceLifecycleSupport {
 				new Thread(new Runnable(){
 					@Override
 					public void run() {
+						boolean locked = false;
 						try {
 							// Make sure everything is ready to go before handling event
 							if(!setup.get()) {
+								locked = true;
 								lock.lock();
 							}
    							handleKeyEvent(event);
 						} finally {
-							lock.unlock();
+							if(locked) {
+								lock.unlock();
+							}
 						}
 					}
-				});
+				}).start();
             }
         }
     }
