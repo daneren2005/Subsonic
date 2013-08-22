@@ -111,8 +111,8 @@ public class DownloadServiceLifecycleSupport {
         executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleWithFixedDelay(downloadChecker, 5, 5, TimeUnit.SECONDS);
         
-        @Override
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				Looper.prepare();
 				eventLooper = Looper.myLooper();
@@ -127,9 +127,14 @@ public class DownloadServiceLifecycleSupport {
             public void onReceive(Context context, Intent intent) {
                 Log.i(TAG, "Headset event for: " + intent.getExtras().get("name"));
                 if (intent.getExtras().getInt("state") == 0) {
-					if(!downloadService.isRemoteEnabled()) {
-						downloadService.pause();
-					}
+                	eventHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if(!downloadService.isRemoteEnabled()) {
+								downloadService.pause();
+							}
+						}
+                	});
                 }
             }
         };
@@ -217,11 +222,18 @@ public class DownloadServiceLifecycleSupport {
     		return;
     	}
     	
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			new SerializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		} else {
-			new SerializeTask().execute();
-		}
+		eventHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				if(lock.tryLock()) {
+					try {
+						serializeDownloadQueueNow();
+					} finally {
+						lock.unlock();
+					}
+				}
+			}
+    	});
     }
     
     public void serializeDownloadQueueNow() {
@@ -238,11 +250,18 @@ public class DownloadServiceLifecycleSupport {
     }
 
 	private void deserializeDownloadQueue() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			new DeserializeTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		} else {
-			new DeserializeTask().execute();
-		}
+		eventHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					lock.lock();
+					deserializeDownloadQueueNow();
+					setup.set(true);
+				} finally {
+					lock.unlock();
+				}
+			}
+    	});
 	}
     private void deserializeDownloadQueueNow() {
        State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER);
@@ -320,23 +339,28 @@ public class DownloadServiceLifecycleSupport {
 
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
-            switch (state) {
-                case TelephonyManager.CALL_STATE_RINGING:
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                    if (downloadService.getPlayerState() == PlayerState.STARTED && !downloadService.isRemoteEnabled()) {
-                        resumeAfterCall = true;
-                        downloadService.pause();
-                    }
-                    break;
-                case TelephonyManager.CALL_STATE_IDLE:
-                    if (resumeAfterCall) {
-                        resumeAfterCall = false;
-                        downloadService.start();
-                    }
-                    break;
-                default:
-                    break;
-            }
+        	eventHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					switch (state) {
+		                case TelephonyManager.CALL_STATE_RINGING:
+		                case TelephonyManager.CALL_STATE_OFFHOOK:
+		                    if (downloadService.getPlayerState() == PlayerState.STARTED && !downloadService.isRemoteEnabled()) {
+		                        resumeAfterCall = true;
+		                        downloadService.pause();
+		                    }
+		                    break;
+		                case TelephonyManager.CALL_STATE_IDLE:
+		                    if (resumeAfterCall) {
+		                        resumeAfterCall = false;
+		                        downloadService.start();
+		                    }
+		                    break;
+		                default:
+		                    break;
+		            }
+				}
+        	});
         }
     }
 
@@ -347,31 +371,4 @@ public class DownloadServiceLifecycleSupport {
         private int currentPlayingIndex;
         private int currentPlayingPosition;
     }
-	
-	private class SerializeTask extends AsyncTask<Void, Void, Void> {
-		@Override
-		protected Void doInBackground(Void... params) {
-			if(lock.tryLock()) {
-				try {
-					serializeDownloadQueueNow();
-				} finally {
-					lock.unlock();
-				}
-			}
-			return null;
-		}
-	}
-	private class DeserializeTask extends AsyncTask<Void, Void, Void> {
-		@Override
-		protected Void doInBackground(Void... params) {
-			try {
-				lock.lock();
-				deserializeDownloadQueueNow();
-				setup.set(true);
-			} finally {
-				lock.unlock();
-			}
-			return null;
-		}
-	}
 }
