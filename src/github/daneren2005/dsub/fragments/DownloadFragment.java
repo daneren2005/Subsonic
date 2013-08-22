@@ -980,7 +980,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					int millisTotal = duration == null ? 0 : duration;
 
 					positionTextView.setText(Util.formatDuration(millisPlayed / 1000));
-					durationTextView.setText(Util.formatDuration(millisTotal / 1000));
+					if(millisTotal > 0) {
+						durationTextView.setText(Util.formatDuration(millisTotal / 1000));
+					} else {
+						durationTextView.setText("-:--");
+					}
 					progressBar.setMax(millisTotal == 0 ? 100 : millisTotal); // Work-around for apparent bug.
 					if(!seekInProgress) {
 						progressBar.setProgress(millisPlayed);
