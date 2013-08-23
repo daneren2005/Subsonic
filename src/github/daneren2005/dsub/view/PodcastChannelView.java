@@ -45,6 +45,7 @@ public class PodcastChannelView extends UpdateView {
 
 		titleView = (TextView) findViewById(R.id.artist_name);
 		starButton = (ImageButton) findViewById(R.id.artist_star);
+		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
