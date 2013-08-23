@@ -56,6 +56,7 @@ public class AlbumView extends UpdateView {
         artistView = (TextView) findViewById(R.id.album_artist);
         coverArtView = findViewById(R.id.album_coverart);
         starButton = (ImageButton) findViewById(R.id.album_star);
+        starButton.setFocusable(false); 
 		
 		moreButton = (ImageView) findViewById(R.id.album_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
