@@ -75,6 +75,7 @@ public class SongView extends UpdateView implements Checkable {
         durationTextView = (TextView) findViewById(R.id.song_duration);
         statusTextView = (TextView) findViewById(R.id.song_status);
         starButton = (ImageButton) findViewById(R.id.song_star);
+        starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
