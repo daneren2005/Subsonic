@@ -117,6 +117,16 @@ public class DownloadServiceLifecycleSupport {
 				Looper.prepare();
 				eventLooper = Looper.myLooper();
 				eventHandler = new Handler(eventLooper);
+
+				// Deserialize queue before starting looper
+				try {
+					lock.lock();
+					deserializeDownloadQueueNow();
+					setup.set(true);
+				} finally {
+					lock.unlock();
+				}
+
 				Looper.loop();
 			}
 		}).start();
@@ -175,8 +185,6 @@ public class DownloadServiceLifecycleSupport {
         commandFilter.addAction(DownloadServiceImpl.CMD_PREVIOUS);
         commandFilter.addAction(DownloadServiceImpl.CMD_NEXT);
         downloadService.registerReceiver(intentReceiver, commandFilter);
-
-        deserializeDownloadQueue();
 
         new CacheCleaner(downloadService, downloadService).clean();
     }
@@ -248,20 +256,6 @@ public class DownloadServiceLifecycleSupport {
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
     }
 
-	private void deserializeDownloadQueue() {
-		eventHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					lock.lock();
-					deserializeDownloadQueueNow();
-					setup.set(true);
-				} finally {
-					lock.unlock();
-				}
-			}
-    	});
-	}
     private void deserializeDownloadQueueNow() {
        State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER);
         if (state == null) {
