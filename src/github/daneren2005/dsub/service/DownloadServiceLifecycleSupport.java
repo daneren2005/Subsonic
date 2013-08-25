@@ -116,7 +116,7 @@ public class DownloadServiceLifecycleSupport {
 			public void run() {
 				Looper.prepare();
 				eventLooper = Looper.myLooper();
-				eventHandler = new Handler(mediaPlayerLooper);
+				eventHandler = new Handler(eventLooper);
 				Looper.loop();
 			}
 		}).start();
@@ -189,7 +189,6 @@ public class DownloadServiceLifecycleSupport {
 					@Override
 					public void run() {
 						if(!setup.get()) {
-							locked = true;
 							lock.lock();
 							lock.unlock();
 						}
@@ -338,7 +337,7 @@ public class DownloadServiceLifecycleSupport {
         private boolean resumeAfterCall;
 
         @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
+        public void onCallStateChanged(final int state, String incomingNumber) {
         	eventHandler.post(new Runnable() {
 				@Override
 				public void run() {
