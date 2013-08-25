@@ -849,7 +849,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     @Override
-    public synchronized int getPlayerPosition() {
+    public int getPlayerPosition() {
         try {
             if (playerState == IDLE || playerState == DOWNLOADING || playerState == PREPARING) {
                 return 0;
