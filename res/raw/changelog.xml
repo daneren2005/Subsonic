@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.1.4" versioncode="61" releasedate="8/25/2013">
+		<change>Fix for freezes on 4.3</change>
+		<change>Fix for starred songs/albums not being clickable</change>
+	</release>
 	<release version="4.1.3" versioncode="60" releasedate="8/21/2013">
 		<change>Updated icon</change>
 		<change>Moved from ActionBarSherlock to Google's new equivalent library</change>
