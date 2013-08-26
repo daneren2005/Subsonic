@@ -30,6 +30,8 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistAdapter;
+
+import java.io.Serializable;
 import java.util.List;
 
 public class SelectPlaylistFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
@@ -38,10 +40,21 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	private ListView list;
 	private View emptyTextView;
 	private PlaylistAdapter playlistAdapter;
+	private List<Playlist> playlists;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		if(bundle != null) {
+			playlists = (List<Playlist>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) playlists);
 	}
 
 	@Override
@@ -52,10 +65,15 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 		emptyTextView = rootView.findViewById(R.id.select_playlist_empty);
 		list.setOnItemClickListener(this);
 		registerForContextMenu(list);
-		if(!primaryFragment) {
-			invalidated = true;
+
+		if(playlists == null) {
+			if(!primaryFragment) {
+				invalidated = true;
+			} else {
+				refresh(false);
+			}
 		} else {
-			refresh(false);
+			list.setAdapter(playlistAdapter = new PlaylistAdapter(context, playlists));
 		}
 
 		return rootView;
@@ -170,7 +188,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 			@Override
 			protected List<Playlist> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<Playlist> playlists = musicService.getPlaylists(refresh, context, this);
+				playlists = musicService.getPlaylists(refresh, context, this);
 				if(!Util.isOffline(context) && refresh) {
 					new CacheCleaner(context, getDownloadService()).cleanPlaylists(playlists);
 				}

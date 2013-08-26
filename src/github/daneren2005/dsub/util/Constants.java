@@ -131,6 +131,9 @@ public final class Constants {
 	public static final String MAIN_BACK_STACK_TABS = "backStackTabs";
 	public static final String MAIN_BACK_STACK_POSITION = "backStackPosition";
 	public static final String FRAGMENT_ID = "fragmentId";
+	public static final String FRAGMENT_LIST = "fragmentList";
+	public static final String FRAGMENT_LIST2 = "fragmentList2";
+	public static final String FRAGMENT_DOWNLOAD_FLIPPER = "fragmentDownloadFlipper";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";

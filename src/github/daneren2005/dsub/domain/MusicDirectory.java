@@ -36,6 +36,13 @@ public class MusicDirectory {
 	private String parent;
     private List<Entry> children = new ArrayList<Entry>();
 
+	public MusicDirectory() {
+
+	}
+	public MusicDirectory(List<Entry> children) {
+		this.children = children;
+	}
+
     public String getName() {
         return name;
     }

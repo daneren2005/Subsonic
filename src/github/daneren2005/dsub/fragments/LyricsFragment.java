@@ -38,16 +38,40 @@ import github.daneren2005.dsub.util.TabBackgroundTask;
  * @author Sindre Mehus
  */
 public final class LyricsFragment extends SubsonicFragment {
+	private TextView artistView;
+	private TextView titleView;
+	private TextView textView;
+
+	private Lyrics lyrics;
+
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		setTitle(R.string.download_menu_lyrics);
+
+		if(bundle != null) {
+			lyrics = (Lyrics) bundle.getSerializable(Constants.FRAGMENT_LIST);
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(Constants.FRAGMENT_LIST, lyrics);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+		setTitle(R.string.download_menu_lyrics);
 		rootView = inflater.inflate(R.layout.lyrics, container, false);
-		load();
+		artistView = (TextView) rootView.findViewById(R.id.lyrics_artist);
+		titleView = (TextView) rootView.findViewById(R.id.lyrics_title);
+		textView = (TextView) rootView.findViewById(R.id.lyrics_text);
+
+		if(lyrics == null) {
+			load();
+		} else {
+			setLyrics();
+		}
 
 		return rootView;
 	}
@@ -64,18 +88,20 @@ public final class LyricsFragment extends SubsonicFragment {
 
 			@Override
 			protected void done(Lyrics result) {
-				TextView artistView = (TextView) rootView.findViewById(R.id.lyrics_artist);
-				TextView titleView = (TextView) rootView.findViewById(R.id.lyrics_title);
-				TextView textView = (TextView) rootView.findViewById(R.id.lyrics_text);
-				if (result != null && result.getArtist() != null) {
-					artistView.setText(result.getArtist());
-					titleView.setText(result.getTitle());
-					textView.setText(result.getText());
-				} else {
-					artistView.setText(R.string.lyrics_nomatch);
-				}
+				lyrics = result;
+				setLyrics();
 			}
 		};
 		task.execute();
+	}
+
+	private void setLyrics() {
+		if (lyrics != null && lyrics.getArtist() != null) {
+			artistView.setText(lyrics.getArtist());
+			titleView.setText(lyrics.getTitle());
+			textView.setText(lyrics.getText());
+		} else {
+			artistView.setText(R.string.lyrics_nomatch);
+		}
 	}
 }

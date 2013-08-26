@@ -36,6 +36,8 @@ import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.view.GenreAdapter;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +45,21 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 	private static final String TAG = SelectGenreFragment.class.getSimpleName();
 	private ListView genreListView;
 	private View emptyView;
+	private List<Genre> genres;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		if(bundle != null) {
+			genres = (List<Genre>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) genres);
 	}
 
 	@Override
@@ -56,7 +69,12 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 		genreListView = (ListView)rootView.findViewById(R.id.select_genre_list);
 		genreListView.setOnItemClickListener(this);
 		emptyView = rootView.findViewById(R.id.select_genre_empty);
-		refresh();
+
+		if(genres == null) {
+			refresh();
+		} else {
+			genreListView.setAdapter(new GenreAdapter(context, genres));
+		}
 
 		return rootView;
 	}
@@ -101,7 +119,7 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 			protected List<Genre> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 
-				List<Genre> genres = new ArrayList<Genre>(); 
+				genres = new ArrayList<Genre>();
 
 				try {
 					genres = musicService.getGenres(refresh, context, this);

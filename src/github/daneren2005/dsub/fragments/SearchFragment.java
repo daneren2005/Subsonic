@@ -1,11 +1,14 @@
 package github.daneren2005.dsub.fragments;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.Arrays;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +39,8 @@ import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 
 public class SearchFragment extends SubsonicFragment {
+	private static final String TAG = SearchFragment.class.getSimpleName();
+
 	private static final int DEFAULT_ARTISTS = 3;
 	private static final int DEFAULT_ALBUMS = 5;
 	private static final int DEFAULT_SONGS = 10;
@@ -60,10 +65,21 @@ public class SearchFragment extends SubsonicFragment {
 	private ListAdapter moreAlbumsAdapter;
 	private ListAdapter moreSongsAdapter;
 	private EntryAdapter songAdapter;
+	private boolean skipSearch = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if(savedInstanceState != null) {
+			searchResult = (SearchResult) savedInstanceState.getSerializable(Constants.FRAGMENT_LIST);
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(Constants.FRAGMENT_LIST, searchResult);
 	}
 
 	@Override
@@ -115,6 +131,11 @@ public class SearchFragment extends SubsonicFragment {
 		});
 		registerForContextMenu(list);
 		((SearchActivity)context).onSupportNewIntent(context.getIntent());
+
+		if(searchResult != null) {
+			skipSearch = true;
+		}
+
 		return rootView;
 	}
 
@@ -169,6 +190,11 @@ public class SearchFragment extends SubsonicFragment {
 	}
 
 	public void search(final String query, final boolean autoplay) {
+		if(skipSearch) {
+			skipSearch = false;
+			populateList();
+			return;
+		}
 		mergeAdapter = new MergeAdapter();
 		list.setAdapter(mergeAdapter);
 		

@@ -48,6 +48,8 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PodcastChannelAdapter;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,10 +62,21 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 	private ListView podcastListView;
 	private PodcastChannelAdapter podcastAdapter;
 	private View emptyView;
+	private List<PodcastChannel> channels;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		if(bundle != null) {
+			channels = (List<PodcastChannel>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) channels);
 	}
 
 	@Override
@@ -74,10 +87,15 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 		podcastListView.setOnItemClickListener(this);
 		registerForContextMenu(podcastListView);
 		emptyView = rootView.findViewById(R.id.select_podcasts_empty);
-		if(!primaryFragment) {
-			invalidated = true;
+
+		if(channels == null) {
+			if(!primaryFragment) {
+				invalidated = true;
+			} else {
+				refresh(false);
+			}
 		} else {
-			refresh(false);
+			podcastListView.setAdapter(podcastAdapter = new PodcastChannelAdapter(context, channels));
 		}
 
 		return rootView;
@@ -147,7 +165,7 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 			protected List<PodcastChannel> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 
-				List<PodcastChannel> channels = new ArrayList<PodcastChannel>(); 
+				channels = new ArrayList<PodcastChannel>();
 
 				try {
 					channels = musicService.getPodcastChannels(refresh, context, this);

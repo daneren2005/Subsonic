@@ -27,6 +27,7 @@ import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistAdapter;
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +40,23 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	private View folderButton;
 	private TextView folderName;
 	private List<MusicFolder> musicFolders = null;
+	private List<Artist> artists;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		if(bundle != null) {
+			artists = (List<Artist>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+			musicFolders = (List<MusicFolder>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) artists);
+		outState.putSerializable(Constants.FRAGMENT_LIST2, (Serializable) musicFolders);
 	}
 
 	@Override
@@ -58,10 +72,15 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 		folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
 
 		registerForContextMenu(artistList);
-		if(!primaryFragment) {
-			invalidated = true;
+		if(artists == null) {
+			if(!primaryFragment) {
+				invalidated = true;
+			} else {
+				refresh(false);
+			}
 		} else {
-			refresh(false);
+			artistList.setAdapter(new ArtistAdapter(context, artists));
+			setMusicFolders();
 		}
 
 		return rootView;
@@ -177,29 +196,32 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 			@Override
 			protected void done(Indexes result) {
-				List<Artist> artists = new ArrayList<Artist>(result.getShortcuts().size() + result.getArtists().size());
+				artists = new ArrayList<Artist>(result.getShortcuts().size() + result.getArtists().size());
 				artists.addAll(result.getShortcuts());
 				artists.addAll(result.getArtists());
 				artistList.setAdapter(new ArtistAdapter(context, artists));
 
-				// Display selected music folder
-				if (musicFolders != null) {
-					String musicFolderId = Util.getSelectedMusicFolderId(context);
-					if (musicFolderId == null) {
-						folderName.setText(R.string.select_artist_all_folders);
-					} else {
-						for (MusicFolder musicFolder : musicFolders) {
-							if (musicFolder.getId().equals(musicFolderId)) {
-								folderName.setText(musicFolder.getName());
-								break;
-							}
-						}
-					}
-				}
+				setMusicFolders();
 				artistList.setVisibility(View.VISIBLE);
 			}
 		};
 		task.execute();
+	}
+	private void setMusicFolders() {
+		// Display selected music folder
+		if (musicFolders != null) {
+			String musicFolderId = Util.getSelectedMusicFolderId(context);
+			if (musicFolderId == null) {
+				folderName.setText(R.string.select_artist_all_folders);
+			} else {
+				for (MusicFolder musicFolder : musicFolders) {
+					if (musicFolder.getId().equals(musicFolderId)) {
+						folderName.setText(musicFolder.getName());
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	private void selectFolder() {

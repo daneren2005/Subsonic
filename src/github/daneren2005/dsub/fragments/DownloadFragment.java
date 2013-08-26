@@ -105,6 +105,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private SongListAdapter songListAdapter;
 	private SilentBackgroundTask<Void> onProgressChangedTask;
 	private boolean seekInProgress = false;
+	private boolean startFlipped = false;
 
 	/**
 	 * Called when the activity is first created.
@@ -112,6 +113,18 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if(savedInstanceState != null) {
+			if(savedInstanceState.getInt(Constants.FRAGMENT_DOWNLOAD_FLIPPER) == 1) {
+				startFlipped = true;
+			}
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(Constants.FRAGMENT_DOWNLOAD_FLIPPER, playlistFlipper.getDisplayedChild());
 	}
 
 	@Override
@@ -692,11 +705,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		setControlsVisible(true);
 
 		DownloadService downloadService = getDownloadService();
-		if (downloadService == null || downloadService.getCurrentPlaying() == null) {
+		if (downloadService == null || downloadService.getCurrentPlaying() == null || startFlipped) {
 			playlistFlipper.setDisplayedChild(1);
 		}
-
-		scrollToCurrent();
 		if (downloadService != null && downloadService.getKeepScreenOn()) {
 			context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		} else {
@@ -814,6 +825,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 		if (currentPlaying != getDownloadService().getCurrentPlaying()) {
 			onCurrentChanged();
+		}
+
+		if(startFlipped) {
+			scrollToCurrent();
+			startFlipped = false;
 		}
 
 		onProgressChanged();

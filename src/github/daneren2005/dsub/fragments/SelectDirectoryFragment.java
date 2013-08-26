@@ -20,6 +20,8 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.view.EntryAdapter;
+
+import java.io.Serializable;
 import java.util.List;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.DownloadActivity;
@@ -78,6 +80,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			if(tmp > 0) {
 				rootId = tmp;
 			}
+			entries = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 		}
 	}
 	
@@ -85,6 +88,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(Constants.FRAGMENT_ID, rootId);
+		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
 	}
 
 	@Override
@@ -128,11 +132,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 		}
-		if(primaryFragment) {
-			load(false);
+
+		if(entries == null) {
+			if(primaryFragment) {
+				load(false);
+			} else {
+				invalidated = true;
+			}
 		} else {
-			invalidated = true;
+			new LoadTask() {
+				@Override
+				protected MusicDirectory load(MusicService service) throws Exception {
+					albumListSize = entries.size();
+					return new MusicDirectory(entries);
+				}
+			}.execute();
 		}
+
 		if(name != null) {
 			setTitle(name);
 		}

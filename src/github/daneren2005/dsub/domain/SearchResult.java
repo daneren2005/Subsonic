@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ import java.util.List;
  *
  * @author Sindre Mehus
  */
-public class SearchResult {
+public class SearchResult implements Serializable {
 
     private final List<Artist> artists;
     private final List<MusicDirectory.Entry> albums;

@@ -2,6 +2,8 @@ package github.daneren2005.dsub.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,12 +48,23 @@ public class ChatFragment extends SubsonicFragment {
 	private EditText messageEditText;
 	private ImageButton sendButton;
 	private Long lastChatMessageTime = (long) 0;
-	private ArrayList<ChatMessage> messageList = new ArrayList<ChatMessage>();
+	private ArrayList<ChatMessage> messageList;
 	private ScheduledExecutorService executorService;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		if(bundle != null) {
+			List<ChatMessage> abstractList = (List<ChatMessage>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+			messageList = new ArrayList<ChatMessage>(abstractList);
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) messageList);
 	}
 	
 	@Override
@@ -99,7 +112,21 @@ public class ChatFragment extends SubsonicFragment {
 			}
 		});
 
-		invalidated = true;
+		if(messageList == null) {
+			messageList = new ArrayList<ChatMessage>();
+			invalidated = true;
+		} else {
+			for (ChatMessage message : messageList) {
+				if (message.getTime() > lastChatMessageTime) {
+					lastChatMessageTime = message.getTime();
+				}
+			}
+
+			ChatAdapter chatAdapter = new ChatAdapter(context, messageList);
+			chatListView.setAdapter(chatAdapter);
+		}
+		setTitle(R.string.button_bar_chat);
+
 		return rootView;
 	}
 	
@@ -161,8 +188,6 @@ public class ChatFragment extends SubsonicFragment {
 	}
 	
 	private synchronized void load(final boolean refresh) {
-		Log.i(TAG, "Loading: " + refresh);
-		setTitle(R.string.button_bar_chat);
 		BackgroundTask<List<ChatMessage>> task = new TabBackgroundTask<List<ChatMessage>>(this) {
 			@Override
 			protected List<ChatMessage> doInBackground() throws Throwable {
@@ -176,7 +201,7 @@ public class ChatFragment extends SubsonicFragment {
 					if(refresh) {
 						messageList.clear();
 					}
-					
+
 					// Reset lastChatMessageTime if we have a newer message
 					for (ChatMessage message : result) {
 						if (message.getTime() > lastChatMessageTime) {
