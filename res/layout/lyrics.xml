@@ -51,7 +51,5 @@
 
     </ScrollView>
 
-    <include layout="@layout/button_bar"/>
-
 </LinearLayout>
 
