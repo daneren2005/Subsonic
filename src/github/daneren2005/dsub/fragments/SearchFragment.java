@@ -134,6 +134,7 @@ public class SearchFragment extends SubsonicFragment {
 
 		if(searchResult != null) {
 			skipSearch = true;
+            populateList();
 		}
 
 		return rootView;
@@ -192,7 +193,6 @@ public class SearchFragment extends SubsonicFragment {
 	public void search(final String query, final boolean autoplay) {
 		if(skipSearch) {
 			skipSearch = false;
-			populateList();
 			return;
 		}
 		mergeAdapter = new MergeAdapter();

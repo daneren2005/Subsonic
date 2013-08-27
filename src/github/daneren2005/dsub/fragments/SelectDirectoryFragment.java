@@ -140,13 +140,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				invalidated = true;
 			}
 		} else {
-			new LoadTask() {
-				@Override
-				protected MusicDirectory load(MusicService service) throws Exception {
-					albumListSize = entries.size();
-					return new MusicDirectory(entries);
-				}
-			}.execute();
+            licenseValid = true;
+            finishLoading();
 		}
 
 		if(name != null) {
@@ -437,44 +432,47 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		@Override
 		protected void done(Pair<MusicDirectory, Boolean> result) {
 			entries = result.getFirst().getChildren();
-
-			int songCount = 0;
-			for (MusicDirectory.Entry entry : entries) {
-				if (!entry.isDirectory()) {
-					songCount++;
-				}
-			}
-
-			if (songCount > 0) {
-				if(showHeader) {
-					View header = createHeader(entries);
-					if(header != null) {
-						entryList.addHeaderView(header, null, false);
-					}
-				}
-			} else {
-				showHeader = false;
-				hideButtons = true;
-			}
-
-			emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
-			entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null) ? true : false);
-			if(albumListType == null || "starred".equals(albumListType)) {
-				entryList.setAdapter(entryAdapter);
-			} else {
-				entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
-			}
-			entryList.setVisibility(View.VISIBLE);
-			licenseValid = result.getSecond();
-			context.supportInvalidateOptionsMenu();
-
-			Bundle args = getArguments();
-			boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-			if (playAll && songCount > 0) {
-				playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
-			}
+            licenseValid = result.getSecond();
+            finishLoading();
 		}
 	}
+
+    private void finishLoading() {
+        int songCount = 0;
+        for (MusicDirectory.Entry entry : entries) {
+            if (!entry.isDirectory()) {
+                songCount++;
+            }
+        }
+
+        if (songCount > 0) {
+            if(showHeader) {
+                View header = createHeader(entries);
+                if(header != null) {
+                    entryList.addHeaderView(header, null, false);
+                }
+            }
+        } else {
+            showHeader = false;
+            hideButtons = true;
+        }
+
+        emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
+        entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null) ? true : false);
+        if(albumListType == null || "starred".equals(albumListType)) {
+            entryList.setAdapter(entryAdapter);
+        } else {
+            entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
+        }
+        entryList.setVisibility(View.VISIBLE);
+        context.supportInvalidateOptionsMenu();
+
+        Bundle args = getArguments();
+        boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+        if (playAll && songCount > 0) {
+            playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
+        }
+    }
 
 	private void playNow(final boolean shuffle, final boolean append) {
 		if(getSelectedSongs().size() > 0) {
