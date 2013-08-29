@@ -73,8 +73,18 @@ public class UpdateView extends LinearLayout {
 	}
 	public void setObject(Object obj1, Object obj2) {
 		setObjectImpl(obj1, obj2);
-		updateBackground();
-		update();
+		backgroundHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				updateBackground();
+				uiHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						update();
+					}
+				});
+			}
+		});
 	}
 	protected void setObjectImpl(Object obj) {
 		
