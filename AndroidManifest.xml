@@ -160,6 +160,7 @@
                   android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
 		<provider android:name="github.daneren2005.dsub.service.sync.StubProvider"
 			android:authorities="github.daneren2005.dsub.provider"
+			android:label="Playlists"
 			android:exported="false"
 			android:syncable="true"/>
 
