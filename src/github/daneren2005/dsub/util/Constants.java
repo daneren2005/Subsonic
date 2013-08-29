@@ -140,6 +140,10 @@ public final class Constants {
 	public static final String OFFLINE_SYNC_NAME = "github.daneren2005.dsub.offline";
 	public static final String OFFLINE_SYNC_DEFAULT = "syncDefaults";
 
+	// Account prefs
+	public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
+	public static final String SYNC_ACCOUNT_TYPE = "subsonic.org";
+
     // Number of free trial days for non-licensed servers.
     public static final int FREE_TRIAL_DAYS = 30;
 

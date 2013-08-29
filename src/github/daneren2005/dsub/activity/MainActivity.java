@@ -1,6 +1,9 @@
 package github.daneren2005.dsub.activity;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -61,6 +64,7 @@ public class MainActivity extends SubsonicActivity {
 		}
 		setContentView(R.layout.main);
 		loadSettings();
+		createAccount();
 
 		bottomBar = findViewById(R.id.bottom_bar);
 		bottomBar.setOnClickListener(new View.OnClickListener() {
@@ -305,6 +309,15 @@ public class MainActivity extends SubsonicActivity {
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
 			editor.commit();
 		}
+	}
+
+	private void createAccount() {
+		AccountManager accountManager = (AccountManager) this.getSystemService(ACCOUNT_SERVICE);
+		Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+		accountManager.addAccountExplicitly(account, null, null);
+
+		// Make sync run every hour
+		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_TYPE, new Bundle(), 1000L * 60L * 60L);
 	}
 
 	private void showInfoDialog() {
