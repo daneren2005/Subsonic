@@ -47,7 +47,7 @@ public class UpdateView extends LinearLayout {
 	
 	protected boolean exists = false;
 	protected boolean shaded = false;
-	protected boolean starred = true;
+	protected boolean starred = false;
 	protected boolean isStarred = false;
 	
 	public UpdateView(Context context) {
@@ -73,8 +73,18 @@ public class UpdateView extends LinearLayout {
 	}
 	public void setObject(Object obj1, Object obj2) {
 		setObjectImpl(obj1, obj2);
-		updateBackground();
-		update();
+		backgroundHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				updateBackground();
+				uiHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						update();
+					}
+				});
+			}
+		});
 	}
 	protected void setObjectImpl(Object obj) {
 		
