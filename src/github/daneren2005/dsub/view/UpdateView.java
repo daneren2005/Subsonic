@@ -47,7 +47,7 @@ public class UpdateView extends LinearLayout {
 	
 	protected boolean exists = false;
 	protected boolean shaded = false;
-	protected boolean starred = true;
+	protected boolean starred = false;
 	protected boolean isStarred = false;
 	
 	public UpdateView(Context context) {
