@@ -298,7 +298,7 @@
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
-	<string name="settings.playlist_title">Playlists</string>
+	<string name="settings.playlist_title">Play</string>
 	<string name="settings.playlist_random_size_title">Random Size</string>
 	<string name="settings.buffer_length">Buffer Length (0 = when fully cached)</string>
 	<string name="settings.sleep_timer_title">Sleep Timer</string>
@@ -324,6 +324,12 @@
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requires Subsonic 4.8+)</string>
 	<string name="settings.video_transcode">Direct Transcode (Requires video -> mp4 or similar setup on Server)</string>
 	<string name="settings.video_flash">Flash (Requires Plugin)</string>
+	<string name="settings.sync_title">Sync</string>
+	<string name="settings.sync_enabled">Sync Enabled</string>
+	<string name="settings.sync_enabled_summary">Whether or not playlists or podcasts are periodically checked for changes</string>
+	<string name="settings.sync_interval">Sync Interval</string>
+	<string name="settings.sync_wifi">Sync on Wifi only</string>
+	<string name="settings.sync_wifi_summary">Only sync while on wifi</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

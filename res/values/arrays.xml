@@ -150,4 +150,25 @@
 		<item>@string/settings.video_flash</item>
 	</string-array>
 
+	<string-array name="syncIntervalValues">
+		<item>15</item>
+		<item>30</item>
+		<item>60</item>
+		<item>120</item>
+		<item>240</item>
+		<item>360</item>
+		<item>720</item>
+		<item>1440</item>
+	</string-array>
+	<string-array name="syncIntervalNames">
+		<item>15 Minutes</item>
+		<item>30 Minutes</item>
+		<item>1 Hour</item>
+		<item>2 Hours</item>
+		<item>3 Hours</item>
+		<item>6 Hours</item>
+		<item>12 Hours</item>
+		<item>Daily</item>
+	</string-array>
+
 </resources>

@@ -18,6 +18,8 @@
  */
 package github.daneren2005.dsub.activity;
 
+import android.accounts.Account;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -73,6 +75,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private PreferenceCategory serversCategory;
 	private EditTextPreference chatRefreshRate;
 	private ListPreference videoPlayer;
+	private ListPreference syncInterval;
 	
 	private int serverCount = 3;
 	private SharedPreferences settings;
@@ -100,6 +103,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
 		chatRefreshRate = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CHAT_REFRESH);
 		videoPlayer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
+		syncInterval = (ListPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
 		
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
@@ -162,6 +166,31 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 return true;
             }
         });
+
+		findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Boolean syncEnabled = (Boolean) newValue;
+
+				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+				ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
+				ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, syncEnabled);
+
+				return true;
+			}
+		});
+		syncInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Integer syncInterval = Integer.parseInt(((String) newValue));
+
+				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+				ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * syncInterval);
+				ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, new Bundle(), 60L * syncInterval);
+
+				return true;
+			}
+		});
 
 		serversCategory.removePreference(addServerPreference);
         for (int i = 1; i <= serverCount; i++) {

@@ -151,6 +151,29 @@
     </PreferenceCategory>
 
 	<PreferenceCategory
+		android:title="@string/settings.sync_title">
+
+		<CheckBoxPreference
+			android:title="@string/settings.sync_enabled"
+			android:summary="@string/settings.sync_enabled_summary"
+			android:key="syncEnabled"
+			android:defaultValue="true"/>
+
+		<ListPreference
+			android:title="@string/settings.sync_interval"
+			android:key="syncInterval"
+			android:defaultValue="60"
+			android:entryValues="@array/syncIntervalValues"
+			android:entries="@array/syncIntervalNames"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.sync_wifi"
+			android:summary="@string/settings.sync_wifi_summary"
+			android:key="syncWifi"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
 		android:title="@string/button_bar.chat">
 
 		<CheckBoxPreference
