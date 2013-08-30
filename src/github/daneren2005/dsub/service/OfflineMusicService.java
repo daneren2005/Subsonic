@@ -32,7 +32,6 @@ import java.util.Set;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
@@ -147,7 +146,10 @@ public class OfflineMusicService extends RESTMusicService {
         return FileUtil.getBaseName(name);
     }
 
-    private MusicDirectory.Entry createEntry(Context context, File file, String name) {		
+	private MusicDirectory.Entry createEntry(Context context, File file, String name) {
+		return createEntry(context, file, name, true);
+	}
+    private MusicDirectory.Entry createEntry(Context context, File file, String name, boolean load) {
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         entry.setDirectory(file.isDirectory());
         entry.setId(file.getPath());
@@ -179,33 +181,8 @@ public class OfflineMusicService extends RESTMusicService {
 				}
 			}
 			
-			try {
-				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-				metadata.setDataSource(file.getAbsolutePath());
-				String discNumber = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER);
-				if(discNumber == null) {
-					discNumber = "1/1";
-				}
-				int slashIndex = discNumber.indexOf("/");
-				if(slashIndex > 0) {
-					discNumber = discNumber.substring(0, slashIndex);
-				}
-				entry.setDiscNumber(Integer.parseInt(discNumber));
-				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-				entry.setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
-				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-				entry.setDuration(Integer.parseInt(length) / 1000);
-				String artist = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-				if(artist != null) {
-					entry.setArtist(artist);
-				}
-				String album = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-				if(album != null) {
-					entry.setAlbum(album);
-				}
-				metadata.release();
-			} catch(Exception e) {
-				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+			if(load) {
+				entry.loadMetadata(file);
 			}
         }
 		
@@ -427,7 +404,7 @@ public class OfflineMusicService extends RESTMusicService {
 				File entryFile = new File(line);
 				String entryName = getName(entryFile);
 				if(entryFile.exists() && entryName != null){
-					playlist.addChild(createEntry(context, entryFile, entryName));
+					playlist.addChild(createEntry(context, entryFile, entryName, false));
 				}
 			}
 			
