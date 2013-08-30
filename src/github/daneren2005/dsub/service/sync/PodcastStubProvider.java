@@ -28,7 +28,7 @@ import android.net.Uri;
  * Created by Scott on 8/28/13.
  */
 
-public class StubProvider extends ContentProvider {
+public class PodcastStubProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         return true;
