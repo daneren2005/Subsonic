@@ -18,9 +18,11 @@
  */
 package github.daneren2005.dsub.domain;
 
+import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
@@ -121,6 +123,37 @@ public class MusicDirectory {
 		private Integer discNumber;
         private boolean starred;
 		private int closeness;
+		
+		public void loadMetadata(File file) {
+			try {
+				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+				metadata.setDataSource(file.getAbsolutePath());
+				String discNumber = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DISC_NUMBER);
+				if(discNumber == null) {
+					discNumber = "1/1";
+				}
+				int slashIndex = discNumber.indexOf("/");
+				if(slashIndex > 0) {
+					discNumber = discNumber.substring(0, slashIndex);
+				}
+				setDiscNumber(Integer.parseInt(discNumber));
+				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+				setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
+				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+				setDuration(Integer.parseInt(length) / 1000);
+				String artist = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+				if(artist != null) {
+					setArtist(artist);
+				}
+				String album = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+				if(album != null) {
+					setAlbum(album);
+				}
+				metadata.release();
+			} catch(Exception e) {
+				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+			}
+		}
 
         public String getId() {
             return id;
