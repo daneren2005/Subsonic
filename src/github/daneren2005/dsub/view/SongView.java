@@ -164,6 +164,11 @@ public class SongView extends UpdateView implements Checkable {
 		partialFile = downloadFile.getPartialFile();
 		partialFileExists = partialFile.exists();
 		isStarred = song.isStarred();
+		
+		// Check if needs to load metadata: check against all fields that we know are null in offline mode
+		if(song.getBitrate() == null && song.getDuration() == null && song.getDiscNumber() == null && isWorkDone) {
+			song.loadMetadata(downloadFile.getCompleteFile());
+		}
 	}
 
 	@Override
