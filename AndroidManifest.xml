@@ -91,15 +91,25 @@
 			<meta-data android:name="android.accounts.AccountAuthenticator"
 				android:resource="@xml/authenticator" />
 		</service>
-		<service android:name="github.daneren2005.dsub.service.sync.SyncService"
+		<service android:name=".service.sync.PlaylistSyncService"
 			android:exported="true"
 			android:process=":sync">
 
-			<intent-filter>com.example.android.datasync.provider
+			<intent-filter>
 				<action android:name="android.content.SyncAdapter"/>
 			</intent-filter>
 			<meta-data android:name="android.content.SyncAdapter"
-				android:resource="@xml/syncadapter" />
+				android:resource="@xml/playlists_syncadapter" />
+		</service>
+		<service android:name=".service.sync.PodcastSyncService"
+				 android:exported="true"
+				 android:process=":sync">
+
+			<intent-filter>
+				<action android:name="android.content.SyncAdapter"/>
+			</intent-filter>
+			<meta-data android:name="android.content.SyncAdapter"
+					   android:resource="@xml/podcasts_syncadapter" />
 		</service>
 
         <receiver android:name="github.daneren2005.dsub.receiver.MediaButtonIntentReceiver">
@@ -159,8 +169,13 @@
         <provider android:name="github.daneren2005.dsub.provider.DSubSearchProvider"
                   android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
 		<provider android:name="github.daneren2005.dsub.service.sync.StubProvider"
-			android:authorities="github.daneren2005.dsub.provider"
+			android:authorities="github.daneren2005.dsub.playlists.provider"
 			android:label="Playlists"
+			android:exported="false"
+			android:syncable="true"/>
+		<provider android:name="github.daneren2005.dsub.service.sync.StubProvider"
+			android:authorities="github.daneren2005.dsub.podcasts.provider"
+			android:label="Podcasts"
 			android:exported="false"
 			android:syncable="true"/>
 

@@ -143,7 +143,8 @@ public final class Constants {
 	// Account prefs
 	public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
 	public static final String SYNC_ACCOUNT_TYPE = "subsonic.org";
-	public static final String SYNC_ACCOUNT_AUTHORITY = "github.daneren2005.dsub.provider";
+	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "github.daneren2005.dsub.playlists.provider";
+	public static final String SYNC_ACCOUNT_PODCAST_AUTHORITY = "github.daneren2005.dsub.podcasts.provider";
 
     // Number of free trial days for non-licensed servers.
     public static final int FREE_TRIAL_DAYS = 30;

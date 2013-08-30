@@ -317,7 +317,10 @@ public class MainActivity extends SubsonicActivity {
 		accountManager.addAccountExplicitly(account, null, null);
 
 		// Make sync run every hour
-		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_AUTHORITY, new Bundle(), 1000L * 60L * 60L);
+		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, true);
+		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * 60L);
+		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, true);
+		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, new Bundle(), 60L * 60L);
 	}
 
 	private void showInfoDialog() {

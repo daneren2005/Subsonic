@@ -19,29 +19,30 @@
 
 package github.daneren2005.dsub.service.sync;
 
-import android.accounts.Account;
-import android.annotation.TargetApi;
-import android.content.AbstractThreadedSyncAdapter;
-import android.content.ContentProviderClient;
-import android.content.Context;
-import android.content.SyncResult;
-import android.os.Bundle;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
 
 /**
  * Created by Scott on 8/28/13.
  */
 
-public class SyncAdapter extends AbstractThreadedSyncAdapter {
-	public SyncAdapter(Context context, boolean autoInitialize) {
-		super(context, autoInitialize);
-	}
-	@TargetApi(14)
-	public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
-		super(context, autoInitialize, allowParallelSyncs);
+public class PlaylistSyncService extends Service {
+	private static PlaylistSyncAdapter playlistSyncAdapter;
+	private static final Object syncLock = new Object();
+
+	@Override
+	public void onCreate() {
+		synchronized (syncLock) {
+			if(playlistSyncAdapter == null) {
+				playlistSyncAdapter = new PlaylistSyncAdapter(getApplicationContext(), true);
+			}
+		}
 	}
 
-		@Override
-	public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+	@Override
+	public IBinder onBind(Intent intent) {
+		return playlistSyncAdapter.getSyncAdapterBinder();
 
 	}
 }
