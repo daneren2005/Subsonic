@@ -63,6 +63,7 @@ public class SongView extends UpdateView implements Checkable {
 	private boolean isSaved = false;
 	private File partialFile;
 	private boolean partialFileExists = false;
+	private boolean loaded = false;
 
     public SongView(Context context) {
         super(context);
@@ -142,6 +143,7 @@ public class SongView extends UpdateView implements Checkable {
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
 		revision = -1;
+		loaded = false;
     }
 	
 	@Override
@@ -168,11 +170,15 @@ public class SongView extends UpdateView implements Checkable {
 		// Check if needs to load metadata: check against all fields that we know are null in offline mode
 		if(song.getBitRate() == null && song.getDuration() == null && song.getDiscNumber() == null && isWorkDone) {
 			song.loadMetadata(downloadFile.getCompleteFile());
+			loaded = true;
 		}
 	}
 
 	@Override
     protected void update() {
+		if(loaded) {
+			setObjectImpl(song, checkedTextView.getVisibility() == View.VISIBLE);
+		}
         if (downloadService == null) {
             return;
         }
