@@ -95,7 +95,11 @@ public class EqualizerController {
     }
 
     public boolean isEnabled() {
-        return isAvailable() && equalizer.getEnabled();
+    	try {
+        	return isAvailable() && equalizer.getEnabled();
+    	} catch(Exception e) {
+    		return false;
+    	}
     }
 
     public void release() {
