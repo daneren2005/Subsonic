@@ -161,7 +161,7 @@ public final class Util {
 
     public static int getActiveServer(Context context) {
         SharedPreferences prefs = getPreferences(context);
-        return prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
     }
 	
 	public static boolean checkServerVersion(Context context, String requiredVersion) {
