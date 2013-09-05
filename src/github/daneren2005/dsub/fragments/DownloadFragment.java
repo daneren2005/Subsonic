@@ -104,6 +104,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private ScheduledFuture<?> hideControlsFuture;
 	private SongListAdapter songListAdapter;
 	private SilentBackgroundTask<Void> onProgressChangedTask;
+	private SilentBackgroundTask<Void> onCurrentChangedTask;
 	private boolean seekInProgress = false;
 	private boolean startFlipped = false;
 
@@ -948,23 +949,40 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 	private void onCurrentChanged() {
 		DownloadService downloadService = getDownloadService();
-		if (downloadService == null) {
+		if (downloadService == null  || onCurrentChangedTask != null) {
 			return;
 		}
+		
+		onCurrentChangedTask = new SilentBackgroundTask<Void>(context) {
+			int currentPlayingIndex;
+			int currentPlayingSize;
 
-		currentPlaying = downloadService.getCurrentPlaying();
-		if (currentPlaying != null) {
-			MusicDirectory.Entry song = currentPlaying.getSong();
-			songTitleTextView.setText(song.getTitle());
-			getImageLoader().loadImage(albumArtImageView, song, true, true);
-			starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, downloadService.getCurrentPlayingIndex() + 1, downloadService.size()));
-		} else {
-			songTitleTextView.setText(null);
-			getImageLoader().loadImage(albumArtImageView, null, true, false);
-			starButton.setImageResource(android.R.drawable.btn_star_big_off);
-			setSubtitle(null);
-		}
+			@Override
+			protected Void doInBackground() throws Throwable {
+				currentPlaying = downloadService.getCurrentPlaying();
+				currentPlayingIndex = downloadService.getCurrentPlayingIndex() + 1;
+				currentPlayingSize = downloadService.size();
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				if (currentPlaying != null) {
+					MusicDirectory.Entry song = currentPlaying.getSong();
+					songTitleTextView.setText(song.getTitle());
+					getImageLoader().loadImage(albumArtImageView, song, true, true);
+					starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+					setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, currentPlayingSize));
+				} else {
+					songTitleTextView.setText(null);
+					getImageLoader().loadImage(albumArtImageView, null, true, false);
+					starButton.setImageResource(android.R.drawable.btn_star_big_off);
+					setSubtitle(null);
+				}
+				onCurrentChangedTask = null;
+			}
+		};
+		onCurrentChangedTask.execute();
 	}
 
 	private void onProgressChanged() {
