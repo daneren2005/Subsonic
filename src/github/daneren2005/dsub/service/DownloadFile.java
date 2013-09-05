@@ -44,8 +44,8 @@ import org.apache.http.HttpStatus;
  * @version $Id$
  */
 public class DownloadFile {
-
     private static final String TAG = DownloadFile.class.getSimpleName();
+    private static final int MAX_FAILURES = 5;
     private final Context context;
     private final MusicDirectory.Entry song;
     private final File partialFile;
@@ -55,7 +55,7 @@ public class DownloadFile {
     private final MediaStoreService mediaStoreService;
     private CancellableTask downloadTask;
     private boolean save;
-    private boolean failed;
+    private int failed = 0;
     private int bitRate;
 	private boolean isPlaying = false;
 	private boolean saveWhenDone = false;
@@ -98,7 +98,6 @@ public class DownloadFile {
 
     public synchronized void download() {
         FileUtil.createDirectoryForParent(saveFile);
-        failed = false;
 		if(!partialFile.exists()) {
 			bitRate = Util.getMaxBitrate(context);
 		}
@@ -153,7 +152,10 @@ public class DownloadFile {
     }
 
     public boolean isFailed() {
-        return failed;
+        return failed > 0;
+    }
+    public boolean isFailedMax() {
+    	return failed > MAX_FAILURES;
     }
 
     public void delete() {
@@ -319,7 +321,7 @@ public class DownloadFile {
                 Util.delete(completeFile);
                 Util.delete(saveFile);
                 if (!isCancelled()) {
-                    failed = true;
+                    failed++;
                     Log.w(TAG, "Failed to download '" + song + "'.", x);
                 }
 
