@@ -393,6 +393,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		private List<List<SubsonicFragment>> frags = new ArrayList<List<SubsonicFragment>>();
 		private List<QueuedFragment> queue = new ArrayList<QueuedFragment>();
 		private int currentPosition;
+		private boolean dontRecreate = false;
 
 		public TabPagerAdapter(ActionBarActivity activity, ViewPager pager) {
 			super(activity.getSupportFragmentManager());
@@ -429,15 +430,18 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 		
 		public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-			if(currentFragment != null) {
-				currentFragment.onCreateOptionsMenu(menu, menuInflater);
-				
+			if(currentFragment != null && !dontRecreate) {
 				for(QueuedFragment addFragment: queue) {
+					// Let Pager know not to try to create options menu in replaceFragment
+					dontRecreate = true;
 					replaceFragment(addFragment.fragment, addFragment.id, currentFragment.getSupportTag());
 					currentFragment = addFragment.fragment;
 				}
-				currentFragment.setPrimaryFragment(true);
+				dontRecreate = false;
 				queue.clear();
+				
+				currentFragment.setPrimaryFragment(true);
+				currentFragment.onCreateOptionsMenu(menu, menuInflater);
 			}
 		}
 		public boolean onOptionsItemSelected(MenuItem item) {
