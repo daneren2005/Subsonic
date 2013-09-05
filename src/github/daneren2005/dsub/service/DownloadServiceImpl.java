@@ -1380,7 +1380,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				int i = start;
 				do {
 					DownloadFile downloadFile = downloadList.get(i);
-					if (!downloadFile.isWorkDone()) {
+					if (!downloadFile.isWorkDone() && !downloadFile.isFailedMax()) {
 						if (downloadFile.shouldSave() || preloaded < Util.getPreloadCount(this)) {
 							currentDownloading = downloadFile;
 							currentDownloading.download();
@@ -1407,10 +1407,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						revision++;
 						i--;
 					} else {
-						currentDownloading = downloadFile;
-						currentDownloading.download();
-						cleanupCandidates.add(currentDownloading);
-						break;
+						if(!downloadFile.isFailedMax()) {
+							currentDownloading = downloadFile;
+							currentDownloading.download();
+							cleanupCandidates.add(currentDownloading);
+							break;
+						}
 					}
 				}
 			}
