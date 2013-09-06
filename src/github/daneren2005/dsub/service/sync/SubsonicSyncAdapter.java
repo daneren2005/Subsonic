@@ -30,12 +30,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import github.daneren2005.dsub.service.RESTMusicService;
+import github.daneren2005.dsub.util.Util;
+
 /**
  * Created by Scott on 9/6/13.
  */
 
 public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	private static final String TAG = SubsonicSyncAdapter.class.getSimpleName();
+	protected RESTMusicService musicService = new RESTMusicService();
 
 	public SubsonicSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
@@ -60,27 +64,31 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		SharedPreferences prefs = Util.getPreferences(context);
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_SYNC_WIFI, true)) {
 			if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-				executeSync();
+				executeSync(context);
 			} else {
 				Log.w(TAG, "Not running sync, not connected to wifi");
 			}
 		} else {
-			executeSync();
+			executeSync(context);
 		}
 	}
 	
-	private void executeSync() {
+	private void executeSync(Context context) {
 		String className = this.getClass().getSimpleName();
 		Log.i(TAG, "Running sync for " + className);
 		long start = System.currentTimeMillis();
 		try {
-			onExecuteSync();
+			int servers = Util.getServerCount(context);
+			for(int i = 1; i <= servers; i++) {
+				musicService.setInstance(i);
+				onExecuteSync(context);
+			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed sync for " + className, e);
 		}
 		Log.i(TAG, className + " executed in " + (System.currentTimeMillis() - start) + " ms");
 	}
-	public void onExecuteSync() {
+	public void onExecuteSync(Context context) {
 	
 	}
 }
