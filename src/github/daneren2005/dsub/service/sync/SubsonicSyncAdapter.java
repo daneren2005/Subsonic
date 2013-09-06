@@ -51,7 +51,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 		
 		// Don't try to sync if no network!
-		if(networkInfo == null || !networkInfo.isConnected()) {
+		if(networkInfo == null || !networkInfo.isConnected() || Util.isOffline(context)) {
 			Log.w(TAG, "Not running sync, not connected to network");
 			return;
 		}
