@@ -1138,7 +1138,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 							}
 						}
 
-						lifecycleSupport.serializeDownloadQueue();
+						// Only call when starting, setPlayerState(PAUSED) already calls this
+						if(start) {
+							lifecycleSupport.serializeDownloadQueue();
+						}
 					} catch (Exception x) {
 						handleError(x);
 					}
