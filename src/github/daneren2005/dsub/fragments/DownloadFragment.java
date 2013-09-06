@@ -948,7 +948,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	}
 
 	private void onCurrentChanged() {
-		DownloadService downloadService = getDownloadService();
+		final DownloadService downloadService = getDownloadService();
 		if (downloadService == null  || onCurrentChangedTask != null) {
 			return;
 		}
