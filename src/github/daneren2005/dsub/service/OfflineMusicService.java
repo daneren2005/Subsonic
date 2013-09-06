@@ -662,6 +662,11 @@ public class OfflineMusicService extends RESTMusicService {
     public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
     }
+    
+    @Override
+    public void setInstance(Integer instance) {
+    	throw new OfflinceException("Offline servers only have one instance");
+    }
 
     private void listFilesRecursively(File parent, List<File> children) {
         for (File file : FileUtil.listMediaFiles(parent)) {
