@@ -355,6 +355,11 @@ public class CachedMusicService implements MusicService {
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return musicService.processOfflineSyncs(context, progressListener);
 	}
+	
+	@Override
+    public void setInstance(Integer instance) {
+    	musicService.setInstance(instance);
+    }
   
   
 
