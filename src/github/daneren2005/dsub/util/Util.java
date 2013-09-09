@@ -40,6 +40,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -929,6 +930,37 @@ public final class Util {
 
         // Update widget
         DSubWidgetProvider.notifyInstances(context, downloadService, false);
+    }
+    
+    public static void showDownloadingNotification(final Context context, DownloadFile file, int size, Handler handler) {
+    	NotificationCompat.Builder notification;
+    	notification = new NotificationCompta.Builder(context)
+    		.setSmallIcon(R.downloading)
+    		.setContentTitle("Downloading " + size + " songs")
+    		.setContentText("Current: " + file.getSong().getTitle())
+    		.setProgress(10, 5, true);
+    	
+		Intent notificationIntent = new Intent(context, MainActivity.class);
+		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
+		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		notification.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+    	
+    	handler.post(new Runnable() {
+			@Override
+			public void run() {
+				downloadService.startForeground(Constants.NOTIFICATION_ID_DOWNLOADING, notification.build());
+			}
+		});
+    }
+    public static void hideDownloadingNotification(final Context context, Handler handler) {
+    	// Remove notification and remove the service from the foreground
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				downloadService.stopForeground(true);
+			}
+		});
     }
 
     public static void sleepQuietly(long millis) {
