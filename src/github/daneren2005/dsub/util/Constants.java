@@ -54,6 +54,7 @@ public final class Constants {
     public static final String INTENT_EXTRA_REQUEST_SEARCH = "subsonic.requestsearch";
     public static final String INTENT_EXTRA_NAME_EXIT = "subsonic.exit" ;
 	public static final String INTENT_EXTRA_NAME_DOWNLOAD = "subsonic.download";
+	public static final String INTENT_EXTRA_NAME_DOWNLOAD_VIEW = "subsonic.download_view";
 	public static final String INTENT_EXTRA_VIEW_ALBUM = "subsonic.view_album";
 	public static final String INTENT_EXTRA_NAME_PODCAST_ID = "subsonic.podcast.id";
 	public static final String INTENT_EXTRA_NAME_PODCAST_NAME = "subsonic.podcast.name";
