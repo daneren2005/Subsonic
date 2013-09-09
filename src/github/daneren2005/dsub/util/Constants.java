@@ -62,6 +62,7 @@ public final class Constants {
     // Notification IDs.
     public static final int NOTIFICATION_ID_PLAYING = 100;
     public static final int NOTIFICATION_ID_ERROR = 101;
+    public static final int NOTIFICATION_ID_DOWNLOADING = 102;
 
     // Preferences keys.
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";
