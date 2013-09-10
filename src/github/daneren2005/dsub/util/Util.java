@@ -60,6 +60,7 @@ import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import org.apache.http.HttpEntity;
@@ -932,10 +933,10 @@ public final class Util {
         DSubWidgetProvider.notifyInstances(context, downloadService, false);
     }
     
-    public static void showDownloadingNotification(final Context context, DownloadFile file, int size, Handler handler) {
-    	NotificationCompat.Builder notification;
-    	notification = new NotificationCompta.Builder(context)
-    		.setSmallIcon(R.downloading)
+    public static void showDownloadingNotification(final Context context, final DownloadServiceImpl downloadService, DownloadFile file, int size, Handler handler) {
+    	NotificationCompat.Builder builder;
+    	builder = new NotificationCompat.Builder(context)
+    		.setSmallIcon(R.drawable.downloading)
     		.setContentTitle("Downloading " + size + " songs")
     		.setContentText("Current: " + file.getSong().getTitle())
     		.setProgress(10, 5, true);
@@ -944,16 +945,18 @@ public final class Util {
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		notification.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+		builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+
+		final Notification notification = builder.build();
     	
     	handler.post(new Runnable() {
 			@Override
 			public void run() {
-				downloadService.startForeground(Constants.NOTIFICATION_ID_DOWNLOADING, notification.build());
+				downloadService.startForeground(Constants.NOTIFICATION_ID_DOWNLOADING, notification);
 			}
 		});
     }
-    public static void hideDownloadingNotification(final Context context, Handler handler) {
+    public static void hideDownloadingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
     	// Remove notification and remove the service from the foreground
 		handler.post(new Runnable() {
 			@Override
