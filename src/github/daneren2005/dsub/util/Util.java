@@ -22,6 +22,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -933,13 +934,14 @@ public final class Util {
         DSubWidgetProvider.notifyInstances(context, downloadService, false);
     }
     
-    public static void showDownloadingNotification(final Context context, final DownloadServiceImpl downloadService, DownloadFile file, int size, Handler handler) {
+    public static void showDownloadingNotification(final Context context, DownloadFile file, int size) {
     	NotificationCompat.Builder builder;
     	builder = new NotificationCompat.Builder(context)
     		.setSmallIcon(R.drawable.stat_notify_download)
     		.setContentTitle("Downloading " + size + " songs")
     		.setContentText("Current: " + file.getSong().getTitle())
-    		.setProgress(10, 5, true);
+    		.setProgress(10, 5, true)
+			.setOngoing(true);
     	
 		Intent notificationIntent = new Intent(context, MainActivity.class);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
@@ -947,23 +949,13 @@ public final class Util {
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
 
-		final Notification notification = builder.build();
-    	
-    	handler.post(new Runnable() {
-			@Override
-			public void run() {
-				downloadService.startForeground(Constants.NOTIFICATION_ID_DOWNLOADING, notification);
-			}
-		});
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.notify(Constants.NOTIFICATION_ID_DOWNLOADING, builder.build());
+
     }
-    public static void hideDownloadingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
-    	// Remove notification and remove the service from the foreground
-		handler.post(new Runnable() {
-			@Override
-			public void run() {
-				downloadService.stopForeground(true);
-			}
-		});
+    public static void hideDownloadingNotification(final Context context) {
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(Constants.NOTIFICATION_ID_DOWNLOADING);
     }
 
     public static void sleepQuietly(long millis) {

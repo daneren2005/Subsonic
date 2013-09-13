@@ -1426,11 +1426,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
 		if(!backgroundDownloadList.isEmpty() && downloadRevision != revision) {
-			Util.showDownloadingNotification(this, this, currentDownloading, backgroundDownloadList.size(), handler);
+			Util.showDownloadingNotification(this, currentDownloading, backgroundDownloadList.size());
 			downloadRevision = revision;
 			downloadOngoing = true;
 		} else if(backgroundDownloadList.isEmpty() && downloadOngoing) {
-			Util.hideDownloadingNotification(this, this, handler);
+			Util.hideDownloadingNotification(this);
 			downloadOngoing = false;
 		}
 
