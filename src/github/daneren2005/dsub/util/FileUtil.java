@@ -378,7 +378,6 @@ public class FileUtil {
             out = new Output(new FileOutputStream(file.getFD()));
 			kryo.writeObject(out, obj);
             Log.i(TAG, "Serialized object to " + fileName);
-			file.close();
             return true;
         } catch (Throwable x) {
             Log.w(TAG, "Failed to serialize object to " + fileName);
@@ -395,7 +394,6 @@ public class FileUtil {
             in = new Input(new FileInputStream(file.getFD()));
 			T result = (T) kryo.readObject(in, tClass);
             Log.i(TAG, "Deserialized object from " + fileName);
-			file.close();
             return result;
         } catch (Throwable x) {
             Log.w(TAG, "Failed to deserialize object from " + fileName, x);
