@@ -57,6 +57,9 @@ public class MainActivity extends SubsonicActivity {
 			getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
 			Intent intent = new Intent();
 			intent.setClass(this, DownloadActivity.class);
+			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
+				intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
+			}
 			startActivity(intent);
 		}
 		setContentView(R.layout.main);

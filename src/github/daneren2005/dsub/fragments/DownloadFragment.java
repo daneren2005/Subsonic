@@ -120,6 +120,13 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				startFlipped = true;
 			}
 		}
+		Bundle args = getArguments();
+		if(args != null) {
+			if(args.getBoolean(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
+				startFlipped = true;
+				nowPlaying = false;
+			}
+		}
 	}
 
 	@Override

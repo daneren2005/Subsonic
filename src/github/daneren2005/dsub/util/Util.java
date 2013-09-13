@@ -936,7 +936,7 @@ public final class Util {
     public static void showDownloadingNotification(final Context context, final DownloadServiceImpl downloadService, DownloadFile file, int size, Handler handler) {
     	NotificationCompat.Builder builder;
     	builder = new NotificationCompat.Builder(context)
-    		.setSmallIcon(R.drawable.downloading)
+    		.setSmallIcon(R.drawable.stat_notify_download)
     		.setContentTitle("Downloading " + size + " songs")
     		.setContentText("Current: " + file.getSong().getTitle())
     		.setProgress(10, 5, true);
