@@ -3,26 +3,23 @@ Run these commands to grab dependent libraries:
 git submodule init
 git submodule update
 
-Go to both ActionBarSherlock/library and DragSortListView/library and build project files with:
+Go to DragSortListView/library and build project files with:
 android update project --path ./
 
+Replace the file DragSortListView/library/libs/android-support-v4.jar with the one from main projects libs/
 
 
 Roadmap of major planned features in rough order that I plan to work on them in (little features get sprinkled in wherever):
 
 UI Redesign
-	-Fragments
-	-Native tabs
 	-Tablets: side by side fragments
 HLS Video
 	-Display video where album art is currently (double tap to fullscreen)
 	-Videos can play inline with songs
 Background Sync
 	-Mark playlists as 'offline', syncs changes
-	-Do things like star songs in offline mode that sync later
+	-Mark podcasts as 'offline', download new episodes only
 New Tabs
-	-Podcasts
 	-Admin functions
 		-Change your password
 	-Create/delete users if admin
-	-Chat
