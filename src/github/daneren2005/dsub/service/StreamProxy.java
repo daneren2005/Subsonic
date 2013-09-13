@@ -220,13 +220,6 @@ public class StreamProxy implements Runnable {
 							Thread.sleep(1000);
 						}
 					}
-					
-					// When done, switch .partial to .complete
-					// Make sure that it is in saveWhenDone mode, and currently playing
-					if(downloadFile.isWorkDone() && !downloadFile.isCompleteFileAvailable() && downloadFile.getPlaying()) {
-						downloadFile.setPlaying(false);
-						downloadFile.setPlaying(true);
-					}
 				} else {
 					Log.w(TAG, "Requesting data for completely downloaded file");
 				}
