@@ -80,7 +80,7 @@ public class EqualizerController {
     public void loadSettings() {
         try {
             if (isAvailable()) {
-                EqualizerSettings settings = FileUtil.deserialize(context, "equalizer.dat");
+                EqualizerSettings settings = FileUtil.deserialize(context, "equalizer.dat", EqualizerSettings.class);
                 if (settings != null) {
                     settings.apply(equalizer);
                 }
@@ -124,10 +124,13 @@ public class EqualizerController {
 
     private static class EqualizerSettings implements Serializable {
 
-        private final short[] bandLevels;
+        private short[] bandLevels;
         private short preset;
-        private final boolean enabled;
+        private boolean enabled;
 
+		public EqualizerSettings() {
+
+		}
         public EqualizerSettings(Equalizer equalizer) {
             enabled = equalizer.getEnabled();
             bandLevels = new short[equalizer.getNumberOfBands()];

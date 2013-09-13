@@ -257,15 +257,12 @@ public class DownloadServiceLifecycleSupport {
     }
 
     private void deserializeDownloadQueueNow() {
-       State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER);
+   		State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER, State.class);
         if (state == null) {
             return;
         }
         Log.i(TAG, "Deserialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
         downloadService.restore(state.songs, state.currentPlayingIndex, state.currentPlayingPosition);
-
-        // Work-around: Serialize again, as the restore() method creates a serialization without current playing info.
-        serializeDownloadQueue();
     }
 
     private void handleKeyEvent(KeyEvent event) {

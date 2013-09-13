@@ -26,10 +26,13 @@ import java.io.Serializable;
  */
 public class Indexes implements Serializable {
 
-    private final long lastModified;
-    private final List<Artist> shortcuts;
-    private final List<Artist> artists;
+    private long lastModified;
+    private List<Artist> shortcuts;
+    private List<Artist> artists;
 
+	public Indexes() {
+
+	}
     public Indexes(long lastModified, List<Artist> shortcuts, List<Artist> artists) {
         this.lastModified = lastModified;
         this.shortcuts = shortcuts;

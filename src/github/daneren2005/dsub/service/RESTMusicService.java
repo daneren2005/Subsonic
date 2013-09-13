@@ -243,7 +243,7 @@ public class RESTMusicService implements MusicService {
 
     private Indexes readCachedIndexes(Context context, String musicFolderId) {
         String filename = getCachedIndexesFilename(context, musicFolderId);
-        return FileUtil.deserialize(context, filename);
+        return FileUtil.deserialize(context, filename, Indexes.class);
     }
 
     private void writeCachedIndexes(Context context, Indexes indexes, String musicFolderId) {
@@ -258,7 +258,7 @@ public class RESTMusicService implements MusicService {
 
     private ArrayList<MusicFolder> readCachedMusicFolders(Context context) {
         String filename = getCachedMusicFoldersFilename(context);
-        return FileUtil.deserialize(context, filename);
+        return FileUtil.deserialize(context, filename, ArrayList.class);
     }
 
     private void writeCachedMusicFolders(Context context, List<MusicFolder> musicFolders) {
