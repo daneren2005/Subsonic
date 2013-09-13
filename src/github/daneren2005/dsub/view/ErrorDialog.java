@@ -59,7 +59,11 @@ public class ErrorDialog {
             }
         });
 
-        builder.create().show();
+		try {
+        	builder.create().show();
+		} catch(Exception e) {
+			// Don't care, just means no activity to attach to
+		}
     }
     
 	private void restart(Activity context) {
