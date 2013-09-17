@@ -761,8 +761,8 @@ public final class Util {
         }
     }
 	
-	public static boolean isNullOrWhiteSpace(String string) { 
-		return string == null || string.isEmpty() || string.trim().isEmpty();
+	public static boolean isNullOrWhiteSpace(String string) {
+		return string == null || "".equals(string) || "".equals(string.trim());
 	}
 
     public static boolean isNetworkConnected(Context context) {
