@@ -93,7 +93,14 @@ public class CachedMusicService implements MusicService {
         }
         List<MusicFolder> result = cachedMusicFolders.get();
         if (result == null) {
-            result = musicService.getMusicFolders(refresh, context, progressListener);
+        	if(!refresh) {
+        		result = FileUtil.deserialize(context, getCacheName(context, "musicFolders"), List.class);
+        	}
+        	
+        	if(result == null) {
+            	result = musicService.getMusicFolders(refresh, context, progressListener);
+            	FileUtil.serialize(context, result, getCacheName(context, "musicFolders"));
+        	}
             cachedMusicFolders.set(result);
         }
         return result;
