@@ -35,7 +35,10 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.PodcastChannel;
@@ -64,6 +67,9 @@ public class FileUtil {
 		kryo.register(Indexes.class);
 		kryo.register(Artist.class);
 		kryo.register(MusicFolder.class);
+		kryo.register(PodcastChannel.class);
+		kryo.register(Playlist.class);
+		kryo.register(Genre.class);
 	}
 	
 	public static File getAnySong(Context context) {
