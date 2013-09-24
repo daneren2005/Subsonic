@@ -722,6 +722,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					protected Void doInBackground() throws Throwable {				
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePodcastEpisode(episode.getEpisodeId(), context, null);
+						if (getDownloadService() != null) {
+							List<MusicDirectory.Entry> episodeList = new ArrayList<MusicDirectory.Entry>(1);
+							episodeList.add(episode);
+							getDownloadService().delete(episodeList);
+						}
 						return null;
 					}
 
