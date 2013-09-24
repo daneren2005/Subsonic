@@ -30,7 +30,7 @@ import java.util.Comparator;
 /**
  * @author Sindre Mehus
  */
-public class MusicDirectory {
+public class MusicDirectory implements Serializable {
 	private static final String TAG = MusicDirectory.class.getSimpleName();
 
     private String name;

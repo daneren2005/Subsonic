@@ -366,7 +366,7 @@ public class CachedMusicService implements MusicService {
 		return musicService.processOfflineSyncs(context, progressListener);
 	}
   
-  	private void getCacheName(Context context, String name, String id) {
+  	private String getCacheName(Context context, String name, String id) {
   		String s = Util.getRestUrl(context, null) + id;
   		return name + "-" + s.hashCode() + ".ser";
   	}
