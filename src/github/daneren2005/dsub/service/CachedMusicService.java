@@ -123,17 +123,15 @@ public class CachedMusicService implements MusicService {
         if (dir == null) {
         	if(!refresh) {
         		dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
-        		
-        		if(dir != null) {
-        			return dir;
-        		}
         	}
         	
-            dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
+        	if(dir == null) {
+            	dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
+            	FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
+        	}
             cache = new TimeLimitedCache<MusicDirectory>(TTL_MUSIC_DIR, TimeUnit.SECONDS);
             cache.set(dir);
             cachedMusicDirectories.put(id, cache);
-            FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
         }
         return dir;
     }
@@ -153,7 +151,14 @@ public class CachedMusicService implements MusicService {
         checkSettingsChanged(context);
         List<Playlist> result = refresh ? null : cachedPlaylists.get();
         if (result == null) {
-            result = musicService.getPlaylists(refresh, context, progressListener);
+        	if(!refresh) {
+        		result = FileUtil.deserialize(context, getCacheName(context, "playlist"), ArrayList.class);
+        	}
+        	
+        	if(result == null) {
+	        	result = musicService.getPlaylists(refresh, context, progressListener);
+	        	FileUtil.serialize(context, result, getCacheName(context, "playlist"));
+        	}
             cachedPlaylists.set(result);
         }
         return result;
@@ -162,11 +167,13 @@ public class CachedMusicService implements MusicService {
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
 		cachedPlaylists.clear();
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist"));
         musicService.createPlaylist(id, name, entries, context, progressListener);
     }
 	
 	@Override
 	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist")));
 		musicService.deletePlaylist(id, context, progressListener);
 	}
 	
@@ -306,7 +313,14 @@ public class CachedMusicService implements MusicService {
 		List<Genre> result = refresh ? null : cachedGenres.get();
 
 		if (result == null) {
-			result = musicService.getGenres(refresh, context, progressListener);
+			if(!refresh) {
+				result = FileUtil.deserialize(context, getCacheName(context, "genre"), List.class);
+			}
+			
+			if(result == null) {
+				result = musicService.getGenres(refresh, context, progressListener);
+				FileUtil.serialize(context, result, getCacheName(context, "genre"));
+			}
 			cachedGenres.set(result);
 		}
 
@@ -324,7 +338,14 @@ public class CachedMusicService implements MusicService {
 		List<PodcastChannel> result = refresh ? null : cachedPodcastChannels.get();
 
 		if (result == null) {
-			result = musicService.getPodcastChannels(refresh, context, progressListener);
+			if(!refresh) {
+				result = FileUtil.deserialize(context, getCacheName(context, "podcast"), List.class);
+			}
+			
+			if(result == null) {
+				result = musicService.getPodcastChannels(refresh, context, progressListener);
+				FileUtil.serialize(context, result, getCacheName(context, "podcast"));
+			}
 			cachedPodcastChannels.set(result);
 		}
 
@@ -343,11 +364,15 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception{
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "podcast")));
+		cachedPodcastChannels.clear();
 		musicService.createPodcastChannel(url, context, progressListener);
 	}
 	
 	@Override
 	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception{
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "podcast")));
+		cachedPodcastChannels.clear();
 		musicService.deletePodcastChannel(id, context, progressListener);
 	}
 	
@@ -368,6 +393,10 @@ public class CachedMusicService implements MusicService {
   
   	private String getCacheName(Context context, String name, String id) {
   		String s = Util.getRestUrl(context, null) + id;
+  		return name + "-" + s.hashCode() + ".ser";
+  	}
+  	private String getCacheName(Context context, String name) {
+  		String s = Util.getRestUrl(context, null);
   		return name + "-" + s.hashCode() + ".ser";
   	}
 
