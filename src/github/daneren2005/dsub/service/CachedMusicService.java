@@ -42,6 +42,7 @@ import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TimeLimitedCache;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -120,10 +121,19 @@ public class CachedMusicService implements MusicService {
         TimeLimitedCache<MusicDirectory> cache = refresh ? null : cachedMusicDirectories.get(id);
         MusicDirectory dir = cache == null ? null : cache.get();
         if (dir == null) {
+        	if(!refresh) {
+        		dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
+        		
+        		if(dir != null) {
+        			return dir;
+        		}
+        	}
+        	
             dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
             cache = new TimeLimitedCache<MusicDirectory>(TTL_MUSIC_DIR, TimeUnit.SECONDS);
             cache.set(dir);
             cachedMusicDirectories.put(id, cache);
+            FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
         }
         return dir;
     }
@@ -356,7 +366,10 @@ public class CachedMusicService implements MusicService {
 		return musicService.processOfflineSyncs(context, progressListener);
 	}
   
-  
+  	private void getCacheName(Context context, String name, String id) {
+  		String s = Util.getRestUrl(context, null) + id;
+  		return name + "-" + s.hashCode() + ".ser";
+  	}
 
     private void checkSettingsChanged(Context context) {
         String newUrl = Util.getRestUrl(context, null);
