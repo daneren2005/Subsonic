@@ -371,15 +371,7 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
-		MusicDirectory dir = null;
-		if(!refresh) {
-			dir = FileUtil.deserialize(context, getCacheName(context, "podcast", id), MusicDirectory.class);
-		}
-		if(dir == null) {
-			dir = musicService.getPodcastEpisodes(refresh, id, context, progressListener);
-			FileUtil.serialize(context, dir, getCacheName(context, "podcast", id));
-		}
-		return dir;
+		return musicService.getPodcastEpisodes(refresh, id, context, progressListener);
 	}
 	
 	@Override
