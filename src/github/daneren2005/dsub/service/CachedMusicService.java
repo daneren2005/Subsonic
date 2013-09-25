@@ -18,6 +18,8 @@
  */
 package github.daneren2005.dsub.service;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -94,12 +96,12 @@ public class CachedMusicService implements MusicService {
         List<MusicFolder> result = cachedMusicFolders.get();
         if (result == null) {
         	if(!refresh) {
-        		result = FileUtil.deserialize(context, getCacheName(context, "musicFolders"), List.class);
+        		result = FileUtil.deserialize(context, getCacheName(context, "musicFolders"), ArrayList.class);
         	}
         	
         	if(result == null) {
             	result = musicService.getMusicFolders(refresh, context, progressListener);
-            	FileUtil.serialize(context, result, getCacheName(context, "musicFolders"));
+            	FileUtil.serialize(context, new ArrayList<MusicFolder>(result), getCacheName(context, "musicFolders"));
         	}
             cachedMusicFolders.set(result);
         }
@@ -164,7 +166,7 @@ public class CachedMusicService implements MusicService {
         	
         	if(result == null) {
 	        	result = musicService.getPlaylists(refresh, context, progressListener);
-	        	FileUtil.serialize(context, result, getCacheName(context, "playlist"));
+	        	FileUtil.serialize(context, new ArrayList<Playlist>(result), getCacheName(context, "playlist"));
         	}
             cachedPlaylists.set(result);
         }
@@ -174,7 +176,7 @@ public class CachedMusicService implements MusicService {
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
 		cachedPlaylists.clear();
-		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist"));
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist")));
         musicService.createPlaylist(id, name, entries, context, progressListener);
     }
 	
@@ -321,12 +323,12 @@ public class CachedMusicService implements MusicService {
 
 		if (result == null) {
 			if(!refresh) {
-				result = FileUtil.deserialize(context, getCacheName(context, "genre"), List.class);
+				result = FileUtil.deserialize(context, getCacheName(context, "genre"), ArrayList.class);
 			}
 			
 			if(result == null) {
 				result = musicService.getGenres(refresh, context, progressListener);
-				FileUtil.serialize(context, result, getCacheName(context, "genre"));
+				FileUtil.serialize(context, new ArrayList<Genre>(result), getCacheName(context, "genre"));
 			}
 			cachedGenres.set(result);
 		}
@@ -346,12 +348,12 @@ public class CachedMusicService implements MusicService {
 
 		if (result == null) {
 			if(!refresh) {
-				result = FileUtil.deserialize(context, getCacheName(context, "podcast"), List.class);
+				result = FileUtil.deserialize(context, getCacheName(context, "podcast"), ArrayList.class);
 			}
 			
 			if(result == null) {
 				result = musicService.getPodcastChannels(refresh, context, progressListener);
-				FileUtil.serialize(context, result, getCacheName(context, "podcast"));
+				FileUtil.serialize(context, new ArrayList<PodcastChannel>(result), getCacheName(context, "podcast"));
 			}
 			cachedPodcastChannels.set(result);
 		}

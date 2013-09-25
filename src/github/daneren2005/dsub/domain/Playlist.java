@@ -33,6 +33,9 @@ public class Playlist implements Serializable {
 	private String created;
 	private Boolean pub;
 
+	public Playlist() {
+
+	}
     public Playlist(String id, String name) {
         this.id = id;
         this.name = name;
