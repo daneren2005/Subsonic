@@ -151,8 +151,16 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception {
-        return musicService.getPlaylist(id, name, context, progressListener);
+    public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
+		MusicDirectory dir = null;
+		if(!refresh) {
+			dir = FileUtil.deserialize(context, getCacheName(context, "playlist", id), MusicDirectory.class);
+		}
+		if(dir == null) {
+			dir = musicService.getPlaylist(refresh, id, name, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "playlist", id));
+		}
+        return dir;
     }
 
     @Override
@@ -362,8 +370,16 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	@Override
-	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getPodcastEpisodes(id, context, progressListener);
+	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
+		MusicDirectory dir = null;
+		if(!refresh) {
+			dir = FileUtil.deserialize(context, getCacheName(context, "podcast", id), MusicDirectory.class);
+		}
+		if(dir == null) {
+			dir = musicService.getPodcastEpisodes(refresh, id, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "podcast", id));
+		}
+		return dir;
 	}
 	
 	@Override
