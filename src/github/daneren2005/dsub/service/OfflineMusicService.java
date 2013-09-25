@@ -378,7 +378,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 
     @Override
-    public MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
 		DownloadService downloadService = DownloadServiceImpl.getInstance();
         if (downloadService == null) {
             return new MusicDirectory();
@@ -606,7 +606,7 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 	
 	@Override
-	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
 		return getMusicDirectory(FileUtil.getPodcastDirectory(context, id).getPath(), null, false, context, progressListener);
 	}
 	

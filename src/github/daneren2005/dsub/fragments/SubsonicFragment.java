@@ -587,7 +587,7 @@ public class SubsonicFragment extends Fragment {
 				if(isDirectory)
 					root = musicService.getMusicDirectory(id, name, false, context, this);
 				else
-					root = musicService.getPlaylist(id, name, context, this);
+					root = musicService.getPlaylist(true, id, name, context, this);
 				List<MusicDirectory.Entry> songs = new LinkedList<MusicDirectory.Entry>();
 				getSongsRecursively(root, songs);
 				return songs;
@@ -792,7 +792,7 @@ public class SubsonicFragment extends Fragment {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				MusicDirectory playlist = musicService.getPlaylist(id, name, context, null);
+				MusicDirectory playlist = musicService.getPlaylist(true, id, name, context, null);
 				List<MusicDirectory.Entry> toDelete = playlist.getChildren();
 				musicService.overwritePlaylist(id, name, toDelete.size(), songs, context, null);
 				return null;

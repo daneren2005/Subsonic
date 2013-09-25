@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -335,9 +334,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		entryList.setVisibility(View.INVISIBLE);
 		emptyView.setVisibility(View.INVISIBLE);
 		if (playlistId != null) {
-			getPlaylist(playlistId, playlistName);
+			getPlaylist(playlistId, playlistName, refresh);
 		} else if(podcastId != null) {
-			getPodcast(podcastId, podcastName);
+			getPodcast(podcastId, podcastName, refresh);
 		} else if (albumListType != null) {
 			getAlbumList(albumListType, albumListSize);
 		} else {
@@ -356,24 +355,24 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}.execute();
 	}
 
-	private void getPlaylist(final String playlistId, final String playlistName) {
+	private void getPlaylist(final String playlistId, final String playlistName, final boolean refresh) {
 		setTitle(playlistName);
 
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				return service.getPlaylist(playlistId, playlistName, context, this);
+				return service.getPlaylist(refresh, playlistId, playlistName, context, this);
 			}
 		}.execute();
 	}
 	
-	private void getPodcast(final String podcastId, final String podcastName) {
+	private void getPodcast(final String podcastId, final String podcastName, final boolean refresh) {
 		setTitle(podcastName);
 
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				return service.getPodcastEpisodes(podcastId, context, this);
+				return service.getPodcastEpisodes(refresh, podcastId, context, this);
 			}
 		}.execute();
 	}

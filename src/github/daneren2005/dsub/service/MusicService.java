@@ -59,7 +59,7 @@ public interface MusicService {
 
     MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception;
 
-    MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception;
+    MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception;
 
     List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
@@ -123,7 +123,7 @@ public interface MusicService {
 	
 	List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 	
-	MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception;
+	MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception;
 	
 	void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception;
 	

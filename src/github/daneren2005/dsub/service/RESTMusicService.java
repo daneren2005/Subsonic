@@ -313,7 +313,7 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getPlaylist(String id, String name, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_PLAYLIST);
 
@@ -904,7 +904,7 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
-	public MusicDirectory getPodcastEpisodes(String id, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("id"), Arrays.<Object>asList(id));
         try {
             return new PodcastEntryParser(context).parse(id, reader, progressListener);
