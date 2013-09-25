@@ -320,7 +320,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public synchronized void downloadBackground(List<MusicDirectory.Entry> songs, boolean save) {
 		for (MusicDirectory.Entry song : songs) {
 			DownloadFile downloadFile = new DownloadFile(this, song, save);
-			backgroundDownloadList.add(downloadFile);
+			if(!downloadFile.isWorkDone() || (downloadFile.shouldSave() && !downloadFile.isSaved())) {
+				// Only add to list if there is work to be done
+				backgroundDownloadList.add(downloadFile);
+			}
 		}
 		revision++;
 		
