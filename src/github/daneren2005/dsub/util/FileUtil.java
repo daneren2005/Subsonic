@@ -20,6 +20,7 @@ package github.daneren2005.dsub.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
@@ -397,11 +398,16 @@ public class FileUtil {
         Input in = null;
         try {
 			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "r");
+
             in = new Input(new FileInputStream(file.getFD()));
 			T result = (T) kryo.readObject(in, tClass);
             Log.i(TAG, "Deserialized object from " + fileName);
             return result;
-        } catch (Throwable x) {
+        } catch(FileNotFoundException e) {
+			// Different error message
+			Log.w(TAG, "No serialization for object from " + fileName);
+			return null;
+		} catch (Throwable x) {
             Log.w(TAG, "Failed to deserialize object from " + fileName, x);
             return null;
         } finally {
