@@ -130,6 +130,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
+			entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
 		}
 
 		if(entries == null) {
@@ -322,7 +323,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 	@Override
 	protected void refresh(boolean refresh) {
-		load(refresh);
+		if(!"root".equals(id)) {
+			load(refresh);
+		}
 	}
 	
 	@Override
@@ -444,7 +447,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
             }
         }
 
-        if (songCount > 0) {
+        if (songCount > 0 && !"root".equals(id)) {
             if(showHeader) {
                 View header = createHeader(entries);
                 if(header != null) {
@@ -453,7 +456,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
             }
         } else {
             showHeader = false;
-            hideButtons = true;
+			if(!"root".equals(id)) {
+            	hideButtons = true;
+			}
         }
 
         emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);

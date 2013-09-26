@@ -29,6 +29,7 @@ import android.content.SharedPreferences;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.ProgressListener;
 import android.util.Log;
 import github.daneren2005.dsub.util.Constants;
@@ -37,7 +38,7 @@ import github.daneren2005.dsub.util.Util;
 /**
  * @author Sindre Mehus
  */
-public class IndexesParser extends AbstractParser {
+public class IndexesParser extends MusicDirectoryEntryParser {
     private static final String TAG = IndexesParser.class.getSimpleName();
 	
 	private Context context;
@@ -55,6 +56,7 @@ public class IndexesParser extends AbstractParser {
 
         List<Artist> artists = new ArrayList<Artist>();
         List<Artist> shortcuts = new ArrayList<Artist>();
+		List<MusicDirectory.Entry> entries = new ArrayList<MusicDirectory.Entry>();
         Long lastModified = null;
         int eventType;
         String index = "#";
@@ -91,7 +93,10 @@ public class IndexesParser extends AbstractParser {
                     shortcut.setIndex("*");
 					shortcut.setStarred(get("starred") != null);
                     shortcuts.add(shortcut);
-                } else if ("error".equals(name)) {
+				} else if("child".equals(name)) {
+					MusicDirectory.Entry entry = parseEntry("");
+					entries.add(entry);
+				} else if ("error".equals(name)) {
                     handleError();
                 }
             }
@@ -115,6 +120,6 @@ public class IndexesParser extends AbstractParser {
         String msg = getContext().getResources().getString(R.string.parser_artist_count, artists.size());
         updateProgress(progressListener, msg);
 
-        return new Indexes(lastModified == null ? 0L : lastModified, shortcuts, artists);
+        return new Indexes(lastModified == null ? 0L : lastModified, shortcuts, artists, entries);
     }
 }

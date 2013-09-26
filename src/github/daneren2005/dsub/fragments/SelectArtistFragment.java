@@ -17,6 +17,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -40,6 +41,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	private View folderButton;
 	private TextView folderName;
 	private List<MusicFolder> musicFolders = null;
+	private List<MusicDirectory.Entry> entries;
 	private List<Artist> artists;
 
 	@Override
@@ -162,6 +164,10 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+			if("root".equals(artist.getId())) {
+				Log.d(TAG, "root");
+				args.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
+			}
 			fragment.setArguments(args);
 
 			replaceFragment(fragment, R.id.select_artist_layout);
@@ -200,6 +206,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 				artists.addAll(result.getShortcuts());
 				artists.addAll(result.getArtists());
 				artistList.setAdapter(new ArtistAdapter(context, artists));
+				entries = result.getEntries();
 
 				setMusicFolders();
 				artistList.setVisibility(View.VISIBLE);

@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
@@ -29,6 +30,7 @@ public class Indexes implements Serializable {
     private long lastModified;
     private List<Artist> shortcuts;
     private List<Artist> artists;
+	private List<MusicDirectory.Entry> entries;
 
 	public Indexes() {
 
@@ -37,7 +39,21 @@ public class Indexes implements Serializable {
         this.lastModified = lastModified;
         this.shortcuts = shortcuts;
         this.artists = artists;
+		this.entries = new ArrayList<MusicDirectory.Entry>();
     }
+	public Indexes(long lastModified, List<Artist> shortcuts, List<Artist> artists, List<MusicDirectory.Entry> entries) {
+		this.lastModified = lastModified;
+		this.shortcuts = shortcuts;
+		this.artists = artists;
+		this.entries = entries;
+		if(!entries.isEmpty()) {
+			Artist root = new Artist();
+			root.setId("root");
+			root.setName("Root");
+			root.setIndex("#");
+			artists.add(root);
+		}
+	}
 
     public long getLastModified() {
         return lastModified;
@@ -50,4 +66,8 @@ public class Indexes implements Serializable {
     public List<Artist> getArtists() {
         return artists;
     }
+
+	public List<MusicDirectory.Entry> getEntries() {
+		return entries;
+	}
 }
