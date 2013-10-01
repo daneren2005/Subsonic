@@ -90,10 +90,10 @@ public class StreamProxy implements Runnable {
 	}
 
 	private class StreamToMediaPlayerTask implements Runnable {
-
-		String localPath;
+		DownloadFile downloadFile;
+		File file;
 		Socket client;
-		int cbSkip;
+		int cbSkip = 0;
 
 		public StreamToMediaPlayerTask(Socket client) {
 			this.client = client;
@@ -149,6 +149,7 @@ public class StreamProxy implements Runnable {
 			// Read HTTP headers
 			Log.i(TAG, "Processing request");
 
+			String localPath;
 			try {
 				localPath = URLDecoder.decode(request.getRequestLine().getUri(), Constants.UTF_8);
 			} catch (UnsupportedEncodingException e) {
@@ -157,11 +158,15 @@ public class StreamProxy implements Runnable {
 			}
 			
 			Log.i(TAG, "Processing request for file " + localPath);
-			File file = new File(localPath);
-			if (!file.exists()) {
+			downloadFile = downloadService.getCurrentPlaying();
+			File partialFile = new File(localPath);
+			if (!file.equals(downloadFile.getPartialFile()) {
 				Log.e(TAG, "File " + localPath + " does not exist");
 				return false;
 			}
+			
+			// Use either partial or complete if downloading finished while StreamProxy was idle
+			file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
 			
 			return true;
 		}
@@ -169,7 +174,6 @@ public class StreamProxy implements Runnable {
 		@Override
 		public void run() {
 			Log.i(TAG, "Streaming song in background");
-			DownloadFile downloadFile = downloadService.getCurrentPlaying();
 			MusicDirectory.Entry song = downloadFile.getSong();
 
             // Create HTTP header
@@ -204,7 +208,6 @@ public class StreamProxy implements Runnable {
 					while (isRunning && !client.isClosed()) {
 
 						// See if there's more to send
-						File file = new File(localPath);
 						int cbSentThisBatch = 0;
 						if (file.exists()) {
 							FileInputStream input = new FileInputStream(file);
