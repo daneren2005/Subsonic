@@ -103,9 +103,10 @@ public class StreamProxy implements Runnable {
 			HttpRequest request = null;
 			InputStream is;
 			String firstLine;
+			BufferedReader reader = null;
 			try {
 				is = client.getInputStream();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(is), 8192);
+				reader = new BufferedReader(new InputStreamReader(is), 8192);
 				firstLine = reader.readLine();
 			} catch (IOException e) {
 				Log.e(TAG, "Error parsing request", e);
@@ -123,6 +124,19 @@ public class StreamProxy implements Runnable {
 			String realUri = uri.substring(1);
 			Log.i(TAG, realUri);
 			request = new BasicHttpRequest(method, realUri);
+			
+			// Get all of the headers 
+			try {
+				String line;
+				while(line = reader.readLine() && !"".equals(line)) {
+					String headerName = line.substring(0, line.indexOf(':'));
+					String headerValue = line.substring(line.indexOf(': ') + 2);
+					request.addHeader(headerName, headerValue);
+				}
+			} catch(IOException e) {
+				// Don't really care once past first line
+			}
+			
 			return request;
 		}
 
