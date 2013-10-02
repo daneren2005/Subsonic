@@ -55,6 +55,7 @@ public class DownloadFile {
     private final MediaStoreService mediaStoreService;
     private CancellableTask downloadTask;
     private boolean save;
+	private boolean failedDownload = false;
     private int failed = 0;
     private int bitRate;
 	private boolean isPlaying = false;
@@ -98,6 +99,7 @@ public class DownloadFile {
 
     public synchronized void download() {
         FileUtil.createDirectoryForParent(saveFile);
+        failedDownload = false;
 		if(!partialFile.exists()) {
 			bitRate = Util.getMaxBitrate(context);
 		}
@@ -152,7 +154,7 @@ public class DownloadFile {
     }
 
     public boolean isFailed() {
-        return failed > 0;
+        return failedDownload;
     }
     public boolean isFailedMax() {
     	return failed > MAX_FAILURES;
@@ -322,6 +324,7 @@ public class DownloadFile {
                 Util.delete(saveFile);
                 if (!isCancelled()) {
                     failed++;
+                    failedDownload = true;
                     Log.w(TAG, "Failed to download '" + song + "'.", x);
                 }
 
