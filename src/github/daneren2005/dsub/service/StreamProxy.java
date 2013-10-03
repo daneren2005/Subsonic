@@ -165,9 +165,6 @@ public class StreamProxy implements Runnable {
 				return false;
 			}
 			
-			// Make sure to have file lock
-			downloadFile.setPlaying(true);
-			
 			// Use either partial or complete if downloading finished while StreamProxy was idle
 			file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
 			
@@ -204,6 +201,9 @@ public class StreamProxy implements Runnable {
                 output.write(headers.getBytes());
 
 				if(!downloadFile.isWorkDone()) {
+					// Make sure to have file lock
+					downloadFile.setPlaying(true);
+					
 					// Loop as long as there's stuff to send
 					while (isRunning && !client.isClosed()) {
 
@@ -240,6 +240,9 @@ public class StreamProxy implements Runnable {
 							Thread.sleep(1000);
 						}
 					}
+					
+					// Release file lock, use of stream proxy means nothing else is using it
+					downloadFile.setPlaying(false);
 				} else {
 					Log.w(TAG, "Requesting data for completely downloaded file");
 				}
@@ -258,9 +261,6 @@ public class StreamProxy implements Runnable {
                     output.close();
                 }
                 client.close();
-                
-                // Release file lock, use of stream proxy means nothing else is using it
-				downloadFile.setPlaying(false);
             }
             catch (IOException e) {
                 Log.e(TAG, "IOException while cleaning up streaming task:");                
