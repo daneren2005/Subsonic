@@ -99,6 +99,8 @@ public class UpdateView extends LinearLayout {
 		}
 		
 		uiHandler = new Handler();
+		// Needed so handler is never null until thread creates it
+		backgroundHandler = uiHandler;
 		updateRunnable = new Runnable() {
             @Override
             public void run() {
