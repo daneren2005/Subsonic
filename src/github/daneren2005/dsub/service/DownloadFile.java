@@ -30,6 +30,7 @@ import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
@@ -318,12 +319,20 @@ public class DownloadFile {
 					}
 				}
 
+            } catch(SubsonicRESTException x) {
+            	Util.close(out);
+                Util.delete(completeFile);
+                Util.delete(saveFile);
+                if (!isCancelled()) {
+                    failed++;
+                    failedDownload = true;
+                    Log.w(TAG, "Failed to download '" + song + "'.", x);
+                }
             } catch (Exception x) {
                 Util.close(out);
                 Util.delete(completeFile);
                 Util.delete(saveFile);
                 if (!isCancelled()) {
-                    failed++;
                     failedDownload = true;
                     Log.w(TAG, "Failed to download '" + song + "'.", x);
                 }
