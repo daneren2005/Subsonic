@@ -128,9 +128,9 @@ public class StreamProxy implements Runnable {
 			// Get all of the headers 
 			try {
 				String line;
-				while(line = reader.readLine() && !"".equals(line)) {
+				while((line = reader.readLine()) != null && !"".equals(line)) {
 					String headerName = line.substring(0, line.indexOf(':'));
-					String headerValue = line.substring(line.indexOf(': ') + 2);
+					String headerValue = line.substring(line.indexOf(": ") + 2);
 					request.addHeader(headerName, headerValue);
 				}
 			} catch(IOException e) {
@@ -160,7 +160,7 @@ public class StreamProxy implements Runnable {
 			Log.i(TAG, "Processing request for file " + localPath);
 			downloadFile = downloadService.getCurrentPlaying();
 			File partialFile = new File(localPath);
-			if (!file.equals(downloadFile.getPartialFile()) {
+			if (!partialFile.equals(downloadFile.getPartialFile())) {
 				Log.e(TAG, "File " + localPath + " does not exist");
 				return false;
 			}
