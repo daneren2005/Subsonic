@@ -18,6 +18,7 @@ import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
+import org.apache.http.Header;
 import org.apache.http.HttpRequest;
 import org.apache.http.message.BasicHttpRequest;
 
@@ -164,13 +165,15 @@ public class StreamProxy implements Runnable {
 				Log.e(TAG, "File " + localPath + " does not exist");
 				return false;
 			}
-			
+
 			// Use either partial or complete if downloading finished while StreamProxy was idle
 			file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
 			
 			// Try to get range requested
-			String range = request.getHeader("Range");
-			if(range != null) {
+			Header rangeHeader = request.getFirstHeader("Range");
+
+			if(rangeHeader != null) {
+				String range = rangeHeader.getValue();
 				int index = range.indexOf("=");
 				if(index >= 0) {
 					range = range.substring(index + 1);
@@ -199,7 +202,7 @@ public class StreamProxy implements Runnable {
 			
 			Integer contentLength = downloadFile.getContentLength();
 			if(contentLength == null && downloadFile.isWorkDone()) {
-				contentLength = file.length();
+				contentLength = (int)file.length();
 			}
 
             // Create HTTP header
@@ -207,13 +210,15 @@ public class StreamProxy implements Runnable {
             if(cbSkip == 0) {
             	headers = "HTTP/1.0 200 OK\r\n";
             } else {
-            	headers = "HTTP/1.0 206 OK\r\n;"
-            	headers += "Content-Range: bytes " + ckSkip + "-" + (file.length() - 1) + "/";
+            	headers = "HTTP/1.0 206 OK\r\n;";
+            	headers += "Content-Range: bytes " + cbSkip + "-" + (file.length() - 1) + "/";
             	if(contentLength == null) {
             		headers += "*";
             	} else {
             		headers += contentLength;
             	}
+
+				Log.i(TAG, "Streaming starts from: " + cbSkip);
             }
             headers += "Content-Type: " + "application/octet-stream" + "\r\n";
 			
@@ -275,12 +280,15 @@ public class StreamProxy implements Runnable {
 						Thread.sleep(1000);
 					}
 				}
-				
+
 				// Release file lock, use of stream proxy means nothing else is using it
 				downloadFile.setPlaying(false);
             }
             catch (SocketException socketException) {
                 Log.e(TAG, "SocketException() thrown, proxy client has probably closed. This can exit harmlessly");
+
+				// Release file lock, use of stream proxy means nothing else is using it
+				downloadFile.setPlaying(false);
             }
             catch (Exception e) {
                 Log.e(TAG, "Exception thrown from streaming task:");
