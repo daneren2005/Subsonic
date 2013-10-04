@@ -44,7 +44,11 @@ public class BluetoothIntentReceiver extends BroadcastReceiver {
 			Util.registerMediaButtonEventReceiver(context);
 		} else if (isDisconnected(intent)) {
 			Log.i(TAG, "Disconnected from Bluetooth A2DP, requesting pause.");
-			context.sendBroadcast(new Intent(DownloadServiceImpl.CMD_PAUSE));
+			SharedPreferences prefs = Util.getPreferences(context);
+			int pausePref = Integer.parseInt(prefs.getString(PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
+			if(pausePref == 0 || pausePref == 2) {
+				context.sendBroadcast(new Intent(DownloadServiceImpl.CMD_PAUSE));
+			}
 		}
 	}
 	private boolean isConnected(Intent intent) {
