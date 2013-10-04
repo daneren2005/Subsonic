@@ -141,7 +141,11 @@ public class DownloadServiceLifecycleSupport {
 						@Override
 						public void run() {
 							if(!downloadService.isRemoteEnabled()) {
-								downloadService.pause();
+								SharedPreferences prefs = Util.getPreferences(downloadService);
+								int pausePref = Integer.parseInt(prefs.getString(PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
+								if(pausePref == 0 || pausePref == 1) {
+									downloadService.pause();
+								}
 							}
 						}
                 	});
