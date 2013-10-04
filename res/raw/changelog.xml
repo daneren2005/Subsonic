@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.1.6" versioncode="64" releasedate="10/3/2013">
+		<change>Fix recent update sometimes messing up downloaded song</change>
+		<change>Fix changing position while streaming a song</change>
+	</release>
 	<release version="4.1.5" versioncode="63" releasedate="9/27/2013">
 		<change>Notification while doing background downloads, clicking will show you the download list</change>
 		<change>Put songs in the root directory in a new folder called Root at the bottom of the list</change>
