@@ -110,6 +110,13 @@
 				android:entryValues="@array/tempLossValues"
 				android:entries="@array/tempLossNames"/>
 
+			<ListPreference
+				android:title="@string/settings.disconnect_pause_title"
+				android:key="pauseOnDisconnect"
+				android:defaultValue="0"
+				android:entryValues="@array/disconnectPauseValues"
+				android:entries="@array/disconnectPauseNames"/>
+
 			<CheckBoxPreference
                 android:title="@string/settings.persistent_title"
                 android:summary="@string/settings.persistent_summary"

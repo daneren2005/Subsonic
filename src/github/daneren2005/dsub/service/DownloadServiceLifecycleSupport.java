@@ -31,6 +31,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.RemoteControlClient;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -43,6 +44,7 @@ import android.view.KeyEvent;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.util.CacheCleaner;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
@@ -142,7 +144,7 @@ public class DownloadServiceLifecycleSupport {
 						public void run() {
 							if(!downloadService.isRemoteEnabled()) {
 								SharedPreferences prefs = Util.getPreferences(downloadService);
-								int pausePref = Integer.parseInt(prefs.getString(PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
+								int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
 								if(pausePref == 0 || pausePref == 1) {
 									downloadService.pause();
 								}

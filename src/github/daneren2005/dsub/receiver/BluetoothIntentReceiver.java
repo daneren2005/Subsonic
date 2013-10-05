@@ -22,8 +22,10 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -45,7 +47,7 @@ public class BluetoothIntentReceiver extends BroadcastReceiver {
 		} else if (isDisconnected(intent)) {
 			Log.i(TAG, "Disconnected from Bluetooth A2DP, requesting pause.");
 			SharedPreferences prefs = Util.getPreferences(context);
-			int pausePref = Integer.parseInt(prefs.getString(PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
+			int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
 			if(pausePref == 0 || pausePref == 2) {
 				context.sendBroadcast(new Intent(DownloadServiceImpl.CMD_PAUSE));
 			}

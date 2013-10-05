@@ -68,6 +68,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private ListPreference preloadCountMobile;
 	private EditTextPreference randomSize;
 	private ListPreference tempLoss;
+	private ListPreference pauseDisconnect;
 	private EditTextPreference bufferLength;
 	private Preference addServerPreference;
 	private PreferenceCategory serversCategory;
@@ -95,6 +96,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		preloadCountMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE);
 		randomSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_RANDOM_SIZE);
 		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
+		pauseDisconnect = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		bufferLength = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_BUFFER_LENGTH);
 		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
@@ -240,6 +242,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		preloadCountMobile.setSummary(preloadCountMobile.getEntry());
 		randomSize.setSummary(randomSize.getText());
 		tempLoss.setSummary(tempLoss.getEntry());
+		pauseDisconnect.setSummary(pauseDisconnect.getEntry());
 		bufferLength.setSummary(bufferLength.getText() + " seconds");
 		chatRefreshRate.setSummary(chatRefreshRate.getText());
 		videoPlayer.setSummary(videoPlayer.getEntry());
