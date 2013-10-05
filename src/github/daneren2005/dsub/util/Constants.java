@@ -116,6 +116,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_CHAT_ENABLED = "chatEnabled";
 	public static final String PREFERENCES_KEY_VIDEO_PLAYER = "videoPlayer";
 	public static final String PREFERENCES_KEY_CONTROL_MODE = "remoteControlMode";
+	public static final String PREFERENCES_KEY_PAUSE_DISCONNECT = "pauseOnDisconnect";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
