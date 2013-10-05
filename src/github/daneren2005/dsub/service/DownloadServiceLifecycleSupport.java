@@ -52,7 +52,7 @@ import github.daneren2005.dsub.util.Util;
 public class DownloadServiceLifecycleSupport {
 
     private static final String TAG = DownloadServiceLifecycleSupport.class.getSimpleName();
-    private static final String FILENAME_DOWNLOADS_SER = "downloadstate.ser";
+    private static final String FILENAME_DOWNLOADS_SER = "downloadstate2.ser";
 
     private final DownloadServiceImpl downloadService;
     private Looper eventLooper;
@@ -252,6 +252,11 @@ public class DownloadServiceLifecycleSupport {
 		state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		state.currentPlayingPosition = downloadService.getPlayerPosition();
 
+		DownloadFile currentPlaying = downloadService.getCurrentPlaying();
+		if(currentPlaying != null) {
+			state.renameCurrent = currentPlaying.isWorkDone() && !currentPlaying.isCompleteFileAvailable();
+		}
+
 		Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
     }
@@ -262,6 +267,13 @@ public class DownloadServiceLifecycleSupport {
             return;
         }
         Log.i(TAG, "Deserialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
+
+		// Rename first thing before anything else starts
+		if(state.renameCurrent && state.currentPlayingIndex != -1 && state.currentPlayingIndex < state.songs.size()) {
+			DownloadFile currentPlaying = new DownloadFile(downloadService, state.songs.get(state.currentPlayingIndex), false);
+			currentPlaying.renamePartial();
+		}
+
         downloadService.restore(state.songs, state.currentPlayingIndex, state.currentPlayingPosition);
     }
 
@@ -360,5 +372,6 @@ public class DownloadServiceLifecycleSupport {
         private List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
         private int currentPlayingIndex;
         private int currentPlayingPosition;
+		private boolean renameCurrent = false;
     }
 }

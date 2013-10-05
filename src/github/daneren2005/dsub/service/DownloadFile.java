@@ -222,6 +222,13 @@ public class DownloadFile {
 		
 		this.isPlaying = isPlaying;
 	}
+	public void renamePartial() {
+		try {
+			Util.renameFile(partialFile, completeFile);
+		} catch(IOException ex) {
+			Log.w(TAG, "Failed to rename file " + partialFile + " to " + completeFile);
+		}
+	}
 	public boolean getPlaying() {
 		return isPlaying;
 	}
