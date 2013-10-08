@@ -205,7 +205,9 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 				artists = new ArrayList<Artist>(result.getShortcuts().size() + result.getArtists().size());
 				artists.addAll(result.getShortcuts());
 				artists.addAll(result.getArtists());
+				artistList.setFastScrollEnabled(false);
 				artistList.setAdapter(new ArtistAdapter(context, artists));
+				artistList.setFastScrollEnabled(true);
 				entries = result.getEntries();
 
 				setMusicFolders();
