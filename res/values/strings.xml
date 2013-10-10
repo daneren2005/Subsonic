@@ -290,7 +290,7 @@
     <string name="settings.search_history_cleared">Search history cleared</string>
     <string name="settings.other_title">Other settings</string>
     <string name="settings.scrobble_title">Scrobble to Last.fm</string>
-    <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the DSub server</string>
+    <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the Subsonic server</string>
     <string name="settings.hide_media_title">Hide from other</string>
     <string name="settings.hide_media_summary">Hide music files from other apps.</string>
     <string name="settings.hide_media_toast">Takes effect next time Android scans your phone for music.</string>
@@ -329,6 +329,8 @@
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requires Subsonic 4.8+)</string>
 	<string name="settings.video_transcode">Direct Transcode (Requires video -> mp4 or similar setup on Server)</string>
 	<string name="settings.video_flash">Flash (Requires Plugin)</string>
+	<string name="settings.cache_screen_title">Cache/Network</string>
+	<string name="settings.playback_title">Playback</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

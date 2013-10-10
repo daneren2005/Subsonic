@@ -98,8 +98,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		pauseDisconnect = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		bufferLength = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_BUFFER_LENGTH);
-		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
+		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		chatRefreshRate = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CHAT_REFRESH);
 		videoPlayer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		
@@ -143,7 +143,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 				return false;
 			}
 		});
-		
+
 		addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -151,9 +151,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             	String instance = String.valueOf(serverCount);
 
             	Preference addServerPreference = findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
-            	serversCategory.removePreference(addServerPreference);
             	serversCategory.addPreference(addServer(serverCount));
-            	serversCategory.addPreference(addServerPreference);
 				
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
@@ -165,13 +163,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
 
-		serversCategory.removePreference(addServerPreference);
+		serversCategory.setOrderingAsAdded(false);
         for (int i = 1; i <= serverCount; i++) {
             String instance = String.valueOf(i);
 			serversCategory.addPreference(addServer(i));
             serverSettings.put(instance, new ServerSettings(instance));
         }
-		serversCategory.addPreference(addServerPreference);
 
         SharedPreferences prefs = Util.getPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -358,6 +355,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		screen.addPreference(serverRemoveServerPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
+
+		screen.setOrder(instance);
 
 		return screen;
 	}
