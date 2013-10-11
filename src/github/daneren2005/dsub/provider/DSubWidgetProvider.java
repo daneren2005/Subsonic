@@ -25,6 +25,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -61,6 +62,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 	private static DSubWidget4x2 instance4x2;
 	private static DSubWidget4x3 instance4x3;
 	private static DSubWidget4x4 instance4x4;
+	private boolean hidden = false;
 
 	public static synchronized void notifyInstances(Context context, DownloadService service, boolean playing) {
 		if(instance4x1 == null) {
@@ -103,6 +105,13 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 		if(getLayout() == R.layout.appwidget4x2) {
 			views.setTextViewText(R.id.album, "");
 		}
+		
+		// Hide widget
+		SharedPreferences prefs = Util.getPreferences(context);
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_WIDGET, false)) {
+			views.setViewVisibility(0, View.GONE);
+			hidden = true;
+		}
 
         linkButtons(context, views, false);
         pushUpdate(context, appWidgetIds, views);
@@ -142,6 +151,12 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     private void performUpdate(Context context, DownloadService service, int[] appWidgetIds, boolean playing) {
         final Resources res = context.getResources();
         final RemoteViews views = new RemoteViews(context.getPackageName(), getLayout());
+        
+        // Make sure widget is visible
+        if(hidden) {
+			views.setViewVisibility(0, View.VISIBLE);
+			hidden = false;
+        }
 
         MusicDirectory.Entry currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
         String title = currentPlaying == null ? null : currentPlaying.getTitle();
