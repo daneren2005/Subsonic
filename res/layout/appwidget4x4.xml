@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/appwidget_bg" >
+    android:background="@drawable/appwidget_bg"
+	android:id="@+id/widget_root">
 
     <ImageView
         android:id="@+id/appwidget_coverart"

@@ -37,6 +37,7 @@ import android.graphics.RectF;
 import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.RemoteViews;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
@@ -46,6 +47,8 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Util;
+
 import java.util.HashMap;
 
 /**
@@ -62,7 +65,6 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 	private static DSubWidget4x2 instance4x2;
 	private static DSubWidget4x3 instance4x3;
 	private static DSubWidget4x4 instance4x4;
-	private boolean hidden = false;
 
 	public static synchronized void notifyInstances(Context context, DownloadService service, boolean playing) {
 		if(instance4x1 == null) {
@@ -105,13 +107,6 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 		if(getLayout() == R.layout.appwidget4x2) {
 			views.setTextViewText(R.id.album, "");
 		}
-		
-		// Hide widget
-		SharedPreferences prefs = Util.getPreferences(context);
-		if(prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_WIDGET, false)) {
-			views.setViewVisibility(0, View.GONE);
-			hidden = true;
-		}
 
         linkButtons(context, views, false);
         pushUpdate(context, appWidgetIds, views);
@@ -151,12 +146,16 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     private void performUpdate(Context context, DownloadService service, int[] appWidgetIds, boolean playing) {
         final Resources res = context.getResources();
         final RemoteViews views = new RemoteViews(context.getPackageName(), getLayout());
-        
-        // Make sure widget is visible
-        if(hidden) {
-			views.setViewVisibility(0, View.VISIBLE);
-			hidden = false;
-        }
+
+		if(playing) {
+			views.setViewVisibility(R.id.widget_root, View.VISIBLE);
+		} else {
+			// Hide widget
+			SharedPreferences prefs = Util.getPreferences(context);
+			if(prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_WIDGET, false)) {
+				views.setViewVisibility(R.id.widget_root, View.GONE);
+			}
+		}
 
         MusicDirectory.Entry currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
         String title = currentPlaying == null ? null : currentPlaying.getTitle();

@@ -37,6 +37,12 @@
 				android:key="displayTrack"
 				android:defaultValue="false"/>
 
+			<CheckBoxPreference
+				android:title="@string/settings.hide_widget_title"
+				android:summary="@string/settings.hide_widget_summary"
+				android:key="hideWidget"
+				android:defaultValue="false"/>
+
 		</PreferenceCategory>
 
 		<PreferenceCategory
