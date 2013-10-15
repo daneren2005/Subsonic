@@ -612,24 +612,29 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				getDownloadService().delete(songs);
 				return true;
 			case R.id.menu_remove_all:
-				new SilentBackgroundTask<Void>(context) {
+				Util.confirmDialog(context, R.string.download_menu_remove_all, "", new DialogInterface.OnClickListener() {
 					@Override
-					protected Void doInBackground() throws Throwable {
-						getDownloadService().setShufflePlayEnabled(false);
-						if(nowPlaying) {
-							getDownloadService().clear();
-						}
-						else {
-							getDownloadService().clearBackground();
-						}
-						return null;
-					}
+					public void onClick(DialogInterface dialog, int which) {
+						new SilentBackgroundTask<Void>(context) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								getDownloadService().setShufflePlayEnabled(false);
+								if(nowPlaying) {
+									getDownloadService().clear();
+								}
+								else {
+									getDownloadService().clearBackground();
+								}
+								return null;
+							}
 
-					@Override
-					protected void done(Void result) {
-						onDownloadListChanged();
+							@Override
+							protected void done(Void result) {
+								onDownloadListChanged();
+							}
+						}.execute();
 					}
-				}.execute();
+				});
 				return true;
 			case R.id.menu_screen_on_off:
 				if (getDownloadService().getKeepScreenOn()) {
