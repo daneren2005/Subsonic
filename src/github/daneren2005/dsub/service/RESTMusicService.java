@@ -732,10 +732,6 @@ public class RESTMusicService implements MusicService {
     public RemoteStatus skipJukebox(int index, int offsetSeconds, Context context, ProgressListener progressListener) throws Exception {
         List<String> parameterNames = Arrays.asList("action", "index", "offset");
         List<Object> parameterValues = Arrays.<Object>asList("skip", index, offsetSeconds);
-		if(index < 0) {
-			parameterNames.remove(1);
-			parameterValues.remove(1);
-		}
         return executeJukeboxCommand(context, progressListener, parameterNames, parameterValues);
     }
 

@@ -104,7 +104,7 @@ public class JukeboxController extends RemoteController {
 		if (jukeboxStatus != null) {
 			jukeboxStatus.setPositionSeconds(seconds);
 		}
-		tasks.add(new Skip(-1, seconds));
+		tasks.add(new Skip(downloadService.getCurrentPlayingIndex(), seconds));
 		downloadService.setPlayerState(PlayerState.STARTED);
 	}
 	@Override
