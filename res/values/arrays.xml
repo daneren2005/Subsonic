@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string-array name="drawerItems">
+		<item>@string/button_bar.home</item>
+		<item>@string/button_bar.podcasts</item>
+		<item>@string/button_bar.chat</item>
+		<item>@string/button_bar.now_playing</item>
+		<item>@string/main.settings</item>
+		<item>@string/menu.exit</item>
+	</string-array>
 
     <string-array name="themeValues">
         <item>light</item>

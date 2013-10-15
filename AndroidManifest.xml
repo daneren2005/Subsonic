@@ -38,6 +38,9 @@
             </intent-filter>
         </activity>
 
+		<activity android:name="github.daneren2005.dsub.activity.SubsonicFragmentActivity"
+				  android:configChanges="orientation|keyboardHidden"/>
+
         <activity android:name="github.daneren2005.dsub.activity.SearchActivity"
                   android:label="@string/search.label"
                   android:configChanges="orientation|keyboardHidden"
@@ -48,7 +51,6 @@
                   android:launchMode="singleTask"/>
 
         <activity android:name="github.daneren2005.dsub.activity.SettingsActivity"
-                  android:theme="@style/Theme.DSub.Dark"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 

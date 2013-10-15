@@ -59,6 +59,7 @@ public final class Constants {
 	public static final String INTENT_EXTRA_NAME_PODCAST_ID = "subsonic.podcast.id";
 	public static final String INTENT_EXTRA_NAME_PODCAST_NAME = "subsonic.podcast.name";
 	public static final String INTENT_EXTRA_NAME_PODCAST_DESCRIPTION = "subsonic.podcast.description";
+	public static final String INTENT_EXTRA_FRAGMENT_TYPE = "fragmentType";
 
     // Notification IDs.
     public static final int NOTIFICATION_ID_PLAYING = 100;

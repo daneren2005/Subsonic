@@ -27,7 +27,7 @@
     <string name="button_bar.browse">Library</string>
     <string name="button_bar.search">Search</string>
     <string name="button_bar.playlists">Playlists</string>
-    <string name="button_bar.now_playing">Playing</string>
+    <string name="button_bar.now_playing">Now Playing</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.chat">Chat</string>
 

@@ -1,3 +1,21 @@
+/*
+ This file is part of Subsonic.
+
+ Subsonic is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Subsonic is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
+
+ Copyright 2009 (C) Sindre Mehus
+ */
 package github.daneren2005.dsub.activity;
 
 import android.content.Context;
@@ -7,22 +25,27 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import github.daneren2005.dsub.R;
@@ -48,6 +71,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected SubsonicFragment currentFragment;
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
+	ViewGroup rootView;
+	DrawerLayout drawer;
+	ActionBarDrawerToggle drawerToggle;
+	ListView drawerList;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -65,6 +92,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		actionBarSpinner.setAdapter(spinnerAdapter);
 
 		getSupportActionBar().setCustomView(actionbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		drawerToggle.syncState();
 	}
 
 	@Override
@@ -89,6 +125,67 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public void finish() {
 		super.finish();
 		Util.disablePendingTransition(this);
+	}
+
+	@Override
+	public void setContentView(int viewId) {
+		super.setContentView(R.layout.abstract_activity);
+		rootView = (ViewGroup) findViewById(R.id.content_frame);
+		LayoutInflater layoutInflater = getLayoutInflater();
+		layoutInflater.inflate(viewId, rootView);
+
+		String[] drawerListItems = getResources().getStringArray(R.array.drawerItems);
+		drawerList = (ListView) findViewById(R.id.left_drawer);
+		drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerListItems));
+
+		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent intent;
+
+				switch(position) {
+					case 0:
+						startActivity(MainActivity.class);
+						break;
+					case 1:
+						startFragmentActivity("Podcast");
+						break;
+					case 2:
+						startFragmentActivity("Chat");
+						break;
+					case 3:
+						startActivity(DownloadActivity.class);
+						break;
+					case 4:
+						startActivity(SettingsActivity.class);
+						break;
+					case 5:
+						exit();
+						break;
+				}
+			}
+		});
+
+		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawerToggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer, R.string.common_appname, R.string.common_appname) {
+			@Override
+			public void onDrawerClosed(View view) {
+				/*if(pagerAdapter != null) {
+
+				} else {
+					getActionBar().setTitle(currentFragment.getTitle());
+				}*/
+			}
+
+			@Override
+			public void onDrawerOpened(View view) {
+				// getActionBar().setTitle(R.string.common_appname);
+			}
+		};
+		drawer.setDrawerListener(drawerToggle);
+		if(this.getClass() != MainActivity.class) {
+			drawerToggle.setDrawerIndicatorEnabled(false);
+		}
 	}
 	
 	@Override
@@ -141,6 +238,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if(drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
 		if(pagerAdapter != null) {
 			return pagerAdapter.onOptionsItemSelected(item);
 		} else if(currentFragment != null) {
@@ -194,7 +295,39 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public void onNothingSelected(AdapterView<?> parent) {
 		
 	}
-	
+
+	public void startActivity(Class t) {
+		Intent intent = new Intent();
+		intent.setClass(SubsonicActivity.this, t);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+		if(this.getClass() != MainActivity.class) {
+			finish();
+		}
+	}
+	public void startFragmentActivity(String fragmentType) {
+		Intent intent = new Intent();
+		intent.setClass(SubsonicActivity.this, SubsonicFragmentActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+		startActivity(intent);
+		if(this.getClass() != MainActivity.class) {
+			finish();
+		}
+	}
+
+	protected void exit() {
+		if(this.getClass() != MainActivity.class) {
+			Intent intent = new Intent(this, MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
+			Util.startActivityWithoutTransition(this, intent);
+		} else {
+			this.stopService(new Intent(this, DownloadServiceImpl.class));
+			this.finish();
+		}
+	}
+
 	public boolean onBackPressedSupport() {
 		if(pagerAdapter != null) {
 			return pagerAdapter.onBackPressed();
