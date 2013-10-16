@@ -512,6 +512,12 @@ public class SubsonicFragment extends Fragment {
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.setStarred(entry.getId(), starred, context, null);
+				
+				// Make sure to clear parent cache
+				String s = Util.getRestUrl(context, null) + entry.getParentId();
+				String parentCache = "directory-" + s.hashCode() + ".ser";
+				File file = new File(context.getCacheDir(), parentCache);
+				file.delete();
 				return null;
 			}
 
