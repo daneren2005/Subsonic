@@ -754,11 +754,14 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				
 				frags.add(i, fragStack);
 			}
-			currentPosition = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_POSITION);
-			List<SubsonicFragment> fragStack = frags.get(currentPosition);
-			currentFragment = fragStack.get(fragStack.size() - 1);
-			currentFragment.setPrimaryFragment(true);
-			activity.supportInvalidateOptionsMenu();
+			
+			if(tabCount > 0) {
+				currentPosition = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_POSITION);
+				List<SubsonicFragment> fragStack = frags.get(currentPosition);
+				currentFragment = fragStack.get(fragStack.size() - 1);
+				currentFragment.setPrimaryFragment(true);
+				activity.supportInvalidateOptionsMenu();
+			}
 		}
 
 		private class TabInfo {
