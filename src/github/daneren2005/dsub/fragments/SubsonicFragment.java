@@ -514,7 +514,7 @@ public class SubsonicFragment extends Fragment {
 				musicService.setStarred(entry.getId(), starred, context, null);
 				
 				// Make sure to clear parent cache
-				String s = Util.getRestUrl(context, null) + entry.getParentId();
+				String s = Util.getRestUrl(context, null) + entry.getParent();
 				String parentCache = "directory-" + s.hashCode() + ".ser";
 				File file = new File(context.getCacheDir(), parentCache);
 				file.delete();
