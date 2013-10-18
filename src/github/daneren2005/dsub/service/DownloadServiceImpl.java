@@ -1347,7 +1347,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 
     protected synchronized void checkDownloads() {
-        if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable()) {
+        if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable() || Util.isOffline(this)) {
             return;
         }
 
