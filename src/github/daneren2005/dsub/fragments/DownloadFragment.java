@@ -40,6 +40,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RemoteControlState;
@@ -60,7 +61,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.EqualizerActivity;
-import github.daneren2005.dsub.activity.MainActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
 public class DownloadFragment extends SubsonicFragment implements OnGestureListener {
@@ -554,10 +554,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			case R.id.menu_show_album:
 				MusicDirectory.Entry entry = song.getSong();
 				
-				Intent intent = new Intent(context, MainActivity.class);
+				Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 				intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, entry.getAlbum());
+				intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, "Artist");
 				
 				if(entry.getGrandParent() != null) {
 					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID, entry.getGrandParent());

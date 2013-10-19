@@ -22,7 +22,6 @@ package github.daneren2005.dsub.activity;
 import github.daneren2005.dsub.R;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import github.daneren2005.dsub.fragments.SearchFragment;
@@ -67,7 +66,7 @@ public class SearchActivity extends SubsonicActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == android.R.id.home) {
 			Intent i = new Intent();
-			i.setClass(this, MainActivity.class);
+			i.setClass(this, SubsonicFragmentActivity.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 			return true;

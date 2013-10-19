@@ -42,10 +42,10 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.HelpActivity;
-import github.daneren2005.dsub.activity.MainActivity;
 import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -335,8 +335,8 @@ public class SubsonicFragment extends Fragment {
 	}
 
 	protected void exit() {
-		if(context.getClass() != MainActivity.class) {
-			Intent intent = new Intent(context, MainActivity.class);
+		if(context.getClass() != SubsonicFragmentActivity.class) {
+			Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
 			Util.startActivityWithoutTransition(context, intent);

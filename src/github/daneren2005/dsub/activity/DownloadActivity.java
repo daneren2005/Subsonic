@@ -23,26 +23,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import github.daneren2005.dsub.fragments.DownloadFragment;
-import android.app.Dialog;
-import android.view.LayoutInflater;
+
 import android.widget.EditText;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
-import android.view.View;
-import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.DownloadFile;
-import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
+
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
-import github.daneren2005.dsub.util.Util;
-import java.util.LinkedList;
-import java.util.List;
 
 public class DownloadActivity extends SubsonicActivity {
 	private static final String TAG = DownloadActivity.class.getSimpleName();
@@ -72,7 +57,7 @@ public class DownloadActivity extends SubsonicActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == android.R.id.home) {
 			Intent i = new Intent();
-			i.setClass(this, MainActivity.class);
+			i.setClass(this, SubsonicFragmentActivity.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 			return true;

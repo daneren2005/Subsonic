@@ -2,6 +2,8 @@
 <resources>
 	<string-array name="drawerItems">
 		<item>@string/button_bar.home</item>
+		<item>@string/button_bar.browse</item>
+		<item>@string/button_bar.playlists</item>
 		<item>@string/button_bar.podcasts</item>
 		<item>@string/button_bar.chat</item>
 		<item>@string/button_bar.now_playing</item>

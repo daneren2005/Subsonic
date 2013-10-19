@@ -41,15 +41,13 @@ import android.view.View;
 import android.widget.RemoteViews;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
-import github.daneren2005.dsub.activity.MainActivity;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
-
-import java.util.HashMap;
 
 /**
  * Simple widget to show currently playing album art along
@@ -257,10 +255,10 @@ public class DSubWidgetProvider extends AppWidgetProvider {
      *
      * @param playerActive True if player is active in background, which means
      *                     widget click will launch {@link DownloadActivity},
-     *                     otherwise we launch {@link MainActivity}.
+     *                     otherwise we launch {@link github.daneren2005.dsub.activity.SubsonicFragmentActivity}.
      */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
-		Intent intent = new Intent(context, MainActivity.class);
+		Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 		if(playerActive) {
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

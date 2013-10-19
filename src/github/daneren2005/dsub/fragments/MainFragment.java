@@ -116,7 +116,6 @@ public class MainFragment extends SubsonicFragment {
 		
 		int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
 		setActiveServer(activeServer);
-		context.getPagerAdapter().invalidate();
 		return true;
 	}
 
@@ -201,7 +200,6 @@ public class MainFragment extends SubsonicFragment {
 	private void toggleOffline() {
 		boolean isOffline = Util.isOffline(context);
 		Util.setOffline(context, !isOffline);
-		context.getPagerAdapter().invalidate();
 		
 		if(isOffline) {
 			int scrobblesCount = Util.offlineScrobblesCount(context);
