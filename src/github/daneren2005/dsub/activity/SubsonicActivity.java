@@ -64,6 +64,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
+	private static String[] drawerItemsDescriptions = ["Home", "Library", "Playlists", "Podcasts", "Chat", "Now Playing", "Settings", "Exit"];
+	private static String[] drawerItems;
 	private boolean destroyed = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
 	protected SubsonicFragment currentFragment;
@@ -132,38 +134,43 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		LayoutInflater layoutInflater = getLayoutInflater();
 		layoutInflater.inflate(viewId, rootView);
 
-		String[] drawerListItems = getResources().getStringArray(R.array.drawerItems);
+		if(drawerItems == null) {
+			drawerItems = getResources().getStringArray(R.array.drawerItems);
+			
+			SharedPreferences prefs = Util.getPreferences(this);
+			// Selectively remove chat listing: [4]
+			if(!prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true)) {
+				List<String> tmp = new ArrayList<String>(Arrays.asList(drawerItems));
+				tmp.remove(4);
+				drawerItems = tmp.toArray();
+				
+				tmp = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
+				tmp.remove(4);
+				drawerItemsDescriptions = tmp.toArray();
+			}
+		}
 		drawerList = (ListView) findViewById(R.id.left_drawer);
-		drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerListItems));
+		drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerItems));
 
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				switch(position) {
-					case 0:
-						startActivity(SubsonicFragmentActivity.class);
-						break;
-					case 1:
-						startFragmentActivity("Artist");
-						break;
-					case 2:
-						startFragmentActivity("Playlist");
-						break;
-					case 3:
-						startFragmentActivity("Podcast");
-						break;
-					case 4:
-						startFragmentActivity("Chat");
-						break;
-					case 5:
-						startActivity(DownloadActivity.class);
-						break;
-					case 6:
-						startActivity(SettingsActivity.class);
-						break;
-					case 7:
-						exit();
-						break;
+				if("Home".equals(drawerItemsDescriptions[position]) {
+					startActivity(SubsonicFragmentActivity.class);
+				} else if("Library".equals(drawerItemsDescriptions[position]) {
+					startFragmentActivity("Artist");
+				} else if("Playlists".equals(drawerItemsDescriptions[position]) {
+					startFragmentActivity("Playlist");
+				} else if("Podcasts".equals(drawerItemsDescriptions[position]) {
+					startFragmentActivity("Podcast");
+				} else if("Chat".equals(drawerItemsDescriptions[position]) {
+					startFragmentActivity("Chat");
+				} else if("Now Playing".equals(drawerItemsDescriptions[position]) {
+					startActivity(DownloadActivity.class);
+				} else if("Settings".equals(drawerItemsDescriptions[position]) {
+					startActivity(SettingsActivity.class);
+				} else if("Exit".equals(drawerItemsDescriptions[position]) {
+					exit();
 				}
 			}
 		});
