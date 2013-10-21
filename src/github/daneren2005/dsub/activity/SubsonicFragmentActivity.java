@@ -87,20 +87,13 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
-			if("Artist".equals(fragmentType)) {
-				currentFragment = new SelectArtistFragment();
-			} else if("Playlist".equals(fragmentType)) {
-				currentFragment = new SelectPlaylistFragment();
-			} else if("Chat".equals(fragmentType)) {
-				currentFragment = new ChatFragment();
-			} else if("Podcast".equals(fragmentType)) {
-				currentFragment = new SelectPodcastsFragment();
-			} else {
-				currentFragment = new MainFragment();
-
+			currentFragment = getNewFragment(fragmentType);
+			
+			if("".equals(fragmentType)) {
 				// Initial startup stuff
 				loadSettings();
 			}
+			
 			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 		}
@@ -277,6 +270,42 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			}
 		}
 	}
+	
+	@Override
+	public void startFragmentActivity(String fragmentType) {
+		// Create a transaction that does all of this
+		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+		
+		// Clear existing stack
+		for(int i = backStack.size() - 1; i >= 0; i--) {
+			trans.remove((Fragment) backStack.get(i));
+		}
+		backStack.clear();
+		
+		// Create new stack
+		currentFragment = getNewFragment(fragmentType);
+		currentFragment.setPrimaryFragment(true);
+		trans.add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "");
+		
+		// Done, cleanup
+		trans.commit();
+		supportInvalidateOptionsMenu();
+		recreateSpinner();
+	}
+	
+	private SubsonicFragment getNewFragment(String fragmentType) {
+		if("Artist".equals(fragmentType)) {
+			return new SelectArtistFragment();
+		} else if("Playlist".equals(fragmentType)) {
+			return new SelectPlaylistFragment();
+		} else if("Chat".equals(fragmentType)) {
+			return new ChatFragment();
+		} else if("Podcast".equals(fragmentType)) {
+			return new SelectPodcastsFragment();
+		} else {
+			return new MainFragment();
+		}
+	} 
 
 	private void update() {
 		if (getDownloadService() == null) {
