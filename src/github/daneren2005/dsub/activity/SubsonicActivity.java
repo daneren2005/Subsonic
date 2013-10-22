@@ -69,6 +69,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private static String[] drawerItemsDescriptions = {"Home", "Library", "Playlists", "Podcasts", "Chat", "Now Playing", "Settings", "Exit"};
 	private static String[] drawerItems;
 	private boolean destroyed = false;
+	private boolean finished = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
 	protected SubsonicFragment currentFragment;
 	Spinner actionBarSpinner;
@@ -309,6 +310,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
 			Util.startActivityWithoutTransition(this, intent);
 		} else {
+			finished = true;
 			this.stopService(new Intent(this, DownloadServiceImpl.class));
 			this.finish();
 		}
@@ -417,6 +419,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 
 	public DownloadService getDownloadService() {
+		if(finished) {
+			return null;
+		}
+		
 		// If service is not available, request it to start and wait for it.
 		for (int i = 0; i < 5; i++) {
 			DownloadService downloadService = DownloadServiceImpl.getInstance();
