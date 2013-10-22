@@ -20,6 +20,7 @@ package github.daneren2005.dsub.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.media.AudioManager;
 import android.os.Build;
@@ -58,13 +59,14 @@ import github.daneren2005.dsub.util.Util;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SubsonicActivity extends ActionBarActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
-	private static String[] drawerItemsDescriptions = ["Home", "Library", "Playlists", "Podcasts", "Chat", "Now Playing", "Settings", "Exit"];
+	private static String[] drawerItemsDescriptions = {"Home", "Library", "Playlists", "Podcasts", "Chat", "Now Playing", "Settings", "Exit"};
 	private static String[] drawerItems;
 	private boolean destroyed = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
@@ -142,11 +144,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			if(!prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true)) {
 				List<String> tmp = new ArrayList<String>(Arrays.asList(drawerItems));
 				tmp.remove(4);
-				drawerItems = tmp.toArray();
+				drawerItems = tmp.toArray(new String[0]);
 				
 				tmp = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
 				tmp.remove(4);
-				drawerItemsDescriptions = tmp.toArray();
+				drawerItemsDescriptions = tmp.toArray(new String[0]);
 			}
 		}
 		drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -155,21 +157,21 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if("Home".equals(drawerItemsDescriptions[position]) {
-					startActivity(SubsonicFragmentActivity.class);
-				} else if("Library".equals(drawerItemsDescriptions[position]) {
+				if("Home".equals(drawerItemsDescriptions[position])) {
+					startFragmentActivity("");
+				} else if("Library".equals(drawerItemsDescriptions[position])) {
 					startFragmentActivity("Artist");
-				} else if("Playlists".equals(drawerItemsDescriptions[position]) {
+				} else if("Playlists".equals(drawerItemsDescriptions[position])) {
 					startFragmentActivity("Playlist");
-				} else if("Podcasts".equals(drawerItemsDescriptions[position]) {
+				} else if("Podcasts".equals(drawerItemsDescriptions[position])) {
 					startFragmentActivity("Podcast");
-				} else if("Chat".equals(drawerItemsDescriptions[position]) {
+				} else if("Chat".equals(drawerItemsDescriptions[position])) {
 					startFragmentActivity("Chat");
-				} else if("Now Playing".equals(drawerItemsDescriptions[position]) {
+				} else if("Now Playing".equals(drawerItemsDescriptions[position])) {
 					startActivity(DownloadActivity.class);
-				} else if("Settings".equals(drawerItemsDescriptions[position]) {
+				} else if("Settings".equals(drawerItemsDescriptions[position])) {
 					startActivity(SettingsActivity.class);
-				} else if("Exit".equals(drawerItemsDescriptions[position]) {
+				} else if("Exit".equals(drawerItemsDescriptions[position])) {
 					exit();
 				}
 			}
@@ -287,12 +289,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(this.getClass() != SubsonicFragmentActivity.class) {
 			finish();
 		}
+		drawer.closeDrawers();
 	}
 	public void startFragmentActivity(String fragmentType) {
 		Intent intent = new Intent();
 		intent.setClass(SubsonicActivity.this, SubsonicFragmentActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+		if(!"".equals(fragmentType)) {
+			intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+		}
 		startActivity(intent);
 		finish();
 	}
@@ -349,7 +354,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		recreateSpinner();
 	}
 	
-	private void recreateSpinner() {
+	protected void recreateSpinner() {
 		if(backStack.size() > 0) {
 			spinnerAdapter.clear();
 			for(int i = 0; i < backStack.size(); i++) {

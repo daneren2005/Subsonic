@@ -185,6 +185,7 @@ public class MainFragment extends SubsonicFragment {
 				}
 			}
 		});
+		setTitle(R.string.common_appname);
 	}
 
 	private void setActiveServer(int instance) {

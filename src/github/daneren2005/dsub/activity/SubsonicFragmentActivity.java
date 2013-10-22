@@ -25,6 +25,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -278,8 +280,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		
 		// Clear existing stack
 		for(int i = backStack.size() - 1; i >= 0; i--) {
-			trans.remove((Fragment) backStack.get(i));
+			trans.remove(backStack.get(i));
 		}
+		trans.remove(currentFragment);
 		backStack.clear();
 		
 		// Create new stack
@@ -291,6 +294,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		trans.commit();
 		supportInvalidateOptionsMenu();
 		recreateSpinner();
+		drawer.closeDrawers();
 	}
 	
 	private SubsonicFragment getNewFragment(String fragmentType) {
