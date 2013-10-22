@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.1.7" versioncode="65" releasedate="10/21/2013">
+		<change>Settings screen now broken down by sections</change>
+		<change>Added option to choose whether or not to pause on headphone/bluetooth disconnect</change>
+		<change>Added confirm for clearing current queue</change>
+		<change>Added option to hide widget while nothing is playing</change>
+		<change>Fix not being able to change position in Jukebox mode</change>
+		<change>Fix position not being saved sometimes when pausing during a streamed song</change>
+		<change>Fix sometimes the letters not matching the position on the artist list</change>
+		<change>Various minor bug fixes</change>
+	</release>
 	<release version="4.1.6" versioncode="64" releasedate="10/3/2013">
 		<change>Fix recent update sometimes messing up downloaded song</change>
 		<change>Fix changing position while streaming a song</change>
