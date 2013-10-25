@@ -478,12 +478,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			visualizerViewLayout.addView(visualizerView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 		}
 
-		// TODO: Extract to utility method and cache.
-		Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Storopia.ttf");
-		equalizerButton.setTypeface(typeface);
-		visualizerButton.setTypeface(typeface);
-		jukeboxButton.setTypeface(typeface);
-
 		return rootView;
 	}
 
