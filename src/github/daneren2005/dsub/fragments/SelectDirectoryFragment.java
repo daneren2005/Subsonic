@@ -130,7 +130,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
-			entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
+			if(entries == null) {
+				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
+			}
 		}
 
 		if(entries == null) {
