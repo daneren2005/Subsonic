@@ -1347,7 +1347,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 
     protected synchronized void checkDownloads() {
-        if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable() || Util.isOffline(this)) {
+        if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable()) {
             return;
         }
 
@@ -1355,7 +1355,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             checkShufflePlay();
         }
 
-        if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this)) {
+        if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this) || Util.isOffline(this)) {
             return;
         }
 
