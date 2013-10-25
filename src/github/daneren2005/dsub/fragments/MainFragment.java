@@ -201,6 +201,7 @@ public class MainFragment extends SubsonicFragment {
 	private void toggleOffline() {
 		boolean isOffline = Util.isOffline(context);
 		Util.setOffline(context, !isOffline);
+		this.invalidate();
 		
 		if(isOffline) {
 			int scrobblesCount = Util.offlineScrobblesCount(context);
