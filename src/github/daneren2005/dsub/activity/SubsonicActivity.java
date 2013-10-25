@@ -231,8 +231,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater menuInflater = getMenuInflater();
-		currentFragment.onCreateOptionsMenu(menu, menuInflater);
+		if(currentFragment != null) {
+			MenuInflater menuInflater = getMenuInflater();
+			currentFragment.onCreateOptionsMenu(menu, menuInflater);
+		}
 		return true;
 	}
 	@Override
