@@ -966,6 +966,8 @@ public class SubsonicFragment extends Fragment {
 
 	public void deleteRecursively(Artist artist) {
 		File dir = FileUtil.getArtistDirectory(context, artist);
+		if(dir == null) return;
+
 		Util.recursiveDelete(dir);
 		if(Util.isOffline(context)) {
 			refresh();
@@ -974,6 +976,8 @@ public class SubsonicFragment extends Fragment {
 	
 	public void deleteRecursively(MusicDirectory.Entry album) {
 		File dir = FileUtil.getAlbumDirectory(context, album);
+		if(dir == null) return;
+
 		Util.recursiveDelete(dir);
 		if(Util.isOffline(context)) {
 			refresh();
