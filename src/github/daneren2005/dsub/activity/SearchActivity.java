@@ -62,27 +62,7 @@ public class SearchActivity extends SubsonicActivity {
 		}
 	}
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == android.R.id.home) {
-			Intent i = new Intent();
-			i.setClass(this, SubsonicFragmentActivity.class);
-			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(i);
-			return true;
-		} else {
-			return super.onOptionsItemSelected(item);
-		}
-	}
-	
 	public void onSupportNewIntent(Intent intent) {
 		onNewIntent(intent);
-	}
-	
-	@Override
-	public void onBackPressed() {
-		if(onBackPressedSupport()) {
-			super.onBackPressed();
-		}
 	}
 }

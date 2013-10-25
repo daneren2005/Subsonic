@@ -54,31 +54,11 @@ public class DownloadActivity extends SubsonicActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId() == android.R.id.home) {
-			Intent i = new Intent();
-			i.setClass(this, SubsonicFragmentActivity.class);
-			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(i);
-			return true;
-		} else {
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	@Override
 	public boolean onTouchEvent(MotionEvent me) {
 		if(currentFragment != null) {
 			return ((DownloadFragment)currentFragment).getGestureDetector().onTouchEvent(me);
 		} else {
 			return false;
-		}
-	}
-	
-	@Override
-	public void onBackPressed() {
-		if(onBackPressedSupport()) {
-			super.onBackPressed();
 		}
 	}
 }

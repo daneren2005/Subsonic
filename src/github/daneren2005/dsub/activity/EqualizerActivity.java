@@ -47,7 +47,7 @@ import github.daneren2005.dsub.util.Util;
  * @author Sindre Mehus
  * @version $Id$
  */
-public class EqualizerActivity extends Activity {
+public class EqualizerActivity extends SubsonicActivity {
 	private static final String TAG = EqualizerActivity.class.getSimpleName();
 
     private static final int MENU_GROUP_PRESET = 100;

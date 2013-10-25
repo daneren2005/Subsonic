@@ -253,9 +253,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(super.onOptionsItemSelected(item)) {
 			return true;
-		} else if(item.getItemId() == android.R.id.home) {
-			startActivity(SubsonicFragmentActivity.class);
-			return true;
 		} else {
 			return false;
 		}

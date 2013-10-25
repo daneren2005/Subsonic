@@ -6,8 +6,6 @@
 
     <TextView
             android:id="@+id/equalizer.frequency"
-            android:textSize="12sp"
-            android:textColor="#c0c0c0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -18,7 +16,6 @@
             android:id="@+id/equalizer.level"
             android:text="0 dB"
             android:textSize="12sp"
-            android:textColor="#c0c0c0"
             android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

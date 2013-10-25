@@ -241,6 +241,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(drawerToggle.onOptionsItemSelected(item)) {
 			return true;
+		} else if(item.getItemId() == android.R.id.home) {
+			finish();
+			return true;
 		}
 
 		return currentFragment.onOptionsItemSelected(item);
@@ -324,6 +327,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			return false;
 		} else {
 			return true;
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if(onBackPressedSupport()) {
+			super.onBackPressed();
 		}
 	}
 	
