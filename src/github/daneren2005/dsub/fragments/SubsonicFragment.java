@@ -41,7 +41,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
-import github.daneren2005.dsub.activity.HelpActivity;
 import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
@@ -131,9 +130,6 @@ public class SubsonicFragment extends Fragment {
 				return true;
 			case R.id.menu_settings:
 				startActivity(new Intent(context, SettingsActivity.class));
-				return true;
-			case R.id.menu_help:
-				startActivity(new Intent(context, HelpActivity.class));
 				return true;
 		}
 

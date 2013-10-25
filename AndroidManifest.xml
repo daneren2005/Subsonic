@@ -50,11 +50,7 @@
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-        <activity android:name="github.daneren2005.dsub.activity.HelpActivity"
-                  android:label="@string/help.label"
-                  android:launchMode="singleTask"/>
-
-        <activity android:name="github.daneren2005.dsub.activity.EqualizerActivity"
+		<activity android:name="github.daneren2005.dsub.activity.EqualizerActivity"
                   android:label="@string/equalizer.label"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
