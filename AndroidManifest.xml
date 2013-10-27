@@ -50,11 +50,6 @@
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 
-		<activity android:name="github.daneren2005.dsub.activity.EqualizerActivity"
-                  android:label="@string/equalizer.label"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:launchMode="singleTask"/>
-
         <activity android:name="github.daneren2005.dsub.activity.VoiceQueryReceiverActivity"
                   android:launchMode="singleTask">
             <intent-filter>

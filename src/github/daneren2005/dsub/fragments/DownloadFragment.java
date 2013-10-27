@@ -60,7 +60,6 @@ import github.daneren2005.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
 import com.mobeta.android.dslv.*;
-import github.daneren2005.dsub.activity.EqualizerActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
 public class DownloadFragment extends SubsonicFragment implements OnGestureListener {
@@ -345,7 +344,8 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				DownloadService downloadService = getDownloadService();
 				if(downloadService != null && downloadService.getEqualizerController() != null
 						&& downloadService.getEqualizerController().getEqualizer() != null) {
-					context.startActivity(new Intent(context, EqualizerActivity.class));
+					SubsonicFragment fragment = new EqualizerFragment();
+					replaceFragment(fragment, R.id.download_layout_container);
 					setControlsVisible(true);
 				} else {
 					Util.toast(context, "Failed to start equalizer.  Try restarting.");
