@@ -64,6 +64,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -95,6 +96,19 @@ public class SubsonicFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		if(bundle != null) {
+			String name = bundle.getString(Constants.FRAGMENT_NAME);
+			if(name != null) {
+				title = name;
+			}
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(Constants.FRAGMENT_NAME, title.toString());
 	}
 
 	@Override

@@ -140,6 +140,7 @@ public final class Constants {
 	public static final String FRAGMENT_LIST = "fragmentList";
 	public static final String FRAGMENT_LIST2 = "fragmentList2";
 	public static final String FRAGMENT_DOWNLOAD_FLIPPER = "fragmentDownloadFlipper";
+	public static final String FRAGMENT_NAME = "fragmentName";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";
