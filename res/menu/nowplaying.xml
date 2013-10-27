@@ -32,4 +32,9 @@
 	<item
         android:id="@+id/menu_toggle_now_playing"
         android:title="@string/download.show_downloading"/>
+
+	<item
+		android:id="@+id/menu_exit"
+		android:icon="@drawable/action_exit"
+		android:title="@string/menu.exit"/>
 </menu>

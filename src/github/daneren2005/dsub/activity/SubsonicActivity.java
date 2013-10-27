@@ -66,7 +66,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
-	private static String[] drawerItemsDescriptions = {"Home", "Library", "Playlists", "Podcasts", "Chat", "Now Playing", "Settings", "Exit"};
+	private static String[] drawerItemsDescriptions;
 	private static String[] drawerItems;
 	private boolean destroyed = false;
 	private boolean finished = false;
@@ -139,6 +139,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 		if(drawerItems == null) {
 			drawerItems = getResources().getStringArray(R.array.drawerItems);
+			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
 			
 			SharedPreferences prefs = Util.getPreferences(this);
 			// Selectively remove chat listing: [4]
