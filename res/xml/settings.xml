@@ -60,6 +60,16 @@
 				android:defaultValue="30"
 				android:digits="0123456789"/>
 		</PreferenceCategory>
+
+		<PreferenceCategory
+			android:title="@string/settings.other_title">
+
+			<CheckBoxPreference
+				android:title="@string/settings.podcasts_enabled"
+				android:summary="@string/settings.podcasts_enabled_summary"
+				android:key="podcastsEnabled"
+				android:defaultValue="true"/>
+		</PreferenceCategory>
 	</PreferenceScreen>
 
 	<PreferenceScreen

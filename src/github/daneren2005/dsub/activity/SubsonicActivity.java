@@ -140,18 +140,30 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(drawerItems == null) {
 			drawerItems = getResources().getStringArray(R.array.drawerItems);
 			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
-			
+
+			// Remove listings that user wants hidden
 			SharedPreferences prefs = Util.getPreferences(this);
+			int alreadyRemoved = 0;
+			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
+			List<String> drawerItemsDescriptionsList = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
+
+			// Selectively remove podcast listing [3]
+			if(!prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true)) {
+				drawerItemsList.remove(3 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(3 - alreadyRemoved);
+				alreadyRemoved++;
+			}
+
 			// Selectively remove chat listing: [4]
 			if(!prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true)) {
-				List<String> tmp = new ArrayList<String>(Arrays.asList(drawerItems));
-				tmp.remove(4);
-				drawerItems = tmp.toArray(new String[0]);
-				
-				tmp = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
-				tmp.remove(4);
-				drawerItemsDescriptions = tmp.toArray(new String[0]);
+				drawerItemsList.remove(4 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(4 - alreadyRemoved);
+				alreadyRemoved++;
 			}
+
+			// Put list back together
+			drawerItems = drawerItemsList.toArray(new String[0]);
+			drawerItemsDescriptions = drawerItemsDescriptionsList.toArray(new String[0]);
 		}
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 		drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerItems));
