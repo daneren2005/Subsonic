@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.1.8" versioncode="66" releasedate="10/26/2013">
+		<change>Fix offline shuffle mode</change>
+	</release>
 	<release version="4.1.7" versioncode="65" releasedate="10/21/2013">
 		<change>Settings screen now broken down by sections</change>
 		<change>Added option to choose whether or not to pause on headphone/bluetooth disconnect</change>
