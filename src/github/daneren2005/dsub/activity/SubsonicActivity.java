@@ -208,9 +208,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 		};
 		drawer.setDrawerListener(drawerToggle);
-		if(this.getClass() != SubsonicFragmentActivity.class) {
-			drawerToggle.setDrawerIndicatorEnabled(false);
-		}
+		drawerToggle.setDrawerIndicatorEnabled(false);
 	}
 	
 	@Override
@@ -255,7 +253,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		} else if(item.getItemId() == android.R.id.home) {
-			finish();
+			onBackPressed();
 			return true;
 		}
 
@@ -365,7 +363,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		trans.commit();
 		recreateSpinner();
 	}
-	private void removeCurrent() {
+	protected void removeCurrent() {
 		if(currentFragment != null) {
 			currentFragment.setPrimaryFragment(false);
 		}

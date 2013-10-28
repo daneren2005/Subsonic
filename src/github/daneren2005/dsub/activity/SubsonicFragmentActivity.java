@@ -250,6 +250,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	}
 
 	@Override
+	public void setContentView(int viewId) {
+		super.setContentView(viewId);
+		drawerToggle.setDrawerIndicatorEnabled(true);
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(super.onOptionsItemSelected(item)) {
 			return true;
@@ -267,6 +273,19 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			} else {
 				finish();
 			}
+		}
+	}
+
+	@Override
+	public void replaceFragment(SubsonicFragment fragment, int id, int tag) {
+		super.replaceFragment(fragment, id, tag);
+		drawerToggle.setDrawerIndicatorEnabled(false);
+	}
+	@Override
+	protected void removeCurrent() {
+		super.removeCurrent();
+		if(backStack.isEmpty()) {
+			drawerToggle.setDrawerIndicatorEnabled(true);
 		}
 	}
 	
