@@ -170,16 +170,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		drawerToggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer, R.string.common_appname, R.string.common_appname) {
 			@Override
 			public void onDrawerClosed(View view) {
-				/*if(pagerAdapter != null) {
-
-				} else {
-					getActionBar().setTitle(currentFragment.getTitle());
-				}*/
+				setTitle(currentFragment.getTitle());
 			}
 
 			@Override
 			public void onDrawerOpened(View view) {
-				// getActionBar().setTitle(R.string.common_appname);
+				getSupportActionBar().setTitle(R.string.common_appname);
+				getSupportActionBar().setDisplayShowCustomEnabled(false);
 			}
 		};
 		drawer.setDrawerListener(drawerToggle);
