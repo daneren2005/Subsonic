@@ -274,15 +274,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	
 	private void populateDrawer() {
+		SharedPreferences prefs = Util.getPreferences(this);
 		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true);
 		
-		if(drawerItems == null || !enabledItems[0].equals(podcastsEnabled) || !enabledItems[1].equals(chatEnabled)) {
+		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == chatEnabled) {
 			drawerItems = getResources().getStringArray(R.array.drawerItems);
 			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
 	
 			// Remove listings that user wants hidden
-			SharedPreferences prefs = Util.getPreferences(this);
 			int alreadyRemoved = 0;
 			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
 			List<String> drawerItemsDescriptionsList = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
