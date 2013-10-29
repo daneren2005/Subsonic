@@ -64,6 +64,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	String albumListType;
 	String albumListExtra;
 	int albumListSize;
+	boolean refreshListing = false;
 	
 	
 	public SelectDirectoryFragment() {
@@ -130,6 +131,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
+			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
 			if(entries == null) {
 				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
 			}
@@ -289,6 +291,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					Bundle args = new Bundle();
 					args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
 					args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+					if("recent".equals(albumListType)) {
+						args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
+					}
 					parentFragment.setArguments(args);
 
 					replaceFragment(parentFragment, fragId);
@@ -336,6 +341,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	private void load(boolean refresh) {
+		if(refreshListing) {
+			refresh = true;
+		}
+		
 		entryList.setVisibility(View.INVISIBLE);
 		emptyView.setVisibility(View.INVISIBLE);
 		if (playlistId != null) {
