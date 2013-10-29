@@ -322,7 +322,7 @@
 	<string name="settings.gapless_playback_summary">The Galaxy S3 seems to be experiencing freezes/other weird issue since the introduction of gapless playback.  Turn this off to fix the issue.</string>
 	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
 	<string name="settings.chat_enabled">Chat Enabled</string>
-	<string name="settings.chat_enabled_summary">Whether or not to display the chat listing.  Restart app after changing.</string>
+	<string name="settings.chat_enabled_summary">Whether or not to display the chat listing in the pull out drawer</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video Player</string>
 	<string name="settings.video_raw">Raw (Requires Subsonic 4.8+)</string>
@@ -334,7 +334,7 @@
 	<string name="settings.hide_widget_title">Hide Widget</string>
 	<string name="settings.hide_widget_summary">Hide widget after exiting app</string>
 	<string name="settings.podcasts_enabled">Podcasts Enabled</string>
-	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcasts listing.  Restart app after changing.</string>
+	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
