@@ -66,8 +66,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
-	private static String[] drawerItemsDescriptions;
-	private static String[] drawerItems;
+	private String[] drawerItemsDescriptions;
+	private String[] drawerItems;
+	private boolean[] enabledItems = {true, true};
 	private boolean destroyed = false;
 	private boolean finished = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
@@ -115,6 +116,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if (theme != null && !theme.equals(Util.getTheme(this))) {
 			restart();
 		}
+		
+		populateDrawer();
 	}
 
 	@Override
@@ -137,36 +140,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		LayoutInflater layoutInflater = getLayoutInflater();
 		layoutInflater.inflate(viewId, rootView);
 
-		if(drawerItems == null) {
-			drawerItems = getResources().getStringArray(R.array.drawerItems);
-			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
-
-			// Remove listings that user wants hidden
-			SharedPreferences prefs = Util.getPreferences(this);
-			int alreadyRemoved = 0;
-			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
-			List<String> drawerItemsDescriptionsList = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
-
-			// Selectively remove podcast listing [3]
-			if(!prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true)) {
-				drawerItemsList.remove(3 - alreadyRemoved);
-				drawerItemsDescriptionsList.remove(3 - alreadyRemoved);
-				alreadyRemoved++;
-			}
-
-			// Selectively remove chat listing: [4]
-			if(!prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true)) {
-				drawerItemsList.remove(4 - alreadyRemoved);
-				drawerItemsDescriptionsList.remove(4 - alreadyRemoved);
-				alreadyRemoved++;
-			}
-
-			// Put list back together
-			drawerItems = drawerItemsList.toArray(new String[0]);
-			drawerItemsDescriptions = drawerItemsDescriptionsList.toArray(new String[0]);
-		}
+		
 		drawerList = (ListView) findViewById(R.id.left_drawer);
-		drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerItems));
 
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
@@ -296,6 +271,46 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
 		
+	}
+	
+	private void populateDrawer() {
+		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
+		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true);
+		
+		if(drawerItems == null || !enabledItems[0].equals(podcastsEnabled) || !enabledItems[1].equals(chatEnabled)) {
+			drawerItems = getResources().getStringArray(R.array.drawerItems);
+			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
+	
+			// Remove listings that user wants hidden
+			SharedPreferences prefs = Util.getPreferences(this);
+			int alreadyRemoved = 0;
+			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
+			List<String> drawerItemsDescriptionsList = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
+	
+			// Selectively remove podcast listing [3]
+			if(!podcastsEnabled) {
+				drawerItemsList.remove(3 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(3 - alreadyRemoved);
+				alreadyRemoved++;
+			}
+	
+			// Selectively remove chat listing: [4]
+			if(!chatEnabled) {
+				drawerItemsList.remove(4 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(4 - alreadyRemoved);
+				alreadyRemoved++;
+			}
+	
+			// Put list back together
+			if(alreadyRemoved > 0) {
+				drawerItems = drawerItemsList.toArray(new String[0]);
+				drawerItemsDescriptions = drawerItemsDescriptionsList.toArray(new String[0]);
+			}
+			
+			drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerItems));
+			enabledItems[0] = podcastsEnabled;
+			enabledItems[1] = chatEnabled;
+		}
 	}
 
 	public void startActivity(Class t) {
