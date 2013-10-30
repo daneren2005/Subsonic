@@ -53,7 +53,6 @@ public class SearchFragment extends SubsonicFragment {
 	private View artistsHeading;
 	private View albumsHeading;
 	private View songsHeading;
-	private TextView searchButton;
 	private View moreArtistsButton;
 	private View moreAlbumsButton;
 	private View moreSongsButton;
@@ -93,7 +92,6 @@ public class SearchFragment extends SubsonicFragment {
 		albumsHeading = buttons.findViewById(R.id.search_albums);
 		songsHeading = buttons.findViewById(R.id.search_songs);
 
-		searchButton = (TextView) buttons.findViewById(R.id.search_search);
 		moreArtistsButton = buttons.findViewById(R.id.search_more_artists);
 		moreAlbumsButton = buttons.findViewById(R.id.search_more_albums);
 		moreSongsButton = buttons.findViewById(R.id.search_more_songs);
@@ -103,9 +101,7 @@ public class SearchFragment extends SubsonicFragment {
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (view == searchButton) {
-					context.onSearchRequested();
-				} else if (view == moreArtistsButton) {
+				if (view == moreArtistsButton) {
 					expandArtists();
 				} else if (view == moreAlbumsButton) {
 					expandAlbums();
@@ -221,7 +217,6 @@ public class SearchFragment extends SubsonicFragment {
 
 	public void populateList() {
 		mergeAdapter = new MergeAdapter();
-		mergeAdapter.addView(searchButton, true);
 
 		if (searchResult != null) {
 			List<Artist> artists = searchResult.getArtists();
@@ -258,7 +253,6 @@ public class SearchFragment extends SubsonicFragment {
 			}
 
 			boolean empty = searchResult.getArtists().isEmpty() && searchResult.getAlbums().isEmpty() && searchResult.getSongs().isEmpty();
-			searchButton.setText(empty ? R.string.search_no_match : R.string.search_search);
 		}
 
 		list.setAdapter(mergeAdapter);
