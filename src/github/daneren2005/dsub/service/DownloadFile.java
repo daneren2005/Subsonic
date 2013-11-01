@@ -217,7 +217,7 @@ public class DownloadFile {
 				completeWhenDone = false;
 			}
 		} catch(IOException ex) {
-			Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile);
+			Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile, ex);
 		}
 		
 		this.isPlaying = isPlaying;
@@ -226,7 +226,7 @@ public class DownloadFile {
 		try {
 			Util.renameFile(partialFile, completeFile);
 		} catch(IOException ex) {
-			Log.w(TAG, "Failed to rename file " + partialFile + " to " + completeFile);
+			Log.w(TAG, "Failed to rename file " + partialFile + " to " + completeFile, ex);
 		}
 	}
 	public boolean getPlaying() {
