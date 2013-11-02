@@ -91,7 +91,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
 			currentFragment = getNewFragment(fragmentType);
 			
-			if("".equals(fragmentType)) {
+			if("".equals(fragmentType) || fragmentType == null) {
 				// Initial startup stuff
 				loadSettings();
 			}
