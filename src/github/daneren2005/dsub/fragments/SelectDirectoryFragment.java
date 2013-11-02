@@ -138,7 +138,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		if(entries == null) {
-			if(primaryFragment) {
+			if(primaryFragment || secondaryFragment) {
 				load(false);
 			} else {
 				invalidated = true;
@@ -306,7 +306,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, fragId);
+				replaceFragment(fragment, fragId, fragId == rootId);
 			} else if (entry.isVideo()) {
 				playVideo(entry);
 			} else if(entry instanceof PodcastEpisode) {

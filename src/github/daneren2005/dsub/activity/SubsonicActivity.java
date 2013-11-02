@@ -107,12 +107,6 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		drawerToggle.syncState();
-		
-		// Check whether this is a tablet or not
-		secondaryContainer = findViewById(R.id.fragment_second_container);
-		if(secondaryContainer != null) {
-			primaryContainer = findViewById(R.id.fragment_container);
-		}
 	}
 
 	@Override
@@ -189,6 +183,12 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		};
 		drawer.setDrawerListener(drawerToggle);
 		drawerToggle.setDrawerIndicatorEnabled(false);
+
+		// Check whether this is a tablet or not
+		secondaryContainer = findViewById(R.id.fragment_second_container);
+		if(secondaryContainer != null) {
+			primaryContainer = findViewById(R.id.fragment_container);
+		}
 	}
 	
 	@Override
@@ -212,11 +212,42 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		FragmentManager fm = getSupportFragmentManager();
 		currentFragment = (SubsonicFragment)fm.findFragmentByTag(ids[0]);
 		currentFragment.setPrimaryFragment(true);
+		currentFragment.setSupportTag(ids[0]);
 		supportInvalidateOptionsMenu();
 		for(int i = 1; i < size; i++) {
 			SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[i]);
+			frag.setSupportTag(ids[i]);
+			if(secondaryContainer != null) {
+				frag.setPrimaryFragment(false, true);
+			}
 			backStack.add(frag);
 		}
+
+		// Current fragment is hidden in secondaryContainer
+		if(secondaryContainer == null && findViewById(currentFragment.getRootId()) == null) {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.remove(currentFragment);
+			trans.commit();
+			getSupportFragmentManager().executePendingTransactions();
+
+			trans = getSupportFragmentManager().beginTransaction();
+			trans.add(backStack.get(backStack.size() - 1).getRootId(), currentFragment, ids[0]);
+			trans.commit();
+		}
+		// Current fragment needs to be moved over to secondaryContainer
+		else if(secondaryContainer != null && secondaryContainer.findViewById(currentFragment.getRootId()) == null) {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.remove(currentFragment);
+			trans.commit();
+			getSupportFragmentManager().executePendingTransactions();
+
+			trans = getSupportFragmentManager().beginTransaction();
+			trans.add(R.id.fragment_second_container, currentFragment, ids[0]);
+			trans.commit();
+
+			secondaryContainer.setVisibility(View.VISIBLE);
+		}
+
 		recreateSpinner();
 	}
 	
@@ -256,7 +287,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	
 	@Override
 	public void setTitle(CharSequence title) {
-		super.setTitle(title);
+		getSupportActionBar().setTitle(title);
 		recreateSpinner();
 	}
 	public void setSubtitle(CharSequence title) {
@@ -367,10 +398,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			super.onBackPressed();
 		}
 	}
-	
+
 	public void replaceFragment(SubsonicFragment fragment, int id, int tag) {
+		replaceFragment(fragment, id, tag, false);
+	}
+	public void replaceFragment(SubsonicFragment fragment, int id, int tag, boolean replaceCurrent) {
 		if(currentFragment != null) {
-			currentFragment.setPrimaryFragment(false);
+			currentFragment.setPrimaryFragment(false, secondaryContainer != null);
 		}
 		backStack.add(currentFragment);
 
@@ -385,20 +419,30 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		} else {
 			// Make sure secondary container is visible now
 			secondaryContainer.setVisibility(View.VISIBLE);
-			
-			// Check to see if you need to put on top of old left or not
-			int leftId = R.id.fragment_container;
-			if(backStack.size() > 1) {
-				SubsonicFragment oldLeftFragment = backStack.get(backStack.size() - 2);
-				leftId = oldLeftFragment.getRootId();
-			}
-			
+
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-			
-			// Move old right to left
-			SubsonicFragment newLeftFragment = backStack.get(backStack.size() - 1);
-			trans.remove(newLeftFragment);
-			trans.add(leftId, newLeftFragment, newLeftFragment.getSupportTag() + "");
+
+			// Check to see if you need to put on top of old left or not
+			if(backStack.size() > 1) {
+				// Move old right to left if there is a backstack already
+				SubsonicFragment newLeftFragment = backStack.get(backStack.size() - 1);
+				trans.remove(newLeftFragment);
+
+				// Only move right to left if replaceCurrent is false
+				if(!replaceCurrent) {
+					SubsonicFragment oldLeftFragment = backStack.get(backStack.size() - 2);
+					int leftId = oldLeftFragment.getRootId();
+
+					// Make sure remove is finished before adding
+					trans.commit();
+					getSupportFragmentManager().executePendingTransactions();
+
+					trans = getSupportFragmentManager().beginTransaction();
+					trans.add(leftId, newLeftFragment, newLeftFragment.getSupportTag() + "");
+				} else {
+					backStack.remove(backStack.size() - 1);
+				}
+			}
 			
 			// Add fragment to the right container
 			trans.add(R.id.fragment_second_container, fragment, tag + "");
@@ -408,7 +452,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 		recreateSpinner();
 	}
-	protected void removeCurrent() {
+	public void removeCurrent() {
 		if(currentFragment != null) {
 			currentFragment.setPrimaryFragment(false);
 		}
@@ -427,10 +471,21 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			
 			// Remove old right fragment
 			trans.remove(oldFrag);
-			
-			// Add current left fragment to right side
-			trans.remove(currentFragment);
-			trans.add(R.id.fragment_second_container, currentFragment, currentFragment.getSupportTag() + "");
+
+			// Only switch places if there is a backstack, otherwise primary container is correct
+			if(backStack.size() > 0) {
+				// Add current left fragment to right side
+				trans.remove(currentFragment);
+
+				// Make sure remove is finished before adding
+				trans.commit();
+				getSupportFragmentManager().executePendingTransactions();
+
+				trans = getSupportFragmentManager().beginTransaction();
+				trans.add(R.id.fragment_second_container, currentFragment, currentFragment.getSupportTag() + "");
+			} else {
+				secondaryContainer.setVisibility(View.GONE);
+			}
 			
 			trans.commit();
 		}

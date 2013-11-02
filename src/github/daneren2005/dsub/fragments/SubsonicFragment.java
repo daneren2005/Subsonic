@@ -85,6 +85,7 @@ public class SubsonicFragment extends Fragment {
 	protected CharSequence subtitle = null;
 	protected View rootView;
 	protected boolean primaryFragment = false;
+	protected boolean secondaryFragment = false;
 	protected boolean invalidated = false;
 	protected static Random random = new Random();
 	
@@ -289,7 +290,10 @@ public class SubsonicFragment extends Fragment {
 	}
 	
 	public void replaceFragment(SubsonicFragment fragment, int id) {
-		context.replaceFragment(fragment, id, fragment.getSupportTag());
+		replaceFragment(fragment, id, true);
+	}
+	public void replaceFragment(SubsonicFragment fragment, int id, boolean replaceCurrent) {
+		context.replaceFragment(fragment, id, fragment.getSupportTag(), secondaryFragment && replaceCurrent);
 	}
 	
 	protected int getNewId() {
@@ -306,7 +310,9 @@ public class SubsonicFragment extends Fragment {
 	public int getRootId() {
 		return rootView.getId();
 	}
-	
+
+	public void setSupportTag(int tag) { this.tag = tag; }
+	public void setSupportTag(String tag) { this.tag = Integer.parseInt(tag); }
 	public int getSupportTag() {
 		return tag;
 	}
@@ -324,7 +330,11 @@ public class SubsonicFragment extends Fragment {
 			}
 		}
 	}
-	
+	public void setPrimaryFragment(boolean primary, boolean secondary) {
+		setPrimaryFragment(primary);
+		secondaryFragment = secondary;
+	}
+
 	public void invalidate() {
 		if(primaryFragment) {
 			refresh(false);

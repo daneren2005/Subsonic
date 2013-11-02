@@ -282,7 +282,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		drawerToggle.setDrawerIndicatorEnabled(false);
 	}
 	@Override
-	protected void removeCurrent() {
+	public void removeCurrent() {
 		super.removeCurrent();
 		if(backStack.isEmpty()) {
 			drawerToggle.setDrawerIndicatorEnabled(true);
@@ -311,6 +311,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		supportInvalidateOptionsMenu();
 		recreateSpinner();
 		drawer.closeDrawers();
+
+		if(secondaryContainer != null) {
+			secondaryContainer.setVisibility(View.GONE);
+		}
 	}
 	
 	private SubsonicFragment getNewFragment(String fragmentType) {
