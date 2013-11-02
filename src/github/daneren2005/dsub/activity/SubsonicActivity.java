@@ -81,6 +81,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	DrawerLayout drawer;
 	ActionBarDrawerToggle drawerToggle;
 	ListView drawerList;
+	View lastSelectedView = null;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -165,6 +166,12 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				} else if("Exit".equals(drawerItemsDescriptions[position])) {
 					exit();
 				}
+
+				if(lastSelectedView != view) {
+					lastSelectedView.setBackgroundResource(android.R.color.transparent);
+					view.setBackgroundResource(R.color.dividerColor);
+					lastSelectedView = view;
+				}
 			}
 		});
 
@@ -177,6 +184,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 			@Override
 			public void onDrawerOpened(View view) {
+				if(lastSelectedView == null) {
+					lastSelectedView = drawerList.getChildAt(0);
+					lastSelectedView.setBackgroundResource(R.color.dividerColor);
+				}
+
 				getSupportActionBar().setTitle(R.string.common_appname);
 				getSupportActionBar().setDisplayShowCustomEnabled(false);
 			}
