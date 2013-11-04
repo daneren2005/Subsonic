@@ -95,7 +95,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private ScheduledExecutorService executorService;
 	private DownloadFile currentPlaying;
 	private long currentRevision;
-	private GestureDetector gestureScanner;
 	private int swipeDistance;
 	private int swipeVelocity;
 	private VisualizerView visualizerView;
@@ -1143,10 +1142,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	public boolean onDown(MotionEvent me) {
 		setControlsVisible(true);
 		return false;
-	}
-
-	public GestureDetector getGestureDetector() {
-		return gestureScanner;
 	}
 
 	@Override
