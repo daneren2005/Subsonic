@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.2.0" versioncode="67" releasedate="11/03/2013">
+		<change>Changed from tabs to Pull Out Drawer like newer Google docs specify</change>
+		<change>Added tablet layout that better uses extra space</change>
+	</release>
 	<release version="4.1.8" versioncode="66" releasedate="10/26/2013">
 		<change>Fix offline shuffle mode</change>
 	</release>
