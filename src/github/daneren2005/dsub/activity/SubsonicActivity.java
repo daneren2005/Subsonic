@@ -195,6 +195,16 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		};
 		drawer.setDrawerListener(drawerToggle);
 		drawerToggle.setDrawerIndicatorEnabled(false);
+		
+		drawer.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				if(currentFragment != null && currentFragment.getGestureDetector() != null) {
+					return currentFragment.getGestureDetector().onTouchEvent(event);
+				} else {
+					return false;
+				}
+			}	
+		});
 
 		// Check whether this is a tablet or not
 		secondaryContainer = findViewById(R.id.fragment_second_container);
