@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,6 +89,7 @@ public class SubsonicFragment extends Fragment {
 	protected boolean secondaryFragment = false;
 	protected boolean invalidated = false;
 	protected static Random random = new Random();
+	protected GestureDetector gestureScanner;
 	
 	public SubsonicFragment() {
 		super();
@@ -1002,5 +1004,9 @@ public class SubsonicFragment extends Fragment {
 		if(Util.isOffline(context)) {
 			refresh();
 		}
+	}
+	
+	public GestureDetector getGestureDetector() {
+		return gestureScanner;
 	}
 }
