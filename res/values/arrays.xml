@@ -6,7 +6,6 @@
 		<item>@string/button_bar.playlists</item>
 		<item>@string/button_bar.podcasts</item>
 		<item>@string/button_bar.chat</item>
-		<item>@string/button_bar.now_playing</item>
 	</string-array>
 
 	<string-array name="drawerItemsDescriptions">
@@ -15,7 +14,6 @@
 		<item>Playlists</item>
 		<item>Podcasts</item>
 		<item>Chat</item>
-		<item>Now Playing</item>
 	</string-array>
 
     <string-array name="themeValues">
