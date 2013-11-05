@@ -70,6 +70,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected static String theme;
 	private String[] drawerItemsDescriptions;
 	private String[] drawerItems;
+	private boolean drawerIdle = true;
 	private boolean[] enabledItems = {true, true};
 	private boolean destroyed = false;
 	private boolean finished = false;
@@ -182,6 +183,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			@Override
 			public void onDrawerClosed(View view) {
 				setTitle(currentFragment.getTitle());
+				
+				drawerIdle = true;
 			}
 
 			@Override
@@ -193,6 +196,14 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 				getSupportActionBar().setTitle(R.string.common_appname);
 				getSupportActionBar().setDisplayShowCustomEnabled(false);
+				
+				drawerIdle = true;
+			}
+			
+			@Override
+			public void onDrawerSlide(View drawerView, float slideOffset) {
+				super.onDrawerSlide(drawerView, slideOffset);
+				drawerIdle = false;
 			}
 		};
 		drawer.setDrawerListener(drawerToggle);
@@ -200,7 +211,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		
 		drawer.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
-				if (currentFragment != null && currentFragment.getGestureDetector() != null) {
+				if (drawerIdle && currentFragment != null && currentFragment.getGestureDetector() != null) {
 					return currentFragment.getGestureDetector().onTouchEvent(event);
 				} else {
 					return false;
