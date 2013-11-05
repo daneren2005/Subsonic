@@ -98,6 +98,11 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			
 			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
+			
+			if(getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
+				SearchFragment fragment = new SearchFragment();
+				replaceFragment(fragment, currentFragment.getRootId(), fragment.getSupportTag());
+			}
 		}
 
 		bottomBar = findViewById(R.id.bottom_bar);
