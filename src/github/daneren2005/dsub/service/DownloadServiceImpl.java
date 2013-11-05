@@ -583,21 +583,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			return;
 		}
 		
-		int index = getCurrentPlayingIndex();
-		if (index != -1) {
-            switch (getRepeatMode()) {
-                case OFF:
-                    index = index + 1;
-                    break;
-                case ALL:
-					index = (index + 1) % size();
-                    break;
-                case SINGLE:
-                    break;
-                default:
-                    break;
-            }
-        }
+		int index = getNextPlayingIndex();
 		
 		nextSetup = false;
 		if(nextPlayingTask != null) {
@@ -617,6 +603,24 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized int getCurrentPlayingIndex() {
         return downloadList.indexOf(currentPlaying);
+    }
+    private int getNextPlayingIndex() {
+    	int index = getCurrentPlayingIndex();
+		if (index != -1) {
+            switch (getRepeatMode()) {
+                case OFF:
+                    index = index + 1;
+                    break;
+                case ALL:
+					index = (index + 1) % size();
+                    break;
+                case SINGLE:
+                    break;
+                default:
+                    break;
+            }
+        }
+        return index;
     }
 
     @Override
@@ -767,27 +771,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public synchronized void next() {
         int index = getCurrentPlayingIndex();
         if (index != -1) {
-            play(index + 1);
+            play(getNextPlayingIndex());
         }
     }
 
     private void onSongCompleted() {
-        int index = getCurrentPlayingIndex();
-        if (index != -1) {
-            switch (getRepeatMode()) {
-                case OFF:
-                    play(index + 1);
-                    break;
-                case ALL:
-                    play((index + 1) % size());
-                    break;
-                case SINGLE:
-                    play(index);
-                    break;
-                default:
-                    break;
-            }
-        }
+    	play(getNextPlayingIndex());
     }
 
     @Override
