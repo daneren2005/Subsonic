@@ -42,7 +42,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
-import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
@@ -250,9 +249,6 @@ public class SubsonicFragment extends Fragment {
 				getDownloadService().clear();
 				getDownloadService().download(songs, false, true, true, false);
 				Util.startActivityWithoutTransition(context, DownloadActivity.class);
-				if(context instanceof SearchActivity) {
-					context.finish();
-				}
 				break;
 			case R.id.song_menu_play_next:
 				getDownloadService().download(songs, false, false, true, false);
@@ -649,9 +645,6 @@ public class SubsonicFragment extends Fragment {
 						downloadService.download(songs, save, autoplay, false, shuffle);
 						if(!append) {
 							Util.startActivityWithoutTransition(context, DownloadActivity.class);
-							if(context instanceof SearchActivity) {
-								context.finish();
-							}
 						}
 					}
 					else {

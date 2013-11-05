@@ -51,6 +51,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -330,6 +331,31 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
 		
+	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		if(currentFragment != null && currentFragment instanceof SearchFragment) {
+			String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
+			boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+			boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
+
+			if (query != null) {
+				((SearchFragment)currentFragment).search(query, autoplay);
+			} else {
+				((SearchFragment)currentFragment).populateList();
+				if (requestsearch) {
+					onSearchRequested();
+				}
+			}
+		} else if(intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
+			setIntent(intent);
+
+			SearchFragment fragment = new SearchFragment();
+			replaceFragment(fragment, currentFragment.getRootId(), fragment.getSupportTag());
+		}
 	}
 	
 	private void populateDrawer() {

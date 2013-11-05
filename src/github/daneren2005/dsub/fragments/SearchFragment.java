@@ -18,11 +18,9 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.net.Uri;
 import android.view.ViewGroup;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.SearchCritera;
@@ -126,7 +124,7 @@ public class SearchFragment extends SubsonicFragment {
 			}
 		});
 		registerForContextMenu(list);
-		((SearchActivity)context).onSupportNewIntent(context.getIntent());
+		context.onNewIntent(context.getIntent());
 
 		if(searchResult != null) {
 			skipSearch = true;
@@ -182,7 +180,7 @@ public class SearchFragment extends SubsonicFragment {
 	public void setPrimaryFragment(boolean primary) {
 		super.setPrimaryFragment(primary);
 		if(rootView != null && primary) {
-			((SearchActivity)context).onSupportNewIntent(context.getIntent());
+			context.onNewIntent(context.getIntent());
 		}
 	}
 

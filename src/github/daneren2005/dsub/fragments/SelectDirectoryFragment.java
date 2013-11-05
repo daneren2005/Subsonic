@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.util.List;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.DownloadActivity;
-import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -594,9 +593,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 				if (autoplay) {
 					Util.startActivityWithoutTransition(context, DownloadActivity.class);
-					if(context instanceof SearchActivity) {
-						context.finish();
-					}
 				} else if (save) {
 					Util.toast(context,
 							   context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));

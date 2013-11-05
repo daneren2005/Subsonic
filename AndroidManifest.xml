@@ -37,12 +37,7 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name="github.daneren2005.dsub.activity.SearchActivity"
-                  android:label="@string/search.label"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:launchMode="singleTask"/>
-
-        <activity android:name="github.daneren2005.dsub.activity.DownloadActivity"
+		<activity android:name="github.daneren2005.dsub.activity.DownloadActivity"
                   android:configChanges="keyboardHidden"
                   android:launchMode="singleTask"/>
 
