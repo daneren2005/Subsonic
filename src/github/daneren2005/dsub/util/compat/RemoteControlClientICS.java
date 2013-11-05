@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
-import android.os.Build;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.service.DownloadService;
 
@@ -37,21 +36,6 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 		mRemoteControl.setPlaybackState(RemoteControlClient.PLAYSTATE_STOPPED);
 		mRemoteControl.setTransportControlFlags(getTransportFlags());
 		imageLoader = SubsonicActivity.getStaticImageLoader(context);
-		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-			mRemoteControl.setOnGetPlaybackPositionListener(new RemoteControlClient.OnGetPlaybackPositionListener() {
-				@Override
-				public long onGetPlaybackPosition() {
-					return downloadService.getPlayerPosition();
-				}
-			});
-			mRemoteControl.setPlaybackPositionUpdateListener(new RemoteControlClient.OnPlaybackPositionUpdateListener() {
-				@Override
-				public void onPlaybackPositionUpdate(long newPosition) {
-					downloadService.seekTo((int) newPosition);
-				}
-			});
-		}
 	}
 	
 	public void unregister(final Context context) {
@@ -62,15 +46,7 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 	}
 	
 	public void setPlaybackState(final int state) {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-			long position = -1;
-			if(state == RemoteControlClient.PLAYSTATE_PLAYING || state == RemoteControlClient.PLAYSTATE_PAUSED) {
-				position = downloadService.getPlayerPosition();
-			}
-			mRemoteControl.setPlaybackState(state, position, 1.0f);
-		} else {
-			mRemoteControl.setPlaybackState(state);
-		}
+		mRemoteControl.setPlaybackState(state);
 	}
 	
 	public void updateMetadata(final Context context, final MusicDirectory.Entry currentSong) {
@@ -99,19 +75,13 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
     	}
 	}
 	
-	private int getTransportFlags() {
-		int flags = RemoteControlClient.FLAG_KEY_MEDIA_PLAY | 
+	protected int getTransportFlags() {
+		return RemoteControlClient.FLAG_KEY_MEDIA_PLAY | 
 			RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | 
 			RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |
 			RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS |
 			RemoteControlClient.FLAG_KEY_MEDIA_NEXT |
 			RemoteControlClient.FLAG_KEY_MEDIA_STOP;
-			
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-			flags = flags | RemoteControlClient.FLAG_KEY_MEDIA_POSITION_UPDATE;
-		}
-		
-		return flags;
 	}
 
 }
