@@ -41,6 +41,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -198,12 +199,12 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		
 		drawer.setOnTouchListener(new View.OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
-				if(currentFragment != null && currentFragment.getGestureDetector() != null) {
+				if (currentFragment != null && currentFragment.getGestureDetector() != null) {
 					return currentFragment.getGestureDetector().onTouchEvent(event);
 				} else {
 					return false;
 				}
-			}	
+			}
 		});
 
 		// Check whether this is a tablet or not

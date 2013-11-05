@@ -13,7 +13,7 @@ import android.media.RemoteControlClient;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.service.DownloadService;
 
-@TargetApi(16)
+@TargetApi(18)
 public class RemoteControlClientJB extends RemoteControlClientICS {
 	@Override
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
