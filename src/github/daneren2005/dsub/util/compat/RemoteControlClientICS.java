@@ -15,10 +15,9 @@ import github.daneren2005.dsub.service.DownloadService;
 
 @TargetApi(14)
 public class RemoteControlClientICS extends RemoteControlClientHelper {
-	
-	private RemoteControlClient mRemoteControl;
-	private ImageLoader imageLoader;
-	private DownloadService downloadService;
+	protected RemoteControlClient mRemoteControl;
+	protected ImageLoader imageLoader;
+	protected DownloadService downloadService;
 	
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
 		downloadService = (DownloadService) context;
