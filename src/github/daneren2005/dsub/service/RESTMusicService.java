@@ -968,7 +968,27 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
+	@Override
+	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
+
+	}
+
+	@Override
+	public List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		return null;
+	}
+
+	@Override
+	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+
+	}
+
+	@Override
+	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
+
+	}
+
 	@Override
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return processOfflineScrobbles(context, progressListener) + processOfflineStars(context, progressListener);

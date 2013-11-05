@@ -24,6 +24,8 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
@@ -134,6 +136,14 @@ public interface MusicService {
 	void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception;
 	
 	void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception;
+
+	void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception;
+
+	List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+
+	void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception;
+
+	void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 }

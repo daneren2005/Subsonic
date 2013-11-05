@@ -28,6 +28,8 @@ import org.apache.http.HttpResponse;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
+
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
@@ -402,7 +404,27 @@ public class CachedMusicService implements MusicService {
 	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
 		musicService.deletePodcastEpisode(id, context, progressListener);
 	}
-	
+
+	@Override
+	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
+		musicService.setRating(id, rating, context, progressListener);
+	}
+
+	@Override
+	public List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getBookmarks(refresh, context, progressListener);
+	}
+
+	@Override
+	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+		musicService.createBookmark(id, position, comment, context, progressListener);
+	}
+
+	@Override
+	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
+		musicService.deleteBookmark(id, context, progressListener);
+	}
+
 	@Override
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return musicService.processOfflineSyncs(context, progressListener);

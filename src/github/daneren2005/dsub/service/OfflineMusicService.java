@@ -34,6 +34,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.RemoteStatus;
@@ -633,6 +634,26 @@ public class OfflineMusicService extends RESTMusicService {
 	@Override
 	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
 		throw new OfflineException("Getting Podcasts not available in offline mode");
+	}
+
+	@Override
+	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Setting ratings not available in offline mode");
+	}
+
+	@Override
+	public List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Getting bookmarks not available in offline mode");
+	}
+
+	@Override
+	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Creating bookmarks not available in offline mode");
+	}
+
+	@Override
+	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Deleting bookmarks not available in offline mode");
 	}
     
     @Override
