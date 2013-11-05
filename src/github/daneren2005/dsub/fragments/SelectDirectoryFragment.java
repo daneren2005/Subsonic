@@ -45,7 +45,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 	private DragSortListView entryList;
 	int rootId;
-	private View footer;
 	private View emptyView;
 	private boolean hideButtons = false;
 	private Boolean licenseValid;
@@ -96,7 +95,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		rootView.setId(rootId);
 
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
-		footer = LayoutInflater.from(context).inflate(R.layout.select_album_footer, entryList, false);
 		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		entryList.setOnItemClickListener(this);
 		entryList.setDropListener(new DragSortListView.DropListener() {
