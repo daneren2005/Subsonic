@@ -70,6 +70,7 @@ import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
+import github.daneren2005.dsub.service.parser.BookmarkParser;
 import github.daneren2005.dsub.service.parser.ChatMessageParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
 import github.daneren2005.dsub.service.parser.GenreParser;
@@ -971,22 +972,50 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
-
+		checkServerVersion(context, "1.6", "Setting ratings not supported.");
+		
+		Reader reader = getReader(context, progressListener, "setRating", null, Arrays.asList("id", "rating"), Arrays.<Object>asList(id, rating));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
 	}
 
 	@Override
 	public List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		return null;
+		checkServerVersion(context, "1.9", "Bookmarks not supported.");
+		
+		Reader reader = getReader(context, progressListener, "getBookmarks", null);
+		try {
+			return new BookmarkParser(context).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
 	}
 
 	@Override
 	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
-
+		checkServerVersion(context, "1.9", "Creating bookmarks not supported.");
+		
+		Reader reader = getReader(context, progressListener, "createBookmark", null, Arrays.asList("id", "position"), Arrays.<Object>asList(id, position));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
 	}
 
 	@Override
 	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
-
+		checkServerVersion(context, "1.9", "Deleting bookmarks not supported.");
+		
+		Reader reader = getReader(context, progressListener, "deleteBookmark", null, Arrays.asList("id"), Arrays.<Object>asList(id));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
 	}
 
 	@Override
