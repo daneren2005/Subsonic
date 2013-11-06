@@ -92,11 +92,11 @@ public class Bookmark {
 		}
 	}
 	
-	public Entry getEntry() {
+	public MusicDirectory.Entry getEntry() {
 		return this.entry;
 	}
 	
-	public void setEntry(Entry entry) {
+	public void setEntry(MusicDirectory.Entry entry) {
 		this.entry = entry;
 	}
 }

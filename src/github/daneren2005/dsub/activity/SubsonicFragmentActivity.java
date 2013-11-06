@@ -42,6 +42,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
+import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectDirectoryFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
@@ -101,7 +102,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			
 			if(getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
 				SearchFragment fragment = new SearchFragment();
-				replaceFragment(fragment, currentFragment.getRootId(), fragment.getSupportTag());
+				replaceFragment(fragment, R.id.home_layout, fragment.getSupportTag());
 			}
 		}
 
