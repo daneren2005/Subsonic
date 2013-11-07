@@ -70,7 +70,7 @@
 	            android:layout_weight="0.0"
 	            android:background="@drawable/btn_bg"
 	            android:scaleType="fitXY"
-	            android:src="@drawable/notification_prev" />
+	            android:src="@drawable/notification_previous" />
 
 	        <ImageButton
 	            android:id="@+id/control_pause"

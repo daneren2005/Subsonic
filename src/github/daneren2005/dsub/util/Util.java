@@ -886,39 +886,62 @@ public final class Util {
         if (colors.getSecond() != null) {
             rv.setTextColor(R.id.notification_artist, colors.getSecond());
         }
-		
-		if(!playing) {
-			rv.setImageViewResource(R.id.control_pause, R.drawable.notification_play);
-			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_stop);
+
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+			rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_play);
+			rv.setImageViewResource(R.id.control_pause, R.drawable.notification_next);
+			rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
 		}
         
         // Create actions for media buttons
         PendingIntent pendingIntent;
-		if(playing) {
+		int previous = 0, pause = 0, next = 0, close = 0;
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+			pause = R.id.control_previous;
+			next = R.id.control_pause;
+			close = R.id.control_next;
+		} else {
+			previous = R.id.control_previous;
+			pause = R.id.control_pause;
+			next = R.id.control_next;
+		}
+
+		if(previous > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
 			prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-			rv.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
-		} else {
+			rv.setOnClickPendingIntent(previous, pendingIntent);
+		}
+		if(pause > 0) {
+			if(playing) {
+				Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
+				pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+				pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+				pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
+				rv.setOnClickPendingIntent(pause, pendingIntent);
+			} else {
+				Intent prevIntent = new Intent("KEYCODE_MEDIA_START");
+				prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+				prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
+				pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+				rv.setOnClickPendingIntent(pause, pendingIntent);
+			}
+		}
+		if(next > 0) {
+			Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
+			nextIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+			nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
+			pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
+			rv.setOnClickPendingIntent(next, pendingIntent);
+		}
+		if(close > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_STOP");
 			prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-			rv.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
+			rv.setOnClickPendingIntent(close, pendingIntent);
 		}
-        
-        Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
-        pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
-        pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-        pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
-        rv.setOnClickPendingIntent(R.id.control_pause, pendingIntent);
-        
-        Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
-        nextIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
-        nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
-        pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
-        rv.setOnClickPendingIntent(R.id.control_next, pendingIntent);
     }
 
     public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
