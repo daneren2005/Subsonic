@@ -770,8 +770,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized void next() {
         int index = getCurrentPlayingIndex();
-        if (index != -1) {
-            play(getNextPlayingIndex());
+		int nextPlayingIndex = getNextPlayingIndex();
+		// Make sure to actually go to next when repeat song is on
+		if(index == nextPlayingIndex) {
+			nextPlayingIndex++;
+		}
+        if (index != -1 && nextPlayingIndex < size()) {
+            play(nextPlayingIndex);
         }
     }
 

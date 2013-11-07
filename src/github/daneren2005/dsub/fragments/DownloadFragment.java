@@ -231,12 +231,8 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				new SilentBackgroundTask<Boolean>(context) {
 					@Override
 					protected Boolean doInBackground() throws Throwable {
-						if (getDownloadService().getCurrentPlayingIndex() < getDownloadService().size() - 1) {
-							getDownloadService().next();
-							return true;
-						} else {
-							return false;
-						}
+						getDownloadService().next();
+						return true;
 					}
 
 					@Override
