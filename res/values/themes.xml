@@ -11,7 +11,9 @@
 		<item name="media_button_start">@drawable/media_start_light</item>
 		<item name="media_button_stop">@drawable/media_stop_light</item>
 		<item name="chat">@drawable/ic_menu_chat_light</item> 
-		<item name="chat_send">@drawable/ic_menu_chat_send_light</item> 
+		<item name="chat_send">@drawable/ic_menu_chat_send_light</item>
+		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
+		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="@style/Theme.AppCompat">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
@@ -25,7 +27,9 @@
 		<item name="media_button_start">@drawable/media_start</item>
 		<item name="media_button_stop">@drawable/media_stop</item>
 		<item name="chat">@drawable/ic_menu_chat_dark</item> 
-		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item> 
+		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
+		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
+		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@android:color/black</item>
@@ -44,6 +48,8 @@
 		<item name="media_button_stop">@drawable/media_stop</item>
 		<item name="chat">@drawable/ic_menu_chat_dark</item> 
 		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
+		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
+		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
 	
 	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
@@ -78,5 +84,11 @@
 		<item name="android:background">@android:color/transparent</item>
 		<item name="backgroundStacked">@android:color/transparent</item>
 		<item name="android:backgroundStacked">@android:color/transparent</item>
+	</style>
+
+	<style name="DSub.TextViewStyle" parent="android:Widget.TextView">
+	</style>
+
+	<style name="DSub.ButtonStyle" parent="android:Widget.Holo.Button">
 	</style>
 </resources>

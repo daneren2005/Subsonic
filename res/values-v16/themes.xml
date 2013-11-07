@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="DSub.TextViewStyle" parent="android:Widget.TextView">
+		<item name="android:fontFamily">sans-serif-light</item>
+	</style>
+
+	<style name="DSub.ButtonStyle" parent="android:Widget.Holo.Button">
+		<item name="android:fontFamily">sans-serif-light</item>
+	</style>
+</resources>
