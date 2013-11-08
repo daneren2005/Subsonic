@@ -180,7 +180,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	}
 
 	private void load(final boolean refresh) {
-		setTitle(R.string.search_artists);
+		setTitle(R.string.button_bar_browse);
 		
 		if (Util.isOffline(context)) {
 			folderButton.setVisibility(View.GONE);
