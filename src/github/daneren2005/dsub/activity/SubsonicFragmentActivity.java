@@ -283,8 +283,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	}
 
 	@Override
-	public void replaceFragment(SubsonicFragment fragment, int id, int tag) {
-		super.replaceFragment(fragment, id, tag);
+	public void replaceFragment(SubsonicFragment fragment, int id, int tag, boolean replaceCurrent) {
+		super.replaceFragment(fragment, id, tag, replaceCurrent);
 		drawerToggle.setDrawerIndicatorEnabled(false);
 	}
 	@Override
