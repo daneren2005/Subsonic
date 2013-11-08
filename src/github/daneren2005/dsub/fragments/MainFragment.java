@@ -195,6 +195,7 @@ public class MainFragment extends SubsonicFragment {
 				service.clearIncomplete();
 			}
 			Util.setActiveServer(context, instance);
+			this.invalidate();
 		}
 	}
 
