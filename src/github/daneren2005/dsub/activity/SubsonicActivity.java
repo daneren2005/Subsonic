@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,10 +59,14 @@ import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.DrawerAdapter;
+
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class SubsonicActivity extends ActionBarActivity implements OnItemSelectedListener {
@@ -376,11 +381,18 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			int alreadyRemoved = 0;
 			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
 			List<String> drawerItemsDescriptionsList = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
+			List<Integer> drawerItemsIconsList = new ArrayList<Integer>();
+
+			TypedArray typedArray = getResources().obtainTypedArray(R.array.drawerItemIcons);
+			for(int i = 0; i < drawerItemsList.size(); i++) {
+				drawerItemsIconsList.add(typedArray.getResourceId(i, 0));
+			}
 	
 			// Selectively remove podcast listing [3]
 			if(!podcastsEnabled) {
 				drawerItemsList.remove(3 - alreadyRemoved);
 				drawerItemsDescriptionsList.remove(3 - alreadyRemoved);
+				drawerItemsIconsList.remove(3 - alreadyRemoved);
 				alreadyRemoved++;
 			}
 
@@ -388,6 +400,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			if(!bookmarksEnabled) {
 				drawerItemsList.remove(4 - alreadyRemoved);
 				drawerItemsDescriptionsList.remove(4 - alreadyRemoved);
+				drawerItemsIconsList.remove(4 - alreadyRemoved);
 				alreadyRemoved++;
 			}
 	
@@ -395,6 +408,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			if(!chatEnabled) {
 				drawerItemsList.remove(5 - alreadyRemoved);
 				drawerItemsDescriptionsList.remove(5 - alreadyRemoved);
+				drawerItemsIconsList.remove(5 - alreadyRemoved);
 				alreadyRemoved++;
 			}
 	
@@ -404,23 +418,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				drawerItemsDescriptions = drawerItemsDescriptionsList.toArray(new String[0]);
 			}
 			
-			drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerItems));
+			drawerList.setAdapter(new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList));
 			enabledItems[0] = podcastsEnabled;
 			enabledItems[1] = bookmarksEnabled;
 			enabledItems[2] = chatEnabled;
 		}
 	}
 
-	public void startActivity(Class t) {
-		Intent intent = new Intent();
-		intent.setClass(SubsonicActivity.this, t);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
-		if(this.getClass() != SubsonicFragmentActivity.class) {
-			finish();
-		}
-		drawer.closeDrawers();
-	}
 	public void startFragmentActivity(String fragmentType) {
 		Intent intent = new Intent();
 		intent.setClass(SubsonicActivity.this, SubsonicFragmentActivity.class);

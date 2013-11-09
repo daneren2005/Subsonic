@@ -18,6 +18,15 @@
 		<item>Chat</item>
 	</string-array>
 
+	<array name="drawerItemIcons">
+		<item>@drawable/ic_menu_home_dark</item>
+		<item>@drawable/ic_menu_library_dark</item>
+		<item>@drawable/ic_menu_playlist_dark</item>
+		<item>@drawable/ic_menu_podcast_dark</item>
+		<item>@drawable/ic_menu_bookmark_dark</item>
+		<item>@drawable/ic_menu_chat_dark</item>
+	</array>
+
     <string-array name="themeValues">
         <item>light</item>
         <item>dark</item>
