@@ -30,9 +30,11 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 
 public class BookmarkAdapter extends ArrayAdapter<Bookmark> {
 	private final static String TAG = BookmarkAdapter.class.getSimpleName();
+	private Context activity;
 	
-	public EntryAdapter(Context activity, List<Bookmark> bookmarks) {
+	public BookmarkAdapter(Context activity, List<Bookmark> bookmarks) {
 		super(activity, android.R.layout.simple_list_item_1, bookmarks);
+		this.activity = activity;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {

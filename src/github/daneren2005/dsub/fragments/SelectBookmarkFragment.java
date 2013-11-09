@@ -93,7 +93,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	}
 	
 	@Override
-	protected void refresh(boolean refresh) {
+	protected void refresh(final boolean refresh) {
 		setTitle(R.string.main_albums_genres);
 		bookmarkListView.setVisibility(View.INVISIBLE);
 		
@@ -114,7 +114,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 			}
 		
 			@Override
-			protected void done(List<Genre> result) {
+			protected void done(List<Bookmark> result) {
 				emptyView.setVisibility(result == null || result.isEmpty() ? View.VISIBLE : View.GONE);
 				
 				if (result != null) {
@@ -124,5 +124,10 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 			}
 		};
 		task.execute();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
 	}
 }
