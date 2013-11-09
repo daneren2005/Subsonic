@@ -12,6 +12,7 @@
 		<item name="media_button_stop">@drawable/media_stop_light</item>
 		<item name="chat">@drawable/ic_menu_chat_light</item> 
 		<item name="chat_send">@drawable/ic_menu_chat_send_light</item>
+		<item name="download_none">@drawable/download_none_light</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
@@ -28,6 +29,7 @@
 		<item name="media_button_stop">@drawable/media_stop</item>
 		<item name="chat">@drawable/ic_menu_chat_dark</item> 
 		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
+		<item name="download_none">@drawable/download_none_dark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
@@ -48,6 +50,7 @@
 		<item name="media_button_stop">@drawable/media_stop</item>
 		<item name="chat">@drawable/ic_menu_chat_dark</item> 
 		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
+		<item name="download_none">@drawable/download_none_dark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>

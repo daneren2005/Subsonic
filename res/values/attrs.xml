@@ -8,5 +8,6 @@
     <attr name="media_button_start" format="reference"/>
     <attr name="media_button_stop" format="reference"/>
 	<attr name="chat" format="reference"/> 
-	<attr name="chat_send" format="reference" /> 
+	<attr name="chat_send" format="reference" />
+	<attr name="download_none" format="reference" />
 </resources>

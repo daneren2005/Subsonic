@@ -51,7 +51,7 @@
 
     <ImageView
 		android:id="@+id/album_more"
-		android:src="@drawable/list_item_more"
+		android:src="?attr/download_none"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:layout_gravity="right|center_vertical"

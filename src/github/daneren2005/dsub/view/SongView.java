@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,8 +43,7 @@ import java.text.DateFormat;
  */
 public class SongView extends UpdateView implements Checkable {
     private static final String TAG = SongView.class.getSimpleName();
-    
-	private Context context;
+
     private MusicDirectory.Entry song;
 
     private CheckedTextView checkedTextView;
@@ -67,7 +67,6 @@ public class SongView extends UpdateView implements Checkable {
 
     public SongView(Context context) {
         super(context);
-		this.context = context;
         LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
         checkedTextView = (CheckedTextView) findViewById(R.id.song_check);
@@ -197,14 +196,16 @@ public class SongView extends UpdateView implements Checkable {
 
         int rightImage = 0;
         if (isWorkDone) {
-			int moreImage = isSaved ? R.drawable.list_item_more_saved : R.drawable.list_item_more_shaded;
+			int moreImage = isSaved ? R.drawable.download_pinned : R.drawable.download_cached;
 			if(moreImage != this.moreImage) {
 				moreButton.setImageResource(moreImage);
 				this.moreImage = moreImage;
 			}
-        } else if(this.moreImage != R.drawable.list_item_more) {
-			moreButton.setImageResource(R.drawable.list_item_more);
-			this.moreImage = R.drawable.list_item_more;
+        } else if(true) {
+			int[] attrs = new int[] {R.attr.download_none};
+			TypedArray typedArray = context.obtainStyledAttributes(attrs);
+			moreButton.setImageResource(typedArray.getResourceId(0, 0));
+			this.moreImage = R.drawable.download_none_light;
 		}
 
         if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {
