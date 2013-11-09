@@ -44,6 +44,7 @@ import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
 import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
+import github.daneren2005.dsub.fragments.SelectBookmarkFragment;
 import github.daneren2005.dsub.fragments.SelectDirectoryFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
 import github.daneren2005.dsub.fragments.SelectPodcastsFragment;
@@ -332,6 +333,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			return new ChatFragment();
 		} else if("Podcast".equals(fragmentType)) {
 			return new SelectPodcastsFragment();
+		} else if("Bookmark".equals(fragmentType)) {
+			return new SelectBookmarkFragment();
 		} else {
 			return new MainFragment();
 		}

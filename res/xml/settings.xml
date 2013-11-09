@@ -69,6 +69,12 @@
 				android:summary="@string/settings.podcasts_enabled_summary"
 				android:key="podcastsEnabled"
 				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/settings.bookmarks_enabled"
+				android:summary="@string/settings.bookmarks_enabled_summary"
+				android:key="bookmarksEnabled"
+				android:defaultValue="true"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 

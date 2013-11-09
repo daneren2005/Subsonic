@@ -80,7 +80,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.select_genres, menu);
+		menuInflater.inflate(R.menu.abstract_top_menu, menu);
 	}
 	
 	@Override
@@ -94,7 +94,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	
 	@Override
 	protected void refresh(final boolean refresh) {
-		setTitle(R.string.main_albums_genres);
+		setTitle(R.string.button_bar_bookmarks);
 		bookmarkListView.setVisibility(View.INVISIBLE);
 		
 		BackgroundTask<List<Bookmark>> task = new TabBackgroundTask<List<Bookmark>>(this) {

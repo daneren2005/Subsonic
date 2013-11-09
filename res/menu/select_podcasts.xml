@@ -7,6 +7,12 @@
 		android:title="@string/menu.refresh"
 		compat:showAsAction="always|withText"/>
 
+	<item
+		android:id="@+id/menu_search"
+		android:icon="@drawable/action_search"
+		android:title="@string/menu.search"
+		compat:showAsAction="always|withText"/>
+
 	<item 
 		android:id="@+id/menu_add_podcast"
 		android:icon="@drawable/action_exit"

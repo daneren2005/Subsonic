@@ -81,7 +81,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.select_playlist, menu);
+		menuInflater.inflate(R.menu.abstract_top_menu, menu);
 	}
 
 	@Override

@@ -30,6 +30,7 @@
     <string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Now Playing</string>
 	<string name="button_bar.podcasts">Podcasts</string>
+	<string name="button_bar.bookmarks">Bookmarks</string>
 	<string name="button_bar.chat">Chat</string>
 
     <string name="main.welcome_title">Welcome!</string>
@@ -332,6 +333,8 @@
 	<string name="settings.hide_widget_summary">Hide widget after exiting app</string>
 	<string name="settings.podcasts_enabled">Podcasts Enabled</string>
 	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
+	<string name="settings.bookmarks_enabled">Bookmarks Enabled</string>
+	<string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

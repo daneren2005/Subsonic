@@ -5,14 +5,16 @@
 		<item>@string/button_bar.browse</item>
 		<item>@string/button_bar.playlists</item>
 		<item>@string/button_bar.podcasts</item>
+		<item>@string/button_bar.bookmarks</item>
 		<item>@string/button_bar.chat</item>
 	</string-array>
 
 	<string-array name="drawerItemsDescriptions">
 		<item>Home</item>
-		<item>Library</item>
-		<item>Playlists</item>
-		<item>Podcasts</item>
+		<item>Artist</item>
+		<item>Playlist</item>
+		<item>Podcast</item>
+		<item>Bookmark</item>
 		<item>Chat</item>
 	</string-array>
 

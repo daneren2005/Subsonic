@@ -71,7 +71,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private String[] drawerItemsDescriptions;
 	private String[] drawerItems;
 	private boolean drawerIdle = true;
-	private boolean[] enabledItems = {true, true};
+	private boolean[] enabledItems = {true, true, true};
 	private boolean destroyed = false;
 	private boolean finished = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
@@ -152,23 +152,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if("Home".equals(drawerItemsDescriptions[position])) {
-					startFragmentActivity("");
-				} else if("Library".equals(drawerItemsDescriptions[position])) {
-					startFragmentActivity("Artist");
-				} else if("Playlists".equals(drawerItemsDescriptions[position])) {
-					startFragmentActivity("Playlist");
-				} else if("Podcasts".equals(drawerItemsDescriptions[position])) {
-					startFragmentActivity("Podcast");
-				} else if("Chat".equals(drawerItemsDescriptions[position])) {
-					startFragmentActivity("Chat");
-				} else if("Now Playing".equals(drawerItemsDescriptions[position])) {
-					startActivity(DownloadActivity.class);
-				} else if("Settings".equals(drawerItemsDescriptions[position])) {
-					startActivity(SettingsActivity.class);
-				} else if("Exit".equals(drawerItemsDescriptions[position])) {
-					exit();
-				}
+				startFragmentActivity(drawerItemsDescriptions[position]);
 
 				if(lastSelectedView != view) {
 					lastSelectedView.setBackgroundResource(android.R.color.transparent);
@@ -372,9 +356,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private void populateDrawer() {
 		SharedPreferences prefs = Util.getPreferences(this);
 		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
+		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true);
 		
-		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == chatEnabled) {
+		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == chatEnabled) {
 			drawerItems = getResources().getStringArray(R.array.drawerItems);
 			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
 	
@@ -389,11 +374,18 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				drawerItemsDescriptionsList.remove(3 - alreadyRemoved);
 				alreadyRemoved++;
 			}
-	
-			// Selectively remove chat listing: [4]
-			if(!chatEnabled) {
+
+			// Selectively remove bookmarks listing [4]
+			if(!bookmarksEnabled) {
 				drawerItemsList.remove(4 - alreadyRemoved);
 				drawerItemsDescriptionsList.remove(4 - alreadyRemoved);
+				alreadyRemoved++;
+			}
+	
+			// Selectively remove chat listing: [5]
+			if(!chatEnabled) {
+				drawerItemsList.remove(5 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(5 - alreadyRemoved);
 				alreadyRemoved++;
 			}
 	
@@ -405,7 +397,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			
 			drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, drawerItems));
 			enabledItems[0] = podcastsEnabled;
-			enabledItems[1] = chatEnabled;
+			enabledItems[1] = bookmarksEnabled;
+			enabledItems[2] = chatEnabled;
 		}
 	}
 
