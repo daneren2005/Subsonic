@@ -85,6 +85,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	ActionBarDrawerToggle drawerToggle;
 	ListView drawerList;
 	View lastSelectedView = null;
+	boolean drawerOpen = false;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -169,6 +170,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				setTitle(currentFragment.getTitle());
 				
 				drawerIdle = true;
+				drawerOpen = false;
+
+				invalidateOptionsMenu();
 			}
 
 			@Override
@@ -182,6 +186,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				getSupportActionBar().setDisplayShowCustomEnabled(false);
 				
 				drawerIdle = true;
+				drawerOpen = true;
+
+				invalidateOptionsMenu();
 			}
 			
 			@Override
@@ -272,8 +279,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if(currentFragment != null) {
-			MenuInflater menuInflater = getMenuInflater();
+		MenuInflater menuInflater = getMenuInflater();
+		if(drawerOpen == true) {
+			menuInflater.inflate(R.menu.drawer_menu, menu);
+		} else if(currentFragment != null) {
 			currentFragment.onCreateOptionsMenu(menu, menuInflater);
 		}
 		return true;
