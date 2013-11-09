@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="Button">54dip</dimen>
+	<dimen name="Button.Small">46dip</dimen>
+</resources>

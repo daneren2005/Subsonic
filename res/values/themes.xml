@@ -51,7 +51,6 @@
 	<style name="Theme.DSub.Holo" parent="@style/Theme.AppCompat">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
-		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="android:windowBackground">@drawable/background</item>
 		<item name="offline_icon">@drawable/main_offline_dark</item>
 		<item name="media_button_backward">@drawable/media_backward_dark</item>
