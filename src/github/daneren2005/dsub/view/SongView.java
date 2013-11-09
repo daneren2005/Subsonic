@@ -223,7 +223,9 @@ public class SongView extends UpdateView implements Checkable {
         if (playing) {
 			if(!this.playing) {
 				this.playing = playing;
-            	titleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.now_playing, 0, 0, 0);
+				int[] attrs = new int[] {R.attr.media_button_start};
+				TypedArray typedArray = context.obtainStyledAttributes(attrs);
+            	titleTextView.setCompoundDrawablesWithIntrinsicBounds(typedArray.getResourceId(0, 0), 0, 0, 0);
 			}
         } else {
 			if(this.playing) {

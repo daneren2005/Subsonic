@@ -356,8 +356,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		getImageLoader().loadImage(coverArtView, song, false, false);
 		int[] attrs = new int[] {(getDownloadService().getPlayerState() == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
 		TypedArray typedArray = this.obtainStyledAttributes(attrs);
-		Drawable drawable = typedArray.getDrawable(0);
-		startButton.setImageDrawable(drawable);
+		startButton.setImageResource(typedArray.getResourceId(0, 0));
 		typedArray.recycle();
 	}
 
