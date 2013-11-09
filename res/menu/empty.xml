@@ -3,7 +3,7 @@
 	  xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_refresh"
-		android:icon="@drawable/action_refresh"
+		android:icon="?attr/refresh"
 		android:title="@string/menu.refresh"
 		compat:showAsAction="always|withText"/>
 </menu>

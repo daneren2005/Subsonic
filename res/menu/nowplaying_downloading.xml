@@ -3,7 +3,7 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item
         android:id="@+id/menu_remove_all"
-        android:icon="@drawable/action_remove_all"
+        android:icon="?attr/remove"
         android:title="@string/download.menu_remove_all"
         compat:showAsAction="always|withText"/>
 		
@@ -13,6 +13,5 @@
 		
 	<item 
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/action_exit"
 		android:title="@string/menu.exit"/>
 </menu>
