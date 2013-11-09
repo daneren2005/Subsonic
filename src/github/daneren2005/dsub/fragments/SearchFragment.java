@@ -81,7 +81,7 @@ public class SearchFragment extends SubsonicFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.search, container, false);
+		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 		setTitle(R.string.search_title);
 
 		View buttons = inflater.inflate(R.layout.search_buttons, null);
@@ -94,7 +94,7 @@ public class SearchFragment extends SubsonicFragment {
 		moreAlbumsButton = buttons.findViewById(R.id.search_more_albums);
 		moreSongsButton = buttons.findViewById(R.id.search_more_songs);
 
-		list = (ListView) rootView.findViewById(R.id.search_list);
+		list = (ListView) rootView.findViewById(R.id.fragment_list);
 
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -293,11 +293,11 @@ public class SearchFragment extends SubsonicFragment {
 		args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.search_layout);
+		replaceFragment(fragment, R.id.fragment_list_layout);
 	}
 
 	private void onAlbumSelected(MusicDirectory.Entry album, boolean autoplay) {
-		int id = R.id.search_layout;
+		int id = R.id.fragment_list_layout;
 		Bundle args;
 		if(album.getParent() != null) {
 			SubsonicFragment parentFragment = new SelectDirectoryFragment();
@@ -306,7 +306,7 @@ public class SearchFragment extends SubsonicFragment {
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, album.getArtist());
 			parentFragment.setArguments(args);
 
-			replaceFragment(parentFragment, R.id.search_layout);
+			replaceFragment(parentFragment, R.id.fragment_list_layout);
 			id = parentFragment.getRootId();
 		}
 		

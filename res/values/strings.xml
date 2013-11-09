@@ -22,6 +22,7 @@
 	<string name="common.stream_external">Stream Video</string>
 	<string name="common.confirm">Confirm</string>
 	<string name="common.confirm_message">Do you want to %1$s %2$s?</string>
+	<string name="common.empty">None found</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -130,10 +131,8 @@
 	<string name="offline.sync_partial">Successfully synced %1$d of %2$d songs</string>
 	<string name="offline.sync_error">Failed to sync songs</string>
 
-	<string name="select_genre.empty">No genres found</string>
 	<string name="select_genre.blank">Blank</string>
 
-	<string name="select_podcasts.empty">No podcasts found</string>
 	<string name="select_podcasts.error">This podcast had an error while downloading on the server.  The server must download it first.</string>
 	<string name="select_podcasts.skipped">This podcast has not been downloaded on the server.  The server must download it first.</string>
     <string name="select_podcasts.initializing">This podcast channel is being initialized on the server.  Please reload after a moment.</string>
@@ -146,8 +145,6 @@
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Failed to add podcast</string>
 	<string name="select_podcasts.invalid_podcast_channel">Invalid podcast channel: %s</string>
-
-    <string name="select_playlist.empty">No saved playlists on server</string>
 
     <string name="download.empty">Playlist is empty</string>
 	<string name="download.shuffle_loading">Shuffle list is loading...</string>

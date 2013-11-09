@@ -34,12 +34,13 @@ public class GenreView extends UpdateView {
 
 	public GenreView(Context context) {
 		super(context);
-		LayoutInflater.from(context).inflate(R.layout.artist_list_item, this, true);
+		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.artist_name);
-		starButton = (ImageButton) findViewById(R.id.artist_star);
+		titleView = (TextView) findViewById(R.id.item_name);
+		starButton = (ImageButton) findViewById(R.id.item_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.artist_more);
+		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton.setVisibility(View.GONE);
 		moreButton.setClickable(false);
 	}
 

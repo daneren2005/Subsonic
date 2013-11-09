@@ -42,7 +42,7 @@ public class ArtistAdapter extends ArrayAdapter<Artist> implements SectionIndexe
     private final Integer[] positions;
 
     public ArtistAdapter(Context activity, List<Artist> artists) {
-        super(activity, R.layout.artist_list_item, artists);
+        super(activity, R.layout.basic_list_item, artists);
         this.activity = activity;
 		
 		Set<String> sectionSet = new LinkedHashSet<String>(30);

@@ -63,11 +63,11 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.select_genres, container, false);
+		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 		
-		bookmarkListView = (ListView)rootView.findViewById(R.id.select_genre_list);
+		bookmarkListView = (ListView)rootView.findViewById(R.id.fragment_list);
 		bookmarkListView.setOnItemClickListener(this);
-		emptyView = rootView.findViewById(R.id.select_genre_empty);
+		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 		
 		if(bookmarks == null) {
 			refresh();

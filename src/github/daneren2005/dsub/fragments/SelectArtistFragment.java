@@ -63,9 +63,9 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.select_artist, container, false);
+		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
-		artistList = (ListView) rootView.findViewById(R.id.select_artist_list);
+		artistList = (ListView) rootView.findViewById(R.id.fragment_list);
 		artistList.setOnItemClickListener(this);
 
 		folderButtonParent = inflater.inflate(R.layout.select_artist_header, artistList, false);
@@ -170,7 +170,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			}
 			fragment.setArguments(args);
 
-			replaceFragment(fragment, R.id.select_artist_layout);
+			replaceFragment(fragment, R.id.fragment_list_layout);
 		}
 	}
 
