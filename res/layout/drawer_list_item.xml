@@ -3,8 +3,8 @@
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:paddingTop="2dip"
-	android:paddingBottom="3dip">
+	android:paddingTop="5dip"
+	android:paddingBottom="6dip">
 
 	<ImageView
 		android:id="@+id/drawer_icon"
@@ -13,7 +13,8 @@
 		android:layout_gravity="left|center_vertical"
 		android:paddingTop="1dip"
 		android:paddingBottom="1dip"
-		android:paddingRight="6dip"/>
+		android:paddingRight="8dip"
+		android:paddingLeft="10dip"/>
 
 	<TextView
 		android:id="@+id/drawer_name"

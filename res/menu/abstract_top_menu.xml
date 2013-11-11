@@ -14,10 +14,6 @@
 		compat:showAsAction="always|withText"/>
 
 	<item
-		android:id="@+id/menu_settings"
-		android:title="@string/menu.settings"/>
-
-	<item
 		android:id="@+id/menu_exit"
 		android:title="@string/menu.exit"/>
 </menu>

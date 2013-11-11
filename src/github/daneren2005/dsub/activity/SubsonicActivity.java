@@ -158,12 +158,17 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startFragmentActivity(drawerItemsDescriptions[position]);
+				if("Settings".equals(drawerItemsDescriptions[position])) {
+					startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
+					drawer.closeDrawers();
+				} else {
+					startFragmentActivity(drawerItemsDescriptions[position]);
 
-				if(lastSelectedView != view) {
-					lastSelectedView.setBackgroundResource(android.R.color.transparent);
-					view.setBackgroundResource(R.color.dividerColor);
-					lastSelectedView = view;
+					if(lastSelectedView != view) {
+						lastSelectedView.setBackgroundResource(android.R.color.transparent);
+						view.setBackgroundResource(R.color.dividerColor);
+						lastSelectedView = view;
+					}
 				}
 			}
 		});
@@ -383,10 +388,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			List<String> drawerItemsDescriptionsList = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
 			List<Integer> drawerItemsIconsList = new ArrayList<Integer>();
 
-			TypedArray typedArray = getResources().obtainTypedArray(R.array.drawerItemIcons);
+			int[] arrayAttr = {R.attr.drawerItemsIcons};
+			TypedArray arrayType = obtainStyledAttributes(arrayAttr);
+			int arrayId = arrayType.getResourceId(0, 0);
+			TypedArray iconType = getResources().obtainTypedArray(arrayId);
 			for(int i = 0; i < drawerItemsList.size(); i++) {
-				drawerItemsIconsList.add(typedArray.getResourceId(i, 0));
+				drawerItemsIconsList.add(iconType.getResourceId(i, 0));
 			}
+			iconType.recycle();
+			arrayType.recycle();
 	
 			// Selectively remove podcast listing [3]
 			if(!podcastsEnabled) {

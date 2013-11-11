@@ -144,9 +144,6 @@ public class SubsonicFragment extends Fragment {
 			case R.id.menu_exit:
 				exit();
 				return true;
-			case R.id.menu_settings:
-				startActivity(new Intent(context, SettingsActivity.class));
-				return true;
 		}
 
 		return false;
