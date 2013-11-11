@@ -54,7 +54,7 @@
     <ImageButton
             style="@style/PlaybackControl.Small"
 			android:id="@+id/download_toggle_list"
-			android:src="@drawable/action_toggle_list"
+			android:src="?attr/toggle_list"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             />

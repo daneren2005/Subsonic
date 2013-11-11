@@ -15,5 +15,8 @@
 	<attr name="remove" format="reference"/>
 	<attr name="save" format="reference"/>
 	<attr name="volume" format="reference"/>
+	<attr name="toggle_list" format="reference"/>
+	<attr name="select_server" format="reference"/>
+	<attr name="downloading" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
 </resources>

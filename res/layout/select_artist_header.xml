@@ -14,7 +14,7 @@
 			android:minHeight="?android:attr/listPreferredItemHeight">
 
 		<ImageView
-				android:src="@drawable/main_select_server"
+				android:src="?attr/select_server"
 				android:layout_gravity="center_vertical"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"/>

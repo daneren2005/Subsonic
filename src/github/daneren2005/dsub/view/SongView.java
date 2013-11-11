@@ -51,13 +51,14 @@ public class SongView extends UpdateView implements Checkable {
     private TextView artistTextView;
     private TextView durationTextView;
     private TextView statusTextView;
+	private ImageView statusImageView;
 	
 	private DownloadService downloadService;
 	private long revision = -1;
 	private DownloadFile downloadFile;
 
 	private boolean playing = false;
-	private int rightImage = 0;
+	private boolean rightImage = false;
 	private int moreImage = 0;
 	private boolean isWorkDone = false;
 	private boolean isSaved = false;
@@ -74,6 +75,7 @@ public class SongView extends UpdateView implements Checkable {
         artistTextView = (TextView) findViewById(R.id.song_artist);
         durationTextView = (TextView) findViewById(R.id.song_duration);
         statusTextView = (TextView) findViewById(R.id.song_status);
+		statusImageView = (ImageView) findViewById(R.id.song_status_icon);
         starButton = (ImageButton) findViewById(R.id.song_star);
         starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
@@ -194,7 +196,6 @@ public class SongView extends UpdateView implements Checkable {
 			}
 		}
 
-        int rightImage = 0;
         if (isWorkDone) {
 			int moreImage = isSaved ? R.drawable.download_pinned : R.drawable.download_cached;
 			if(moreImage != this.moreImage) {
@@ -211,14 +212,15 @@ public class SongView extends UpdateView implements Checkable {
 
         if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {
 			statusTextView.setText(Util.formatLocalizedBytes(partialFile.length(), getContext()));
-			rightImage = R.drawable.downloading;
-        } else if(this.rightImage != 0) {
+			if(!rightImage) {
+				statusImageView.setVisibility(View.VISIBLE);
+				rightImage = true;
+			}
+        } else if(rightImage) {
             statusTextView.setText(null);
+			statusImageView.setVisibility(View.GONE);
+			rightImage = false;
         }
-		if(this.rightImage != rightImage) {
-        	statusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, rightImage, 0);
-			this.rightImage = rightImage;
-		}
 
         boolean playing = downloadService.getCurrentPlaying() == downloadFile;
         if (playing) {
