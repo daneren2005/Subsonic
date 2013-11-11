@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/download_other_controls_layout"
+	android:orientation="horizontal"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center_horizontal">
+
+	<Button
+		android:id="@+id/download_jukebox"
+		android:text="RC"
+		android:textStyle="bold"
+		android:textSize="22sp"
+		android:background="@drawable/menubar_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:paddingTop="4dip"
+		android:paddingLeft="14dip"
+		android:paddingBottom="4dip"/>
+
+	<Button
+		android:id="@+id/download_equalizer"
+		android:text="EQ"
+		android:textStyle="bold"
+		android:textSize="22sp"
+		android:background="@drawable/menubar_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:paddingTop="4dip"
+		android:paddingLeft="7dip"
+		android:paddingRight="7dip"
+		android:paddingBottom="4dip"/>
+
+	<Button
+		android:id="@+id/download_visualizer"
+		android:text="VIS"
+		android:textStyle="bold"
+		android:textSize="22sp"
+		android:background="@drawable/menubar_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:paddingTop="4dip"
+		android:paddingLeft="7dip"
+		android:paddingRight="7dip"
+		android:paddingBottom="4dip"/>
+
+	<ImageButton
+		android:id="@+id/download_star"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/menubar_button"
+		android:src="@android:drawable/star_big_off"
+		android:paddingTop="8dip"
+		android:paddingLeft="10dip"
+		android:paddingRight="10dip"
+		android:paddingBottom="8dip"/>
+</LinearLayout>
