@@ -103,6 +103,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private SongListAdapter songListAdapter;
 	private SilentBackgroundTask<Void> onProgressChangedTask;
 	private SilentBackgroundTask<Void> onCurrentChangedTask;
+	private SilentBackgroundTask<Void> onDownloadListChangedTask;
 	private boolean seekInProgress = false;
 	private boolean startFlipped = false;
 
@@ -899,54 +900,71 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private void onDownloadListChanged() {
 		onDownloadListChanged(false);
 	}
-	private void onDownloadListChanged(boolean refresh) {
-		DownloadService downloadService = getDownloadService();
-		if (downloadService == null) {
+	private void onDownloadListChanged(final boolean refresh) {
+		final DownloadService downloadService = getDownloadService();
+		if (downloadService == null || onDownloadListChangedTask != null) {
 			return;
 		}
 
-		List<DownloadFile> list;
-		if(nowPlaying) {
-			list = downloadService.getSongs();
-		}
-		else {
-			list = downloadService.getBackgroundDownloads();
-		}
+		onDownloadListChangedTask = new SilentBackgroundTask<Void>(context) {
+			int currentPlayingIndex;
+			int size;
 
-		if(downloadService.isShufflePlayEnabled()) {
-			emptyTextView.setText(R.string.download_shuffle_loading);
-		}
-		else {
-			emptyTextView.setText(R.string.download_empty);
-		}
+			@Override
+			protected Void doInBackground() throws Throwable {
+				currentPlayingIndex = downloadService.getCurrentPlayingIndex() + 1;
+				size = downloadService.size();
+				return null;
+			}
 
-		if(songListAdapter == null || refresh) {
-			playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
-		} else {
-			songListAdapter.notifyDataSetChanged();
-		}
-		emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
-		currentRevision = downloadService.getDownloadListUpdateRevision();
-
-		switch (downloadService.getRepeatMode()) {
-			case OFF:
-				if("light".equals(SubsonicActivity.getThemeName()) | "light_fullscreen".equals(SubsonicActivity.getThemeName())) {
-					repeatButton.setImageResource(R.drawable.media_repeat_off_light);
-				} else {
-					repeatButton.setImageResource(R.drawable.media_repeat_off);
+			@Override
+			protected void done(Void result) {
+				List<DownloadFile> list;
+				if(nowPlaying) {
+					list = downloadService.getSongs();
 				}
-				break;
-			case ALL:
-				repeatButton.setImageResource(R.drawable.media_repeat_all);
-				break;
-			case SINGLE:
-				repeatButton.setImageResource(R.drawable.media_repeat_single);
-				break;
-			default:
-				break;
-		}
-		
-		setSubtitle(context.getResources().getString(R.string.download_playing_out_of, downloadService.getCurrentPlayingIndex() + 1, downloadService.size()));
+				else {
+					list = downloadService.getBackgroundDownloads();
+				}
+
+				if(downloadService.isShufflePlayEnabled()) {
+					emptyTextView.setText(R.string.download_shuffle_loading);
+				}
+				else {
+					emptyTextView.setText(R.string.download_empty);
+				}
+
+				if(songListAdapter == null || refresh) {
+					playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
+				} else {
+					songListAdapter.notifyDataSetChanged();
+				}
+				emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
+				currentRevision = downloadService.getDownloadListUpdateRevision();
+
+				switch (downloadService.getRepeatMode()) {
+					case OFF:
+						if("light".equals(SubsonicActivity.getThemeName()) | "light_fullscreen".equals(SubsonicActivity.getThemeName())) {
+							repeatButton.setImageResource(R.drawable.media_repeat_off_light);
+						} else {
+							repeatButton.setImageResource(R.drawable.media_repeat_off);
+						}
+						break;
+					case ALL:
+						repeatButton.setImageResource(R.drawable.media_repeat_all);
+						break;
+					case SINGLE:
+						repeatButton.setImageResource(R.drawable.media_repeat_single);
+						break;
+					default:
+						break;
+				}
+
+				setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, size));
+				onDownloadListChangedTask = null;
+			}
+		};
+		onDownloadListChangedTask.execute();
 	}
 
 	private void onCurrentChanged() {
