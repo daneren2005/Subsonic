@@ -28,7 +28,7 @@ import java.util.Locale;
 /**
  * Created by Scott on 11/4/13.
  */
-public class Bookmark {
+public class Bookmark implements Serializable {
 	private int position;
 	private String username;
 	private String comment;

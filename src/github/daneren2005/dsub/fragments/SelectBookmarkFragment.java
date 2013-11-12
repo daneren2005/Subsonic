@@ -20,6 +20,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,12 +30,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.domain.Bookmark;
+import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.TabBackgroundTask;
+import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -67,6 +72,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 		
 		bookmarkListView = (ListView)rootView.findViewById(R.id.fragment_list);
 		bookmarkListView.setOnItemClickListener(this);
+		registerForContextMenu(bookmarkListView);
 		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 		
 		if(bookmarks == null) {
@@ -90,6 +96,32 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 		}
 		
 		return false;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo);
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+		MusicDirectory.Entry entry = bookmarks.get(info.position).getEntry();
+		onCreateContextMenu(menu, view, menuInfo, entry);
+		if(!Util.isOffline(context)) {
+			menu.removeItem(R.id.song_menu_remove_playlist);
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem) {
+		if(!primaryFragment) {
+			return false;
+		}
+
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+		if(onContextItemSelected(menuItem, bookmarks.get(info.position).getEntry())) {
+			return true;
+		}
+
+		return true;
 	}
 	
 	@Override
@@ -128,6 +160,13 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService == null) {
+			return;
+		}
 
+		Bookmark bookmark = (Bookmark) parent.getItemAtPosition(position);
+		downloadService.download(bookmark);
+		Util.startActivityWithoutTransition(context, DownloadActivity.class);
 	}
 }

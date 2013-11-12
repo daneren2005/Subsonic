@@ -28,6 +28,7 @@ import static github.daneren2005.dsub.domain.PlayerState.STARTED;
 import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RemoteControlState;
@@ -269,6 +270,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public IBinder onBind(Intent intent) {
         return binder;
     }
+
+	@Override
+	public synchronized void download(Bookmark bookmark) {
+		clear();
+		DownloadFile downloadFile = new DownloadFile(this, bookmark.getEntry(), false);
+		downloadList.add(downloadFile);
+		revision++;
+		updateJukeboxPlaylist();
+		play(0, true, bookmark.getPosition());
+		lifecycleSupport.serializeDownloadQueue();
+	}
 
     @Override
     public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
@@ -666,8 +678,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public synchronized void play(int index) {
         play(index, true);
     }
-
-    private synchronized void play(int index, boolean start) {
+	private synchronized void play(int index, boolean start) {
+		play(index, start, 0);
+	}
+    private synchronized void play(int index, boolean start, int position) {
         if (index < 0 || index >= size()) {
             reset();
             setCurrentPlaying(null, false);
@@ -683,7 +697,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					remoteController.changeTrack(index, downloadList.get(index));
                     setPlayerState(STARTED);
                 } else {
-                    bufferAndPlay();
+                    bufferAndPlay(position);
                 }
             }
 			if (remoteState == RemoteControlState.LOCAL) {
@@ -1071,14 +1085,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		remoteController.setVolume(up);
     }
 
-    private synchronized void bufferAndPlay() {
+	private synchronized void bufferAndPlay() {
+		bufferAndPlay(0);
+	}
+    private synchronized void bufferAndPlay(int position) {
 		if(playerState != PREPARED) {
 			reset();
 
-			bufferTask = new BufferTask(currentPlaying, 0);
+			bufferTask = new BufferTask(currentPlaying, position);
 			bufferTask.start();
 		} else {
-			doPlay(currentPlaying, 0, true);
+			doPlay(currentPlaying, position, true);
 		}
     }
 

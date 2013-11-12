@@ -18,5 +18,6 @@
 	<attr name="toggle_list" format="reference"/>
 	<attr name="select_server" format="reference"/>
 	<attr name="downloading" format="reference"/>
+	<attr name="bookmark" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
 </resources>

@@ -3,8 +3,8 @@
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:paddingTop="5dip"
-	android:paddingBottom="6dip">
+	android:paddingTop="8dip"
+	android:paddingBottom="9dip">
 
 	<ImageView
 		android:id="@+id/drawer_icon"
@@ -20,6 +20,7 @@
 		android:id="@+id/drawer_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:textSize="26sp"
+		android:textStyle="bold"
 		android:singleLine="true"/>
 </LinearLayout>

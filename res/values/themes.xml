@@ -21,6 +21,7 @@
 		<item name="toggle_list">@drawable/action_toggle_list_light</item>
 		<item name="select_server">@drawable/main_select_server_light</item>
 		<item name="downloading">@drawable/downloading_light</item>
+		<item name="bookmark">@drawable/ic_menu_bookmark_light</item>
 		<item name="drawerItemsIcons">@array/drawerItemIconsLight</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
@@ -47,6 +48,7 @@
 		<item name="toggle_list">@drawable/action_toggle_list_dark</item>
 		<item name="select_server">@drawable/main_select_server_dark</item>
 		<item name="downloading">@drawable/downloading_dark</item>
+		<item name="bookmark">@drawable/ic_menu_bookmark_dark</item>
 		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
@@ -76,6 +78,7 @@
 		<item name="toggle_list">@drawable/action_toggle_list_dark</item>
 		<item name="select_server">@drawable/main_select_server_dark</item>
 		<item name="downloading">@drawable/downloading_dark</item>
+		<item name="bookmark">@drawable/ic_menu_bookmark_dark</item>
 		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>

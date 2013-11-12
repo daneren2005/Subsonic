@@ -47,6 +47,8 @@ import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.FadeOutAnimation;
@@ -91,6 +93,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private Button jukeboxButton;
 	private View toggleListButton;
 	private ImageButton starButton;
+	private ImageButton bookmarkButton;
 	private View mainLayout;
 	private ScheduledExecutorService executorService;
 	private DownloadFile currentPlaying;
@@ -168,6 +171,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		equalizerButton = (Button)rootView.findViewById(R.id.download_equalizer);
 		visualizerButton = (Button)rootView.findViewById(R.id.download_visualizer);
 		jukeboxButton = (Button)rootView.findViewById(R.id.download_jukebox);
+		bookmarkButton = (ImageButton) rootView.findViewById(R.id.download_bookmark);
 		LinearLayout visualizerViewLayout = (LinearLayout)rootView.findViewById(R.id.download_visualizer_view_layout);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
 
@@ -196,6 +200,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		equalizerButton.setOnTouchListener(touchListener);
 		visualizerButton.setOnTouchListener(touchListener);
 		jukeboxButton.setOnTouchListener(touchListener);
+		bookmarkButton.setOnTouchListener(touchListener);
 		emptyTextView.setOnTouchListener(touchListener);
 		albumArtImageView.setOnTouchListener(touchListener);
 
@@ -377,6 +382,31 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			}
 		});
 
+		bookmarkButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
+						if (currentDownload != null) {
+							MusicDirectory.Entry currentSong = currentDownload.getSong();
+							MusicService musicService = MusicServiceFactory.getMusicService(context);
+							musicService.createBookmark(currentSong.getId(), getDownloadService().getPlayerPosition(), "", context, null);
+						}
+
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						Util.toast(context, R.string.download_save_bookmark);
+						setControlsVisible(true);
+					}
+				}.execute();
+			}
+		});
+
 		toggleListButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -479,6 +509,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		DownloadService downloadService = getDownloadService();
 		if(Util.isOffline(context)) {
 			menuInflater.inflate(R.menu.nowplaying_offline, menu);
 		} else {
@@ -489,11 +520,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				menuInflater.inflate(R.menu.nowplaying_downloading, menu);
 			}
 
-			if(getDownloadService() != null && getDownloadService().getSleepTimer()) {
+			if(downloadService != null && downloadService.getSleepTimer()) {
 				menu.findItem(R.id.menu_toggle_timer).setTitle(R.string.download_stop_timer);
 			}
 		}
-		if(getDownloadService() != null && getDownloadService().getKeepScreenOn()) {
+		if(downloadService != null && downloadService.getKeepScreenOn()) {
 			menu.findItem(R.id.menu_screen_on_off).setTitle(R.string.download_menu_screen_off);
 		}
 	}

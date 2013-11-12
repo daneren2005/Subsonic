@@ -38,16 +38,21 @@
 						android:layout_alignParentTop="true"
 						android:scaleType="centerCrop"/>
 
-					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 						android:id="@+id/download_overlay_buttons"
-						android:orientation="horizontal"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:background="@color/overlayColor"
 						android:layout_alignParentBottom="true">
 
-						<include layout="@layout/download_action_buttons"/>
-					</LinearLayout>
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_centerHorizontal="true">
+
+							<include layout="@layout/download_action_buttons"/>
+						</LinearLayout>
+					</RelativeLayout>
 
 					<LinearLayout
 						android:id="@+id/download_visualizer_view_layout"

@@ -22,6 +22,7 @@ import java.util.List;
 
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RemoteControlState;
@@ -33,6 +34,7 @@ import github.daneren2005.dsub.domain.RepeatMode;
  */
 public interface DownloadService {
 
+	void download(Bookmark bookmark);
     void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle);
 	void downloadBackground(List<MusicDirectory.Entry> songs, boolean save);
 
