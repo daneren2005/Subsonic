@@ -195,14 +195,14 @@ public class MainFragment extends SubsonicFragment {
 				service.clearIncomplete();
 			}
 			Util.setActiveServer(context, instance);
-			this.invalidate();
+			context.invalidate();
 		}
 	}
 
 	private void toggleOffline() {
 		boolean isOffline = Util.isOffline(context);
 		Util.setOffline(context, !isOffline);
-		this.invalidate();
+		context.invalidate();
 		
 		if(isOffline) {
 			int scrobblesCount = Util.offlineScrobblesCount(context);

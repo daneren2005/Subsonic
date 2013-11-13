@@ -375,8 +375,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private void populateDrawer() {
 		SharedPreferences prefs = Util.getPreferences(this);
 		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
-		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true);
-		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true);
+		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this);
+		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		
 		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == chatEnabled) {
 			drawerItems = getResources().getStringArray(R.array.drawerItems);
@@ -566,6 +566,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			trans.commit();
 		}
 		recreateSpinner();
+	}
+
+	public void invalidate() {
+		if(currentFragment != null) {
+			currentFragment.invalidate();
+			populateDrawer();
+		}
 	}
 	
 	protected void recreateSpinner() {
