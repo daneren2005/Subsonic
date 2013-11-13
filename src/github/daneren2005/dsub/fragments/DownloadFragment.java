@@ -794,6 +794,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	}
 
 	private void updateButtons() {
+		if(context == null) {
+			return;
+		}
+
 		SharedPreferences prefs = Util.getPreferences(context);
 		boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
 		if(equalizerOn && getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
