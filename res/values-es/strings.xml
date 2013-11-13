@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common.appname">DSub</string>
+    <string name="common.ok">OK</string>
+    <string name="common.save">Guardar</string>
+    <string name="common.cancel">Cancelar</string>
+    <string name="common.play_now">Reproducir</string>
+	<string name="common.play_shuffled">Reproducir en aleatorio</string>
+    <string name="common.play_next">Siguiente en la cola</string>
+    <string name="common.play_last">Reproducir al final</string>
+	<string name="common.download">Caché</string>
+    <string name="common.pin">Caché permanente</string>
+    <string name="common.delete">Borrar</string>
+	<string name="common.star">Poner estrella</string>
+	<string name="common.unstar">Quitar estrella</string>
+	<string name="common.info">Detalles</string>
+	<string name="common.name">Nombre</string>
+	<string name="common.comment">Comentar</string>
+	<string name="common.public">Público</string>
+	<string name="common.play_external">Reproducir vídeo</string>
+	<string name="common.stream_external">Stream Video</string>
+	<string name="common.confirm">Confirmar</string>
+	<string name="common.confirm_message">Quieres %1$s %2$s?</string>
+
+    <string name="button_bar.home">Inicio</string>
+    <string name="button_bar.browse">Biblioteca</string>
+    <string name="button_bar.search">Buscar</string>
+    <string name="button_bar.playlists">Listas de reproducción</string>
+    <string name="button_bar.now_playing">Ahora suena</string>
+	<string name="button_bar.podcasts">Podcasts</string>
+	<string name="button_bar.chat">Chat</string>
+
+    <string name="main.welcome_title">Bienvenido!</string>
+    <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
+	<string name="main.about_title">Acerca de DSub</string>
+	<string name="main.about_text">Autor: Scott Jackson
+		\nEmail: daneren2005@gmail.com
+		\nVersión: %1$s
+		\nEspacio usado: %2$s of %3$s
+		\nEspacio disponible: %4$s of %5$s</string>
+    <string name="main.select_server">Seleccionar servidor</string>
+    <string name="main.shuffle">Reproducción aleatoria</string>
+    <string name="main.offline">Modo Offline</string>
+	<string name="main.online">Modo Online</string>
+    <string name="main.settings">Preferencias</string>
+    <string name="main.albums_title">Discos</string>
+    <string name="main.albums_newest">Añadidos recientemente</string>
+    <string name="main.albums_recent">Reproducidos recientemente</string>
+    <string name="main.albums_frequent">Más reproducidos</string>
+    <string name="main.albums_highest">Mejor valorados</string>
+    <string name="main.albums_starred">Con estrella</string>
+    <string name="main.albums_random">Aleatorio</string>
+	<string name="main.albums_genres">Géneros</string>
+	<string name="main.back_confirm">Pulsa atrás de nuevo para salir</string>
+
+	<string name="menu.search">Buscar</string>
+	<string name="menu.shuffle">Aleatorio</string>
+	<string name="menu.refresh">Actualizar</string>
+	<string name="menu.select">Seleccionar todo</string>
+	<string name="menu.play">Reproducir</string>
+	<string name="menu.play_last">Reproducir al final</string>
+    <string name="menu.exit">Salir</string>
+    <string name="menu.settings">Preferencias</string>
+    <string name="menu.help">Ayuda</string>
+	<string name="menu.about">Acerca de</string>
+	<string name="menu.add_playlist">Añadir a lista de reproducción</string>
+	<string name="menu.remove_playlist">Borrar de lista de reproducción</string>
+	<string name="menu.deleted_playlist">Listas borradas %s</string>
+	<string name="menu.deleted_playlist_error">Error al borrar la lista de reproducción %s</string>
+	<string name="menu.log">Enviar Log</string>
+	<string name="menu.set_timer">Ajustar temporizador</string>
+	<string name="menu.check_podcasts">Comprobar nuevos episodios</string>
+	<string name="menu.add_podcast">Añadir canal</string>
+	<string name="menu.cast">Enviar al dispositivo</string>
+
+    <string name="playlist.label">Listas de reproducción</string>
+	<string name="playlist.update_info">Actualizar información</string>
+	<string name="playlist.updated_info">Información actualizada para la lista %s</string>
+	<string name="playlist.updated_info_error">Error al actualizar la información de la lista %s</string>
+	<string name="playlist.overwrite">Sobreescribir lista de reproducción actual</string>
+	<string name="playlist.add_to">Añadir a lista de reproducción</string>
+	<string name="playlist.create_new">Crear nueva</string>
+
+    <string name="help.label">Ayuda</string>
+    <string name="help.title">Bienvenido a DSub!</string>
+    <string name="help.back">Atrás</string>
+    <string name="help.close">Cerrar</string>
+    <string name="help.url">file:///android_asset/html/en/index.html</string>
+    <string name="help.loading">Cargando...</string>
+
+    <string name="play_video.loading">Cargando vídeo...</string>
+    <string name="play_video.noplugin">Por favor instala Adobe Flash player desde el Android Market.</string>
+
+    <string name="search.label">Buscar</string>
+    <string name="search.title">Buscar</string>
+    <string name="search.search">Click para buscar</string>
+    <string name="search.no_match">No hay coincidencias, inténtelo de nuevo</string>
+    <string name="search.artists">Artista</string>
+    <string name="search.albums">Disco</string>
+    <string name="search.songs">Canción</string>
+    <string name="search.more">Mostrar más</string>
+
+    <string name="progress.wait">Espere por favor...</string>
+
+    <string name="music_library.label">Biblioteca de medios</string>
+    <string name="music_library.label_offline">Archivos Offline</string>
+
+    <string name="select_album.empty">Vacío</string>
+    <string name="select_album.select">Seleccionar todo</string>
+    <string name="select_album.n_selected">Seleccionadas %d canciones</string>
+    <string name="select_album.n_unselected">%d canciones deseleccionadas</string>
+    <string name="select_album.more">Más</string>
+    <string name="select_album.offline">Offline</string>
+    <string name="select_album.searching">Buscando...</string>
+    <string name="select_album.no_sdcard">Error: No hay tarjeta SD disponible</string>
+    <string name="select_album.no_network">Aviso: No hay red disponible</string>
+    <string name="select_album.not_licensed">Servidor sin licencia. Quedan %d días de prueba</string>
+    <string name="select_album.donate_dialog_message">Consigue descargas ilimitadas haciendo una donación a Subsonic</string>
+    <string name="select_album.donate_dialog_now">Ahora</string>
+    <string name="select_album.donate_dialog_later">Más tarde</string>
+    <string name="select_album.donate_dialog_0_trial_days_left">Periodo de prueba terminado</string>
+
+    <string name="offline.sync_dialog_title">Canciones offline esperando a ser sincronizadas</string>
+    <string name="offline.sync_dialog_message">Procesar %1$d offline scrobbles?
+		\nProcesar %2$d estrellas offline?
+	</string>
+	<string name="offline.sync_dialog_default">Usar esta acción por defecto</string>
+	<string name="offline.sync_success">%1$d canciones sincronizadas correctamente</string>
+	<string name="offline.sync_partial">%1$d de %2$d canciones sincronizadas</string>
+	<string name="offline.sync_error">Error al sincronizar canciones</string>
+
+	<string name="select_genre.empty">No se han encontrado géneros</string>
+	<string name="select_genre.blank">Vacío</string>
+
+	<string name="select_podcasts.empty">No se han encontrado podcasts</string>
+	<string name="select_podcasts.error">Ha habido un error descargando este podcast en el servidor. El servidor debe descargarlo antes.</string>
+	<string name="select_podcasts.skipped">Este podcast no ha sido descargado en el servidor. El servidor debe descargarlo antes.</string>
+    <string name="select_podcasts.initializing">Este podcast está siendo reiniciado en el servidor. Por favor, actualice en unos segundos.</string>
+	<string name="select_podcasts.server_download">Descargar en el servidor</string>
+	<string name="select_podcasts.server_delete">Borrar en el servidor</string>
+	<string name="select_podcasts.downloading">Descargando %s en el servidor</string>
+	<string name="select_podcasts.refreshing">El servidor está comprobando nuevos podcasts ahora</string>
+	<string name="select_podcasts.deleted">Podcasts eliminados %s</string>
+	<string name="select_podcasts.deleted_error">Error al elimintar el podcast %s</string>
+	<string name="select_podcasts.add_url">URL:</string>
+	<string name="select_podcasts.created_error">Error al agregar podcast</string>
+	<string name="select_podcasts.invalid_podcast_channel">Canal de podcast no valido: %s</string>
+
+    <string name="select_playlist.empty">No hay listas de reproducción guardadas en el servidor</string>
+
+    <string name="download.empty">Lista de reproducción vaía</string>
+	<string name="download.shuffle_loading">Cargando lista aleatoria...</string>
+    <string name="download.playerstate_downloading">Descargando - %s</string>
+    <string name="download.playerstate_buffering">Buffering</string>
+    <string name="download.playerstate_playing_shuffle">Reproduciendo en aleatorio</string>
+    <string name="download.menu_show_album">Mostrar disco</string>
+    <string name="download.menu_lyrics">Letras</string>
+    <string name="download.menu_remove">Eliminar de la cola</string>
+	<string name="download.menu_delete">Borrar cache</string>
+    <string name="download.menu_remove_all">Borrar todo</string>
+    <string name="download.menu_screen_on">Pantalla encendida</string>
+    <string name="download.menu_screen_off">Pantalla apagada</string>
+    <string name="download.menu_shuffle">Aleatorio</string>
+	<string name="download.menu_toggle">Cambiar</string>
+    <string name="download.menu_save">Guardar lista de reproducción</string>
+    <string name="download.menu_shuffle_notification">Lista de reproducción en aleatorio</string>
+    <string name="download.playlist_title">Guardar lista de reproducción</string>
+    <string name="download.playlist_name">Introduce un nombre válido para la lista de reproducción:</string>
+    <string name="download.playlist_saving">Guardando lista de reproducción \"%s\"...</string>
+    <string name="download.playlist_done">Lista de reproducción guardada.</string>
+    <string name="download.playlist_error">Error al guardar la lista de reproducción, inténtelo más tarde.</string>
+    <string name="download.repeat_off">Repetir off</string>
+    <string name="download.repeat_all">Repetir todo</string>
+    <string name="download.repeat_single">Repetir canción</string>
+    <string name="download.visualizer_on">Visualizador encendido.</string>
+    <string name="download.visualizer_off">Visualizador apagado.</string>
+    <string name="download.jukebox_on">Control remoto encendido. La música se está reproduciendo en el ordenador.</string>
+    <string name="download.jukebox_off">Control remoto apagado. La música se está reproduciendo en el dispositivo móvil.</string>
+    <string name="download.jukebox_volume">Volumen remoto</string>
+    <string name="download.jukebox_server_too_old">Control remoto no soportado. Por favor, actualice su servidor Subsonic.</string>
+    <string name="download.jukebox_offline">Control remoto no disponible en modo offline.</string>
+    <string name="download.jukebox_not_authorized">Control remoto no permitido. Por favor, active el modo jukebox en <b>Users &gt; Settings</b> en su servidor Subsonic.</string>
+	<string name="download.show_downloading">Mostrar descargas</string>
+	<string name="download.show_now_playing">Mostrar reproduciendo ahora</string>
+	<string name="download.timer_length">Temporizador</string>
+	<string name="download.start_timer">Iniciar temporizador</string>
+	<string name="download.stop_timer">Detener temporizador</string>
+	<string name="download.need_download">El vídeo ha de ser descargado antes</string>
+	<string name="download.no_streaming_player">Ningún reproductor puede reproducir este stream</string>
+	<string name="download.playing_out_of">Reproduciendo: %1$d/%2$d</string>
+    
+	<string name="starring_content_starred">Marcado con estrella \"%s\"</string>
+	<string name="starring_content_unstarred">Sin marca de estrella \"%s\"</string>
+    <string name="starring_content_error">Error al actualizar \"%s\", inténtelo más tarde.</string>
+	
+	<string name="playlist_error">Error al obtener las listas de reproducción</string>
+	<string name="updated_playlist">Añadida %1$s canción a \"%2$s\"</string>
+    <string name="updated_playlist_error">Error al actualizar \"%s\", inténtelo más tarde.</string>
+	<string name="removed_playlist">Borrar %1$s canciones de \"%2$s\"</string>
+
+    <string name="song_details.all">%1$s %2$s</string>
+    <string name="song_details.kbps">%d kbps</string>
+	<string name="song_details.error">Error</string>
+	<string name="song_details.skipped">Saltados</string>
+	<string name="song_details.downloading">Descargando</string>
+
+    <string name="lyrics.nomatch">No se han encontrado letras</string>
+
+    <string name="error.label">Error</string>
+
+    <string name="settings.title">Ajustes de DSub</string>
+    <string name="settings.test_connection_title">Comprobar conexión</string>
+	<string name="settings.servers_add">Añadir servidor</string>
+	<string name="settings.servers_remove">Borrar servidor</string>
+    <string name="settings.servers_title">Servidores</string>
+    <string name="settings.server_unused">Sin usar</string>
+    <string name="settings.server_name">Nombre</string>
+    <string name="settings.server_address">Dirección del servidor</string>
+    <string name="settings.server_username">Usuario</string>
+    <string name="settings.server_password">Contraseña</string>
+	<string name="settings.server_open_browser">Abrir en el navegador</string>
+    <string name="settings.cache_title">Caché de música</string>
+    <string name="settings.preload_wifi">Canciones para precargar (Wifi)</string>
+	<string name="settings.preload_mobile">Canciones pare precargar (Móvil)</string>
+    <string name="settings.cache_size">Tamaño de caché (MB)</string>
+    <string name="settings.cache_location">Ruta de caché</string>
+    <string name="settings.cache_location_error">Ruta de caché no válida. Utilizando la opción por defecto.</string>
+	<string name="settings.cache_clear">Limpiar cache</string>
+	<string name="settings.cache_clear_complete">Caché limpiada</string>
+    <string name="settings.testing_connection">Probando conexión...</string>
+    <string name="settings.testing_ok">Conexión correcta</string>
+    <string name="settings.testing_unlicensed">Conexión correcta. Servidor sin licencia.</string>
+    <string name="settings.connection_failure">Error de conexión.</string>
+    <string name="settings.invalid_url">Introduzca una URL válida.</string>
+    <string name="settings.invalid_username">Por favor, especifique un usuario válido.</string>
+    <string name="settings.appearance_title">Apariencia</string>
+    <string name="settings.theme_title">Tema</string>
+    <string name="settings.theme_light">Claro</string>
+    <string name="settings.theme_dark">Oscuro</string>
+	<string name="settings.theme_black">Negro</string>
+	<string name="settings.theme_holo">Holo</string>
+	<string name="settings.theme_light_fullscreen">Claro pantalla completa</string>
+    <string name="settings.theme_dark_fullscreen">Oscuro pantalla completa</string>
+	<string name="settings.theme_black_fullscreen">Negro pantalla completa</string>
+	<string name="settings.theme_holo_fullscreen">Holo pantalla completa</string>
+	<string name="settings.track_title">Mostrar número de pista</string>
+	<string name="settings.track_summary">Mostrar número de pista al inicio de la canción si existe</string>
+    <string name="settings.network_title">Red</string>
+    <string name="settings.max_bitrate_wifi">Bitrate máximo - Wi-Fi</string>
+    <string name="settings.max_bitrate_mobile">Bitrate máximo - Móvil</string>
+    <string name="settings.max_bitrate_32">32 Kbps</string>
+    <string name="settings.max_bitrate_64">64 Kbps</string>
+    <string name="settings.max_bitrate_80">80 Kbps</string>
+    <string name="settings.max_bitrate_96">96 Kbps</string>
+    <string name="settings.max_bitrate_112">112 Kbps</string>
+    <string name="settings.max_bitrate_128">128 Kbps</string>
+    <string name="settings.max_bitrate_160">160 Kbps</string>
+    <string name="settings.max_bitrate_192">192 Kbps</string>
+    <string name="settings.max_bitrate_256">256 Kbps</string>
+    <string name="settings.max_bitrate_320">320 Kbps</string>
+	<string name="settings.max_video_bitrate_wifi">Bitrate de vídeo máximo - Wi-Fi</string>
+    <string name="settings.max_video_bitrate_mobile">Bitrate de vídeo máximo - Móvil</string>
+	<string name="settings.max_video_bitrate_200">200 Kbps</string>
+    <string name="settings.max_video_bitrate_300">300 Kbps</string>
+    <string name="settings.max_video_bitrate_400">400 Kbps</string>
+    <string name="settings.max_video_bitrate_500">500 Kbps</string>
+    <string name="settings.max_video_bitrate_700">700 Kbps</string>
+    <string name="settings.max_video_bitrate_1000">1000 Kbps</string>
+    <string name="settings.max_video_bitrate_1500">1500 Kbps</string>
+    <string name="settings.max_video_bitrate_2000">2000 Kbps</string>
+    <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
+    <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
+    <string name="settings.max_bitrate_unlimited">Ilimitado</string>
+    <string name="settings.wifi_required_title">Streaming sólo en Wi-Fi</string>
+    <string name="settings.wifi_required_summary">Sólo utilizar streaming si estás conectado a Wi-Fi</string>
+	<string name="settings.network_timeout_title">Network Timeout</string>
+	<string name="settings.network_timeout_10000">10 seconds</string>
+	<string name="settings.network_timeout_15000">15 seconds</string>
+	<string name="settings.network_timeout_30000">30 seconds</string>
+	<string name="settings.network_timeout_45000">45 seconds</string>
+	<string name="settings.network_timeout_60000">60 seconds</string>
+    <string name="settings.preload_1">1 canción</string>
+    <string name="settings.preload_2">2 canciones</string>
+    <string name="settings.preload_3">3 canciones</string>
+    <string name="settings.preload_5">5 canciones</string>
+    <string name="settings.preload_10">10 canciones</string>
+	<string name="settings.preload_unlimited">Ilimitado</string>
+    <string name="settings.clear_search_history">Borrar historial de búsqueda</string>
+    <string name="settings.search_history_cleared">Historial de búsqueda borrado</string>
+    <string name="settings.other_title">Otros ajustes</string>
+    <string name="settings.scrobble_title">Scrobblear a Last.fm</string>
+    <string name="settings.scrobble_summary">Recuerde configurar su usuario y contraseña de Last.fm en su servidor</string>
+    <string name="settings.hide_media_title">Ocultar del resto</string>
+    <string name="settings.hide_media_summary">Ocultar archivos de música de otras aplicaciones.</string>
+    <string name="settings.hide_media_toast">Se aplicará la próxima vez que Android escanee la música de su teléfono.</string>
+    <string name="settings.media_button_title">Botones multimedia</string>
+    <string name="settings.media_button_summary">Responder a los botones Bluetooth, teléfono y manos libres</string>
+    <string name="settings.screen_lit_title">Mantener pantalla encendida</string>
+    <string name="settings.screen_lit_summary">Mantener la pantalla encendida durantes las descargas mejora la velocidad de descarga.</string>
+	<string name="settings.playlist_title">Listas de reproducción</string>
+	<string name="settings.playlist_random_size_title">Tamaño aleatorio</string>
+	<string name="settings.buffer_length">Tamaño del buffer (0 = totalmente en caché)</string>
+	<string name="settings.sleep_timer_title">Temporizador</string>
+	<string name="settings.sleep_timer_duration_title">Duración del temporizador</string>
+	<string name="settings.sleep_timer_off">Encendido</string>
+	<string name="settings.sleep_timer_on">Apagado</string>
+	<string name="settings.sleep_timer_always_on">Siempre encendido</string>
+	<string name="settings.temp_loss_title">Pérdida temporal de foco</string>
+	<string name="settings.temp_loss_pause">Pausar siempre</string>
+	<string name="settings.temp_loss_pause_lower">Pausar, bajar el volumen cuando sea solicitado</string>
+	<string name="settings.temp_loss_lower">Bajar volumen siempre</string>
+	<string name="settings.temp_loss_nothing">No hacer nada</string>
+	<string name="settings.persistent_title">Notificación permanente</string>
+	<string name="settings.persistent_summary">Mostrar la notificación incluso tras pausar. Pulsar botón stop para quitarlo.</string>
+	<string name="settings.gapless_playback">Reproducción sin pausas</string>
+	<string name="settings.gapless_playback_summary">El Galaxy S3 parece sufrir algunos bloqueos y funcionamentos extraños desde la introducción de la reproducción sin pausas. Desmarca esta opción para solucionar el problema.</string>
+	<string name="settings.chat_refresh">Tiempo de actualización de chat (Segundos)</string>
+	<string name="settings.chat_enabled">Chat habilitado</string>
+	<string name="settings.chat_enabled_summary">Para mostrar o no mostrar la pestaña de chat. Reinicia la aplicación tras el cambio.</string>
+	<string name="settings.video_title">Vídeo</string>
+	<string name="settings.video_player">Reproductor de vídeo</string>
+	<string name="settings.video_raw">Raw (Requiere Subsonic 4.8+)</string>
+	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requiere Subsonic 4.8+)</string>
+	<string name="settings.video_transcode">Transcodificación directa (Requisitos de vídeo -> configurar mp4 o similar en el servidor)</string>
+	<string name="settings.video_flash">Flash (Requiere Plugin)</string>
+
+	<string name="shuffle.title">Iniciar aleatorio por</string>
+	<string name="shuffle.startYear">Año inicial:</string>
+	<string name="shuffle.endYear">Año final:</string>
+	<string name="shuffle.genre">Género:</string>
+	<string name="shuffle.pick_genre">Seleccionar género</string>
+
+    <string name="music_service.retry">Error de red. Reintentando %1$d de %2$d.</string>
+
+    <string name="background_task.wait">Por favor, espere...</string>
+    <string name="background_task.loading">Cargando.</string>
+    <string name="background_task.no_network">Este programa requiere de acceso a la red. Encienda el Wi-Fi o la conexión de datos móviles.</string>
+    <string name="background_task.network_error">Error de red. Por favor, compruebe la dirección del servidor o inténtelo más tarde.</string>
+    <string name="background_task.not_found">Recurso no encontrado. Por favor, compruebe la dirección del servidor.</string>
+    <string name="background_task.parse_error">Respuesta desconocida. Por favor, compruebe la dirección del servidor.</string>
+
+    <string name="service.connecting">Conectando con el servidor, espere por favor.</string>
+
+    <string name="parser.reading">Leyendo desde el servidor.</string>
+    <string name="parser.reading_done">Leyendo desde el servidor. Hecho!</string>
+    <string name="parser.upgrade_client">Versiones incompatibles. Por favor, actualice la aplicación DSub de Android.</string>
+    <string name="parser.upgrade_server">Versiones incompatibles. Por favor, actualice su servidor Subsonic.</string>
+    <string name="parser.not_authenticated">Usuario o contraseña inconrrectos.</string>
+    <string name="parser.not_authorized">Sin autorización. Compruebe los permisos en el servidor Subsonic.</string>
+    <string name="parser.artist_count">Recibidos %d artistas.</string>
+
+    <string name="select_artist.refresh">Actualizar</string>
+    <string name="select_artist.folder">Seleccionar carpeta</string>
+    <string name="select_artist.all_folders">Todas las carpetas</string>
+
+    <string name="equalizer.label">Ecualizador</string>
+    <string name="equalizer.enabled">Activado</string>
+    <string name="equalizer.preset">Seleccionar preset</string>
+
+	<string name="widget.4x1">DSub (4x1)</string>
+	<string name="widget.4x2">DSub (4x2)</string>
+	<string name="widget.4x3">DSub (4x3)</string>
+	<string name="widget.4x4">DSub (4x4)</string>
+    <string name="widget.initial_text">Toca para seleccionar música</string>
+    <string name="widget.sdcard_busy">Tarjeta SD no disponible</string>
+    <string name="widget.sdcard_missing">No hay tarjeta SD</string>
+
+    <string name="util.bytes_format.gigabyte">0.00 GB</string>
+    <string name="util.bytes_format.megabyte">0.00 MB</string>
+    <string name="util.bytes_format.kilobyte">0 KB</string>
+    <string name="util.bytes_format.byte">0 B</string>
+
+	<string name="changelog_full_title">Log de cambios</string>
+    <string name="changelog_title">Novedades</string>
+    <string name="changelog_ok_button">OK</string>
+    <string name="changelog_show_full">Más…</string>
+
+	<string name="chat.send_a_message">Enviar un mensaje</string> 
+
+    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+
+    <plurals name="select_album_n_songs">
+        <item quantity="zero">Sin canciones</item>
+        <item quantity="one">Una canción</item>
+        <item quantity="other">%d canciones</item>
+    </plurals>
+    <plurals name="select_album_n_songs_downloading">
+        <item quantity="one">Una canción programada para descarga.</item>
+        <item quantity="other">%d canciones programadas para descarga.</item>
+    </plurals>
+    <plurals name="select_album_n_songs_added">
+        <item quantity="one">Canción añadida a la cola.</item>
+        <item quantity="other">%d canciones añadidas a la cola.</item>
+    </plurals>
+    <plurals name="select_album_donate_dialog_n_trial_days_left">
+        <item quantity="one">Queda un día del periodo de prueba</item>
+        <item quantity="other">Quedan %d días del periodo de prueba</item>
+    </plurals>
+
+</resources>
