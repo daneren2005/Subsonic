@@ -849,7 +849,7 @@ public final class Util {
 		});
 
         // Update widget
-        DSubWidgetProvider.notifyInstances(context, downloadService, true);
+        DSubWidgetProvider.notifyInstances(context, downloadService, playing);
     }
     
     private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean playing){
