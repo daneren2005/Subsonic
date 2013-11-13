@@ -18,11 +18,13 @@
  */
 package github.daneren2005.dsub.activity;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -33,6 +35,8 @@ import android.preference.PreferenceScreen;
 import android.provider.SearchRecentSuggestions;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MenuItem;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.provider.DSubSearchProvider;
 import github.daneren2005.dsub.service.DownloadService;
@@ -78,6 +82,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private int serverCount = 3;
 	private SharedPreferences settings;
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     @Override
     public void onCreate(Bundle savedInstanceState) {
 		applyTheme();
@@ -145,23 +150,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		});
 
 		addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
 				serverCount++;
-            	String instance = String.valueOf(serverCount);
+				String instance = String.valueOf(serverCount);
 
-            	Preference addServerPreference = findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
-            	serversCategory.addPreference(addServer(serverCount));
-				
+				Preference addServerPreference = findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+				serversCategory.addPreference(addServer(serverCount));
+
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
 				editor.commit();
-				
+
 				serverSettings.put(instance, new ServerSettings(instance));
-            	
-                return true;
-            }
-        });
+
+				return true;
+			}
+		});
 
 		serversCategory.setOrderingAsAdded(false);
         for (int i = 1; i <= serverCount; i++) {
@@ -174,6 +179,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         prefs.registerOnSharedPreferenceChangeListener(this);
 
         update();
+
+		if(Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setHomeButtonEnabled(true);
+		}
     }
 	
 	@Override
@@ -183,6 +193,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         SharedPreferences prefs = Util.getPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
     }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(item.getItemId() == android.R.id.home) {
+			onBackPressed();
+			return true;
+		}
+
+		return false;
+	}
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
