@@ -21,6 +21,7 @@ package github.daneren2005.dsub.fragments;
 import android.content.SharedPreferences;
 import android.media.audiofx.Equalizer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -152,7 +153,11 @@ public class EqualizerFragment extends SubsonicFragment {
 				short setLevel;
 				if(changedEnabled) {
 					setLevel = (short)(equalizer.getBandLevel(band) - masterLevel);
-					bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+					if(isEnabled) {
+						bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+					} else {
+						bar.setProgress(-minEQLevel);
+					}
 				} else {
 					bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
 					setLevel = (short)(equalizer.getBandLevel(band) + masterLevel);

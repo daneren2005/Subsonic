@@ -753,6 +753,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		if(rootView != null) {
 			if(primary) {
 				mainLayout.setVisibility(View.VISIBLE);
+				updateButtons();
 			} else {
 				mainLayout.setVisibility(View.GONE);
 			}
