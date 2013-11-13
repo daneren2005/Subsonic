@@ -385,25 +385,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		bookmarkButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
-						if (currentDownload != null) {
-							MusicDirectory.Entry currentSong = currentDownload.getSong();
-							MusicService musicService = MusicServiceFactory.getMusicService(context);
-							musicService.createBookmark(currentSong.getId(), getDownloadService().getPlayerPosition(), "", context, null);
-						}
-
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						Util.toast(context, R.string.download_save_bookmark);
-						setControlsVisible(true);
-					}
-				}.execute();
+				createBookmark();
 			}
 		});
 
@@ -1160,6 +1142,54 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			@Override
 			protected void done(Void result) {
 				progressBar.setProgress(seekTo);
+			}
+		}.execute();
+	}
+	
+	private void createBookmark() {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService == null) {
+			return;
+		}
+		
+		DownloadFile currentDownload = downloadService.getCurrentPlaying();
+		if(currentDownload == null) {
+			return;
+		}
+		
+		View dialogView = context.getLayoutInflater().inflate(R.layout.create_bookmark, null);
+		final EditText commentBox = (EditText)dialogView.findViewById(R.id.comment_text);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.download_save_bookmark_title)
+			.setView(dialogView)
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					String comment = commentBox.getText().toString();
+
+					createBookmark(currentDownload, comment);
+				}
+			})
+			.setNegativeButton(R.string.common_cancel, null);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	private void createBookmark(DownloadFile currentDownload, String comment) {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicDirectory.Entry currentSong = currentDownload.getSong();
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.createBookmark(currentSong.getId(), getDownloadService().getPlayerPosition(), comment, context, null);
+
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, R.string.download_save_bookmark);
+				setControlsVisible(true);
 			}
 		}.execute();
 	}
