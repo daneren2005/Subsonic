@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.EntryAdapter;
 
 import java.io.Serializable;
@@ -575,28 +576,33 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		final List<MusicDirectory.Entry> songs = getSelectedSongs();
-		Runnable onValid = new Runnable() {
+		warnIfNetworkOrStorageUnavailable();
+		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
 			@Override
-			public void run() {
+			protected Void doInBackground() throws Throwable {
 				if (!append) {
 					getDownloadService().clear();
 				}
 
-				warnIfNetworkOrStorageUnavailable();
 				getDownloadService().download(songs, save, autoplay, playNext, shuffle);
 				if (playlistName != null) {
 					getDownloadService().setSuggestedPlaylistName(playlistName, playlistId);
 				} else {
 					getDownloadService().setSuggestedPlaylistName(null, null);
 				}
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
 				if (autoplay) {
 					Util.startActivityWithoutTransition(context, DownloadActivity.class);
 				} else if (save) {
 					Util.toast(context,
-							   context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+							context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
 				} else if (append) {
 					Util.toast(context,
-							   context.getResources().getQuantityString(R.plurals.select_album_n_songs_added, songs.size(), songs.size()));
+							context.getResources().getQuantityString(R.plurals.select_album_n_songs_added, songs.size(), songs.size()));
 				}
 			}
 		};
@@ -616,14 +622,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			return;
 		}
 
-		Runnable onValid = new Runnable() {
+		warnIfNetworkOrStorageUnavailable();
+		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
 			@Override
-			public void run() {
-				warnIfNetworkOrStorageUnavailable();
+			protected Void doInBackground() throws Throwable {
 				getDownloadService().downloadBackground(songs, save);
+				return null;
+			}
 
-				Util.toast(context,
-					context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
 			}
 		};
 
@@ -754,9 +763,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		});
 	}
 
-	private void checkLicenseAndTrialPeriod(Runnable onValid) {
+	private void checkLicenseAndTrialPeriod(LoadingTask onValid) {
 		if (licenseValid) {
-			onValid.run();
+			onValid.execute();
 			return;
 		}
 
@@ -769,11 +778,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			showDonationDialog(trialDaysLeft, onValid);
 		} else {
 			Util.toast(context, context.getResources().getString(R.string.select_album_not_licensed, trialDaysLeft));
-			onValid.run();
+			onValid.execute();
 		}
 	}
 
-	private void showDonationDialog(int trialDaysLeft, final Runnable onValid) {
+	private void showDonationDialog(int trialDaysLeft, final LoadingTask onValid) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(android.R.drawable.ic_dialog_info);
 
@@ -800,7 +809,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				public void onClick(DialogInterface dialogInterface, int i) {
 					dialogInterface.dismiss();
 					if (onValid != null) {
-						onValid.run();
+						onValid.execute();
 					}
 				}
 			});
