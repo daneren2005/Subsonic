@@ -198,6 +198,13 @@
 	<string name="updated_playlist">Added %1$s songs to \"%2$s\"</string>
     <string name="updated_playlist_error">Failed to update \"%s\", please try later.</string>
 	<string name="removed_playlist">Removed %1$s songs from \"%2$s\"</string>
+	
+	<string name="bookmark.delete">Delete bookmark</string>
+	<string name="bookmark.deleted">Deleted the bookmark for \"%s\"</string>
+	<string name="bookmark.deleted_error">Failed to delete the bookmark for \"%s\"</string>
+	<string name="bookmark.details">Song: %1$s
+		\nComment: %2$s
+		\nPosition: %3$s</string>
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>
