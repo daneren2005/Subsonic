@@ -1152,7 +1152,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			return;
 		}
 		
-		DownloadFile currentDownload = downloadService.getCurrentPlaying();
+		final DownloadFile currentDownload = downloadService.getCurrentPlaying();
 		if(currentDownload == null) {
 			return;
 		}
@@ -1175,7 +1175,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
-	private void createBookmark(DownloadFile currentDownload, String comment) {
+	private void createBookmark(final DownloadFile currentDownload, final String comment) {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {

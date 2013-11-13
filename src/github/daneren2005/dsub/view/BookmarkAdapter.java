@@ -25,8 +25,12 @@ import java.util.List;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.util.Util;
 
 public class BookmarkAdapter extends ArrayAdapter<Bookmark> {
 	private final static String TAG = BookmarkAdapter.class.getSimpleName();
@@ -51,7 +55,7 @@ public class BookmarkAdapter extends ArrayAdapter<Bookmark> {
 		// Add current position to duration
 		TextView durationTextView = (TextView) view.findViewById(R.id.song_duration);
 		String duration = durationTextView.getText().toString();
-		durationTextView.setText(Util.formatDuration(bookmark.getPosition()) + " / " + duration);
+		durationTextView.setText(Util.formatDuration(bookmark.getPosition() / 1000) + " / " + duration);
 		
 		return view;
 	}
