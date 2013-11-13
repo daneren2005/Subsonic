@@ -271,7 +271,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			trans.commit();
 		}
 		// Current fragment needs to be moved over to secondaryContainer
-		else if(secondaryContainer != null && secondaryContainer.findViewById(currentFragment.getRootId()) == null) {
+		else if(secondaryContainer != null && secondaryContainer.findViewById(currentFragment.getRootId()) == null && backStack.size() > 0) {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.remove(currentFragment);
 			trans.commit();
