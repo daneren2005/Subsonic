@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:compat="http://schemas.android.com/apk/res-auto">
+	
+	<item
+		android:id="@+id/bookmark_menu_info"
+		android:title="@string/common.info"/>
+		
+	<item 
+		android:id="@+id/song_menu_download"
+		android:title="@string/common.download"/>
+		
+	<item 
+		android:id="@+id/song_menu_pin"
+		android:title="@string/common.pin"/>
+		
+	<item 
+		android:id="@+id/song_menu_delete"
+		android:title="@string/common.delete"/>
+		
+	<item 
+		android:id="@+id/bookmark_menu_delete"
+		android:title="@string/bookmark.delete"/>
+</menu>
