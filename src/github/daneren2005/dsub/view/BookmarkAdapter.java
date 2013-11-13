@@ -38,7 +38,8 @@ public class BookmarkAdapter extends ArrayAdapter<Bookmark> {
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
-		MusicDirectory.Entry entry = getItem(position).getEntry();
+		Bookmark bookmark = getItem(position);
+		MusicDirectory.Entry entry = bookmark.getEntry();
 		SongView view;
 		if (convertView != null) {
 			view = (SongView) convertView;
@@ -46,6 +47,12 @@ public class BookmarkAdapter extends ArrayAdapter<Bookmark> {
 			view = new SongView(activity);
 		}
 		view.setObject(entry, false);
+		
+		// Add current position to duration
+		TextView durationTextView = (TextView) view.findViewById(R.id.song_duration);
+		String duration = durationTextView.getText().toString();
+		durationTextView.setText(Util.formatDuration(bookmark.getPosition()) + " / " + duration);
+		
 		return view;
 	}
 }
