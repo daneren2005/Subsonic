@@ -998,7 +998,7 @@ public class RESTMusicService implements MusicService {
 	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Creating bookmarks not supported.");
 		
-		Reader reader = getReader(context, progressListener, "createBookmark", null, Arrays.asList("id", "position"), Arrays.<Object>asList(id, position));
+		Reader reader = getReader(context, progressListener, "createBookmark", null, Arrays.asList("id", "position", "comment"), Arrays.<Object>asList(id, position, comment));
 		try {
 			new ErrorParser(context).parse(reader);
 		} finally {
