@@ -200,11 +200,15 @@
 	<string name="removed_playlist">Removed %1$s songs from \"%2$s\"</string>
 	
 	<string name="bookmark.delete">Delete bookmark</string>
+	<string name="bookmark.delete_title">Delete the bookmark for</string>
 	<string name="bookmark.deleted">Deleted the bookmark for \"%s\"</string>
 	<string name="bookmark.deleted_error">Failed to delete the bookmark for \"%s\"</string>
+	<string name="bookmark.details_title">Bookmark Details</string>
 	<string name="bookmark.details">Song: %1$s
-		\nComment: %2$s
-		\nPosition: %3$s</string>
+		\nPosition: %2$s
+		\nCreated: %3$s
+		\nLast Updated: %4$s
+		\nComment: %5$s</string>
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>
