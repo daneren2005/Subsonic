@@ -18,6 +18,7 @@
 */
 package github.daneren2005.dsub.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -36,8 +37,11 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
@@ -118,10 +122,10 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 		Bookmark bookmark = bookmarks.get(info.position);
 		
 		switch(menuItem.getItemId()) {
-			case R.bookmark_menu_info:
+			case R.id.bookmark_menu_info:
 				displayBookmarkInfo(bookmark);
 				break;
-			case R.bookmark_menu_delete:
+			case R.id.bookmark_menu_delete:
 				deleteBookmark(bookmark);
 				break;
 		}
@@ -181,10 +185,14 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	
 	private void displayBookmarkInfo(final Bookmark bookmark) {
 		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
+		String comment = bookmark.getComment();
+		if(comment == null) {
+			comment = "";
+		}
+
 		String msg = context.getResources().getString(R.string.bookmark_details,
-			song.getTitle(), Util.formatDuration(bookmark.getPosition), 
-			formatter.format(bookmark.getCreated()), formatter.format(bookmark.getChanged()), bookmark.getComment());
+			bookmark.getEntry().getTitle(), Util.formatDuration(bookmark.getPosition() / 1000),
+			formatter.format(bookmark.getCreated()), formatter.format(bookmark.getChanged()), comment);
 		
 		Util.info(context, R.string.bookmark_details_title, msg);
 	}

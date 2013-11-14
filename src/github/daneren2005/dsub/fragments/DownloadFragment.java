@@ -814,7 +814,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		boolean jukeboxEnabled = getDownloadService() != null && getDownloadService().isRemoteEnabled();
 		jukeboxButton.setTextColor(jukeboxEnabled ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
 		
-		if(Util.isOffline) {
+		if(Util.isOffline(context)) {
 			bookmarkButton.setVisibility(View.GONE);
 		} else {
 			bookmarkButton.setVisibility(View.VISIBLE);
