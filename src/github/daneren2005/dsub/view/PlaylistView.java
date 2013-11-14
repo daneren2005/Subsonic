@@ -40,7 +40,6 @@ public class PlaylistView extends UpdateView {
 
 	private Context context;
 	private Playlist playlist;
-	private File file;
 
 	private TextView titleView;
 
@@ -63,11 +62,5 @@ public class PlaylistView extends UpdateView {
 	protected void setObjectImpl(Object obj) {
 		this.playlist = (Playlist) obj;
 		titleView.setText(playlist.getName());
-		file = FileUtil.getPlaylistFile(Util.getServerName(context), playlist.getName());
-	}
-	
-	@Override
-	protected void updateBackground() {
-		exists = file.exists();
 	}
 }
