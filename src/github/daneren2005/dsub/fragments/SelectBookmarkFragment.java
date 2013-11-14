@@ -42,6 +42,8 @@ import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
 import java.io.Serializable;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	private ListView bookmarkListView;
 	private View emptyView;
 	private List<Bookmark> bookmarks;
+	private BookmarkAdapter bookmarkAdapter;
 	
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -101,13 +104,8 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-
-		MusicDirectory.Entry entry = bookmarks.get(info.position).getEntry();
-		onCreateContextMenu(menu, view, menuInfo, entry);
-		if(!Util.isOffline(context)) {
-			menu.removeItem(R.id.song_menu_remove_playlist);
-		}
+		MenuInflater inflater = context.getMenuInflater();
+		inflater.inflate(R.menu.select_bookmark_context, menu);
 	}
 
 	@Override
@@ -117,7 +115,18 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 		}
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		if(onContextItemSelected(menuItem, bookmarks.get(info.position).getEntry())) {
+		Bookmark bookmark = bookmarks.get(info.position);
+		
+		switch(menuItem.getItemId()) {
+			case R.bookmark_menu_info:
+				displayBookmarkInfo(bookmark);
+				break;
+			case R.bookmark_menu_delete:
+				deleteBookmark(bookmark);
+				break;
+		}
+		
+		if(onContextItemSelected(menuItem, bookmark.getEntry())) {
 			return true;
 		}
 
@@ -150,7 +159,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 				emptyView.setVisibility(result == null || result.isEmpty() ? View.VISIBLE : View.GONE);
 				
 				if (result != null) {
-					bookmarkListView.setAdapter(new BookmarkAdapter(context, result));
+					bookmarkListView.setAdapter(bookmarkAdapter = new BookmarkAdapter(context, result));
 					bookmarkListView.setVisibility(View.VISIBLE);
 				}
 			}
@@ -168,5 +177,50 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 		Bookmark bookmark = (Bookmark) parent.getItemAtPosition(position);
 		downloadService.download(bookmark);
 		Util.startActivityWithoutTransition(context, DownloadActivity.class);
+	}
+	
+	private void displayBookmarkInfo(final Bookmark bookmark) {
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		String msg = context.getResources().getString(R.string.bookmark_details,
+			song.getTitle(), Util.formatDuration(bookmark.getPosition), 
+			formatter.format(bookmark.getCreated()), formatter.format(bookmark.getChanged()), bookmark.getComment());
+		
+		Util.info(context, R.string.bookmark_details_title, msg);
+	}
+	private void deleteBookmark(final Bookmark bookmark) {
+		final MusicDirectory.Entry entry = bookmark.getEntry();
+		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new LoadingTask<Void>(context, false) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						musicService.deleteBookmark(entry.getId(), context, null);
+						return null;
+					}
+					
+					@Override
+					protected void done(Void result) {
+						bookmarkAdapter.remove(bookmark);
+						bookmarkAdapter.notifyDataSetChanged();
+						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
+					}
+					
+					@Override
+					protected void error(Throwable error) {
+						String msg;
+						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+							msg = getErrorMessage(error);
+						} else {
+							msg = context.getResources().getString(R.string.bookmark_deleted_error, entry.getTitle()) + " " + getErrorMessage(error);
+						}
+						
+						Util.toast(context, msg, false);
+					}
+				}.execute();
+			}
+		});
 	}
 }
