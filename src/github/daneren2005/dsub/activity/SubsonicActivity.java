@@ -90,6 +90,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	ActionBarDrawerToggle drawerToggle;
 	ListView drawerList;
 	View lastSelectedView = null;
+	int lastSelectedPosition = 0;
 	boolean drawerOpen = false;
 
 	@Override
@@ -168,6 +169,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 						lastSelectedView.setBackgroundResource(android.R.color.transparent);
 						view.setBackgroundResource(R.color.dividerColor);
 						lastSelectedView = view;
+						lastSelectedPosition = position;
 					}
 				}
 			}
@@ -188,7 +190,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			@Override
 			public void onDrawerOpened(View view) {
 				if(lastSelectedView == null) {
-					lastSelectedView = drawerList.getChildAt(0);
+					lastSelectedView = drawerList.getChildAt(lastSelectedPosition);
 					lastSelectedView.setBackgroundResource(R.color.dividerColor);
 				}
 
@@ -239,6 +241,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 		savedInstanceState.putStringArray(Constants.MAIN_BACK_STACK, ids);
 		savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE, backStack.size() + 1);
+		savedInstanceState.putInt(Constants.FRAGMENT_POSITION, lastSelectedPosition);
 	}
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -284,6 +287,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			secondaryContainer.setVisibility(View.VISIBLE);
 		}
 
+		lastSelectedPosition = savedInstanceState.getInt(Constants.FRAGMENT_POSITION);
 		recreateSpinner();
 	}
 	
