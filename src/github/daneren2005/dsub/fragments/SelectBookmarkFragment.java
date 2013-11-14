@@ -194,7 +194,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 			bookmark.getEntry().getTitle(), Util.formatDuration(bookmark.getPosition() / 1000),
 			formatter.format(bookmark.getCreated()), formatter.format(bookmark.getChanged()), comment);
 		
-		Util.info(context, R.string.bookmark_details_title, msg);
+		Util.info(context, R.string.bookmark_details_title, msg, false);
 	}
 	private void deleteBookmark(final Bookmark bookmark) {
 		final MusicDirectory.Entry entry = bookmark.getEntry();
