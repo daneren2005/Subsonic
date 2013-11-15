@@ -32,7 +32,7 @@
 		android:paddingRight="12dip"
 		android:layout_alignParentLeft="true"
 		android:layout_below="@+id/jukebox_volume_title"
-		android:src="?attr/volume"/>
+		android:src="@drawable/ic_action_volume_dark"/>
 
 	<SeekBar
 		android:layout_height="wrap_content"
