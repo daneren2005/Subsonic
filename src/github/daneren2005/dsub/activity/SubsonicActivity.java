@@ -184,7 +184,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				drawerIdle = true;
 				drawerOpen = false;
 
-				invalidateOptionsMenu();
+				supportInvalidateOptionsMenu();
 			}
 
 			@Override
@@ -200,7 +200,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				drawerIdle = true;
 				drawerOpen = true;
 
-				invalidateOptionsMenu();
+				supportInvalidateOptionsMenu();
 			}
 			
 			@Override

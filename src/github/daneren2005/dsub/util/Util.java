@@ -792,7 +792,7 @@ public final class Util {
 		info(context, titleId, message, true);
 	}
 	public static void info(Context context, String title, String message) {
-		info(context, title, message);
+		info(context, title, message, true);
 	}
 	public static void info(Context context, int titleId, int messageId, boolean linkify) {
         showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, linkify);
