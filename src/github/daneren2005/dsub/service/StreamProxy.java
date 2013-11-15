@@ -18,6 +18,7 @@ import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
+import org.apache.http.Header;
 import org.apache.http.HttpRequest;
 import org.apache.http.message.BasicHttpRequest;
 
@@ -90,10 +91,10 @@ public class StreamProxy implements Runnable {
 	}
 
 	private class StreamToMediaPlayerTask implements Runnable {
-
-		String localPath;
+		DownloadFile downloadFile;
+		File file;
 		Socket client;
-		int cbSkip;
+		int cbSkip = 0;
 
 		public StreamToMediaPlayerTask(Socket client) {
 			this.client = client;
@@ -103,9 +104,10 @@ public class StreamProxy implements Runnable {
 			HttpRequest request = null;
 			InputStream is;
 			String firstLine;
+			BufferedReader reader = null;
 			try {
 				is = client.getInputStream();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(is), 8192);
+				reader = new BufferedReader(new InputStreamReader(is), 8192);
 				firstLine = reader.readLine();
 			} catch (IOException e) {
 				Log.e(TAG, "Error parsing request", e);
@@ -123,6 +125,19 @@ public class StreamProxy implements Runnable {
 			String realUri = uri.substring(1);
 			Log.i(TAG, realUri);
 			request = new BasicHttpRequest(method, realUri);
+			
+			// Get all of the headers 
+			try {
+				String line;
+				while((line = reader.readLine()) != null && !"".equals(line)) {
+					String headerName = line.substring(0, line.indexOf(':'));
+					String headerValue = line.substring(line.indexOf(": ") + 2);
+					request.addHeader(headerName, headerValue);
+				}
+			} catch(IOException e) {
+				// Don't really care once past first line
+			}
+			
 			return request;
 		}
 
@@ -135,6 +150,7 @@ public class StreamProxy implements Runnable {
 			// Read HTTP headers
 			Log.i(TAG, "Processing request");
 
+			String localPath;
 			try {
 				localPath = URLDecoder.decode(request.getRequestLine().getUri(), Constants.UTF_8);
 			} catch (UnsupportedEncodingException e) {
@@ -143,10 +159,37 @@ public class StreamProxy implements Runnable {
 			}
 			
 			Log.i(TAG, "Processing request for file " + localPath);
-			File file = new File(localPath);
-			if (!file.exists()) {
+			downloadFile = downloadService.getCurrentPlaying();
+			File partialFile = new File(localPath);
+			if (!partialFile.equals(downloadFile.getPartialFile())) {
 				Log.e(TAG, "File " + localPath + " does not exist");
 				return false;
+			}
+
+			// Use either partial or complete if downloading finished while StreamProxy was idle
+			file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
+			
+			// Try to get range requested
+			Header rangeHeader = request.getFirstHeader("Range");
+
+			if(rangeHeader != null) {
+				String range = rangeHeader.getValue();
+				int index = range.indexOf("=");
+				if(index >= 0) {
+					range = range.substring(index + 1);
+					
+					index = range.indexOf("-");
+					if(index > 0) {
+						range = range.substring(0, index);
+					}
+					
+					cbSkip = Integer.parseInt(range);
+					
+					// Make sure to not try to read past where the file is downloaded
+					if(cbSkip >= file.length()) {
+						return false;
+					}
+				}
 			}
 			
 			return true;
@@ -155,14 +198,30 @@ public class StreamProxy implements Runnable {
 		@Override
 		public void run() {
 			Log.i(TAG, "Streaming song in background");
-			DownloadFile downloadFile = downloadService.getCurrentPlaying();
 			MusicDirectory.Entry song = downloadFile.getSong();
-
-            // Create HTTP header
-            String headers = "HTTP/1.0 200 OK\r\n";
-            headers += "Content-Type: " + "application/octet-stream" + "\r\n";
 			
 			Integer contentLength = downloadFile.getContentLength();
+			if(contentLength == null && downloadFile.isWorkDone()) {
+				contentLength = (int)file.length();
+			}
+
+            // Create HTTP header
+            String headers;
+            if(cbSkip == 0) {
+            	headers = "HTTP/1.0 200 OK\r\n";
+            } else {
+            	headers = "HTTP/1.0 206 OK\r\n;";
+            	headers += "Content-Range: bytes " + cbSkip + "-" + (file.length() - 1) + "/";
+            	if(contentLength == null) {
+            		headers += "*";
+            	} else {
+            		headers += contentLength;
+            	}
+
+				Log.i(TAG, "Streaming starts from: " + cbSkip);
+            }
+            headers += "Content-Type: " + "application/octet-stream" + "\r\n";
+			
 			long fileSize;
 			if(contentLength == null) {
 				fileSize = downloadFile.getBitRate() * ((song.getDuration() != null) ? song.getDuration() : 0) * 1000 / 8;
@@ -182,50 +241,54 @@ public class StreamProxy implements Runnable {
                 output = new BufferedOutputStream(client.getOutputStream(), 32*1024);                           
                 output.write(headers.getBytes());
 
-				if(!downloadFile.isWorkDone()) {
-					// Loop as long as there's stuff to send
-					while (isRunning && !client.isClosed()) {
+				// Make sure to have file lock
+				downloadFile.setPlaying(true);
+				
+				// Loop as long as there's stuff to send
+				while (isRunning && !client.isClosed()) {
 
-						// See if there's more to send
-						File file = new File(localPath);
-						int cbSentThisBatch = 0;
-						if (file.exists()) {
-							FileInputStream input = new FileInputStream(file);
-							input.skip(cbSkip);
-							int cbToSendThisBatch = input.available();
-							while (cbToSendThisBatch > 0) {
-								int cbToRead = Math.min(cbToSendThisBatch, buff.length);
-								int cbRead = input.read(buff, 0, cbToRead);
-								if (cbRead == -1) {
-									break;
-								}
-								cbToSendThisBatch -= cbRead;
-								cbToSend -= cbRead;
-								output.write(buff, 0, cbRead);
-								output.flush();
-								cbSkip += cbRead;
-								cbSentThisBatch += cbRead;
+					// See if there's more to send
+					int cbSentThisBatch = 0;
+					if (file.exists()) {
+						FileInputStream input = new FileInputStream(file);
+						input.skip(cbSkip);
+						int cbToSendThisBatch = input.available();
+						while (cbToSendThisBatch > 0) {
+							int cbToRead = Math.min(cbToSendThisBatch, buff.length);
+							int cbRead = input.read(buff, 0, cbToRead);
+							if (cbRead == -1) {
+								break;
 							}
-							input.close();
+							cbToSendThisBatch -= cbRead;
+							cbToSend -= cbRead;
+							output.write(buff, 0, cbRead);
+							output.flush();
+							cbSkip += cbRead;
+							cbSentThisBatch += cbRead;
 						}
-
-						// Done regardless of whether or not it thinks it is
-						if(downloadFile.isWorkDone() && cbSkip >= file.length()) {
-							break;
-						}
-
-						// If we did nothing this batch, block for a second
-						if (cbSentThisBatch == 0) {
-							Log.d(TAG, "Blocking until more data appears (" + cbToSend + ")");
-							Thread.sleep(1000);
-						}
+						input.close();
 					}
-				} else {
-					Log.w(TAG, "Requesting data for completely downloaded file");
+
+					// Done regardless of whether or not it thinks it is
+					if(downloadFile.isWorkDone() && cbSkip >= file.length()) {
+						break;
+					}
+
+					// If we did nothing this batch, block for a second
+					if (cbSentThisBatch == 0) {
+						Log.d(TAG, "Blocking until more data appears (" + cbToSend + ")");
+						Thread.sleep(1000);
+					}
 				}
+
+				// Release file lock, use of stream proxy means nothing else is using it
+				downloadFile.setPlaying(false);
             }
             catch (SocketException socketException) {
                 Log.e(TAG, "SocketException() thrown, proxy client has probably closed. This can exit harmlessly");
+
+				// Release file lock, use of stream proxy means nothing else is using it
+				downloadFile.setPlaying(false);
             }
             catch (Exception e) {
                 Log.e(TAG, "Exception thrown from streaming task:");

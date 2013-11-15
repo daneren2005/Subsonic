@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.daneren2005.dsub"
           android:installLocation="internalOnly"
-          android:versionCode="62"
-          android:versionName="4.1.4">
+          android:versionCode="69"
+          android:versionName="4.2.0">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
@@ -23,7 +23,7 @@
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 	<uses-feature android:name="android.hardware.microphone" android:required="false" />
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18"/>
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
 
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
@@ -32,36 +32,20 @@
     	android:icon="@drawable/launch"
     	android:theme="@style/Theme.DSub.Holo">
 
-        <activity android:name="github.daneren2005.dsub.activity.MainActivity"
-                  android:label="DSub"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:launchMode="standard">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
+		<activity android:name="github.daneren2005.dsub.activity.SubsonicFragmentActivity"
+				  android:configChanges="orientation|keyboardHidden"
+				  android:launchMode="standard">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
 
-        <activity android:name="github.daneren2005.dsub.activity.SearchActivity"
-                  android:label="@string/search.label"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:launchMode="singleTask"/>
-
-        <activity android:name="github.daneren2005.dsub.activity.DownloadActivity"
+		<activity android:name="github.daneren2005.dsub.activity.DownloadActivity"
                   android:configChanges="keyboardHidden"
                   android:launchMode="singleTask"/>
 
         <activity android:name="github.daneren2005.dsub.activity.SettingsActivity"
-                  android:theme="@style/Theme.DSub.Dark"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:launchMode="singleTask"/>
-
-        <activity android:name="github.daneren2005.dsub.activity.HelpActivity"
-                  android:label="@string/help.label"
-                  android:launchMode="singleTask"/>
-
-        <activity android:name="github.daneren2005.dsub.activity.EqualizerActivity"
-                  android:label="@string/equalizer.label"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
 

@@ -24,12 +24,14 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+
+import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.provider.DSubSearchProvider;
 
 /**
- * Receives voice search queries and forwards to the SearchActivity.
+ * Receives voice search queries and forwards to the SearchFragment.
  *
  * http://android-developers.blogspot.com/2010/09/supporting-new-music-voice-action.html
  *
@@ -48,9 +50,10 @@ public class VoiceQueryReceiverActivity extends Activity {
                                                                               DSubSearchProvider.MODE);
             suggestions.saveRecentQuery(query, null);
 
-            Intent intent = new Intent(VoiceQueryReceiverActivity.this, SearchActivity.class);
+            Intent intent = new Intent(VoiceQueryReceiverActivity.this, SubsonicFragmentActivity.class);
             intent.putExtra(Constants.INTENT_EXTRA_NAME_QUERY, query);
             intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
+			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Util.startActivityWithoutTransition(VoiceQueryReceiverActivity.this, intent);
         }
         finish();

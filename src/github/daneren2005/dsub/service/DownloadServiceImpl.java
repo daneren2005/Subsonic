@@ -28,6 +28,7 @@ import static github.daneren2005.dsub.domain.PlayerState.STARTED;
 import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RemoteControlState;
@@ -115,6 +116,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private PowerManager.WakeLock wakeLock;
     private boolean keepScreenOn;
 	private int cachedPosition = 0;
+	private long downloadRevision;
+	private boolean downloadOngoing = false;
 
     private static boolean equalizerAvailable;
     private static boolean visualizerAvailable;
@@ -268,6 +271,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         return binder;
     }
 
+	@Override
+	public synchronized void download(Bookmark bookmark) {
+		clear();
+		DownloadFile downloadFile = new DownloadFile(this, bookmark.getEntry(), false);
+		downloadList.add(downloadFile);
+		revision++;
+		updateJukeboxPlaylist();
+		play(0, true, bookmark.getPosition());
+		lifecycleSupport.serializeDownloadQueue();
+	}
+
     @Override
     public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
         setShufflePlayEnabled(false);
@@ -318,7 +332,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public synchronized void downloadBackground(List<MusicDirectory.Entry> songs, boolean save) {
 		for (MusicDirectory.Entry song : songs) {
 			DownloadFile downloadFile = new DownloadFile(this, song, save);
-			backgroundDownloadList.add(downloadFile);
+			if(!downloadFile.isWorkDone() || (downloadFile.shouldSave() && !downloadFile.isSaved())) {
+				// Only add to list if there is work to be done
+				backgroundDownloadList.add(downloadFile);
+			}
 		}
 		revision++;
 		
@@ -578,21 +595,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			return;
 		}
 		
-		int index = getCurrentPlayingIndex();
-		if (index != -1) {
-            switch (getRepeatMode()) {
-                case OFF:
-                    index = index + 1;
-                    break;
-                case ALL:
-					index = (index + 1) % size();
-                    break;
-                case SINGLE:
-                    break;
-                default:
-                    break;
-            }
-        }
+		int index = getNextPlayingIndex();
 		
 		nextSetup = false;
 		if(nextPlayingTask != null) {
@@ -612,6 +615,24 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized int getCurrentPlayingIndex() {
         return downloadList.indexOf(currentPlaying);
+    }
+    private int getNextPlayingIndex() {
+    	int index = getCurrentPlayingIndex();
+		if (index != -1) {
+            switch (getRepeatMode()) {
+                case OFF:
+                    index = index + 1;
+                    break;
+                case ALL:
+					index = (index + 1) % size();
+                    break;
+                case SINGLE:
+                    break;
+                default:
+                    break;
+            }
+        }
+        return index;
     }
 
     @Override
@@ -657,8 +678,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public synchronized void play(int index) {
         play(index, true);
     }
-
-    private synchronized void play(int index, boolean start) {
+	private synchronized void play(int index, boolean start) {
+		play(index, start, 0);
+	}
+    private synchronized void play(int index, boolean start, int position) {
         if (index < 0 || index >= size()) {
             reset();
             setCurrentPlaying(null, false);
@@ -674,7 +697,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					remoteController.changeTrack(index, downloadList.get(index));
                     setPlayerState(STARTED);
                 } else {
-                    bufferAndPlay();
+                    bufferAndPlay(position);
                 }
             }
 			if (remoteState == RemoteControlState.LOCAL) {
@@ -761,28 +784,18 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized void next() {
         int index = getCurrentPlayingIndex();
-        if (index != -1) {
-            play(index + 1);
+		int nextPlayingIndex = getNextPlayingIndex();
+		// Make sure to actually go to next when repeat song is on
+		if(index == nextPlayingIndex) {
+			nextPlayingIndex++;
+		}
+        if (index != -1 && nextPlayingIndex < size()) {
+            play(nextPlayingIndex);
         }
     }
 
     private void onSongCompleted() {
-        int index = getCurrentPlayingIndex();
-        if (index != -1) {
-            switch (getRepeatMode()) {
-                case OFF:
-                    play(index + 1);
-                    break;
-                case ALL:
-                    play((index + 1) % size());
-                    break;
-                case SINGLE:
-                    play(index);
-                    break;
-                default:
-                    break;
-            }
-        }
+    	play(getNextPlayingIndex());
     }
 
     @Override
@@ -1072,14 +1085,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		remoteController.setVolume(up);
     }
 
-    private synchronized void bufferAndPlay() {
+	private synchronized void bufferAndPlay() {
+		bufferAndPlay(0);
+	}
+    private synchronized void bufferAndPlay(int position) {
 		if(playerState != PREPARED) {
 			reset();
 
-			bufferTask = new BufferTask(currentPlaying, 0);
+			bufferTask = new BufferTask(currentPlaying, position);
 			bufferTask.start();
 		} else {
-			doPlay(currentPlaying, 0, true);
+			doPlay(currentPlaying, position, true);
 		}
     }
 
@@ -1138,7 +1154,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 							}
 						}
 
-						lifecycleSupport.serializeDownloadQueue();
+						// Only call when starting, setPlayerState(PAUSED) already calls this
+						if(start) {
+							lifecycleSupport.serializeDownloadQueue();
+						}
 					} catch (Exception x) {
 						handleError(x);
 					}
@@ -1158,6 +1177,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
             if(nextMediaPlayer != null) {
             	nextMediaPlayer.setOnCompletionListener(null);
+            	nextMediaPlayer.setOnErrorListener(null);
+            	nextMediaPlayer.reset();
             	nextMediaPlayer.release();
             	nextMediaPlayer = null;
             }
@@ -1345,7 +1366,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             checkShufflePlay();
         }
 
-        if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this)) {
+        if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this) || Util.isOffline(this)) {
             return;
         }
 
@@ -1380,7 +1401,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				int i = start;
 				do {
 					DownloadFile downloadFile = downloadList.get(i);
-					if (!downloadFile.isWorkDone()) {
+					if (!downloadFile.isWorkDone() && !downloadFile.isFailedMax()) {
 						if (downloadFile.shouldSave() || preloaded < Util.getPreloadCount(this)) {
 							currentDownloading = downloadFile;
 							currentDownloading.download();
@@ -1407,14 +1428,25 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						revision++;
 						i--;
 					} else {
-						currentDownloading = downloadFile;
-						currentDownloading.download();
-						cleanupCandidates.add(currentDownloading);
-						break;
+						if(!downloadFile.isFailedMax()) {
+							currentDownloading = downloadFile;
+							currentDownloading.download();
+							cleanupCandidates.add(currentDownloading);
+							break;
+						}
 					}
 				}
 			}
         }
+
+		if(!backgroundDownloadList.isEmpty() && downloadRevision != revision) {
+			Util.showDownloadingNotification(this, currentDownloading, backgroundDownloadList.size());
+			downloadRevision = revision;
+			downloadOngoing = true;
+		} else if(backgroundDownloadList.isEmpty() && downloadOngoing) {
+			Util.hideDownloadingNotification(this);
+			downloadOngoing = false;
+		}
 
         // Delete obsolete .partial and .complete files.
         cleanup();

@@ -31,6 +31,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.RemoteControlClient;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -43,6 +44,7 @@ import android.view.KeyEvent;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.util.CacheCleaner;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
@@ -52,7 +54,7 @@ import github.daneren2005.dsub.util.Util;
 public class DownloadServiceLifecycleSupport {
 
     private static final String TAG = DownloadServiceLifecycleSupport.class.getSimpleName();
-    private static final String FILENAME_DOWNLOADS_SER = "downloadstate.ser";
+    private static final String FILENAME_DOWNLOADS_SER = "downloadstate2.ser";
 
     private final DownloadServiceImpl downloadService;
     private Looper eventLooper;
@@ -141,7 +143,11 @@ public class DownloadServiceLifecycleSupport {
 						@Override
 						public void run() {
 							if(!downloadService.isRemoteEnabled()) {
-								downloadService.pause();
+								SharedPreferences prefs = Util.getPreferences(downloadService);
+								int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
+								if(pausePref == 0 || pausePref == 1) {
+									downloadService.pause();
+								}
 							}
 						}
                 	});
@@ -252,20 +258,29 @@ public class DownloadServiceLifecycleSupport {
 		state.currentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		state.currentPlayingPosition = downloadService.getPlayerPosition();
 
+		DownloadFile currentPlaying = downloadService.getCurrentPlaying();
+		if(currentPlaying != null) {
+			state.renameCurrent = currentPlaying.isWorkDone() && !currentPlaying.isCompleteFileAvailable();
+		}
+
 		Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
     }
 
     private void deserializeDownloadQueueNow() {
-       State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER);
+   		State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER, State.class);
         if (state == null) {
             return;
         }
         Log.i(TAG, "Deserialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
-        downloadService.restore(state.songs, state.currentPlayingIndex, state.currentPlayingPosition);
 
-        // Work-around: Serialize again, as the restore() method creates a serialization without current playing info.
-        serializeDownloadQueue();
+		// Rename first thing before anything else starts
+		if(state.renameCurrent && state.currentPlayingIndex != -1 && state.currentPlayingIndex < state.songs.size()) {
+			DownloadFile currentPlaying = new DownloadFile(downloadService, state.songs.get(state.currentPlayingIndex), false);
+			currentPlaying.renamePartial();
+		}
+
+        downloadService.restore(state.songs, state.currentPlayingIndex, state.currentPlayingPosition);
     }
 
     private void handleKeyEvent(KeyEvent event) {
@@ -363,5 +378,6 @@ public class DownloadServiceLifecycleSupport {
         private List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
         private int currentPlayingIndex;
         private int currentPlayingPosition;
+		private boolean renameCurrent = false;
     }
 }

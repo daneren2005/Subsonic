@@ -20,9 +20,9 @@ package github.daneren2005.dsub.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.SortedSet;
@@ -36,9 +36,18 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.Genre;
+import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.PodcastEpisode;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * @author Sindre Mehus
@@ -52,6 +61,17 @@ public class FileUtil {
 	private static final List<String> VIDEO_FILE_EXTENSIONS = Arrays.asList("flv", "mp4", "m4v", "wmv", "avi", "mov", "mpg", "mkv");
 	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Arrays.asList("m3u");
     private static final File DEFAULT_MUSIC_DIR = createDirectory("music");
+	private static final Kryo kryo = new Kryo();
+
+	static {
+		kryo.register(MusicDirectory.Entry.class);
+		kryo.register(Indexes.class);
+		kryo.register(Artist.class);
+		kryo.register(MusicFolder.class);
+		kryo.register(PodcastChannel.class);
+		kryo.register(Playlist.class);
+		kryo.register(Genre.class);
+	}
 	
 	public static File getAnySong(Context context) {
 		File dir = getMusicDirectory(context);
@@ -359,35 +379,36 @@ public class FileUtil {
 	}
 
     public static <T extends Serializable> boolean serialize(Context context, T obj, String fileName) {
-        File file = new File(context.getCacheDir(), fileName);
-        ObjectOutputStream out = null;
+        Output out = null;
         try {
-            out = new ObjectOutputStream(new FileOutputStream(file));
-            out.writeObject(obj);
-            Log.i(TAG, "Serialized object to " + file);
+			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
+            out = new Output(new FileOutputStream(file.getFD()));
+			kryo.writeObject(out, obj);
+            Log.i(TAG, "Serialized object to " + fileName);
             return true;
         } catch (Throwable x) {
-            Log.w(TAG, "Failed to serialize object to " + file);
+            Log.w(TAG, "Failed to serialize object to " + fileName);
             return false;
         } finally {
             Util.close(out);
         }
     }
 
-    public static <T extends Serializable> T deserialize(Context context, String fileName) {
-        File file = new File(context.getCacheDir(), fileName);
-        if (!file.exists() || !file.isFile()) {
-            return null;
-        }
-
-        ObjectInputStream in = null;
+    public static <T extends Serializable> T deserialize(Context context, String fileName, Class<T> tClass) {
+        Input in = null;
         try {
-            in = new ObjectInputStream(new FileInputStream(file));
-            T result = (T) in.readObject();
-            Log.i(TAG, "Deserialized object from " + file);
+			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "r");
+
+            in = new Input(new FileInputStream(file.getFD()));
+			T result = (T) kryo.readObject(in, tClass);
+            Log.i(TAG, "Deserialized object from " + fileName);
             return result;
-        } catch (Throwable x) {
-            Log.w(TAG, "Failed to deserialize object from " + file, x);
+        } catch(FileNotFoundException e) {
+			// Different error message
+			Log.w(TAG, "No serialization for object from " + fileName);
+			return null;
+		} catch (Throwable x) {
+            Log.w(TAG, "Failed to deserialize object from " + fileName, x);
             return null;
         } finally {
             Util.close(in);

@@ -24,12 +24,14 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+
+import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.provider.DSubSearchProvider;
 
 /**
- * Receives search queries and forwards to the SelectAlbumActivity.
+ * Receives search queries and forwards to the SearchFragment.
  *
  * @author Sindre Mehus
  */
@@ -46,8 +48,9 @@ public class QueryReceiverActivity extends Activity {
                                                                               DSubSearchProvider.MODE);
             suggestions.saveRecentQuery(query, null);
 
-            Intent intent = new Intent(QueryReceiverActivity.this, SearchActivity.class);
+            Intent intent = new Intent(QueryReceiverActivity.this, SubsonicFragmentActivity.class);
             intent.putExtra(Constants.INTENT_EXTRA_NAME_QUERY, query);
+			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Util.startActivityWithoutTransition(QueryReceiverActivity.this, intent);
         }
         finish();

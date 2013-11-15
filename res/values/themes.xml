@@ -10,22 +10,48 @@
 		<item name="media_button_repeat_off">@drawable/media_repeat_off_light</item>
 		<item name="media_button_start">@drawable/media_start_light</item>
 		<item name="media_button_stop">@drawable/media_stop_light</item>
-		<item name="chat">@drawable/ic_menu_chat_light</item> 
-		<item name="chat_send">@drawable/ic_menu_chat_send_light</item> 
+		<item name="chat_send">@drawable/ic_menu_chat_send_light</item>
+		<item name="download_none">@drawable/download_none_light</item>
+		<item name="shuffle">@drawable/ic_menu_shuffle_light</item>
+		<item name="refresh">@drawable/ic_menu_refresh_light</item>
+		<item name="search">@drawable/ic_menu_search_light</item>
+		<item name="remove">@drawable/ic_menu_remove_light</item>
+		<item name="save">@drawable/ic_menu_save_light</item>
+		<item name="volume">@drawable/ic_action_volume_light</item>
+		<item name="toggle_list">@drawable/action_toggle_list_light</item>
+		<item name="select_server">@drawable/main_select_server_light</item>
+		<item name="downloading">@drawable/downloading_light</item>
+		<item name="bookmark">@drawable/ic_menu_bookmark_light</item>
+		<item name="drawerItemsIcons">@array/drawerItemIconsLight</item>
+		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
+		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="@style/Theme.AppCompat">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:textColorSecondary">@color/cyan</item>
-		<item name="offline_icon">@drawable/main_offline</item>
-		<item name="media_button_backward">@drawable/media_backward</item>
-		<item name="media_button_forward">@drawable/media_forward</item>
-		<item name="media_button_pause">@drawable/media_pause</item>
+		<item name="offline_icon">@drawable/main_offline_dark</item>
+		<item name="media_button_backward">@drawable/media_backward_dark</item>
+		<item name="media_button_forward">@drawable/media_forward_dark</item>
+		<item name="media_button_pause">@drawable/media_pause_dark</item>
 		<item name="media_button_repeat_off">@drawable/media_repeat_off</item>
-		<item name="media_button_start">@drawable/media_start</item>
-		<item name="media_button_stop">@drawable/media_stop</item>
-		<item name="chat">@drawable/ic_menu_chat_dark</item> 
-		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item> 
+		<item name="media_button_start">@drawable/media_start_dark</item>
+		<item name="media_button_stop">@drawable/media_stop_dark</item>
+		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
+		<item name="download_none">@drawable/download_none_dark</item>
+		<item name="shuffle">@drawable/ic_menu_shuffle_dark</item>
+		<item name="refresh">@drawable/ic_menu_refresh_dark</item>
+		<item name="search">@drawable/ic_menu_search_dark</item>
+		<item name="remove">@drawable/ic_menu_remove_dark</item>
+		<item name="save">@drawable/ic_menu_save_dark</item>
+		<item name="volume">@drawable/ic_action_volume_dark</item>
+		<item name="toggle_list">@drawable/action_toggle_list_dark</item>
+		<item name="select_server">@drawable/main_select_server_dark</item>
+		<item name="downloading">@drawable/downloading_dark</item>
+		<item name="bookmark">@drawable/ic_menu_bookmark_dark</item>
+		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
+		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
+		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@android:color/black</item>
@@ -33,17 +59,29 @@
 	<style name="Theme.DSub.Holo" parent="@style/Theme.AppCompat">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
-		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="android:windowBackground">@drawable/background</item>
-		<item name="offline_icon">@drawable/main_offline</item>
-		<item name="media_button_backward">@drawable/media_backward</item>
-		<item name="media_button_forward">@drawable/media_forward</item>
-		<item name="media_button_pause">@drawable/media_pause</item>
+		<item name="offline_icon">@drawable/main_offline_dark</item>
+		<item name="media_button_backward">@drawable/media_backward_dark</item>
+		<item name="media_button_forward">@drawable/media_forward_dark</item>
+		<item name="media_button_pause">@drawable/media_pause_dark</item>
 		<item name="media_button_repeat_off">@drawable/media_repeat_off</item>
-		<item name="media_button_start">@drawable/media_start</item>
-		<item name="media_button_stop">@drawable/media_stop</item>
-		<item name="chat">@drawable/ic_menu_chat_dark</item> 
+		<item name="media_button_start">@drawable/media_start_dark</item>
+		<item name="media_button_stop">@drawable/media_stop_dark</item>
 		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
+		<item name="download_none">@drawable/download_none_dark</item>
+		<item name="shuffle">@drawable/ic_menu_shuffle_dark</item>
+		<item name="refresh">@drawable/ic_menu_refresh_dark</item>
+		<item name="search">@drawable/ic_menu_search_dark</item>
+		<item name="remove">@drawable/ic_menu_remove_dark</item>
+		<item name="save">@drawable/ic_menu_save_dark</item>
+		<item name="volume">@drawable/ic_action_volume_dark</item>
+		<item name="toggle_list">@drawable/action_toggle_list_dark</item>
+		<item name="select_server">@drawable/main_select_server_dark</item>
+		<item name="downloading">@drawable/downloading_dark</item>
+		<item name="bookmark">@drawable/ic_menu_bookmark_dark</item>
+		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
+		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
+		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
 	
 	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
@@ -78,5 +116,11 @@
 		<item name="android:background">@android:color/transparent</item>
 		<item name="backgroundStacked">@android:color/transparent</item>
 		<item name="android:backgroundStacked">@android:color/transparent</item>
+	</style>
+
+	<style name="DSub.TextViewStyle" parent="android:Widget.TextView">
+	</style>
+
+	<style name="DSub.ButtonStyle" parent="android:Widget.Holo.Button">
 	</style>
 </resources>

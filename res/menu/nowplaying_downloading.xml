@@ -3,19 +3,9 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item
         android:id="@+id/menu_remove_all"
-        android:icon="@drawable/action_remove_all"
+        android:icon="?attr/remove"
         android:title="@string/download.menu_remove_all"
         compat:showAsAction="always|withText"/>
-
-    <item
-        android:id="@+id/menu_screen_on_off"
-        android:icon="@drawable/action_screen_on_off"
-        android:title="@string/download.menu_screen_on"
-        compat:showAsAction="ifRoom|withText"/>
-		
-	<item
-        android:id="@+id/menu_toggle_timer"
-        android:title="@string/download.start_timer"/>
 		
 	<item
         android:id="@+id/menu_toggle_now_playing"
@@ -23,6 +13,5 @@
 		
 	<item 
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/action_exit"
 		android:title="@string/menu.exit"/>
 </menu>

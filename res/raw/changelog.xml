@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.2.0" versioncode="69" releasedate="11/14/2013">
+		<change>Changed from tabs to Pull Out Drawer like newer Google docs specify</change>
+		<change>Major UI update with better scaling icons</change>
+		<change>Updated main app icon (thanks Ben Sumner)</change>
+		<change>Added tablet layout that better uses extra space</change>
+		<change>New Bookmarks tab</change>
+		<change>Persistent notification is like other music apps now (change in settings)</change>
+		<change>Ability to hide Podcasts/Bookmarks/Chat tabs</change>
+		<change>Pressing next with repeat all on loops back to beginning</change>
+		<change>Increase right padding so context buttons are easier to press</change>
+	</release>
+	<release version="4.1.8" versioncode="66" releasedate="10/26/2013">
+		<change>Fix offline shuffle mode</change>
+	</release>
+	<release version="4.1.7" versioncode="65" releasedate="10/21/2013">
+		<change>Settings screen now broken down by sections</change>
+		<change>Added option to choose whether or not to pause on headphone/bluetooth disconnect</change>
+		<change>Added confirm for clearing current queue</change>
+		<change>Added option to hide widget while nothing is playing</change>
+		<change>Fix not being able to change position in Jukebox mode</change>
+		<change>Fix position not being saved sometimes when pausing during a streamed song</change>
+		<change>Fix sometimes the letters not matching the position on the artist list</change>
+		<change>Various minor bug fixes</change>
+	</release>
+	<release version="4.1.6" versioncode="64" releasedate="10/3/2013">
+		<change>Fix recent update sometimes messing up downloaded song</change>
+		<change>Fix changing position while streaming a song</change>
+	</release>
+	<release version="4.1.5" versioncode="63" releasedate="9/27/2013">
+		<change>Notification while doing background downloads, clicking will show you the download list</change>
+		<change>Put songs in the root directory in a new folder called Root at the bottom of the list</change>
+		<change>Speedup of saving/loading current playing list (mostly matters for those using large playlists)</change>
+		<change>Cache most common folder listings for better experience while network is intermittent</change>
+		<change>Speedup of offline playlist loading</change>
+		<change>Fix app reloading data/losing position on orientation change</change>
+		<change>Fix Show Album from now playing list</change>
+		<change>Fix using shuffle in offline mode sometimes using online songs</change>
+		<change>Various optimizations and bug fixes</change>
+	</release>
 	<release version="4.1.4" versioncode="61" releasedate="8/25/2013">
 		<change>Fix for freezes on 4.3</change>
 		<change>Fix for starred songs/albums not being clickable</change>

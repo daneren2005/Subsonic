@@ -40,55 +40,11 @@
 				android:layout_weight="1"
 				android:background="@android:color/transparent">
 
-				<LinearLayout
-						android:id="@+id/download_other_controls_layout"
-						android:orientation="horizontal"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_gravity="center_horizontal">
-
-					<Button
-						android:id="@+id/download_jukebox"
-						android:text="RC"
-						android:textStyle="bold"
-						android:textSize="22sp"
-						android:background="@drawable/menubar_button"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginTop="3dip"
-						android:padding="9dip"/>
-					<Button
-						android:id="@+id/download_equalizer"
-						android:text="EQ"
-						android:textStyle="bold"
-						android:textSize="22sp"
-						android:background="@drawable/menubar_button"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginTop="3dip"
-						android:padding="9dip"/>
-					<Button
-						android:id="@+id/download_visualizer"
-						android:text="VIS"
-						android:textStyle="bold"
-						android:textSize="22sp"
-						android:background="@drawable/menubar_button"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginTop="3dip"
-						android:padding="9dip"/>
-					<ImageButton
-						android:id="@+id/download_star"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_gravity="center_vertical"
-						android:background="@drawable/menubar_button"
-						android:src="@android:drawable/star_big_off"
-						android:padding="10dip"/>
-				</LinearLayout>
+				<include layout="@layout/download_action_buttons"/>
 
 				<LinearLayout
 						android:id="@+id/download_visualizer_view_layout"
+						android:orientation="horizontal"
 						android:layout_width="fill_parent"
 						android:layout_height="60dip"
 						android:layout_marginLeft="12dip"

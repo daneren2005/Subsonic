@@ -3,19 +3,19 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_play_now"
-		android:icon="@drawable/action_play_all"
+		android:icon="?media_button_start"
 		android:title="@string/menu.play"
 		compat:showAsAction="always|withText"/>
 		
 	<item 
 		android:id="@+id/menu_refresh"
-		android:icon="@drawable/action_refresh"
+		android:icon="?attr/refresh"
 		android:title="@string/menu.refresh"
 		compat:showAsAction="always|withText"/>
 		
 	<item 
 		android:id="@+id/menu_shuffle"
-		android:icon="@drawable/action_shuffle"
+		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
 		compat:showAsAction="ifRoom|withText"/>
 </menu>

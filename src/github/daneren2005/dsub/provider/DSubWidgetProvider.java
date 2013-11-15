@@ -25,6 +25,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -36,16 +37,17 @@ import android.graphics.RectF;
 import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.RemoteViews;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
-import github.daneren2005.dsub.activity.MainActivity;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
-import java.util.HashMap;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * Simple widget to show currently playing album art along
@@ -142,6 +144,16 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     private void performUpdate(Context context, DownloadService service, int[] appWidgetIds, boolean playing) {
         final Resources res = context.getResources();
         final RemoteViews views = new RemoteViews(context.getPackageName(), getLayout());
+
+		if(playing) {
+			views.setViewVisibility(R.id.widget_root, View.VISIBLE);
+		} else {
+			// Hide widget
+			SharedPreferences prefs = Util.getPreferences(context);
+			if(prefs.getBoolean(Constants.PREFERENCES_KEY_HIDE_WIDGET, false)) {
+				views.setViewVisibility(R.id.widget_root, View.GONE);
+			}
+		}
 
         MusicDirectory.Entry currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
         String title = currentPlaying == null ? null : currentPlaying.getTitle();
@@ -243,10 +255,10 @@ public class DSubWidgetProvider extends AppWidgetProvider {
      *
      * @param playerActive True if player is active in background, which means
      *                     widget click will launch {@link DownloadActivity},
-     *                     otherwise we launch {@link MainActivity}.
+     *                     otherwise we launch {@link github.daneren2005.dsub.activity.SubsonicFragmentActivity}.
      */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
-		Intent intent = new Intent(context, MainActivity.class);
+		Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 		if(playerActive) {
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -30,6 +30,7 @@ import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
@@ -44,8 +45,8 @@ import org.apache.http.HttpStatus;
  * @version $Id$
  */
 public class DownloadFile {
-
     private static final String TAG = DownloadFile.class.getSimpleName();
+    private static final int MAX_FAILURES = 5;
     private final Context context;
     private final MusicDirectory.Entry song;
     private final File partialFile;
@@ -55,7 +56,8 @@ public class DownloadFile {
     private final MediaStoreService mediaStoreService;
     private CancellableTask downloadTask;
     private boolean save;
-    private boolean failed;
+	private boolean failedDownload = false;
+    private int failed = 0;
     private int bitRate;
 	private boolean isPlaying = false;
 	private boolean saveWhenDone = false;
@@ -98,7 +100,7 @@ public class DownloadFile {
 
     public synchronized void download() {
         FileUtil.createDirectoryForParent(saveFile);
-        failed = false;
+        failedDownload = false;
 		if(!partialFile.exists()) {
 			bitRate = Util.getMaxBitrate(context);
 		}
@@ -153,7 +155,10 @@ public class DownloadFile {
     }
 
     public boolean isFailed() {
-        return failed;
+        return failedDownload;
+    }
+    public boolean isFailedMax() {
+    	return failed > MAX_FAILURES;
     }
 
     public void delete() {
@@ -212,10 +217,17 @@ public class DownloadFile {
 				completeWhenDone = false;
 			}
 		} catch(IOException ex) {
-			Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile);
+			Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile, ex);
 		}
 		
 		this.isPlaying = isPlaying;
+	}
+	public void renamePartial() {
+		try {
+			Util.renameFile(partialFile, completeFile);
+		} catch(IOException ex) {
+			Log.w(TAG, "Failed to rename file " + partialFile + " to " + completeFile, ex);
+		}
 	}
 	public boolean getPlaying() {
 		return isPlaying;
@@ -314,12 +326,21 @@ public class DownloadFile {
 					}
 				}
 
+            } catch(SubsonicRESTException x) {
+            	Util.close(out);
+                Util.delete(completeFile);
+                Util.delete(saveFile);
+                if (!isCancelled()) {
+                    failed++;
+                    failedDownload = true;
+                    Log.w(TAG, "Failed to download '" + song + "'.", x);
+                }
             } catch (Exception x) {
                 Util.close(out);
                 Util.delete(completeFile);
                 Util.delete(saveFile);
                 if (!isCancelled()) {
-                    failed = true;
+                    failedDownload = true;
                     Log.w(TAG, "Failed to download '" + song + "'.", x);
                 }
 

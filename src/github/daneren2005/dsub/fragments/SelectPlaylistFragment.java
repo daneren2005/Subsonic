@@ -59,10 +59,10 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.select_playlist, container, false);
+		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
-		list = (ListView) rootView.findViewById(R.id.select_playlist_list);
-		emptyTextView = rootView.findViewById(R.id.select_playlist_empty);
+		list = (ListView) rootView.findViewById(R.id.fragment_list);
+		emptyTextView = rootView.findViewById(R.id.fragment_list_empty);
 		list.setOnItemClickListener(this);
 		registerForContextMenu(list);
 
@@ -81,7 +81,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.select_playlist, menu);
+		menuInflater.inflate(R.menu.abstract_top_menu, menu);
 	}
 
 	@Override
@@ -96,6 +96,9 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		if(!primaryFragment) {
+			return;
+		}
 
 		MenuInflater inflater = context.getMenuInflater();		
 		if (Util.isOffline(context)) {
@@ -133,7 +136,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, R.id.select_playlist_layout);
+				replaceFragment(fragment, R.id.fragment_list_layout);
 				break;
 			case R.id.playlist_menu_play_shuffled:
 				fragment = new SelectDirectoryFragment();
@@ -144,7 +147,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, R.id.select_playlist_layout);
+				replaceFragment(fragment, R.id.fragment_list_layout);
 				break;
 			case R.id.playlist_menu_delete:
 				deletePlaylist(playlist);
@@ -171,7 +174,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.select_playlist_layout);
+		replaceFragment(fragment, R.id.fragment_list_layout);
 	}
 
 	@Override

@@ -3,27 +3,25 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_refresh"
-		android:icon="@drawable/action_refresh"
+		android:icon="?attr/refresh"
 		android:title="@string/menu.refresh"
+		compat:showAsAction="always|withText"/>
+
+	<item
+		android:id="@+id/menu_search"
+		android:icon="?attr/search"
+		android:title="@string/menu.search"
 		compat:showAsAction="always|withText"/>
 
 	<item 
 		android:id="@+id/menu_add_podcast"
-		android:icon="@drawable/action_exit"
 		android:title="@string/menu.add_podcast"/>
 
 	<item 
 		android:id="@+id/menu_check"
-		android:icon="@drawable/action_refresh"
 		android:title="@string/menu.check_podcasts"/>
 
-	<item 
-		android:id="@+id/menu_settings"
-		android:icon="@drawable/action_settings"
-		android:title="@string/menu.settings"/>
-
-	<item 
+	<item
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/action_exit"
 		android:title="@string/menu.exit"/>
 </menu>

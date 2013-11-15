@@ -36,7 +36,7 @@ public class PlaylistAdapter extends ArrayAdapter<Playlist> {
 	private final Context activity;
 
 	public PlaylistAdapter(Context activity, List<Playlist> Playlists) {
-		super(activity, R.layout.playlist_list_item, Playlists);
+		super(activity, R.layout.basic_list_item, Playlists);
 		this.activity = activity;
 	}
 

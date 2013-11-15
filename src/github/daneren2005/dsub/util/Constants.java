@@ -54,14 +54,18 @@ public final class Constants {
     public static final String INTENT_EXTRA_REQUEST_SEARCH = "subsonic.requestsearch";
     public static final String INTENT_EXTRA_NAME_EXIT = "subsonic.exit" ;
 	public static final String INTENT_EXTRA_NAME_DOWNLOAD = "subsonic.download";
+	public static final String INTENT_EXTRA_NAME_DOWNLOAD_VIEW = "subsonic.download_view";
 	public static final String INTENT_EXTRA_VIEW_ALBUM = "subsonic.view_album";
 	public static final String INTENT_EXTRA_NAME_PODCAST_ID = "subsonic.podcast.id";
 	public static final String INTENT_EXTRA_NAME_PODCAST_NAME = "subsonic.podcast.name";
 	public static final String INTENT_EXTRA_NAME_PODCAST_DESCRIPTION = "subsonic.podcast.description";
+	public static final String INTENT_EXTRA_FRAGMENT_TYPE = "fragmentType";
+	public static final String INTENT_EXTRA_REFRESH_LISTINGS = "refreshListings";
 
     // Notification IDs.
     public static final int NOTIFICATION_ID_PLAYING = 100;
     public static final int NOTIFICATION_ID_ERROR = 101;
+    public static final int NOTIFICATION_ID_DOWNLOADING = 102;
 
     // Preferences keys.
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";
@@ -117,6 +121,10 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SYNC_ENABLED = "syncEnabled";
 	public static final String PREFERENCES_KEY_SYNC_INTERVAL = "syncInterval";
 	public static final String PREFERENCES_KEY_SYNC_WIFI = "syncWifi";
+	public static final String PREFERENCES_KEY_PAUSE_DISCONNECT = "pauseOnDisconnect";
+	public static final String PREFERENCES_KEY_HIDE_WIDGET = "hideWidget";
+	public static final String PREFERENCES_KEY_PODCASTS_ENABLED = "podcastsEnabled";
+	public static final String PREFERENCES_KEY_BOOKMARKS_ENABLED = "bookmarksEnabled";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
@@ -137,6 +145,8 @@ public final class Constants {
 	public static final String FRAGMENT_LIST = "fragmentList";
 	public static final String FRAGMENT_LIST2 = "fragmentList2";
 	public static final String FRAGMENT_DOWNLOAD_FLIPPER = "fragmentDownloadFlipper";
+	public static final String FRAGMENT_NAME = "fragmentName";
+	public static final String FRAGMENT_POSITION = "fragmentPosition";
 
     // Name of the preferences file.
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";

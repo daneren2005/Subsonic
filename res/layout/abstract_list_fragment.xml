@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/fragment_list_layout"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical" >
+
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="1px"
+		android:background="@color/dividerColor"/>
+
+	<include layout="@layout/tab_progress" />
+
+	<TextView
+		android:id="@+id/fragment_list_empty"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="10dip"
+		android:text="@string/common.empty"
+		android:visibility="gone" />
+
+	<ListView
+		android:id="@+id/fragment_list"
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1.0"
+		android:fastScrollEnabled="true"/>
+</LinearLayout>

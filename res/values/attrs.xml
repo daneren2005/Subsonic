@@ -7,6 +7,17 @@
     <attr name="media_button_repeat_off" format="reference"/>
     <attr name="media_button_start" format="reference"/>
     <attr name="media_button_stop" format="reference"/>
-	<attr name="chat" format="reference"/> 
-	<attr name="chat_send" format="reference" /> 
+	<attr name="chat_send" format="reference"/>
+	<attr name="download_none" format="reference"/>
+	<attr name="shuffle" format="reference"/>
+	<attr name="refresh" format="reference"/>
+	<attr name="search" format="reference"/>
+	<attr name="remove" format="reference"/>
+	<attr name="save" format="reference"/>
+	<attr name="volume" format="reference"/>
+	<attr name="toggle_list" format="reference"/>
+	<attr name="select_server" format="reference"/>
+	<attr name="downloading" format="reference"/>
+	<attr name="bookmark" format="reference"/>
+	<attr name="drawerItemsIcons" format="reference"/>
 </resources>

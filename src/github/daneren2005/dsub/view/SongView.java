@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,8 +43,7 @@ import java.text.DateFormat;
  */
 public class SongView extends UpdateView implements Checkable {
     private static final String TAG = SongView.class.getSimpleName();
-    
-	private Context context;
+
     private MusicDirectory.Entry song;
 
     private CheckedTextView checkedTextView;
@@ -51,22 +51,23 @@ public class SongView extends UpdateView implements Checkable {
     private TextView artistTextView;
     private TextView durationTextView;
     private TextView statusTextView;
+	private ImageView statusImageView;
 	
 	private DownloadService downloadService;
 	private long revision = -1;
 	private DownloadFile downloadFile;
 
 	private boolean playing = false;
-	private int rightImage = 0;
+	private boolean rightImage = false;
 	private int moreImage = 0;
 	private boolean isWorkDone = false;
 	private boolean isSaved = false;
 	private File partialFile;
 	private boolean partialFileExists = false;
+	private boolean loaded = false;
 
     public SongView(Context context) {
         super(context);
-		this.context = context;
         LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
         checkedTextView = (CheckedTextView) findViewById(R.id.song_check);
@@ -74,6 +75,7 @@ public class SongView extends UpdateView implements Checkable {
         artistTextView = (TextView) findViewById(R.id.song_artist);
         durationTextView = (TextView) findViewById(R.id.song_duration);
         statusTextView = (TextView) findViewById(R.id.song_status);
+		statusImageView = (ImageView) findViewById(R.id.song_status_icon);
         starButton = (ImageButton) findViewById(R.id.song_star);
         starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
@@ -142,6 +144,7 @@ public class SongView extends UpdateView implements Checkable {
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
 		revision = -1;
+		loaded = false;
     }
 	
 	@Override
@@ -164,10 +167,19 @@ public class SongView extends UpdateView implements Checkable {
 		partialFile = downloadFile.getPartialFile();
 		partialFileExists = partialFile.exists();
 		isStarred = song.isStarred();
+		
+		// Check if needs to load metadata: check against all fields that we know are null in offline mode
+		if(song.getBitRate() == null && song.getDuration() == null && song.getDiscNumber() == null && isWorkDone) {
+			song.loadMetadata(downloadFile.getCompleteFile());
+			loaded = true;
+		}
 	}
 
 	@Override
     protected void update() {
+		if(loaded) {
+			setObjectImpl(song, checkedTextView.getVisibility() == View.VISIBLE);
+		}
         if (downloadService == null) {
             return;
         }
@@ -184,34 +196,39 @@ public class SongView extends UpdateView implements Checkable {
 			}
 		}
 
-        int rightImage = 0;
         if (isWorkDone) {
-			int moreImage = isSaved ? R.drawable.list_item_more_saved : R.drawable.list_item_more_shaded;
+			int moreImage = isSaved ? R.drawable.download_pinned : R.drawable.download_cached;
 			if(moreImage != this.moreImage) {
 				moreButton.setImageResource(moreImage);
 				this.moreImage = moreImage;
 			}
-        } else if(this.moreImage != R.drawable.list_item_more) {
-			moreButton.setImageResource(R.drawable.list_item_more);
-			this.moreImage = R.drawable.list_item_more;
+        } else if(true) {
+			int[] attrs = new int[] {R.attr.download_none};
+			TypedArray typedArray = context.obtainStyledAttributes(attrs);
+			moreButton.setImageResource(typedArray.getResourceId(0, 0));
+			typedArray.recycle();
+			this.moreImage = R.drawable.download_none_light;
 		}
 
         if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {
 			statusTextView.setText(Util.formatLocalizedBytes(partialFile.length(), getContext()));
-			rightImage = R.drawable.downloading;
-        } else if(this.rightImage != 0) {
+			if(!rightImage) {
+				statusImageView.setVisibility(View.VISIBLE);
+				rightImage = true;
+			}
+        } else if(rightImage) {
             statusTextView.setText(null);
+			statusImageView.setVisibility(View.GONE);
+			rightImage = false;
         }
-		if(this.rightImage != rightImage) {
-        	statusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, rightImage, 0);
-			this.rightImage = rightImage;
-		}
 
         boolean playing = downloadService.getCurrentPlaying() == downloadFile;
         if (playing) {
 			if(!this.playing) {
 				this.playing = playing;
-            	titleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.stat_notify_playing, 0, 0, 0);
+				int[] attrs = new int[] {R.attr.media_button_start};
+				TypedArray typedArray = context.obtainStyledAttributes(attrs);
+            	titleTextView.setCompoundDrawablesWithIntrinsicBounds(typedArray.getResourceId(0, 0), 0, 0, 0);
 			}
         } else {
 			if(this.playing) {

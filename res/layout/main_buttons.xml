@@ -15,7 +15,7 @@
             android:minHeight="?android:attr/listPreferredItemHeight">
 
         <ImageView
-                android:src="@drawable/main_select_server"
+                android:src="?attr/select_server"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -71,7 +71,6 @@
     <TextView
             android:id="@+id/main_albums_newest"
             android:text="@string/main.albums_newest"
-            android:drawableRight="@drawable/list_item_more"
             android:drawablePadding="6dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -83,7 +82,6 @@
     <TextView
             android:id="@+id/main_albums_recent"
             android:text="@string/main.albums_recent"
-            android:drawableRight="@drawable/list_item_more"
             android:drawablePadding="6dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -95,7 +93,6 @@
     <TextView
             android:id="@+id/main_albums_frequent"
             android:text="@string/main.albums_frequent"
-            android:drawableRight="@drawable/list_item_more"
             android:drawablePadding="6dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -107,7 +104,6 @@
     <TextView
             android:id="@+id/main_albums_highest"
             android:text="@string/main.albums_highest"
-            android:drawableRight="@drawable/list_item_more"
             android:drawablePadding="6dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -119,7 +115,6 @@
     <TextView
             android:id="@+id/main_albums_starred"
             android:text="@string/main.albums_starred"
-            android:drawableRight="@drawable/list_item_more"
             android:drawablePadding="6dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -131,7 +126,6 @@
 	<TextView
             android:id="@+id/main_albums_genres"
             android:text="@string/main.albums_genres"
-            android:drawableRight="@drawable/list_item_more"
             android:drawablePadding="6dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -143,7 +137,6 @@
     <TextView
             android:id="@+id/main_albums_random"
             android:text="@string/main.albums_random"
-            android:drawableRight="@drawable/list_item_more"
             android:drawablePadding="6dip"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

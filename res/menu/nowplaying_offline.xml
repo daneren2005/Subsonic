@@ -4,28 +4,25 @@
 
     <item
         android:id="@+id/menu_shuffle"
-        android:icon="@drawable/action_shuffle"
+        android:icon="?attr/shuffle"
         android:title="@string/download.menu_shuffle"
         compat:showAsAction="always|withText"/>
 		
 	<item
         android:id="@+id/menu_remove_all"
-        android:icon="@drawable/action_remove_all"
+        android:icon="?attr/remove"
         android:title="@string/download.menu_remove_all"
         compat:showAsAction="always|withText"/>
 	
 	<item
         android:id="@+id/menu_screen_on_off"
-        android:icon="@drawable/action_screen_on_off"
-        android:title="@string/download.menu_screen_on"
-        compat:showAsAction="ifRoom|withText"/>
+        android:title="@string/download.menu_screen_on"/>
 		
 	<item
         android:id="@+id/menu_toggle_timer"
         android:title="@string/download.start_timer"/>
 		
-	<item 
+	<item
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/action_exit"
 		android:title="@string/menu.exit"/>
 </menu>

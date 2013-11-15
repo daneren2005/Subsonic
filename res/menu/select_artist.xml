@@ -3,29 +3,23 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_refresh"
-		android:icon="@drawable/action_refresh"
+		android:icon="?attr/refresh"
 		android:title="@string/menu.refresh"
 		compat:showAsAction="always|withText"/>
 		
 	<item 
 		android:id="@+id/menu_shuffle"
-		android:icon="@drawable/action_shuffle"
+		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
 		compat:showAsAction="always|withText"/>
 		
 	<item 
 		android:id="@+id/menu_search"
-		android:icon="@drawable/action_search"
+		android:icon="?attr/search"
 		android:title="@string/menu.search"
 		compat:showAsAction="ifRoom|withText"/>
 
-	<item 
-		android:id="@+id/menu_settings"
-		android:icon="@drawable/action_settings"
-		android:title="@string/menu.settings"/>
-
-	<item 
+	<item
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/action_exit"
 		android:title="@string/menu.exit"/>
 </menu>

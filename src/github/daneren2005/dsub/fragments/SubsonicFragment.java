@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,11 +42,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
-import github.daneren2005.dsub.activity.HelpActivity;
-import github.daneren2005.dsub.activity.MainActivity;
-import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -65,6 +64,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,8 +85,10 @@ public class SubsonicFragment extends Fragment {
 	protected CharSequence subtitle = null;
 	protected View rootView;
 	protected boolean primaryFragment = false;
+	protected boolean secondaryFragment = false;
 	protected boolean invalidated = false;
 	protected static Random random = new Random();
+	protected GestureDetector gestureScanner;
 	
 	public SubsonicFragment() {
 		super();
@@ -96,6 +98,19 @@ public class SubsonicFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		if(bundle != null) {
+			String name = bundle.getString(Constants.FRAGMENT_NAME);
+			if(name != null) {
+				title = name;
+			}
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(Constants.FRAGMENT_NAME, title.toString());
 	}
 
 	@Override
@@ -128,12 +143,6 @@ public class SubsonicFragment extends Fragment {
 				return true;
 			case R.id.menu_exit:
 				exit();
-				return true;
-			case R.id.menu_settings:
-				startActivity(new Intent(context, SettingsActivity.class));
-				return true;
-			case R.id.menu_help:
-				startActivity(new Intent(context, HelpActivity.class));
 				return true;
 		}
 
@@ -237,9 +246,6 @@ public class SubsonicFragment extends Fragment {
 				getDownloadService().clear();
 				getDownloadService().download(songs, false, true, true, false);
 				Util.startActivityWithoutTransition(context, DownloadActivity.class);
-				if(context instanceof SearchActivity) {
-					context.finish();
-				}
 				break;
 			case R.id.song_menu_play_next:
 				getDownloadService().download(songs, false, false, true, false);
@@ -279,7 +285,10 @@ public class SubsonicFragment extends Fragment {
 	}
 	
 	public void replaceFragment(SubsonicFragment fragment, int id) {
-		context.replaceFragment(fragment, id, fragment.getSupportTag());
+		replaceFragment(fragment, id, true);
+	}
+	public void replaceFragment(SubsonicFragment fragment, int id, boolean replaceCurrent) {
+		context.replaceFragment(fragment, id, fragment.getSupportTag(), secondaryFragment && replaceCurrent);
 	}
 	
 	protected int getNewId() {
@@ -296,7 +305,9 @@ public class SubsonicFragment extends Fragment {
 	public int getRootId() {
 		return rootView.getId();
 	}
-	
+
+	public void setSupportTag(int tag) { this.tag = tag; }
+	public void setSupportTag(String tag) { this.tag = Integer.parseInt(tag); }
 	public int getSupportTag() {
 		return tag;
 	}
@@ -314,10 +325,14 @@ public class SubsonicFragment extends Fragment {
 			}
 		}
 	}
-	
+	public void setPrimaryFragment(boolean primary, boolean secondary) {
+		setPrimaryFragment(primary);
+		secondaryFragment = secondary;
+	}
+
 	public void invalidate() {
 		if(primaryFragment) {
-			refresh(false);
+			refresh(true);
 		} else {
 			invalidated = true;
 		}
@@ -335,8 +350,8 @@ public class SubsonicFragment extends Fragment {
 	}
 
 	protected void exit() {
-		if(context.getClass() != MainActivity.class) {
-			Intent intent = new Intent(context, MainActivity.class);
+		if(context.getClass() != SubsonicFragmentActivity.class) {
+			Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
 			Util.startActivityWithoutTransition(context, intent);
@@ -512,6 +527,12 @@ public class SubsonicFragment extends Fragment {
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.setStarred(entry.getId(), starred, context, null);
+				
+				// Make sure to clear parent cache
+				String s = Util.getRestUrl(context, null) + entry.getParent();
+				String parentCache = "directory-" + s.hashCode() + ".ser";
+				File file = new File(context.getCacheDir(), parentCache);
+				file.delete();
 				return null;
 			}
 
@@ -587,7 +608,7 @@ public class SubsonicFragment extends Fragment {
 				if(isDirectory)
 					root = musicService.getMusicDirectory(id, name, false, context, this);
 				else
-					root = musicService.getPlaylist(id, name, context, this);
+					root = musicService.getPlaylist(true, id, name, context, this);
 				List<MusicDirectory.Entry> songs = new LinkedList<MusicDirectory.Entry>();
 				getSongsRecursively(root, songs);
 				return songs;
@@ -621,9 +642,6 @@ public class SubsonicFragment extends Fragment {
 						downloadService.download(songs, save, autoplay, false, shuffle);
 						if(!append) {
 							Util.startActivityWithoutTransition(context, DownloadActivity.class);
-							if(context instanceof SearchActivity) {
-								context.finish();
-							}
 						}
 					}
 					else {
@@ -792,7 +810,7 @@ public class SubsonicFragment extends Fragment {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				MusicDirectory playlist = musicService.getPlaylist(id, name, context, null);
+				MusicDirectory playlist = musicService.getPlaylist(true, id, name, context, null);
 				List<MusicDirectory.Entry> toDelete = playlist.getChildren();
 				musicService.overwritePlaylist(id, name, toDelete.size(), songs, context, null);
 				return null;
@@ -960,6 +978,8 @@ public class SubsonicFragment extends Fragment {
 
 	public void deleteRecursively(Artist artist) {
 		File dir = FileUtil.getArtistDirectory(context, artist);
+		if(dir == null) return;
+
 		Util.recursiveDelete(dir);
 		if(Util.isOffline(context)) {
 			refresh();
@@ -968,9 +988,15 @@ public class SubsonicFragment extends Fragment {
 	
 	public void deleteRecursively(MusicDirectory.Entry album) {
 		File dir = FileUtil.getAlbumDirectory(context, album);
+		if(dir == null) return;
+
 		Util.recursiveDelete(dir);
 		if(Util.isOffline(context)) {
 			refresh();
 		}
+	}
+	
+	public GestureDetector getGestureDetector() {
+		return gestureScanner;
 	}
 }

@@ -5,17 +5,6 @@
               android:layout_height="wrap_content">
 
     <TextView
-            android:id="@+id/search_search"
-            android:text="@string/search.search"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawablePadding="0dp"
-            android:drawableLeft="@drawable/search"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:gravity="center"
-            android:padding="12dp"/>
-
-    <TextView
             android:id="@+id/search_artists"
             android:text="@string/search.artists"
             android:layout_width="fill_parent"
@@ -82,4 +71,3 @@
             android:paddingBottom="8dp"/>
 
 </LinearLayout>
-

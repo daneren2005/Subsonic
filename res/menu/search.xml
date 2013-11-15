@@ -3,23 +3,12 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_search"
-		android:icon="@drawable/action_search"
+		android:icon="?attr/search"
 		android:title="@string/menu.search"
 		compat:showAsAction="ifRoom|withText"/>
 
 	<item 
-		android:id="@+id/menu_help"
-		android:icon="@drawable/ic_menu_help"
-		android:title="@string/menu.help"/>
-
-	<item 
-		android:id="@+id/menu_settings"
-		android:icon="@drawable/ic_menu_settings"
-		android:title="@string/menu.settings"/>
-
-	<item 
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/ic_menu_exit"
 		android:title="@string/menu.exit"/>
 
 </menu>

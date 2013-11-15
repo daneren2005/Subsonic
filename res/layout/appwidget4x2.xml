@@ -5,7 +5,8 @@
     android:minWidth="250dp"
     android:minHeight="110dp"
     android:background="@drawable/appwidget_bg"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+	android:id="@+id/widget_root">
 
     <ImageView
         android:id="@+id/appwidget_coverart"

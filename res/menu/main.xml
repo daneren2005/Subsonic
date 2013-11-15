@@ -3,24 +3,18 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_search"
-		android:icon="@drawable/action_search"
+		android:icon="?attr/search"
 		android:title="@string/menu.search"
 		compat:showAsAction="always|withText"/>
 	
 	<item 
 		android:id="@+id/menu_shuffle"
-		android:icon="@drawable/action_shuffle"
+		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
 		compat:showAsAction="always|withText"/>
-
-	<item 
-		android:id="@+id/menu_help"
-		android:icon="@drawable/action_help"
-		android:title="@string/menu.help"/>
 		
 	<item 
 		android:id="@+id/menu_about"
-		android:icon="@drawable/action_help"
 		android:title="@string/menu.about"/>
 		
 	<item 
@@ -31,14 +25,7 @@
 		android:id="@+id/menu_changelog"
 		android:title="@string/changelog_full_title"/>
 
-	<item 
-		android:id="@+id/menu_settings"
-		android:icon="@drawable/action_settings"
-		android:title="@string/menu.settings"/>
-
-	<item 
+	<item
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/action_exit"
 		android:title="@string/menu.exit"/>
-
 </menu>

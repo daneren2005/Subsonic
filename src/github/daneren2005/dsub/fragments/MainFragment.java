@@ -95,6 +95,9 @@ public class MainFragment extends SubsonicFragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		if(!primaryFragment) {
+			return;
+		}
 		
 		int serverCount = Util.getServerCount(context);
 		int activeServer = Util.getActiveServer(context);
@@ -116,7 +119,6 @@ public class MainFragment extends SubsonicFragment {
 		
 		int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
 		setActiveServer(activeServer);
-		context.getPagerAdapter().invalidate();
 		return true;
 	}
 
@@ -186,6 +188,7 @@ public class MainFragment extends SubsonicFragment {
 				}
 			}
 		});
+		setTitle(R.string.common_appname);
 	}
 
 	private void setActiveServer(int instance) {
@@ -195,13 +198,14 @@ public class MainFragment extends SubsonicFragment {
 				service.clearIncomplete();
 			}
 			Util.setActiveServer(context, instance);
+			context.invalidate();
 		}
 	}
 
 	private void toggleOffline() {
 		boolean isOffline = Util.isOffline(context);
 		Util.setOffline(context, !isOffline);
-		context.getPagerAdapter().invalidate();
+		context.invalidate();
 		
 		if(isOffline) {
 			int scrobblesCount = Util.offlineScrobblesCount(context);

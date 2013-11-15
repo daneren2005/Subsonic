@@ -3,27 +3,25 @@
 	  xmlns:compat="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_shuffle"
-        android:icon="@drawable/action_shuffle"
+        android:icon="?attr/shuffle"
         android:title="@string/download.menu_shuffle"
         compat:showAsAction="ifRoom|withText"/>
 		
 	<item
         android:id="@+id/menu_remove_all"
-        android:icon="@drawable/action_remove_all"
+        android:icon="?attr/remove"
         android:title="@string/download.menu_remove_all"
         compat:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/menu_save_playlist"
-        android:icon="@drawable/action_save"
+        android:icon="?attr/save"
         android:title="@string/download.menu_save"
         compat:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/menu_screen_on_off"
-        android:icon="@drawable/action_screen_on_off"
-        android:title="@string/download.menu_screen_on"
-        compat:showAsAction="ifRoom|withText"/>
+        android:title="@string/download.menu_screen_on"/>
 		
 	<item
         android:id="@+id/menu_toggle_timer"
@@ -32,9 +30,8 @@
 	<item
         android:id="@+id/menu_toggle_now_playing"
         android:title="@string/download.show_downloading"/>
-		
-	<item 
+
+	<item
 		android:id="@+id/menu_exit"
-		android:icon="@drawable/action_exit"
 		android:title="@string/menu.exit"/>
 </menu>

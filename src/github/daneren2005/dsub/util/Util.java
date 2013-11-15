@@ -22,6 +22,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -40,6 +41,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -52,13 +54,14 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.MainActivity;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import org.apache.http.HttpEntity;
@@ -161,7 +164,7 @@ public final class Util {
 
     public static int getActiveServer(Context context) {
         SharedPreferences prefs = getPreferences(context);
-        return prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
     }
 	
 	public static boolean checkServerVersion(Context context, String requiredVersion) {
@@ -758,8 +761,8 @@ public final class Util {
         }
     }
 	
-	public static boolean isNullOrWhiteSpace(String string) { 
-		return string == null || string.isEmpty() || string.trim().isEmpty();
+	public static boolean isNullOrWhiteSpace(String string) {
+		return string == null || "".equals(string) || "".equals(string.trim());
 	}
 
     public static boolean isNetworkConnected(Context context) {
@@ -783,24 +786,44 @@ public final class Util {
     }
 
     public static void info(Context context, int titleId, int messageId) {
-        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId);
+    	info(context, titleId, messageId, true);
     }
 	public static void info(Context context, int titleId, String message) {
-		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message);
+		info(context, titleId, message, true);
 	}
 	public static void info(Context context, String title, String message) {
-		showDialog(context, android.R.drawable.ic_dialog_info, title, message);
+		info(context, title, message, true);
+	}
+	public static void info(Context context, int titleId, int messageId, boolean linkify) {
+        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, linkify);
+    }
+	public static void info(Context context, int titleId, String message, boolean linkify) {
+		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message, linkify);
+	}
+	public static void info(Context context, String title, String message, boolean linkify) {
+		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
 	}
 
 	private static void showDialog(Context context, int icon, int titleId, int messageId) {
-		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId));
+		showDialog(context, icon, titleId, messageId, true);
 	}
 	private static void showDialog(Context context, int icon, int titleId, String message) {
-		showDialog(context, icon, context.getResources().getString(titleId), message);
+		showDialog(context, icon, titleId, message, true);
 	}
 	private static void showDialog(Context context, int icon, String title, String message) {
+		showDialog(context, icon, title, message, true);
+	}
+	private static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
+		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
+	}
+	private static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
+		showDialog(context, icon, context.getResources().getString(titleId), message, linkify);
+	}
+	private static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
 		SpannableString ss = new SpannableString(message);
-		Linkify.addLinks(ss, Linkify.ALL);
+		if(linkify) {
+			Linkify.addLinks(ss, Linkify.ALL);
+		}
 		
 		AlertDialog dialog = new AlertDialog.Builder(context)
 			.setIcon(icon)
@@ -833,10 +856,10 @@ public final class Util {
         setupViews(smallContentView, context, song, playing);
         notification.contentView = smallContentView;
         
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         
 		handler.post(new Runnable() {
 			@Override
@@ -846,7 +869,7 @@ public final class Util {
 		});
 
         // Update widget
-        DSubWidgetProvider.notifyInstances(context, downloadService, true);
+        DSubWidgetProvider.notifyInstances(context, downloadService, playing);
     }
     
     private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean playing){
@@ -883,39 +906,62 @@ public final class Util {
         if (colors.getSecond() != null) {
             rv.setTextColor(R.id.notification_artist, colors.getSecond());
         }
-		
-		if(!playing) {
-			rv.setImageViewResource(R.id.control_pause, R.drawable.notification_play);
-			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_stop);
+
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+			rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_play);
+			rv.setImageViewResource(R.id.control_pause, R.drawable.notification_next);
+			rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
 		}
         
         // Create actions for media buttons
         PendingIntent pendingIntent;
-		if(playing) {
+		int previous = 0, pause = 0, next = 0, close = 0;
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+			pause = R.id.control_previous;
+			next = R.id.control_pause;
+			close = R.id.control_next;
+		} else {
+			previous = R.id.control_previous;
+			pause = R.id.control_pause;
+			next = R.id.control_next;
+		}
+
+		if(previous > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
 			prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-			rv.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
-		} else {
+			rv.setOnClickPendingIntent(previous, pendingIntent);
+		}
+		if(pause > 0) {
+			if(playing) {
+				Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
+				pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+				pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+				pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
+				rv.setOnClickPendingIntent(pause, pendingIntent);
+			} else {
+				Intent prevIntent = new Intent("KEYCODE_MEDIA_START");
+				prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+				prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
+				pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
+				rv.setOnClickPendingIntent(pause, pendingIntent);
+			}
+		}
+		if(next > 0) {
+			Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
+			nextIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+			nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
+			pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
+			rv.setOnClickPendingIntent(next, pendingIntent);
+		}
+		if(close > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_STOP");
 			prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
-			rv.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
+			rv.setOnClickPendingIntent(close, pendingIntent);
 		}
-        
-        Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
-        pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
-        pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-        pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
-        rv.setOnClickPendingIntent(R.id.control_pause, pendingIntent);
-        
-        Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
-        nextIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
-        nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
-        pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
-        rv.setOnClickPendingIntent(R.id.control_next, pendingIntent);
     }
 
     public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
@@ -929,6 +975,30 @@ public final class Util {
 
         // Update widget
         DSubWidgetProvider.notifyInstances(context, downloadService, false);
+    }
+    
+    public static void showDownloadingNotification(final Context context, DownloadFile file, int size) {
+    	NotificationCompat.Builder builder;
+    	builder = new NotificationCompat.Builder(context)
+    		.setSmallIcon(R.drawable.stat_notify_download)
+    		.setContentTitle("Downloading " + size + " songs")
+    		.setContentText("Current: " + (file != null ? file.getSong().getTitle() : "none"))
+    		.setProgress(10, 5, true)
+			.setOngoing(true);
+    	
+		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
+		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
+		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.notify(Constants.NOTIFICATION_ID_DOWNLOADING, builder.build());
+
+    }
+    public static void hideDownloadingNotification(final Context context) {
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(Constants.NOTIFICATION_ID_DOWNLOADING);
     }
 
     public static void sleepQuietly(long millis) {

@@ -81,12 +81,12 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.select_podcasts, container, false);
+		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
-		podcastListView = (ListView)rootView.findViewById(R.id.select_podcasts_list);
+		podcastListView = (ListView)rootView.findViewById(R.id.fragment_list);
 		podcastListView.setOnItemClickListener(this);
 		registerForContextMenu(podcastListView);
-		emptyView = rootView.findViewById(R.id.select_podcasts_empty);
+		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 
 		if(channels == null) {
 			if(!primaryFragment) {
@@ -127,6 +127,10 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		if(!primaryFragment) {
+			return;
+		}
+
 		if(!Util.isOffline(context)) {
 			android.view.MenuInflater inflater = context.getMenuInflater();
 			inflater.inflate(R.menu.select_podcasts_context, menu);
@@ -205,7 +209,7 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 			args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_DESCRIPTION, channel.getDescription());
 			fragment.setArguments(args);
 
-			replaceFragment(fragment, R.id.select_podcasts_layout);
+			replaceFragment(fragment, R.id.fragment_list_layout);
 		}
 	}
 	

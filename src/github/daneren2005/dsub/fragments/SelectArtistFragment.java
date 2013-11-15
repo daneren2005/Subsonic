@@ -17,6 +17,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -40,6 +41,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	private View folderButton;
 	private TextView folderName;
 	private List<MusicFolder> musicFolders = null;
+	private List<MusicDirectory.Entry> entries;
 	private List<Artist> artists;
 
 	@Override
@@ -61,9 +63,9 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.select_artist, container, false);
+		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
-		artistList = (ListView) rootView.findViewById(R.id.select_artist_list);
+		artistList = (ListView) rootView.findViewById(R.id.fragment_list);
 		artistList.setOnItemClickListener(this);
 
 		folderButtonParent = inflater.inflate(R.layout.select_artist_header, artistList, false);
@@ -103,6 +105,9 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		if(!primaryFragment) {
+			return;
+		}
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		Object entry = artistList.getItemAtPosition(info.position);
@@ -146,7 +151,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 															: selectedFolder.getName();
 			Util.setSelectedMusicFolderId(context, musicFolderId);
 			folderName.setText(musicFolderName);
-			refresh();
+			context.invalidate();
 		}
 
 		return true;
@@ -162,9 +167,13 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+			if("root".equals(artist.getId())) {
+				Log.d(TAG, "root");
+				args.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
+			}
 			fragment.setArguments(args);
 
-			replaceFragment(fragment, R.id.select_artist_layout);
+			replaceFragment(fragment, R.id.fragment_list_layout);
 		}
 	}
 
@@ -174,7 +183,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	}
 
 	private void load(final boolean refresh) {
-		setTitle(R.string.search_artists);
+		setTitle(R.string.button_bar_browse);
 		
 		if (Util.isOffline(context)) {
 			folderButton.setVisibility(View.GONE);
@@ -199,7 +208,10 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 				artists = new ArrayList<Artist>(result.getShortcuts().size() + result.getArtists().size());
 				artists.addAll(result.getShortcuts());
 				artists.addAll(result.getArtists());
+				artistList.setFastScrollEnabled(false);
 				artistList.setAdapter(new ArtistAdapter(context, artists));
+				artistList.setFastScrollEnabled(true);
+				entries = result.getEntries();
 
 				setMusicFolders();
 				artistList.setVisibility(View.VISIBLE);

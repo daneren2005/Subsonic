@@ -22,8 +22,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import github.daneren2005.dsub.activity.MainActivity;
+
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -59,11 +60,15 @@ public class ErrorDialog {
             }
         });
 
-        builder.create().show();
+		try {
+        	builder.create().show();
+		} catch(Exception e) {
+			// Don't care, just means no activity to attach to
+		}
     }
     
 	private void restart(Activity context) {
-		Intent intent = new Intent(context, MainActivity.class);
+		Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Util.startActivityWithoutTransition(context, intent);
 	}

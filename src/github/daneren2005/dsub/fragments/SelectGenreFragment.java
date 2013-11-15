@@ -64,11 +64,11 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.select_genres, container, false);
+		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
-		genreListView = (ListView)rootView.findViewById(R.id.select_genre_list);
+		genreListView = (ListView)rootView.findViewById(R.id.fragment_list);
 		genreListView.setOnItemClickListener(this);
-		emptyView = rootView.findViewById(R.id.select_genre_empty);
+		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 
 		if(genres == null) {
 			refresh();
@@ -81,6 +81,10 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		if(!primaryFragment) {
+			return;
+		}
+
 		menuInflater.inflate(R.menu.select_genres, menu);
 	}
 	
@@ -91,18 +95,6 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 		}
 
 		return false;
-	}
-	
-	@Override
-	public void setPrimaryFragment(boolean primary) {
-		super.setPrimaryFragment(primary);
-		if(rootView != null) {
-			if(primary) {
-				((ViewGroup)rootView).getChildAt(0).setVisibility(View.VISIBLE);
-			} else {
-				((ViewGroup)rootView).getChildAt(0).setVisibility(View.GONE);
-			}
-		}
 	}
 
 	@Override
@@ -155,6 +147,6 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA, genre.getName());
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.select_genre_layout);
+		replaceFragment(fragment, R.id.fragment_list_layout);
 	}
 }

@@ -14,18 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.EntryAdapter;
 
 import java.io.Serializable;
 import java.util.List;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.DownloadActivity;
-import github.daneren2005.dsub.activity.SearchActivity;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -47,7 +46,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 	private DragSortListView entryList;
 	int rootId;
-	private View footer;
 	private View emptyView;
 	private boolean hideButtons = false;
 	private Boolean licenseValid;
@@ -65,6 +63,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	String albumListType;
 	String albumListExtra;
 	int albumListSize;
+	boolean refreshListing = false;
 	
 	
 	public SelectDirectoryFragment() {
@@ -97,7 +96,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		rootView.setId(rootId);
 
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
-		footer = LayoutInflater.from(context).inflate(R.layout.select_album_footer, entryList, false);
 		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		entryList.setOnItemClickListener(this);
 		entryList.setDropListener(new DragSortListView.DropListener() {
@@ -131,10 +129,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
+			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
+			if(entries == null) {
+				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
+			}
 		}
 
 		if(entries == null) {
-			if(primaryFragment) {
+			if(primaryFragment || secondaryFragment) {
 				load(false);
 			} else {
 				invalidated = true;
@@ -233,6 +235,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		if(!primaryFragment) {
+			return;
+		}
+
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
 		MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
@@ -287,6 +293,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					Bundle args = new Bundle();
 					args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
 					args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+					if("recent".equals(albumListType)) {
+						args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
+					}
 					parentFragment.setArguments(args);
 
 					replaceFragment(parentFragment, fragId);
@@ -299,7 +308,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, fragId);
+				replaceFragment(fragment, fragId, fragId == rootId);
 			} else if (entry.isVideo()) {
 				playVideo(entry);
 			} else if(entry instanceof PodcastEpisode) {
@@ -323,7 +332,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 	@Override
 	protected void refresh(boolean refresh) {
-		load(refresh);
+		if(!"root".equals(id)) {
+			load(refresh);
+		}
 	}
 	
 	@Override
@@ -332,12 +343,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	private void load(boolean refresh) {
+		if(refreshListing) {
+			refresh = true;
+		}
+		
 		entryList.setVisibility(View.INVISIBLE);
 		emptyView.setVisibility(View.INVISIBLE);
 		if (playlistId != null) {
-			getPlaylist(playlistId, playlistName);
+			getPlaylist(playlistId, playlistName, refresh);
 		} else if(podcastId != null) {
-			getPodcast(podcastId, podcastName);
+			getPodcast(podcastId, podcastName, refresh);
 		} else if (albumListType != null) {
 			getAlbumList(albumListType, albumListSize);
 		} else {
@@ -356,24 +371,24 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}.execute();
 	}
 
-	private void getPlaylist(final String playlistId, final String playlistName) {
+	private void getPlaylist(final String playlistId, final String playlistName, final boolean refresh) {
 		setTitle(playlistName);
 
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				return service.getPlaylist(playlistId, playlistName, context, this);
+				return service.getPlaylist(refresh, playlistId, playlistName, context, this);
 			}
 		}.execute();
 	}
 	
-	private void getPodcast(final String podcastId, final String podcastName) {
+	private void getPodcast(final String podcastId, final String podcastName, final boolean refresh) {
 		setTitle(podcastName);
 
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				return service.getPodcastEpisodes(podcastId, context, this);
+				return service.getPodcastEpisodes(refresh, podcastId, context, this);
 			}
 		}.execute();
 	}
@@ -445,7 +460,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
             }
         }
 
-        if (songCount > 0) {
+        if (songCount > 0 && !"root".equals(id)) {
             if(showHeader) {
                 View header = createHeader(entries);
                 if(header != null) {
@@ -454,7 +469,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
             }
         } else {
             showHeader = false;
-            hideButtons = true;
+			if(!"root".equals(id)) {
+            	hideButtons = true;
+			}
         }
 
         emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
@@ -563,31 +580,33 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		final List<MusicDirectory.Entry> songs = getSelectedSongs();
-		Runnable onValid = new Runnable() {
+		warnIfNetworkOrStorageUnavailable();
+		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
 			@Override
-			public void run() {
+			protected Void doInBackground() throws Throwable {
 				if (!append) {
 					getDownloadService().clear();
 				}
 
-				warnIfNetworkOrStorageUnavailable();
 				getDownloadService().download(songs, save, autoplay, playNext, shuffle);
 				if (playlistName != null) {
 					getDownloadService().setSuggestedPlaylistName(playlistName, playlistId);
 				} else {
 					getDownloadService().setSuggestedPlaylistName(null, null);
 				}
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
 				if (autoplay) {
 					Util.startActivityWithoutTransition(context, DownloadActivity.class);
-					if(context instanceof SearchActivity) {
-						context.finish();
-					}
 				} else if (save) {
 					Util.toast(context,
-							   context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+							context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
 				} else if (append) {
 					Util.toast(context,
-							   context.getResources().getQuantityString(R.plurals.select_album_n_songs_added, songs.size(), songs.size()));
+							context.getResources().getQuantityString(R.plurals.select_album_n_songs_added, songs.size(), songs.size()));
 				}
 			}
 		};
@@ -607,14 +626,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			return;
 		}
 
-		Runnable onValid = new Runnable() {
+		warnIfNetworkOrStorageUnavailable();
+		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
 			@Override
-			public void run() {
-				warnIfNetworkOrStorageUnavailable();
+			protected Void doInBackground() throws Throwable {
 				getDownloadService().downloadBackground(songs, save);
+				return null;
+			}
 
-				Util.toast(context,
-					context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
 			}
 		};
 
@@ -722,6 +744,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					protected Void doInBackground() throws Throwable {				
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePodcastEpisode(episode.getEpisodeId(), context, null);
+						if (getDownloadService() != null) {
+							List<MusicDirectory.Entry> episodeList = new ArrayList<MusicDirectory.Entry>(1);
+							episodeList.add(episode);
+							getDownloadService().delete(episodeList);
+						}
 						return null;
 					}
 
@@ -740,9 +767,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		});
 	}
 
-	private void checkLicenseAndTrialPeriod(Runnable onValid) {
+	private void checkLicenseAndTrialPeriod(LoadingTask onValid) {
 		if (licenseValid) {
-			onValid.run();
+			onValid.execute();
 			return;
 		}
 
@@ -755,11 +782,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			showDonationDialog(trialDaysLeft, onValid);
 		} else {
 			Util.toast(context, context.getResources().getString(R.string.select_album_not_licensed, trialDaysLeft));
-			onValid.run();
+			onValid.execute();
 		}
 	}
 
-	private void showDonationDialog(int trialDaysLeft, final Runnable onValid) {
+	private void showDonationDialog(int trialDaysLeft, final LoadingTask onValid) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(android.R.drawable.ic_dialog_info);
 
@@ -786,7 +813,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				public void onClick(DialogInterface dialogInterface, int i) {
 					dialogInterface.dismiss();
 					if (onValid != null) {
-						onValid.run();
+						onValid.execute();
 					}
 				}
 			});

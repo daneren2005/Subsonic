@@ -48,12 +48,20 @@
 				android:visibility="gone"/>
 
             <TextView
-                    android:id="@+id/song_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:drawablePadding="1dip"
-                    android:paddingRight="6dip"/>
+				android:id="@+id/song_status"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="right|center_vertical"
+				android:drawablePadding="1dip"
+				android:paddingRight="2dip"/>
+
+			<ImageView
+				android:id="@+id/song_status_icon"
+				android:layout_width="24dip"
+				android:layout_height="24dip"
+				android:layout_gravity="center_vertical"
+				android:src="?attr/downloading"
+				android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout android:orientation="horizontal"
@@ -87,10 +95,10 @@
 	
 	<ImageView
 		android:id="@+id/artist_more"
-		android:src="@drawable/list_item_more"
+		android:src="?attr/download_none"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:layout_gravity="right|center_vertical"
-		android:paddingRight="6dip"
+		android:paddingRight="10dip"
 		android:background="@drawable/menubar_button"/>
 </LinearLayout>

@@ -28,9 +28,12 @@ import java.io.Serializable;
  */
 public class MusicFolder implements Serializable {
 
-    private final String id;
-    private final String name;
+    private String id;
+    private String name;
 
+	public MusicFolder() {
+
+	}
     public MusicFolder(String id, String name) {
         this.id = id;
         this.name = name;

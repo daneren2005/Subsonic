@@ -1,53 +1,97 @@
+/*
+ This file is part of Subsonic.
+
+ Subsonic is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Subsonic is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
+
+ Copyright 2009 (C) Sindre Mehus
+ */
 package github.daneren2005.dsub.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.DrawerAdapter;
+
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class SubsonicActivity extends ActionBarActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
+	private String[] drawerItemsDescriptions;
+	private String[] drawerItems;
+	private boolean drawerIdle = true;
+	private boolean[] enabledItems = {true, true, true};
 	private boolean destroyed = false;
-	protected TabPagerAdapter pagerAdapter;
-	protected ViewPager viewPager;
+	private boolean finished = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
 	protected SubsonicFragment currentFragment;
+	protected View primaryContainer;
+	protected View secondaryContainer;
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
+	ViewGroup rootView;
+	DrawerLayout drawer;
+	ActionBarDrawerToggle drawerToggle;
+	ListView drawerList;
+	View lastSelectedView = null;
+	int lastSelectedPosition = 0;
+	boolean drawerOpen = false;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -65,6 +109,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		actionBarSpinner.setAdapter(spinnerAdapter);
 
 		getSupportActionBar().setCustomView(actionbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		drawerToggle.syncState();
 	}
 
 	@Override
@@ -76,6 +129,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if (theme != null && !theme.equals(Util.getTheme(this))) {
 			restart();
 		}
+		
+		populateDrawer();
 	}
 
 	@Override
@@ -90,50 +145,157 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		super.finish();
 		Util.disablePendingTransition(this);
 	}
+
+	@Override
+	public void setContentView(int viewId) {
+		super.setContentView(R.layout.abstract_activity);
+		rootView = (ViewGroup) findViewById(R.id.content_frame);
+		LayoutInflater layoutInflater = getLayoutInflater();
+		layoutInflater.inflate(viewId, rootView);
+
+		
+		drawerList = (ListView) findViewById(R.id.left_drawer);
+
+		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				if("Settings".equals(drawerItemsDescriptions[position])) {
+					startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
+					drawer.closeDrawers();
+				} else {
+					startFragmentActivity(drawerItemsDescriptions[position]);
+
+					if(lastSelectedView != view) {
+						lastSelectedView.setBackgroundResource(android.R.color.transparent);
+						view.setBackgroundResource(R.color.dividerColor);
+						lastSelectedView = view;
+						lastSelectedPosition = position;
+					}
+				}
+			}
+		});
+
+		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawerToggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer, R.string.common_appname, R.string.common_appname) {
+			@Override
+			public void onDrawerClosed(View view) {
+				setTitle(currentFragment.getTitle());
+				
+				drawerIdle = true;
+				drawerOpen = false;
+
+				supportInvalidateOptionsMenu();
+			}
+
+			@Override
+			public void onDrawerOpened(View view) {
+				if(lastSelectedView == null) {
+					lastSelectedView = drawerList.getChildAt(lastSelectedPosition);
+					lastSelectedView.setBackgroundResource(R.color.dividerColor);
+				}
+
+				getSupportActionBar().setTitle(R.string.common_appname);
+				getSupportActionBar().setDisplayShowCustomEnabled(false);
+				
+				drawerIdle = true;
+				drawerOpen = true;
+
+				supportInvalidateOptionsMenu();
+			}
+			
+			@Override
+			public void onDrawerSlide(View drawerView, float slideOffset) {
+				super.onDrawerSlide(drawerView, slideOffset);
+				drawerIdle = false;
+			}
+		};
+		drawer.setDrawerListener(drawerToggle);
+		drawerToggle.setDrawerIndicatorEnabled(false);
+		
+		drawer.setOnTouchListener(new View.OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				if (drawerIdle && currentFragment != null && currentFragment.getGestureDetector() != null) {
+					return currentFragment.getGestureDetector().onTouchEvent(event);
+				} else {
+					return false;
+				}
+			}
+		});
+
+		// Check whether this is a tablet or not
+		secondaryContainer = findViewById(R.id.fragment_second_container);
+		if(secondaryContainer != null) {
+			primaryContainer = findViewById(R.id.fragment_container);
+		}
+	}
 	
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
-		if(viewPager == null) {
-			String[] ids = new String[backStack.size() + 1];
-			ids[0] = currentFragment.getTag();
-			int i = 1;
-			for(SubsonicFragment frag: backStack) {
-				ids[i] = frag.getTag();
-				i++;
-			}
-			savedInstanceState.putStringArray(Constants.MAIN_BACK_STACK, ids);
-			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE, backStack.size() + 1);
-		} else {
-			pagerAdapter.onSaveInstanceState(savedInstanceState);
+		String[] ids = new String[backStack.size() + 1];
+		ids[0] = currentFragment.getTag();
+		int i = 1;
+		for(SubsonicFragment frag: backStack) {
+			ids[i] = frag.getTag();
+			i++;
 		}
+		savedInstanceState.putStringArray(Constants.MAIN_BACK_STACK, ids);
+		savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE, backStack.size() + 1);
+		savedInstanceState.putInt(Constants.FRAGMENT_POSITION, lastSelectedPosition);
 	}
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		if(viewPager == null) {
-			super.onRestoreInstanceState(savedInstanceState);
-			int size = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE);
-			String[] ids = savedInstanceState.getStringArray(Constants.MAIN_BACK_STACK);
-			FragmentManager fm = getSupportFragmentManager();
-			currentFragment = (SubsonicFragment)fm.findFragmentByTag(ids[0]);
-			currentFragment.setPrimaryFragment(true);
-			supportInvalidateOptionsMenu();
-			for(int i = 1; i < size; i++) {
-				SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[i]);
-				backStack.add(frag);
+		super.onRestoreInstanceState(savedInstanceState);
+		int size = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE);
+		String[] ids = savedInstanceState.getStringArray(Constants.MAIN_BACK_STACK);
+		FragmentManager fm = getSupportFragmentManager();
+		currentFragment = (SubsonicFragment)fm.findFragmentByTag(ids[0]);
+		currentFragment.setPrimaryFragment(true);
+		currentFragment.setSupportTag(ids[0]);
+		supportInvalidateOptionsMenu();
+		for(int i = 1; i < size; i++) {
+			SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[i]);
+			frag.setSupportTag(ids[i]);
+			if(secondaryContainer != null) {
+				frag.setPrimaryFragment(false, true);
 			}
-			recreateSpinner();
-		} else {
-			pagerAdapter.onRestoreInstanceState(savedInstanceState);
-			super.onRestoreInstanceState(savedInstanceState);
+			backStack.add(frag);
 		}
+
+		// Current fragment is hidden in secondaryContainer
+		if(secondaryContainer == null && findViewById(currentFragment.getRootId()) == null) {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.remove(currentFragment);
+			trans.commit();
+			getSupportFragmentManager().executePendingTransactions();
+
+			trans = getSupportFragmentManager().beginTransaction();
+			trans.add(backStack.get(backStack.size() - 1).getRootId(), currentFragment, ids[0]);
+			trans.commit();
+		}
+		// Current fragment needs to be moved over to secondaryContainer
+		else if(secondaryContainer != null && secondaryContainer.findViewById(currentFragment.getRootId()) == null && backStack.size() > 0) {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.remove(currentFragment);
+			trans.commit();
+			getSupportFragmentManager().executePendingTransactions();
+
+			trans = getSupportFragmentManager().beginTransaction();
+			trans.add(R.id.fragment_second_container, currentFragment, ids[0]);
+			trans.commit();
+
+			secondaryContainer.setVisibility(View.VISIBLE);
+		}
+
+		lastSelectedPosition = savedInstanceState.getInt(Constants.FRAGMENT_POSITION);
+		recreateSpinner();
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getMenuInflater();
-		if(pagerAdapter != null) {
-			pagerAdapter.onCreateOptionsMenu(menu, menuInflater);
+		if(drawerOpen == true) {
+			menuInflater.inflate(R.menu.drawer_menu, menu);
 		} else if(currentFragment != null) {
 			currentFragment.onCreateOptionsMenu(menu, menuInflater);
 		}
@@ -141,12 +303,14 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(pagerAdapter != null) {
-			return pagerAdapter.onOptionsItemSelected(item);
-		} else if(currentFragment != null) {
-			return currentFragment.onOptionsItemSelected(item);
+		if(drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		} else if(item.getItemId() == android.R.id.home) {
+			onBackPressed();
+			return true;
 		}
-		return true;
+
+		return currentFragment.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -165,12 +329,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	
 	@Override
 	public void setTitle(CharSequence title) {
-		super.setTitle(title);
-		if(pagerAdapter != null) {
-			pagerAdapter.recreateSpinner();
-		} else {
-			recreateSpinner();
-		}
+		getSupportActionBar().setTitle(title);
+		recreateSpinner();
 	}
 	public void setSubtitle(CharSequence title) {
 		getSupportActionBar().setSubtitle(title);
@@ -181,11 +341,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		int top = spinnerAdapter.getCount() - 1;
 		if(position < top) {
 			for(int i = top; i > position; i--) {
-				if(pagerAdapter != null) {
-					pagerAdapter.removeCurrent();
-				} else {
-					removeCurrent();
-				}
+				removeCurrent();
 			}
 		}
 	}
@@ -194,40 +350,189 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public void onNothingSelected(AdapterView<?> parent) {
 		
 	}
-	
-	public boolean onBackPressedSupport() {
-		if(pagerAdapter != null) {
-			return pagerAdapter.onBackPressed();
-		} else {
-			if(backStack.size() > 0) {
-				removeCurrent();
-				return false;
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		if(currentFragment != null && currentFragment instanceof SearchFragment) {
+			String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
+			boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+			boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
+
+			if (query != null) {
+				((SearchFragment)currentFragment).search(query, autoplay);
 			} else {
-				return true;
+				((SearchFragment)currentFragment).populateList();
+				if (requestsearch) {
+					onSearchRequested();
+				}
 			}
+		} else if(intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
+			setIntent(intent);
+
+			SearchFragment fragment = new SearchFragment();
+			replaceFragment(fragment, currentFragment.getRootId(), fragment.getSupportTag());
 		}
 	}
 	
-	public void replaceFragment(SubsonicFragment fragment, int id, int tag) {
-		if(pagerAdapter != null) {
-			pagerAdapter.replaceCurrent(fragment, id, tag);
-		} else {
-			if(currentFragment != null) {
-				currentFragment.setPrimaryFragment(false);
+	private void populateDrawer() {
+		SharedPreferences prefs = Util.getPreferences(this);
+		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
+		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this);
+		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
+		
+		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == chatEnabled) {
+			drawerItems = getResources().getStringArray(R.array.drawerItems);
+			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
+	
+			// Remove listings that user wants hidden
+			int alreadyRemoved = 0;
+			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
+			List<String> drawerItemsDescriptionsList = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
+			List<Integer> drawerItemsIconsList = new ArrayList<Integer>();
+
+			int[] arrayAttr = {R.attr.drawerItemsIcons};
+			TypedArray arrayType = obtainStyledAttributes(arrayAttr);
+			int arrayId = arrayType.getResourceId(0, 0);
+			TypedArray iconType = getResources().obtainTypedArray(arrayId);
+			for(int i = 0; i < drawerItemsList.size(); i++) {
+				drawerItemsIconsList.add(iconType.getResourceId(i, 0));
 			}
-			backStack.add(currentFragment);
+			iconType.recycle();
+			arrayType.recycle();
+	
+			// Selectively remove podcast listing [3]
+			if(!podcastsEnabled) {
+				drawerItemsList.remove(3 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(3 - alreadyRemoved);
+				drawerItemsIconsList.remove(3 - alreadyRemoved);
+				alreadyRemoved++;
+			}
+
+			// Selectively remove bookmarks listing [4]
+			if(!bookmarksEnabled) {
+				drawerItemsList.remove(4 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(4 - alreadyRemoved);
+				drawerItemsIconsList.remove(4 - alreadyRemoved);
+				alreadyRemoved++;
+			}
+	
+			// Selectively remove chat listing: [5]
+			if(!chatEnabled) {
+				drawerItemsList.remove(5 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(5 - alreadyRemoved);
+				drawerItemsIconsList.remove(5 - alreadyRemoved);
+				alreadyRemoved++;
+			}
+	
+			// Put list back together
+			if(alreadyRemoved > 0) {
+				drawerItems = drawerItemsList.toArray(new String[0]);
+				drawerItemsDescriptions = drawerItemsDescriptionsList.toArray(new String[0]);
+			}
 			
-			currentFragment = fragment;
-			currentFragment.setPrimaryFragment(true);
-			supportInvalidateOptionsMenu();
-			
+			drawerList.setAdapter(new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList));
+			enabledItems[0] = podcastsEnabled;
+			enabledItems[1] = bookmarksEnabled;
+			enabledItems[2] = chatEnabled;
+		}
+	}
+
+	public void startFragmentActivity(String fragmentType) {
+		Intent intent = new Intent();
+		intent.setClass(SubsonicActivity.this, SubsonicFragmentActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		if(!"".equals(fragmentType)) {
+			intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+		}
+		startActivity(intent);
+		finish();
+	}
+
+	protected void exit() {
+		if(this.getClass() != SubsonicFragmentActivity.class) {
+			Intent intent = new Intent(this, SubsonicFragmentActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
+			Util.startActivityWithoutTransition(this, intent);
+		} else {
+			finished = true;
+			this.stopService(new Intent(this, DownloadServiceImpl.class));
+			this.finish();
+		}
+	}
+
+	public boolean onBackPressedSupport() {
+		if(backStack.size() > 0) {
+			removeCurrent();
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if(onBackPressedSupport()) {
+			super.onBackPressed();
+		}
+	}
+
+	public void replaceFragment(SubsonicFragment fragment, int id, int tag) {
+		replaceFragment(fragment, id, tag, false);
+	}
+	public void replaceFragment(SubsonicFragment fragment, int id, int tag, boolean replaceCurrent) {
+		if(currentFragment != null) {
+			currentFragment.setPrimaryFragment(false, secondaryContainer != null);
+		}
+		backStack.add(currentFragment);
+
+		currentFragment = fragment;
+		currentFragment.setPrimaryFragment(true);
+		supportInvalidateOptionsMenu();
+
+		if(secondaryContainer == null) {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.add(id, fragment, tag + "");
 			trans.commit();
-			recreateSpinner();
+		} else {
+			// Make sure secondary container is visible now
+			secondaryContainer.setVisibility(View.VISIBLE);
+
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+
+			// Check to see if you need to put on top of old left or not
+			if(backStack.size() > 1) {
+				// Move old right to left if there is a backstack already
+				SubsonicFragment newLeftFragment = backStack.get(backStack.size() - 1);
+				trans.remove(newLeftFragment);
+
+				// Only move right to left if replaceCurrent is false
+				if(!replaceCurrent) {
+					SubsonicFragment oldLeftFragment = backStack.get(backStack.size() - 2);
+					int leftId = oldLeftFragment.getRootId();
+
+					// Make sure remove is finished before adding
+					trans.commit();
+					getSupportFragmentManager().executePendingTransactions();
+
+					trans = getSupportFragmentManager().beginTransaction();
+					trans.add(leftId, newLeftFragment, newLeftFragment.getSupportTag() + "");
+				} else {
+					backStack.remove(backStack.size() - 1);
+				}
+			}
+			
+			// Add fragment to the right container
+			trans.add(R.id.fragment_second_container, fragment, tag + "");
+			
+			// Commit it all
+			trans.commit();
 		}
+		recreateSpinner();
 	}
-	private void removeCurrent() {
+	public void removeCurrent() {
 		if(currentFragment != null) {
 			currentFragment.setPrimaryFragment(false);
 		}
@@ -237,13 +542,48 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		currentFragment.setPrimaryFragment(true);
 		supportInvalidateOptionsMenu();
 
-		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-		trans.remove(oldFrag);
-		trans.commit();
+		if(secondaryContainer == null) {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.remove(oldFrag);
+			trans.commit();
+		} else {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			
+			// Remove old right fragment
+			trans.remove(oldFrag);
+
+			// Only switch places if there is a backstack, otherwise primary container is correct
+			if(backStack.size() > 0) {
+				// Add current left fragment to right side
+				trans.remove(currentFragment);
+
+				// Make sure remove is finished before adding
+				trans.commit();
+				getSupportFragmentManager().executePendingTransactions();
+
+				trans = getSupportFragmentManager().beginTransaction();
+				trans.add(R.id.fragment_second_container, currentFragment, currentFragment.getSupportTag() + "");
+			} else {
+				secondaryContainer.setVisibility(View.GONE);
+			}
+			
+			trans.commit();
+		}
 		recreateSpinner();
 	}
+
+	public void invalidate() {
+		if(currentFragment != null) {
+			while(backStack.size() > 0) {
+				removeCurrent();
+			}
+
+			currentFragment.invalidate();
+			populateDrawer();
+		}
+	}
 	
-	private void recreateSpinner() {
+	protected void recreateSpinner() {
 		if(backStack.size() > 0) {
 			spinnerAdapter.clear();
 			for(int i = 0; i < backStack.size(); i++) {
@@ -256,13 +596,6 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		} else {
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
 		}
-	}
-	
-	protected void addTab(int titleRes, Class fragmentClass, Bundle args) {
-		pagerAdapter.addTab(getString(titleRes), fragmentClass, args);
-	}
-	protected void addTab(CharSequence title, Class fragmentClass, Bundle args) {
-		pagerAdapter.addTab(title, fragmentClass, args);
 	}
 
 	protected void restart() {
@@ -313,6 +646,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 
 	public DownloadService getDownloadService() {
+		if(finished) {
+			return null;
+		}
+		
 		// If service is not available, request it to start and wait for it.
 		for (int i = 0; i < 5; i++) {
 			DownloadService downloadService = DownloadServiceImpl.getInstance();
@@ -324,13 +661,6 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			Util.sleepQuietly(50L);
 		}
 		return DownloadServiceImpl.getInstance();
-	}
-	
-	public ViewPager getViewPager() {
-		return viewPager;
-	}
-	public TabPagerAdapter getPagerAdapter() {
-		return pagerAdapter;
 	}
 	
 	public static String getThemeName() {
@@ -381,260 +711,6 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				}
 
 			}
-		}
-	}
-	
-	public class TabPagerAdapter extends FragmentPagerAdapter implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
-		private ActionBarActivity activity;
-		private ViewPager pager;
-		private ActionBar actionBar;
-		private SubsonicFragment currentFragment;
-		private List<TabInfo> tabs = new ArrayList<TabInfo>();
-		private List<List<SubsonicFragment>> frags = new ArrayList<List<SubsonicFragment>>();
-		private List<QueuedFragment> queue = new ArrayList<QueuedFragment>();
-		private int currentPosition;
-
-		public TabPagerAdapter(ActionBarActivity activity, ViewPager pager) {
-			super(activity.getSupportFragmentManager());
-			this.activity = activity;
-			this.actionBar = activity.getSupportActionBar();
-			this.pager = pager;
-			this.currentPosition = 0;
-		}
-
-		@Override
-		public Fragment getItem(int i) {
-			final TabInfo tabInfo = tabs.get(i);
-			SubsonicFragment frag = (SubsonicFragment) Fragment.instantiate(activity, tabInfo.fragmentClass.getName(), tabInfo.args);
-			List<SubsonicFragment> fragStack = new ArrayList<SubsonicFragment>();
-			fragStack.add(frag);
-			while(i > frags.size()) {
-				frags.add(null);
-			}
-			if(i == frags.size()) {
-				frags.add(i, fragStack);
-			} else {
-				frags.set(i, fragStack);
-			}
-			if(currentFragment == null || currentPosition == i) {
-				currentFragment = frag;
-				currentFragment.setPrimaryFragment(true);
-			}
-			return frag;
-		}
-
-		@Override
-		public int getCount() {
-			return tabs.size();
-		}
-		
-		public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-			if(currentFragment != null) {
-				currentFragment.onCreateOptionsMenu(menu, menuInflater);
-				
-				for(QueuedFragment addFragment: queue) {
-					replaceFragment(addFragment.fragment, addFragment.id, currentFragment.getSupportTag());
-					currentFragment = addFragment.fragment;
-				}
-				currentFragment.setPrimaryFragment(true);
-				queue.clear();
-			}
-		}
-		public boolean onOptionsItemSelected(MenuItem item) {
-			if(currentFragment != null) {
-				return currentFragment.onOptionsItemSelected(item);
-			} else {
-				return false;
-			}
-		}
-
-		public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-			TabInfo tabInfo = (TabInfo) tab.getTag();
-			for (int i = 0; i < tabs.size(); i++) {
-				if ( tabs.get(i) == tabInfo ) {
-					pager.setCurrentItem(i);
-					break;
-				}
-			}
-		}
-
-		public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
-
-		public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {}
-
-		public void onPageScrollStateChanged(int arg0) {}
-
-		public void onPageScrolled(int arg0, float arg1, int arg2) {}
-
-		public void onPageSelected(int position) {
-			currentPosition = position;
-			actionBar.setSelectedNavigationItem(position);
-			if(currentFragment != null) {
-				currentFragment.setPrimaryFragment(false);
-			}
-			if(position <= frags.size()) {
-				List<SubsonicFragment> fragStack = frags.get(position);
-				currentFragment = fragStack.get(fragStack.size() - 1);
-				if(currentFragment != null) {
-					currentFragment.setPrimaryFragment(true);
-				}
-				activity.supportInvalidateOptionsMenu();
-				recreateSpinner();
-			}
-		}
-
-		public void addTab(CharSequence title, Class fragmentClass, Bundle args) {
-			final TabInfo tabInfo = new TabInfo(fragmentClass, args);
-
-			ActionBar.Tab tab = actionBar.newTab();
-			tab.setText(title);
-			tab.setTabListener(this);
-			tab.setTag(tabInfo);
-
-			tabs.add(tabInfo);
-
-			actionBar.addTab(tab);
-			notifyDataSetChanged();
-		}
-		public void queueFragment(SubsonicFragment fragment, int id) {
-			QueuedFragment frag = new QueuedFragment();
-			frag.fragment = fragment;
-			frag.id = id;
-			queue.add(frag);
-		}
-		public void replaceCurrent(SubsonicFragment fragment, int id, int tag) {
-			if(currentFragment != null) {
-				currentFragment.setPrimaryFragment(false);
-			}
-			List<SubsonicFragment> fragStack = frags.get(currentPosition);
-			fragStack.add(fragment);
-			
-			currentFragment = fragment;
-			currentFragment.setPrimaryFragment(true);
-			activity.supportInvalidateOptionsMenu();
-			
-			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-			trans.add(id, fragment, tag + "");
-			trans.commit();
-			recreateSpinner();
-		}
-		
-		public void removeCurrent() {
-			if(currentFragment != null) {
-				currentFragment.setPrimaryFragment(false);
-			}
-			List<SubsonicFragment> fragStack = frags.get(currentPosition);
-			Fragment oldFrag = (Fragment)fragStack.remove(fragStack.size() - 1);
-			
-			currentFragment = fragStack.get(fragStack.size() - 1);
-			currentFragment.setPrimaryFragment(true);
-			activity.supportInvalidateOptionsMenu();
-			
-			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-			trans.remove(oldFrag);
-			trans.commit();
-		}
-		
-		public boolean onBackPressed() {
-			List<SubsonicFragment> fragStack = frags.get(currentPosition);
-			if(fragStack.size() > 1) {
-				removeCurrent();
-				recreateSpinner();
-				return false;
-			} else {
-				if(currentPosition == 0) {
-					return true;
-				} else {
-					viewPager.setCurrentItem(0);
-					return false;
-				}
-			}
-		}
-		
-		private void recreateSpinner() {
-			if(frags.isEmpty()) {
-				return;
-			}
-			
-			List<SubsonicFragment> fragStack = frags.get(currentPosition);
-			if(fragStack.size() > 1) {
-				spinnerAdapter.clear();
-				for(int i = 0; i < fragStack.size(); i++) {
-					SubsonicFragment frag = fragStack.get(i);
-					spinnerAdapter.add(frag.getTitle());
-				}
-				spinnerAdapter.notifyDataSetChanged();
-				actionBarSpinner.setSelection(spinnerAdapter.getCount() - 1);
-				actionBar.setDisplayShowCustomEnabled(true);
-			} else {
-				actionBar.setDisplayShowCustomEnabled(false);
-			}
-		}
-		
-		public void invalidate() {
-			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-			for (int i = 0; i < frags.size(); i++) {
-				List<SubsonicFragment> fragStack = frags.get(i);
-				
-				for(int j = fragStack.size() - 1; j > 0; j--) {
-					SubsonicFragment oldFrag = fragStack.remove(j);
-					trans.remove((Fragment)oldFrag);
-				}
-				
-				SubsonicFragment frag = (SubsonicFragment)fragStack.get(0);
-				frag.invalidate();
-			}
-			trans.commit();
-		}
-		
-		public void onSaveInstanceState(Bundle savedInstanceState) {
-			for(int i = 0; i < frags.size(); i++) {
-				List<SubsonicFragment> fragStack = frags.get(i);
-				String[] ids = new String[fragStack.size()];
-				
-				for(int j = 0; j < fragStack.size(); j++) {
-					ids[j] = fragStack.get(j).getTag();
-				}
-				savedInstanceState.putStringArray(Constants.MAIN_BACK_STACK + i, ids);
-				savedInstanceState.putInt(Constants.MAIN_BACK_STACK_SIZE + i, fragStack.size());
-			}
-			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_TABS, frags.size());
-			savedInstanceState.putInt(Constants.MAIN_BACK_STACK_POSITION, currentPosition);
-		}
-		
-		public void onRestoreInstanceState(Bundle savedInstanceState) {
-			int tabCount = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_TABS);
-			FragmentManager fm = activity.getSupportFragmentManager();
-			for(int i = 0; i < tabCount; i++) {
-				int stackSize = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_SIZE + i);
-				String[] ids = savedInstanceState.getStringArray(Constants.MAIN_BACK_STACK + i);
-				List<SubsonicFragment> fragStack = new ArrayList<SubsonicFragment>();
-				
-				for(int j = 0; j < stackSize; j++) {
-					SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[j]);
-					fragStack.add(frag);
-				}
-				
-				frags.add(i, fragStack);
-			}
-			currentPosition = savedInstanceState.getInt(Constants.MAIN_BACK_STACK_POSITION);
-			List<SubsonicFragment> fragStack = frags.get(currentPosition);
-			currentFragment = fragStack.get(fragStack.size() - 1);
-			currentFragment.setPrimaryFragment(true);
-			activity.supportInvalidateOptionsMenu();
-		}
-
-		private class TabInfo {
-			public final Class fragmentClass;
-			public final Bundle args;
-			public TabInfo(Class fragmentClass, Bundle args) {
-				this.fragmentClass = fragmentClass;
-				this.args = args;
-			}
-		}
-		private class QueuedFragment {
-			public SubsonicFragment fragment;
-			public int id;
 		}
 	}
 }

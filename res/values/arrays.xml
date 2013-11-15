@@ -1,5 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string-array name="drawerItems">
+		<item>@string/button_bar.home</item>
+		<item>@string/button_bar.browse</item>
+		<item>@string/button_bar.playlists</item>
+		<item>@string/button_bar.podcasts</item>
+		<item>@string/button_bar.bookmarks</item>
+		<item>@string/button_bar.chat</item>
+		<item>@string/menu.settings</item>
+	</string-array>
+
+	<string-array name="drawerItemsDescriptions">
+		<item>Home</item>
+		<item>Artist</item>
+		<item>Playlist</item>
+		<item>Podcast</item>
+		<item>Bookmark</item>
+		<item>Chat</item>
+		<item>Settings</item>
+	</string-array>
+
+	<array name="drawerItemIconsLight">
+		<item>@drawable/main_offline_light</item>
+		<item>@drawable/ic_menu_library_light</item>
+		<item>@drawable/ic_menu_playlist_light</item>
+		<item>@drawable/ic_menu_podcast_light</item>
+		<item>@drawable/ic_menu_bookmark_light</item>
+		<item>@drawable/ic_menu_chat_light</item>
+		<item>@drawable/ic_menu_settings_light</item>
+	</array>
+
+	<array name="drawerItemIconsDark">
+		<item>@drawable/main_offline_dark</item>
+		<item>@drawable/ic_menu_library_dark</item>
+		<item>@drawable/ic_menu_playlist_dark</item>
+		<item>@drawable/ic_menu_podcast_dark</item>
+		<item>@drawable/ic_menu_bookmark_dark</item>
+		<item>@drawable/ic_menu_chat_dark</item>
+		<item>@drawable/ic_menu_settings_dark</item>
+	</array>
 
     <string-array name="themeValues">
         <item>light</item>
@@ -135,6 +174,19 @@
 		<item>@string/settings.temp_loss_pause_lower</item>
 		<item>@string/settings.temp_loss_lower</item>
 		<item>@string/settings.temp_loss_nothing</item>
+	</string-array>
+
+	<string-array name="disconnectPauseValues">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+	<string-array name="disconnectPauseNames">
+		<item>@string/settings.disconnect_pause_both</item>
+		<item>@string/settings.disconnect_pause_headphone</item>
+		<item>@string/settings.disconnect_pause_bluetooth</item>
+		<item>@string/settings.disconnect_pause_neither</item>
 	</string-array>
 
 	<string-array name="videoPlayerValues">
