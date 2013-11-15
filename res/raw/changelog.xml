@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.2.0" versioncode="68" releasedate="11/10/2013">
+	<release version="4.2.0" versioncode="69" releasedate="11/14/2013">
 		<change>Changed from tabs to Pull Out Drawer like newer Google docs specify</change>
 		<change>Major UI update with better scaling icons</change>
-		<change>Updated main app icon</change>
+		<change>Updated main app icon (thanks Ben Sumner)</change>
 		<change>Added tablet layout that better uses extra space</change>
+		<change>New Bookmarks tab</change>
 		<change>Persistent notification is like other music apps now (change in settings)</change>
+		<change>Ability to hide Podcasts/Bookmarks/Chat tabs</change>
 		<change>Pressing next with repeat all on loops back to beginning</change>
 		<change>Increase right padding so context buttons are easier to press</change>
 	</release>
