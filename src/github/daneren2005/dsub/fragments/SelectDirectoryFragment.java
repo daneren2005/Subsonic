@@ -288,7 +288,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
 			if (entry.isDirectory()) {
 				int fragId = rootId;
-				if(albumListType != null && entry.getParent() != null) {
+				/*if(albumListType != null && entry.getParent() != null) {
 					SubsonicFragment parentFragment = new SelectDirectoryFragment();
 					Bundle args = new Bundle();
 					args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
@@ -300,7 +300,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 					replaceFragment(parentFragment, fragId);
 					fragId = parentFragment.getRootId();
-				}
+				}*/
 				
 				SubsonicFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
