@@ -506,7 +506,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				menu.findItem(R.id.menu_toggle_timer).setTitle(R.string.download_stop_timer);
 			}
 		}
-		if(downloadService != null && downloadService.getKeepScreenOn()) {
+		if(downloadService != null && downloadService.getKeepScreenOn() && nowPlaying) {
 			menu.findItem(R.id.menu_screen_on_off).setTitle(R.string.download_menu_screen_off);
 		}
 	}
