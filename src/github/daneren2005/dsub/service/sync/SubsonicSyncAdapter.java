@@ -1,0 +1,94 @@
+/*
+ This file is part of Subsonic.
+
+ Subsonic is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Subsonic is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
+
+ Copyright 2009 (C) Sindre Mehus
+ */
+
+package github.daneren2005.dsub.service.sync;
+
+import android.accounts.Account;
+import android.annotation.TargetApi;
+import android.content.AbstractThreadedSyncAdapter;
+import android.content.ContentProviderClient;
+import android.content.Context;
+import android.content.SyncResult;
+import android.os.Bundle;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
+
+import github.daneren2005.dsub.service.RESTMusicService;
+import github.daneren2005.dsub.util.Util;
+
+/**
+ * Created by Scott on 9/6/13.
+ */
+
+public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
+	private static final String TAG = SubsonicSyncAdapter.class.getSimpleName();
+	protected RESTMusicService musicService = new RESTMusicService();
+
+	public SubsonicSyncAdapter(Context context, boolean autoInitialize) {
+		super(context, autoInitialize);
+	}
+	@TargetApi(14)
+	public SubsonicSyncSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+		super(context, autoInitialize, allowParallelSyncs);
+	}
+
+	@Override
+	public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+		
+		// Don't try to sync if no network!
+		if(networkInfo == null || !networkInfo.isConnected() || Util.isOffline(context)) {
+			Log.w(TAG, "Not running sync, not connected to network");
+			return;
+		}
+
+		// Check if user wants to only sync on wifi
+		SharedPreferences prefs = Util.getPreferences(context);
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_SYNC_WIFI, true)) {
+			if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+				executeSync(context);
+			} else {
+				Log.w(TAG, "Not running sync, not connected to wifi");
+			}
+		} else {
+			executeSync(context);
+		}
+	}
+	
+	private void executeSync(Context context) {
+		String className = this.getClass().getSimpleName();
+		Log.i(TAG, "Running sync for " + className);
+		long start = System.currentTimeMillis();
+		try {
+			int servers = Util.getServerCount(context);
+			for(int i = 1; i <= servers; i++) {
+				musicService.setInstance(i);
+				onExecuteSync(context);
+			}
+		} catch(Exception e) {
+			Log.e(TAG, "Failed sync for " + className, e);
+		}
+		Log.i(TAG, className + " executed in " + (System.currentTimeMillis() - start) + " ms");
+	}
+	public void onExecuteSync(Context context) {
+	
+	}
+}

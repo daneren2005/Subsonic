@@ -329,11 +329,17 @@ public final class Util {
     }
 
     public static String getRestUrl(Context context, String method) {
-        StringBuilder builder = new StringBuilder();
-
         SharedPreferences prefs = getPreferences(context);
-
         int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+        return getRestUrl(context, method, prefs, instance);
+    }
+    public static String getRestUrl(Context context, String method, int instance) {
+    	SharedPreferences prefs = getPreferences(context);
+    	return getRestUrl(context, method, prefs, instance);
+    }
+    public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance) {
+        StringBuilder builder = new StringBuilder();
+        
         String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
         String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
         String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
