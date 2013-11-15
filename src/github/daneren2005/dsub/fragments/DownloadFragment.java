@@ -986,6 +986,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 				setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, size));
 				onDownloadListChangedTask = null;
+				if(onCurrentChangedTask != null) {
+					onCurrentChangedTask.execute();
+				} else if(onProgressChangedTask != null) {
+					onProgressChangedTask.execute();
+				}
 			}
 		};
 		onDownloadListChangedTask.execute();
@@ -1024,9 +1029,15 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					setSubtitle(null);
 				}
 				onCurrentChangedTask = null;
+				if(onProgressChangedTask != null) {
+					onProgressChangedTask.execute();
+				}
 			}
 		};
-		onCurrentChangedTask.execute();
+		
+		if(onDownloadListChangedTask == null) {
+			onCurrentChangedTask.execute();
+		}
 	}
 
 	private void onProgressChanged() {
@@ -1119,7 +1130,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				onProgressChangedTask = null;
 			}
 		};
-		onProgressChangedTask.execute();
+		if(onDownloadListChangedTask == null && onCurrentChangedTask == null) {
+			onProgressChangedTask.execute();
+		}
 	}
 
 	private void changeProgress(final int ms) {

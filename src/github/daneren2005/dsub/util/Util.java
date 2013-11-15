@@ -786,24 +786,44 @@ public final class Util {
     }
 
     public static void info(Context context, int titleId, int messageId) {
-        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId);
+    	info(context, titleId, messageId, true);
     }
 	public static void info(Context context, int titleId, String message) {
-		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message);
+		info(context, titleId, message, true);
 	}
 	public static void info(Context context, String title, String message) {
-		showDialog(context, android.R.drawable.ic_dialog_info, title, message);
+		info(context, title, message);
+	}
+	public static void info(Context context, int titleId, int messageId, boolean linkify) {
+        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, linkify);
+    }
+	public static void info(Context context, int titleId, String message, boolean linkify) {
+		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message, linkify);
+	}
+	public static void info(Context context, String title, String message, boolean linkify) {
+		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
 	}
 
 	private static void showDialog(Context context, int icon, int titleId, int messageId) {
-		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId));
+		showDialog(context, icon, titleId, messageId, true);
 	}
 	private static void showDialog(Context context, int icon, int titleId, String message) {
-		showDialog(context, icon, context.getResources().getString(titleId), message);
+		showDialog(context, icon, titleId, message, true);
 	}
 	private static void showDialog(Context context, int icon, String title, String message) {
+		showDialog(context, icon, title, message, true);
+	}
+	private static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
+		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
+	}
+	private static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
+		showDialog(context, icon, context.getResources().getString(titleId), message, linkify);
+	}
+	private static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
 		SpannableString ss = new SpannableString(message);
-		Linkify.addLinks(ss, Linkify.ALL);
+		if(linkify) {
+			Linkify.addLinks(ss, Linkify.ALL);
+		}
 		
 		AlertDialog dialog = new AlertDialog.Builder(context)
 			.setIcon(icon)
