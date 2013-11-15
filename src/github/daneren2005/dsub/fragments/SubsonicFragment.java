@@ -332,7 +332,7 @@ public class SubsonicFragment extends Fragment {
 
 	public void invalidate() {
 		if(primaryFragment) {
-			refresh(false);
+			refresh(true);
 		} else {
 			invalidated = true;
 		}

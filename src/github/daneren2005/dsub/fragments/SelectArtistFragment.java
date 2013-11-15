@@ -148,7 +148,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 															: selectedFolder.getName();
 			Util.setSelectedMusicFolderId(context, musicFolderId);
 			folderName.setText(musicFolderName);
-			refresh();
+			context.invalidate();
 		}
 
 		return true;

@@ -574,6 +574,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	public void invalidate() {
 		if(currentFragment != null) {
+			while(backStack.size() > 0) {
+				removeCurrent();
+			}
+
 			currentFragment.invalidate();
 			populateDrawer();
 		}
