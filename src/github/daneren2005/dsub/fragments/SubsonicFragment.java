@@ -329,6 +329,9 @@ public class SubsonicFragment extends Fragment {
 		setPrimaryFragment(primary);
 		secondaryFragment = secondary;
 	}
+	public void setSecondaryFragment(boolean secondary) {
+		secondaryFragment = secondary;
+	}
 
 	public void invalidate() {
 		if(primaryFragment) {
