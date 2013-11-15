@@ -292,6 +292,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		bufferLength.setSummary(bufferLength.getText() + " seconds");
 		chatRefreshRate.setSummary(chatRefreshRate.getText());
 		videoPlayer.setSummary(videoPlayer.getEntry());
+		syncInterval.setSummary(syncInterval.getEntry());
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }

@@ -662,8 +662,8 @@ public class OfflineMusicService extends RESTMusicService {
     }
     
     @Override
-    public void setInstance(Integer instance) {
-    	throw new OfflinceException("Offline servers only have one instance");
+    public void setInstance(Integer instance) throws Exception{
+    	throw new OfflineException("Offline servers only have one instance");
     }
 
     private void listFilesRecursively(File parent, List<File> children) {

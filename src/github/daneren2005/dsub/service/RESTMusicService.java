@@ -1116,7 +1116,7 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
-	public void setInstance(Integer instance) {
+	public void setInstance(Integer instance)  throws Exception {
 		this.instance = instance;
 	}
 
@@ -1325,9 +1325,9 @@ public class RESTMusicService implements MusicService {
     
 	private String getRestUrl(Context context, String method) {
 		if(instance == null) {
-			Util.getRestUrl(context, method);
+			return Util.getRestUrl(context, method);
 		} else {
-			Util.getRestUrl(context, method, instance);
+			return Util.getRestUrl(context, method, instance);
 		}
 	}
 }

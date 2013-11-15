@@ -24,6 +24,7 @@ import android.annotation.TargetApi;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.net.ConnectivityManager;
@@ -31,6 +32,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import github.daneren2005.dsub.service.RESTMusicService;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -40,13 +42,15 @@ import github.daneren2005.dsub.util.Util;
 public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	private static final String TAG = SubsonicSyncAdapter.class.getSimpleName();
 	protected RESTMusicService musicService = new RESTMusicService();
+	private Context context;
 
 	public SubsonicSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
 	}
 	@TargetApi(14)
-	public SubsonicSyncSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+	public SubsonicSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
+		this.context = context;
 	}
 
 	@Override

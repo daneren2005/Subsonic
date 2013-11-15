@@ -147,5 +147,5 @@ public interface MusicService {
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 	
-	void setInstance(Integer instance);
+	void setInstance(Integer instance) throws Exception;
 }
