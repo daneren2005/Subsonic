@@ -322,6 +322,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		if(secondaryContainer != null) {
 			secondaryContainer.setVisibility(View.GONE);
 		}
+		drawerToggle.setDrawerIndicatorEnabled(true);
 	}
 	
 	private SubsonicFragment getNewFragment(String fragmentType) {
