@@ -31,7 +31,6 @@
 
 					<ImageView
 						android:id="@+id/download_album_art_image"
-						android:src="@drawable/unknown_album_large"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_centerHorizontal="true"
