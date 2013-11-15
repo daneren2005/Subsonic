@@ -96,6 +96,9 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		if(!primaryFragment) {
+			return;
+		}
 
 		MenuInflater inflater = context.getMenuInflater();		
 		if (Util.isOffline(context)) {

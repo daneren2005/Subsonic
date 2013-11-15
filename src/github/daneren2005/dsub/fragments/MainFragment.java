@@ -95,6 +95,9 @@ public class MainFragment extends SubsonicFragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		if(!primaryFragment) {
+			return;
+		}
 		
 		int serverCount = Util.getServerCount(context);
 		int activeServer = Util.getActiveServer(context);

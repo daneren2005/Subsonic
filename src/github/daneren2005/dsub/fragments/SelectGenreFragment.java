@@ -81,6 +81,10 @@ public class SelectGenreFragment extends SubsonicFragment implements AdapterView
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		if(!primaryFragment) {
+			return;
+		}
+
 		menuInflater.inflate(R.menu.select_genres, menu);
 	}
 	

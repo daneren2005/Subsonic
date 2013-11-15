@@ -523,6 +523,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	@Override
 	public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		if(!primaryFragment) {
+			return;
+		}
+
 		if (view == playlistView) {
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 			DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
