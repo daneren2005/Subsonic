@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.2.1" versioncode="70" releasedate="11/15/2013">
+		<change>Fixed crash when going to download list with Screen On = true</change>
+		<change>Fixed crash when changing volume in RC mode</change>
+	</release>
 	<release version="4.2.0" versioncode="69" releasedate="11/14/2013">
 		<change>Changed from tabs to Pull Out Drawer like newer Google docs specify</change>
 		<change>Major UI update with better scaling icons</change>
