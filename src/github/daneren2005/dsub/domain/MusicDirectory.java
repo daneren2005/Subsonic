@@ -96,7 +96,10 @@ public class MusicDirectory implements Serializable {
 	}
 	
 	public void sortChildren() {
-		EntryComparator.sort(children);
+		EntryComparator.sort(children, false);
+	}
+	public void sortChildren(boolean sortByYear) {
+		EntryComparator.sort(children, sortByYear);
 	}
 
     public static class Entry implements Serializable {
@@ -364,13 +367,33 @@ public class MusicDirectory implements Serializable {
     }
 	
 	public static class EntryComparator implements Comparator<Entry> {
+		private boolean sortByYear = false;
+		
+		EntryComparator(boolean byYear) {
+			sortByYear = byYear;
+		}
+		
 		public int compare(Entry lhs, Entry rhs) {
 			if(lhs.isDirectory() && !rhs.isDirectory()) {
 				return -1;
 			} else if(!lhs.isDirectory() && rhs.isDirectory()) {
 				return 1;
 			} else if(lhs.isDirectory() && rhs.isDirectory()) {
-				return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+				if(sortByYear) {
+					Integer lhsYear = lhs.getYear();
+					Integer rhsYear = rhs.getYear();
+					if(lhsYear != null && rhsYear != null) {
+						return lhsYear.compareTo(rhsYear);
+					} else if(lhsYear != null) {
+						return -1;
+					} else if(rhsYear != null) {
+						return 1;
+					} else {
+						return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+					}
+				} else {
+					return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+				}
 			}
 			
 			Integer lhsDisc = lhs.getDiscNumber();
@@ -397,9 +420,9 @@ public class MusicDirectory implements Serializable {
 			return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
 		}
 		
-		public static void sort(List<Entry> entries) {
+		public static void sort(List<Entry> entries, boolean sortByYear) {
 			try {
-				Collections.sort(entries, new EntryComparator());
+				Collections.sort(entries, new EntryComparator(sortByYear));
 			} catch (Exception e) {
 				Log.w(TAG, "Failed to sort MusicDirectory");
 			}
