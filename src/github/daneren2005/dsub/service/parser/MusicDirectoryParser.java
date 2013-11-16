@@ -72,7 +72,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 		
 		// Only apply sorting on server version 4.7 and greater, where disc is supported
 		if(Util.checkServerVersion(context, "1.8.0")) {
-			dir.sortChildren();
+			dir.sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SORT_BY_YEAR, false));
 		}
 
         long t1 = System.currentTimeMillis();
