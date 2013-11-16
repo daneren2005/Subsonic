@@ -22,7 +22,6 @@ import android.content.Context;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
 import org.xmlpull.v1.XmlPullParser;
@@ -72,7 +71,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 		
 		// Only apply sorting on server version 4.7 and greater, where disc is supported
 		if(Util.checkServerVersion(context, "1.8.0")) {
-			dir.sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SORT_BY_YEAR, false));
+			dir.sortChildren();
 		}
 
         long t1 = System.currentTimeMillis();
