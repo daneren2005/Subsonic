@@ -30,4 +30,8 @@
 	<item 
 		android:id="@+id/artist_menu_delete"
 		android:title="@string/common.delete"/>
+		
+	<item 
+		android:id="@+id/artist_menu_star"
+		android:title="@string/common.star"/>
 </menu>
