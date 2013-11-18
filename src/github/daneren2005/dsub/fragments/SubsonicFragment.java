@@ -221,6 +221,9 @@ public class SubsonicFragment extends Fragment {
 			case R.id.artist_menu_delete:
 				deleteRecursively(artist);
 				break;
+			case R.id.artist_menu_star:
+				toggleStarred(artist);
+				break;
 			case R.id.album_menu_play_now:
 				downloadRecursively(entry.getId(), false, false, true, false, false);
 				break;
