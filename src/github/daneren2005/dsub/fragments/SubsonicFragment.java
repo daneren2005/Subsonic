@@ -192,8 +192,12 @@ public class SubsonicFragment extends Fragment {
 			}
 			else {
 				inflater.inflate(R.menu.select_artist_context, menu);
+
+				menu.findItem(R.id.artist_menu_star).setTitle(artist.isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
 		}
+		
+		menu.setGroupVisible(R.id.server_1_10, false);
 	}
 
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
