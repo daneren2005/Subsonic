@@ -741,7 +741,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 		updateButtons();
 
-		if(currentPlaying == null && currentPlaying == getDownloadService().getCurrentPlaying()) {
+		if(currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
 			getImageLoader().loadImage(albumArtImageView, null, true, false);
 		}
 	}

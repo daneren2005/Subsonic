@@ -187,6 +187,7 @@ public class SubsonicFragment extends Fragment {
 				}
 			}
 		} else if(selected instanceof Artist) {
+			Artist artist = (Artist) selected;
 			if(Util.isOffline(context)) {
 				inflater.inflate(R.menu.select_artist_context_offline, menu);
 			}
