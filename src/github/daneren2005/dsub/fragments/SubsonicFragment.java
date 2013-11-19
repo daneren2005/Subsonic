@@ -197,8 +197,10 @@ public class SubsonicFragment extends Fragment {
 				menu.findItem(R.id.artist_menu_star).setTitle(artist.isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
 		}
-		
-		menu.setGroupVisible(R.id.server_1_10, false);
+
+		if(!Util.checkServerVersion(context, "1.10.1")) {
+			menu.setGroupVisible(R.id.server_1_10, false);
+		}
 	}
 
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {

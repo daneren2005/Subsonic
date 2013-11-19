@@ -80,6 +80,8 @@ public class Version implements Comparable<Version> {
 						return "4.7";
 					case 9:
 						return "4.8";
+					case 10:
+						return "4.9";
 				}
 		}
 		return "";
