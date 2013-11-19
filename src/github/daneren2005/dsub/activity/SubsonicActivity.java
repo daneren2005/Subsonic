@@ -368,7 +368,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					onSearchRequested();
 				}
 			}
-		} else if(intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
+		} else if(currentFragment != null && intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
 			setIntent(intent);
 
 			SearchFragment fragment = new SearchFragment();
