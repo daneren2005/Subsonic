@@ -109,6 +109,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private SilentBackgroundTask<Void> onDownloadListChangedTask;
 	private boolean seekInProgress = false;
 	private boolean startFlipped = false;
+	private boolean scrollWhenLoaded = false;
 
 	/**
 	 * Called when the activity is first created.
@@ -832,6 +833,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	// Scroll to current playing/downloading.
 	private void scrollToCurrent() {
 		if (getDownloadService() == null || songListAdapter == null) {
+			scrollWhenLoaded = true;
 			return;
 		}
 
@@ -988,6 +990,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 						break;
 					default:
 						break;
+				}
+				
+				if(scrollWhenLoaded) {
+					scrollToCurrent();
+					scrollWhenLoaded = false;
 				}
 
 				setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, size));
