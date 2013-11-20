@@ -952,10 +952,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				
 				list = new ArrayList<DownloadFile>();
 				if(nowPlaying) {
-					list.add(downloadService.getSongs());
+					list.addAll(downloadService.getSongs());
 				}
 				else {
-					list.add(downloadService.getBackgroundDownloads());
+					list.addAll(downloadService.getBackgroundDownloads());
 				}
 				
 				return null;
