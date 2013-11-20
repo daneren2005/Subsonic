@@ -939,6 +939,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 
 		onDownloadListChangedTask = new SilentBackgroundTask<Void>(context) {
+			List<DownloadFile> list;
 			int currentPlayingIndex;
 			int size;
 
@@ -946,19 +947,20 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			protected Void doInBackground() throws Throwable {
 				currentPlayingIndex = downloadService.getCurrentPlayingIndex() + 1;
 				size = downloadService.size();
+				
+				list = new ArrayList<DownloadFile>();
+				if(nowPlaying) {
+					list.add(downloadService.getSongs());
+				}
+				else {
+					list.add(downloadService.getBackgroundDownloads());
+				}
+				
 				return null;
 			}
 
 			@Override
 			protected void done(Void result) {
-				List<DownloadFile> list;
-				if(nowPlaying) {
-					list = downloadService.getSongs();
-				}
-				else {
-					list = downloadService.getBackgroundDownloads();
-				}
-
 				if(downloadService.isShufflePlayEnabled()) {
 					emptyTextView.setText(R.string.download_shuffle_loading);
 				}
@@ -966,11 +968,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					emptyTextView.setText(R.string.download_empty);
 				}
 
-				if(songListAdapter == null || refresh) {
-					playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
-				} else {
-					songListAdapter.notifyDataSetChanged();
-				}
+				playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
 				emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
 				currentRevision = downloadService.getDownloadListUpdateRevision();
 
