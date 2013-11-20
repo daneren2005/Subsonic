@@ -103,6 +103,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private VisualizerView visualizerView;
 	private boolean nowPlaying = true;
 	private ScheduledFuture<?> hideControlsFuture;
+	private List<DownloadFile> songList;
 	private SongListAdapter songListAdapter;
 	private SilentBackgroundTask<Void> onProgressChangedTask;
 	private SilentBackgroundTask<Void> onCurrentChangedTask;
@@ -866,8 +867,8 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 
 		if(startFlipped) {
-			scrollToCurrent();
 			startFlipped = false;
+			scrollToCurrent();
 		}
 
 		onProgressChanged();
@@ -941,7 +942,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 
 		onDownloadListChangedTask = new SilentBackgroundTask<Void>(context) {
-			List<DownloadFile> list;
 			int currentPlayingIndex;
 			int size;
 
@@ -950,19 +950,19 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				currentPlayingIndex = downloadService.getCurrentPlayingIndex() + 1;
 				size = downloadService.size();
 				
-				list = new ArrayList<DownloadFile>();
-				if(nowPlaying) {
-					list.addAll(downloadService.getSongs());
-				}
-				else {
-					list.addAll(downloadService.getBackgroundDownloads());
-				}
-				
 				return null;
 			}
 
 			@Override
 			protected void done(Void result) {
+				List<DownloadFile> list;
+				if(nowPlaying) {
+					list = downloadService.getSongs();
+				}
+				else {
+					list = downloadService.getBackgroundDownloads();
+				}
+				
 				if(downloadService.isShufflePlayEnabled()) {
 					emptyTextView.setText(R.string.download_shuffle_loading);
 				}
@@ -971,6 +971,17 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				}
 
 				playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
+				
+				if(songListAdapter == null || refresh) {
+					songList = new ArrayList<DownloadFile>();
+					songList.addAll(list);
+					playlistView.setAdapter(songListAdapter = new SongListAdapter(songList));
+				} else {
+					songList.clear();
+					songList.addAll(list);
+					songListAdapter.notifyDataSetChanged();
+				}
+				
 				emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
 				currentRevision = downloadService.getDownloadListUpdateRevision();
 
