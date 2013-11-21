@@ -969,8 +969,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				else {
 					emptyTextView.setText(R.string.download_empty);
 				}
-
-				playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
 				
 				if(songListAdapter == null || refresh) {
 					songList = new ArrayList<DownloadFile>();
