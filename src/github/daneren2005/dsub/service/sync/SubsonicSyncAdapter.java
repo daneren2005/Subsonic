@@ -101,14 +101,14 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 			int servers = Util.getServerCount(context);
 			for(int i = 1; i <= servers; i++) {
 				musicService.setInstance(i);
-				onExecuteSync(context);
+				onExecuteSync(context, i);
 			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed sync for " + className, e);
 		}
 		Log.i(TAG, className + " executed in " + (System.currentTimeMillis() - start) + " ms");
 	}
-	public void onExecuteSync(Context context) {
+	public void onExecuteSync(Context context, int instance) {
 	
 	}
 }
