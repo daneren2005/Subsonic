@@ -30,6 +30,7 @@ import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.util.FileUtil;
 
 /**
  * @author Sindre Mehus
@@ -38,11 +39,12 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 public class ShufflePlayBuffer {
 
     private static final String TAG = ShufflePlayBuffer.class.getSimpleName();
+    private static final String CACHE_FILENAME = "shuffleBuffer.ser";
     private static final int CAPACITY = 50;
     private static final int REFILL_THRESHOLD = 40;
 
     private final ScheduledExecutorService executorService;
-    private final List<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
+    private List<MusicDirectory.Entry> buffer;
 	private int lastCount = -1;
     private Context context;
     private int currentServer;
@@ -53,7 +55,13 @@ public class ShufflePlayBuffer {
 	private String endYear = "";
 
     public ShufflePlayBuffer(Context context) {
-        this.context = context;		
+        this.context = context;
+        
+        buffer = FileUtil.deserialize(context, CACHE_FILENAME, ArrayList.class);	
+        if(buffer == null) {
+        	buffer = new ArrayList<MusicDirectory.Entry>();
+        }
+        
         executorService = Executors.newSingleThreadScheduledExecutor();
         Runnable runnable = new Runnable() {
             @Override
@@ -69,8 +77,15 @@ public class ShufflePlayBuffer {
 
         List<MusicDirectory.Entry> result = new ArrayList<MusicDirectory.Entry>(size);
         synchronized (buffer) {
+        	boolean removed = false;
             while (!buffer.isEmpty() && result.size() < size) {
                 result.add(buffer.remove(buffer.size() - 1));
+                removed = true;
+            }
+            
+            // Re-cache if anything is taken out
+            if(removed) {
+				FileUtil.serialize(context, buffer, "shuffle.ser");
             }
         }
         Log.i(TAG, "Taking " + result.size() + " songs from shuffle play buffer. " + buffer.size() + " remaining.");
@@ -100,6 +115,9 @@ public class ShufflePlayBuffer {
                 buffer.addAll(songs.getChildren());
                 Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildrenSize() + " songs.");
 				lastCount = songs.getChildrenSize();
+				
+				// Cache buffer
+				FileUtil.serialize(context, buffer, "shuffle.ser");
             }
         } catch (Exception x) {
             Log.w(TAG, "Failed to refill shuffle play buffer.", x);
@@ -121,6 +139,10 @@ public class ShufflePlayBuffer {
 				startYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
 				endYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
                 buffer.clear();
+                
+                // Clear cache
+                File file = new File(context.getCacheDir(), CACHE_FILENAME);
+                file.delete();
             }
         }
     }
