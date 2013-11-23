@@ -257,6 +257,8 @@
 	<string name="settings.theme_holo_fullscreen">Holo Fullscreen</string>
 	<string name="settings.track_title">Display Track #</string>
 	<string name="settings.track_summary">Display Track # in front of songs if one exists</string>
+	<string name="settings.custom_sort">Custom Sort</string>
+	<string name="settings.custom_sort_summary">Sort directory listings to properly sort by disc number.  Interferes with the servers sort albums by year.</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobile</string>

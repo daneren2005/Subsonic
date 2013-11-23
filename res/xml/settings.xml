@@ -43,6 +43,12 @@
 				android:key="hideWidget"
 				android:defaultValue="false"/>
 
+			<CheckBoxPreference
+				android:title="@string/settings.custom_sort"
+				android:summary="@string/settings.custom_sort_summary"
+				android:key="customSortEnabled"
+				android:defaultValue="true"/>
+
 		</PreferenceCategory>
 
 		<PreferenceCategory
