@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.2.2" versioncode="71" releasedate="11/22/2013">
+		<change>Added starring for artists for 4.9+ Servers</change>
+		<change>Add ability to place large widget on lockscreen for Android 4.2+</change>
+		<change>Option to use app's custom sorting (on by default)</change>
+		<change>Lots of tablet UI enhancements</change>
+		<change>Updated translations</change>
+		<change>Tons of bug fixes</change>
+	</release>
 	<release version="4.2.1" versioncode="70" releasedate="11/15/2013">
 		<change>Fixed crash when going to download list with Screen On = true</change>
 		<change>Fixed crash when changing volume in RC mode</change>
