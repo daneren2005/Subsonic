@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -44,7 +45,8 @@ public class ShufflePlayBuffer {
     private static final int REFILL_THRESHOLD = 40;
 
     private final ScheduledExecutorService executorService;
-    private List<MusicDirectory.Entry> buffer;
+	private boolean firstRun = true;
+    private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
 	private int lastCount = -1;
     private Context context;
     private int currentServer;
@@ -56,11 +58,6 @@ public class ShufflePlayBuffer {
 
     public ShufflePlayBuffer(Context context) {
         this.context = context;
-        
-        buffer = FileUtil.deserialize(context, CACHE_FILENAME, ArrayList.class);	
-        if(buffer == null) {
-        	buffer = new ArrayList<MusicDirectory.Entry>();
-        }
         
         executorService = Executors.newSingleThreadScheduledExecutor();
         Runnable runnable = new Runnable() {
@@ -85,7 +82,7 @@ public class ShufflePlayBuffer {
             
             // Re-cache if anything is taken out
             if(removed) {
-				FileUtil.serialize(context, buffer, "shuffle.ser");
+				FileUtil.serialize(context, buffer, CACHE_FILENAME);
             }
         }
         Log.i(TAG, "Taking " + result.size() + " songs from shuffle play buffer. " + buffer.size() + " remaining.");
@@ -101,7 +98,7 @@ public class ShufflePlayBuffer {
         // Check if active server has changed.
         clearBufferIfnecessary();
 
-        if (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0) {
+        if (buffer != null && (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
             return;
         }
 
@@ -117,7 +114,7 @@ public class ShufflePlayBuffer {
 				lastCount = songs.getChildrenSize();
 				
 				// Cache buffer
-				FileUtil.serialize(context, buffer, "shuffle.ser");
+				FileUtil.serialize(context, buffer, CACHE_FILENAME);
             }
         } catch (Exception x) {
             Log.w(TAG, "Failed to refill shuffle play buffer.", x);
@@ -139,10 +136,18 @@ public class ShufflePlayBuffer {
 				startYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
 				endYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
                 buffer.clear();
-                
-                // Clear cache
-                File file = new File(context.getCacheDir(), CACHE_FILENAME);
-                file.delete();
+
+				if(firstRun) {
+					ArrayList cacheList = FileUtil.deserialize(context, CACHE_FILENAME, ArrayList.class);
+					if(cacheList != null) {
+						buffer.addAll(cacheList);
+					}
+					firstRun = false;
+				} else {
+					// Clear cache
+					File file = new File(context.getCacheDir(), CACHE_FILENAME);
+					file.delete();
+				}
             }
         }
     }
