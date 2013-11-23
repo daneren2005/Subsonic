@@ -19,16 +19,16 @@
 
 package github.daneren2005.dsub.service.sync;
 
-import android.accounts.Account;
 import android.annotation.TargetApi;
-import android.content.AbstractThreadedSyncAdapter;
-import android.content.ContentProviderClient;
 import android.content.Context;
-import android.content.SyncResult;
-import android.os.Bundle;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -36,6 +36,8 @@ import github.daneren2005.dsub.util.Util;
 */
 
 public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
+	private static String TAG = PlaylistSyncAdapter.class.getSimpleName();
+
 	public PlaylistSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
 	}
@@ -47,17 +49,21 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	@Override
 	public void onExecuteSync(Context context, int instance) {
 		String serverName = Util.getServerName(context, instance);
-		String playlistListFile = "sync-playlist-" + (Util.getRestUrl(context, null, instance)).hasCode() + ".ser";
+		String playlistListFile = "sync-playlist-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
 		List<Integer> playlistList = FileUtil.deserialize(context, playlistListFile, ArrayList.class);
 		for(int i = 0; i < playlistList.size(); i++) {
 			String id = Integer.toString(playlistList.get(i));
-			MusicDirectory playlist = musicService.getPlaylist(true, id, serverName, context, null);
-			
-			for(MusicDirectory.Entry entry: playlist.getChildren()) {
-				DownloadFile file = new DownloadFile(context, entry, true);
-				while(!file.isSaved() && !file.isFailedMax()) {
-					file.downloadNow();
+			try {
+				MusicDirectory playlist = musicService.getPlaylist(true, id, serverName, context, null);
+
+				for(MusicDirectory.Entry entry: playlist.getChildren()) {
+					DownloadFile file = new DownloadFile(context, entry, true);
+					while(!file.isSaved() && !file.isFailedMax()) {
+						file.downloadNow();
+					}
 				}
+			} catch(Exception e) {
+				Log.e(TAG, "Failed to get playlist for " + serverName);
 			}
 		}
 	}

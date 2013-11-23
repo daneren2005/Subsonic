@@ -19,16 +19,17 @@
 
 package github.daneren2005.dsub.service.sync;
 
-import android.accounts.Account;
 import android.annotation.TargetApi;
-import android.content.AbstractThreadedSyncAdapter;
-import android.content.ContentProviderClient;
 import android.content.Context;
-import android.content.SyncResult;
-import android.os.Bundle;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -36,6 +37,8 @@ import github.daneren2005.dsub.util.Util;
  */
 
 public class PodcastSyncAdapter extends SubsonicSyncAdapter {
+	private static String TAG = PodcastSyncAdapter.class.getSimpleName();
+
 	public PodcastSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
 	}
@@ -47,18 +50,22 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 	@Override
 	public void onExecuteSync(Context context, int instance) {
 		String serverName = Util.getServerName(context, instance);
-		String podcastListFile = "sync-podcast-" + (Util.getRestUrl(context, null, instance)).hasCode() + ".ser";
+		String podcastListFile = "sync-podcast-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
 		List<Integer> podcastList = FileUtil.deserialize(context, podcastListFile, ArrayList.class);
 		for(int i = 0; i < podcastList.size(); i++) {
 			String id = Integer.toString(podcastList.get(i));
-			List<PodcastChannel> podcasts = musicService.getPodcastEpisodes(true, id, context, null);
-			
-			// TODO: Only grab most recent podcasts!
-			for(PodcastChannel entry: podcasts) {
-				DownloadFile file = new DownloadFile(context, entry, true);
-				while(!file.isSaved() && !file.isFailedMax()) {
-					file.downloadNow();
+			try {
+				MusicDirectory podcasts = musicService.getPodcastEpisodes(true, id, context, null);
+
+				// TODO: Only grab most recent podcasts!
+				for(MusicDirectory.Entry entry: podcasts.getChildren()) {
+					DownloadFile file = new DownloadFile(context, entry, true);
+					while(!file.isSaved() && !file.isFailedMax()) {
+						file.downloadNow();
+					}
 				}
+			} catch(Exception e) {
+				Log.e(TAG, "Failed to get playlist for " + serverName);
 			}
 		}
 	}
