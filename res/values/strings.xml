@@ -257,6 +257,8 @@
 	<string name="settings.theme_holo_fullscreen">Holo Fullscreen</string>
 	<string name="settings.track_title">Display Track #</string>
 	<string name="settings.track_summary">Display Track # in front of songs if one exists</string>
+	<string name="settings.custom_sort">Custom Sort</string>
+	<string name="settings.custom_sort_summary">Sort directory listings to properly sort by disc number.  Interferes with the servers sort albums by year.</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobile</string>
@@ -368,7 +370,7 @@
     <string name="background_task.no_network">This program requires network access. Please turn on Wi-Fi or mobile network.</string>
     <string name="background_task.network_error">A network error occurred. Please check the server address or try again later.</string>
     <string name="background_task.not_found">Resource not found. Please check the server address.</string>
-    <string name="background_task.parse_error">Didn\'t understand the reply. Please check the server address.</string>
+    <string name="background_task.parse_error">A problem occurred communicating with the server. Please check the server address and verify that you can connect using a regular browser on your device.</string>
 
     <string name="service.connecting">Contacting server, please wait.</string>
 

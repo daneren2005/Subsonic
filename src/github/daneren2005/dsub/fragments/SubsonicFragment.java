@@ -187,12 +187,19 @@ public class SubsonicFragment extends Fragment {
 				}
 			}
 		} else if(selected instanceof Artist) {
+			Artist artist = (Artist) selected;
 			if(Util.isOffline(context)) {
 				inflater.inflate(R.menu.select_artist_context_offline, menu);
 			}
 			else {
 				inflater.inflate(R.menu.select_artist_context, menu);
+
+				menu.findItem(R.id.artist_menu_star).setTitle(artist.isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
+		}
+
+		if(!Util.checkServerVersion(context, "1.10.1")) {
+			menu.setGroupVisible(R.id.server_1_10, false);
 		}
 	}
 
@@ -220,6 +227,9 @@ public class SubsonicFragment extends Fragment {
 				break;
 			case R.id.artist_menu_delete:
 				deleteRecursively(artist);
+				break;
+			case R.id.artist_menu_star:
+				toggleStarred(artist);
 				break;
 			case R.id.album_menu_play_now:
 				downloadRecursively(entry.getId(), false, false, true, false, false);
@@ -327,6 +337,9 @@ public class SubsonicFragment extends Fragment {
 	}
 	public void setPrimaryFragment(boolean primary, boolean secondary) {
 		setPrimaryFragment(primary);
+		secondaryFragment = secondary;
+	}
+	public void setSecondaryFragment(boolean secondary) {
 		secondaryFragment = secondary;
 	}
 

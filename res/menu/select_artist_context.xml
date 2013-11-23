@@ -30,4 +30,10 @@
 	<item 
 		android:id="@+id/artist_menu_delete"
 		android:title="@string/common.delete"/>
+
+	<group android:id="@+id/server_1_10">
+		<item 
+			android:id="@+id/artist_menu_star"
+			android:title="@string/common.star"/>
+	</group>
 </menu>

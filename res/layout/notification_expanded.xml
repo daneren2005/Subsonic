@@ -58,40 +58,41 @@
 	        xmlns:android="http://schemas.android.com/apk/res/android"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_gravity="center|fill"
-	        android:gravity="center_horizontal"
-	        android:orientation="horizontal" >
+	        android:orientation="horizontal"
+			android:showDividers="middle"
+			android:divider="?android:listDivider">
 
 	        <ImageButton
 	            android:id="@+id/control_previous"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
+				android:layout_width="0dip"
+				android:layout_height="fill_parent"
 	            android:layout_gravity="center"
-	            android:layout_weight="0.0"
+	            android:layout_weight="1"
+				android:padding="10dip"
 	            android:background="@drawable/btn_bg"
-	            android:scaleType="fitXY"
+	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_previous" />
 
 	        <ImageButton
 	            android:id="@+id/control_pause"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_gravity="center"
-	            android:layout_marginLeft="10dp"
-	            android:layout_marginRight="10dp"
-	            android:layout_weight="0.0"
+				android:layout_width="0dip"
+				android:layout_height="fill_parent"
+				android:layout_gravity="center"
+				android:layout_weight="1"
+				android:padding="10dip"
 	            android:background="@drawable/btn_bg"
-	            android:scaleType="fitXY"
+	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_pause" />
 
 	        <ImageButton
 	            android:id="@+id/control_next"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_gravity="center"
-	            android:layout_weight="0.0"
+				android:layout_width="0dip"
+				android:layout_height="fill_parent"
+				android:layout_gravity="center"
+				android:layout_weight="1"
+				android:padding="10dip"
 	            android:background="@drawable/btn_bg"
-	            android:scaleType="fitXY"
+	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_next" />
 	    </LinearLayout>
 

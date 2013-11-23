@@ -103,12 +103,14 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private VisualizerView visualizerView;
 	private boolean nowPlaying = true;
 	private ScheduledFuture<?> hideControlsFuture;
+	private List<DownloadFile> songList;
 	private SongListAdapter songListAdapter;
 	private SilentBackgroundTask<Void> onProgressChangedTask;
 	private SilentBackgroundTask<Void> onCurrentChangedTask;
 	private SilentBackgroundTask<Void> onDownloadListChangedTask;
 	private boolean seekInProgress = false;
 	private boolean startFlipped = false;
+	private boolean scrollWhenLoaded = false;
 
 	/**
 	 * Called when the activity is first created.
@@ -506,7 +508,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				menu.findItem(R.id.menu_toggle_timer).setTitle(R.string.download_stop_timer);
 			}
 		}
-		if(downloadService != null && downloadService.getKeepScreenOn()) {
+		if(downloadService != null && downloadService.getKeepScreenOn() && nowPlaying) {
 			menu.findItem(R.id.menu_screen_on_off).setTitle(R.string.download_menu_screen_off);
 		}
 	}
@@ -740,6 +742,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 
 		updateButtons();
+
+		if(currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
+			getImageLoader().loadImage(albumArtImageView, null, true, false);
+		}
 	}
 
 	@Override
@@ -828,6 +834,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	// Scroll to current playing/downloading.
 	private void scrollToCurrent() {
 		if (getDownloadService() == null || songListAdapter == null) {
+			scrollWhenLoaded = true;
 			return;
 		}
 
@@ -860,8 +867,8 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 
 		if(startFlipped) {
-			scrollToCurrent();
 			startFlipped = false;
+			scrollToCurrent();
 		}
 
 		onProgressChanged();
@@ -942,6 +949,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			protected Void doInBackground() throws Throwable {
 				currentPlayingIndex = downloadService.getCurrentPlayingIndex() + 1;
 				size = downloadService.size();
+				
 				return null;
 			}
 
@@ -954,19 +962,24 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				else {
 					list = downloadService.getBackgroundDownloads();
 				}
-
+				
 				if(downloadService.isShufflePlayEnabled()) {
 					emptyTextView.setText(R.string.download_shuffle_loading);
 				}
 				else {
 					emptyTextView.setText(R.string.download_empty);
 				}
-
+				
 				if(songListAdapter == null || refresh) {
-					playlistView.setAdapter(songListAdapter = new SongListAdapter(list));
+					songList = new ArrayList<DownloadFile>();
+					songList.addAll(list);
+					playlistView.setAdapter(songListAdapter = new SongListAdapter(songList));
 				} else {
+					songList.clear();
+					songList.addAll(list);
 					songListAdapter.notifyDataSetChanged();
 				}
+				
 				emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
 				currentRevision = downloadService.getDownloadListUpdateRevision();
 
@@ -986,6 +999,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 						break;
 					default:
 						break;
+				}
+				
+				if(scrollWhenLoaded) {
+					scrollToCurrent();
+					scrollWhenLoaded = false;
 				}
 
 				setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, size));

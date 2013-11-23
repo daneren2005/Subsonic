@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -30,6 +31,7 @@ import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.util.FileUtil;
 
 /**
  * @author Sindre Mehus
@@ -38,11 +40,13 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 public class ShufflePlayBuffer {
 
     private static final String TAG = ShufflePlayBuffer.class.getSimpleName();
+    private static final String CACHE_FILENAME = "shuffleBuffer.ser";
     private static final int CAPACITY = 50;
     private static final int REFILL_THRESHOLD = 40;
 
     private final ScheduledExecutorService executorService;
-    private final List<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
+	private boolean firstRun = true;
+    private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
 	private int lastCount = -1;
     private Context context;
     private int currentServer;
@@ -53,7 +57,8 @@ public class ShufflePlayBuffer {
 	private String endYear = "";
 
     public ShufflePlayBuffer(Context context) {
-        this.context = context;		
+        this.context = context;
+        
         executorService = Executors.newSingleThreadScheduledExecutor();
         Runnable runnable = new Runnable() {
             @Override
@@ -69,8 +74,15 @@ public class ShufflePlayBuffer {
 
         List<MusicDirectory.Entry> result = new ArrayList<MusicDirectory.Entry>(size);
         synchronized (buffer) {
+        	boolean removed = false;
             while (!buffer.isEmpty() && result.size() < size) {
                 result.add(buffer.remove(buffer.size() - 1));
+                removed = true;
+            }
+            
+            // Re-cache if anything is taken out
+            if(removed) {
+				FileUtil.serialize(context, buffer, CACHE_FILENAME);
             }
         }
         Log.i(TAG, "Taking " + result.size() + " songs from shuffle play buffer. " + buffer.size() + " remaining.");
@@ -86,7 +98,7 @@ public class ShufflePlayBuffer {
         // Check if active server has changed.
         clearBufferIfnecessary();
 
-        if (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0) {
+        if (buffer != null && (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
             return;
         }
 
@@ -100,6 +112,9 @@ public class ShufflePlayBuffer {
                 buffer.addAll(songs.getChildren());
                 Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildrenSize() + " songs.");
 				lastCount = songs.getChildrenSize();
+				
+				// Cache buffer
+				FileUtil.serialize(context, buffer, CACHE_FILENAME);
             }
         } catch (Exception x) {
             Log.w(TAG, "Failed to refill shuffle play buffer.", x);
@@ -121,6 +136,18 @@ public class ShufflePlayBuffer {
 				startYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
 				endYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
                 buffer.clear();
+
+				if(firstRun) {
+					ArrayList cacheList = FileUtil.deserialize(context, CACHE_FILENAME, ArrayList.class);
+					if(cacheList != null) {
+						buffer.addAll(cacheList);
+					}
+					firstRun = false;
+				} else {
+					// Clear cache
+					File file = new File(context.getCacheDir(), CACHE_FILENAME);
+					file.delete();
+				}
             }
         }
     }

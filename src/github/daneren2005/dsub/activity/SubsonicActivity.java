@@ -368,7 +368,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					onSearchRequested();
 				}
 			}
-		} else if(intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
+		} else if(currentFragment != null && intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
 			setIntent(intent);
 
 			SearchFragment fragment = new SearchFragment();
@@ -511,6 +511,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				// Only move right to left if replaceCurrent is false
 				if(!replaceCurrent) {
 					SubsonicFragment oldLeftFragment = backStack.get(backStack.size() - 2);
+					oldLeftFragment.setSecondaryFragment(false);
 					int leftId = oldLeftFragment.getRootId();
 
 					// Make sure remove is finished before adding
@@ -539,7 +540,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		Fragment oldFrag = (Fragment)currentFragment;
 
 		currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
-		currentFragment.setPrimaryFragment(true);
+		currentFragment.setPrimaryFragment(true, false);
 		supportInvalidateOptionsMenu();
 
 		if(secondaryContainer == null) {
@@ -563,6 +564,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 				trans = getSupportFragmentManager().beginTransaction();
 				trans.add(R.id.fragment_second_container, currentFragment, currentFragment.getSupportTag() + "");
+				
+				backStack.get(backStack.size() - 1).setSecondaryFragment(true);
 			} else {
 				secondaryContainer.setVisibility(View.GONE);
 			}

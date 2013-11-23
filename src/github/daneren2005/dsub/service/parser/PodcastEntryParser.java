@@ -88,7 +88,7 @@ public class PodcastEntryParser extends AbstractParser {
 						episode.setPath(episode.getPath().substring("Podcasts/".length()));
 					}
 					
-					if("error".equals(episode.getStatus()) || "skipped".equals(episode.getStatus())) {
+					if(episode.getId() == null) {
 						episode.setId(String.valueOf(bogusId));
 						bogusId--;
 					}
