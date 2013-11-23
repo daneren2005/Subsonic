@@ -26,12 +26,16 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
+import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * Created by Scott on 8/28/13.
  */
 
-public class PodcastSyncAdapter extends AbstractThreadedSyncAdapter {
+public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 	public PodcastSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
 	}
@@ -40,8 +44,22 @@ public class PodcastSyncAdapter extends AbstractThreadedSyncAdapter {
 		super(context, autoInitialize, allowParallelSyncs);
 	}
 
-		@Override
-	public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-
+	@Override
+	public void onExecuteSync(Context context, int instance) {
+		String serverName = Util.getServerName(context, instance);
+		String podcastListFile = "sync-podcast-" + (Util.getRestUrl(context, null, instance)).hasCode() + ".ser";
+		List<Integer> podcastList = FileUtil.deserialize(context, podcastListFile, ArrayList.class);
+		for(int i = 0; i < podcastList.size(); i++) {
+			String id = Integer.toString(podcastList.get(i));
+			List<PodcastChannel> podcasts = musicService.getPodcastEpisodes(true, id, context, null);
+			
+			// TODO: Only grab most recent podcasts!
+			for(PodcastChannel entry: podcasts) {
+				DownloadFile file = new DownloadFile(context, entry, true);
+				while(!file.isSaved() && !file.isFailedMax()) {
+					file.downloadNow();
+				}
+			}
+		}
 	}
 }

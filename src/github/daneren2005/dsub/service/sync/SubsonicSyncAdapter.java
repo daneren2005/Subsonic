@@ -24,8 +24,11 @@ import android.annotation.TargetApi;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SyncResult;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -63,6 +66,19 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 			Log.w(TAG, "Not running sync, not connected to network");
 			return;
 		}
+		
+		// Make sure battery > x% or is charging
+		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+		Intent batteryStatus = context.registerReceiver(null, intentFilter);
+		if(batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1) != BatteryManager.BATTERY_STATUS_CHARGING) {
+			int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+			int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+			
+			if((level / (float)scale) > 0.15) {
+				Log.w(TAG, "Not running sync, battery too low");
+				return;
+			}
+		}
 
 		// Check if user wants to only sync on wifi
 		SharedPreferences prefs = Util.getPreferences(context);
@@ -85,14 +101,14 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 			int servers = Util.getServerCount(context);
 			for(int i = 1; i <= servers; i++) {
 				musicService.setInstance(i);
-				onExecuteSync(context);
+				onExecuteSync(context, i);
 			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed sync for " + className, e);
 		}
 		Log.i(TAG, className + " executed in " + (System.currentTimeMillis() - start) + " ms");
 	}
-	public void onExecuteSync(Context context) {
+	public void onExecuteSync(Context context, int instance) {
 	
 	}
 }
