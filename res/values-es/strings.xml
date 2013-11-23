@@ -22,6 +22,7 @@
 	<string name="common.stream_external">Stream Video</string>
 	<string name="common.confirm">Confirmar</string>
 	<string name="common.confirm_message">Quieres %1$s %2$s?</string>
+	<string name="common.empty">No se ha encontrado nada</string>
 
     <string name="button_bar.home">Inicio</string>
     <string name="button_bar.browse">Biblioteca</string>
@@ -29,6 +30,7 @@
     <string name="button_bar.playlists">Listas de reproducción</string>
     <string name="button_bar.now_playing">Ahora suena</string>
 	<string name="button_bar.podcasts">Podcasts</string>
+	<string name="button_bar.bookmarks">Marcadores</string>
 	<string name="button_bar.chat">Chat</string>
 
     <string name="main.welcome_title">Bienvenido!</string>
@@ -320,6 +322,11 @@
 	<string name="settings.temp_loss_pause_lower">Pausar, bajar el volumen cuando sea solicitado</string>
 	<string name="settings.temp_loss_lower">Bajar volumen siempre</string>
 	<string name="settings.temp_loss_nothing">No hacer nada</string>
+	<string name="settings.disconnect_pause_title">Pausar al desconectar</string>
+	<string name="settings.disconnect_pause_both">Pausar en todos los casos</string>
+	<string name="settings.disconnect_pause_headphone">Pausar sólo con auriculares</string>
+	<string name="settings.disconnect_pause_bluetooth">Pausar sólo en bluetooth</string>
+	<string name="settings.disconnect_pause_neither">No hacer nada</string>
 	<string name="settings.persistent_title">Notificación permanente</string>
 	<string name="settings.persistent_summary">Mostrar la notificación incluso tras pausar. Pulsar botón stop para quitarlo.</string>
 	<string name="settings.gapless_playback">Reproducción sin pausas</string>
@@ -333,6 +340,14 @@
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requiere Subsonic 4.8+)</string>
 	<string name="settings.video_transcode">Transcodificación directa (Requisitos de vídeo -> configurar mp4 o similar en el servidor)</string>
 	<string name="settings.video_flash">Flash (Requiere Plugin)</string>
+	<string name="settings.cache_screen_title">Caché/Red</string>
+	<string name="settings.playback_title">Reproducción</string>
+	<string name="settings.hide_widget_title">Ocultar Widget</string>
+	<string name="settings.hide_widget_summary">Ocultar widget tras abandonar la aplicación</string>
+	<string name="settings.podcasts_enabled">Podcasts Habilitados</string>
+	<string name="settings.podcasts_enabled_summary">Mostrar o no mostrar el apartado Podcasts en el menú</string>
+	<string name="settings.bookmarks_enabled">Marcadores Habilitados</string>
+	<string name="settings.bookmarks_enabled_summary">Mostrar o no mostrar el apartado Marcadoresen el menú</string>
 
 	<string name="shuffle.title">Iniciar aleatorio por</string>
 	<string name="shuffle.startYear">Año inicial:</string>
