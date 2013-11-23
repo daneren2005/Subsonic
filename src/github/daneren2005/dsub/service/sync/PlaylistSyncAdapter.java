@@ -28,6 +28,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -54,8 +55,8 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 			
 			for(MusicDirectory.Entry entry: playlist.getChildren()) {
 				DownloadFile file = new DownloadFile(context, entry, true);
-				if(!file.isSaved()) {
-					// TODO: Figure something out to download these one at a time!
+				while(!file.isSaved() && !file.isFailedMax()) {
+					file.downloadNow();
 				}
 			}
 		}
