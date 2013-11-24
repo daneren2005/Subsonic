@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -62,5 +63,10 @@ public class PlaylistView extends UpdateView {
 	protected void setObjectImpl(Object obj) {
 		this.playlist = (Playlist) obj;
 		titleView.setText(playlist.getName());
+	}
+
+	@Override
+	protected void updateBackground() {
+		pinned = Util.isSyncedPlaylist(context, playlist.getId());
 	}
 }

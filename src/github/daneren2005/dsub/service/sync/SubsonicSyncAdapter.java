@@ -49,6 +49,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 
 	public SubsonicSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
+		this.context = context;
 	}
 	@TargetApi(14)
 	public SubsonicSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {

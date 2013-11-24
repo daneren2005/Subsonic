@@ -106,6 +106,14 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 		}
 		else {
 			inflater.inflate(R.menu.select_playlist_context, menu);
+
+			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+			Playlist playlist = (Playlist) list.getItemAtPosition(info.position);
+			if(Util.isSyncedPlaylist(context, playlist.getId())) {
+				menu.removeItem(R.id.playlist_menu_sync);
+			} else {
+				menu.removeItem(R.id.playlist_menu_stop_sync);
+			}
 		}
 	}
 
@@ -125,8 +133,11 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 			case R.id.playlist_menu_download:
 				downloadPlaylist(playlist.getId(), playlist.getName(), false, true, false, false, true);
 				break;
-			case R.id.playlist_menu_pin:
-				downloadPlaylist(playlist.getId(), playlist.getName(), true, true, false, false, true);
+			case R.id.playlist_menu_sync:
+				syncPlaylist(playlist);
+				break;
+			case R.id.playlist_menu_stop_sync:
+				stopSyncPlaylist(playlist);
 				break;
 			case R.id.playlist_menu_play_now:
 				fragment = new SelectDirectoryFragment();
@@ -217,6 +228,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePlaylist(playlist.getId(), context, null);
+						Util.removeSyncedPlaylist(context, playlist.getId());
 						return null;
 					}
 
@@ -305,5 +317,14 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 			})
 			.setNegativeButton(R.string.common_cancel, null)
 			.show();
+	}
+
+	private void syncPlaylist(Playlist playlist) {
+		Util.addSyncedPlaylist(context, playlist.getId());
+		downloadPlaylist(playlist.getId(), playlist.getName(), true, true, false, false, true);
+	}
+
+	private void stopSyncPlaylist(Playlist playlist) {
+		Util.removeSyncedPlaylist(context, playlist.getId());
 	}
 }

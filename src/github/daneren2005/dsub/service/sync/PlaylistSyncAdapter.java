@@ -49,10 +49,9 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	@Override
 	public void onExecuteSync(Context context, int instance) {
 		String serverName = Util.getServerName(context, instance);
-		String playlistListFile = "sync-playlist-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
-		List<Integer> playlistList = FileUtil.deserialize(context, playlistListFile, ArrayList.class);
+		List<String> playlistList = Util.getSyncedPlaylists(context, instance);
 		for(int i = 0; i < playlistList.size(); i++) {
-			String id = Integer.toString(playlistList.get(i));
+			String id = playlistList.get(i);
 			try {
 				MusicDirectory playlist = musicService.getPlaylist(true, id, serverName, context, null);
 
