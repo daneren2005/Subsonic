@@ -202,7 +202,7 @@ public class SongView extends UpdateView implements Checkable {
 				moreButton.setImageResource(moreImage);
 				this.moreImage = moreImage;
 			}
-        } else if(true) {
+        } else if(this.moreImage != R.drawable.download_none_light) {
 			int[] attrs = new int[] {R.attr.download_none};
 			TypedArray typedArray = context.obtainStyledAttributes(attrs);
 			moreButton.setImageResource(typedArray.getResourceId(0, 0));
