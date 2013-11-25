@@ -30,8 +30,8 @@ import java.util.List;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadFile;
-import github.daneren2005.dsub.service.SyncUtil;
-import github.daneren2005.dsub.service.SyncUtil.SyncSet;
+import github.daneren2005.dsub.util.SyncUtil;
+import github.daneren2005.dsub.util.SyncUtil.SyncSet;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 

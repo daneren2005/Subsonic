@@ -27,7 +27,7 @@ import java.util.List;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
-import github.daneren2005.dsub.service.SyncUtil;
+import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 
 /**

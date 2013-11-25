@@ -1,14 +1,10 @@
-package github.daneren2005.dsub.service;
+package github.daneren2005.dsub.util;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.Util;
 
 /**
  * Created by Scott on 11/24/13.

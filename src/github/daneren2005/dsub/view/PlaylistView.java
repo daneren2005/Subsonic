@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Playlist;
-import github.daneren2005.dsub.service.SyncUtil;
+import github.daneren2005.dsub.util.SyncUtil;
 
 /**
  * Used to display albums in a {@code ListView}.
