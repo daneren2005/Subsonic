@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -27,9 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Playlist;
-import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.Util;
-import java.io.File;
+import github.daneren2005.dsub.service.SyncUtil;
 
 /**
  * Used to display albums in a {@code ListView}.
@@ -67,6 +64,6 @@ public class PlaylistView extends UpdateView {
 
 	@Override
 	protected void updateBackground() {
-		pinned = Util.isSyncedPlaylist(context, playlist.getId());
+		pinned = SyncUtil.isSyncedPlaylist(context, playlist.getId());
 	}
 }

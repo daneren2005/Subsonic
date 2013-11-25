@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.service.SyncUtil;
 import github.daneren2005.dsub.util.FileUtil;
 import java.io.File;
 
@@ -66,6 +68,18 @@ public class PodcastChannelView extends UpdateView {
 	
 	@Override
 	protected void updateBackground() {
-		exists = file.exists();
+		if(SyncUtil.isSyncedPodcast(context, channel.getId())) {
+			if(exists) {
+				shaded = false;
+				exists = false;
+			}
+			pinned = true;
+		} else if(file.exists()) {
+			if(pinned) {
+				shaded = false;
+				pinned = false;
+			}
+			exists = true;
+		}
 	}
 }

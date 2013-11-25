@@ -107,7 +107,6 @@ public final class Util {
 	public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
 	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
 
-	private static List<String> syncedPlaylists;
 	private static boolean hasFocus = false;
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
@@ -430,51 +429,6 @@ public final class Util {
 		}
 		
 		return name;
-	}
-
-	public static boolean isSyncedPlaylist(Context context, String playlistId) {
-		if(syncedPlaylists == null) {
-			syncedPlaylists = getSyncedPlaylists(context);
-		}
-		return syncedPlaylists.contains(playlistId);
-	}
-	public static ArrayList<String> getSyncedPlaylists(Context context) {
-		return getSyncedPlaylists(context, Util.getActiveServer(context));
-	}
-	public static ArrayList<String> getSyncedPlaylists(Context context, int instance) {
-		ArrayList<String> playlists = FileUtil.deserialize(context, getPlaylistSyncFile(context, instance), ArrayList.class);
-		if(playlists == null) {
-			playlists = new ArrayList<String>();
-		}
-		return playlists;
-	}
-	public static void addSyncedPlaylist(Context context, String playlistId) {
-		String playlistFile = getPlaylistSyncFile(context);
-		ArrayList<String> playlists = getSyncedPlaylists(context);
-		if(!playlists.contains(playlistId)) {
-			playlists.add(playlistId);
-		}
-		for(String str: playlists) {
-			Log.d(TAG, str);
-		}
-		FileUtil.serialize(context, playlists, playlistFile);
-		syncedPlaylists = playlists;
-	}
-	public static void removeSyncedPlaylist(Context context, String playlistId) {
-		String playlistFile = getPlaylistSyncFile(context);
-		ArrayList<String> playlists = getSyncedPlaylists(context);
-		if(playlists.contains(playlistId)) {
-			playlists.remove(playlistId);
-			FileUtil.serialize(context, playlists, playlistFile);
-			syncedPlaylists = playlists;
-		}
-	}
-	private static String getPlaylistSyncFile(Context context) {
-		int instance = Util.getActiveServer(context);
-		return getPlaylistSyncFile(context, instance);
-	}
-	private static String getPlaylistSyncFile(Context context, int instance) {
-		return "sync-playlist-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
 	}
 
     public static String getContentType(HttpEntity entity) {

@@ -23,12 +23,15 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.service.SyncUtil;
+import github.daneren2005.dsub.service.SyncUtil.SyncSet;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
@@ -49,24 +52,38 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 
 	@Override
 	public void onExecuteSync(Context context, int instance) {
-		String serverName = Util.getServerName(context, instance);
-		String podcastListFile = "sync-podcast-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
-		List<Integer> podcastList = FileUtil.deserialize(context, podcastListFile, ArrayList.class);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+		ArrayList<SyncSet> podcastList = SyncUtil.getSyncedPodcasts(context, instance);
+		boolean updated = false;
 		for(int i = 0; i < podcastList.size(); i++) {
-			String id = Integer.toString(podcastList.get(i));
+			SyncSet set = podcastList.get(i);
+			String id = set.id;
+			List<String> existingEpisodes = set.synced;
 			try {
 				MusicDirectory podcasts = musicService.getPodcastEpisodes(true, id, context, null);
 
-				// TODO: Only grab most recent podcasts!
 				for(MusicDirectory.Entry entry: podcasts.getChildren()) {
-					DownloadFile file = new DownloadFile(context, entry, true);
-					while(!file.isSaved() && !file.isFailedMax()) {
-						file.downloadNow();
+					// Make sure podcast is valid and not already synced
+					if(entry.getId() != null && "completed".equals(((PodcastEpisode)entry).getStatus()) && !existingEpisodes.contains(entry.getId())) {
+						DownloadFile file = new DownloadFile(context, entry, true);
+						while(!file.isSaved() && !file.isFailedMax()) {
+							file.downloadNow();
+						}
+						// Only add if actualy downloaded correctly
+						if(file.isSaved()) {
+							existingEpisodes.add(entry.getId());
+						}
 					}
 				}
 			} catch(Exception e) {
-				Log.e(TAG, "Failed to get playlist for " + serverName);
+				Log.e(TAG, "Failed to get podcasts for " + Util.getServerName(context, instance));
 			}
+		}
+
+		// Make sure there are is at least one change before re-syncing
+		if(updated) {
+			FileUtil.serialize(context, podcastList, SyncUtil.getPodcastSyncFile(context, instance));
 		}
 	}
 }

@@ -23,12 +23,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
-import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.service.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -49,7 +48,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	@Override
 	public void onExecuteSync(Context context, int instance) {
 		String serverName = Util.getServerName(context, instance);
-		List<String> playlistList = Util.getSyncedPlaylists(context, instance);
+		List<String> playlistList = SyncUtil.getSyncedPlaylists(context, instance);
 		for(int i = 0; i < playlistList.size(); i++) {
 			String id = playlistList.get(i);
 			try {

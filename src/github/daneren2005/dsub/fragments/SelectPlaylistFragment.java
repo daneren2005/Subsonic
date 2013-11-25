@@ -23,6 +23,7 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
+import github.daneren2005.dsub.service.SyncUtil;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.CacheCleaner;
 import github.daneren2005.dsub.util.Constants;
@@ -109,7 +110,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 			Playlist playlist = (Playlist) list.getItemAtPosition(info.position);
-			if(Util.isSyncedPlaylist(context, playlist.getId())) {
+			if(SyncUtil.isSyncedPlaylist(context, playlist.getId())) {
 				menu.removeItem(R.id.playlist_menu_sync);
 			} else {
 				menu.removeItem(R.id.playlist_menu_stop_sync);
@@ -228,7 +229,7 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePlaylist(playlist.getId(), context, null);
-						Util.removeSyncedPlaylist(context, playlist.getId());
+						SyncUtil.removeSyncedPlaylist(context, playlist.getId());
 						return null;
 					}
 
@@ -320,11 +321,11 @@ public class SelectPlaylistFragment extends SubsonicFragment implements AdapterV
 	}
 
 	private void syncPlaylist(Playlist playlist) {
-		Util.addSyncedPlaylist(context, playlist.getId());
+		SyncUtil.addSyncedPlaylist(context, playlist.getId());
 		downloadPlaylist(playlist.getId(), playlist.getName(), true, true, false, false, true);
 	}
 
 	private void stopSyncPlaylist(Playlist playlist) {
-		Util.removeSyncedPlaylist(context, playlist.getId());
+		SyncUtil.removeSyncedPlaylist(context, playlist.getId());
 	}
 }
