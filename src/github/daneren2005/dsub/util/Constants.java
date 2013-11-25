@@ -83,6 +83,7 @@ public final class Constants {
     public static final String PREFERENCES_KEY_PASSWORD = "password";
     public static final String PREFERENCES_KEY_INSTALL_TIME = "installTime";
     public static final String PREFERENCES_KEY_THEME = "theme";
+    public static final String PREFERENCES_KEY_FULL_SCREEN = "fullScreen";
 	public static final String PREFERENCES_KEY_DISPLAY_TRACK = "displayTrack";
     public static final String PREFERENCES_KEY_MAX_BITRATE_WIFI = "maxBitrateWifi";
     public static final String PREFERENCES_KEY_MAX_BITRATE_MOBILE = "maxBitrateMobile";
