@@ -84,19 +84,6 @@
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle</item>
 	</style>
 	
-	<style name="Theme.DSub.Light.Fullscreen" parent="Theme.DSub.Light">
-		<item name="android:windowFullscreen">true</item>
-	</style>
-	<style name="Theme.DSub.Dark.Fullscreen" parent="Theme.DSub.Dark">
-		<item name="android:windowFullscreen">true</item>
-	</style>
-	<style name="Theme.DSub.Black.Fullscreen" parent="Theme.DSub.Black">
-		<item name="android:windowFullscreen">true</item>
-	</style>
-	<style name="Theme.DSub.Holo.Fullscreen" parent="Theme.DSub.Holo">
-		<item name="android:windowFullscreen">true</item>
-	</style>
-	
 	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.AppCompat.Light.ActionBar.Solid">
 		<item name="background">@android:color/transparent</item>
 		<item name="android:background">@android:color/transparent</item>
