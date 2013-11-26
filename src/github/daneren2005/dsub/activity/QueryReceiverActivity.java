@@ -66,7 +66,6 @@ public class QueryReceiverActivity extends Activity {
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, albumId);
-			intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, "Artist");
 			if (name != null) {
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, name);
 			}
