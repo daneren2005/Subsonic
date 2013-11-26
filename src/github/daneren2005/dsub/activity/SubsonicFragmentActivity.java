@@ -272,6 +272,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 			replaceFragment(fragment, fragmentID, currentFragment.getSupportTag());
 			getIntent().removeExtra(Constants.INTENT_EXTRA_VIEW_ALBUM);
+			if("Artist".equals(getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE))) {
+				lastSelectedPosition = 1;
+			}
 		}
 
 		executorService = Executors.newSingleThreadScheduledExecutor();
