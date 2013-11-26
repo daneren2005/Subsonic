@@ -380,7 +380,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 		return screen;
 	}
-	
+
 	private void applyTheme() {
 		String activeTheme = Util.getTheme(this);
 		if ("dark".equals(activeTheme)) {
@@ -389,17 +389,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 			setTheme(R.style.Theme_DSub_Black);
 		} else if ("light".equals(activeTheme)) {
 			setTheme(R.style.Theme_DSub_Light);
-		} else if ("dark_fullscreen".equals(activeTheme)) {
-			setTheme(R.style.Theme_DSub_Dark_Fullscreen);
-		} else if ("black_fullscreen".equals(activeTheme)) {
-			setTheme(R.style.Theme_DSub_Black_Fullscreen);
-		} else if ("light_fullscreen".equals(activeTheme)) {
-			setTheme(R.style.Theme_DSub_Light_Fullscreen);
-		} else if("holo".equals(activeTheme)) {
-			setTheme(R.style.Theme_DSub_Holo);
-		} else if("holo_fullscreen".equals(activeTheme)) {
-			setTheme(R.style.Theme_DSub_Holo_Fullscreen);
-		}else {
+		} else {
 			setTheme(R.style.Theme_DSub_Holo);
 		}
 	}

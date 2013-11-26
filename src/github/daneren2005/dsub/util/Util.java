@@ -279,6 +279,11 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_THEME, null);
     }
+	public static void setTheme(Context context, String theme) {
+		SharedPreferences.Editor editor = getPreferences(context).edit();
+		editor.putString(Constants.PREFERENCES_KEY_THEME, theme);
+		editor.commit();
+	}
 	
 	public static boolean getDisplayTrack(Context context) {
 		SharedPreferences prefs = getPreferences(context);
