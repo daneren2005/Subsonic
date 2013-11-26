@@ -44,10 +44,6 @@ public class QueryReceiverActivity extends Activity {
         String query = getIntent().getStringExtra(SearchManager.QUERY);
 
         if (query != null) {
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this, DSubSearchProvider.AUTHORITY,
-                                                                              DSubSearchProvider.MODE);
-            suggestions.saveRecentQuery(query, null);
-
             Intent intent = new Intent(QueryReceiverActivity.this, SubsonicFragmentActivity.class);
             intent.putExtra(Constants.INTENT_EXTRA_NAME_QUERY, query);
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);

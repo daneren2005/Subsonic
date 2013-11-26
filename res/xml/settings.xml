@@ -185,11 +185,6 @@
 				android:summary="@string/settings.screen_lit_summary"
 				android:key="screenLitOnDownload"
 				android:defaultValue="true"/>
-
-			<Preference
-				android:key="clearSearchHistory"
-				android:title="@string/settings.clear_search_history"
-				android:persistent="false"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 

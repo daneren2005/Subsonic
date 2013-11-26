@@ -111,15 +111,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
 
-        findPreference("clearSearchHistory").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SettingsActivity.this, DSubSearchProvider.AUTHORITY, DSubSearchProvider.MODE);
-                suggestions.clearHistory();
-                Util.toast(SettingsActivity.this, R.string.settings_search_history_cleared);
-                return false;
-            }
-        });
 		findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
