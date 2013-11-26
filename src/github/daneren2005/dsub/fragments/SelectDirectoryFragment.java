@@ -368,6 +368,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return service.getMusicDirectory(id, name, refresh, context, this);
 			}
+			
+			@Override
+			protected void done(Pair<MusicDirectory, Boolean> result) {
+				super.done(result);
+				setTitle(result.getFirst().getName());
+			}
 		}.execute();
 	}
 
