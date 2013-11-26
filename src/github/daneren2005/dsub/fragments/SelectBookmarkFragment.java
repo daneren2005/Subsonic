@@ -177,14 +177,23 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		DownloadService downloadService = getDownloadService();
+		final DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;
 		}
 
-		Bookmark bookmark = (Bookmark) parent.getItemAtPosition(position);
-		downloadService.download(bookmark);
-		Util.startActivityWithoutTransition(context, DownloadActivity.class);
+		final Bookmark bookmark = (Bookmark) parent.getItemAtPosition(position);
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				downloadService.download(bookmark);
+			}
+			
+			@Override
+			protected void done(Void result) {
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+			}
+		}.execute();
 	}
 	
 	private void displayBookmarkInfo(final Bookmark bookmark) {
