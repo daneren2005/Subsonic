@@ -170,7 +170,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					startFragmentActivity(drawerItemsDescriptions[position]);
 
 					if(lastSelectedView != view) {
-						lastSelectedView.setBackgroundResource(android.R.color.transparent);
+						if(lastSelectedView != null) {
+							lastSelectedView.setBackgroundResource(android.R.color.transparent);
+						}
 						view.setBackgroundResource(R.color.dividerColor);
 						lastSelectedView = view;
 						lastSelectedPosition = position;
