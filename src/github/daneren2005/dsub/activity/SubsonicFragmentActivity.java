@@ -206,6 +206,33 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			changeLog.getLogDialog().show();
 		}
 	}
+	
+	@Override
+	public void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		if(currentFragment != null && currentFragment instanceof SearchFragment) {
+			String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
+			boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+			boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
+
+			if (query != null) {
+				((SearchFragment)currentFragment).search(query, autoplay);
+			} else {
+				((SearchFragment)currentFragment).populateList();
+				if (requestsearch) {
+					onSearchRequested();
+				}
+			}
+		} else if(currentFragment != null && intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
+			setIntent(intent);
+
+			SearchFragment fragment = new SearchFragment();
+			replaceFragment(fragment, currentFragment.getRootId(), fragment.getSupportTag());
+		} else {
+			setIntent(intent);
+		}
+	}
 
 	@Override
 	public void onResume() {
