@@ -224,7 +224,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		};
 
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
-			int fragmentID = R.id.fragment_list_layout;
+			int fragmentID = currentFragment != null ? currentFragment.getRootId() : R.id.fragment_list_layout;
 			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID)) {
 				SubsonicFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();

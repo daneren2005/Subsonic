@@ -5,5 +5,6 @@
             android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
             android:voiceLanguageModel="web_search"
             android:searchSuggestAuthority="github.daneren2005.dsub.provider.DSubSearchProvider"
-            android:searchSuggestSelection=" ?" >
+            android:searchSuggestSelection=" unused"
+			android:searchSuggestIntentAction="android.intent.action.VIEW">
 </searchable>

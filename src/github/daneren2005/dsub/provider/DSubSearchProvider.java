@@ -83,7 +83,7 @@ public class DSubSearchProvider extends ContentProvider {
 		}
 		for (MusicDirectory.Entry song : searchResult.getSongs()) {
 			String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
-			cursor.addRow(new Object[]{song.getId(), song.getTitle(), song.getArtist(), song.getParent(), null, icon});
+			cursor.addRow(new Object[]{song.getId(), song.getTitle(), song.getArtist(), song.getParent(), song.getTitle(), icon});
 		}
 		return cursor;
 	}
