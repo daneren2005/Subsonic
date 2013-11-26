@@ -54,17 +54,9 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 		}
 		
 		// Update the remote controls
-    	mRemoteControl.editMetadata(true)
-    	.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
-    	.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
-    	.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, (currentSong == null) ? null : currentSong.getArtist())
-    	.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, (currentSong) == null ? null : currentSong.getTitle())
-    	.putString(MediaMetadataRetriever.METADATA_KEY_GENRE, (currentSong) == null ? null : currentSong.getGenre())
-    	.putLong(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER, (currentSong == null) ? 
-    			0 : ((currentSong.getTrack() == null) ? 0 : currentSong.getTrack()))
-    	.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, (currentSong == null) ? 
-    			0 : ((currentSong.getDuration() == null) ? 0 : currentSong.getDuration()))
-    	.apply();
+		RemoteControlClient.MetadataEditor editor = mRemoteControl.editMetadata(true);
+		updateMetadata(currentSong, editor);
+		editor.apply();
     	if (currentSong == null || imageLoader == null) {
     		mRemoteControl.editMetadata(true)
         	.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
@@ -72,6 +64,17 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
     	} else {
     		imageLoader.loadImage(context, mRemoteControl, currentSong);
     	}
+	}
+	protected void updateMetadata(final MusicDirectory.Entry currentSong, final RemoteControlClient.MetadataEditor editor) {
+		editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
+			.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
+			.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, (currentSong == null) ? null : currentSong.getArtist())
+			.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, (currentSong) == null ? null : currentSong.getTitle())
+			.putString(MediaMetadataRetriever.METADATA_KEY_GENRE, (currentSong) == null ? null : currentSong.getGenre())
+			.putLong(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER, (currentSong == null) ? 
+				0 : ((currentSong.getTrack() == null) ? 0 : currentSong.getTrack()))
+			.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, (currentSong == null) ? 
+				0 : ((currentSong.getDuration() == null) ? 0 : currentSong.getDuration()));
 	}
 	
 	protected int getTransportFlags() {
