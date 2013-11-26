@@ -211,7 +211,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	public void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 
-		if(currentFragment != null && currentFragment instanceof SearchFragment) {
+		if(currentFragment != null && currentFragment instanceof SearchFragment && intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
 			String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 			boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
 			boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
