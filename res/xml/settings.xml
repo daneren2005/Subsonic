@@ -30,6 +30,12 @@
 				android:defaultValue="holo"
 				android:entryValues="@array/themeValues"
 				android:entries="@array/themeNames"/>
+				
+			<CheckBoxPreference
+				android:title="@string/settings.theme_fullscreen"
+				android:summary="@string/settings.theme_fullscreen_summary"
+				android:key="fullScreen"
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.track_title"
