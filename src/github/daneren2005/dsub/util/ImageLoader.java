@@ -74,8 +74,12 @@ public class ImageLoader implements Runnable {
 			
 			@Override
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
-				if(evicted && oldBitmap != nowPlaying) {
-					oldBitmap.recycle();
+				if(evicted) {
+					if(oldBitmap != nowPlaying) {
+						oldBitmap.recycle();
+					} else {
+						cache.put(key, oldBitmap);
+					}
 				}
 			}
 		};
