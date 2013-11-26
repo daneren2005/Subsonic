@@ -104,6 +104,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			if(getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
 				SearchFragment fragment = new SearchFragment();
 				replaceFragment(fragment, R.id.home_layout, fragment.getSupportTag());
+				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 			}
 		}
 
