@@ -29,6 +29,7 @@ public class RemoteControlClientJB extends RemoteControlClientICS {
 			@Override
 			public void onPlaybackPositionUpdate(long newPosition) {
 				downloadService.seekTo((int) newPosition);
+				setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
 			}
 		});
 	}
