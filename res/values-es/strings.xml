@@ -75,6 +75,8 @@
 	<string name="menu.check_podcasts">Comprobar nuevos episodios</string>
 	<string name="menu.add_podcast">Añadir canal</string>
 	<string name="menu.cast">Enviar al dispositivo</string>
+	<string name="menu.keep_synced">Mantener sincronizado</string>
+	<string name="menu.stop_sync">Detener sincronización</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -251,10 +253,8 @@
     <string name="settings.theme_dark">Oscuro</string>
 	<string name="settings.theme_black">Negro</string>
 	<string name="settings.theme_holo">Holo</string>
-	<string name="settings.theme_light_fullscreen">Claro pantalla completa</string>
-    <string name="settings.theme_dark_fullscreen">Oscuro pantalla completa</string>
-	<string name="settings.theme_black_fullscreen">Negro pantalla completa</string>
-	<string name="settings.theme_holo_fullscreen">Holo pantalla completa</string>
+	<string name="settings.theme_fullscreen">Pantalla completa</string>
+	<string name="settings.theme_fullscreen_summary">Esconder tantos elementos de la interfaz como Android permita</string>
 	<string name="settings.track_title">Mostrar número de pista</string>
 	<string name="settings.track_summary">Mostrar número de pista al inicio de la canción si existe</string>
     <string name="settings.network_title">Red</string>
@@ -348,6 +348,12 @@
 	<string name="settings.podcasts_enabled_summary">Mostrar o no mostrar el apartado Podcasts en el menú</string>
 	<string name="settings.bookmarks_enabled">Marcadores Habilitados</string>
 	<string name="settings.bookmarks_enabled_summary">Mostrar o no mostrar el apartado Marcadoresen el menú</string>
+	<string name="settings.sync_title">Sincronizar</string>
+	<string name="settings.sync_enabled">Sincronización habilitada</string>
+	<string name="settings.sync_enabled_summary">Comprobar o no comprobar periódicamente cambios en las listas de reproducción o podcasts</string>
+	<string name="settings.sync_interval">Intervalo de sincronización</string>
+	<string name="settings.sync_wifi">Sincronizar sólo con Wifi</string>
+	<string name="settings.sync_wifi_summary">Sincronizar únicamente al estar conectado a una red Wifi</string>
 
 	<string name="shuffle.title">Iniciar aleatorio por</string>
 	<string name="shuffle.startYear">Año inicial:</string>
