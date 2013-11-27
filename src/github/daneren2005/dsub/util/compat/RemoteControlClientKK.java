@@ -8,9 +8,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaMetadataEditor;
 import android.media.MediaMetadataRetriever;
 import android.media.Rating;
 import android.media.RemoteControlClient;
+import android.os.AsyncTask;
+import android.util.Log;
+
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
@@ -21,11 +25,14 @@ import java.io.File;
 
 @TargetApi(19)
 public class RemoteControlClientKK extends RemoteControlClientJB {
+	private static String TAG = RemoteControlClientKK.class.getSimpleName();
+	protected MusicDirectory.Entry currentSong;
+
 	@Override
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
 		super.register(context, mediaButtonReceiverComponent);
-		
-		mRemoteControl.setMetadataUpdateListener(new RemoteControlClient.onMetadataUpdateListener() {
+
+		mRemoteControl.setMetadataUpdateListener(new RemoteControlClient.OnMetadataUpdateListener() {
 			@Override
 			public void onMetadataUpdate(int key, Object newValue) {
 				if(key == MediaMetadataEditor.RATING_KEY_BY_USER) {
@@ -41,6 +48,7 @@ public class RemoteControlClientKK extends RemoteControlClientJB {
 		super.updateMetadata(currentSong, editor);
 		editor.putObject(MediaMetadataEditor.RATING_KEY_BY_USER, Rating.newHeartRating(currentSong.isStarred()));
 		editor.addEditableKey(MediaMetadataEditor.RATING_KEY_BY_USER);
+		this.currentSong = currentSong;
 	}
 	
 	@Override
@@ -50,23 +58,23 @@ public class RemoteControlClientKK extends RemoteControlClientJB {
 	
 	private void setStarred(final MusicDirectory.Entry entry, final boolean starred) {
 		entry.setStarred(starred);
-	
-		new SilentBackgroundTask<Void>(context) {
+
+		new AsyncTask<Void, Void, Void>() {
 			@Override
-			protected Void doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.setStarred(entry.getId(), starred, context, null);
-				
-				// Make sure to clear parent cache
-				String s = Util.getRestUrl(context, null) + entry.getParent();
-				String parentCache = "directory-" + s.hashCode() + ".ser";
-				File file = new File(context.getCacheDir(), parentCache);
-				file.delete();
-			}
-			
-			@Override
-			protected void done(Void result) {
-				
+			protected Void doInBackground(Void... params) {
+				try {
+					MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
+					musicService.setStarred(entry.getId(), starred, downloadService, null);
+
+					// Make sure to clear parent cache
+					String s = Util.getRestUrl(downloadService, null) + entry.getParent();
+					String parentCache = "directory-" + s.hashCode() + ".ser";
+					File file = new File(downloadService.getCacheDir(), parentCache);
+					file.delete();
+				} catch(Exception e) {
+					Log.w(TAG, "Failed to set star for " + entry.getTitle());
+				}
+				return null;
 			}
 		}.execute();
 	}

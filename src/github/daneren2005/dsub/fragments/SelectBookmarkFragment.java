@@ -42,6 +42,7 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
@@ -187,6 +188,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 			@Override
 			protected Void doInBackground() throws Throwable {
 				downloadService.download(bookmark);
+				return null;
 			}
 			
 			@Override

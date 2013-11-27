@@ -1,6 +1,7 @@
 package github.daneren2005.dsub.util.compat;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.ImageLoader;
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -17,10 +18,10 @@ import github.daneren2005.dsub.service.DownloadService;
 public class RemoteControlClientICS extends RemoteControlClientHelper {
 	protected RemoteControlClient mRemoteControl;
 	protected ImageLoader imageLoader;
-	protected DownloadService downloadService;
+	protected DownloadServiceImpl downloadService;
 	
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
-		downloadService = (DownloadService) context;
+		downloadService = (DownloadServiceImpl) context;
 		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
 		// build the PendingIntent for the remote control client

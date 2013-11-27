@@ -356,9 +356,9 @@ public class SearchFragment extends SubsonicFragment {
 		MusicDirectory.Entry album = searchResult.getAlbums().isEmpty() ? null : searchResult.getAlbums().get(0); 
 		MusicDirectory.Entry song = searchResult.getSongs().isEmpty() ? null : searchResult.getSongs().get(0);
 		
-		if(artist != null && query.equals(artist.getName()) {
+		if(artist != null && query.equals(artist.getName())) {
 			onArtistSelected(artist, true);
-		} else if(album != null && query.equals(album.getTitle()) {
+		} else if(album != null && query.equals(album.getTitle())) {
 			onAlbumSelected(album, true);
 		} else if(song != null) {
 			onSongSelected(song, false, false, true, false);

@@ -296,6 +296,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		lastSelectedPosition = savedInstanceState.getInt(Constants.FRAGMENT_POSITION);
 		recreateSpinner();
 	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
