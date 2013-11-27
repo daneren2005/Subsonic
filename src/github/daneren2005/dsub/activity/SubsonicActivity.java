@@ -299,7 +299,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	@Override
 	public void onNewIntent(Intent intent) {
-
+		super.onNewIntent(intent);
 	}
 	
 	@Override
