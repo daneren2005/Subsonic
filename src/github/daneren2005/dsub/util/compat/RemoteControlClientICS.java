@@ -11,11 +11,15 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
+import android.util.Log;
+
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.service.DownloadService;
 
 @TargetApi(14)
 public class RemoteControlClientICS extends RemoteControlClientHelper {
+	private static String TAG = RemoteControlClientICS.class.getSimpleName();
+
 	protected RemoteControlClient mRemoteControl;
 	protected ImageLoader imageLoader;
 	protected DownloadServiceImpl downloadService;
@@ -75,7 +79,7 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 			.putLong(MediaMetadataRetriever.METADATA_KEY_CD_TRACK_NUMBER, (currentSong == null) ? 
 				0 : ((currentSong.getTrack() == null) ? 0 : currentSong.getTrack()))
 			.putLong(MediaMetadataRetriever.METADATA_KEY_DURATION, (currentSong == null) ? 
-				0 : ((currentSong.getDuration() == null) ? 0 : currentSong.getDuration()));
+				0 : ((currentSong.getDuration() == null) ? 0 : (currentSong.getDuration() * 1000)));
 	}
 	
 	protected int getTransportFlags() {
