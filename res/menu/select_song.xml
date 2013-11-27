@@ -42,6 +42,10 @@
 	<item 
 		android:id="@+id/menu_remove_playlist"
 		android:title="@string/menu.remove_playlist"/>
+
+	<item
+		android:id="@+id/menu_play_next"
+		android:title="@string/common.play_next"/>
 		
 	<item 
 		android:id="@+id/menu_play_last"

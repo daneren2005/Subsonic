@@ -196,6 +196,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			case R.id.menu_play_last:
 				playNow(false, true);
 				return true;
+			case R.id.menu_play_next:
+				playNow(false, true, true);
+				return true;
 			case R.id.menu_shuffle:
 				playNow(true, false);
 				return true;
@@ -498,8 +501,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
     }
 
 	private void playNow(final boolean shuffle, final boolean append) {
+		playNow(shuffle, append, false);
+	}
+	private void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
 		if(getSelectedSongs().size() > 0) {
-			download(append, false, !append, false, shuffle);
+			download(append, false, !append, playNext, shuffle);
 			selectAll(false, false);
 		}
 		else {

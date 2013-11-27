@@ -26,6 +26,10 @@
 	<item 
 		android:id="@+id/menu_delete"
 		android:title="@string/common.delete"/>
+
+	<item
+		android:id="@+id/menu_play_next"
+		android:title="@string/common.play_next"/>
 		
 	<item 
 		android:id="@+id/menu_play_last"
