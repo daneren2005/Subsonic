@@ -129,6 +129,7 @@ public class RESTMusicService implements MusicService {
     private String redirectFrom;
     private String redirectTo;
     private final ThreadSafeClientConnManager connManager;
+	private Integer instance;
 
     public RESTMusicService() {
 
@@ -245,7 +246,7 @@ public class RESTMusicService implements MusicService {
     }
 
     private String getCachedIndexesFilename(Context context, String musicFolderId) {
-        String s = Util.getRestUrl(context, null) + musicFolderId;
+        String s = getRestUrl(context, null) + musicFolderId;
         return "indexes-" + Math.abs(s.hashCode()) + ".ser";
     }
 
@@ -596,7 +597,7 @@ public class RESTMusicService implements MusicService {
                 return bitmap;
             }
 
-            String url = Util.getRestUrl(context, "getCoverArt");
+            String url = getRestUrl(context, "getCoverArt");
 
             InputStream in = null;
             try {
@@ -640,7 +641,7 @@ public class RESTMusicService implements MusicService {
     @Override
     public HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, CancellableTask task) throws Exception {
 
-        String url = Util.getRestUrl(context, "stream");
+        String url = getRestUrl(context, "stream");
 
         // Set socket read timeout. Note: The timeout increases as the offset gets larger. This is
         // to avoid the thrashing effect seen when offset is combined with transcoding/downsampling on the server.
@@ -674,7 +675,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public String getVideoUrl(int maxBitrate, Context context, String id) {
-        StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "videoPlayer"));
+        StringBuilder builder = new StringBuilder(getRestUrl(context, "videoPlayer"));
         builder.append("&id=").append(id);
         builder.append("&maxBitRate=").append(maxBitrate);
         builder.append("&autoplay=true");
@@ -686,7 +687,7 @@ public class RESTMusicService implements MusicService {
 	
 	@Override
 	public String getVideoStreamUrl(String format, int maxBitrate, Context context, String id) throws Exception {
-		StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "stream"));
+		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
         builder.append("&id=").append(id);
 		if(!"raw".equals(format)) {
 			checkServerVersion(context, "1.9", "Video streaming not supported.");
@@ -703,7 +704,7 @@ public class RESTMusicService implements MusicService {
 	public String getHlsUrl(String id, int bitRate, Context context) throws Exception {
 		checkServerVersion(context, "1.9", "HLS video streaming not supported.");
 		
-		StringBuilder builder = new StringBuilder(Util.getRestUrl(context, "hls"));
+		StringBuilder builder = new StringBuilder(getRestUrl(context, "hls"));
         builder.append("&id=").append(id);
 		if(bitRate > 0) {
 			builder.append("&bitRate=").append(bitRate);
@@ -1113,6 +1114,11 @@ public class RESTMusicService implements MusicService {
 		
 		return id;
 	}
+	
+	@Override
+	public void setInstance(Integer instance)  throws Exception {
+		this.instance = instance;
+	}
 
     private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
         return getReader(context, progressListener, method, requestParams, Collections.<String>emptyList(), Collections.emptyList());
@@ -1130,7 +1136,7 @@ public class RESTMusicService implements MusicService {
             progressListener.updateProgress(R.string.service_connecting);
         }
 
-        String url = Util.getRestUrl(context, method);
+        String url = getRestUrl(context, method);
         return getReaderForURL(context, url, requestParams, parameterNames, parameterValues, progressListener);
     }
 
@@ -1316,4 +1322,12 @@ public class RESTMusicService implements MusicService {
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         return networkInfo == null ? -1 : networkInfo.getType();
     }
+    
+	private String getRestUrl(Context context, String method) {
+		if(instance == null) {
+			return Util.getRestUrl(context, method);
+		} else {
+			return Util.getRestUrl(context, method, instance);
+		}
+	}
 }

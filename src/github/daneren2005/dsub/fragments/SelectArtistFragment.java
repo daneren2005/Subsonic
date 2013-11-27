@@ -1,7 +1,9 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -67,6 +69,9 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 		artistList = (ListView) rootView.findViewById(R.id.fragment_list);
 		artistList.setOnItemClickListener(this);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			artistList.setFastScrollAlwaysVisible(true);
+		}
 
 		folderButtonParent = inflater.inflate(R.layout.select_artist_header, artistList, false);
 		folderName = (TextView) folderButtonParent.findViewById(R.id.select_artist_folder_2);

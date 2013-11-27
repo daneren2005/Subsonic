@@ -75,6 +75,8 @@
 	<string name="menu.set_timer">Set Timer</string>
 	<string name="menu.check_podcasts">Check For New Episodes</string>
 	<string name="menu.add_podcast">Add Channel</string>
+	<string name="menu.keep_synced">Keep Synced</string>
+	<string name="menu.stop_sync">Stop syncing</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -309,7 +311,7 @@
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
-	<string name="settings.playlist_title">Playlists</string>
+	<string name="settings.playlist_title">Play</string>
 	<string name="settings.playlist_random_size_title">Random Size</string>
 	<string name="settings.buffer_length">Buffer Length (0 = when fully cached)</string>
 	<string name="settings.sleep_timer_title">Sleep Timer</string>
@@ -348,6 +350,12 @@
 	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
 	<string name="settings.bookmarks_enabled">Bookmarks Enabled</string>
 	<string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
+	<string name="settings.sync_title">Sync</string>
+	<string name="settings.sync_enabled">Sync Enabled</string>
+	<string name="settings.sync_enabled_summary">Whether or not playlists or podcasts are periodically checked for changes</string>
+	<string name="settings.sync_interval">Sync Interval</string>
+	<string name="settings.sync_wifi">Sync on Wifi only</string>
+	<string name="settings.sync_wifi_summary">Only sync while on wifi</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

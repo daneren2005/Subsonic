@@ -146,4 +146,6 @@ public interface MusicService {
 	void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
+	
+	void setInstance(Integer instance) throws Exception;
 }

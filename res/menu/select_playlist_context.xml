@@ -22,10 +22,13 @@
         android:title="@string/common.download"
         />
 
-    <item 
-        android:id="@+id/playlist_menu_pin"
-        android:title="@string/common.pin"
-        />
+	<item
+		android:id="@+id/playlist_menu_sync"
+		android:title="@string/menu.keep_synced"/>
+
+	<item
+		android:id="@+id/playlist_menu_stop_sync"
+		android:title="@string/menu.stop_sync"/>
 		
 	<item 
         android:id="@+id/playlist_update_info"

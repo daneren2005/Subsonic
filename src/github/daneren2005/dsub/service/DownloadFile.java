@@ -99,13 +99,21 @@ public class DownloadFile {
 	}
 
     public synchronized void download() {
-        FileUtil.createDirectoryForParent(saveFile);
+        preDownload();
+        downloadTask.start();
+    }
+    public synchronized void downloadNow() {
+    	preDownload();
+    	downloadTask.execute();
+		
+    }
+    private void preDownload() {
+    	FileUtil.createDirectoryForParent(saveFile);
         failedDownload = false;
 		if(!partialFile.exists()) {
 			bitRate = Util.getMaxBitrate(context);
 		}
-        downloadTask = new DownloadTask();
-        downloadTask.start();
+		downloadTask = new DownloadTask();
     }
 
     public synchronized void cancelDownload() {

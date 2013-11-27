@@ -48,6 +48,7 @@ public class UpdateView extends LinearLayout {
 	protected ImageView moreButton;
 	
 	protected boolean exists = false;
+	protected boolean pinned = false;
 	protected boolean shaded = false;
 	protected boolean starred = false;
 	protected boolean isStarred = false;
@@ -169,9 +170,9 @@ public class UpdateView extends LinearLayout {
 	}
 	protected void update() {
 		if(moreButton != null) {
-			if(exists) {
+			if(exists || pinned) {
 				if(!shaded) {
-					moreButton.setImageResource(R.drawable.download_cached);
+					moreButton.setImageResource(exists ? R.drawable.download_cached : R.drawable.download_pinned);
 					shaded = true;
 				}
 			} else {

@@ -15,7 +15,11 @@
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.BLUETOOTH"/>
 	<uses-permission android:name="android.permission.READ_LOGS"/>
-	
+	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+
+
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 	<uses-feature android:name="android.hardware.microphone" android:required="false" />
 
@@ -63,6 +67,34 @@
 
         <service android:name="github.daneren2005.dsub.service.DownloadServiceImpl"
                  android:label="Subsonic Download Service"/>
+		<service android:name="github.daneren2005.dsub.service.sync.AuthenticatorService">
+			<intent-filter>
+				<action android:name="android.accounts.AccountAuthenticator"/>
+			</intent-filter>
+
+			<meta-data android:name="android.accounts.AccountAuthenticator"
+				android:resource="@xml/authenticator" />
+		</service>
+		<service android:name=".service.sync.PlaylistSyncService"
+			android:exported="true"
+			android:process=":sync">
+
+			<intent-filter>
+				<action android:name="android.content.SyncAdapter"/>
+			</intent-filter>
+			<meta-data android:name="android.content.SyncAdapter"
+				android:resource="@xml/playlists_syncadapter" />
+		</service>
+		<service android:name=".service.sync.PodcastSyncService"
+				 android:exported="true"
+				 android:process=":sync">
+
+			<intent-filter>
+				<action android:name="android.content.SyncAdapter"/>
+			</intent-filter>
+			<meta-data android:name="android.content.SyncAdapter"
+					   android:resource="@xml/podcasts_syncadapter" />
+		</service>
 
         <receiver android:name="github.daneren2005.dsub.receiver.MediaButtonIntentReceiver">
             <intent-filter android:priority="999">
@@ -120,6 +152,16 @@
 
         <provider android:name="github.daneren2005.dsub.provider.DSubSearchProvider"
                   android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
+		<provider android:name=".service.sync.PlaylistStubProvider"
+			android:authorities="github.daneren2005.dsub.playlists.provider"
+			android:label="Playlists"
+			android:exported="false"
+			android:syncable="true"/>
+		<provider android:name=".service.sync.PodcastStubProvider"
+			android:authorities="github.daneren2005.dsub.podcasts.provider"
+			android:label="Podcasts"
+			android:exported="false"
+			android:syncable="true"/>
 
         <meta-data android:name="android.app.default_searchable"
                    android:value="github.daneren2005.dsub.activity.QueryReceiverActivity"/>

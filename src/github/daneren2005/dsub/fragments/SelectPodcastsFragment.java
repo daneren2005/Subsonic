@@ -21,9 +21,6 @@ package github.daneren2005.dsub.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -36,11 +33,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
+import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
@@ -134,6 +133,14 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 		if(!Util.isOffline(context)) {
 			android.view.MenuInflater inflater = context.getMenuInflater();
 			inflater.inflate(R.menu.select_podcasts_context, menu);
+
+			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+			PodcastChannel podcast = (PodcastChannel) podcastListView.getItemAtPosition(info.position);
+			if(SyncUtil.isSyncedPodcast(context, podcast.getId())) {
+				menu.removeItem(R.id.podcast_menu_sync);
+			} else {
+				menu.removeItem(R.id.podcast_menu_stop_sync);
+			}
 		}
 	}
 
@@ -147,6 +154,12 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 		PodcastChannel channel = (PodcastChannel) podcastListView.getItemAtPosition(info.position);
 
 		switch (menuItem.getItemId()) {
+			case R.id.podcast_menu_sync:
+				syncPodcast(channel);
+				break;
+			case R.id.podcast_menu_stop_sync:
+				stopSyncPodcast(channel);
+				break;
 			case R.id.podcast_channel_info:
 				displayPodcastInfo(channel);
 				break;
@@ -305,6 +318,7 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePodcastChannel(channel.getId(), context, null);
+						stopSyncPodcast(channel);
 						return null;
 					}
 
@@ -329,5 +343,32 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 				}.execute();
 			}
 		});
+	}
+
+	private void syncPodcast(final PodcastChannel podcast) {
+		new LoadingTask<MusicDirectory>(context, false) {
+			@Override
+			protected MusicDirectory doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				return musicService.getPodcastEpisodes(true, podcast.getId(), context, this);
+			}
+
+			@Override
+			protected void done(MusicDirectory result) {
+				List<String> existingEpisodes = new ArrayList<String>();
+				for(MusicDirectory.Entry entry: result.getChildren()) {
+					String id = entry.getId();
+					if(id != null) {
+						existingEpisodes.add(entry.getId());
+					}
+				}
+
+				SyncUtil.addSyncedPodcast(context, podcast.getId(), existingEpisodes);
+			}
+		}.execute();
+	}
+
+	private void stopSyncPodcast(PodcastChannel podcast) {
+		SyncUtil.removeSyncedPodcast(context, podcast.getId());
 	}
 }

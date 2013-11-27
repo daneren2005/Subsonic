@@ -18,6 +18,10 @@
  */
 package github.daneren2005.dsub.activity;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -96,6 +100,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			if("".equals(fragmentType) || fragmentType == null) {
 				// Initial startup stuff
 				loadSettings();
+				createAccount();
 			}
 			
 			currentFragment.setPrimaryFragment(true);
@@ -434,6 +439,22 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
 			editor.commit();
 		}
+	}
+
+	private void createAccount() {
+		AccountManager accountManager = (AccountManager) this.getSystemService(ACCOUNT_SERVICE);
+		Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+		accountManager.addAccountExplicitly(account, null, null);
+
+		SharedPreferences prefs = Util.getPreferences(this);
+		boolean syncEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SYNC_ENABLED, true);
+		int syncInterval = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SYNC_INTERVAL, "60"));
+
+		// Make sync run every hour
+		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
+		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * syncInterval);
+		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, syncEnabled);
+		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, new Bundle(), 60L * syncInterval);
 	}
 
 	private void showInfoDialog() {

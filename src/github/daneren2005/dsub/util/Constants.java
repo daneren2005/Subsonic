@@ -119,6 +119,9 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_CHAT_ENABLED = "chatEnabled";
 	public static final String PREFERENCES_KEY_VIDEO_PLAYER = "videoPlayer";
 	public static final String PREFERENCES_KEY_CONTROL_MODE = "remoteControlMode";
+	public static final String PREFERENCES_KEY_SYNC_ENABLED = "syncEnabled";
+	public static final String PREFERENCES_KEY_SYNC_INTERVAL = "syncInterval";
+	public static final String PREFERENCES_KEY_SYNC_WIFI = "syncWifi";
 	public static final String PREFERENCES_KEY_PAUSE_DISCONNECT = "pauseOnDisconnect";
 	public static final String PREFERENCES_KEY_HIDE_WIDGET = "hideWidget";
 	public static final String PREFERENCES_KEY_PODCASTS_ENABLED = "podcastsEnabled";
@@ -151,6 +154,12 @@ public final class Constants {
     public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";
 	public static final String OFFLINE_SYNC_NAME = "github.daneren2005.dsub.offline";
 	public static final String OFFLINE_SYNC_DEFAULT = "syncDefaults";
+
+	// Account prefs
+	public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
+	public static final String SYNC_ACCOUNT_TYPE = "subsonic.org";
+	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "github.daneren2005.dsub.playlists.provider";
+	public static final String SYNC_ACCOUNT_PODCAST_AUTHORITY = "github.daneren2005.dsub.podcasts.provider";
 
     // Number of free trial days for non-licensed servers.
     public static final int FREE_TRIAL_DAYS = 30;
