@@ -71,11 +71,12 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		// Make sure battery > x% or is charging
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		Intent batteryStatus = context.registerReceiver(null, intentFilter);
-		if(batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1) != BatteryManager.BATTERY_STATUS_CHARGING) {
+		int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+		if(status != BatteryManager.BATTERY_STATUS_CHARGING && status != BatteryManager.BATTERY_STATUS_FULL) {
 			int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
 			int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 			
-			if((level / (float)scale) > 0.15) {
+			if((level / (float)scale) < 0.15) {
 				Log.w(TAG, "Not running sync, battery too low");
 				return;
 			}
