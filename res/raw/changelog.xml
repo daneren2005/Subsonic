@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.3.0Beta" versioncode="72" releasedate="11/26/2013">
+		<change>Manage new sync options in Settings -> Cache/Network</change>
+		<change>Mark playlists as Keep Synced to auto download whole playlist</change>
+		<change>Mark podcasts as Keep Synced to auto download new podcasts</change>
+		<change>New Search Provider that searches as you type (thanks Sindre)</change>
+		<change>When using "Listen To" search, autoplay artist or albums if they match the query</change>
+		<change>Full screen option in Settings.  Immersive mode for Android 4.4+</change>
+		<change>Fix KitKat's lockscreen scrollbar for Android 4.4+</change>
+		<change>Hungarian translation (thanks Andrássy László)</change>
+		<change>Tons of bug fixes</change>
+	</release>
 	<release version="4.2.2" versioncode="71" releasedate="11/22/2013">
 		<change>Added starring for artists for 4.9+ Servers</change>
 		<change>Add ability to place large widget on lockscreen for Android 4.2+</change>
