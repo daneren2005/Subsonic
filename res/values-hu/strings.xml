@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="common.appname">DSub</string>
+    <string name="common.ok">OK</string>
+    <string name="common.save">Mentés</string>
+    <string name="common.cancel">Mégse</string>
+    <string name="common.play_now">Lejátszás</string>
+	<string name="common.play_shuffled">Véletlen sorrendű lejátszás</string>
+    <string name="common.play_next">Lejátszás (Következőként)</string>
+    <string name="common.play_last">Lejátszás (Utolsóként)</string>
+	<string name="common.download">Letöltés</string>
+    <string name="common.pin">Letöltés (állandó)</string>
+    <string name="common.delete">Törlés</string>
+	<string name="common.star">Csillagozás be</string>
+	<string name="common.unstar">Csillagozás ki</string>
+	<string name="common.info">Részletek</string>
+	<string name="common.name">Név</string>
+	<string name="common.comment">Megjegyzés</string>
+	<string name="common.public">Nyilvános</string>
+	<string name="common.play_external">Videólejátszás</string>
+	<string name="common.stream_external">Stream Videó</string>
+	<string name="common.confirm">Jóváhagyás</string>
+	<string name="common.confirm_message">Szeretné, hogy %1$s %2$s?</string>
+	<string name="common.empty">Nem található</string>
+
+    <string name="button_bar.home">Főoldal</string>
+    <string name="button_bar.browse">Médiakönyvtár</string>
+    <string name="button_bar.search">Keresés</string>
+    <string name="button_bar.playlists">Lejátszási listák</string>
+    <string name="button_bar.now_playing">Lejátszó</string>
+	<string name="button_bar.podcasts">Podcastok</string>
+	<string name="button_bar.bookmarks">Könyvjelzők</string>
+	<string name="button_bar.chat">Csevegés (Chat)</string>
+
+    <string name="main.welcome_title">Üdvözlet!</string>
+    <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás még nincs beállítva. Miután konfigurálta saját kiszolgálóját (elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba, és adja meg csatlakozási adatokat!</string>
+	<string name="main.about_title">DSub információk</string>
+	<string name="main.about_text">Fejlesztő: Scott Jackson
+		\nEmail: daneren2005@gmail.com
+		\nVerzió: %1$s
+		\nFelhasznált tároló: %2$s/%3$s
+		\nFelhasználható tároló: %4$s/%5$s</string>
+    <string name="main.select_server">Kiszolgáló kiválasztása</string>
+    <string name="main.shuffle">Véletlen sorrendű lejátszás</string>
+    <string name="main.offline">Offline mód</string>
+	<string name="main.online">Online mód</string>
+    <string name="main.settings">Beállítások</string>
+    <string name="main.albums_title">Albumok</string>
+    <string name="main.albums_newest">Utoljára hozzáadott</string>
+    <string name="main.albums_recent">Utoljára lejátszott</string>
+    <string name="main.albums_frequent">Legtöbbször lejátszott</string>
+    <string name="main.albums_highest">Legjobbra értékelt</string>
+    <string name="main.albums_starred">Csillagozott</string>
+    <string name="main.albums_random">Véletlenszerű</string>
+	<string name="main.albums_genres">Műfajok</string>
+	<string name="main.back_confirm">Nyomja meg még egyszer a kilépéshez!</string>
+
+	<string name="menu.search">Keresés</string>
+	<string name="menu.shuffle">Véletlen sorrendű</string>
+	<string name="menu.refresh">Frissítés</string>
+	<string name="menu.select">Összes kijelölése</string>
+	<string name="menu.play">Lejátszás</string>
+	<string name="menu.play_last">Lejátszás (Utolsóként)</string>
+    <string name="menu.exit">Kilépés</string>
+    <string name="menu.settings">Beállítások</string>
+    <string name="menu.help">Súgó</string>
+	<string name="menu.about">Névjegy</string>
+	<string name="menu.add_playlist">Hozzáadás a lejátszási listához</string>
+	<string name="menu.remove_playlist">Törlés a lejátszási listából</string>
+	<string name="menu.deleted_playlist">%s lejátszási lista törölve</string>
+	<string name="menu.deleted_playlist_error">%s lejátszási lista törlése sikertelen!</string>
+	<string name="menu.log">Log küldése</string>
+	<string name="menu.set_timer">Időzítő beállítása</string>
+	<string name="menu.check_podcasts">Új epizódok ellenőrzése</string>
+	<string name="menu.add_podcast">Csatorna hozzáadása</string>
+
+    <string name="playlist.label">Lejátszási listák</string>
+	<string name="playlist.update_info">Módosítás</string>
+	<string name="playlist.updated_info">%s lejátszási lista módosítva</string>
+	<string name="playlist.updated_info_error">%s lejátszási lista módosítása sikertelen!</string>
+	<string name="playlist.overwrite">Létező lejátszási lista felülírása</string>
+	<string name="playlist.add_to">Hozzáadás a lejátszási listához</string>
+	<string name="playlist.create_new">Új létrehozása</string>
+
+    <string name="help.label">Súgó</string>
+    <string name="help.title">Üdvözli a DSub!</string>
+    <string name="help.back">Vissza</string>
+    <string name="help.close">Bezárás</string>
+    <string name="help.url">file:///android_asset/html/en/index.html</string>
+    <string name="help.loading">Betöltés...</string>
+
+    <string name="play_video.loading">Videó betöltése...</string>
+    <string name="play_video.noplugin">Kérem telepítse az Adobe Flash Player-t a Play Áruházból!</string>
+
+    <string name="search.label">Keresés</string>
+    <string name="search.title">Keresés</string>
+    <string name="search.search">Érintse meg a kereséshez</string>
+    <string name="search.no_match">Nincs találat, próbálja újra!</string>
+    <string name="search.artists">Előadók</string>
+    <string name="search.albums">Albumok</string>
+    <string name="search.songs">Dalok</string>
+    <string name="search.more">Továbbiak</string>
+
+    <string name="progress.wait">Kérem várjon!</string>
+
+    <string name="music_library.label">Médiakönyvtár</string>
+    <string name="music_library.label_offline">Kapcsolat nélküli médiák</string>
+
+    <string name="select_album.empty">Nem található média!</string>
+    <string name="select_album.select">Összes kijelölése</string>
+    <string name="select_album.n_selected">%d dal kijelölve.</string>
+    <string name="select_album.n_unselected">%d dal visszavonva.</string>
+    <string name="select_album.more">Továbbiak</string>
+    <string name="select_album.offline">Offline</string>
+    <string name="select_album.searching">Keresés...</string>
+    <string name="select_album.no_sdcard">Hiba: SD kártya nem áll rendelkezésre!</string>
+    <string name="select_album.no_network">Figyelem: Hálózat nem áll rendelkezésre!</string>
+    <string name="select_album.not_licensed">A kiszolgálónak nincs licensze! %d próbanap van hátra!</string>
+    <string name="select_album.donate_dialog_message">Korlátlan letöltéshez juthat a Subsonic támogatásával!</string>
+    <string name="select_album.donate_dialog_now">Most</string>
+    <string name="select_album.donate_dialog_later">Később</string>
+    <string name="select_album.donate_dialog_0_trial_days_left">A próbaidőszak lejárt!</string>
+
+    <string name="offline.sync_dialog_title">Offline dalok várnak a szinkronizálás befejezésére</string>
+    <string name="offline.sync_dialog_message">%1$d folyamat scrobble offline módban?
+		\n%2$d folyamat csillagozás offline módban?
+	</string>
+	<string name="offline.sync_dialog_default">A művelet használata alapértelmezettként</string>
+	<string name="offline.sync_success">%1$d dal sikeresen szinkronizálva</string>
+	<string name="offline.sync_partial">%1$d/%2$d dal sikeresen szinkronizálva</string>
+	<string name="offline.sync_error">A dalok szinkronizálása sikertelen!</string>
+
+	<string name="select_genre.blank">Üres</string>
+
+	<string name="select_podcasts.error">A podcast hibát jelzett a kiszolgálón történő letöltés közben! A kiszolgálónak kell letöltenie először!</string>
+	<string name="select_podcasts.skipped">Ez a podcast nem lett letöltve a kiszolgálón! A kiszolgálónak kell letöltenie először!</string>
+    <string name="select_podcasts.initializing">A podcast csatorna inicializálása a kiszolgálón. Kérjük, töltse be újra néhány pillanat múlva!</string>
+	<string name="select_podcasts.server_download">Letöltés a kiszolgálón</string>
+	<string name="select_podcasts.server_delete">Törlés a kiszolgálóról</string>
+	<string name="select_podcasts.downloading">%s letöltése a kiszolgálón</string>
+	<string name="select_podcasts.refreshing">A kiszolgáló ellenőrzi az új podcastokat...</string>
+	<string name="select_podcasts.deleted">%s podcast törölve</string>
+	<string name="select_podcasts.deleted_error">%s podcast törlése sikertelen!</string>
+	<string name="select_podcasts.add_url">URL:</string>
+	<string name="select_podcasts.created_error">Podcast hozzáadása sikertelen!</string>
+	<string name="select_podcasts.invalid_podcast_channel">Érvénytelen podcast csatorna: %s</string>
+
+    <string name="download.empty">A lejátszási lista üres!</string>
+	<string name="download.shuffle_loading">Véletlen sorrendű lista betöltése...</string>
+    <string name="download.playerstate_downloading">Letöltés - %s</string>
+    <string name="download.playerstate_buffering">Pufferelés</string>
+    <string name="download.playerstate_playing_shuffle">Véletlen sorrendű</string>
+    <string name="download.menu_show_album">Album megjelenítése</string>
+    <string name="download.menu_lyrics">Dalszövegek</string>
+    <string name="download.menu_remove">Törlés a lejátszási sorból</string>
+	<string name="download.menu_delete">Gyorsítótár ürítése</string>
+    <string name="download.menu_remove_all">Összes eltávolítása</string>
+    <string name="download.menu_screen_on">Kijelző be</string>
+    <string name="download.menu_screen_off">Kijelző ki</string>
+    <string name="download.menu_shuffle">Véletlen sorrendű</string>
+	<string name="download.menu_toggle">Váltás</string>
+    <string name="download.menu_save">Lejátszási lista mentése</string>
+    <string name="download.menu_shuffle_notification">Véletlen sorrendű lejátszás</string>
+    <string name="download.playlist_title">Lejátszási lista mentése</string>
+    <string name="download.playlist_name">Lejátszási lista neve:</string>
+    <string name="download.playlist_saving">\"%s\" lejátszási lista mentése...</string>
+    <string name="download.playlist_done">Lejátszási lista mentése sikeres.</string>
+    <string name="download.playlist_error">Lejátszási lista mentése sikertelen, próbálja később!</string>
+    <string name="download.repeat_off">Ismétlés ki</string>
+    <string name="download.repeat_all">Összes ismétlése</string>
+    <string name="download.repeat_single">Dal ismétlése</string>
+    <string name="download.visualizer_on">Visualizer bekapcsolva.</string>
+    <string name="download.visualizer_off">Visualizer kikapcsolva.</string>
+    <string name="download.jukebox_on">Távvezérlés bekapcsolása. A zenelejátszás a számítógépen történik.</string>
+    <string name="download.jukebox_off">Távvezérlés kikapcsolása. A zenelejátszás a telefonon történik.</string>
+    <string name="download.jukebox_volume">Hangerő távvezérlése</string>
+    <string name="download.jukebox_server_too_old">A távvezérlés nem támogatott. Kérjük, frissítse a Subsonic kiszolgálót!</string>
+    <string name="download.jukebox_offline">A távvezérlés nem lehetséges offline módban!</string>
+    <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Kérjük, engedélyezze a jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
+	<string name="download.show_downloading">Letöltés megjelenítése</string>
+	<string name="download.show_now_playing">Lejátszó megjelenítése</string>
+	<string name="download.timer_length">Időhossz</string>
+	<string name="download.start_timer">Időzítő indítása</string>
+	<string name="download.stop_timer">Időzítő megállítása</string>
+	<string name="download.need_download">A videót először le kell tölteni!</string>
+	<string name="download.no_streaming_player">Nincs megfelelő lejátszó a stream megjelenítéséhez!</string>
+	<string name="download.playing_out_of">Lejátszás: %1$d/%2$d</string>
+	<string name="download.save_bookmark_title">Könyvjelző létrehozása</string>
+	<string name="download.save_bookmark">Könyvjelző létrehozva</string>
+    
+	<string name="starring_content_starred">\"%s\ csillagozott"</string>
+	<string name="starring_content_unstarred">\"%s\ nem csillagozott"</string>
+    <string name="starring_content_error">Nem sikerült frissíteni \"%s\", próbálja később!</string>
+	
+	<string name="playlist_error">Nem sikerült elérni a lejátszási lista adatait!</string>
+	<string name="updated_playlist">%1$s dal hozzádva: \"%2$s\"</string>
+    <string name="updated_playlist_error">Nem sikerült frissíteni \"%s\", próbálja később!</string>
+	<string name="removed_playlist">%1$s dal eltávolítva: \"%2$s\"</string>
+	
+	<string name="bookmark.delete">Könyvjelző törlése</string>
+	<string name="bookmark.delete_title">Könyvjelző törlése</string>
+	<string name="bookmark.deleted">\"%s\" könyvjelző törölve</string>
+	<string name="bookmark.deleted_error">\"%s\" könyvjelző törlése sikertelen!</string>
+	<string name="bookmark.details_title">Könyvjelző részletei</string>
+	<string name="bookmark.details">Dal: %1$s
+		\nPozíció: %2$s
+		\nLétrehozva: %3$s
+		\nUtolsó módosítás: %4$s
+		\nMegjegyzés: %5$s</string>
+
+    <string name="song_details.all">%1$s %2$s</string>
+    <string name="song_details.kbps">%d kbps</string>
+	<string name="song_details.error">Hiba</string>
+	<string name="song_details.skipped">Átlépve</string>
+	<string name="song_details.downloading">Letöltés</string>
+
+    <string name="lyrics.nomatch">Dalszöveg nem található!</string>
+
+    <string name="error.label">Hiba</string>
+
+    <string name="settings.title">Beállítások</string>
+    <string name="settings.test_connection_title">Kapcsolat tesztelése</string>
+	<string name="settings.servers_add">Kiszolgáló hozzáadása</string>
+	<string name="settings.servers_remove">Kiszolgáló eltávolítása</string>
+    <string name="settings.servers_title">Kiszolgálók</string>
+    <string name="settings.server_unused">Nem használt</string>
+    <string name="settings.server_name">Név</string>
+    <string name="settings.server_address">Kiszolgáló címe</string>
+    <string name="settings.server_username">Felhasználónév</string>
+    <string name="settings.server_password">Jelszó</string>
+	<string name="settings.server_open_browser">Megnyitás böngészőben</string>
+    <string name="settings.cache_title">Zene gyorsítótár</string>
+    <string name="settings.preload_wifi">Dalok előolvasása (Wifi)</string>
+	<string name="settings.preload_mobile">Dalok előolvasása (Mobilhálózat)</string>
+    <string name="settings.cache_size">Gyorsítótár mérete (MB)</string>
+    <string name="settings.cache_location">Gyorsítótár helye</string>
+    <string name="settings.cache_location_error">Hibás gyorsítótár hely! Az alapértelmezett használata.</string>
+	<string name="settings.cache_clear">Gyorsítótár törlése</string>
+	<string name="settings.cache_clear_complete">Gyorsítótár törlése kész!</string>
+    <string name="settings.testing_connection">Kapcsolat tesztelése...</string>
+    <string name="settings.testing_ok">Kapcsolat OK!</string>
+    <string name="settings.testing_unlicensed">Kapcsolat OK! A kiszolgálónak nincs licensze!</string>
+    <string name="settings.connection_failure">Csatlakozási hiba!</string>
+    <string name="settings.invalid_url">Adjon meg egy érvényes URL-t!</string>
+    <string name="settings.invalid_username">Adjon meg érvényes felhasználónevet (szóközt nem tartalmazhat)!</string>
+    <string name="settings.appearance_title">Megjelenés</string>
+    <string name="settings.theme_title">Témák</string>
+    <string name="settings.theme_light">Világos</string>
+    <string name="settings.theme_dark">Sötét</string>
+	<string name="settings.theme_black">Fekete</string>
+	<string name="settings.theme_holo">Holo</string>
+	<string name="settings.theme_fullscreen">Teljes képernyős</string>
+	<string name="settings.theme_fullscreen_summary">Annyi UI elem elrejtése, amennyit az Android megenged</string>
+	<string name="settings.track_title">Dalsorszám megjelenítése #</string>
+	<string name="settings.track_summary">Dalsorszám megjelenítése # a dal címe előtt, ha létezik.</string>
+	<string name="settings.custom_sort">Egyéni rendezés</string>
+	<string name="settings.custom_sort_summary">Könyvtárlisa rendezése a lemez sorszámának megfelelően. Ütközhet a kiszolgáló év szerinti albumrendezésével.</string>
+    <string name="settings.network_title">Hálózat</string>
+    <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
+    <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
+    <string name="settings.max_bitrate_32">32 Kbps</string>
+    <string name="settings.max_bitrate_64">64 Kbps</string>
+    <string name="settings.max_bitrate_80">80 Kbps</string>
+    <string name="settings.max_bitrate_96">96 Kbps</string>
+    <string name="settings.max_bitrate_112">112 Kbps</string>
+    <string name="settings.max_bitrate_128">128 Kbps</string>
+    <string name="settings.max_bitrate_160">160 Kbps</string>
+    <string name="settings.max_bitrate_192">192 Kbps</string>
+    <string name="settings.max_bitrate_256">256 Kbps</string>
+    <string name="settings.max_bitrate_320">320 Kbps</string>
+	<string name="settings.max_video_bitrate_wifi">Max. videó bitráta - Wi-Fi</string>
+    <string name="settings.max_video_bitrate_mobile">Max. videó bitráta - Mobilhálózat</string>
+	<string name="settings.max_video_bitrate_200">200 Kbps</string>
+    <string name="settings.max_video_bitrate_300">300 Kbps</string>
+    <string name="settings.max_video_bitrate_400">400 Kbps</string>
+    <string name="settings.max_video_bitrate_500">500 Kbps</string>
+    <string name="settings.max_video_bitrate_700">700 Kbps</string>
+    <string name="settings.max_video_bitrate_1000">1000 Kbps</string>
+    <string name="settings.max_video_bitrate_1500">1500 Kbps</string>
+    <string name="settings.max_video_bitrate_2000">2000 Kbps</string>
+    <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
+    <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
+    <string name="settings.max_bitrate_unlimited">Korlátlan</string>
+    <string name="settings.wifi_required_title">Csak Wi-Fi streaming</string>
+    <string name="settings.wifi_required_summary">Streaming, csak Wi-Fi hálózaton keresztül.</string>
+	<string name="settings.network_timeout_title">Hálózati időtúllépés</string>
+	<string name="settings.network_timeout_10000">10 másodperc</string>
+	<string name="settings.network_timeout_15000">15 másodperc</string>
+	<string name="settings.network_timeout_30000">30 másodperc</string>
+	<string name="settings.network_timeout_45000">45 másodperc</string>
+	<string name="settings.network_timeout_60000">60 másodperc</string>
+    <string name="settings.preload_1">1 dal</string>
+    <string name="settings.preload_2">2 dal</string>
+    <string name="settings.preload_3">3 dal</string>
+    <string name="settings.preload_5">5 dal</string>
+    <string name="settings.preload_10">10 dal</string>
+	<string name="settings.preload_unlimited">Korlátlan</string>
+    <string name="settings.clear_search_history">Keresési előzmények törlése</string>
+    <string name="settings.search_history_cleared">Keresési előzmények törölve</string>
+    <string name="settings.other_title">Egyéb beállítások</string>
+    <string name="settings.scrobble_title">Továbbítás Last.fm-re (Scrobbling)</string>
+    <string name="settings.scrobble_summary">A Last.fm felhasználónevet és jelszót be kell állítani a Subsonic kiszolgálón!</string>
+    <string name="settings.hide_media_title">Elrejtés</string>
+    <string name="settings.hide_media_summary">Zenefájlok elrejtése egyéb alkalmazások elől.</string>
+    <string name="settings.hide_media_toast">A következő alkalomtól lép életbe, amikor az Android zenefájlokat keres a telefonon.</string>
+    <string name="settings.media_button_title">Média vezérlőgombok</string>
+    <string name="settings.media_button_summary">Telefon irányítása a bluetooth eszköz vagy a fülhallgató vezérlőgombjaival.</string>
+    <string name="settings.screen_lit_title">Képernyő ébrentartása</string>
+    <string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt, a magasabb letöltési sebesség érdekében.</string>
+	<string name="settings.playlist_title">Lejátszási listák</string>
+	<string name="settings.playlist_random_size_title">Véletlenszerű lejátszási lista mérete</string>
+	<string name="settings.buffer_length">Pufferméret (0 = teljes gyorsítótárazás)</string>
+	<string name="settings.sleep_timer_title">Alvás időzítő</string>
+	<string name="settings.sleep_timer_duration_title">Alvás időzítő időtartam</string>
+	<string name="settings.sleep_timer_off">Ki</string>
+	<string name="settings.sleep_timer_on">Be</string>
+	<string name="settings.sleep_timer_always_on">Mindig be</string>
+	<string name="settings.temp_loss_title">Temporary Loss of Focus</string>
+	<string name="settings.temp_loss_pause">Mindig megállít.</string>
+	<string name="settings.temp_loss_pause_lower">Megállít, kérésre alacsonyabb hangerő.</string>
+	<string name="settings.temp_loss_lower">Mindig alacsonyabb hangerő.</string>
+	<string name="settings.temp_loss_nothing">Ne csináljon semmit.</string>
+	<string name="settings.disconnect_pause_title">Megállítás kapcsolatbontás esetén</string>
+	<string name="settings.disconnect_pause_both">Megállítás minden esetben.</string>
+	<string name="settings.disconnect_pause_headphone">Megállítás fejhallgató használata esetén.</string>
+	<string name="settings.disconnect_pause_bluetooth">Megállítás bluetooth használata esetén.</string>
+	<string name="settings.disconnect_pause_neither">Ne csináljon semmit.</string>
+	<string name="settings.persistent_title">Állandó kijelzés</string>
+	<string name="settings.persistent_summary">Kijelzés az értesítési sávon megállítás után is. Nyomja meg a stop gombot a törléséhez!</string>
+	<string name="settings.gapless_playback">Egybefüggő lejátszás (Gapless)</string>
+	<string name="settings.gapless_playback_summary">Ha Galaxy S3 telefonnál lefagyásokat/furcsaságokat tapasztal az egybefüggő lejátszás (Gapless) engedélyezése után, a probléma megoldásához kapcsolja ki a funkciót!</string>
+	<string name="settings.chat_refresh">Csevegés frissítési gyakorisága (mp.)</string>
+	<string name="settings.chat_enabled">Csevegés (Chat) engedélyezése</string>
+	<string name="settings.chat_enabled_summary">Csevegés (Chat) menüpont megjelenítése az elhúzható oldalsávon.</string>
+	<string name="settings.video_title">Videó</string>
+	<string name="settings.video_player">Videólejátszó</string>
+	<string name="settings.video_raw">Nyers (Subsonic 4.8-tól)</string>
+	<string name="settings.video_hls">HTTP Live Stream (HLS) (Subsonic 4.8-tól)</string>
+	<string name="settings.video_transcode">Közvetlen transzkódolás (video -> mp4, vagy hasonló beállítás szükséges a kiszolgálón!)</string>
+	<string name="settings.video_flash">Flash (Plugin szükséges!)</string>
+	<string name="settings.cache_screen_title">Gyorsítótár/Hálózat</string>
+	<string name="settings.playback_title">Lejátszás</string>
+	<string name="settings.hide_widget_title">Widget elrejtése</string>
+	<string name="settings.hide_widget_summary">Widget elrejtése kilépés után.</string>
+	<string name="settings.podcasts_enabled">Podcastok engedélyezése</string>
+	<string name="settings.podcasts_enabled_summary">Podcastok menüpont megjelenítése az elhúzható oldalsávon.</string>
+	<string name="settings.bookmarks_enabled">Könyvjelzők engedélyezése</string>
+	<string name="settings.bookmarks_enabled_summary">Könyvjelzők menüpont megjelenítése az elhúzható oldalsávon.</string>
+
+	<string name="shuffle.title">Véletlen sorrend</string>
+	<string name="shuffle.startYear">Kezdő év:</string>
+	<string name="shuffle.endYear">Befejező év:</string>
+	<string name="shuffle.genre">Műfaj:</string>
+	<string name="shuffle.pick_genre">Műfaj kiválasztása</string>
+
+    <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
+
+    <string name="background_task.wait">Kérem várjon!</string>
+    <string name="background_task.loading">Betöltés...</string>
+    <string name="background_task.no_network">Az alkalmazás hálózati hozzáférést igényel. Kérjük, kapcsolja be a Wi-Fi-t vagy a mobilhálózatot!</string>
+    <string name="background_task.network_error">Hálózati hiba történt! Kérjük, ellenőrizze a kiszolgáló címét vagy próbálja később!</string>
+    <string name="background_task.not_found">Az erőforrás nem található! Kérjük, ellenőrizze a kiszolgáló címét!</string>
+    <string name="background_task.parse_error">Hiba történt a kiszolgálóval történő kommunikációban. Kérjük, ellenőrizze a kiszolgáló címét, és próbáljon meg web böngészővel a kiszolgálóhoz csatlakozni!</string>
+
+    <string name="service.connecting">Csatlakozás a kiszolgálóhoz, kérem várjon!</string>
+
+    <string name="parser.reading">Olvasás a kiszolgálóról...</string>
+    <string name="parser.reading_done">Olvasás a kiszolgálóról. Kész!</string>
+    <string name="parser.upgrade_client">Nem kompatibilis verzió. Kérjük, frissítse a DSub Android alkalmazást!</string>
+    <string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Subsonic kiszolgálót!</string>
+    <string name="parser.not_authenticated">Hibás felhasználónév vagy jelszó!</string>
+    <string name="parser.not_authorized">Nincs engedélyezve! Ellenőrizze a felhasználó jogosultságait a Subsonic kiszolgálón!</string>
+    <string name="parser.artist_count">%d előadó található a médiakönyvtárban.</string>
+
+    <string name="select_artist.refresh">Frissítés</string>
+    <string name="select_artist.folder">Mappa kiválasztása</string>
+    <string name="select_artist.all_folders">Összes mappa</string>
+
+    <string name="equalizer.label">Equalizer</string>
+    <string name="equalizer.enabled">Engedélyezve</string>
+    <string name="equalizer.preset">Profil kiválasztása</string>
+
+	<string name="widget.4x1">DSub (4x1)</string>
+	<string name="widget.4x2">DSub (4x2)</string>
+	<string name="widget.4x3">DSub (4x3)</string>
+	<string name="widget.4x4">DSub (4x4)</string>
+    <string name="widget.initial_text">Érintse meg a zene kiválasztásához</string>
+    <string name="widget.sdcard_busy">Az SD kártya nem elérhető!</string>
+    <string name="widget.sdcard_missing">Nincs SD kártya!</string>
+
+    <string name="util.bytes_format.gigabyte">0.00 GB</string>
+    <string name="util.bytes_format.megabyte">0.00 MB</string>
+    <string name="util.bytes_format.kilobyte">0 KB</string>
+    <string name="util.bytes_format.byte">0 B</string>
+
+	<string name="changelog_full_title">Újdonságok</string>
+    <string name="changelog_title">Újdonságok</string>
+    <string name="changelog_ok_button">OK</string>
+    <string name="changelog_show_full">Továbbiak…</string>
+
+	<string name="chat.send_a_message">Üzenet küldése</string> 
+
+    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+
+    <plurals name="select_album_n_songs">
+        <item quantity="zero">Nincsenek dalok</item>
+        <item quantity="one">1 dal</item>
+        <item quantity="other">%d dal</item>
+    </plurals>
+    <plurals name="select_album_n_songs_downloading">
+        <item quantity="one">1 dal kijelölve letöltésre.</item>
+        <item quantity="other">%d dal kijelölve letöltésre.</item>
+    </plurals>
+    <plurals name="select_album_n_songs_added">
+        <item quantity="one">1 dal hozzáadva a lejátszási sorhoz.</item>
+        <item quantity="other">%d dal hozzáadva a lejátszási sorhoz.</item>
+    </plurals>
+    <plurals name="select_album_donate_dialog_n_trial_days_left">
+        <item quantity="one">1 nap van hátra a próbaidőszakból.</item>
+        <item quantity="other">%d nap van hátra a próbaidőszakból.</item>
+    </plurals>
+
+</resources>
