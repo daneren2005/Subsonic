@@ -492,7 +492,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
         Bundle args = getArguments();
         boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-        if (playAll && songCount > 0) {
+        if (playAll) {
             playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
         }
     }
