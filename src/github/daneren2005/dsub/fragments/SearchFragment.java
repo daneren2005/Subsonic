@@ -182,9 +182,11 @@ public class SearchFragment extends SubsonicFragment {
 	@Override
 	public void setPrimaryFragment(boolean primary) {
 		super.setPrimaryFragment(primary);
-		if(rootView != null && primary) {
-			context.onNewIntent(context.getIntent());
-		}
+	}
+
+	@Override
+	public void refresh(boolean refresh) {
+		context.onNewIntent(context.getIntent());
 	}
 
 	public void search(final String query, final boolean autoplay) {
