@@ -54,42 +54,46 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 	public void onExecuteSync(Context context, int instance) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		ArrayList<SyncSet> podcastList = SyncUtil.getSyncedPodcasts(context, instance);
-		
-		// Only refresh if syncs exist (implies a server where supported)
-		if(podcastList.size() > 0) {
-			// Refresh podcast listings before syncing
-			musicService.refreshPodcasts(context, null);
-		}
-		
-		boolean updated = false;
-		for(int i = 0; i < podcastList.size(); i++) {
-			SyncSet set = podcastList.get(i);
-			String id = set.id;
-			List<String> existingEpisodes = set.synced;
-			try {
-				MusicDirectory podcasts = musicService.getPodcastEpisodes(true, id, context, null);
 
-				for(MusicDirectory.Entry entry: podcasts.getChildren()) {
-					// Make sure podcast is valid and not already synced
-					if(entry.getId() != null && "completed".equals(((PodcastEpisode)entry).getStatus()) && !existingEpisodes.contains(entry.getId())) {
-						DownloadFile file = new DownloadFile(context, entry, true);
-						while(!file.isSaved() && !file.isFailedMax()) {
-							file.downloadNow();
-						}
-						// Only add if actualy downloaded correctly
-						if(file.isSaved()) {
-							existingEpisodes.add(entry.getId());
+		try {
+			// Only refresh if syncs exist (implies a server where supported)
+			if(podcastList.size() > 0) {
+				// Refresh podcast listings before syncing
+				musicService.refreshPodcasts(context, null);
+			}
+
+			boolean updated = false;
+			for(int i = 0; i < podcastList.size(); i++) {
+				SyncSet set = podcastList.get(i);
+				String id = set.id;
+				List<String> existingEpisodes = set.synced;
+				try {
+					MusicDirectory podcasts = musicService.getPodcastEpisodes(true, id, context, null);
+
+					for(MusicDirectory.Entry entry: podcasts.getChildren()) {
+						// Make sure podcast is valid and not already synced
+						if(entry.getId() != null && "completed".equals(((PodcastEpisode)entry).getStatus()) && !existingEpisodes.contains(entry.getId())) {
+							DownloadFile file = new DownloadFile(context, entry, true);
+							while(!file.isSaved() && !file.isFailedMax()) {
+								file.downloadNow();
+							}
+							// Only add if actualy downloaded correctly
+							if(file.isSaved()) {
+								existingEpisodes.add(entry.getId());
+							}
 						}
 					}
+				} catch (Exception e) {
+					Log.w(TAG, "Failed to get podcasts for " + id + " on " + Util.getServerName(context, instance));
 				}
-			} catch(Exception e) {
-				Log.e(TAG, "Failed to get podcasts for " + Util.getServerName(context, instance));
 			}
-		}
 
-		// Make sure there are is at least one change before re-syncing
-		if(updated) {
-			FileUtil.serialize(context, podcastList, SyncUtil.getPodcastSyncFile(context, instance));
+			// Make sure there are is at least one change before re-syncing
+			if(updated) {
+				FileUtil.serialize(context, podcastList, SyncUtil.getPodcastSyncFile(context, instance));
+			}
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to get podcasts for " + Util.getServerName(context, instance));
 		}
 	}
 }
