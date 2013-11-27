@@ -352,10 +352,18 @@ public class SearchFragment extends SubsonicFragment {
 	}
 
 	private void autoplay(String query) {
-		if (!searchResult.getSongs().isEmpty()) {
-			onSongSelected(searchResult.getSongs().get(0), false, false, true, false);
-		} else if (!searchResult.getAlbums().isEmpty()) {
-			onAlbumSelected(searchResult.getAlbums().get(0), true);
+		Artist artist = searchResult.getArtists().isEmpty() ? null : searchResult.getArtists().get(0);
+		MusicDirectory.Entry album = searchResult.getAlbums().isEmpty() ? null : searchResult.getAlbums().get(0); 
+		MusicDirectory.Entry song = searchResult.getSongs().isEmpty() ? null : searchResult.getSongs().get(0);
+		
+		if(artist != null && query.equals(artist.getName()) {
+			onArtistSelected(artist, true);
+		} else if(album != null && query.equals(album.getTitle()) {
+			onAlbumSelected(album, true);
+		} else if(song != null) {
+			onSongSelected(song, false, false, true, false);
+		} else if(album != null) {
+			onAlbumSelected(album, true);
 		}
 	}
 }
