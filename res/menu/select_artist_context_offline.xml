@@ -12,6 +12,10 @@
         android:title="@string/common.play_shuffled"
         />
 
+	<item
+		android:id="@+id/artist_menu_play_next"
+		android:title="@string/common.play_next"/>
+
     <item 
         android:id="@+id/artist_menu_play_last"
         android:title="@string/common.play_last"

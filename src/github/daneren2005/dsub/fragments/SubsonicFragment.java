@@ -216,6 +216,9 @@ public class SubsonicFragment extends Fragment {
 			case R.id.artist_menu_play_shuffled:
 				downloadRecursively(artist.getId(), false, false, true, true, false);
 				break;
+			case R.id.artist_menu_play_next:
+				downloadRecursively(artist.getId(), false, true, false, false, false, true);
+				break;
 			case R.id.artist_menu_play_last:
 				downloadRecursively(artist.getId(), false, true, false, false, false);
 				break;
@@ -236,6 +239,9 @@ public class SubsonicFragment extends Fragment {
 				break;
 			case R.id.album_menu_play_shuffled:
 				downloadRecursively(entry.getId(), false, false, true, true, false);
+				break;
+			case R.id.album_menu_play_next:
+				downloadRecursively(entry.getId(), false, true, false, false, false, true);
 				break;
 			case R.id.album_menu_play_last:
 				downloadRecursively(entry.getId(), false, true, false, false, false);
@@ -607,10 +613,16 @@ public class SubsonicFragment extends Fragment {
 	protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, "", true, save, append, autoplay, shuffle, background);
 	}
+	protected void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
+		downloadRecursively(id, "", true, save, append, autoplay, shuffle, background, playNext);
+	}
 	protected void downloadPlaylist(final String id, final String name, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, name, false, save, append, autoplay, shuffle, background);
 	}
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
+		downloadRecursively(id, name, isDirectory, save, append, autoplay, shuffle, background, false);
+	}
+	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
 		LoadingTask<List<MusicDirectory.Entry>> task = new LoadingTask<List<MusicDirectory.Entry>>(context) {
 			private static final int MAX_SONGS = 500;
 
@@ -652,7 +664,7 @@ public class SubsonicFragment extends Fragment {
 					}
 					warnIfNetworkOrStorageUnavailable();
 					if(!background) {
-						downloadService.download(songs, save, autoplay, false, shuffle);
+						downloadService.download(songs, save, autoplay, playNext, shuffle);
 						if(!append) {
 							Util.startActivityWithoutTransition(context, DownloadActivity.class);
 						}
