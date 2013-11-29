@@ -67,7 +67,7 @@
     <string name="menu.help">Súgó</string>
 	<string name="menu.about">Névjegy</string>
 	<string name="menu.add_playlist">Hozzáadás lejátszási listához</string>
-	<string name="menu.remove_playlist">Törlés a lejátszási listából</string>
+	<string name="menu.remove_playlist">Eltávolítás a lejátszási listából</string>
 	<string name="menu.deleted_playlist">%s lejátszási lista törölve</string>
 	<string name="menu.deleted_playlist_error">%s lejátszási lista törlése sikertelen!</string>
 	<string name="menu.log">Log küldése</string>
@@ -83,7 +83,7 @@
 	<string name="playlist.updated_info_error">%s lejátszási lista módosítása sikertelen!</string>
 	<string name="playlist.overwrite">Létező lejátszási lista felülírása</string>
 	<string name="playlist.add_to">Hozzáadás lejátszási listához</string>
-	<string name="playlist.create_new">Új lista létrehozása</string>
+	<string name="playlist.create_new">Új lejátszási lista</string>
 
     <string name="help.label">Súgó</string>
     <string name="help.title">Üdvözli a DSub!</string>
@@ -135,12 +135,12 @@
 
 	<string name="select_genre.blank">Üres</string>
 
-	<string name="select_podcasts.error">A podcast hibát jelzett a kiszolgálón történő letöltés közben! A kiszolgálónak kell letöltenie először!</string>
-	<string name="select_podcasts.skipped">Ez a podcast nem lett letöltve a kiszolgálón! A kiszolgálónak kell letöltenie először!</string>
+	<string name="select_podcasts.error">A podcast hibát jelzett a kiszolgálóra történő letöltés közben! A kiszolgálónak kell letöltenie először!</string>
+	<string name="select_podcasts.skipped">Ez a podcast nem lett letöltve a kiszolgálóra! A kiszolgálónak kell letöltenie először!</string>
     <string name="select_podcasts.initializing">A podcast csatorna inicializálása a kiszolgálón. Kérjük, töltse be újra néhány pillanat múlva!</string>
-	<string name="select_podcasts.server_download">Letöltés a kiszolgálón</string>
+	<string name="select_podcasts.server_download">Letöltés a kiszolgálóra</string>
 	<string name="select_podcasts.server_delete">Törlés a kiszolgálóról</string>
-	<string name="select_podcasts.downloading">%s letöltése a kiszolgálón</string>
+	<string name="select_podcasts.downloading">%s letöltése a kiszolgálóra</string>
 	<string name="select_podcasts.refreshing">A kiszolgáló ellenőrzi az új podcastokat...</string>
 	<string name="select_podcasts.deleted">%s podcast törölve</string>
 	<string name="select_podcasts.deleted_error">%s podcast törlése sikertelen!</string>
@@ -148,23 +148,23 @@
 	<string name="select_podcasts.created_error">Podcast hozzáadása sikertelen!</string>
 	<string name="select_podcasts.invalid_podcast_channel">Érvénytelen podcast csatorna: %s</string>
 
-    <string name="download.empty">A lejátszási lista üres!</string>
+    <string name="download.empty">A várólista üres!</string>
 	<string name="download.shuffle_loading">Véletlen sorrendű lista betöltése...</string>
     <string name="download.playerstate_downloading">Letöltés - %s</string>
     <string name="download.playerstate_buffering">Pufferelés</string>
     <string name="download.playerstate_playing_shuffle">Véletlen sorrendű</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszövegek</string>
-    <string name="download.menu_remove">Törlés a várólistáról</string>
+    <string name="download.menu_remove">Eltávolítás a várólistáról</string>
 	<string name="download.menu_delete">Gyorsítótár ürítése</string>
     <string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
     <string name="download.menu_screen_off">Kijelző ki</string>
     <string name="download.menu_shuffle">Véletlen sorrendű</string>
 	<string name="download.menu_toggle">Váltás</string>
-    <string name="download.menu_save">Lejátszási lista mentése</string>
+    <string name="download.menu_save">Mentés lejátszási listába</string>
     <string name="download.menu_shuffle_notification">Véletlen sorrendű lejátszás</string>
-    <string name="download.playlist_title">Lejátszási lista mentése</string>
+    <string name="download.playlist_title">Mentés lejátszási listába</string>
     <string name="download.playlist_name">Lejátszási lista neve:</string>
     <string name="download.playlist_saving">\"%s\" lejátszási lista mentése...</string>
     <string name="download.playlist_done">Lejátszási lista mentése sikeres.</string>
