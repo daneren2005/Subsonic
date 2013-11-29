@@ -75,7 +75,7 @@ public class ImageLoader implements Runnable {
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
 				if(evicted) {
 					if(oldBitmap != nowPlaying) {
-						oldBitmap.recycle();
+						// oldBitmap.recycle();
 					} else {
 						cache.put(key, oldBitmap);
 					}
@@ -170,7 +170,7 @@ public class ImageLoader implements Runnable {
 					} else {
 						emptyImage = Bitmap.createBitmap(imageSizeDefault, imageSizeDefault, Bitmap.Config.ARGB_8888);
 					}
-					existingDrawable = new BitmapDrawable(emptyImage);
+					existingDrawable = new BitmapDrawable(context.getResources(), emptyImage);
 				} else {
 					// Try to get rid of old transitions
 					try {
