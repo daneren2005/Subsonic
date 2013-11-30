@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.3.0Beta" versioncode="72" releasedate="11/26/2013">
+	<release version="4.3.0" versioncode="74" releasedate="11/30/2013">
 		<change>Manage new sync options in Settings -> Cache/Network</change>
 		<change>Mark playlists as Keep Synced to auto download whole playlist</change>
 		<change>Mark podcasts as Keep Synced to auto download new podcasts</change>
@@ -8,6 +8,8 @@
 		<change>When using "Listen To" search, autoplay artist or albums if they match the query</change>
 		<change>Full screen option in Settings.  Immersive mode for Android 4.4+</change>
 		<change>Fix KitKat's lockscreen scrollbar for Android 4.4+</change>
+		<change>Fix crashes on KitKat</change>
+		<change>Added Play Next to artist/album context menus + song overflow menu</change>
 		<change>Hungarian translation (thanks Andrássy László)</change>
 		<change>Tons of bug fixes</change>
 	</release>
