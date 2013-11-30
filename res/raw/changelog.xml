@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.3.1" versioncode="75" releasedate="11/30/2013">
+		<change>Fix search on MusicCabinet servers</change>
+	</release>
 	<release version="4.3.0" versioncode="74" releasedate="11/30/2013">
 		<change>Manage new sync options in Settings -> Cache/Network</change>
 		<change>Mark playlists as Keep Synced to auto download whole playlist</change>
