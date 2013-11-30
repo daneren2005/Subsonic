@@ -75,15 +75,15 @@ public class DSubSearchProvider extends ContentProvider {
 
 		for (Artist artist : searchResult.getArtists()) {
 			String icon = RESOURCE_PREFIX + R.drawable.ic_action_artist;
-			cursor.addRow(new Object[]{artist.getId(), artist.getName(), null, artist.getId(), artist.getName(), icon});
+			cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, artist.getId(), artist.getName(), icon});
 		}
 		for (MusicDirectory.Entry album : searchResult.getAlbums()) {
 			String icon = RESOURCE_PREFIX + R.drawable.ic_action_album;
-			cursor.addRow(new Object[]{album.getId(), album.getTitle(), album.getArtist(), album.getId(), album.getTitle(), icon});
+			cursor.addRow(new Object[]{album.getId().hashCode(), album.getTitle(), album.getArtist(), album.getId(), album.getTitle(), icon});
 		}
 		for (MusicDirectory.Entry song : searchResult.getSongs()) {
 			String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
-			cursor.addRow(new Object[]{song.getId(), song.getTitle(), song.getArtist(), song.getParent(), song.getTitle(), icon});
+			cursor.addRow(new Object[]{song.getId().hashCode(), song.getTitle(), song.getArtist(), song.getParent(), song.getTitle(), icon});
 		}
 		return cursor;
 	}
