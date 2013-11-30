@@ -25,6 +25,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.RemoteControlClient;
+import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -75,7 +76,7 @@ public class ImageLoader implements Runnable {
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
 				if(evicted) {
 					if(oldBitmap != nowPlaying) {
-						// oldBitmap.recycle();
+						oldBitmap.recycle();
 					} else {
 						cache.put(key, oldBitmap);
 					}
@@ -131,8 +132,9 @@ public class ImageLoader implements Runnable {
 	}
 
 	public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
-		if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled())
-		createLargeUnknownImage(context);
+		if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled()) {
+			createLargeUnknownImage(context);
+		}
 
 		if (entry == null || entry.getCoverArt() == null) {
 			setUnknownImage(remoteControl);
@@ -199,13 +201,16 @@ public class ImageLoader implements Runnable {
 	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
 		if(remoteControl != null && drawable != null) {
 			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
+			if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+				origBitmap = origBitmap.copy(origBitmap.getConfig(), false);
+			}
 			if ( origBitmap != null && !origBitmap.isRecycled()) {
 				remoteControl.editMetadata(false).putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, origBitmap).apply();
 			} else  {
 				Log.e(TAG, "Tried to load a recycled bitmap.");
 				remoteControl.editMetadata(false)
-				.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
-				.apply();
+					.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
+					.apply();
 			}
 		}
 	}
