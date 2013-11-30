@@ -238,9 +238,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		if(!primaryFragment) {
-			return;
-		}
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
@@ -255,14 +252,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				menu.removeItem(R.id.song_menu_server_download);
 			}
 		}
+
+		recreateContextMenu(menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(!primaryFragment) {
+		if(menuItem.getGroupId() != getSupportTag()) {
 			return false;
 		}
-		
+
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Object selectedItem = entries.get(showHeader ? (info.position - 1) : info.position);
 		

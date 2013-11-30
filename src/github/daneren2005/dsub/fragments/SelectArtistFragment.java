@@ -110,9 +110,6 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		if(!primaryFragment) {
-			return;
-		}
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		Object entry = artistList.getItemAtPosition(info.position);
@@ -136,11 +133,13 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			}
 			menu.setGroupCheckable(MENU_GROUP_MUSIC_FOLDER, true, true);
 		}
+
+		recreateContextMenu(menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(!primaryFragment) {
+		if(menuItem.getGroupId() != getSupportTag()) {
 			return false;
 		}
 

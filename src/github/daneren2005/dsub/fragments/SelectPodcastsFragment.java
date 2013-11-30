@@ -126,9 +126,6 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		if(!primaryFragment) {
-			return;
-		}
 
 		if(!Util.isOffline(context)) {
 			android.view.MenuInflater inflater = context.getMenuInflater();
@@ -142,11 +139,13 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 				menu.removeItem(R.id.podcast_menu_stop_sync);
 			}
 		}
+
+		recreateContextMenu(menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(!primaryFragment) {
+		if(menuItem.getGroupId() != getSupportTag()) {
 			return false;
 		}
 		

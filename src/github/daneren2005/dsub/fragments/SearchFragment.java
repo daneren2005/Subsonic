@@ -151,9 +151,6 @@ public class SearchFragment extends SubsonicFragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		if(!primaryFragment) {
-			return;
-		}
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		Object selectedItem = list.getItemAtPosition(info.position);
@@ -161,11 +158,13 @@ public class SearchFragment extends SubsonicFragment {
 		if(selectedItem instanceof MusicDirectory.Entry && !((MusicDirectory.Entry) selectedItem).isVideo() && !Util.isOffline(context)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
+
+		recreateContextMenu(menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(!primaryFragment) {
+		if(menuItem.getGroupId() != getSupportTag()) {
 			return false;
 		}
 		

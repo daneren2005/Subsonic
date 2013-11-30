@@ -109,9 +109,6 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		if(!primaryFragment) {
-			return;
-		}
 
 		MenuInflater inflater = context.getMenuInflater();
 		inflater.inflate(R.menu.select_bookmark_context, menu);
@@ -119,10 +116,6 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(!primaryFragment) {
-			return false;
-		}
-
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Bookmark bookmark = bookmarks.get(info.position);
 		

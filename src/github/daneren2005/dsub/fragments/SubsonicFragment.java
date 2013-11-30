@@ -33,6 +33,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -200,6 +201,18 @@ public class SubsonicFragment extends Fragment {
 
 		if(!Util.checkServerVersion(context, "1.10.1")) {
 			menu.setGroupVisible(R.id.server_1_10, false);
+		}
+	}
+
+	protected void recreateContextMenu(ContextMenu menu) {
+		List<MenuItem> menuItems = new ArrayList<MenuItem>();
+		for(int i = 0; i < menu.size(); i++) {
+			menuItems.add(menu.getItem(i));
+		}
+		menu.clear();
+		for(int i = 0; i < menuItems.size(); i++) {
+			MenuItem item = menuItems.get(i);
+			menu.add(tag, item.getItemId(), Menu.NONE, item.getTitle());
 		}
 	}
 

@@ -95,9 +95,6 @@ public class MainFragment extends SubsonicFragment {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		if(!primaryFragment) {
-			return;
-		}
 		
 		int serverCount = Util.getServerCount(context);
 		int activeServer = Util.getActiveServer(context);
@@ -109,11 +106,13 @@ public class MainFragment extends SubsonicFragment {
 		}
 		menu.setGroupCheckable(MENU_GROUP_SERVER, true, true);
 		menu.setHeaderTitle(R.string.main_select_server);
+
+		recreateContextMenu(menu);
 	}
 
 	@Override
 	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
-		if(!primaryFragment) {
+		if(menuItem.getGroupId() != getSupportTag()) {
 			return false;
 		}
 		
