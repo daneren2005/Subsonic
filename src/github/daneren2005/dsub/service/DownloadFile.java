@@ -86,7 +86,7 @@ public class DownloadFile {
      */
     public int getBitRate() {
 		if(!partialFile.exists()) {
-			bitRate = Util.getMaxBitrate(context);
+			bitRate = song.isVideo() ? Util.getMaxVideoBitrate(context) : Util.getMaxBitrate(context);
 		}
         if (bitRate > 0) {
             return bitRate;
