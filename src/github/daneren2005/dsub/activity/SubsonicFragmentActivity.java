@@ -83,13 +83,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			stopService(new Intent(this, DownloadServiceImpl.class));
 			finish();
 		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
-			getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
-			Intent intent = new Intent();
-			intent.setClass(this, DownloadActivity.class);
-			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
+			DownloadService service = getDownloadService();
+			if(service != null && service.getCurrentPlaying() != null) {
+				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
+				Intent intent = new Intent();
+				intent.setClass(this, DownloadActivity.class);
+				if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
+					intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
+				}
+				startActivity(intent);
 			}
-			startActivity(intent);
 		}
 		setContentView(R.layout.abstract_fragment_activity);
 
