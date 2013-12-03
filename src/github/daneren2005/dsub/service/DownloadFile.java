@@ -86,13 +86,16 @@ public class DownloadFile {
      */
     public int getBitRate() {
 		if(!partialFile.exists()) {
-			bitRate = song.isVideo() ? Util.getMaxVideoBitrate(context) : Util.getMaxBitrate(context);
+			bitRate = getActualBitrate();
 		}
         if (bitRate > 0) {
             return bitRate;
         }
         return song.getBitRate() == null ? 160 : song.getBitRate();
     }
+	private int getActualBitrate() {
+		return song.isVideo() ? Util.getMaxVideoBitrate(context) : Util.getMaxBitrate(context);
+	}
 	
 	public Integer getContentLength() {
 		return contentLength;
@@ -111,7 +114,7 @@ public class DownloadFile {
     	FileUtil.createDirectoryForParent(saveFile);
         failedDownload = false;
 		if(!partialFile.exists()) {
-			bitRate = Util.getMaxBitrate(context);
+			bitRate = getActualBitrate();
 		}
 		downloadTask = new DownloadTask();
     }
