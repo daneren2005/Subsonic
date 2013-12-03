@@ -566,7 +566,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		int count = entryList.getCount();
 		for (int i = 0; i < count; i++) {
 			if (entryList.isItemChecked(i)) {
-				songs.add((MusicDirectory.Entry) entryList.getItemAtPosition(i));
+				MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(i);
+				if(!entry.isDirectory()) {
+					songs.add(entry);
+				}
 			}
 		}
 		return songs;
