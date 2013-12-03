@@ -260,6 +260,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			remoteController.shutdown();
 		}
 		Util.hidePlayingNotification(this, this, handler);
+		Util.hideDownloadingNotification(this);
     }
 
     public static DownloadService getInstance() {
