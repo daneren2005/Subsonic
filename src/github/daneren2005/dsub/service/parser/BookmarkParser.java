@@ -21,6 +21,7 @@ package github.daneren2005.dsub.service.parser;
 import android.content.Context;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Bookmark;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 import java.io.Reader;
@@ -57,7 +58,9 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
                 	bookmark.setPosition(getInteger("position"));
                 	bookmark.setUsername(get("username"));
                 } else if ("entry".equals(name)) {
-                	bookmark.setEntry(parseEntry(null));
+					MusicDirectory.Entry entry = parseEntry(null);
+					entry.setTrack(null);
+                	bookmark.setEntry(entry);
                 	bookmarks.add(bookmark);
                 } else if ("error".equals(name)) {
                     handleError();
