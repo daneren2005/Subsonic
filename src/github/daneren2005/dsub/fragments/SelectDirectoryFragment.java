@@ -64,6 +64,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	String albumListExtra;
 	int albumListSize;
 	boolean refreshListing = false;
+	boolean showAll = false;
 	
 	
 	public SelectDirectoryFragment() {
@@ -130,6 +131,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
+			showAll = args.getBoolean(Constants.INTENT_EXTRA_VIEW_ALBUM, false);
 			if(entries == null) {
 				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
 			}
@@ -358,7 +360,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		} else if (albumListType != null) {
 			getAlbumList(albumListType, albumListSize);
 		} else {
-			getMusicDirectory(id, name, refresh);
+			if(showAll) {
+				getRecursiveMusicDirectory(id, name, refresh);
+			} else {
+				getMusicDirectory(id, name, refresh);
+			}
 		}
 	}
 
@@ -369,6 +375,34 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return service.getMusicDirectory(id, name, refresh, context, this);
+			}
+			
+			@Override
+			protected void done(Pair<MusicDirectory, Boolean> result) {
+				super.done(result);
+				setTitle(result.getFirst().getName());
+			}
+		}.execute();
+	}
+	
+	private void getRecursiveMusicDirectory(final String id, final String name, final boolean refresh) {
+		setTitle(name);
+
+		new LoadTask() {
+			@Override
+			protected MusicDirectory load(MusicService service) throws Exception {
+				MusicDirectory root = service.getMusicDirectory(id, name, refresh, context, this);
+				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+				getSongsRecursively(root, songs);
+				root.replaceChildren(songs);
+			}
+			
+			private void getSongsRecursively(MusicDirectory parent, List<MusicDirectory.Entry> songs) throws Exception {
+				songs.addAll(parent.getChildren(false, true));
+				for (MusicDirectory.Entry dir : parent.getChildren(true, false)) {
+					MusicService musicService = MusicServiceFactory.getMusicService(context);
+					getSongsRecursively(musicService.getMusicDirectory(dir.getId(), dir.getTitle(), refresh, context, this), songs);
+				}
 			}
 			
 			@Override
