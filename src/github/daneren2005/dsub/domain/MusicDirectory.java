@@ -36,10 +36,10 @@ public class MusicDirectory implements Serializable {
     private String name;
 	private String id;
 	private String parent;
-    private List<Entry> children = new ArrayList<Entry>();
+    private List<Entry> children;
 
 	public MusicDirectory() {
-
+		children = new ArrayList<Entry>();
 	}
 	public MusicDirectory(List<Entry> children) {
 		this.children = children;
@@ -72,6 +72,10 @@ public class MusicDirectory implements Serializable {
     public void addChild(Entry child) {
         children.add(child);
     }
+    
+	public void replaceChildren(List<Entry> children) {
+		this.children = children;
+	}
 
     public List<Entry> getChildren() {
         return getChildren(true, true);
