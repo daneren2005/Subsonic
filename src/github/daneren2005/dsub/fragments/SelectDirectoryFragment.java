@@ -131,7 +131,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
-			showAll = args.getBoolean(Constants.INTENT_EXTRA_VIEW_ALBUM, false);
 			if(entries == null) {
 				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
 			}
@@ -228,6 +227,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			case R.id.menu_download_all:
 				downloadAllPodcastEpisodes();
 				return true;
+			case R.id.menu_show_all:
+				showAll = true;
+				refresh(true);
 		}
 
 		if(super.onOptionsItemSelected(item)) {
@@ -395,6 +397,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
 				getSongsRecursively(root, songs);
 				root.replaceChildren(songs);
+				return root;
 			}
 			
 			private void getSongsRecursively(MusicDirectory parent, List<MusicDirectory.Entry> songs) throws Exception {
