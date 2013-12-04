@@ -80,6 +80,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 							// Only add if actualy downloaded correctly
 							if(file.isSaved()) {
 								existingEpisodes.add(entry.getId());
+								updated = true;
 							}
 						}
 					}
