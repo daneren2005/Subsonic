@@ -31,6 +31,7 @@ import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
@@ -509,6 +510,15 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     }
 
     public synchronized void clear(boolean serialize) {
+    	// Delete podcast if fully listened to
+    	if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
+    		// Make sure > 95% of the way through
+    		int cutoffPoint = getPlayerDuration() * 0.95;
+    		if(duration > 0 && cachedPosition > cutoffPoint) {
+    			currentPlaying.delete();
+    		}
+    	}
+    	
         reset();
         downloadList.clear();
         revision++;
