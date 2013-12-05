@@ -2,4 +2,6 @@
 <resources>
 	<dimen name="Button">54dip</dimen>
 	<dimen name="Button.Small">46dip</dimen>
+	<dimen name="AlbumArt.Small">68dip</dimen>
+	<dimen name="AlbumArt.Header">120dip</dimen>
 </resources>

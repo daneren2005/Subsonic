@@ -7,11 +7,9 @@
 
     <ImageView
             android:id="@+id/album_coverart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:paddingTop="1dip"
-			android:paddingBottom="1dip"/>
+            android:layout_width="@dimen/AlbumArt.Small"
+            android:layout_height="@dimen/AlbumArt.Small"
+            android:layout_gravity="left|center_vertical"/>
 
     <LinearLayout
             android:orientation="vertical"
