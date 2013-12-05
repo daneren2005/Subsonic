@@ -512,8 +512,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     public synchronized void clear(boolean serialize) {
     	// Delete podcast if fully listened to
     	if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
+			int duration = getPlayerDuration();
+
     		// Make sure > 95% of the way through
-    		int cutoffPoint = getPlayerDuration() * 0.95;
+    		int cutoffPoint = (int)(duration * 0.95);
     		if(duration > 0 && cachedPosition > cutoffPoint) {
     			currentPlaying.delete();
     		}
