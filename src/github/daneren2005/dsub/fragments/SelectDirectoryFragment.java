@@ -14,10 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.EntryAdapter;
 
@@ -879,9 +882,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			header = LayoutInflater.from(context).inflate(R.layout.select_album_header, entryList, false);
 			add = true;
 		}
-		
+
+		final ImageLoader imageLoader = getImageLoader();
+		final MusicDirectory.Entry albumRep = entries.get(random.nextInt(entries.size()));
 		View coverArtView = header.findViewById(R.id.select_album_art);
-		getImageLoader().loadImage(coverArtView, entries.get(random.nextInt(entries.size())), false, true);
+		coverArtView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AlertDialog.Builder imageDialog = new AlertDialog.Builder(context);
+				ImageView fullScreenView = new ImageView(context);
+				imageLoader.loadImage(fullScreenView, albumRep, true, true);
+				imageDialog.setView(fullScreenView);
+				imageDialog.setCancelable(true);
+				imageDialog.create();
+				imageDialog.show();
+			}
+		});
+		imageLoader.loadImage(coverArtView, albumRep, false, true);
 
 		TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
 		if(playlistName != null) {
