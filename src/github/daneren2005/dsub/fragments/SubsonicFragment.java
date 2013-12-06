@@ -271,6 +271,9 @@ public class SubsonicFragment extends Fragment {
 			case R.id.album_menu_delete:
 				deleteRecursively(entry);
 				break;
+			case R.id.album_menu_info:
+				displaySongInfo(entry);
+				break;
 			case R.id.song_menu_play_now:
 				getDownloadService().clear();
 				getDownloadService().download(songs, false, true, true, false);
@@ -877,25 +880,27 @@ public class SubsonicFragment extends Fragment {
 		Integer bitrate = null;
 		String format = null;
 		long size = 0;
-		try {
-			DownloadFile downloadFile = new DownloadFile(context, song, false);
-			File file = downloadFile.getCompleteFile();
-			if(file.exists()) {
-				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-				metadata.setDataSource(file.getAbsolutePath());
-				String tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-				bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
-				format = FileUtil.getExtension(file.getName());
-				size = file.length();
-
-				if(Util.isOffline(context)) {
-					song.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
-					String year = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
-					song.setYear(Integer.parseInt((year != null) ? year : "0"));
+		if(!song.isDirectory()) {
+			try {
+				DownloadFile downloadFile = new DownloadFile(context, song, false);
+				File file = downloadFile.getCompleteFile();
+				if(file.exists()) {
+					MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+					metadata.setDataSource(file.getAbsolutePath());
+					String tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+					bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
+					format = FileUtil.getExtension(file.getName());
+					size = file.length();
+	
+					if(Util.isOffline(context)) {
+						song.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
+						String year = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
+						song.setYear(Integer.parseInt((year != null) ? year : "0"));
+					}
 				}
+			} catch(Exception e) {
+				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
 			}
-		} catch(Exception e) {
-			Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
 		}
 
 		String msg = "";
