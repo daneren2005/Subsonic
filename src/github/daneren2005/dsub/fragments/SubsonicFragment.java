@@ -907,7 +907,12 @@ public class SubsonicFragment extends Fragment {
 		if(song instanceof PodcastEpisode) {
 			msg += "Podcast: " + song.getArtist() + "\nStatus: " + ((PodcastEpisode)song).getStatus();
 		} else if(!song.isVideo()) {
-			msg += "Artist: " + song.getArtist() + "\nAlbum: " + song.getAlbum();
+			if(song.getArtist() != null && !"".equals(song.getArtist())) {
+				msg += "Artist: " + song.getArtist();
+			}
+			if(song.getAlbum() != null && !"".equals(song.getAlbum())) {
+				msg += "\nAlbum: " + song.getAlbum();
+			}
 		}
 		if(song.getTrack() != null && song.getTrack() != 0) {
 			msg += "\nTrack: " + song.getTrack();
