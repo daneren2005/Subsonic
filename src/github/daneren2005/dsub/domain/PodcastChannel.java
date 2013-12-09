@@ -77,4 +77,17 @@ public class PodcastChannel implements Serializable {
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
+	
+	public static class PodcastComparator implements Comparator<PodcastChannel> {
+		@Override
+		public int compare(PodcastChannel podcast1, PodcastChannel podcast2) {
+			return podcast1.getName().compareToIgnoreCase(podcast2.getName());
+		}
+
+		public static List<PodcastChannel> sort(List<PodcastChannel> podcasts) {
+			Collections.sort(podcasts, new PodcastComparator());
+			return podcasts;
+		}
+
+	}
 }
