@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.3.2" versioncode="76" releasedate="12/8/2013">
+		<change>Click on album art to popup a larger version</change>
+		<change>Added Show all media button to replace albums with songs</change>
+		<change>Automatically delete podcasts that are > 95% listened to</change>
+		<change>Added Show Details button to albums (Year/Genre on Subsonic 4.9Beta3+)</change>
+		<change>Fix podcasts syncing trying to redownload ones you delete</change>
+		<change>Fix the context menus on the first pane on tablets not working</change>
+		<change>Bunch of random bug fixes and enhancements</change>
+	</release>
 	<release version="4.3.1" versioncode="75" releasedate="11/30/2013">
 		<change>Fix search on MusicCabinet servers</change>
 	</release>
