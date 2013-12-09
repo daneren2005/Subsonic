@@ -17,7 +17,7 @@
  Copyright 2009 (C) Sindre Mehus
  */
 
-package github.daneren2005.dsub.service.sync;
+package github.daneren2005.dsub.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

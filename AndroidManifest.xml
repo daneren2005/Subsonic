@@ -152,12 +152,12 @@
 
         <provider android:name="github.daneren2005.dsub.provider.DSubSearchProvider"
                   android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
-		<provider android:name=".service.sync.PlaylistStubProvider"
+		<provider android:name="github.daneren2005.dsub.provider.PlaylistStubProvider"
 			android:authorities="github.daneren2005.dsub.playlists.provider"
 			android:label="Playlists"
 			android:exported="false"
 			android:syncable="true"/>
-		<provider android:name=".service.sync.PodcastStubProvider"
+		<provider android:name="github.daneren2005.dsub.provider.PodcastStubProvider"
 			android:authorities="github.daneren2005.dsub.podcasts.provider"
 			android:label="Podcasts"
 			android:exported="false"
