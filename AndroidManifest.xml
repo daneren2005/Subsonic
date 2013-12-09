@@ -75,7 +75,7 @@
 			<meta-data android:name="android.accounts.AccountAuthenticator"
 				android:resource="@xml/authenticator" />
 		</service>
-		<service android:name=".service.sync.PlaylistSyncService"
+		<service android:name="github.daneren2005.dsub.service.sync.PlaylistSyncService"
 			android:exported="true"
 			android:process=":sync">
 
@@ -85,7 +85,7 @@
 			<meta-data android:name="android.content.SyncAdapter"
 				android:resource="@xml/playlists_syncadapter" />
 		</service>
-		<service android:name=".service.sync.PodcastSyncService"
+		<service android:name="github.daneren2005.dsub.service.sync.PodcastSyncService"
 				 android:exported="true"
 				 android:process=":sync">
 
@@ -94,6 +94,26 @@
 			</intent-filter>
 			<meta-data android:name="android.content.SyncAdapter"
 					   android:resource="@xml/podcasts_syncadapter" />
+		</service>
+		<service android:name="github.daneren2005.dsub.service.sync.StarredSyncService"
+				 android:exported="true"
+				 android:process=":sync">
+
+			<intent-filter>
+				<action android:name="android.content.SyncAdapter"/>
+			</intent-filter>
+			<meta-data android:name="android.content.SyncAdapter"
+					   android:resource="@xml/starred_syncadapter" />
+		</service>
+		<service android:name="github.daneren2005.dsub.service.sync.MostRecentSyncService"
+				 android:exported="true"
+				 android:process=":sync">
+
+			<intent-filter>
+				<action android:name="android.content.SyncAdapter"/>
+			</intent-filter>
+			<meta-data android:name="android.content.SyncAdapter"
+					   android:resource="@xml/mostrecent_syncadapter" />
 		</service>
 
         <receiver android:name="github.daneren2005.dsub.receiver.MediaButtonIntentReceiver">
@@ -162,6 +182,16 @@
 			android:label="Podcasts"
 			android:exported="false"
 			android:syncable="true"/>
+		<provider android:name="github.daneren2005.dsub.provider.StarredStubProvider"
+				  android:authorities="github.daneren2005.dsub.starred.provider"
+				  android:label="Starred"
+				  android:exported="false"
+				  android:syncable="true"/>
+		<provider android:name="github.daneren2005.dsub.provider.MostRecentStubProvider"
+				  android:authorities="github.daneren2005.dsub.mostrecent.provider"
+				  android:label="MostRecent"
+				  android:exported="false"
+				  android:syncable="true"/>
 
         <meta-data android:name="android.app.default_searchable"
                    android:value="github.daneren2005.dsub.activity.QueryReceiverActivity"/>

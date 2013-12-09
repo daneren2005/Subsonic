@@ -357,6 +357,10 @@
 	<string name="settings.sync_interval">Sync Interval</string>
 	<string name="settings.sync_wifi">Sync on Wifi only</string>
 	<string name="settings.sync_wifi_summary">Only sync while on wifi</string>
+	<string name="settings.sync_most_recent">Sync Recently Added</string>
+	<string name="settings.sync_most_recent_summary">Automatically cache newly added albums</string>
+	<string name="settings.sync_starred">Sync Starred</string>
+	<string name="settings.sync_starred_summary">Automatically cache songs, albums, and artists which are starred</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

@@ -192,6 +192,18 @@
 				android:summary="@string/settings.sync_wifi_summary"
 				android:key="syncWifi"
 				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/settings.sync_starred"
+				android:summary="@string/settings.sync_starred_summary"
+				android:key="syncStarred"
+				android:defaultValue="false"/>
+
+			<CheckBoxPreference
+				android:title="@string/settings.sync_most_recent"
+				android:summary="@string/settings.sync_most_recent_summary"
+				android:key="syncMostRecent"
+				android:defaultValue="false"/>
 		</PreferenceCategory>
 
 		<PreferenceCategory
