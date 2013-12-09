@@ -889,6 +889,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		coverArtView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if(albumRep.getCoverArt() == null) {
+					return;
+				}
+
 				AlertDialog.Builder imageDialog = new AlertDialog.Builder(context);
 				ImageView fullScreenView = new ImageView(context);
 				imageLoader.loadImage(fullScreenView, albumRep, true, true);
