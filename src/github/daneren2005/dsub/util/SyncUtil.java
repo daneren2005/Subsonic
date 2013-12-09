@@ -101,6 +101,30 @@ public final class SyncUtil {
 	public static String getPodcastSyncFile(Context context, int instance) {
 		return "sync-podcast-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
 	}
+	
+	// Starred
+	public static List<String> getSyncedStarred(Context context, int instance) {
+		ArrayList<String> list = FileUtil.deserialize(context, getStarredSyncFile(context, instance), ArrayList.class);
+		if(list == null) {
+			list = new ArrayList<String>();
+		}
+		return list;
+	}
+	public static String getStarredSyncFile(Context context, int instance) {
+		return "sync-starred-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
+	}
+	
+	// Most Recently Added
+	public static List<String> getSyncedMostRecent(Context context, int instance) {
+		ArrayList<String> list = FileUtil.deserialize(context, getMostRecentSyncFile(context, instance), ArrayList.class);
+		if(list == null) {
+			list = new ArrayList<String>();
+		}
+		return list;
+	}
+	public static String getMostRecentSyncFile(Context context, int instance) {
+		return "sync-most_recent-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
+	}
 
 	public static class SyncSet implements Serializable {
 		public String id;
