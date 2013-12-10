@@ -54,7 +54,7 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 	public void onExecuteSync(Context context, int instance) {
 		try {
 			ArrayList<String> syncedList = SyncUtil.getSyncedMostRecent(context, instance);
-			MusicDirectory albumList = musicService.getAlbumList("recent", 20, 0, context, null);
+			MusicDirectory albumList = musicService.getAlbumList("newest", 20, 0, context, null);
 			boolean updated = false;
 			if(syncedList.size() == 0) {
 				// Get the initial set of albums on first run, don't sync any of these!
