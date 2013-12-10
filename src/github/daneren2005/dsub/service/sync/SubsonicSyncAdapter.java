@@ -114,4 +114,19 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	public void onExecuteSync(Context context, int instance) {
 	
 	}
+	
+	protected void downloadRecursively(MusicDirectory.Entry parent, Context context) {
+		for (MusicDirectory.Entry parent: album.getChildren(false, true)) {
+			if (!song.isVideo()) {
+				DownloadFile file = new DownloadFile(context, song, true);
+				while(!file.isSaved() && !file.isFailedMax()) {
+					file.downloadNow();
+				}
+			}
+		}
+		
+		for (MusicDirectory.Entry dir: parent.getChildren(true, false)) {
+			downloadRecursively(musicService.getMusicDirectory(dir.getId(), dir.getTitle(), true, context, null), context);
+		}
+	}
 }
