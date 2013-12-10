@@ -103,7 +103,7 @@ public final class SyncUtil {
 	}
 	
 	// Starred
-	public static List<String> getSyncedStarred(Context context, int instance) {
+	public static ArrayList<String> getSyncedStarred(Context context, int instance) {
 		ArrayList<String> list = FileUtil.deserialize(context, getStarredSyncFile(context, instance), ArrayList.class);
 		if(list == null) {
 			list = new ArrayList<String>();
@@ -115,7 +115,7 @@ public final class SyncUtil {
 	}
 	
 	// Most Recently Added
-	public static List<String> getSyncedMostRecent(Context context, int instance) {
+	public static ArrayList<String> getSyncedMostRecent(Context context, int instance) {
 		ArrayList<String> list = FileUtil.deserialize(context, getMostRecentSyncFile(context, instance), ArrayList.class);
 		if(list == null) {
 			list = new ArrayList<String>();
