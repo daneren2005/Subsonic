@@ -75,7 +75,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 						if(entry.getId() != null && "completed".equals(((PodcastEpisode)entry).getStatus()) && !existingEpisodes.contains(entry.getId())) {
 							DownloadFile file = new DownloadFile(context, entry, true);
 							while(!file.isSaved() && !file.isFailedMax()) {
-								file.downloadNow();
+								file.downloadNow(musicService);
 							}
 							// Only add if actualy downloaded correctly
 							if(file.isSaved()) {

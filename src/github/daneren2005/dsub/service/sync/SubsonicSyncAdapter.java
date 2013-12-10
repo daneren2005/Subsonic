@@ -122,7 +122,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 			if (!song.isVideo()) {
 				DownloadFile file = new DownloadFile(context, song, save);
 				while(!file.isCompleteFileAvailable() && !file.isFailedMax()) {
-					file.downloadNow();
+					file.downloadNow(musicService);
 				}
 			}
 		}

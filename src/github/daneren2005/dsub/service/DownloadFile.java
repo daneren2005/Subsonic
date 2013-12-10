@@ -54,7 +54,7 @@ public class DownloadFile {
     private final File saveFile;
 
     private final MediaStoreService mediaStoreService;
-    private CancellableTask downloadTask;
+    private DownloadTask downloadTask;
     private boolean save;
 	private boolean failedDownload = false;
     private int failed = 0;
@@ -105,8 +105,9 @@ public class DownloadFile {
         preDownload();
         downloadTask.start();
     }
-    public synchronized void downloadNow() {
+    public synchronized void downloadNow(MusicService musicService) {
     	preDownload();
+		downloadTask.setMusicService(musicService);
     	downloadTask.execute();
 		
     }
@@ -250,6 +251,7 @@ public class DownloadFile {
     }
 
     private class DownloadTask extends CancellableTask {
+		private MusicService musicService;
 
         @Override
         public void execute() {
@@ -287,7 +289,9 @@ public class DownloadFile {
                     return;
                 }
 
-                MusicService musicService = MusicServiceFactory.getMusicService(context);
+				if(musicService == null) {
+                	musicService = MusicServiceFactory.getMusicService(context);
+				}
 
 				// Some devices seem to throw error on partial file which doesn't exist
 				boolean compare;
@@ -376,6 +380,10 @@ public class DownloadFile {
         public String toString() {
             return "DownloadTask (" + song + ")";
         }
+
+		public void setMusicService(MusicService musicService) {
+			this.musicService = musicService;
+		}
 
         private void downloadAndSaveCoverArt(MusicService musicService) throws Exception {
             try {

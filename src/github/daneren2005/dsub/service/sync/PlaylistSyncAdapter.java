@@ -57,7 +57,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				for(MusicDirectory.Entry entry: playlist.getChildren()) {
 					DownloadFile file = new DownloadFile(context, entry, true);
 					while(!file.isSaved() && !file.isFailedMax()) {
-						file.downloadNow();
+						file.downloadNow(musicService);
 					}
 				}
 			} catch(Exception e) {
