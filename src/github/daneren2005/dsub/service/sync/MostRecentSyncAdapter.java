@@ -52,6 +52,31 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 
 	@Override
 	public void onExecuteSync(Context context, int instance) {
-
+		List<String> syncedList = SyncUtil.getSyncedMostRecent(context, instance);
+		MusicDirectory albumList = service.getAlbumList("recent", 20, 0, context, null);
+		boolean updated = false;
+		if(syncedList.size() == 0) {
+			// Get the initial set of albums on first run, don't sync any of these!
+			for(MusicDirectory.Entry album: albumList.getChildren()) {
+				syncedList.add(album.getId());
+			}
+			updated = true;
+		} else {
+			for(MusicDirectory.Entry album: albumList.getChildren()) {
+				if(!syncedList.contains(album.getId()) {
+					try {
+						downloadRecursively(album, context);
+						syncedList.add(album.getId());
+						updated = true;
+					} catch(Exception e) {
+						Log.w(TAG, "Failed to get songs for " + id + " on " + Util.getServerName(context, instance));
+					}
+				}
+			}
+		}
+		
+		if(updated) {
+			FileUtil.serialize(context, podcastList, SyncUtil.getMostRecentSyncFile(context, instance));
+		}
 	}
 }
