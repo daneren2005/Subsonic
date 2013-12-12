@@ -514,8 +514,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     	if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
 			int duration = getPlayerDuration();
 
-    		// Make sure > 95% of the way through
-    		int cutoffPoint = (int)(duration * 0.95);
+    		// Make sure > 90% of the way through
+    		int cutoffPoint = (int)(duration * 0.90);
     		if(duration > 0 && cachedPosition > cutoffPoint) {
     			currentPlaying.delete();
     		}
