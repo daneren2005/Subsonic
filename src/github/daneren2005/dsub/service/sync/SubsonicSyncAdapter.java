@@ -34,6 +34,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import java.util.List;
+
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.RESTMusicService;
@@ -117,18 +119,22 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	
 	}
 	
-	protected void downloadRecursively(MusicDirectory parent, Context context, boolean save) throws Exception {
+	protected void downloadRecursively(List<String> paths, MusicDirectory parent, Context context, boolean save) throws Exception {
 		for (MusicDirectory.Entry song: parent.getChildren(false, true)) {
 			if (!song.isVideo()) {
 				DownloadFile file = new DownloadFile(context, song, save);
-				while(!file.isCompleteFileAvailable() && !file.isFailedMax()) {
+				while(!(save && file.isSaved() || !save && file.isCompleteFileAvailable()) && !file.isFailedMax()) {
 					file.downloadNow(musicService);
+				}
+
+				if(paths != null && file.isCompleteFileAvailable()) {
+					paths.add(file.getCompleteFile().getPath());
 				}
 			}
 		}
 		
 		for (MusicDirectory.Entry dir: parent.getChildren(true, false)) {
-			downloadRecursively(musicService.getMusicDirectory(dir.getId(), dir.getTitle(), true, context, null), context, save);
+			downloadRecursively(paths, musicService.getMusicDirectory(dir.getId(), dir.getTitle(), true, context, null), context, save);
 		}
 	}
 }

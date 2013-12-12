@@ -66,7 +66,7 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 				for(MusicDirectory.Entry album: albumList.getChildren()) {
 					if(!syncedList.contains(album.getId())) {
 						try {
-							downloadRecursively(musicService.getMusicDirectory(album.getId(), album.getTitle(), true, context, null), context, false);
+							downloadRecursively(null, musicService.getMusicDirectory(album.getId(), album.getTitle(), true, context, null), context, false);
 							syncedList.add(album.getId());
 							updated = true;
 						} catch(Exception e) {
