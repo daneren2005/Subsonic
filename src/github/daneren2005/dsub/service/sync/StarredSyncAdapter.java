@@ -23,16 +23,13 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.PodcastEpisode;
-import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SyncUtil;
-import github.daneren2005.dsub.util.SyncUtil.SyncSet;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -52,6 +49,29 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 
 	@Override
 	public void onExecuteSync(Context context, int instance) {
+		try {
+			ArrayList<String> syncedList = new ArrayList<String>();
+			MusicDirectory starredList = musicService.getStarredList(context, null);
 
+			// Pin all the starred stuff
+			downloadRecursively(syncedList, starredList, context, true);
+
+			// Get old starred list
+			ArrayList<String> oldSyncedList = SyncUtil.getSyncedStarred(context, instance);
+
+			// Check to make sure there aren't any old starred songs that now need to be removed
+			oldSyncedList.removeAll(syncedList);
+
+			for(String path: oldSyncedList) {
+				File file = new File(path);
+				if(!file.delete()) {
+					Log.w(TAG, "Failed to delete " + path);
+				}
+			}
+
+			FileUtil.serialize(context, syncedList, SyncUtil.getStarredSyncFile(context, instance));
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to get starred list for " + Util.getServerName(context, instance));
+		}
 	}
 }
