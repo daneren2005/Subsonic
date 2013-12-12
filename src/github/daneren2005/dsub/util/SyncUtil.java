@@ -41,8 +41,12 @@ public final class SyncUtil {
 		syncedPlaylists = playlists;
 	}
 	public static void removeSyncedPlaylist(Context context, String playlistId) {
-		String playlistFile = getPlaylistSyncFile(context);
-		ArrayList<String> playlists = getSyncedPlaylists(context);
+		int instance = Util.getActiveServer(context);
+		removeSyncedPlaylist(context, playlistId, instance);
+	}
+	public static void removeSyncedPlaylist(Context context, String playlistId, int instance) {
+		String playlistFile = getPlaylistSyncFile(context, instance);
+		ArrayList<String> playlists = getSyncedPlaylists(context, instance);
 		if(playlists.contains(playlistId)) {
 			playlists.remove(playlistId);
 			FileUtil.serialize(context, playlists, playlistFile);
@@ -85,8 +89,11 @@ public final class SyncUtil {
 		syncedPodcasts = podcasts;
 	}
 	public static void removeSyncedPodcast(Context context, String podcastId) {
-		String podcastFile = getPodcastSyncFile(context);
-		ArrayList<SyncSet> podcasts = getSyncedPodcasts(context);
+		removeSyncedPodcast(context, podcastId, Util.getActiveServer(context));
+	}
+	public static void removeSyncedPodcast(Context context, String podcastId, int instance) {
+		String podcastFile = getPodcastSyncFile(context, instance);
+		ArrayList<SyncSet> podcasts = getSyncedPodcasts(context, instance);
 		SyncSet set = new SyncSet(podcastId);
 		if(podcasts.contains(set)) {
 			podcasts.remove(set);

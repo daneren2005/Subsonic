@@ -30,6 +30,7 @@ import java.util.List;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.SyncUtil.SyncSet;
 import github.daneren2005.dsub.util.FileUtil;
@@ -83,6 +84,11 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 								updated = true;
 							}
 						}
+					}
+				}  catch(SubsonicRESTException e) {
+					if(e.getCode() == 70) {
+						SyncUtil.removeSyncedPodcast(context, id, instance);
+						Log.i(TAG, "Unsync deleted podcasts for " + id + " on " + Util.getServerName(context, instance));
 					}
 				} catch (Exception e) {
 					Log.w(TAG, "Failed to get podcasts for " + id + " on " + Util.getServerName(context, instance));

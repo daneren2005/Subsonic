@@ -27,6 +27,7 @@ import java.util.List;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 
@@ -60,8 +61,13 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 						file.downloadNow(musicService);
 					}
 				}
+			} catch(SubsonicRESTException e) {
+				if(e.getCode() == 70) {
+					SyncUtil.removeSyncedPlaylist(context, id, instance);
+					Log.i(TAG, "Unsync deleted playlist " + id + " for " + serverName);
+				}
 			} catch(Exception e) {
-				Log.e(TAG, "Failed to get playlist for " + serverName);
+				Log.e(TAG, "Failed to get playlist " + id + " for " + serverName);
 			}
 		}
 	}
