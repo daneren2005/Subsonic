@@ -79,6 +79,9 @@ public class PodcastChannelView extends UpdateView {
 				pinned = false;
 			}
 			exists = true;
+		} else {
+			pinned = false;
+			exists = false;
 		}
 	}
 }
