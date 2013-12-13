@@ -9,8 +9,8 @@
 	<string name="common.play_shuffled">Véletlen sorrendű lejátszás</string>
     <string name="common.play_next">Lejátszás (Következőként)</string>
     <string name="common.play_last">Lejátszás (Utolsóként)</string>
-	<string name="common.download">Letöltés (gyorsítótárba)</string>
-    <string name="common.pin">Letöltés (megőrzés az eszközön)</string>
+	<string name="common.download">Letöltés (Gyorsítótárba)</string>
+    <string name="common.pin">Tárolás (Megőrzés az eszközön)</string>
     <string name="common.delete">Törlés</string>
 	<string name="common.star">Csillag jelölés be</string>
 	<string name="common.unstar">Csillag jelölés ki</string>
@@ -76,6 +76,7 @@
 	<string name="menu.add_podcast">Csatorna hozzáadása</string>
 	<string name="menu.keep_synced">Tartsa szinkronizálva</string>
 	<string name="menu.stop_sync">Szinkronizálás megállítása</string>
+	<string name="menu.show_all">Minden média megjelenítése</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Módosítás</string>
@@ -154,7 +155,7 @@
     <string name="download.playerstate_buffering">Pufferelés</string>
     <string name="download.playerstate_playing_shuffle">Véletlen sorrendű</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
-    <string name="download.menu_lyrics">Dalszövegek</string>
+    <string name="download.menu_lyrics">Dalszöveg</string>
     <string name="download.menu_remove">Eltávolítás a várólistáról</string>
 	<string name="download.menu_delete">Gyorsítótár ürítése</string>
     <string name="download.menu_remove_all">Összes eltávolítása</string>
@@ -309,7 +310,7 @@
     <string name="settings.media_button_title">Média vezérlőgombok</string>
     <string name="settings.media_button_summary">A lejátszó irányítása a bluetooth eszköz vagy a fülhallgató vezérlőgombjaival.</string>
     <string name="settings.screen_lit_title">Képernyő ébrentartása</string>
-    <string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt a magasabb letöltési sebesség érdekében.</string>
+    <string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt, a magasabb letöltési sebesség érdekében.</string>
 	<string name="settings.playlist_title">Lejátszási listák</string>
 	<string name="settings.playlist_random_size_title">Véletlenszerű lejátszási lista mérete</string>
 	<string name="settings.buffer_length">Pufferméret (0 = teljes gyorsítótárazás)</string>
@@ -355,6 +356,10 @@
 	<string name="settings.sync_interval">Szinkronizálás időintervalluma</string>
 	<string name="settings.sync_wifi">Szinkronizálás csak Wi-Fivel</string>
 	<string name="settings.sync_wifi_summary">Szinkronizálás csak Wi-Fi hálózaton keresztül.</string>
+	<string name="settings.sync_most_recent">Utoljára hozzáadottak szinkronizálása</string>
+	<string name="settings.sync_most_recent_summary">Az utoljára hozzáadott albumok automatikus gyorsítótárazása.</string>
+	<string name="settings.sync_starred">Csillaggal megjelöltek szinkronizálása</string>
+	<string name="settings.sync_starred_summary">A csillaggal megjelölt dalok/albumok/előadók automatikusan gyorsítótárazása.</string>
 
 	<string name="shuffle.title">Véletlen sorrend</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
