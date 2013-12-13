@@ -49,6 +49,14 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	@Override
 	public void onExecuteSync(Context context, int instance) {
 		String serverName = Util.getServerName(context, instance);
+
+		try {
+			// Just update playlist listings so user doesn't have to
+			musicService.getPlaylists(true, context, null);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to refresh playlist list for " + serverName);
+		}
+
 		List<String> playlistList = SyncUtil.getSyncedPlaylists(context, instance);
 		for(int i = 0; i < playlistList.size(); i++) {
 			String id = playlistList.get(i);

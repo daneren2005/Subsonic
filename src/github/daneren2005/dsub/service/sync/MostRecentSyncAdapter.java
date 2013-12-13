@@ -78,6 +78,11 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 
 			if(updated) {
 				FileUtil.serialize(context, syncedList, SyncUtil.getMostRecentSyncFile(context, instance));
+
+				// If there is a new album on the active server, chances are artists need to be refreshed
+				if(Util.getActiveServer(context) == instance) {
+					musicService.getIndexes(Util.getSelectedMusicFolderId(context), true, context, null);
+				}
 			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to get most recent list for " + Util.getServerName(context, instance));

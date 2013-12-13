@@ -61,6 +61,9 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 			if(podcastList.size() > 0) {
 				// Refresh podcast listings before syncing
 				musicService.refreshPodcasts(context, null);
+
+				// Just update podcast listings so user doesn't have to
+				musicService.getPodcastChannels(true, context, null);
 			}
 
 			boolean updated = false;
