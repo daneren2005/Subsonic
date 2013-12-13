@@ -63,9 +63,14 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 			oldSyncedList.removeAll(syncedList);
 
 			for(String path: oldSyncedList) {
-				File file = new File(path);
-				if(!file.delete()) {
-					Log.w(TAG, "Failed to delete " + path);
+				File saveFile = new File(path);
+
+				// Unpin file, rename to .complete
+				File completeFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
+					".complete." + FileUtil.getExtension(saveFile.getName()));
+
+				if(!saveFile.renameTo(completeFile)) {
+					Log.w(TAG, "Failed to rename " + path + " to " + completeFile.getPath());
 				}
 			}
 
