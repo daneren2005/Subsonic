@@ -261,7 +261,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 		Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 		intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.appwidget_coverart, pendingIntent);
         views.setOnClickPendingIntent(R.id.appwidget_top, pendingIntent);
         
