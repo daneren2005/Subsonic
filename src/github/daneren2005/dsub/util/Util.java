@@ -994,8 +994,8 @@ public final class Util {
     	NotificationCompat.Builder builder;
     	builder = new NotificationCompat.Builder(context)
     		.setSmallIcon(R.drawable.stat_notify_download)
-    		.setContentTitle("Downloading " + size + " songs")
-    		.setContentText("Current: " + (file != null ? file.getSong().getTitle() : "none"))
+    		.setContentTitle(context.getResources().getString(R.string.download_downloading_title, size))
+    		.setContentText(context.getResources().getString(R.string.download_downloading_summary, (file != null ? file.getSong().getTitle() : "none")))
     		.setProgress(10, 5, true)
 			.setOngoing(true);
     	
