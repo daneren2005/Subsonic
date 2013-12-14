@@ -130,7 +130,11 @@ public class UpdateView extends LinearLayout {
 					views.add(view);
                 }
             }
-			updateAllLive(views);
+			if(views.size() > 0) {
+				updateAllLive(views);
+			} else {
+				uiHandler.postDelayed(updateRunnable, 2000L);
+			}
         } catch (Throwable x) {
             Log.w(TAG, "Error when updating song views.", x);
         }
