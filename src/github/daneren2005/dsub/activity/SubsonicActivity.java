@@ -62,6 +62,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.DrawerAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -135,6 +136,14 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 		
 		populateDrawer();
+		UpdateView.addActiveActivity();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		UpdateView.removeActiveActivity();
 	}
 
 	@Override
