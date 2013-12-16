@@ -62,7 +62,12 @@ public class EqualizerFragment extends SubsonicFragment {
 		equalizerController = DownloadServiceImpl.getInstance().getEqualizerController();
 		equalizer = equalizerController.getEqualizer();
 
-		initEqualizer();
+		try {
+			initEqualizer();
+		} catch(Exception e) {
+			Util.toast(context, "Failed to initialize EQ");
+			context.onBackPressed();
+		}
 
 		final View presetButton = rootView.findViewById(R.id.equalizer_preset);
 		registerForContextMenu(presetButton);
