@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Genre;
@@ -68,7 +69,7 @@ public class GenreParser extends AbstractParser {
         	
             // Replace unescaped ampersand
             xml = xml.replaceAll("&(?!amp;|lt;|gt;|#37;|apos;)", "&amp;");
-            
+
             // Replace unescaped percent symbol
             // No replacements for <> at this time
             xml = xml.replaceAll("%", "&#37;");
@@ -105,7 +106,7 @@ public class GenreParser extends AbstractParser {
                 if (genre != null) {
                 	String value = getText();
                 	if (genre != null) {
-                		genre.setName(value);
+                		genre.setName(Html.fromHtml(value).toString());
                 		genre.setIndex(value.substring(0, 1));
                 		result.add(genre);
                 		genre = null;
