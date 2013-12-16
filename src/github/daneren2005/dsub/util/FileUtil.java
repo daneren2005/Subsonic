@@ -379,39 +379,43 @@ public class FileUtil {
 	}
 
     public static <T extends Serializable> boolean serialize(Context context, T obj, String fileName) {
-        Output out = null;
-        try {
-			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
-            out = new Output(new FileOutputStream(file.getFD()));
-			kryo.writeObject(out, obj);
-            Log.i(TAG, "Serialized object to " + fileName);
-            return true;
-        } catch (Throwable x) {
-            Log.w(TAG, "Failed to serialize object to " + fileName);
-            return false;
-        } finally {
-            Util.close(out);
-        }
+		synchronized (kryo) {
+			Output out = null;
+			try {
+				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
+				out = new Output(new FileOutputStream(file.getFD()));
+				kryo.writeObject(out, obj);
+				Log.i(TAG, "Serialized object to " + fileName);
+				return true;
+			} catch (Throwable x) {
+				Log.w(TAG, "Failed to serialize object to " + fileName);
+				return false;
+			} finally {
+				Util.close(out);
+			}
+		}
     }
 
     public static <T extends Serializable> T deserialize(Context context, String fileName, Class<T> tClass) {
-        Input in = null;
-        try {
-			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "r");
+		synchronized (kryo) {
+			Input in = null;
+			try {
+				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "r");
 
-            in = new Input(new FileInputStream(file.getFD()));
-			T result = (T) kryo.readObject(in, tClass);
-            Log.i(TAG, "Deserialized object from " + fileName);
-            return result;
-        } catch(FileNotFoundException e) {
-			// Different error message
-			Log.w(TAG, "No serialization for object from " + fileName);
-			return null;
-		} catch (Throwable x) {
-            Log.w(TAG, "Failed to deserialize object from " + fileName, x);
-            return null;
-        } finally {
-            Util.close(in);
-        }
+				in = new Input(new FileInputStream(file.getFD()));
+				T result = (T) kryo.readObject(in, tClass);
+				Log.i(TAG, "Deserialized object from " + fileName);
+				return result;
+			} catch(FileNotFoundException e) {
+				// Different error message
+				Log.w(TAG, "No serialization for object from " + fileName);
+				return null;
+			} catch (Throwable x) {
+				Log.w(TAG, "Failed to deserialize object from " + fileName, x);
+				return null;
+			} finally {
+				Util.close(in);
+			}
+		}
     }
 }
