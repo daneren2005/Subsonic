@@ -117,6 +117,6 @@ public class GenreParser extends AbstractParser {
         validate();
         updateProgress(progressListener, R.string.parser_reading_done);
         
-        return result;
+        return Genre.GenreComparator.sort(result);
     }
 }
