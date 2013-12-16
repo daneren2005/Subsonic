@@ -73,23 +73,28 @@ public class DownloadServiceLifecycleSupport {
      */
     private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            Log.i(TAG, "intentReceiver.onReceive: " + action);
-            if (DownloadServiceImpl.CMD_PLAY.equals(action)) {
-                downloadService.play();
-            } else if (DownloadServiceImpl.CMD_NEXT.equals(action)) {
-                downloadService.next();
-            } else if (DownloadServiceImpl.CMD_PREVIOUS.equals(action)) {
-                downloadService.previous();
-            } else if (DownloadServiceImpl.CMD_TOGGLEPAUSE.equals(action)) {
-                downloadService.togglePlayPause();
-            } else if (DownloadServiceImpl.CMD_PAUSE.equals(action)) {
-                downloadService.pause();
-            } else if (DownloadServiceImpl.CMD_STOP.equals(action)) {
-                downloadService.pause();
-                downloadService.seekTo(0);
-            }
+        public void onReceive(final Context context, final Intent intent) {
+			eventHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					String action = intent.getAction();
+					Log.i(TAG, "intentReceiver.onReceive: " + action);
+					if (DownloadServiceImpl.CMD_PLAY.equals(action)) {
+						downloadService.play();
+					} else if (DownloadServiceImpl.CMD_NEXT.equals(action)) {
+						downloadService.next();
+					} else if (DownloadServiceImpl.CMD_PREVIOUS.equals(action)) {
+						downloadService.previous();
+					} else if (DownloadServiceImpl.CMD_TOGGLEPAUSE.equals(action)) {
+						downloadService.togglePlayPause();
+					} else if (DownloadServiceImpl.CMD_PAUSE.equals(action)) {
+						downloadService.pause();
+					} else if (DownloadServiceImpl.CMD_STOP.equals(action)) {
+						downloadService.pause();
+						downloadService.seekTo(0);
+					}
+				}
+			});
         }
     };
 
