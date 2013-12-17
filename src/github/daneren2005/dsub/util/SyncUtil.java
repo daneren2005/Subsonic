@@ -1,10 +1,18 @@
 package github.daneren2005.dsub.util;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 
 /**
  * Created by Scott on 11/24/13.
@@ -131,6 +139,33 @@ public final class SyncUtil {
 	}
 	public static String getMostRecentSyncFile(Context context, int instance) {
 		return "sync-most_recent-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
+	}
+
+	public static void showSyncNotification(final Context context, int stringId, String extra) {
+		String content = (extra != null) ? context.getResources().getString(stringId, extra) : context.getResources().getString(stringId);
+
+		NotificationCompat.Builder builder;
+		builder = new NotificationCompat.Builder(context)
+				.setSmallIcon(R.drawable.stat_notify_download)
+				.setContentTitle(context.getResources().getString(R.string.sync_title))
+				.setContentText(content)
+				.setOngoing(false);
+
+		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.notify(stringId, builder.build());
+	}
+
+	public static String joinNames(List<String> names) {
+		StringBuilder builder = new StringBuilder();
+		for (String val : names) {
+			builder.append(val).append(", ");
+		}
+		builder.setLength(builder.length() - 2);
+		return builder.toString();
 	}
 
 	public static class SyncSet implements Serializable {

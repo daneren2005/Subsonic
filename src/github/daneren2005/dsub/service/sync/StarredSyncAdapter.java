@@ -27,6 +27,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SyncUtil;
@@ -54,7 +55,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 			MusicDirectory starredList = musicService.getStarredList(context, null);
 
 			// Pin all the starred stuff
-			downloadRecursively(syncedList, starredList, context, true);
+			boolean updated = downloadRecursively(syncedList, starredList, context, true);
 
 			// Get old starred list
 			ArrayList<String> oldSyncedList = SyncUtil.getSyncedStarred(context, instance);
@@ -75,6 +76,9 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 			}
 
 			FileUtil.serialize(context, syncedList, SyncUtil.getStarredSyncFile(context, instance));
+			if(updated) {
+				SyncUtil.showSyncNotification(context, R.string.sync_new_starred, null);
+			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to get starred list for " + Util.getServerName(context, instance));
 		}

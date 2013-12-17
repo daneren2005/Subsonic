@@ -23,8 +23,10 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
@@ -58,6 +60,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 		}
 
 		List<String> playlistList = SyncUtil.getSyncedPlaylists(context, instance);
+		List<String> updated = new ArrayList<String>();
 		for(int i = 0; i < playlistList.size(); i++) {
 			String id = playlistList.get(i);
 			try {
@@ -67,6 +70,9 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 					DownloadFile file = new DownloadFile(context, entry, true);
 					while(!file.isSaved() && !file.isFailedMax()) {
 						file.downloadNow(musicService);
+						if(!updated.contains(playlist.getName())) {
+							updated.add(playlist.getName());
+						}
 					}
 				}
 			} catch(SubsonicRESTException e) {
@@ -76,6 +82,10 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				}
 			} catch(Exception e) {
 				Log.e(TAG, "Failed to get playlist " + id + " for " + serverName);
+			}
+
+			if(updated.size() > 0) {
+				SyncUtil.showSyncNotification(context, R.string.sync_new_playlists, SyncUtil.joinNames(updated));
 			}
 		}
 	}

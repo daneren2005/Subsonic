@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadFile;
@@ -55,20 +56,21 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 		try {
 			ArrayList<String> syncedList = SyncUtil.getSyncedMostRecent(context, instance);
 			MusicDirectory albumList = musicService.getAlbumList("newest", 20, 0, context, null);
-			boolean updated = false;
+			List<String> updated = new ArrayList<String>();
+			boolean firstRun = false;
 			if(syncedList.size() == 0) {
 				// Get the initial set of albums on first run, don't sync any of these!
 				for(MusicDirectory.Entry album: albumList.getChildren()) {
 					syncedList.add(album.getId());
 				}
-				updated = true;
+				firstRun = true;
 			} else {
 				for(MusicDirectory.Entry album: albumList.getChildren()) {
 					if(!syncedList.contains(album.getId())) {
 						try {
 							downloadRecursively(null, musicService.getMusicDirectory(album.getId(), album.getTitle(), true, context, null), context, false);
 							syncedList.add(album.getId());
-							updated = true;
+							updated.add(album.getTitle());
 						} catch(Exception e) {
 							Log.w(TAG, "Failed to get songs for " + album.getId() + " on " + Util.getServerName(context, instance));
 						}
@@ -76,13 +78,17 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 				}
 			}
 
-			if(updated) {
+			if(updated.size() > 0) {
 				FileUtil.serialize(context, syncedList, SyncUtil.getMostRecentSyncFile(context, instance));
 
 				// If there is a new album on the active server, chances are artists need to be refreshed
 				if(Util.getActiveServer(context) == instance) {
 					musicService.getIndexes(Util.getSelectedMusicFolderId(context), true, context, null);
 				}
+
+				SyncUtil.showSyncNotification(context, R.string.sync_new_albums, SyncUtil.joinNames(updated));
+			} else if(firstRun) {
+				FileUtil.serialize(context, syncedList, SyncUtil.getMostRecentSyncFile(context, instance));
 			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to get most recent list for " + Util.getServerName(context, instance));
