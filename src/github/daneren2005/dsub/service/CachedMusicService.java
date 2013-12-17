@@ -198,21 +198,25 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist", id)));
 		musicService.addToPlaylist(id, toAdd, context, progressListener);
 	}
 	
 	@Override
 	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist", id)));
 		musicService.removeFromPlaylist(id, toRemove, context, progressListener);
 	}
 	
 	@Override
 	public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist", id)));
 		musicService.overwritePlaylist(id, name, toRemove, toAdd, context, progressListener);
 	}
 	
 	@Override
 	public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
+		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist", id)));
 		musicService.updatePlaylist(id, name, comment, pub, context, progressListener);
 	}
 
