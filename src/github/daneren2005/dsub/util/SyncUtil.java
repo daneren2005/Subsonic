@@ -142,21 +142,23 @@ public final class SyncUtil {
 	}
 
 	public static void showSyncNotification(final Context context, int stringId, String extra) {
-		String content = (extra != null) ? context.getResources().getString(stringId, extra) : context.getResources().getString(stringId);
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION, true)) {
+			String content = (extra != null) ? context.getResources().getString(stringId, extra) : context.getResources().getString(stringId);
 
-		NotificationCompat.Builder builder;
-		builder = new NotificationCompat.Builder(context)
-				.setSmallIcon(R.drawable.stat_notify_download)
-				.setContentTitle(context.getResources().getString(R.string.sync_title))
-				.setContentText(content)
-				.setOngoing(false);
+			NotificationCompat.Builder builder;
+			builder = new NotificationCompat.Builder(context)
+					.setSmallIcon(R.drawable.stat_notify_download)
+					.setContentTitle(context.getResources().getString(R.string.sync_title))
+					.setContentText(content)
+					.setOngoing(false);
 
-		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
-		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
+			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
 
-		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify(stringId, builder.build());
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.notify(stringId, builder.build());
+		}
 	}
 
 	public static String joinNames(List<String> names) {

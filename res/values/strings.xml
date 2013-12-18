@@ -369,6 +369,8 @@
 	<string name="settings.sync_most_recent_summary">Automatically cache newly added albums</string>
 	<string name="settings.sync_starred">Sync Starred</string>
 	<string name="settings.sync_starred_summary">Automatically cache songs, albums, and artists which are starred</string>
+	<string name="settings.sync_notification">Show Sync Notification</string>
+	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
