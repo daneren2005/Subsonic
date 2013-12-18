@@ -147,9 +147,10 @@ public final class SyncUtil {
 
 			NotificationCompat.Builder builder;
 			builder = new NotificationCompat.Builder(context)
-					.setSmallIcon(R.drawable.stat_notify_download)
+					.setSmallIcon(R.drawable.stat_notify_sync)
 					.setContentTitle(context.getResources().getString(R.string.sync_title))
 					.setContentText(content)
+					.setStyle(new NotificationCompat.BigTextStyle().bigText(content))
 					.setOngoing(false);
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);

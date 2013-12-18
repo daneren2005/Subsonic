@@ -195,9 +195,9 @@
 	<string name="download.downloading_title">Downloading %1$d songs</string>
 	<string name="download.downloading_summary">Current: %1$s</string>
 
-	<string name="sync.title">New content is available</string>
-	<string name="sync.new_podcasts">New podcasts for: %s</string>
-	<string name="sync.new_playlists">New songs in playlists: %s</string>
+	<string name="sync.title">DSub: New media is available</string>
+	<string name="sync.new_podcasts">New podcasts: %s</string>
+	<string name="sync.new_playlists">New in playlists: %s</string>
 	<string name="sync.new_albums">New albums: %s</string>
 	<string name="sync.new_starred">New starred songs</string>
     
