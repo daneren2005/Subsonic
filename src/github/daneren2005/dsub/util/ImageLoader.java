@@ -203,7 +203,7 @@ public class ImageLoader implements Runnable {
 	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
 		if(remoteControl != null && drawable != null) {
 			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
-			if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 				origBitmap = origBitmap.copy(origBitmap.getConfig(), false);
 			}
 			if ( origBitmap != null && !origBitmap.isRecycled()) {
