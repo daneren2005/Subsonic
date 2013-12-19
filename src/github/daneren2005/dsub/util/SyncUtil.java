@@ -155,7 +155,7 @@ public final class SyncUtil {
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+			builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0));
 
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(stringId, builder.build());

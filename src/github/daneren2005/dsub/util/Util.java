@@ -1003,7 +1003,7 @@ public final class Util {
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		builder.setContentIntent(PendingIntent.getActivity(context, 0, notificationIntent, 0));
+		builder.setContentIntent(PendingIntent.getActivity(context, 1, notificationIntent, 0));
 
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(Constants.NOTIFICATION_ID_DOWNLOADING, builder.build());
