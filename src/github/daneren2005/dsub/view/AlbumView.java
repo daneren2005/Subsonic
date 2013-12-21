@@ -31,6 +31,8 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
+import java.util.List;
+
 /**
  * Used to display albums in a {@code ListView}.
  *
@@ -72,11 +74,31 @@ public class AlbumView extends UpdateView {
         artistView.setText(album.getArtist());
         artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
 		((ImageLoader)obj2).loadImage(coverArtView, album, false, true);
-        file = FileUtil.getAlbumDirectory(context, album);
+        file = null;
     }
     
     @Override
 	protected void updateBackground() {
+		if(file == null) {
+			String s = Util.getRestUrl(context, null) + album.getId();
+			String cacheName = "directory-" + s.hashCode() + ".ser";
+			MusicDirectory dir = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
+
+			if(dir != null) {
+				List<MusicDirectory.Entry> songs = dir.getChildren(false, true);
+				if(songs.size() > 0) {
+					MusicDirectory.Entry firstSong = songs.get(0);
+					File songFile = FileUtil.getSongFile(context, firstSong);
+					file = songFile.getParentFile();
+				}
+			}
+
+			// Backup in case cache is null or can't get dir from it
+			if(file == null) {
+				file = FileUtil.getAlbumDirectory(context, album);
+			}
+		}
+
 		exists = file.exists();
 		isStarred = album.isStarred(); 
 	}
