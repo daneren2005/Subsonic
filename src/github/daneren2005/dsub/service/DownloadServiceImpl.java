@@ -977,7 +977,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 					if(mediaPlayer != null && playerState == STARTED) {
 						cachedPosition = mediaPlayer.getCurrentPosition();
 					}
-					Thread.sleep(200L);
+					Thread.sleep(1000L);
 				}
 				catch(Exception e) {
 					Log.w(TAG, "Crashed getting current position", e);
@@ -1272,25 +1272,26 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
 					playNext();
-					return;
+				} else {
+					// If file is not completely downloaded, restart the playback from the current position.
+					synchronized (DownloadServiceImpl.this) {
+						if(downloadFile.isWorkDone()) {
+							// Complete was called early even though file is fully buffered
+							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+							reset();
+							downloadFile.setPlaying(false);
+							doPlay(downloadFile, pos, true);
+							downloadFile.setPlaying(true);
+						} else {
+							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
+							reset();
+							bufferTask = new BufferTask(downloadFile, pos);
+							bufferTask.start();
+						}
+					}
 				}
 
-				// If file is not completely downloaded, restart the playback from the current position.
-				synchronized (DownloadServiceImpl.this) {
-					if(downloadFile.isWorkDone()) {
-						// Complete was called early even though file is fully buffered
-						Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
-						reset();
-						downloadFile.setPlaying(false);
-						doPlay(downloadFile, pos, true);
-						downloadFile.setPlaying(true);
-					} else {
-						Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
-						reset();
-						bufferTask = new BufferTask(downloadFile, pos);
-						bufferTask.start();
-					} 
-				}
+				wakeLock.release();
 			}
 		});
 	}
