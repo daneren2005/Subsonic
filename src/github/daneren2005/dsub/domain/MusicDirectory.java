@@ -374,7 +374,17 @@ public class MusicDirectory implements Serializable {
 			} else if(!lhs.isDirectory() && rhs.isDirectory()) {
 				return 1;
 			} else if(lhs.isDirectory() && rhs.isDirectory()) {
-				return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+				Integer lhsYear = lhs.getYear();
+				Integer rhsYear = rhs.getYear();
+				if(lhsYear != null && rhsYear != null) {
+					return lhsYear.compareTo(rhsYear);
+				} else if(lhsYear != null) {
+					return -1;
+				} else if(rhsYear != null) {
+					return 1;
+				} else {
+					return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+				}
 			}
 			
 			Integer lhsDisc = lhs.getDiscNumber();
