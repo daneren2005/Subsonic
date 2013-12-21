@@ -222,6 +222,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				selectAll(false, false);
 				return true;
 			case R.id.menu_add_playlist:
+				if(getSelectedSongs().isEmpty()) {
+					selectAll(true, false);
+				}
 				addToPlaylist(getSelectedSongs());
 				return true;
 			case R.id.menu_remove_playlist:
