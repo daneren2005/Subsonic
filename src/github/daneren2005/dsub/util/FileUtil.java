@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -227,6 +228,13 @@ public class FileUtil {
 	public static boolean deleteMusicDirectory(Context context) {
 		File musicDirectory = FileUtil.getMusicDirectory(context);
 		return Util.recursiveDelete(musicDirectory);
+	}
+	public static void deleteSerializedCache(Context context) {
+		for(File file: context.getCacheDir().listFiles()) {
+			if(file.getName().indexOf(".ser") != -1) {
+				file.delete();
+			}
+		}
 	}
 
     public static boolean ensureDirectoryExistsAndIsReadWritable(File dir) {

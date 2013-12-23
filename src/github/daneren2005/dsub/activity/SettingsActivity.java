@@ -125,6 +125,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 							@Override
 							protected Void doInBackground() throws Throwable {
 								FileUtil.deleteMusicDirectory(SettingsActivity.this);
+								FileUtil.deleteSerializedCache(SettingsActivity.this);
 								return null;
 							}
 
