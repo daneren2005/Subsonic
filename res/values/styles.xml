@@ -64,4 +64,27 @@
 		<item name="remove_mode">flingRemove</item>
 		<item name="drag_start_mode">onLongPress</item>
 	</style>
+
+	<style name="MainAlbumButton">
+		<item name="android:drawablePadding">6dip</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:paddingLeft">6dip</item>
+		<item name="android:paddingRight">6dip</item>
+		<item name="android:minHeight">46dip</item>
+	</style>
+
+	<style name="MainAlbumButtonLabel">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+		<item name="android:textColor">@color/cyan</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:paddingLeft">6dp</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">16sp</item>
+	</style>
 </resources>

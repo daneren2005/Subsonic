@@ -484,6 +484,11 @@ public class OfflineMusicService extends RESTMusicService {
         throw new OfflineException("Album lists not available in offline mode");
     }
 
+	@Override
+	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Album lists not available in offline mode");
+	}
+
     @Override
     public String getVideoUrl(int maxBitrate, Context context, String id) {
         return null;

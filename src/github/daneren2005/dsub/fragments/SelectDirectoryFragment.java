@@ -459,7 +459,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			setTitle(R.string.main_albums_frequent);
 		} else if ("starred".equals(albumListType)) {
 			setTitle(R.string.main_albums_starred);
-		} else if("genres".equals(albumListType)) {
+		} else if("genres".equals(albumListType) || "years".equals(albumListType)) {
 			setTitle(albumListExtra);
 		}
 
@@ -469,6 +469,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				MusicDirectory result;
 				if ("starred".equals(albumListType)) {
 					result = service.getStarredList(context, this);
+				} else if(("genres".equals(albumListType) && Util.checkServerVersion(context, "1.10.0")) || "years".equals(albumListType)) {
+					result = service.getAlbumList(albumListType, albumListExtra, size, 0, context, this);
 				} else if("genres".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
 				} else {

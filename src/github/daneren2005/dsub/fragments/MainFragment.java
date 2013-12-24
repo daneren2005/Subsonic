@@ -142,6 +142,7 @@ public class MainFragment extends SubsonicFragment {
 		final View albumsFrequentButton = buttons.findViewById(R.id.main_albums_frequent);
 		final View albumsStarredButton = buttons.findViewById(R.id.main_albums_starred);
 		final View albumsGenresButton = buttons.findViewById(R.id.main_albums_genres);
+		final View albumsYearButton = buttons.findViewById(R.id.main_albums_year);
 
 		final View dummyView = rootView.findViewById(R.id.main_dummy);
 
@@ -158,7 +159,7 @@ public class MainFragment extends SubsonicFragment {
 		adapter.addView(offlineButton, true);
 		if (!Util.isOffline(context)) {
 			adapter.addView(albumsTitle, false);
-			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton, albumsHighestButton, albumsStarredButton, albumsGenresButton, albumsRecentButton, albumsFrequentButton), true);
+			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton, albumsHighestButton, albumsStarredButton, albumsGenresButton, albumsYearButton, albumsRecentButton, albumsFrequentButton), true);
 		}
 		list.setAdapter(adapter);
 		registerForContextMenu(dummyView);
@@ -184,6 +185,8 @@ public class MainFragment extends SubsonicFragment {
 					showAlbumList("starred");
 				} else if(view == albumsGenresButton) {
 					showAlbumList("genres");
+				} else if(view == albumsYearButton) {
+					showAlbumList("years");
 				}
 			}
 		});
@@ -218,6 +221,9 @@ public class MainFragment extends SubsonicFragment {
 	private void showAlbumList(String type) {
 		if("genres".equals(type)) {
 			SubsonicFragment fragment = new SelectGenreFragment();
+			replaceFragment(fragment, R.id.home_layout);
+		} else if("years".equals(type)) {
+			SubsonicFragment fragment = new SelectYearFragment();
 			replaceFragment(fragment, R.id.home_layout);
 		} else {
 			SubsonicFragment fragment = new SelectDirectoryFragment();

@@ -513,7 +513,44 @@ public class RESTMusicService implements MusicService {
         }
     }
 
-    @Override
+	@Override
+	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		names.add("size");
+		names.add("offset");
+
+		values.add(size);
+		values.add(offset);
+
+		if("genres".equals(type)) {
+			names.add("type");
+			values.add("byGenre");
+
+			names.add("genre");
+			values.add(extra);
+		} else if("years".equals(type)) {
+			names.add("type");
+			values.add("byYear");
+
+			names.add("fromYear");
+			names.add("toYear");
+
+			int decade = Integer.parseInt(extra);
+			values.add(decade);
+			values.add(decade + 10);
+		}
+
+		Reader reader = getReader(context, progressListener, "getAlbumList", null, names, values);
+		try {
+			return new AlbumListParser(context).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
     public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
         Reader reader = getReader(context, progressListener, "getStarred", null);
         try {
