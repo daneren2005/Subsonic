@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -41,14 +42,16 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.view.GenreAdapter;
 
 public abstract class SelectListFragment<T> extends SubsonicFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectListFragment.class.getSimpleName();
-	private ListView listView;
-	private View emptyView;
-	private List<T> objects;
+	protected ListView listView;
+	protected ArrayAdapter adapter;
+	protected View emptyView;
+	protected List<T> objects;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -71,6 +74,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 
 		listView = (ListView)rootView.findViewById(R.id.fragment_list);
 		listView.setOnItemClickListener(this);
+		registerForContextMenu(listView);
 		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 
 		if(objects == null) {
@@ -101,7 +105,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	}
 
 	@Override
-	protected void refresh(boolean refresh) {
+	protected void refresh(final boolean refresh) {
 		setTitle(getTitleResource());
 		listView.setVisibility(View.INVISIBLE);
 
@@ -113,7 +117,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 				objects = new ArrayList<T>();
 
 				try {
-					objects = getObjects(musicService);
+					objects = getObjects(musicService, refresh, this);
 				} catch (Exception x) {
 					Log.e(TAG, "Failed to load", x);
 				}
@@ -126,8 +130,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 				emptyView.setVisibility(result == null || result.isEmpty() ? View.VISIBLE : View.GONE);
 
 				if (result != null) {
-					// TODO:
-					listView.setAdapter(getAdapter(result));
+					listView.setAdapter(adapter = getAdapter(result));
 					listView.setVisibility(View.VISIBLE);
 				}
 			}
@@ -136,7 +139,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	}
 
 	public abstract int getOptionsMenu();
-	public abstract ListAdapter getAdapter(List<T> objs);
-	public abstract List<T> getObjects(MusicService musicService);
+	public abstract ArrayAdapter getAdapter(List<T> objs);
+	public abstract List<T> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception;
 	public abstract int getTitleResource();
 }

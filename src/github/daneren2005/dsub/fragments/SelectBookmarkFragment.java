@@ -19,17 +19,13 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ArrayAdapter;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.domain.Bookmark;
@@ -39,72 +35,17 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
-import github.daneren2005.dsub.util.BackgroundTask;
-import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
-import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
-import java.io.Serializable;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-public class SelectBookmarkFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
+public class SelectBookmarkFragment extends SelectListFragment<Bookmark> {
 	private static final String TAG = SelectBookmarkFragment.class.getSimpleName();
-	private ListView bookmarkListView;
-	private View emptyView;
-	private List<Bookmark> bookmarks;
-	private BookmarkAdapter bookmarkAdapter;
-	
-	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
-	
-		if(bundle != null) {
-			bookmarks = (List<Bookmark>) bundle.getSerializable(Constants.FRAGMENT_LIST);
-		}
-	}
-	
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) bookmarks);
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
-		
-		bookmarkListView = (ListView)rootView.findViewById(R.id.fragment_list);
-		bookmarkListView.setOnItemClickListener(this);
-		registerForContextMenu(bookmarkListView);
-		emptyView = rootView.findViewById(R.id.fragment_list_empty);
-		
-		if(bookmarks == null) {
-			refresh();
-		} else {
-			bookmarkListView.setAdapter(new BookmarkAdapter(context, bookmarks));
-		}
-		
-		return rootView;
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.abstract_top_menu, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if(super.onOptionsItemSelected(item)) {
-			return true;
-		}
-		
-		return false;
-	}
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
@@ -117,7 +58,7 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Bookmark bookmark = bookmarks.get(info.position);
+		Bookmark bookmark = objects.get(info.position);
 		
 		switch(menuItem.getItemId()) {
 			case R.id.bookmark_menu_info:
@@ -134,39 +75,25 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 
 		return true;
 	}
-	
+
 	@Override
-	protected void refresh(final boolean refresh) {
-		setTitle(R.string.button_bar_bookmarks);
-		bookmarkListView.setVisibility(View.INVISIBLE);
-		
-		BackgroundTask<List<Bookmark>> task = new TabBackgroundTask<List<Bookmark>>(this) {
-			@Override
-			protected List<Bookmark> doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				
-				bookmarks = new ArrayList<Bookmark>();
-				
-				try {
-					bookmarks = musicService.getBookmarks(refresh, context, this);
-				} catch (Exception x) {
-					Log.e(TAG, "Failed to load bookmarks", x);
-				}
-				
-				return bookmarks;
-			}
-		
-			@Override
-			protected void done(List<Bookmark> result) {
-				emptyView.setVisibility(result == null || result.isEmpty() ? View.VISIBLE : View.GONE);
-				
-				if (result != null) {
-					bookmarkListView.setAdapter(bookmarkAdapter = new BookmarkAdapter(context, result));
-					bookmarkListView.setVisibility(View.VISIBLE);
-				}
-			}
-		};
-		task.execute();
+	public int getOptionsMenu() {
+		return R.menu.abstract_top_menu;
+	}
+
+	@Override
+	public ArrayAdapter getAdapter(List<Bookmark> bookmarks) {
+		return new BookmarkAdapter(context, bookmarks);
+	}
+
+	@Override
+	public List<Bookmark> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+		return musicService.getBookmarks(refresh, context, listener);
+	}
+
+	@Override
+	public int getTitleResource() {
+		return R.string.button_bar_bookmarks;
 	}
 
 	@Override
@@ -219,8 +146,8 @@ public class SelectBookmarkFragment extends SubsonicFragment implements AdapterV
 					
 					@Override
 					protected void done(Void result) {
-						bookmarkAdapter.remove(bookmark);
-						bookmarkAdapter.notifyDataSetChanged();
+						adapter.remove(bookmark);
+						adapter.notifyDataSetChanged();
 						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
 					}
 					

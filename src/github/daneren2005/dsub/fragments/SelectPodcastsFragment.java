@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -39,6 +40,7 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
@@ -56,54 +58,8 @@ import java.util.List;
  *
  * @author Scott
  */
-public class SelectPodcastsFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
+public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
-	private ListView podcastListView;
-	private PodcastChannelAdapter podcastAdapter;
-	private View emptyView;
-	private List<PodcastChannel> channels;
-	
-	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
-
-		if(bundle != null) {
-			channels = (List<PodcastChannel>) bundle.getSerializable(Constants.FRAGMENT_LIST);
-		}
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) channels);
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
-
-		podcastListView = (ListView)rootView.findViewById(R.id.fragment_list);
-		podcastListView.setOnItemClickListener(this);
-		registerForContextMenu(podcastListView);
-		emptyView = rootView.findViewById(R.id.fragment_list_empty);
-
-		if(channels == null) {
-			if(!primaryFragment) {
-				invalidated = true;
-			} else {
-				refresh(false);
-			}
-		} else {
-			podcastListView.setAdapter(podcastAdapter = new PodcastChannelAdapter(context, channels));
-		}
-
-		return rootView;
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.select_podcasts, menu);
-	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -132,7 +88,7 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 			inflater.inflate(R.menu.select_podcasts_context, menu);
 
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			PodcastChannel podcast = (PodcastChannel) podcastListView.getItemAtPosition(info.position);
+			PodcastChannel podcast = (PodcastChannel) listView.getItemAtPosition(info.position);
 			if(SyncUtil.isSyncedPodcast(context, podcast.getId())) {
 				menu.removeItem(R.id.podcast_menu_sync);
 			} else {
@@ -150,7 +106,7 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 		}
 		
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		PodcastChannel channel = (PodcastChannel) podcastListView.getItemAtPosition(info.position);
+		PodcastChannel channel = (PodcastChannel) listView.getItemAtPosition(info.position);
 
 		switch (menuItem.getItemId()) {
 			case R.id.podcast_menu_sync:
@@ -169,42 +125,27 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 		
 		return true;
 	}
-	
+
 	@Override
-	protected void refresh(final boolean refresh) {
-		setTitle(R.string.button_bar_podcasts);
-		podcastListView.setVisibility(View.INVISIBLE);
-		emptyView.setVisibility(View.GONE);
-		
-		BackgroundTask<List<PodcastChannel>> task = new TabBackgroundTask<List<PodcastChannel>>(this) {
-			@Override
-			protected List<PodcastChannel> doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-
-				channels = new ArrayList<PodcastChannel>();
-
-				try {
-					channels = musicService.getPodcastChannels(refresh, context, this);
-				} catch (Exception x) {
-					Log.e(TAG, "Failed to load podcasts", x);
-				}
-
-				return channels;
-			}
-
-			@Override
-			protected void done(List<PodcastChannel> result) {
-				emptyView.setVisibility(result == null || result.isEmpty() ? View.VISIBLE : View.GONE);
-
-				if (result != null) {
-					podcastListView.setAdapter(podcastAdapter = new PodcastChannelAdapter(context, result));
-					podcastListView.setVisibility(View.VISIBLE);
-				}
-			}
-		};
-		task.execute();
+	public int getOptionsMenu() {
+		return R.menu.select_podcasts;
 	}
-	
+
+	@Override
+	public ArrayAdapter getAdapter(List<PodcastChannel> channels) {
+		return new PodcastChannelAdapter(context, channels);
+	}
+
+	@Override
+	public List<PodcastChannel> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+		return musicService.getPodcastChannels(refresh, context, listener);
+	}
+
+	@Override
+	public int getTitleResource() {
+		return R.string.button_bar_podcasts;
+	}
+
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		PodcastChannel channel = (PodcastChannel) parent.getItemAtPosition(position);
@@ -323,8 +264,8 @@ public class SelectPodcastsFragment extends SubsonicFragment implements AdapterV
 
 					@Override
 					protected void done(Void result) {
-						podcastAdapter.remove(channel);
-						podcastAdapter.notifyDataSetChanged();
+						adapter.remove(channel);
+						adapter.notifyDataSetChanged();
 						Util.toast(context, context.getResources().getString(R.string.select_podcasts_deleted, channel.getName()));
 					}
 

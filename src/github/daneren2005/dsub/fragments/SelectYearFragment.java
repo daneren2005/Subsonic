@@ -22,15 +22,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.ProgressListener;
 
 /**
  * Created by Scott on 12/23/13.
@@ -43,12 +42,12 @@ public class SelectYearFragment extends SelectListFragment<Integer> {
 	}
 
 	@Override
-	public ListAdapter getAdapter(List<Integer> objs) {
+	public ArrayAdapter getAdapter(List<Integer> objs) {
 		return new ArrayAdapter<Integer>(context, android.R.layout.simple_list_item_1, objs);
 	}
 
 	@Override
-	public List<Integer> getObjects(MusicService musicService) {
+	public List<Integer> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
 		List<Integer> decades = new ArrayList<Integer>();
 		for(int i = 2010; i >= 1920; i -= 10) {
 			decades.add(i);

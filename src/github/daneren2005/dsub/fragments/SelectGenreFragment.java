@@ -20,119 +20,39 @@ package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ArrayAdapter;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.TabBackgroundTask;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.view.GenreAdapter;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class SelectGenreFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
+public class SelectGenreFragment extends SelectListFragment<Genre> {
 	private static final String TAG = SelectGenreFragment.class.getSimpleName();
-	private ListView genreListView;
-	private View emptyView;
-	private List<Genre> genres;
 
 	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
-
-		if(bundle != null) {
-			genres = (List<Genre>) bundle.getSerializable(Constants.FRAGMENT_LIST);
-		}
+	public int getOptionsMenu() {
+		return R.menu.empty;
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) genres);
+	public ArrayAdapter getAdapter(List<Genre> objs) {
+		return new GenreAdapter(context, objs);
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
-
-		genreListView = (ListView)rootView.findViewById(R.id.fragment_list);
-		genreListView.setOnItemClickListener(this);
-		emptyView = rootView.findViewById(R.id.fragment_list_empty);
-
-		if(genres == null) {
-			refresh();
-		} else {
-			genreListView.setAdapter(new GenreAdapter(context, genres));
-		}
-
-		return rootView;
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		if(!primaryFragment) {
-			return;
-		}
-
-		menuInflater.inflate(R.menu.select_genres, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if(super.onOptionsItemSelected(item)) {
-			return true;
-		}
-
-		return false;
+	public List<Genre> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+		return musicService.getGenres(refresh, context, listener);
 	}
 
 	@Override
-	protected void refresh(boolean refresh) {
-		load(refresh);
-	}
-
-	private void load(final boolean refresh) {
-		setTitle(R.string.main_albums_genres);
-		genreListView.setVisibility(View.INVISIBLE);
-		
-		BackgroundTask<List<Genre>> task = new TabBackgroundTask<List<Genre>>(this) {
-			@Override
-			protected List<Genre> doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-
-				genres = new ArrayList<Genre>();
-
-				try {
-					genres = musicService.getGenres(refresh, context, this);
-				} catch (Exception x) {
-					Log.e(TAG, "Failed to load genres", x);
-				}
-
-				return genres;
-			}
-
-			@Override
-			protected void done(List<Genre> result) {
-				emptyView.setVisibility(result == null || result.isEmpty() ? View.VISIBLE : View.GONE);
-
-				if (result != null) {
-					genreListView.setAdapter(new GenreAdapter(context, result));
-					genreListView.setVisibility(View.VISIBLE);
-				}
-			}
-		};
-		task.execute();
+	public int getTitleResource() {
+		return R.string.main_albums_genres;
 	}
 	
 	@Override
