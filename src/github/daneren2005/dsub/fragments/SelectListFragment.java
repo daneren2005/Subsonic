@@ -113,7 +113,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 				objects = new ArrayList<T>();
 
 				try {
-					objects = getObjects();
+					objects = getObjects(musicService);
 				} catch (Exception x) {
 					Log.e(TAG, "Failed to load", x);
 				}
@@ -137,6 +137,6 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 
 	public abstract int getOptionsMenu();
 	public abstract ListAdapter getAdapter(List<T> objs);
-	public abstract List<T> getObjects();
+	public abstract List<T> getObjects(MusicService musicService);
 	public abstract int getTitleResource();
 }
