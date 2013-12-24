@@ -75,7 +75,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 				}
 			}
 
-			FileUtil.serialize(context, syncedList, SyncUtil.getStarredSyncFile(context, instance));
+			SyncUtil.setSyncedStarred(syncedList, context, instance);
 			if(updated) {
 				SyncUtil.showSyncNotification(context, R.string.sync_new_starred, null);
 			}

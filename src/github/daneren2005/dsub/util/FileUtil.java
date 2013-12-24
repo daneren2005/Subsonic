@@ -30,10 +30,15 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.DeflaterInputStream;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
@@ -426,4 +431,46 @@ public class FileUtil {
 			}
 		}
     }
+
+	public static <T extends Serializable> boolean serializeCompressed(Context context, T obj, String fileName) {
+		synchronized (kryo) {
+			Output out = null;
+			try {
+				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
+				out = new Output(new DeflaterOutputStream(new FileOutputStream(file.getFD())));
+				kryo.writeObject(out, obj);
+				Log.i(TAG, "Serialized compressed object to " + fileName);
+				return true;
+			} catch (Throwable x) {
+				Log.w(TAG, "Failed to serialize compressed object to " + fileName);
+				return false;
+			} finally {
+				Util.close(out);
+			}
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	public static <T extends Serializable> T deserializeCompressed(Context context, String fileName, Class<T> tClass) {
+		synchronized (kryo) {
+			Input in = null;
+			try {
+				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "r");
+
+				in = new Input(new InflaterInputStream(new FileInputStream(file.getFD())));
+				T result = (T) kryo.readObject(in, tClass);
+				Log.i(TAG, "Deserialized compressed object from " + fileName);
+				return result;
+			} catch(FileNotFoundException e) {
+				// Different error message
+				Log.w(TAG, "No serialization compressed for object from " + fileName);
+				return null;
+			} catch (Throwable x) {
+				Log.w(TAG, "Failed to deserialize compressed object from " + fileName, x);
+				return null;
+			} finally {
+				Util.close(in);
+			}
+		}
+	}
 }

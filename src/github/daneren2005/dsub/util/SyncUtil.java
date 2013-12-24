@@ -119,11 +119,14 @@ public final class SyncUtil {
 	
 	// Starred
 	public static ArrayList<String> getSyncedStarred(Context context, int instance) {
-		ArrayList<String> list = FileUtil.deserialize(context, getStarredSyncFile(context, instance), ArrayList.class);
+		ArrayList<String> list = FileUtil.deserializeCompressed(context, getStarredSyncFile(context, instance), ArrayList.class);
 		if(list == null) {
 			list = new ArrayList<String>();
 		}
 		return list;
+	}
+	public static void setSyncedStarred(ArrayList<String> syncedList, Context context, int instance) {
+		FileUtil.serializeCompressed(context, syncedList, SyncUtil.getStarredSyncFile(context, instance));
 	}
 	public static String getStarredSyncFile(Context context, int instance) {
 		return "sync-starred-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
