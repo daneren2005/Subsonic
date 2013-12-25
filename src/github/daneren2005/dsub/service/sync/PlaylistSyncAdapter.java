@@ -103,15 +103,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				if(origPathList.size() > 0) {
 					for(String path: origPathList) {
 						File saveFile = new File(path);
-
-						// Unpin file, rename to .complete
-						File completeFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
-								".complete." + FileUtil.getExtension(saveFile.getName()));
-
-						if(!saveFile.renameTo(completeFile)) {
-							Log.w(TAG, "Failed to rename " + path + " to " + completeFile.getPath());
-						}
-
+						FileUtil.unpinSong(saveFile);
 						cachedPlaylist.synced.remove(path);
 					}
 

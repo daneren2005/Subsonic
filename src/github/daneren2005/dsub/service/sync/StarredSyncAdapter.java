@@ -65,14 +65,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 
 			for(String path: oldSyncedList) {
 				File saveFile = new File(path);
-
-				// Unpin file, rename to .complete
-				File completeFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
-					".complete." + FileUtil.getExtension(saveFile.getName()));
-
-				if(!saveFile.renameTo(completeFile)) {
-					Log.w(TAG, "Failed to rename " + path + " to " + completeFile.getPath());
-				}
+				FileUtil.unpinSong(saveFile);
 			}
 
 			SyncUtil.setSyncedStarred(syncedList, context, instance);
