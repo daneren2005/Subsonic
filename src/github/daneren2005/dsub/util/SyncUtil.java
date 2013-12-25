@@ -19,7 +19,7 @@ import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
  */
 public final class SyncUtil {
 	private static String TAG = SyncUtil.class.getSimpleName();
-	private static ArrayList<String> syncedPlaylists;
+	private static ArrayList<SyncSet> syncedPlaylists;
 	private static ArrayList<SyncSet> syncedPodcasts;
 
 	// Playlist sync
@@ -27,25 +27,41 @@ public final class SyncUtil {
 		if(syncedPlaylists == null) {
 			syncedPlaylists = getSyncedPlaylists(context);
 		}
-		return syncedPlaylists.contains(playlistId);
+		return syncedPlaylists.contains(new SyncSet(playlistId));
 	}
-	public static ArrayList<String> getSyncedPlaylists(Context context) {
+	public static ArrayList<SyncSet> getSyncedPlaylists(Context context) {
 		return getSyncedPlaylists(context, Util.getActiveServer(context));
 	}
-	public static ArrayList<String> getSyncedPlaylists(Context context, int instance) {
-		ArrayList<String> playlists = FileUtil.deserialize(context, getPlaylistSyncFile(context, instance), ArrayList.class);
+	public static ArrayList<SyncSet> getSyncedPlaylists(Context context, int instance) {
+		String syncFile = getPlaylistSyncFile(context, instance);
+		ArrayList<SyncSet> playlists = FileUtil.deserializeCompressed(context, syncFile, ArrayList.class);
 		if(playlists == null) {
-			playlists = new ArrayList<String>();
+			playlists = new ArrayList<SyncSet>();
+
+			// Try to convert old style into new style
+			ArrayList<String> oldPlaylists = FileUtil.deserialize(context, syncFile, ArrayList.class);
+			// If exists, time to convert!
+			if(oldPlaylists != null) {
+				for(String id: oldPlaylists) {
+					playlists.add(new SyncSet(id));
+				}
+
+				FileUtil.serializeCompressed(context, playlists, syncFile);
+			}
 		}
 		return playlists;
 	}
+	public static void setSyncedPlaylists(Context context, int instance, ArrayList<SyncSet> playlists) {
+		FileUtil.serializeCompressed(context, playlists, getPlaylistSyncFile(context, instance));
+	}
 	public static void addSyncedPlaylist(Context context, String playlistId) {
 		String playlistFile = getPlaylistSyncFile(context);
-		ArrayList<String> playlists = getSyncedPlaylists(context);
-		if(!playlists.contains(playlistId)) {
-			playlists.add(playlistId);
+		ArrayList<SyncSet> playlists = getSyncedPlaylists(context);
+		SyncSet set = new SyncSet(playlistId);
+		if(!playlists.contains(set)) {
+			playlists.add(set);
 		}
-		FileUtil.serialize(context, playlists, playlistFile);
+		FileUtil.serializeCompressed(context, playlists, playlistFile);
 		syncedPlaylists = playlists;
 	}
 	public static void removeSyncedPlaylist(Context context, String playlistId) {
@@ -54,10 +70,11 @@ public final class SyncUtil {
 	}
 	public static void removeSyncedPlaylist(Context context, String playlistId, int instance) {
 		String playlistFile = getPlaylistSyncFile(context, instance);
-		ArrayList<String> playlists = getSyncedPlaylists(context, instance);
-		if(playlists.contains(playlistId)) {
-			playlists.remove(playlistId);
-			FileUtil.serialize(context, playlists, playlistFile);
+		ArrayList<SyncSet> playlists = getSyncedPlaylists(context, instance);
+		SyncSet set = new SyncSet(playlistId);
+		if(playlists.contains(set)) {
+			playlists.remove(set);
+			FileUtil.serializeCompressed(context, playlists, playlistFile);
 			syncedPlaylists = playlists;
 		}
 	}

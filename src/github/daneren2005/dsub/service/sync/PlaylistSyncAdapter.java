@@ -23,6 +23,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,9 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SyncUtil;
+import github.daneren2005.dsub.util.SyncUtil.SyncSet;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -59,21 +62,60 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 			Log.e(TAG, "Failed to refresh playlist list for " + serverName);
 		}
 
-		List<String> playlistList = SyncUtil.getSyncedPlaylists(context, instance);
+		ArrayList<SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, instance);
 		List<String> updated = new ArrayList<String>();
+		boolean removed = false;
 		for(int i = 0; i < playlistList.size(); i++) {
-			String id = playlistList.get(i);
+			SyncSet cachedPlaylist = playlistList.get(i);
+			String id = cachedPlaylist.id;
 			try {
-				MusicDirectory playlist = musicService.getPlaylist(true, id, serverName, context, null);
+				MusicDirectory playlist = musicService.getPlaylist(false, id, serverName, context, null);
+
+				// Get list of original paths
+				List<String> origPathList = new ArrayList<String>();
+				if(cachedPlaylist.synced != null) {
+					origPathList.addAll(cachedPlaylist.synced);
+				} else {
+					cachedPlaylist.synced = new ArrayList<String>();
+				}
 
 				for(MusicDirectory.Entry entry: playlist.getChildren()) {
 					DownloadFile file = new DownloadFile(context, entry, true);
-					while(!file.isSaved() && !file.isFailedMax()) {
-						file.downloadNow(musicService);
-						if(!updated.contains(playlist.getName())) {
-							updated.add(playlist.getName());
+					String path = file.getCompleteFile().getPath();
+					if(!cachedPlaylist.synced.contains(path)) {
+						while(!file.isSaved() && !file.isFailedMax()) {
+							file.downloadNow(musicService);
+							if(!updated.contains(playlist.getName())) {
+								updated.add(playlist.getName());
+							}
+						}
+
+						// Add to cached path set if saved
+						if(file.isSaved()) {
+							cachedPlaylist.synced.add(path);
 						}
 					}
+
+					origPathList.remove(path);
+				}
+
+				// Check to unpin all paths which are no longer in playlist
+				if(origPathList.size() > 0) {
+					for(String path: origPathList) {
+						File saveFile = new File(path);
+
+						// Unpin file, rename to .complete
+						File completeFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
+								".complete." + FileUtil.getExtension(saveFile.getName()));
+
+						if(!saveFile.renameTo(completeFile)) {
+							Log.w(TAG, "Failed to rename " + path + " to " + completeFile.getPath());
+						}
+
+						cachedPlaylist.synced.remove(path);
+					}
+
+					removed = true;
 				}
 			} catch(SubsonicRESTException e) {
 				if(e.getCode() == 70) {
@@ -81,11 +123,14 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 					Log.i(TAG, "Unsync deleted playlist " + id + " for " + serverName);
 				}
 			} catch(Exception e) {
-				Log.e(TAG, "Failed to get playlist " + id + " for " + serverName);
+				Log.e(TAG, "Failed to get playlist " + id + " for " + serverName, e);
 			}
 
 			if(updated.size() > 0) {
 				SyncUtil.showSyncNotification(context, R.string.sync_new_playlists, SyncUtil.joinNames(updated));
+			}
+			if(updated.size() > 0 || removed) {
+				SyncUtil.setSyncedPlaylists(context, instance, playlistList);
 			}
 		}
 	}
