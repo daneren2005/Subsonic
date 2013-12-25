@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.3.3" versioncode="77" releasedate="12/25/2013">
+		<change>Enable keep starred songs synced in settings</change>
+		<change>Enable sync newly added in settings</change>
+		<change>Sync notification when new stuff is downloaded (can be disabled)</change>
+		<change>Added albums by decade button to home screen on 4.9Beta3+</change>
+		<change>Browse genres by album (instead of by song) on 4.9Beta3+</change>
+		<change>Sort Podcasts by name</change>
+		<change>Sort albums by year on 4.9Beta3+</change>
+		<change>Fix clicking on notifications/widgets</change>
+		<change>Many sync fixes/improvements</change>
+		<change>Background optimizations to improve battery life</change>
+		<change>Fix genres not being sorted/weird characters in 4.9Beta3+</change>
+		<change>Fix crash turning screen back on in Android 4.3</change>
+		<change>Various minor bug fixes</change>
+	</release>
 	<release version="4.3.2" versioncode="76" releasedate="12/8/2013">
 		<change>Click on album art to popup a larger version</change>
 		<change>Added Show all media button to replace albums with songs</change>
