@@ -17,11 +17,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.BackgroundTask;
@@ -261,7 +264,27 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 		downloadPlaylist(playlist.getId(), playlist.getName(), true, true, false, false, true);
 	}
 
-	private void stopSyncPlaylist(Playlist playlist) {
+	private void stopSyncPlaylist(final Playlist playlist) {
 		SyncUtil.removeSyncedPlaylist(context, playlist.getId());
+
+		new LoadingTask<Void>(context, false) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				// Unpin all of the songs in playlist
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				MusicDirectory root = musicService.getPlaylist(true, playlist.getId(), playlist.getName(), context, this);
+				for(MusicDirectory.Entry entry: root.getChildren()) {
+					DownloadFile file = new DownloadFile(context, entry, false);
+					file.unpin();
+				}
+
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+
+			}
+		}.execute();
 	}
 }
