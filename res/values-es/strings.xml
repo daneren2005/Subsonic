@@ -55,6 +55,7 @@
     <string name="main.albums_random">Aleatorio</string>
 	<string name="main.albums_genres">Géneros</string>
 	<string name="main.back_confirm">Pulsa atrás de nuevo para salir</string>
+	<string name="main.albums_year">Décadas</string>
 
 	<string name="menu.search">Buscar</string>
 	<string name="menu.shuffle">Aleatorio</string>
@@ -77,6 +78,7 @@
 	<string name="menu.cast">Enviar al dispositivo</string>
 	<string name="menu.keep_synced">Mantener sincronizado</string>
 	<string name="menu.stop_sync">Detener sincronización</string>
+	<string name="menu.show_all">Mostrar todo el contenido</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -195,6 +197,8 @@
 	<string name="download.playing_out_of">Reproduciendo: %1$d/%2$d</string>
 	<string name="download.save_bookmark_title">Crear marcador</string>
 	<string name="download.save_bookmark">Marcador creado</string>
+	<string name="download.downloading_title">Descargando %1$d canciones</string>
+	<string name="download.downloading_summary">En este momento: %1$s</string>
     
 	<string name="starring_content_starred">Marcado con estrella \"%s\"</string>
 	<string name="starring_content_unstarred">Sin marca de estrella \"%s\"</string>
@@ -354,6 +358,18 @@
 	<string name="settings.sync_interval">Intervalo de sincronización</string>
 	<string name="settings.sync_wifi">Sincronizar sólo con Wifi</string>
 	<string name="settings.sync_wifi_summary">Sincronizar únicamente al estar conectado a una red Wifi</string>
+	<string name="settings.sync_most_recent">Sincronizar añadidos recientemente</string>
+	<string name="settings.sync_most_recent_summary">Descargar a caché albumes añadidos recientemente</string>
+	<string name="settings.sync_starred">Sincronizar los elementos con estrella</string>
+	<string name="settings.sync_starred_summary">Descargar a caché automáticamente canciones, albumes y artistas que contengan estrella</string>
+	<string name="settings.sync_notification">Mostrar notificación de sincronización</string>
+	<string name="settings.sync_notification_summary">Mostrar una notificación tras haber sincronizado nuevo contenido</string>
+
+	<string name="sync.title">DSub: Nuevo contenido multimedia disponible</string>
+	<string name="sync.new_podcasts">Nuevos podcasts: %s</string>
+	<string name="sync.new_playlists">Nuevos en listas de reproducción: %s</string>
+	<string name="sync.new_albums">Nuevos álbumes: %s</string>
+	<string name="sync.new_starred">Nuevas canciones con estrella</string>
 
 	<string name="shuffle.title">Iniciar aleatorio por</string>
 	<string name="shuffle.startYear">Año inicial:</string>
