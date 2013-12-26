@@ -39,6 +39,10 @@
 	<item 
 		android:id="@+id/album_menu_delete"
 		android:title="@string/common.delete"/>
+
+	<item
+		android:id="@+id/album_menu_show_artist"
+		android:title="@string/menu.show_artist"/>
 		
 	<item 
 		android:id="@+id/album_menu_star"

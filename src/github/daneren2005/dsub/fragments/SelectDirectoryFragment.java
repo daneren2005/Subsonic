@@ -256,6 +256,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null && (podcastId == null  || Util.isOffline(context) && podcastId != null)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
+		// Remove show artists if parent is not set and if not on a album list
+		if((albumListType == null || entry.getParent() == null) && !Util.isOffline(context)) {
+			menu.removeItem(R.id.album_menu_show_artist);
+		}
 		if(podcastId != null && !Util.isOffline(context)) {
 			String status = ((PodcastEpisode)entry).getStatus();
 			if("completed".equals(status)) {

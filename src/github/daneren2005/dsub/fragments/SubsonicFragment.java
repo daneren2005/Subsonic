@@ -274,6 +274,9 @@ public class SubsonicFragment extends Fragment {
 			case R.id.album_menu_info:
 				displaySongInfo(entry);
 				break;
+			case R.id.album_menu_show_artist:
+				showArtist((MusicDirectory.Entry) selectedItem);
+				break;
 			case R.id.song_menu_play_now:
 				getDownloadService().clear();
 				getDownloadService().download(songs, false, true, true, false);
@@ -1042,6 +1045,16 @@ public class SubsonicFragment extends Fragment {
 		if(Util.isOffline(context)) {
 			refresh();
 		}
+	}
+
+	public void showArtist(MusicDirectory.Entry entry) {
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, getRootId(), true);
 	}
 	
 	public GestureDetector getGestureDetector() {

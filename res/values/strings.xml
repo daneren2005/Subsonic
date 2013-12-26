@@ -80,6 +80,7 @@
 	<string name="menu.keep_synced">Keep Synced</string>
 	<string name="menu.stop_sync">Stop syncing</string>
 	<string name="menu.show_all">Show all media</string>
+	<string name="menu.show_artist">Show Artist</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
