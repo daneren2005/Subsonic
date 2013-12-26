@@ -303,28 +303,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if (position >= 0) {
 			MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
 			if (entry.isDirectory()) {
-				int fragId = rootId;
-				/*if(albumListType != null && entry.getParent() != null) {
-					SubsonicFragment parentFragment = new SelectDirectoryFragment();
-					Bundle args = new Bundle();
-					args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
-					args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
-					if("recent".equals(albumListType)) {
-						args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
-					}
-					parentFragment.setArguments(args);
-
-					replaceFragment(parentFragment, fragId);
-					fragId = parentFragment.getRootId();
-				}*/
-				
 				SubsonicFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, fragId, fragId == rootId);
+				replaceFragment(fragment, rootId, true);
 			} else if (entry.isVideo()) {
 				playVideo(entry);
 			} else if(entry instanceof PodcastEpisode) {
