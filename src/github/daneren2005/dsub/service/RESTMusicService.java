@@ -515,6 +515,8 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.10.1", "This type of album list is not supported");
+
 		List<String> names = new ArrayList<String>();
 		List<Object> values = new ArrayList<Object>();
 
