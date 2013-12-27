@@ -78,7 +78,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 
 		if(objects == null) {
-			refresh();
+			refresh(false);
 		} else {
 			listView.setAdapter(getAdapter(objects));
 		}
