@@ -26,6 +26,7 @@ import java.io.FilenameFilter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Iterator;
@@ -419,13 +420,26 @@ public class FileUtil {
 		}
     }
 
-    public static <T extends Serializable> T deserialize(Context context, String fileName, Class<T> tClass) {
+	public static <T extends Serializable> T deserialize(Context context, String fileName, Class<T> tClass) {
+		return deserialize(context, fileName, tClass, 0);
+	}
+
+    public static <T extends Serializable> T deserialize(Context context, String fileName, Class<T> tClass, int hoursOld) {
 		synchronized (kryo) {
 			Input in = null;
 			try {
-				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "r");
+				File file = new File(context.getCacheDir(), fileName);
 
-				in = new Input(new FileInputStream(file.getFD()));
+				Date fileDate = new Date(file.lastModified());
+				// Convert into hours
+				long age = (new Date().getTime() - fileDate.getTime()) / 1000 / 3600;
+				if(hoursOld != 0 && age > hoursOld) {
+					return null;
+				}
+
+				RandomAccessFile randomFile = new RandomAccessFile(file, "r");
+
+				in = new Input(new FileInputStream(randomFile.getFD()));
 				T result = (T) kryo.readObject(in, tClass);
 				Log.i(TAG, "Deserialized object from " + fileName);
 				return result;

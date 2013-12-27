@@ -382,7 +382,27 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getPodcastEpisodes(refresh, id, context, progressListener);
+		checkSettingsChanged(context);
+		String altId = "p-" + id;
+		TimeLimitedCache<MusicDirectory> cache = refresh ? null : cachedMusicDirectories.get(altId);
+		MusicDirectory result = (cache == null) ? null : cache.get();
+
+		if(result == null) {
+			if(!refresh) {
+				result = FileUtil.deserialize(context, getCacheName(context, "directory", altId), MusicDirectory.class, 10);
+			}
+
+			if(result == null) {
+				result = musicService.getPodcastEpisodes(refresh, id, context, progressListener);
+				FileUtil.serialize(context, result, getCacheName(context, "directory", altId));
+			}
+			cache = new TimeLimitedCache<MusicDirectory>(TTL_MUSIC_DIR, TimeUnit.SECONDS);
+			cache.set(result);
+			cachedMusicDirectories.put(altId, cache);
+		}
+		return result;
+
+
 	}
 	
 	@Override
