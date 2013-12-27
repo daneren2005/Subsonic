@@ -430,11 +430,13 @@ public class FileUtil {
 			try {
 				File file = new File(context.getCacheDir(), fileName);
 
-				Date fileDate = new Date(file.lastModified());
-				// Convert into hours
-				long age = (new Date().getTime() - fileDate.getTime()) / 1000 / 3600;
-				if(hoursOld != 0 && age > hoursOld) {
-					return null;
+				if(hoursOld != 0) {
+					Date fileDate = new Date(file.lastModified());
+					// Convert into hours
+					long age = (new Date().getTime() - fileDate.getTime()) / 1000 / 3600;
+					if(age > hoursOld) {
+						return null;
+					}
 				}
 
 				RandomAccessFile randomFile = new RandomAccessFile(file, "r");
