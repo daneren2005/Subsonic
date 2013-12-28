@@ -37,6 +37,7 @@ import android.util.Log;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.CachedMusicService;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.RESTMusicService;
 import github.daneren2005.dsub.util.Constants;
@@ -48,7 +49,7 @@ import github.daneren2005.dsub.util.Util;
 
 public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	private static final String TAG = SubsonicSyncAdapter.class.getSimpleName();
-	protected RESTMusicService musicService = new RESTMusicService();
+	protected CachedMusicService musicService = new CachedMusicService(new RESTMusicService());
 	private Context context;
 
 	public SubsonicSyncAdapter(Context context, boolean autoInitialize) {

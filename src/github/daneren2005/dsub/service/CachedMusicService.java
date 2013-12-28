@@ -57,7 +57,7 @@ public class CachedMusicService implements MusicService {
     private static final int MUSIC_DIR_CACHE_SIZE = 20;
     private static final int TTL_MUSIC_DIR = 5 * 60; // Five minutes
 
-    private final MusicService musicService;
+    private final RESTMusicService musicService;
     private final LruCache<String, TimeLimitedCache<MusicDirectory>> cachedMusicDirectories;
     private final TimeLimitedCache<Boolean> cachedLicenseValid = new TimeLimitedCache<Boolean>(120, TimeUnit.SECONDS);
     private final TimeLimitedCache<Indexes> cachedIndexes = new TimeLimitedCache<Indexes>(60 * 60, TimeUnit.SECONDS);
@@ -67,7 +67,7 @@ public class CachedMusicService implements MusicService {
 	private final TimeLimitedCache<List<PodcastChannel>> cachedPodcastChannels = new TimeLimitedCache<List<PodcastChannel>>(10 * 3600, TimeUnit.SECONDS);
     private String restUrl;
 
-    public CachedMusicService(MusicService musicService) {
+    public CachedMusicService(RESTMusicService musicService) {
         this.musicService = musicService;
         cachedMusicDirectories = new LruCache<String, TimeLimitedCache<MusicDirectory>>(MUSIC_DIR_CACHE_SIZE);
     }
@@ -474,7 +474,7 @@ public class CachedMusicService implements MusicService {
   	}
 
     private void checkSettingsChanged(Context context) {
-        String newUrl = Util.getRestUrl(context, null);
+        String newUrl = musicService.getRestUrl(context, null);
         if (!Util.equals(newUrl, restUrl)) {
             cachedMusicFolders.clear();
             cachedMusicDirectories.evictAll();

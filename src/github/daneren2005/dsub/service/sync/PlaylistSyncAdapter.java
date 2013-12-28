@@ -69,7 +69,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 			SyncSet cachedPlaylist = playlistList.get(i);
 			String id = cachedPlaylist.id;
 			try {
-				MusicDirectory playlist = musicService.getPlaylist(false, id, serverName, context, null);
+				MusicDirectory playlist = musicService.getPlaylist(true, id, serverName, context, null);
 
 				// Get list of original paths
 				List<String> origPathList = new ArrayList<String>();

@@ -1362,7 +1362,7 @@ public class RESTMusicService implements MusicService {
         return networkInfo == null ? -1 : networkInfo.getType();
     }
     
-	private String getRestUrl(Context context, String method) {
+	public String getRestUrl(Context context, String method) {
 		if(instance == null) {
 			return Util.getRestUrl(context, method);
 		} else {
