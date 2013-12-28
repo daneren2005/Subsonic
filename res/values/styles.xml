@@ -63,6 +63,7 @@
 		<item name="remove_enabled">false</item>
 		<item name="remove_mode">flingRemove</item>
 		<item name="drag_start_mode">onLongPress</item>
+		<item name="float_background_color">@android:color/transparent</item>
 	</style>
 
 	<style name="MainAlbumButton">
