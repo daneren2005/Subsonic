@@ -58,6 +58,29 @@
 		</PreferenceCategory>
 
 		<PreferenceCategory
+			android:title="@string/settings.menu_options.title">
+
+			<CheckBoxPreference
+				android:title="@string/settings.menu_options.play_next"
+				android:summary="@string/settings.menu_options.play_next_summary"
+				android:key="showPlayNext"
+				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/settings.menu_options.play_last"
+				android:summary="@string/settings.menu_options.play_last_summary"
+				android:key="showPlayLast"
+				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/settings.menu_options.star"
+				android:summary="@string/settings.menu_options.star_summary"
+				android:key="showStar"
+				android:defaultValue="true"/>
+
+		</PreferenceCategory>
+
+		<PreferenceCategory
 			android:title="@string/button_bar.chat">
 
 			<CheckBoxPreference

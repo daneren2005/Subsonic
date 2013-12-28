@@ -202,12 +202,25 @@ public class SubsonicFragment extends Fragment {
 		if(!Util.checkServerVersion(context, "1.10.1")) {
 			menu.setGroupVisible(R.id.server_1_10, false);
 		}
+		SharedPreferences prefs = Util.getPreferences(context);
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_NEXT, true)) {
+			menu.setGroupVisible(R.id.hide_play_next, false);
+		}
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_LAST, true)) {
+			menu.setGroupVisible(R.id.hide_play_last, false);
+		}
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
+			menu.setGroupVisible(R.id.hide_star, false);
+		}
 	}
 
 	protected void recreateContextMenu(ContextMenu menu) {
 		List<MenuItem> menuItems = new ArrayList<MenuItem>();
 		for(int i = 0; i < menu.size(); i++) {
-			menuItems.add(menu.getItem(i));
+			MenuItem item = menu.getItem(i);
+			if(item.isVisible()) {
+				menuItems.add(item);
+			}
 		}
 		menu.clear();
 		for(int i = 0; i < menuItems.size(); i++) {

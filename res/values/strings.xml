@@ -374,6 +374,13 @@
 	<string name="settings.sync_starred_summary">Automatically cache songs, albums, and artists which are starred</string>
 	<string name="settings.sync_notification">Show Sync Notification</string>
 	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
+	<string name="settings.menu_options.title">Optional Menu Options</string>
+	<string name="settings.menu_options.play_next">Play Next</string>
+	<string name="settings.menu_options.play_next_summary">Show Play next in menus</string>
+	<string name="settings.menu_options.play_last">Play Last</string>
+	<string name="settings.menu_options.play_last_summary">Show Play last in menus</string>
+	<string name="settings.menu_options.star">Star</string>
+	<string name="settings.menu_options.star_summary">Show Star in menus</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

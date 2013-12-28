@@ -12,15 +12,17 @@
         android:title="@string/common.play_now"
         />
 
-    <item 
-        android:id="@+id/song_menu_play_next"
-        android:title="@string/common.play_next"
-        />
+	<group android:id="@+id/hide_play_next">
+		<item
+			android:id="@+id/song_menu_play_next"
+			android:title="@string/common.play_next"/>
+	</group>
 
-    <item 
-        android:id="@+id/song_menu_play_last"
-        android:title="@string/common.play_last"
-        />
+	<group android:id="@+id/hide_play_last">
+		<item
+			android:id="@+id/song_menu_play_last"
+			android:title="@string/common.play_last"/>
+	</group>
 		
 	<item 
         android:id="@+id/song_menu_download"
@@ -43,9 +45,10 @@
 	<item 
 		android:id="@+id/song_menu_remove_playlist"
 		android:title="@string/menu.remove_playlist"/>
-		
-	<item 
-		android:id="@+id/song_menu_star"
-		android:title="@string/common.star"/>  
-        
+
+	<group android:id="@+id/hide_star">
+		<item
+			android:id="@+id/song_menu_star"
+			android:title="@string/common.star"/>
+	</group>
 </menu>

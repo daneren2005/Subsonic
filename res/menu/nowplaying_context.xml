@@ -21,10 +21,12 @@
 	<item 
 		android:id="@+id/menu_delete"
 		android:title="@string/download.menu_delete"/>
-		
-	<item 
-		android:id="@+id/menu_star"
-		android:title="@string/common.star"/>  
+
+	<group android:id="@+id/hide_star">
+		<item
+			android:id="@+id/menu_star"
+			android:title="@string/common.star"/>
+	</group>
 		
 	<item 
 		android:id="@+id/menu_add_playlist"

@@ -3,6 +3,7 @@ package github.daneren2005.dsub.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -179,6 +180,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					if(playlistId == null) {
 						menu.removeItem(R.id.menu_remove_playlist);
 					}
+				}
+
+				SharedPreferences prefs = Util.getPreferences(context);
+				if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_NEXT, true)) {
+					menu.setGroupVisible(R.id.hide_play_next, false);
+				}
+				if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_LAST, true)) {
+					menu.setGroupVisible(R.id.hide_play_last, false);
 				}
 			} else {
 				if(Util.isOffline(context)) {
