@@ -108,6 +108,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	protected void refresh(final boolean refresh) {
 		setTitle(getTitleResource());
 		listView.setVisibility(View.INVISIBLE);
+		emptyView.setVisibility(View.GONE);
 
 		BackgroundTask<List<T>> task = new TabBackgroundTask<List<T>>(this) {
 			@Override
