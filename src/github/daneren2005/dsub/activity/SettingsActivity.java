@@ -317,8 +317,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		}
 
 		serverUrlPreference.setSummary(serverUrlPreference.getText());
-
 		screen.setSummary(serverUrlPreference.getText());
+
+		final EditTextPreference serverInternalUrlPreference = new EditTextPreference(this);
+		serverInternalUrlPreference.setKey(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
+		serverInternalUrlPreference.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_URI);
+		serverInternalUrlPreference.setDefaultValue("http://");
+		serverInternalUrlPreference.setTitle(R.string.settings_server_internal_address);
+		serverInternalUrlPreference.setSummary(serverInternalUrlPreference.getText());
 
 		final EditTextPreference serverUsernamePreference = new EditTextPreference(this);
 		serverUsernamePreference.setKey(Constants.PREFERENCES_KEY_USERNAME + instance);
@@ -392,6 +398,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 		screen.addPreference(serverNamePreference);
 		screen.addPreference(serverUrlPreference);
+		screen.addPreference(serverInternalUrlPreference);
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverRemoveServerPreference);
@@ -522,6 +529,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private class ServerSettings {
         private EditTextPreference serverName;
         private EditTextPreference serverUrl;
+		private EditTextPreference serverInternalUrl;
         private EditTextPreference username;
         private PreferenceScreen screen;
 
@@ -530,6 +538,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             screen = (PreferenceScreen) findPreference("server" + instance);
             serverName = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
             serverUrl = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_URL + instance);
+			serverInternalUrl = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
             username = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_USERNAME + instance);
 
             serverUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -548,6 +557,22 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     return true;
                 }
             });
+			serverInternalUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object value) {
+					try {
+						String url = (String) value;
+						new URL(url);
+						if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+							throw new Exception();
+						}
+					} catch (Exception x) {
+						new ErrorDialog(SettingsActivity.this, R.string.settings_invalid_url, false);
+						return false;
+					}
+					return true;
+				}
+			});
 
             username.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -565,6 +590,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         public void update() {
             serverName.setSummary(serverName.getText());
             serverUrl.setSummary(serverUrl.getText());
+			serverInternalUrl.setSummary(serverInternalUrl.getText());
             username.setSummary(username.getText());
             screen.setSummary(serverUrl.getText());
             screen.setTitle(serverName.getText());

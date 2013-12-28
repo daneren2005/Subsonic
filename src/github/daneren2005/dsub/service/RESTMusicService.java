@@ -1363,10 +1363,13 @@ public class RESTMusicService implements MusicService {
     }
     
 	public String getRestUrl(Context context, String method) {
+		return getRestUrl(context, method, true);
+	}
+	public String getRestUrl(Context context, String method, boolean allowAltAddress) {
 		if(instance == null) {
-			return Util.getRestUrl(context, method);
+			return Util.getRestUrl(context, method, allowAltAddress);
 		} else {
-			return Util.getRestUrl(context, method, instance);
+			return Util.getRestUrl(context, method, instance, allowAltAddress);
 		}
 	}
 }

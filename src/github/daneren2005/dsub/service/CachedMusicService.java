@@ -28,6 +28,7 @@ import org.apache.http.HttpResponse;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
@@ -53,11 +54,12 @@ import github.daneren2005.dsub.util.Util;
  * @author Sindre Mehus
  */
 public class CachedMusicService implements MusicService {
+	private static final String TAG = CachedMusicService.class.getSimpleName();
 
     private static final int MUSIC_DIR_CACHE_SIZE = 20;
     private static final int TTL_MUSIC_DIR = 5 * 60; // Five minutes
 
-    private final RESTMusicService musicService;
+	private final RESTMusicService musicService;
     private final LruCache<String, TimeLimitedCache<MusicDirectory>> cachedMusicDirectories;
     private final TimeLimitedCache<Boolean> cachedLicenseValid = new TimeLimitedCache<Boolean>(120, TimeUnit.SECONDS);
     private final TimeLimitedCache<Indexes> cachedIndexes = new TimeLimitedCache<Indexes>(60 * 60, TimeUnit.SECONDS);
@@ -465,16 +467,16 @@ public class CachedMusicService implements MusicService {
     }
   
   	private String getCacheName(Context context, String name, String id) {
-  		String s = Util.getRestUrl(context, null) + id;
+  		String s = musicService.getRestUrl(context, null, false) + id;
   		return name + "-" + s.hashCode() + ".ser";
   	}
   	private String getCacheName(Context context, String name) {
-  		String s = Util.getRestUrl(context, null);
+  		String s = musicService.getRestUrl(context, null, false);
   		return name + "-" + s.hashCode() + ".ser";
   	}
 
     private void checkSettingsChanged(Context context) {
-        String newUrl = musicService.getRestUrl(context, null);
+        String newUrl = musicService.getRestUrl(context, null, false);
         if (!Util.equals(newUrl, restUrl)) {
             cachedMusicFolders.clear();
             cachedMusicDirectories.evictAll();
