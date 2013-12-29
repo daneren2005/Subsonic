@@ -72,6 +72,9 @@ public class MusicDirectory implements Serializable {
     public void addChild(Entry child) {
         children.add(child);
     }
+	public void addChildren(List<Entry> children) {
+		this.children.addAll(children);
+	}
     
 	public void replaceChildren(List<Entry> children) {
 		this.children = children;

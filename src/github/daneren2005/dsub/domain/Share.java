@@ -41,6 +41,14 @@ public class Share implements Serializable {
     public Share() {
     	entries = new ArrayList<Entry>();
     }
+
+	public String getName() {
+		if(description != null && !"".equals(description)) {
+			return description;
+		} else {
+			return url.replaceFirst(".*/([^/?]+).*", "$1");
+		}
+	}
 	
     public String getId() {
         return id;
@@ -55,7 +63,7 @@ public class Share implements Serializable {
     }
 
     public void setUrl(String url) {
-        this.url = url;
+		this.url = url;
     }
     
     public String getDescription() {
@@ -129,12 +137,20 @@ public class Share implements Serializable {
     public void setVisitCount(Long visitCount) {
     	this.visitCount = visitCount;
     }
-    
+
+	public MusicDirectory getMusicDirectory() {
+		MusicDirectory dir = new MusicDirectory();
+		dir.addChildren(entries);
+		dir.setId(getId());
+		dir.setName(getName());
+		return dir;
+	}
+
     public List<Entry> getEntries() {
     	return this.entries;
     }
     
     public void addEntry(Entry entry) {
-    	entries.add(entry);
+		entries.add(entry);
     }
  }

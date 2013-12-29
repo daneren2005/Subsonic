@@ -116,6 +116,12 @@ public interface MusicService {
     void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception;
 	
 	List<Share> getShares(Context context, ProgressListener progressListener) throws Exception;
+
+	List<Share> createShare(List<String> ids, String description, Long expires, Context context, ProgressListener progressListener) throws Exception;
+
+	void deleteShare(String id, Context context, ProgressListener progressListener) throws Exception;
+
+	void updateShare(String id, String description, Long expires, Context context, ProgressListener progressListener) throws Exception;
     
     List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception;
     

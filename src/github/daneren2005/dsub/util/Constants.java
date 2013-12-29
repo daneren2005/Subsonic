@@ -59,6 +59,7 @@ public final class Constants {
 	public static final String INTENT_EXTRA_NAME_PODCAST_ID = "subsonic.podcast.id";
 	public static final String INTENT_EXTRA_NAME_PODCAST_NAME = "subsonic.podcast.name";
 	public static final String INTENT_EXTRA_NAME_PODCAST_DESCRIPTION = "subsonic.podcast.description";
+	public static final String INTENT_EXTRA_NAME_SHARE = "subsonic.share";
 	public static final String INTENT_EXTRA_FRAGMENT_TYPE = "fragmentType";
 	public static final String INTENT_EXTRA_REFRESH_LISTINGS = "refreshListings";
 
@@ -134,6 +135,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_MENU_PLAY_NEXT = "showPlayNext";
 	public static final String PREFERENCES_KEY_MENU_PLAY_LAST = "showPlayLast";
 	public static final String PREFERENCES_KEY_MENU_STAR = "showStar";
+	public static final String PREFERENCES_KEY_SHARED_ENABLED = "sharedEnabled";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";

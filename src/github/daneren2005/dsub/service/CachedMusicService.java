@@ -328,6 +328,21 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
+	public List<Share> createShare(List<String> ids, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.createShare(ids, description, expires, context, progressListener);
+	}
+
+	@Override
+	public void deleteShare(String id, Context context, ProgressListener progressListener) throws Exception {
+		musicService.deleteShare(id, context, progressListener);
+	}
+
+	@Override
+	public void updateShare(String id, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
+		musicService.updateShare(id, description, expires, context, progressListener);
+	}
+
+	@Override
 	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getChatMessages(since, context, progressListener);
 	}

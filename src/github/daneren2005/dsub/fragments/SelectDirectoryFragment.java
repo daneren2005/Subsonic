@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.EntryAdapter;
@@ -131,6 +132,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			podcastId = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_ID);
 			podcastName = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_NAME);
 			podcastDescription = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_DESCRIPTION);
+			Object shareObj = args.getSerializable(Constants.INTENT_EXTRA_NAME_SHARE);
+			share = (shareObj != null) ? (Share) shareObj : null;
 			albumListType = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
@@ -363,6 +366,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			getPlaylist(playlistId, playlistName, refresh);
 		} else if(podcastId != null) {
 			getPodcast(podcastId, podcastName, refresh);
+		} else if (share != null) {
+			if(showAll) {
+				getRecursiveMusicDirectory(share.getId(), share.getName(), refresh);
+			} else {
+				getShare(share, refresh);
+			}
 		} else if (albumListType != null) {
 			getAlbumList(albumListType, albumListSize);
 		} else {
@@ -397,7 +406,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				MusicDirectory root = service.getMusicDirectory(id, name, refresh, context, this);
+				MusicDirectory root;
+				if(share == null) {
+					root = service.getMusicDirectory(id, name, refresh, context, this);
+				} else {
+					root = share.getMusicDirectory();
+				}
 				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
 				getSongsRecursively(root, songs);
 				root.replaceChildren(songs);
@@ -438,6 +452,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return service.getPodcastEpisodes(refresh, podcastId, context, this);
+			}
+		}.execute();
+	}
+
+	private void getShare(final Share share, final boolean refresh) {
+		setTitle(share.getName());
+
+		new LoadTask() {
+			@Override
+			protected MusicDirectory load(MusicService service) throws Exception {
+				return share.getMusicDirectory();
 			}
 		}.execute();
 	}
@@ -564,7 +589,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 		}
 
-		if (hasSubFolders && id != null) {
+		if (hasSubFolders && (id != null || share != null)) {
 			downloadRecursively(id, false, append, !append, shuffle, false);
 		} else {
 			selectAll(true, false);

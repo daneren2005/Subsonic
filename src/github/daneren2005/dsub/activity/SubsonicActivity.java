@@ -375,6 +375,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		SharedPreferences prefs = Util.getPreferences(this);
 		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
 		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this);
+		boolean sharedEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SHARED_ENABLED, true) && !Util.isOffline(this);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		
 		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == chatEnabled) {
@@ -412,12 +413,20 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				drawerItemsIconsList.remove(4 - alreadyRemoved);
 				alreadyRemoved++;
 			}
-	
-			// Selectively remove chat listing: [5]
-			if(!chatEnabled) {
+
+			// Selectively remove shared listing [5]
+			if(!bookmarksEnabled) {
 				drawerItemsList.remove(5 - alreadyRemoved);
 				drawerItemsDescriptionsList.remove(5 - alreadyRemoved);
 				drawerItemsIconsList.remove(5 - alreadyRemoved);
+				alreadyRemoved++;
+			}
+	
+			// Selectively remove chat listing: [6]
+			if(!chatEnabled) {
+				drawerItemsList.remove(6 - alreadyRemoved);
+				drawerItemsDescriptionsList.remove(6 - alreadyRemoved);
+				drawerItemsIconsList.remove(6 - alreadyRemoved);
 				alreadyRemoved++;
 			}
 	

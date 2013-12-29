@@ -835,6 +835,88 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
+	public List<Share> createShare(List<String> ids, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
+		List<String> parameterNames = new LinkedList<String>();
+		List<Object> parameterValues = new LinkedList<Object>();
+
+		for (String id : ids) {
+			parameterNames.add("id");
+			parameterValues.add(id);
+		}
+
+		if (description != null) {
+			parameterNames.add("description");
+			parameterValues.add(description);
+		}
+
+		if (expires > 0) {
+			parameterNames.add("expires");
+			parameterValues.add(expires);
+		}
+
+		Reader reader = getReader(context, progressListener, "createShare", null, parameterNames, parameterValues);
+		try {
+			return new ShareParser(context).parse(reader, progressListener);
+		}
+		finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void deleteShare(String id, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.6", "Shares not supported.");
+
+		HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
+
+		List<String> parameterNames = new ArrayList<String>();
+		List<Object> parameterValues = new ArrayList<Object>();
+
+		parameterNames.add("id");
+		parameterValues.add(id);
+
+		Reader reader = getReader(context, progressListener, "deleteShare", params, parameterNames, parameterValues);
+
+		try {
+			new ErrorParser(context).parse(reader);
+		}
+		finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void updateShare(String id, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.6", "Updating share not supported.");
+
+		HttpParams params = new BasicHttpParams();
+		HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
+
+		List<String> parameterNames = new ArrayList<String>();
+		List<Object> parameterValues = new ArrayList<Object>();
+
+		parameterNames.add("id");
+		parameterValues.add(id);
+
+		if (description != null) {
+			parameterNames.add("description");
+			parameterValues.add(description);
+		}
+
+		parameterNames.add("expires");
+		parameterValues.add(expires);
+
+		Reader reader = getReader(context, progressListener, "updateShare", params, parameterNames, parameterValues);
+		try {
+			new ErrorParser(context).parse(reader);
+		}
+		finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
 	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.2", "Chat not supported.");
 

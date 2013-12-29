@@ -53,6 +53,7 @@ import github.daneren2005.dsub.fragments.SelectBookmarkFragment;
 import github.daneren2005.dsub.fragments.SelectDirectoryFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
 import github.daneren2005.dsub.fragments.SelectPodcastsFragment;
+import github.daneren2005.dsub.fragments.SelectShareFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
@@ -381,6 +382,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			return new SelectPodcastsFragment();
 		} else if("Bookmark".equals(fragmentType)) {
 			return new SelectBookmarkFragment();
+		} else if("Share".equals(fragmentType)) {
+			return new SelectShareFragment();
 		} else {
 			return new MainFragment();
 		}

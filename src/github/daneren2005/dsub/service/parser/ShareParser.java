@@ -19,6 +19,8 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
+import android.util.Log;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -31,8 +33,9 @@ import java.util.List;
  * @author Joshua Bahnsen
  */
 public class ShareParser extends MusicDirectoryEntryParser {
+	private static final String TAG = ShareParser.class.getSimpleName();
 
-    public ShareParser(Context context) {
+	public ShareParser(Context context) {
         super(context);
     }
 
@@ -54,15 +57,18 @@ public class ShareParser extends MusicDirectoryEntryParser {
                 if ("share".equals(name)) {
                 	share = new Share();
                 	share.setCreated(get("created"));
+					share.setUrl(get("url"));
                 	share.setDescription(get("description"));
                 	share.setExpires(get("expires"));
                 	share.setId(get("id"));
                 	share.setLastVisited(get("lastVisited"));
-                	share.setUrl(get("url"));
                 	share.setUsername(get("username"));
                 	share.setVisitCount(getLong("visitCount"));
+					dir.add(share);
                 } else if ("entry".equals(name)) {
-                	share.addEntry(parseEntry(null));
+					if(share != null) {
+                		share.addEntry(parseEntry(null));
+					}
                 } else if ("error".equals(name)) {
                     handleError();
                 }

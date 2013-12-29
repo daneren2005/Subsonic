@@ -51,6 +51,7 @@ import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastEpisode;
+import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -90,6 +91,7 @@ public class SubsonicFragment extends Fragment {
 	protected boolean invalidated = false;
 	protected static Random random = new Random();
 	protected GestureDetector gestureScanner;
+	protected Share share;
 	
 	public SubsonicFragment() {
 		super();
@@ -662,10 +664,15 @@ public class SubsonicFragment extends Fragment {
 			protected List<MusicDirectory.Entry> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				MusicDirectory root;
-				if(isDirectory)
+				if(share != null) {
+					root = share.getMusicDirectory();
+				}
+				else if(isDirectory) {
 					root = musicService.getMusicDirectory(id, name, false, context, this);
-				else
+				}
+				else {
 					root = musicService.getPlaylist(true, id, name, context, this);
+				}
 				List<MusicDirectory.Entry> songs = new LinkedList<MusicDirectory.Entry>();
 				getSongsRecursively(root, songs);
 				return songs;
