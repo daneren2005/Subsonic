@@ -116,6 +116,12 @@
 				android:summary="@string/settings.bookmarks_enabled_summary"
 				android:key="bookmarksEnabled"
 				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/settings.shares_enabled"
+				android:summary="@string/settings.shares_enabled_summary"
+				android:key="sharedEnabled"
+				android:defaultValue="true"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 

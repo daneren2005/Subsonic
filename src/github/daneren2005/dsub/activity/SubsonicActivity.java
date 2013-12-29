@@ -80,7 +80,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private String[] drawerItemsDescriptions;
 	private String[] drawerItems;
 	private boolean drawerIdle = true;
-	private boolean[] enabledItems = {true, true, true};
+	private boolean[] enabledItems = {true, true, true, true};
 	private boolean destroyed = false;
 	private boolean finished = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
@@ -378,7 +378,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		boolean sharedEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SHARED_ENABLED, true) && !Util.isOffline(this);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		
-		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == chatEnabled) {
+		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == sharedEnabled || !enabledItems[3] == chatEnabled) {
 			drawerItems = getResources().getStringArray(R.array.drawerItems);
 			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
 	
@@ -415,7 +415,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 
 			// Selectively remove shared listing [5]
-			if(!bookmarksEnabled) {
+			if(!sharedEnabled) {
 				drawerItemsList.remove(5 - alreadyRemoved);
 				drawerItemsDescriptionsList.remove(5 - alreadyRemoved);
 				drawerItemsIconsList.remove(5 - alreadyRemoved);
@@ -439,7 +439,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			drawerList.setAdapter(new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList));
 			enabledItems[0] = podcastsEnabled;
 			enabledItems[1] = bookmarksEnabled;
-			enabledItems[2] = chatEnabled;
+			enabledItems[2] = sharedEnabled;
+			enabledItems[3] = chatEnabled;
 		}
 	}
 

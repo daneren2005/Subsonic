@@ -365,6 +365,8 @@
 	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
 	<string name="settings.bookmarks_enabled">Bookmarks Enabled</string>
 	<string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
+	<string name="settings.shares_enabled">Shares Enabled</string>
+	<string name="settings.shares_enabled_summary">Whether or not to display the shares listing in the pull out drawer</string>
 	<string name="settings.sync_title">Sync</string>
 	<string name="settings.sync_enabled">Sync Enabled</string>
 	<string name="settings.sync_enabled_summary">Whether or not playlists or podcasts are periodically checked for changes</string>
