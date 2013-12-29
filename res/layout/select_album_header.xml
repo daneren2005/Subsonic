@@ -60,7 +60,18 @@
 			android:singleLine="true"
 			android:ellipsize="none"/>
 
-		</LinearLayout>
+	</LinearLayout>
+
+	<ImageView
+		android:id="@+id/select_album_share"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:scaleType="fitCenter"
+		android:src="?attr/share"
+		android:padding="10dip"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"
+		android:background="@drawable/menubar_button"/>
 </RelativeLayout>
 
 

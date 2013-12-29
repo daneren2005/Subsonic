@@ -7,6 +7,10 @@
 		android:title="@string/common.info"/>
 
 	<item
+		android:id="@+id/share_menu_share"
+		android:title="@string/menu.share"/>
+
+	<item
 		android:id="@+id/share_update_info"
 		android:title="@string/playlist.update_info"
 		/>

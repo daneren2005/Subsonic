@@ -55,6 +55,9 @@ public class SelectShareFragment extends SelectListFragment<Share> {
 		Share share = (Share) listView.getItemAtPosition(info.position);
 
 		switch (menuItem.getItemId()) {
+			case R.id.share_menu_share:
+				shareExternal(share);
+				break;
 			case R.id.share_menu_info:
 				displayShareInfo(share);
 				break;

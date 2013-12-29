@@ -214,6 +214,9 @@ public class SubsonicFragment extends Fragment {
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
 			menu.setGroupVisible(R.id.hide_star, false);
 		}
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true)) {
+			menu.setGroupVisible(R.id.hide_share, false);
+		}
 	}
 
 	protected void recreateContextMenu(ContextMenu menu) {
@@ -234,7 +237,7 @@ public class SubsonicFragment extends Fragment {
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
 		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
 		MusicDirectory.Entry entry = selectedItem instanceof MusicDirectory.Entry ? (MusicDirectory.Entry) selectedItem : null;
-		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(10);
+		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(1);
 		songs.add(entry);
 
 		switch (menuItem.getItemId()) {
@@ -292,6 +295,9 @@ public class SubsonicFragment extends Fragment {
 			case R.id.album_menu_show_artist:
 				showArtist((MusicDirectory.Entry) selectedItem);
 				break;
+			case R.id.album_menu_share:
+				createShare(songs);
+				break;
 			case R.id.song_menu_play_now:
 				getDownloadService().clear();
 				getDownloadService().download(songs, false, true, true, false);
@@ -326,6 +332,9 @@ public class SubsonicFragment extends Fragment {
 				break;
 			case R.id.song_menu_stream_external:
 				streamExternalPlayer(entry);
+				break;
+			case R.id.song_menu_share:
+				createShare(songs);
 				break;
 			default:
 				return false;
@@ -1075,6 +1084,49 @@ public class SubsonicFragment extends Fragment {
 		fragment.setArguments(args);
 
 		replaceFragment(fragment, getRootId(), true);
+	}
+
+	public void createShare(final List<MusicDirectory.Entry> entries) {
+		new LoadingTask<List<Share>>(context, true) {
+			@Override
+			protected List<Share> doInBackground() throws Throwable {
+				List<String> ids = new ArrayList<String>(entries.size());
+				for(MusicDirectory.Entry entry: entries) {
+					ids.add(entry.getId());
+				}
+
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				return musicService.createShare(ids, null, 0L, context, this);
+			}
+
+			@Override
+			protected void done(final List<Share> shares) {
+				if(shares.size() > 0) {
+					Share share = shares.get(0);
+					shareExternal(share);
+				} else {
+					Util.toast(context, context.getResources().getString(R.string.playlist_error), false);
+				}
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(R.string.playlist_error) + " " + getErrorMessage(error);
+				}
+
+				Util.toast(context, msg, false);
+			}
+		}.execute();
+	}
+	public void shareExternal(Share share) {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TEXT, share.getUrl());
+		context.startActivity(Intent.createChooser(intent, context.getResources().getString(R.string.share_via)));
 	}
 	
 	public GestureDetector getGestureDetector() {

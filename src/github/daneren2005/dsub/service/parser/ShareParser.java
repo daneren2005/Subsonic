@@ -19,11 +19,15 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Share;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.Util;
+
 import org.xmlpull.v1.XmlPullParser;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -47,6 +51,14 @@ public class ShareParser extends MusicDirectoryEntryParser {
         List<Share> dir = new ArrayList<Share>();
         Share share = null;
         int eventType;
+
+		SharedPreferences prefs = Util.getPreferences(context);
+		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+		if(serverUrl.charAt(serverUrl.length() - 1) != '/') {
+			serverUrl += '/';
+		}
+		serverUrl += "share/";
         
         do {
             eventType = nextParseEvent();
@@ -57,7 +69,7 @@ public class ShareParser extends MusicDirectoryEntryParser {
                 if ("share".equals(name)) {
                 	share = new Share();
                 	share.setCreated(get("created"));
-					share.setUrl(get("url"));
+					share.setUrl(get("url").replaceFirst(".*/([^/?]+).*", serverUrl + "$1"));
                 	share.setDescription(get("description"));
                 	share.setExpires(get("expires"));
                 	share.setId(get("id"));

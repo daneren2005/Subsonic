@@ -51,4 +51,10 @@
 			android:id="@+id/song_menu_star"
 			android:title="@string/common.star"/>
 	</group>
+
+	<group android:id="@+id/hide_share">
+		<item
+			android:id="@+id/song_menu_share"
+			android:title="@string/menu.share"/>
+	</group>
 </menu>

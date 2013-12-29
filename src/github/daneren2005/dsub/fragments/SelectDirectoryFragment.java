@@ -940,6 +940,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			titleView.setPadding(0, 6, 4, 8);
 		} else if(name != null) {
 			titleView.setText(name);
+		} else if(share != null) {
+			titleView.setVisibility(View.GONE);
 		}
 
 		int songCount = 0;
@@ -980,6 +982,20 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		} else {
 			songCountView.setVisibility(View.GONE);
 			songLengthView.setVisibility(View.GONE);
+		}
+
+		if(add) {
+			ImageView shareButton = (ImageView) header.findViewById(R.id.select_album_share);
+			if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true)) {
+				shareButton.setVisibility(View.GONE);
+			} else {
+				shareButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						createShare(SelectDirectoryFragment.this.entries);
+					}
+				});
+			}
 		}
 
 		if(add) {

@@ -19,5 +19,6 @@
 	<attr name="select_server" format="reference"/>
 	<attr name="downloading" format="reference"/>
 	<attr name="bookmark" format="reference"/>
+	<attr name="share" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
 </resources>

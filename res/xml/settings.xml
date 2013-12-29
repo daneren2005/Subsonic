@@ -61,21 +61,27 @@
 			android:title="@string/settings.menu_options.title">
 
 			<CheckBoxPreference
-				android:title="@string/settings.menu_options.play_next"
+				android:title="@string/common.play_next"
 				android:summary="@string/settings.menu_options.play_next_summary"
 				android:key="showPlayNext"
 				android:defaultValue="true"/>
 
 			<CheckBoxPreference
-				android:title="@string/settings.menu_options.play_last"
+				android:title="@string/common.play_last"
 				android:summary="@string/settings.menu_options.play_last_summary"
 				android:key="showPlayLast"
 				android:defaultValue="true"/>
 
 			<CheckBoxPreference
-				android:title="@string/settings.menu_options.star"
+				android:title="@string/common.star"
 				android:summary="@string/settings.menu_options.star_summary"
 				android:key="showStar"
+				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/menu.share"
+				android:summary="@string/settings.menu_options.shared_summary"
+				android:key="showShared"
 				android:defaultValue="true"/>
 
 		</PreferenceCategory>
