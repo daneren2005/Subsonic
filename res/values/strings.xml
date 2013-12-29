@@ -369,6 +369,14 @@
 	<string name="settings.sync_enabled">Sync Enabled</string>
 	<string name="settings.sync_enabled_summary">Whether or not playlists or podcasts are periodically checked for changes</string>
 	<string name="settings.sync_interval">Sync Interval</string>
+	<string name="settings.sync_interval_15">15 Minutes</string>
+	<string name="settings.sync_interval_30">30 Minutes</string>
+	<string name="settings.sync_interval_60">1 Hour</string>
+	<string name="settings.sync_interval_120">2 Hours</string>
+	<string name="settings.sync_interval_240">4 Hours</string>
+	<string name="settings.sync_interval_360">6 Hours</string>
+	<string name="settings.sync_interval_720">12 Hours</string>
+	<string name="settings.sync_interval_1440">Daily</string>
 	<string name="settings.sync_wifi">Sync on Wifi only</string>
 	<string name="settings.sync_wifi_summary">Only sync while on wifi</string>
 	<string name="settings.sync_most_recent">Sync Recently Added</string>

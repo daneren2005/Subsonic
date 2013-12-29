@@ -209,14 +209,14 @@
 		<item>1440</item>
 	</string-array>
 	<string-array name="syncIntervalNames">
-		<item>15 Minutes</item>
-		<item>30 Minutes</item>
-		<item>1 Hour</item>
-		<item>2 Hours</item>
-		<item>3 Hours</item>
-		<item>6 Hours</item>
-		<item>12 Hours</item>
-		<item>Daily</item>
+		<item>@string/settings.sync_interval_15</item>
+		<item>@string/settings.sync_interval_30</item>
+		<item>@string/settings.sync_interval_60</item>
+		<item>@string/settings.sync_interval_120</item>
+		<item>@string/settings.sync_interval_240</item>
+		<item>@string/settings.sync_interval_360</item>
+		<item>@string/settings.sync_interval_720</item>
+		<item>@string/settings.sync_interval_1440</item>
 	</string-array>
 
 </resources>
