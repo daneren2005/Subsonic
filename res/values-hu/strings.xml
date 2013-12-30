@@ -31,6 +31,7 @@
     <string name="button_bar.now_playing">Lejátszó</string>
 	<string name="button_bar.podcasts">Podcastok</string>
 	<string name="button_bar.bookmarks">Könyvjelzők</string>
+	<string name="button_bar.shares">Megosztások</string>
 	<string name="button_bar.chat">Csevegés (Chat)</string>
 
     <string name="main.welcome_title">Üdvözlet!</string>
@@ -81,6 +82,7 @@
 	<string name="menu.stop_sync">Szinkronizálás megállítása</string>
 	<string name="menu.show_all">Minden média megjelenítése</string>
 	<string name="menu.show_artist">Ugrás az előadóhoz</string>
+	<string name="menu.share">Megosztás</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Módosítás</string>
@@ -363,6 +365,8 @@
 	<string name="settings.podcasts_enabled_summary">Podcastok menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.bookmarks_enabled">Könyvjelzők engedélyezése</string>
 	<string name="settings.bookmarks_enabled_summary">Könyvjelzők menüpont megjelenítése az elhúzható oldalsávon.</string>
+	<string name="settings.shares_enabled">Megosztás engedélyezése</string>
+	<string name="settings.shares_enabled_summary">Megosztások menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.sync_title">Szinkronizálás</string>
 	<string name="settings.sync_enabled">Szinkronizálás engedélyezése</string>
 	<string name="settings.sync_enabled_summary">Lejátszási listák és podcastok változásainak rendszeres ellenőrzése.</string>
@@ -374,7 +378,7 @@
 	<string name="settings.sync_interval_240">4 óra</string>
 	<string name="settings.sync_interval_360">6 óra</string>
 	<string name="settings.sync_interval_720">12 óra</string>
-	<string name="settings.sync_interval_1440">1 nap</string>
+	<string name="settings.sync_interval_1440">Naponta</string>
 	<string name="settings.sync_wifi">Szinkronizálás csak Wi-Fivel</string>
 	<string name="settings.sync_wifi_summary">Szinkronizálás csak Wi-Fi hálózaton keresztül.</string>
 	<string name="settings.sync_most_recent">Utoljára hozzáadottak szinkronizálása</string>
@@ -387,12 +391,32 @@
 	<string name="settings.menu_options.play_next_summary">Lejátszás (Következőként) opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.play_last_summary">Lejátszás (Utolsóként) opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.star_summary">Csillagozás opció megjelenítése a menüben.</string>
+	<string name="settings.menu_options.shared_summary">Megosztás opció megjelenítése a menüben.</string>
 
 	<string name="shuffle.title">Véletlen sorrend</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
 	<string name="shuffle.endYear">Befejező év:</string>
 	<string name="shuffle.genre">Műfaj:</string>
 	<string name="shuffle.pick_genre">Műfaj kiválasztása</string>
+
+	<string name="share.info">Tulajdonos: %1$s
+		\nLeírás: %2$s
+		\nURL: %3$s
+		\nLétrehozva: %4$s
+		\nUtolsó látogatás: %5$s
+		\nLejárati idő: %6$s
+		\nLátogatások száma: %7$s
+
+	</string>
+	<string name="share.expires">Lejárati idő: %s</string>
+	<string name="share.expires_never">Nincs lejárati idő</string>
+	<string name="share.deleted">%s megosztás törölve</string>
+	<string name="share.deleted_error">%s megosztás törlése sikertelen!</string>
+	<string name="share.no_expiration">Nincs lejárati idő</string>
+	<string name="share.expiration">Lejárati idő:</string>
+	<string name="share.updated_info">%s megosztás információi frissítve</string>
+	<string name="share.updated_info_error">%s megosztás információinak frissítése sikertelen!</string>
+	<string name="share.via">Megosztás ezzel</string>
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
 
