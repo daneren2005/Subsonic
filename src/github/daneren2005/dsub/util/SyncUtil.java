@@ -83,7 +83,7 @@ public final class SyncUtil {
 		return getPlaylistSyncFile(context, instance);
 	}
 	public static String getPlaylistSyncFile(Context context, int instance) {
-		return "sync-playlist-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
+		return "sync-playlist-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
 	}
 
 	// Podcast sync
@@ -131,7 +131,7 @@ public final class SyncUtil {
 		return getPodcastSyncFile(context, instance);
 	}
 	public static String getPodcastSyncFile(Context context, int instance) {
-		return "sync-podcast-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
+		return "sync-podcast-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
 	}
 	
 	// Starred
@@ -146,7 +146,7 @@ public final class SyncUtil {
 		FileUtil.serializeCompressed(context, syncedList, SyncUtil.getStarredSyncFile(context, instance));
 	}
 	public static String getStarredSyncFile(Context context, int instance) {
-		return "sync-starred-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
+		return "sync-starred-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
 	}
 	
 	// Most Recently Added
@@ -158,7 +158,7 @@ public final class SyncUtil {
 		return list;
 	}
 	public static String getMostRecentSyncFile(Context context, int instance) {
-		return "sync-most_recent-" + (Util.getRestUrl(context, null, instance)).hashCode() + ".ser";
+		return "sync-most_recent-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
 	}
 
 	public static void showSyncNotification(final Context context, int stringId, String extra) {
