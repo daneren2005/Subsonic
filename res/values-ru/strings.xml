@@ -34,7 +34,7 @@
 	
 	<string name="main.about_title">О программе DSub</string>
 	<string name="main.about_text">Автор: Scott Jackson
-		\nEmail: daneren2005@gmail.com
+		\nEmail: dsub.android@gmail.com
 		\nВерсия: %1$s
 		\nИспользовано места: %2$s из %3$s
 		\nДоступно места: %4$s из %5$s</string>

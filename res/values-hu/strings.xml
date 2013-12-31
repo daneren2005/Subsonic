@@ -39,7 +39,7 @@
 	saját kiszolgálóját (elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba, és adja meg csatlakozási adatokat!</string>
 	<string name="main.about_title">DSub információk</string>
 	<string name="main.about_text">Fejlesztő: Scott Jackson
-		\nEmail: daneren2005@gmail.com
+		\nEmail: dsub.android@gmail.com
 		\nVerzió: %1$s
 		\nFelhasznált tároló: %2$s/%3$s
 		\nFelhasználható tároló: %4$s/%5$s</string>

@@ -37,7 +37,7 @@
     <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
 	<string name="main.about_title">Acerca de DSub</string>
 	<string name="main.about_text">Autor: Scott Jackson
-		\nEmail: daneren2005@gmail.com
+		\nEmail: dsub.android@gmail.com
 		\nVersión: %1$s
 		\nEspacio usado: %2$s of %3$s
 		\nEspacio disponible: %4$s of %5$s</string>
