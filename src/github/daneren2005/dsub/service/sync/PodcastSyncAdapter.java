@@ -60,11 +60,11 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 		try {
 			// Only refresh if syncs exist (implies a server where supported)
 			if(podcastList.size() > 0) {
-				// Refresh podcast listings before syncing
-				musicService.refreshPodcasts(context, null);
-
 				// Just update podcast listings so user doesn't have to
 				musicService.getPodcastChannels(true, context, null);
+
+				// Refresh podcast listings before syncing
+				musicService.refreshPodcasts(context, null);
 			}
 
 			List<String> updated = new ArrayList<String>();
