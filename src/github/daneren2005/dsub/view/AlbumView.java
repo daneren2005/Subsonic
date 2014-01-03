@@ -80,7 +80,7 @@ public class AlbumView extends UpdateView {
     @Override
 	protected void updateBackground() {
 		if(file == null) {
-			String s = Util.getRestUrl(context, null) + album.getId();
+			String s = Util.getRestUrl(context, null, false) + album.getId();
 			String cacheName = "directory-" + s.hashCode() + ".ser";
 			MusicDirectory dir = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
 
