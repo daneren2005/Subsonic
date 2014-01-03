@@ -67,13 +67,15 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 			} else {
 				for(MusicDirectory.Entry album: albumList.getChildren()) {
 					if(!syncedList.contains(album.getId())) {
-						try {
-							downloadRecursively(null, musicService.getMusicDirectory(album.getId(), album.getTitle(), true, context, null), context, false);
-							syncedList.add(album.getId());
-							updated.add(album.getTitle());
-						} catch(Exception e) {
-							Log.w(TAG, "Failed to get songs for " + album.getId() + " on " + Util.getServerName(context, instance));
+						if(!"Podcast".equals(album.getGenre())) {
+							try {
+								downloadRecursively(null, musicService.getMusicDirectory(album.getId(), album.getTitle(), true, context, null), context, false);
+								updated.add(album.getTitle());
+							} catch(Exception e) {
+								Log.w(TAG, "Failed to get songs for " + album.getId() + " on " + Util.getServerName(context, instance));
+							}
 						}
+						syncedList.add(album.getId());
 					}
 				}
 			}
