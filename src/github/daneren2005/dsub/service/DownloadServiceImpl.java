@@ -301,6 +301,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 downloadList.add(getCurrentPlayingIndex() + offset, downloadFile);
                 offset++;
             }
+			setNextPlaying();
             revision++;
         } else {
 			int size = size();
