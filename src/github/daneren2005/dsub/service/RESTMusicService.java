@@ -98,6 +98,7 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
 import java.io.*;
+import java.util.zip.GZIPInputStream;
 
 /**
  * @author Sindre Mehus
@@ -1269,6 +1270,10 @@ public class RESTMusicService implements MusicService {
         }
 
         InputStream in = entity.getContent();
+		Header contentEncoding = entity.getContentEncoding();
+		if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+			in = new GZIPInputStream(in);
+		}
         return new InputStreamReader(in, Constants.UTF_8);
     }
 
@@ -1356,6 +1361,7 @@ public class RESTMusicService implements MusicService {
                     request.addHeader(header);
                 }
             }
+			request.addHeader("Accept-Encoding", "gzip");
 
             // Set credentials to get through apache proxies that require authentication.
             int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
