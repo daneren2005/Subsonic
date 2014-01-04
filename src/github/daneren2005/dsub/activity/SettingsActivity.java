@@ -47,6 +47,7 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
+import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.view.ErrorDialog;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
@@ -242,6 +243,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		else if (Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION.equals(key)){
 			DownloadService downloadService = DownloadServiceImpl.getInstance();
 			downloadService.setSleepTimerDuration(Integer.parseInt(sharedPreferences.getString(key, "60")));
+		}
+		else if(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT.equals(key)) {
+			SyncUtil.removeMostRecentSyncFiles(this);
 		}
 		
 		scheduleBackup();

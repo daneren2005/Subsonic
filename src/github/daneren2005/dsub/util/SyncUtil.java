@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -156,6 +157,13 @@ public final class SyncUtil {
 			list = new ArrayList<String>();
 		}
 		return list;
+	}
+	public static void removeMostRecentSyncFiles(Context context) {
+		int total = Util.getServerCount(context);
+		for(int i = 0; i < total; i++) {
+			File file = new File(context.getCacheDir(), getMostRecentSyncFile(context, i));
+			file.delete();
+		}
 	}
 	public static String getMostRecentSyncFile(Context context, int instance) {
 		return "sync-most_recent-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
