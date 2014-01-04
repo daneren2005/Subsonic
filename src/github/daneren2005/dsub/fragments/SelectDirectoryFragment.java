@@ -16,14 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.EntryAdapter;
 
 import java.io.Serializable;
@@ -319,6 +317,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
+				if ("newest".equals(albumListType)) {
+					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
+				}
 				fragment.setArguments(args);
 
 				replaceFragment(fragment, rootId, true);
