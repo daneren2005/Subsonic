@@ -654,17 +654,13 @@ public class RESTMusicService implements MusicService {
                 }
 
                 byte[] bytes = Util.toByteArray(in);
-
-				File albumDir = FileUtil.getAlbumDirectory(context, entry);
-                if (albumDir.exists()) {
-                    OutputStream out = null;
-                    try {
-                        out = new FileOutputStream(FileUtil.getAlbumArtFile(albumDir));
-                        out.write(bytes);
-                    } finally {
-                        Util.close(out);
-                    }
-                }
+				OutputStream out = null;
+				try {
+					out = new FileOutputStream(FileUtil.getAlbumArtFile(context, entry));
+					out.write(bytes);
+				} finally {
+					Util.close(out);
+				}
 
                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 				if(size != saveSize) {

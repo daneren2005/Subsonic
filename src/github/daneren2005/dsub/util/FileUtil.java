@@ -139,21 +139,43 @@ public class FileUtil {
 
     public static File getAlbumArtFile(Context context, MusicDirectory.Entry entry) {
         File albumDir = getAlbumDirectory(context, entry);
-        return getAlbumArtFile(albumDir);
+		File artFile;
+		File albumFile = getAlbumArtFile(albumDir);
+		File hexFile = getHexAlbumArtFile(albumDir);
+		if(albumDir.exists()) {
+			if(hexFile.exists()) {
+				hexFile.renameTo(albumFile);
+			}
+			artFile = albumFile;
+		} else {
+			artFile = hexFile;
+		}
+        return artFile;
     }
 
     public static File getAlbumArtFile(File albumDir) {
         return new File(albumDir, Constants.ALBUM_ART_FILE);
     }
+	public static File getHexAlbumArtFile(File albumDir) {
+		return new File(getAlbumArtDirectory(), Util.md5Hex(albumDir.getPath()) + ".jpeg");
+	}
 
     public static Bitmap getAlbumArtBitmap(Context context, MusicDirectory.Entry entry, int size) {
         File albumArtFile = getAlbumArtFile(context, entry);
+		Log.d(TAG, albumArtFile.toString());
         if (albumArtFile.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(albumArtFile.getPath());
 			return (bitmap == null) ? null : Bitmap.createScaledBitmap(bitmap, size, size, true);
         }
         return null;
     }
+
+	public static File getAlbumArtDirectory() {
+		File albumArtDir = new File(getSubsonicDirectory(), "artwork");
+		ensureDirectoryExistsAndIsReadWritable(albumArtDir);
+		ensureDirectoryExistsAndIsReadWritable(new File(albumArtDir, ".nomedia"));
+		return albumArtDir;
+	}
 	
 	public static File getArtistDirectory(Context context, Artist artist) {
 		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getName()));
