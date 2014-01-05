@@ -80,23 +80,7 @@ public class AlbumView extends UpdateView {
     @Override
 	protected void updateBackground() {
 		if(file == null) {
-			String s = Util.getRestUrl(context, null, false) + album.getId();
-			String cacheName = "directory-" + s.hashCode() + ".ser";
-			MusicDirectory dir = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
-
-			if(dir != null) {
-				List<MusicDirectory.Entry> songs = dir.getChildren(false, true);
-				if(songs.size() > 0) {
-					MusicDirectory.Entry firstSong = songs.get(0);
-					File songFile = FileUtil.getSongFile(context, firstSong);
-					file = songFile.getParentFile();
-				}
-			}
-
-			// Backup in case cache is null or can't get dir from it
-			if(file == null) {
-				file = FileUtil.getAlbumDirectory(context, album);
-			}
+			file = FileUtil.getAlbumDirectory(context, album);
 		}
 
 		exists = file.exists();

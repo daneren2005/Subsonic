@@ -187,17 +187,33 @@ public class FileUtil {
 	}
 
     public static File getAlbumDirectory(Context context, MusicDirectory.Entry entry) {
-        File dir;
+        File dir = null;
         if (entry.getPath() != null) {
             File f = new File(fileSystemSafeDir(entry.getPath()));
             dir = new File(getMusicDirectory(context).getPath() + "/" + (entry.isDirectory() ? f.getPath() : f.getParent()));
         } else {
-            String artist = fileSystemSafe(entry.getArtist());
-			String album = fileSystemSafe(entry.getAlbum());
-			if("unnamed".equals(album)) {
-				album = fileSystemSafe(entry.getTitle());
+			// Do a special lookup since 4.7+ doesn't match artist/album to entry.getPath
+			String s = Util.getRestUrl(context, null, false) + entry.getId();
+			String cacheName = "directory-" + s.hashCode() + ".ser";
+			MusicDirectory entryDir = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
+
+			if(entryDir != null) {
+				List<MusicDirectory.Entry> songs = entryDir.getChildren(false, true);
+				if(songs.size() > 0) {
+					MusicDirectory.Entry firstSong = songs.get(0);
+					File songFile = FileUtil.getSongFile(context, firstSong);
+					dir = songFile.getParentFile();
+				}
 			}
-            dir = new File(getMusicDirectory(context).getPath() + "/" + artist + "/" + album);
+
+			if(dir == null) {
+				String artist = fileSystemSafe(entry.getArtist());
+				String album = fileSystemSafe(entry.getAlbum());
+				if("unnamed".equals(album)) {
+					album = fileSystemSafe(entry.getTitle());
+				}
+				dir = new File(getMusicDirectory(context).getPath() + "/" + artist + "/" + album);
+			}
         }
         return dir;
     }
