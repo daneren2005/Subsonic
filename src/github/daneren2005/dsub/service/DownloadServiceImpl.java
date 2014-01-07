@@ -297,9 +297,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 offset = 0;
             }
             for (MusicDirectory.Entry song : songs) {
-                DownloadFile downloadFile = new DownloadFile(this, song, save);
-                downloadList.add(getCurrentPlayingIndex() + offset, downloadFile);
-                offset++;
+				if(song != null) {
+					DownloadFile downloadFile = new DownloadFile(this, song, save);
+					downloadList.add(getCurrentPlayingIndex() + offset, downloadFile);
+					offset++;
+				}
             }
 			setNextPlaying();
             revision++;
