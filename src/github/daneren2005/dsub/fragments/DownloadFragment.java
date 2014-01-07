@@ -1268,10 +1268,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		DownloadService downloadService = getDownloadService();
-		if (downloadService == null) {
+		if (downloadService == null || e1 == null || e2 == null) {
 			return false;
 		}
-		Log.d(TAG, "onFling");
 
 		// Right to Left swipe
 		if (e1.getX() - e2.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
