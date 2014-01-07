@@ -162,13 +162,32 @@ public class FileUtil {
 
     public static Bitmap getAlbumArtBitmap(Context context, MusicDirectory.Entry entry, int size) {
         File albumArtFile = getAlbumArtFile(context, entry);
-		Log.d(TAG, albumArtFile.toString());
         if (albumArtFile.exists()) {
-            Bitmap bitmap = BitmapFactory.decodeFile(albumArtFile.getPath());
-			return (bitmap == null) ? null : Bitmap.createScaledBitmap(bitmap, size, size, true);
+			final BitmapFactory.Options opt = new BitmapFactory.Options();
+			opt.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(albumArtFile.getPath(), opt);
+			opt.inPurgeable = true;
+			opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
+			opt.inJustDecodeBounds = false;
+
+			Bitmap bitmap = BitmapFactory.decodeFile(albumArtFile.getPath(), opt);
+			return bitmap == null ? null : getScaledBitmap(bitmap, size);
         }
         return null;
     }
+	public static Bitmap getSampledBitmap(byte[] bytes, int size) {
+		final BitmapFactory.Options opt = new BitmapFactory.Options();
+		opt.inJustDecodeBounds = true;
+		BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opt);
+		opt.inPurgeable = true;
+		opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
+		opt.inJustDecodeBounds = false;
+		Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opt);
+		return getScaledBitmap(bitmap, size);
+	}
+	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
+		return Bitmap.createScaledBitmap(bitmap, size, Util.getScaledHeight(bitmap, size), true);
+	}
 
 	public static File getAlbumArtDirectory() {
 		File albumArtDir = new File(getSubsonicDirectory(), "artwork");

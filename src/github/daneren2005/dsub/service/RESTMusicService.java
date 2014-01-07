@@ -626,7 +626,7 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, int saveSize, ProgressListener progressListener) throws Exception {
+    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception {
 
         // Synchronize on the entry so that we don't download concurrently for the same song.
         synchronized (entry) {
@@ -641,8 +641,8 @@ public class RESTMusicService implements MusicService {
 
             InputStream in = null;
             try {
-                List<String> parameterNames = Arrays.asList("id", "size");
-                List<Object> parameterValues = Arrays.<Object>asList(entry.getCoverArt(), saveSize);
+                List<String> parameterNames = Arrays.asList("id");
+                List<Object> parameterValues = Arrays.<Object>asList(entry.getCoverArt());
                 HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener);
                 in = entity.getContent();
 
@@ -662,12 +662,7 @@ public class RESTMusicService implements MusicService {
 					Util.close(out);
 				}
 
-                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-				if(size != saveSize) {
-					bitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
-				}
-				return bitmap;
-
+                return FileUtil.getSampledBitmap(bytes, size);
             } finally {
                 Util.close(in);
             }

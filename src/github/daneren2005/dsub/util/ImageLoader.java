@@ -278,7 +278,7 @@ public class ImageLoader implements Runnable {
 		public void loadImage() {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
-				Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, mSaveSize, null);
+				Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, null);
 				String key = getKey(mEntry.getCoverArt(), mSize);
 				cache.put(key, bitmap);
 				// Make sure key is the most recently "used"

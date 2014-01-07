@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -792,6 +793,42 @@ public final class Util {
 	
 	public static boolean isNullOrWhiteSpace(String string) {
 		return string == null || "".equals(string) || "".equals(string.trim());
+	}
+
+	public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			// Calculate ratios of height and width to requested height and
+			// width
+			final int heightRatio = Math.round((float) height / (float) reqHeight);
+			final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+			// Choose the smallest ratio as inSampleSize value, this will
+			// guarantee
+			// a final image with both dimensions larger than or equal to the
+			// requested height and width.
+			inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+		}
+
+		return inSampleSize;
+	}
+
+	public static int getScaledHeight(double height, double width, int newWidth) {
+		// Try to keep correct aspect ratio of the original image, do not force a square
+		double aspectRatio = height / width;
+
+		// Assume the size given refers to the width of the image, so calculate the new height using
+		//	the previously determined aspect ratio
+		return (int) Math.round(newWidth * aspectRatio);
+	}
+
+	public static int getScaledHeight(Bitmap bitmap, int width) {
+		return Util.getScaledHeight((double) bitmap.getHeight(), (double) bitmap.getWidth(), width);
 	}
 
     public static boolean isNetworkConnected(Context context) {

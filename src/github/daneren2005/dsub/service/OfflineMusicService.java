@@ -201,7 +201,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 
     @Override
-    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, int saveSize, ProgressListener progressListener) throws Exception {
+    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception {
 		try {
 			return FileUtil.getAlbumArtBitmap(context, entry, size);
 		} catch(Exception e) {
