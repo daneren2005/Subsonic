@@ -32,6 +32,7 @@
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Marcadores</string>
 	<string name="button_bar.chat">Chat</string>
+	<string name="button_bar.shares">Compartidos</string>
 
     <string name="main.welcome_title">Bienvenido!</string>
     <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
@@ -79,6 +80,8 @@
 	<string name="menu.keep_synced">Mantener sincronizado</string>
 	<string name="menu.stop_sync">Detener sincronización</string>
 	<string name="menu.show_all">Mostrar todo el contenido</string>
+	<string name="menu.show_artist">Mostrar artista</string>
+	<string name="menu.share">Compartir</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -364,6 +367,40 @@
 	<string name="settings.sync_starred_summary">Descargar a caché automáticamente canciones, albumes y artistas que contengan estrella</string>
 	<string name="settings.sync_notification">Mostrar notificación de sincronización</string>
 	<string name="settings.sync_notification_summary">Mostrar una notificación tras haber sincronizado nuevo contenido</string>
+	<string name="settings.sync_interval_15">15 Minutos</string>
+	<string name="settings.sync_interval_30">30 Minutos</string>
+	<string name="settings.sync_interval_60">1 Hora</string>
+	<string name="settings.sync_interval_120">2 Horas</string>
+	<string name="settings.sync_interval_240">4 Horas</string>
+	<string name="settings.sync_interval_360">6 Horas</string>
+	<string name="settings.sync_interval_720">12 Horas</string>
+	<string name="settings.sync_interval_1440">Diariamente</string>
+	<string name="settings.menu_options.title">Opciones del menú opcionales</string>
+	<string name="settings.menu_options.play_next_summary">Mostrar Reproducir Siguiente en los menús</string>
+	<string name="settings.menu_options.play_last_summary">Mostrar Reproducir Anterior en menús</string>
+	<string name="settings.menu_options.star_summary">Mostrar estrella en menús</string>
+	<string name="settings.menu_options.shared_summary">Mostrar Compartir en menús</string>
+	<string name="settings.shares_enabled">Compartir habilitadoShares Enabled</string>
+	<string name="settings.shares_enabled_summary">Mostrar o no mostrar la lista de compartidos en el menú desplegable</string>
+	<string name="settings.server_internal_address">Dirección de red interna</string>
+
+	<string name="share.info">Dueño: %1$s
+		\nDescripción: %2$s
+		\nURL: %3$s
+		\nCreado: %4$s
+		\nÚltima visita: %5$s
+		\nExpira: %6$s
+		\nNúmero de visitas: %7$s
+	</string>
+	<string name="share.expires">Expira: %s</string>
+	<string name="share.expires_never">Nunca expira</string>
+	<string name="share.deleted">Compartición eliminada %s</string>
+	<string name="share.deleted_error">Error al eliminar compartición %s</string>
+	<string name="share.no_expiration">No expira</string>
+	<string name="share.expiration">Expira:</string>
+	<string name="share.updated_info">Información de compartición actualizada para %s</string>
+	<string name="share.updated_info_error">Error al actualizar información de compartición para %s</string>
+	<string name="share.via">Compartir vía</string>
 
 	<string name="sync.title">DSub: Nuevo contenido multimedia disponible</string>
 	<string name="sync.new_podcasts">Nuevos podcasts: %s</string>
