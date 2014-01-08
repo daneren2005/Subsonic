@@ -62,8 +62,12 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
                     getHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            loading.cancel();
-                            error(t);
+							try {
+								loading.cancel();
+								error(t);
+							} catch(Exception e) {
+								// Don't care
+							}
                         }
                     });
                 }
