@@ -70,7 +70,7 @@
     <string name="menu.settings">Beállítások</string>
     <string name="menu.help">Súgó</string>
 	<string name="menu.about">Névjegy</string>
-	<string name="menu.add_playlist">Hozzáadás lejátszási listához</string>
+	<string name="menu.add_playlist">Mentés lejátszási listába</string>
 	<string name="menu.remove_playlist">Eltávolítás a lejátszási listából</string>
 	<string name="menu.deleted_playlist">%s lejátszási lista törölve</string>
 	<string name="menu.deleted_playlist_error">%s lejátszási lista törlése sikertelen!</string>
@@ -85,11 +85,11 @@
 	<string name="menu.share">Megosztás</string>
 
     <string name="playlist.label">Lejátszási listák</string>
-	<string name="playlist.update_info">Módosítás</string>
+	<string name="playlist.update_info">Szerkesztés</string>
 	<string name="playlist.updated_info">%s lejátszási lista módosítva</string>
 	<string name="playlist.updated_info_error">%s lejátszási lista módosítása sikertelen!</string>
 	<string name="playlist.overwrite">Létező lejátszási lista felülírása</string>
-	<string name="playlist.add_to">Hozzáadás lejátszási listához</string>
+	<string name="playlist.add_to">Mentés lejátszási listába</string>
 	<string name="playlist.create_new">Új lejátszási lista</string>
 
     <string name="help.label">Súgó</string>
@@ -163,7 +163,7 @@
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszöveg</string>
     <string name="download.menu_remove">Eltávolítás a várólistáról</string>
-	<string name="download.menu_delete">Gyorsítótár ürítése</string>
+	<string name="download.menu_delete">Törlés a gyorsítótárból</string>
     <string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
     <string name="download.menu_screen_off">Kijelző ki</string>
@@ -206,8 +206,8 @@
 	<string name="sync.new_albums">Új albumok: %s</string>
 	<string name="sync.new_starred">Új csillagozott dalok</string>
     
-	<string name="starring_content_starred">\"%s"\ csillagozás be</string>
-	<string name="starring_content_unstarred">\"%s"\ csillagozás ki</string>
+	<string name="starring_content_starred">\"%s\" csillagozás be</string>
+	<string name="starring_content_unstarred">\"%s\" csillagozás ki</string>
     <string name="starring_content_error">Nem sikerült frissíteni \"%s\", próbálja később!</string>
 	
 	<string name="playlist_error">Nem sikerült elérni a lejátszási lista adatait!</string>
@@ -273,7 +273,7 @@
 	<string name="settings.track_title">Dalsorszám megjelenítése #</string>
 	<string name="settings.track_summary">Dalsorszám megjelenítése # a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
-	<string name="settings.custom_sort_summary">Könyvtárlisa rendezése a lemez sorszámának megfelelően. Ütközhet a kiszolgáló év szerinti albumrendezésével.</string>
+	<string name="settings.custom_sort_summary">Könyvtárlisa rendezése a lemez sorszámának megfelelően. Ütközhet a kiszolgáló év szerinti albumrendezésével!</string>
     <string name="settings.network_title">Hálózat</string>
     <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
