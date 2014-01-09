@@ -60,18 +60,15 @@ public class CachedMusicService implements MusicService {
     private static final int TTL_MUSIC_DIR = 5 * 60; // Five minutes
 
 	private final RESTMusicService musicService;
-    private final LruCache<String, TimeLimitedCache<MusicDirectory>> cachedMusicDirectories;
     private final TimeLimitedCache<Boolean> cachedLicenseValid = new TimeLimitedCache<Boolean>(120, TimeUnit.SECONDS);
     private final TimeLimitedCache<Indexes> cachedIndexes = new TimeLimitedCache<Indexes>(60 * 60, TimeUnit.SECONDS);
     private final TimeLimitedCache<List<Playlist>> cachedPlaylists = new TimeLimitedCache<List<Playlist>>(3600, TimeUnit.SECONDS);
     private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<List<MusicFolder>>(10 * 3600, TimeUnit.SECONDS);
-	private final TimeLimitedCache<List<Genre>> cachedGenres = new TimeLimitedCache<List<Genre>>(10 * 3600, TimeUnit.SECONDS);
 	private final TimeLimitedCache<List<PodcastChannel>> cachedPodcastChannels = new TimeLimitedCache<List<PodcastChannel>>(10 * 3600, TimeUnit.SECONDS);
     private String restUrl;
 
     public CachedMusicService(RESTMusicService musicService) {
         this.musicService = musicService;
-        cachedMusicDirectories = new LruCache<String, TimeLimitedCache<MusicDirectory>>(MUSIC_DIR_CACHE_SIZE);
     }
 
     @Override
@@ -118,7 +115,6 @@ public class CachedMusicService implements MusicService {
         if (refresh) {
             cachedIndexes.clear();
             cachedMusicFolders.clear();
-            cachedMusicDirectories.evictAll();
         }
         Indexes result = cachedIndexes.get();
         if (result == null) {
@@ -130,23 +126,18 @@ public class CachedMusicService implements MusicService {
 
     @Override
     public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        checkSettingsChanged(context);
-        TimeLimitedCache<MusicDirectory> cache = refresh ? null : cachedMusicDirectories.get(id);
-        MusicDirectory dir = cache == null ? null : cache.get();
-        if (dir == null) {
-        	if(!refresh) {
-        		dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
-        	}
-        	
-        	if(dir == null) {
-            	dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
-            	FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
-        	}
-            cache = new TimeLimitedCache<MusicDirectory>(TTL_MUSIC_DIR, TimeUnit.SECONDS);
-            cache.set(dir);
-            cachedMusicDirectories.put(id, cache);
-        }
-        return dir;
+	MusicDirectory dir = null;
+
+	if(!refresh) {
+		dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
+	}
+
+	if(dir == null) {
+		dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
+		FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
+	}
+
+	return dir;
     }
 
     @Override
@@ -354,19 +345,15 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		checkSettingsChanged(context);
-		List<Genre> result = refresh ? null : cachedGenres.get();
+		List<Genre> result = null;
 
-		if (result == null) {
-			if(!refresh) {
-				result = FileUtil.deserialize(context, getCacheName(context, "genre"), ArrayList.class);
-			}
-			
-			if(result == null) {
-				result = musicService.getGenres(refresh, context, progressListener);
-				FileUtil.serialize(context, new ArrayList<Genre>(result), getCacheName(context, "genre"));
-			}
-			cachedGenres.set(result);
+		if(!refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "genre"), ArrayList.class);
+		}
+
+		if(result == null) {
+			result = musicService.getGenres(refresh, context, progressListener);
+			FileUtil.serialize(context, new ArrayList<Genre>(result), getCacheName(context, "genre"));
 		}
 
 		return result;
@@ -399,27 +386,19 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
-		checkSettingsChanged(context);
 		String altId = "p-" + id;
-		TimeLimitedCache<MusicDirectory> cache = refresh ? null : cachedMusicDirectories.get(altId);
-		MusicDirectory result = (cache == null) ? null : cache.get();
+		MusicDirectory result = null;
+
+		if(!refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "directory", altId), MusicDirectory.class, 10);
+		}
 
 		if(result == null) {
-			if(!refresh) {
-				result = FileUtil.deserialize(context, getCacheName(context, "directory", altId), MusicDirectory.class, 10);
-			}
-
-			if(result == null) {
-				result = musicService.getPodcastEpisodes(refresh, id, context, progressListener);
-				FileUtil.serialize(context, result, getCacheName(context, "directory", altId));
-			}
-			cache = new TimeLimitedCache<MusicDirectory>(TTL_MUSIC_DIR, TimeUnit.SECONDS);
-			cache.set(result);
-			cachedMusicDirectories.put(altId, cache);
+			result = musicService.getPodcastEpisodes(refresh, id, context, progressListener);
+			FileUtil.serialize(context, result, getCacheName(context, "directory", altId));
 		}
+
 		return result;
-
-
 	}
 	
 	@Override
@@ -494,7 +473,6 @@ public class CachedMusicService implements MusicService {
         String newUrl = musicService.getRestUrl(context, null, false);
         if (!Util.equals(newUrl, restUrl)) {
             cachedMusicFolders.clear();
-            cachedMusicDirectories.evictAll();
             cachedLicenseValid.clear();
             cachedIndexes.clear();
             cachedPlaylists.clear();
