@@ -93,6 +93,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private boolean isPartial = true;
     private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
+	private final List<DownloadFile> toDelete = new ArrayList<DownloadFile>();
 	private final Handler handler = new Handler();
 	private Handler mediaPlayerHandler;
     private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
@@ -354,7 +355,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
     }
 
-    public void restore(List<MusicDirectory.Entry> songs, int currentPlayingIndex, int currentPlayingPosition) {
+    public void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
 		SharedPreferences prefs = Util.getPreferences(this);
 		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
 		if(remoteState != RemoteControlState.LOCAL) {
@@ -379,6 +380,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             }
 			autoPlayStart = false;
         }
+
+		if(toDelete != null) {
+			for(MusicDirectory.Entry entry: toDelete) {
+				this.toDelete.add(forSong(entry));
+			}
+		}
     }
 
     @Override
@@ -523,7 +530,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     			currentPlaying.delete();
     		}
     	}
-    	
+		for(DownloadFile podcast: toDelete) {
+			podcast.delete();
+		}
+		toDelete.clear();
+
         reset();
         downloadList.clear();
         revision++;
@@ -665,6 +676,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public List<DownloadFile> getSongs() {
 		return downloadList;
 	}
+
+	public List<DownloadFile> getToDelete() { return toDelete; }
 
     @Override
     public synchronized List<DownloadFile> getDownloads() {
@@ -1292,6 +1305,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 							bufferTask.start();
 						}
 					}
+				}
+
+				// Finished loading, delete when list is cleared
+				if(downloadFile.getSong() instanceof PodcastEpisode) {
+					toDelete.add(downloadFile);
 				}
 
 				wakeLock.release();
