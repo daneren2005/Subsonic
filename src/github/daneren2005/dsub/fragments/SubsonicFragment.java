@@ -958,14 +958,14 @@ public class SubsonicFragment extends Fragment {
 		if(!Util.isOffline(context) && song.getSuffix() != null) {
 			msg += "\nServer Format: " + song.getSuffix();
 			if(song.getBitRate() != null && song.getBitRate() != 0) {
-				msg += "\nServer Bitrate: " + song.getBitRate() + " kpbs";
+				msg += "\nServer Bitrate: " + song.getBitRate() + " kbps";
 			}
 		}
 		if(format != null && !"".equals(format)) {
 			msg += "\nCached Format: " + format;
 		}
 		if(bitrate != null && bitrate != 0) {
-			msg += "\nCached Bitrate: " + bitrate + " kpbs";
+			msg += "\nCached Bitrate: " + bitrate + " kbps";
 		}
 		if(size != 0) {
 			msg += "\nSize: " + Util.formatBytes(size);
