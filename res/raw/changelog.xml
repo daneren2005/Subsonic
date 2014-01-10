@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.3.4" versioncode="78" releasedate="1/7/2014">
-		<change>New Share management tab (can disable in settings). Ability to share albums/songs</change>
-		<change>High quality album art cache (doesn't overwrite existing downloaded art)</change>
+	<release version="4.3.4" versioncode="79" releasedate="1/9/2014">
+		<change>New Share management tab (can disable in settings). Ability to share albums/songs (thanks archrival)</change>
+		<change>High quality album art cache (doesn't overwrite existing downloaded art) (thanks archrival)</change>
 		<change>Add ability to hide Play next/Play Last/Star/Share from menus</change>
 		<change>Add ability to define a separate IP used while browsing via WiFi</change>
 		<change>With unlimited bitrate, default to 320 kpbs if transcoding to mp3 (instead of server default of 128 kpbs)</change>
 		<change>Show artist as a option under album lists/search albums</change>
 		<change>GZip if tomcat/reverse proxy is set up to support it</change>
 		<change>Fix for using play next sometimes screwing up playback</change>
+		<change>Fix listened to podcasts not being deleted in certain circumstances</change>
 	</release>
 	<release version="4.3.3" versioncode="77" releasedate="12/25/2013">
 		<change>Enable keep starred songs synced in settings</change>
