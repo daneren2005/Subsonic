@@ -812,6 +812,17 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
     @Override
     public synchronized void next() {
+		// Delete podcast if fully listened to
+		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
+			int duration = getPlayerDuration();
+
+			// Make sure > 90% of the way through
+			int cutoffPoint = (int)(duration * 0.90);
+			if(duration > 0 && cachedPosition > cutoffPoint) {
+				toDelete.add(currentPlaying);
+			}
+		}
+
         int index = getCurrentPlayingIndex();
 		int nextPlayingIndex = getNextPlayingIndex();
 		// Make sure to actually go to next when repeat song is on
