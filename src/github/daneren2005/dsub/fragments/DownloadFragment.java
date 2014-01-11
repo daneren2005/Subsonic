@@ -1110,8 +1110,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 				switch (playerState) {
 					case DOWNLOADING:
-						long bytes = currentPlaying.getPartialFile().length();
-						statusTextView.setText(context.getResources().getString(R.string.download_playerstate_downloading, Util.formatLocalizedBytes(bytes, context)));
+						if(currentPlaying != null) {
+							long bytes = currentPlaying.getPartialFile().length();
+							statusTextView.setText(context.getResources().getString(R.string.download_playerstate_downloading, Util.formatLocalizedBytes(bytes, context)));
+						}
 						break;
 					case PREPARING:
 						statusTextView.setText(R.string.download_playerstate_buffering);
