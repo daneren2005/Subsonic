@@ -137,6 +137,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_MENU_STAR = "showStar";
 	public static final String PREFERENCES_KEY_MENU_SHARED = "showShared";
 	public static final String PREFERENCES_KEY_SHARED_ENABLED = "sharedEnabled";
+	public static final String PREFERENCES_KEY_BROWSE_TAGS = "browseTags";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";

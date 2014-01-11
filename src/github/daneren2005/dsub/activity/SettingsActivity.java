@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -339,6 +340,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverPasswordPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		serverPasswordPreference.setSummary("***");
 		serverPasswordPreference.setTitle(R.string.settings_server_password);
+
+		final CheckBoxPreference serverTagPreference = new CheckBoxPreference(this);
+		serverTagPreference.setKey(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance);
+		serverTagPreference.setChecked(Util.isTagBrowsing(this, instance));
+		serverTagPreference.setSummary(R.string.settings_browse_by_tags_summary);
+		serverTagPreference.setTitle(R.string.settings_browse_by_tags);
 		
 		final Preference serverOpenBrowser = new Preference(this);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
@@ -405,6 +412,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		screen.addPreference(serverInternalUrlPreference);
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
+		screen.addPreference(serverTagPreference);
 		screen.addPreference(serverRemoveServerPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);

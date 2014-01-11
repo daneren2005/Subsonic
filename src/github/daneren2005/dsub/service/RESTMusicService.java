@@ -219,7 +219,7 @@ public class RESTMusicService implements MusicService {
             parameterValues.add(musicFolderId);
         }
 
-        Reader reader = getReader(context, progressListener, "getIndexes", null, parameterNames, parameterValues);
+        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtists" : "getIndexes", null, parameterNames, parameterValues);
         try {
             Indexes indexes = new IndexesParser(context).parse(reader, progressListener);
             if (indexes != null) {
@@ -307,7 +307,7 @@ public class RESTMusicService implements MusicService {
         List<String> parameterNames = Arrays.asList("query", "artistCount", "albumCount", "songCount");
         List<Object> parameterValues = Arrays.<Object>asList(critera.getQuery(), critera.getArtistCount(),
                                                              critera.getAlbumCount(), critera.getSongCount());
-        Reader reader = getReader(context, progressListener, "search2", null, parameterNames, parameterValues);
+        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "search3" : "search2", null, parameterNames, parameterValues);
         try {
             return new SearchResult2Parser(context).parse(reader, progressListener);
         } finally {
@@ -505,7 +505,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbumList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReader(context, progressListener, "getAlbumList",
+        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getAlbumList2" : "getAlbumList",
                                   null, Arrays.asList("type", "size", "offset"), Arrays.<Object>asList(type, size, offset));
         try {
             return new AlbumListParser(context).parse(reader, progressListener);
@@ -545,7 +545,7 @@ public class RESTMusicService implements MusicService {
 			values.add(decade + 10);
 		}
 
-		Reader reader = getReader(context, progressListener, "getAlbumList", null, names, values);
+		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getAlbumList2" : "getAlbumList", null, names, values);
 		try {
 			return new AlbumListParser(context).parse(reader, progressListener);
 		} finally {
@@ -555,7 +555,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
     public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReader(context, progressListener, "getStarred", null);
+        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getStarred2" : "getStarred", null);
         try {
             return new StarredListParser(context).parse(reader, progressListener);
         } finally {
@@ -1440,7 +1440,14 @@ public class RESTMusicService implements MusicService {
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         return networkInfo == null ? -1 : networkInfo.getType();
     }
-    
+
+	private int getInstance(Context context) {
+		if(instance == null) {
+			return Util.getActiveServer(context);
+		} else {
+			return instance;
+		}
+	}
 	public String getRestUrl(Context context, String method) {
 		return getRestUrl(context, method, true);
 	}
