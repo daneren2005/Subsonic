@@ -248,7 +248,7 @@ public class RESTMusicService implements MusicService {
 
     private String getCachedIndexesFilename(Context context, String musicFolderId) {
         String s = getRestUrl(context, null) + musicFolderId;
-        return "indexes-" + Math.abs(s.hashCode()) + ".ser";
+        return (Util.isTagBrowsing(context, getInstance(context)) ? "artists-" : "indexes-") + Math.abs(s.hashCode()) + ".ser";
     }
 
     @Override

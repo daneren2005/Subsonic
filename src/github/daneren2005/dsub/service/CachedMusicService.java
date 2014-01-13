@@ -66,6 +66,7 @@ public class CachedMusicService implements MusicService {
     private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<List<MusicFolder>>(10 * 3600, TimeUnit.SECONDS);
 	private final TimeLimitedCache<List<PodcastChannel>> cachedPodcastChannels = new TimeLimitedCache<List<PodcastChannel>>(10 * 3600, TimeUnit.SECONDS);
     private String restUrl;
+	private boolean isTagBrowsing = false;
 
     public CachedMusicService(RESTMusicService musicService) {
         this.musicService = musicService;
@@ -503,13 +504,15 @@ public class CachedMusicService implements MusicService {
 
     private void checkSettingsChanged(Context context) {
         String newUrl = musicService.getRestUrl(context, null, false);
-        if (!Util.equals(newUrl, restUrl)) {
+		boolean newIsTagBrowsing = Util.isTagBrowsing(context);
+        if (!Util.equals(newUrl, restUrl) || isTagBrowsing != newIsTagBrowsing) {
             cachedMusicFolders.clear();
             cachedLicenseValid.clear();
             cachedIndexes.clear();
             cachedPlaylists.clear();
 			cachedPodcastChannels.clear();
             restUrl = newUrl;
+			isTagBrowsing = newIsTagBrowsing;
         }
     }
 }
