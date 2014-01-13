@@ -48,7 +48,9 @@ public class StarredListParser extends MusicDirectoryEntryParser {
                 String name = getElementName();
                 if ("album".equals(name) || "song".equals(name)) {
 					MusicDirectory.Entry entry = parseEntry("");
-					entry.setDirectory(true);
+					if("album".equals(name)) {
+						entry.setDirectory(true);
+					}
                     dir.addChild(entry);
                 } else if("artist".equals(name)) {
 					MusicDirectory.Entry entry = parseArtist();

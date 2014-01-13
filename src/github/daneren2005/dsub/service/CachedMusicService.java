@@ -126,21 +126,53 @@ public class CachedMusicService implements MusicService {
 
     @Override
     public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-	MusicDirectory dir = null;
+		MusicDirectory dir = null;
 
-	if(!refresh) {
-		dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
-	}
+		if(!refresh) {
+			dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
+		}
 
-	if(dir == null) {
-		dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
-		FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
-	}
+		if(dir == null) {
+			dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
+		}
 
-	return dir;
+		return dir;
     }
 
-    @Override
+	@Override
+	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		MusicDirectory dir = null;
+
+		if(!refresh) {
+			dir = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
+		}
+
+		if(dir == null) {
+			dir = musicService.getArtist(id, name, refresh, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "artist", id));
+		}
+
+		return dir;
+	}
+
+	@Override
+	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		MusicDirectory dir = null;
+
+		if(!refresh) {
+			dir = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
+		}
+
+		if(dir == null) {
+			dir = musicService.getAlbum(id, name, refresh, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "album", id));
+		}
+
+		return dir;
+	}
+
+	@Override
     public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
         return musicService.search(criteria, context, progressListener);
     }
@@ -309,8 +341,8 @@ public class CachedMusicService implements MusicService {
     }
     
 	@Override
-	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
-		musicService.setStarred(id, starred, context, progressListener);
+	public void setStarred(String id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+		musicService.setStarred(id, artistId, albumId, starred, context, progressListener);
 	}
 	
 	@Override

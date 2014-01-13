@@ -171,6 +171,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			if("root".equals(artist.getId())) {
 				args.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
 			}
+			args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 			fragment.setArguments(args);
 
 			replaceFragment(fragment, R.id.fragment_list_layout);
@@ -185,7 +186,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	private void load(final boolean refresh) {
 		setTitle(R.string.button_bar_browse);
 		
-		if (Util.isOffline(context)) {
+		if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
 			folderButton.setVisibility(View.GONE);
 		} else {
 			folderButton.setVisibility(View.VISIBLE);
@@ -196,7 +197,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			@Override
 			protected Indexes doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				if (!Util.isOffline(context)) {
+				if (!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
 					musicFolders = musicService.getMusicFolders(refresh, context, this);
 				}
 				String musicFolderId = Util.getSelectedMusicFolderId(context);

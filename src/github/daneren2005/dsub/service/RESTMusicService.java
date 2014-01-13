@@ -274,7 +274,27 @@ public class RESTMusicService implements MusicService {
         }
     }
 
-    @Override
+	@Override
+	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "getArtist", null, "id", id);
+		try {
+			return new MusicDirectoryParser(context).parse(name, reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "getAlbum", null, "id", id);
+		try {
+			return new MusicDirectoryParser(context).parse(name, reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
     public SearchResult search(SearchCritera critera, Context context, ProgressListener progressListener) throws Exception {
         try {
             return searchNew(critera, context, progressListener);
@@ -802,11 +822,24 @@ public class RESTMusicService implements MusicService {
     }
     
     @Override
-    public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+    public void setStarred(String id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
-		id = getOfflineSongId(id, context, progressListener);
+
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		if(id != null) {
+			names.add("id");
+			values.add(getOfflineSongId(id, context, progressListener));
+		} else if(artistId != null) {
+			names.add("artistId");
+			values.add(artistId);
+		} else if(albumId != null) {
+			names.add("albumId");
+			values.add(albumId);
+		}
 		
-		Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, "id", id);
+		Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, names, values);
     	try {
             new ErrorParser(context).parse(reader);
         } finally {
@@ -1183,7 +1216,7 @@ public class RESTMusicService implements MusicService {
 			String id = offline.getString(Constants.OFFLINE_STAR_ID + i, null);
 			boolean starred = offline.getBoolean(Constants.OFFLINE_STAR_SETTING + i, false);
 			if(id != null) {
-				setStarred(id, starred, context, progressListener);
+				setStarred(id, null, null, starred, context, progressListener);
 			} else {
 				String search = offline.getString(Constants.OFFLINE_STAR_SEARCH + i, "");
 				try{
@@ -1191,10 +1224,10 @@ public class RESTMusicService implements MusicService {
 					SearchResult result = searchNew(critera, context, progressListener);
 					if(result.getSongs().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
-						setStarred(result.getSongs().get(0).getId(), starred, context, progressListener);
+						setStarred(result.getSongs().get(0).getId(), null, null, starred, context, progressListener);
 					} else if(result.getAlbums().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getAlbums().get(0).getTitle() + " by " + result.getAlbums().get(0).getArtist() + " with id " + result.getAlbums().get(0).getId());
-						setStarred(result.getAlbums().get(0).getId(), starred, context, progressListener);
+						setStarred(result.getAlbums().get(0).getId(), null, null, starred, context, progressListener);
 					}
 					else{
 						throw new Exception("Song not found on server");

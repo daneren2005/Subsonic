@@ -64,7 +64,7 @@ public class RemoteControlClientKK extends RemoteControlClientJB {
 			protected Void doInBackground(Void... params) {
 				try {
 					MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-					musicService.setStarred(entry.getId(), starred, downloadService, null);
+					musicService.setStarred(entry.getId(), null, null, starred, downloadService, null);
 
 					// Make sure to clear parent cache
 					String s = Util.getRestUrl(downloadService, null) + entry.getParent();

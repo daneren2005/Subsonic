@@ -68,6 +68,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	int albumListSize;
 	boolean refreshListing = false;
 	boolean showAll = false;
+	boolean artist = false;
 	
 	
 	public SelectDirectoryFragment() {
@@ -136,6 +137,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
+			artist = args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false);
 			if(entries == null) {
 				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
 			}
@@ -320,6 +322,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				if ("newest".equals(albumListType)) {
 					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
 				}
+				if(entry.getArtist() == null && entry.getParent() == null) {
+					args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+				}
 				fragment.setArguments(args);
 
 				replaceFragment(fragment, rootId, true);
@@ -390,7 +395,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				return service.getMusicDirectory(id, name, refresh, context, this);
+				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+					if(artist) {
+						return service.getArtist(id, name, refresh, context, this);
+					} else {
+						return service.getAlbum(id, name, refresh, context, this);
+					}
+				} else {
+					return service.getMusicDirectory(id, name, refresh, context, this);
+				}
 			}
 			
 			@Override
@@ -409,7 +422,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			protected MusicDirectory load(MusicService service) throws Exception {
 				MusicDirectory root;
 				if(share == null) {
-					root = service.getMusicDirectory(id, name, refresh, context, this);
+					if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+						if(artist) {
+							root = service.getArtist(id, name, refresh, context, this);
+						} else {
+							root = service.getAlbum(id, name, refresh, context, this);
+						}
+					} else {
+						root = service.getMusicDirectory(id, name, refresh, context, this);
+					}
 				} else {
 					root = share.getMusicDirectory();
 				}

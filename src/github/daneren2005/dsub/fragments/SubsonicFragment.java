@@ -588,7 +588,11 @@ public class SubsonicFragment extends Fragment {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.setStarred(entry.getId(), starred, context, null);
+				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+					musicService.setStarred(null, null, entry.getId(), starred, context, null);
+				} else {
+					musicService.setStarred(entry.getId(), null, null, starred, context, null);
+				}
 				
 				// Make sure to clear parent cache
 				String s = Util.getRestUrl(context, null) + entry.getParent();
@@ -627,7 +631,11 @@ public class SubsonicFragment extends Fragment {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.setStarred(entry.getId(), starred, context, null);
+				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+					musicService.setStarred(null, entry.getId(), null, starred, context, null);
+				} else {
+					musicService.setStarred(entry.getId(), null, null, starred, context, null);
+				}
 				return null;
 			}
 
