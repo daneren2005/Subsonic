@@ -95,13 +95,13 @@ public class DownloadFile {
     }
 	private int getActualBitrate() {
 		int br = song.isVideo() ? Util.getMaxVideoBitrate(context) : Util.getMaxBitrate(context);
-        if (br == 0 && song.getTranscodedSuffix() != null &&
-                "mp3".equals(song.getTranscodedSuffix().toLowerCase()) &&
-                song.getBitRate() != null) {
-            br = Math.min(320, song.getBitRate());
-        } else {
-            br = 320;
-        }
+		if(br == 0 && song.getTranscodedSuffix() != null && "mp3".equals(song.getTranscodedSuffix().toLowerCase())) {
+			if(song.getBitRate() != null) {
+				br = Math.min(320, song.getBitRate());
+			} else {
+				br = 320;
+			}
+		}
 
 		return br;
 	}

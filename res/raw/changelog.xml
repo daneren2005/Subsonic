@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.3.5" versioncode="80" releasedate="1/11/2014">
+		<change>Fix downloads not limiting bitrate correctly</change>
+	</release>
 	<release version="4.3.4" versioncode="79" releasedate="1/9/2014">
 		<change>New Share management tab (can disable in settings). Ability to share albums/songs (thanks archrival)</change>
 		<change>High quality album art cache (doesn't overwrite existing downloaded art) (thanks archrival)</change>
