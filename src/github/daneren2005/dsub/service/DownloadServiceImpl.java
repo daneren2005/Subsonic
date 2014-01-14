@@ -498,6 +498,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			currentDownloading = null;
 		}
 		backgroundDownloadList.clear();
+		Util.hideDownloadingNotification(this);
 	}
 
     @Override
