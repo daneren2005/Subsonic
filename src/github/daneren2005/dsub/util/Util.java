@@ -38,6 +38,7 @@ import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
@@ -65,6 +66,7 @@ import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
+
 import org.apache.http.HttpEntity;
 
 import java.io.ByteArrayOutputStream;
@@ -358,7 +360,9 @@ public final class Util {
 		StringBuilder builder = new StringBuilder();
 
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-		if(allowAltAddress && Util.isWifiConnected(context)) {
+		if(allowAltAddress && 
+				(prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "").equals("") && Util.isWifiConnected(context))
+				|| prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "").equals(Util.getSSID(context))) {
 			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
 			if(internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
 				serverUrl = internalUrl;
@@ -846,6 +850,16 @@ public final class Util {
 		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 		boolean connected = networkInfo != null && networkInfo.isConnected();
 		return connected && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI);
+	}
+	public static String getSSID(Context context) {
+		if (isWifiConnected(context)) {
+			WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+			if (wifiManager.getConnectionInfo() != null && wifiManager.getConnectionInfo().getSSID() != null) {
+				return wifiManager.getConnectionInfo().getSSID().replace("\"", "");
+			}
+			return null;
+		}
+		return null;
 	}
 
     public static boolean isExternalStoragePresent() {
