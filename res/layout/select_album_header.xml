@@ -30,7 +30,16 @@
 			android:textAppearance="?android:attr/textAppearanceLarge"
 			android:textStyle="bold"
 			android:singleLine="true"
-			android:ellipsize="end"/>
+			android:ellipsize="marquee"
+			android:marqueeRepeatLimit="marquee_forever"
+			android:scrollHorizontally="true"
+			android:focusable="true"
+			android:focusableInTouchMode="true">
+
+			<requestFocus android:focusable="true"
+				android:focusableInTouchMode="true"
+				android:duplicateParentState="true" />
+		</TextView>
 
 		<TextView
 			android:text="This is the artist name"
