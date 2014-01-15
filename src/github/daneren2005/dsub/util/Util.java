@@ -1200,32 +1200,13 @@ public final class Util {
 
             File albumArtFile = FileUtil.getAlbumArtFile(context, song);
             intent.putExtra("coverart", albumArtFile.getAbsolutePath());
-			
-			avrcpIntent.putExtra("playing", true);
-			avrcpIntent.putExtra("track", song.getTitle());
-			avrcpIntent.putExtra("artist", song.getArtist());
-			avrcpIntent.putExtra("album", song.getAlbum());
-			avrcpIntent.putExtra("ListSize",(long) downloadService.getSongs().size());
-			avrcpIntent.putExtra("id", (long) downloadService.getCurrentPlayingIndex()+1);
-			avrcpIntent.putExtra("duration", (long) downloadService.getPlayerDuration());
-			avrcpIntent.putExtra("position", (long) downloadService.getPlayerPosition());
-			avrcpIntent.putExtra("coverart", albumArtFile.getAbsolutePath());
         } else {
             intent.putExtra("title", "");
             intent.putExtra("artist", "");
             intent.putExtra("album", "");
             intent.putExtra("coverart", "");
-			
-			avrcpIntent.putExtra("playing", false);
-			avrcpIntent.putExtra("track", "");
-			avrcpIntent.putExtra("artist", "");
-			avrcpIntent.putExtra("album", "");
-			avrcpIntent.putExtra("ListSize",(long)0);
-			avrcpIntent.putExtra("id", (long) 0);
-			avrcpIntent.putExtra("duration", (long )0);
-			avrcpIntent.putExtra("position", (long) 0);
-			avrcpIntent.putExtra("coverart", "");
         }
+		addTrackInfo(context, song, avrcpIntent);
 
         context.sendBroadcast(intent);
 		context.sendBroadcast(avrcpIntent);
@@ -1234,7 +1215,7 @@ public final class Util {
     /**
      * <p>Broadcasts the given player state as the one being set.</p>
      */
-    public static void broadcastPlaybackStatusChange(Context context, PlayerState state) {
+    public static void broadcastPlaybackStatusChange(Context context, MusicDirectory.Entry song, PlayerState state) {
         Intent intent = new Intent(EVENT_PLAYSTATE_CHANGED);
 		Intent avrcpIntent = new Intent(AVRCP_PLAYSTATE_CHANGED);
 
@@ -1258,10 +1239,38 @@ public final class Util {
             default:
                 return; // No need to broadcast.
         }
+		addTrackInfo(context, song, avrcpIntent);
 
         context.sendBroadcast(intent);
 		context.sendBroadcast(avrcpIntent);
     }
+
+	private static void addTrackInfo(Context context, MusicDirectory.Entry song, Intent intent) {
+		if (song != null) {
+			DownloadService downloadService = (DownloadServiceImpl)context;
+			File albumArtFile = FileUtil.getAlbumArtFile(context, song);
+
+			intent.putExtra("playing", true);
+			intent.putExtra("track", song.getTitle());
+			intent.putExtra("artist", song.getArtist());
+			intent.putExtra("album", song.getAlbum());
+			intent.putExtra("ListSize", (long) downloadService.getSongs().size());
+			intent.putExtra("id", (long) downloadService.getCurrentPlayingIndex() + 1);
+			intent.putExtra("duration", (long) downloadService.getPlayerDuration());
+			intent.putExtra("position", (long) downloadService.getPlayerPosition());
+			intent.putExtra("coverart", albumArtFile.getAbsolutePath());
+		} else {
+			intent.putExtra("playing", false);
+			intent.putExtra("track", "");
+			intent.putExtra("artist", "");
+			intent.putExtra("album", "");
+			intent.putExtra("ListSize", (long) 0);
+			intent.putExtra("id", (long) 0);
+			intent.putExtra("duration", (long) 0);
+			intent.putExtra("position", (long) 0);
+			intent.putExtra("coverart", "");
+		}
+	}
 
     /**
      * Resolves the default text color for notifications.

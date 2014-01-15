@@ -952,7 +952,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         boolean show = playerState == PlayerState.STARTED;
         boolean pause = playerState == PlayerState.PAUSED;
 		boolean hide = playerState == PlayerState.STOPPED;
-        Util.broadcastPlaybackStatusChange(this, playerState);
+        Util.broadcastPlaybackStatusChange(this, (currentPlaying != null) ? currentPlaying.getSong() : null, playerState);
 
         this.playerState = playerState;
 		
