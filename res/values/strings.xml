@@ -244,7 +244,7 @@
     <string name="settings.server_unused">Unused</string>
     <string name="settings.server_name">Name</string>
     <string name="settings.server_address">Server address</string>
-	<string name="settings.server_local_network_ssid" >Local network</string>
+	<string name="settings.server_local_network_ssid" >Local network SSID</string>
 	<string name="settings.server_internal_address">Local network address</string>
     <string name="settings.server_username">Username</string>
     <string name="settings.server_password">Password</string>

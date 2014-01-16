@@ -406,13 +406,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 		screen.addPreference(serverNamePreference);
 		screen.addPreference(serverUrlPreference);
-		screen.addPreference(serverLocalNetworkSSIDPreference);
 		screen.addPreference(serverInternalUrlPreference);
+		screen.addPreference(serverLocalNetworkSSIDPreference);
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
-		screen.addPreference(serverRemoveServerPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
+		screen.addPreference(serverRemoveServerPreference);
 
 		screen.setOrder(instance);
 
