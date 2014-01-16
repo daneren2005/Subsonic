@@ -18,7 +18,7 @@
 	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
 	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
 	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
 	<uses-feature android:name="android.hardware.microphone" android:required="false" />
@@ -26,7 +26,6 @@
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
 
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application android:label="@string/common.appname"
     	android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
