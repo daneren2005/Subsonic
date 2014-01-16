@@ -360,12 +360,13 @@ public final class Util {
 		StringBuilder builder = new StringBuilder();
 
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-		if(allowAltAddress && 
-				(prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "").equals("") && Util.isWifiConnected(context))
-				|| prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "").equals(Util.getSSID(context))) {
-			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-			if(internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
-				serverUrl = internalUrl;
+		if(allowAltAddress && Util.isWifiConnected(context)) {
+			String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
+			if("".equals(SSID) || SSID.equals(Util.getSSID(context))) {
+				String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+				if(internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
+					serverUrl = internalUrl;
+				}
 			}
 		}
 
