@@ -322,6 +322,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 		serverUrlPreference.setSummary(serverUrlPreference.getText());
 		screen.setSummary(serverUrlPreference.getText());
+		
+		final EditTextPreference serverLocalNetworkSSIDPreference = new EditTextPreference(this);
+		serverLocalNetworkSSIDPreference.setKey(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
+		serverLocalNetworkSSIDPreference.setTitle(R.string.settings_server_local_network_ssid);
 
 		final EditTextPreference serverInternalUrlPreference = new EditTextPreference(this);
 		serverInternalUrlPreference.setKey(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
@@ -402,6 +406,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 		screen.addPreference(serverNamePreference);
 		screen.addPreference(serverUrlPreference);
+		screen.addPreference(serverLocalNetworkSSIDPreference);
 		screen.addPreference(serverInternalUrlPreference);
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
@@ -533,6 +538,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private class ServerSettings {
         private EditTextPreference serverName;
         private EditTextPreference serverUrl;
+        private EditTextPreference serverLocalNetworkSSID;
 		private EditTextPreference serverInternalUrl;
         private EditTextPreference username;
         private PreferenceScreen screen;
@@ -542,6 +548,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             screen = (PreferenceScreen) findPreference("server" + instance);
             serverName = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
             serverUrl = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_URL + instance);
+            serverLocalNetworkSSID = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
 			serverInternalUrl = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
             username = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_USERNAME + instance);
 
@@ -594,6 +601,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         public void update() {
             serverName.setSummary(serverName.getText());
             serverUrl.setSummary(serverUrl.getText());
+            serverLocalNetworkSSID.setSummary(serverLocalNetworkSSID.getText());
 			serverInternalUrl.setSummary(serverInternalUrl.getText());
             username.setSummary(username.getText());
             screen.setSummary(serverUrl.getText());
