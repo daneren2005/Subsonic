@@ -436,6 +436,7 @@
     <string name="parser.not_authenticated">Wrong username or password.</string>
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
     <string name="parser.artist_count">Got %d artists.</string>
+	<string name="parser.server_error">Server error: %s</string>
 
     <string name="select_artist.refresh">Refresh</string>
     <string name="select_artist.folder">Select folder</string>
