@@ -37,6 +37,7 @@ import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -116,22 +117,25 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public MusicDirectory getMusicDirectory(String id, String artistName, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        File dir = new File(id);
-        MusicDirectory result = new MusicDirectory();
-        result.setName(dir.getName());
-
-        Set<String> names = new HashSet<String>();
-
-        for (File file : FileUtil.listMediaFiles(dir)) {
-            String name = getName(file);
-            if (name != null & !names.contains(name)) {
-                names.add(name);
-                result.addChild(createEntry(context, file, name));
-            }
-        }
-		result.sortChildren();
-        return result;
+        return getMusicDirectory(id, artistName, refresh, context, progressListener, false);
     }
+	private MusicDirectory getMusicDirectory(String id, String artistName, boolean refresh, Context context, ProgressListener progressListener, boolean isPodcast) throws Exception {
+		File dir = new File(id);
+		MusicDirectory result = new MusicDirectory();
+		result.setName(dir.getName());
+
+		Set<String> names = new HashSet<String>();
+
+		for (File file : FileUtil.listMediaFiles(dir)) {
+			String name = getName(file);
+			if (name != null & !names.contains(name)) {
+				names.add(name);
+				result.addChild(createEntry(context, file, name, true, isPodcast));
+			}
+		}
+		result.sortChildren();
+		return result;
+	}
 
     private String getName(File file) {
         String name = file.getName();
@@ -151,18 +155,28 @@ public class OfflineMusicService extends RESTMusicService {
 		return createEntry(context, file, name, true);
 	}
     private MusicDirectory.Entry createEntry(Context context, File file, String name, boolean load) {
-        MusicDirectory.Entry entry = new MusicDirectory.Entry();
-        entry.setDirectory(file.isDirectory());
-        entry.setId(file.getPath());
-        entry.setParent(file.getParent());
-        entry.setSize(file.length());
-        String root = FileUtil.getMusicDirectory(context).getPath();
+        return createEntry(context, file, name, load, false);
+    }
+	private MusicDirectory.Entry createEntry(Context context, File file, String name, boolean load, boolean isPodcast) {
+		MusicDirectory.Entry entry;
+		if(isPodcast) {
+			PodcastEpisode episode = new PodcastEpisode();
+			episode.setStatus("completed");
+			entry = episode;
+		} else {
+			entry = new MusicDirectory.Entry();
+		}
+		entry.setDirectory(file.isDirectory());
+		entry.setId(file.getPath());
+		entry.setParent(file.getParent());
+		entry.setSize(file.length());
+		String root = FileUtil.getMusicDirectory(context).getPath();
 		if(!file.getParentFile().getParentFile().getPath().equals(root)) {
 			entry.setGrandParent(file.getParentFile().getParent());
 		}
-        entry.setPath(file.getPath().replaceFirst("^" + root + "/" , ""));
+		entry.setPath(file.getPath().replaceFirst("^" + root + "/" , ""));
 		String title = name;
-        if (file.isFile()) {
+		if (file.isFile()) {
 			File artistFolder = file.getParentFile().getParentFile();
 			File albumFolder = file.getParentFile();
 			if(artistFolder.getPath().equals(root)) {
@@ -170,8 +184,8 @@ public class OfflineMusicService extends RESTMusicService {
 			} else {
 				entry.setArtist(artistFolder.getName());
 			}
-            entry.setAlbum(albumFolder.getName());
-			
+			entry.setAlbum(albumFolder.getName());
+
 			int index = name.indexOf('-');
 			if(index != -1) {
 				try {
@@ -181,24 +195,24 @@ public class OfflineMusicService extends RESTMusicService {
 					// Failed parseInt, just means track filled out
 				}
 			}
-			
+
 			if(load) {
 				entry.loadMetadata(file);
 			}
-        }
-		
-        entry.setTitle(title);
-        entry.setSuffix(FileUtil.getExtension(file.getName().replace(".complete", "")));
+		}
 
-        File albumArt = FileUtil.getAlbumArtFile(context, entry);
-        if (albumArt.exists()) {
-            entry.setCoverArt(albumArt.getPath());
-        }
+		entry.setTitle(title);
+		entry.setSuffix(FileUtil.getExtension(file.getName().replace(".complete", "")));
+
+		File albumArt = FileUtil.getAlbumArtFile(context, entry);
+		if (albumArt.exists()) {
+			entry.setCoverArt(albumArt.getPath());
+		}
 		if(FileUtil.isVideoFile(file)) {
 			entry.setVideo(true);
 		}
-        return entry;
-    }
+		return entry;
+	}
 
     @Override
     public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception {
@@ -613,7 +627,7 @@ public class OfflineMusicService extends RESTMusicService {
 	
 	@Override
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
-		return getMusicDirectory(FileUtil.getPodcastDirectory(context, id).getPath(), null, false, context, progressListener);
+		return getMusicDirectory(FileUtil.getPodcastDirectory(context, id).getPath(), null, false, context, progressListener, true);
 	}
 	
 	@Override
