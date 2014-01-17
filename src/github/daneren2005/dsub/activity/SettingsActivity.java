@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -82,6 +83,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private EditTextPreference chatRefreshRate;
 	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
+	private CheckBoxPreference syncEnabled;
+	private CheckBoxPreference syncWifi;
+	private CheckBoxPreference syncNotification;
+	private CheckBoxPreference syncStarred;
+	private CheckBoxPreference syncMostRecent;
 	private String internalSSID;
 	
 	private int serverCount = 3;
@@ -119,6 +125,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		chatRefreshRate = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CHAT_REFRESH);
 		videoPlayer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		syncInterval = (ListPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
+		syncEnabled = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
+		syncWifi = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
+		syncNotification = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
+		syncStarred = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
+		syncMostRecent = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
 		
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
@@ -296,6 +307,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		chatRefreshRate.setSummary(chatRefreshRate.getText());
 		videoPlayer.setSummary(videoPlayer.getEntry());
 		syncInterval.setSummary(syncInterval.getEntry());
+		if(syncEnabled.isChecked()) {
+			if(!syncInterval.isEnabled()) {
+				syncInterval.setEnabled(true);
+				syncWifi.setEnabled(true);
+				syncNotification.setEnabled(true);
+				syncStarred.setEnabled(true);
+				syncMostRecent.setEnabled(true);
+			}
+		} else {
+			if(syncInterval.isEnabled()) {
+				syncInterval.setEnabled(false);
+				syncWifi.setEnabled(false);
+				syncNotification.setEnabled(false);
+				syncStarred.setEnabled(false);
+				syncMostRecent.setEnabled(false);
+			}
+		}
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }
