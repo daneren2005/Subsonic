@@ -1300,6 +1300,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
 					playNext();
+
+					// Finished loading, delete when list is cleared
+					if(downloadFile.getSong() instanceof PodcastEpisode) {
+						toDelete.add(downloadFile);
+					}
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadServiceImpl.this) {
@@ -1317,11 +1322,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 							bufferTask.start();
 						}
 					}
-				}
-
-				// Finished loading, delete when list is cleared
-				if(downloadFile.getSong() instanceof PodcastEpisode) {
-					toDelete.add(downloadFile);
 				}
 
 				wakeLock.release();
