@@ -104,6 +104,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private final Scrobbler scrobbler = new Scrobbler();
 	private RemoteController remoteController;
     private DownloadFile currentPlaying;
+	private int currentPlayingIndex = -1;
 	private DownloadFile nextPlaying;
     private DownloadFile currentDownloading;
     private CancellableTask bufferTask;
@@ -329,6 +330,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
             if (currentPlaying == null) {
                 currentPlaying = downloadList.get(0);
+				currentPlayingIndex = 0;
 				currentPlaying.setPlaying(true);
             }
             checkDownloads();
@@ -604,6 +606,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			this.currentPlaying.setPlaying(false);
 		}
         this.currentPlaying = currentPlaying;
+		if(currentPlaying == null) {
+			currentPlayingIndex = -1;
+		} else {
+			currentPlayingIndex = downloadList.indexOf(currentPlaying);
+		}
 
         if (currentPlaying != null) {
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
@@ -641,8 +648,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 
     @Override
-    public synchronized int getCurrentPlayingIndex() {
-        return downloadList.indexOf(currentPlaying);
+    public int getCurrentPlayingIndex() {
+        return currentPlayingIndex;
     }
     private int getNextPlayingIndex() {
     	int index = getCurrentPlayingIndex();
