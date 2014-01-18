@@ -1323,8 +1323,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						}
 					}
 				}
-
-				wakeLock.release();
 			}
 		});
 	}
