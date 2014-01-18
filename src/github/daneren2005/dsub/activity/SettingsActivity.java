@@ -615,6 +615,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 				public boolean onPreferenceChange(Preference preference, Object value) {
 					try {
 						String url = (String) value;
+						// Allow blank internal IP address
+						if("".equals(url) || url == null) {
+							return true;
+						}
+
 						new URL(url);
 						if (url.contains(" ") || url.contains("@") || url.contains("_")) {
 							throw new Exception();
