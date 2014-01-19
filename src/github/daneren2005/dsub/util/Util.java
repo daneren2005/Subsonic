@@ -421,7 +421,14 @@ public final class Util {
 	}
 	
 	public static String parseOfflineIDSearch(Context context, String id, String cacheLocation) {
-		String name = id.replace(cacheLocation, "");
+		// Try to get this info based off of tags first
+		String name = parseOfflineIDSearch(id);
+		if(name != null) {
+			return name;
+		}
+
+		// Otherwise go nuts trying to parse from file structure
+		name = id.replace(cacheLocation, "");
 		if(name.startsWith("/")) {
 			name = name.substring(1);
 		}
@@ -456,6 +463,31 @@ public final class Util {
 		}
 		
 		return name;
+	}
+
+	public static String parseOfflineIDSearch(String id) {
+		MusicDirectory.Entry entry = new MusicDirectory.Entry();
+		File file = new File(id);
+
+		if(file.exists()) {
+			entry.loadMetadata(file);
+
+			if(entry.getArtist() != null) {
+				String title = file.getName();
+				int index = title.lastIndexOf(".");
+				title = index == -1 ? title : title.substring(0, index);
+				title = title.substring(title.indexOf('-') + 1);
+
+				String query = "artist:\"" + entry.getArtist() + "\"" +
+					" AND title:\"" + title + "\"";
+
+				return query;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
 	}
 
     public static String getContentType(HttpEntity entity) {
