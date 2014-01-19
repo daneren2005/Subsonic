@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.3.6" versioncode="81" releasedate="1/19/2014">
+		<change>Added optional SSID to use for local network address (requires new permission: ACCESS_WIFI_STATE)</change>
+		<change>Fix not being able to clear local network address</change>
+		<change>Fix Galaxy S3 issues</change>
+		<change>Hide star button on now playing screen if hidden in settings</change>
+		<change>Fix podcasts not being clickable in offline mode</change>
+		<change>Bunch of minor improvements/bugfixes</change>
+	</release>
 	<release version="4.3.5" versioncode="80" releasedate="1/11/2014">
 		<change>Fix downloads not limiting bitrate correctly</change>
 	</release>

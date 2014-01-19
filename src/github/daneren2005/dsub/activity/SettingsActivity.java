@@ -83,6 +83,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private EditTextPreference chatRefreshRate;
 	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
+	private CheckBoxPreference syncEnabled;
+	private CheckBoxPreference syncWifi;
+	private CheckBoxPreference syncNotification;
+	private CheckBoxPreference syncStarred;
+	private CheckBoxPreference syncMostRecent;
+	private String internalSSID;
 	
 	private int serverCount = 3;
 	private SharedPreferences settings;
@@ -93,6 +99,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		applyTheme();
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings);
+
+		internalSSID = Util.getSSID(this);
+		if(internalSSID == null) {
+			internalSSID = "";
+		}
+		internalSSID = this.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
 
         theme = (ListPreference) findPreference(Constants.PREFERENCES_KEY_THEME);
         maxBitrateWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
@@ -113,6 +125,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		chatRefreshRate = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CHAT_REFRESH);
 		videoPlayer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		syncInterval = (ListPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
+		syncEnabled = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
+		syncWifi = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
+		syncNotification = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
+		syncStarred = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
+		syncMostRecent = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
 		
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
@@ -290,6 +307,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		chatRefreshRate.setSummary(chatRefreshRate.getText());
 		videoPlayer.setSummary(videoPlayer.getEntry());
 		syncInterval.setSummary(syncInterval.getEntry());
+		if(syncEnabled.isChecked()) {
+			if(!syncInterval.isEnabled()) {
+				syncInterval.setEnabled(true);
+				syncWifi.setEnabled(true);
+				syncNotification.setEnabled(true);
+				syncStarred.setEnabled(true);
+				syncMostRecent.setEnabled(true);
+			}
+		} else {
+			if(syncInterval.isEnabled()) {
+				syncInterval.setEnabled(false);
+				syncWifi.setEnabled(false);
+				syncNotification.setEnabled(false);
+				syncStarred.setEnabled(false);
+				syncMostRecent.setEnabled(false);
+			}
+		}
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }
@@ -304,6 +338,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverNamePreference.setKey(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
 		serverNamePreference.setDefaultValue(getResources().getString(R.string.settings_server_unused));
 		serverNamePreference.setTitle(R.string.settings_server_name);
+		serverNamePreference.setDialogTitle(R.string.settings_server_name);
 
 		if (serverNamePreference.getText() == null) {
 			serverNamePreference.setText(getResources().getString(R.string.settings_server_unused));
@@ -316,6 +351,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverUrlPreference.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_URI);
 		serverUrlPreference.setDefaultValue("http://yourhost");
 		serverUrlPreference.setTitle(R.string.settings_server_address);
+		serverUrlPreference.setDialogTitle(R.string.settings_server_address);
 
 		if (serverUrlPreference.getText() == null) {
 			serverUrlPreference.setText("http://yourhost");
@@ -323,17 +359,25 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 		serverUrlPreference.setSummary(serverUrlPreference.getText());
 		screen.setSummary(serverUrlPreference.getText());
+		
+		final EditTextPreference serverLocalNetworkSSIDPreference = new EditTextPreference(this);
+		serverLocalNetworkSSIDPreference.setKey(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
+		serverLocalNetworkSSIDPreference.setTitle(R.string.settings_server_local_network_ssid);
+		serverLocalNetworkSSIDPreference.setDialogTitle(R.string.settings_server_local_network_ssid);
+		serverLocalNetworkSSIDPreference.setDialogMessage(internalSSID);
 
 		final EditTextPreference serverInternalUrlPreference = new EditTextPreference(this);
 		serverInternalUrlPreference.setKey(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
 		serverInternalUrlPreference.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_URI);
 		serverInternalUrlPreference.setDefaultValue("http://");
 		serverInternalUrlPreference.setTitle(R.string.settings_server_internal_address);
+		serverInternalUrlPreference.setDialogTitle(R.string.settings_server_internal_address);
 		serverInternalUrlPreference.setSummary(serverInternalUrlPreference.getText());
 
 		final EditTextPreference serverUsernamePreference = new EditTextPreference(this);
 		serverUsernamePreference.setKey(Constants.PREFERENCES_KEY_USERNAME + instance);
 		serverUsernamePreference.setTitle(R.string.settings_server_username);
+		serverUsernamePreference.setDialogTitle(R.string.settings_server_username);
 
 		final EditTextPreference serverPasswordPreference = new EditTextPreference(this);
 		serverPasswordPreference.setKey(Constants.PREFERENCES_KEY_PASSWORD + instance);
@@ -346,6 +390,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverTagPreference.setChecked(Util.isTagBrowsing(this, instance));
 		serverTagPreference.setSummary(R.string.settings_browse_by_tags_summary);
 		serverTagPreference.setTitle(R.string.settings_browse_by_tags);
+		serverPasswordPreference.setDialogTitle(R.string.settings_server_password);
 		
 		final Preference serverOpenBrowser = new Preference(this);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
@@ -410,12 +455,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		screen.addPreference(serverNamePreference);
 		screen.addPreference(serverUrlPreference);
 		screen.addPreference(serverInternalUrlPreference);
+		screen.addPreference(serverLocalNetworkSSIDPreference);
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverTagPreference);
-		screen.addPreference(serverRemoveServerPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
+		screen.addPreference(serverRemoveServerPreference);
 
 		screen.setOrder(instance);
 
@@ -541,6 +587,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private class ServerSettings {
         private EditTextPreference serverName;
         private EditTextPreference serverUrl;
+        private EditTextPreference serverLocalNetworkSSID;
 		private EditTextPreference serverInternalUrl;
         private EditTextPreference username;
         private PreferenceScreen screen;
@@ -550,6 +597,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             screen = (PreferenceScreen) findPreference("server" + instance);
             serverName = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
             serverUrl = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_URL + instance);
+            serverLocalNetworkSSID = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
 			serverInternalUrl = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
             username = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_USERNAME + instance);
 
@@ -574,6 +622,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 				public boolean onPreferenceChange(Preference preference, Object value) {
 					try {
 						String url = (String) value;
+						// Allow blank internal IP address
+						if("".equals(url) || url == null) {
+							return true;
+						}
+
 						new URL(url);
 						if (url.contains(" ") || url.contains("@") || url.contains("_")) {
 							throw new Exception();
@@ -602,6 +655,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         public void update() {
             serverName.setSummary(serverName.getText());
             serverUrl.setSummary(serverUrl.getText());
+            serverLocalNetworkSSID.setSummary(serverLocalNetworkSSID.getText());
 			serverInternalUrl.setSummary(serverInternalUrl.getText());
             username.setSummary(username.getText());
             screen.setSummary(serverUrl.getText());

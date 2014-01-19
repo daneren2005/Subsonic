@@ -50,6 +50,9 @@ public abstract class AbstractParser {
         int code = getInteger("code");
         String message;
         switch (code) {
+			case 0:
+				message = context.getResources().getString(R.string.parser_server_error, get("message"));
+				break;
             case 20:
                 message = context.getResources().getString(R.string.parser_upgrade_client);
                 break;

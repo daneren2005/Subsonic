@@ -104,6 +104,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     private final Scrobbler scrobbler = new Scrobbler();
 	private RemoteController remoteController;
     private DownloadFile currentPlaying;
+	private int currentPlayingIndex = -1;
 	private DownloadFile nextPlaying;
     private DownloadFile currentDownloading;
     private CancellableTask bufferTask;
@@ -329,6 +330,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         } else {
             if (currentPlaying == null) {
                 currentPlaying = downloadList.get(0);
+				currentPlayingIndex = 0;
 				currentPlaying.setPlaying(true);
             }
             checkDownloads();
@@ -498,6 +500,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			currentDownloading = null;
 		}
 		backgroundDownloadList.clear();
+		Util.hideDownloadingNotification(this);
 	}
 
     @Override
@@ -603,6 +606,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			this.currentPlaying.setPlaying(false);
 		}
         this.currentPlaying = currentPlaying;
+		if(currentPlaying == null) {
+			currentPlayingIndex = -1;
+		} else {
+			currentPlayingIndex = downloadList.indexOf(currentPlaying);
+		}
 
         if (currentPlaying != null) {
         	Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
@@ -640,8 +648,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 
     @Override
-    public synchronized int getCurrentPlayingIndex() {
-        return downloadList.indexOf(currentPlaying);
+    public int getCurrentPlayingIndex() {
+        return currentPlayingIndex;
     }
     private int getNextPlayingIndex() {
     	int index = getCurrentPlayingIndex();
@@ -951,7 +959,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         boolean show = playerState == PlayerState.STARTED;
         boolean pause = playerState == PlayerState.PAUSED;
 		boolean hide = playerState == PlayerState.STOPPED;
-        Util.broadcastPlaybackStatusChange(this, playerState);
+        Util.broadcastPlaybackStatusChange(this, (currentPlaying != null) ? currentPlaying.getSong() : null, playerState);
 
         this.playerState = playerState;
 		
@@ -1299,6 +1307,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
 					playNext();
+
+					// Finished loading, delete when list is cleared
+					if(downloadFile.getSong() instanceof PodcastEpisode) {
+						toDelete.add(downloadFile);
+					}
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadServiceImpl.this) {
@@ -1317,13 +1330,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 						}
 					}
 				}
-
-				// Finished loading, delete when list is cleared
-				if(downloadFile.getSong() instanceof PodcastEpisode) {
-					toDelete.add(downloadFile);
-				}
-
-				wakeLock.release();
 			}
 		});
 	}

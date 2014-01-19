@@ -49,7 +49,38 @@
 							android:layout_height="wrap_content"
 							android:layout_centerHorizontal="true">
 
-							<include layout="@layout/download_action_buttons"/>
+							<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+								android:id="@+id/download_other_controls_layout"
+								android:orientation="horizontal"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:layout_gravity="center_horizontal">
+
+								<Button
+									android:id="@+id/download_jukebox"
+									android:text="RC"
+									style="@style/DownloadActionButton"/>
+
+								<Button
+									android:id="@+id/download_equalizer"
+									android:text="EQ"
+									style="@style/DownloadActionButton"/>
+
+								<Button
+									android:id="@+id/download_visualizer"
+									android:text="VIS"
+									style="@style/DownloadActionButton"/>
+
+								<ImageButton
+									android:id="@+id/download_star"
+									style="@style/DownloadActionImageButton"
+									android:src="@android:drawable/star_big_off"/>
+
+								<ImageButton
+									android:id="@+id/download_bookmark"
+									style="@style/DownloadActionImageButton"
+									android:src="@drawable/ic_menu_bookmark_dark"/>
+							</LinearLayout>
 						</LinearLayout>
 					</RelativeLayout>
 

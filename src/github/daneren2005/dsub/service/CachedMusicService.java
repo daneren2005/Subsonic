@@ -83,7 +83,16 @@ public class CachedMusicService implements MusicService {
         checkSettingsChanged(context);
         Boolean result = cachedLicenseValid.get();
         if (result == null) {
-            result = musicService.isLicenseValid(context, progressListener);
+			result = FileUtil.deserialize(context, getCacheName(context, "license"), Boolean.class);
+
+			if(result == null) {
+            	result = musicService.isLicenseValid(context, progressListener);
+
+				// Only save a copy license is valid
+				if(result == true) {
+					FileUtil.serialize(context, (Boolean) result, getCacheName(context, "license"));
+				}
+			}
             cachedLicenseValid.set(result, result ? 30L * 60L : 2L * 60L, TimeUnit.SECONDS);
         }
         return result;

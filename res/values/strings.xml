@@ -244,7 +244,9 @@
     <string name="settings.server_unused">Unused</string>
     <string name="settings.server_name">Name</string>
     <string name="settings.server_address">Server address</string>
-	<string name="settings.server_internal_address">Internal network address</string>
+	<string name="settings.server_local_network_ssid" >Local network SSID</string>
+	<string name="settings.server_local_network_ssid_hint">Current SSID: %s</string>
+	<string name="settings.server_internal_address">Local network address</string>
     <string name="settings.server_username">Username</string>
     <string name="settings.server_password">Password</string>
 	<string name="settings.server_open_browser">Open in browser</string>
@@ -438,6 +440,7 @@
     <string name="parser.not_authenticated">Wrong username or password.</string>
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
     <string name="parser.artist_count">Got %d artists.</string>
+	<string name="parser.server_error">Server error: %s</string>
 
     <string name="select_artist.refresh">Refresh</string>
     <string name="select_artist.folder">Select folder</string>
