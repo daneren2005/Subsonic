@@ -594,7 +594,7 @@ public class RESTMusicService implements MusicService {
         names.add("size");
         values.add(size);
 
-        if (musicFolderId != null && !"".equals(musicFolderId)) {
+        if (musicFolderId != null && !"".equals(musicFolderId) && !Util.isTagBrowsing(context, getInstance(context))) {
             names.add("musicFolderId");
             values.add(musicFolderId);
         }
