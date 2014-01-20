@@ -32,12 +32,15 @@ public class MusicDirectoryEntryParser extends AbstractParser {
     protected MusicDirectory.Entry parseEntry(String artist) {
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         entry.setId(get("id"));
-        entry.setParent(get("parent"));
+		String albumId = get("albumId");
+		if(albumId != null) {
+			entry.setParent(albumId);
+			entry.setGrandParent(get("artistId"));
+		} else {
+			entry.setParent(get("parent"));
+		}
 		if(entry.getParent() == null) {
-			entry.setParent(get("albumId"));
-			if(entry.getParent() == null) {
-				entry.setParent(get("artistId"));
-			}
+			entry.setParent(get("artistId"));
 		}
         entry.setTitle(get("title"));
 		if(entry.getTitle() == null) {
