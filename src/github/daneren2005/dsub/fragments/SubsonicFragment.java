@@ -1110,6 +1110,7 @@ public class SubsonicFragment extends Fragment {
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
 		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 		fragment.setArguments(args);
 
 		replaceFragment(fragment, getRootId(), true);
