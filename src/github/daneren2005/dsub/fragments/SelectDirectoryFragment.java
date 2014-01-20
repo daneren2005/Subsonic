@@ -68,7 +68,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	int albumListSize;
 	boolean refreshListing = false;
 	boolean showAll = false;
-	boolean artist = false;
 	
 	
 	public SelectDirectoryFragment() {
@@ -395,15 +394,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					if(artist) {
-						return service.getArtist(id, name, refresh, context, this);
-					} else {
-						return service.getAlbum(id, name, refresh, context, this);
-					}
-				} else {
-					return service.getMusicDirectory(id, name, refresh, context, this);
-				}
+				return getMusicDirectory(id, name, refresh, service, this);
 			}
 			
 			@Override
@@ -422,15 +413,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			protected MusicDirectory load(MusicService service) throws Exception {
 				MusicDirectory root;
 				if(share == null) {
-					if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-						if(artist) {
-							root = service.getArtist(id, name, refresh, context, this);
-						} else {
-							root = service.getAlbum(id, name, refresh, context, this);
-						}
-					} else {
-						root = service.getMusicDirectory(id, name, refresh, context, this);
-					}
+					root = getMusicDirectory(id, name, refresh, service, this);
 				} else {
 					root = share.getMusicDirectory();
 				}

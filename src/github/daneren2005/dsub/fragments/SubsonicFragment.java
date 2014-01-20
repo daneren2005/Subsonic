@@ -62,6 +62,7 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
@@ -92,6 +93,7 @@ public class SubsonicFragment extends Fragment {
 	protected static Random random = new Random();
 	protected GestureDetector gestureScanner;
 	protected Share share;
+	protected boolean artist = false;
 	
 	public SubsonicFragment() {
 		super();
@@ -685,7 +687,7 @@ public class SubsonicFragment extends Fragment {
 					root = share.getMusicDirectory();
 				}
 				else if(isDirectory) {
-					root = musicService.getMusicDirectory(id, name, false, context, this);
+					root = getMusicDirectory(id, name, false, musicService, this);
 				}
 				else {
 					root = musicService.getPlaylist(true, id, name, context, this);
@@ -733,6 +735,18 @@ public class SubsonicFragment extends Fragment {
 		};
 
 		task.execute();
+	}
+
+	protected MusicDirectory getMusicDirectory(String id, String name, boolean refresh, MusicService service, ProgressListener listener) throws Exception {
+		if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+			if(artist) {
+				return service.getArtist(id, name, refresh, context, listener);
+			} else {
+				return service.getAlbum(id, name, refresh, context, listener);
+			}
+		} else {
+			return service.getMusicDirectory(id, name, refresh, context, listener);
+		}
 	}
 
 	protected void addToPlaylist(final List<MusicDirectory.Entry> songs) {
