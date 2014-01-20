@@ -51,6 +51,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			artists = (List<Artist>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 			musicFolders = (List<MusicFolder>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
 		}
+		artist = true;
 	}
 
 	@Override

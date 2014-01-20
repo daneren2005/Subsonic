@@ -709,7 +709,14 @@ public class SubsonicFragment extends Fragment {
 				}
 				for (MusicDirectory.Entry dir : parent.getChildren(true, false)) {
 					MusicService musicService = MusicServiceFactory.getMusicService(context);
-					getSongsRecursively(musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this), songs);
+
+					MusicDirectory musicDirectory;
+					if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+						musicDirectory = musicService.getAlbum(dir.getId(), dir.getTitle(), false, context, this);
+					} else {
+						musicDirectory = musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this);
+					}
+					getSongsRecursively(musicDirectory, songs);
 				}
 			}
 
