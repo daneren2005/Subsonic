@@ -94,6 +94,7 @@ public class SubsonicFragment extends Fragment {
 	protected GestureDetector gestureScanner;
 	protected Share share;
 	protected boolean artist = false;
+	protected boolean artistOverride = false;
 	
 	public SubsonicFragment() {
 		super();
@@ -268,21 +269,27 @@ public class SubsonicFragment extends Fragment {
 				toggleStarred(artist);
 				break;
 			case R.id.album_menu_play_now:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, false, true, false, false);
 				break;
 			case R.id.album_menu_play_shuffled:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, false, true, true, false);
 				break;
 			case R.id.album_menu_play_next:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, true, false, false, false, true);
 				break;
 			case R.id.album_menu_play_last:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, true, false, false, false);
 				break;
 			case R.id.album_menu_download:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, true, false, false, true);
 				break;
 			case R.id.album_menu_pin:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), true, true, false, false, true);
 				break;
 			case R.id.album_menu_star:
@@ -738,6 +745,7 @@ public class SubsonicFragment extends Fragment {
 						downloadService.downloadBackground(songs, save);
 					}
 				}
+				artistOverride = false;
 			}
 		};
 
@@ -746,7 +754,7 @@ public class SubsonicFragment extends Fragment {
 
 	protected MusicDirectory getMusicDirectory(String id, String name, boolean refresh, MusicService service, ProgressListener listener) throws Exception {
 		if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-			if(artist) {
+			if(artist && !artistOverride) {
 				return service.getArtist(id, name, refresh, context, listener);
 			} else {
 				return service.getAlbum(id, name, refresh, context, listener);
