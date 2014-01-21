@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.4 Beta2" versioncode="83" releasedate="1/21/2014">
+		<change>Fix Show All Media</change>
+		<change>Fix play/cache</change>
+		<change>Fix Show Artist/Album</change>
+		<change>Fix albums not showing as cached</change>
+	</release>
 	<release version="4.4.0 Beta1" versioncode="82" releasedate="1/19/2014">
 		<change>Browse by ID3 Tags instead of folder structure (off by default)</change>
 		<change>Probably a good idea to clear existing cache since there will be many songs that don't match up</change>
