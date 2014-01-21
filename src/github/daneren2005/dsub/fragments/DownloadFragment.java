@@ -1281,11 +1281,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		// Right to Left swipe
 		if (e1.getX() - e2.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
 			warnIfNetworkOrStorageUnavailable();
-			if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
-				downloadService.next();
-				onCurrentChanged();
-				onProgressChanged();
-			}
+			downloadService.next();
+			onCurrentChanged();
+			onProgressChanged();
 			return true;
 		}
 

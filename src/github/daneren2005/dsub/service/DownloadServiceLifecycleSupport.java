@@ -323,9 +323,7 @@ public class DownloadServiceLifecycleSupport {
 					break;
 				case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
 				case KeyEvent.KEYCODE_MEDIA_NEXT:
-					if (downloadService.getCurrentPlayingIndex() < downloadService.size() - 1) {
-						downloadService.next();
-					}
+					downloadService.next();
 					break;
 				case RemoteControlClient.FLAG_KEY_MEDIA_STOP:
 				case KeyEvent.KEYCODE_MEDIA_STOP:
