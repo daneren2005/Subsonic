@@ -811,9 +811,13 @@ public class DownloadServiceImpl extends Service implements DownloadService {
         }
 
         // Restart song if played more than five seconds.
-        if (getPlayerPosition() > 5000 || index == 0) {
+        if (getPlayerPosition() > 5000 || (index == 0 && getRepeatMode() != RepeatMode.ALL)) {
             play(index);
         } else {
+			if(index == 0) {
+				index = size();
+			}
+
             play(index - 1);
         }
     }
