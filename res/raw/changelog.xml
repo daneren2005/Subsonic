@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.3.7" versioncode="84" releasedate="1/22/2014">
+		<change>Add stats to genres for 4.9Beta3+ Servers</change>
+		<change>Fix stuck Last.FM notification if you use it to scrobble</change>
+		<change>Fix shuffle play issue</change>
+		<change>Fix pressing next from bluetooth controls not looping back to start with repeat set to all</change>
+	</release>
 	<release version="4.3.6" versioncode="81" releasedate="1/19/2014">
 		<change>Added optional SSID to use for local network address (requires new permission: ACCESS_WIFI_STATE)</change>
 		<change>Fix not being able to clear local network address</change>
