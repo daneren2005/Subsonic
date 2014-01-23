@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.4 Beta2" versioncode="83" releasedate="1/21/2014">
-		<change>Fix Show All Media</change>
-		<change>Fix play/cache</change>
-		<change>Fix Show Artist/Album</change>
-		<change>Fix albums not showing as cached</change>
-	</release>
-	<release version="4.4.0 Beta1" versioncode="82" releasedate="1/19/2014">
-		<change>Browse by ID3 Tags instead of folder structure (off by default)</change>
-		<change>Probably a good idea to clear existing cache since there will be many songs that don't match up</change>
+	<release version="4.3.7" versioncode="84" releasedate="1/22/2014">
+		<change>Add stats to genres for 4.9Beta3+ Servers</change>
+		<change>Fix stuck Last.FM notification if you use it to scrobble</change>
+		<change>Fix shuffle play issue</change>
+		<change>Fix pressing next from bluetooth controls not looping back to start with repeat set to all</change>
 	</release>
 	<release version="4.3.6" versioncode="81" releasedate="1/19/2014">
 		<change>Added optional SSID to use for local network address (requires new permission: ACCESS_WIFI_STATE)</change>

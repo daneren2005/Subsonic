@@ -1255,11 +1255,13 @@ public final class Util {
 
             File albumArtFile = FileUtil.getAlbumArtFile(context, song);
             intent.putExtra("coverart", albumArtFile.getAbsolutePath());
+			avrcpIntent.putExtra("playing", true);
         } else {
             intent.putExtra("title", "");
             intent.putExtra("artist", "");
             intent.putExtra("album", "");
             intent.putExtra("coverart", "");
+			avrcpIntent.putExtra("playing", false);
         }
 		addTrackInfo(context, song, avrcpIntent);
 
@@ -1305,7 +1307,6 @@ public final class Util {
 			DownloadService downloadService = (DownloadServiceImpl)context;
 			File albumArtFile = FileUtil.getAlbumArtFile(context, song);
 
-			intent.putExtra("playing", true);
 			intent.putExtra("track", song.getTitle());
 			intent.putExtra("artist", song.getArtist());
 			intent.putExtra("album", song.getAlbum());
@@ -1315,7 +1316,6 @@ public final class Util {
 			intent.putExtra("position", (long) downloadService.getPlayerPosition());
 			intent.putExtra("coverart", albumArtFile.getAbsolutePath());
 		} else {
-			intent.putExtra("playing", false);
 			intent.putExtra("track", "");
 			intent.putExtra("artist", "");
 			intent.putExtra("album", "");

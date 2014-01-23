@@ -14,7 +14,9 @@ import github.daneren2005.dsub.util.Util;
 public class Genre implements Serializable {
 	private String name;
     private String index;
-	
+	private Integer albumCount;
+	private Integer songCount;
+
     public String getName() {
         return name;
     }
@@ -35,6 +37,22 @@ public class Genre implements Serializable {
     public String toString() {
         return name;
     }
+
+	public Integer getAlbumCount() {
+		return albumCount;
+	}
+
+	public void setAlbumCount(Integer albumCount) {
+		this.albumCount = albumCount;
+	}
+
+	public Integer getSongCount() {
+		return songCount;
+	}
+
+	public void setSongCount(Integer songCount) {
+		this.songCount = songCount;
+	}
 
 	public static class GenreComparator implements Comparator<Genre> {
 		@Override

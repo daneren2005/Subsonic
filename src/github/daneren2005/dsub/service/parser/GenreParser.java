@@ -97,6 +97,8 @@ public class GenreParser extends AbstractParser {
                 String name = getElementName();
                 if ("genre".equals(name)) {
                     genre = new Genre();
+					genre.setSongCount(getInteger("songCount"));
+					genre.setAlbumCount(getInteger("albumCount"));
                 } else if ("error".equals(name)) {
                     handleError();
                 } else {

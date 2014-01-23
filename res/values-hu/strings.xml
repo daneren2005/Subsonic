@@ -6,7 +6,7 @@
     <string name="common.save">Mentés</string>
     <string name="common.cancel">Mégse</string>
     <string name="common.play_now">Lejátszás</string>
-	<string name="common.play_shuffled">Véletlen sorrendű lejátszás</string>
+	<string name="common.play_shuffled">Lejátszás (Kevert sorrendben)</string>
     <string name="common.play_next">Lejátszás (Következőként)</string>
     <string name="common.play_last">Lejátszás (Utolsóként)</string>
 	<string name="common.download">Letöltés (Gyorsítótárba)</string>
@@ -44,7 +44,7 @@
 		\nFelhasznált tároló: %2$s/%3$s
 		\nFelhasználható tároló: %4$s/%5$s</string>
     <string name="main.select_server">Kiszolgáló kiválasztása</string>
-    <string name="main.shuffle">Véletlen sorrendű lejátszás</string>
+    <string name="main.shuffle">Lejátszás (Kevert sorrendben)</string>
     <string name="main.offline">Offline mód</string>
 	<string name="main.online">Online mód</string>
     <string name="main.settings">Beállítások</string>
@@ -61,7 +61,7 @@
 	<string name="main.back_confirm">Nyomja meg még egyszer a kilépéshez!</string>
 
 	<string name="menu.search">Keresés</string>
-	<string name="menu.shuffle">Véletlen sorrendű</string>
+	<string name="menu.shuffle">Lejátszás (Kevert sorrendben)</string>
 	<string name="menu.refresh">Frissítés</string>
 	<string name="menu.select">Összes kijelölése</string>
 	<string name="menu.play">Lejátszás</string>
@@ -141,6 +141,8 @@
 	<string name="offline.sync_error">A dalok szinkronizálása sikertelen!</string>
 
 	<string name="select_genre.blank">Üres</string>
+	<string name="select_genre.songs">%d dal</string>
+	<string name="select_genre.albums">%d album</string>
 
 	<string name="select_podcasts.error">A podcast hibát jelzett a kiszolgálóra történő letöltés közben! A kiszolgálónak kell letöltenie először!</string>
 	<string name="select_podcasts.skipped">Ez a podcast nem lett letöltve a kiszolgálóra! A kiszolgálónak kell letöltenie először!</string>
@@ -156,10 +158,10 @@
 	<string name="select_podcasts.invalid_podcast_channel">Érvénytelen podcast csatorna: %s</string>
 
     <string name="download.empty">A várólista üres!</string>
-	<string name="download.shuffle_loading">Véletlen sorrendű lista betöltése...</string>
+	<string name="download.shuffle_loading">Kevert sorrendű lista betöltése...</string>
     <string name="download.playerstate_downloading">Letöltés - %s</string>
     <string name="download.playerstate_buffering">Pufferelés</string>
-    <string name="download.playerstate_playing_shuffle">Véletlen sorrendű</string>
+    <string name="download.playerstate_playing_shuffle">Kevert sorrendű</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszöveg</string>
     <string name="download.menu_remove">Eltávolítás a várólistáról</string>
@@ -167,10 +169,10 @@
     <string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
     <string name="download.menu_screen_off">Kijelző ki</string>
-    <string name="download.menu_shuffle">Véletlen sorrendű</string>
+    <string name="download.menu_shuffle">Kevert sorrendű</string>
 	<string name="download.menu_toggle">Váltás</string>
     <string name="download.menu_save">Mentés lejátszási listába</string>
-    <string name="download.menu_shuffle_notification">Véletlen sorrendű lejátszás</string>
+    <string name="download.menu_shuffle_notification">Kevert sorrendű lejátszás</string>
     <string name="download.playlist_title">Mentés lejátszási listába</string>
     <string name="download.playlist_name">Lejátszási lista neve:</string>
     <string name="download.playlist_saving">\"%s\" lejátszási lista mentése...</string>
@@ -244,6 +246,8 @@
     <string name="settings.server_unused">Nem használt</string>
     <string name="settings.server_name">Név</string>
     <string name="settings.server_address">Kiszolgáló címe</string>
+	<string name="settings.server_local_network_ssid" >Helyi hálózati SSID</string>
+	<string name="settings.server_local_network_ssid_hint">Aktuális SSID: %s</string>
 	<string name="settings.server_internal_address">Belső hálózati cím</string>
     <string name="settings.server_username">Felhasználónév</string>
     <string name="settings.server_password">Jelszó</string>
@@ -393,7 +397,7 @@
 	<string name="settings.menu_options.star_summary">Csillagozás opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.shared_summary">Megosztás opció megjelenítése a menüben.</string>
 
-	<string name="shuffle.title">Véletlen sorrend</string>
+	<string name="shuffle.title">Kevert sorrend</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
 	<string name="shuffle.endYear">Befejező év:</string>
 	<string name="shuffle.genre">Műfaj:</string>
@@ -436,6 +440,7 @@
     <string name="parser.not_authenticated">Hibás felhasználónév vagy jelszó!</string>
     <string name="parser.not_authorized">Nincs engedélyezve! Ellenőrizze a felhasználó jogosultságait a Subsonic kiszolgálón!</string>
     <string name="parser.artist_count">%d előadó található a médiakönyvtárban.</string>
+	<string name="parser.server_error">Kiszolgáló hiba: %s</string>
 
     <string name="select_artist.refresh">Frissítés</string>
     <string name="select_artist.folder">Mappa kiválasztása</string>

@@ -21,8 +21,6 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Genre;
@@ -31,20 +29,30 @@ public class GenreView extends UpdateView {
 	private static final String TAG = GenreView.class.getSimpleName();
 
 	private TextView titleView;
+	private TextView songsView;
+	private TextView albumsView;
 
 	public GenreView(Context context) {
 		super(context);
-		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
+		LayoutInflater.from(context).inflate(R.layout.genre_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		starButton = (ImageButton) findViewById(R.id.item_star);
-		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.item_more);
-		moreButton.setVisibility(View.GONE);
-		moreButton.setClickable(false);
+		titleView = (TextView) findViewById(R.id.genre_name);
+		songsView = (TextView) findViewById(R.id.genre_songs);
+		albumsView = (TextView) findViewById(R.id.genre_albums);
 	}
 
 	public void setObjectImpl(Object obj) {
-		titleView.setText(((Genre)obj).getName());
+		Genre genre = (Genre) obj;
+		titleView.setText(genre.getName());
+
+		if(genre.getAlbumCount() != null) {
+			songsView.setVisibility(View.VISIBLE);
+			albumsView.setVisibility(View.VISIBLE);
+			songsView.setText(context.getResources().getString(R.string.select_genre_songs, genre.getSongCount()));
+			albumsView.setText(context.getResources().getString(R.string.select_genre_albums, genre.getAlbumCount()));
+		} else {
+			songsView.setVisibility(View.GONE);
+			albumsView.setVisibility(View.GONE);
+		}
 	}
 }

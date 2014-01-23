@@ -189,9 +189,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 							return null;
 						}
 
-						if (getDownloadService().getCurrentPlayingIndex() < getDownloadService().size() - 1) {
-							getDownloadService().next();
-						}
+						getDownloadService().next();
 						return null;
 					}
 
