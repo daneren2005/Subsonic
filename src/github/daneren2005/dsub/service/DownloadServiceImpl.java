@@ -414,6 +414,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             downloadList.remove(getCurrentPlayingIndex());
             downloadList.add(0, currentPlaying);
         }
+		currentPlayingIndex = downloadList.indexOf(currentPlaying);
         revision++;
         lifecycleSupport.serializeDownloadQueue();
         updateJukeboxPlaylist();
@@ -557,6 +558,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
     public synchronized void remove(int which) {
 		downloadList.remove(which);
+		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 	}
 
     @Override
@@ -570,6 +572,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
             setCurrentPlaying(null, false);
         }
         downloadList.remove(downloadFile);
+		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 		backgroundDownloadList.remove(downloadFile);
         revision++;
         lifecycleSupport.serializeDownloadQueue();
@@ -1546,6 +1549,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
                 revision++;
             }
         }
+		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 
         if (revisionBefore != revision) {
             updateJukeboxPlaylist();
