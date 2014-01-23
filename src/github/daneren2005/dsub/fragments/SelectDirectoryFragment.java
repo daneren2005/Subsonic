@@ -495,6 +495,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					result = service.getStarredList(context, this);
 				} else if(("genres".equals(albumListType) && Util.checkServerVersion(context, "1.10.0")) || "years".equals(albumListType)) {
 					result = service.getAlbumList(albumListType, albumListExtra, size, 0, context, this);
+					if(result.getChildrenSize() == 0 && "genres".equals(albumListType)) {
+						result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
+					}
 				} else if("genres".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
 				} else {
