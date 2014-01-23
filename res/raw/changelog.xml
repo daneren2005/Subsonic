@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.4 Beta3" versioncode="85" releasedate="1/22/2014">
+		<change>Updated to include 4.3.7 changes</change>
+	</release>
+	<release version="4.4 Beta2" versioncode="83" releasedate="1/21/2014">
+		<change>Fix Show All Media</change>
+		<change>Fix play/cache</change>
+		<change>Fix Show Artist/Album</change>
+		<change>Fix albums not showing as cached</change>
+	</release>
+	<release version="4.4.0" versioncode="82" releasedate="1/19/2014">
+		<change>Browse by ID3 Tags instead of folder structure (off by default)</change>
+		<change>Probably a good idea to clear existing cache since there will be many songs that don't match up</change>
+	</release>
 	<release version="4.3.7" versioncode="84" releasedate="1/22/2014">
 		<change>Add stats to genres for 4.9Beta3+ Servers</change>
 		<change>Fix stuck Last.FM notification if you use it to scrobble</change>
