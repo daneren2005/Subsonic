@@ -63,7 +63,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -822,15 +821,22 @@ public class RESTMusicService implements MusicService {
     }
     
     @Override
-    public void setStarred(String id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+    public void setStarred(List<String> ids, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
 
 		List<String> names = new ArrayList<String>();
 		List<Object> values = new ArrayList<Object>();
 
-		if(id != null) {
-			names.add("id");
-			values.add(getOfflineSongId(id, context, progressListener));
+		if(ids != null) {
+			if(ids.size() > 1) {
+				for (String id : ids) {
+					names.add("id");
+					values.add(id);
+				}
+			} else {
+				names.add("id");
+				values.add(getOfflineSongId(ids.get(0), context, progressListener));
+			}
 		} else if(artistId != null) {
 			names.add("artistId");
 			values.add(artistId);
@@ -1216,7 +1222,7 @@ public class RESTMusicService implements MusicService {
 			String id = offline.getString(Constants.OFFLINE_STAR_ID + i, null);
 			boolean starred = offline.getBoolean(Constants.OFFLINE_STAR_SETTING + i, false);
 			if(id != null) {
-				setStarred(id, null, null, starred, context, progressListener);
+				setStarred(Arrays.asList(id), null, null, starred, context, progressListener);
 			} else {
 				String search = offline.getString(Constants.OFFLINE_STAR_SEARCH + i, "");
 				try{
@@ -1224,10 +1230,10 @@ public class RESTMusicService implements MusicService {
 					SearchResult result = searchNew(critera, context, progressListener);
 					if(result.getSongs().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
-						setStarred(result.getSongs().get(0).getId(), null, null, starred, context, progressListener);
+						setStarred(Arrays.asList(result.getSongs().get(0).getId()), null, null, starred, context, progressListener);
 					} else if(result.getAlbums().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getAlbums().get(0).getTitle() + " by " + result.getAlbums().get(0).getArtist() + " with id " + result.getAlbums().get(0).getId());
-						setStarred(result.getAlbums().get(0).getId(), null, null, starred, context, progressListener);
+						setStarred(Arrays.asList(result.getAlbums().get(0).getId()), null, null, starred, context, progressListener);
 					}
 					else{
 						throw new Exception("Song not found on server");

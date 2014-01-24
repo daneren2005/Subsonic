@@ -71,6 +71,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -600,7 +601,7 @@ public class SubsonicFragment extends Fragment {
 				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
 					musicService.setStarred(null, null, entry.getId(), starred, context, null);
 				} else {
-					musicService.setStarred(entry.getId(), null, null, starred, context, null);
+					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
 				}
 				
 				// Make sure to clear parent cache
@@ -643,7 +644,7 @@ public class SubsonicFragment extends Fragment {
 				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
 					musicService.setStarred(null, entry.getId(), null, starred, context, null);
 				} else {
-					musicService.setStarred(entry.getId(), null, null, starred, context, null);
+					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
 				}
 				return null;
 			}

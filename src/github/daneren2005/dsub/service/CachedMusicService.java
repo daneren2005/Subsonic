@@ -27,8 +27,6 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
-import android.util.Log;
 
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
@@ -351,7 +349,7 @@ public class CachedMusicService implements MusicService {
     }
     
 	@Override
-	public void setStarred(String id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+	public void setStarred(List<String> id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		musicService.setStarred(id, artistId, albumId, starred, context, progressListener);
 	}
 	

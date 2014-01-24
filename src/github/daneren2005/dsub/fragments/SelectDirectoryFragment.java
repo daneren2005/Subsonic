@@ -200,6 +200,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 			}
 		}
+
+		if("starred".equals(albumListType)) {
+			menuInflater.inflate(R.menu.unstar, menu);
+		}
 	}
 
 	@Override
@@ -247,6 +251,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			case R.id.menu_show_all:
 				showAll = true;
 				refresh(true);
+				return true;
+			case R.id.menu_unstar:
+				unstarSelected();
+				return true;
 		}
 
 		if(super.onOptionsItemSelected(item)) {
@@ -862,6 +870,52 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}.execute();
 			}
 		});
+	}
+
+	public void unstarSelected() {
+		if(getSelectedSongs().size() == 0) {
+			selectAll(true, false);
+		}
+		final List<MusicDirectory.Entry> selected = getSelectedSongs();
+		if(selected.size() == 0) {
+			return;
+		}
+
+		new LoadingTask<Void>(context, true) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				List<String> ids = new ArrayList<String>();
+				for(MusicDirectory.Entry entry: selected) {
+					ids.add(entry.getId());
+				}
+				musicService.setStarred(ids, null, null, false, context, this);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, context.getResources().getString(R.string.starring_content_unstarred, Integer.toString(selected.size())));
+
+				for(MusicDirectory.Entry entry: selected) {
+					entries.remove(entry);
+				}
+				entryAdapter.notifyDataSetChanged();
+				selectAll(false, false);
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(R.string.starring_content_error, Integer.toString(selected.size())) + " " + getErrorMessage(error);
+				}
+
+				Util.toast(context, msg, false);
+			}
+		}.execute();
 	}
 
 	private void checkLicenseAndTrialPeriod(LoadingTask onValid) {

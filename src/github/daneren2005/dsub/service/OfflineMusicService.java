@@ -559,7 +559,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 	
 	@Override
-	public void setStarred(String id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+	public void setStarred(List<String> ids, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 
@@ -567,7 +567,8 @@ public class OfflineMusicService extends RESTMusicService {
 		int stars = offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
 		stars++;
 		SharedPreferences.Editor offlineEditor = offline.edit();
-		
+
+		String id = ids.get(0);
 		if(id.indexOf(cacheLocn) != -1) {
 			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
 			offlineEditor.putString(Constants.OFFLINE_STAR_SEARCH + stars, searchCriteria);

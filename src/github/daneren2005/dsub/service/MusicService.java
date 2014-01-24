@@ -117,7 +117,7 @@ public interface MusicService {
 
     RemoteStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception;
     
-    void setStarred(String id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception;
+    void setStarred(List<String> id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception;
 	
 	List<Share> getShares(Context context, ProgressListener progressListener) throws Exception;
 
