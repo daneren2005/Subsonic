@@ -349,7 +349,7 @@ public class CachedMusicService implements MusicService {
     }
     
 	@Override
-	public void setStarred(List<String> id, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+	public void setStarred(List<String> id, List<String> artistId, List<String> albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		musicService.setStarred(id, artistId, albumId, starred, context, progressListener);
 	}
 	

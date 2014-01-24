@@ -873,31 +873,43 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	public void unstarSelected() {
-		if(getSelectedSongs().size() == 0) {
-			selectAll(true, false);
+		List<MusicDirectory.Entry> selected = getSelectedSongs();
+		if(selected.size() == 0) {
+			selected = entries;
 		}
-		final List<MusicDirectory.Entry> selected = getSelectedSongs();
 		if(selected.size() == 0) {
 			return;
 		}
+		final List<MusicDirectory.Entry> unstar = new ArrayList<MusicDirectory.Entry>();
+		unstar.addAll(selected);
 
 		new LoadingTask<Void>(context, true) {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				List<String> ids = new ArrayList<String>();
-				for(MusicDirectory.Entry entry: selected) {
-					ids.add(entry.getId());
+				List<String> artists = new ArrayList<String>();
+				List<String> albums = new ArrayList<String>();
+				for(MusicDirectory.Entry entry: unstar) {
+					if(entry.isDirectory()) {
+						if(entry.getArtist() == null || entry.getParent() == null) {
+							artists.add(entry.getId());
+						} else {
+							albums.add(entry.getId());
+						}
+					} else {
+						ids.add(entry.getId());
+					}
 				}
-				musicService.setStarred(ids, null, null, false, context, this);
+				musicService.setStarred(ids, artists, albums, false, context, this);
 				return null;
 			}
 
 			@Override
 			protected void done(Void result) {
-				Util.toast(context, context.getResources().getString(R.string.starring_content_unstarred, Integer.toString(selected.size())));
+				Util.toast(context, context.getResources().getString(R.string.starring_content_unstarred, Integer.toString(unstar.size())));
 
-				for(MusicDirectory.Entry entry: selected) {
+				for(MusicDirectory.Entry entry: unstar) {
 					entries.remove(entry);
 				}
 				entryAdapter.notifyDataSetChanged();
@@ -910,7 +922,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
 				} else {
-					msg = context.getResources().getString(R.string.starring_content_error, Integer.toString(selected.size())) + " " + getErrorMessage(error);
+					msg = context.getResources().getString(R.string.starring_content_error, Integer.toString(unstar.size())) + " " + getErrorMessage(error);
 				}
 
 				Util.toast(context, msg, false);

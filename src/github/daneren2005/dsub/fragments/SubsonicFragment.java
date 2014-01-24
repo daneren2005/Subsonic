@@ -599,7 +599,11 @@ public class SubsonicFragment extends Fragment {
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					musicService.setStarred(null, null, entry.getId(), starred, context, null);
+					if(entry.getParent() == null || entry.getArtist() == null) {
+						musicService.setStarred(null, Arrays.asList(entry.getId()), null, starred, context, null);
+					} else {
+						musicService.setStarred(null, null, Arrays.asList(entry.getId()), starred, context, null);
+					}
 				} else {
 					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
 				}
@@ -642,7 +646,7 @@ public class SubsonicFragment extends Fragment {
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					musicService.setStarred(null, entry.getId(), null, starred, context, null);
+					musicService.setStarred(null, Arrays.asList(entry.getId()), null, starred, context, null);
 				} else {
 					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
 				}

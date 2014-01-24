@@ -559,7 +559,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 	
 	@Override
-	public void setStarred(List<String> ids, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+	public void setStarred(List<String> ids, List<String> artistId, List<String> albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 

@@ -821,13 +821,13 @@ public class RESTMusicService implements MusicService {
     }
     
     @Override
-    public void setStarred(List<String> ids, String artistId, String albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+    public void setStarred(List<String> ids, List<String> artistId, List<String> albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
 
 		List<String> names = new ArrayList<String>();
 		List<Object> values = new ArrayList<Object>();
 
-		if(ids != null) {
+		if(ids != null && ids.size() > 0) {
 			if(ids.size() > 1) {
 				for (String id : ids) {
 					names.add("id");
@@ -837,12 +837,18 @@ public class RESTMusicService implements MusicService {
 				names.add("id");
 				values.add(getOfflineSongId(ids.get(0), context, progressListener));
 			}
-		} else if(artistId != null) {
-			names.add("artistId");
-			values.add(artistId);
-		} else if(albumId != null) {
-			names.add("albumId");
-			values.add(albumId);
+		}
+		if(artistId != null && artistId.size() > 0) {
+			for (String id : artistId) {
+				names.add("artistId");
+				values.add(id);
+			}
+		}
+		if(albumId != null && albumId.size() > 0) {
+			for (String id : albumId) {
+				names.add("albumId");
+				values.add(id);
+			}
 		}
 		
 		Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, names, values);
