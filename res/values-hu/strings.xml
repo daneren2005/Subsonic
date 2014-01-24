@@ -312,6 +312,7 @@
 	<string name="settings.network_timeout_30000">30 másodperc</string>
 	<string name="settings.network_timeout_45000">45 másodperc</string>
 	<string name="settings.network_timeout_60000">60 másodperc</string>
+    <string name="settings.preload_0">0 dal</string>
     <string name="settings.preload_1">1 dal</string>
     <string name="settings.preload_2">2 dal</string>
     <string name="settings.preload_3">3 dal</string>

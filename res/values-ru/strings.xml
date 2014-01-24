@@ -233,6 +233,7 @@
 	<string name="settings.network_timeout_30000">30 секунд</string>
 	<string name="settings.network_timeout_45000">45 секунд</string>
 	<string name="settings.network_timeout_60000">60 секунд</string>
+    <string name="settings.preload_0">0 композиция</string>
     <string name="settings.preload_1">1 композиция</string>
     <string name="settings.preload_2">2 композиции</string>
     <string name="settings.preload_3">3 композиции</string>

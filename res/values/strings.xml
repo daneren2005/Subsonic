@@ -312,6 +312,7 @@
 	<string name="settings.network_timeout_30000">30 seconds</string>
 	<string name="settings.network_timeout_45000">45 seconds</string>
 	<string name="settings.network_timeout_60000">60 seconds</string>
+    <string name="settings.preload_0">0 song</string>
     <string name="settings.preload_1">1 song</string>
     <string name="settings.preload_2">2 songs</string>
     <string name="settings.preload_3">3 songs</string>
