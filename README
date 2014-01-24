@@ -28,3 +28,30 @@ HLS Video
 	-Display video where album art is currently (double tap to fullscreen)
 	-Videos can play inline with songs
 	
+
+I haven't felt like forking dragsortlistview properly, so local bugfixes:
+In DragSortListView.java line 741 above v.addView(child).  Fixes NPE:
+if(child.getParent() != null) {
+	((ViewGroup) child.getParent()).removeView(child);
+}
+
+In DragSortListView.java line 722, inside of child != oldChild statement. Fixes checkables mixed with non-checkables not being converted:
+if(child instanceof Checkable && !(v instanceof Checkable)) {
+	v = new DragSortItemViewCheckable(getContext());
+	v.setLayoutParams(new AbsListView.LayoutParams(
+		ViewGroup.LayoutParams.FILL_PARENT,
+		ViewGroup.LayoutParams.WRAP_CONTENT));
+} else if(!(child instanceof Checkable) && v instanceof Checkable) {
+	v = new DragSortItemView(getContext());
+	v.setLayoutParams(new AbsListView.LayoutParams(
+			ViewGroup.LayoutParams.FILL_PARENT,
+			ViewGroup.LayoutParams.WRAP_CONTENT));
+} else {
+	// shouldn't get here if user is reusing convertViews
+	// properly
+	if (oldChild != null) {
+		v.removeViewAt(0);
+	}
+}
+v.addView(child);
+	
