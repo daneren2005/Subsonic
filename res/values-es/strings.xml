@@ -76,7 +76,6 @@
 	<string name="menu.set_timer">Ajustar temporizador</string>
 	<string name="menu.check_podcasts">Comprobar nuevos episodios</string>
 	<string name="menu.add_podcast">Añadir canal</string>
-	<string name="menu.cast">Enviar al dispositivo</string>
 	<string name="menu.keep_synced">Mantener sincronizado</string>
 	<string name="menu.stop_sync">Detener sincronización</string>
 	<string name="menu.show_all">Mostrar todo el contenido</string>
@@ -139,10 +138,8 @@
 	<string name="offline.sync_partial">%1$d de %2$d canciones sincronizadas</string>
 	<string name="offline.sync_error">Error al sincronizar canciones</string>
 
-	<string name="select_genre.empty">No se han encontrado géneros</string>
 	<string name="select_genre.blank">Vacío</string>
 
-	<string name="select_podcasts.empty">No se han encontrado podcasts</string>
 	<string name="select_podcasts.error">Ha habido un error descargando este podcast en el servidor. El servidor debe descargarlo antes.</string>
 	<string name="select_podcasts.skipped">Este podcast no ha sido descargado en el servidor. El servidor debe descargarlo antes.</string>
     <string name="select_podcasts.initializing">Este podcast está siendo reiniciado en el servidor. Por favor, actualice en unos segundos.</string>
@@ -155,8 +152,6 @@
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Error al agregar podcast</string>
 	<string name="select_podcasts.invalid_podcast_channel">Canal de podcast no valido: %s</string>
-
-    <string name="select_playlist.empty">No hay listas de reproducción guardadas en el servidor</string>
 
     <string name="download.empty">Lista de reproducción vaía</string>
 	<string name="download.shuffle_loading">Cargando lista aleatoria...</string>

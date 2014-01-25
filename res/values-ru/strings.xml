@@ -18,7 +18,6 @@
 	<string name="common.name">Название</string>
 	<string name="common.comment">Комментарий</string>
 	<string name="common.public">Общедоступный</string>
-	<string name="common.webview">Воспроизвести в браузере (флэш)</string>
 	<string name="common.play_external">Воспроизвести во внешнем плеере</string>
 	<string name="common.stream_external">Воспроизвести поток во внешнем плеере</string>
 	<string name="common.confirm">Подтверждение</string>
@@ -112,8 +111,6 @@
     <string name="select_album.donate_dialog_later">Позже</string>
     <string name="select_album.donate_dialog_0_trial_days_left">Пробный период закончился</string>
 
-    <string name="select_playlist.empty">Нет сохраненных списков воспроизведения на сервере</string>
-
     <string name="download.empty">Список воспроизведения пуст</string>
 	<string name="download.shuffle_loading">Загружается случайный список...</string>
     <string name="download.playerstate_downloading">Загрузка - %s</string>
@@ -162,7 +159,6 @@
 	<string name="updated_playlist">Добавлено %1$s композиций в \"%2$s\"</string>
     <string name="updated_playlist_error">Не удалось обновить \"%s\", пожалуйста, попробуйте позже.</string>
 	<string name="removed_playlist">Удалено %1$s из \"%2$s\" композиций</string>
-	<string name="delete_playlist">Удалить %1$s?</string>
 
     <string name="song_details.all">%1$s %2$s</string>
     <string name="song_details.kbps">%d kbps</string>
@@ -174,14 +170,11 @@
     <string name="settings.title">Настройки DSub</string>
     <string name="settings.test_connection_title">Проверить соединение</string>
     <string name="settings.servers_title">Серверы</string>
-    <string name="settings.server_unused1">Неиспользованный 1</string>
-    <string name="settings.server_unused2">Неиспользованный 2</string>
     <string name="settings.server_name">Название</string>
     <string name="settings.server_address">Адрес сервера</string>
     <string name="settings.server_username">Имя пользователя</string>
     <string name="settings.server_password">Пароль</string>
     <string name="settings.cache_title">Кэш музыки</string>
-    <string name="settings.preload">Композиций для предзагрузки</string>
     <string name="settings.cache_size">Размер кэша (Мб)</string>
     <string name="settings.cache_location">Путь кэша</string>
     <string name="settings.cache_location_error">Некорректный путь. Используем путь по умолчанию.</string>
@@ -196,9 +189,6 @@
     <string name="settings.theme_light">Светлая</string>
     <string name="settings.theme_dark">Темная</string>
 	<string name="settings.theme_holo">Holo</string>
-	<string name="settings.theme_light_fullscreen">Светлая во весь экран</string>
-    <string name="settings.theme_dark_fullscreen">Темная во весь экран</string>
-	<string name="settings.theme_holo_fullscreen">Holo во весь экран</string>
     <string name="settings.network_title">Сеть</string>
     <string name="settings.max_bitrate_wifi">Макс. битрейт аудио по Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Макс. битрейт видео по сети</string>
