@@ -82,6 +82,7 @@
 
     <string-array name="preloadCountNames">
 		<item>@string/settings.preload_0</item>
+		<item>@string/settings.preload_1</item>
         <item>@string/settings.preload_2</item>
         <item>@string/settings.preload_3</item>
         <item>@string/settings.preload_5</item>
