@@ -71,7 +71,14 @@ public class AlbumView extends UpdateView {
     protected void setObjectImpl(Object obj1, Object obj2) {
     	this.album = (MusicDirectory.Entry) obj1;
     	titleView.setText(album.getTitle());
-        artistView.setText(album.getArtist());
+		String artist = album.getArtist();
+		if(artist == null) {
+			artist = "";
+		}
+		if(album.getYear() != null) {
+			artist += " - " + album.getYear();
+		}
+        artistView.setText(artist);
         artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
 		((ImageLoader)obj2).loadImage(coverArtView, album, false, true);
         file = null;
