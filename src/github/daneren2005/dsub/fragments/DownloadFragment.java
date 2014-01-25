@@ -880,10 +880,33 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 	protected void startTimer() {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.start_timer, null);
-		final EditText lengthBox = (EditText)dialogView.findViewById(R.id.timer_length);
 
+		// Setup length label
+		final TextView lengthBox = (TextView) dialogView.findViewById(R.id.timer_length_label);
 		final SharedPreferences prefs = Util.getPreferences(context);
-		lengthBox.setText(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, ""));
+		String lengthString = prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5");
+		int length = Integer.parseInt(lengthString);
+		lengthBox.setText(Util.formatDuration(length));
+
+		// Setup length slider
+		final SeekBar lengthBar = (SeekBar) dialogView.findViewById(R.id.timer_length_bar);
+		lengthBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				if(fromUser) {
+					int length = getMinutes(progress);
+					lengthBox.setText(Util.formatDuration(length));
+				}
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_set_timer)
@@ -891,13 +914,13 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
-					String length = lengthBox.getText().toString();
+					int length = getMinutes(lengthBar.getProgress());
 
 					SharedPreferences.Editor editor = prefs.edit();
-					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, length);
+					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
 					editor.commit();
 
-					getDownloadService().setSleepTimerDuration(Integer.parseInt(length));
+					getDownloadService().setSleepTimerDuration(length);
 					getDownloadService().startSleepTimer();
 					context.supportInvalidateOptionsMenu();
 				}
@@ -905,6 +928,16 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
+	}
+
+	private int getMinutes(int progress) {
+		if(progress < 30) {
+			return progress + 1;
+		} else if(progress < 61) {
+			return (progress - 30) * 5 + getMinutes(29);
+		} else {
+			return (progress - 61) * 15 + getMinutes(60);
+		}
 	}
 
 	private void toggleFullscreenAlbumArt() {

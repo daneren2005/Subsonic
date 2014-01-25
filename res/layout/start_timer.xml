@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,16 +12,14 @@
 			android:id="@+id/timer_length_label"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
-			android:textSize="20dp"
-			android:text="@string/download.timer_length" />
-		<EditText
-			android:id="@+id/timer_length"
-			android:inputType="number"
+			android:layout_marginLeft="8dp"
+			android:textSize="20dp"/>
+
+		<SeekBar
+			android:id="@+id/timer_length_bar"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
-			android:hint="@string/download.timer_length" />
+			android:max="97"/>
 	</LinearLayout>
 </LinearLayout>
