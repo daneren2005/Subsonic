@@ -951,12 +951,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		int songCount = 0;
 
 		Set<String> artists = new HashSet<String>();
+		Set<Integer> years = new HashSet<Integer>();
 		Integer totalDuration = 0;
 		for (MusicDirectory.Entry entry : entries) {
 			if (!entry.isDirectory()) {
 				songCount++;
 				if (entry.getArtist() != null) {
 					artists.add(entry.getArtist());
+				}
+				if(entry.getYear() != null) {
+					years.add(entry.getYear());
 				}
 				Integer duration = entry.getDuration();
 				if(duration != null) {
@@ -971,7 +975,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			artistView.setSingleLine(false);
 			artistView.setLines(5);
 		} else if (artists.size() == 1) {
-			artistView.setText(artists.iterator().next());
+			String artistText = artists.iterator().next();
+			if(years.size() == 1) {
+				artistText += " - " + years.iterator().next();
+			}
+			artistView.setText(artistText);
 			artistView.setVisibility(View.VISIBLE);
 		} else {
 			artistView.setVisibility(View.GONE);
