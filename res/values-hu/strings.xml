@@ -93,16 +93,6 @@
 	<string name="playlist.add_to">Mentés lejátszási listába</string>
 	<string name="playlist.create_new">Új lejátszási lista</string>
 
-    <string name="help.label">Súgó</string>
-    <string name="help.title">Üdvözli a DSub!</string>
-    <string name="help.back">Vissza</string>
-    <string name="help.close">Bezárás</string>
-    <string name="help.url">file:///android_asset/html/en/index.html</string>
-    <string name="help.loading">Betöltés...</string>
-
-    <string name="play_video.loading">Videó betöltése...</string>
-    <string name="play_video.noplugin">Kérem telepítse az Adobe Flash Player-t a Play Áruházból!</string>
-
     <string name="search.label">Keresés</string>
     <string name="search.title">Keresés</string>
     <string name="search.search">Érintse meg a kereséshez</string>

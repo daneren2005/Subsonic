@@ -73,16 +73,6 @@
 	<string name="playlist.updated_info">Информация для списка воспроизведения %s обновлена</string>
 	<string name="playlist.updated_info_error">Не удалось обновить информацию для списка воспроизведения %s</string>
 
-    <string name="help.label">Помощь</string>
-    <string name="help.title">Добро пожаловать в DSub!</string>
-    <string name="help.back">Назад</string>
-    <string name="help.close">Закрыть</string>
-    <string name="help.url">file:///android_asset/html/ru/index.html</string>
-    <string name="help.loading">Загрузка...</string>
-
-    <string name="play_video.loading">Загрузка видео...</string>
-    <string name="play_video.noplugin">Пожалуйста, установить Adobe Flash Player из Google Play.</string>
-
     <string name="search.label">Поиск</string>
     <string name="search.title">Поиск</string>
     <string name="search.search">Нажмите для поиска</string>

@@ -20,22 +20,6 @@
     <string name="main.albums_recent">Récemment joués</string>
     <string name="main.albums_frequent">Fréquemment joués</string>
 
-    <!--<string name="menu.exit">TODO: Exit</string>-->
-    <!--<string name="menu.settings">TODO: Settings</string>-->
-    <!--<string name="menu.help">TODO: Help</string>-->
-
-    <string name="playlist.label">Playlists</string>
-
-    <string name="help.label">Aide</string>
-    <string name="help.title">Bienvenue dans Subsonic!</string>
-    <string name="help.back">Retour</string>
-    <string name="help.close">Fermer</string>
-    <string name="help.url">file:///android_asset/html/fr/index.html</string>
-    <string name="help.loading">Chargement...</string>
-
-    <string name="play_video.loading">Chargement de la vidéo...</string>
-    <string name="play_video.noplugin">Veuillez installer Adobe Flash Player à partir du marché Android.</string>
-
     <string name="search.label">Recherche</string>
     <string name="search.title">Recherche</string>
     <string name="search.search">Cliquer pour rechercher</string>

@@ -94,16 +94,6 @@
 	<string name="playlist.create_new">Create New</string>
 	<string name="playlist.delete">Delete Playlist</string>
 
-    <string name="help.label">Help</string>
-    <string name="help.title">Welcome to DSub!</string>
-    <string name="help.back">Back</string>
-    <string name="help.close">Close</string>
-    <string name="help.url">file:///android_asset/html/en/index.html</string>
-    <string name="help.loading">Loading...</string>
-
-    <string name="play_video.loading">Loading video...</string>
-    <string name="play_video.noplugin">Please install Adobe Flash Player from Android Market.</string>
-
     <string name="search.label">Search</string>
     <string name="search.title">Search</string>
     <string name="search.search">Click to search</string>

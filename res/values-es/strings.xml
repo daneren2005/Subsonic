@@ -91,16 +91,6 @@
 	<string name="playlist.add_to">Añadir a lista de reproducción</string>
 	<string name="playlist.create_new">Crear nueva</string>
 
-    <string name="help.label">Ayuda</string>
-    <string name="help.title">Bienvenido a DSub!</string>
-    <string name="help.back">Atrás</string>
-    <string name="help.close">Cerrar</string>
-    <string name="help.url">file:///android_asset/html/en/index.html</string>
-    <string name="help.loading">Cargando...</string>
-
-    <string name="play_video.loading">Cargando vídeo...</string>
-    <string name="play_video.noplugin">Por favor instala Adobe Flash player desde el Android Market.</string>
-
     <string name="search.label">Buscar</string>
     <string name="search.title">Buscar</string>
     <string name="search.search">Click para buscar</string>
