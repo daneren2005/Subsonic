@@ -36,7 +36,7 @@
 		
 	<item 
 		android:id="@+id/song_menu_delete"
-		android:title="@string/common.delete"/>
+		android:title="@string/menu.delete"/>
 	
 	<item 
 		android:id="@+id/song_menu_add_playlist"

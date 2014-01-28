@@ -17,5 +17,5 @@
 
 	<item
 		android:id="@+id/share_menu_delete"
-		android:title="@string/common.delete"/>
+		android:title="@string/share.delete"/>
 </menu>

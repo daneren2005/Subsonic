@@ -66,6 +66,7 @@
 	<string name="menu.deleted_playlist_error">Не удалось удалить список %s</string>
 	<string name="menu.log">Отправить журнал событий</string>
 	<string name="menu.set_timer">Установить таймер</string>
+	<string name="menu.delete">Удалить кэш</string>
 
     <string name="playlist.label">Списки</string>
 	<string name="playlist.update_info">Изменить информацию</string>
@@ -119,7 +120,6 @@
     <string name="download.menu_show_album">Показать альбом</string>
     <string name="download.menu_lyrics">Текст</string>
     <string name="download.menu_remove">Убрать из очереди</string>
-	<string name="download.menu_delete">Удалить кэш</string>
     <string name="download.menu_remove_all">Очистить</string>
     <string name="download.menu_screen_on">Включить подсветку</string>
     <string name="download.menu_screen_off">Отключать подсветку</string>

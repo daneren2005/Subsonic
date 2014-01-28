@@ -36,7 +36,7 @@
 
 	<item 
 		android:id="@+id/artist_menu_delete"
-		android:title="@string/common.delete"/>
+		android:title="@string/menu.delete"/>
 
 	<group android:id="@+id/server_1_10">
 		<group android:id="@+id/hide_star">

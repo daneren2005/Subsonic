@@ -6,7 +6,7 @@
 		android:title="@string/common.info"/>
 	<item 
 		android:id="@+id/podcast_channel_delete"
-		android:title="@string/common.delete"/>
+		android:title="@string/select_podcasts.delete"/>
 
 	<item
 		android:id="@+id/podcast_menu_sync"

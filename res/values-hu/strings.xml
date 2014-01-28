@@ -83,6 +83,7 @@
 	<string name="menu.show_all">Minden média megjelenítése</string>
 	<string name="menu.show_artist">Ugrás az előadóhoz</string>
 	<string name="menu.share">Megosztás</string>
+	<string name="menu.delete">Törlés a gyorsítótárból</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -165,7 +166,6 @@
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszöveg</string>
     <string name="download.menu_remove">Eltávolítás a várólistáról</string>
-	<string name="download.menu_delete">Törlés a gyorsítótárból</string>
     <string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
     <string name="download.menu_screen_off">Kijelző ki</string>

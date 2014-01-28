@@ -81,6 +81,7 @@
 	<string name="menu.show_all">Mostrar todo el contenido</string>
 	<string name="menu.show_artist">Mostrar artista</string>
 	<string name="menu.share">Compartir</string>
+	<string name="menu.delete">Borrar cache</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -161,7 +162,6 @@
     <string name="download.menu_show_album">Mostrar disco</string>
     <string name="download.menu_lyrics">Letras</string>
     <string name="download.menu_remove">Eliminar de la cola</string>
-	<string name="download.menu_delete">Borrar cache</string>
     <string name="download.menu_remove_all">Borrar todo</string>
     <string name="download.menu_screen_on">Pantalla encendida</string>
     <string name="download.menu_screen_off">Pantalla apagada</string>

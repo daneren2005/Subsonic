@@ -16,7 +16,7 @@
 
 	<item 
 		android:id="@+id/menu_delete"
-		android:title="@string/download.menu_delete"/>
+		android:title="@string/menu.delete"/>
 
 	<item 
 		android:id="@+id/menu_star"

@@ -83,6 +83,7 @@
 	<string name="menu.show_all">Show all media</string>
 	<string name="menu.show_artist">Show Artist</string>
 	<string name="menu.share">Share</string>
+	<string name="menu.delete">Delete Cache</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -91,6 +92,7 @@
 	<string name="playlist.overwrite">Overwrite existing playlist</string>
 	<string name="playlist.add_to">Add to Playlist</string>
 	<string name="playlist.create_new">Create New</string>
+	<string name="playlist.delete">Delete Playlist</string>
 
     <string name="help.label">Help</string>
     <string name="help.title">Welcome to DSub!</string>
@@ -156,6 +158,7 @@
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Failed to add podcast</string>
 	<string name="select_podcasts.invalid_podcast_channel">Invalid podcast channel: %s</string>
+	<string name="select_podcasts.delete">Delete podcast</string>
 
     <string name="download.empty">Playlist is empty</string>
 	<string name="download.shuffle_loading">Shuffle list is loading...</string>
@@ -165,7 +168,6 @@
     <string name="download.menu_show_album">Show album</string>
     <string name="download.menu_lyrics">Lyrics</string>
     <string name="download.menu_remove">Remove from queue</string>
-	<string name="download.menu_delete">Delete cache</string>
     <string name="download.menu_remove_all">Remove all</string>
     <string name="download.menu_screen_on">Screen on</string>
     <string name="download.menu_screen_off">Screen off</string>
@@ -422,6 +424,7 @@
 	<string name="share.updated_info">Updated share information for %s</string>
 	<string name="share.updated_info_error">Failed to update share information for %s</string>
 	<string name="share.via">Share via</string>
+	<string name="share.delete">Delete Share</string>
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
 
