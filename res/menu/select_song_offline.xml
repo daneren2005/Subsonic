@@ -25,7 +25,7 @@
 		
 	<item 
 		android:id="@+id/menu_delete"
-		android:title="@string/menu.delete"/>
+		android:title="@string/menu.delete_cache"/>
 
 	<group android:id="@+id/hide_play_next">
 		<item

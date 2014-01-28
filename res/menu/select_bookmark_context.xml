@@ -16,7 +16,7 @@
 		
 	<item 
 		android:id="@+id/song_menu_delete"
-		android:title="@string/menu.delete"/>
+		android:title="@string/menu.delete_cache"/>
 		
 	<item 
 		android:id="@+id/bookmark_menu_delete"

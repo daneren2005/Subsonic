@@ -81,7 +81,7 @@
 	<string name="menu.show_all">Mostrar todo el contenido</string>
 	<string name="menu.show_artist">Mostrar artista</string>
 	<string name="menu.share">Compartir</string>
-	<string name="menu.delete">Borrar cache</string>
+	<string name="menu.delete_cache">Borrar cache</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>

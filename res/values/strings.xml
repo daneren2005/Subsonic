@@ -83,7 +83,7 @@
 	<string name="menu.show_all">Show all media</string>
 	<string name="menu.show_artist">Show Artist</string>
 	<string name="menu.share">Share</string>
-	<string name="menu.delete">Delete Cache</string>
+	<string name="menu.delete_cache">Delete Cache</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
