@@ -222,7 +222,6 @@ public class DownloadServiceLifecycleSupport {
         executorService.shutdown();
         eventLooper.quit();
         serializeDownloadQueueNow();
-        downloadService.clear(false);
         downloadService.unregisterReceiver(ejectEventReceiver);
         downloadService.unregisterReceiver(headsetEventReceiver);
         downloadService.unregisterReceiver(intentReceiver);
