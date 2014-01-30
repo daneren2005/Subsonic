@@ -410,11 +410,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public synchronized void shuffle() {
         Collections.shuffle(downloadList);
+		currentPlayingIndex = downloadList.indexOf(currentPlaying);
         if (currentPlaying != null) {
             downloadList.remove(getCurrentPlayingIndex());
             downloadList.add(0, currentPlaying);
+			currentPlayingIndex = 0;
         }
-		currentPlayingIndex = downloadList.indexOf(currentPlaying);
         revision++;
         lifecycleSupport.serializeDownloadQueue();
         updateJukeboxPlaylist();
