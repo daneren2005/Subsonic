@@ -68,7 +68,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	int albumListSize;
 	boolean refreshListing = false;
 	boolean showAll = false;
-	
+	boolean restoredInstance = false;
 	
 	public SelectDirectoryFragment() {
 		super();
@@ -84,6 +84,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				rootId = tmp;
 			}
 			entries = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+			restoredInstance = true;
 		}
 	}
 	
@@ -585,7 +586,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
         Bundle args = getArguments();
         boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-        if (playAll) {
+        if (playAll && !restoredInstance) {
             playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
         }
     }
