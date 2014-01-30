@@ -114,7 +114,7 @@ public class ChatFragment extends SubsonicFragment {
 
 		if(messageList == null) {
 			messageList = new ArrayList<ChatMessage>();
-			invalidated = true;
+			refresh(true);
 		} else {
 			for (ChatMessage message : messageList) {
 				if (message.getTime() > lastChatMessageTime) {
