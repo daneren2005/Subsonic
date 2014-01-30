@@ -27,8 +27,6 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
-import android.util.Log;
 
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
@@ -66,6 +64,7 @@ public class CachedMusicService implements MusicService {
     private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<List<MusicFolder>>(10 * 3600, TimeUnit.SECONDS);
 	private final TimeLimitedCache<List<PodcastChannel>> cachedPodcastChannels = new TimeLimitedCache<List<PodcastChannel>>(10 * 3600, TimeUnit.SECONDS);
     private String restUrl;
+	private boolean isTagBrowsing = false;
 
     public CachedMusicService(RESTMusicService musicService) {
         this.musicService = musicService;
@@ -135,21 +134,53 @@ public class CachedMusicService implements MusicService {
 
     @Override
     public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-	MusicDirectory dir = null;
+		MusicDirectory dir = null;
 
-	if(!refresh) {
-		dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
-	}
+		if(!refresh) {
+			dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
+		}
 
-	if(dir == null) {
-		dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
-		FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
-	}
+		if(dir == null) {
+			dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
+		}
 
-	return dir;
+		return dir;
     }
 
-    @Override
+	@Override
+	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		MusicDirectory dir = null;
+
+		if(!refresh) {
+			dir = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
+		}
+
+		if(dir == null) {
+			dir = musicService.getArtist(id, name, refresh, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "artist", id));
+		}
+
+		return dir;
+	}
+
+	@Override
+	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		MusicDirectory dir = null;
+
+		if(!refresh) {
+			dir = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
+		}
+
+		if(dir == null) {
+			dir = musicService.getAlbum(id, name, refresh, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "album", id));
+		}
+
+		return dir;
+	}
+
+	@Override
     public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
         return musicService.search(criteria, context, progressListener);
     }
@@ -318,8 +349,8 @@ public class CachedMusicService implements MusicService {
     }
     
 	@Override
-	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
-		musicService.setStarred(id, starred, context, progressListener);
+	public void setStarred(List<String> id, List<String> artistId, List<String> albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+		musicService.setStarred(id, artistId, albumId, starred, context, progressListener);
 	}
 	
 	@Override
@@ -480,13 +511,15 @@ public class CachedMusicService implements MusicService {
 
     private void checkSettingsChanged(Context context) {
         String newUrl = musicService.getRestUrl(context, null, false);
-        if (!Util.equals(newUrl, restUrl)) {
+		boolean newIsTagBrowsing = Util.isTagBrowsing(context);
+        if (!Util.equals(newUrl, restUrl) || isTagBrowsing != newIsTagBrowsing) {
             cachedMusicFolders.clear();
             cachedLicenseValid.clear();
             cachedIndexes.clear();
             cachedPlaylists.clear();
 			cachedPodcastChannels.clear();
             restUrl = newUrl;
+			isTagBrowsing = newIsTagBrowsing;
         }
     }
 }

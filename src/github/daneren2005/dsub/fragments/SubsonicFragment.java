@@ -62,6 +62,7 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
@@ -70,6 +71,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,6 +94,8 @@ public class SubsonicFragment extends Fragment {
 	protected static Random random = new Random();
 	protected GestureDetector gestureScanner;
 	protected Share share;
+	protected boolean artist = false;
+	protected boolean artistOverride = false;
 	
 	public SubsonicFragment() {
 		super();
@@ -266,21 +270,27 @@ public class SubsonicFragment extends Fragment {
 				toggleStarred(artist);
 				break;
 			case R.id.album_menu_play_now:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, false, true, false, false);
 				break;
 			case R.id.album_menu_play_shuffled:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, false, true, true, false);
 				break;
 			case R.id.album_menu_play_next:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, true, false, false, false, true);
 				break;
 			case R.id.album_menu_play_last:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, true, false, false, false);
 				break;
 			case R.id.album_menu_download:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), false, true, false, false, true);
 				break;
 			case R.id.album_menu_pin:
+				artistOverride = true;
 				downloadRecursively(entry.getId(), true, true, false, false, true);
 				break;
 			case R.id.album_menu_star:
@@ -588,7 +598,15 @@ public class SubsonicFragment extends Fragment {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.setStarred(entry.getId(), starred, context, null);
+				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+					if(entry.getParent() == null || entry.getArtist() == null) {
+						musicService.setStarred(null, Arrays.asList(entry.getId()), null, starred, context, null);
+					} else {
+						musicService.setStarred(null, null, Arrays.asList(entry.getId()), starred, context, null);
+					}
+				} else {
+					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
+				}
 				
 				// Make sure to clear parent cache
 				String s = Util.getRestUrl(context, null) + entry.getParent();
@@ -627,7 +645,11 @@ public class SubsonicFragment extends Fragment {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.setStarred(entry.getId(), starred, context, null);
+				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+					musicService.setStarred(null, Arrays.asList(entry.getId()), null, starred, context, null);
+				} else {
+					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
+				}
 				return null;
 			}
 
@@ -677,7 +699,7 @@ public class SubsonicFragment extends Fragment {
 					root = share.getMusicDirectory();
 				}
 				else if(isDirectory) {
-					root = musicService.getMusicDirectory(id, name, false, context, this);
+					root = getMusicDirectory(id, name, false, musicService, this);
 				}
 				else {
 					root = musicService.getPlaylist(true, id, name, context, this);
@@ -699,7 +721,14 @@ public class SubsonicFragment extends Fragment {
 				}
 				for (MusicDirectory.Entry dir : parent.getChildren(true, false)) {
 					MusicService musicService = MusicServiceFactory.getMusicService(context);
-					getSongsRecursively(musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this), songs);
+
+					MusicDirectory musicDirectory;
+					if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+						musicDirectory = musicService.getAlbum(dir.getId(), dir.getTitle(), false, context, this);
+					} else {
+						musicDirectory = musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this);
+					}
+					getSongsRecursively(musicDirectory, songs);
 				}
 			}
 
@@ -721,10 +750,23 @@ public class SubsonicFragment extends Fragment {
 						downloadService.downloadBackground(songs, save);
 					}
 				}
+				artistOverride = false;
 			}
 		};
 
 		task.execute();
+	}
+
+	protected MusicDirectory getMusicDirectory(String id, String name, boolean refresh, MusicService service, ProgressListener listener) throws Exception {
+		if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+			if(artist && !artistOverride) {
+				return service.getArtist(id, name, refresh, context, listener);
+			} else {
+				return service.getAlbum(id, name, refresh, context, listener);
+			}
+		} else {
+			return service.getMusicDirectory(id, name, refresh, context, listener);
+		}
 	}
 
 	protected void addToPlaylist(final List<MusicDirectory.Entry> songs) {
@@ -1081,6 +1123,7 @@ public class SubsonicFragment extends Fragment {
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
 		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 		fragment.setArguments(args);
 
 		replaceFragment(fragment, getRootId(), true);

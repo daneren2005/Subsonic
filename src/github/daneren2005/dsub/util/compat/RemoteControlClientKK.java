@@ -22,6 +22,7 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
+import java.util.Arrays;
 
 @TargetApi(19)
 public class RemoteControlClientKK extends RemoteControlClientJB {
@@ -64,7 +65,7 @@ public class RemoteControlClientKK extends RemoteControlClientJB {
 			protected Void doInBackground(Void... params) {
 				try {
 					MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-					musicService.setStarred(entry.getId(), starred, downloadService, null);
+					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, downloadService, null);
 
 					// Make sure to clear parent cache
 					String s = Util.getRestUrl(downloadService, null) + entry.getParent();

@@ -67,7 +67,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
-                if ("indexes".equals(name)) {
+                if ("indexes".equals(name) || "artists".equals(name)) {
                     changed = true;
                     lastModified = getLong("lastModified");
 					ignoredArticles = get("ignoredArticles");

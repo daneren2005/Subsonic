@@ -388,9 +388,17 @@ public final class Util {
 
 		return builder.toString();
 	}
+
+	public static boolean isTagBrowsing(Context context) {
+		return isTagBrowsing(context, Util.getActiveServer(context));
+	}
+	public static boolean isTagBrowsing(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance, false);
+	}
 	
 	public static String getVideoPlayerType(Context context) {
-		SharedPreferences prefs = getPreferences(context); 
+		SharedPreferences prefs = getPreferences(context);
 		return prefs.getString(Constants.PREFERENCES_KEY_VIDEO_PLAYER, "raw"); 
 	}
 

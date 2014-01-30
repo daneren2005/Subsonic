@@ -57,6 +57,10 @@ public interface MusicService {
 
     MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
+	MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+
+	MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+
     SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception;
 
     MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception;
@@ -113,7 +117,7 @@ public interface MusicService {
 
     RemoteStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception;
     
-    void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception;
+    void setStarred(List<String> id, List<String> artistId, List<String> albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception;
 	
 	List<Share> getShares(Context context, ProgressListener progressListener) throws Exception;
 

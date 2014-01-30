@@ -137,7 +137,17 @@ public class OfflineMusicService extends RESTMusicService {
 		return result;
 	}
 
-    private String getName(File file) {
+	@Override
+	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Artist by tags not available in offline mode");
+	}
+
+	@Override
+	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Album by tags not available in offline mode");
+	}
+
+	private String getName(File file) {
         String name = file.getName();
         if (file.isDirectory()) {
             return name;
@@ -549,7 +559,7 @@ public class OfflineMusicService extends RESTMusicService {
     }
 	
 	@Override
-	public void setStarred(String id, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+	public void setStarred(List<String> ids, List<String> artistId, List<String> albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 
@@ -557,7 +567,8 @@ public class OfflineMusicService extends RESTMusicService {
 		int stars = offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
 		stars++;
 		SharedPreferences.Editor offlineEditor = offline.edit();
-		
+
+		String id = ids.get(0);
 		if(id.indexOf(cacheLocn) != -1) {
 			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
 			offlineEditor.putString(Constants.OFFLINE_STAR_SEARCH + stars, searchCriteria);

@@ -389,6 +389,8 @@
 	<string name="settings.menu_options.play_last_summary">Show Play last in menus</string>
 	<string name="settings.menu_options.star_summary">Show Star in menus</string>
 	<string name="settings.menu_options.shared_summary">Show Share in menus</string>
+	<string name="settings.browse_by_tags">Browse By Tags</string>
+	<string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.  Requires Subsonic 4.7+</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

@@ -136,6 +136,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListExtra = args.getString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA);
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
+			artist = args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false);
 			if(entries == null) {
 				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
 			}
@@ -199,6 +200,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 			}
 		}
+
+		if("starred".equals(albumListType)) {
+			menuInflater.inflate(R.menu.unstar, menu);
+		}
 	}
 
 	@Override
@@ -246,6 +251,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			case R.id.menu_show_all:
 				showAll = true;
 				refresh(true);
+				return true;
+			case R.id.menu_unstar:
+				unstarSelected();
+				return true;
 		}
 
 		if(super.onOptionsItemSelected(item)) {
@@ -320,6 +329,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				if ("newest".equals(albumListType)) {
 					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
 				}
+				if(entry.getArtist() == null && entry.getParent() == null) {
+					args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+				}
 				fragment.setArguments(args);
 
 				replaceFragment(fragment, rootId, true);
@@ -390,7 +402,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				return service.getMusicDirectory(id, name, refresh, context, this);
+				return getMusicDirectory(id, name, refresh, service, this);
 			}
 			
 			@Override
@@ -409,7 +421,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			protected MusicDirectory load(MusicService service) throws Exception {
 				MusicDirectory root;
 				if(share == null) {
-					root = service.getMusicDirectory(id, name, refresh, context, this);
+					root = getMusicDirectory(id, name, refresh, service, this);
 				} else {
 					root = share.getMusicDirectory();
 				}
@@ -423,7 +435,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				songs.addAll(parent.getChildren(false, true));
 				for (MusicDirectory.Entry dir : parent.getChildren(true, false)) {
 					MusicService musicService = MusicServiceFactory.getMusicService(context);
-					getSongsRecursively(musicService.getMusicDirectory(dir.getId(), dir.getTitle(), refresh, context, this), songs);
+
+					MusicDirectory musicDirectory;
+					if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+						musicDirectory = musicService.getAlbum(dir.getId(), dir.getTitle(), false, context, this);
+					} else {
+						musicDirectory = musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this);
+					}
+					getSongsRecursively(musicDirectory, songs);
 				}
 			}
 			
@@ -851,6 +870,64 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}.execute();
 			}
 		});
+	}
+
+	public void unstarSelected() {
+		List<MusicDirectory.Entry> selected = getSelectedSongs();
+		if(selected.size() == 0) {
+			selected = entries;
+		}
+		if(selected.size() == 0) {
+			return;
+		}
+		final List<MusicDirectory.Entry> unstar = new ArrayList<MusicDirectory.Entry>();
+		unstar.addAll(selected);
+
+		new LoadingTask<Void>(context, true) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				List<String> ids = new ArrayList<String>();
+				List<String> artists = new ArrayList<String>();
+				List<String> albums = new ArrayList<String>();
+				for(MusicDirectory.Entry entry: unstar) {
+					if(entry.isDirectory()) {
+						if(entry.getArtist() == null || entry.getParent() == null) {
+							artists.add(entry.getId());
+						} else {
+							albums.add(entry.getId());
+						}
+					} else {
+						ids.add(entry.getId());
+					}
+				}
+				musicService.setStarred(ids, artists, albums, false, context, this);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, context.getResources().getString(R.string.starring_content_unstarred, Integer.toString(unstar.size())));
+
+				for(MusicDirectory.Entry entry: unstar) {
+					entries.remove(entry);
+				}
+				entryAdapter.notifyDataSetChanged();
+				selectAll(false, false);
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(R.string.starring_content_error, Integer.toString(unstar.size())) + " " + getErrorMessage(error);
+				}
+
+				Util.toast(context, msg, false);
+			}
+		}.execute();
 	}
 
 	private void checkLicenseAndTrialPeriod(LoadingTask onValid) {

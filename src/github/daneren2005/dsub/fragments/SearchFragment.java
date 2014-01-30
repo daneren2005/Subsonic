@@ -298,6 +298,7 @@ public class SearchFragment extends SubsonicFragment {
 		if(autoplay) {
 			args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
 		}
+		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 		fragment.setArguments(args);
 
 		replaceFragment(fragment, R.id.fragment_list_layout);
