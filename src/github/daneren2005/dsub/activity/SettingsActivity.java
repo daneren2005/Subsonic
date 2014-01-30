@@ -369,7 +369,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		final EditTextPreference serverInternalUrlPreference = new EditTextPreference(this);
 		serverInternalUrlPreference.setKey(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
 		serverInternalUrlPreference.getEditText().setInputType(InputType.TYPE_TEXT_VARIATION_URI);
-		serverInternalUrlPreference.setDefaultValue("http://");
+		serverInternalUrlPreference.setDefaultValue("");
 		serverInternalUrlPreference.setTitle(R.string.settings_server_internal_address);
 		serverInternalUrlPreference.setDialogTitle(R.string.settings_server_internal_address);
 		serverInternalUrlPreference.setSummary(serverInternalUrlPreference.getText());
