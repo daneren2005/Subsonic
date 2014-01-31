@@ -846,7 +846,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			nextPlayingIndex++;
 		}
         if (index != -1 && nextPlayingIndex < size()) {
-            play(nextPlayingIndex);
+			if(nextPlaying != null && downloadList.get(nextPlayingIndex) == nextPlaying && nextPlayerState == PlayerState.PREPARED && remoteState == RemoteControlState.LOCAL) {
+				playNext(true);
+			} else {
+	            play(nextPlayingIndex);
+			}
         }
     }
 
