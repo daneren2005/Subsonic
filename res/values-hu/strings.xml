@@ -6,11 +6,11 @@
     <string name="common.save">Mentés</string>
     <string name="common.cancel">Mégse</string>
     <string name="common.play_now">Lejátszás</string>
-	<string name="common.play_shuffled">Lejátszás (Kevert sorrendben)</string>
-    <string name="common.play_next">Lejátszás (Következőként)</string>
-    <string name="common.play_last">Lejátszás (Utolsóként)</string>
-	<string name="common.download">Letöltés (Gyorsítótárba)</string>
-    <string name="common.pin">Tárolás (Megőrzés az eszközön)</string>
+	<string name="common.play_shuffled">Lejátszás kevert sorrendben</string>
+    <string name="common.play_next">Lejátszás következőként</string>
+    <string name="common.play_last">Lejátszás utolsóként</string>
+	<string name="common.download">Letöltés gyorsítótárba</string>
+    <string name="common.pin">Letöltés tárolásra (megőrzés)</string>
     <string name="common.delete">Törlés</string>
 	<string name="common.star">Csillagozás be</string>
 	<string name="common.unstar">Csillagozás ki</string>
@@ -44,7 +44,7 @@
 		\nFelhasznált tároló: %2$s/%3$s
 		\nFelhasználható tároló: %4$s/%5$s</string>
     <string name="main.select_server">Kiszolgáló kiválasztása</string>
-    <string name="main.shuffle">Lejátszás (Kevert sorrendben)</string>
+    <string name="main.shuffle">Lejátszás kevert sorrendben</string>
     <string name="main.offline">Offline mód</string>
 	<string name="main.online">Online mód</string>
     <string name="main.settings">Beállítások</string>
@@ -61,11 +61,11 @@
 	<string name="main.back_confirm">Nyomja meg még egyszer a kilépéshez!</string>
 
 	<string name="menu.search">Keresés</string>
-	<string name="menu.shuffle">Lejátszás (Kevert sorrendben)</string>
+	<string name="menu.shuffle">Lejátszás kevert sorrendben</string>
 	<string name="menu.refresh">Frissítés</string>
 	<string name="menu.select">Összes kijelölése</string>
 	<string name="menu.play">Lejátszás</string>
-	<string name="menu.play_last">Lejátszás (Utolsóként)</string>
+	<string name="menu.play_last">Lejátszás utolsóként</string>
     <string name="menu.exit">Kilépés</string>
     <string name="menu.settings">Beállítások</string>
     <string name="menu.help">Súgó</string>
@@ -83,7 +83,7 @@
 	<string name="menu.show_all">Minden média megjelenítése</string>
 	<string name="menu.show_artist">Ugrás az előadóhoz</string>
 	<string name="menu.share">Megosztás</string>
-	<string name="menu.delete_cache">Törlés a gyorsítótárból</string>
+	<string name="menu.delete_cache">Gyorsítótár törlése</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -92,6 +92,7 @@
 	<string name="playlist.overwrite">Létező lejátszási lista felülírása</string>
 	<string name="playlist.add_to">Mentés lejátszási listába</string>
 	<string name="playlist.create_new">Új lejátszási lista</string>
+	<string name="playlist.delete">Lejátszási lista törlése</string>
 
     <string name="search.label">Keresés</string>
     <string name="search.title">Keresés</string>
@@ -147,6 +148,7 @@
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Podcast hozzáadása sikertelen!</string>
 	<string name="select_podcasts.invalid_podcast_channel">Érvénytelen podcast csatorna: %s</string>
+	<string name="select_podcasts.delete">Podcast törlése</string>
 
     <string name="download.empty">A várólista üres!</string>
 	<string name="download.shuffle_loading">Kevert sorrendű lista betöltése...</string>
@@ -383,10 +385,12 @@
 	<string name="settings.sync_notification">Szinkronizálási értesítések</string>
 	<string name="settings.sync_notification_summary">Értesítés megjelenítése, ha új média került szinkronizálásra.</string>
 	<string name="settings.menu_options.title">Opcionális menübeállítások</string>
-	<string name="settings.menu_options.play_next_summary">Lejátszás (Következőként) opció megjelenítése a menüben.</string>
-	<string name="settings.menu_options.play_last_summary">Lejátszás (Utolsóként) opció megjelenítése a menüben.</string>
+	<string name="settings.menu_options.play_next_summary">Lejátszás következőként opció megjelenítése a menüben.</string>
+	<string name="settings.menu_options.play_last_summary">Lejátszás utolsóként opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.star_summary">Csillagozás opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.shared_summary">Megosztás opció megjelenítése a menüben.</string>
+	<string name="settings.browse_by_tags">Böngészés ID3 Tag használatával</string>
+	<string name="settings.browse_by_tags_summary">ID3 Tag módszer használata a fájlredszer alapú mód helyett. Subsonic 4.7+ verzió felett!</string>
 
 	<string name="shuffle.title">Kevert sorrend</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -412,6 +416,7 @@
 	<string name="share.updated_info">%s megosztás információi frissítve</string>
 	<string name="share.updated_info_error">%s megosztás információinak frissítése sikertelen!</string>
 	<string name="share.via">Megosztás ezzel</string>
+	<string name="share.delete">Megosztás törlése</string>
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
 
