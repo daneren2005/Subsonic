@@ -90,6 +90,7 @@
 	<string name="playlist.overwrite">Sobreescribir lista de reproducción actual</string>
 	<string name="playlist.add_to">Añadir a lista de reproducción</string>
 	<string name="playlist.create_new">Crear nueva</string>
+	<string name="playlist.delete">Borrar lista de reproducción</string>
 
     <string name="search.label">Buscar</string>
     <string name="search.title">Buscar</string>
@@ -130,6 +131,8 @@
 	<string name="offline.sync_error">Error al sincronizar canciones</string>
 
 	<string name="select_genre.blank">Vacío</string>
+	<string name="select_genre.songs">%d canciones</string>
+	<string name="select_genre.albums">%d albumes</string>
 
 	<string name="select_podcasts.error">Ha habido un error descargando este podcast en el servidor. El servidor debe descargarlo antes.</string>
 	<string name="select_podcasts.skipped">Este podcast no ha sido descargado en el servidor. El servidor debe descargarlo antes.</string>
@@ -143,6 +146,7 @@
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Error al agregar podcast</string>
 	<string name="select_podcasts.invalid_podcast_channel">Canal de podcast no valido: %s</string>
+	<string name="select_podcasts.delete">Borrar podcast</string>
 
     <string name="download.empty">Lista de reproducción vaía</string>
 	<string name="download.shuffle_loading">Cargando lista aleatoria...</string>
@@ -369,6 +373,10 @@
 	<string name="settings.shares_enabled">Compartir habilitadoShares Enabled</string>
 	<string name="settings.shares_enabled_summary">Mostrar o no mostrar la lista de compartidos en el menú desplegable</string>
 	<string name="settings.server_internal_address">Dirección de red interna</string>
+	<string name="settings.browse_by_tags">Explorar por tags</string>
+	<string name="settings.browse_by_tags_summary">Explorar por tags en vez de por estructura de carpetas. Requiere Subsonic 4.7+</string>
+	<string name="settings.server_local_network_ssid" >SSID Red local</string>
+	<string name="settings.server_local_network_ssid_hint">SSID Actual: %s</string>
 
 	<string name="share.info">Dueño: %1$s
 		\nDescripción: %2$s
@@ -387,6 +395,7 @@
 	<string name="share.updated_info">Información de compartición actualizada para %s</string>
 	<string name="share.updated_info_error">Error al actualizar información de compartición para %s</string>
 	<string name="share.via">Compartir vía</string>
+	<string name="share.delete">Borrar compartido</string>
 
 	<string name="sync.title">DSub: Nuevo contenido multimedia disponible</string>
 	<string name="sync.new_podcasts">Nuevos podcasts: %s</string>
