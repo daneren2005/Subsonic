@@ -22,9 +22,21 @@ public final class SyncUtil {
 	private static String TAG = SyncUtil.class.getSimpleName();
 	private static ArrayList<SyncSet> syncedPlaylists;
 	private static ArrayList<SyncSet> syncedPodcasts;
+	private static String url;
+
+	private static void checkRestURL(Context context) {
+		Util instance = Util.getActiveServer(context);
+		String newURL = Util.getRestUrl(context, null, instance, false);
+		if(url == null || !url.equals(newURL)) {
+			syncedPlaylists = null;
+			syncedPodcasts = null;
+			url = newURL;
+		}
+	}
 
 	// Playlist sync
 	public static boolean isSyncedPlaylist(Context context, String playlistId) {
+		checkRestURL(context);
 		if(syncedPlaylists == null) {
 			syncedPlaylists = getSyncedPlaylists(context);
 		}
@@ -89,6 +101,7 @@ public final class SyncUtil {
 
 	// Podcast sync
 	public static boolean isSyncedPodcast(Context context, String podcastId) {
+		checkRestURL(context);
 		if(syncedPodcasts == null) {
 			syncedPodcasts = getSyncedPodcasts(context);
 		}
