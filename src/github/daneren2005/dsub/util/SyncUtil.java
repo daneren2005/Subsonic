@@ -25,7 +25,7 @@ public final class SyncUtil {
 	private static String url;
 
 	private static void checkRestURL(Context context) {
-		Util instance = Util.getActiveServer(context);
+		int instance = Util.getActiveServer(context);
 		String newURL = Util.getRestUrl(context, null, instance, false);
 		if(url == null || !url.equals(newURL)) {
 			syncedPlaylists = null;
