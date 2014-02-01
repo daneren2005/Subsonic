@@ -80,7 +80,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 		if(objects == null) {
 			refresh(false);
 		} else {
-			listView.setAdapter(getAdapter(objects));
+			listView.setAdapter(adapter = getAdapter(objects));
 		}
 
 		return rootView;
