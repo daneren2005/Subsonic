@@ -75,7 +75,7 @@ public class DSubSearchProvider extends ContentProvider {
 
 		for (Artist artist : searchResult.getArtists()) {
 			String icon = RESOURCE_PREFIX + R.drawable.ic_action_artist;
-			cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, artist.getId(), artist.getName(), icon});
+			cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "ar-" + artist.getId(), artist.getName(), icon});
 		}
 		for (MusicDirectory.Entry album : searchResult.getAlbums()) {
 			String icon = RESOURCE_PREFIX + R.drawable.ic_action_album;

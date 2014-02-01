@@ -65,6 +65,10 @@ public class QueryReceiverActivity extends Activity {
 			Intent intent = new Intent(this, SubsonicFragmentActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
+			if(albumId.indexOf("ar-") == 0) {
+				intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+				albumId = albumId.replace("ar-", "");
+			}
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, albumId);
 			if (name != null) {
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, name);
