@@ -205,6 +205,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
 			getEqualizerController();
 		}
+		if(prefs.getBoolean(Constants.PREFERENCES_VISUALIZER_ON, false)) {
+			getVisualizerController();
+			showVisualization = true;
+		}
     }
 
     @Override
@@ -456,7 +460,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
     @Override
     public void setShowVisualization(boolean showVisualization) {
         this.showVisualization = showVisualization;
-    }
+		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
+		editor.putBoolean(Constants.PREFERENCES_VISUALIZER_ON, showVisualization);
+		editor.commit();
+	}
 
     @Override
     public synchronized DownloadFile forSong(MusicDirectory.Entry song) {

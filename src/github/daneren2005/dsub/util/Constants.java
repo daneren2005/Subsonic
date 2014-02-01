@@ -114,6 +114,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_KEEP_SCREEN_ON = "keepScreenOn";
 	public static final String PREFERENCES_KEY_BUFFER_LENGTH = "bufferLength";
 	public static final String PREFERENCES_EQUALIZER_ON = "equalizerOn";
+	public static final String PREFERENCES_VISUALIZER_ON = "visualizerOn";
 	public static final String PREFERENCES_EQUALIZER_SETTINGS = "equalizerSettings";
 	public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";
 	public static final String PREFERENCES_KEY_GAPLESS_PLAYBACK = "gaplessPlayback";

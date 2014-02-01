@@ -489,6 +489,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			visualizerButton.setVisibility(View.GONE);
 		} else {
 			visualizerView = new VisualizerView(context);
+			if(downloadService.getShowVisualization()) {
+				visualizerView.setActive(true);
+			}
 			visualizerViewLayout.addView(visualizerView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 		}
 
