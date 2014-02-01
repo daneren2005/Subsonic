@@ -569,12 +569,19 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				
 				Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 				intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
-				intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+				if(Util.isTagBrowsing(context)) {
+					intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, entry.getAlbumId());
+				} else {
+					intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+				}
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, entry.getAlbum());
 				intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, "Artist");
 				
 				if(entry.getGrandParent() != null) {
 					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID, entry.getGrandParent());
+					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME, entry.getArtist());
+				} else if(Util.isTagBrowsing(context)) {
+					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID, entry.getArtistId());
 					intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME, entry.getArtist());
 				}
 				

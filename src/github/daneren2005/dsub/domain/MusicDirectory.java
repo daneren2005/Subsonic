@@ -110,6 +110,8 @@ public class MusicDirectory implements Serializable {
         private String id;
         private String parent;
 		private String grandParent;
+		private String albumId;
+		private String artistId;
         private boolean directory;
         private String title;
         private String album;
@@ -185,6 +187,22 @@ public class MusicDirectory implements Serializable {
         public void setGrandParent(String grandParent) {
             this.grandParent = grandParent;
         }
+
+		public String getAlbumId() {
+			return albumId;
+		}
+
+		public void setAlbumId(String albumId) {
+			this.albumId = albumId;
+		}
+
+		public String getArtistId() {
+			return artistId;
+		}
+
+		public void setArtistId(String artistId) {
+			this.artistId = artistId;
+		}
 
         public boolean isDirectory() {
             return directory;
@@ -368,7 +386,7 @@ public class MusicDirectory implements Serializable {
         public String toString() {
             return title;
         }
-    }
+	}
 	
 	public static class EntryComparator implements Comparator<Entry> {
 		public int compare(Entry lhs, Entry rhs) {

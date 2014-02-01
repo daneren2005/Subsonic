@@ -1121,7 +1121,11 @@ public class SubsonicFragment extends Fragment {
 	public void showArtist(MusicDirectory.Entry entry) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
-		args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+		if(Util.isTagBrowsing(context)) {
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getArtistId());
+		} else {
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+		}
 		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
 		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 		fragment.setArguments(args);

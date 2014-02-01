@@ -277,7 +277,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
 		// Remove show artists if parent is not set and if not on a album list
-		if((albumListType == null || entry.getParent() == null) && !Util.isOffline(context)) {
+		if((albumListType == null || (entry.getParent() == null && entry.getArtistId() == null)) && !Util.isOffline(context)) {
 			menu.removeItem(R.id.album_menu_show_artist);
 		}
 		if(podcastId != null && !Util.isOffline(context)) {

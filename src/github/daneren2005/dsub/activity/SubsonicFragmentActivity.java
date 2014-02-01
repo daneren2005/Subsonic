@@ -269,6 +269,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID));
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME));
+				args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 				fragment.setArguments(args);
 
 				replaceFragment(fragment, R.id.fragment_list_layout, currentFragment.getSupportTag());
