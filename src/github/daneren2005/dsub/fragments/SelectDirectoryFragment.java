@@ -48,7 +48,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private DragSortListView entryList;
-	int rootId;
+	int rootId = -1;
 	private View emptyView;
 	private boolean hideButtons = false;
 	private Boolean licenseValid;
@@ -72,7 +72,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	
 	public SelectDirectoryFragment() {
 		super();
-		rootId = getNewId();
 	}
 
 	@Override
@@ -85,6 +84,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 			entries = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 			restoredInstance = true;
+		}
+		if(rootId == -1) {
+			rootId = getNewId();
 		}
 	}
 	
