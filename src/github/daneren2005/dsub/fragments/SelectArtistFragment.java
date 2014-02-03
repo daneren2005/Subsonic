@@ -84,6 +84,9 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 				refresh(false);
 			}
 		} else {
+			if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
+				folderButton.setVisibility(View.GONE);
+			}
 			artistList.setAdapter(new ArtistAdapter(context, artists));
 			setMusicFolders();
 		}
