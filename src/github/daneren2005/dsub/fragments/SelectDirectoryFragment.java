@@ -370,6 +370,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public int getRootId() {
 		return rootId;
 	}
+	public int setRootId() {
+		rootId = getNewId();
+		return rootId;
+	}
 
 	private void load(boolean refresh) {
 		if(refreshListing) {

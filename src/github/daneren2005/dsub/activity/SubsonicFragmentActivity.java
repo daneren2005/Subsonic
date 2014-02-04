@@ -265,7 +265,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
 			int fragmentID = currentFragment != null ? currentFragment.getRootId() : R.id.fragment_list_layout;
 			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID)) {
-				SubsonicFragment fragment = new SelectDirectoryFragment();
+				SelectDirectoryFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID));
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME));
@@ -273,7 +273,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				fragment.setArguments(args);
 
 				replaceFragment(fragment, R.id.fragment_list_layout, currentFragment.getSupportTag());
-				fragmentID = fragment.getRootId();
+				fragmentID = fragment.setRootId();
 			}
 
 			SubsonicFragment fragment = new SelectDirectoryFragment();
