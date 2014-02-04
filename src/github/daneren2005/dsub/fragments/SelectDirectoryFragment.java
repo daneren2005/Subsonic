@@ -85,9 +85,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			entries = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 			restoredInstance = true;
 		}
-		if(rootId == -1) {
-			rootId = getNewId();
-		}
 	}
 	
 	@Override
@@ -100,6 +97,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.select_album, container, false);
+		if(rootId == -1) {
+			rootId = getNewId();
+		}
 		rootView.setId(rootId);
 
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
