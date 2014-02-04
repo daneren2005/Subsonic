@@ -770,6 +770,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		// Swap the media players since nextMediaPlayer is ready to play
 		if(start) {
 			nextMediaPlayer.start();
+		} else if(!nextMediaPlayer.isPlaying()) {
+			Log.w(TAG, "nextSetup lied about it's state!");
+			nextMediaPlayer.start();
 		} else {
 			Log.i(TAG, "nextMediaPlayer already playing");
 		}
@@ -854,6 +857,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		}
         if (index != -1 && nextPlayingIndex < size()) {
 			if(nextPlaying != null && downloadList.get(nextPlayingIndex) == nextPlaying && nextPlayerState == PlayerState.PREPARED && remoteState == RemoteControlState.LOCAL) {
+				if(mediaPlayer.isPlaying()) {
+					mediaPlayer.stop();
+				}
+				mediaPlayer.setOnErrorListener(null);
 				mediaPlayer.setOnCompletionListener(null);
 				mediaPlayer.reset();
 				playNext(true);
