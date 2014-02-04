@@ -362,10 +362,6 @@ public class SubsonicFragment extends Fragment {
 	}
 	
 	protected int getNewId() {
-		if(rootView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			return rootView.generateViewId();
-		}
-
 		for (;;) {
 	        final int result = nextGeneratedId.get();
 	        // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
@@ -375,6 +371,12 @@ public class SubsonicFragment extends Fragment {
 	            return result;
 	        }
 	    }
+	}
+	protected void maximizeIdGenerator(int id) {
+		final int result = nextGeneratedId.get();
+		if(id >= result) {
+			nextGeneratedId.set(id + 1);
+		}
 	}
 	public int getRootId() {
 		return rootView.getId();

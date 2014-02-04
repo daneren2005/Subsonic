@@ -81,6 +81,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			int tmp = bundle.getInt(Constants.FRAGMENT_ID, -1);
 			if(tmp > 0) {
 				rootId = tmp;
+				maximizeIdGenerator(tmp);
 			}
 			entries = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 			restoredInstance = true;
