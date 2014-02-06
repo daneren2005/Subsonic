@@ -300,6 +300,14 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	}
 
 	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		if(backStack.size() > 0) {
+			drawerToggle.setDrawerIndicatorEnabled(false);
+		}
+	}
+
+	@Override
 	public void setContentView(int viewId) {
 		super.setContentView(viewId);
 		drawerToggle.setDrawerIndicatorEnabled(true);
