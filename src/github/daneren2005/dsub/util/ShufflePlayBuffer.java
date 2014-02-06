@@ -39,103 +39,103 @@ import github.daneren2005.dsub.util.FileUtil;
  */
 public class ShufflePlayBuffer {
 
-    private static final String TAG = ShufflePlayBuffer.class.getSimpleName();
-    private static final String CACHE_FILENAME = "shuffleBuffer.ser";
-    private static final int CAPACITY = 50;
-    private static final int REFILL_THRESHOLD = 40;
+	private static final String TAG = ShufflePlayBuffer.class.getSimpleName();
+	private static final String CACHE_FILENAME = "shuffleBuffer.ser";
+	private static final int CAPACITY = 50;
+	private static final int REFILL_THRESHOLD = 40;
 
-    private final ScheduledExecutorService executorService;
+	private final ScheduledExecutorService executorService;
 	private boolean firstRun = true;
-    private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
+	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
 	private int lastCount = -1;
-    private Context context;
-    private int currentServer;
+	private Context context;
+	private int currentServer;
 	private String currentFolder = "";
-	
+
 	private String genre = "";
 	private String startYear = "";
 	private String endYear = "";
 
-    public ShufflePlayBuffer(Context context) {
-        this.context = context;
-        
-        executorService = Executors.newSingleThreadScheduledExecutor();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+	public ShufflePlayBuffer(Context context) {
+		this.context = context;
+
+		executorService = Executors.newSingleThreadScheduledExecutor();
+		Runnable runnable = new Runnable() {
+			@Override
+			public void run() {
 				refill();
 			}
-        };
-        executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
-    }
+		};
+		executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
+	}
 
-    public List<MusicDirectory.Entry> get(int size) {
-        clearBufferIfnecessary();
+	public List<MusicDirectory.Entry> get(int size) {
+		clearBufferIfnecessary();
 
-        List<MusicDirectory.Entry> result = new ArrayList<MusicDirectory.Entry>(size);
-        synchronized (buffer) {
-        	boolean removed = false;
-            while (!buffer.isEmpty() && result.size() < size) {
-                result.add(buffer.remove(buffer.size() - 1));
-                removed = true;
-            }
-            
-            // Re-cache if anything is taken out
-            if(removed) {
+		List<MusicDirectory.Entry> result = new ArrayList<MusicDirectory.Entry>(size);
+		synchronized (buffer) {
+			boolean removed = false;
+			while (!buffer.isEmpty() && result.size() < size) {
+				result.add(buffer.remove(buffer.size() - 1));
+				removed = true;
+			}
+
+			// Re-cache if anything is taken out
+			if(removed) {
 				FileUtil.serialize(context, buffer, CACHE_FILENAME);
-            }
-        }
-        Log.i(TAG, "Taking " + result.size() + " songs from shuffle play buffer. " + buffer.size() + " remaining.");
-        return result;
-    }
+			}
+		}
+		Log.i(TAG, "Taking " + result.size() + " songs from shuffle play buffer. " + buffer.size() + " remaining.");
+		return result;
+	}
 
-    public void shutdown() {
-        executorService.shutdown();
-    }
+	public void shutdown() {
+		executorService.shutdown();
+	}
 
-    private void refill() {
+	private void refill() {
 
-        // Check if active server has changed.
-        clearBufferIfnecessary();
+		// Check if active server has changed.
+		clearBufferIfnecessary();
 
-        if (buffer != null && (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
-            return;
-        }
+		if (buffer != null && (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
+			return;
+		}
 
-        try {
-            MusicService service = MusicServiceFactory.getMusicService(context);
-            int n = CAPACITY - buffer.size();
+		try {
+			MusicService service = MusicServiceFactory.getMusicService(context);
+			int n = CAPACITY - buffer.size();
 			String folder = Util.getSelectedMusicFolderId(context);
-            MusicDirectory songs = service.getRandomSongs(n, folder, genre, startYear, endYear, context, null);
+			MusicDirectory songs = service.getRandomSongs(n, folder, genre, startYear, endYear, context, null);
 
-            synchronized (buffer) {
-                buffer.addAll(songs.getChildren());
-                Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildrenSize() + " songs.");
+			synchronized (buffer) {
+				buffer.addAll(songs.getChildren());
+				Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildrenSize() + " songs.");
 				lastCount = songs.getChildrenSize();
-				
+
 				// Cache buffer
 				FileUtil.serialize(context, buffer, CACHE_FILENAME);
-            }
-        } catch (Exception x) {
-            Log.w(TAG, "Failed to refill shuffle play buffer.", x);
-        }
-    }
+			}
+		} catch (Exception x) {
+			Log.w(TAG, "Failed to refill shuffle play buffer.", x);
+		}
+	}
 
-    private void clearBufferIfnecessary() {
-        synchronized (buffer) {
+	private void clearBufferIfnecessary() {
+		synchronized (buffer) {
 			final SharedPreferences prefs = Util.getPreferences(context);
-            if (currentServer != Util.getActiveServer(context)
-				|| (currentFolder != null && !currentFolder.equals(Util.getSelectedMusicFolderId(context)))
-				|| (genre != null && !genre.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "")))
-				|| (startYear != null && !startYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "")))
-				|| (endYear != null && !endYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "")))) {
+			if (currentServer != Util.getActiveServer(context)
+					|| (currentFolder != null && !currentFolder.equals(Util.getSelectedMusicFolderId(context)))
+					|| (genre != null && !genre.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "")))
+					|| (startYear != null && !startYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "")))
+					|| (endYear != null && !endYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "")))) {
 				lastCount = -1;
-                currentServer = Util.getActiveServer(context);
+				currentServer = Util.getActiveServer(context);
 				currentFolder = Util.getSelectedMusicFolderId(context);
 				genre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");
 				startYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
 				endYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "");
-                buffer.clear();
+				buffer.clear();
 
 				if(firstRun) {
 					ArrayList cacheList = FileUtil.deserialize(context, CACHE_FILENAME, ArrayList.class);
@@ -148,7 +148,7 @@ public class ShufflePlayBuffer {
 					File file = new File(context.getCacheDir(), CACHE_FILENAME);
 					file.delete();
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 }
