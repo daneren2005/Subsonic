@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.4" versioncode="85" releasedate="2/4/2014">
+	<release version="4.4" versioncode="86" releasedate="2/5/2014">
 		<change>Browse by ID3 Tags instead of folder structure (off by default)</change>
 		<change>Probably a good idea to clear existing cache since there will be many songs that don't match up</change>
 		<change>Add unstar option to mass unstar songs in the Starred list</change>
