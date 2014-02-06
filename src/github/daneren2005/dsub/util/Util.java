@@ -482,6 +482,7 @@ public final class Util {
 
 			if(entry.getArtist() != null) {
 				String title = file.getName();
+				title = title.replace(".complete", "").replace(".partial", "");
 				int index = title.lastIndexOf(".");
 				title = index == -1 ? title : title.substring(0, index);
 				title = title.substring(title.indexOf('-') + 1);
