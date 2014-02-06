@@ -92,6 +92,8 @@ public class DownloadServiceLifecycleSupport {
 					} else if (DownloadServiceImpl.CMD_STOP.equals(action)) {
 						downloadService.pause();
 						downloadService.seekTo(0);
+					} else if(DownloadServiceImpl.CANCEL_DOWNLOADS.equals(action)) {
+						downloadService.clearBackground();
 					}
 				}
 			});
@@ -195,6 +197,7 @@ public class DownloadServiceLifecycleSupport {
 		commandFilter.addAction(DownloadServiceImpl.CMD_STOP);
 		commandFilter.addAction(DownloadServiceImpl.CMD_PREVIOUS);
 		commandFilter.addAction(DownloadServiceImpl.CMD_NEXT);
+		commandFilter.addAction(DownloadServiceImpl.CANCEL_DOWNLOADS);
 		downloadService.registerReceiver(intentReceiver, commandFilter);
 
 		new CacheCleaner(downloadService, downloadService).clean();

@@ -81,7 +81,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public static final String CMD_STOP = "github.daneren2005.dsub.CMD_STOP";
 	public static final String CMD_PREVIOUS = "github.daneren2005.dsub.CMD_PREVIOUS";
 	public static final String CMD_NEXT = "github.daneren2005.dsub.CMD_NEXT";
-
+	public static final String CANCEL_DOWNLOADS = "github.daneren2005.dsub.CANCEL_DOWNLOADS";
 
 	private RemoteControlClientHelper mRemoteControl;
 

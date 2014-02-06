@@ -1106,13 +1106,24 @@ public final class Util {
     }
     
     public static void showDownloadingNotification(final Context context, DownloadFile file, int size) {
+		Intent cancelIntent = new Intent(context, DownloadServiceImpl.class);
+		cancelIntent.setAction(DownloadServiceImpl.CANCEL_DOWNLOADS);
+		PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, 0);
+
+		String currentDownloading = (file != null) ? file.getSong().getTitle() : "none";
+
     	NotificationCompat.Builder builder;
     	builder = new NotificationCompat.Builder(context)
     		.setSmallIcon(R.drawable.stat_notify_download)
     		.setContentTitle(context.getResources().getString(R.string.download_downloading_title, size))
-    		.setContentText(context.getResources().getString(R.string.download_downloading_summary, (file != null ? file.getSong().getTitle() : "none")))
+    		.setContentText(context.getResources().getString(R.string.download_downloading_summary, currentDownloading))
+			.setStyle(new NotificationCompat.BigTextStyle()
+				.bigText(context.getResources().getString(R.string.download_downloading_summary, currentDownloading)))
     		.setProgress(10, 5, true)
-			.setOngoing(true);
+			.setOngoing(true)
+			.addAction(R.drawable.notification_close,
+				context.getResources().getString(R.string.common_cancel,
+				cancelPI);
     	
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
