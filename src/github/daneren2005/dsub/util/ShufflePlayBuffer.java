@@ -44,14 +44,16 @@ public class ShufflePlayBuffer {
 	private static final int CAPACITY = 50;
 	private static final int REFILL_THRESHOLD = 40;
 
-	private final ScheduledExecutorService executorService;
+	private ScheduledExecutorService executorService;
+	private Runnable runnable;
 	private boolean firstRun = true;
 	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
 	private int lastCount = -1;
 	private Context context;
+
+	private SharedPreferences.OnSharedPreferenceChangeListener listener;
 	private int currentServer;
 	private String currentFolder = "";
-
 	private String genre = "";
 	private String startYear = "";
 	private String endYear = "";
@@ -60,7 +62,7 @@ public class ShufflePlayBuffer {
 		this.context = context;
 
 		executorService = Executors.newSingleThreadScheduledExecutor();
-		Runnable runnable = new Runnable() {
+		runnable = new Runnable() {
 			@Override
 			public void run() {
 				refill();
@@ -71,6 +73,8 @@ public class ShufflePlayBuffer {
 
 	public List<MusicDirectory.Entry> get(int size) {
 		clearBufferIfnecessary();
+		// Make sure fetcher is running if needed
+		restart();
 
 		List<MusicDirectory.Entry> result = new ArrayList<MusicDirectory.Entry>(size);
 		synchronized (buffer) {
@@ -91,14 +95,24 @@ public class ShufflePlayBuffer {
 
 	public void shutdown() {
 		executorService.shutdown();
+		Util.getPreferences(context).unregisterOnSharedPreferenceChangeListener(listener);
+	}
+
+	private void restart() {
+		synchronized(buffer) {
+			if(buffer.size() <= REFILL_THRESHOLD && lastCount != 0 && executorService.isShutdown()) {
+				executorService = Executors.newSingleThreadScheduledExecutor();
+				executorService.scheduleWithFixedDelay(runnable, 0, 10, TimeUnit.SECONDS);
+			}
+		}
 	}
 
 	private void refill() {
-
 		// Check if active server has changed.
 		clearBufferIfnecessary();
 
 		if (buffer != null && (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
+			executorService.shutdown();
 			return;
 		}
 
@@ -125,7 +139,7 @@ public class ShufflePlayBuffer {
 		synchronized (buffer) {
 			final SharedPreferences prefs = Util.getPreferences(context);
 			if (currentServer != Util.getActiveServer(context)
-					|| (currentFolder != null && !currentFolder.equals(Util.getSelectedMusicFolderId(context)))
+					|| !Util.equals(currentFolder, Util.getSelectedMusicFolderId(context))
 					|| (genre != null && !genre.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "")))
 					|| (startYear != null && !startYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "")))
 					|| (endYear != null && !endYear.equals(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, "")))) {
@@ -142,6 +156,15 @@ public class ShufflePlayBuffer {
 					if(cacheList != null) {
 						buffer.addAll(cacheList);
 					}
+
+					listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+						@Override
+						public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+							clearBufferIfnecessary();
+							restart();
+						}
+					};
+					prefs.registerOnSharedPreferenceChangeListener(listener);
 					firstRun = false;
 				} else {
 					// Clear cache
