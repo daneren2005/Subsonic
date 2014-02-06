@@ -5,17 +5,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
@@ -24,18 +21,14 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
-import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SyncUtil;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.CacheCleaner;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
-import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistAdapter;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
@@ -94,7 +87,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, R.id.fragment_list_layout);
+				replaceFragment(fragment);
 				break;
 			case R.id.playlist_menu_play_shuffled:
 				fragment = new SelectDirectoryFragment();
@@ -105,7 +98,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, R.id.fragment_list_layout);
+				replaceFragment(fragment);
 				break;
 			case R.id.playlist_menu_delete:
 				deletePlaylist(playlist);
@@ -156,7 +149,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.fragment_list_layout);
+		replaceFragment(fragment);
 	}
 
 	private void deletePlaylist(final Playlist playlist) {

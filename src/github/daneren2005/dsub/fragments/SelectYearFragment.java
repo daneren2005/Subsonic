@@ -73,6 +73,6 @@ public class SelectYearFragment extends SelectListFragment<Integer> {
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA, Integer.toString(decade));
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.fragment_list_layout);
+		replaceFragment(fragment);
 	}
 }

@@ -221,10 +221,10 @@ public class MainFragment extends SubsonicFragment {
 	private void showAlbumList(String type) {
 		if("genres".equals(type)) {
 			SubsonicFragment fragment = new SelectGenreFragment();
-			replaceFragment(fragment, R.id.home_layout);
+			replaceFragment(fragment);
 		} else if("years".equals(type)) {
 			SubsonicFragment fragment = new SelectYearFragment();
-			replaceFragment(fragment, R.id.home_layout);
+			replaceFragment(fragment);
 		} else {
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
@@ -233,7 +233,7 @@ public class MainFragment extends SubsonicFragment {
 			args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
 			fragment.setArguments(args);
 
-			replaceFragment(fragment, R.id.home_layout);
+			replaceFragment(fragment);
 		}
 	}
 	

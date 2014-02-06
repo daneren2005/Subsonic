@@ -30,11 +30,8 @@ import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -54,7 +51,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
@@ -66,10 +62,8 @@ import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class SubsonicActivity extends ActionBarActivity implements OnItemSelectedListener {
@@ -268,30 +262,34 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		currentFragment.setPrimaryFragment(true);
 		currentFragment.setSupportTag(ids[0]);
 		supportInvalidateOptionsMenu();
+		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 		for(int i = 1; i < size; i++) {
 			SubsonicFragment frag = (SubsonicFragment)fm.findFragmentByTag(ids[i]);
 			frag.setSupportTag(ids[i]);
 			if(secondaryContainer != null) {
 				frag.setPrimaryFragment(false, true);
 			}
+			trans.hide(frag);
 			backStack.add(frag);
 		}
+		trans.commit();
 
 		// Current fragment is hidden in secondaryContainer
-		if(secondaryContainer == null && findViewById(currentFragment.getRootId()) == null) {
-			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+		if(secondaryContainer == null && !currentFragment.isVisible()) {
+			trans = getSupportFragmentManager().beginTransaction();
 			trans.remove(currentFragment);
 			trans.commit();
 			getSupportFragmentManager().executePendingTransactions();
 
 			trans = getSupportFragmentManager().beginTransaction();
-			trans.add(backStack.get(backStack.size() - 1).getRootId(), currentFragment, ids[0]);
+			trans.add(R.id.fragment_container, currentFragment, ids[0]);
 			trans.commit();
 		}
 		// Current fragment needs to be moved over to secondaryContainer
 		else if(secondaryContainer != null && secondaryContainer.findViewById(currentFragment.getRootId()) == null && backStack.size() > 0) {
-			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans = getSupportFragmentManager().beginTransaction();
 			trans.remove(currentFragment);
+			trans.show(backStack.get(backStack.size() - 1));
 			trans.commit();
 			getSupportFragmentManager().executePendingTransactions();
 
@@ -484,10 +482,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 	}
 
-	public void replaceFragment(SubsonicFragment fragment, int id, int tag) {
-		replaceFragment(fragment, id, tag, false);
+	public void replaceFragment(SubsonicFragment fragment, int tag) {
+		replaceFragment(fragment, tag, false);
 	}
-	public void replaceFragment(SubsonicFragment fragment, int id, int tag, boolean replaceCurrent) {
+	public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
+		SubsonicFragment oldFragment = currentFragment;
 		if(currentFragment != null) {
 			currentFragment.setPrimaryFragment(false, secondaryContainer != null);
 		}
@@ -499,7 +498,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 		if(secondaryContainer == null) {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-			trans.add(id, fragment, tag + "");
+			trans.hide(oldFragment);
+			trans.add(R.id.fragment_container, fragment, tag + "");
 			trans.commit();
 		} else {
 			// Make sure secondary container is visible now
@@ -517,14 +517,14 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				if(!replaceCurrent) {
 					SubsonicFragment oldLeftFragment = backStack.get(backStack.size() - 2);
 					oldLeftFragment.setSecondaryFragment(false);
-					int leftId = oldLeftFragment.getRootId();
+					trans.hide(oldLeftFragment);
 
 					// Make sure remove is finished before adding
 					trans.commit();
 					getSupportFragmentManager().executePendingTransactions();
 
 					trans = getSupportFragmentManager().beginTransaction();
-					trans.add(leftId, newLeftFragment, newLeftFragment.getSupportTag() + "");
+					trans.add(R.id.fragment_container, newLeftFragment, newLeftFragment.getSupportTag() + "");
 				} else {
 					backStack.remove(backStack.size() - 1);
 				}
@@ -542,15 +542,16 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(currentFragment != null) {
 			currentFragment.setPrimaryFragment(false);
 		}
-		Fragment oldFrag = (Fragment)currentFragment;
+		Fragment oldFrag = currentFragment;
 
-		currentFragment = (SubsonicFragment) backStack.remove(backStack.size() - 1);
+		currentFragment = backStack.remove(backStack.size() - 1);
 		currentFragment.setPrimaryFragment(true, false);
 		supportInvalidateOptionsMenu();
 
 		if(secondaryContainer == null) {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			trans.remove(oldFrag);
+			trans.show(currentFragment);
 			trans.commit();
 		} else {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
@@ -569,8 +570,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 				trans = getSupportFragmentManager().beginTransaction();
 				trans.add(R.id.fragment_second_container, currentFragment, currentFragment.getSupportTag() + "");
-				
-				backStack.get(backStack.size() - 1).setSecondaryFragment(true);
+
+				SubsonicFragment newLeftFragment = backStack.get(backStack.size() - 1);
+				newLeftFragment.setSecondaryFragment(true);
+				trans.show(newLeftFragment);
 			} else {
 				secondaryContainer.setVisibility(View.GONE);
 			}

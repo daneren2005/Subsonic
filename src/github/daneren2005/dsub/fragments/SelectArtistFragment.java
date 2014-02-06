@@ -2,7 +2,6 @@ package github.daneren2005.dsub.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,11 +21,10 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistAdapter;
-import java.io.File;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -178,7 +176,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 			fragment.setArguments(args);
 
-			replaceFragment(fragment, R.id.fragment_list_layout);
+			replaceFragment(fragment);
 		}
 	}
 

@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.4 Beta3" versioncode="85" releasedate="1/22/2014">
-		<change>Updated to include 4.3.7 changes</change>
-	</release>
-	<release version="4.4 Beta2" versioncode="83" releasedate="1/21/2014">
-		<change>Fix Show All Media</change>
-		<change>Fix play/cache</change>
-		<change>Fix Show Artist/Album</change>
-		<change>Fix albums not showing as cached</change>
-	</release>
-	<release version="4.4.0" versioncode="82" releasedate="1/19/2014">
+	<release version="4.4" versioncode="85" releasedate="2/4/2014">
 		<change>Browse by ID3 Tags instead of folder structure (off by default)</change>
 		<change>Probably a good idea to clear existing cache since there will be many songs that don't match up</change>
+		<change>Add unstar option to mass unstar songs in the Starred list</change>
+		<change>Convert the start timer to use a slider</change>
+		<change>Add years to albums display (requires Subsonic 4.9+)</change>
+		<change>Renamed all Delete's to Delete something to remove ambiguity</change>
+		<change>Fixed some places where rotating the screen caused a crash</change>
+		<change>Various minor bug fixes</change>
 	</release>
 	<release version="4.3.7" versioncode="84" releasedate="1/22/2014">
 		<change>Add stats to genres for 4.9Beta3+ Servers</change>

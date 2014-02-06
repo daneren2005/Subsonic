@@ -11,10 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -352,7 +350,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				if(downloadService != null && downloadService.getEqualizerController() != null
 						&& downloadService.getEqualizerController().getEqualizer() != null) {
 					SubsonicFragment fragment = new EqualizerFragment();
-					replaceFragment(fragment, R.id.download_layout_container);
+					replaceFragment(fragment);
 					setControlsVisible(true);
 				} else {
 					Util.toast(context, "Failed to start equalizer.  Try restarting.");
@@ -614,7 +612,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 				args.putString(Constants.INTENT_EXTRA_NAME_TITLE, song.getSong().getTitle());
 				fragment.setArguments(args);
 				
-				replaceFragment(fragment, R.id.download_layout_container);
+				replaceFragment(fragment);
 				return true;
 			case R.id.menu_remove:
 				new SilentBackgroundTask<Void>(context) {

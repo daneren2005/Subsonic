@@ -48,7 +48,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private DragSortListView entryList;
-	int rootId = -1;
 	private View emptyView;
 	private boolean hideButtons = false;
 	private Boolean licenseValid;
@@ -78,11 +77,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		if(bundle != null) {
-			int tmp = bundle.getInt(Constants.FRAGMENT_ID, -1);
-			if(tmp > 0) {
-				rootId = tmp;
-				maximizeIdGenerator(tmp);
-			}
 			entries = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 			restoredInstance = true;
 		}
@@ -91,17 +85,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt(Constants.FRAGMENT_ID, rootId);
 		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.select_album, container, false);
-		if(rootId == -1) {
-			rootId = getNewId();
-		}
-		rootView.setId(rootId);
 
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
 		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -338,7 +327,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, rootId, true);
+				replaceFragment(fragment, true);
 			} else if (entry.isVideo()) {
 				playVideo(entry);
 			} else if(entry instanceof PodcastEpisode) {
@@ -365,15 +354,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(!"root".equals(id)) {
 			load(refresh);
 		}
-	}
-	
-	@Override
-	public int getRootId() {
-		return rootId;
-	}
-	public int setRootId() {
-		rootId = getNewId();
-		return rootId;
 	}
 
 	private void load(boolean refresh) {

@@ -20,17 +20,14 @@ package github.daneren2005.dsub.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
@@ -114,7 +111,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			
 			if(getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
 				SearchFragment fragment = new SearchFragment();
-				replaceFragment(fragment, R.id.home_layout, fragment.getSupportTag());
+				replaceFragment(fragment, fragment.getSupportTag());
 			}
 		}
 
@@ -238,7 +235,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				setIntent(intent);
 
 				SearchFragment fragment = new SearchFragment();
-				replaceFragment(fragment, currentFragment.getRootId(), fragment.getSupportTag());
+				replaceFragment(fragment, fragment.getSupportTag());
 			}
 		} else {
 			setIntent(intent);
@@ -263,7 +260,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		};
 
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
-			int fragmentID = currentFragment != null ? currentFragment.getRootId() : R.id.fragment_list_layout;
 			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID)) {
 				SelectDirectoryFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
@@ -272,8 +268,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 				fragment.setArguments(args);
 
-				replaceFragment(fragment, R.id.fragment_list_layout, currentFragment.getSupportTag());
-				fragmentID = fragment.setRootId();
+				replaceFragment(fragment, currentFragment.getSupportTag());
 			}
 
 			SubsonicFragment fragment = new SelectDirectoryFragment();
@@ -285,7 +280,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			}
 			fragment.setArguments(args);
 
-			replaceFragment(fragment, fragmentID, currentFragment.getSupportTag());
+			replaceFragment(fragment, currentFragment.getSupportTag());
 			getIntent().removeExtra(Constants.INTENT_EXTRA_VIEW_ALBUM);
 			if("Artist".equals(getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE))) {
 				lastSelectedPosition = 1;
@@ -332,8 +327,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	}
 
 	@Override
-	public void replaceFragment(SubsonicFragment fragment, int id, int tag, boolean replaceCurrent) {
-		super.replaceFragment(fragment, id, tag, replaceCurrent);
+	public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
+		super.replaceFragment(fragment, tag, replaceCurrent);
 		drawerToggle.setDrawerIndicatorEnabled(false);
 	}
 	@Override

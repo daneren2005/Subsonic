@@ -20,12 +20,10 @@ package github.daneren2005.dsub.activity;
 
 import github.daneren2005.dsub.R;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import github.daneren2005.dsub.fragments.DownloadFragment;
 
 import android.widget.EditText;
-import android.content.Intent;
 
 import github.daneren2005.dsub.util.Constants;
 
@@ -41,7 +39,7 @@ public class DownloadActivity extends SubsonicActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.download_activity);
 
-		if (findViewById(R.id.download_container) != null && savedInstanceState == null) {
+		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
 			currentFragment = new DownloadFragment();
 			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
 				Bundle args = new Bundle();
@@ -49,14 +47,14 @@ public class DownloadActivity extends SubsonicActivity {
 				currentFragment.setArguments(args);
 			}
 			currentFragment.setPrimaryFragment(true);
-			getSupportFragmentManager().beginTransaction().add(R.id.download_container, currentFragment, currentFragment.getSupportTag() + "").commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 		}
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent me) {
 		if(currentFragment != null) {
-			return ((DownloadFragment)currentFragment).getGestureDetector().onTouchEvent(me);
+			return currentFragment.getGestureDetector().onTouchEvent(me);
 		} else {
 			return false;
 		}

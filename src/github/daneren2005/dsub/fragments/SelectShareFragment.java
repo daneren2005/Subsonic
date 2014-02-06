@@ -1,10 +1,8 @@
 package github.daneren2005.dsub.fragments;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -101,7 +98,7 @@ public class SelectShareFragment extends SelectListFragment<Share> {
 		args.putSerializable(Constants.INTENT_EXTRA_NAME_SHARE, share);
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.fragment_list_layout);
+		replaceFragment(fragment);
 	}
 
 	private void displayShareInfo(final Share share) {

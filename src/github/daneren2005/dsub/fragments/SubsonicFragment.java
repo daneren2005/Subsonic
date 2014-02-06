@@ -28,7 +28,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -44,7 +43,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
-import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.Artist;
@@ -68,7 +66,6 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,11 +74,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class SubsonicFragment extends Fragment {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
-	private static final AtomicInteger nextGeneratedId = new AtomicInteger(1);
 	private static int TAG_INC = 10;
 	private int tag;
 	
@@ -354,30 +349,13 @@ public class SubsonicFragment extends Fragment {
 		return true;
 	}
 	
-	public void replaceFragment(SubsonicFragment fragment, int id) {
-		replaceFragment(fragment, id, true);
+	public void replaceFragment(SubsonicFragment fragment) {
+		replaceFragment(fragment, true);
 	}
-	public void replaceFragment(SubsonicFragment fragment, int id, boolean replaceCurrent) {
-		context.replaceFragment(fragment, id, fragment.getSupportTag(), secondaryFragment && replaceCurrent);
+	public void replaceFragment(SubsonicFragment fragment, boolean replaceCurrent) {
+		context.replaceFragment(fragment, fragment.getSupportTag(), secondaryFragment && replaceCurrent);
 	}
-	
-	protected int getNewId() {
-		for (;;) {
-	        final int result = nextGeneratedId.get();
-	        // aapt-generated IDs have the high byte nonzero; clamp to the range under that.
-	        int newValue = result + 1;
-	        if (newValue > 0x00FFFFFF) newValue = 1; // Roll over to 1, not 0.
-	        if (nextGeneratedId.compareAndSet(result, newValue)) {
-	            return result;
-	        }
-	    }
-	}
-	protected void maximizeIdGenerator(int id) {
-		final int result = nextGeneratedId.get();
-		if(id >= result) {
-			nextGeneratedId.set(id + 1);
-		}
-	}
+
 	public int getRootId() {
 		return rootView.getId();
 	}
@@ -1137,7 +1115,7 @@ public class SubsonicFragment extends Fragment {
 		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, getRootId(), true);
+		replaceFragment(fragment, true);
 	}
 
 	public void createShare(final List<MusicDirectory.Entry> entries) {

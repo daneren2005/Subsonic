@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -67,6 +66,6 @@ public class SelectGenreFragment extends SelectListFragment<Genre> {
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_EXTRA, genre.getName());
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.fragment_list_layout);
+		replaceFragment(fragment);
 	}
 }

@@ -1,14 +1,11 @@
 package github.daneren2005.dsub.fragments;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
 import java.util.Arrays;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -301,7 +298,7 @@ public class SearchFragment extends SubsonicFragment {
 		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.fragment_list_layout);
+		replaceFragment(fragment);
 	}
 
 	private void onAlbumSelected(MusicDirectory.Entry album, boolean autoplay) {
@@ -314,7 +311,7 @@ public class SearchFragment extends SubsonicFragment {
 		}
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, R.id.fragment_list_layout);
+		replaceFragment(fragment);
 	}
 
 	private void onSongSelected(MusicDirectory.Entry song, boolean save, boolean append, boolean autoplay, boolean playNext) {

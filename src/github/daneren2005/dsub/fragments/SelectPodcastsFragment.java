@@ -21,17 +21,11 @@ package github.daneren2005.dsub.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -42,15 +36,12 @@ import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SyncUtil;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
-import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PodcastChannelAdapter;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,7 +153,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 			args.putString(Constants.INTENT_EXTRA_NAME_PODCAST_DESCRIPTION, channel.getDescription());
 			fragment.setArguments(args);
 
-			replaceFragment(fragment, R.id.fragment_list_layout);
+			replaceFragment(fragment);
 		}
 	}
 	
