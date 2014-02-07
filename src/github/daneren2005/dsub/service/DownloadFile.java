@@ -63,6 +63,7 @@ public class DownloadFile {
 	private boolean saveWhenDone = false;
 	private boolean completeWhenDone = false;
 	private Integer contentLength = null;
+	private int currentSpeed = 0;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
         this.context = context;
@@ -108,6 +109,40 @@ public class DownloadFile {
 	
 	public Integer getContentLength() {
 		return contentLength;
+	}
+
+	public int getCurrentSize() {
+		if(partialFile.exists()) {
+			return partialFile.length();
+		} else {
+			File file = getCompleteFile();
+			if(file.exists()) {
+				return file.length();
+			} else {
+				return 0;
+			}
+		}
+	}
+
+	public int getEstimatedSize() {
+		if(contentLength != null) {
+			return contentLength;
+		}
+
+		File file = getCompleteFile();
+		if(file.exists()) {
+			return file.length();
+		} else if(song.getDuration() == null) {
+			return 0;
+		} else {
+			int br = getBitrate();
+			int duration = song.getDuration();
+			return br * duration;
+		}
+	}
+
+	public int getBytesPerSecond() {
+		return currentSpeed;
 	}
 
     public synchronized void download() {
@@ -430,15 +465,19 @@ public class DownloadFile {
             long count = 0;
             int n;
             long lastLog = System.currentTimeMillis();
+			long lastCount = 0;
 
             while (!isCancelled() && (n = in.read(buffer)) != -1) {
                 out.write(buffer, 0, n);
                 count += n;
+				lastCount += n;
 
                 long now = System.currentTimeMillis();
                 if (now - lastLog > 3000L) {  // Only every so often.
                     Log.i(TAG, "Downloaded " + Util.formatBytes(count) + " of " + song);
+					currentSpeed = lastCount / ((now - lastLog) / 1000L);
                     lastLog = now;
+					lastCount = 0;
                 }
             }
             return count;
