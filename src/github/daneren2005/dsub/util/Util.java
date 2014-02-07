@@ -1122,7 +1122,7 @@ public final class Util {
     		.setProgress(10, 5, true)
 			.setOngoing(true)
 			.addAction(R.drawable.notification_close,
-				context.getResources().getString(R.string.common_cancel,
+				context.getResources().getString(R.string.common_cancel),
 				cancelPI);
     	
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);

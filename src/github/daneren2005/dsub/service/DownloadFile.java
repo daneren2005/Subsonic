@@ -63,7 +63,7 @@ public class DownloadFile {
 	private boolean saveWhenDone = false;
 	private boolean completeWhenDone = false;
 	private Integer contentLength = null;
-	private int currentSpeed = 0;
+	private long currentSpeed = 0;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
         this.context = context;
@@ -111,7 +111,7 @@ public class DownloadFile {
 		return contentLength;
 	}
 
-	public int getCurrentSize() {
+	public long getCurrentSize() {
 		if(partialFile.exists()) {
 			return partialFile.length();
 		} else {
@@ -119,12 +119,12 @@ public class DownloadFile {
 			if(file.exists()) {
 				return file.length();
 			} else {
-				return 0;
+				return 0L;
 			}
 		}
 	}
 
-	public int getEstimatedSize() {
+	public long getEstimatedSize() {
 		if(contentLength != null) {
 			return contentLength;
 		}
@@ -135,13 +135,13 @@ public class DownloadFile {
 		} else if(song.getDuration() == null) {
 			return 0;
 		} else {
-			int br = getBitrate();
+			int br = getBitRate();
 			int duration = song.getDuration();
 			return br * duration;
 		}
 	}
 
-	public int getBytesPerSecond() {
+	public long getBytesPerSecond() {
 		return currentSpeed;
 	}
 
