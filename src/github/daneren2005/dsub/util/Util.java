@@ -606,14 +606,17 @@ public final class Util {
     }
 	public static boolean recursiveDelete(File dir) {
 		if (dir != null && dir.exists()) {
-			for(File file: dir.listFiles()) {
-				if(file.isDirectory()) {
-					if(!recursiveDelete(file)) {
-						return false;
-					}
-				} else if(file.exists()) {
-					if(!file.delete()) {
-						return false;
+			File[] list = dir.listFiles();
+			if(list != null) {
+				for(File file: list) {
+					if(file.isDirectory()) {
+						if(!recursiveDelete(file)) {
+							return false;
+						}
+					} else if(file.exists()) {
+						if(!file.delete()) {
+							return false;
+						}
 					}
 				}
 			}
