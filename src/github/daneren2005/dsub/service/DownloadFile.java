@@ -135,7 +135,7 @@ public class DownloadFile {
 		} else if(song.getDuration() == null) {
 			return 0;
 		} else {
-			int br = getBitRate();
+			int br = (getBitRate() * 1024) / 8;
 			int duration = song.getDuration();
 			return br * duration;
 		}

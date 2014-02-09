@@ -1108,12 +1108,24 @@ public final class Util {
         DSubWidgetProvider.notifyInstances(context, downloadService, false);
     }
     
-    public static void showDownloadingNotification(final Context context, DownloadFile file, int size) {
+	public static void showDownloadingNotification(final Context context, DownloadFile file, int size, DownloadFile speedFile) {
 		Intent cancelIntent = new Intent(context, DownloadServiceImpl.class);
 		cancelIntent.setAction(DownloadServiceImpl.CANCEL_DOWNLOADS);
 		PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, 0);
 
-		String currentDownloading = (file != null) ? file.getSong().getTitle() : "none";
+		String currentDownloading, currentSize, speed;
+		if(file != null) {
+			currentDownloading = file.getSong().getTitle();
+			currentSize = Util.formatBytes(file.getEstimatedSize());
+		} else {
+			currentDownloading = "none";
+			currentSize = "0";
+		}
+		if(speedFile != null) {
+			speed = Long.toString(speedFile.getBytesPerSecond() / 1024);
+		} else {
+			speed = "0";
+		}
 
     	NotificationCompat.Builder builder;
     	builder = new NotificationCompat.Builder(context)
@@ -1121,7 +1133,7 @@ public final class Util {
     		.setContentTitle(context.getResources().getString(R.string.download_downloading_title, size))
     		.setContentText(context.getResources().getString(R.string.download_downloading_summary, currentDownloading))
 			.setStyle(new NotificationCompat.BigTextStyle()
-				.bigText(context.getResources().getString(R.string.download_downloading_summary, currentDownloading)))
+				.bigText(context.getResources().getString(R.string.download_downloading_summary_expanded, currentDownloading, currentSize, speed)))
     		.setProgress(10, 5, true)
 			.setOngoing(true)
 			.addAction(R.drawable.notification_close,

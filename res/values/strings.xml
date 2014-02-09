@@ -193,6 +193,9 @@
 	<string name="download.save_bookmark">Bookmark created</string>
 	<string name="download.downloading_title">Downloading %1$d songs</string>
 	<string name="download.downloading_summary">Current: %1$s</string>
+	<string name="download.downloading_summary_expanded">Current: %1$s
+		\nEstimated Size: %2$s
+		\nAverage Speed: %3$s kbps</string>
 
 	<string name="sync.title">DSub: New media is available</string>
 	<string name="sync.new_podcasts">New podcasts: %s</string>

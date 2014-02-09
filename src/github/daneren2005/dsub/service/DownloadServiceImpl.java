@@ -121,6 +121,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private int cachedPosition = 0;
 	private long downloadRevision;
 	private boolean downloadOngoing = false;
+	private DownloadFile lastDownloaded = null;
 
 	private static boolean equalizerAvailable;
 	private static boolean visualizerAvailable;
@@ -1526,13 +1527,26 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			}
 		}
 
-		if(!backgroundDownloadList.isEmpty() && downloadRevision != revision) {
-			Util.showDownloadingNotification(this, currentDownloading, backgroundDownloadList.size());
+		if(!backgroundDownloadList.isEmpty()) {
+			DownloadFile speedFile = null;
+			// Updating existing notification
+			if(downloadOngoing) {
+				// Changing download, use speed of last DownloadFile
+				if(revision != downloadRevision && lastDownloaded != null) {
+					speedFile = lastDownloaded;
+				} else {
+					// Updated mid-download
+					speedFile = currentDownloading;
+				}
+			}
+			Util.showDownloadingNotification(this, currentDownloading, backgroundDownloadList.size(), speedFile);
 			downloadRevision = revision;
+			lastDownloaded = currentDownloading;
 			downloadOngoing = true;
 		} else if(backgroundDownloadList.isEmpty() && downloadOngoing) {
 			Util.hideDownloadingNotification(this);
 			downloadOngoing = false;
+			lastDownloaded = null;
 		}
 
 		// Delete obsolete .partial and .complete files.
