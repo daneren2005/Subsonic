@@ -18,6 +18,8 @@
  */
 package github.daneren2005.dsub.service;
 
+import android.support.v7.media.MediaRouteSelector;
+
 import java.util.List;
 
 import github.daneren2005.dsub.audiofx.EqualizerController;
@@ -123,6 +125,8 @@ public interface DownloadService {
     EqualizerController getEqualizerController();
 
     VisualizerController getVisualizerController();
+
+	MediaRouteSelector getRemotesAvailable();
 
     boolean isRemoteEnabled();
 

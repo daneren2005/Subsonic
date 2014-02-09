@@ -34,6 +34,7 @@ import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
+import github.daneren2005.dsub.provider.JukeboxRouteProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.Constants;
@@ -63,6 +64,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.support.v7.media.MediaControlIntent;
+import android.support.v7.media.MediaRouteSelector;
+import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.support.v4.util.LruCache;
 import java.net.URLEncoder;
@@ -135,6 +139,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private Timer sleepTimer;
 	private int timerDuration;
 	private boolean autoPlayStart = false;
+
+	private MediaRouteSelector remoteSelector;
 
 	static {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -210,6 +216,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			getVisualizerController();
 			showVisualization = true;
 		}
+
+		MediaRouter mediaRouter = MediaRouter.getInstance(this);
+		JukeboxRouteProvider routeProvider = new JukeboxRouteProvider(this);
+		mediaRouter.addProvider(routeProvider);
+
+		MediaRouteSelector.Builder builder = new MediaRouteSelector.Builder();
+		builder.addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+		remoteSelector = builder.build();
 	}
 
 	@Override
@@ -1115,6 +1129,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			}
 		}
 		return visualizerController;
+	}
+
+	@Override
+	public MediaRouteSelector getRemotesAvailable() {
+		return remoteSelector;
 	}
 
 	@Override
