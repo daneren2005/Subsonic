@@ -505,7 +505,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		if(downloadService != null) {
 			MenuItem mediaRouteItem = menu.findItem(R.id.menu_mediaroute);
 			MediaRouteButton mediaRouteButton = (MediaRouteButton) mediaRouteItem.getActionView();
-			mediaRouteButton.setRouteSelector(downloadService.getRemotesAvailable());
+			mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 		}
 	}
 
@@ -749,6 +749,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		if(currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
 			getImageLoader().loadImage(albumArtImageView, null, true, false);
 		}
+		if(downloadService != null) {
+			downloadService.startRemoteScan();
+		}
 	}
 
 	@Override
@@ -757,6 +760,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		executorService.shutdown();
 		if (visualizerView != null && visualizerView.isActive()) {
 			visualizerView.setActive(false);
+		}
+		if(getDownloadService() != null) {
+			getDownloadService().startRemoteScan();
 		}
 	}
 	

@@ -29,6 +29,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
+import github.daneren2005.dsub.util.MediaRouteManager;
 
 /**
  * @author Sindre Mehus
@@ -126,13 +127,17 @@ public interface DownloadService {
 
     VisualizerController getVisualizerController();
 
-	MediaRouteSelector getRemotesAvailable();
+	MediaRouteSelector getRemoteSelector();
 
     boolean isRemoteEnabled();
 
     void setRemoteEnabled(RemoteControlState newState);
 
     void setRemoteVolume(boolean up);
+
+	void startRemoteScan();
+
+	void stopRemoteScan();
 	
 	void setSleepTimerDuration(int duration);
 	
