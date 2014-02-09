@@ -308,7 +308,6 @@
     <string name="settings.screen_lit_summary">Mantener la pantalla encendida durantes las descargas mejora la velocidad de descarga.</string>
 	<string name="settings.playlist_title">Listas de reproducción</string>
 	<string name="settings.playlist_random_size_title">Tamaño aleatorio</string>
-	<string name="settings.buffer_length">Tamaño del buffer (0 = totalmente en caché)</string>
 	<string name="settings.sleep_timer_title">Temporizador</string>
 	<string name="settings.sleep_timer_duration_title">Duración del temporizador</string>
 	<string name="settings.sleep_timer_off">Encendido</string>

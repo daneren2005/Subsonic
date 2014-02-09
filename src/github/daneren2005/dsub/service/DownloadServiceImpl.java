@@ -1622,16 +1622,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			this.position = position;
 			partialFile = downloadFile.getPartialFile();
 
-			SharedPreferences prefs = Util.getPreferences(DownloadServiceImpl.this);
-			long bufferLength = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_BUFFER_LENGTH, "5"));
-			if(bufferLength == 0) {
-				// Set to seconds in a day, basically infinity
-				bufferLength = 86400L;
-			}
-
 			// Calculate roughly how many bytes BUFFER_LENGTH_SECONDS corresponds to.
 			int bitRate = downloadFile.getBitRate();
-			long byteCount = Math.max(100000, bitRate * 1024L / 8L * bufferLength);
+			long byteCount = Math.max(100000, bitRate * 1024L / 8L * 5L);
 
 			// Find out how large the file should grow before resuming playback.
 			Log.i(TAG, "Buffering from position " + position + " and bitrate " + bitRate);

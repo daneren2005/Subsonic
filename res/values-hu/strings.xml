@@ -325,7 +325,6 @@
     <string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt, a magasabb letöltési sebesség érdekében.</string>
 	<string name="settings.playlist_title">Lejátszási listák</string>
 	<string name="settings.playlist_random_size_title">Véletlenszerű lejátszási lista mérete</string>
-	<string name="settings.buffer_length">Pufferméret (0 = teljes gyorsítótárazás)</string>
 	<string name="settings.sleep_timer_title">Alvás időzítő</string>
 	<string name="settings.sleep_timer_duration_title">Alvás időzítő időtartam</string>
 	<string name="settings.sleep_timer_off">Ki</string>
