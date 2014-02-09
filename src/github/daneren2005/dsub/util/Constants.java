@@ -41,7 +41,6 @@ public final class Constants {
     public static final String INTENT_EXTRA_NAME_ARTIST = "subsonic.artist";
     public static final String INTENT_EXTRA_NAME_TITLE = "subsonic.title";
     public static final String INTENT_EXTRA_NAME_AUTOPLAY = "subsonic.playall";
-    public static final String INTENT_EXTRA_NAME_ERROR = "subsonic.error";
     public static final String INTENT_EXTRA_NAME_QUERY = "subsonic.query";
     public static final String INTENT_EXTRA_NAME_PLAYLIST_ID = "subsonic.playlist.id";
     public static final String INTENT_EXTRA_NAME_PLAYLIST_NAME = "subsonic.playlist.name";
@@ -50,7 +49,6 @@ public final class Constants {
     public static final String INTENT_EXTRA_NAME_ALBUM_LIST_SIZE = "subsonic.albumlistsize";
     public static final String INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET = "subsonic.albumlistoffset";
     public static final String INTENT_EXTRA_NAME_SHUFFLE = "subsonic.shuffle";
-    public static final String INTENT_EXTRA_NAME_REFRESH = "subsonic.refresh";
     public static final String INTENT_EXTRA_REQUEST_SEARCH = "subsonic.requestsearch";
     public static final String INTENT_EXTRA_NAME_EXIT = "subsonic.exit" ;
 	public static final String INTENT_EXTRA_NAME_DOWNLOAD = "subsonic.download";
@@ -65,7 +63,6 @@ public final class Constants {
 
     // Notification IDs.
     public static final int NOTIFICATION_ID_PLAYING = 100;
-    public static final int NOTIFICATION_ID_ERROR = 101;
     public static final int NOTIFICATION_ID_DOWNLOADING = 102;
 
     // Preferences keys.
@@ -104,7 +101,6 @@ public final class Constants {
     public static final String PREFERENCES_KEY_REPEAT_MODE = "repeatMode";
     public static final String PREFERENCES_KEY_WIFI_REQUIRED_FOR_DOWNLOAD = "wifiRequiredForDownload";
 	public static final String PREFERENCES_KEY_RANDOM_SIZE = "randomSize";
-	public static final String PREFERENCES_KEY_SLEEP_TIMER = "sleepTimer";
 	public static final String PREFERENCES_KEY_SLEEP_TIMER_DURATION = "sleepTimerDuration";
 	public static final String PREFERENCES_KEY_OFFLINE = "offline";
 	public static final String PREFERENCES_KEY_TEMP_LOSS = "tempLoss";
@@ -153,9 +149,6 @@ public final class Constants {
 	
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";
-	public static final String MAIN_BACK_STACK_TABS = "backStackTabs";
-	public static final String MAIN_BACK_STACK_POSITION = "backStackPosition";
-	public static final String FRAGMENT_ID = "fragmentId";
 	public static final String FRAGMENT_LIST = "fragmentList";
 	public static final String FRAGMENT_LIST2 = "fragmentList2";
 	public static final String FRAGMENT_DOWNLOAD_FLIPPER = "fragmentDownloadFlipper";
