@@ -193,6 +193,9 @@
 	<string name="download.save_bookmark">Bookmark created</string>
 	<string name="download.downloading_title">Downloading %1$d songs</string>
 	<string name="download.downloading_summary">Current: %1$s</string>
+	<string name="download.downloading_summary_expanded">Current: %1$s
+		\nEstimated Size: %2$s
+		\nAverage Speed: %3$s kbps</string>
 
 	<string name="sync.title">DSub: New media is available</string>
 	<string name="sync.new_podcasts">New podcasts: %s</string>
@@ -269,7 +272,7 @@
 	<string name="settings.track_title">Display Track #</string>
 	<string name="settings.track_summary">Display Track # in front of songs if one exists</string>
 	<string name="settings.custom_sort">Custom Sort</string>
-	<string name="settings.custom_sort_summary">Sort directory listings to properly sort by disc number.  Interferes with the servers sort albums by year.</string>
+	<string name="settings.custom_sort_summary">Override default server sorting to sort by disc number and by year.</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobile</string>
@@ -325,7 +328,6 @@
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
 	<string name="settings.playlist_title">Play</string>
 	<string name="settings.playlist_random_size_title">Random Size</string>
-	<string name="settings.buffer_length">Buffer Length (0 = when fully cached)</string>
 	<string name="settings.sleep_timer_title">Sleep Timer</string>
 	<string name="settings.sleep_timer_duration_title">Sleep Timer Duration</string>
 	<string name="settings.sleep_timer_off">Off</string>

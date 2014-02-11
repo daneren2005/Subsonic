@@ -77,7 +77,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private EditTextPreference randomSize;
 	private ListPreference tempLoss;
 	private ListPreference pauseDisconnect;
-	private EditTextPreference bufferLength;
 	private Preference addServerPreference;
 	private PreferenceCategory serversCategory;
 	private EditTextPreference chatRefreshRate;
@@ -119,7 +118,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		randomSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_RANDOM_SIZE);
 		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		pauseDisconnect = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
-		bufferLength = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_BUFFER_LENGTH);
 		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
 		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		chatRefreshRate = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CHAT_REFRESH);
@@ -303,7 +301,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		randomSize.setSummary(randomSize.getText());
 		tempLoss.setSummary(tempLoss.getEntry());
 		pauseDisconnect.setSummary(pauseDisconnect.getEntry());
-		bufferLength.setSummary(bufferLength.getText() + " seconds");
 		chatRefreshRate.setSummary(chatRefreshRate.getText());
 		videoPlayer.setSummary(videoPlayer.getEntry());
 		syncInterval.setSummary(syncInterval.getEntry());

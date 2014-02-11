@@ -92,8 +92,6 @@ public class DownloadServiceLifecycleSupport {
 					} else if (DownloadServiceImpl.CMD_STOP.equals(action)) {
 						downloadService.pause();
 						downloadService.seekTo(0);
-					} else if(DownloadServiceImpl.CANCEL_DOWNLOADS.equals(action)) {
-						downloadService.clearBackground();
 					}
 				}
 			});
@@ -204,19 +202,26 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	public void onStart(Intent intent) {
-		if (intent != null && intent.getExtras() != null) {
-			final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
-			if (event != null) {
-				eventHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						if(!setup.get()) {
-							lock.lock();
-							lock.unlock();
+		if (intent != null) {
+			if(intent.getExtras() != null) {
+				final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+				if (event != null) {
+					eventHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							if(!setup.get()) {
+								lock.lock();
+								lock.unlock();
+							}
+							handleKeyEvent(event);
 						}
-						handleKeyEvent(event);
-					}
-				});
+					});
+				}
+			} else {
+				String action = intent.getAction();
+				if(DownloadServiceImpl.CANCEL_DOWNLOADS.equals(action)) {
+					downloadService.clearBackground();
+				}
 			}
 		}
 	}

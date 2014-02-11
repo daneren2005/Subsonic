@@ -234,7 +234,6 @@
     <string name="settings.screen_lit_summary">Оставить экран включенным для повышения скорости при скачивании.</string>
 	<string name="settings.playlist_title">Списки воспроизведения</string>
 	<string name="settings.playlist_random_size_title">Размер случайного списка</string>
-	<string name="settings.buffer_length">Размер буфера (0 = кешировать полностью)</string>
 	<string name="settings.sleep_timer_title">Таймер сна</string>
 	<string name="settings.sleep_timer_duration_title">Продолжительность таймера сна</string>
 	<string name="settings.sleep_timer_off">Выключен</string>

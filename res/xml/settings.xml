@@ -278,12 +278,6 @@
 				android:title="@string/settings.playback_title">
 
 				<EditTextPreference
-					android:title="@string/settings.buffer_length"
-					android:key="bufferLength"
-					android:defaultValue="5"
-					android:digits="0123456789"/>
-
-				<EditTextPreference
 					android:title="@string/settings.playlist_random_size_title"
 					android:key="randomSize"
 					android:defaultValue="20"
