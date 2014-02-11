@@ -65,7 +65,7 @@ public class CacheCleaner {
         }
     }
 	
-	private long getMinimumDelete(List<File> files) {
+	private long getMinimumDelete(List<File> files, List<File> pinned) {
 		if(files.size() == 0) {
 			return 0L;
 		}
@@ -74,6 +74,9 @@ public class CacheCleaner {
 		
         long bytesUsedBySubsonic = 0L;
         for (File file : files) {
+            bytesUsedBySubsonic += file.length();
+        }
+        for (File file : pinned) {
             bytesUsedBySubsonic += file.length();
         }
 		
@@ -118,17 +121,19 @@ public class CacheCleaner {
         Log.i(TAG, "Deleted           : " + Util.formatBytes(bytesDeleted));
     }
 
-    private void findCandidatesForDeletion(File file, List<File> files, List<File> dirs) {
+    private void findCandidatesForDeletion(File file, List<File> files, List<File> pinned, List<File> dirs) {
         if (file.isFile()) {
             String name = file.getName();
             boolean isCacheFile = name.endsWith(".partial") || name.contains(".partial.") || name.endsWith(".complete") || name.contains(".complete.");
             if (isCacheFile) {
                 files.add(file);
-            }
+            } else {
+				pinned.add(file);
+			}
         } else {
             // Depth-first
             for (File child : FileUtil.listFiles(file)) {
-                findCandidatesForDeletion(child, files, dirs);
+                findCandidatesForDeletion(child, files, pinned, dirs);
             }
             dirs.add(file);
         }
@@ -171,14 +176,15 @@ public class CacheCleaner {
 
 			try {
 				List<File> files = new ArrayList<File>();
+				List<File> pinned = new ArrayList<File>();
 				List<File> dirs = new ArrayList<File>();
 
-				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, dirs);
+				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
 				sortByAscendingModificationTime(files);
 
 				Set<File> undeletable = findUndeletableFiles();
 
-				deleteFiles(files, undeletable, getMinimumDelete(files), true);
+				deleteFiles(files, undeletable, getMinimumDelete(files, pinned), true);
 				deleteEmptyDirs(dirs, undeletable);
 			} catch (RuntimeException x) {
 				Log.e(TAG, "Error in cache cleaning.", x);
@@ -198,10 +204,11 @@ public class CacheCleaner {
 
 			try {
 				List<File> files = new ArrayList<File>();
+				List<File> pinned = new ArrayList<File>();
 				List<File> dirs = new ArrayList<File>();
-				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, dirs);
+				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
 				
-				long bytesToDelete = getMinimumDelete(files);
+				long bytesToDelete = getMinimumDelete(files, pinned);
 				if(bytesToDelete > 0L) {
 					sortByAscendingModificationTime(files);
 					Set<File> undeletable = findUndeletableFiles();
