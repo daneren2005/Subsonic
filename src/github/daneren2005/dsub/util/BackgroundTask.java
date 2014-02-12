@@ -20,6 +20,11 @@ package github.daneren2005.dsub.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -37,16 +42,16 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     private final Activity activity;
 
-	private static final DEFAULT_CONCURRENCY = 5;
+	private static final int DEFAULT_CONCURRENCY = 5;
 	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>(DEFAULT_CONCURRENCY));
-	private static final BlockingQueue<Task> queue = new BlockingQueue<Task>(10);
+	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
 	private static final Handler handler = new Handler();
 
     public BackgroundTask(Activity activity) {
         this.activity = activity;
 
 		if(threads.isEmpty()) {
-			for(int i = 0; i < DEFAULT_CONCURRENY; i++) {
+			for(int i = 0; i < DEFAULT_CONCURRENCY; i++) {
 				Thread thread = new Thread(new TaskRunnable(), String.format("BackgroundTask_%d", i));
 				threads.add(thread);
 				thread.start();
@@ -132,7 +137,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 						onDone(result);
 					}
 				});
-			} catch(Throwable t) {
+			} catch(final Throwable t) {
 				if(isCancelled()) {
 					return;
 				}
@@ -158,7 +163,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		}
 	}
 
-	private class TaskRunnable extends Runnable {
+	private class TaskRunnable implements Runnable {
 		private boolean running = true;
 
 		public TaskRunnable() {
