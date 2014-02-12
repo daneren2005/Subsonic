@@ -29,6 +29,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import github.daneren2005.dsub.R;
@@ -40,15 +41,15 @@ import github.daneren2005.dsub.view.ErrorDialog;
 public abstract class BackgroundTask<T> implements ProgressListener {
     private static final String TAG = BackgroundTask.class.getSimpleName();
 
-    private final Activity activity;
+    private final Context context;
 
 	private static final int DEFAULT_CONCURRENCY = 5;
 	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>(DEFAULT_CONCURRENCY));
 	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
 	private static final Handler handler = new Handler();
 
-    public BackgroundTask(Activity activity) {
-        this.activity = activity;
+    public BackgroundTask(Context context) {
+        this.context = context;
 
 		if(threads.isEmpty()) {
 			for(int i = 0; i < DEFAULT_CONCURRENCY; i++) {
@@ -68,7 +69,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	}
 
     protected Activity getActivity() {
-        return activity;
+        return (context instanceof Activity) ? ((Activity) context) : null;
     }
 
     protected Handler getHandler() {
@@ -83,25 +84,25 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     protected void error(Throwable error) {
         Log.w(TAG, "Got exception: " + error, error);
-        new ErrorDialog(activity, getErrorMessage(error), true);
+        new ErrorDialog(context, getErrorMessage(error), true);
     }
 
     protected String getErrorMessage(Throwable error) {
 
-        if (error instanceof IOException && !Util.isNetworkConnected(activity)) {
-            return activity.getResources().getString(R.string.background_task_no_network);
+        if (error instanceof IOException && !Util.isNetworkConnected(context)) {
+            return context.getResources().getString(R.string.background_task_no_network);
         }
 
         if (error instanceof FileNotFoundException) {
-            return activity.getResources().getString(R.string.background_task_not_found);
+            return context.getResources().getString(R.string.background_task_not_found);
         }
 
         if (error instanceof IOException) {
-            return activity.getResources().getString(R.string.background_task_network_error);
+            return context.getResources().getString(R.string.background_task_network_error);
         }
 
         if (error instanceof XmlPullParserException) {
-            return activity.getResources().getString(R.string.background_task_parse_error);
+            return context.getResources().getString(R.string.background_task_parse_error);
         }
 
         String message = error.getMessage();
@@ -120,7 +121,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     @Override
     public void updateProgress(int messageId) {
-        updateProgress(activity.getResources().getString(messageId));
+        updateProgress(context.getResources().getString(messageId));
     }
 
 	protected class Task {

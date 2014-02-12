@@ -20,6 +20,7 @@ package github.daneren2005.dsub.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
@@ -32,13 +33,13 @@ import github.daneren2005.dsub.util.Util;
  */
 public class ErrorDialog {
 
-    public ErrorDialog(Activity activity, int messageId, boolean finishActivityOnCancel) {
-        this(activity, activity.getResources().getString(messageId), finishActivityOnCancel);
+    public ErrorDialog(Context context, int messageId, boolean finishActivityOnCancel) {
+        this(context, context.getResources().getString(messageId), finishActivityOnCancel);
     }
 
-    public ErrorDialog(final Activity activity, String message, final boolean finishActivityOnClose) {
+    public ErrorDialog(final Context context, String message, final boolean finishActivityOnClose) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setIcon(android.R.drawable.ic_dialog_alert);
         builder.setTitle(R.string.error_label);
         builder.setMessage(message);
@@ -47,7 +48,7 @@ public class ErrorDialog {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 if (finishActivityOnClose) {
-                     restart(activity);
+                     restart(context);
                 }
             }
         });
@@ -55,7 +56,7 @@ public class ErrorDialog {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (finishActivityOnClose) {
-                    restart(activity);
+                    restart(context);
                 }
             }
         });
@@ -67,7 +68,7 @@ public class ErrorDialog {
 		}
     }
     
-	private void restart(Activity context) {
+	private void restart(Context context) {
 		Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		Util.startActivityWithoutTransition(context, intent);
