@@ -14,9 +14,7 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
     private final Activity tabActivity;
 	private ProgressDialog loading;
-	private Thread thread;
 	private final boolean cancellable;
-	private boolean cancelled = false;
 
 	public LoadingTask(Activity activity) {
 		super(activity);
@@ -37,7 +35,7 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 			}
 		});
 
-		queue.offer(new Task() {
+		queue.offer(task = new Task() {
 			@Override
 			public void onDone(T result) {
 				loading.cancel();
@@ -51,13 +49,6 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 			}
 		});
     }
-
-	protected void cancel() {
-		cancelled = true;
-		if (thread != null) {
-			thread.interrupt();
-		}
-	}
 
 	@Override
     protected boolean isCancelled() {

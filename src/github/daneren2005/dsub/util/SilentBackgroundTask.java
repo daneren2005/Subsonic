@@ -18,19 +18,19 @@
  */
 package github.daneren2005.dsub.util;
 
-import android.app.Activity;
+import android.content.Context;
 
 /**
  * @author Sindre Mehus
  */
 public abstract class SilentBackgroundTask<T> extends BackgroundTask<T> {
-    public SilentBackgroundTask(Activity activity) {
-        super(activity);
+    public SilentBackgroundTask(Context context) {
+        super(context);
     }
 
     @Override
     public void execute() {
-		queue.offer(new Task());
+		queue.offer(task = new Task());
     }
 
     @Override

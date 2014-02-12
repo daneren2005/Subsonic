@@ -42,6 +42,8 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     private static final String TAG = BackgroundTask.class.getSimpleName();
 
     private final Context context;
+	private boolean cancelled = false;
+	private Task task;
 
 	private static final int DEFAULT_CONCURRENCY = 5;
 	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>(DEFAULT_CONCURRENCY));
@@ -112,8 +114,14 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         return error.getClass().getSimpleName();
     }
 
+	public void cancel() {
+		cancelled = true;
+		if(task != null) {
+			task.cancel();
+		}
+	}
 	protected boolean isCancelled() {
-		return false;
+		return cancelled;
 	}
 
     @Override
@@ -125,7 +133,15 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     }
 
 	protected class Task {
+		private Thread thread;
+		private AtomicBoolean taskStart = new AtomicBoolean(true);
+
 		private void execute() {
+			if(!taskStart.get()) {
+				return;
+			}
+
+			thread = Thread.currentThread();
 			try {
 				final T result = doInBackground();
 				if(isCancelled()) {
@@ -138,6 +154,11 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 						onDone(result);
 					}
 				});
+			} catch(InterruptedException interrupt) {
+				if(!isCancelled()) {
+					// Don't exit root thread if task cancelled
+					throw interrupt;
+				}
 			} catch(final Throwable t) {
 				if(isCancelled()) {
 					return;
@@ -156,6 +177,12 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 			}
 		}
 
+		public void cancel() {
+			taskStart.set(false);
+			if(thread != null) {
+				thread.interrupt();
+			}
+		}
 		public void onDone(T result) {
 			done(result);
 		}
