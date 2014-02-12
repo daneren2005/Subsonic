@@ -33,15 +33,34 @@ import github.daneren2005.dsub.view.ErrorDialog;
  * @author Sindre Mehus
  */
 public abstract class BackgroundTask<T> implements ProgressListener {
-
     private static final String TAG = BackgroundTask.class.getSimpleName();
+
     private final Activity activity;
-    private final Handler handler;
+
+	private static final DEFAULT_CONCURRENCY = 5;
+	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>(DEFAULT_CONCURRENCY));
+	private static final BlockingQueue<Task> queue = new BlockingQueue<Task>(10);
+	private static final Handler handler = new Handler();
 
     public BackgroundTask(Activity activity) {
         this.activity = activity;
-        handler = new Handler();
+
+		if(threads.isEmpty()) {
+			for(int i = 0; i < DEFAULT_CONCURRENY; i++) {
+				Thread thread = new Thread(new TaskRunnable(), String.format("BackgroundTask_%d", i));
+				threads.add(thread);
+				thread.start();
+			}
+		}
     }
+
+	public static void stopThreads() {
+		for(Thread thread: threads) {
+			thread.interrupt();
+		}
+		threads.clear();
+		queue.clear();
+	}
 
     protected Activity getActivity() {
         return activity;
@@ -51,7 +70,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         return handler;
     }
 
-    public abstract void execute();
+	public abstract void execute();
 
     protected abstract T doInBackground() throws Throwable;
 
@@ -87,6 +106,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         return error.getClass().getSimpleName();
     }
 
+	protected boolean isCancelled() {
+		return false;
+	}
+
     @Override
     public abstract void updateProgress(final String message);
 
@@ -94,4 +117,67 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     public void updateProgress(int messageId) {
         updateProgress(activity.getResources().getString(messageId));
     }
+
+	protected class Task {
+		private void execute() {
+			try {
+				final T result = doInBackground();
+				if(isCancelled()) {
+					return;
+				}
+
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						onDone(result);
+					}
+				});
+			} catch(Throwable t) {
+				if(isCancelled()) {
+					return;
+				}
+
+				handler.post(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							onError(t);
+						} catch(Exception e) {
+							// Don't care
+						}
+					}
+				});
+			}
+		}
+
+		public void onDone(T result) {
+			done(result);
+		}
+		public void onError(Throwable t) {
+			error(t);
+		}
+	}
+
+	private class TaskRunnable extends Runnable {
+		private boolean running = true;
+
+		public TaskRunnable() {
+
+		}
+
+		@Override
+		public void run() {
+			while(running) {
+				try {
+					Task task = queue.take();
+					task.execute();
+				} catch(InterruptedException stop) {
+					running = false;
+				} catch(Throwable t) {
+					Log.e(TAG, "Unexpected crash in BackgroundTask thread", t);
+				}
+			}
+		}
+	}
+
 }
