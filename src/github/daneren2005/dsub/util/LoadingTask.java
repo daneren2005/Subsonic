@@ -38,13 +38,13 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 		queue.offer(task = new Task() {
 			@Override
 			public void onDone(T result) {
-				loading.cancel();
+				loading.dismiss();
 				done(result);
 			}
 
 			@Override
 			public void onError(Throwable t) {
-				loading.cancel();
+				loading.dismiss();
 				error(t);
 			}
 		});
@@ -52,7 +52,7 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
 	@Override
     protected boolean isCancelled() {
-        return (tabActivity instanceof SubsonicActivity && ((SubsonicActivity)tabActivity).isDestroyed()) || cancelled;
+        return (tabActivity instanceof SubsonicActivity && tabActivity.isDestroyed()) || cancelled;
     }
 	
 	@Override

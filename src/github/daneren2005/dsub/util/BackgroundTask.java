@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -42,11 +43,11 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     private static final String TAG = BackgroundTask.class.getSimpleName();
 
     private final Context context;
-	private boolean cancelled = false;
-	private Task task;
+	protected boolean cancelled = false;
+	protected Task task;
 
 	private static final int DEFAULT_CONCURRENCY = 5;
-	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>(DEFAULT_CONCURRENCY));
+	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>());
 	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
 	private static final Handler handler = new Handler();
 
@@ -86,7 +87,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     protected void error(Throwable error) {
         Log.w(TAG, "Got exception: " + error, error);
-        new ErrorDialog(context, getErrorMessage(error), true);
+		Activity activity = getActivity();
+		if(activity != null) {
+        	new ErrorDialog(activity, getErrorMessage(error), true);
+		}
     }
 
     protected String getErrorMessage(Throwable error) {
@@ -136,7 +140,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		private Thread thread;
 		private AtomicBoolean taskStart = new AtomicBoolean(true);
 
-		private void execute() {
+		private void execute() throws Exception {
 			if(!taskStart.get()) {
 				return;
 			}

@@ -19,7 +19,7 @@ public abstract class TabBackgroundTask<T> extends BackgroundTask<T> {
     public void execute() {
         tabFragment.setProgressVisible(true);
 
-		queue.offer(tab = new Task() {
+		queue.offer(task = new Task() {
 			@Override
 			public void onDone(T result) {
 				tabFragment.setProgressVisible(false);

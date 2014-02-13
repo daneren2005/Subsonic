@@ -33,13 +33,13 @@ import github.daneren2005.dsub.util.Util;
  */
 public class ErrorDialog {
 
-    public ErrorDialog(Context context, int messageId, boolean finishActivityOnCancel) {
-        this(context, context.getResources().getString(messageId), finishActivityOnCancel);
+    public ErrorDialog(Activity activity, int messageId, boolean finishActivityOnCancel) {
+        this(activity, activity.getResources().getString(messageId), finishActivityOnCancel);
     }
 
-    public ErrorDialog(final Context context, String message, final boolean finishActivityOnClose) {
+    public ErrorDialog(final Activity activity, String message, final boolean finishActivityOnClose) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setIcon(android.R.drawable.ic_dialog_alert);
         builder.setTitle(R.string.error_label);
         builder.setMessage(message);
@@ -48,7 +48,7 @@ public class ErrorDialog {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
                 if (finishActivityOnClose) {
-                     restart(context);
+                     restart(activity);
                 }
             }
         });
@@ -56,7 +56,7 @@ public class ErrorDialog {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (finishActivityOnClose) {
-                    restart(context);
+                    restart(activity);
                 }
             }
         });
@@ -68,9 +68,9 @@ public class ErrorDialog {
 		}
     }
     
-	private void restart(Context context) {
-		Intent intent = new Intent(context, SubsonicFragmentActivity.class);
+	private void restart(Activity activity) {
+		Intent intent = new Intent(activity, SubsonicFragmentActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		Util.startActivityWithoutTransition(context, intent);
+		Util.startActivityWithoutTransition(activity, intent);
 	}
 }

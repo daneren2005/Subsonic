@@ -557,7 +557,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
 
             @Override
-            protected void cancel() {
+            public void cancel() {
                 super.cancel();
                 Util.setActiveServer(SettingsActivity.this, previousInstance);
             }
