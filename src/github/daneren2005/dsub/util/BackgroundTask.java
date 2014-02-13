@@ -159,7 +159,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 					}
 				});
 			} catch(InterruptedException interrupt) {
-				if(!isCancelled()) {
+				if(taskStart.get()) {
 					// Don't exit root thread if task cancelled
 					throw interrupt;
 				}
@@ -210,6 +210,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 					task.execute();
 				} catch(InterruptedException stop) {
 					running = false;
+					threads.remove(Thread.currentThread());
 				} catch(Throwable t) {
 					Log.e(TAG, "Unexpected crash in BackgroundTask thread", t);
 				}
