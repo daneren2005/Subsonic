@@ -21,6 +21,12 @@ public class Scrobbler {
         if (song == null || !Util.isScrobblingEnabled(context)) {
             return;
         }
+
+		// Ignore podcasts
+		if(song.getSong() instanceof PodcastEpisode) {
+			return;
+		}
+
         final String id = song.getSong().getId();
 
         // Avoid duplicate registrations.
@@ -30,6 +36,7 @@ public class Scrobbler {
         if (!submission && id.equals(lastNowPlaying)) {
             return;
         }
+
         if (submission) {
             lastSubmission = id;
         } else {
