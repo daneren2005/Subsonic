@@ -293,7 +293,12 @@ public class CachedMusicService implements MusicService {
         return musicService.getDownloadInputStream(context, song, offset, maxBitrate, task);
     }
 
-    @Override
+	@Override
+	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
+		return musicService.getMusicUrl(context, song, maxBitrate);
+	}
+
+	@Override
     public Version getLocalVersion(Context context) throws Exception {
         return musicService.getLocalVersion(context);
     }

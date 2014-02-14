@@ -762,7 +762,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			visualizerView.setActive(false);
 		}
 		if(getDownloadService() != null) {
-			getDownloadService().startRemoteScan();
+			getDownloadService().stopRemoteScan();
 		}
 	}
 	

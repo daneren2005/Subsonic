@@ -95,6 +95,8 @@ public interface MusicService {
 
     HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, CancellableTask task) throws Exception;
 
+	String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception;
+
     Version getLocalVersion(Context context) throws Exception;
 
     Version getLatestVersion(Context context, ProgressListener progressListener) throws Exception;

@@ -372,7 +372,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		SharedPreferences prefs = Util.getPreferences(this);
 		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
 		if(remoteState != RemoteControlState.LOCAL) {
-			setRemoteState(remoteState);
+			setRemoteState(remoteState, null);
 		}
 		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
 		download(songs, false, false, false, false);
@@ -1158,6 +1158,11 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				remoteController = new JukeboxController(this, handler);
 				break;
 			case CHROMECAST:
+				// TODO: Fix case where starting up with chromecast set
+				if(ref == null) {
+					remoteState = RemoteControlState.LOCAL;
+					break;
+				}
 				remoteController = (RemoteController) ref;
 				break;
 			case LOCAL: default:

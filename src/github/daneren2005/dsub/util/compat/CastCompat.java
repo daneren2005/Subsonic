@@ -17,6 +17,9 @@ package github.daneren2005.dsub.util.compat;
 
 import android.support.v7.media.MediaRouter;
 
+import com.google.android.gms.cast.CastDevice;
+import com.google.android.gms.cast.CastMediaControlIntent;
+
 import github.daneren2005.dsub.service.ChromeCastController;
 import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.RemoteController;
@@ -25,6 +28,8 @@ import github.daneren2005.dsub.service.RemoteController;
  * Created by owner on 2/9/14.
  */
 public final class CastCompat {
+	public static final String APPLICATION_ID =  "5F85EBEB";
+
 	static {
 		try {
 			Class.forName("com.google.android.gms.cast.CastDevice");
@@ -47,6 +52,6 @@ public final class CastCompat {
 	}
 
 	public static String getCastControlCategory() {
-		return CastMediaControlIntent.categoryForCast("5F85EBEB");
+		return CastMediaControlIntent.categoryForCast(APPLICATION_ID);
 	}
 }
