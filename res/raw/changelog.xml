@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.5 Beta" versioncode="87" releasedate="2/15/2014">
+		<change>Add ChromeCast support for music only (Android 2.3+ only)</change>
+		<change>More detailed download notification (Android 4.2+)</change>
+		<change>Cancel button on download notification (Android 4.2+)</change>
+		<change>Update background threading architecture to be more efficient</change>
+		<change>Fix cache cleaner not using pinned music in space calculations</change>
+		<change>Don't scrobble podcasts</change>
+		<change>Fix offline scrobbling bug</change>
+	</release>
 	<release version="4.4" versioncode="86" releasedate="2/5/2014">
 		<change>Browse by ID3 Tags instead of folder structure (off by default)</change>
 		<change>Probably a good idea to clear existing cache since there will be many songs that don't match up</change>
