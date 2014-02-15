@@ -273,6 +273,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			remoteController.stop();
 			remoteController.shutdown();
 		}
+		mediaRouter.destroy();
 		Util.hidePlayingNotification(this, this, handler);
 		Util.hideDownloadingNotification(this);
 	}

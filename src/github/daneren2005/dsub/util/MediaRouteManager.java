@@ -16,9 +16,13 @@
 package github.daneren2005.dsub.util;
 
 import android.support.v7.media.MediaControlIntent;
+import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.provider.JukeboxRouteProvider;
@@ -36,6 +40,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private DownloadServiceImpl downloadService;
 	private MediaRouter router;
 	private MediaRouteSelector selector;
+	private List<MediaRouteProvider> providers = new ArrayList<MediaRouteProvider>();
 
 	static {
 		try {
@@ -51,6 +56,12 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		router = MediaRouter.getInstance(downloadService);
 		addProviders();
 		buildSelector();
+	}
+
+	public void destroy() {
+		for(MediaRouteProvider provider: providers) {
+			router.removeProvider(provider);
+		}
 	}
 
 	@Override
@@ -81,6 +92,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private void addProviders() {
 		JukeboxRouteProvider routeProvider = new JukeboxRouteProvider(downloadService);
 		router.addProvider(routeProvider);
+		providers.add(routeProvider);
 	}
 	private void buildSelector() {
 		MediaRouteSelector.Builder builder = new MediaRouteSelector.Builder();
