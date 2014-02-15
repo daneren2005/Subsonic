@@ -15,6 +15,7 @@
 
 package github.daneren2005.dsub.service;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -26,9 +27,11 @@ import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
 import com.google.android.gms.cast.RemoteMediaPlayer;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.images.WebImage;
 
 import java.io.IOException;
 
@@ -215,6 +218,8 @@ public class ChromeCastController extends RemoteController {
 				meta.putString(MediaMetadata.KEY_ARTIST, song.getArtist());
 				meta.putString(MediaMetadata.KEY_ALBUM_ARTIST, song.getArtist());
 				meta.putString(MediaMetadata.KEY_ALBUM_TITLE, song.getAlbum());
+				String coverArt = musicService.getCoverArtUrl(downloadService, song);
+				meta.addImage(new WebImage(Uri.parse(coverArt)));
 			}
 
 			// Load it into a MediaInfo wrapper
@@ -234,7 +239,7 @@ public class ChromeCastController extends RemoteController {
 							downloadService.setPlayerState(PlayerState.PREPARED);
 						}
 					} else if(result.getStatus().getStatusCode() != ConnectionResult.SIGN_IN_REQUIRED) {
-						Log.e(TAG, "Failed to load");
+						Log.e(TAG, "Failed to load: " + result.getStatus().toString());
 						downloadService.setPlayerState(PlayerState.STOPPED);
 						error = true;
 						Util.toast(downloadService, downloadService.getResources().getString(R.string.download_failed_to_load));
