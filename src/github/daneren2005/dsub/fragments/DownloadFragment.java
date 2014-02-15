@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.MediaRouteButton;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -41,7 +42,6 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
-import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
@@ -88,7 +88,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private ImageButton repeatButton;
 	private Button equalizerButton;
 	private Button visualizerButton;
-	private Button jukeboxButton;
 	private View toggleListButton;
 	private ImageButton starButton;
 	private ImageButton bookmarkButton;
@@ -170,7 +169,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		repeatButton = (ImageButton)rootView.findViewById(R.id.download_repeat);
 		equalizerButton = (Button)rootView.findViewById(R.id.download_equalizer);
 		visualizerButton = (Button)rootView.findViewById(R.id.download_visualizer);
-		jukeboxButton = (Button)rootView.findViewById(R.id.download_jukebox);
 		bookmarkButton = (ImageButton) rootView.findViewById(R.id.download_bookmark);
 		LinearLayout visualizerViewLayout = (LinearLayout)rootView.findViewById(R.id.download_visualizer_view_layout);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
@@ -203,7 +201,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		startButton.setOnTouchListener(touchListener);
 		equalizerButton.setOnTouchListener(touchListener);
 		visualizerButton.setOnTouchListener(touchListener);
-		jukeboxButton.setOnTouchListener(touchListener);
 		bookmarkButton.setOnTouchListener(touchListener);
 		emptyTextView.setOnTouchListener(touchListener);
 		albumArtImageView.setOnTouchListener(touchListener);
@@ -375,17 +372,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			}
 		});
 
-		jukeboxButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				boolean jukeboxEnabled = !getDownloadService().isRemoteEnabled();
-				getDownloadService().setRemoteEnabled(jukeboxEnabled ? RemoteControlState.JUKEBOX_SERVER : RemoteControlState.LOCAL);
-				updateButtons();
-				Util.toast(context, jukeboxEnabled ? R.string.download_jukebox_on : R.string.download_jukebox_off, false);
-				setControlsVisible(true);
-			}
-		});
-
 		bookmarkButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -515,6 +501,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 		if(downloadService != null && downloadService.getKeepScreenOn() && nowPlaying) {
 			menu.findItem(R.id.menu_screen_on_off).setTitle(R.string.download_menu_screen_off);
+		}
+		if(downloadService != null) {
+			MenuItem mediaRouteItem = menu.findItem(R.id.menu_mediaroute);
+			MediaRouteButton mediaRouteButton = (MediaRouteButton) mediaRouteItem.getActionView();
+			mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 		}
 	}
 
@@ -758,6 +749,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		if(currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
 			getImageLoader().loadImage(albumArtImageView, null, true, false);
 		}
+		if(downloadService != null) {
+			downloadService.startRemoteScan();
+		}
 	}
 
 	@Override
@@ -766,6 +760,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		executorService.shutdown();
 		if (visualizerView != null && visualizerView.isActive()) {
 			visualizerView.setActive(false);
+		}
+		if(getDownloadService() != null) {
+			getDownloadService().stopRemoteScan();
 		}
 	}
 	
@@ -832,9 +829,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		if (visualizerView != null) {
 			visualizerButton.setTextColor(visualizerView.isActive() ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
 		}
-
-		boolean jukeboxEnabled = getDownloadService() != null && getDownloadService().isRemoteEnabled();
-		jukeboxButton.setTextColor(jukeboxEnabled ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
 		
 		if(Util.isOffline(context)) {
 			bookmarkButton.setVisibility(View.GONE);
@@ -1195,7 +1189,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 						break;
 				}
 
-				jukeboxButton.setTextColor(isJukeboxEnabled ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
 				onProgressChangedTask = null;
 			}
 		};

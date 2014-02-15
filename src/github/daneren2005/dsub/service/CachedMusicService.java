@@ -283,7 +283,12 @@ public class CachedMusicService implements MusicService {
         return musicService.getRandomSongs(size, folder, genre, startYear, endYear, context, progressListener);
     }
 
-    @Override
+	@Override
+	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
+		return musicService.getCoverArtUrl(context, entry);
+	}
+
+	@Override
     public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception {
         return musicService.getCoverArt(context, entry, size, progressListener);
     }
@@ -293,7 +298,12 @@ public class CachedMusicService implements MusicService {
         return musicService.getDownloadInputStream(context, song, offset, maxBitrate, task);
     }
 
-    @Override
+	@Override
+	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
+		return musicService.getMusicUrl(context, song, maxBitrate);
+	}
+
+	@Override
     public Version getLocalVersion(Context context) throws Exception {
         return musicService.getLocalVersion(context);
     }

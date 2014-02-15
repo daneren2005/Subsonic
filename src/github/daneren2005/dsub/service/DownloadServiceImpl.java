@@ -37,6 +37,7 @@ import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.MediaRouteManager;
 import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.Util;
@@ -63,6 +64,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.support.v7.media.MediaRouteSelector;
 import android.util.Log;
 import android.support.v4.util.LruCache;
 import java.net.URLEncoder;
@@ -135,6 +137,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	private Timer sleepTimer;
 	private int timerDuration;
 	private boolean autoPlayStart = false;
+
+	private MediaRouteManager mediaRouter;
 
 	static {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
@@ -210,6 +214,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			getVisualizerController();
 			showVisualization = true;
 		}
+
+		mediaRouter = new MediaRouteManager(this);
 	}
 
 	@Override
@@ -366,7 +372,7 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		SharedPreferences prefs = Util.getPreferences(this);
 		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
 		if(remoteState != RemoteControlState.LOCAL) {
-			setRemoteState(remoteState);
+			setRemoteState(remoteState, null);
 		}
 		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
 		download(songs, false, false, false, false);
@@ -1118,19 +1124,27 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	}
 
 	@Override
+	public MediaRouteSelector getRemoteSelector() {
+		return mediaRouter.getSelector();
+	}
+
+	@Override
 	public boolean isRemoteEnabled() {
 		return remoteState != RemoteControlState.LOCAL;
 	}
 
 	@Override
 	public void setRemoteEnabled(RemoteControlState newState) {
-		setRemoteState(newState);
+		setRemoteEnabled(newState, null);
+	}
+	public void setRemoteEnabled(RemoteControlState newState, Object ref) {
+		setRemoteState(newState, ref);
 
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putInt(Constants.PREFERENCES_KEY_CONTROL_MODE, newState.getValue());
 		editor.commit();
 	}
-	private void setRemoteState(RemoteControlState newState) {
+	private void setRemoteState(RemoteControlState newState, Object ref) {
 		if(remoteController != null) {
 			remoteController.stop();
 			setPlayerState(PlayerState.IDLE);
@@ -1142,6 +1156,14 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		switch(newState) {
 			case JUKEBOX_SERVER:
 				remoteController = new JukeboxController(this, handler);
+				break;
+			case CHROMECAST:
+				// TODO: Fix case where starting up with chromecast set
+				if(ref == null) {
+					remoteState = RemoteControlState.LOCAL;
+					break;
+				}
+				remoteController = (RemoteController) ref;
 				break;
 			case LOCAL: default:
 				break;
@@ -1167,6 +1189,16 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	@Override
 	public void setRemoteVolume(boolean up) {
 		remoteController.setVolume(up);
+	}
+
+	@Override
+	public void startRemoteScan() {
+		mediaRouter.startScan();
+	}
+
+	@Override
+	public void stopRemoteScan() {
+		mediaRouter.stopScan();
 	}
 
 	private synchronized void bufferAndPlay() {

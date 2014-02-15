@@ -48,11 +48,6 @@
 						android:layout_gravity="center_horizontal">
 
 						<Button
-							android:id="@+id/download_jukebox"
-							android:text="RC"
-							style="@style/DownloadActionButton"/>
-
-						<Button
 							android:id="@+id/download_equalizer"
 							android:text="EQ"
 							style="@style/DownloadActionButton"/>

@@ -644,6 +644,14 @@ public class RESTMusicService implements MusicService {
         }
     }
 
+	@Override
+	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
+		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt", false));
+		builder.append("&id=").append(entry.getId());
+		String url = rewriteUrlWithRedirect(context, builder.toString());
+		return url;
+	}
+
     @Override
     public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception {
 
@@ -723,7 +731,18 @@ public class RESTMusicService implements MusicService {
         return response;
     }
 
-    @Override
+	@Override
+	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
+		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream", false));
+		builder.append("&id=").append(song.getId());
+		builder.append("&maxBitRate=").append(maxBitrate);
+
+		String url = rewriteUrlWithRedirect(context, builder.toString());
+		Log.i(TAG, "Using music URL: " + url);
+		return url;
+	}
+
+	@Override
     public String getVideoUrl(int maxBitrate, Context context, String id) {
         StringBuilder builder = new StringBuilder(getRestUrl(context, "videoPlayer"));
         builder.append("&id=").append(id);

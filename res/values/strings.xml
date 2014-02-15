@@ -84,6 +84,7 @@
 	<string name="menu.show_artist">Show Artist</string>
 	<string name="menu.share">Share</string>
 	<string name="menu.delete_cache">Delete Cache</string>
+	<string name="menu.cast">Cast To Device</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -196,6 +197,7 @@
 	<string name="download.downloading_summary_expanded">Current: %1$s
 		\nEstimated Size: %2$s
 		\nAverage Speed: %3$s kbps</string>
+	<string name="download.failed_to_load">Failed to load</string>
 
 	<string name="sync.title">DSub: New media is available</string>
 	<string name="sync.new_podcasts">New podcasts: %s</string>

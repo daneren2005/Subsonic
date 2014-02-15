@@ -18,6 +18,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="appcompat" />
     <orderEntry type="module" module-name="DragSortListView" />
+    <orderEntry type="module" module-name="mediarouter" />
+    <orderEntry type="library" name="google-player-services" level="project" />
+    <orderEntry type="module" module-name="google-play-services_lib" />
   </component>
 </module>
 
