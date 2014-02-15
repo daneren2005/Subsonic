@@ -1136,7 +1136,9 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 	@Override
 	public void setRemoteEnabled(RemoteControlState newState) {
-		setRemoteEnabled(newState, null);
+		if(instance != null) {
+			setRemoteEnabled(newState, null);
+		}
 	}
 	public void setRemoteEnabled(RemoteControlState newState, Object ref) {
 		setRemoteState(newState, ref);
