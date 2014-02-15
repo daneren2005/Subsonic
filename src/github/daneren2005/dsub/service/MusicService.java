@@ -91,6 +91,8 @@ public interface MusicService {
 
     MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception;
 
+	String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception;
+
     Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception;
 
     HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, CancellableTask task) throws Exception;

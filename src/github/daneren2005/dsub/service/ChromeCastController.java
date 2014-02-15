@@ -32,7 +32,11 @@ import com.google.android.gms.common.api.Status;
 
 import java.io.IOException;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.CastCompat;
 
 /**
@@ -49,6 +53,7 @@ public class ChromeCastController extends RemoteController {
 
 	private boolean applicationStarted = false;
 	private boolean waitingForReconnect = false;
+	private boolean error = false;
 
 	private RemoteMediaPlayer mediaPlayer;
 	private double gain = 0.5;
@@ -93,10 +98,17 @@ public class ChromeCastController extends RemoteController {
 
 	@Override
 	public void start() {
+		if(error) {
+			error = false;
+			Log.w(TAG, "Attempting to restart song");
+			startSong(downloadService.getCurrentPlaying(), true);
+			return;
+		}
+
 		try {
 			mediaPlayer.play(apiClient);
 		} catch(Exception e) {
-			Log.e(TAG, "Failed to pause");
+			Log.e(TAG, "Failed to start");
 		}
 	}
 
@@ -112,7 +124,7 @@ public class ChromeCastController extends RemoteController {
 	@Override
 	public void shutdown() {
 		try {
-			if(mediaPlayer != null) {
+			if(mediaPlayer != null && !error) {
 				mediaPlayer.stop(apiClient);
 			}
 		} catch(Exception e) {
@@ -120,17 +132,20 @@ public class ChromeCastController extends RemoteController {
 		}
 
 		try {
-			Cast.CastApi.stopApplication(apiClient);
-			Cast.CastApi.removeMessageReceivedCallbacks(apiClient, mediaPlayer.getNamespace());
-			mediaPlayer = null;
-			applicationStarted = false;
-		} catch(IOException e) {
+			if(apiClient != null) {
+				Cast.CastApi.stopApplication(apiClient);
+				Cast.CastApi.removeMessageReceivedCallbacks(apiClient, mediaPlayer.getNamespace());
+				mediaPlayer = null;
+				applicationStarted = false;
+			}
+		} catch(Exception e) {
 			Log.e(TAG, "Failed to shutdown application", e);
 		}
 
-		if(apiClient.isConnected()) {
+		if(apiClient != null && apiClient.isConnected()) {
 			apiClient.disconnect();
 		}
+		apiClient = null;
 	}
 
 	@Override
@@ -159,7 +174,7 @@ public class ChromeCastController extends RemoteController {
 		gain = Math.max(gain, 0.0);
 		gain = Math.min(gain, 1.0);
 
-		getVolumeToast().setVolume(gain);
+		getVolumeToast().setVolume((float) gain);
 		try {
 			Cast.CastApi.setVolume(apiClient, gain);
 		} catch(Exception e) {
@@ -169,8 +184,8 @@ public class ChromeCastController extends RemoteController {
 
 	@Override
 	public int getRemotePosition() {
-		if(remotePlayer != null) {
-			return remotePlayer.getApproximateStreamPosition();
+		if(mediaPlayer != null) {
+			return (int) (mediaPlayer.getApproximateStreamPosition() / 1000L);
 		} else {
 			return 0;
 		}
@@ -181,11 +196,12 @@ public class ChromeCastController extends RemoteController {
 			// Don't start anything
 			return;
 		}
+		downloadService.setPlayerState(PlayerState.PREPARING);
 		MusicDirectory.Entry song = currentPlaying.getSong();
 
 		try {
 			MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-			String url = song.isVideo() ? musicVideo.getHlsUrl(song.getId(), downloadFile.getBitRate(), downloadService) : musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
+			String url = song.isVideo() ? musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService) : musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
 			//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
 			url = url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
 
@@ -208,7 +224,7 @@ public class ChromeCastController extends RemoteController {
 				.setMetadata(meta)
 				.build();
 
-			mediaPlayer.load(apiClient, mediaInfo, autoPlay).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
+			mediaPlayer.load(apiClient, mediaInfo, autoStart).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
 				@Override
 				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
 					if (result.getStatus().isSuccess()) {
@@ -217,9 +233,11 @@ public class ChromeCastController extends RemoteController {
 						} else {
 							downloadService.setPlayerState(PlayerState.PREPARED);
 						}
-					} else {
+					} else if(result.getStatus().getStatusCode() != ConnectionResult.SIGN_IN_REQUIRED) {
 						Log.e(TAG, "Failed to load");
 						downloadService.setPlayerState(PlayerState.STOPPED);
+						error = true;
+						Util.toast(downloadService, downloadService.getResources().getString(R.string.download_failed_to_load));
 					}
 				}
 			});
@@ -276,17 +294,18 @@ public class ChromeCastController extends RemoteController {
 				@Override
 				public void onStatusUpdated() {
 					MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
+					Log.d(TAG, "state: " + mediaStatus.getPlayerState());
 					switch(mediaStatus.getPlayerState()) {
-						case PLAYER_STATE_PLAYING:
+						case MediaStatus.PLAYER_STATE_PLAYING:
 							downloadService.setPlayerState(PlayerState.STARTED);
 							break;
-						case PLAYER_STATE_PAUSED:
+						case MediaStatus.PLAYER_STATE_PAUSED:
 							downloadService.setPlayerState(PlayerState.PAUSED);
 							break;
-						case PLAYER_STATE_BUFFERING:
+						case MediaStatus.PLAYER_STATE_BUFFERING:
 							downloadService.setPlayerState(PlayerState.PREPARING);
 							break;
-						case PLAYER_STATE_IDLE:
+						case MediaStatus.PLAYER_STATE_IDLE:
 							downloadService.setPlayerState(PlayerState.COMPLETED);
 							downloadService.next();
 							break;
@@ -297,7 +316,6 @@ public class ChromeCastController extends RemoteController {
 				@Override
 				public void onMetadataUpdated() {
 					MediaInfo mediaInfo = mediaPlayer.getMediaInfo();
-					MediaMetadata metadata = mediaInfo.getMetadata();
 					// TODO: Do I care about this?
 				}
 			});
@@ -309,7 +327,7 @@ public class ChromeCastController extends RemoteController {
 			}
 
 			DownloadFile currentPlaying = downloadService.getCurrentPlaying();
-			startSong(currentPlaying, false);
+			startSong(currentPlaying, true);
 		}
 	}
 

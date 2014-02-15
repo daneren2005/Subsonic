@@ -197,6 +197,7 @@
 	<string name="download.downloading_summary_expanded">Current: %1$s
 		\nEstimated Size: %2$s
 		\nAverage Speed: %3$s kbps</string>
+	<string name="download.failed_to_load">Failed to load</string>
 
 	<string name="sync.title">DSub: New media is available</string>
 	<string name="sync.new_podcasts">New podcasts: %s</string>

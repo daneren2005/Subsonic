@@ -18,6 +18,7 @@ package github.daneren2005.dsub.util;
 import android.support.v7.media.MediaControlIntent;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
+import android.util.Log;
 
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.provider.JukeboxRouteProvider;
@@ -29,6 +30,7 @@ import github.daneren2005.dsub.util.compat.CastCompat;
  * Created by owner on 2/8/14.
  */
 public class MediaRouteManager extends MediaRouter.Callback {
+	private static final String TAG = MediaRouteManager.class.getSimpleName();
 	private static boolean castAvailable = false;
 
 	private DownloadServiceImpl downloadService;
