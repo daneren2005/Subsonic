@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.util.DisplayMetrics;
@@ -432,9 +433,17 @@ public class DownloadFile {
         private void downloadAndSaveCoverArt(MusicService musicService) throws Exception {
             try {
                 if (song.getCoverArt() != null) {
-                    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-                    int size = Math.min(metrics.widthPixels, metrics.heightPixels);
-                    musicService.getCoverArt(context, song, size, null);
+					// Check if album art already exists, don't want to needlessly load into memory
+					File albumArtFile = FileUtil.getAlbumArtFile(context, song);
+					if(!albumArtFile.exists()) {
+						DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+						int size = Math.min(metrics.widthPixels, metrics.heightPixels);
+						Bitmap bitmap = musicService.getCoverArt(context, song, size, null);
+						// Not being used, get rid of it immediately
+						if(bitmap != null) {
+							bitmap.recycle();
+						}
+					}
                 }
             } catch (Exception x) {
                 Log.e(TAG, "Failed to get cover art.", x);
