@@ -62,6 +62,7 @@ public class ChromeCastController extends RemoteController {
 	private double gain = 0.5;
 
 	public ChromeCastController(DownloadServiceImpl downloadService, CastDevice castDevice) {
+		downloadService.setPlayerState(PlayerState.PREPARING);
 		this.downloadService = downloadService;
 		this.castDevice = castDevice;
 
@@ -299,7 +300,6 @@ public class ChromeCastController extends RemoteController {
 				@Override
 				public void onStatusUpdated() {
 					MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
-					Log.d(TAG, "state: " + mediaStatus.getPlayerState());
 					switch(mediaStatus.getPlayerState()) {
 						case MediaStatus.PLAYER_STATE_PLAYING:
 							downloadService.setPlayerState(PlayerState.STARTED);
@@ -311,8 +311,12 @@ public class ChromeCastController extends RemoteController {
 							downloadService.setPlayerState(PlayerState.PREPARING);
 							break;
 						case MediaStatus.PLAYER_STATE_IDLE:
-							downloadService.setPlayerState(PlayerState.COMPLETED);
-							downloadService.next();
+							if(mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
+								downloadService.setPlayerState(PlayerState.COMPLETED);
+								downloadService.next();
+							} else {
+								downloadService.setPlayerState(PlayerState.IDLE);
+							}
 							break;
 					}
 				}
