@@ -32,6 +32,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.view.ErrorDialog;
@@ -204,6 +205,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
 		@Override
 		public void run() {
+			Looper.prepare();
 			while(running) {
 				try {
 					Task task = queue.take();
