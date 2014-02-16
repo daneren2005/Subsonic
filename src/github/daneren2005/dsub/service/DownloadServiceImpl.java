@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.service;
 
+import static android.support.v7.media.MediaRouter.RouteInfo;
 import static github.daneren2005.dsub.domain.PlayerState.COMPLETED;
 import static github.daneren2005.dsub.domain.PlayerState.DOWNLOADING;
 import static github.daneren2005.dsub.domain.PlayerState.IDLE;
@@ -65,6 +66,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.support.v7.media.MediaRouteSelector;
+import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.support.v4.util.LruCache;
 import java.net.URLEncoder;
@@ -204,6 +206,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 
 		keepScreenOn = prefs.getBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, false);
 
+		mediaRouter = new MediaRouteManager(this);
+
 		instance = this;
 		lifecycleSupport.onCreate();
 
@@ -214,8 +218,6 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			getVisualizerController();
 			showVisualization = true;
 		}
-
-		mediaRouter = new MediaRouteManager(this);
 	}
 
 	@Override
@@ -373,7 +375,8 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 		SharedPreferences prefs = Util.getPreferences(this);
 		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
 		if(remoteState != RemoteControlState.LOCAL) {
-			setRemoteState(remoteState, null);
+			String id = prefs.getString(Constants.PREFERENCES_KEY_CONTROL_ID, null);
+			setRemoteState(remoteState, null, id);
 		}
 		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
 		download(songs, false, false, false, false);
@@ -936,7 +939,10 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			bufferTask.cancel();
 		}
 		try {
-			setPlayerState(IDLE);
+			// Only set to idle if it's not being killed to start RemoteController
+			if(remoteState == RemoteControlState.LOCAL) {
+				setPlayerState(IDLE);
+			}
 			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.setOnCompletionListener(null);
 			mediaPlayer.reset();
@@ -1143,11 +1149,18 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 	public void setRemoteEnabled(RemoteControlState newState, Object ref) {
 		setRemoteState(newState, ref);
 
+		RouteInfo info = mediaRouter.getSelectedRoute();
+		String routeId = info.getId();
+
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putInt(Constants.PREFERENCES_KEY_CONTROL_MODE, newState.getValue());
+		editor.putString(Constants.PREFERENCES_KEY_CONTROL_ID, routeId);
 		editor.commit();
 	}
 	private void setRemoteState(RemoteControlState newState, Object ref) {
+		setRemoteState(newState, ref, null);
+	}
+	private void setRemoteState(final RemoteControlState newState, final Object ref, final String routeId) {
 		if(remoteController != null) {
 			remoteController.stop();
 			setPlayerState(PlayerState.IDLE);
@@ -1186,6 +1199,23 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 			Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
 		} else {
 			Util.hidePlayingNotification(this, this, handler);
+		}
+
+		if(routeId != null) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					RouteInfo info = mediaRouter.getRouteForId(routeId);
+					if(info == null) {
+						setRemoteState(RemoteControlState.LOCAL, null);
+					} else if(newState == RemoteControlState.CHROMECAST) {
+						RemoteController controller = mediaRouter.getRemoteController(info);
+						if(controller != null) {
+							setRemoteState(RemoteControlState.CHROMECAST, controller);
+						}
+					}
+				}
+			});
 		}
 	}
 
@@ -1301,6 +1331,12 @@ public class DownloadServiceImpl extends Service implements DownloadService {
 				nextMediaPlayer.release();
 				nextMediaPlayer = null;
 			}
+
+			// Exit when using remote controllers
+			if(remoteState != RemoteControlState.LOCAL) {
+				return;
+			}
+
 			nextMediaPlayer = new MediaPlayer();
 			nextMediaPlayer.setWakeMode(DownloadServiceImpl.this, PowerManager.PARTIAL_WAKE_LOCK);
 			try {

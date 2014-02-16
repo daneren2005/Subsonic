@@ -30,6 +30,8 @@ import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.RemoteController;
 import github.daneren2005.dsub.util.compat.CastCompat;
 
+import static android.support.v7.media.MediaRouter.RouteInfo;
+
 /**
  * Created by owner on 2/8/14.
  */
@@ -65,7 +67,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	}
 
 	@Override
-	public void onRouteSelected(MediaRouter router, MediaRouter.RouteInfo info) {
+	public void onRouteSelected(MediaRouter router, RouteInfo info) {
 		if(castAvailable) {
 			RemoteController controller = CastCompat.getController(downloadService, info);
 			if(controller != null) {
@@ -74,7 +76,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		}
 	}
 	@Override
-	public void onRouteUnselected(MediaRouter router, MediaRouter.RouteInfo info) {
+	public void onRouteUnselected(MediaRouter router, RouteInfo info) {
 		downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 	}
 
@@ -87,6 +89,32 @@ public class MediaRouteManager extends MediaRouter.Callback {
 
 	public MediaRouteSelector getSelector() {
 		return selector;
+	}
+
+	public RouteInfo getSelectedRoute() {
+		return router.getSelectedRoute();
+	}
+	public RouteInfo getRouteForId(String id) {
+		if(id == null) {
+			return null;
+		}
+
+		// Try to find matching id
+		for(RouteInfo info: router.getRoutes()) {
+			if(id.equals(info.getId())) {
+				router.selectRoute(info);
+				return info;
+			}
+		}
+
+		return null;
+	}
+	public RemoteController getRemoteController(RouteInfo info) {
+		if(castAvailable) {
+			return CastCompat.getController(downloadService, info);
+		} else {
+			return null;
+		}
 	}
 
 	private void addProviders() {

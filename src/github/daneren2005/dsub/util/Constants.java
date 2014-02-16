@@ -119,6 +119,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_CHAT_ENABLED = "chatEnabled";
 	public static final String PREFERENCES_KEY_VIDEO_PLAYER = "videoPlayer";
 	public static final String PREFERENCES_KEY_CONTROL_MODE = "remoteControlMode";
+	public static final String PREFERENCES_KEY_CONTROL_ID = "remoteControlId";
 	public static final String PREFERENCES_KEY_SYNC_ENABLED = "syncEnabled";
 	public static final String PREFERENCES_KEY_SYNC_INTERVAL = "syncInterval";
 	public static final String PREFERENCES_KEY_SYNC_WIFI = "syncWifi";
