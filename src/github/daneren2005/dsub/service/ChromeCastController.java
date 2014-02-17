@@ -223,9 +223,19 @@ public class ChromeCastController extends RemoteController {
 				meta.addImage(new WebImage(Uri.parse(coverArt)));
 			}
 
+			String contentType;
+			if(song.isVideo()) {
+				contentType = "application/x-mpegURL";
+			}
+			else if(song.getTranscodedContentType() != null) {
+				contentType = song.getTranscodedContentType();
+			} else {
+				contentType = song.getContentType();
+			}
+
 			// Load it into a MediaInfo wrapper
 			MediaInfo mediaInfo = new MediaInfo.Builder(url)
-				.setContentType(song.isVideo() ? "application/x-mpegURL" : song.getTranscodedContentType())
+				.setContentType(contentType)
 				.setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
 				.setMetadata(meta)
 				.build();
@@ -241,17 +251,23 @@ public class ChromeCastController extends RemoteController {
 						}
 					} else if(result.getStatus().getStatusCode() != ConnectionResult.SIGN_IN_REQUIRED) {
 						Log.e(TAG, "Failed to load: " + result.getStatus().toString());
-						downloadService.setPlayerState(PlayerState.STOPPED);
-						error = true;
-						Util.toast(downloadService, downloadService.getResources().getString(R.string.download_failed_to_load));
+						failedLoad();
 					}
 				}
 			});
 		} catch (IllegalStateException e) {
 			Log.e(TAG, "Problem occurred with media during loading", e);
+			failedLoad();
 		} catch (Exception e) {
 			Log.e(TAG, "Problem opening media during loading", e);
+			failedLoad();
 		}
+	}
+
+	private void failedLoad() {
+		Util.toast(downloadService, downloadService.getResources().getString(R.string.download_failed_to_load));
+		downloadService.setPlayerState(PlayerState.STOPPED);
+		error = true;
 	}
 
 
