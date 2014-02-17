@@ -504,8 +504,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		}
 		if(downloadService != null) {
 			MenuItem mediaRouteItem = menu.findItem(R.id.menu_mediaroute);
-			MediaRouteButton mediaRouteButton = (MediaRouteButton) mediaRouteItem.getActionView();
-			mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
+			if(mediaRouteItem != null) {
+				MediaRouteButton mediaRouteButton = (MediaRouteButton) mediaRouteItem.getActionView();
+				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
+			}
 		}
 	}
 
