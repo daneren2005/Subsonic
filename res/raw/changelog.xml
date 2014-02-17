@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.5 Beta" versioncode="87" releasedate="2/15/2014">
+	<release version="4.5 Beta 2" versioncode="88" releasedate="2/17/2014">
+		<change>Fix loading when transcoded content type is null (ie: mp3 -> mp3)</change>
+		<change>Fix multiple Jukebox options in cast menu</change>
+		<change>Fix pressing next skipping twice</change>
+		<change>Fix crash when going to download list</change>
+		<change>Fix route state not being restored after exiting app and coming back later</change>
+		<change>Memory optimizations</change>
+	</release>
+	<release version="4.5 Beta 1" versioncode="87" releasedate="2/15/2014">
 		<change>Add ChromeCast support for music only (Android 2.3+ only)</change>
 		<change>More detailed download notification (Android 4.2+)</change>
 		<change>Cancel button on download notification (Android 4.2+)</change>
