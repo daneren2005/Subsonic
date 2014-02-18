@@ -20,9 +20,9 @@ package github.daneren2005.dsub.updates;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.util.Log;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +60,7 @@ public class Updater {
 			Log.i(TAG, "Updating from version " + lastVersion + " to " + version);
 			for(Updater updater: updaters) {
 				if(updater.shouldUpdate(lastVersion)) {
-					new BackgroundUpdate().execute(updater);
+					new BackgroundUpdate(context, updater).execute();
 				}
 			}
 		}
@@ -70,13 +70,20 @@ public class Updater {
 		return this.TAG;
 	}
 	
-	private class BackgroundUpdate extends AsyncTask<Updater, Void, Void> {
+	private class BackgroundUpdate extends SilentBackgroundTask<Void> {
+		private final Updater updater;
+
+		public BackgroundUpdate(Context context, Updater updater) {
+			super(context);
+			this.updater = updater;
+		}
+
 		@Override
-		protected Void doInBackground(Updater... params) {
+		protected Void doInBackground() {
 			try {
-				params[0].update(context);
+				updater.update(context);
 			} catch(Exception e) {
-				Log.w(TAG, "Failed to run update for " + params[0].getName());
+				Log.w(TAG, "Failed to run update for " + updater.getName());
 			}
 			return null;
 		}
