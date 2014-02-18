@@ -55,8 +55,8 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     public BackgroundTask(Context context) {
         this.context = context;
 
-		if(threads.isEmpty()) {
-			for(int i = 0; i < DEFAULT_CONCURRENCY; i++) {
+		if(threads.size() < DEFAULT_CONCURRENCY) {
+			for(int i = threads.size(); i < DEFAULT_CONCURRENCY; i++) {
 				Thread thread = new Thread(new TaskRunnable(), String.format("BackgroundTask_%d", i));
 				threads.add(thread);
 				thread.start();
