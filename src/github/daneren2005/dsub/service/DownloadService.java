@@ -630,6 +630,7 @@ public class DownloadService extends Service {
 			nextPlayerState = IDLE;
 			return;
 		}
+		setNextPlayerState(IDLE);
 
 		int index = getNextPlayingIndex();
 
@@ -644,7 +645,6 @@ public class DownloadService extends Service {
 			nextPlayingTask.start();
 		} else {
 			nextPlaying = null;
-			setNextPlayerState(IDLE);
 		}
 	}
 
@@ -1677,7 +1677,6 @@ public class DownloadService extends Service {
 		private final File partialFile;
 
 		public CheckCompletionTask(DownloadFile downloadFile) {
-			setNextPlayerState(PlayerState.IDLE);
 			this.downloadFile = downloadFile;
 			if(downloadFile != null) {
 				partialFile = downloadFile.getPartialFile();
