@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.os.StatFs;
 import github.daneren2005.dsub.domain.Playlist;
@@ -35,13 +34,13 @@ public class CacheCleaner {
     }
 
     public void clean() {
-		new BackgroundCleanup().execute();
+		new BackgroundCleanup(context).execute();
     }
 	public void cleanSpace() {
-		new BackgroundSpaceCleanup().execute();
+		new BackgroundSpaceCleanup(context).execute();
 	}
 	public void cleanPlaylists(List<Playlist> playlists) {
-		new BackgroundPlaylistsCleanup().execute(playlists);
+		new BackgroundPlaylistsCleanup(context, playlists).execute();
 	}
 
     private void deleteEmptyDirs(List<File> dirs, Set<File> undeletable) {
@@ -166,9 +165,13 @@ public class CacheCleaner {
         return undeletable;
     }
 	
-	private class BackgroundCleanup extends AsyncTask<Void, Void, Void> {
+	private class BackgroundCleanup extends SilentBackgroundTask<Void> {
+		public BackgroundCleanup(Context context) {
+			super(context);
+		}
+
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected Void doInBackground() {
 			if (downloadService == null) {
 				Log.e(TAG, "DownloadService not set. Aborting cache cleaning.");
 				return null;
@@ -189,14 +192,18 @@ public class CacheCleaner {
 			} catch (RuntimeException x) {
 				Log.e(TAG, "Error in cache cleaning.", x);
 			}
-			
+
 			return null;
 		}
 	}
-	
-	private class BackgroundSpaceCleanup extends AsyncTask<Void, Void, Void> {
+
+	private class BackgroundSpaceCleanup extends SilentBackgroundTask<Void> {
+		public BackgroundSpaceCleanup(Context context) {
+			super(context);
+		}
+
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected Void doInBackground() {
 			if (downloadService == null) {
 				Log.e(TAG, "DownloadService not set. Aborting cache cleaning.");
 				return null;
@@ -207,7 +214,7 @@ public class CacheCleaner {
 				List<File> pinned = new ArrayList<File>();
 				List<File> dirs = new ArrayList<File>();
 				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
-				
+
 				long bytesToDelete = getMinimumDelete(files, pinned);
 				if(bytesToDelete > 0L) {
 					sortByAscendingModificationTime(files);
@@ -217,29 +224,35 @@ public class CacheCleaner {
 			} catch (RuntimeException x) {
 				Log.e(TAG, "Error in cache cleaning.", x);
 			}
-			
+
 			return null;
 		}
 	}
-	
-	private class BackgroundPlaylistsCleanup extends AsyncTask<List<Playlist>, Void, Void> {
+
+	private class BackgroundPlaylistsCleanup extends SilentBackgroundTask<Void> {
+		private final List<Playlist> playlists;
+
+		public BackgroundPlaylistCleanup(Context context, List<Playlist> playlists) {
+			super(context);
+			this.playlists = playlists;
+		}
+
 		@Override
-		protected Void doInBackground(List<Playlist>... params) {
+		protected Void doInBackground() {
 			try {
 				String server = Util.getServerName(context);
 				SortedSet<File> playlistFiles = FileUtil.listFiles(FileUtil.getPlaylistDirectory(server));
-				List<Playlist> playlists = params[0];
 				for (Playlist playlist : playlists) {
 					playlistFiles.remove(FileUtil.getPlaylistFile(server, playlist.getName()));
 				}
-				
+
 				for(File playlist : playlistFiles) {
 					playlist.delete();
 				}
 			} catch (RuntimeException x) {
 				Log.e(TAG, "Error in playlist cache cleaning.", x);
 			}
-			
+
 			return null;
 		}
 	}

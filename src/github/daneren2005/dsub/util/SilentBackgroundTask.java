@@ -33,6 +33,11 @@ public abstract class SilentBackgroundTask<T> extends BackgroundTask<T> {
 		queue.offer(task = new Task());
     }
 
+	@Override
+	protected void done(T result) {
+		// Don't do anything unless overriden
+	}
+
     @Override
     public void updateProgress(int messageId) {
     }
