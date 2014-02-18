@@ -35,7 +35,7 @@ import github.daneren2005.dsub.domain.RemoteStatus;
 
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();
-	protected DownloadServiceImpl downloadService;
+	protected DownloadService downloadService;
 	private VolumeToast volumeToast;
 
 	public abstract void start();

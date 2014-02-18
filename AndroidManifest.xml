@@ -67,7 +67,7 @@
             <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/>
         </activity>
 
-        <service android:name="github.daneren2005.dsub.service.DownloadServiceImpl"
+        <service android:name=".service.DownloadService"
                  android:label="Subsonic Download Service"/>
 		<service android:name="github.daneren2005.dsub.service.sync.AuthenticatorService">
 			<intent-filter>

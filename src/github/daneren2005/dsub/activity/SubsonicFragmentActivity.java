@@ -54,7 +54,6 @@ import github.daneren2005.dsub.fragments.SelectShareFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.updates.Updater;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
@@ -80,7 +79,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
-			stopService(new Intent(this, DownloadServiceImpl.class));
+			stopService(new Intent(this, DownloadService.class));
 			finish();
 		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
 			DownloadService service = getDownloadService();

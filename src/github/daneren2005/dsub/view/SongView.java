@@ -20,8 +20,6 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.media.MediaMetadataRetriever;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -29,12 +27,10 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
-import java.text.DateFormat;
 
 /**
  * Used to display songs in a {@code ListView}.
@@ -150,7 +146,7 @@ public class SongView extends UpdateView implements Checkable {
 	@Override
 	protected void updateBackground() {
         if (downloadService == null) {
-			downloadService = DownloadServiceImpl.getInstance();
+			downloadService = DownloadService.getInstance();
 			if(downloadService == null) {
 				return;
 			}

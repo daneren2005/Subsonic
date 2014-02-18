@@ -21,7 +21,6 @@ package github.daneren2005.dsub.fragments;
 import android.content.SharedPreferences;
 import android.media.audiofx.Equalizer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -38,7 +37,7 @@ import java.util.Map;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.audiofx.EqualizerController;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
 
@@ -59,7 +58,7 @@ public class EqualizerFragment extends SubsonicFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.equalizer, container, false);
 
-		equalizerController = DownloadServiceImpl.getInstance().getEqualizerController();
+		equalizerController = DownloadService.getInstance().getEqualizerController();
 		equalizer = equalizerController.getEqualizer();
 
 		try {
@@ -105,7 +104,7 @@ public class EqualizerFragment extends SubsonicFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		equalizerController = DownloadServiceImpl.getInstance().getEqualizerController();
+		equalizerController = DownloadService.getInstance().getEqualizerController();
 		equalizer = equalizerController.getEqualizer();
 	}
 

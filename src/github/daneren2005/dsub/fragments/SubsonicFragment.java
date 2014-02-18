@@ -53,7 +53,6 @@ import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
@@ -413,7 +412,7 @@ public class SubsonicFragment extends Fragment {
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
 			Util.startActivityWithoutTransition(context, intent);
 		} else {
-			context.stopService(new Intent(context, DownloadServiceImpl.class));
+			context.stopService(new Intent(context, DownloadService.class));
 			context.finish();
 		}
 	}

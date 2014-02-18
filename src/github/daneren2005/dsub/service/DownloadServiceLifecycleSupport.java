@@ -33,8 +33,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.RemoteControlClient;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.PhoneStateListener;
@@ -56,7 +54,7 @@ public class DownloadServiceLifecycleSupport {
 	private static final String TAG = DownloadServiceLifecycleSupport.class.getSimpleName();
 	private static final String FILENAME_DOWNLOADS_SER = "downloadstate2.ser";
 
-	private final DownloadServiceImpl downloadService;
+	private final DownloadService downloadService;
 	private Looper eventLooper;
 	private Handler eventHandler;
 	private ScheduledExecutorService executorService;
@@ -79,17 +77,17 @@ public class DownloadServiceLifecycleSupport {
 				public void run() {
 					String action = intent.getAction();
 					Log.i(TAG, "intentReceiver.onReceive: " + action);
-					if (DownloadServiceImpl.CMD_PLAY.equals(action)) {
+					if (DownloadService.CMD_PLAY.equals(action)) {
 						downloadService.play();
-					} else if (DownloadServiceImpl.CMD_NEXT.equals(action)) {
+					} else if (DownloadService.CMD_NEXT.equals(action)) {
 						downloadService.next();
-					} else if (DownloadServiceImpl.CMD_PREVIOUS.equals(action)) {
+					} else if (DownloadService.CMD_PREVIOUS.equals(action)) {
 						downloadService.previous();
-					} else if (DownloadServiceImpl.CMD_TOGGLEPAUSE.equals(action)) {
+					} else if (DownloadService.CMD_TOGGLEPAUSE.equals(action)) {
 						downloadService.togglePlayPause();
-					} else if (DownloadServiceImpl.CMD_PAUSE.equals(action)) {
+					} else if (DownloadService.CMD_PAUSE.equals(action)) {
 						downloadService.pause();
-					} else if (DownloadServiceImpl.CMD_STOP.equals(action)) {
+					} else if (DownloadService.CMD_STOP.equals(action)) {
 						downloadService.pause();
 						downloadService.seekTo(0);
 					}
@@ -99,7 +97,7 @@ public class DownloadServiceLifecycleSupport {
 	};
 
 
-	public DownloadServiceLifecycleSupport(DownloadServiceImpl downloadService) {
+	public DownloadServiceLifecycleSupport(DownloadService downloadService) {
 		this.downloadService = downloadService;
 	}
 
@@ -189,13 +187,13 @@ public class DownloadServiceLifecycleSupport {
 
 		// Register the handler for outside intents.
 		IntentFilter commandFilter = new IntentFilter();
-		commandFilter.addAction(DownloadServiceImpl.CMD_PLAY);
-		commandFilter.addAction(DownloadServiceImpl.CMD_TOGGLEPAUSE);
-		commandFilter.addAction(DownloadServiceImpl.CMD_PAUSE);
-		commandFilter.addAction(DownloadServiceImpl.CMD_STOP);
-		commandFilter.addAction(DownloadServiceImpl.CMD_PREVIOUS);
-		commandFilter.addAction(DownloadServiceImpl.CMD_NEXT);
-		commandFilter.addAction(DownloadServiceImpl.CANCEL_DOWNLOADS);
+		commandFilter.addAction(DownloadService.CMD_PLAY);
+		commandFilter.addAction(DownloadService.CMD_TOGGLEPAUSE);
+		commandFilter.addAction(DownloadService.CMD_PAUSE);
+		commandFilter.addAction(DownloadService.CMD_STOP);
+		commandFilter.addAction(DownloadService.CMD_PREVIOUS);
+		commandFilter.addAction(DownloadService.CMD_NEXT);
+		commandFilter.addAction(DownloadService.CANCEL_DOWNLOADS);
 		downloadService.registerReceiver(intentReceiver, commandFilter);
 
 		new CacheCleaner(downloadService, downloadService).clean();
@@ -219,7 +217,7 @@ public class DownloadServiceLifecycleSupport {
 				}
 			} else {
 				String action = intent.getAction();
-				if(DownloadServiceImpl.CANCEL_DOWNLOADS.equals(action)) {
+				if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
 					downloadService.clearBackground();
 				}
 			}

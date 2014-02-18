@@ -414,9 +414,9 @@ public class DownloadFile {
 				if (wifiLock != null) {
 					wifiLock.release();
 				}
-                new CacheCleaner(context, DownloadServiceImpl.getInstance()).cleanSpace();
-				if(DownloadServiceImpl.getInstance() != null) {
-					((DownloadServiceImpl)DownloadServiceImpl.getInstance()).checkDownloads();
+                new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
+				if(DownloadService.getInstance() != null) {
+					((DownloadService) DownloadService.getInstance()).checkDownloads();
 				}
             }
         }

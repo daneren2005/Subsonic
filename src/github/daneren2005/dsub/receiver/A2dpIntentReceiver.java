@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 
 public class A2dpIntentReceiver extends BroadcastReceiver {
 	private static final String PLAYSTATUS_RESPONSE = "com.android.music.playstatusresponse";
@@ -15,7 +14,7 @@ public class A2dpIntentReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Log.i(TAG, "GOT INTENT " + intent);
 
-		DownloadService downloadService = DownloadServiceImpl.getInstance();
+		DownloadService downloadService = DownloadService.getInstance();
 
 		if (downloadService != null){
 

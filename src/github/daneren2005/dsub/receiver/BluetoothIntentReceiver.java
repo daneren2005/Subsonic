@@ -24,7 +24,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
+
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
 
@@ -49,7 +50,7 @@ public class BluetoothIntentReceiver extends BroadcastReceiver {
 			SharedPreferences prefs = Util.getPreferences(context);
 			int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
 			if(pausePref == 0 || pausePref == 2) {
-				context.sendBroadcast(new Intent(DownloadServiceImpl.CMD_PAUSE));
+				context.sendBroadcast(new Intent(DownloadService.CMD_PAUSE));
 			}
 		}
 	}

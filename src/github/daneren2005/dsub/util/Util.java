@@ -38,7 +38,6 @@ import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
@@ -65,7 +64,6 @@ import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 
 import org.apache.http.HttpEntity;
 
@@ -83,8 +81,6 @@ import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -971,7 +967,7 @@ public final class Util {
 		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-	public static void showPlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler, MusicDirectory.Entry song) {
+	public static void showPlayingNotification(final Context context, final DownloadService downloadService, Handler handler, MusicDirectory.Entry song) {
         // Set the icon, scrolling text and timestamp
         final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
@@ -1059,7 +1055,7 @@ public final class Util {
 
 		if(previous > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
-			prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+			prevIntent.setComponent(new ComponentName(context, DownloadService.class));
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
 			rv.setOnClickPendingIntent(previous, pendingIntent);
@@ -1067,13 +1063,13 @@ public final class Util {
 		if(pause > 0) {
 			if(playing) {
 				Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
-				pauseIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+				pauseIntent.setComponent(new ComponentName(context, DownloadService.class));
 				pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
 				pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
 				rv.setOnClickPendingIntent(pause, pendingIntent);
 			} else {
 				Intent prevIntent = new Intent("KEYCODE_MEDIA_START");
-				prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+				prevIntent.setComponent(new ComponentName(context, DownloadService.class));
 				prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
 				pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
 				rv.setOnClickPendingIntent(pause, pendingIntent);
@@ -1081,21 +1077,21 @@ public final class Util {
 		}
 		if(next > 0) {
 			Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
-			nextIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+			nextIntent.setComponent(new ComponentName(context, DownloadService.class));
 			nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
 			pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
 			rv.setOnClickPendingIntent(next, pendingIntent);
 		}
 		if(close > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_STOP");
-			prevIntent.setComponent(new ComponentName(context, DownloadServiceImpl.class));
+			prevIntent.setComponent(new ComponentName(context, DownloadService.class));
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
 			rv.setOnClickPendingIntent(close, pendingIntent);
 		}
     }
 
-    public static void hidePlayingNotification(final Context context, final DownloadServiceImpl downloadService, Handler handler) {
+    public static void hidePlayingNotification(final Context context, final DownloadService downloadService, Handler handler) {
 		// Remove notification and remove the service from the foreground
 		handler.post(new Runnable() {
 			@Override
@@ -1109,8 +1105,8 @@ public final class Util {
     }
     
 	public static void showDownloadingNotification(final Context context, DownloadFile file, int size, DownloadFile speedFile) {
-		Intent cancelIntent = new Intent(context, DownloadServiceImpl.class);
-		cancelIntent.setAction(DownloadServiceImpl.CANCEL_DOWNLOADS);
+		Intent cancelIntent = new Intent(context, DownloadService.class);
+		cancelIntent.setAction(DownloadService.CANCEL_DOWNLOADS);
 		PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, 0);
 
 		String currentDownloading, currentSize, speed;
@@ -1236,7 +1232,7 @@ public final class Util {
 			hasFocus = true;
     		audioManager.requestAudioFocus(new OnAudioFocusChangeListener() {
 				public void onAudioFocusChange(int focusChange) {
-					DownloadServiceImpl downloadService = (DownloadServiceImpl)context;
+					DownloadService downloadService = (DownloadService)context;
 					if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isRemoteEnabled()) {
 						if(downloadService.getPlayerState() == PlayerState.STARTED) {							
 							SharedPreferences prefs = getPreferences(context);
@@ -1271,7 +1267,7 @@ public final class Util {
      * <p>Broadcasts the given song info as the new song being played.</p>
      */
     public static void broadcastNewTrackInfo(Context context, MusicDirectory.Entry song) {
-		DownloadService downloadService = (DownloadServiceImpl)context;
+		DownloadService downloadService = (DownloadService)context;
         Intent intent = new Intent(EVENT_META_CHANGED);
 		Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
 
@@ -1331,7 +1327,7 @@ public final class Util {
 
 	private static void addTrackInfo(Context context, MusicDirectory.Entry song, Intent intent) {
 		if (song != null) {
-			DownloadService downloadService = (DownloadServiceImpl)context;
+			DownloadService downloadService = (DownloadService)context;
 			File albumArtFile = FileUtil.getAlbumArtFile(context, song);
 
 			intent.putExtra("track", song.getTitle());

@@ -27,7 +27,6 @@ import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
 import com.google.android.gms.cast.RemoteMediaPlayer;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -61,7 +60,7 @@ public class ChromeCastController extends RemoteController {
 	private RemoteMediaPlayer mediaPlayer;
 	private double gain = 0.5;
 
-	public ChromeCastController(DownloadServiceImpl downloadService, CastDevice castDevice) {
+	public ChromeCastController(DownloadService downloadService, CastDevice castDevice) {
 		downloadService.setPlayerState(PlayerState.PREPARING);
 		this.downloadService = downloadService;
 		this.castDevice = castDevice;

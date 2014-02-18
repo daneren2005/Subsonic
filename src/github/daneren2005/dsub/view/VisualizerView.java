@@ -23,12 +23,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.audiofx.Visualizer;
-import android.util.AttributeSet;
 import android.view.View;
 import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 
 /**
  * A simple class that draws waveform data received from a
@@ -92,7 +90,7 @@ public class VisualizerView extends View {
     }
 
     private VisualizerController getVizualiser() {
-        DownloadService downloadService = DownloadServiceImpl.getInstance();
+        DownloadService downloadService = DownloadService.getInstance();
         VisualizerController visualizerController = downloadService == null ? null : downloadService.getVisualizerController();
         return visualizerController;
     }
@@ -109,7 +107,7 @@ public class VisualizerView extends View {
         if (!active) {
             return;
         }
-        DownloadService downloadService = DownloadServiceImpl.getInstance();
+        DownloadService downloadService = DownloadService.getInstance();
         if (downloadService != null && downloadService.getPlayerState() != PlayerState.STARTED) {
             return;
         }

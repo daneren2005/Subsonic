@@ -23,7 +23,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
+
+import github.daneren2005.dsub.service.DownloadService;
 
 /**
  * @author Sindre Mehus
@@ -37,7 +38,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
         KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
         Log.i(TAG, "Got MEDIA_BUTTON key event: " + event);
 
-        Intent serviceIntent = new Intent(context, DownloadServiceImpl.class);
+        Intent serviceIntent = new Intent(context, DownloadService.class);
         serviceIntent.putExtra(Intent.EXTRA_KEY_EVENT, event);
         context.startService(serviceIntent);
         if (isOrderedBroadcast())

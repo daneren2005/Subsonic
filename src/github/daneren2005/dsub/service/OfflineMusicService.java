@@ -404,7 +404,7 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
-		DownloadService downloadService = DownloadServiceImpl.getInstance();
+		DownloadService downloadService = DownloadService.getInstance();
         if (downloadService == null) {
             return new MusicDirectory();
         }

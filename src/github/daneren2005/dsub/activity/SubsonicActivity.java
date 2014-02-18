@@ -53,7 +53,6 @@ import android.widget.Spinner;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
@@ -97,7 +96,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		applyTheme();
 		super.onCreate(bundle);
 		applyFullscreen();
-		startService(new Intent(this, DownloadServiceImpl.class));
+		startService(new Intent(this, DownloadService.class));
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
 		View actionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
@@ -461,7 +460,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			Util.startActivityWithoutTransition(this, intent);
 		} else {
 			finished = true;
-			this.stopService(new Intent(this, DownloadServiceImpl.class));
+			this.stopService(new Intent(this, DownloadService.class));
 			this.finish();
 		}
 	}
@@ -675,15 +674,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		
 		// If service is not available, request it to start and wait for it.
 		for (int i = 0; i < 5; i++) {
-			DownloadService downloadService = DownloadServiceImpl.getInstance();
+			DownloadService downloadService = DownloadService.getInstance();
 			if (downloadService != null) {
 				return downloadService;
 			}
 			Log.w(TAG, "DownloadService not running. Attempting to start it.");
-			startService(new Intent(this, DownloadServiceImpl.class));
+			startService(new Intent(this, DownloadService.class));
 			Util.sleepQuietly(50L);
 		}
-		return DownloadServiceImpl.getInstance();
+		return DownloadService.getInstance();
 	}
 	
 	public static String getThemeName() {

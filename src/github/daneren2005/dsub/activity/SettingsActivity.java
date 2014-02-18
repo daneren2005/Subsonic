@@ -35,15 +35,12 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import android.provider.SearchRecentSuggestions;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.provider.DSubSearchProvider;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
@@ -257,7 +254,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             setCacheLocation(sharedPreferences.getString(key, ""));
         }
 		else if (Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION.equals(key)){
-			DownloadService downloadService = DownloadServiceImpl.getInstance();
+			DownloadService downloadService = DownloadService.getInstance();
 			downloadService.setSleepTimerDuration(Integer.parseInt(sharedPreferences.getString(key, "60")));
 		}
 		else if(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT.equals(key)) {
@@ -521,7 +518,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
 
             // Clear download queue.
-            DownloadService downloadService = DownloadServiceImpl.getInstance();
+            DownloadService downloadService = DownloadService.getInstance();
             downloadService.clear();
         }
     }

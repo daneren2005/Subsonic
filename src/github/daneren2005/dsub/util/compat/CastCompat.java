@@ -21,7 +21,7 @@ import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
 
 import github.daneren2005.dsub.service.ChromeCastController;
-import github.daneren2005.dsub.service.DownloadServiceImpl;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.RemoteController;
 
 /**
@@ -42,7 +42,7 @@ public final class CastCompat {
 		// Calling here forces class initialization.
 	}
 
-	public static RemoteController getController(DownloadServiceImpl downloadService, MediaRouter.RouteInfo info) {
+	public static RemoteController getController(DownloadService downloadService, MediaRouter.RouteInfo info) {
 		CastDevice device = CastDevice.getFromBundle(info.getExtras());
 		if(device != null) {
 			return new ChromeCastController(downloadService, device);

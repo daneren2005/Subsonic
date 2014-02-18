@@ -26,10 +26,8 @@ import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.Util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -48,7 +46,7 @@ public class JukeboxController extends RemoteController {
 	private RemoteStatus jukeboxStatus;
 	private float gain = 0.5f;
     
-    public JukeboxController(DownloadServiceImpl downloadService, Handler handler) {
+    public JukeboxController(DownloadService downloadService, Handler handler) {
     	this.downloadService = downloadService;
 		this.handler = handler;
         new Thread() {
