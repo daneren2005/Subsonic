@@ -88,6 +88,11 @@ public class ImageLoader {
 		createLargeUnknownImage(context);
 	}
 
+	public void clearCache() {
+		nowPlaying = null;
+		cache.evictAll();
+	}
+
 	private void createLargeUnknownImage(Context context) {
 		BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(R.drawable.unknown_album_large);
 		Bitmap bitmap = Bitmap.createScaledBitmap(drawable.getBitmap(), imageSizeLarge, imageSizeLarge, true);
