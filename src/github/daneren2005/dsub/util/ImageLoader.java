@@ -48,16 +48,12 @@ import java.util.concurrent.LinkedBlockingQueue;
  *
  * @author Sindre Mehus
  */
-@TargetApi(14)
-public class ImageLoader implements Runnable {
+public class ImageLoader {
 	private static final String TAG = ImageLoader.class.getSimpleName();
-	private static final int CONCURRENCY = 5;
 
-	private Handler mHandler = new Handler();
 	private Context context;
 	private LruCache<String, Bitmap> cache;
 	private Bitmap nowPlaying;
-	private final BlockingQueue<Task> queue;
 	private final int imageSizeDefault;
 	private final int imageSizeLarge;
 	private Drawable largeUnknownImage;
@@ -66,11 +62,9 @@ public class ImageLoader implements Runnable {
 		this.context = context;
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 		final int cacheSize = maxMemory / 4;
-		Log.d(TAG, "Max: " + cacheSize);
 		cache = new LruCache<String, Bitmap>(cacheSize) {
 			@Override
 			protected int sizeOf(String key, Bitmap bitmap) {
-				Log.d(TAG, "size: " + (bitmap.getRowBytes() * bitmap.getHeight() / 1024));
 				return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
 			}
 
@@ -86,16 +80,10 @@ public class ImageLoader implements Runnable {
 			}
 		};
 
-		queue = new LinkedBlockingQueue<Task>(500);
-
 		// Determine the density-dependent image sizes.
 		imageSizeDefault = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		imageSizeLarge = (int) Math.round(Math.min(metrics.widthPixels, metrics.heightPixels));
-
-		for (int i = 0; i < CONCURRENCY; i++) {
-			new Thread(this, "ImageLoader").start();
-		}
+		imageSizeLarge = Math.round(Math.min(metrics.widthPixels, metrics.heightPixels));
 
 		createLargeUnknownImage(context);
 	}
@@ -130,7 +118,7 @@ public class ImageLoader implements Runnable {
 		if (!large) {
 			setUnknownImage(view, large);
 		}
-		queue.offer(new Task(view.getContext(), entry, size, imageSizeLarge, large, new ViewTaskHandler(view, crossfade)));
+		new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade).execute();
 	}
 
 	public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
@@ -151,7 +139,7 @@ public class ImageLoader implements Runnable {
 		}
 
 		setUnknownImage(remoteControl);
-		queue.offer(new Task(context, entry, imageSizeLarge, imageSizeLarge, false, new RemoteControlClientTaskHandler(remoteControl)));
+		new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl).execute();
 	}
 
 	private String getKey(String coverArtId, int size) {
@@ -233,49 +221,25 @@ public class ImageLoader implements Runnable {
 		setImage(remoteControl, largeUnknownImage);
 	}
 
-	public void clear() {
-		queue.clear();
-	}
-
-	@Override
-	public void run() {
-		while (true) {
-			try {
-				Task task = queue.take();
-				task.execute();
-			} catch (Throwable x) {
-				Log.e(TAG, "Unexpected exception in ImageLoader.", x);
-			}
-		}
-	}
-
-	private class Task {
+	private abstract class ImageTask extends SilentBackgroundTask<Void> {
 		private final Context mContext;
 		private final MusicDirectory.Entry mEntry;
 		private final int mSize;
 		private final int mSaveSize;
 		private final boolean mIsNowPlaying;
-		private ImageLoaderTaskHandler mTaskHandler;
+		protected Drawable mDrawable;
 
-		public Task(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, ImageLoaderTaskHandler taskHandler) {
+		public ImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying) {
+			super(context);
 			mContext = context;
 			mEntry = entry;
 			mSize = size;
 			mSaveSize = saveSize;
 			mIsNowPlaying = isNowPlaying;
-			mTaskHandler = taskHandler;
 		}
 
-		public void execute() {
-			try {
-				loadImage();
-			} catch(OutOfMemoryError e) {
-				Log.w(TAG, "Ran out of memory trying to load image, try cleanup and retry");
-				cache.evictAll();
-				System.gc();
-			}
-		}
-		public void loadImage() {
+		@Override
+		protected Void doInBackground() throws Throwable {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
 				Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, null);
@@ -287,51 +251,43 @@ public class ImageLoader implements Runnable {
 					nowPlaying = bitmap;
 				}
 
-				final Drawable drawable = Util.createDrawableFromBitmap(mContext, bitmap);
-				mTaskHandler.setDrawable(drawable);
-				mHandler.post(mTaskHandler);
+				mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
 			} catch (Throwable x) {
 				Log.e(TAG, "Failed to download album art.", x);
 			}
+
+			return null;
 		}
 	}
 
-	private abstract class ImageLoaderTaskHandler implements Runnable {
-
-		protected Drawable mDrawable;
-
-		public void setDrawable(Drawable drawable) {
-			mDrawable = drawable;
-		}
-
-	}
-
-	private class ViewTaskHandler extends ImageLoaderTaskHandler {
-
+	private class ViewImageTask extends ImageTask {
 		protected boolean mCrossfade;
 		private View mView;
 
-		public ViewTaskHandler(View view, boolean crossfade) {
-			mCrossfade = crossfade;
+		public ViewImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, View view, boolean crossfade) {
+			super(context, entry, size, saveSize, isNowPlaying);
+
 			mView = view;
+			mCrossfade = crossfade;
 		}
 
 		@Override
-		public void run() {
+		protected void done(Void result) {
 			setImage(mView, mDrawable, mCrossfade);
 		}
 	}
 
-	private class RemoteControlClientTaskHandler extends ImageLoaderTaskHandler {
-
+	private class RemoteControlClientImageTask extends ImageTask {
 		private RemoteControlClient mRemoteControl;
 
-		public RemoteControlClientTaskHandler(RemoteControlClient remoteControl) {
+		public RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClient remoteControl) {
+			super(context, entry, size, saveSize, isNowPlaying);
+
 			mRemoteControl = remoteControl;
 		}
 
 		@Override
-		public void run() {
+		protected void done(Void result) {
 			setImage(mRemoteControl, mDrawable);
 		}
 	}

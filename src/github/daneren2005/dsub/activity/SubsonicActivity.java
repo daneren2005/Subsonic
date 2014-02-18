@@ -143,7 +143,6 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected void onDestroy() {
 		super.onDestroy();
 		destroyed = true;
-		getImageLoader().clear();
 	}
 
 	@Override
