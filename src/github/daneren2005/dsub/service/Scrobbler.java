@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import github.daneren2005.dsub.domain.PodcastEpisode;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -45,9 +46,9 @@ public class Scrobbler {
             lastNowPlaying = id;
         }
 
-        new Thread("Scrobble " + song) {
+        new SilentBackgroundTask(context)<Void> {
             @Override
-            public void run() {
+            protected Void doInBackground() {
                 MusicService service = MusicServiceFactory.getMusicService(context);
                 try {
                     service.scrobble(id, submission, context, null);
@@ -55,7 +56,8 @@ public class Scrobbler {
                 } catch (Exception x) {
                     Log.i(TAG, "Failed to scrobble'" + (submission ? "submission" : "now playing") + "' for " + song, x);
                 }
+				return null;
             }
-        }.start();
+        }.execute();
     }
 }
