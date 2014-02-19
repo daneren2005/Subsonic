@@ -180,7 +180,7 @@ public class DownloadService extends Service {
 				mediaPlayerHandler = new Handler(mediaPlayerLooper);
 				Looper.loop();
 			}
-		}).start();
+		}, "DownloadService").start();
 
 		Util.registerMediaButtonEventReceiver(this);
 
@@ -993,7 +993,7 @@ public class DownloadService extends Service {
 
 		if(playerState == STARTED && positionCache == null) {
 			positionCache = new PositionCache();
-			Thread thread = new Thread(positionCache);
+			Thread thread = new Thread(positionCache, "PositionCache");
 			thread.start();
 		} else if(playerState != STARTED && positionCache != null) {
 			positionCache.stop();

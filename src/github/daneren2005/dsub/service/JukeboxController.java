@@ -49,7 +49,7 @@ public class JukeboxController extends RemoteController {
     public JukeboxController(DownloadService downloadService, Handler handler) {
     	this.downloadService = downloadService;
 		this.handler = handler;
-        new Thread() {
+        new Thread("JukeboxController") {
             @Override
             public void run() {
 				running = true;

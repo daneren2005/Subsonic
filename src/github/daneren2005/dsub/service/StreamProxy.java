@@ -56,7 +56,7 @@ public class StreamProxy implements Runnable {
 	}
 
 	public void start() {
-		thread = new Thread(this);
+		thread = new Thread(this, "StreamProxy");
 		thread.start();
 	}
 

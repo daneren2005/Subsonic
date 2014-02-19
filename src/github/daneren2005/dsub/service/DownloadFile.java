@@ -454,7 +454,7 @@ public class DownloadFile {
 
             // Start a thread that will close the input stream if the task is
             // cancelled, thus causing the copy() method to return.
-            new Thread() {
+            new Thread("DownloadFile_copy") {
                 @Override
                 public void run() {
                     while (true) {

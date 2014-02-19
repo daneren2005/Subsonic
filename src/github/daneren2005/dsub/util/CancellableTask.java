@@ -65,7 +65,7 @@ public abstract class CancellableTask {
     public abstract void execute();
 
     public void start() {
-        thread.set(new Thread() {
+        thread.set(new Thread("CancellableTask") {
             @Override
             public void run() {
                 running.set(true);
