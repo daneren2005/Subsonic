@@ -1067,7 +1067,7 @@ public class RESTMusicService implements MusicService {
 				content += channel.getName() + "\n";
 			}
 			
-			File file = FileUtil.getPodcastFile(context, Util.getServerName(context));
+			File file = FileUtil.getPodcastFile(context, Util.getServerName(context, getInstance(context)));
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 			bw.write(content);
 			bw.close();
