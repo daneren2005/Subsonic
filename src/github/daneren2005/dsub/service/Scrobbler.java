@@ -46,7 +46,7 @@ public class Scrobbler {
             lastNowPlaying = id;
         }
 
-        new SilentBackgroundTask(context)<Void> {
+        new SilentBackgroundTask<Void>(context) {
             @Override
             protected Void doInBackground() {
                 MusicService service = MusicServiceFactory.getMusicService(context);

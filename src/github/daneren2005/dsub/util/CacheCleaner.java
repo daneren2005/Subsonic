@@ -232,7 +232,7 @@ public class CacheCleaner {
 	private class BackgroundPlaylistsCleanup extends SilentBackgroundTask<Void> {
 		private final List<Playlist> playlists;
 
-		public BackgroundPlaylistCleanup(Context context, List<Playlist> playlists) {
+		public BackgroundPlaylistsCleanup(Context context, List<Playlist> playlists) {
 			super(context);
 			this.playlists = playlists;
 		}
