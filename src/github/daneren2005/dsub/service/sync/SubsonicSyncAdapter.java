@@ -107,8 +107,10 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		int servers = Util.getServerCount(context);
 		for(int i = 1; i <= servers; i++) {
 			try {
-				musicService.setInstance(i);
-				onExecuteSync(context, i);
+				if(isValidServer(context, i)) {
+					musicService.setInstance(i);
+					onExecuteSync(context, i);
+				}
 			} catch(Exception e) {
 				Log.e(TAG, "Failed sync for " + className + "(" + i + ")", e);
 			}
@@ -143,5 +145,14 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		}
 
 		return downloaded;
+	}
+
+	private boolean isValidServer(Context context, int instance) {
+		String url = Util.getRESTUrl(context, "null", instance, false);
+		if(url.contains("demo.subsonic.org") || url.contains("yourhost")) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
