@@ -134,7 +134,7 @@ public class DownloadServiceLifecycleSupport {
 
 				Looper.loop();
 			}
-		}).start();
+		}, "DownloadServiceLifecycleSupport").start();
 
 		// Pause when headset is unplugged.
 		headsetEventReceiver = new BroadcastReceiver() {

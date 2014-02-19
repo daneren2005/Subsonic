@@ -120,7 +120,7 @@ public class UpdateView extends LinearLayout {
 				uiHandler.post(updateRunnable);
 				Looper.loop();
 			}
-		}).start();
+		}, "UpdateView").start();
     }
 
     private static void updateAll() {
