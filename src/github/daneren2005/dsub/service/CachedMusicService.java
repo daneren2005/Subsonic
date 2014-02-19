@@ -188,12 +188,18 @@ public class CachedMusicService implements MusicService {
     @Override
     public MusicDirectory getPlaylist(boolean refresh, String id, String name, Context context, ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
+		MusicDirectory cachedPlaylist = FileUtil.deserialize(context, getCacheName(context, "playlist", id), MusicDirectory.class);
 		if(!refresh) {
-			dir = FileUtil.deserialize(context, getCacheName(context, "playlist", id), MusicDirectory.class);
+			dir = cachedPlaylist;
 		}
 		if(dir == null) {
 			dir = musicService.getPlaylist(refresh, id, name, context, progressListener);
 			FileUtil.serialize(context, dir, getCacheName(context, "playlist", id));
+
+			if(cachedPlaylist == null || !cachedPlaylist.equals(dir)) {
+				File playlistFile = FileUtil.getPlaylistFile(Util.getServerName(context, musicService.getInstance(context)), name);
+				FileUtil.writePlaylistFile(playlistFile, dir);
+			}
 		}
         return dir;
     }

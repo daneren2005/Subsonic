@@ -126,6 +126,27 @@ public class FileUtil {
 		File playlistDir = getPlaylistDirectory(server);
 		return new File(playlistDir, fileSystemSafe(name) + ".m3u");
 	}
+	public static void writePlaylistFile(File file, MusicDirectory playlist) {
+		FileWriter fw = new FileWriter(file);
+		BufferedWriter bw = new BufferedWriter(fw);
+		try {
+			fw.write("#EXTM3U\n");
+			for (MusicDirectory.Entry e : playlist.getChildren()) {
+				String filePath = FileUtil.getSongFile(context, e).getAbsolutePath();
+				if(! new File(filePath).exists()){
+					String ext = FileUtil.getExtension(filePath);
+					String base = FileUtil.getBaseName(filePath);
+					filePath = base + ".complete." + ext;
+				}
+				fw.write(filePath + "\n");
+			}
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to save playlist: " + playlist.getName());
+		} finally {
+			bw.close();
+			fw.close();
+		}
+	}
 	public static File getPlaylistDirectory() {
 		File playlistDir = new File(getSubsonicDirectory(), "playlists");
 		ensureDirectoryExistsAndIsReadWritable(playlistDir);

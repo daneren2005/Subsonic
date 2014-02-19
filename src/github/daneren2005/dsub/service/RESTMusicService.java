@@ -341,30 +341,7 @@ public class RESTMusicService implements MusicService {
 
         Reader reader = getReader(context, progressListener, "getPlaylist", params, "id", id);
         try {
-			MusicDirectory playlist = new PlaylistParser(context).parse(reader, progressListener);
-			
-			File playlistFile = FileUtil.getPlaylistFile(Util.getServerName(context), name);
-			FileWriter fw = new FileWriter(playlistFile);
-			BufferedWriter bw = new BufferedWriter(fw);
-			try {
-				fw.write("#EXTM3U\n");
-				for (MusicDirectory.Entry e : playlist.getChildren()) {
-					String filePath = FileUtil.getSongFile(context, e).getAbsolutePath();
-					if(! new File(filePath).exists()){
-						String ext = FileUtil.getExtension(filePath);
-						String base = FileUtil.getBaseName(filePath);
-						filePath = base + ".complete." + ext;                
-					}
-					fw.write(filePath + "\n");
-				}
-			} catch(Exception e) {
-				Log.w(TAG, "Failed to save playlist: " + name);
-			} finally {
-				bw.close();
-				fw.close();
-			}
-			
-			return playlist;
+			return new PlaylistParser(context).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -1505,7 +1482,7 @@ public class RESTMusicService implements MusicService {
         return networkInfo == null ? -1 : networkInfo.getType();
     }
 
-	private int getInstance(Context context) {
+	public int getInstance(Context context) {
 		if(instance == null) {
 			return Util.getActiveServer(context);
 		} else {
