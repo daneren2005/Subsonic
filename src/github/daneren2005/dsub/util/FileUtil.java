@@ -245,7 +245,7 @@ public class FileUtil {
 		return new File(dir.getPath() + "/" +  fileSystemSafe(server));
 	}
 	public static File getPodcastDirectory(Context context) {
-		File dir = new File(getSubsonicDirectory(), "podcasts");
+		File dir = new File(context.getCacheDir(), "podcasts");
 		ensureDirectoryExistsAndIsReadWritable(dir);
 		return dir;
 	}
