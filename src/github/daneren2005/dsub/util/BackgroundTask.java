@@ -50,7 +50,14 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	private static final int DEFAULT_CONCURRENCY = 5;
 	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>());
 	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
-	private static final Handler handler = new Handler();
+	private static Handler handler = null;
+	static {
+		try {
+			handler = new Handler();
+		} catch(Exception e) {
+			// Not called from main thread
+		}
+	}
 
     public BackgroundTask(Context context) {
         this.context = context;
@@ -153,12 +160,14 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 					return;
 				}
 
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						onDone(result);
-					}
-				});
+				if(handler != null) {
+					handler.post(new Runnable() {
+						@Override
+						public void run() {
+							onDone(result);
+						}
+					});
+				}
 			} catch(InterruptedException interrupt) {
 				if(taskStart.get()) {
 					// Don't exit root thread if task cancelled
@@ -169,16 +178,18 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 					return;
 				}
 
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							onError(t);
-						} catch(Exception e) {
-							// Don't care
+				if(handler != null) {
+					handler.post(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								onError(t);
+							} catch(Exception e) {
+								// Don't care
+							}
 						}
-					}
-				});
+					});
+				}
 			}
 		}
 
