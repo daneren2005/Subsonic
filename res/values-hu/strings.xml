@@ -84,6 +84,7 @@
 	<string name="menu.show_artist">Ugrás az előadóhoz</string>
 	<string name="menu.share">Megosztás</string>
 	<string name="menu.delete_cache">Gyorsítótár törlése</string>
+	<string name="menu.cast">Továbbítás eszközhöz</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -193,6 +194,10 @@
 	<string name="download.save_bookmark">Könyvjelző létrehozva</string>
 	<string name="download.downloading_title">%1$d dal letöltése</string>
 	<string name="download.downloading_summary">Aktuális: %1$s</string>
+	<string name="download.downloading_summary_expanded">Aktuális: %1$s
+		\nBecsült méret: %2$s
+		\nÁtlagos sebesség: %3$s kbps</string>
+	<string name="download.failed_to_load">Failed to load</string>
 
 	<string name="sync.title">DSub: Új média érhető el!</string>
 	<string name="sync.new_podcasts">Új podcastok: %s</string>
