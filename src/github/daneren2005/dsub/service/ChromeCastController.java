@@ -56,6 +56,7 @@ public class ChromeCastController extends RemoteController {
 	private boolean applicationStarted = false;
 	private boolean waitingForReconnect = false;
 	private boolean error = false;
+	private boolean ignoreNextPaused = false;
 
 	private RemoteMediaPlayer mediaPlayer;
 	private double gain = 0.5;
@@ -243,15 +244,15 @@ public class ChromeCastController extends RemoteController {
 				.setMetadata(meta)
 				.build();
 
+			if(autoStart) {
+				ignoreNextPaused = true;
+			}
+
 			mediaPlayer.load(apiClient, mediaInfo, autoStart, position * 1000L).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
 				@Override
 				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
 					if (result.getStatus().isSuccess()) {
-						if(mediaPlayer.getMediaStatus().getPlayerState() == MediaStatus.PLAYER_STATE_PLAYING) {
-							downloadService.setPlayerState(PlayerState.STARTED);
-						} else {
-							downloadService.setPlayerState(PlayerState.PREPARED);
-						}
+						// Handled in other handler
 					} else if(result.getStatus().getStatusCode() != ConnectionResult.SIGN_IN_REQUIRED) {
 						Log.e(TAG, "Failed to load: " + result.getStatus().toString());
 						failedLoad();
@@ -329,10 +330,15 @@ public class ChromeCastController extends RemoteController {
 					MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
 					switch(mediaStatus.getPlayerState()) {
 						case MediaStatus.PLAYER_STATE_PLAYING:
+							if(ignoreNextPaused) {
+								ignoreNextPaused = false;
+							}
 							downloadService.setPlayerState(PlayerState.STARTED);
 							break;
 						case MediaStatus.PLAYER_STATE_PAUSED:
-							downloadService.setPlayerState(PlayerState.PAUSED);
+							if(!ignoreNextPaused) {
+								downloadService.setPlayerState(PlayerState.PAUSED);
+							}
 							break;
 						case MediaStatus.PLAYER_STATE_BUFFERING:
 							downloadService.setPlayerState(PlayerState.PREPARING);
@@ -341,6 +347,8 @@ public class ChromeCastController extends RemoteController {
 							if(mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
 								downloadService.setPlayerState(PlayerState.COMPLETED);
 								downloadService.next();
+							} else if(mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
+								downloadService.setPlayerState(PlayerState.PREPARING);
 							} else {
 								downloadService.setPlayerState(PlayerState.IDLE);
 							}
