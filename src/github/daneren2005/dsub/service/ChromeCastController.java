@@ -61,11 +61,15 @@ public class ChromeCastController extends RemoteController {
 	private double gain = 0.5;
 
 	public ChromeCastController(DownloadService downloadService, CastDevice castDevice) {
-		downloadService.setPlayerState(PlayerState.PREPARING);
 		this.downloadService = downloadService;
 		this.castDevice = castDevice;
+	}
 
-		connectionCallbacks = new ConnectionCallbacks();
+	@Override
+	public void create(boolean playing, int seconds) {
+		downloadService.setPlayerState(PlayerState.PREPARING);
+
+		connectionCallbacks = new ConnectionCallbacks(playing, seconds);
 		connectionFailedListener = new ConnectionFailedListener();
 		castClientListener = new Cast.Listener() {
 			@Override
@@ -91,10 +95,10 @@ public class ChromeCastController extends RemoteController {
 
 		Cast.CastOptions.Builder apiOptionsBuilder = Cast.CastOptions.builder(castDevice, castClientListener);
 		apiClient = new GoogleApiClient.Builder(downloadService)
-			.addApi(Cast.API, apiOptionsBuilder.build())
-			.addConnectionCallbacks(connectionCallbacks)
-			.addOnConnectionFailedListener(connectionFailedListener)
-			.build();
+				.addApi(Cast.API, apiOptionsBuilder.build())
+				.addConnectionCallbacks(connectionCallbacks)
+				.addOnConnectionFailedListener(connectionFailedListener)
+				.build();
 
 		apiClient.connect();
 	}
@@ -104,7 +108,7 @@ public class ChromeCastController extends RemoteController {
 		if(error) {
 			error = false;
 			Log.w(TAG, "Attempting to restart song");
-			startSong(downloadService.getCurrentPlaying(), true);
+			startSong(downloadService.getCurrentPlaying(), true, 0);
 			return;
 		}
 
@@ -167,7 +171,7 @@ public class ChromeCastController extends RemoteController {
 
 	@Override
 	public void changeTrack(int index, DownloadFile song) {
-		startSong(song, true);
+		startSong(song, true, 0);
 	}
 
 	@Override
@@ -194,7 +198,7 @@ public class ChromeCastController extends RemoteController {
 		}
 	}
 
-	void startSong(DownloadFile currentPlaying, boolean autoStart) {
+	void startSong(DownloadFile currentPlaying, boolean autoStart, int position) {
 		if(currentPlaying == null) {
 			// Don't start anything
 			return;
@@ -239,7 +243,7 @@ public class ChromeCastController extends RemoteController {
 				.setMetadata(meta)
 				.build();
 
-			mediaPlayer.load(apiClient, mediaInfo, autoStart).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
+			mediaPlayer.load(apiClient, mediaInfo, autoStart, position * 1000L).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
 				@Override
 				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
 					if (result.getStatus().isSuccess()) {
@@ -271,6 +275,14 @@ public class ChromeCastController extends RemoteController {
 
 
 	private class ConnectionCallbacks implements GoogleApiClient.ConnectionCallbacks {
+		private boolean isPlaying;
+		private int position;
+
+		ConnectionCallbacks(boolean isPlaying, int position) {
+			this.isPlaying = isPlaying;
+			this.position = position;
+		}
+
 		@Override
 		public void onConnected(Bundle connectionHint) {
 			if (waitingForReconnect) {
@@ -351,7 +363,7 @@ public class ChromeCastController extends RemoteController {
 			}
 
 			DownloadFile currentPlaying = downloadService.getCurrentPlaying();
-			startSong(currentPlaying, true);
+			startSong(currentPlaying, isPlaying, position);
 		}
 	}
 

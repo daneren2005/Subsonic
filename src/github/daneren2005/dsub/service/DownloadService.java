@@ -388,10 +388,7 @@ public class DownloadService extends Service {
 				Util.sleepQuietly(50L);
 			}
 
-			play(currentPlayingIndex, false);
-			if (currentPlaying != null && currentPlaying.isCompleteFileAvailable() && remoteState == RemoteControlState.LOCAL) {
-				doPlay(currentPlaying, currentPlayingPosition, autoPlayStart);
-			}
+			play(currentPlayingIndex, autoPlayStart, currentPlayingPosition);
 			autoPlayStart = false;
 		}
 
@@ -723,15 +720,12 @@ public class DownloadService extends Service {
 				nextPlayingTask = null;
 			}
 			setCurrentPlaying(index, start);
-			if (start) {
-				if (remoteState != RemoteControlState.LOCAL) {
-					remoteController.changeTrack(index, downloadList.get(index));
-					setPlayerState(STARTED);
-				} else {
-					bufferAndPlay(position);
-				}
+			if (start && remoteState != RemoteControlState.LOCAL) {
+				remoteController.changeTrack(index, downloadList.get(index));
+				setPlayerState(STARTED);
 			}
 			if (remoteState == RemoteControlState.LOCAL) {
+				bufferAndPlay(position, start);
 				checkDownloads();
 				setNextPlaying();
 			}
@@ -1113,6 +1107,9 @@ public class DownloadService extends Service {
 		setRemoteState(newState, ref, null);
 	}
 	private void setRemoteState(final RemoteControlState newState, final Object ref, final String routeId) {
+		boolean isPlaying = playerState == STARTED;
+		int position = getPlayerPosition();
+
 		if(remoteController != null) {
 			remoteController.stop();
 			setPlayerState(PlayerState.IDLE);
@@ -1126,7 +1123,6 @@ public class DownloadService extends Service {
 				remoteController = new JukeboxController(this, handler);
 				break;
 			case CHROMECAST:
-				// TODO: Fix case where starting up with chromecast set
 				if(ref == null) {
 					remoteState = RemoteControlState.LOCAL;
 					break;
@@ -1135,6 +1131,12 @@ public class DownloadService extends Service {
 				break;
 			case LOCAL: default:
 				break;
+		}
+
+		if(remoteController != null) {
+			remoteController.create(isPlaying, position / 1000);
+		} else {
+			play(getCurrentPlayingIndex(), isPlaying, position);
 		}
 
 		if (remoteState != RemoteControlState.LOCAL) {
@@ -1187,13 +1189,16 @@ public class DownloadService extends Service {
 		bufferAndPlay(0);
 	}
 	private synchronized void bufferAndPlay(int position) {
+		bufferAndPlay(position, true);
+	}
+	private synchronized void bufferAndPlay(int position, boolean start) {
 		if(playerState != PREPARED) {
 			reset();
 
-			bufferTask = new BufferTask(currentPlaying, position);
+			bufferTask = new BufferTask(currentPlaying, position, start);
 			bufferTask.start();
 		} else {
-			doPlay(currentPlaying, position, true);
+			doPlay(currentPlaying, position, start);
 		}
 	}
 
@@ -1374,7 +1379,7 @@ public class DownloadService extends Service {
 						} else {
 							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
 							reset();
-							bufferTask = new BufferTask(downloadFile, pos);
+							bufferTask = new BufferTask(downloadFile, pos, true);
 							bufferTask.start();
 						}
 					}
@@ -1630,11 +1635,13 @@ public class DownloadService extends Service {
 		private final int position;
 		private final long expectedFileSize;
 		private final File partialFile;
+		private final boolean start;
 
-		public BufferTask(DownloadFile downloadFile, int position) {
+		public BufferTask(DownloadFile downloadFile, int position, boolean start) {
 			this.downloadFile = downloadFile;
 			this.position = position;
 			partialFile = downloadFile.getPartialFile();
+			this.start = start;
 
 			// Calculate roughly how many bytes BUFFER_LENGTH_SECONDS corresponds to.
 			int bitRate = downloadFile.getBitRate();
@@ -1655,7 +1662,7 @@ public class DownloadService extends Service {
 					return;
 				}
 			}
-			doPlay(downloadFile, position, true);
+			doPlay(downloadFile, position, start);
 		}
 
 		private boolean bufferComplete() {

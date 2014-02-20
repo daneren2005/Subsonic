@@ -49,15 +49,23 @@ public class JukeboxController extends RemoteController {
     public JukeboxController(DownloadService downloadService, Handler handler) {
     	this.downloadService = downloadService;
 		this.handler = handler;
-        new Thread("JukeboxController") {
-            @Override
-            public void run() {
-				running = true;
-                processTasks();
-            }
-        }.start();
-        updatePlaylist();
     }
+
+	@Override
+	public void create(boolean playing, int seconds) {
+		new Thread("JukeboxController") {
+			@Override
+			public void run() {
+				running = true;
+				processTasks();
+			}
+		}.start();
+		updatePlaylist();
+		// Best I can do since API doesn't support seeking without starting playback
+		if(seconds != 0 && playing) {
+			changePosition(seconds);
+		}
+	}
 
 	@Override
 	public void start() {

@@ -38,6 +38,7 @@ public abstract class RemoteController {
 	protected DownloadService downloadService;
 	private VolumeToast volumeToast;
 
+	public abstract void create(boolean playing, int seconds);
 	public abstract void start();
 	public abstract void stop();
 	public abstract void shutdown();
