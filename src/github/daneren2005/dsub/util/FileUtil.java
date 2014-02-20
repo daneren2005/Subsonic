@@ -18,11 +18,14 @@
  */
 package github.daneren2005.dsub.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -126,7 +129,7 @@ public class FileUtil {
 		File playlistDir = getPlaylistDirectory(server);
 		return new File(playlistDir, fileSystemSafe(name) + ".m3u");
 	}
-	public static void writePlaylistFile(File file, MusicDirectory playlist) {
+	public static void writePlaylistFile(Context context, File file, MusicDirectory playlist) throws IOException {
 		FileWriter fw = new FileWriter(file);
 		BufferedWriter bw = new BufferedWriter(fw);
 		try {

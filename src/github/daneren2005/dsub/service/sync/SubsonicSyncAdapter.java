@@ -148,7 +148,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	}
 
 	private boolean isValidServer(Context context, int instance) {
-		String url = Util.getRESTUrl(context, "null", instance, false);
+		String url = Util.getRestUrl(context, "null", instance, false);
 		if(url.contains("demo.subsonic.org") || url.contains("yourhost")) {
 			return false;
 		} else {
