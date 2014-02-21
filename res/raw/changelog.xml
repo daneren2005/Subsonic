@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.5 Beta 3" versioncode="89" releasedate="2/20/2014">
-		<change>Fix keeping state (playing, position) when switching between Chromecast and back</change>
-		<change>Fix play button switching to paused while it's still loading on Chromecast</change>
-		<change>Fix for pressing next close together</change>
-		<change>Fix some offline caching issues when sync is on with multiple servers</change>
-		<change>Never sync the demo server</change>
-		<change>Clear album art cache on exit</change>
-	</release>
-	<release version="4.5 Beta 2" versioncode="88" releasedate="2/17/2014">
-		<change>Fix loading when transcoded content type is null (ie: mp3 -> mp3)</change>
-		<change>Fix multiple Jukebox options in cast menu</change>
-		<change>Fix pressing next skipping twice</change>
-		<change>Fix crash when going to download list</change>
-		<change>Fix route state not being restored after exiting app and coming back later</change>
-		<change>Memory optimizations</change>
-	</release>
-	<release version="4.5 Beta 1" versioncode="87" releasedate="2/15/2014">
+	<release version="4.5" versioncode="90" releasedate="2/21/2014">
 		<change>Add ChromeCast support for music only (Android 2.3+ only)</change>
+		<change>Video/Offline mode to follow</change>
 		<change>More detailed download notification (Android 4.2+)</change>
 		<change>Cancel button on download notification (Android 4.2+)</change>
 		<change>Update background threading architecture to be more efficient</change>
+		<change>Memory optimizations</change>
+		<change>Never sync the demo server</change>
+		<change>Clear album art cache on exit</change>
 		<change>Fix cache cleaner not using pinned music in space calculations</change>
 		<change>Don't scrobble podcasts</change>
 		<change>Fix offline scrobbling bug</change>
+		<change>Fix some offline caching issues when sync is on with multiple servers</change>
 	</release>
 	<release version="4.4" versioncode="86" releasedate="2/5/2014">
 		<change>Browse by ID3 Tags instead of folder structure (off by default)</change>
