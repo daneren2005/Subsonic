@@ -830,17 +830,7 @@ public class DownloadService extends Service {
 			nextPlayingIndex++;
 		}
 		if (index != -1 && nextPlayingIndex < size()) {
-			if(nextPlaying != null && downloadList.get(nextPlayingIndex) == nextPlaying && nextPlayerState == PlayerState.PREPARED && remoteState == RemoteControlState.LOCAL) {
-				if(mediaPlayer.isPlaying()) {
-					mediaPlayer.stop();
-				}
-				mediaPlayer.setOnErrorListener(null);
-				mediaPlayer.setOnCompletionListener(null);
-				mediaPlayer.reset();
-				playNext(true);
-			} else {
-				play(nextPlayingIndex);
-			}
+			play(nextPlayingIndex);
 		}
 	}
 
