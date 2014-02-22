@@ -3,7 +3,7 @@ Run these commands to grab dependent libraries:
 git submodule init
 git submodule update
 
-Go to DragSortListView/library and build project files with:
+Go to DragSortListView/library, and ServerProxy and build project files with:
 android update project --path ./
 
 Replace the file DragSortListView/library/libs/android-support-v4.jar with the one from main projects libs/
@@ -11,12 +11,10 @@ Replace the file DragSortListView/library/libs/android-support-v4.jar with the o
 
 Roadmap of major planned features in rough order that I plan to work on them in (little features get sprinkled in wherever):
 
-Tag Browsing
 Album Art Grid View
 	-Display albums in a grid
 	-Display artists if supported (yes for tags, no for folders currently)
 RemoteControl
-	-Chromecast
 	-DLNA/UpNP Client
 	-DLNA/UpNP Renderer
 New Tabs
