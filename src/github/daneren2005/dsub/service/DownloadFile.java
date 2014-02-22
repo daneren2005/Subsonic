@@ -36,6 +36,8 @@ import github.daneren2005.dsub.util.CancellableTask;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.CacheCleaner;
+import github.daneren2005.serverproxy.BufferFile;
+
 import org.apache.http.Header;
 
 import org.apache.http.HttpResponse;
@@ -45,7 +47,7 @@ import org.apache.http.HttpStatus;
  * @author Sindre Mehus
  * @version $Id$
  */
-public class DownloadFile {
+public class DownloadFile implements BufferFile {
     private static final String TAG = DownloadFile.class.getSimpleName();
     private static final int MAX_FAILURES = 5;
     private final Context context;
@@ -63,7 +65,7 @@ public class DownloadFile {
 	private boolean isPlaying = false;
 	private boolean saveWhenDone = false;
 	private boolean completeWhenDone = false;
-	private Integer contentLength = null;
+	private Long contentLength = null;
 	private long currentSpeed = 0;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
@@ -108,7 +110,7 @@ public class DownloadFile {
 		return br;
 	}
 	
-	public Integer getContentLength() {
+	public Long getContentLength() {
 		return contentLength;
 	}
 
@@ -125,6 +127,7 @@ public class DownloadFile {
 		}
 	}
 
+	@Override
 	public long getEstimatedSize() {
 		if(contentLength != null) {
 			return contentLength;
@@ -136,7 +139,7 @@ public class DownloadFile {
 		} else if(song.getDuration() == null) {
 			return 0;
 		} else {
-			int br = (getBitRate() * 1024) / 8;
+			int br = (getBitRate() * 1000) / 8;
 			int duration = song.getDuration();
 			return br * duration;
 		}
@@ -171,6 +174,17 @@ public class DownloadFile {
         }
     }
 
+	@Override
+	public File getFile() {
+		if (saveFile.exists()) {
+			return saveFile;
+		} else if (completeFile.exists()) {
+			return completeFile;
+		} else {
+			return partialFile;
+		}
+	}
+
     public File getCompleteFile() {
         if (saveFile.exists()) {
             return saveFile;
@@ -195,11 +209,22 @@ public class DownloadFile {
         return saveFile.exists() || completeFile.exists();
     }
 
+	@Override
     public synchronized boolean isWorkDone() {
         return saveFile.exists() || (completeFile.exists() && !save) || saveWhenDone || completeWhenDone;
     }
 
-    public synchronized boolean isDownloading() {
+	@Override
+	public void onStart() {
+		setPlaying(true);
+	}
+
+	@Override
+	public void onStop() {
+		setPlaying(false);
+	}
+
+	public synchronized boolean isDownloading() {
         return downloadTask != null && downloadTask.isRunning();
     }
 
@@ -353,7 +378,7 @@ public class DownloadFile {
 						String contentLengthString = contentLengthHeader.getValue();
 						if(contentLengthString != null) {
 							Log.i(TAG, "Content Length: " + contentLengthString);
-							contentLength = Integer.parseInt(contentLengthString);
+							contentLength = Long.parseLong(contentLengthString);
 						}
 					}
 					in = response.getEntity().getContent();

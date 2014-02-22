@@ -1,3 +1,6 @@
 [submodule "DragSortListView"]
 	path = DragSortListView
 	url = https://github.com/bauerca/drag-sort-listview.git
+[submodule "ServerProxy"]
+	path = ServerProxy
+	url = https://github.com/daneren2005/ServerProxy.git
