@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.5.1" versioncode="91" releasedate="2/21/2014">
+		<change>Fix crash on Android 2.2/2.3 devices</change>
+	</release>
 	<release version="4.5" versioncode="90" releasedate="2/21/2014">
 		<change>Add ChromeCast support for music only (Android 2.3+ only)</change>
 		<change>Video/Offline mode to follow</change>
