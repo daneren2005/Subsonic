@@ -208,6 +208,10 @@ public class MainFragment extends SubsonicFragment {
 		boolean isOffline = Util.isOffline(context);
 		Util.setOffline(context, !isOffline);
 		context.invalidate();
+		DownloadService service = getDownloadService();
+		if (service != null) {
+			service.setOnline(isOffline);
+		}
 		
 		if(isOffline) {
 			int scrobblesCount = Util.offlineScrobblesCount(context);

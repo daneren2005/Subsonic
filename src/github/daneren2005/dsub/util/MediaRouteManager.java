@@ -42,6 +42,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private MediaRouter router;
 	private MediaRouteSelector selector;
 	private List<MediaRouteProvider> providers = new ArrayList<MediaRouteProvider>();
+	private List<MediaRouteProvider> offlineProviders = new ArrayList<MediaRouteProvider>();
 
 	static {
 		try {
@@ -116,10 +117,22 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		}
 	}
 
+	public void addOfflineProviders() {
+		JukeboxRouteProvider jukeboxProvider = new JukeboxRouteProvider(downloadService);
+		router.addProvider(jukeboxProvider);
+		providers.add(jukeboxProvider);
+		offlineProviders.add(jukeboxProvider);
+	}
+	public void removeOfflineProviders() {
+		for(MediaRouteProvider provider: offlineProviders) {
+			router.removeProvider(provider);
+		}
+	}
+
 	private void addProviders() {
-		JukeboxRouteProvider routeProvider = new JukeboxRouteProvider(downloadService);
-		router.addProvider(routeProvider);
-		providers.add(routeProvider);
+		if(!Util.isOffline(downloadService)) {
+			addOfflineProviders();
+		}
 	}
 	private void buildSelector() {
 		MediaRouteSelector.Builder builder = new MediaRouteSelector.Builder();
