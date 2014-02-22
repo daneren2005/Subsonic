@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteButton;
 import android.view.ContextMenu;
 import android.view.Display;
@@ -505,7 +506,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		if(downloadService != null) {
 			MenuItem mediaRouteItem = menu.findItem(R.id.menu_mediaroute);
 			if(mediaRouteItem != null) {
-				MediaRouteButton mediaRouteButton = (MediaRouteButton) mediaRouteItem.getActionView();
+				MediaRouteButton mediaRouteButton = (MediaRouteButton) MenuItemCompat.getActionView(mediaRouteItem);
 				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 			}
 		}
