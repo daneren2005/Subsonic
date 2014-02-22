@@ -244,8 +244,8 @@ public class ChromeCastController extends RemoteController {
 					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
 				}
 
-				//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
-				url = url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
+				url = fixURLs(url);
+				Log.i(TAG, "Cast url: " + url);
 			}
 
 			// Setup song/video information
@@ -259,17 +259,19 @@ public class ChromeCastController extends RemoteController {
 				meta.putString(MediaMetadata.KEY_ALBUM_ARTIST, song.getArtist());
 				meta.putString(MediaMetadata.KEY_ALBUM_TITLE, song.getAlbum());
 
-				String coverArt;
+				String coverArt = "";
 				if(proxy == null) {
 					coverArt = musicService.getCoverArtUrl(downloadService, song);
+					coverArt = fixURLs(coverArt);
 					meta.addImage(new WebImage(Uri.parse(coverArt)));
 				} else {
 					File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
 					if(coverArtFile != null && coverArtFile.exists()) {
-						coverArt = coverArtFile.getPath();
-						meta.addImage(new WebImage(Uri.parse(proxy.getPublicAddress(coverArt))));
+						coverArt = proxy.getPublicAddress(coverArtFile.getPath());
+						meta.addImage(new WebImage(Uri.parse(coverArt)));
 					}
 				}
+				Log.i(TAG, "Cover art: " + coverArt);
 			}
 
 			String contentType;
@@ -313,6 +315,20 @@ public class ChromeCastController extends RemoteController {
 			Log.e(TAG, "Problem opening media during loading", e);
 			failedLoad();
 		}
+	}
+
+	private String fixURLs(String url) {
+		// Only change to internal when using https
+		if(url.indexOf("https") != -1) {
+			SharedPreferences prefs = Util.getPreferences(downloadService);
+			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+			String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+			url = url.replace(internalUrl, externalUrl);
+		}
+
+		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
+		return url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
 	}
 
 	private void failedLoad() {
