@@ -1154,6 +1154,16 @@ public class DownloadService extends Service {
 			if (currentDownloading != null) {
 				currentDownloading.cancelDownload();
 			}
+
+			// Cancels current setup tasks
+			if(bufferTask != null && bufferTask.isRunning()) {
+				bufferTask.cancel();
+				bufferTask = null;
+			}
+			if(nextPlayingTask != null && nextPlayingTask.isRunning()) {
+				nextPlayingTask.cancel();
+				nextPlayingTask = null;
+			}
 		}
 
 		SharedPreferences prefs = Util.getPreferences(this);
