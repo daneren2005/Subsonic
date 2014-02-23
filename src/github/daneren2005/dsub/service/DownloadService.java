@@ -570,6 +570,9 @@ public class DownloadService extends Service {
 			proxy.stop();
 			proxy = null;
 		}
+
+		suggestedPlaylistName = null;
+		suggestedPlaylistId = null;
 	}
 
 	public synchronized void remove(int which) {
