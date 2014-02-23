@@ -649,7 +649,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 	}
 
-	public boolean isDestroyed() {
+	public boolean isDestroyedCompat() {
 		return destroyed;
 	}
 
