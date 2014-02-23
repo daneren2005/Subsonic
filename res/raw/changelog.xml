@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.5.2" versioncode="92" releasedate="2/23/2014">
+		<change>Add support for casting in offline mode</change>
+		<change>Use internal IP for ChromeCast if using a http address</change>
+		<change>Fix loading getting stuck on 4.1 and below devices</change>
+	</release>
 	<release version="4.5.1" versioncode="91" releasedate="2/21/2014">
 		<change>Fix crash on Android 2.2/2.3 devices</change>
 	</release>
