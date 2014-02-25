@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.view.ContextMenu;
@@ -367,11 +368,15 @@ public class MainFragment extends SubsonicFragment {
 
 				@Override
 				protected void done(File logcat) {
+					String footer = "Android SDK: " + Build.VERSION.SDK;
+					footer += "\nDevice Model: " + Build.MODEL;
+					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
+
 					Intent email = new Intent(android.content.Intent.ACTION_SEND);
 					email.setType("text/plain");
 					email.putExtra(Intent.EXTRA_EMAIL, new String[] {"dsub.android@gmail.com"});
 					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + version + " Error Logs");
-					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here");
+					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n" + footer);
 					Uri attachment = Uri.fromFile(logcat);
 					email.putExtra(Intent.EXTRA_STREAM, attachment);
 					startActivity(email);
