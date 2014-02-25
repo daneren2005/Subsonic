@@ -1336,7 +1336,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		// Top to Bottom swipe
 		 else if (e2.getY() - e1.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
 			 warnIfNetworkOrStorageUnavailable();
-			 downloadService.seekTo(downloadService.getPlayerPosition() + 30000); 
+			 downloadService.seekTo(downloadService.getPlayerPosition() + DownloadService.FAST_FORWARD);
 			 onProgressChanged();
 			 return true;
 		 }
@@ -1344,7 +1344,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 		// Bottom to Top swipe
 		else if (e1.getY() - e2.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
 			warnIfNetworkOrStorageUnavailable();
-			downloadService.seekTo(downloadService.getPlayerPosition() - 8000);
+			downloadService.seekTo(downloadService.getPlayerPosition() - DownloadService.REWIND);
 			onProgressChanged();
 			return true;
 		}

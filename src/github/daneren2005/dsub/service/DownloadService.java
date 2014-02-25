@@ -76,7 +76,6 @@ import java.net.URLEncoder;
  * @version $Id$
  */
 public class DownloadService extends Service {
-
 	private static final String TAG = DownloadService.class.getSimpleName();
 
 	public static final String CMD_PLAY = "github.daneren2005.dsub.CMD_PLAY";
@@ -86,6 +85,8 @@ public class DownloadService extends Service {
 	public static final String CMD_PREVIOUS = "github.daneren2005.dsub.CMD_PREVIOUS";
 	public static final String CMD_NEXT = "github.daneren2005.dsub.CMD_NEXT";
 	public static final String CANCEL_DOWNLOADS = "github.daneren2005.dsub.CANCEL_DOWNLOADS";
+	public static final int FAST_FORWARD = 30000;
+	public static final int REWIND = 10000;
 
 	private RemoteControlClientHelper mRemoteControl;
 
@@ -802,6 +803,10 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void seekTo(int position) {
+		if(position < 0) {
+			position = 0;
+		}
+
 		try {
 			if (remoteState != RemoteControlState.LOCAL) {
 				remoteController.changePosition(position / 1000);
@@ -820,6 +825,13 @@ public class DownloadService extends Service {
 			return;
 		}
 
+		// If only one song, just skip within song
+		if(size() == 1) {
+			seekTo(getPlayerPosition() - REWIND);
+			return;
+		}
+
+
 		// Restart song if played more than five seconds.
 		if (getPlayerPosition() > 5000 || (index == 0 && getRepeatMode() != RepeatMode.ALL)) {
 			play(index);
@@ -833,6 +845,12 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void next() {
+		// If only one song, just skip within song
+		if(size() == 1) {
+			seekTo(getPlayerPosition() + FAST_FORWARD);
+			return;
+		}
+
 		// Delete podcast if fully listened to
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
 			int duration = getPlayerDuration();
