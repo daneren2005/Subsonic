@@ -435,7 +435,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		SharedPreferences prefs = Util.getPreferences(this);
 		if (!prefs.contains(Constants.PREFERENCES_KEY_CACHE_LOCATION)) {
 			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory().getPath());
+			editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory(this).getPath());
 			editor.commit();
 		}
 

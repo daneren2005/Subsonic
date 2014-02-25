@@ -70,7 +70,7 @@ public class FileUtil {
     private static final List<String> MUSIC_FILE_EXTENSIONS = Arrays.asList("mp3", "ogg", "aac", "flac", "m4a", "wav", "wma");
 	private static final List<String> VIDEO_FILE_EXTENSIONS = Arrays.asList("flv", "mp4", "m4v", "wmv", "avi", "mov", "mpg", "mkv");
 	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Arrays.asList("m3u");
-    private static final File DEFAULT_MUSIC_DIR = createDirectory("music");
+    private static File DEFAULT_MUSIC_DIR;
 	private static final Kryo kryo = new Kryo();
 
 	static {
@@ -124,9 +124,9 @@ public class FileUtil {
 
         return new File(dir, fileName.toString());
     }
-	
-	public static File getPlaylistFile(String server, String name) {
-		File playlistDir = getPlaylistDirectory(server);
+
+	public static File getPlaylistFile(Context context, String server, String name) {
+		File playlistDir = getPlaylistDirectory(context, server);
 		return new File(playlistDir, fileSystemSafe(name) + ".m3u");
 	}
 	public static void writePlaylistFile(Context context, File file, MusicDirectory playlist) throws IOException {
@@ -150,13 +150,13 @@ public class FileUtil {
 			fw.close();
 		}
 	}
-	public static File getPlaylistDirectory() {
-		File playlistDir = new File(getSubsonicDirectory(), "playlists");
+	public static File getPlaylistDirectory(Context context) {
+		File playlistDir = new File(getSubsonicDirectory(context), "playlists");
 		ensureDirectoryExistsAndIsReadWritable(playlistDir);
 		return playlistDir;
 	}
-	public static File getPlaylistDirectory(String server) {
-		File playlistDir = new File(getPlaylistDirectory(), server);
+	public static File getPlaylistDirectory(Context context, String server) {
+		File playlistDir = new File(getPlaylistDirectory(context), server);
 		ensureDirectoryExistsAndIsReadWritable(playlistDir);
 		return playlistDir;
 	}
@@ -165,7 +165,7 @@ public class FileUtil {
         File albumDir = getAlbumDirectory(context, entry);
 		File artFile;
 		File albumFile = getAlbumArtFile(albumDir);
-		File hexFile = getHexAlbumArtFile(albumDir);
+		File hexFile = getHexAlbumArtFile(context, albumDir);
 		if(albumDir.exists()) {
 			if(hexFile.exists()) {
 				hexFile.renameTo(albumFile);
@@ -180,8 +180,8 @@ public class FileUtil {
     public static File getAlbumArtFile(File albumDir) {
         return new File(albumDir, Constants.ALBUM_ART_FILE);
     }
-	public static File getHexAlbumArtFile(File albumDir) {
-		return new File(getAlbumArtDirectory(), Util.md5Hex(albumDir.getPath()) + ".jpeg");
+	public static File getHexAlbumArtFile(Context context, File albumDir) {
+		return new File(getAlbumArtDirectory(context), Util.md5Hex(albumDir.getPath()) + ".jpeg");
 	}
 
     public static Bitmap getAlbumArtBitmap(Context context, MusicDirectory.Entry entry, int size) {
@@ -213,13 +213,13 @@ public class FileUtil {
 		return Bitmap.createScaledBitmap(bitmap, size, Util.getScaledHeight(bitmap, size), true);
 	}
 
-	public static File getAlbumArtDirectory() {
-		File albumArtDir = new File(getSubsonicDirectory(), "artwork");
+	public static File getAlbumArtDirectory(Context context) {
+		File albumArtDir = new File(getSubsonicDirectory(context), "artwork");
 		ensureDirectoryExistsAndIsReadWritable(albumArtDir);
 		ensureDirectoryExistsAndIsReadWritable(new File(albumArtDir, ".nomedia"));
 		return albumArtDir;
 	}
-	
+
 	public static File getArtistDirectory(Context context, Artist artist) {
 		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getName()));
 		return dir;
@@ -291,24 +291,28 @@ public class FileUtil {
         }
     }
 
-    private static File createDirectory(String name) {
-        File dir = new File(getSubsonicDirectory(), name);
+    private static File createDirectory(Context context, String name) {
+        File dir = new File(getSubsonicDirectory(context), name);
         if (!dir.exists() && !dir.mkdirs()) {
             Log.e(TAG, "Failed to create " + name);
         }
         return dir;
     }
 
-    public static File getSubsonicDirectory() {
-        return new File(Environment.getExternalStorageDirectory(), "subsonic");
+    public static File getSubsonicDirectory(Context context) {
+        return context.getExternalFilesDir(null);
     }
 
-    public static File getDefaultMusicDirectory() {
+    public static File getDefaultMusicDirectory(Context context) {
+		if(DEFAULT_MUSIC_DIR == null) {
+			DEFAULT_MUSIC_DIR = createDirectory(context, "music");
+		}
+
         return DEFAULT_MUSIC_DIR;
     }
 
     public static File getMusicDirectory(Context context) {
-        String path = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, DEFAULT_MUSIC_DIR.getPath());
+        String path = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, getDefaultMusicDirectory(context).getPath());
         File dir = new File(path);
         return ensureDirectoryExistsAndIsReadWritable(dir) ? dir : getDefaultMusicDirectory();
     }

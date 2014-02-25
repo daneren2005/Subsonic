@@ -344,7 +344,7 @@ public class MainFragment extends SubsonicFragment {
 				@Override
 				protected File doInBackground() throws Throwable {
 					updateProgress("Gathering Logs");
-					File logcat = new File(FileUtil.getSubsonicDirectory(), "logcat.txt");
+					File logcat = new File(FileUtil.getSubsonicDirectory(context), "logcat.txt");
 					Process logcatProc = null;
 
 					try {

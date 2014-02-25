@@ -476,7 +476,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	}
 
     private void setHideMedia(boolean hide) {
-        File nomediaDir = new File(FileUtil.getSubsonicDirectory(), ".nomedia");
+        File nomediaDir = new File(FileUtil.getSubsonicDirectory(this), ".nomedia");
         if (hide && !nomediaDir.exists()) {
 			try {
 				if (!nomediaDir.createNewFile()) {
@@ -507,7 +507,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             Util.toast(this, R.string.settings_cache_location_error, false);
 
             // Reset it to the default.
-            String defaultPath = FileUtil.getDefaultMusicDirectory().getPath();
+            String defaultPath = FileUtil.getDefaultMusicDirectory(this).getPath();
             if (!defaultPath.equals(path)) {
                 SharedPreferences prefs = Util.getPreferences(this);
                 SharedPreferences.Editor editor = prefs.edit();
