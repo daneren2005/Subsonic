@@ -380,7 +380,7 @@ public class MainFragment extends SubsonicFragment {
 					email.setType("text/plain");
 					email.putExtra(Intent.EXTRA_EMAIL, new String[] {"dsub.android@gmail.com"});
 					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + version + " Error Logs");
-					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n" + footer);
+					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
 					Uri attachment = Uri.fromFile(logcat);
 					email.putExtra(Intent.EXTRA_STREAM, attachment);
 					startActivity(email);
