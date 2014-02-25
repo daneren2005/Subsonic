@@ -434,9 +434,14 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 		SharedPreferences prefs = Util.getPreferences(this);
 		if (!prefs.contains(Constants.PREFERENCES_KEY_CACHE_LOCATION)) {
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory(this).getPath());
-			editor.commit();
+			resetCacheLocation(prefs);
+		} else {
+			String path = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+			File cacheLocation = new File(path);
+			if(!FileUtil.ensureDirectoryExistsAndIsReadWritable(cacheLocation)) {
+				resetCacheLocation(prefs);
+				Util.info(this, R.string.common_warning, R.string.settings_cache_location_reset);
+			}
 		}
 
 		if (!prefs.contains(Constants.PREFERENCES_KEY_OFFLINE)) {
@@ -455,6 +460,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
 			editor.commit();
 		}
+	}
+
+	private void resetCacheLocation(SharedPreferences prefs) {
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory(this).getPath());
+		editor.commit();
 	}
 
 	private void createAccount() {

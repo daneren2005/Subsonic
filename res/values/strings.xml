@@ -23,6 +23,7 @@
 	<string name="common.confirm">Confirm</string>
 	<string name="common.confirm_message">Do you want to %1$s %2$s?</string>
 	<string name="common.empty">None found</string>
+	<string name="common.warning">Warning</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -255,6 +256,7 @@
     <string name="settings.cache_size">Cache size (MB)</string>
     <string name="settings.cache_location">Cache location</string>
     <string name="settings.cache_location_error">Invalid cache location. Using default.</string>
+    <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that DSub uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
 	<string name="settings.cache_clear">Clear Cache</string>
 	<string name="settings.cache_clear_complete">Finished clearing cache</string>
     <string name="settings.testing_connection">Testing connection...</string>
