@@ -217,9 +217,9 @@ public class JukeboxController extends RemoteController {
 			@Override
 			public void run() {
 				Util.toast(downloadService, resourceId, false);
+				downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 			}
 		});
-		downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 	}
 	
 	private MusicService getMusicService() {

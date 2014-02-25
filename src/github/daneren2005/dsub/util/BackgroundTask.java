@@ -53,7 +53,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	private static Handler handler = null;
 	static {
 		try {
-			handler = new Handler();
+			handler = new Handler(Looper.getMainLooper());
 		} catch(Exception e) {
 			// Not called from main thread
 		}
@@ -67,6 +67,13 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 				Thread thread = new Thread(new TaskRunnable(), String.format("BackgroundTask_%d", i));
 				threads.add(thread);
 				thread.start();
+			}
+		}
+		if(handler == null) {
+			try {
+				handler = new Handler(Looper.getMainLooper());
+			} catch(Exception e) {
+				// Not called from main thread
 			}
 		}
     }

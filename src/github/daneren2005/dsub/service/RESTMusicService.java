@@ -623,7 +623,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
-		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt", false));
+		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
 		builder.append("&id=").append(entry.getId());
 		String url = rewriteUrlWithRedirect(context, builder.toString());
 		return url;
@@ -710,7 +710,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
-		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream", false));
+		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
 		builder.append("&id=").append(song.getId());
 		builder.append("&maxBitRate=").append(maxBitrate);
 

@@ -15,6 +15,7 @@
 
 package github.daneren2005.dsub.service;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,14 +33,17 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.images.WebImage;
 
+import java.io.File;
 import java.io.IOException;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.CastCompat;
+import github.daneren2005.serverproxy.FileProxy;
 
 /**
  * Created by owner on 2/9/14.
@@ -58,12 +62,17 @@ public class ChromeCastController extends RemoteController {
 	private boolean error = false;
 	private boolean ignoreNextPaused = false;
 
+	private FileProxy proxy;
+	private String rootLocation;
 	private RemoteMediaPlayer mediaPlayer;
 	private double gain = 0.5;
 
 	public ChromeCastController(DownloadService downloadService, CastDevice castDevice) {
 		this.downloadService = downloadService;
 		this.castDevice = castDevice;
+
+		SharedPreferences prefs = Util.getPreferences(downloadService);
+		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 	}
 
 	@Override
@@ -154,6 +163,11 @@ public class ChromeCastController extends RemoteController {
 			apiClient.disconnect();
 		}
 		apiClient = null;
+
+		if(proxy != null) {
+			proxy.stop();
+			proxy = null;
+		}
 	}
 
 	@Override
@@ -209,9 +223,30 @@ public class ChromeCastController extends RemoteController {
 
 		try {
 			MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-			String url = song.isVideo() ? musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService) : musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
-			//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
-			url = url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
+			String url;
+			// Offline, use file proxy
+			if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
+				if(proxy == null) {
+					proxy = new FileProxy(downloadService);
+					proxy.start();
+				}
+
+				url = proxy.getPublicAddress(song.getId());
+			} else {
+				if(proxy != null) {
+					proxy.stop();
+					proxy = null;
+				}
+
+				if(song.isVideo()) {
+					url = musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService);
+				} else {
+					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
+				}
+
+				url = fixURLs(url);
+				Log.i(TAG, "Cast url: " + url);
+			}
 
 			// Setup song/video information
 			MediaMetadata meta = new MediaMetadata(song.isVideo() ? MediaMetadata.MEDIA_TYPE_MOVIE : MediaMetadata.MEDIA_TYPE_MUSIC_TRACK);
@@ -223,8 +258,20 @@ public class ChromeCastController extends RemoteController {
 				meta.putString(MediaMetadata.KEY_ARTIST, song.getArtist());
 				meta.putString(MediaMetadata.KEY_ALBUM_ARTIST, song.getArtist());
 				meta.putString(MediaMetadata.KEY_ALBUM_TITLE, song.getAlbum());
-				String coverArt = musicService.getCoverArtUrl(downloadService, song);
-				meta.addImage(new WebImage(Uri.parse(coverArt)));
+
+				String coverArt = "";
+				if(proxy == null) {
+					coverArt = musicService.getCoverArtUrl(downloadService, song);
+					coverArt = fixURLs(coverArt);
+					meta.addImage(new WebImage(Uri.parse(coverArt)));
+				} else {
+					File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
+					if(coverArtFile != null && coverArtFile.exists()) {
+						coverArt = proxy.getPublicAddress(coverArtFile.getPath());
+						meta.addImage(new WebImage(Uri.parse(coverArt)));
+					}
+				}
+				Log.i(TAG, "Cover art: " + coverArt);
 			}
 
 			String contentType;
@@ -233,8 +280,10 @@ public class ChromeCastController extends RemoteController {
 			}
 			else if(song.getTranscodedContentType() != null) {
 				contentType = song.getTranscodedContentType();
-			} else {
+			} else if(song.getContentType() != null) {
 				contentType = song.getContentType();
+			} else {
+				contentType = "audio/mpeg";
 			}
 
 			// Load it into a MediaInfo wrapper
@@ -266,6 +315,20 @@ public class ChromeCastController extends RemoteController {
 			Log.e(TAG, "Problem opening media during loading", e);
 			failedLoad();
 		}
+	}
+
+	private String fixURLs(String url) {
+		// Only change to internal when using https
+		if(url.indexOf("https") != -1) {
+			SharedPreferences prefs = Util.getPreferences(downloadService);
+			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+			String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+			url = url.replace(internalUrl, externalUrl);
+		}
+
+		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
+		return url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
 	}
 
 	private void failedLoad() {

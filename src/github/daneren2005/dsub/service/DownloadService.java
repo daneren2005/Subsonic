@@ -43,6 +43,7 @@ import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
+import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -133,7 +134,7 @@ public class DownloadService extends Service {
 	private boolean showVisualization;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
 	private PositionCache positionCache;
-	private StreamProxy proxy;
+	private BufferProxy proxy;
 
 	private Timer sleepTimer;
 	private int timerDuration;
@@ -274,6 +275,10 @@ public class DownloadService extends Service {
 			remoteController.stop();
 			remoteController.shutdown();
 		}
+		if(proxy != null) {
+			proxy.stop();
+			proxy = null;
+		}
 		mediaRouter.destroy();
 		Util.hidePlayingNotification(this, this, handler);
 		Util.hideDownloadingNotification(this);
@@ -368,7 +373,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	public void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
+	public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
 		SharedPreferences prefs = Util.getPreferences(this);
 		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
 		if(remoteState != RemoteControlState.LOCAL) {
@@ -518,6 +523,15 @@ public class DownloadService extends Service {
 		updateJukeboxPlaylist();
 	}
 
+	public synchronized void setOnline(boolean online) {
+		if(online) {
+			mediaRouter.addOfflineProviders();
+		} else {
+			mediaRouter.removeOfflineProviders();
+			clearIncomplete();
+		}
+	}
+
 	public synchronized int size() {
 		return downloadList.size();
 	}
@@ -552,6 +566,13 @@ public class DownloadService extends Service {
 		}
 		updateJukeboxPlaylist();
 		setNextPlaying();
+		if(proxy != null) {
+			proxy.stop();
+			proxy = null;
+		}
+
+		suggestedPlaylistName = null;
+		suggestedPlaylistId = null;
 	}
 
 	public synchronized void remove(int which) {
@@ -830,17 +851,7 @@ public class DownloadService extends Service {
 			nextPlayingIndex++;
 		}
 		if (index != -1 && nextPlayingIndex < size()) {
-			if(nextPlaying != null && downloadList.get(nextPlayingIndex) == nextPlaying && nextPlayerState == PlayerState.PREPARED && remoteState == RemoteControlState.LOCAL) {
-				if(mediaPlayer.isPlaying()) {
-					mediaPlayer.stop();
-				}
-				mediaPlayer.setOnErrorListener(null);
-				mediaPlayer.setOnCompletionListener(null);
-				mediaPlayer.reset();
-				playNext(true);
-			} else {
-				play(nextPlayingIndex);
-			}
+			play(nextPlayingIndex);
 		}
 	}
 
@@ -1146,6 +1157,16 @@ public class DownloadService extends Service {
 			if (currentDownloading != null) {
 				currentDownloading.cancelDownload();
 			}
+
+			// Cancels current setup tasks
+			if(bufferTask != null && bufferTask.isRunning()) {
+				bufferTask.cancel();
+				bufferTask = null;
+			}
+			if(nextPlayingTask != null && nextPlayingTask.isRunning()) {
+				nextPlayingTask.cancel();
+				nextPlayingTask = null;
+			}
 		}
 
 		SharedPreferences prefs = Util.getPreferences(this);
@@ -1216,10 +1237,11 @@ public class DownloadService extends Service {
 			String dataSource = file.getPath();
 			if(isPartial) {
 				if (proxy == null) {
-					proxy = new StreamProxy(this);
+					proxy = new BufferProxy(this);
 					proxy.start();
 				}
-				dataSource = String.format("http://127.0.0.1:%d/%s", proxy.getPort(), URLEncoder.encode(dataSource, Constants.UTF_8));
+				proxy.setBufferFile(downloadFile);
+				dataSource = proxy.getPrivateAddress(dataSource);
 				Log.i(TAG, "Data Source: " + dataSource);
 			} else if(proxy != null) {
 				proxy.stop();
