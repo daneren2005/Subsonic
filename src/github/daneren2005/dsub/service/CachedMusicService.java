@@ -196,7 +196,7 @@ public class CachedMusicService implements MusicService {
 			dir = musicService.getPlaylist(refresh, id, name, context, progressListener);
 			FileUtil.serialize(context, dir, getCacheName(context, "playlist", id));
 
-			File playlistFile = FileUtil.getPlaylistFile(context, Util.getServerName(context, musicService.getInstance(context)), name);
+			File playlistFile = FileUtil.getPlaylistFile(context, Util.getServerName(context, musicService.getInstance(context)), dir.getName());
 			if(cachedPlaylist == null || !playlistFile.exists() || !cachedPlaylist.getChildren().equals(dir.getChildren())) {
 				FileUtil.writePlaylistFile(context, playlistFile, dir);
 			}
