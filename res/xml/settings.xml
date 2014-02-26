@@ -55,6 +55,12 @@
 				android:key="customSortEnabled"
 				android:defaultValue="true"/>
 
+			<CheckBoxPreference
+				android:title="@string/settings.open_to_library"
+				android:summary="@string/settings.open_to_library_summary"
+				android:key="openToLibrary"
+				android:defaultValue="false"/>
+
 		</PreferenceCategory>
 
 		<PreferenceCategory

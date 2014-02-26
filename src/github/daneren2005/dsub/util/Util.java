@@ -392,7 +392,12 @@ public final class Util {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance, false);
 	}
-	
+
+	public static boolean isOpenToLibrary(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_OPEN_TO_LIBRARY, false);
+	}
+
 	public static String getVideoPlayerType(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getString(Constants.PREFERENCES_KEY_VIDEO_PLAYER, "raw"); 

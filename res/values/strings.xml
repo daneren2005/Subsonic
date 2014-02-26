@@ -277,6 +277,8 @@
 	<string name="settings.track_summary">Display Track # in front of songs if one exists</string>
 	<string name="settings.custom_sort">Custom Sort</string>
 	<string name="settings.custom_sort_summary">Override default server sorting to sort by disc number and by year.</string>
+	<string name="settings.open_to_library">Open To Library</string>
+	<string name="settings.open_to_library_summary">Open directly to the library screen instead of opening to home.</string>
     <string name="settings.network_title">Network</string>
     <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobile</string>
