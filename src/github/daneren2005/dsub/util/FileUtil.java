@@ -314,7 +314,7 @@ public class FileUtil {
     public static File getMusicDirectory(Context context) {
         String path = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, getDefaultMusicDirectory(context).getPath());
         File dir = new File(path);
-        return ensureDirectoryExistsAndIsReadWritable(dir) ? dir : getDefaultMusicDirectory();
+        return ensureDirectoryExistsAndIsReadWritable(dir) ? dir : getDefaultMusicDirectory(context);
     }
 	public static boolean deleteMusicDirectory(Context context) {
 		File musicDirectory = FileUtil.getMusicDirectory(context);
