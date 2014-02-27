@@ -33,12 +33,17 @@
 
 			</github.daneren2005.dsub.view.MyViewFlipper>
 
-			<LinearLayout android:orientation="vertical"
+			<RelativeLayout android:orientation="vertical"
 				android:id="@+id/download_control_layout"
 				android:layout_width="0dp"
 				android:layout_height="fill_parent"
 				android:layout_weight="1"
 				android:background="@android:color/transparent">
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true">
 
 					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 						android:id="@+id/download_other_controls_layout"
@@ -67,6 +72,7 @@
 							style="@style/DownloadActionImageButton"
 							android:src="?attr/bookmark"/>
 					</LinearLayout>
+				</LinearLayout>
 
 				<LinearLayout
 						android:id="@+id/download_visualizer_view_layout"
@@ -75,7 +81,8 @@
 						android:layout_height="60dip"
 						android:layout_marginLeft="12dip"
 						android:layout_marginRight="12dip"
-						android:layout_gravity="center_horizontal"/>
+						android:layout_gravity="center_horizontal"
+						android:layout_above="@+id/download_song_title"/>
 
 				<TextView
 						android:id="@+id/download_song_title"
@@ -88,7 +95,8 @@
 						android:ellipsize="end"
 						android:gravity="center_horizontal"
 						android:textAppearance="?android:attr/textAppearanceMedium"
-						android:textColor="?android:textColorPrimary"/>
+						android:textColor="?android:textColorPrimary"
+						android:layout_above="@+id/download_status"/>
 
 				<TextView
 						android:id="@+id/download_status"
@@ -101,13 +109,28 @@
 						android:singleLine="true"
 						android:ellipsize="end"
 						android:textAppearance="?android:attr/textAppearanceSmall"
-						android:textColor="?android:textColorSecondary" />
+						android:textColor="?android:textColorSecondary"
+						android:layout_above="@+id/download_media_buttons_wrapper"/>
 
-				<include layout="@layout/download_media_buttons"/>
+				<LinearLayout
+					android:id="@+id/download_media_buttons_wrapper"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_above="@+id/download_slider_wrapper">
 
-				<include layout="@layout/download_slider"/>
+					<include layout="@layout/download_media_buttons"/>
+				</LinearLayout>
 
-			</LinearLayout>
+				<LinearLayout
+					android:id="@+id/download_slider_wrapper"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignParentBottom="true">
+
+					<include layout="@layout/download_slider"/>
+				</LinearLayout>
+
+			</RelativeLayout>
 
 		</LinearLayout>
 	</LinearLayout>
