@@ -101,8 +101,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
-			if(fragmentType == null && Util.isOpenToLibrary(this) {
+			if(fragmentType == null && Util.isOpenToLibrary(this)) {
 				fragmentType = "Artist";
+				lastSelectedPosition = 1;
 			}
 			currentFragment = getNewFragment(fragmentType);
 			
