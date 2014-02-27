@@ -511,7 +511,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private void showInfoDialog() {
 		if (!infoDialogDisplayed) {
 			infoDialogDisplayed = true;
-			Log.i(TAG, Util.getRestUrl(this, null));
 			if (Util.getRestUrl(this, null).contains("demo.subsonic.org")) {
 				Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
 			}
