@@ -36,18 +36,22 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+		if(DownloadService.getInstance() == null && (event.getKeyCode() == KeyEvent.KEYCODE_MEDIA_STOP ||
+			event.getKeyCode() == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || event.getKeyCode() == KeyEvent.KEYCODE_HEADSETHOOK)) {
+			Log.w(TAG, "Ignore keycode event because downloadService is off");
+			return;
+		}
         Log.i(TAG, "Got MEDIA_BUTTON key event: " + event);
 
         Intent serviceIntent = new Intent(context, DownloadService.class);
         serviceIntent.putExtra(Intent.EXTRA_KEY_EVENT, event);
         context.startService(serviceIntent);
-        if (isOrderedBroadcast())
-	{
-		try {
-			abortBroadcast();
-		} catch (Exception x) {
-			// Ignored.
+        if (isOrderedBroadcast()) {
+			try {
+				abortBroadcast();
+			} catch (Exception x) {
+				// Ignored.
+			}
 		}
-	}
     }
 }
