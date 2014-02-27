@@ -24,25 +24,24 @@
 					android:layout_weight="1"
 					android:background="@android:color/transparent">
 
-				<RelativeLayout android:orientation="vertical"
+				<FrameLayout android:orientation="vertical"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_above="@+id/download_song_title">
+					android:layout_alignParentTop="true">
 
 					<ImageView
 						android:id="@+id/download_album_art_image"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_centerHorizontal="true"
-						android:layout_alignParentTop="true"
-						android:scaleType="fitCenter"/>
+						android:scaleType="fitCenter"
+						android:layout_gravity="center_horizontal|top"/>
 
 					<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 						android:id="@+id/download_overlay_buttons"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:background="@color/overlayColor"
-						android:layout_alignParentBottom="true">
+						android:layout_gravity="center_horizontal|bottom">
 
 						<LinearLayout
 							android:layout_width="wrap_content"
@@ -86,9 +85,8 @@
 						android:layout_height="60dip"
 						android:layout_marginLeft="16dip"
 						android:layout_marginRight="16dip"
-						android:layout_gravity="center_horizontal"
-						android:layout_alignParentBottom="true"/>
-				</RelativeLayout>
+						android:layout_gravity="center_horizontal|bottom"/>
+				</FrameLayout>
 
 				<TextView
 						android:id="@+id/download_status"
