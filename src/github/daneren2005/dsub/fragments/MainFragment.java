@@ -376,6 +376,7 @@ public class MainFragment extends SubsonicFragment {
 					String footer = "Android SDK: " + Build.VERSION.SDK;
 					footer += "\nDevice Model: " + Build.MODEL;
 					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
+					footer += "\nROM: " + Build.DISPLAY;
 
 					Intent email = new Intent(android.content.Intent.ACTION_SEND);
 					email.setType("text/plain");
