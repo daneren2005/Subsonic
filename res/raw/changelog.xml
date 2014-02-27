@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.5.3" versioncode="93" releasedate="2/26/2014">
+		<change>WARNING: Please read the first change!</change>
+		<change>Google changed Android so that apps can only write to a specific location on a SD card for 4.4+.  Samsung is currently upgrading their phones to 4.4, so if you have a Galaxy phone you will probably receive a notification that the cache location has been changed to the only place DSub can write to now.  Everyone else's settings will be left alone, but the default cache location has also been changed.</change>
+		<change>When your only playing one song, next/previous buttons skip within song (mostly useful for podcasts)</change>
+		<change>Added option to auto open to Library instead of the Home tab (under Settings -> Appearance)</change>
+		<change>Add more information to Send Log function for easier debugging</change>
+		<change>Some minor bug fixes</change>
+	</release>
 	<release version="4.5.2" versioncode="92" releasedate="2/23/2014">
 		<change>Add support for casting in offline mode</change>
 		<change>Use internal IP for ChromeCast if using a http address</change>
