@@ -245,7 +245,6 @@ public class ChromeCastController extends RemoteController {
 				}
 
 				url = fixURLs(url);
-				Log.i(TAG, "Cast url: " + url);
 			}
 
 			// Setup song/video information
@@ -271,7 +270,6 @@ public class ChromeCastController extends RemoteController {
 						meta.addImage(new WebImage(Uri.parse(coverArt)));
 					}
 				}
-				Log.i(TAG, "Cover art: " + coverArt);
 			}
 
 			String contentType;
