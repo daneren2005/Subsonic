@@ -178,6 +178,14 @@ public class DownloadService extends Service {
 					// Froyo or lower
 				}
 
+				if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
+					getEqualizerController();
+				}
+				if(prefs.getBoolean(Constants.PREFERENCES_VISUALIZER_ON, false)) {
+					getVisualizerController();
+					showVisualization = true;
+				}
+
 				mediaPlayerLooper = Looper.myLooper();
 				mediaPlayerHandler = new Handler(mediaPlayerLooper);
 				Looper.loop();
@@ -211,14 +219,6 @@ public class DownloadService extends Service {
 
 		instance = this;
 		lifecycleSupport.onCreate();
-
-		if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
-			getEqualizerController();
-		}
-		if(prefs.getBoolean(Constants.PREFERENCES_VISUALIZER_ON, false)) {
-			getVisualizerController();
-			showVisualization = true;
-		}
 	}
 
 	@Override
