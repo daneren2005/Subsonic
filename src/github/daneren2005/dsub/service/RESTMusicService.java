@@ -203,6 +203,18 @@ public class RESTMusicService implements MusicService {
             return cachedIndexes;
         }
 
+		// If manual refresh, try to start server scan for madsonic servers
+		if(refresh) {
+			Reader reader = getReader(context, progressListener, "startRescan", null);
+			try {
+				new ErrorParser(context).parse(reader);
+			} catch(Exception e) {
+				// Probably not madsonic, don't care
+			} finally {
+				Util.close(reader);
+			}
+		}
+
         long lastModified = (cachedIndexes == null || refresh) ? 0L : cachedIndexes.getLastModified();
 
         List<String> parameterNames = new ArrayList<String>();
