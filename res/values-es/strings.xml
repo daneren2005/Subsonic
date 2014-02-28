@@ -23,6 +23,7 @@
 	<string name="common.confirm">Confirmar</string>
 	<string name="common.confirm_message">Quieres %1$s %2$s?</string>
 	<string name="common.empty">No se ha encontrado nada</string>
+	<string name="common.warning">Aviso</string>
 
     <string name="button_bar.home">Inicio</string>
     <string name="button_bar.browse">Biblioteca</string>
@@ -82,6 +83,7 @@
 	<string name="menu.show_artist">Mostrar artista</string>
 	<string name="menu.share">Compartir</string>
 	<string name="menu.delete_cache">Borrar cache</string>
+	<string name="menu.cast">Hacer streaming al dispositivo</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -191,6 +193,11 @@
 	<string name="download.save_bookmark">Marcador creado</string>
 	<string name="download.downloading_title">Descargando %1$d canciones</string>
 	<string name="download.downloading_summary">En este momento: %1$s</string>
+	<string name="download.downloading_summary_expanded">Actual: %1$s
+		\nTamaño medio: %2$s
+		\nVelocidad media: %3$s kbps
+	</string>
+	<string name="download.failed_to_load">Error al cargar</string>
     
 	<string name="starring_content_starred">Marcado con estrella \"%s\"</string>
 	<string name="starring_content_unstarred">Sin marca de estrella \"%s\"</string>
@@ -376,6 +383,9 @@
 	<string name="settings.browse_by_tags_summary">Explorar por tags en vez de por estructura de carpetas. Requiere Subsonic 4.7+</string>
 	<string name="settings.server_local_network_ssid" >SSID Red local</string>
 	<string name="settings.server_local_network_ssid_hint">SSID Actual: %s</string>
+	<string name="settings.cache_location_reset">No se puede escribir en la ubicación seleccionada para la caché. Si has actualizado recientemente el sistema operativo de tu dispositivo a KitKat 4.4, la manera en la que las apps escriben en la Tarjeta SD ha cambiado, por lo que sólo pueden escribir en una ubicación específica. La ubicación que utiliza DSub ha sido automáticamente cambiada por la ubicación correcta. Para eliminar todos los datos de la app anterior, tendrás que introducir la Tarjeta SD en el ordenador y eliminar la carpeta manualmente.</string>
+	<string name="settings.open_to_library">Acceder directamente a la biblioteca</string>
+	<string name="settings.open_to_library_summary">Acceder directamente a la pantalla de la biblioteca en lugar de abrir primero la pantalla principal.</string>
 
 	<string name="share.info">Dueño: %1$s
 		\nDescripción: %2$s
