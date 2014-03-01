@@ -19,8 +19,10 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.SharedPreferences;
+import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -37,6 +39,7 @@ import java.util.Map;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.audiofx.EqualizerController;
+import github.daneren2005.dsub.audiofx.LoudnessEnhancerController;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
@@ -50,20 +53,28 @@ public class EqualizerFragment extends SubsonicFragment {
 	private static final int MENU_GROUP_PRESET = 100;
 
 	private final Map<Short, SeekBar> bars = new HashMap<Short, SeekBar>();
+	private SeekBar bassBar;
+	private SeekBar loudnessBar;
 	private EqualizerController equalizerController;
 	private Equalizer equalizer;
+	private BassBoost bass;
+	private LoudnessEnhancerController loudnessEnhancer;
 	private short masterLevel = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.equalizer, container, false);
 
-		equalizerController = DownloadService.getInstance().getEqualizerController();
+		DownloadService service = DownloadService.getInstance();
+		equalizerController = service.getEqualizerController();
 		equalizer = equalizerController.getEqualizer();
+		bass = equalizerController.getBassBoost();
+		loudnessEnhancer = equalizerController.getLoudnessEnhancerController();
 
 		try {
 			initEqualizer();
 		} catch(Exception e) {
+			Log.e(TAG, "Failed to initialize EQ", e);
 			Util.toast(context, "Failed to initialize EQ");
 			context.onBackPressed();
 		}
@@ -106,6 +117,7 @@ public class EqualizerFragment extends SubsonicFragment {
 		super.onResume();
 		equalizerController = DownloadService.getInstance().getEqualizerController();
 		equalizer = equalizerController.getEqualizer();
+		bass = equalizerController.getBassBoost();
 	}
 
 	@Override
@@ -180,6 +192,11 @@ public class EqualizerFragment extends SubsonicFragment {
 			}
 		}
 
+		bassBar.setEnabled(isEnabled);
+		if(loudnessBar != null) {
+			loudnessBar.setEnabled(isEnabled);
+		}
+
 		if(!isEnabled) {
 			masterLevel = 0;
 			SharedPreferences prefs = Util.getPreferences(context);
@@ -240,6 +257,98 @@ public class EqualizerFragment extends SubsonicFragment {
 			});
 			layout.addView(bandBar);
 		}
+
+		LinearLayout specialLayout = (LinearLayout) rootView.findViewById(R.id.special_effects_layout);
+
+		// Setup bass booster
+		View bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
+		TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
+		final TextView bassTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
+		bassBar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+
+		freqTextView.setText(R.string.equalizer_bass_booster);
+		bassBar.setEnabled(equalizer.getEnabled());
+		short bassLevel = 0;
+		if(bass.getEnabled()) {
+			bassLevel = bass.getRoundedStrength();
+		}
+		bassTextView.setText(context.getResources().getString(R.string.equalizer_bass_size, bassLevel));
+		bassBar.setMax(1000);
+		bassBar.setProgress(bassLevel);
+		bassBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				bassTextView.setText(context.getResources().getString(R.string.equalizer_bass_size, progress));
+				if(fromUser) {
+					if(progress > 0) {
+						if(!bass.getEnabled()) {
+							bass.setEnabled(true);
+						}
+						bass.setStrength((short) progress);
+					} else if(progress == 0 && bass.getEnabled()) {
+						bass.setStrength((short) progress);
+						bass.setEnabled(false);
+					}
+				}
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
+		specialLayout.addView(bandBar);
+
+		if(loudnessEnhancer != null && loudnessEnhancer.isAvailable()) {
+			// Setup loudness enhancer
+			bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
+			freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
+			final TextView loudnessTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
+			loudnessBar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+
+			freqTextView.setText(R.string.equalizer_voice_booster);
+			loudnessBar.setEnabled(equalizer.getEnabled());
+			int loudnessLevel = 0;
+			if(loudnessEnhancer.isEnabled()) {
+				loudnessLevel = (int) loudnessEnhancer.getGain();
+			}
+			loudnessBar.setProgress(loudnessLevel / 100);
+			loudnessTextView.setText(context.getResources().getString(R.string.equalizer_db_size, loudnessLevel / 100));
+			loudnessBar.setMax(15);
+			loudnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					loudnessTextView.setText(context.getResources().getString(R.string.equalizer_db_size, progress));
+					if(fromUser) {
+						if(progress > 0) {
+							if(!loudnessEnhancer.isEnabled()) {
+								loudnessEnhancer.enable();
+							}
+							loudnessEnhancer.setGain(progress * 100);
+						} else if(progress == 0 && loudnessEnhancer.isEnabled()) {
+							loudnessEnhancer.setGain(progress * 100);
+							loudnessEnhancer.disable();
+						}
+					}
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+
+				}
+
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+
+				}
+			});
+			specialLayout.addView(bandBar);
+		}
 	}
 
 	private void initPregain(LinearLayout layout, final short minEQLevel, final short maxEQLevel) {
@@ -285,6 +394,6 @@ public class EqualizerFragment extends SubsonicFragment {
 	}
 
 	private void updateLevelText(TextView levelTextView, short level) {
-		levelTextView.setText((level > 0 ? "+" : "") + level / 100 + " dB");
+		levelTextView.setText((level > 0 ? "+" : "") + context.getResources().getString(R.string.equalizer_db_size, level / 100));
 	}
 }

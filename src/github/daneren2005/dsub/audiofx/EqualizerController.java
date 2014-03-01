@@ -21,8 +21,9 @@ package github.daneren2005.dsub.audiofx;
 import java.io.Serializable;
 
 import android.content.Context;
-import android.media.MediaPlayer;
+import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
+import android.os.Build;
 import android.util.Log;
 import github.daneren2005.dsub.util.FileUtil;
 
@@ -34,125 +35,170 @@ import github.daneren2005.dsub.util.FileUtil;
  */
 public class EqualizerController {
 
-    private static final String TAG = EqualizerController.class.getSimpleName();
+	private static final String TAG = EqualizerController.class.getSimpleName();
 
-    private final Context context;
-    private Equalizer equalizer;
+	private final Context context;
+	private Equalizer equalizer;
+	private BassBoost bass;
+	private boolean loudnessAvailable = false;
+	private LoudnessEnhancerController loudnessEnhancerController;
 	private boolean released = false;
 	private int audioSessionId = 0;
 
-    // Class initialization fails when this throws an exception.
-    static {
-        try {
-            Class.forName("android.media.audiofx.Equalizer");
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+	public EqualizerController(Context context, int audioSessionId) {
+		this.context = context;
+		try {
+			this.audioSessionId = audioSessionId;
+			init();
+		} catch (Throwable x) {
+			Log.w(TAG, "Failed to create equalizer.", x);
+		}
+	}
 
-    /**
-     * Throws an exception if the {@link Equalizer} class is not available.
-     */
-    public static void checkAvailable() throws Throwable {
-        // Calling here forces class initialization.
-    }
+	private void init() {
+		equalizer = new Equalizer(0, audioSessionId);
+		bass = new BassBoost(0, audioSessionId);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			loudnessAvailable = true;
+			loudnessEnhancerController = new LoudnessEnhancerController(context, audioSessionId);
+		}
+	}
 
-    public EqualizerController(Context context, MediaPlayer mediaPlayer) {
-        this.context = context;
-        try {
-			audioSessionId = mediaPlayer.getAudioSessionId();
-            equalizer = new Equalizer(0, audioSessionId);
-        } catch (Throwable x) {
-            Log.w(TAG, "Failed to create equalizer.", x);
-        }
-    }
+	public void saveSettings() {
+		try {
+			if (isAvailable()) {
+				FileUtil.serialize(context, new EqualizerSettings(equalizer, bass, loudnessEnhancerController), "equalizer.dat");
+			}
+		} catch (Throwable x) {
+			Log.w(TAG, "Failed to save equalizer settings.", x);
+		}
+	}
 
-    public void saveSettings() {
-        try {
-            if (isAvailable()) {
-                FileUtil.serialize(context, new EqualizerSettings(equalizer), "equalizer.dat");
-            }
-        } catch (Throwable x) {
-            Log.w(TAG, "Failed to save equalizer settings.", x);
-        }
-    }
+	public void loadSettings() {
+		try {
+			if (isAvailable()) {
+				EqualizerSettings settings = FileUtil.deserialize(context, "equalizer.dat", EqualizerSettings.class);
+				if (settings != null) {
+					settings.apply(equalizer, bass, loudnessEnhancerController);
+				}
+			}
+		} catch (Throwable x) {
+			Log.w(TAG, "Failed to load equalizer settings.", x);
+		}
+	}
 
-    public void loadSettings() {
-        try {
-            if (isAvailable()) {
-                EqualizerSettings settings = FileUtil.deserialize(context, "equalizer.dat", EqualizerSettings.class);
-                if (settings != null) {
-                    settings.apply(equalizer);
-                }
-            }
-        } catch (Throwable x) {
-            Log.w(TAG, "Failed to load equalizer settings.", x);
-        }
-    }
+	public boolean isAvailable() {
+		return equalizer != null && bass != null;
+	}
 
-    public boolean isAvailable() {
-        return equalizer != null;
-    }
+	public boolean isEnabled() {
+		try {
+			return isAvailable() && equalizer.getEnabled();
+		} catch(Exception e) {
+			return false;
+		}
+	}
 
-    public boolean isEnabled() {
-    	try {
-        	return isAvailable() && equalizer.getEnabled();
-    	} catch(Exception e) {
-    		return false;
-    	}
-    }
-
-    public void release() {
-        if (isAvailable()) {
+	public void release() {
+		if (isAvailable()) {
 			released = true;
-            equalizer.release();
-        }
-    }
+			equalizer.release();
+			bass.release();
+			if(loudnessEnhancerController != null && loudnessEnhancerController.isAvailable()) {
+				loudnessEnhancerController.release();
+			}
+		}
+	}
 
-    public Equalizer getEqualizer() {
+	public Equalizer getEqualizer() {
 		if(released) {
 			released = false;
 			try {
-				equalizer = new Equalizer(0, audioSessionId);
+				init();
 			} catch (Throwable x) {
 				equalizer = null;
 				Log.w(TAG, "Failed to create equalizer.", x);
 			}
 		}
-        return equalizer;
-    }
+		return equalizer;
+	}
+	public BassBoost getBassBoost() {
+		if(released) {
+			released = false;
+			try {
+				init();
+			} catch (Throwable x) {
+				bass = null;
+				Log.w(TAG, "Failed to create bass booster.", x);
+			}
+		}
+		return bass;
+	}
+	public LoudnessEnhancerController getLoudnessEnhancerController() {
+		if(loudnessAvailable && released) {
+			released = false;
+			try {
+				init();
+			} catch (Throwable x) {
+				loudnessEnhancerController = null;
+				Log.w(TAG, "Failed to create loudness enhancer.", x);
+			}
+		}
+		return loudnessEnhancerController;
+	}
 
-    private static class EqualizerSettings implements Serializable {
+	private static class EqualizerSettings implements Serializable {
 
-        private short[] bandLevels;
-        private short preset;
-        private boolean enabled;
+		private short[] bandLevels;
+		private short preset;
+		private boolean enabled;
+		private short bass;
+		private int loudness;
 
 		public EqualizerSettings() {
 
 		}
-        public EqualizerSettings(Equalizer equalizer) {
-            enabled = equalizer.getEnabled();
-            bandLevels = new short[equalizer.getNumberOfBands()];
-            for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
-                bandLevels[i] = equalizer.getBandLevel(i);
-            }
-            try {
-                preset = equalizer.getCurrentPreset();
-            } catch (Exception x) {
-                preset = -1;
-            }
-        }
+		public EqualizerSettings(Equalizer equalizer, BassBoost boost, LoudnessEnhancerController loudnessEnhancerController) {
+			enabled = equalizer.getEnabled();
+			bandLevels = new short[equalizer.getNumberOfBands()];
+			for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
+				bandLevels[i] = equalizer.getBandLevel(i);
+			}
+			try {
+				preset = equalizer.getCurrentPreset();
+			} catch (Exception x) {
+				preset = -1;
+			}
+			try {
+				bass = boost.getRoundedStrength();
+			} catch(Exception e) {
+				bass = 0;
+			}
 
-        public void apply(Equalizer equalizer) {
-            for (short i = 0; i < bandLevels.length; i++) {
-                equalizer.setBandLevel(i, bandLevels[i]);
-            }
-            if (preset >= 0 && preset < equalizer.getNumberOfPresets()) {
-                equalizer.usePreset(preset);
-            }
-            equalizer.setEnabled(enabled);
-        }
-    }
+			try {
+				loudness = (int) loudnessEnhancerController.getGain();
+			} catch(Exception e) {
+				loudness = 0;
+			}
+		}
+
+		public void apply(Equalizer equalizer, BassBoost boost, LoudnessEnhancerController loudnessController) {
+			for (short i = 0; i < bandLevels.length; i++) {
+				equalizer.setBandLevel(i, bandLevels[i]);
+			}
+			if (preset >= 0 && preset < equalizer.getNumberOfPresets()) {
+				equalizer.usePreset(preset);
+			}
+			equalizer.setEnabled(enabled);
+			if(bass != 0) {
+				boost.setEnabled(true);
+				boost.setStrength(bass);
+			}
+			if(loudness != 0) {
+				loudnessController.enable();
+				loudnessController.setGain(loudness);
+			}
+		}
+	}
 }
 

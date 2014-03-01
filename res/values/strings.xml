@@ -453,6 +453,10 @@
     <string name="equalizer.label">Equalizer</string>
     <string name="equalizer.enabled">Enabled</string>
     <string name="equalizer.preset">Select preset</string>
+	<string name="equalizer.bass_booster">Bass Booster</string>
+	<string name="equalizer.voice_booster">Voice Booster</string>
+	<string name="equalizer.db_size">%d dB</string>
+	<string name="equalizer.bass_size">%d mille</string>
 
 	<string name="widget.4x1">DSub (4x1)</string>
 	<string name="widget.4x2">DSub (4x2)</string>

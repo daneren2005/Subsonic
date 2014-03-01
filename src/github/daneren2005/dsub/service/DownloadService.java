@@ -27,7 +27,10 @@ import static github.daneren2005.dsub.domain.PlayerState.PREPARED;
 import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
 import static github.daneren2005.dsub.domain.PlayerState.STARTED;
 import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
+
+import github.daneren2005.dsub.audiofx.AudioEffectsController;
 import github.daneren2005.dsub.audiofx.EqualizerController;
+import github.daneren2005.dsub.audiofx.LoudnessEnhancerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -128,10 +131,7 @@ public class DownloadService extends Service {
 	private boolean downloadOngoing = false;
 	private DownloadFile lastDownloaded = null;
 
-	private static boolean equalizerAvailable;
-	private static boolean visualizerAvailable;
-	private EqualizerController equalizerController;
-	private VisualizerController visualizerController;
+	private AudioEffectsController effectsController;
 	private boolean showVisualization;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
 	private PositionCache positionCache;
@@ -143,17 +143,11 @@ public class DownloadService extends Service {
 
 	private MediaRouteManager mediaRouter;
 
-	static {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-			equalizerAvailable = true;
-			visualizerAvailable = true;
-		}
-	}
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
+		final SharedPreferences prefs = Util.getPreferences(this);
 		new Thread(new Runnable() {
 			public void run() {
 				Looper.prepare();
@@ -178,6 +172,7 @@ public class DownloadService extends Service {
 					// Froyo or lower
 				}
 
+				effectsController = new AudioEffectsController(DownloadService.this, mediaPlayer);
 				if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
 					getEqualizerController();
 				}
@@ -205,7 +200,6 @@ public class DownloadService extends Service {
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
 		wakeLock.setReferenceCounted(false);
 
-		SharedPreferences prefs = Util.getPreferences(this);
 		try {
 			timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5"));
 		} catch(Throwable e) {
@@ -255,12 +249,7 @@ public class DownloadService extends Service {
 		}
 		mediaPlayerLooper.quit();
 		shufflePlayBuffer.shutdown();
-		if (equalizerController != null) {
-			equalizerController.release();
-		}
-		if (visualizerController != null) {
-			visualizerController.release();
-		}
+		effectsController.release();
 		if (mRemoteControl != null) {
 			mRemoteControl.unregister(this);
 			mRemoteControl = null;
@@ -1079,33 +1068,15 @@ public class DownloadService extends Service {
 	}
 
 	public boolean getEqualizerAvailable() {
-		return equalizerAvailable;
-	}
-
-	public boolean getVisualizerAvailable() {
-		return visualizerAvailable;
+		return effectsController.isAvailable();
 	}
 
 	public EqualizerController getEqualizerController() {
-		if (equalizerAvailable && equalizerController == null) {
-			equalizerController = new EqualizerController(this, mediaPlayer);
-			if (!equalizerController.isAvailable()) {
-				equalizerController = null;
-			} else {
-				equalizerController.loadSettings();
-			}
-		}
-		return equalizerController;
+		return effectsController.getEqualizerController();
 	}
 
 	public VisualizerController getVisualizerController() {
-		if (visualizerAvailable && visualizerController == null) {
-			visualizerController = new VisualizerController(this, mediaPlayer);
-			if (!visualizerController.isAvailable()) {
-				visualizerController = null;
-			}
-		}
-		return visualizerController;
+		return effectsController.getVisualizerController();
 	}
 
 	public MediaRouteSelector getRemoteSelector() {
@@ -1500,7 +1471,11 @@ public class DownloadService extends Service {
 	}
 	private void handleErrorNext(Exception x) {
 		Log.w(TAG, "Next Media player error: " + x, x);
-		nextMediaPlayer.reset();
+		try {
+			nextMediaPlayer.reset();
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to reset next media player", x);
+		}
 		setNextPlayerState(IDLE);
 	}
 

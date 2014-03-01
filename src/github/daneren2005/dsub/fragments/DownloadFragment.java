@@ -464,13 +464,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			downloadService.setShufflePlayEnabled(true);
 		}
 
-		boolean visualizerAvailable = downloadService != null && downloadService.getVisualizerAvailable();
 		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
 
 		if (!equalizerAvailable) {
 			equalizerButton.setVisibility(View.GONE);
-		}
-		if (!visualizerAvailable) {
 			visualizerButton.setVisibility(View.GONE);
 		} else {
 			visualizerView = new VisualizerView(context);
