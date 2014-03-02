@@ -97,6 +97,7 @@ public class DownloadService extends Service {
 	private Looper mediaPlayerLooper;
 	private MediaPlayer mediaPlayer;
 	private MediaPlayer nextMediaPlayer;
+	private int audioSessionId;
 	private boolean nextSetup = false;
 	private boolean isPartial = true;
 	private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
@@ -154,6 +155,7 @@ public class DownloadService extends Service {
 
 				mediaPlayer = new MediaPlayer();
 				mediaPlayer.setWakeMode(DownloadService.this, PowerManager.PARTIAL_WAKE_LOCK);
+				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
 				mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 					@Override
@@ -162,17 +164,19 @@ public class DownloadService extends Service {
 						return false;
 					}
 				});
+				audioSessionId = mediaPlayer.getAudioSessionId();
+				Log.d(TAG, "id: " + audioSessionId);
 
 				try {
 					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
-					i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+					i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId);
 					i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
 					sendBroadcast(i);
 				} catch(Throwable e) {
 					// Froyo or lower
 				}
 
-				effectsController = new AudioEffectsController(DownloadService.this, mediaPlayer);
+				effectsController = new AudioEffectsController(DownloadService.this, audioSessionId);
 				if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
 					getEqualizerController();
 				}
@@ -1222,7 +1226,11 @@ public class DownloadService extends Service {
 			mediaPlayer.setOnCompletionListener(null);
 			mediaPlayer.reset();
 			setPlayerState(IDLE);
-			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			try {
+				mediaPlayer.setAudioSessionId(audioSessionId);
+			} catch(Exception e) {
+				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			}
 			String dataSource = file.getPath();
 			if(isPartial) {
 				if (proxy == null) {
@@ -1305,7 +1313,7 @@ public class DownloadService extends Service {
 			nextMediaPlayer = new MediaPlayer();
 			nextMediaPlayer.setWakeMode(DownloadService.this, PowerManager.PARTIAL_WAKE_LOCK);
 			try {
-				nextMediaPlayer.setAudioSessionId(mediaPlayer.getAudioSessionId());
+				nextMediaPlayer.setAudioSessionId(audioSessionId);
 			} catch(Throwable e) {
 				nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			}

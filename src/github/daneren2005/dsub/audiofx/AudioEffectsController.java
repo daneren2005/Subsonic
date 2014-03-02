@@ -36,9 +36,9 @@ public class AudioEffectsController {
 	private EqualizerController equalizerController;
 	private VisualizerController visualizerController;
 
-    public AudioEffectsController(Context context, MediaPlayer mediaPlayer) {
+    public AudioEffectsController(Context context, int audioSessionId) {
         this.context = context;
-		audioSessionId = mediaPlayer.getAudioSessionId();
+		this.audioSessionId = audioSessionId;
 
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
 			available = true;
