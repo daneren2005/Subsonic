@@ -368,6 +368,19 @@ public class FileUtil {
         }
         return true;
     }
+	public static boolean verifyCanWrite(File dir) {
+		if(ensureDirectoryExistsAndIsReadWritable(dir) {
+			try {
+				File tmp = File.createTempFile("tmp", "tmp", dir);
+				tmp.delete();
+				return true;
+			} catch(Exception e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 
     /**
     * Makes a given filename safe by replacing special characters like slashes ("/" and "\")
