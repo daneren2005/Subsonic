@@ -266,17 +266,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		};
 
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
-			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID)) {
-				SelectDirectoryFragment fragment = new SelectDirectoryFragment();
-				Bundle args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID));
-				args.putString(Constants.INTENT_EXTRA_NAME_NAME, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME));
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
-				fragment.setArguments(args);
-
-				replaceFragment(fragment, currentFragment.getSupportTag());
-			}
-
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ID));
