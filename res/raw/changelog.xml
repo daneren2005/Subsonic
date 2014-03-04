@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.5.4" versioncode="94" releasedate="3/3/2014">
+		<change>Fix cache location reset for Samsung upgrades</change>
+	</release>
 	<release version="4.5.3" versioncode="93" releasedate="2/26/2014">
 		<change>WARNING: Please read the first change!</change>
 		<change>Google changed Android so that apps can only write to a specific location on a SD card for 4.4+.  Samsung is currently upgrading their phones to 4.4, so if you have a Galaxy phone you will probably receive a notification that the cache location has been changed to the only place DSub can write to now.  Everyone else's settings will be left alone, but the default cache location has also been changed.</change>

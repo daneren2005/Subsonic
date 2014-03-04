@@ -369,7 +369,7 @@ public class FileUtil {
         return true;
     }
 	public static boolean verifyCanWrite(File dir) {
-		if(ensureDirectoryExistsAndIsReadWritable(dir) {
+		if(ensureDirectoryExistsAndIsReadWritable(dir)) {
 			try {
 				File tmp = File.createTempFile("tmp", "tmp", dir);
 				tmp.delete();
