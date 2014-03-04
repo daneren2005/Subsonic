@@ -443,7 +443,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		} else {
 			String path = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 			File cacheLocation = new File(path);
-			if(!FileUtil.ensureDirectoryExistsAndIsReadWritable(cacheLocation)) {
+			if(!FileUtil.verifyCanWrite(cacheLocation)) {
 				resetCacheLocation(prefs);
 				Util.info(this, R.string.common_warning, R.string.settings_cache_location_reset);
 			}
