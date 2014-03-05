@@ -411,6 +411,7 @@ public class ChromeCastController extends RemoteController {
 							} else if(mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
 								downloadService.setPlayerState(PlayerState.PREPARING);
 							} else {
+								Log.w(TAG, "Idle reason: " + mediaStatus.getIdleReason());
 								downloadService.setPlayerState(PlayerState.IDLE);
 							}
 							break;
