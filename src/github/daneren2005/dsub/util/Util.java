@@ -1015,7 +1015,7 @@ public final class Util {
      // Set the album art.
         try {
 			ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
-			Bitmap bitmap;
+			Bitmap bitmap = null;
 			if(imageLoader != null) {
 				bitmap = imageLoader.getCachedImage(context, song, false);
 			}
