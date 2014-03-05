@@ -99,6 +99,23 @@ public class ImageLoader {
 		largeUnknownImage = Util.createDrawableFromBitmap(context, bitmap);
 	}
 
+	public Bitmap getCachedImage(Context context, MusicDirectory.Entry entry, boolean large) {
+		if(entry == null || entry.getCoverArt() == null) {
+			return null;
+		}
+
+		int size = large ? imageSizeLarge : imageSizeDefault;
+		Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), size));
+		if(bitmap == null || bitmap.isRecycled()) {
+			bitmap = FileUtil.getAlbumArtBitmap(context, entry, size);
+			String key = getKey(entry.getCoverArt(), size);
+			cache.put(key, bitmap);
+			cache.get(key);
+		}
+
+		return bitmap;
+	}
+
 	public void loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
 		if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled()) {
 			createLargeUnknownImage(view.getContext());

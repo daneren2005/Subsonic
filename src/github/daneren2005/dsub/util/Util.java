@@ -55,6 +55,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -1013,8 +1014,11 @@ public final class Util {
     
      // Set the album art.
         try {
-            int size = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
-            Bitmap bitmap = FileUtil.getAlbumArtBitmap(context, song, size);
+			ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
+			Bitmap bitmap;
+			if(imageLoader != null) {
+				bitmap = imageLoader.getCachedImage(context, song, false);
+			}
             if (bitmap == null) {
              // set default album art
              rv.setImageViewResource(R.id.notification_image, R.drawable.unknown_album);

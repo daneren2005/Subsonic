@@ -41,6 +41,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
+import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
@@ -197,13 +198,12 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 
         // Set the cover art
         try {
-            int size;
+            boolean large = false;
 			if(getLayout() != R.layout.appwidget4x1 && getLayout() != R.layout.appwidget4x2) {
-				size = context.getResources().getDrawable(R.drawable.unknown_album_large).getIntrinsicHeight();
-			} else {
-				size = context.getResources().getDrawable(R.drawable.appwidget_art_default).getIntrinsicHeight();
+				large = true;
 			}
-            Bitmap bitmap = currentPlaying == null ? null : FileUtil.getAlbumArtBitmap(context, currentPlaying, size);
+			ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
+            Bitmap bitmap = imageLoader == null ? null : imageLoader.getCachedImage(context, currentPlaying, large);
 
             if (bitmap == null) {
                 // Set default cover art
