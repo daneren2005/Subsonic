@@ -1206,7 +1206,7 @@ public class DownloadService extends Service {
 		bufferAndPlay(position, true);
 	}
 	private synchronized void bufferAndPlay(int position, boolean start) {
-		if(playerState != PREPARED) {
+		if(!currentPlaying.isCompleteFileAvailable()) {
 			reset();
 
 			bufferTask = new BufferTask(currentPlaying, position, start);
