@@ -41,9 +41,21 @@
 				android:background="@android:color/transparent">
 
 				<LinearLayout
+					android:id="@+id/download_visualizer_view_layout"
+					android:orientation="horizontal"
+					android:layout_width="fill_parent"
+					android:layout_height="60dip"
+					android:layout_marginLeft="12dip"
+					android:layout_marginRight="12dip"
+					android:layout_gravity="center_horizontal"
+					android:layout_above="@+id/download_other_controls_wrapper"/>
+
+				<LinearLayout
+					android:id="@+id/download_other_controls_wrapper"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_centerHorizontal="true">
+					android:layout_centerHorizontal="true"
+					android:layout_above="@+id/download_song_title">
 
 					<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 						android:id="@+id/download_other_controls_layout"
@@ -73,16 +85,6 @@
 							android:src="?attr/bookmark"/>
 					</LinearLayout>
 				</LinearLayout>
-
-				<LinearLayout
-						android:id="@+id/download_visualizer_view_layout"
-						android:orientation="horizontal"
-						android:layout_width="fill_parent"
-						android:layout_height="60dip"
-						android:layout_marginLeft="12dip"
-						android:layout_marginRight="12dip"
-						android:layout_gravity="center_horizontal"
-						android:layout_above="@+id/download_song_title"/>
 
 				<TextView
 						android:id="@+id/download_song_title"
