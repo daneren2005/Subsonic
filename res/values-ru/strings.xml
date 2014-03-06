@@ -112,7 +112,6 @@
     <string name="download.menu_remove">Убрать из очереди</string>
     <string name="download.menu_remove_all">Очистить</string>
     <string name="download.menu_screen_on">Включить подсветку</string>
-    <string name="download.menu_screen_off">Отключать подсветку</string>
     <string name="download.menu_shuffle">Перемешать</string>
 	<string name="download.menu_toggle">Переключатель</string>
     <string name="download.menu_save">Сохранить список</string>

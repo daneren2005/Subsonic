@@ -160,7 +160,6 @@
     <string name="download.menu_remove">Eliminar de la cola</string>
     <string name="download.menu_remove_all">Borrar todo</string>
     <string name="download.menu_screen_on">Pantalla encendida</string>
-    <string name="download.menu_screen_off">Pantalla apagada</string>
     <string name="download.menu_shuffle">Aleatorio</string>
 	<string name="download.menu_toggle">Cambiar</string>
     <string name="download.menu_save">Guardar lista de reproducción</string>

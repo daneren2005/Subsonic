@@ -162,7 +162,6 @@
     <string name="download.menu_remove">Eltávolítás a várólistáról</string>
     <string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
-    <string name="download.menu_screen_off">Kijelző ki</string>
     <string name="download.menu_shuffle">Kevert sorrendben</string>
 	<string name="download.menu_toggle">Váltás</string>
     <string name="download.menu_save">Mentés lejátszási listába</string>

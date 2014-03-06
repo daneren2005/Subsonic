@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-	  xmlns:compat="http://schemas.android.com/apk/res-auto">
+	  xmlns:compat="http://schemas.android.com/apk/res-auto"
+	  android:checkableBehavior="all">
+
     <item
         android:id="@+id/menu_shuffle"
         android:icon="?attr/shuffle"
@@ -28,7 +30,8 @@
 
     <item
         android:id="@+id/menu_screen_on_off"
-        android:title="@string/download.menu_screen_on"/>
+        android:title="@string/download.menu_screen_on"
+		android:checkable="true"/>
 		
 	<item
         android:id="@+id/menu_toggle_timer"
