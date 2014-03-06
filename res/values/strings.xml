@@ -5,10 +5,10 @@
     <string name="common.ok">OK</string>
     <string name="common.save">Save</string>
     <string name="common.cancel">Cancel</string>
-    <string name="common.play_now">Play now</string>
-	<string name="common.play_shuffled">Play shuffled</string>
-    <string name="common.play_next">Play next</string>
-    <string name="common.play_last">Play last</string>
+    <string name="common.play_now">Play Now</string>
+	<string name="common.play_shuffled">Play Shuffled</string>
+    <string name="common.play_next">Play Next</string>
+    <string name="common.play_last">Play Last</string>
 	<string name="common.download">Cache</string>
     <string name="common.pin">Permanent Cache</string>
     <string name="common.delete">Delete</string>
