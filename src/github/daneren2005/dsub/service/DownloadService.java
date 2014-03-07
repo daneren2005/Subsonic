@@ -39,7 +39,7 @@ import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
-import github.daneren2005.dsub.util.CancellableTask;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MediaRouteManager;
 import github.daneren2005.dsub.util.ShufflePlayBuffer;
@@ -654,7 +654,7 @@ public class DownloadService extends Service {
 		if(index < size() && index != -1 && index != currentPlayingIndex) {
 			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
-			nextPlayingTask.start();
+			nextPlayingTask.execute();
 		} else {
 			nextPlaying = null;
 		}
@@ -1215,7 +1215,7 @@ public class DownloadService extends Service {
 			reset();
 
 			bufferTask = new BufferTask(currentPlaying, position, start);
-			bufferTask.start();
+			bufferTask.execute();
 		} else {
 			doPlay(currentPlaying, position, start);
 		}
@@ -1404,7 +1404,7 @@ public class DownloadService extends Service {
 							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
 							reset();
 							bufferTask = new BufferTask(downloadFile, pos, true);
-							bufferTask.start();
+							bufferTask.execute();
 						}
 					}
 					checkDownloads();
@@ -1659,7 +1659,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private class BufferTask extends CancellableTask {
+	private class BufferTask extends SilentBackgroundTask {
 		private final DownloadFile downloadFile;
 		private final int position;
 		private final long expectedFileSize;
@@ -1682,7 +1682,7 @@ public class DownloadService extends Service {
 		}
 
 		@Override
-		public void execute() {
+		public void doInBackground() {
 			setPlayerState(DOWNLOADING);
 
 			while (!bufferComplete()) {
@@ -1708,7 +1708,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private class CheckCompletionTask extends CancellableTask {
+	private class CheckCompletionTask extends SilentBackgroundTask {
 		private final DownloadFile downloadFile;
 		private final File partialFile;
 
@@ -1722,7 +1722,7 @@ public class DownloadService extends Service {
 		}
 
 		@Override
-		public void execute() {
+		public void doInBackground() {
 			if(downloadFile == null) {
 				return;
 			}
