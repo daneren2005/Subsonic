@@ -21,8 +21,6 @@ package github.daneren2005.dsub.service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -57,7 +55,6 @@ public class DownloadServiceLifecycleSupport {
 	private final DownloadService downloadService;
 	private Looper eventLooper;
 	private Handler eventHandler;
-	private ScheduledExecutorService executorService;
 	private BroadcastReceiver headsetEventReceiver;
 	private BroadcastReceiver ejectEventReceiver;
 	private PhoneStateListener phoneStateListener;
@@ -102,20 +99,6 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	public void onCreate() {
-		Runnable downloadChecker = new Runnable() {
-			@Override
-			public void run() {
-				try {
-					downloadService.checkDownloads();
-				} catch (Throwable x) {
-					Log.e(TAG, "checkDownloads() failed.", x);
-				}
-			}
-		};
-
-		executorService = Executors.newSingleThreadScheduledExecutor();
-		executorService.scheduleWithFixedDelay(downloadChecker, 5, 5, TimeUnit.SECONDS);
-
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -225,7 +208,6 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	public void onDestroy() {
-		executorService.shutdown();
 		eventLooper.quit();
 		serializeDownloadQueueNow();
 		downloadService.unregisterReceiver(ejectEventReceiver);

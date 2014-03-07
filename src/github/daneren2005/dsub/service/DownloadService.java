@@ -165,7 +165,6 @@ public class DownloadService extends Service {
 					}
 				});
 				audioSessionId = mediaPlayer.getAudioSessionId();
-				Log.d(TAG, "id: " + audioSessionId);
 
 				try {
 					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
@@ -520,6 +519,7 @@ public class DownloadService extends Service {
 	public synchronized void setOnline(boolean online) {
 		if(online) {
 			mediaRouter.addOfflineProviders();
+			checkDownloads();
 		} else {
 			mediaRouter.removeOfflineProviders();
 			clearIncomplete();
@@ -781,6 +781,7 @@ public class DownloadService extends Service {
 			proxy.stop();
 			proxy = null;
 		}
+		checkDownloads();
 	}
 
 	/** Plays or resumes the playback, depending on the current player state. */
@@ -1169,6 +1170,10 @@ public class DownloadService extends Service {
 			Util.hidePlayingNotification(this, this, handler);
 		}
 
+		if(remoteState == RemoteControlState.LOCAL) {
+			checkDownloads();
+		}
+
 		if(routeId != null) {
 			handler.post(new Runnable() {
 				@Override
@@ -1402,6 +1407,7 @@ public class DownloadService extends Service {
 							bufferTask.start();
 						}
 					}
+					checkDownloads();
 				}
 			}
 		});
