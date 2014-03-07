@@ -651,7 +651,7 @@ public class DownloadService extends Service {
 			nextPlayingTask.cancel();
 			nextPlayingTask = null;
 		}
-		if(index < size() && index != -1) {
+		if(index < size() && index != -1 && index != currentPlayingIndex) {
 			nextPlaying = downloadList.get(index);
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.start();
