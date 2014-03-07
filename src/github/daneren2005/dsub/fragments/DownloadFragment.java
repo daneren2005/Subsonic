@@ -380,13 +380,16 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			}
 		});
 
-		toggleListButton.setOnClickListener(new View.OnClickListener() {
+		View.OnClickListener toggleListener = new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				toggleFullscreenAlbumArt();
 				setControlsVisible(true);
 			}
-		});
+		};
+
+		toggleListButton.setOnClickListener(toggleListener);
+		albumArtImageView.setOnClickListener(toggleListener);
 
 		progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
