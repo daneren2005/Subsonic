@@ -191,7 +191,7 @@ public final class SyncUtil {
 					.setSmallIcon(R.drawable.stat_notify_sync)
 					.setContentTitle(context.getResources().getString(R.string.sync_title))
 					.setContentText(content)
-					.setStyle(new NotificationCompat.BigTextStyle().bigText(content))
+					.setStyle(new NotificationCompat.BigTextStyle().bigText(content.replace(", ", "\n")))
 					.setOngoing(false);
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
