@@ -45,6 +45,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     private final Context context;
 	protected boolean cancelled = false;
+	protected OnCancelListener cancelListener;
 	protected Task task;
 
 	private static final int DEFAULT_CONCURRENCY = 5;
@@ -138,9 +139,23 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		if(task != null) {
 			task.cancel();
 		}
+		if(cancelListener != null) {
+			cancelListener.onCancel();
+		}
 	}
-	protected boolean isCancelled() {
+	public boolean isCancelled() {
 		return cancelled;
+	}
+	public void setOnCancelListener(OnCancelListener listener) {
+		cancelListener = listener;
+	}
+
+	public boolean isRunning() {
+		if(task == null) {
+			return false;
+		} else {
+			return task.isRunning();
+		}
 	}
 
     @Override
@@ -172,8 +187,11 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 						@Override
 						public void run() {
 							onDone(result);
+							taskStart.set(false);
 						}
 					});
+				} else {
+					taskStart.set(false);
 				}
 			} catch(InterruptedException interrupt) {
 				if(taskStart.get()) {
@@ -191,11 +209,14 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 						public void run() {
 							try {
 								onError(t);
+								taskStart.set(false);
 							} catch(Exception e) {
 								// Don't care
 							}
 						}
 					});
+				} else {
+					taskStart.set(false);
 				}
 			}
 		}
@@ -211,6 +232,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		}
 		public void onError(Throwable t) {
 			error(t);
+		}
+
+		public boolean isRunning() {
+			return taskStart.get();
 		}
 	}
 
@@ -238,4 +263,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		}
 	}
 
+	public static interface OnCancelListener {
+		void onCancel();
+	}
 }

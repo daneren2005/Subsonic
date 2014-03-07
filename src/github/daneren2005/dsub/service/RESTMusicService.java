@@ -91,7 +91,7 @@ import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.VersionParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
 import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
-import github.daneren2005.dsub.util.CancellableTask;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -686,7 +686,7 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, CancellableTask task) throws Exception {
+    public HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
 
         String url = getRestUrl(context, "stream");
 
@@ -1328,7 +1328,7 @@ public class RESTMusicService implements MusicService {
 
     private HttpResponse getResponseForURL(Context context, String url, HttpParams requestParams,
                                            List<String> parameterNames, List<Object> parameterValues,
-                                           List<Header> headers, ProgressListener progressListener, CancellableTask task) throws Exception {
+                                           List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
         Log.d(TAG, "Connections in pool: " + connManager.getConnectionsInPool());
 
         // If not too many parameters, extract them to the URL rather than relying on the HTTP POST request being
@@ -1351,7 +1351,7 @@ public class RESTMusicService implements MusicService {
 
     private HttpResponse executeWithRetry(Context context, String url, String originalUrl, HttpParams requestParams,
                                           List<String> parameterNames, List<Object> parameterValues,
-                                          List<Header> headers, ProgressListener progressListener, CancellableTask task) throws IOException {
+                                          List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws IOException {
 		// Strip out sensitive information from log
         Log.i(TAG, stripUrlInfo(url));
 
@@ -1370,19 +1370,14 @@ public class RESTMusicService implements MusicService {
 
             if (task != null) {
                 // Attempt to abort the HTTP request if the task is cancelled.
-                task.setOnCancelListener(new CancellableTask.OnCancelListener() {
+                task.setOnCancelListener(new SilentBackgroundTask.OnCancelListener() {
                     @Override
                     public void onCancel() {
-						new Thread(new Runnable() {
-							public void run() {
-								try {
-									cancelled.set(true);
-									request.abort();
-								} catch(Exception e) {
-									Log.e(TAG, "Failed to stop http task");
-								}
-							}
-						}).start();
+						try {
+							request.abort();
+						} catch(Exception e) {
+							Log.e(TAG, "Failed to stop http task");
+						}
                     }
                 });
             }

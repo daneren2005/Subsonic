@@ -32,7 +32,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
-import github.daneren2005.dsub.util.CancellableTask;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.CacheCleaner;
@@ -151,13 +151,12 @@ public class DownloadFile implements BufferFile {
 
     public synchronized void download() {
         preDownload();
-        downloadTask.start();
+        downloadTask.execute();
     }
     public synchronized void downloadNow(MusicService musicService) {
     	preDownload();
 		downloadTask.setMusicService(musicService);
-    	downloadTask.execute();
-		
+    	downloadTask.doInBackground();
     }
     private void preDownload() {
     	FileUtil.createDirectoryForParent(saveFile);
@@ -165,7 +164,7 @@ public class DownloadFile implements BufferFile {
 		if(!partialFile.exists()) {
 			bitRate = getActualBitrate();
 		}
-		downloadTask = new DownloadTask();
+		downloadTask = new DownloadTask(context);
     }
 
     public synchronized void cancelDownload() {
@@ -320,11 +319,15 @@ public class DownloadFile implements BufferFile {
         return "DownloadFile (" + song + ")";
     }
 
-    private class DownloadTask extends CancellableTask {
+    private class DownloadTask extends SilentBackgroundTask {
 		private MusicService musicService;
 
+		public DownloadTask(Context context) {
+			super(context);
+		}
+
         @Override
-        public void execute() {
+        public void doInBackground() {
 
             InputStream in = null;
             FileOutputStream out = null;
