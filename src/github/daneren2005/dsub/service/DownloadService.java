@@ -1008,7 +1008,7 @@ public class DownloadService extends Service {
 			scrobbler.scrobble(this, currentPlaying, true);
 		}
 
-		if(playerState == STARTED && positionCache == null) {
+		if(playerState == STARTED && positionCache == null && remoteState == RemoteControlState.LOCAL) {
 			positionCache = new PositionCache();
 			Thread thread = new Thread(positionCache, "PositionCache");
 			thread.start();
