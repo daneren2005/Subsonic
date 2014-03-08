@@ -116,8 +116,8 @@ public class DownloadService extends Service {
 	private int currentPlayingIndex = -1;
 	private DownloadFile nextPlaying;
 	private DownloadFile currentDownloading;
-	private CancellableTask bufferTask;
-	private CancellableTask nextPlayingTask;
+	private SilentBackgroundTask bufferTask;
+	private SilentBackgroundTask nextPlayingTask;
 	private PlayerState playerState = IDLE;
 	private PlayerState nextPlayerState = IDLE;
 	private boolean shufflePlay;
@@ -1659,7 +1659,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private class BufferTask extends SilentBackgroundTask {
+	private class BufferTask extends SilentBackgroundTask<Void> {
 		private final DownloadFile downloadFile;
 		private final int position;
 		private final long expectedFileSize;
@@ -1667,6 +1667,7 @@ public class DownloadService extends Service {
 		private final boolean start;
 
 		public BufferTask(DownloadFile downloadFile, int position, boolean start) {
+			super(instance);
 			this.downloadFile = downloadFile;
 			this.position = position;
 			partialFile = downloadFile.getPartialFile();
@@ -1682,16 +1683,18 @@ public class DownloadService extends Service {
 		}
 
 		@Override
-		public void doInBackground() {
+		public Void doInBackground() {
 			setPlayerState(DOWNLOADING);
 
 			while (!bufferComplete()) {
 				Util.sleepQuietly(1000L);
 				if (isCancelled()) {
-					return;
+					return null;
 				}
 			}
 			doPlay(downloadFile, position, start);
+
+			return null;
 		}
 
 		private boolean bufferComplete() {
@@ -1708,11 +1711,12 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private class CheckCompletionTask extends SilentBackgroundTask {
+	private class CheckCompletionTask extends SilentBackgroundTask<Void> {
 		private final DownloadFile downloadFile;
 		private final File partialFile;
 
 		public CheckCompletionTask(DownloadFile downloadFile) {
+			super(instance);
 			this.downloadFile = downloadFile;
 			if(downloadFile != null) {
 				partialFile = downloadFile.getPartialFile();
@@ -1722,9 +1726,9 @@ public class DownloadService extends Service {
 		}
 
 		@Override
-		public void doInBackground() {
+		public Void doInBackground() {
 			if(downloadFile == null) {
-				return;
+				return null;
 			}
 
 			// Do an initial sleep so this prepare can't compete with main prepare
@@ -1732,7 +1736,7 @@ public class DownloadService extends Service {
 			while (!bufferComplete()) {
 				Util.sleepQuietly(5000L);
 				if (isCancelled()) {
-					return;
+					return null;
 				}
 			}
 
@@ -1742,6 +1746,7 @@ public class DownloadService extends Service {
 					setupNext(downloadFile);
 				}
 			});
+			return null;
 		}
 
 		private boolean bufferComplete() {

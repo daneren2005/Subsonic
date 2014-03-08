@@ -319,7 +319,7 @@ public class DownloadFile implements BufferFile {
         return "DownloadFile (" + song + ")";
     }
 
-    private class DownloadTask extends SilentBackgroundTask {
+    private class DownloadTask extends SilentBackgroundTask<Void> {
 		private MusicService musicService;
 
 		public DownloadTask(Context context) {
@@ -327,7 +327,7 @@ public class DownloadFile implements BufferFile {
 		}
 
         @Override
-        public void doInBackground() {
+        public Void doInBackground() {
 
             InputStream in = null;
             FileOutputStream out = null;
@@ -347,7 +347,7 @@ public class DownloadFile implements BufferFile {
 
                 if (saveFile.exists()) {
                     Log.i(TAG, saveFile + " already exists. Skipping.");
-                    return;
+                    return null;
                 }
                 if (completeFile.exists()) {
                     if (save) {
@@ -359,7 +359,7 @@ public class DownloadFile implements BufferFile {
                     } else {
                         Log.i(TAG, completeFile + " already exists. Skipping.");
                     }
-                    return;
+                    return null;
                 }
 
 				if(musicService == null) {
@@ -447,6 +447,8 @@ public class DownloadFile implements BufferFile {
 					((DownloadService) DownloadService.getInstance()).checkDownloads();
 				}
             }
+
+			return null;
         }
 
         @Override
