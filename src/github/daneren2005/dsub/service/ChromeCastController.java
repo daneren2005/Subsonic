@@ -39,6 +39,7 @@ import java.io.IOException;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
@@ -98,7 +99,7 @@ public class ChromeCastController extends RemoteController {
 
 			@Override
 			public void onApplicationDisconnected(int errorCode) {
-				shutdown();
+				shutdownInternal();
 			}
 
 		};
@@ -168,6 +169,11 @@ public class ChromeCastController extends RemoteController {
 			proxy.stop();
 			proxy = null;
 		}
+	}
+
+	private void shutdownInternal() {
+		// This will call this.shutdown() indirectly
+		downloadService.setRemoteEnabled(RemoteControlState.LOCAL, null);
 	}
 
 	@Override
@@ -375,7 +381,7 @@ public class ChromeCastController extends RemoteController {
 							applicationStarted = true;
 							setupChannel();
 						} else {
-							shutdown();
+							shutdownInternal();
 						}
 					}
 				});
@@ -444,7 +450,7 @@ public class ChromeCastController extends RemoteController {
 	private class ConnectionFailedListener implements GoogleApiClient.OnConnectionFailedListener {
 		@Override
 		public void onConnectionFailed(ConnectionResult result) {
-			shutdown();
+			shutdownInternal();
 		}
 	}
 }
