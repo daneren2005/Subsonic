@@ -1120,6 +1120,10 @@ public class DownloadService extends Service {
 			setPlayerState(PlayerState.IDLE);
 			remoteController.shutdown();
 			remoteController = null;
+
+			if(newState == RemoteCtronlState.LOCAL) {
+				mediaRouter.setDefaultRoute();
+			}
 		}
 
 		remoteState = newState;

@@ -80,6 +80,10 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 	}
 
+	public void setDefaultRoute() {
+		router.selectRoute(router.getDefaultRoute());
+	}
+
 	public void startScan() {
 		router.addCallback(selector, this, MediaRouter.CALLBACK_FLAG_PERFORM_ACTIVE_SCAN);
 	}
