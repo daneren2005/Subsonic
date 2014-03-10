@@ -57,7 +57,7 @@ public class AlbumListAdapter extends EndlessAdapter {
 		MusicDirectory result;
 		if(("genres".equals(type) && Util.checkServerVersion(context, "1.10.0")) || "years".equals(type)) {
 			result = service.getAlbumList(type, extra, size, offset, context, null);
-		} else if("genres".equals(type)) {
+		} else if("genres".equals(type) || "genres-songs".equals(type)) {
 			result = service.getSongsByGenre(extra, size, offset, context, null);
 		} else {
 			result = service.getAlbumList(type, size, offset, context, null);
