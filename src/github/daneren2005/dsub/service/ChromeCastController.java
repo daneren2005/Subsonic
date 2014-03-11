@@ -178,7 +178,9 @@ public class ChromeCastController extends RemoteController {
 
 	@Override
 	public void updatePlaylist() {
-
+		if(downloadService.getCurrentPlaying() == null) {
+			startSong(null, false, 0);
+		}
 	}
 
 	@Override
@@ -221,7 +223,14 @@ public class ChromeCastController extends RemoteController {
 
 	void startSong(DownloadFile currentPlaying, boolean autoStart, int position) {
 		if(currentPlaying == null) {
-			// Don't start anything
+			try {
+				if (mediaPlayer != null && !error) {
+					mediaPlayer.stop(apiClient);
+				}
+			} catch(IOException e) {
+				Log.e(TAG, "Failed to stop RemoteMediaPlayer", e);
+			}
+			downloadService.setPlayerState(PlayerState.IDLE);
 			return;
 		}
 		downloadService.setPlayerState(PlayerState.PREPARING);

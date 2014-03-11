@@ -1121,7 +1121,7 @@ public class DownloadService extends Service {
 			remoteController.shutdown();
 			remoteController = null;
 
-			if(newState == RemoteCtronlState.LOCAL) {
+			if(newState == RemoteControlState.LOCAL) {
 				mediaRouter.setDefaultRoute();
 			}
 		}
