@@ -404,6 +404,10 @@ public class ChromeCastController extends RemoteController {
 				@Override
 				public void onStatusUpdated() {
 					MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
+					if(mediaStatus == null) {
+						return;
+					}
+
 					switch(mediaStatus.getPlayerState()) {
 						case MediaStatus.PLAYER_STATE_PLAYING:
 							if(ignoreNextPaused) {
