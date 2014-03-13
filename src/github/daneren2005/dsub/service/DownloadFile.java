@@ -408,7 +408,11 @@ public class DownloadFile implements BufferFile {
 				} else {
 					if(save) {
 						Util.renameFile(partialFile, saveFile);
-						mediaStoreService.saveInMediaStore(DownloadFile.this);
+						try {
+							mediaStoreService.saveInMediaStore(DownloadFile.this);
+						} catch(Exception e) {
+							Log.w(TAG, "Failed to save in media store", e);
+						}
 					} else {
 						Util.renameFile(partialFile, completeFile);
 					}
@@ -428,6 +432,7 @@ public class DownloadFile implements BufferFile {
                 Util.delete(completeFile);
                 Util.delete(saveFile);
                 if (!isCancelled()) {
+					failed++;
                     failedDownload = true;
                     Log.w(TAG, "Failed to download '" + song + "'.", x);
                 }
