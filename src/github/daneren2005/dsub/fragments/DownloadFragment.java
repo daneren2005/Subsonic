@@ -546,6 +546,14 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			if (downloadFile.getSong().getGrandParent() == null) {
 				menu.findItem(R.id.menu_show_artist).setVisible(false);
 			}
+
+			SharedPreferences prefs = Util.getPreferences(context);
+			if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
+				menu.setGroupVisible(R.id.hide_star, false);
+			}
+			if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true)) {
+				menu.setGroupVisible(R.id.hide_share, false);
+			}
 		}
 	}
 
@@ -715,6 +723,10 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 			case R.id.menu_info:
 				displaySongInfo(song.getSong());
 				return true;
+			case R.id.menu_share:
+				songs = new ArrayList<MusicDirectory.Entry>(1);
+				songs.add(song.getSong());
+				createShare(songs);
 			default:
 				return false;
 		}
