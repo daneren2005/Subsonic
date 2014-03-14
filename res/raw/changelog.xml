@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
 	<release version="4.5.5" versioncode="96" releasedate="3/14/2014">
-		<change>If you are normally having problems with ChromeCast randomly stopping, please check if it is still an issue.  If it is, I added some debug info, so please send me a log from Home -> Send Logs.</change>
 		<change>Now Playing screen improvements</change>
 		<change>Bass Booster/Voice Booster added in the EQ settings</change>
 		<change>Equalizer fixes and improvements</change>
