@@ -52,4 +52,9 @@ if(child instanceof Checkable && !(v instanceof Checkable)) {
 	}
 }
 v.addView(child);
+
+In DragSortController.java line 380, first thing in onScroll:
+if(e1 == null || e2 == null) {
+	return false;
+}
 	
