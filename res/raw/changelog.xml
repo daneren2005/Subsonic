@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.5.5 Beta" versioncode="95" releasedate="3/11/2014">
+	<release version="4.5.5" versioncode="96" releasedate="3/14/2014">
 		<change>If you are normally having problems with ChromeCast randomly stopping, please check if it is still an issue.  If it is, I added some debug info, so please send me a log from Home -> Send Logs.</change>
 		<change>Now Playing screen improvements</change>
 		<change>Bass Booster/Voice Booster added in the EQ settings</change>
 		<change>Equalizer fixes and improvements</change>
 		<change>Added Show Artist to Now Playing screen</change>
 		<change>Screen On/Off changed to a checkbox</change>
+		<change>Click on album art opens list view</change>
 		<change>ChromeCast bug fixes</change>
 		<change>Fix genres not auto adding more if songs > 20 and albums = 0</change>
+		<change>Fix rotating screen after using Show Album</change>
 		<change>Improve memory usage</change>
 	</release>
 	<release version="4.5.4" versioncode="94" releasedate="3/3/2014">
