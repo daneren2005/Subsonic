@@ -131,6 +131,12 @@ public class ShufflePlayBuffer {
 				FileUtil.serialize(context, buffer, CACHE_FILENAME);
 			}
 		} catch (Exception x) {
+			// Give it one more try before quitting
+			if(lastCount != -2) {
+				lastCount = -2;
+			} else if(lastCount == -2) {
+				lastCount = 0;
+			}
 			Log.w(TAG, "Failed to refill shuffle play buffer.", x);
 		}
 	}
