@@ -227,7 +227,7 @@ public class ChromeCastController extends RemoteController {
 				if (mediaPlayer != null && !error) {
 					mediaPlayer.stop(apiClient);
 				}
-			} catch(IOException e) {
+			} catch(Exception e) {
 				Log.e(TAG, "Failed to stop RemoteMediaPlayer", e);
 			}
 			downloadService.setPlayerState(PlayerState.IDLE);
