@@ -736,7 +736,7 @@ public class DownloadService extends Service {
 			}
 			setCurrentPlaying(index, start);
 			if (start && remoteState != RemoteControlState.LOCAL) {
-				remoteController.changeTrack(index, downloadList.get(index));
+				remoteController.changeTrack(index, currentPlaying);
 			}
 			if (remoteState == RemoteControlState.LOCAL) {
 				bufferAndPlay(position, start);
