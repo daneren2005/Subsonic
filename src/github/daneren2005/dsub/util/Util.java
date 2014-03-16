@@ -1317,7 +1317,7 @@ public final class Util {
                 intent.putExtra("state", "stop");
 				avrcpIntent.putExtra("playing", false);
                 break;
-            case PAUSED:
+            case PAUSED: case PREPARED:
                 intent.putExtra("state", "pause");
 				avrcpIntent.putExtra("playing", false);
                 break;
@@ -1330,7 +1330,9 @@ public final class Util {
         }
 		addTrackInfo(context, song, avrcpIntent);
 
-        context.sendBroadcast(intent);
+		if(state != PlayerState.PREPARED) {
+			context.sendBroadcast(intent);
+		}
 		context.sendBroadcast(avrcpIntent);
     }
 

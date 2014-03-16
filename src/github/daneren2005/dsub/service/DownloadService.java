@@ -759,6 +759,7 @@ public class DownloadService extends Service {
 	}
 	private synchronized void playNext(boolean start) {
 		// Swap the media players since nextMediaPlayer is ready to play
+		Util.broadcastPlaybackStatusChange(this, currentPlaying.getSong(), PlayerState.PREPARED);
 		if(start) {
 			nextMediaPlayer.start();
 		} else if(!nextMediaPlayer.isPlaying()) {
