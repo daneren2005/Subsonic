@@ -49,6 +49,9 @@ public abstract class RemoteController {
 	public abstract void setVolume(boolean up);
 	
 	public abstract int getRemotePosition();
+	public int getRemoteDuration() {
+		return 0;
+	}
 
 	protected abstract class RemoteTask {
 		abstract RemoteStatus execute() throws Exception;

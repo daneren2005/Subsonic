@@ -86,7 +86,7 @@ public class ChromeCastController extends RemoteController {
 			@Override
 			public void onApplicationStatusChanged() {
 				if (apiClient != null) {
-					Log.d(TAG, "onApplicationStatusChanged: " + Cast.CastApi.getApplicationStatus(apiClient));
+					Log.i(TAG, "onApplicationStatusChanged: " + Cast.CastApi.getApplicationStatus(apiClient));
 				}
 			}
 
@@ -216,6 +216,15 @@ public class ChromeCastController extends RemoteController {
 	public int getRemotePosition() {
 		if(mediaPlayer != null) {
 			return (int) (mediaPlayer.getApproximateStreamPosition() / 1000L);
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public int getRemoteDuration() {
+		if(mediaPlayer != null) {
+			return (int) (mediaPlayer.getStreamDuration() / 1000L);
 		} else {
 			return 0;
 		}

@@ -956,10 +956,14 @@ public class DownloadService extends Service {
 			}
 		}
 		if (playerState != IDLE && playerState != DOWNLOADING && playerState != PlayerState.PREPARING) {
-			try {
-				return mediaPlayer.getDuration();
-			} catch (Exception x) {
-				handleError(x);
+			if(remoteState == RemoteControlState.LOCAL) {
+				try {
+					return mediaPlayer.getDuration();
+				} catch (Exception x) {
+					handleError(x);
+				}
+			} else {
+				return remoteController.getRemoteDuration() * 1000;
 			}
 		}
 		return 0;
