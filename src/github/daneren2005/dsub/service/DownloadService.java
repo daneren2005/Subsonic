@@ -1691,11 +1691,11 @@ public class DownloadService extends Service {
 		}
 
 		@Override
-		public Void doInBackground() {
+		public Void doInBackground() throws InterruptedException {
 			setPlayerState(DOWNLOADING);
 
 			while (!bufferComplete()) {
-				Util.sleepQuietly(1000L);
+				Thread.sleep(1000L);
 				if (isCancelled()) {
 					return null;
 				}
@@ -1734,15 +1734,15 @@ public class DownloadService extends Service {
 		}
 
 		@Override
-		public Void doInBackground() {
+		public Void doInBackground()  throws InterruptedException {
 			if(downloadFile == null) {
 				return null;
 			}
 
 			// Do an initial sleep so this prepare can't compete with main prepare
-			Util.sleepQuietly(5000L);
+			Thread.sleep(5000L);
 			while (!bufferComplete()) {
-				Util.sleepQuietly(5000L);
+				Thread.sleep(5000L);
 				if (isCancelled()) {
 					return null;
 				}
