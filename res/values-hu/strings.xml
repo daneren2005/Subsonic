@@ -7,8 +7,8 @@
     <string name="common.cancel">Mégse</string>
     <string name="common.play_now">Lejátszás</string>
 	<string name="common.play_shuffled">Lejátszás kevert sorrendben</string>
-    <string name="common.play_next">Lejátszás következőként</string>
-    <string name="common.play_last">Lejátszás utolsóként</string>
+    <string name="common.play_next">Sorbaállítás következőnek</string>
+    <string name="common.play_last">Sorbaállítás utolsónak</string>
 	<string name="common.download">Letöltés gyorsítótárba</string>
     <string name="common.pin">Letöltés tárolásra (megőrzés)</string>
     <string name="common.delete">Törlés</string>
@@ -66,12 +66,12 @@
 	<string name="menu.refresh">Frissítés</string>
 	<string name="menu.select">Összes kijelölése</string>
 	<string name="menu.play">Lejátszás</string>
-	<string name="menu.play_last">Lejátszás utolsóként</string>
+	<string name="menu.play_last">Sorbaállítás utolsónak</string>
     <string name="menu.exit">Kilépés</string>
     <string name="menu.settings">Beállítások</string>
     <string name="menu.help">Súgó</string>
 	<string name="menu.about">Névjegy</string>
-	<string name="menu.add_playlist">Mentés lejátszási listába</string>
+	<string name="menu.add_playlist">Hozzáadás a lejátszási listához</string>
 	<string name="menu.remove_playlist">Eltávolítás a lejátszási listából</string>
 	<string name="menu.deleted_playlist">%s lejátszási lista törölve</string>
 	<string name="menu.deleted_playlist_error">%s lejátszási lista törlése sikertelen!</string>
@@ -92,7 +92,7 @@
 	<string name="playlist.updated_info">%s lejátszási lista módosítva</string>
 	<string name="playlist.updated_info_error">%s lejátszási lista módosítása sikertelen!</string>
 	<string name="playlist.overwrite">Létező lejátszási lista felülírása</string>
-	<string name="playlist.add_to">Mentés lejátszási listába</string>
+	<string name="playlist.add_to">Hozzáadás a lejátszási listához</string>
 	<string name="playlist.create_new">Új lejátszási lista</string>
 	<string name="playlist.delete">Lejátszási lista törlése</string>
 
@@ -156,17 +156,17 @@
 	<string name="download.shuffle_loading">Kevert sorrendű lista betöltése...</string>
     <string name="download.playerstate_downloading">Letöltés - %s</string>
     <string name="download.playerstate_buffering">Pufferelés</string>
-    <string name="download.playerstate_playing_shuffle">Kevert lejátszás</string>
+    <string name="download.playerstate_playing_shuffle">Sorrend keverése</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszöveg</string>
     <string name="download.menu_remove">Eltávolítás a várólistáról</string>
     <string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
-    <string name="download.menu_shuffle">Kevert sorrendben</string>
+    <string name="download.menu_shuffle">Sorrend keverése</string>
 	<string name="download.menu_toggle">Váltás</string>
-    <string name="download.menu_save">Mentés lejátszási listába</string>
-    <string name="download.menu_shuffle_notification">Kevert sorrendű lejátszás</string>
-    <string name="download.playlist_title">Mentés lejátszási listába</string>
+    <string name="download.menu_save">Lejátszási lista mentése</string>
+    <string name="download.menu_shuffle_notification">Lejátszás kevert sorrendben</string>
+    <string name="download.playlist_title">Lejátszási lista mentése</string>
     <string name="download.playlist_name">Lejátszási lista neve:</string>
     <string name="download.playlist_saving">\"%s\" lejátszási lista mentése...</string>
     <string name="download.playlist_done">Lejátszási lista mentése sikeres.</string>
@@ -184,7 +184,7 @@
     <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Kérjük, engedélyezze a jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
 	<string name="download.show_downloading">Letöltési sor megjelenítése</string>
 	<string name="download.show_now_playing">Lejátszó megjelenítése</string>
-	<string name="download.timer_length">Időhossz</string>
+	<string name="download.timer_length">Időhossz:</string>
 	<string name="download.start_timer">Időzítő indítása</string>
 	<string name="download.stop_timer">Időzítő megállítása</string>
 	<string name="download.need_download">A videót először le kell tölteni!</string>
@@ -271,7 +271,7 @@
 	<string name="settings.theme_black">Fekete</string>
 	<string name="settings.theme_holo">Holo</string>
 	<string name="settings.theme_fullscreen">Teljes képernyős</string>
-	<string name="settings.theme_fullscreen_summary">Annyi UI elem elrejtése, amennyit az Android megenged.</string>
+	<string name="settings.theme_fullscreen_summary">Teljes képernyős lejátszó megjelenítése (értesítési sáv rejtése).</string>
 	<string name="settings.track_title">Dalsorszám megjelenítése #</string>
 	<string name="settings.track_summary">Dalsorszám megjelenítése # a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
@@ -369,7 +369,7 @@
 	<string name="settings.podcasts_enabled_summary">Podcastok menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.bookmarks_enabled">Könyvjelzők engedélyezése</string>
 	<string name="settings.bookmarks_enabled_summary">Könyvjelzők menüpont megjelenítése az elhúzható oldalsávon.</string>
-	<string name="settings.shares_enabled">Megosztás engedélyezése</string>
+	<string name="settings.shares_enabled">Megosztások engedélyezése</string>
 	<string name="settings.shares_enabled_summary">Megosztások menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.sync_title">Szinkronizálás</string>
 	<string name="settings.sync_enabled">Szinkronizálás engedélyezése</string>
@@ -392,8 +392,8 @@
 	<string name="settings.sync_notification">Szinkronizálási értesítések</string>
 	<string name="settings.sync_notification_summary">Értesítés megjelenítése, ha új média került szinkronizálásra.</string>
 	<string name="settings.menu_options.title">Opcionális menübeállítások</string>
-	<string name="settings.menu_options.play_next_summary">Lejátszás következőként opció megjelenítése a menüben.</string>
-	<string name="settings.menu_options.play_last_summary">Lejátszás utolsóként opció megjelenítése a menüben.</string>
+	<string name="settings.menu_options.play_next_summary">Sorbaállítás következőnek opció megjelenítése a menüben.</string>
+	<string name="settings.menu_options.play_last_summary">Sorbaállítás utolsónak opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.star_summary">Csillagozás opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.shared_summary">Megosztás opció megjelenítése a menüben.</string>
 	<string name="settings.browse_by_tags">Böngészés ID3 Tag használatával</string>
@@ -452,6 +452,10 @@
     <string name="equalizer.label">Equalizer</string>
     <string name="equalizer.enabled">Engedélyezve</string>
     <string name="equalizer.preset">Profil kiválasztása</string>
+	<string name="equalizer.bass_booster">Bass Booster</string>
+	<string name="equalizer.voice_booster">Voice Booster</string>
+	<string name="equalizer.db_size">%d dB</string>
+	<string name="equalizer.bass_size">%d mille</string>
 
 	<string name="widget.4x1">DSub (4x1)</string>
 	<string name="widget.4x2">DSub (4x2)</string>
