@@ -186,9 +186,6 @@ public class EqualizerController {
 			for (short i = 0; i < bandLevels.length; i++) {
 				equalizer.setBandLevel(i, bandLevels[i]);
 			}
-			if (preset >= 0 && preset < equalizer.getNumberOfPresets()) {
-				equalizer.usePreset(preset);
-			}
 			equalizer.setEnabled(enabled);
 			if(bass != 0) {
 				boost.setEnabled(true);
