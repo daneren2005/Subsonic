@@ -542,8 +542,6 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 			if (downloadFile.getSong().getParent() == null) {
 				menu.findItem(R.id.menu_show_album).setVisible(false);
-			}
-			if (downloadFile.getSong().getGrandParent() == null) {
 				menu.findItem(R.id.menu_show_artist).setVisible(false);
 			}
 
@@ -589,6 +587,9 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 						albumId = entry.getArtistId();
 					} else {
 						albumId = entry.getGrandParent();
+						if(albumId == null) {
+							intent.putExtra(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getParent());
+						}
 					}
 					albumName = entry.getArtist();
 					intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, true);

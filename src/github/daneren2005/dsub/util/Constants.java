@@ -39,6 +39,7 @@ public final class Constants {
     public static final String INTENT_EXTRA_NAME_NAME = "subsonic.name";
 	public static final String INTENT_EXTRA_NAME_PARENT_ID = "subsonic.parent_id";
     public static final String INTENT_EXTRA_NAME_PARENT_NAME = "subsonic.parent_name";
+	public static final String INTENT_EXTRA_NAME_CHILD_ID = "subsonic.child.id";
     public static final String INTENT_EXTRA_NAME_ARTIST = "subsonic.artist";
     public static final String INTENT_EXTRA_NAME_TITLE = "subsonic.title";
     public static final String INTENT_EXTRA_NAME_AUTOPLAY = "subsonic.playall";

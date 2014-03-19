@@ -68,6 +68,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	boolean refreshListing = false;
 	boolean showAll = false;
 	boolean restoredInstance = false;
+	boolean lookupParent = false;
 	
 	public SelectDirectoryFragment() {
 		super();
@@ -130,6 +131,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
 			artist = args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false);
+
+			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);
+			if(childId != null) {
+				id = childId;
+				lookupParent = true;
+			}
 			if(entries == null) {
 				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
 			}
@@ -390,7 +397,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		new LoadTask() {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				return getMusicDirectory(id, name, refresh, service, this);
+				MusicDirectory dir = getMusicDirectory(id, name, refresh, service, this);
+
+				if(lookupParent) {
+					dir = getMusicDirectory(dir.getParent(), name, refresh, service, this);
+				}
+
+				return dir;
 			}
 			
 			@Override
