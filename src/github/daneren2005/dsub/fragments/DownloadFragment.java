@@ -600,15 +600,20 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 				if(Util.isOffline(context)) {
 					try {
-						// This should only be succesful if this is a online song in offline mode
+						// This should only be successful if this is a online song in offline mode
 						Integer.parseInt(entry.getParent());
 						String root = FileUtil.getMusicDirectory(context).getPath();
 						String id = root + "/" + entry.getPath();
 						id = id.substring(0, id.lastIndexOf("/"));
-						intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, id);
+						if(menuItemId == R.id.menu_show_album) {
+							intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, id);
+						}
 						id = id.substring(0, id.lastIndexOf("/"));
-						intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_ID, id);
-						intent.putExtra(Constants.INTENT_EXTRA_NAME_PARENT_NAME, entry.getArtist());
+						if(menuItemId != R.id.menu_show_album) {
+							intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, id);
+							intent.putExtra(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+							intent.removeExtra(Constants.INTENT_EXTRA_NAME_CHILD_ID);
+						}
 					} catch(Exception e) {
 						// Do nothing, entry.getParent() is fine
 					}
