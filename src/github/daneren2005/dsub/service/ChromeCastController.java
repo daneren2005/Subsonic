@@ -62,6 +62,7 @@ public class ChromeCastController extends RemoteController {
 	private boolean waitingForReconnect = false;
 	private boolean error = false;
 	private boolean ignoreNextPaused = false;
+	private String sessionId;
 
 	private FileProxy proxy;
 	private String rootLocation;
@@ -363,17 +364,35 @@ public class ChromeCastController extends RemoteController {
 	private class ConnectionCallbacks implements GoogleApiClient.ConnectionCallbacks {
 		private boolean isPlaying;
 		private int position;
+		private ResultCallback<Cast.ApplicationConnectionResult> resultCallback;
 
 		ConnectionCallbacks(boolean isPlaying, int position) {
 			this.isPlaying = isPlaying;
 			this.position = position;
+
+			resultCallback = new ResultCallback<Cast.ApplicationConnectionResult>() {
+				@Override
+				public void onResult(Cast.ApplicationConnectionResult result) {
+					Status status = result.getStatus();
+					if (status.isSuccess()) {
+						ApplicationMetadata applicationMetadata = result.getApplicationMetadata();
+						sessionId = result.getSessionId();
+						String applicationStatus = result.getApplicationStatus();
+						boolean wasLaunched = result.getWasLaunched();
+
+						applicationStarted = true;
+						setupChannel();
+					} else {
+						shutdownInternal();
+					}
+				}
+			};
 		}
 
 		@Override
 		public void onConnected(Bundle connectionHint) {
 			if (waitingForReconnect) {
-				waitingForReconnect = false;
-				// reconnectChannels();
+				reconnectApplication();
 			} else {
 				launchApplication();
 			}
@@ -381,30 +400,22 @@ public class ChromeCastController extends RemoteController {
 
 		@Override
 		public void onConnectionSuspended(int cause) {
+			Log.w(TAG, "Connection suspended");
 			waitingForReconnect = true;
 		}
 
 		void launchApplication() {
 			try {
-				Cast.CastApi.launchApplication(apiClient, CastCompat.APPLICATION_ID, false).setResultCallback(new ResultCallback<Cast.ApplicationConnectionResult>() {
-					@Override
-					public void onResult(Cast.ApplicationConnectionResult result) {
-						Status status = result.getStatus();
-						if (status.isSuccess()) {
-							ApplicationMetadata applicationMetadata = result.getApplicationMetadata();
-							String sessionId = result.getSessionId();
-							String applicationStatus = result.getApplicationStatus();
-							boolean wasLaunched = result.getWasLaunched();
-
-							applicationStarted = true;
-							setupChannel();
-						} else {
-							shutdownInternal();
-						}
-					}
-				});
+				Cast.CastApi.launchApplication(apiClient, CastCompat.APPLICATION_ID, false).setResultCallback(resultCallback);
 			} catch (Exception e) {
 				Log.e(TAG, "Failed to launch application", e);
+			}
+		}
+		void reconnectApplication() {
+			try {
+				Cast.CastApi.joinApplication(apiClient, CastCompat.APPLICATION_ID, sessionId).setResultCallback(resultCallback);
+			} catch (Exception e) {
+				Log.e(TAG, "Failed to reconnect application", e);
 			}
 		}
 		void setupChannel() {
@@ -465,7 +476,11 @@ public class ChromeCastController extends RemoteController {
 			}
 
 			DownloadFile currentPlaying = downloadService.getCurrentPlaying();
-			startSong(currentPlaying, isPlaying, position);
+			if(!waitingForReconnect) {
+				startSong(currentPlaying, isPlaying, position);
+			} else {
+				waitingForReconnect = false;
+			}
 		}
 	}
 
