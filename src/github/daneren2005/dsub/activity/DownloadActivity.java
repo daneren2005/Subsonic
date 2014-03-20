@@ -53,7 +53,7 @@ public class DownloadActivity extends SubsonicActivity {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent me) {
-		if(currentFragment != null) {
+		if(currentFragment != null && currentFragment.getGestureDetector() != null) {
 			return currentFragment.getGestureDetector().onTouchEvent(me);
 		} else {
 			return false;
