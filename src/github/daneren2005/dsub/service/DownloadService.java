@@ -1459,7 +1459,11 @@ public class DownloadService extends Service {
 
 	public void setVolume(float volume) {
 		if(mediaPlayer != null && (playerState == STARTED || playerState == PAUSED || playerState == STOPPED)) {
-			mediaPlayer.setVolume(volume, volume);
+			try {
+				mediaPlayer.setVolume(volume, volume);
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to set volume");
+			}
 		}
 	}
 
