@@ -164,7 +164,11 @@ public class DownloadService extends Service {
 						return false;
 					}
 				});
-				audioSessionId = mediaPlayer.getAudioSessionId();
+				try {
+					audioSessionId = mediaPlayer.getAudioSessionId();
+				} catch(Throwable e) {
+					// Froyo or lower
+				}
 
 				try {
 					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
