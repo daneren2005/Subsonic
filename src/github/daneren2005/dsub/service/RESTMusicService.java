@@ -1351,7 +1351,7 @@ public class RESTMusicService implements MusicService {
 
     private HttpResponse executeWithRetry(Context context, String url, String originalUrl, HttpParams requestParams,
                                           List<String> parameterNames, List<Object> parameterValues,
-                                          List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws IOException {
+                                          List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		// Strip out sensitive information from log
         Log.i(TAG, stripUrlInfo(url));
 
@@ -1424,7 +1424,7 @@ public class RESTMusicService implements MusicService {
                 }
                 Log.w(TAG, "Got IOException (" + attempts + "), will retry", x);
                 increaseTimeouts(requestParams);
-                Util.sleepQuietly(2000L);
+				Thread.sleep(2000L);
             }
         }
     }

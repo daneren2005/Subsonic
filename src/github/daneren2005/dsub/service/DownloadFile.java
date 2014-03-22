@@ -156,7 +156,11 @@ public class DownloadFile implements BufferFile {
     public synchronized void downloadNow(MusicService musicService) {
     	preDownload();
 		downloadTask.setMusicService(musicService);
-    	downloadTask.doInBackground();
+		try {
+			downloadTask.doInBackground();
+		} catch(InterruptedException e) {
+			// This should never be reached
+		}
     }
     private void preDownload() {
     	FileUtil.createDirectoryForParent(saveFile);
@@ -327,8 +331,7 @@ public class DownloadFile implements BufferFile {
 		}
 
         @Override
-        public Void doInBackground() {
-
+        public Void doInBackground() throws InterruptedException {
             InputStream in = null;
             FileOutputStream out = null;
             PowerManager.WakeLock wakeLock = null;
@@ -421,15 +424,17 @@ public class DownloadFile implements BufferFile {
 				}
 
             } catch(SubsonicRESTException x) {
-            	Util.close(out);
-                Util.delete(completeFile);
-                Util.delete(saveFile);
-                if (!isCancelled()) {
-                    failed++;
-                    failedDownload = true;
-                    Log.w(TAG, "Failed to download '" + song + "'.", x);
-                }
-            } catch (Exception x) {
+				Util.close(out);
+				Util.delete(completeFile);
+				Util.delete(saveFile);
+				if (!isCancelled()) {
+					failed++;
+					failedDownload = true;
+					Log.w(TAG, "Failed to download '" + song + "'.", x);
+				}
+			} catch(InterruptedException x) {
+				throw x;
+			} catch (Exception x) {
                 Util.close(out);
                 Util.delete(completeFile);
                 Util.delete(saveFile);
