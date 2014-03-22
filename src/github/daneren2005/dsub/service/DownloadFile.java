@@ -398,6 +398,8 @@ public class DownloadFile implements BufferFile {
 
 					if (isCancelled()) {
 						throw new Exception("Download of '" + song + "' was cancelled");
+					} else if(partialFile.length() == 0) {
+						throw new Exception("Download of '" + song + "' failed.  File is 0 bytes long.");
 					}
 
 					downloadAndSaveCoverArt(musicService);
@@ -449,7 +451,7 @@ public class DownloadFile implements BufferFile {
 				}
                 new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
 				if(DownloadService.getInstance() != null) {
-					((DownloadService) DownloadService.getInstance()).checkDownloads();
+					DownloadService.getInstance().checkDownloads();
 				}
             }
 

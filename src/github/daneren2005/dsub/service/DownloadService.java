@@ -1704,7 +1704,7 @@ public class DownloadService extends Service {
 
 			while (!bufferComplete()) {
 				Thread.sleep(1000L);
-				if (isCancelled()) {
+				if (isCancelled() || downloadFile.isFailedMax()) {
 					return null;
 				}
 			}
