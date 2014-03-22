@@ -1186,12 +1186,29 @@ public class DownloadService extends Service {
 		}
 
 		if(routeId != null) {
-			handler.post(new Runnable() {
+			final Runnable delayedReconnect = new Runnable() {
 				@Override
 				public void run() {
 					RouteInfo info = mediaRouter.getRouteForId(routeId);
 					if(info == null) {
 						setRemoteState(RemoteControlState.LOCAL, null);
+					} else if(newState == RemoteControlState.CHROMECAST) {
+						RemoteController controller = mediaRouter.getRemoteController(info);
+						if(controller != null) {
+							setRemoteState(RemoteControlState.CHROMECAST, controller);
+						}
+					}
+					mediaRouter.stopScan();
+				}
+			};
+
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					mediaRouter.startScan();
+					RouteInfo info = mediaRouter.getRouteForId(routeId);
+					if(info == null) {
+						handler.postDelayed(delayedReconnect, 2000L);
 					} else if(newState == RemoteControlState.CHROMECAST) {
 						RemoteController controller = mediaRouter.getRemoteController(info);
 						if(controller != null) {
