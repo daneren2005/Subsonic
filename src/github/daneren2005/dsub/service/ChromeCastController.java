@@ -86,7 +86,7 @@ public class ChromeCastController extends RemoteController {
 		castClientListener = new Cast.Listener() {
 			@Override
 			public void onApplicationStatusChanged() {
-				if (apiClient != null) {
+				if (apiClient != null && apiClient.isConnected()) {
 					Log.i(TAG, "onApplicationStatusChanged: " + Cast.CastApi.getApplicationStatus(apiClient));
 				}
 			}
@@ -238,7 +238,7 @@ public class ChromeCastController extends RemoteController {
 					mediaPlayer.stop(apiClient);
 				}
 			} catch(Exception e) {
-				Log.e(TAG, "Failed to stop RemoteMediaPlayer", e);
+				// Just means it didn't need to be stopped
 			}
 			downloadService.setPlayerState(PlayerState.IDLE);
 			return;
@@ -392,6 +392,7 @@ public class ChromeCastController extends RemoteController {
 		@Override
 		public void onConnected(Bundle connectionHint) {
 			if (waitingForReconnect) {
+				Log.i(TAG, "Reconnecting");
 				reconnectApplication();
 			} else {
 				launchApplication();
@@ -401,6 +402,8 @@ public class ChromeCastController extends RemoteController {
 		@Override
 		public void onConnectionSuspended(int cause) {
 			Log.w(TAG, "Connection suspended");
+			isPlaying = downloadService.getPlayerState() == PlayerState.STARTED;
+			position = getRemotePosition();
 			waitingForReconnect = true;
 		}
 
@@ -419,55 +422,52 @@ public class ChromeCastController extends RemoteController {
 			}
 		}
 		void setupChannel() {
-			mediaPlayer = new RemoteMediaPlayer();
-			mediaPlayer.setOnStatusUpdatedListener(new RemoteMediaPlayer.OnStatusUpdatedListener() {
-				@Override
-				public void onStatusUpdated() {
-					MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
-					if(mediaStatus == null) {
-						return;
-					}
+			if(!waitingForReconnect) {
+				mediaPlayer = new RemoteMediaPlayer();
+				mediaPlayer.setOnStatusUpdatedListener(new RemoteMediaPlayer.OnStatusUpdatedListener() {
+					@Override
+					public void onStatusUpdated() {
+						MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
+						if (mediaStatus == null) {
+							return;
+						}
 
-					switch(mediaStatus.getPlayerState()) {
-						case MediaStatus.PLAYER_STATE_PLAYING:
-							if(ignoreNextPaused) {
-								ignoreNextPaused = false;
-							}
-							downloadService.setPlayerState(PlayerState.STARTED);
-							break;
-						case MediaStatus.PLAYER_STATE_PAUSED:
-							if(!ignoreNextPaused) {
-								downloadService.setPlayerState(PlayerState.PAUSED);
-							}
-							break;
-						case MediaStatus.PLAYER_STATE_BUFFERING:
-							downloadService.setPlayerState(PlayerState.PREPARING);
-							break;
-						case MediaStatus.PLAYER_STATE_IDLE:
-							if(mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
-								downloadService.setPlayerState(PlayerState.COMPLETED);
-								downloadService.next();
-							} else if(mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
+						switch (mediaStatus.getPlayerState()) {
+							case MediaStatus.PLAYER_STATE_PLAYING:
+								if (ignoreNextPaused) {
+									ignoreNextPaused = false;
+								}
+								downloadService.setPlayerState(PlayerState.STARTED);
+								break;
+							case MediaStatus.PLAYER_STATE_PAUSED:
+								if (!ignoreNextPaused) {
+									downloadService.setPlayerState(PlayerState.PAUSED);
+								}
+								break;
+							case MediaStatus.PLAYER_STATE_BUFFERING:
 								downloadService.setPlayerState(PlayerState.PREPARING);
-							} else if(mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_ERROR) {
-								Log.e(TAG, "Idle due to unknown error");
-								downloadService.setPlayerState(PlayerState.COMPLETED);
-								downloadService.next();
-							} else {
-								Log.w(TAG, "Idle reason: " + mediaStatus.getIdleReason());
-								downloadService.setPlayerState(PlayerState.IDLE);
-							}
-							break;
+								break;
+							case MediaStatus.PLAYER_STATE_IDLE:
+								if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
+									downloadService.setPlayerState(PlayerState.COMPLETED);
+									downloadService.next();
+								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
+									if (downloadService.getPlayerState() != PlayerState.PREPARING) {
+										downloadService.setPlayerState(PlayerState.PREPARING);
+									}
+								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_ERROR) {
+									Log.e(TAG, "Idle due to unknown error");
+									downloadService.setPlayerState(PlayerState.COMPLETED);
+									downloadService.next();
+								} else {
+									Log.w(TAG, "Idle reason: " + mediaStatus.getIdleReason());
+									downloadService.setPlayerState(PlayerState.IDLE);
+								}
+								break;
+						}
 					}
-				}
-			});
-			mediaPlayer.setOnMetadataUpdatedListener(new RemoteMediaPlayer.OnMetadataUpdatedListener() {
-				@Override
-				public void onMetadataUpdated() {
-					MediaInfo mediaInfo = mediaPlayer.getMediaInfo();
-					// TODO: Do I care about this?
-				}
-			});
+				});
+			}
 
 			try {
 				Cast.CastApi.setMessageReceivedCallbacks(apiClient, mediaPlayer.getNamespace(), mediaPlayer);
@@ -475,10 +475,11 @@ public class ChromeCastController extends RemoteController {
 				Log.e(TAG, "Exception while creating channel", e);
 			}
 
-			DownloadFile currentPlaying = downloadService.getCurrentPlaying();
 			if(!waitingForReconnect) {
+				DownloadFile currentPlaying = downloadService.getCurrentPlaying();
 				startSong(currentPlaying, isPlaying, position);
-			} else {
+			}
+			if(waitingForReconnect) {
 				waitingForReconnect = false;
 			}
 		}
