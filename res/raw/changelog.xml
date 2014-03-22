@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.5.6" versioncode="97" releasedate="3/22/2014">
+		<change>Fix issues with Chromecast reconnecting</change>
+		<change>Work around for Samsung's bluetooth metadata for 4.3+ devices</change>
+		<change>Work around for Show Artist not working when playing from playlists</change>
+		<change>Fix a crash on Froyo devices</change>
+		<change>Fix for some songs showing as downloaded when the server only sent a 0 length file</change>
+	</release>
 	<release version="4.5.5" versioncode="96" releasedate="3/14/2014">
 		<change>Now Playing screen improvements</change>
 		<change>Bass Booster/Voice Booster added in the EQ settings</change>
