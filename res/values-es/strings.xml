@@ -194,7 +194,6 @@
 	<string name="download.downloading_summary">En este momento: %1$s</string>
 	<string name="download.downloading_summary_expanded">Actual: %1$s
 		\nTamaño medio: %2$s
-		\nVelocidad media: %3$s kbps
 	</string>
 	<string name="download.failed_to_load">Error al cargar</string>
     

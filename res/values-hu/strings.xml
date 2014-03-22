@@ -195,8 +195,7 @@
 	<string name="download.downloading_title">%1$d dal letöltése</string>
 	<string name="download.downloading_summary">Aktuális: %1$s</string>
 	<string name="download.downloading_summary_expanded">Aktuális: %1$s
-		\nBecsült méret: %2$s
-		\nÁtlagos sebesség: %3$s kbps</string>
+		\nBecsült méret: %2$s</string>
 	<string name="download.failed_to_load">Failed to load</string>
 
 	<string name="sync.title">DSub: Új média érhető el!</string>
