@@ -7,3 +7,4 @@ nbandroid/*
 .idea
 subsonic-android.iml
 releases/
+proguard_logs/
