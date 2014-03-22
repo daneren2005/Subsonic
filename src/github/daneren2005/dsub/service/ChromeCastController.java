@@ -93,8 +93,12 @@ public class ChromeCastController extends RemoteController {
 
 			@Override
 			public void onVolumeChanged() {
-				if (apiClient != null) {
-					gain = Cast.CastApi.getVolume(apiClient);
+				if (apiClient != null && applicationStarted) {
+					try {
+						gain = Cast.CastApi.getVolume(apiClient);
+					} catch(Exception e) {
+						Log.w(TAG, "Failed to get volume");
+					}
 				}
 			}
 
