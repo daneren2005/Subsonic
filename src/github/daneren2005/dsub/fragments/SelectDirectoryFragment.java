@@ -399,7 +399,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			protected MusicDirectory load(MusicService service) throws Exception {
 				MusicDirectory dir = getMusicDirectory(id, name, refresh, service, this);
 
-				if(lookupParent) {
+				if(lookupParent && dir.getParent() != null) {
 					dir = getMusicDirectory(dir.getParent(), name, refresh, service, this);
 				}
 
