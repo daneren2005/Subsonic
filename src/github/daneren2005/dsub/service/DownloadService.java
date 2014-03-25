@@ -1186,13 +1186,6 @@ public class DownloadService extends Service {
 			}
 		}
 
-		SharedPreferences prefs = Util.getPreferences(this);
-		if(currentPlaying != null && prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
-			Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
-		} else {
-			Util.hidePlayingNotification(this, this, handler);
-		}
-
 		if(remoteState == RemoteControlState.LOCAL) {
 			checkDownloads();
 		}
