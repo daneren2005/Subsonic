@@ -900,6 +900,12 @@ public class DownloadService extends Service {
 			if (playerState == STARTED) {
 				if (remoteState != RemoteControlState.LOCAL) {
 					remoteController.stop();
+					handler.post(new Runnable() {
+						@Override
+						public void run() {
+							mediaRouter.setDefaultRoute();
+						}
+					});
 				} else {
 					mediaPlayer.pause();
 				}

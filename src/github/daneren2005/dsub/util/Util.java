@@ -39,6 +39,7 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -48,6 +49,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
@@ -979,14 +981,15 @@ public final class Util {
         notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 
 		boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
+		boolean remote = downloadService.isRemoteEnabled();
         if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
 			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-            setupViews(expandedContentView,context,song, playing);
+            setupViews(expandedContentView,context,song, playing, remote);
             notification.bigContentView = expandedContentView;
         }
         
         RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
-        setupViews(smallContentView, context, song, playing);
+        setupViews(smallContentView, context, song, playing, remote);
         notification.contentView = smallContentView;
         
         Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
@@ -1005,7 +1008,7 @@ public final class Util {
         DSubWidgetProvider.notifyInstances(context, downloadService, playing);
     }
     
-    private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean playing){
+    private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean playing, boolean remote){
     
      // Use the same text for the ticker and the expanded notification
         String title = song.getTitle();
@@ -1060,6 +1063,11 @@ public final class Util {
 			previous = R.id.control_previous;
 			pause = R.id.control_pause;
 			next = R.id.control_next;
+		}
+
+		if(remote && close == 0) {
+			close = R.id.notification_close;
+			rv.setViewVisibility(close, View.VISIBLE);
 		}
 
 		if(previous > 0) {
