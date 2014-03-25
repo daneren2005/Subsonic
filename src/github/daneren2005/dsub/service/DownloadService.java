@@ -870,7 +870,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private void onSongCompleted() {
+	public void onSongCompleted() {
 		play(getNextPlayingIndex());
 	}
 

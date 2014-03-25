@@ -454,7 +454,7 @@ public class ChromeCastController extends RemoteController {
 							case MediaStatus.PLAYER_STATE_IDLE:
 								if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
 									downloadService.setPlayerState(PlayerState.COMPLETED);
-									downloadService.next();
+									downloadService.onSongCompleted();
 								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
 									if (downloadService.getPlayerState() != PlayerState.PREPARING) {
 										downloadService.setPlayerState(PlayerState.PREPARING);
