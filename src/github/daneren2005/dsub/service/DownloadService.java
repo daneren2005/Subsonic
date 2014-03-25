@@ -728,9 +728,15 @@ public class DownloadService extends Service {
 		play(index, start, 0);
 	}
 	private synchronized void play(int index, boolean start, int position) {
-		if (index < 0 || index >= size()) {
+		int size = this.size();
+		if (index < 0 || index >= size) {
 			reset();
-			setCurrentPlaying(null, false);
+			if(index >= size && size != 0) {
+				setCurrentPlaying(0, false);
+				Util.hidePlayingNotification(this, this, handler);
+			} else {
+				setCurrentPlaying(null, false);
+			}
 			lifecycleSupport.serializeDownloadQueue();
 		} else {
 			if(nextPlayingTask != null) {
