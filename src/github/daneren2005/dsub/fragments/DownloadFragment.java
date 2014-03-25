@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteButton;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -1169,7 +1170,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 					if(!seekInProgress) {
 						progressBar.setProgress(millisPlayed);
 					}
-					progressBar.setEnabled(currentPlaying.isWorkDone() || isJukeboxEnabled);
+					progressBar.setEnabled((currentPlaying.isWorkDone() || isJukeboxEnabled) && playerState != PlayerState.PREPARING);
 				} else {
 					positionTextView.setText("0:00");
 					durationTextView.setText("-:--");
