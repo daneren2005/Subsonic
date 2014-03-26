@@ -35,7 +35,7 @@ import github.daneren2005.dsub.service.DownloadService;
  * Created by Scott on 11/28/13.
  */
 public class JukeboxRouteProvider extends MediaRouteProvider {
-	public static final String CATEGORY_SAMPLE_ROUTE = "github.daneren2005.dsub.SERVER_JUKEBOX";
+	public static final String CATEGORY_JUKEBOX_ROUTE = "github.daneren2005.dsub.SERVER_JUKEBOX";
 	private static int MAX_VOLUME = 10;
 
 	private DownloadService downloadService;
@@ -46,7 +46,7 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 
 		// Create intents
 		IntentFilter routeIntentFilter = new IntentFilter();
-		routeIntentFilter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+		routeIntentFilter.addCategory(CATEGORY_JUKEBOX_ROUTE);
 		routeIntentFilter.addAction(MediaControlIntent.ACTION_START_SESSION);
 		routeIntentFilter.addAction(MediaControlIntent.ACTION_GET_SESSION_STATUS);
 		routeIntentFilter.addAction(MediaControlIntent.ACTION_END_SESSION);
@@ -81,7 +81,7 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 
 		@Override
 		public boolean onControlRequest(Intent intent, android.support.v7.media.MediaRouter.ControlRequestCallback callback) {
-			if (intent.hasCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)) {
+			if (intent.hasCategory(CATEGORY_JUKEBOX_ROUTE)) {
 				return true;
 			} else {
 				return false;

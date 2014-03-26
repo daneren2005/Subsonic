@@ -19,6 +19,10 @@ import android.support.v7.media.MediaControlIntent;
 import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
+import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +60,14 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	public MediaRouteManager(DownloadService downloadService) {
 		this.downloadService = downloadService;
 		router = MediaRouter.getInstance(downloadService);
+
+		// Check if play services is available
+		int result = GooglePlayServicesUtil.isGooglePlayServicesAvailable(downloadService);
+		if(result != ConnectionResult.SUCCESS){
+			Log.w(TAG, "No play services, failed with result: " + result);
+			castAvailable = false;
+		}
+
 		addProviders();
 		buildSelector();
 	}
@@ -140,7 +152,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	}
 	private void buildSelector() {
 		MediaRouteSelector.Builder builder = new MediaRouteSelector.Builder();
-		builder.addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+		builder.addControlCategory(JukeboxRouteProvider.CATEGORY_JUKEBOX_ROUTE);
 		if(castAvailable) {
 			builder.addControlCategory(CastCompat.getCastControlCategory());
 		}
