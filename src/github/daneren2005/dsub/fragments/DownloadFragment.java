@@ -73,6 +73,11 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	private static final int COLOR_BUTTON_DISABLED = Color.rgb(206, 213, 211);
 	private static final int INCREMENT_TIME = 5000;
 
+	private static final int ACTION_PREVIOUS = 1;
+	private static final int ACTION_NEXT = 2;
+	private static final int ACTION_REWIND = 3;
+	private static final int ACTION_FORWARD = 4;
+
 	private ViewFlipper playlistFlipper;
 	private TextView emptyTextView;
 	private TextView songTitleTextView;
@@ -1338,46 +1343,62 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		DownloadService downloadService = getDownloadService();
+		final DownloadService downloadService = getDownloadService();
 		if (downloadService == null || e1 == null || e2 == null) {
 			return false;
 		}
 
 		// Right to Left swipe
+		int action = 0;
 		if (e1.getX() - e2.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
-			warnIfNetworkOrStorageUnavailable();
-			downloadService.next();
-			onCurrentChanged();
-			onProgressChanged();
-			return true;
+			action = ACTION_NEXT;
 		}
-
 		// Left to Right swipe
 		else if (e2.getX() - e1.getX() > swipeDistance && Math.abs(velocityX) > swipeVelocity) {
-			warnIfNetworkOrStorageUnavailable();
-			downloadService.previous();
-			onCurrentChanged();
-			onProgressChanged();
-			return true;
+			action = ACTION_PREVIOUS;
 		}
-
 		// Top to Bottom swipe
-		 else if (e2.getY() - e1.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
-			 warnIfNetworkOrStorageUnavailable();
-			 downloadService.seekTo(downloadService.getPlayerPosition() + DownloadService.FAST_FORWARD);
-			 onProgressChanged();
-			 return true;
-		 }
-
+		else if (e2.getY() - e1.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
+			action = ACTION_FORWARD;
+		}
 		// Bottom to Top swipe
 		else if (e1.getY() - e2.getY() > swipeDistance && Math.abs(velocityY) > swipeVelocity) {
-			warnIfNetworkOrStorageUnavailable();
-			downloadService.seekTo(downloadService.getPlayerPosition() - DownloadService.REWIND);
-			onProgressChanged();
-			return true;
+			action = ACTION_REWIND;
 		}
 
-		return false;
+		if(action > 0) {
+			final int performAction = action;
+			warnIfNetworkOrStorageUnavailable();
+			new SilentBackgroundTask<Void>(context) {
+				@Override
+				protected Void doInBackground() throws Throwable {
+					switch(performAction) {
+						case ACTION_NEXT:
+							downloadService.next();
+							break;
+						case ACTION_PREVIOUS:
+							downloadService.previous();
+							break;
+						case ACTION_FORWARD:
+							downloadService.seekTo(downloadService.getPlayerPosition() + DownloadService.FAST_FORWARD);
+							break;
+						case ACTION_REWIND:
+							downloadService.seekTo(downloadService.getPlayerPosition() - DownloadService.REWIND);
+							break;
+					}
+
+					onProgressChanged();
+					if(performAction == ACTION_NEXT || performAction == ACTION_PREVIOUS) {
+						onCurrentChanged();
+					}
+					return null;
+				}
+			}.execute();
+
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private void toggleNowPlaying() {
