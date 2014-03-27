@@ -65,13 +65,13 @@ public class EqualizerFragment extends SubsonicFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.equalizer, container, false);
 
-		DownloadService service = DownloadService.getInstance();
-		equalizerController = service.getEqualizerController();
-		equalizer = equalizerController.getEqualizer();
-		bass = equalizerController.getBassBoost();
-		loudnessEnhancer = equalizerController.getLoudnessEnhancerController();
-
 		try {
+			DownloadService service = DownloadService.getInstance();
+			equalizerController = service.getEqualizerController();
+			equalizer = equalizerController.getEqualizer();
+			bass = equalizerController.getBassBoost();
+			loudnessEnhancer = equalizerController.getLoudnessEnhancerController();
+
 			initEqualizer();
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to initialize EQ", e);
