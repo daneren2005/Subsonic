@@ -1266,7 +1266,7 @@ public class DownloadService extends Service {
 			setPlayerState(IDLE);
 			try {
 				mediaPlayer.setAudioSessionId(audioSessionId);
-			} catch(Exception e) {
+			} catch(Throwable e) {
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			}
 			String dataSource = file.getPath();
