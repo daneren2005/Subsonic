@@ -200,6 +200,14 @@ public class EqualizerFragment extends SubsonicFragment {
 		if(loudnessBar != null) {
 			loudnessBar.setEnabled(isEnabled);
 		}
+		if(changedEnabled && !isEnabled) {
+			bass.setStrength((short) 0);
+			bassBar.setProgress(0);
+			if(loudnessBar != null) {
+				loudnessEnhancer.setGain(0);
+				loudnessBar.setProgress(0);
+			}
+		}
 
 		if(!isEnabled) {
 			masterLevel = 0;
