@@ -44,9 +44,9 @@ public class MusicDirectoryEntryParser extends AbstractParser {
         entry.setStarred(get("starred") != null);
         entry.setYear(getInteger("year"));
         entry.setGenre(get("genre"));
+		entry.setAlbum(get("album"));
 
         if (!entry.isDirectory()) {
-            entry.setAlbum(get("album"));
 			entry.setAlbumId(get("albumId"));
             entry.setTrack(getInteger("track"));
             entry.setContentType(get("contentType"));
