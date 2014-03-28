@@ -204,7 +204,7 @@ public class RESTMusicService implements MusicService {
         }
 
 		// If manual refresh, try to start server scan for madsonic servers
-		if(refresh) {
+		/*if(refresh) {
 			Reader reader = getReader(context, progressListener, "startRescan", null);
 			try {
 				new ErrorParser(context).parse(reader);
@@ -213,7 +213,7 @@ public class RESTMusicService implements MusicService {
 			} finally {
 				Util.close(reader);
 			}
-		}
+		}*/
 
         long lastModified = (cachedIndexes == null || refresh) ? 0L : cachedIndexes.getLastModified();
 
