@@ -427,6 +427,9 @@ public class OfflineMusicService extends RESTMusicService {
 			
 			while( (line = buffer.readLine()) != null ){
 				File entryFile = new File(line);
+				if(!entryFile.exists()) {
+					entryFile = new File(line.replace(".complete", ""));
+				}
 				String entryName = getName(entryFile);
 				if(entryFile.exists() && entryName != null){
 					playlist.addChild(createEntry(context, entryFile, entryName, false));
