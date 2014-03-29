@@ -145,7 +145,11 @@ public class MusicDirectory implements Serializable {
 				if(slashIndex > 0) {
 					discNumber = discNumber.substring(0, slashIndex);
 				}
-				setDiscNumber(Integer.parseInt(discNumber));
+				try {
+					setDiscNumber(Integer.parseInt(discNumber));
+				} catch(Exception e) {
+					Log.w(TAG, "Non numbers in disc field!");
+				}
 				String bitrate = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
 				setBitRate(Integer.parseInt((bitrate != null) ? bitrate : "0") / 1000);
 				String length = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -160,7 +164,7 @@ public class MusicDirectory implements Serializable {
 				}
 				metadata.release();
 			} catch(Exception e) {
-				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
+				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver", e);
 			}
 		}
 
