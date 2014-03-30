@@ -69,6 +69,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -688,6 +689,11 @@ public class SubsonicFragment extends Fragment {
 				else {
 					root = musicService.getPlaylist(true, id, name, context, this);
 				}
+
+				if(shuffle) {
+					Collections.shuffle(root.getChildren());
+				}
+
 				List<MusicDirectory.Entry> songs = new LinkedList<MusicDirectory.Entry>();
 				getSongsRecursively(root, songs);
 				return songs;
@@ -725,7 +731,7 @@ public class SubsonicFragment extends Fragment {
 					}
 					warnIfNetworkOrStorageUnavailable();
 					if(!background) {
-						downloadService.download(songs, save, autoplay, playNext, shuffle);
+						downloadService.download(songs, save, autoplay, playNext, false);
 						if(!append) {
 							Util.startActivityWithoutTransition(context, DownloadActivity.class);
 						}
