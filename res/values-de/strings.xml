@@ -155,15 +155,15 @@
     <string name="download.empty">Wiedergabeliste ist leer</string>
 	<string name="download.shuffle_loading">Shuffle list is loading...</string>
     <string name="download.playerstate_downloading">Downloade - %s</string>
-    <string name="download.playerstate_buffering">Buffering</string>
+    <string name="download.playerstate_buffering">Buffere</string>
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Zeige Album</string>
     <string name="download.menu_lyrics">Liedtext</string>
-    <string name="download.menu_remove">Remove from queue</string>
+    <string name="download.menu_remove">Entferne aus Warteschlange</string>
     <string name="download.menu_remove_all">Alle entfernen</string>
-    <string name="download.menu_screen_on">Screen on</string>
+    <string name="download.menu_screen_on">Bildschirm an</string>
     <string name="download.menu_shuffle">Mischen</string>
-	<string name="download.menu_toggle">Toggle</string>
+	<string name="download.menu_toggle">Umschalten</string>
     <string name="download.menu_save">Wiedergabeliste speichern</string>
     <string name="download.menu_shuffle_notification">Wiedergabeliste wurde gemischt</string>
     <string name="download.playlist_title">Speichere Wiedergabeliste</string>
@@ -209,7 +209,7 @@
 	<string name="starring_content_unstarred">Kein Favorit \"%s\"</string>
     <string name="starring_content_error">Aktualisierung von \"%s\" fehlgeschlagen, bitte später erneut probieren.</string>
 	
-	<string name="playlist_error">Failed to grab list of playlists</string>
+	<string name="playlist_error">Konnte Liste der Wiedergabelisten nicht herunterladen</string>
 	<string name="updated_playlist">%1$s Lieder zu \"%2$s\" hinzugefügt</string>
     <string name="updated_playlist_error">Aktualisierung \"%s\" fehlgeschlagen, bitte später erneut probieren.</string>
 	<string name="removed_playlist">%1$s entfernt aus \"%2$s\"</string>
@@ -260,7 +260,7 @@
 	<string name="settings.cache_clear_complete">Cache wurde geleert</string>
     <string name="settings.testing_connection">Teste Verbindung...</string>
     <string name="settings.testing_ok">Verbindung ist OK</string>
-    <string name="settings.testing_unlicensed">Verbindung ist OK. Server nicht lizensiert.</string>
+    <string name="settings.testing_unlicensed">Verbindung ist OK. Server ist nicht lizensiert.</string>
     <string name="settings.connection_failure">Verbindung fehlgeschlagen.</string>
     <string name="settings.invalid_url">Bitte geben Sie eine gültige URL an.</string>
     <string name="settings.invalid_username">Bitte gültigen Nutzernamen angeben (keine führenden Leerzeichen).</string>
@@ -285,7 +285,7 @@
     <string name="settings.max_video_bitrate_mobile">Max Video bitrate - Mobil</string>
     <string name="settings.max_bitrate_unlimited">Unbegrenzt</string>
     <string name="settings.wifi_required_title">Nur Wi-Fi streaming</string>
-    <string name="settings.wifi_required_summary">Medien nur streamen, wenn per Wi-Fi verbunden</string>
+    <string name="settings.wifi_required_summary">Medien nur streamen, wenn mit Wi-Fi verbunden</string>
 	<string name="settings.network_timeout_title">Netzwerk Timeout</string>
 	<string name="settings.network_timeout_10000">10 Sekunden</string>
 	<string name="settings.network_timeout_15000">15 Sekunden</string>
@@ -306,15 +306,15 @@
     <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the Subsonic server</string>
     <string name="settings.hide_media_title">Verstecke vor anderen</string>
     <string name="settings.hide_media_summary">Musikdateien vor anderen Apps verstecken.</string>
-    <string name="settings.hide_media_toast">Wird bei der nächsten Mediensuche durch Android.</string>
+    <string name="settings.hide_media_toast">Wird aktiv bei der nächsten Mediensuche durch Android.</string>
     <string name="settings.media_button_title">Media buttons</string>
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
     <string name="settings.screen_lit_title">Bildschirm aktiv halten</string>
     <string name="settings.screen_lit_summary">Ein aktiver Bildschirm verbessert die Downloadgeschwindigkeit.</string>
 	<string name="settings.playlist_title">Play</string>
-	<string name="settings.playlist_random_size_title">Random Size</string>
-	<string name="settings.sleep_timer_title">Sleep Timer</string>
-	<string name="settings.sleep_timer_duration_title">Sleep Timer Duration</string>
+	<string name="settings.playlist_random_size_title">Zufallsgröße</string>
+	<string name="settings.sleep_timer_title">Einschlaftimer</string>
+	<string name="settings.sleep_timer_duration_title">EInschlafdauer</string>
 	<string name="settings.sleep_timer_off">Aus</string>
 	<string name="settings.sleep_timer_on">An</string>
 	<string name="settings.sleep_timer_always_on">Immer An</string>
@@ -341,7 +341,7 @@
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (benötigt Subsonic 4.8+)</string>
 	<string name="settings.video_transcode">Direct Transcode (benötigt video -> mp4 oder ähnliches Einstellungen auf dem Server)</string>
 	<string name="settings.video_flash">Flash (benötigt Plugin)</string>
-	<string name="settings.cache_screen_title">Cache/Network</string>
+	<string name="settings.cache_screen_title">Cache/Netzwerk</string>
 	<string name="settings.playback_title">Wiedergabe</string>
 	<string name="settings.hide_widget_title">Verstecke Widget</string>
 	<string name="settings.hide_widget_summary">Verstecke Widget nach dem verlassen der App</string>
@@ -352,7 +352,7 @@
 	<string name="settings.shares_enabled">Freigaben aktiviert</string>
 	<string name="settings.shares_enabled_summary">Whether or not to display the shares listing in the pull out drawer</string>
 	<string name="settings.sync_title">Sync</string>
-	<string name="settings.sync_enabled">Sync Enabled</string>
+	<string name="settings.sync_enabled">Synchronisierung aktiv</string>
 	<string name="settings.sync_enabled_summary">Whether or not playlists or podcasts are periodically checked for changes</string>
 	<string name="settings.sync_interval">Sync Interval</string>
 	<string name="settings.sync_interval_15">15 Minutes</string>
@@ -374,7 +374,7 @@
 	<string name="settings.menu_options.title">Optional Menu Options</string>
 	<string name="settings.menu_options.play_next_summary">Show Play next in menus</string>
 	<string name="settings.menu_options.play_last_summary">Show Play last in menus</string>
-	<string name="settings.menu_options.star_summary">Zeige Star in den Menus</string>
+	<string name="settings.menu_options.star_summary">Zeige Favorit in den Menus</string>
 	<string name="settings.menu_options.shared_summary">Zeige Freigabe in den Menus</string>
 	<string name="settings.browse_by_tags">Tags nutzen</string>
 	<string name="settings.browse_by_tags_summary">Tags statt Ordner verwenden.  Benötigt Subsonic 4.7+</string>
