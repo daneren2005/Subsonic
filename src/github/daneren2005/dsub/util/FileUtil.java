@@ -235,18 +235,10 @@ public class FileUtil {
             File f = new File(fileSystemSafeDir(entry.getPath()));
             dir = new File(getMusicDirectory(context).getPath() + "/" + (entry.isDirectory() ? f.getPath() : f.getParent()));
         } else {
-			// Do a special lookup since 4.7+ doesn't match artist/album to entry.getPath
-			String s = Util.getRestUrl(context, null, false) + entry.getId();
-			String cacheName = (Util.isTagBrowsing(context) ? "album-" : "directory-") + s.hashCode() + ".ser";
-			MusicDirectory entryDir = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
-
-			if(entryDir != null) {
-				List<MusicDirectory.Entry> songs = entryDir.getChildren(false, true);
-				if(songs.size() > 0) {
-					MusicDirectory.Entry firstSong = songs.get(0);
-					File songFile = FileUtil.getSongFile(context, firstSong);
-					dir = songFile.getParentFile();
-				}
+			MusicDirectory.Entry firstSong = lookupChild(context, entry, false);
+			if(firstSong != null) {
+				File songFile = FileUtil.getSongFile(context, firstSong);
+				dir = songFile.getParentFile();
 			}
 
 			if(dir == null) {
@@ -260,6 +252,22 @@ public class FileUtil {
         }
         return dir;
     }
+
+	public static MusicDirectory.Entry lookupChild(Context context, MusicDirectory.Entry entry, boolean allowDir) {
+		// Do a special lookup since 4.7+ doesn't match artist/album to entry.getPath
+		String s = Util.getRestUrl(context, null, false) + entry.getId();
+		String cacheName = (Util.isTagBrowsing(context) ? "album-" : "directory-") + s.hashCode() + ".ser";
+		MusicDirectory entryDir = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
+
+		if(entryDir != null) {
+			List<MusicDirectory.Entry> songs = entryDir.getChildren(allowDir, true);
+			if(songs.size() > 0) {
+				return songs.get(0);
+			}
+		}
+
+		return null;
+	}
 	
 	public static String getPodcastPath(Context context, PodcastEpisode episode) {
 		return fileSystemSafe(episode.getArtist()) + "/" + fileSystemSafe(episode.getTitle());
