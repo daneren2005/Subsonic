@@ -379,9 +379,13 @@ public class FileUtil {
 	public static boolean verifyCanWrite(File dir) {
 		if(ensureDirectoryExistsAndIsReadWritable(dir)) {
 			try {
-				File tmp = File.createTempFile("tmp", "tmp", dir);
-				tmp.delete();
-				return true;
+				File tmp = new File(dir, "tmp");
+				if(tmp.createNewFile()) {
+					tmp.delete();
+					return true;
+				} else {
+					return false;
+				}
 			} catch(Exception e) {
 				return false;
 			}
