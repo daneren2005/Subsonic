@@ -44,6 +44,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Genre;
@@ -313,7 +314,11 @@ public class FileUtil {
 
     public static File getDefaultMusicDirectory(Context context) {
 		if(DEFAULT_MUSIC_DIR == null) {
-			DEFAULT_MUSIC_DIR = createDirectory(context, "music");
+			File[] dirs = ContextCompat.getExternalFilesDirs(context, null);
+			DEFAULT_MUSIC_DIR = new File(dirs[dirs.length - 1], "music");
+			if (!DEFAULT_MUSIC_DIR.exists() && !DEFAULT_MUSIC_DIR.mkdirs()) {
+				Log.e(TAG, "Failed to create " + "music");
+			}
 		}
 
         return DEFAULT_MUSIC_DIR;
