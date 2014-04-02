@@ -503,7 +503,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     private void setCacheLocation(String path) {
         File dir = new File(path);
-        if (!FileUtil.ensureDirectoryExistsAndIsReadWritable(dir)) {
+        if (!FileUtil.verifyCanWrite(dir)) {
             Util.toast(this, R.string.settings_cache_location_error, false);
 
             // Reset it to the default.
