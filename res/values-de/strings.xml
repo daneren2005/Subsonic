@@ -195,8 +195,7 @@
 	<string name="download.downloading_title">Lade %1$d Lieder</string>
 	<string name="download.downloading_summary">Aktuell: %1$s</string>
 	<string name="download.downloading_summary_expanded">Aktuell: %1$s
-		\nGeschätzte Größe: %2$s
-		\nGeschwindigkeit: %3$s kbps</string>
+		\nGeschätzte Größe: %2$s</string>
 	<string name="download.failed_to_load">Laden fehlgeschlagen</string>
 
 	<string name="sync.title">DSub: New Medien verfügbar</string>
