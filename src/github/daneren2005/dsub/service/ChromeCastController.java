@@ -109,8 +109,8 @@ public class ChromeCastController extends RemoteController {
 
 		};
 
-		Cast.CastOptions.Builder apiOptionsBuilder = Cast.CastOptions.builder(castDevice, castClientListener);
-		apiClient = new GoogleApiClient.Builder(downloadService)
+		Cast.CastOptions.Builder apiOptionsBuilder = Cast.CastOptions.builder(castDevice, castClientListener).setVerboseLoggingEnabled(true);
+		apiClient = new GoogleApiClient.Builder(downloadService).useDefaultAccount()
 				.addApi(Cast.API, apiOptionsBuilder.build())
 				.addConnectionCallbacks(connectionCallbacks)
 				.addOnConnectionFailedListener(connectionFailedListener)
@@ -329,7 +329,7 @@ public class ChromeCastController extends RemoteController {
 				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
 					if (result.getStatus().isSuccess()) {
 						// Handled in other handler
-					} else if(result.getStatus().getStatusCode() != ConnectionResult.SIGN_IN_REQUIRED) {
+					} else {
 						Log.e(TAG, "Failed to load: " + result.getStatus().toString());
 						failedLoad();
 					}
