@@ -1338,11 +1338,6 @@ public class DownloadService extends Service {
 			if(nextMediaPlayer != null) {
 				nextMediaPlayer.setOnCompletionListener(null);
 				nextMediaPlayer.setOnErrorListener(null);
-				try {
-					nextMediaPlayer.setNextMediaPlayer(null);
-				} catch(Exception e) {
-					// Don't care
-				}
 				nextMediaPlayer.reset();
 				nextMediaPlayer.release();
 				nextMediaPlayer = null;
@@ -1359,11 +1354,6 @@ public class DownloadService extends Service {
 				nextMediaPlayer.setAudioSessionId(audioSessionId);
 			} catch(Throwable e) {
 				nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			}
-			try {
-				nextMediaPlayer.setNextMediaPlayer(null);
-			} catch(Exception e) {
-				// Don't care
 			}
 			nextMediaPlayer.setDataSource(file.getPath());
 			setNextPlayerState(PREPARING);
