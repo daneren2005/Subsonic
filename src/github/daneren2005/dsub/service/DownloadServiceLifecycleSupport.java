@@ -346,7 +346,7 @@ public class DownloadServiceLifecycleSupport {
 					switch (state) {
 						case TelephonyManager.CALL_STATE_RINGING:
 						case TelephonyManager.CALL_STATE_OFFHOOK:
-							if (downloadService.getPlayerState() == PlayerState.STARTED && !downloadService.isRemoteEnabled()) {
+							if (downloadService.getPlayerState() == PlayerState.STARTED) {
 								resumeAfterCall = true;
 								downloadService.pause();
 							}
