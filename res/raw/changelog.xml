@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.5.7" versioncode="98" releasedate="4/1/2014">
+		<change>Add X to notification when casting for quick disconnect</change>
+		<change>Chromecast obeys repeat preferences</change>
+		<change>Shuffle by album by default (shuffle on now playing screen if you want by song)</change>
+		<change>Don't show Chromecast as option if Play Services isn't installed</change>
+		<change>Improve the handling of cover art for multi-disc albums</change>
+		<change>Pause for calls when using DSub as remote</change>
+		<change>German translation (thanks thknepper)</change>
+		<change>Several minor bug fixes</change>
+	</release>
 	<release version="4.5.6" versioncode="97" releasedate="3/22/2014">
 		<change>Fix issues with Chromecast reconnecting</change>
 		<change>Work around for Samsung's bluetooth metadata for 4.3+ devices</change>
