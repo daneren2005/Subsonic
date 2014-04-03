@@ -170,6 +170,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
+				// Reset set folder ID
+				editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
 				editor.commit();
 
 				serverSettings.put(instance, new ServerSettings(instance));
