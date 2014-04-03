@@ -139,6 +139,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SHARED_ENABLED = "sharedEnabled";
 	public static final String PREFERENCES_KEY_BROWSE_TAGS = "browseTags";
 	public static final String PREFERENCES_KEY_OPEN_TO_LIBRARY = "openToLibrary";
+	public static final String PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE = "overrideSystemLanguage";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.os.Build;
@@ -50,6 +51,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
@@ -58,12 +66,6 @@ import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.DrawerAdapter;
 import github.daneren2005.dsub.view.UpdateView;
-
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SubsonicActivity extends ActionBarActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
@@ -630,6 +632,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			setTheme(R.style.Theme_DSub_Light);
 		} else {
 			setTheme(R.style.Theme_DSub_Holo);
+		}
+
+		SharedPreferences prefs = Util.getPreferences(this);
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
+			Configuration config = new Configuration();
+			config.locale = Locale.ENGLISH;
+			getResources().updateConfiguration(config,getResources().getDisplayMetrics());
 		}
 	}
 	private void applyFullscreen() {

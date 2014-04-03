@@ -61,6 +61,12 @@
 				android:key="openToLibrary"
 				android:defaultValue="false"/>
 
+			<CheckBoxPreference
+				android:title="@string/settings.override_system_language"
+				android:summary="@string/settings.override_system_language_summary"
+				android:key="overrideSystemLanguage"
+				android:defaultValue="false"/>
+
 		</PreferenceCategory>
 
 		<PreferenceCategory
