@@ -281,7 +281,13 @@ public class ChangeLog {
     protected AlertDialog getDialog(boolean full) {
         WebView wv = new WebView(mContext);
         //wv.setBackgroundColor(0); // transparent
-        wv.loadDataWithBaseURL(null, getLog(full), "text/html", "UTF-8", null);
+		String log = getLog(full);
+		// No changes to show
+		if(log == null) {
+			return null;
+		}
+
+        wv.loadDataWithBaseURL(null, log, "text/html", "UTF-8", null);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle(
@@ -400,6 +406,10 @@ public class ChangeLog {
 
         // ... and sort them (newest version first).
         Collections.sort(versions, Collections.reverseOrder());
+
+		if(versions.size() == 0) {
+			return null;
+		}
 
         for (Integer version : versions) {
             int key = version.intValue();
