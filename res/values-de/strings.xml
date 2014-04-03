@@ -126,8 +126,8 @@
     <string name="select_album.donate_dialog_0_trial_days_left">Testzeitraum ist vorbei</string>
 
     <string name="offline.sync_dialog_title">Offline Lieder warten auf Synchronisierung</string>
-    <string name="offline.sync_dialog_message">Process %1$d offline scrobbles?
-		\nProcess %2$d offline stars?
+    <string name="offline.sync_dialog_message">Scrobble %1$d Einträge?
+		\nÜbermittle %2$d neue Favoriten an den Server?
 	</string>
 	<string name="offline.sync_dialog_default">Nutze als Standardaktion</string>
 	<string name="offline.sync_success">Erfolgreich %1$d Lieder synchronisiert</string>
@@ -370,7 +370,7 @@
 	<string name="settings.sync_starred_summary">Synchronisiere favorisierte Lieder, Albem und Künstler automatisch</string>
 	<string name="settings.sync_notification">Benachrichtigung nach Synchronisierung</string>
 	<string name="settings.sync_notification_summary">Zeige eine Benachrichtigung nachdem neue Medien synchronisiert wurden.</string>
-	<string name="settings.menu_options.title">Optionale Menu Einträge</string>
+	<string name="settings.menu_options.title">Optionale Menü Einträge</string>
 	<string name="settings.menu_options.play_next_summary">Zeige \"Als nächstes abspielen\" im Menü</string>
 	<string name="settings.menu_options.play_last_summary">Zeige \"Als letztes abspielen\" im Menü</string>
 	<string name="settings.menu_options.star_summary">Zeige Favorit in den Menus</string>
@@ -420,7 +420,7 @@
     <string name="parser.upgrade_client">Inkompatible Versionen. Aktualisierung der DSub Android App erforderlich.</string>
     <string name="parser.upgrade_server">Inkompatible Versionen. Aktualisierung des Subsonic Server erforderlich.</string>
     <string name="parser.not_authenticated">Benutzername oder/und Passwort falsch.</string>
-    <string name="parser.not_authorized">Nicht authorisiert. Bitte prüfen Sie die Nutzergenehmigungen im Subsonic server.</string>
+    <string name="parser.not_authorized">Nicht authorisiert. Bitte prüfen Sie die Einstellungen im Subsonic server.</string>
     <string name="parser.artist_count">%d Künstler.</string>
 	<string name="parser.server_error">Serverfehler: %s</string>
 
