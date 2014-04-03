@@ -20,6 +20,7 @@ package github.daneren2005.dsub.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -214,7 +215,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 		ChangeLog changeLog = new ChangeLog(this, Util.getPreferences(this));
 		if(changeLog.isFirstRun()) {
-			changeLog.getLogDialog().show();
+			Dialog log = changeLog.getLogDialog();
+			if(log != null) {
+				log.show();
+			}
 		}
 	}
 	
