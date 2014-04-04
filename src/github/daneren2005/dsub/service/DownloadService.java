@@ -355,6 +355,9 @@ public class DownloadService extends Service {
 			if(!downloadFile.isWorkDone() || (downloadFile.shouldSave() && !downloadFile.isSaved())) {
 				// Only add to list if there is work to be done
 				backgroundDownloadList.add(downloadFile);
+			} else if(downloadFile.isSaved() && !save) {
+				// Quickly unpin song instead of adding it to work to be done
+				downloadFile.unpin();
 			}
 		}
 		revision++;
