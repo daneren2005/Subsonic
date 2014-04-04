@@ -131,7 +131,7 @@
 	</string>
 	<string name="offline.sync_dialog_default">Nutze als Standardaktion</string>
 	<string name="offline.sync_success">Erfolgreich %1$d Lieder synchronisiert</string>
-	<string name="offline.sync_partial">Erfolgreich 1$d von %2$d Liedern synchronisiert</string>
+	<string name="offline.sync_partial">Erfolgreich %1$d von %2$d Liedern synchronisiert</string>
 	<string name="offline.sync_error">Synchronisierung der Lieder fehlgeschlagen</string>
 
 	<string name="select_genre.blank">leer</string>
