@@ -377,6 +377,8 @@
 	<string name="settings.menu_options.shared_summary">Zeige \"Freigeben\" im Menü</string>
 	<string name="settings.browse_by_tags">Tags nutzen</string>
 	<string name="settings.browse_by_tags_summary">Tags statt Ordner verwenden.  Benötigt Subsonic 4.7+</string>
+	<string name="settings.override_system_language">In Englisch anmzeigen</string>
+	<string name="settings.override_system_language_summary">Verwende Englisch anstatt Deutsch für DSub. Benötigt einen Neustart der App.</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
