@@ -197,6 +197,8 @@
 	<string name="download.downloading_summary_expanded">Current: %1$s
 		\nEstimated Size: %2$s</string>
 	<string name="download.failed_to_load">Failed to load</string>
+	<string name="download.title_now_playing">Now Playing</string>
+	<string name="download.title_downloading">Downloading</string>
 
 	<string name="sync.title">DSub: New media is available</string>
 	<string name="sync.new_podcasts">New podcasts: %s</string>
