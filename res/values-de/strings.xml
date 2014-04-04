@@ -78,12 +78,12 @@
 	<string name="menu.log">Sende Log</string>
 	<string name="menu.set_timer">Setze Timer</string>
 	<string name="menu.check_podcasts">Prüfe auf neue Episoden</string>
-	<string name="menu.add_podcast">Kanal hinzufügen</string>
+	<string name="menu.add_podcast">Podcast hinzufügen</string>
 	<string name="menu.keep_synced">Synchron halten</string>
 	<string name="menu.stop_sync">Synchronisierung stoppen</string>
 	<string name="menu.show_all">Zeige alle Medien</string>
 	<string name="menu.show_artist">Zeige Künstler</string>
-	<string name="menu.share">freigeben</string>
+	<string name="menu.share">Freigeben</string>
 	<string name="menu.delete_cache">Lösche Cache</string>
 	<string name="menu.cast">An Chromecast senden</string>
 
@@ -126,12 +126,12 @@
     <string name="select_album.donate_dialog_0_trial_days_left">Testzeitraum ist vorbei</string>
 
     <string name="offline.sync_dialog_title">Offline Lieder warten auf Synchronisierung</string>
-    <string name="offline.sync_dialog_message">Process %1$d offline scrobbles?
-		\nProcess %2$d offline stars?
+    <string name="offline.sync_dialog_message">Scrobble %1$d Einträge?
+		\nÜbermittle %2$d neue Favoriten an den Server?
 	</string>
 	<string name="offline.sync_dialog_default">Nutze als Standardaktion</string>
 	<string name="offline.sync_success">Erfolgreich %1$d Lieder synchronisiert</string>
-	<string name="offline.sync_partial">Erfolgreich 1$d von %2$d Liedern synchronisiert</string>
+	<string name="offline.sync_partial">Erfolgreich %1$d von %2$d Liedern synchronisiert</string>
 	<string name="offline.sync_error">Synchronisierung der Lieder fehlgeschlagen</string>
 
 	<string name="select_genre.blank">leer</string>
@@ -153,7 +153,7 @@
 	<string name="select_podcasts.delete">Lösche Podcast</string>
 
     <string name="download.empty">Wiedergabeliste ist leer</string>
-	<string name="download.shuffle_loading">Shuffle list is loading...</string>
+	<string name="download.shuffle_loading">Wiedergabeliste wird gemischt...</string>
     <string name="download.playerstate_downloading">Downloade - %s</string>
     <string name="download.playerstate_buffering">Buffere</string>
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
@@ -228,7 +228,7 @@
     <string name="song_details.kbps">%d kbps</string>
 	<string name="song_details.error">Fehler</string>
 	<string name="song_details.skipped">Überspringen</string>
-	<string name="song_details.downloading">Downloading</string>
+	<string name="song_details.downloading">Wird geladen</string>
 
     <string name="lyrics.nomatch">Kein Liedtext gefunden</string>
 
@@ -269,19 +269,19 @@
     <string name="settings.theme_dark">Dunkel</string>
 	<string name="settings.theme_black">Schwarz</string>
 	<string name="settings.theme_holo">Holo</string>
-	<string name="settings.theme_fullscreen">Fullscreen</string>
+	<string name="settings.theme_fullscreen">Vollbildschirm</string>
 	<string name="settings.theme_fullscreen_summary">Verstecke soviel der Benutzerschnittstelle wie von Android ermöglicht.</string>
-	<string name="settings.track_title">Zeige Tracknummer</string>
-	<string name="settings.track_summary">Zeige Tracknummer vor dem Titel</string>
+	<string name="settings.track_title">Titelnummer anzeigen</string>
+	<string name="settings.track_summary">Zeige Titelnummer vor dem Titel</string>
 	<string name="settings.custom_sort">Benutzerdefinierte Sortierung</string>
 	<string name="settings.custom_sort_summary">Sortiere nach CD-Nummer und Jahr.</string>
 	<string name="settings.open_to_library">Bibliothek öffnen</string>
 	<string name="settings.open_to_library_summary">Direkt die Bibliothek anstatt der Startseite öffnen.</string>
     <string name="settings.network_title">Netzwerk</string>
-    <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
-    <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobil</string>
-	<string name="settings.max_video_bitrate_wifi">Max Video bitrate - Wi-Fi</string>
-    <string name="settings.max_video_bitrate_mobile">Max Video bitrate - Mobil</string>
+    <string name="settings.max_bitrate_wifi">Max Audio Bitrate - Wi-Fi</string>
+    <string name="settings.max_bitrate_mobile">Max Audio Bitrate - Mobil</string>
+	<string name="settings.max_video_bitrate_wifi">Max Video Bitrate - Wi-Fi</string>
+    <string name="settings.max_video_bitrate_mobile">Max Video Bitrate - Mobil</string>
     <string name="settings.max_bitrate_unlimited">Unbegrenzt</string>
     <string name="settings.wifi_required_title">Nur Wi-Fi streaming</string>
     <string name="settings.wifi_required_summary">Medien nur streamen, wenn mit Wi-Fi verbunden</string>
@@ -301,59 +301,59 @@
     <string name="settings.clear_search_history">Lösche Suchanfragen</string>
     <string name="settings.search_history_cleared">Suchanfragen gelöscht</string>
     <string name="settings.other_title">Sonstige Einstellungen</string>
-    <string name="settings.scrobble_title">Scrobble to Last.fm</string>
-    <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the Subsonic server</string>
+    <string name="settings.scrobble_title">Scrobble zu Last.fm</string>
+    <string name="settings.scrobble_summary">Ihr Benutzername und Passwort für Last.fm muss im Subsonic-Server konfiguriert sein</string>
     <string name="settings.hide_media_title">Verstecke vor anderen</string>
     <string name="settings.hide_media_summary">Musikdateien vor anderen Apps verstecken.</string>
     <string name="settings.hide_media_toast">Wird aktiv bei der nächsten Mediensuche durch Android.</string>
-    <string name="settings.media_button_title">Media buttons</string>
-    <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
+    <string name="settings.media_button_title">Medientasten</string>
+    <string name="settings.media_button_summary">Verwende Medientasten des Telefon, Freisprecheinrichtung und Bluetooth</string>
     <string name="settings.screen_lit_title">Bildschirm aktiv halten</string>
     <string name="settings.screen_lit_summary">Ein aktiver Bildschirm verbessert die Downloadgeschwindigkeit.</string>
-	<string name="settings.playlist_title">Play</string>
+	<string name="settings.playlist_title">Wiedergeben</string>
 	<string name="settings.playlist_random_size_title">Zufallsgröße</string>
 	<string name="settings.sleep_timer_title">Einschlaftimer</string>
 	<string name="settings.sleep_timer_duration_title">EInschlafdauer</string>
 	<string name="settings.sleep_timer_off">Aus</string>
 	<string name="settings.sleep_timer_on">An</string>
 	<string name="settings.sleep_timer_always_on">Immer An</string>
-	<string name="settings.temp_loss_title">Temporary Loss of Focus</string>
-	<string name="settings.temp_loss_pause">Always Pause</string>
-	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
-	<string name="settings.temp_loss_lower">Always lower volume</string>
-	<string name="settings.temp_loss_nothing">Do Nothing</string>
-	<string name="settings.disconnect_pause_title">Pause on Disconnect</string>
-	<string name="settings.disconnect_pause_both">Pause on either</string>
-	<string name="settings.disconnect_pause_headphone">Pause only for headphone</string>
-	<string name="settings.disconnect_pause_bluetooth">Pause only for bluetooth</string>
-	<string name="settings.disconnect_pause_neither">Do Nothing</string>
-	<string name="settings.persistent_title">Persistent Notification</string>
-	<string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>
-	<string name="settings.gapless_playback">Gapless Playback</string>
-	<string name="settings.gapless_playback_summary">The Galaxy S3 seems to be experiencing freezes/other weird issue since the introduction of gapless playback.  Turn this off to fix the issue.</string>
-	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
+	<string name="settings.temp_loss_title">Bei Verbindungsverlust zum Kopfhörer/Lautsprecher</string>
+	<string name="settings.temp_loss_pause">Immer pausieren</string>
+	<string name="settings.temp_loss_pause_lower">Pausiere und Lautstärke bei Bedarf veringern</string>
+	<string name="settings.temp_loss_lower">Lautstärke veringern</string>
+	<string name="settings.temp_loss_nothing">Nichts machen</string>
+	<string name="settings.disconnect_pause_title">Pause bei Verbindungsverlust</string>
+	<string name="settings.disconnect_pause_both">Pausiere immer</string>
+	<string name="settings.disconnect_pause_headphone">Nur bei Kopfhörer pausieren</string>
+	<string name="settings.disconnect_pause_bluetooth">Nur bei Bluetooth pausieren</string>
+	<string name="settings.disconnect_pause_neither">Nichts machen</string>
+	<string name="settings.persistent_title">Dauerhafte Benachrichtigung</string>
+	<string name="settings.persistent_summary">Zeige die Benachrichtigung auch nach pausieren der Wiedergabe.  Zum entfernen Stop auswählen.</string>
+	<string name="settings.gapless_playback">Lückenlose Wiedergabe</string>
+	<string name="settings.gapless_playback_summary">Das Galaxy S3 scheint Probleme seit der Einführung der lückenlosen Wiedergabe zu haben. Zur Behebung schalten Sie dies ab.</string>
+	<string name="settings.chat_refresh">Chat Aktualisierungsrate (Sekunden)</string>
 	<string name="settings.chat_enabled">Chat aktiv</string>
-	<string name="settings.chat_enabled_summary">Whether or not to display the chat listing in the pull out drawer</string>
+	<string name="settings.chat_enabled_summary">Chat im Seitenmenu anzeigen</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video Player</string>
 	<string name="settings.video_raw">Raw (benötigt Subsonic 4.8+)</string>
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (benötigt Subsonic 4.8+)</string>
-	<string name="settings.video_transcode">Direct Transcode (benötigt video -> mp4 oder ähnliches Einstellungen auf dem Server)</string>
+	<string name="settings.video_transcode">Direkte Transkodierung (benötigt video -> mp4 oder ähnliche Einstellungen auf dem Server)</string>
 	<string name="settings.video_flash">Flash (benötigt Plugin)</string>
 	<string name="settings.cache_screen_title">Cache/Netzwerk</string>
 	<string name="settings.playback_title">Wiedergabe</string>
 	<string name="settings.hide_widget_title">Verstecke Widget</string>
 	<string name="settings.hide_widget_summary">Verstecke Widget nach dem verlassen der App</string>
 	<string name="settings.podcasts_enabled">Podcasts aktiviert</string>
-	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
+	<string name="settings.podcasts_enabled_summary">Podcast im Seitenmenü anzeigen</string>
 	<string name="settings.bookmarks_enabled">Lesezeichen aktiviert</string>
-	<string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
+	<string name="settings.bookmarks_enabled_summary">Lesezeichen im Seitenmenü anzeigen</string>
 	<string name="settings.shares_enabled">Freigaben aktiviert</string>
-	<string name="settings.shares_enabled_summary">Whether or not to display the shares listing in the pull out drawer</string>
-	<string name="settings.sync_title">Sync</string>
+	<string name="settings.shares_enabled_summary">Freigabe im Seitenmenü anzeigen</string>
+	<string name="settings.sync_title">Synchronisierung</string>
 	<string name="settings.sync_enabled">Synchronisierung aktiv</string>
-	<string name="settings.sync_enabled_summary">Whether or not playlists or podcasts are periodically checked for changes</string>
-	<string name="settings.sync_interval">Sync Interval</string>
+	<string name="settings.sync_enabled_summary">Podcast regelmäßig auf Änderungen prüfen</string>
+	<string name="settings.sync_interval">Synchronisierungsintervall</string>
 	<string name="settings.sync_interval_15">15 Minutes</string>
 	<string name="settings.sync_interval_30">30 Minutes</string>
 	<string name="settings.sync_interval_60">1 Stunde</string>
@@ -365,18 +365,20 @@
 	<string name="settings.sync_wifi">Nur per Wifi synchronisieren</string>
 	<string name="settings.sync_wifi_summary">Nur bei Verwendung von Wifi synchronisieren</string>
 	<string name="settings.sync_most_recent">Synchronisiere neu hinzugefügte Lieder</string>
-	<string name="settings.sync_most_recent_summary">Automatically cache newly added albums</string>
+	<string name="settings.sync_most_recent_summary">Lade neu hinzugefügte Alben automatisch herunter</string>
 	<string name="settings.sync_starred">Synchronisiere Favoriten</string>
 	<string name="settings.sync_starred_summary">Synchronisiere favorisierte Lieder, Albem und Künstler automatisch</string>
-	<string name="settings.sync_notification">Show Sync Notification</string>
-	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
-	<string name="settings.menu_options.title">Optional Menu Options</string>
-	<string name="settings.menu_options.play_next_summary">Show Play next in menus</string>
-	<string name="settings.menu_options.play_last_summary">Show Play last in menus</string>
+	<string name="settings.sync_notification">Benachrichtigung nach Synchronisierung</string>
+	<string name="settings.sync_notification_summary">Zeige eine Benachrichtigung nachdem neue Medien synchronisiert wurden.</string>
+	<string name="settings.menu_options.title">Optionale Menü Einträge</string>
+	<string name="settings.menu_options.play_next_summary">Zeige \"Als nächstes abspielen\" im Menü</string>
+	<string name="settings.menu_options.play_last_summary">Zeige \"Als letztes abspielen\" im Menü</string>
 	<string name="settings.menu_options.star_summary">Zeige Favorit in den Menus</string>
-	<string name="settings.menu_options.shared_summary">Zeige Freigabe in den Menus</string>
+	<string name="settings.menu_options.shared_summary">Zeige \"Freigeben\" im Menü</string>
 	<string name="settings.browse_by_tags">Tags nutzen</string>
 	<string name="settings.browse_by_tags_summary">Tags statt Ordner verwenden.  Benötigt Subsonic 4.7+</string>
+	<string name="settings.override_system_language">In Englisch anmzeigen</string>
+	<string name="settings.override_system_language_summary">Verwende Englisch anstatt Deutsch für DSub. Benötigt einen Neustart der App.</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
@@ -420,7 +422,7 @@
     <string name="parser.upgrade_client">Inkompatible Versionen. Aktualisierung der DSub Android App erforderlich.</string>
     <string name="parser.upgrade_server">Inkompatible Versionen. Aktualisierung des Subsonic Server erforderlich.</string>
     <string name="parser.not_authenticated">Benutzername oder/und Passwort falsch.</string>
-    <string name="parser.not_authorized">Nicht authorisiert. Bitte prüfen Sie die Nutzergenehmigungen im Subsonic server.</string>
+    <string name="parser.not_authorized">Nicht authorisiert. Bitte prüfen Sie die Einstellungen im Subsonic-Server.</string>
     <string name="parser.artist_count">%d Künstler.</string>
 	<string name="parser.server_error">Serverfehler: %s</string>
 
@@ -430,13 +432,13 @@
 
     <string name="equalizer.label">Equalizer</string>
     <string name="equalizer.enabled">aktiv</string>
-    <string name="equalizer.preset">Select preset</string>
-	<string name="equalizer.bass_booster">Bass Booster</string>
-	<string name="equalizer.voice_booster">Voice Booster</string>
+    <string name="equalizer.preset">Wähle Vorgabe</string>
+	<string name="equalizer.bass_booster">Bassverstärkung</string>
+	<string name="equalizer.voice_booster">Sprachverstärkung</string>
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d mille</string>
 
-    <string name="widget.initial_text">Touch to select music</string>
+    <string name="widget.initial_text">Zur Musikauswahl berühren</string>
     <string name="widget.sdcard_busy">SD-Karte nicht verfügbar</string>
     <string name="widget.sdcard_missing">Keine SD-Karte</string>
 
