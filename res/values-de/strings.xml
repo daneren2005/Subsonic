@@ -369,7 +369,7 @@
 	<string name="settings.sync_most_recent">Synchronisiere neu hinzugefügte Lieder</string>
 	<string name="settings.sync_most_recent_summary">Lade neu hinzugefügte Alben automatisch herunter</string>
 	<string name="settings.sync_starred">Synchronisiere Favoriten</string>
-	<string name="settings.sync_starred_summary">Synchronisiere favorisierte Lieder, Albem und Künstler automatisch</string>
+	<string name="settings.sync_starred_summary">Synchronisiere favorisierte Lieder, Alben und Künstler automatisch</string>
 	<string name="settings.sync_notification">Benachrichtigung nach Synchronisierung</string>
 	<string name="settings.sync_notification_summary">Zeige eine Benachrichtigung nachdem neue Medien synchronisiert wurden.</string>
 	<string name="settings.menu_options.title">Optionale Menü Einträge</string>
