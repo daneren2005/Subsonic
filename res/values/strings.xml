@@ -22,6 +22,7 @@
 	<string name="common.stream_external">Stream Video</string>
 	<string name="common.confirm">Confirm</string>
 	<string name="common.confirm_message">Do you want to %1$s %2$s?</string>
+	<string name="common.confirm_message_cache">cache</string>
 	<string name="common.empty">None found</string>
 	<string name="common.warning">Warning</string>
 

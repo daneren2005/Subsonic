@@ -21,7 +21,8 @@
 	<string name="common.play_external">Video abspielen</string>
 	<string name="common.stream_external">Video streamen</string>
 	<string name="common.confirm">Bestätigen</string>
-	<string name="common.confirm_message">Wollen Sie %1$s %2$s?</string>
+	<string name="common.confirm_message">Wollen Sie %2$s %1$s?</string>
+	<string name="common.confirm_message_cache">den Cache</string>
 	<string name="common.empty">Nicht gefunden</string>
 	<string name="common.warning">Warnung</string>
 
