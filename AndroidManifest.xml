@@ -176,22 +176,22 @@
                   android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
 		<provider android:name="github.daneren2005.dsub.provider.PlaylistStubProvider"
 			android:authorities="github.daneren2005.dsub.playlists.provider"
-			android:label="Playlists"
+			android:label="@string/button_bar.playlists"
 			android:exported="false"
 			android:syncable="true"/>
 		<provider android:name="github.daneren2005.dsub.provider.PodcastStubProvider"
 			android:authorities="github.daneren2005.dsub.podcasts.provider"
-			android:label="Podcasts"
+			android:label="@string/button_bar.podcasts"
 			android:exported="false"
 			android:syncable="true"/>
 		<provider android:name="github.daneren2005.dsub.provider.StarredStubProvider"
 				  android:authorities="github.daneren2005.dsub.starred.provider"
-				  android:label="Starred"
+				  android:label="@string/main.albums_starred"
 				  android:exported="false"
 				  android:syncable="true"/>
 		<provider android:name="github.daneren2005.dsub.provider.MostRecentStubProvider"
 				  android:authorities="github.daneren2005.dsub.mostrecent.provider"
-				  android:label="MostRecent"
+				  android:label="@string/provider.most_recent"
 				  android:exported="false"
 				  android:syncable="true"/>
 
