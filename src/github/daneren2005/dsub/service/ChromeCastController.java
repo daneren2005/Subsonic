@@ -349,9 +349,11 @@ public class ChromeCastController extends RemoteController {
 		if(url.indexOf("https") != -1) {
 			SharedPreferences prefs = Util.getPreferences(downloadService);
 			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-			String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-			url = url.replace(internalUrl, externalUrl);
+			if(internalUrl != null && !"".equals(internalUrl)) {
+				String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+				url = url.replace(internalUrl, externalUrl);
+			}
 		}
 
 		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC

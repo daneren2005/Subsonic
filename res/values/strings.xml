@@ -35,6 +35,7 @@
 	<string name="button_bar.bookmarks">Bookmarks</string>
 	<string name="button_bar.shares">Shares</string>
 	<string name="button_bar.chat">Chat</string>
+	<string name="button_bar.downloading">Downloading</string>
 
     <string name="main.welcome_title">Welcome!</string>
     <string name="main.welcome_text">Welcome to DSub! The app is currently configured to use the Subsonic demo server. After you\'ve
@@ -183,8 +184,6 @@
     <string name="download.jukebox_server_too_old">Remote control is not supported. Please upgrade your Subsonic server.</string>
     <string name="download.jukebox_offline">Remote control is not available in offline mode.</string>
     <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your Subsonic server.</string>
-	<string name="download.show_downloading">Show Downloading</string>
-	<string name="download.show_now_playing">Show Now Playing</string>
 	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Start Timer</string>
 	<string name="download.stop_timer">Stop Timer</string>
