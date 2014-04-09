@@ -21,7 +21,8 @@
 	<string name="common.play_external">Video abspielen</string>
 	<string name="common.stream_external">Video streamen</string>
 	<string name="common.confirm">Bestätigen</string>
-	<string name="common.confirm_message">Wollen Sie %1$s %2$s?</string>
+	<string name="common.confirm_message">Wollen Sie %2$s %1$s?</string>
+	<string name="common.confirm_message_cache">den Cache</string>
 	<string name="common.empty">Nicht gefunden</string>
 	<string name="common.warning">Warnung</string>
 
@@ -34,6 +35,7 @@
 	<string name="button_bar.bookmarks">Lesezeichen</string>
 	<string name="button_bar.shares">Freigaben</string>
 	<string name="button_bar.chat">Chat</string>
+	<string name="button_bar.downloading">Downloads</string>
 
     <string name="main.welcome_title">Willkommen!</string>
     <string name="main.welcome_text">Willkommen zu DSub! Die App ist aktuell für den Subsonic-Demo-Server konfiguriert. Nachdem Sie Ihren eigenen Server
@@ -182,8 +184,6 @@
     <string name="download.jukebox_server_too_old">Fernbedienung wird nicht unterstützt. Aktualisierung des Subsonic-Servers notwendig.</string>
     <string name="download.jukebox_offline">Fernbedienung im Offline-Modus nicht verfügbar.</string>
     <string name="download.jukebox_not_authorized">Fernbedienung ist nicht erlaubt. Bitte aktivieren Sie den Jukebox-Modus unter <b>Nutzer &gt; Einstellungen</b> auf Ihrem Subsonic-Server.</string>
-	<string name="download.show_downloading">Zeige Downloads</string>
-	<string name="download.show_now_playing">Zeige aktuelles Lied</string>
 	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Starte Timer</string>
 	<string name="download.stop_timer">Stoppe Timer</string>
@@ -198,7 +198,7 @@
 		\nGeschätzte Größe: %2$s</string>
 	<string name="download.failed_to_load">Laden fehlgeschlagen</string>
 
-	<string name="sync.title">DSub: New Medien verfügbar</string>
+	<string name="sync.title">DSub: Neue Medien verfügbar</string>
 	<string name="sync.new_podcasts">Neuer Podcast: %s</string>
 	<string name="sync.new_playlists">Neu in Wiedergabeliste: %s</string>
 	<string name="sync.new_albums">Neues Album: %s</string>
@@ -313,17 +313,17 @@
 	<string name="settings.playlist_title">Wiedergeben</string>
 	<string name="settings.playlist_random_size_title">Zufallsgröße</string>
 	<string name="settings.sleep_timer_title">Einschlaftimer</string>
-	<string name="settings.sleep_timer_duration_title">EInschlafdauer</string>
+	<string name="settings.sleep_timer_duration_title">Einschlafdauer</string>
 	<string name="settings.sleep_timer_off">Aus</string>
 	<string name="settings.sleep_timer_on">An</string>
 	<string name="settings.sleep_timer_always_on">Immer An</string>
-	<string name="settings.temp_loss_title">Bei Verbindungsverlust zum Kopfhörer/Lautsprecher</string>
+	<string name="settings.temp_loss_title">Verhalten bei Benachrichtigungen</string>
 	<string name="settings.temp_loss_pause">Immer pausieren</string>
 	<string name="settings.temp_loss_pause_lower">Pausiere und Lautstärke bei Bedarf veringern</string>
 	<string name="settings.temp_loss_lower">Lautstärke veringern</string>
 	<string name="settings.temp_loss_nothing">Nichts machen</string>
-	<string name="settings.disconnect_pause_title">Pause bei Verbindungsverlust</string>
-	<string name="settings.disconnect_pause_both">Pausiere immer</string>
+	<string name="settings.disconnect_pause_title">Verhalten bei Verbindungsverlust</string>
+	<string name="settings.disconnect_pause_both">Immer pausieren</string>
 	<string name="settings.disconnect_pause_headphone">Nur bei Kopfhörer pausieren</string>
 	<string name="settings.disconnect_pause_bluetooth">Nur bei Bluetooth pausieren</string>
 	<string name="settings.disconnect_pause_neither">Nichts machen</string>
@@ -333,7 +333,7 @@
 	<string name="settings.gapless_playback_summary">Das Galaxy S3 scheint Probleme seit der Einführung der lückenlosen Wiedergabe zu haben. Zur Behebung schalten Sie dies ab.</string>
 	<string name="settings.chat_refresh">Chat Aktualisierungsrate (Sekunden)</string>
 	<string name="settings.chat_enabled">Chat aktiv</string>
-	<string name="settings.chat_enabled_summary">Chat im Seitenmenu anzeigen</string>
+	<string name="settings.chat_enabled_summary">Chat im Seitenmenü anzeigen</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video Player</string>
 	<string name="settings.video_raw">Raw (benötigt Subsonic 4.8+)</string>
@@ -367,18 +367,20 @@
 	<string name="settings.sync_most_recent">Synchronisiere neu hinzugefügte Lieder</string>
 	<string name="settings.sync_most_recent_summary">Lade neu hinzugefügte Alben automatisch herunter</string>
 	<string name="settings.sync_starred">Synchronisiere Favoriten</string>
-	<string name="settings.sync_starred_summary">Synchronisiere favorisierte Lieder, Albem und Künstler automatisch</string>
+	<string name="settings.sync_starred_summary">Synchronisiere favorisierte Lieder, Alben und Künstler automatisch</string>
 	<string name="settings.sync_notification">Benachrichtigung nach Synchronisierung</string>
 	<string name="settings.sync_notification_summary">Zeige eine Benachrichtigung nachdem neue Medien synchronisiert wurden.</string>
 	<string name="settings.menu_options.title">Optionale Menü Einträge</string>
 	<string name="settings.menu_options.play_next_summary">Zeige \"Als nächstes abspielen\" im Menü</string>
 	<string name="settings.menu_options.play_last_summary">Zeige \"Als letztes abspielen\" im Menü</string>
-	<string name="settings.menu_options.star_summary">Zeige Favorit in den Menus</string>
+	<string name="settings.menu_options.star_summary">Zeige Favorit im Menü</string>
 	<string name="settings.menu_options.shared_summary">Zeige \"Freigeben\" im Menü</string>
 	<string name="settings.browse_by_tags">Tags nutzen</string>
 	<string name="settings.browse_by_tags_summary">Tags statt Ordner verwenden.  Benötigt Subsonic 4.7+</string>
-	<string name="settings.override_system_language">In Englisch anmzeigen</string>
+	<string name="settings.override_system_language">In Englisch anzeigen</string>
 	<string name="settings.override_system_language_summary">Verwende Englisch anstatt Deutsch für DSub. Benötigt einen Neustart der App.</string>
+
+	<string name="provider.most_recent">Neue Alben</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>

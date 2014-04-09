@@ -651,6 +651,9 @@ public final class Util {
         toast.show();
     }
 	
+	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick) {
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick);
+	}
 	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
 		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick);
 	}

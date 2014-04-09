@@ -132,7 +132,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				Util.confirmDialog(SettingsActivity.this, R.string.common_delete, "cache", new DialogInterface.OnClickListener() {
+				Util.confirmDialog(SettingsActivity.this, R.string.common_delete, R.string.common_confirm_message_cache, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						new LoadingTask<Void>(SettingsActivity.this, false) {
