@@ -36,10 +36,6 @@
 	<item
         android:id="@+id/menu_toggle_timer"
         android:title="@string/download.start_timer"/>
-		
-	<item
-        android:id="@+id/menu_toggle_now_playing"
-        android:title="@string/download.show_downloading"/>
 
 	<item
 		android:id="@+id/menu_exit"

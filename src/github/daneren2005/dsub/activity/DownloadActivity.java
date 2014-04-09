@@ -21,7 +21,7 @@ package github.daneren2005.dsub.activity;
 import github.daneren2005.dsub.R;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import github.daneren2005.dsub.fragments.DownloadFragment;
+import github.daneren2005.dsub.fragments.NowPlayingFragment;
 
 import android.widget.EditText;
 
@@ -40,7 +40,7 @@ public class DownloadActivity extends SubsonicActivity {
 		setContentView(R.layout.download_activity);
 
 		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
-			currentFragment = new DownloadFragment();
+			currentFragment = new NowPlayingFragment();
 			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
 				Bundle args = new Bundle();
 				args.putBoolean(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);

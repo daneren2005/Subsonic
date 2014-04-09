@@ -52,12 +52,13 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	protected ArrayAdapter adapter;
 	protected View emptyView;
 	protected List<T> objects;
+	protected boolean serialize = true;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
-		if(bundle != null) {
+		if(bundle != null && serialize) {
 			objects = (List<T>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 		}
 	}
@@ -65,7 +66,9 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) objects);
+		if(serialize) {
+			outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) objects);
+		}
 	}
 
 	@Override

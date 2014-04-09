@@ -199,6 +199,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			@Override
 			public void onDrawerOpened(View view) {
 				if(lastSelectedView == null) {
+					if(lastSelectedPosition == -1) {
+						lastSelectedPosition = drawerList.getChildCount() - 2;
+					}
 					lastSelectedView = drawerList.getChildAt(lastSelectedPosition);
 					lastSelectedView.setBackgroundResource(R.color.dividerColor);
 				}

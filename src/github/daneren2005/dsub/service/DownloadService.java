@@ -506,6 +506,7 @@ public class DownloadService extends Service {
 			currentDownloading = null;
 		}
 		backgroundDownloadList.clear();
+		revision++;
 		Util.hideDownloadingNotification(this);
 	}
 

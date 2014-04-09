@@ -8,6 +8,7 @@
 		<item>@string/button_bar.bookmarks</item>
 		<item>@string/button_bar.shares</item>
 		<item>@string/button_bar.chat</item>
+		<item>@string/button_bar.downloading</item>
 		<item>@string/menu.settings</item>
 	</string-array>
 
@@ -19,6 +20,7 @@
 		<item>Bookmark</item>
 		<item>Share</item>
 		<item>Chat</item>
+		<item>Download</item>
 		<item>Settings</item>
 	</string-array>
 
@@ -30,6 +32,7 @@
 		<item>@drawable/ic_menu_bookmark_light</item>
 		<item>@drawable/ic_menu_share_light</item>
 		<item>@drawable/ic_menu_chat_light</item>
+		<item>@drawable/ic_menu_download_light</item>
 		<item>@drawable/ic_menu_settings_light</item>
 	</array>
 
@@ -41,6 +44,7 @@
 		<item>@drawable/ic_menu_bookmark_dark</item>
 		<item>@drawable/ic_menu_share_dark</item>
 		<item>@drawable/ic_menu_chat_dark</item>
+		<item>@drawable/ic_menu_download_dark</item>
 		<item>@drawable/ic_menu_settings_dark</item>
 	</array>
 

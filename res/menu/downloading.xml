@@ -7,10 +7,6 @@
         android:title="@string/download.menu_remove_all"
         compat:showAsAction="always|withText"/>
 		
-	<item
-        android:id="@+id/menu_toggle_now_playing"
-        android:title="@string/download.show_now_playing"/>
-		
 	<item 
 		android:id="@+id/menu_exit"
 		android:title="@string/menu.exit"/>

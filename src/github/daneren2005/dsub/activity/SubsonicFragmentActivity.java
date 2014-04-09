@@ -45,6 +45,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.fragments.ChatFragment;
+import github.daneren2005.dsub.fragments.DownloadFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
 import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
@@ -85,16 +86,14 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			stopService(new Intent(this, DownloadService.class));
 			finish();
 			getImageLoader().clearCache();
+		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
+			getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, "Download");
 		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
 			DownloadService service = getDownloadService();
-			boolean downloadView = getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW);
-			if((service != null && service.getCurrentPlaying() != null) || downloadView) {
+			if((service != null && service.getCurrentPlaying() != null)) {
 				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
 				Intent intent = new Intent();
 				intent.setClass(this, DownloadActivity.class);
-				if(downloadView) {
-					intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
-				}
 				startActivity(intent);
 			}
 		}
@@ -105,6 +104,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			if(fragmentType == null && Util.isOpenToLibrary(this)) {
 				fragmentType = "Artist";
 				lastSelectedPosition = 1;
+			} else if(fragmentType == "Download") {
+				lastSelectedPosition = -1;
 			}
 			currentFragment = getNewFragment(fragmentType);
 			
@@ -391,6 +392,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			return new SelectBookmarkFragment();
 		} else if("Share".equals(fragmentType)) {
 			return new SelectShareFragment();
+		} else if("Download".equals(fragmentType)) {
+			return new DownloadFragment();
 		} else {
 			return new MainFragment();
 		}
