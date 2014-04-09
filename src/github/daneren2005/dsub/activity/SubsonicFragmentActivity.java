@@ -251,6 +251,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		} else {
 			setIntent(intent);
 		}
+		drawer.closeDrawers();
 	}
 
 	@Override
