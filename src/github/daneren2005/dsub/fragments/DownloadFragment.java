@@ -146,7 +146,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.download, container, false);
-		setTitle(nowPlaying ? R.string.download_title_now_playing : R.string.download_title_downloading);
+		setTitle(nowPlaying ? "Now Playing" : "Downloading");
 		
 		mainLayout = rootView.findViewById(R.id.download_layout);
 		if(!primaryFragment) {
@@ -1403,7 +1403,7 @@ public class DownloadFragment extends SubsonicFragment implements OnGestureListe
 
 	private void toggleNowPlaying() {
 		nowPlaying = !nowPlaying;
-		setTitle(nowPlaying ? R.string.download_title_now_playing : R.string.download_title_downloading);
+		setTitle(nowPlaying ? "Now Playing" : "Downloading");
 		onDownloadListChanged(true);
 	}
 

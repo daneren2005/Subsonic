@@ -198,8 +198,6 @@
 	<string name="download.downloading_summary_expanded">Aktuell: %1$s
 		\nGeschätzte Größe: %2$s</string>
 	<string name="download.failed_to_load">Laden fehlgeschlagen</string>
-	<string name="download.title_now_playing">Aktuelles Lied</string>
-	<string name="download.title_downloading">Aktive Downloads</string>
 
 	<string name="sync.title">DSub: Neue Medien verfügbar</string>
 	<string name="sync.new_podcasts">Neuer Podcast: %s</string>
