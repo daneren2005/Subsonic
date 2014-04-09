@@ -35,6 +35,7 @@
 	<string name="button_bar.bookmarks">Lesezeichen</string>
 	<string name="button_bar.shares">Freigaben</string>
 	<string name="button_bar.chat">Chat</string>
+	<string name="button_bar.downloading">Downloads</string>
 
     <string name="main.welcome_title">Willkommen!</string>
     <string name="main.welcome_text">Willkommen zu DSub! Die App ist aktuell für den Subsonic-Demo-Server konfiguriert. Nachdem Sie Ihren eigenen Server
@@ -183,8 +184,6 @@
     <string name="download.jukebox_server_too_old">Fernbedienung wird nicht unterstützt. Aktualisierung des Subsonic-Servers notwendig.</string>
     <string name="download.jukebox_offline">Fernbedienung im Offline-Modus nicht verfügbar.</string>
     <string name="download.jukebox_not_authorized">Fernbedienung ist nicht erlaubt. Bitte aktivieren Sie den Jukebox-Modus unter <b>Nutzer &gt; Einstellungen</b> auf Ihrem Subsonic-Server.</string>
-	<string name="download.show_downloading">Zeige Downloads</string>
-	<string name="download.show_now_playing">Zeige aktuelles Lied</string>
 	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Starte Timer</string>
 	<string name="download.stop_timer">Stoppe Timer</string>
