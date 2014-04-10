@@ -103,9 +103,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
 			if(fragmentType == null && Util.isOpenToLibrary(this)) {
 				fragmentType = "Artist";
-				lastSelectedPosition = 1;
-			} else if(fragmentType == "Download") {
-				lastSelectedPosition = -1;
+				getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
 			}
 			currentFragment = getNewFragment(fragmentType);
 			

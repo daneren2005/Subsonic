@@ -208,9 +208,6 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				}
 
 				if(lastSelectedView == null) {
-					if(lastSelectedPosition == -1) {
-						lastSelectedPosition = drawerList.getChildCount() - 2;
-					}
 					lastSelectedView = drawerList.getChildAt(lastSelectedPosition);
 					lastSelectedView.setBackgroundResource(R.color.dividerColor);
 				}
@@ -427,6 +424,16 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			enabledItems[1] = bookmarksEnabled;
 			enabledItems[2] = sharedEnabled;
 			enabledItems[3] = chatEnabled;
+
+			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
+			if(fragmentType != null) {
+				for(int i = 0; i < drawerItemsDescriptions.length; i++) {
+					if(fragmentType.equals(drawerItemsDescriptions[i])) {
+						lastSelectedPosition = drawerAdapter.getAdapterPosition(i);
+						break;
+					}
+				}
+			}
 		}
 	}
 

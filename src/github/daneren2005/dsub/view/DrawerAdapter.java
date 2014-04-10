@@ -90,6 +90,15 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
 		return position;
 	}
+	public int getAdapterPosition(int position) {
+		for(int i = position; i >= 0; i--) {
+			if(!visible.get(i)) {
+				position--;
+			}
+		}
+
+		return position;
+	}
 
 	public void setItemVisible(int position, boolean visible) {
 		if(this.visible.get(position) != visible) {
