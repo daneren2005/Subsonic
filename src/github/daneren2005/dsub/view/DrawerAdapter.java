@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -39,17 +40,20 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 	private Context context;
 	private List<String> items;
 	private List<Integer> icons;
+	private List<Boolean> visible;
 
-	public DrawerAdapter(Context context, List<String> items, List<Integer> icons) {
+	public DrawerAdapter(Context context, List<String> items, List<Integer> icons, List<Boolean> visible) {
 		super(context, R.layout.drawer_list_item, items);
 
 		this.context = context;
 		this.items = items;
 		this.icons = icons;
+		this.visible = visible;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		position = getActualPosition(position);
 		String item = items.get(position);
 		Integer icon = icons.get(position);
 
@@ -60,9 +64,40 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 		TextView textView = (TextView) convertView.findViewById(R.id.drawer_name);
 		textView.setText(item);
 		ImageView iconView = (ImageView) convertView.findViewById(R.id.drawer_icon);
-		Log.d(TAG, "icon: " + icon);
 		iconView.setImageResource(icon);
 
 		return convertView;
+	}
+
+	@Override
+	public int getCount() {
+		int count = 0;
+		for(int i = 0; i < visible.size(); i++) {
+			if(visible.get(i)) {
+				count++;
+			}
+		}
+
+		return count;
+	}
+
+	public int getActualPosition(int position) {
+		for(int i = 0; i <= position; i++) {
+			if(!visible.get(i)) {
+				position++;
+			}
+		}
+
+		return position;
+	}
+
+	public void setItemVisible(int position, boolean visible) {
+		if(this.visible.get(position) != visible) {
+			this.visible.set(position, visible);
+			notifyDataSetInvalidated();
+		}
+	}
+	public void setDownloadVisible(boolean visible) {
+		setItemVisible(items.size() - 2, visible);
 	}
 }

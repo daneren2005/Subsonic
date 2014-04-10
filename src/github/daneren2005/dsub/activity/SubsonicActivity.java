@@ -87,6 +87,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	ViewGroup rootView;
 	DrawerLayout drawer;
 	ActionBarDrawerToggle drawerToggle;
+	DrawerAdapter drawerAdapter;
 	ListView drawerList;
 	View lastSelectedView = null;
 	int lastSelectedPosition = 0;
@@ -166,6 +167,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				position = drawerAdapter.getActualPosition(position);
 				if("Settings".equals(drawerItemsDescriptions[position])) {
 					startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
 					drawer.closeDrawers();
@@ -198,6 +200,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 			@Override
 			public void onDrawerOpened(View view) {
+				DownloadService downloadService = getDownloadService();
+				if(downloadService == null || downloadService.getBackgroundDownloads().isEmpty()) {
+					drawerAdapter.setDownloadVisible(false);
+				} else {
+					drawerAdapter.setDownloadVisible(true);
+				}
+
 				if(lastSelectedView == null) {
 					if(lastSelectedPosition == -1) {
 						lastSelectedPosition = drawerList.getChildCount() - 2;
@@ -382,12 +391,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == sharedEnabled || !enabledItems[3] == chatEnabled) {
 			drawerItems = getResources().getStringArray(R.array.drawerItems);
 			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
-	
-			// Remove listings that user wants hidden
-			int alreadyRemoved = 0;
+
 			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
-			List<String> drawerItemsDescriptionsList = new ArrayList<String>(Arrays.asList(drawerItemsDescriptions));
 			List<Integer> drawerItemsIconsList = new ArrayList<Integer>();
+			List<Boolean> drawerItemsVisibleList = new ArrayList<Boolean>();
 
 			int[] arrayAttr = {R.attr.drawerItemsIcons};
 			TypedArray arrayType = obtainStyledAttributes(arrayAttr);
@@ -395,49 +402,27 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			TypedArray iconType = getResources().obtainTypedArray(arrayId);
 			for(int i = 0; i < drawerItemsList.size(); i++) {
 				drawerItemsIconsList.add(iconType.getResourceId(i, 0));
+				drawerItemsVisibleList.add(true);
 			}
 			iconType.recycle();
 			arrayType.recycle();
-	
-			// Selectively remove podcast listing [3]
+
+			// Hide listings user doesn't want to see
 			if(!podcastsEnabled) {
-				drawerItemsList.remove(3 - alreadyRemoved);
-				drawerItemsDescriptionsList.remove(3 - alreadyRemoved);
-				drawerItemsIconsList.remove(3 - alreadyRemoved);
-				alreadyRemoved++;
+				drawerItemsVisibleList.set(3, false);
 			}
-
-			// Selectively remove bookmarks listing [4]
 			if(!bookmarksEnabled) {
-				drawerItemsList.remove(4 - alreadyRemoved);
-				drawerItemsDescriptionsList.remove(4 - alreadyRemoved);
-				drawerItemsIconsList.remove(4 - alreadyRemoved);
-				alreadyRemoved++;
+				drawerItemsVisibleList.set(4, false);
 			}
-
-			// Selectively remove shared listing [5]
 			if(!sharedEnabled) {
-				drawerItemsList.remove(5 - alreadyRemoved);
-				drawerItemsDescriptionsList.remove(5 - alreadyRemoved);
-				drawerItemsIconsList.remove(5 - alreadyRemoved);
-				alreadyRemoved++;
+				drawerItemsVisibleList.set(5, false);
 			}
-	
-			// Selectively remove chat listing: [6]
 			if(!chatEnabled) {
-				drawerItemsList.remove(6 - alreadyRemoved);
-				drawerItemsDescriptionsList.remove(6 - alreadyRemoved);
-				drawerItemsIconsList.remove(6 - alreadyRemoved);
-				alreadyRemoved++;
+				drawerItemsVisibleList.set(6, false);
 			}
-	
-			// Put list back together
-			if(alreadyRemoved > 0) {
-				drawerItems = drawerItemsList.toArray(new String[0]);
-				drawerItemsDescriptions = drawerItemsDescriptionsList.toArray(new String[0]);
-			}
+			drawerItemsVisibleList.set(7, false);
 			
-			drawerList.setAdapter(new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList));
+			drawerList.setAdapter(drawerAdapter = new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList, drawerItemsVisibleList));
 			enabledItems[0] = podcastsEnabled;
 			enabledItems[1] = bookmarksEnabled;
 			enabledItems[2] = sharedEnabled;
