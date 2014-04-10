@@ -380,8 +380,6 @@
 	<string name="settings.override_system_language">In Englisch anzeigen</string>
 	<string name="settings.override_system_language_summary">Verwende Englisch anstatt Deutsch für DSub. Benötigt einen Neustart der App.</string>
 
-	<string name="provider.most_recent">Neue Alben</string>
-
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
 	<string name="shuffle.endYear">Endjahr:</string>

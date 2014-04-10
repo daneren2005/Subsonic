@@ -191,7 +191,7 @@
 				  android:syncable="true"/>
 		<provider android:name="github.daneren2005.dsub.provider.MostRecentStubProvider"
 				  android:authorities="github.daneren2005.dsub.mostrecent.provider"
-				  android:label="@string/provider.most_recent"
+				  android:label="@string/main.albums_newest"
 				  android:exported="false"
 				  android:syncable="true"/>
 
