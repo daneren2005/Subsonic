@@ -378,9 +378,8 @@ public class MainFragment extends SubsonicFragment {
 					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
 					footer += "\nROM: " + Build.DISPLAY;
 
-					Intent email = new Intent(android.content.Intent.ACTION_SEND);
-					email.setType("text/plain");
-					email.putExtra(Intent.EXTRA_EMAIL, new String[] {"dsub.android@gmail.com"});
+					Intent email = new Intent(Intent.ACTION_SENDTO,
+						Uri.fromParts("mailto", "dsub.android@gmail.com", null));
 					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + version + " Error Logs");
 					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
 					Uri attachment = Uri.fromFile(logcat);
