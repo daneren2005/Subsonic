@@ -25,6 +25,9 @@
     <orderEntry type="library" name="google-player-services" level="project" />
     <orderEntry type="module" module-name="google-play-services_lib" />
     <orderEntry type="module" module-name="ServerProxy" />
+    <orderEntry type="library" name="android-support-v4" level="project" />
+    <orderEntry type="library" name="android-support-v7-appcompat" level="project" />
+    <orderEntry type="library" name="android-support-v7-mediarouter" level="project" />
   </component>
 </module>
 
