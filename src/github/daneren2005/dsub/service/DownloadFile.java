@@ -423,27 +423,25 @@ public class DownloadFile implements BufferFile {
 					}
 				}
 
-            } catch(SubsonicRESTException x) {
+            } catch(InterruptedException x) {
+				throw x
+			} catch(IOException x) {
 				Util.close(out);
 				Util.delete(completeFile);
 				Util.delete(saveFile);
-				if (!isCancelled()) {
-					failed++;
+				if(!isCancelled()) {
 					failedDownload = true;
 					Log.w(TAG, "Failed to download '" + song + "'.", x);
 				}
-			} catch(InterruptedException x) {
-				throw x;
 			} catch (Exception x) {
                 Util.close(out);
                 Util.delete(completeFile);
                 Util.delete(saveFile);
                 if (!isCancelled()) {
-					failed++;
+                	failed++;
                     failedDownload = true;
                     Log.w(TAG, "Failed to download '" + song + "'.", x);
                 }
-
             } finally {
                 Util.close(in);
                 Util.close(out);
