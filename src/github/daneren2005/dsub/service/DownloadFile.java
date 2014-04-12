@@ -424,7 +424,7 @@ public class DownloadFile implements BufferFile {
 				}
 
             } catch(InterruptedException x) {
-				throw x
+				throw x;
 			} catch(IOException x) {
 				Util.close(out);
 				Util.delete(completeFile);
