@@ -417,7 +417,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			if(!chatEnabled) {
 				drawerItemsVisibleList.set(6, false);
 			}
-			drawerItemsVisibleList.set(7, false);
+			if(!getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
+				drawerItemsVisibleList.set(7, false);
+			}
 			
 			drawerList.setAdapter(drawerAdapter = new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList, drawerItemsVisibleList));
 			enabledItems[0] = podcastsEnabled;

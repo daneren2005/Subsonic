@@ -88,6 +88,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			getImageLoader().clearCache();
 		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
 			getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, "Download");
+			if(drawerAdapter != null) {
+				drawerAdapter.setDownloadVisible(true);
+			}
 		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
 			DownloadService service = getDownloadService();
 			if((service != null && service.getCurrentPlaying() != null)) {
