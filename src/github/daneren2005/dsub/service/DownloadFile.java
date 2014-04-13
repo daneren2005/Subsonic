@@ -227,6 +227,13 @@ public class DownloadFile implements BufferFile {
 		setPlaying(false);
 	}
 
+	@Override
+	public synchronized void onResume() {
+		if(!isFailedMax() && !isDownloading()) {
+			download();
+		}
+	}
+
 	public synchronized boolean isDownloading() {
         return downloadTask != null && downloadTask.isRunning();
     }

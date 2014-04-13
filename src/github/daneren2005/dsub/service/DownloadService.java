@@ -1718,6 +1718,8 @@ public class DownloadService extends Service {
 				Thread.sleep(1000L);
 				if (isCancelled() || downloadFile.isFailedMax()) {
 					return null;
+				} else if(!downloadFile.isFailedMax() && !downloadFile.isDownloading()) {
+					checkDownloads();
 				}
 			}
 			doPlay(downloadFile, position, start);
