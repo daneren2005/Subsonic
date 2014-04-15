@@ -637,8 +637,7 @@ public class RESTMusicService implements MusicService {
 	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
 		builder.append("&id=").append(entry.getId());
-		String url = rewriteUrlWithRedirect(context, builder.toString());
-		return url;
+		return builder.toString();
 	}
 
     @Override
@@ -726,7 +725,7 @@ public class RESTMusicService implements MusicService {
 		builder.append("&id=").append(song.getId());
 		builder.append("&maxBitRate=").append(maxBitrate);
 
-		String url = rewriteUrlWithRedirect(context, builder.toString());
+		String url = builder.toString();
 		Log.i(TAG, "Using music URL: " + stripUrlInfo(url));
 		return url;
 	}
