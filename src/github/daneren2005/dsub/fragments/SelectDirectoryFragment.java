@@ -20,11 +20,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.EntryAdapter;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.DownloadActivity;
@@ -297,6 +299,20 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Object selectedItem = entries.get(showHeader ? (info.position - 1) : info.position);
+
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false) && menuItem.getItemId() == R.id.song_menu_play_now) {
+			List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+			Iterator it = entries.listIterator(info.position - 1);
+			while(it.hasNext()) {
+				songs.add((MusicDirectory.Entry) it.next());
+			}
+
+			getDownloadService().clear();
+			getDownloadService().download(songs, false, true, true, false);
+			Util.startActivityWithoutTransition(context, DownloadActivity.class);
+
+			return true;
+		}
 		
 		if(onContextItemSelected(menuItem, selectedItem)) {
 			return true;

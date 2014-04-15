@@ -115,7 +115,7 @@
 		</PreferenceCategory>
 
 		<PreferenceCategory
-			android:title="@string/settings.other_title">
+			android:title="@string/settings.drawer_items_title">
 
 			<CheckBoxPreference
 				android:title="@string/settings.podcasts_enabled"
@@ -134,6 +134,16 @@
 				android:summary="@string/settings.shares_enabled_summary"
 				android:key="sharedEnabled"
 				android:defaultValue="true"/>
+		</PreferenceCategory>
+
+		<PreferenceCategory
+			android:title="@string/settings.other_title">
+
+			<CheckBoxPreference
+				android:title="@string/settings.play_now_after"
+				android:summary="@string/settings.play_now_after_summary"
+				android:key="playNowAfter"
+				android:defaultValue="false"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 
