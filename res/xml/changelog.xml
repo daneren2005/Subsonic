@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.5.8" versioncode="100" releasedate="4/15/2014">
+		<change>Downloads list now in own sub tab - only visible when something is downloading</change>
+		<change>Remember folder selection when switching between servers</change>
+		<change>Option to have play now play everything after it like the Subsonic Web GUI does (disabled by default)</change>
+		<change>Add app override to use English instead of incomplete translation</change>
+		<change>Fix several issues with Chromecast using https servers</change>
+		<change>Improve translations</change>
+		<change>Decrease apk size</change>
+		<change>Remove Froyo support</change>
+		<change>Random bug fixes</change>
+	</release>
 	<release version="4.5.7" versioncode="98" releasedate="4/1/2014">
 		<change>Add X to notification when casting for quick disconnect</change>
 		<change>Chromecast obeys repeat preferences</change>
