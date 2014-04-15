@@ -52,7 +52,7 @@
 	<string name="main.online">Gehe Online</string>
     <string name="main.settings">Einstellungen</string>
     <string name="main.albums_title">Album Liste</string>
-    <string name="main.albums_newest">Neu hinzugefügt</string>
+    <string name="main.albums_newest">Neue Alben</string>
     <string name="main.albums_recent">Vor kurzem gespielt</string>
     <string name="main.albums_frequent">Am meisten gespielt</string>
     <string name="main.albums_highest">Top bewertet</string>
@@ -379,6 +379,9 @@
 	<string name="settings.browse_by_tags_summary">Tags statt Ordner verwenden.  Benötigt Subsonic 4.7+</string>
 	<string name="settings.override_system_language">In Englisch anzeigen</string>
 	<string name="settings.override_system_language_summary">Verwende Englisch anstatt Deutsch für DSub. Benötigt einen Neustart der App.</string>
+	<string name="settings.drawer_items_title">Seitenmenü</string>
+	<string name="settings.play_now_after">Jetzt wiedergeben bis zum Listenende</string>
+	<string name="settings.play_now_after_summary">\"Jetzt wiedergeben\" im Kontextmenü spielt das ausgewählte Lied und alle in der Liste nachfolgenden Lieder ab (wie in der Web-Schnittstelle des Subsonic-Server)</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
