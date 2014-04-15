@@ -22,7 +22,8 @@
 	<string name="common.stream_external">Stream Videó</string>
 	<string name="common.confirm">Jóváhagyás</string>
 	<string name="common.confirm_message">Biztos benne: %1$s %2$s?</string>
-	<string name="common.empty">Nem található</string>
+	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.empty">Nem található!</string>
 	<string name="common.warning">Figyelem!</string>
 
     <string name="button_bar.home">Főoldal</string>
@@ -34,6 +35,7 @@
 	<string name="button_bar.bookmarks">Könyvjelzők</string>
 	<string name="button_bar.shares">Megosztások</string>
 	<string name="button_bar.chat">Csevegés (Chat)</string>
+	<string name="button_bar.downloading">Letöltések</string>
 
     <string name="main.welcome_title">Üdvözlet!</string>
     <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás még nincs beállítva. Miután konfigurálta
@@ -182,8 +184,6 @@
     <string name="download.jukebox_server_too_old">A távvezérlés nem támogatott. Kérjük, frissítse a Subsonic kiszolgálót!</string>
     <string name="download.jukebox_offline">A távvezérlés nem lehetséges offline módban!</string>
     <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Kérjük, engedélyezze a jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
-	<string name="download.show_downloading">Letöltési sor megjelenítése</string>
-	<string name="download.show_now_playing">Lejátszó megjelenítése</string>
 	<string name="download.timer_length">Időhossz:</string>
 	<string name="download.start_timer">Időzítő indítása</string>
 	<string name="download.stop_timer">Időzítő megállítása</string>
@@ -195,8 +195,8 @@
 	<string name="download.downloading_title">%1$d dal letöltése</string>
 	<string name="download.downloading_summary">Aktuális: %1$s</string>
 	<string name="download.downloading_summary_expanded">Aktuális: %1$s
-		\nBecsült méret: %2$s</string>
-	<string name="download.failed_to_load">Failed to load</string>
+		\nBecsült méret: %2$s
+	<string name="download.failed_to_load">A beolvasás sikertelen!</string>
 
 	<string name="sync.title">DSub: Új média érhető el!</string>
 	<string name="sync.new_podcasts">Új podcastok: %s</string>
@@ -209,7 +209,7 @@
     <string name="starring_content_error">Nem sikerült frissíteni \"%s\", próbálja később!</string>
 	
 	<string name="playlist_error">Nem sikerült elérni a lejátszási lista adatait!</string>
-	<string name="updated_playlist">%1$s dal hozzádva: \"%2$s\"</string>
+	<string name="updated_playlist">%1$s dal hozzáadva: \"%2$s\"</string>
     <string name="updated_playlist_error">Nem sikerült frissíteni \"%s\", próbálja később!</string>
 	<string name="removed_playlist">%1$s dal eltávolítva: \"%2$s\"</string>
 	
@@ -397,6 +397,11 @@
 	<string name="settings.menu_options.shared_summary">Megosztás opció megjelenítése a menüben.</string>
 	<string name="settings.browse_by_tags">Böngészés ID3 Tag használatával</string>
 	<string name="settings.browse_by_tags_summary">ID3 Tag módszer használata a fájlredszer alapú mód helyett. Subsonic 4.7+ verzió felett!</string>
+	<string name="settings.override_system_language">A rendszer nyelvének felülbírálása</string>
+	<string name="settings.override_system_language_summary">A Dsub megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
+	<string name="settings.drawer_items_title">Oldalsáv elemei</string>
+	<string name="settings.play_now_after">Lejátszás utána</string>
+	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik a dal lejátszása minden kijelölt elem után (mint a Subsonic webes felületén)</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>

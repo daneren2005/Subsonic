@@ -22,6 +22,7 @@
 	<string name="common.stream_external">Stream Video</string>
 	<string name="common.confirm">Confirmar</string>
 	<string name="common.confirm_message">Quieres %1$s %2$s?</string>
+	<string name="common.confirm_message_cache">cache</string>
 	<string name="common.empty">No se ha encontrado nada</string>
 	<string name="common.warning">Aviso</string>
 
@@ -34,6 +35,7 @@
 	<string name="button_bar.bookmarks">Marcadores</string>
 	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.shares">Compartidos</string>
+	<string name="button_bar.downloading">Descargando</string>
 
     <string name="main.welcome_title">Bienvenido!</string>
     <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
@@ -384,6 +386,11 @@
 	<string name="settings.cache_location_reset">No se puede escribir en la ubicación seleccionada para la caché. Si has actualizado recientemente el sistema operativo de tu dispositivo a KitKat 4.4, la manera en la que las apps escriben en la Tarjeta SD ha cambiado, por lo que sólo pueden escribir en una ubicación específica. La ubicación que utiliza DSub ha sido automáticamente cambiada por la ubicación correcta. Para eliminar todos los datos de la app anterior, tendrás que introducir la Tarjeta SD en el ordenador y eliminar la carpeta manualmente.</string>
 	<string name="settings.open_to_library">Acceder directamente a la biblioteca</string>
 	<string name="settings.open_to_library_summary">Acceder directamente a la pantalla de la biblioteca en lugar de abrir primero la pantalla principal.</string>
+	<string name="settings.override_system_language">Sobreescribir idioma del sistema</string>
+	<string name="settings.override_system_language_summary">Mostrar la aplicación en inglés aún teniendo disponible DSub en el idioma del sistema. Probablemente necesite borrar la aplicación de la memoria para efectuar los cambios.</string>
+	<string name="settings.drawer_items_title">Items del menú</string>
+	<string name="settings.play_now_after">Reproducir ahora - Después</string>
+	<string name="settings.play_now_after_summary">Pulsar "Reproducir ahora" desde el menú contextual actúa como la interfaz web de Subsonic, reproduciendo todos los items a partir del seleccionado</string>
 
 	<string name="share.info">Dueño: %1$s
 		\nDescripción: %2$s
@@ -438,6 +445,11 @@
     <string name="select_artist.refresh">Actualizar</string>
     <string name="select_artist.folder">Seleccionar carpeta</string>
     <string name="select_artist.all_folders">Todas las carpetas</string>
+
+	<string name="equalizer.bass_booster">Potenciar bajos</string>
+	<string name="equalizer.voice_booster">Potenciar vocesr</string>
+	<string name="equalizer.db_size">%d dB</string>
+	<string name="equalizer.bass_size">%d mille</string>
 
     <string name="equalizer.label">Ecualizador</string>
     <string name="equalizer.enabled">Activado</string>
