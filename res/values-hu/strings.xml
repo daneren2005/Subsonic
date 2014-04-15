@@ -196,6 +196,7 @@
 	<string name="download.downloading_summary">Aktuális: %1$s</string>
 	<string name="download.downloading_summary_expanded">Aktuális: %1$s
 		\nBecsült méret: %2$s
+	</string>
 	<string name="download.failed_to_load">A beolvasás sikertelen!</string>
 
 	<string name="sync.title">DSub: Új média érhető el!</string>
