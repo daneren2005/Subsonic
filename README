@@ -6,8 +6,6 @@ git submodule update
 Go to DragSortListView/library, and ServerProxy and build project files with:
 android update project --path ./
 
-Replace the file DragSortListView/library/libs/android-support-v4.jar with the one from main projects libs/
-
 
 Roadmap of major planned features in rough order that I plan to work on them in (little features get sprinkled in wherever):
 
@@ -25,36 +23,4 @@ New Tabs
 HLS Video
 	-Display video where album art is currently (double tap to fullscreen)
 	-Videos can play inline with songs
-	
-
-I haven't felt like forking dragsortlistview properly, so local bugfixes:
-In DragSortListView.java line 741 above v.addView(child).  Fixes NPE:
-if(child.getParent() != null) {
-	((ViewGroup) child.getParent()).removeView(child);
-}
-
-In DragSortListView.java line 722, inside of child != oldChild statement. Fixes checkables mixed with non-checkables not being converted:
-if(child instanceof Checkable && !(v instanceof Checkable)) {
-	v = new DragSortItemViewCheckable(getContext());
-	v.setLayoutParams(new AbsListView.LayoutParams(
-		ViewGroup.LayoutParams.FILL_PARENT,
-		ViewGroup.LayoutParams.WRAP_CONTENT));
-} else if(!(child instanceof Checkable) && v instanceof Checkable) {
-	v = new DragSortItemView(getContext());
-	v.setLayoutParams(new AbsListView.LayoutParams(
-			ViewGroup.LayoutParams.FILL_PARENT,
-			ViewGroup.LayoutParams.WRAP_CONTENT));
-} else {
-	// shouldn't get here if user is reusing convertViews
-	// properly
-	if (oldChild != null) {
-		v.removeViewAt(0);
-	}
-}
-v.addView(child);
-
-In DragSortController.java line 380, first thing in onScroll:
-if(e1 == null || e2 == null) {
-	return false;
-}
 	
