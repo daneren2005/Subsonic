@@ -116,12 +116,13 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				Log.e(TAG, "Failed to get playlist " + id + " for " + serverName, e);
 			}
 
-			if(updated.size() > 0) {
-				SyncUtil.showSyncNotification(context, R.string.sync_new_playlists, SyncUtil.joinNames(updated));
-			}
 			if(updated.size() > 0 || removed) {
 				SyncUtil.setSyncedPlaylists(context, instance, playlistList);
 			}
+		}
+
+		if(updated.size() > 0) {
+			SyncUtil.showSyncNotification(context, R.string.sync_new_playlists, SyncUtil.joinNames(updated));
 		}
 	}
 }
