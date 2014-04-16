@@ -209,7 +209,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 				if(lastSelectedView == null) {
 					lastSelectedView = drawerList.getChildAt(lastSelectedPosition);
-					lastSelectedView.setBackgroundResource(R.color.dividerColor);
+					if(lastSelectedView != null) {
+						lastSelectedView.setBackgroundResource(R.color.dividerColor);
+					}
 				}
 
 				getSupportActionBar().setTitle(R.string.common_appname);
@@ -428,7 +430,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			enabledItems[3] = chatEnabled;
 
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
-			if(fragmentType != null) {
+			if(fragmentType != null && lastSelectedPosition == 0) {
 				for(int i = 0; i < drawerItemsDescriptions.length; i++) {
 					if(fragmentType.equals(drawerItemsDescriptions[i])) {
 						lastSelectedPosition = drawerAdapter.getAdapterPosition(i);
