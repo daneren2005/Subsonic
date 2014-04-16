@@ -82,18 +82,16 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				for(MusicDirectory.Entry entry: playlist.getChildren()) {
 					DownloadFile file = new DownloadFile(context, entry, true);
 					String path = file.getCompleteFile().getPath();
-					if(!cachedPlaylist.synced.contains(path)) {
-						while(!file.isSaved() && !file.isFailedMax()) {
-							file.downloadNow(musicService);
-							if(!updated.contains(playlist.getName())) {
-								updated.add(playlist.getName());
-							}
+					while(!file.isSaved() && !file.isFailedMax()) {
+						file.downloadNow(musicService);
+						if(file.isSaved() && !updated.contains(playlist.getName())) {
+							updated.add(playlist.getName());
 						}
+					}
 
-						// Add to cached path set if saved
-						if(file.isSaved()) {
-							cachedPlaylist.synced.add(path);
-						}
+					// Add to cached path set if saved
+					if(file.isSaved() && !cachedPlaylist.synced.contains(path)) {
+						cachedPlaylist.synced.add(path);
 					}
 
 					origPathList.remove(path);
