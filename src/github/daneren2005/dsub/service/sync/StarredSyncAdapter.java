@@ -25,7 +25,6 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;

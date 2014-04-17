@@ -15,7 +15,6 @@
 
 package github.daneren2005.dsub.util;
 
-import android.support.v7.media.MediaControlIntent;
 import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;

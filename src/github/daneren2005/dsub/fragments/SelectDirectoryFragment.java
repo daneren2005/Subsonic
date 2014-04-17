@@ -20,7 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.EntryAdapter;
@@ -259,11 +258,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				return true;
 		}
 
-		if(super.onOptionsItemSelected(item)) {
-			return true;
-		}
+		return super.onOptionsItemSelected(item);
 
-		return false;
 	}
 
 	@Override
@@ -592,7 +588,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
         }
 
         emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
-        entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null) ? true : false);
+        entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null));
         if(albumListType == null || "starred".equals(albumListType)) {
             entryList.setAdapter(entryAdapter);
         } else {

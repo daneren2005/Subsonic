@@ -20,7 +20,6 @@ package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Share;

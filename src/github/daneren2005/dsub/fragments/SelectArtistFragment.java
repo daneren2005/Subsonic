@@ -99,11 +99,8 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(super.onOptionsItemSelected(item)) {
-			return true;
-		}
+		return super.onOptionsItemSelected(item);
 
-		return false;
 	}
 
 	@Override

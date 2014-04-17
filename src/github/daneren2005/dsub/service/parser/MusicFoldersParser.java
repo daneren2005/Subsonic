@@ -27,7 +27,6 @@ import org.xmlpull.v1.XmlPullParser;
 import android.content.Context;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicFolder;
-import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.util.ProgressListener;
 
 /**

@@ -41,7 +41,7 @@ public class MostRecentStubProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return new String();
+        return "";
     }
 
     @Override

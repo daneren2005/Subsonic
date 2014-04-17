@@ -36,7 +36,7 @@ import github.daneren2005.dsub.service.DownloadService;
  */
 public class JukeboxRouteProvider extends MediaRouteProvider {
 	public static final String CATEGORY_JUKEBOX_ROUTE = "github.daneren2005.dsub.SERVER_JUKEBOX";
-	private static int MAX_VOLUME = 10;
+	private static final int MAX_VOLUME = 10;
 
 	private DownloadService downloadService;
 

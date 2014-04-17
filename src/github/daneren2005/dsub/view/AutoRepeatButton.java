@@ -8,8 +8,8 @@ import android.widget.ImageButton;
 
 public class AutoRepeatButton extends ImageButton {
 
-	private long initialRepeatDelay = 1000;
-	private long repeatIntervalInMilliseconds = 300;
+	private static final long initialRepeatDelay = 1000;
+	private static final long repeatIntervalInMilliseconds = 300;
 	private boolean doClick = true;
 	private Runnable repeatEvent = null;
 

@@ -41,7 +41,7 @@ public class PlaylistStubProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return new String();
+        return "";
     }
 
     @Override

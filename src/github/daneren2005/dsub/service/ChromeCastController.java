@@ -54,9 +54,6 @@ public class ChromeCastController extends RemoteController {
 
 	private CastDevice castDevice;
 	private GoogleApiClient apiClient;
-	private ConnectionCallbacks connectionCallbacks;
-	private ConnectionFailedListener connectionFailedListener;
-	private Cast.Listener castClientListener;
 
 	private boolean applicationStarted = false;
 	private boolean waitingForReconnect = false;
@@ -81,9 +78,9 @@ public class ChromeCastController extends RemoteController {
 	public void create(boolean playing, int seconds) {
 		downloadService.setPlayerState(PlayerState.PREPARING);
 
-		connectionCallbacks = new ConnectionCallbacks(playing, seconds);
-		connectionFailedListener = new ConnectionFailedListener();
-		castClientListener = new Cast.Listener() {
+		ConnectionCallbacks connectionCallbacks = new ConnectionCallbacks(playing, seconds);
+		ConnectionFailedListener connectionFailedListener = new ConnectionFailedListener();
+		Cast.Listener castClientListener = new Cast.Listener() {
 			@Override
 			public void onApplicationStatusChanged() {
 				if (apiClient != null && apiClient.isConnected()) {
@@ -96,7 +93,7 @@ public class ChromeCastController extends RemoteController {
 				if (apiClient != null && applicationStarted) {
 					try {
 						gain = Cast.CastApi.getVolume(apiClient);
-					} catch(Exception e) {
+					} catch (Exception e) {
 						Log.w(TAG, "Failed to get volume");
 					}
 				}

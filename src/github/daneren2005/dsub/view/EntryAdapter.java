@@ -19,7 +19,7 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.util.Log;
+
 import java.util.List;
 
 import android.view.View;

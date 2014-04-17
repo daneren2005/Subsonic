@@ -87,7 +87,7 @@ public class CachedMusicService implements MusicService {
             	result = musicService.isLicenseValid(context, progressListener);
 
 				// Only save a copy license is valid
-				if(result == true) {
+				if(result) {
 					FileUtil.serialize(context, (Boolean) result, getCacheName(context, "license"));
 				}
 			}

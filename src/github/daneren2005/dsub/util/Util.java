@@ -39,7 +39,6 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -173,11 +172,7 @@ public final class Util {
 	public static boolean checkServerVersion(Context context, String requiredVersion) {
 		Version version = Util.getServerRestVersion(context);
 		Version required = new Version(requiredVersion);
-		if(version != null && version.compareTo(required) >= 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return version != null && version.compareTo(required) >= 0;
 	}
 	
 	public static int getServerCount(Context context) {

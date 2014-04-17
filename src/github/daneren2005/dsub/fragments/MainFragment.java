@@ -358,7 +358,7 @@ public class MainFragment extends SubsonicFragment {
 						progs.add(logcat.getPath());
 						progs.add("*:I");
 
-						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[0]));
+						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
 						logcatProc.waitFor();
 					} catch(Exception e) {
 						Util.toast(context, "Failed to gather logs");

@@ -31,7 +31,6 @@ import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
@@ -296,10 +295,10 @@ public class DownloadFile implements BufferFile {
 	
 	public void setPlaying(boolean isPlaying) {
 		try {
-			if(saveWhenDone && isPlaying == false) {
+			if(saveWhenDone && !isPlaying) {
 				Util.renameFile(completeFile, saveFile);
 				saveWhenDone = false;
-			} else if(completeWhenDone && isPlaying == false) {
+			} else if(completeWhenDone && !isPlaying) {
 				if(save) {
 					Util.renameFile(partialFile, saveFile);
                     mediaStoreService.saveInMediaStore(DownloadFile.this);

@@ -63,11 +63,7 @@ public class AlbumListAdapter extends EndlessAdapter {
 			result = service.getAlbumList(type, size, offset, context, null);
 		}
 		entries = result.getChildren();
-		if(entries.size() > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return entries.size() > 0;
 	}
 
 	@Override

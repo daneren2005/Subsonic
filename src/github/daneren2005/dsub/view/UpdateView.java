@@ -131,7 +131,7 @@ public class UpdateView extends LinearLayout {
 				return;
 			}
 
-			List<UpdateView> views = new ArrayList<UpdateView>();;
+			List<UpdateView> views = new ArrayList<UpdateView>();
             for (UpdateView view : INSTANCES.keySet()) {
                 if (view.isShown()) {
 					views.add(view);

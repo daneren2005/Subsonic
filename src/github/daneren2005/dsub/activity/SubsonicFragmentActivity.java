@@ -320,11 +320,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(super.onOptionsItemSelected(item)) {
-			return true;
-		} else {
-			return false;
-		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

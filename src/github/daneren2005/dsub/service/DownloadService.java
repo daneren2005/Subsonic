@@ -99,7 +99,6 @@ public class DownloadService extends Service {
 	private MediaPlayer nextMediaPlayer;
 	private int audioSessionId;
 	private boolean nextSetup = false;
-	private boolean isPartial = true;
 	private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> toDelete = new ArrayList<DownloadFile>();
@@ -128,7 +127,6 @@ public class DownloadService extends Service {
 	private PowerManager.WakeLock wakeLock;
 	private boolean keepScreenOn;
 	private int cachedPosition = 0;
-	private long downloadRevision;
 	private boolean downloadOngoing = false;
 
 	private AudioEffectsController effectsController;
@@ -1262,7 +1260,7 @@ public class DownloadService extends Service {
 		try {
 			downloadFile.setPlaying(true);
 			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-			isPartial = file.equals(downloadFile.getPartialFile());
+			boolean isPartial = file.equals(downloadFile.getPartialFile());
 			downloadFile.updateModificationDate();
 
 			mediaPlayer.setOnCompletionListener(null);
@@ -1618,7 +1616,6 @@ public class DownloadService extends Service {
 
 		if(!backgroundDownloadList.isEmpty()) {
 			Util.showDownloadingNotification(this, currentDownloading, backgroundDownloadList.size());
-			downloadRevision = revision;
 			downloadOngoing = true;
 		} else if(backgroundDownloadList.isEmpty() && downloadOngoing) {
 			Util.hideDownloadingNotification(this);

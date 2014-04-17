@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;

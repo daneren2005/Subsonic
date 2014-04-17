@@ -215,7 +215,6 @@ public class ImageLoader {
 				}
 			}
 			imageView.setImageDrawable(drawable);
-			return;
 		}
 	}
 

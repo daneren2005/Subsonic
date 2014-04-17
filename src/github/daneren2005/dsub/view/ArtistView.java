@@ -27,7 +27,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.Util;
+
 import java.io.File;
 
 /**

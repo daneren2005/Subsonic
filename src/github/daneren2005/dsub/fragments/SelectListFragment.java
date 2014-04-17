@@ -100,11 +100,8 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(super.onOptionsItemSelected(item)) {
-			return true;
-		}
+		return super.onOptionsItemSelected(item);
 
-		return false;
 	}
 
 	@Override
