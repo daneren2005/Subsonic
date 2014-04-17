@@ -6,4 +6,5 @@
 	android:resizeMode="horizontal|vertical"
 	android:initialLayout="@layout/appwidget4x4"
 	android:initialKeyguardLayout="@layout/appwidget4x4"
+	android:previewImage="@drawable/appwidget4x4_preview"
 	android:widgetCategory="keyguard|home_screen"/>
