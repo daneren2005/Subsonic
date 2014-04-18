@@ -7,12 +7,18 @@
 
 	<include layout="@layout/tab_progress" />
 
-	<ListView
-		android:id="@+id/chat_entries"
+	<android.support.v4.widget.SwipeRefreshLayout
+		android:id="@+id/refresh_layout"
 		android:layout_width="fill_parent"
 		android:layout_height="0dip"
-		android:layout_weight="1.0"
-		android:textFilterEnabled="true" />
+		android:layout_weight="1.0">
+
+		<ListView
+			android:id="@+id/chat_entries"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:textFilterEnabled="true" />
+	</android.support.v4.widget.SwipeRefreshLayout>
 
 	<LinearLayout 
 		android:layout_height="4dip" 
@@ -32,7 +38,7 @@
 			android:layout_weight="1"
 			android:autoLink="all"
 			android:hint="@string/chat.send_a_message"
-			android:inputType="textEmailAddress|textMultiLine"            
+			android:inputType="textEmailAddress|textMultiLine"
 			android:linksClickable="true"
 			android:paddingBottom="10dip"
 			android:paddingTop="10dip" />

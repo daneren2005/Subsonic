@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -157,6 +158,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(name != null) {
 			setTitle(name);
 		}
+
+		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout.setOnRefreshListener(this);
 
 		return rootView;
 	}
@@ -602,6 +606,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
         if (playAll && !restoredInstance) {
             playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
         }
+
+		refreshLayout.setRefreshing(false);
     }
 
 	private void playNow(final boolean shuffle, final boolean append) {

@@ -2,6 +2,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -88,6 +89,9 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			artistList.setAdapter(new ArtistAdapter(context, artists));
 			setMusicFolders();
 		}
+
+		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout.setOnRefreshListener(this);
 
 		return rootView;
 	}
@@ -215,6 +219,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 				setMusicFolders();
 				artistList.setVisibility(View.VISIBLE);
+				refreshLayout.setRefreshing(false);
 			}
 		};
 		task.execute();

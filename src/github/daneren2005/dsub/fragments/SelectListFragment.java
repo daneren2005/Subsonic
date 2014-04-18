@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -86,6 +87,9 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 			listView.setAdapter(adapter = getAdapter(objects));
 		}
 
+		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout.setOnRefreshListener(this);
+
 		return rootView;
 	}
 	
@@ -134,6 +138,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 					listView.setAdapter(adapter = getAdapter(result));
 					listView.setVisibility(View.VISIBLE);
 				}
+				refreshLayout.setRefreshing(false);
 			}
 		};
 		task.execute();

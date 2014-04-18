@@ -30,6 +30,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
@@ -75,7 +76,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class SubsonicFragment extends Fragment {
+public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
 	private static int TAG_INC = 10;
 	private int tag;
@@ -92,6 +93,7 @@ public class SubsonicFragment extends Fragment {
 	protected Share share;
 	protected boolean artist = false;
 	protected boolean artistOverride = false;
+	protected SwipeRefreshLayout refreshLayout;
 	
 	public SubsonicFragment() {
 		super();
@@ -404,6 +406,11 @@ public class SubsonicFragment extends Fragment {
 	}
 	protected void refresh(boolean refresh) {
 
+	}
+
+	@Override
+	public void onRefresh() {
+		refresh();
 	}
 
 	protected void exit() {
