@@ -137,9 +137,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_refresh:
-				refresh(true);
-				return true;
 			case R.id.menu_shuffle:
 				onShuffleRequested();
 				return true;

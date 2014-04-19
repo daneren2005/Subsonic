@@ -172,7 +172,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 		else if(hideButtons && !showAll) {
 			if(albumListType != null) {
-				menuInflater.inflate(R.menu.select_album_list, menu);
+				menuInflater.inflate(R.menu.empty, menu);
 			} else {
 				menuInflater.inflate(R.menu.select_album, menu);
 			}

@@ -8,12 +8,6 @@
 		compat:showAsAction="always|withText"/>
 		
 	<item 
-		android:id="@+id/menu_refresh"
-		android:icon="?attr/refresh"
-		android:title="@string/menu.refresh"
-		compat:showAsAction="always|withText"/>
-		
-	<item 
 		android:id="@+id/menu_shuffle"
 		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
