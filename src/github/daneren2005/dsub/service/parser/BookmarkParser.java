@@ -37,7 +37,6 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
     }
 
     public List<Bookmark> parse(Reader reader, ProgressListener progressListener) throws Exception {
-        updateProgress(progressListener, R.string.parser_reading);
         init(reader);
 
         List<Bookmark> bookmarks = new ArrayList<Bookmark>();
@@ -69,7 +68,6 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-        updateProgress(progressListener, R.string.parser_reading_done);
 
         return bookmarks;
     }

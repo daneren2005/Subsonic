@@ -49,9 +49,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
     }
 
     public Indexes parse(Reader reader, ProgressListener progressListener) throws Exception {
-
         long t0 = System.currentTimeMillis();
-        updateProgress(progressListener, R.string.parser_reading);
         init(reader);
 
         List<Artist> artists = new ArrayList<Artist>();

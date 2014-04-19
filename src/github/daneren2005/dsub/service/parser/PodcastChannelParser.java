@@ -37,7 +37,6 @@ public class PodcastChannelParser extends AbstractParser {
 	}
 
 	public List<PodcastChannel> parse(Reader reader, ProgressListener progressListener) throws Exception {
-		updateProgress(progressListener, R.string.parser_reading);
 		init(reader);
 
 		List<PodcastChannel> channels = new ArrayList<PodcastChannel>();

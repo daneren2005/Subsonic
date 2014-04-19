@@ -36,8 +36,6 @@ public class AlbumListParser extends MusicDirectoryEntryParser {
     }
 
     public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
-
-        updateProgress(progressListener, R.string.parser_reading);
         init(reader);
 
         MusicDirectory dir = new MusicDirectory();
@@ -57,7 +55,6 @@ public class AlbumListParser extends MusicDirectoryEntryParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-        updateProgress(progressListener, R.string.parser_reading_done);
 
         return dir;
     }

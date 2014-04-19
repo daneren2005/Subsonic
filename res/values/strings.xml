@@ -440,9 +440,7 @@
 
     <string name="service.connecting">Contacting server, please wait.</string>
 
-    <string name="parser.reading">Reading from server.</string>
-    <string name="parser.reading_done">Reading from server. Done!</string>
-    <string name="parser.upgrade_client">Incompatible versions. Please upgrade DSub Android app.</string>
+    <string name="parser.upgrade_client">Incompatible versions. Please upgrade DSub.</string>
     <string name="parser.upgrade_server">Incompatible versions. Please upgrade Subsonic server.</string>
     <string name="parser.not_authenticated">Wrong username or password.</string>
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>

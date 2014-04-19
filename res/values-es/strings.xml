@@ -434,8 +434,6 @@
 
     <string name="service.connecting">Conectando con el servidor, espere por favor.</string>
 
-    <string name="parser.reading">Leyendo desde el servidor.</string>
-    <string name="parser.reading_done">Leyendo desde el servidor. Hecho!</string>
     <string name="parser.upgrade_client">Versiones incompatibles. Por favor, actualice la aplicación DSub de Android.</string>
     <string name="parser.upgrade_server">Versiones incompatibles. Por favor, actualice su servidor Subsonic.</string>
     <string name="parser.not_authenticated">Usuario o contraseña inconrrectos.</string>

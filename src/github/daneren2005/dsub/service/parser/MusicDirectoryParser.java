@@ -44,7 +44,6 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 
     public MusicDirectory parse(String artist, Reader reader, ProgressListener progressListener) throws Exception {
         long t0 = System.currentTimeMillis();
-        updateProgress(progressListener, R.string.parser_reading);
         init(reader);
 
         MusicDirectory dir = new MusicDirectory();
@@ -74,7 +73,6 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-        updateProgress(progressListener, R.string.parser_reading_done);
 		
 		// Only apply sorting on server version 4.7 and greater, where disc is supported
 		if(Util.checkServerVersion(context, "1.8.0") && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true)) {

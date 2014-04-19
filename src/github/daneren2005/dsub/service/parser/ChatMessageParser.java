@@ -38,7 +38,6 @@ public class ChatMessageParser extends AbstractParser {
     }
 
     public List<ChatMessage> parse(Reader reader, ProgressListener progressListener) throws Exception {
-        updateProgress(progressListener, R.string.parser_reading);
         init(reader);
         List<ChatMessage> result = new ArrayList<ChatMessage>();
         int eventType;
@@ -60,7 +59,6 @@ public class ChatMessageParser extends AbstractParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-        updateProgress(progressListener, R.string.parser_reading_done);
         
         return result;
     }

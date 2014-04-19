@@ -36,7 +36,6 @@ public class LyricsParser extends AbstractParser {
     }
 
     public Lyrics parse(Reader reader, ProgressListener progressListener) throws Exception {
-        updateProgress(progressListener, R.string.parser_reading);
         init(reader);
 
         Lyrics lyrics = null;

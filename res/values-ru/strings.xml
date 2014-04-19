@@ -259,8 +259,6 @@
 
     <string name="service.connecting">Подключение к серверу. Пожалуйста, подождите.</string>
 
-    <string name="parser.reading">Чтение с сервера.</string>
-    <string name="parser.reading_done">Чтение с сервера выполнено!</string>
     <string name="parser.upgrade_client">Несовместимые версии. Пожалуйста, обновите приложение DSub для Android.</string>
     <string name="parser.upgrade_server">Несовместимые версии. Пожалуйста, обновите сервер Subsonic.</string>
     <string name="parser.not_authenticated">Неправильное имя пользователя или пароль.</string>
