@@ -82,18 +82,16 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				for(MusicDirectory.Entry entry: playlist.getChildren()) {
 					DownloadFile file = new DownloadFile(context, entry, true);
 					String path = file.getCompleteFile().getPath();
-					if(!cachedPlaylist.synced.contains(path)) {
-						while(!file.isSaved() && !file.isFailedMax()) {
-							file.downloadNow(musicService);
-							if(!updated.contains(playlist.getName())) {
-								updated.add(playlist.getName());
-							}
+					while(!file.isSaved() && !file.isFailedMax()) {
+						file.downloadNow(musicService);
+						if(file.isSaved() && !updated.contains(playlist.getName())) {
+							updated.add(playlist.getName());
 						}
+					}
 
-						// Add to cached path set if saved
-						if(file.isSaved()) {
-							cachedPlaylist.synced.add(path);
-						}
+					// Add to cached path set if saved
+					if(file.isSaved() && !cachedPlaylist.synced.contains(path)) {
+						cachedPlaylist.synced.add(path);
 					}
 
 					origPathList.remove(path);
@@ -118,12 +116,13 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				Log.e(TAG, "Failed to get playlist " + id + " for " + serverName, e);
 			}
 
-			if(updated.size() > 0) {
-				SyncUtil.showSyncNotification(context, R.string.sync_new_playlists, SyncUtil.joinNames(updated));
-			}
 			if(updated.size() > 0 || removed) {
 				SyncUtil.setSyncedPlaylists(context, instance, playlistList);
 			}
+		}
+
+		if(updated.size() > 0) {
+			SyncUtil.showSyncNotification(context, R.string.sync_new_playlists, SyncUtil.joinNames(updated));
 		}
 	}
 }

@@ -66,6 +66,7 @@ public class DownloadFile implements BufferFile {
 	private boolean completeWhenDone = false;
 	private Long contentLength = null;
 	private long currentSpeed = 0;
+	private boolean rateLimit = false;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
         this.context = context;
@@ -149,10 +150,12 @@ public class DownloadFile implements BufferFile {
 	}
 
     public synchronized void download() {
+    	rateLimit = false;
         preDownload();
         downloadTask.execute();
     }
     public synchronized void downloadNow(MusicService musicService) {
+    	rateLimit = true;
     	preDownload();
 		downloadTask.setMusicService(musicService);
 		try {
@@ -522,6 +525,7 @@ public class DownloadFile implements BufferFile {
             long lastLog = System.currentTimeMillis();
 			long lastCount = 0;
 
+			boolean activeLimit = rateLimit;
             while (!isCancelled() && (n = in.read(buffer)) != -1) {
                 out.write(buffer, 0, n);
                 count += n;
@@ -533,6 +537,21 @@ public class DownloadFile implements BufferFile {
 					currentSpeed = lastCount / ((now - lastLog) / 1000L);
                     lastLog = now;
 					lastCount = 0;
+					
+					// Re-establish every few seconds whether screen is on or not
+					if(rateLimit) {
+						PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+						if(pm.isScreenOn()) {
+							activeLimit = true;
+						} else {
+							activeLimit = false;
+						}
+					}
+                }
+                
+                // If screen is on and rateLimit is true, stop downloading from exhausting bandwidth
+                if(activeLimit) {
+                	Thread.sleep(10L);
                 }
             }
             return count;
