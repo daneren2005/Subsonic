@@ -40,7 +40,6 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
     }
 
     public SearchResult parse(Reader reader, ProgressListener progressListener) throws Exception {
-        updateProgress(progressListener, R.string.parser_reading);
         init(reader);
 
         List<Artist> artists = new ArrayList<Artist>();
@@ -69,7 +68,6 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-        updateProgress(progressListener, R.string.parser_reading_done);
 
         return new SearchResult(artists, albums, songs);
     }

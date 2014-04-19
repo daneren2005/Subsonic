@@ -39,7 +39,6 @@ public class PodcastEntryParser extends AbstractParser {
     }
 	
 	public MusicDirectory parse(String channel, Reader reader, ProgressListener progressListener) throws Exception {
-		updateProgress(progressListener, R.string.parser_reading);
 		init(reader);
 
 		MusicDirectory episodes = new MusicDirectory();

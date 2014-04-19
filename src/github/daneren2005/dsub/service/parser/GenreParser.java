@@ -45,8 +45,6 @@ public class GenreParser extends AbstractParser {
     }
 
     public List<Genre> parse(Reader reader, ProgressListener progressListener) throws Exception {
-        updateProgress(progressListener, R.string.parser_reading);
-        
         List<Genre> result = new ArrayList<Genre>();
         StringReader sr = null;
         
@@ -118,7 +116,6 @@ public class GenreParser extends AbstractParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-        updateProgress(progressListener, R.string.parser_reading_done);
         
         return Genre.GenreComparator.sort(result);
     }

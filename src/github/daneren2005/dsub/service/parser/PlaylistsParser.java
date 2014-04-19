@@ -39,8 +39,6 @@ public class PlaylistsParser extends AbstractParser {
     }
 
     public List<Playlist> parse(Reader reader, ProgressListener progressListener) throws Exception {
-
-        updateProgress(progressListener, R.string.parser_reading);
         init(reader);
 
         List<Playlist> result = new ArrayList<Playlist>();
@@ -65,7 +63,6 @@ public class PlaylistsParser extends AbstractParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
-        updateProgress(progressListener, R.string.parser_reading_done);
 
         return PlaylistAdapter.PlaylistComparator.sort(result);
     }

@@ -441,8 +441,6 @@
 
     <string name="service.connecting">Csatlakozás a kiszolgálóhoz, kérem várjon!</string>
 
-    <string name="parser.reading">Olvasás a kiszolgálóról...</string>
-    <string name="parser.reading_done">Olvasás a kiszolgálóról. Kész!</string>
     <string name="parser.upgrade_client">Nem kompatibilis verzió. Kérjük, frissítse a DSub Android alkalmazást!</string>
     <string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Subsonic kiszolgálót!</string>
     <string name="parser.not_authenticated">Hibás felhasználónév vagy jelszó!</string>
