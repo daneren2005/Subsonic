@@ -606,8 +606,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
         if (playAll && !restoredInstance) {
             playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
         }
-
-		refreshLayout.setRefreshing(false);
     }
 
 	private void playNow(final boolean shuffle, final boolean append) {

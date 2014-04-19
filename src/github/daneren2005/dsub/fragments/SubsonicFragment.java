@@ -407,6 +407,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	@Override
 	public void onRefresh() {
+		refreshLayout.setRefreshing(false);
 		refresh();
 	}
 

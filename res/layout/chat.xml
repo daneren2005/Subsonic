@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/chat_layout"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/refresh_layout"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical" >
+	android:layout_height="fill_parent">
 
-	<include layout="@layout/tab_progress" />
-
-	<android.support.v4.widget.SwipeRefreshLayout
-		android:id="@+id/refresh_layout"
+	<LinearLayout
+		android:id="@+id/chat_layout"
 		android:layout_width="fill_parent"
-		android:layout_height="0dip"
-		android:layout_weight="1.0">
+		android:layout_height="fill_parent"
+		android:orientation="vertical" >
+
+		<include layout="@layout/tab_progress" />
 
 		<ListView
 			android:id="@+id/chat_entries"
 			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1.0"
 			android:textFilterEnabled="true" />
-	</android.support.v4.widget.SwipeRefreshLayout>
 
-	<LinearLayout 
-		android:layout_height="4dip" 
-		android:layout_width="fill_parent" 
-		android:layout_marginTop="4dip"/>
+		<LinearLayout
+			android:layout_height="4dip"
+			android:layout_width="fill_parent"
+			android:layout_marginTop="4dip"/>
 
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="bottom" >
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="bottom" >
 
-		<EditText
-			android:id="@+id/chat_edittext"
-			android:layout_width="0dip"
-			android:layout_height="40dip"
-			android:layout_weight="1"
-			android:autoLink="all"
-			android:hint="@string/chat.send_a_message"
-			android:inputType="textEmailAddress|textMultiLine"
-			android:linksClickable="true"
-			android:paddingBottom="10dip"
-			android:paddingTop="10dip" />
+			<EditText
+				android:id="@+id/chat_edittext"
+				android:layout_width="0dip"
+				android:layout_height="40dip"
+				android:layout_weight="1"
+				android:autoLink="all"
+				android:hint="@string/chat.send_a_message"
+				android:inputType="textEmailAddress|textMultiLine"
+				android:linksClickable="true"
+				android:paddingBottom="10dip"
+				android:paddingTop="10dip" />
 
-		<ImageButton
-			android:id="@+id/chat_send"
-			android:layout_width="60dip"
-			android:layout_height="40dip"
-			android:src="?attr/chat_send" />
+			<ImageButton
+				android:id="@+id/chat_send"
+				android:layout_width="60dip"
+				android:layout_height="40dip"
+				android:src="?attr/chat_send" />
 
+		</LinearLayout>
 	</LinearLayout>
-</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

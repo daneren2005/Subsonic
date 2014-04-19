@@ -1300,6 +1300,7 @@ public class RESTMusicService implements MusicService {
         if (progressListener != null) {
             progressListener.updateProgress(R.string.service_connecting);
         }
+		Util.sleepQuietly(2000L);
 
         String url = getRestUrl(context, method);
         return getReaderForURL(context, url, requestParams, parameterNames, parameterValues, progressListener);

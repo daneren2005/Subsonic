@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/select_album_layout"
-	android:orientation="vertical"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/refresh_layout"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-	<View
+	<LinearLayout
+		android:id="@+id/select_album_layout"
+		android:orientation="vertical"
 		android:layout_width="fill_parent"
-		android:layout_height="1px"
-		android:background="@color/dividerColor"/>
+		android:layout_height="fill_parent">
 
-	<include layout="@layout/tab_progress"/>
+		<View
+			android:layout_width="fill_parent"
+			android:layout_height="1px"
+			android:background="@color/dividerColor"/>
 
-	<TextView
-		android:id="@+id/select_album_empty"
-		android:text="@string/select_album.empty"
-		android:visibility="gone"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:padding="10dip"/>
+		<include layout="@layout/tab_progress"/>
 
-	<android.support.v4.widget.SwipeRefreshLayout
-		android:id="@+id/refresh_layout"
-		android:layout_width="fill_parent"
-		android:layout_height="0dip"
-		android:layout_weight="1.0">
+		<TextView
+			android:id="@+id/select_album_empty"
+			android:text="@string/select_album.empty"
+			android:visibility="gone"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:padding="10dip"/>
 
 		<com.mobeta.android.dslv.DragSortListView
 			style="@style/DragDropListView"
 			android:id="@+id/select_album_entries"
 			android:textFilterEnabled="true"
 			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1.0"
 			android:fastScrollEnabled="true"/>
-
-	</android.support.v4.widget.SwipeRefreshLayout>
-</LinearLayout>
+	</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

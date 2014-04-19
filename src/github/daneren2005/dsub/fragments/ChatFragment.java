@@ -217,7 +217,6 @@ public class ChatFragment extends SubsonicFragment {
 					ChatAdapter chatAdapter = new ChatAdapter(context, messageList);
 					chatListView.setAdapter(chatAdapter);
 				}
-				refreshLayout.setRefreshing(false);
 			}
 		};
 
