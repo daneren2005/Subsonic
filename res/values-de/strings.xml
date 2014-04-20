@@ -420,7 +420,7 @@
 
     <string name="service.connecting">Kontaktiere Server, bitte warten.</string>
 
-    <string name="parser.upgrade_client">Inkompatible Versionen. Aktualisierung der DSub Android App erforderlich.</string>
+    <string name="parser.upgrade_client">Inkompatible Versionen. Aktualisierung von DSub erforderlich.</string>
     <string name="parser.upgrade_server">Inkompatible Versionen. Aktualisierung des Subsonic Server erforderlich.</string>
     <string name="parser.not_authenticated">Benutzername oder/und Passwort falsch.</string>
     <string name="parser.not_authorized">Nicht authorisiert. Bitte prüfen Sie die Einstellungen im Subsonic-Server.</string>
