@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -64,11 +65,24 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
+		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout.setOnRefreshListener(this);
+
 		artistList = (ListView) rootView.findViewById(R.id.fragment_list);
 		artistList.setOnItemClickListener(this);
 		if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
 			artistList.setFastScrollAlwaysVisible(true);
 		}
+		artistList.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				int topRowVerticalPosition = (artistList.getChildCount() == 0) ? 0 : artistList.getChildAt(0).getTop();
+				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
+			}
+		});
 
 		folderButtonParent = inflater.inflate(R.layout.select_artist_header, artistList, false);
 		folderName = (TextView) folderButtonParent.findViewById(R.id.select_artist_folder_2);
@@ -89,9 +103,6 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 			artistList.setAdapter(new ArtistAdapter(context, artists));
 			setMusicFolders();
 		}
-
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-		refreshLayout.setOnRefreshListener(this);
 
 		return rootView;
 	}

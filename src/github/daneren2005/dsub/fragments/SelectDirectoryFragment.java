@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -95,6 +96,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.select_album, container, false);
 
+		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout.setOnRefreshListener(this);
+
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
 		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		entryList.setOnItemClickListener(this);
@@ -110,6 +114,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 				entries.add(to, entries.remove(from));
 				entryAdapter.notifyDataSetChanged();
+			}
+		});
+
+		entryList.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				int topRowVerticalPosition = (entryList.getChildCount() == 0) ? 0 : entryList.getChildAt(0).getTop();
+				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
 			}
 		});
 
@@ -158,9 +173,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(name != null) {
 			setTitle(name);
 		}
-
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-		refreshLayout.setOnRefreshListener(this);
 
 		return rootView;
 	}

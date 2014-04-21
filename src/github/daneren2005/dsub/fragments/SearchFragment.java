@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -92,6 +93,9 @@ public class SearchFragment extends SubsonicFragment {
 		moreAlbumsButton = buttons.findViewById(R.id.search_more_albums);
 		moreSongsButton = buttons.findViewById(R.id.search_more_songs);
 
+		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout.setEnabled(false);
+
 		list = (ListView) rootView.findViewById(R.id.fragment_list);
 
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -122,15 +126,22 @@ public class SearchFragment extends SubsonicFragment {
 			}
 		});
 		registerForContextMenu(list);
+		list.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				int topRowVerticalPosition = (list.getChildCount() == 0) ? 0 : list.getChildAt(0).getTop();
+				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
+			}
+		});
 		context.onNewIntent(context.getIntent());
 
 		if(searchResult != null) {
 			skipSearch = true;
             populateList();
 		}
-
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-		refreshLayout.setEnabled(false);
 
 		return rootView;
 	}
