@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.view.AlbumGridAdapter;
 import github.daneren2005.dsub.view.EntryAdapter;
 
 import java.io.Serializable;
@@ -49,12 +51,14 @@ import java.util.Set;
 public class SelectDirectoryFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
+	private GridView albumList;
 	private DragSortListView entryList;
 	private View emptyView;
 	private boolean hideButtons = false;
 	private Boolean licenseValid;
 	private boolean showHeader = true;
 	private EntryAdapter entryAdapter;
+	private List<MusicDirectory.Entry> albums;
 	private List<MusicDirectory.Entry> entries;
 
 	String id;
@@ -94,6 +98,27 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.select_album, container, false);
+
+		albumList = (GridView) rootView.findViewById(R.id.select_album_albums);
+		albumList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
+				SubsonicFragment fragment = new SelectDirectoryFragment();
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
+				if ("newest".equals(albumListType)) {
+					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
+				}
+				if(entry.getArtist() == null && entry.getParent() == null) {
+					args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+				}
+				fragment.setArguments(args);
+
+				replaceFragment(fragment, true);
+			}
+		});
 
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
 		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -563,7 +588,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		@Override
 		protected void done(Pair<MusicDirectory, Boolean> result) {
-			entries = result.getFirst().getChildren();
+			albums = result.getFirst().getChildren(true, false);
+			entries = result.getFirst().getChildren(false, true);
             licenseValid = result.getSecond();
             finishLoading();
 		}
@@ -591,13 +617,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
         }
 
-        emptyView.setVisibility(entries.isEmpty() ? View.VISIBLE : View.GONE);
-        entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null));
-        if(albumListType == null || "starred".equals(albumListType)) {
-            entryList.setAdapter(entryAdapter);
-        } else {
-            entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
-        }
+		emptyView.setVisibility((entries.isEmpty() && albums.isEmpty()) ? View.VISIBLE : View.GONE);
+		entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null));
+		entryList.setAdapter(entryAdapter);
+		if(albumListType == null || "starred".equals(albumListType)) {
+			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums));
+		} else {
+			albumList.setAdapter(new AlbumListAdapter(context, new AlbumGridAdapter(context, getImageLoader(), albums), albumListType, albumListExtra, albumListSize));
+		}
         entryList.setVisibility(View.VISIBLE);
         context.supportInvalidateOptionsMenu();
 
