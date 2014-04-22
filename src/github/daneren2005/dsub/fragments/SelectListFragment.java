@@ -27,6 +27,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -76,8 +77,21 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
+		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout.setOnRefreshListener(this);
+
 		listView = (ListView)rootView.findViewById(R.id.fragment_list);
 		listView.setOnItemClickListener(this);
+		listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				int topRowVerticalPosition = (listView.getChildCount() == 0) ? 0 : listView.getChildAt(0).getTop();
+				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
+			}
+		});
 		registerForContextMenu(listView);
 		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 
@@ -86,9 +100,6 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 		} else {
 			listView.setAdapter(adapter = getAdapter(objects));
 		}
-
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-		refreshLayout.setOnRefreshListener(this);
 
 		return rootView;
 	}
