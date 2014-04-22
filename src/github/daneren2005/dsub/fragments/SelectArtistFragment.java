@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -23,6 +24,7 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistAdapter;
@@ -31,24 +33,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectArtistFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
+public class SelectArtistFragment extends SelectListFragment<Artist> {
 	private static final String TAG = SelectArtistFragment.class.getSimpleName();
 	private static final int MENU_GROUP_MUSIC_FOLDER = 10;
 
-	private ListView artistList;
 	private View folderButtonParent;
 	private View folderButton;
 	private TextView folderName;
 	private List<MusicFolder> musicFolders = null;
 	private List<MusicDirectory.Entry> entries;
-	private List<Artist> artists;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 
 		if(bundle != null) {
-			artists = (List<Artist>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 			musicFolders = (List<MusicFolder>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
 		}
 		artist = true;
@@ -57,50 +56,21 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) artists);
 		outState.putSerializable(Constants.FRAGMENT_LIST2, (Serializable) musicFolders);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
+		super.onCreateView(inflater, container, bundle);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-		refreshLayout.setOnRefreshListener(this);
-
-		artistList = (ListView) rootView.findViewById(R.id.fragment_list);
-		artistList.setOnItemClickListener(this);
 		if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-			artistList.setFastScrollAlwaysVisible(true);
+			listView.setFastScrollAlwaysVisible(true);
 		}
-		artistList.setOnScrollListener(new AbsListView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (artistList.getChildCount() == 0) ? 0 : artistList.getChildAt(0).getTop();
-				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-			}
-		});
-
-		folderButtonParent = inflater.inflate(R.layout.select_artist_header, artistList, false);
-		folderName = (TextView) folderButtonParent.findViewById(R.id.select_artist_folder_2);
-		artistList.addHeaderView(folderButtonParent);
-		folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
-
-		registerForContextMenu(artistList);
-		if(artists == null) {
-			if(!primaryFragment) {
-				invalidated = true;
-			} else {
-				refresh(false);
-			}
-		} else {
+		if(objects != null) {
 			if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
 				folderButton.setVisibility(View.GONE);
 			}
-			artistList.setAdapter(new ArtistAdapter(context, artists));
 			setMusicFolders();
 		}
 
@@ -108,22 +78,11 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		menuInflater.inflate(R.menu.select_artist, menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return super.onOptionsItemSelected(item);
-
-	}
-
-	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		Object entry = artistList.getItemAtPosition(info.position);
+		Object entry = listView.getItemAtPosition(info.position);
 
 		if (entry instanceof Artist) {
 			onCreateContextMenu(menu, view, menuInfo, entry);
@@ -155,7 +114,7 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 		}
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Artist artist = (Artist) artistList.getItemAtPosition(info.position);
+		Artist artist = (Artist) listView.getItemAtPosition(info.position);
 
 		if (artist != null) {
 			return onContextItemSelected(menuItem, artist);
@@ -193,19 +152,20 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 	}
 
 	@Override
-	protected void refresh(boolean refresh) {
-		load(refresh);
-	}
+	protected void refresh(final boolean refresh) {
+		if(folderButton == null) {
+			folderButtonParent = getLayoutInflater(null).inflate(R.layout.select_artist_header, listView, false);
+			folderName = (TextView) folderButtonParent.findViewById(R.id.select_artist_folder_2);
+			listView.addHeaderView(folderButtonParent);
+			folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
+		}
 
-	private void load(final boolean refresh) {
-		setTitle(R.string.button_bar_browse);
-		
 		if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
 			folderButton.setVisibility(View.GONE);
 		} else {
 			folderButton.setVisibility(View.VISIBLE);
 		}
-		artistList.setVisibility(View.INVISIBLE);
+		listView.setVisibility(View.INVISIBLE);
 
 		BackgroundTask<Indexes> task = new TabBackgroundTask<Indexes>(this) {
 			@Override
@@ -220,21 +180,42 @@ public class SelectArtistFragment extends SubsonicFragment implements AdapterVie
 
 			@Override
 			protected void done(Indexes result) {
-				artists = new ArrayList<Artist>(result.getShortcuts().size() + result.getArtists().size());
-				artists.addAll(result.getShortcuts());
-				artists.addAll(result.getArtists());
-				artistList.setFastScrollEnabled(false);
-				artistList.setAdapter(new ArtistAdapter(context, artists));
-				artistList.setFastScrollEnabled(true);
+				objects = new ArrayList<Artist>(result.getShortcuts().size() + result.getArtists().size());
+				objects.addAll(result.getShortcuts());
+				objects.addAll(result.getArtists());
+				listView.setFastScrollEnabled(false);
+				listView.setAdapter(adapter = getAdapter(objects));
+				listView.setFastScrollEnabled(true);
 				entries = result.getEntries();
 
 				setMusicFolders();
-				artistList.setVisibility(View.VISIBLE);
+				listView.setVisibility(View.VISIBLE);
 				refreshLayout.setRefreshing(false);
 			}
 		};
 		task.execute();
 	}
+
+	@Override
+	public int getOptionsMenu() {
+		return R.menu.select_artist;
+	}
+
+	@Override
+	public ArrayAdapter getAdapter(List<Artist> objects) {
+		return new ArtistAdapter(context, objects);
+	}
+
+	@Override
+	public List<Artist> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+		return null;
+	}
+
+	@Override
+	public int getTitleResource() {
+		return R.string.button_bar_browse;
+	}
+
 	private void setMusicFolders() {
 		// Display selected music folder
 		if (musicFolders != null) {
