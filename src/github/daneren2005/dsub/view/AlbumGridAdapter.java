@@ -42,8 +42,13 @@ public class AlbumGridAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		MusicDirectory.Entry entry = getItem(position);
 
-		AlbumView view;
-		view = new AlbumView(activity);
+		AlbumCell view;
+		if(convertView instanceof AlbumCell) {
+			view = (AlbumCell) convertView;
+		} else {
+			view = new AlbumCell(activity);
+		}
+
 		view.setObject(entry, imageLoader);
 		return view;
 	}
