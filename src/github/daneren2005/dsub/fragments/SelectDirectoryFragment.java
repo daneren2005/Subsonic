@@ -61,6 +61,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private EntryAdapter entryAdapter;
 	private List<MusicDirectory.Entry> albums;
 	private List<MusicDirectory.Entry> entries;
+	private boolean albumContext = false;
 
 	String id;
 	String name;
@@ -124,6 +125,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 		});
 
+		albumList.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				int topRowVerticalPosition = (albumList.getChildCount() == 0) ? 0 : albumList.getChildAt(0).getTop();
+				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
+			}
+		});
+
 		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
 		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		entryList.setOnItemClickListener(this);
@@ -142,13 +154,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 		});
 
-		albumList.setOnScrollListener(new AbsListView.OnScrollListener() {
+		entryList.setOnScrollListener(new AbsListView.OnScrollListener() {
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (albumList.getChildCount() == 0) ? 0 : albumList.getChildAt(0).getTop();
+				int topRowVerticalPosition = (entryList.getChildCount() == 0) ? 0 : entryList.getChildAt(0).getTop();
 				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
 			}
 		});
@@ -156,6 +168,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		emptyView = rootView.findViewById(R.id.select_album_empty);
 
 		registerForContextMenu(entryList);
+		registerForContextMenu(albumList);
 
 		Bundle args = getArguments();
 		if(args != null) {
@@ -309,7 +322,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
-		MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
+		MusicDirectory.Entry entry;
+		if(view.getId() == R.id.select_album_entries) {
+			entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
+			albumContext = false;
+		} else {
+			entry = (MusicDirectory.Entry) albumList.getItemAtPosition(info.position);
+			albumContext = true;
+		}
+
 		onCreateContextMenu(menu, view, menuInfo, entry);
 		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null && (podcastId == null  || Util.isOffline(context) && podcastId != null)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
@@ -335,7 +356,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Object selectedItem = entries.get(showHeader ? (info.position - 1) : info.position);
+		Object selectedItem;
+		if(albumContext) {
+			selectedItem = albums.get(showHeader ? (info.position - 1) : info.position);
+		} else {
+			selectedItem = entries.get(showHeader ? (info.position - 1) : info.position);
+		}
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false) && menuItem.getItemId() == R.id.song_menu_play_now) {
 			List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
