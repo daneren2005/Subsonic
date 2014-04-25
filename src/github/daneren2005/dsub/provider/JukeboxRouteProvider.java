@@ -30,12 +30,14 @@ import android.support.v7.media.MediaRouteProviderDescriptor;
 
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.RemoteController;
 
 /**
  * Created by Scott on 11/28/13.
  */
 public class JukeboxRouteProvider extends MediaRouteProvider {
 	public static final String CATEGORY_JUKEBOX_ROUTE = "github.daneren2005.dsub.SERVER_JUKEBOX";
+	private RemoteController controller;
 	private static final int MAX_VOLUME = 10;
 
 	private DownloadService downloadService;
@@ -44,6 +46,10 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 		super(context);
 		this.downloadService = (DownloadService) context;
 
+		broadcastDescriptor();
+	}
+
+	private void broadcastDescriptor() {
 		// Create intents
 		IntentFilter routeIntentFilter = new IntentFilter();
 		routeIntentFilter.addCategory(CATEGORY_JUKEBOX_ROUTE);
@@ -57,7 +63,7 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 				.setPlaybackStream(AudioManager.STREAM_MUSIC)
 				.setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
 				.setDescription("Subsonic Jukebox")
-				.setVolume(5)
+				.setVolume(controller == null ? 5 : (int) (controller.getVolume() * 10))
 				.setVolumeMax(MAX_VOLUME)
 				.setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_VARIABLE);
 
@@ -72,7 +78,7 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 		return new JukeboxRouteController(downloadService);
 	}
 
-	private static class JukeboxRouteController extends RouteController {
+	private class JukeboxRouteController extends RouteController {
 		private DownloadService downloadService;
 
 		public JukeboxRouteController(DownloadService downloadService) {
@@ -91,16 +97,27 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 		@Override
 		public void onRelease() {
 			downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
+			controller = null;
 		}
 
 		@Override
 		public void onSelect() {
 			downloadService.setRemoteEnabled(RemoteControlState.JUKEBOX_SERVER);
+			controller = downloadService.getRemoteController();
 		}
 
 		@Override
 		public void onUnselect() {
 			downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
+			controller = null;
+		}
+
+		@Override
+		public void onUpdateVolume(int delta) {
+			if(controller != null) {
+				controller.setVolume(delta > 0);
+			}
+			broadcastDescriptor();
 		}
 	}
 }

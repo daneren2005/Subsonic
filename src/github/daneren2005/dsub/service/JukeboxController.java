@@ -134,6 +134,10 @@ public class JukeboxController extends RemoteController {
 		tasks.remove(SetGain.class);
 		tasks.add(new SetGain(gain));
 	}
+	@Override
+	public double getVolume() {
+		return gain;
+	}
 	
 	@Override
 	public int getRemotePosition() {

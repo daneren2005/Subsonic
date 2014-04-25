@@ -1114,6 +1114,10 @@ public class DownloadService extends Service {
 		return remoteState != RemoteControlState.LOCAL;
 	}
 
+	public RemoteController getRemoteController() {
+		return remoteController;
+	}
+
 	public void setRemoteEnabled(RemoteControlState newState) {
 		if(instance != null) {
 			setRemoteEnabled(newState, null);
@@ -1236,7 +1240,11 @@ public class DownloadService extends Service {
 	}
 
 	public void setRemoteVolume(boolean up) {
-		remoteController.setVolume(up);
+		if(remoteState == RemoteControlState.JUKEBOX_SERVER) {
+			mediaRouter.getSelectedRoute().requestUpdateVolume(up ? 1 : -1);
+		} else {
+			remoteController.setVolume(up);
+		}
 	}
 
 	public void startRemoteScan() {

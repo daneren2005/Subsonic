@@ -213,6 +213,10 @@ public class ChromeCastController extends RemoteController {
 			Log.e(TAG, "Failed to the volume");
 		}
 	}
+	@Override
+	public double getVolume() {
+		return Cast.CastApi.getVolume(apiClient);
+	}
 
 	@Override
 	public int getRemotePosition() {
