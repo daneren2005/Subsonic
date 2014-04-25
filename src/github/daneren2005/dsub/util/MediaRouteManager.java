@@ -85,9 +85,17 @@ public class MediaRouteManager extends MediaRouter.Callback {
 				downloadService.setRemoteEnabled(RemoteControlState.CHROMECAST, controller);
 			}
 		}
+
+		if(downloadService.isRemoteEnabled()) {
+			downloadService.registerRoute(router);
+		}
 	}
 	@Override
 	public void onRouteUnselected(MediaRouter router, RouteInfo info) {
+		if(downloadService.isRemoteEnabled()) {
+			downloadService.unregisterRoute(router);
+		}
+
 		downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
 	}
 

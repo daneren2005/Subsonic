@@ -70,6 +70,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.support.v7.media.MediaRouteSelector;
+import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.support.v4.util.LruCache;
 import java.net.URLEncoder;
@@ -1225,6 +1226,13 @@ public class DownloadService extends Service {
 				}
 			});
 		}
+	}
+
+	public void registerRoute(MediaRouter router) {
+		mRemoteControl.registerRoute(router);
+	}
+	public void unregisterRoute(MediaRouter router) {
+		mRemoteControl.unregisterRoute(router);
 	}
 
 	public void setRemoteVolume(boolean up) {

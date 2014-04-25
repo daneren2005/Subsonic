@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
+import android.support.v7.media.MediaRouter;
 
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
@@ -68,6 +69,17 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
     		imageLoader.loadImage(context, mRemoteControl, currentSong);
     	}
 	}
+
+	@Override
+	public void registerRoute(MediaRouter router) {
+		router.addRemoteControlClient(mRemoteControl);
+	}
+
+	@Override
+	public void unregisterRoute(MediaRouter router) {
+		router.removeRemoteControlClient(mRemoteControl);
+	}
+
 	protected void updateMetadata(final MusicDirectory.Entry currentSong, final RemoteControlClient.MetadataEditor editor) {
 		editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
 			.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
