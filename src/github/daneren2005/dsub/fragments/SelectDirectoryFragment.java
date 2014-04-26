@@ -53,7 +53,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private GridView albumList;
-	private DragSortListView entryList;
+	private ListView entryList;
 	private View emptyView;
 	private boolean hideButtons = false;
 	private Boolean licenseValid;
@@ -104,7 +104,22 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
 
-		albumList = (GridView) rootView.findViewById(R.id.select_album_albums);
+		entryList = (ListView) rootView.findViewById(R.id.select_album_entries);
+		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		entryList.setOnItemClickListener(this);
+
+		entryList.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				int topRowVerticalPosition = (entryList.getChildCount() == 0) ? 0 : entryList.getChildAt(0).getTop();
+				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
+			}
+		});
+
+		albumList = (GridView) inflater.inflate(R.layout.grid_view, entryList, false);
 		albumList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -124,46 +139,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				replaceFragment(fragment, true);
 			}
 		});
-
-		albumList.setOnScrollListener(new AbsListView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (albumList.getChildCount() == 0) ? 0 : albumList.getChildAt(0).getTop();
-				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-			}
-		});
-
-		entryList = (DragSortListView) rootView.findViewById(R.id.select_album_entries);
-		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		entryList.setOnItemClickListener(this);
-		entryList.setDropListener(new DragSortListView.DropListener() {
-			@Override
-			public void drop(int from, int to) {
-				int max = entries.size();
-				if(to >= max) {
-					to = max - 1;
-				}
-				else if(to < 0) {
-					to = 0;
-				}
-				entries.add(to, entries.remove(from));
-				entryAdapter.notifyDataSetChanged();
-			}
-		});
-
-		entryList.setOnScrollListener(new AbsListView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (entryList.getChildCount() == 0) ? 0 : entryList.getChildAt(0).getTop();
-				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-			}
-		});
+		entryList.addHeaderView(albumList);
 
 		emptyView = rootView.findViewById(R.id.select_album_empty);
 
@@ -324,6 +300,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		MusicDirectory.Entry entry;
 		if(view.getId() == R.id.select_album_entries) {
+			if(info.position == 0) {
+				return;
+			}
 			entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
 			albumContext = false;
 		} else {
@@ -360,6 +339,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(albumContext) {
 			selectedItem = albums.get(showHeader ? (info.position - 1) : info.position);
 		} else {
+			if(info.position == 0) {
+				return false;
+			}
+			info.position--;
 			selectedItem = entries.get(showHeader ? (info.position - 1) : info.position);
 		}
 
@@ -645,7 +628,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
             if(showHeader) {
                 View header = createHeader(entries);
                 if(header != null) {
+					entryList.removeHeaderView(albumList);
                     entryList.addHeaderView(header, null, false);
+					entryList.addHeaderView(albumList);
                 }
             }
         } else {

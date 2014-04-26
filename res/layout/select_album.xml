@@ -25,23 +25,11 @@
 			android:layout_height="wrap_content"
 			android:padding="10dip"/>
 
-		<GridView
-			android:id="@+id/select_album_albums"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:numColumns="auto_fit"
-			android:horizontalSpacing="10dp"
-			android:verticalSpacing="10dp"
-			android:gravity="center"
-			android:stretchMode="columnWidth"/>
-
-		<com.mobeta.android.dslv.DragSortListView
-			style="@style/DragDropListView"
+		<ListView
 			android:id="@+id/select_album_entries"
 			android:textFilterEnabled="true"
 			android:layout_width="fill_parent"
 			android:layout_height="0dip"
-			android:layout_weight="1.0"
-			android:fastScrollEnabled="true"/>
+			android:layout_weight="1.0"/>
 	</LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
