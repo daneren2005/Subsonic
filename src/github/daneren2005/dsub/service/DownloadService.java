@@ -1534,7 +1534,11 @@ public class DownloadService extends Service {
 	private void handleError(Exception x) {
 		Log.w(TAG, "Media player error: " + x, x);
 		if(mediaPlayer != null) {
-			mediaPlayer.reset();
+			try {
+				mediaPlayer.reset();
+			} catch(Exception e) {
+				Log.e(TAG, "Failed to reset player in error handler");
+			}
 		}
 		setPlayerState(IDLE);
 	}
