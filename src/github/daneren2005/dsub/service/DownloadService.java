@@ -30,7 +30,6 @@ import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
 
 import github.daneren2005.dsub.audiofx.AudioEffectsController;
 import github.daneren2005.dsub.audiofx.EqualizerController;
-import github.daneren2005.dsub.audiofx.LoudnessEnhancerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -73,7 +72,6 @@ import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.support.v4.util.LruCache;
-import java.net.URLEncoder;
 
 /**
  * @author Sindre Mehus
@@ -1239,11 +1237,11 @@ public class DownloadService extends Service {
 		mRemoteControl.unregisterRoute(router);
 	}
 
-	public void setRemoteVolume(boolean up) {
+	public void updateRemoteVolume(boolean up) {
 		if(remoteState == RemoteControlState.JUKEBOX_SERVER) {
 			mediaRouter.getSelectedRoute().requestUpdateVolume(up ? 1 : -1);
 		} else {
-			remoteController.setVolume(up);
+			remoteController.updateVolume(up);
 		}
 	}
 

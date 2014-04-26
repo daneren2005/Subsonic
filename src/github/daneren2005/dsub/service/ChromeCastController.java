@@ -200,7 +200,18 @@ public class ChromeCastController extends RemoteController {
 	}
 
 	@Override
-	public void setVolume(boolean up) {
+	public void setVolume(int volume) {
+		gain = volume / 10.0;
+
+		getVolumeToast().setVolume((float) gain);
+		try {
+			Cast.CastApi.setVolume(apiClient, gain);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to the volume");
+		}
+	}
+	@Override
+	public void updateVolume(boolean up) {
 		double delta = up ? 0.1 : -0.1;
 		gain += delta;
 		gain = Math.max(gain, 0.0);

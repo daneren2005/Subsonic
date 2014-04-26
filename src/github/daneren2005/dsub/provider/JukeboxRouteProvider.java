@@ -115,7 +115,15 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 		@Override
 		public void onUpdateVolume(int delta) {
 			if(controller != null) {
-				controller.setVolume(delta > 0);
+				controller.updateVolume(delta > 0);
+			}
+			broadcastDescriptor();
+		}
+
+		@Override
+		public void onSetVolume(int volume) {
+			if(controller != null) {
+				controller.setVolume(volume);
 			}
 			broadcastDescriptor();
 		}

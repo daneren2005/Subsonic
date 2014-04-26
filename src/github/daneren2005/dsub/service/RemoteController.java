@@ -46,7 +46,8 @@ public abstract class RemoteController {
 	public abstract void updatePlaylist();
 	public abstract void changePosition(int seconds);
 	public abstract void changeTrack(int index, DownloadFile song);
-	public abstract void setVolume(boolean up);
+	public abstract void setVolume(int volume);
+	public abstract void updateVolume(boolean up);
 	public abstract double getVolume();
 	
 	public abstract int getRemotePosition();

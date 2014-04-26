@@ -124,7 +124,15 @@ public class JukeboxController extends RemoteController {
 		downloadService.setPlayerState(PlayerState.STARTED);
 	}
 	@Override
-	public void setVolume(boolean up) {
+	public void setVolume(int volume) {
+		gain = volume / 10.0f;
+
+		getVolumeToast().setVolume(gain);
+		tasks.remove(SetGain.class);
+		tasks.add(new SetGain(gain));
+	}
+	@Override
+	public void updateVolume(boolean up) {
 		float delta = up ? 0.1f : -0.1f;
 		gain += delta;
 		gain = Math.max(gain, 0.0f);

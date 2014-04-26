@@ -350,7 +350,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		boolean isJukebox = getDownloadService() != null && getDownloadService().isRemoteEnabled();
 
 		if (isVolumeAdjust && isJukebox) {
-			getDownloadService().setRemoteVolume(isVolumeUp);
+			getDownloadService().updateRemoteVolume(isVolumeUp);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
