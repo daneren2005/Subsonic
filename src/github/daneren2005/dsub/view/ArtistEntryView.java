@@ -37,7 +37,7 @@ import java.io.File;
  * @author Sindre Mehus
  */
 public class ArtistEntryView extends UpdateView {
-	private static final String TAG = AlbumView.class.getSimpleName();
+	private static final String TAG = ArtistEntryView.class.getSimpleName();
 
 	private Context context;
 	private MusicDirectory.Entry artist;
