@@ -30,6 +30,7 @@
 			android:textFilterEnabled="true"
 			android:layout_width="fill_parent"
 			android:layout_height="0dip"
-			android:layout_weight="1.0"/>
+			android:layout_weight="1.0"
+			android:fastScrollEnabled="true"/>
 	</LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
