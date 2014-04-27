@@ -135,22 +135,24 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		entryList.setOnItemClickListener(this);
 
+		entryList.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				int topRowVerticalPosition = (entryList.getChildCount() == 0) ? 0 : entryList.getChildAt(0).getTop();
+				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
+			}
+		});
+
 		if(albumListType == null || "starred".equals(albumListType)) {
 			albumList = (GridView) inflater.inflate(R.layout.unscrollable_grid_view, entryList, false);
-
-			entryList.setOnScrollListener(new AbsListView.OnScrollListener() {
-				@Override
-				public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-				@Override
-				public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-					int topRowVerticalPosition = (entryList.getChildCount() == 0) ? 0 : entryList.getChildAt(0).getTop();
-					refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-				}
-			});
+			entryList.addHeaderView(albumList);
 		} else {
 			ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
 			albumList = (GridView) inflater.inflate(R.layout.grid_view, rootGroup, false);
+			rootGroup.removeView(entryList);
 			rootGroup.addView(albumList);
 
 			albumList.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -183,11 +185,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				replaceFragment(fragment, true);
 			}
 		});
-		if(albumListType == null || "starred".equals(albumListType)) {
-			entryList.addHeaderView(albumList);
-		} else {
-			entryList.setVisibility(View.GONE);
-		}
 
 		emptyView = rootView.findViewById(R.id.select_album_empty);
 
@@ -602,7 +599,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 						SelectDirectoryFragment.this.albumListType = "genres-songs";
 						result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
 					}
-				} else if("genres".equals(albumListType)) {
+				} else if("genres".equals(albumListType) || "genres-songs".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
 				} else {
 					result = service.getAlbumList(albumListType, size, 0, context, this);
@@ -664,7 +661,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		emptyView.setVisibility((entries.isEmpty() && albums.isEmpty()) ? View.VISIBLE : View.GONE);
 		entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null));
 		entryList.setAdapter(entryAdapter);
-		if(albumListType == null || "starred".equals(albumListType)) {
+		if("genres-songs".equals(albumListType)) {
+			ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
+			if(rootGroup.findViewById(R.id.gridview) != null) {
+				rootGroup.removeView(albumList);
+				rootGroup.addView(entryList);
+			}
+
+			entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
+		}
+		else if(albumListType == null || "starred".equals(albumListType)) {
 			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums));
 		} else {
 			albumList.setAdapter(new AlbumListAdapter(context, new AlbumGridAdapter(context, getImageLoader(), albums), albumListType, albumListExtra, albumListSize));
