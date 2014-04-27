@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.6 Beta" versioncode="102" releasedate="4/27/2014">
+		<change>Large album art</change>
+		<change>Pull to refresh</change>
+		<change>Control remote playing (Jukebox/Chromecast) volume from outside app (JB+)</change>
+		<change>Rate limiting for background sync while phone is in use</change>
+		<change>Fix issue with playlist sync not picking up changes</change>
+	</release>
 	<release version="4.5.8" versioncode="100" releasedate="4/15/2014">
 		<change>Downloads list now in own sub tab - only visible when something is downloading</change>
 		<change>Remember folder selection when switching between servers</change>
