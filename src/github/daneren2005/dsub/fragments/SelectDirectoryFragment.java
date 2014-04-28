@@ -134,17 +134,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		entryList = (ListView) rootView.findViewById(R.id.select_album_entries);
 		entryList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		entryList.setOnItemClickListener(this);
-
-		entryList.setOnScrollListener(new AbsListView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (entryList.getChildCount() == 0) ? 0 : entryList.getChildAt(0).getTop();
-				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-			}
-		});
+		setupScrollList(entryList);
 
 		if(albumListType == null || "starred".equals(albumListType)) {
 			albumList = (GridView) inflater.inflate(R.layout.unscrollable_grid_view, entryList, false);
@@ -155,16 +145,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			rootGroup.removeView(entryList);
 			rootGroup.addView(albumList);
 
-			albumList.setOnScrollListener(new AbsListView.OnScrollListener() {
-				@Override
-				public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-				@Override
-				public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-					int topRowVerticalPosition = (albumList.getChildCount() == 0) ? 0 : albumList.getChildAt(0).getTop();
-					refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-				}
-			});
+			setupScrollList(albumList);
 		}
 		albumList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override

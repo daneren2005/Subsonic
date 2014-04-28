@@ -126,16 +126,7 @@ public class SearchFragment extends SubsonicFragment {
 			}
 		});
 		registerForContextMenu(list);
-		list.setOnScrollListener(new AbsListView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (list.getChildCount() == 0) ? 0 : list.getChildAt(0).getTop();
-				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-			}
-		});
+		setupScrollList(list);
 		context.onNewIntent(context.getIntent());
 
 		if(searchResult != null) {

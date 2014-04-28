@@ -131,17 +131,7 @@ public class ChatFragment extends SubsonicFragment {
 
 		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
-
-		chatListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (chatListView.getChildCount() == 0) ? 0 : chatListView.getChildAt(0).getTop();
-				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-			}
-		});
+		setupScrollList(chatListView);
 
 		return rootView;
 	}

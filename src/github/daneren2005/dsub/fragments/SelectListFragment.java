@@ -82,16 +82,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 
 		listView = (ListView)rootView.findViewById(R.id.fragment_list);
 		listView.setOnItemClickListener(this);
-		listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (listView.getChildCount() == 0) ? 0 : listView.getChildAt(0).getTop();
-				refreshLayout.setEnabled(topRowVerticalPosition >= 0);
-			}
-		});
+		setupScrollList(listView);
 		registerForContextMenu(listView);
 		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 

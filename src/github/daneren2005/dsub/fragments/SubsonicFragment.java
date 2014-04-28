@@ -38,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -458,6 +459,19 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 	public CharSequence getTitle() {
 		return this.title;
+	}
+
+	protected void setupScrollList(final AbsListView listView) {
+		listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				int topRowVerticalPosition = (listView.getChildCount() == 0) ? 0 : listView.getChildAt(0).getTop();
+				refreshLayout.setEnabled(topRowVerticalPosition >= 0 && listView.getFirstVisiblePosition() == 0);
+			}
+		});
 	}
 
 	protected void warnIfNetworkOrStorageUnavailable() {
