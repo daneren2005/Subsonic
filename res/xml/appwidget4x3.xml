@@ -4,4 +4,5 @@
 	android:minHeight="180dp"
 	android:updatePeriodMillis="0"
 	android:resizeMode="horizontal|vertical"
+	android:previewImage="@drawable/appwidget4x3_preview"
 	android:initialLayout="@layout/appwidget4x3"/>
