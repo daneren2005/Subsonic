@@ -87,6 +87,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		super.onCreate(bundle);
 		if(bundle != null) {
 			entries = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+			albums = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
 			restoredInstance = true;
 		}
 	}
@@ -95,6 +96,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
+		outState.putSerializable(Constants.FRAGMENT_LIST2, (Serializable) albums);
 	}
 
 	@Override
@@ -123,6 +125,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 			if(entries == null) {
 				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
+				albums = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST2);
 			}
 		}
 
