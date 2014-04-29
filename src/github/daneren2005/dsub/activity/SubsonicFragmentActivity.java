@@ -104,13 +104,15 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
+			boolean firstRun = false;
 			if(fragmentType == null && Util.isOpenToLibrary(this)) {
 				fragmentType = "Artist";
 				getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+				firstRun = true;
 			}
 			currentFragment = getNewFragment(fragmentType);
 			
-			if("".equals(fragmentType) || fragmentType == null) {
+			if("".equals(fragmentType) || fragmentType == null || firstRun) {
 				// Initial startup stuff
 				loadSettings();
 			}
