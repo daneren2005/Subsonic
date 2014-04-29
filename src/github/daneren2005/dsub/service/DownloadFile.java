@@ -21,6 +21,7 @@ package github.daneren2005.dsub.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -434,8 +435,15 @@ public class DownloadFile implements BufferFile {
 
             } catch(InterruptedException x) {
 				throw x;
+			} catch(FileNotFoundException x) {
+				Util.delete(completeFile);
+				Util.delete(saveFile);
+				if(!isCancelled()) {
+					failed = MAX_FAILURES + 1;
+					failedDownload = true;
+					Log.w(TAG, "Failed to download '" + song + "'.", x);
+				}
 			} catch(IOException x) {
-				Util.close(out);
 				Util.delete(completeFile);
 				Util.delete(saveFile);
 				if(!isCancelled()) {
@@ -443,7 +451,6 @@ public class DownloadFile implements BufferFile {
 					Log.w(TAG, "Failed to download '" + song + "'.", x);
 				}
 			} catch (Exception x) {
-                Util.close(out);
                 Util.delete(completeFile);
                 Util.delete(saveFile);
                 if (!isCancelled()) {
