@@ -39,6 +39,7 @@ public class AlbumCell  extends UpdateView {
 	private View coverArtView;
 	private TextView titleView;
 	private TextView artistView;
+	private boolean showArtist = true;
 
 	public AlbumCell(Context context) {
 		super(context);
@@ -56,6 +57,10 @@ public class AlbumCell  extends UpdateView {
 		});
 	}
 
+	public void setShowArtist(boolean showArtist) {
+		this.showArtist = showArtist;
+	}
+
 	protected void setObjectImpl(Object obj1, Object obj2) {
 		this.album = (MusicDirectory.Entry) obj1;
 		if(album.getAlbum() == null) {
@@ -63,12 +68,17 @@ public class AlbumCell  extends UpdateView {
 		} else {
 			titleView.setText(album.getAlbum());
 		}
-		String artist = album.getArtist();
-		if(artist == null) {
-			artist = "";
-		}
-		if(album.getYear() != null) {
-			artist += " - " + album.getYear();
+		String artist = "";
+		if(showArtist) {
+			artist = album.getArtist();
+			if (artist == null) {
+				artist = "";
+			}
+			if (album.getYear() != null) {
+				artist += " - " + album.getYear();
+			}
+		} else if(album.getYear() != null) {
+			artist += album.getYear();
 		}
 		artistView.setText(artist);
 		artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);

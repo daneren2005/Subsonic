@@ -655,9 +655,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
 		}
 		else if(albumListType == null || "starred".equals(albumListType)) {
-			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums));
+			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
 		} else {
-			albumList.setAdapter(new AlbumListAdapter(context, new AlbumGridAdapter(context, getImageLoader(), albums), albumListType, albumListExtra, albumListSize));
+			albumList.setAdapter(new AlbumListAdapter(context, new AlbumGridAdapter(context, getImageLoader(), albums, true), albumListType, albumListExtra, albumListSize));
 		}
         entryList.setVisibility(View.VISIBLE);
         context.supportInvalidateOptionsMenu();

@@ -30,12 +30,14 @@ public class AlbumGridAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 	private final Context activity;
 	private final ImageLoader imageLoader;
 	private List<MusicDirectory.Entry> entries;
+	private boolean showArtist;
 
-	public AlbumGridAdapter(Context activity, ImageLoader imageLoader, List<MusicDirectory.Entry> entries) {
+	public AlbumGridAdapter(Context activity, ImageLoader imageLoader, List<MusicDirectory.Entry> entries, boolean showArtist) {
 		super(activity, android.R.layout.simple_list_item_1, entries);
 		this.entries = entries;
 		this.activity = activity;
 		this.imageLoader = imageLoader;
+		this.showArtist = showArtist;
 	}
 
 	@Override
@@ -49,6 +51,7 @@ public class AlbumGridAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 			view = new AlbumCell(activity);
 		}
 
+		view.setShowArtist(showArtist);
 		view.setObject(entry, imageLoader);
 		return view;
 	}
