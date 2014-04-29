@@ -315,11 +315,7 @@ public class FileUtil {
     public static File getDefaultMusicDirectory(Context context) {
 		if(DEFAULT_MUSIC_DIR == null) {
 			File[] dirs = ContextCompat.getExternalFilesDirs(context, null);
-			if(Util.isExternalStoragePresent()) {
-				DEFAULT_MUSIC_DIR = new File(dirs[dirs.length - 1], "music");
-			} else {
-				DEFAULT_MUSIC_DIR = new File(context.getExternalFilesDir(null), "music");
-			}
+			DEFAULT_MUSIC_DIR = new File(dirs[dirs.length - 1], "music");
 			if (!DEFAULT_MUSIC_DIR.exists() && !DEFAULT_MUSIC_DIR.mkdirs()) {
 				Log.e(TAG, "Failed to create default dir " + DEFAULT_MUSIC_DIR);
 			}
