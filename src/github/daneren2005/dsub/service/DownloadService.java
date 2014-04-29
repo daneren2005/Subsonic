@@ -1521,10 +1521,11 @@ public class DownloadService extends Service {
 		int currentPlayingIndex = getCurrentPlayingIndex();
 		DownloadFile movedSong = list.remove(from);
 		list.add(to, movedSong);
+		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 		if(remoteState != RemoteControlState.LOCAL && mainList) {
 			updateJukeboxPlaylist();
-		} else if(mainList && (movedSong == nextPlaying || (currentPlayingIndex + 1) == to)) {
-			// Moving next playing or moving a song to be next playing
+		} else if(mainList && (movedSong == nextPlaying || movedSong == currentPlaying || (currentPlayingIndex + 1) == to)) {
+			// Moving next playing, current playing, or moving a song to be next playing
 			setNextPlaying();
 		}
 	}
