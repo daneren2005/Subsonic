@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.6 Beta 2" versioncode="103" releasedate="4/28/2014">
+		<change>Fix issue causing pull to refresh being triggered incorrectly</change>
+		<change>Fix crash on rotate</change>
+		<change>Re-enable fast scroll for grid of albums</change>
+		<change>Fix case of drag/dropping where next song isn't updated correctly</change>
+	</release>
 	<release version="4.6 Beta" versioncode="102" releasedate="4/27/2014">
 		<change>Large album art</change>
 		<change>Pull to refresh</change>
 		<change>Control remote playing (Jukebox/Chromecast) volume from outside app (JB+)</change>
 		<change>Rate limiting for background sync while phone is in use</change>
 		<change>Fix issue with playlist sync not picking up changes</change>
+		<change>Fix DSub preempting all bluetooth events</change>
 	</release>
 	<release version="4.5.8" versioncode="100" releasedate="4/15/2014">
 		<change>Downloads list now in own sub tab - only visible when something is downloading</change>
