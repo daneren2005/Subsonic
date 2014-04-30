@@ -508,12 +508,16 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void clearIncomplete() {
-		reset();
 		Iterator<DownloadFile> iterator = downloadList.iterator();
 		while (iterator.hasNext()) {
 			DownloadFile downloadFile = iterator.next();
 			if (!downloadFile.isCompleteFileAvailable()) {
 				iterator.remove();
+				
+				// Reset if the current playing song has been removed
+				if(currentPlaying == downloadFile) {
+					reset();
+				}
 			}
 		}
 		lifecycleSupport.serializeDownloadQueue();
