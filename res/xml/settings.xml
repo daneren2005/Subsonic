@@ -67,6 +67,11 @@
 				android:key="overrideSystemLanguage"
 				android:defaultValue="false"/>
 
+			<CheckBoxPreference
+				android:title="@string/settings.large_album_art"
+				android:summary="@string/settings.large_album_art_summary"
+				android:key="largeAlbumArt"
+				android:defaultValue="true"/>
 		</PreferenceCategory>
 
 		<PreferenceCategory

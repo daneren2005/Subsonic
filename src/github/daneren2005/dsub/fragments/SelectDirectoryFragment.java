@@ -77,6 +77,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	boolean showAll = false;
 	boolean restoredInstance = false;
 	boolean lookupParent = false;
+	boolean largeAlbums = false;
 	
 	public SelectDirectoryFragment() {
 		super();
@@ -139,7 +140,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		entryList.setOnItemClickListener(this);
 		setupScrollList(entryList);
 
-		if(albumListType == null || "starred".equals(albumListType)) {
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true)) {
+			largeAlbums = true;
+		}
+
+		if(albumListType == null || "starred".equals(albumListType) || !largeAlbums) {
 			albumList = (GridView) inflater.inflate(R.layout.unscrollable_grid_view, entryList, false);
 			entryList.addHeaderView(albumList);
 		} else {
@@ -611,8 +616,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		@Override
 		protected void done(Pair<MusicDirectory, Boolean> result) {
-			albums = result.getFirst().getChildren(true, false);
-			entries = result.getFirst().getChildren(false, true);
+			if(largeAlbums) {
+				albums = result.getFirst().getChildren(true, false);
+				entries = result.getFirst().getChildren(false, true);
+			} else {
+				albums = new ArrayList<MusicDirectory.Entry>();
+				entries = result.getFirst().getChildren();
+			}
             licenseValid = result.getSecond();
             finishLoading();
 		}
@@ -647,17 +657,18 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		entryList.setAdapter(entryAdapter);
 		if("genres-songs".equals(albumListType)) {
 			ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
-			if(rootGroup.findViewById(R.id.gridview) != null) {
+			if(rootGroup.findViewById(R.id.gridview) != null && largeAlbums) {
 				rootGroup.removeView(albumList);
 				rootGroup.addView(entryList);
 			}
 
 			entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
-		}
-		else if(albumListType == null || "starred".equals(albumListType)) {
-			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
-		} else {
-			albumList.setAdapter(new AlbumListAdapter(context, new AlbumGridAdapter(context, getImageLoader(), albums, true), albumListType, albumListExtra, albumListSize));
+		} else if(largeAlbums) {
+			if(albumListType == null || "starred".equals(albumListType)) {
+				albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
+			} else {
+				albumList.setAdapter(new AlbumListAdapter(context, new AlbumGridAdapter(context, getImageLoader(), albums, true), albumListType, albumListExtra, albumListSize));
+			}
 		}
         entryList.setVisibility(View.VISIBLE);
         context.supportInvalidateOptionsMenu();

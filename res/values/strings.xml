@@ -402,6 +402,8 @@
 	<string name="settings.drawer_items_title">Drawer Items</string>
 	<string name="settings.play_now_after">Play Now - After</string>
 	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
+	<string name="settings.large_album_art">Large Album Art</string>
+	<string name="settings.large_album_art_summary">Display albums with large album art instead of in a list</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
