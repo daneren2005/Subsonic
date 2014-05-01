@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.6 Beta 3" versioncode="104" releasedate="4/30/2014">
+		<change>Make large album art optional</change>
+		<change>Don't show artist for large album arts when viewing a artist's albums</change>
+		<change>Add padding around albums</change>
+		<change>Fix a case of files trying to download infinitely in background</change>
+		<change>Fix crash for Gingerbread</change>
+		<change>Fix going to offline mode losing current track progress</change>
+	</release>
 	<release version="4.6 Beta 2" versioncode="103" releasedate="4/28/2014">
 		<change>Fix issue causing pull to refresh being triggered incorrectly</change>
 		<change>Fix crash on rotate</change>
