@@ -1,6 +1,8 @@
 package github.daneren2005.dsub.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AbsListView;
@@ -27,8 +29,8 @@ public class UnscrollableGridView extends GridView {
 	public int getColumnWidth() {
 		// This method will be called from onMeasure() too.
 		// It's better to use getMeasuredWidth(), as it is safe in this case.
-		final int totalHorizontalSpacing = getNumColumns() > 0 ? (getNumColumns() - 1) * getHorizontalSpacing() : 0;
-		return (getMeasuredWidth() - getPaddingLeft() - getPaddingRight() - totalHorizontalSpacing) / getNumColumns();
+		final int totalHorizontalSpacing = getNumColumnsCompat() > 0 ? (getNumColumnsCompat() - 1) * getHorizontalSpacing() : 0;
+		return (getMeasuredWidth() - getPaddingLeft() - getPaddingRight() - totalHorizontalSpacing) / getNumColumnsCompat();
 	}
 
 	@Override
@@ -70,12 +72,33 @@ public class UnscrollableGridView extends GridView {
 		}
 
 		// Number of rows required to 'mTotal' items.
-		final int rows = (int) Math.ceil((double) getCount() / getNumColumns());
+		final int rows = (int) Math.ceil((double) getCount() / getNumColumnsCompat());
 		final int childrenHeight = childHeight * rows;
 		final int totalVerticalSpacing = rows > 0 ? (rows - 1) * getVerticalSpacing() : 0;
 
 		// Total height of this view.
 		final int measuredHeight = childrenHeight + getPaddingTop() + getPaddingBottom() + totalVerticalSpacing;
 		setMeasuredDimension(measuredWidth, measuredHeight);
+	}
+
+	private int getNumColumnsCompat() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			return getNumColumnsCompat11();
+		} else {
+			int columns = 0;
+			int children = getChildCount();
+			if (children > 0) {
+				int width = getChildAt(0).getMeasuredWidth();
+				if (width > 0) {
+					columns = getWidth() / width;
+				}
+			}
+			return columns > 0 ? columns : AUTO_FIT;
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private int getNumColumnsCompat11() {
+		return getNumColumns();
 	}
 }
