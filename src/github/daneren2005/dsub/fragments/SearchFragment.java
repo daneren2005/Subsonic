@@ -126,7 +126,6 @@ public class SearchFragment extends SubsonicFragment {
 			}
 		});
 		registerForContextMenu(list);
-		setupScrollList(list);
 		context.onNewIntent(context.getIntent());
 
 		if(searchResult != null) {
