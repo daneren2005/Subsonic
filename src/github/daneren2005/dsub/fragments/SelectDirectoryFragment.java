@@ -639,7 +639,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
         if (songCount > 0 && !"root".equals(id)) {
             if(showHeader) {
                 View header = createHeader(entries);
-                if(header != null) {
+                if(header != null && entryList != null) {
 					entryList.removeHeaderView(albumList);
                     entryList.addHeaderView(header, null, false);
 					entryList.addHeaderView(albumList);
