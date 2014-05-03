@@ -4,7 +4,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="0dip"
 	android:layout_weight="1.0"
-	android:numColumns="auto_fit"
+	android:numColumns="@integer/Grid.Columns"
 	android:horizontalSpacing="10dp"
 	android:verticalSpacing="10dp"
 	android:gravity="center"
