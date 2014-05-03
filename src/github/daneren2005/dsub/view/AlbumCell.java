@@ -49,6 +49,9 @@ public class AlbumCell  extends UpdateView {
 		coverArtView = findViewById(R.id.album_coverart);
 		titleView = (TextView) findViewById(R.id.album_title);
 		artistView = (TextView) findViewById(R.id.album_artist);
+
+		starButton = (ImageButton) findViewById(R.id.album_star);
+		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.album_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
