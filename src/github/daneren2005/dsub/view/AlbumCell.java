@@ -83,8 +83,7 @@ public class AlbumCell  extends UpdateView {
 		} else if(album.getYear() != null) {
 			artist += album.getYear();
 		}
-		artistView.setText(artist);
-		artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
+		artistView.setText(album.getArtist() == null ? "" : artist);
 		((ImageLoader)obj2).loadImage(coverArtView, album, false, true);
 		file = null;
 	}
