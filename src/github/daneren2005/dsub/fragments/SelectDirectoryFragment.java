@@ -127,6 +127,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			if(entries == null) {
 				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
 				albums = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST2);
+
+				if(albums == null) {
+					albums = new ArrayList<MusicDirectory.Entry>();
+				}
 			}
 		}
 
