@@ -156,8 +156,18 @@ public class EqualizerFragment extends SubsonicFragment {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_EQUALIZER_ON, enabled);
 		editor.commit();
-		equalizer.setEnabled(enabled);
-		updateBars(true);
+		for(int i = 0; i < 10; i++) {
+			try {
+				equalizer.setEnabled(enabled);
+				updateBars(true);
+				i = 10;
+			} catch (UnsupportedOperationException e) {
+				equalizerController.release();
+				equalizer = equalizerController.getEqualizer();
+				bass = equalizerController.getBassBoost();
+				loudnessEnhancer = equalizerController.getLoudnessEnhancerController();
+			}
+		}
 	}
 
 	private void updateBars(boolean changedEnabled) {
