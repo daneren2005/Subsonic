@@ -1,26 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.6 Beta 3" versioncode="104" releasedate="4/30/2014">
-		<change>Make large album art optional</change>
-		<change>Don't show artist for large album arts when viewing a artist's albums</change>
-		<change>Add padding around albums</change>
-		<change>Fix a case of files trying to download infinitely in background</change>
-		<change>Fix crash for Gingerbread</change>
-		<change>Fix going to offline mode losing current track progress</change>
-	</release>
-	<release version="4.6 Beta 2" versioncode="103" releasedate="4/28/2014">
-		<change>Fix issue causing pull to refresh being triggered incorrectly</change>
-		<change>Fix crash on rotate</change>
-		<change>Re-enable fast scroll for grid of albums</change>
-		<change>Fix case of drag/dropping where next song isn't updated correctly</change>
-	</release>
-	<release version="4.6 Beta" versioncode="102" releasedate="4/27/2014">
-		<change>Large album art</change>
+	<release version="4.6" versioncode="105" releasedate="5/2/2014">
+		<change>Large album art view (optional)</change>
 		<change>Pull to refresh</change>
 		<change>Control remote playing (Jukebox/Chromecast) volume from outside app (JB+)</change>
 		<change>Rate limiting for background sync while phone is in use</change>
 		<change>Fix issue with playlist sync not picking up changes</change>
 		<change>Fix DSub preempting all bluetooth events</change>
+		<change>Fix case of drag/dropping where next song isn't updated correctly</change>
+		<change>Fix cache location not being correct on devices with empty SD card slot</change>
 	</release>
 	<release version="4.5.8" versioncode="100" releasedate="4/15/2014">
 		<change>Downloads list now in own sub tab - only visible when something is downloading</change>
