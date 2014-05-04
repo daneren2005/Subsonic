@@ -206,11 +206,7 @@ public class EqualizerFragment extends SubsonicFragment {
 				} else if(setLevel > maxEQLevel) {
 					setLevel = maxEQLevel;
 				}
-				try {
-					equalizer.setBandLevel(band, setLevel);
-				} catch(Exception e) {
-					Log.w(TAG, "Failed to set band level");
-				}
+				equalizer.setBandLevel(band, setLevel);
 			} else if(!isEnabled) {
 				bar.setProgress(-minEQLevel);
 			}
