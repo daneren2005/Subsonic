@@ -4,15 +4,20 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by Scott on 4/26/2014.
  */
 public class UnscrollableGridView extends GridView {
+	private static final String TAG = UnscrollableGridView.class.getSimpleName();
+
 	public UnscrollableGridView(Context context) {
 		super(context);
 	}
@@ -29,7 +34,17 @@ public class UnscrollableGridView extends GridView {
 	public int getColumnWidth() {
 		// This method will be called from onMeasure() too.
 		// It's better to use getMeasuredWidth(), as it is safe in this case.
-		final int totalHorizontalSpacing = getNumColumnsCompat() > 0 ? (getNumColumnsCompat() - 1) * getHorizontalSpacing() : 0;
+
+		int hSpacing = 20;
+		try {
+			Field field = GridView.class.getDeclaredField("mHorizontalSpacing");
+			field.setAccessible(true);
+			hSpacing = field.getInt(this);
+		} catch(Exception e) {
+
+		}
+
+		final int totalHorizontalSpacing = getNumColumnsCompat() > 0 ? (getNumColumnsCompat() - 1) * hSpacing : 0;
 		return (getMeasuredWidth() - getPaddingLeft() - getPaddingRight() - totalHorizontalSpacing) / getNumColumnsCompat();
 	}
 
@@ -71,13 +86,23 @@ public class UnscrollableGridView extends GridView {
 			childHeight = child.getMeasuredHeight();
 		}
 
+		int vSpacing = 10;
+		try {
+			Field field = GridView.class.getDeclaredField("mVerticalSpacing");
+			field.setAccessible(true);
+			vSpacing = field.getInt(this);
+		} catch(Exception e) {
+
+		}
+
 		// Number of rows required to 'mTotal' items.
 		final int rows = (int) Math.ceil((double) getCount() / getNumColumnsCompat());
 		final int childrenHeight = childHeight * rows;
-		final int totalVerticalSpacing = rows > 0 ? (rows - 1) * getVerticalSpacing() : 0;
+		final int totalVerticalSpacing = rows > 0 ? (rows - 1) * vSpacing : 0;
 
 		// Total height of this view.
-		final int measuredHeight = childrenHeight + getPaddingTop() + getPaddingBottom() + totalVerticalSpacing;
+		final int measuredHeight = Math.abs(childrenHeight + getPaddingTop() + getPaddingBottom() + totalVerticalSpacing);
+		Log.d(TAG, measuredWidth + " x " + measuredHeight);
 		setMeasuredDimension(measuredWidth, measuredHeight);
 	}
 
