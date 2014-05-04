@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.6.1" versioncode="106" releasedate="5/3/2014">
+		<change>Fix crash on ICS and below</change>
+	</release>
 	<release version="4.6" versioncode="105" releasedate="5/2/2014">
 		<change>Large album art view (optional)</change>
 		<change>Pull to refresh</change>
