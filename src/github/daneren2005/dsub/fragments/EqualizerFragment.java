@@ -146,7 +146,17 @@ public class EqualizerFragment extends SubsonicFragment {
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
 		short preset = (short) menuItem.getItemId();
-		equalizer.usePreset(preset);
+		for(int i = 0; i < 10; i++) {
+			try {
+				equalizer.usePreset(preset);
+				i = 10;
+			} catch (UnsupportedOperationException e) {
+				equalizerController.release();
+				equalizer = equalizerController.getEqualizer();
+				bass = equalizerController.getBassBoost();
+				loudnessEnhancer = equalizerController.getLoudnessEnhancerController();
+			}
+		}
 		updateBars(false);
 		return true;
 	}
