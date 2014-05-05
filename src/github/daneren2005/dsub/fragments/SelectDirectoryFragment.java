@@ -707,6 +707,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				break;
 			}
 		}
+		if(albums.size() > 0) {
+			hasSubFolders = true;
+		}
 
 		if (hasSubFolders && (id != null || share != null)) {
 			downloadRecursively(id, false, append, !append, shuffle, false);
