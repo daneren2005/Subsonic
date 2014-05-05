@@ -659,8 +659,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		emptyView.setVisibility((entries.isEmpty() && albums.isEmpty()) ? View.VISIBLE : View.GONE);
+		// Always going to have entries in entryAdapter
 		entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null));
-		entryList.setAdapter(entryAdapter);
+		// Song-only genre needs to always be entry list + infinite adapter
 		if("genres-songs".equals(albumListType)) {
 			ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
 			if(rootGroup.findViewById(R.id.gridview) != null && largeAlbums) {
@@ -669,13 +670,18 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 
 			entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
-		} else if(largeAlbums) {
-			if(albumListType == null || "starred".equals(albumListType)) {
-				albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
-			} else {
+		} else if((albumListType == null || "starred".equals(albumListType)) && largeAlbums) {
+			// Only set standard album adapter if not album list and largeAlbums is true
+			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
+		} else {
+			// If album list, use infinite adapters for either depending on whether or not largeAlbums is true
+			if(largeAlbums) {
 				albumList.setAdapter(new AlbumListAdapter(context, new AlbumGridAdapter(context, getImageLoader(), albums, true), albumListType, albumListExtra, albumListSize));
+			} else {
+				entryAdapter = new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize);
 			}
 		}
+		entryList.setAdapter(entryAdapter);
         entryList.setVisibility(View.VISIBLE);
         context.supportInvalidateOptionsMenu();
 
