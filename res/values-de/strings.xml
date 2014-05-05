@@ -382,6 +382,8 @@
 	<string name="settings.drawer_items_title">Seitenmenü</string>
 	<string name="settings.play_now_after">Jetzt wiedergeben bis zum Listenende</string>
 	<string name="settings.play_now_after_summary">\"Jetzt wiedergeben\" im Kontextmenü spielt das ausgewählte Lied und alle in der Liste nachfolgenden Lieder ab (wie in der Web-Schnittstelle des Subsonic-Server)</string>
+	<string name="settings.large_album_art">Große Cover anzeigen</string>
+	<string name="settings.large_album_art_summary">Verwende große Cover zur Anzeige der Alben anstatt einer Liste</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
