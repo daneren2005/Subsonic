@@ -66,7 +66,7 @@
 	<string name="menu.search">Keresés</string>
 	<string name="menu.shuffle">Lejátszás kevert sorrendben</string>
 	<string name="menu.refresh">Frissítés</string>
-	<string name="menu.select">Összes kijelölése</string>
+	<string name="menu.select">Összes kijelölése be/ki</string>
 	<string name="menu.play">Lejátszás</string>
 	<string name="menu.play_last">Sorbaállítás utolsónak</string>
     <string name="menu.exit">Kilépés</string>
@@ -83,7 +83,7 @@
 	<string name="menu.add_podcast">Csatorna hozzáadása</string>
 	<string name="menu.keep_synced">Tartsa szinkronizálva</string>
 	<string name="menu.stop_sync">Szinkronizálás megállítása</string>
-	<string name="menu.show_all">Minden média megjelenítése</string>
+	<string name="menu.show_all">Összes média megjelenítése</string>
 	<string name="menu.show_artist">Ugrás az előadóhoz</string>
 	<string name="menu.share">Megosztás</string>
 	<string name="menu.delete_cache">Gyorsítótár törlése</string>
@@ -107,13 +107,13 @@
     <string name="search.songs">Dalok</string>
     <string name="search.more">Továbbiak</string>
 
-    <string name="progress.wait">Kérem várjon!</string>
+    <string name="progress.wait">Kérem várjon...</string>
 
     <string name="music_library.label">Médiakönyvtár</string>
     <string name="music_library.label_offline">Kapcsolat nélküli médiák</string>
 
     <string name="select_album.empty">Nem található média!</string>
-    <string name="select_album.select">Összes kijelölése</string>
+    <string name="select_album.select">Összes kijelölése be/ki</string>
     <string name="select_album.n_selected">%d dal kijelölve.</string>
     <string name="select_album.n_unselected">%d dal visszavonva.</string>
     <string name="select_album.more">Továbbiak</string>
@@ -271,7 +271,7 @@
 	<string name="settings.theme_black">Fekete</string>
 	<string name="settings.theme_holo">Holo</string>
 	<string name="settings.theme_fullscreen">Teljes képernyős</string>
-	<string name="settings.theme_fullscreen_summary">Teljes képernyős lejátszó megjelenítése (értesítési sáv rejtése).</string>
+	<string name="settings.theme_fullscreen_summary">Teljes képernyős üzemmód (értesítési sáv rejtése).</string>
 	<string name="settings.track_title">Dalsorszám megjelenítése #</string>
 	<string name="settings.track_summary">Dalsorszám megjelenítése # a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
@@ -402,7 +402,9 @@
 	<string name="settings.override_system_language_summary">A Dsub megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
 	<string name="settings.drawer_items_title">Oldalsáv elemei</string>
 	<string name="settings.play_now_after">Lejátszás utána</string>
-	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik a dal lejátszása minden kijelölt elem után (mint a Subsonic webes felületén)</string>
+	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik minden dal lejátszása a kijelölt elem után (mint a Subsonic webes felületén)</string>
+	<string name="settings.large_album_art">Nagy méretű albumborítók</string>
+	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben nagy méretű albumborítóval a listanézet helyett.</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -432,14 +434,14 @@
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
 
-    <string name="background_task.wait">Kérem várjon!</string>
+    <string name="background_task.wait">Kérem várjon...</string>
     <string name="background_task.loading">Betöltés...</string>
     <string name="background_task.no_network">Az alkalmazás hálózati hozzáférést igényel. Kérjük, kapcsolja be a Wi-Fi-t vagy a mobilhálózatot!</string>
     <string name="background_task.network_error">Hálózati hiba történt! Kérjük, ellenőrizze a kiszolgáló címét vagy próbálja később!</string>
     <string name="background_task.not_found">Az erőforrás nem található! Kérjük, ellenőrizze a kiszolgáló címét!</string>
     <string name="background_task.parse_error">Hiba történt a kiszolgálóval történő kommunikációban. Kérjük, ellenőrizze a kiszolgáló címét, és próbáljon meg web böngészővel a kiszolgálóhoz csatlakozni!</string>
 
-    <string name="service.connecting">Csatlakozás a kiszolgálóhoz, kérem várjon!</string>
+    <string name="service.connecting">Csatlakozás a kiszolgálóhoz, kérem várjon...</string>
 
     <string name="parser.upgrade_client">Nem kompatibilis verzió. Kérjük, frissítse a DSub Android alkalmazást!</string>
     <string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Subsonic kiszolgálót!</string>
