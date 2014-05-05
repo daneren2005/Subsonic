@@ -146,7 +146,17 @@ public class EqualizerFragment extends SubsonicFragment {
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
 		short preset = (short) menuItem.getItemId();
-		equalizer.usePreset(preset);
+		for(int i = 0; i < 10; i++) {
+			try {
+				equalizer.usePreset(preset);
+				i = 10;
+			} catch (UnsupportedOperationException e) {
+				equalizerController.release();
+				equalizer = equalizerController.getEqualizer();
+				bass = equalizerController.getBassBoost();
+				loudnessEnhancer = equalizerController.getLoudnessEnhancerController();
+			}
+		}
 		updateBars(false);
 		return true;
 	}
@@ -156,8 +166,18 @@ public class EqualizerFragment extends SubsonicFragment {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_EQUALIZER_ON, enabled);
 		editor.commit();
-		equalizer.setEnabled(enabled);
-		updateBars(true);
+		for(int i = 0; i < 10; i++) {
+			try {
+				equalizer.setEnabled(enabled);
+				updateBars(true);
+				i = 10;
+			} catch (UnsupportedOperationException e) {
+				equalizerController.release();
+				equalizer = equalizerController.getEqualizer();
+				bass = equalizerController.getBassBoost();
+				loudnessEnhancer = equalizerController.getLoudnessEnhancerController();
+			}
+		}
 	}
 
 	private void updateBars(boolean changedEnabled) {
@@ -186,11 +206,7 @@ public class EqualizerFragment extends SubsonicFragment {
 				} else if(setLevel > maxEQLevel) {
 					setLevel = maxEQLevel;
 				}
-				try {
-					equalizer.setBandLevel(band, setLevel);
-				} catch(Exception e) {
-					Log.w(TAG, "Failed to set band level");
-				}
+				equalizer.setBandLevel(band, setLevel);
 			} else if(!isEnabled) {
 				bar.setProgress(-minEQLevel);
 			}
