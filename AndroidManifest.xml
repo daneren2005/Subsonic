@@ -119,7 +119,9 @@
 		</service>
 
         <receiver android:name="github.daneren2005.dsub.receiver.MediaButtonIntentReceiver">
+        	<intent-filter>
 			<action android:name="android.intent.action.MEDIA_BUTTON" />
+		</intent-filter>
         </receiver>
 
         <receiver android:name="github.daneren2005.dsub.receiver.BluetoothIntentReceiver">
