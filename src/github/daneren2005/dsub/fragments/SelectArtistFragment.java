@@ -68,10 +68,10 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 		}
 
 		if(objects != null) {
+			createMusicFolderButton();
 			if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
 				folderButton.setVisibility(View.GONE);
 			}
-			createMusicFolderButton();
 			setMusicFolders();
 		}
 
