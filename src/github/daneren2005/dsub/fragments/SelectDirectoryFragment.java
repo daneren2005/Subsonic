@@ -16,9 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -661,6 +663,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		emptyView.setVisibility((entries.isEmpty() && albums.isEmpty()) ? View.VISIBLE : View.GONE);
 		// Always going to have entries in entryAdapter
 		entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null));
+		ListAdapter listAdapter = entryAdapter;
 		// Song-only genre needs to always be entry list + infinite adapter
 		if("genres-songs".equals(albumListType)) {
 			ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
@@ -669,7 +672,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				rootGroup.addView(entryList);
 			}
 
-			entryList.setAdapter(new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize));
+			listAdapter = new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize);
 		} else if((albumListType == null || "starred".equals(albumListType)) && largeAlbums) {
 			// Only set standard album adapter if not album list and largeAlbums is true
 			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
@@ -678,10 +681,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			if(largeAlbums) {
 				albumList.setAdapter(new AlbumListAdapter(context, new AlbumGridAdapter(context, getImageLoader(), albums, true), albumListType, albumListExtra, albumListSize));
 			} else {
-				entryAdapter = new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize);
+				listAdapter = new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize);
 			}
 		}
-		entryList.setAdapter(entryAdapter);
+		entryList.setAdapter(listAdapter);
         entryList.setVisibility(View.VISIBLE);
         context.supportInvalidateOptionsMenu();
 
