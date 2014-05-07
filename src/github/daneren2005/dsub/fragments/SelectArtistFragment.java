@@ -3,6 +3,7 @@ package github.daneren2005.dsub.fragments;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,6 +62,7 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+		folderButton = null;
 		super.onCreateView(inflater, container, bundle);
 
 		if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
@@ -68,7 +70,6 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 		}
 
 		if(objects != null) {
-			createMusicFolderButton();
 			if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
 				folderButton.setVisibility(View.GONE);
 			}
@@ -154,15 +155,6 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	protected void refresh(final boolean refresh) {
-		if(folderButton == null) {
-			createMusicFolderButton();
-		}
-
-		if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
-			folderButton.setVisibility(View.GONE);
-		} else {
-			folderButton.setVisibility(View.VISIBLE);
-		}
 		listView.setVisibility(View.INVISIBLE);
 
 		BackgroundTask<Indexes> task = new TabBackgroundTask<Indexes>(this) {
@@ -201,6 +193,7 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	public ArrayAdapter getAdapter(List<Artist> objects) {
+		createMusicFolderButton();
 		return new ArtistAdapter(context, objects);
 	}
 
@@ -215,10 +208,18 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 	}
 
 	private void createMusicFolderButton() {
-		folderButtonParent = getLayoutInflater(null).inflate(R.layout.select_artist_header, listView, false);
-		folderName = (TextView) folderButtonParent.findViewById(R.id.select_artist_folder_2);
-		listView.addHeaderView(folderButtonParent);
-		folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
+		if(folderButton == null) {
+			folderButtonParent = getLayoutInflater(null).inflate(R.layout.select_artist_header, listView, false);
+			folderName = (TextView) folderButtonParent.findViewById(R.id.select_artist_folder_2);
+			listView.addHeaderView(folderButtonParent);
+			folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
+		}
+
+		if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
+			folderButton.setVisibility(View.GONE);
+		} else {
+			folderButton.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void setMusicFolders() {
