@@ -64,6 +64,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private List<MusicDirectory.Entry> albums;
 	private List<MusicDirectory.Entry> entries;
 	private boolean albumContext = false;
+	private boolean addAlbumHeader = false;
 
 	String id;
 	String name;
@@ -152,6 +153,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		if(albumListType == null || "starred".equals(albumListType) || !largeAlbums) {
 			albumList = (GridView) inflater.inflate(R.layout.unscrollable_grid_view, entryList, false);
+			addAlbumHeader = true;
 		} else {
 			ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
 			albumList = (GridView) inflater.inflate(R.layout.grid_view, rootGroup, false);
@@ -656,8 +658,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
         }
 
 		// Needs to be added here, GB crashes if you to try to remove the header view before adapter is set
-		if(albumListType == null || "starred".equals(albumListType) || !largeAlbums) {
+		if(addAlbumHeader) {
 			entryList.addHeaderView(albumList);
+			addAlbumHeader = false;
 		}
 
 		emptyView.setVisibility((entries.isEmpty() && albums.isEmpty()) ? View.VISIBLE : View.GONE);
