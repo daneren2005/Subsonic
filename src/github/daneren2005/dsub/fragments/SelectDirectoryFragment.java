@@ -1019,6 +1019,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 				for(MusicDirectory.Entry entry: unstar) {
 					entries.remove(entry);
+					albums.remove(entry);
 				}
 				entryAdapter.notifyDataSetChanged();
 				selectAll(false, false);
