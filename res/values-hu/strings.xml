@@ -30,7 +30,7 @@
     <string name="button_bar.browse">Médiakönyvtár</string>
     <string name="button_bar.search">Keresés</string>
     <string name="button_bar.playlists">Lejátszási listák</string>
-    <string name="button_bar.now_playing">Lejátszó</string>
+    <string name="button_bar.now_playing">Várólista</string>
 	<string name="button_bar.podcasts">Podcastok</string>
 	<string name="button_bar.bookmarks">Könyvjelzők</string>
 	<string name="button_bar.shares">Megosztások</string>
@@ -75,8 +75,8 @@
 	<string name="menu.about">Névjegy</string>
 	<string name="menu.add_playlist">Hozzáadás a lejátszási listához</string>
 	<string name="menu.remove_playlist">Eltávolítás a lejátszási listából</string>
-	<string name="menu.deleted_playlist">%s lejátszási lista törölve</string>
-	<string name="menu.deleted_playlist_error">%s lejátszási lista törlése sikertelen!</string>
+	<string name="menu.deleted_playlist">\"%s\" lejátszási lista törölve</string>
+	<string name="menu.deleted_playlist_error">\"%s\" lejátszási lista törlése sikertelen!</string>
 	<string name="menu.log">Log küldése</string>
 	<string name="menu.set_timer">Időzítő beállítása</string>
 	<string name="menu.check_podcasts">Új epizódok ellenőrzése</string>
@@ -91,8 +91,8 @@
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
-	<string name="playlist.updated_info">%s lejátszási lista módosítva</string>
-	<string name="playlist.updated_info_error">%s lejátszási lista módosítása sikertelen!</string>
+	<string name="playlist.updated_info">\"%s\" lejátszási lista módosítva</string>
+	<string name="playlist.updated_info_error">\"%s\" lejátszási lista módosítása sikertelen!</string>
 	<string name="playlist.overwrite">Létező lejátszási lista felülírása</string>
 	<string name="playlist.add_to">Hozzáadás a lejátszási listához</string>
 	<string name="playlist.create_new">Új lejátszási lista</string>
@@ -145,18 +145,18 @@
     <string name="select_podcasts.initializing">A podcast csatorna inicializálása a kiszolgálón. Kérjük, töltse be újra néhány pillanat múlva!</string>
 	<string name="select_podcasts.server_download">Letöltés a kiszolgálóra</string>
 	<string name="select_podcasts.server_delete">Törlés a kiszolgálóról</string>
-	<string name="select_podcasts.downloading">%s letöltése a kiszolgálóra</string>
+	<string name="select_podcasts.downloading">\"%s\" letöltése a kiszolgálóra</string>
 	<string name="select_podcasts.refreshing">A kiszolgáló ellenőrzi az új podcastokat...</string>
-	<string name="select_podcasts.deleted">%s podcast törölve</string>
-	<string name="select_podcasts.deleted_error">%s podcast törlése sikertelen!</string>
+	<string name="select_podcasts.deleted">\"%s\" podcast törölve</string>
+	<string name="select_podcasts.deleted_error">\"%s\" podcast törlése sikertelen!</string>
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Podcast hozzáadása sikertelen!</string>
-	<string name="select_podcasts.invalid_podcast_channel">Érvénytelen podcast csatorna: %s</string>
+	<string name="select_podcasts.invalid_podcast_channel">Érvénytelen podcast csatorna: \"%s\"</string>
 	<string name="select_podcasts.delete">Podcast törlése</string>
 
     <string name="download.empty">A várólista üres!</string>
 	<string name="download.shuffle_loading">Kevert sorrendű lista betöltése...</string>
-    <string name="download.playerstate_downloading">Letöltés - %s</string>
+    <string name="download.playerstate_downloading">Letöltés - \"%s\"</string>
     <string name="download.playerstate_buffering">Pufferelés</string>
     <string name="download.playerstate_playing_shuffle">Sorrend keverése</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
@@ -166,9 +166,9 @@
     <string name="download.menu_screen_on">Kijelző be</string>
     <string name="download.menu_shuffle">Sorrend keverése</string>
 	<string name="download.menu_toggle">Váltás</string>
-    <string name="download.menu_save">Lejátszási lista mentése</string>
+    <string name="download.menu_save">Mentés lejátszási listába</string>
     <string name="download.menu_shuffle_notification">Lejátszás kevert sorrendben</string>
-    <string name="download.playlist_title">Lejátszási lista mentése</string>
+    <string name="download.playlist_title">Mentés lejátszási listába</string>
     <string name="download.playlist_name">Lejátszási lista neve:</string>
     <string name="download.playlist_saving">\"%s\" lejátszási lista mentése...</string>
     <string name="download.playlist_done">Lejátszási lista mentése sikeres.</string>
@@ -200,9 +200,9 @@
 	<string name="download.failed_to_load">A beolvasás sikertelen!</string>
 
 	<string name="sync.title">DSub: Új média érhető el!</string>
-	<string name="sync.new_podcasts">Új podcastok: %s</string>
-	<string name="sync.new_playlists">Új lejátszási listák: %s</string>
-	<string name="sync.new_albums">Új albumok: %s</string>
+	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
+	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
+	<string name="sync.new_albums">Új albumok: \"%s\"</string>
 	<string name="sync.new_starred">Új csillagozott dalok</string>
     
 	<string name="starring_content_starred">\"%s\" csillagozás be</string>
@@ -423,12 +423,12 @@
 	</string>
 	<string name="share.expires">Lejárati idő: %s</string>
 	<string name="share.expires_never">Nincs lejárati idő</string>
-	<string name="share.deleted">%s megosztás törölve</string>
-	<string name="share.deleted_error">%s megosztás törlése sikertelen!</string>
+	<string name="share.deleted">\"%s\" megosztás törölve</string>
+	<string name="share.deleted_error">\"%s\" megosztás törlése sikertelen!</string>
 	<string name="share.no_expiration">Nincs lejárati idő</string>
 	<string name="share.expiration">Lejárati idő:</string>
-	<string name="share.updated_info">%s megosztás információi frissítve</string>
-	<string name="share.updated_info_error">%s megosztás információinak frissítése sikertelen!</string>
+	<string name="share.updated_info">\"%s\" megosztás információi frissítve</string>
+	<string name="share.updated_info_error">\"%s\" megosztás információinak frissítése sikertelen!</string>
 	<string name="share.via">Megosztás ezzel</string>
 	<string name="share.delete">Megosztás törlése</string>
 
