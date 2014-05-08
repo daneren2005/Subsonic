@@ -15,8 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -1022,7 +1020,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 				for(MusicDirectory.Entry entry: unstar) {
 					entries.remove(entry);
-					albums.remove(entry);
 				}
 				entryAdapter.notifyDataSetChanged();
 				selectAll(false, false);
