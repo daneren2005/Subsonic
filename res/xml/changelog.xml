@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.6.3" versioncode="108" releasedate="5/7/2014">
+		<change>Fix infinite scroll with small album art</change>
+		<change>Fix pressing play from artist screen not playing all albums</change>
+		<change>Only hide artist if the artist is the same for all the albums</change>
+		<change>Several random crash fixes</change>
+	</release>
 	<release version="4.6.2" versioncode="107" releasedate="5/5/2014">
 		<change>Fix DSub not being recognized as a Bluetooth Media Player</change>
 		<change>Fix a couple of crashes</change>
