@@ -40,6 +40,7 @@ public class AlbumGridAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 		
 		// Always show artist if they aren't all the same
 		if(!showArtist) {
+			String artist = null;
 			for(MusicDirectory.Entry entry: entries) {
 				if(artist == null) {
 					artist = entry.getArtist();
