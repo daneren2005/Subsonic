@@ -1328,9 +1328,7 @@ public class RESTMusicService implements MusicService {
     private HttpResponse getResponseForURL(Context context, String url, HttpParams requestParams,
                                            List<String> parameterNames, List<Object> parameterValues,
                                            List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
-        Log.d(TAG, "Connections in pool: " + connManager.getConnectionsInPool());
-
-        // If not too many parameters, extract them to the URL rather than relying on the HTTP POST request being
+	// If not too many parameters, extract them to the URL rather than relying on the HTTP POST request being
         // received intact. Remember, HTTP POST requests are converted to GET requests during HTTP redirects, thus
         // loosing its entity.
         if (parameterNames != null && parameterNames.size() < 10) {
