@@ -102,7 +102,6 @@ public class UnscrollableGridView extends GridView {
 
 		// Total height of this view.
 		final int measuredHeight = Math.abs(childrenHeight + getPaddingTop() + getPaddingBottom() + totalVerticalSpacing);
-		Log.d(TAG, measuredWidth + " x " + measuredHeight);
 		setMeasuredDimension(measuredWidth, measuredHeight);
 	}
 
