@@ -1800,7 +1800,7 @@ public class DownloadService extends Service {
 
 		private boolean bufferComplete() {
 			boolean completeFileAvailable = downloadFile.isWorkDone();
-			Log.i(TAG, "Buffering next " + partialFile + " (" + partialFile.length() + ")");
+			Log.i(TAG, "Buffering next " + partialFile + " (" + partialFile.length() + "): " + completeFileAvailable);
 			return completeFileAvailable && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED);
 		}
 
