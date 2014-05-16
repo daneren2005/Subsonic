@@ -772,10 +772,7 @@ public class DownloadService extends Service {
 		}
 	}
 	private synchronized void playNext(boolean start) {
-		// Only send a quick pause event for samsung devices, causes issues with others
-		if(Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
-			Util.broadcastPlaybackStatusChange(this, currentPlaying.getSong(), PlayerState.PREPARED);
-		}
+		Util.broadcastPlaybackStatusChange(this, currentPlaying.getSong(), PlayerState.PREPARED);
 		
 		// Swap the media players since nextMediaPlayer is ready to play
 		if(start) {
