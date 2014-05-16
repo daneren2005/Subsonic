@@ -1317,10 +1317,18 @@ public final class Util {
                 intent.putExtra("state", "stop");
 				avrcpIntent.putExtra("playing", false);
                 break;
-            case PAUSED: case PREPARED:
+            case PAUSED:
                 intent.putExtra("state", "pause");
 				avrcpIntent.putExtra("playing", false);
                 break;
+			case PREPARED:
+				// Only send quick pause event for samsung devices, causes issues for others
+				if(Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+					avrcpIntent.putExtra("playing", false);
+				} else {
+					return; // Don't broadcast anything
+				}
+				break;
             case COMPLETED:
                 intent.putExtra("state", "complete");
 				avrcpIntent.putExtra("playing", false);
