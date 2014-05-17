@@ -94,6 +94,9 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 			return null;
 		}
 
+		listView.setOnScrollListener(null);
+		refreshLayout.setEnabled(false);
+
 		List<DownloadFile> songList = new ArrayList<DownloadFile>();
 		songList.addAll(downloadService.getBackgroundDownloads());
 		currentRevision = downloadService.getDownloadListUpdateRevision();
