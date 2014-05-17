@@ -634,14 +634,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
     private void finishLoading() {
-        int songCount = 0;
-        for (MusicDirectory.Entry entry : entries) {
-            if (!entry.isDirectory()) {
-                songCount++;
-            }
-        }
-
-        if (songCount > 0 && !"root".equals(id)) {
+        if (entries.size() > 0 && albums.size() == 0 && !"root".equals(id)) {
             if(showHeader) {
                 View header = createHeader(entries);
                 if(header != null && entryList != null) {
