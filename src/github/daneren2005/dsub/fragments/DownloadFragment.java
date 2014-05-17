@@ -91,7 +91,7 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 	public List<DownloadFile> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
 		DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
-			return null;
+			return new ArrayList<DownloadFile>();
 		}
 
 		listView.setOnScrollListener(null);
