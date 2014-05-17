@@ -239,7 +239,7 @@ public class DownloadService extends Service {
 
 		try {
 			Intent i = new Intent(AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
-			i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, mediaPlayer.getAudioSessionId());
+			i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId);
 			i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
 			sendBroadcast(i);
 		} catch(Throwable e) {
