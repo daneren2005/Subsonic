@@ -586,6 +586,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private void openInBrowser(final int instance) {
     	SharedPreferences prefs = Util.getPreferences(this);  
     	String url = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+		if(url == null) {
+			new ErrorDialog(SettingsActivity.this, R.string.settings_invalid_url, false);
+			return;
+		}
     	Uri uriServer = Uri.parse(url);
     	
     	Intent browserIntent = new Intent(Intent.ACTION_VIEW, uriServer);            	
