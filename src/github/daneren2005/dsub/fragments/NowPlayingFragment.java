@@ -25,10 +25,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteButton;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -488,6 +490,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				visualizerView.setActive(true);
 			}
 			visualizerViewLayout.addView(visualizerView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+		}
+
+		if(Build.MODEL.equals("Nexus 4")) {
+			View slider = rootView.findViewById(R.id.download_slider);
+			slider.setPadding(0, 0, 0, 0);
 		}
 
 		return rootView;
