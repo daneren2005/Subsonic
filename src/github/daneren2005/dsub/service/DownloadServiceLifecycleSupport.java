@@ -261,6 +261,10 @@ public class DownloadServiceLifecycleSupport {
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
 	}
 
+	public void post(Runnable runnable) {
+		eventHandler.post(runnable);
+	}
+
 	private void deserializeDownloadQueueNow() {
 		State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER, State.class);
 		if (state == null) {

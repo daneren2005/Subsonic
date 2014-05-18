@@ -524,14 +524,23 @@ public class DownloadService extends Service {
 		updateJukeboxPlaylist();
 	}
 
-	public synchronized void setOnline(boolean online) {
+	public void setOnline(final boolean online) {
 		if(online) {
 			mediaRouter.addOfflineProviders();
-			checkDownloads();
 		} else {
 			mediaRouter.removeOfflineProviders();
-			clearIncomplete();
 		}
+
+		lifecycleSupport.post(new Runnable() {
+			@Override
+			public void run() {
+				if(online) {
+					checkDownloads();
+				} else {
+					clearIncomplete();
+				}
+			}
+		});
 	}
 
 	public synchronized int size() {
