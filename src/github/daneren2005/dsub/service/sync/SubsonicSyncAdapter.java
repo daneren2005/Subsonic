@@ -50,6 +50,7 @@ import github.daneren2005.dsub.util.Util;
 public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	private static final String TAG = SubsonicSyncAdapter.class.getSimpleName();
 	protected CachedMusicService musicService = new CachedMusicService(new RESTMusicService());
+	protected boolean tagBrowsing;
 	private Context context;
 
 	public SubsonicSyncAdapter(Context context, boolean autoInitialize) {
@@ -108,6 +109,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		for(int i = 1; i <= servers; i++) {
 			try {
 				if(isValidServer(context, i)) {
+					tagBrowsing = Util.isTagBrowsing(context, instance);
 					musicService.setInstance(i);
 					onExecuteSync(context, i);
 				}
@@ -139,7 +141,21 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		}
 		
 		for (MusicDirectory.Entry dir: parent.getChildren(true, false)) {
-			if(downloadRecursively(paths, musicService.getMusicDirectory(dir.getId(), dir.getTitle(), true, context, null), context, save)) {
+			String id = dir.getId();
+			String name = dir.getTitle();
+			
+			MusicDirectory contents;
+			if(tagBrowsing) {
+				if(dir.getParent() == null || dir.getArtist() == null) {
+					contents = musicService.getArtist(id, name, true, context, null);
+				} else {
+					contents = musicService.getAlbum(id, name, true, context, null);
+				}
+			} else {
+				contents = musicService.getMusicDirectory(id name, true, context, null);
+			}
+			
+			if(downloadRecursively(paths, contents, context, save)) {
 				downloaded = true;
 			}
 		}
