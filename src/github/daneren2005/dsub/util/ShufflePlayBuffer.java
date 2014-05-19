@@ -49,7 +49,8 @@ public class ShufflePlayBuffer {
 	private boolean firstRun = true;
 	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
 	private int lastCount = -1;
-	private Context context;
+	private DownloadService context;
+	private boolean awaitingResults = false;
 
 	private SharedPreferences.OnSharedPreferenceChangeListener listener;
 	private int currentServer;
@@ -58,7 +59,7 @@ public class ShufflePlayBuffer {
 	private String startYear = "";
 	private String endYear = "";
 
-	public ShufflePlayBuffer(Context context) {
+	public ShufflePlayBuffer(DownloadService context) {
 		this.context = context;
 
 		executorService = Executors.newSingleThreadScheduledExecutor();
@@ -90,6 +91,9 @@ public class ShufflePlayBuffer {
 			}
 		}
 		Log.i(TAG, "Taking " + result.size() + " songs from shuffle play buffer. " + buffer.size() + " remaining.");
+		if(result.isEmpty()) {
+			awaitingResults = true;
+		}
 		return result;
 	}
 
@@ -138,6 +142,11 @@ public class ShufflePlayBuffer {
 				lastCount = 0;
 			}
 			Log.w(TAG, "Failed to refill shuffle play buffer.", x);
+		}
+		
+		if(awaitingResults) {
+			awaitingResults = false;
+			context.checkDownloads();
 		}
 	}
 
