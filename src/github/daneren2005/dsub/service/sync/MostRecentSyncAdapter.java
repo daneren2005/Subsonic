@@ -69,8 +69,9 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 					if(!syncedList.contains(album.getId())) {
 						if(!"Podcast".equals(album.getGenre())) {
 							try {
-								downloadRecursively(null, musicService.getMusicDirectory(album.getId(), album.getTitle(), true, context, null), context, false);
-								updated.add(album.getTitle());
+								if(downloadRecursively(null, musicService.getMusicDirectory(album.getId(), album.getTitle(), true, context, null), context, false)) {
+									updated.add(album.getTitle());
+								}
 							} catch(Exception e) {
 								Log.w(TAG, "Failed to get songs for " + album.getId() + " on " + Util.getServerName(context, instance));
 							}
