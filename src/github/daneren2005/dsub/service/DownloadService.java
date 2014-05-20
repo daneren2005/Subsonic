@@ -1564,7 +1564,7 @@ public class DownloadService extends Service {
 		setNextPlayerState(IDLE);
 	}
 
-	protected synchronized void checkDownloads() {
+	public synchronized void checkDownloads() {
 		if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable()) {
 			return;
 		}

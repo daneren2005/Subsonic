@@ -109,7 +109,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		for(int i = 1; i <= servers; i++) {
 			try {
 				if(isValidServer(context, i)) {
-					tagBrowsing = Util.isTagBrowsing(context, instance);
+					tagBrowsing = Util.isTagBrowsing(context, i);
 					musicService.setInstance(i);
 					onExecuteSync(context, i);
 				}
@@ -152,7 +152,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 					contents = musicService.getAlbum(id, name, true, context, null);
 				}
 			} else {
-				contents = musicService.getMusicDirectory(id name, true, context, null);
+				contents = musicService.getMusicDirectory(id, name, true, context, null);
 			}
 			
 			if(downloadRecursively(paths, contents, context, save)) {
