@@ -1389,7 +1389,6 @@ public class RESTMusicService implements MusicService {
 
             if (requestParams != null) {
                 request.setParams(requestParams);
-                Log.d(TAG, "Socket read timeout: " + HttpConnectionParams.getSoTimeout(requestParams) + " ms.");
             }
 
             if (headers != null) {
