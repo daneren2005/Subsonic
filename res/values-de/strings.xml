@@ -168,6 +168,7 @@
 	<string name="download.menu_toggle">Umschalten</string>
     <string name="download.menu_save">Wiedergabeliste speichern</string>
     <string name="download.menu_shuffle_notification">Wiedergabeliste wurde gemischt</string>
+	<string name="download.menu_remove_played_songs">Abgespielte Titel entfernen</string>
     <string name="download.playlist_title">Speichere Wiedergabeliste</string>
     <string name="download.playlist_name">Name der Wiedergabeliste eingeben:</string>
     <string name="download.playlist_saving">Sichere Wiedergabeliste \"%s\"...</string>
