@@ -32,6 +32,11 @@
         android:id="@+id/menu_screen_on_off"
         android:title="@string/download.menu_screen_on"
 		android:checkable="true"/>
+
+	<item
+		android:id="@+id/menu_remove_played"
+		android:title="@string/download.menu_remove_played_songs"
+		android:checkable="true"/>
 		
 	<item
         android:id="@+id/menu_toggle_timer"

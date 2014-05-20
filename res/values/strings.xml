@@ -168,6 +168,7 @@
 	<string name="download.menu_toggle">Toggle</string>
     <string name="download.menu_save">Save playlist</string>
     <string name="download.menu_shuffle_notification">Playlist was shuffled</string>
+	<string name="download.menu_remove_played_songs">Remove played songs</string>
     <string name="download.playlist_title">Save playlist</string>
     <string name="download.playlist_name">Enter the playlist name:</string>
     <string name="download.playlist_saving">Saving playlist \"%s\"...</string>

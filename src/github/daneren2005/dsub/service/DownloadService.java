@@ -118,6 +118,7 @@ public class DownloadService extends Service {
 	private SilentBackgroundTask nextPlayingTask;
 	private PlayerState playerState = IDLE;
 	private PlayerState nextPlayerState = IDLE;
+	private boolean removePlayed;
 	private boolean shufflePlay;
 	private long revision;
 	private static DownloadService instance;
@@ -376,6 +377,9 @@ public class DownloadService extends Service {
 			String id = prefs.getString(Constants.PREFERENCES_KEY_CONTROL_ID, null);
 			setRemoteState(remoteState, null, id);
 		}
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, false)) {
+			removePlayed = true;
+		}
 		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
 		download(songs, false, false, false, false);
 		if(startShufflePlay) {
@@ -398,6 +402,19 @@ public class DownloadService extends Service {
 				this.toDelete.add(forSong(entry));
 			}
 		}
+	}
+
+	public synchronized void setRemovePlayed(boolean enabled) {
+		removePlayed = enabled;
+		if(removePlayed) {
+			checkDownloads();
+		}
+		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, enabled);
+		editor.commit();
+	}
+	public boolean isRemovePlayed() {
+		return removePlayed;
 	}
 
 	public synchronized void setShufflePlayEnabled(boolean enabled) {
@@ -1569,6 +1586,9 @@ public class DownloadService extends Service {
 			return;
 		}
 
+		if(removePlayed) {
+			checkRemovePlayed();
+		}
 		if (shufflePlay) {
 			checkShufflePlay();
 		}
@@ -1656,6 +1676,14 @@ public class DownloadService extends Service {
 
 		// Delete obsolete .partial and .complete files.
 		cleanup();
+	}
+
+	private synchronized void checkRemovePlayed() {
+		while(currentPlayingIndex > 0) {
+			downloadList.remove(0);
+			currentPlayingIndex = downloadList.indexOf(currentPlaying);
+			revision++;
+		}
 	}
 
 	private synchronized void checkShufflePlay() {

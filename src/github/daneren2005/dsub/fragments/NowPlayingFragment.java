@@ -515,6 +515,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(downloadService != null && downloadService.getKeepScreenOn()) {
 			menu.findItem(R.id.menu_screen_on_off).setChecked(true);
 		}
+		if(downloadService != null && downloadService.isRemovePlayed()) {
+			menu.findItem(R.id.menu_remove_played).setChecked(true);
+		}
 		if(downloadService != null) {
 			MenuItem mediaRouteItem = menu.findItem(R.id.menu_mediaroute);
 			if(mediaRouteItem != null) {
@@ -689,6 +692,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				} else {
 					context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 					getDownloadService().setKeepScreenOn(true);
+				}
+				context.supportInvalidateOptionsMenu();
+				return true;
+			case R.id.menu_remove_played:
+				if (getDownloadService().isRemovePlayed()) {
+					getDownloadService().setRemovePlayed(false);
+				} else {
+					getDownloadService().setRemovePlayed(true);
 				}
 				context.supportInvalidateOptionsMenu();
 				return true;
