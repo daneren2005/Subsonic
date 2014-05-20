@@ -123,7 +123,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	public void onExecuteSync(Context context, int instance) {
 	
 	}
-	
+
 	protected boolean downloadRecursively(List<String> paths, MusicDirectory parent, Context context, boolean save) throws Exception {
 		boolean downloaded = false;
 		for (MusicDirectory.Entry song: parent.getChildren(false, true)) {
@@ -141,26 +141,26 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		}
 		
 		for (MusicDirectory.Entry dir: parent.getChildren(true, false)) {
-			String id = dir.getId();
-			String name = dir.getTitle();
-			
-			MusicDirectory contents;
-			if(tagBrowsing) {
-				if(dir.getParent() == null || dir.getArtist() == null) {
-					contents = musicService.getArtist(id, name, true, context, null);
-				} else {
-					contents = musicService.getAlbum(id, name, true, context, null);
-				}
-			} else {
-				contents = musicService.getMusicDirectory(id, name, true, context, null);
-			}
-			
-			if(downloadRecursively(paths, contents, context, save)) {
+			if(downloadRecursively(paths, getMusicDirectory(dir), context, save)) {
 				downloaded = true;
 			}
 		}
 
 		return downloaded;
+	}
+	protected MusicDirectory getMusicDirectory(MusicDirectory.Entry dir) throws Exception{
+		String id = dir.getId();
+		String name = dir.getTitle();
+
+		if(tagBrowsing) {
+			if(dir.getArtist() == null) {
+				return musicService.getArtist(id, name, true, context, null);
+			} else {
+				return musicService.getAlbum(id, name, true, context, null);
+			}
+		} else {
+			return musicService.getMusicDirectory(id, name, true, context, null);
+		}
 	}
 
 	private boolean isValidServer(Context context, int instance) {
