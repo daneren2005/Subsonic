@@ -28,6 +28,10 @@ import github.daneren2005.dsub.util.Util;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
+
+import static github.daneren2005.dsub.domain.MusicDirectory.*;
 
 /**
  * @author Sindre Mehus
@@ -43,19 +47,34 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
     }
 
     public MusicDirectory parse(String artist, Reader reader, ProgressListener progressListener) throws Exception {
-        long t0 = System.currentTimeMillis();
         init(reader);
 
         MusicDirectory dir = new MusicDirectory();
         int eventType;
 		boolean isArtist = false;
+		Map<String, Entry> titleMap = new HashMap<String, Entry>();
         do {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
                 if ("child".equals(name) || "song".equals(name) || "video".equals(name)) {
-					MusicDirectory.Entry entry = parseEntry(artist);
+					Entry entry = parseEntry(artist);
 					entry.setGrandParent(dir.getParent());
+
+					// Check if duplicates
+					Entry duplicate = titleMap.get(entry.getTitle());
+					if(duplicate != null) {
+						// Check if the first already has been rebased or not
+						if(duplicate.getTitle().equals(entry.getTitle())) {
+							duplicate.rebaseTitleOffPath();
+						}
+
+						// Rebase if this is the second instance of this title found
+						entry.rebaseTitleOffPath();
+					} else {
+						titleMap.put(entry.getTitle(), entry);
+					}
+
                     dir.addChild(entry);
                 } else if ("directory".equals(name) || "artist".equals(name) || ("album".equals(name) && !isArtist)) {
                     dir.setName(get("name"));
@@ -63,7 +82,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 					dir.setParent(get("parent"));
 					isArtist = true;
                 } else if("album".equals(name)) {
-					MusicDirectory.Entry entry = parseEntry(artist);
+					Entry entry = parseEntry(artist);
 					entry.setDirectory(true);
 					dir.addChild(entry);
 				} else if ("error".equals(name)) {
@@ -78,9 +97,6 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 		if(Util.checkServerVersion(context, "1.8.0") && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true)) {
 			dir.sortChildren();
 		}
-
-        long t1 = System.currentTimeMillis();
-        Log.d(TAG, "Got music directory in " + (t1 - t0) + "ms.");
 
         return dir;
     }

@@ -167,6 +167,19 @@ public class MusicDirectory implements Serializable {
 				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver", e);
 			}
 		}
+		public void rebaseTitleOffPath() {
+			String filename = getPath();
+			if(filename.indexOf('/') != -1) {
+				filename = filename.substring(filename.lastIndexOf('/') + 1);
+				if(getTrack() != null) {
+					filename = filename.replace(String.format("%02d ", getTrack()), "");
+				}
+
+				filename = filename.substring(0, filename.lastIndexOf('.'));
+
+				setTitle(filename);
+			}
+		}
 
         public String getId() {
             return id;
