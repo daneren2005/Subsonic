@@ -1051,7 +1051,9 @@ public class DownloadService extends Service {
 		} else if(hide) {
 			Util.hidePlayingNotification(this, this, handler);
 		}
-		mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+		if(mRemoteControl != null) {
+			mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+		}
 
 		if (playerState == STARTED) {
 			scrobbler.scrobble(this, currentPlaying, false);
