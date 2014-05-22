@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.6.4" versioncode="109" releasedate="5/21/2014">
+		<change>Add option to remove already played songs from queue</change>
+		<change>Add total song count to About dialog</change>
+		<change>For songs with identical titles, treat filename as title</change>
+		<change>Fix Most Recent sync not working with Tag Browsing checked</change>
+		<change>Fix hide from other apps not hiding all music</change>
+		<change>Fix Nexus 4 layout issue</change>
+	</release>
 	<release version="4.6.3" versioncode="108" releasedate="5/7/2014">
 		<change>Fix infinite scroll with small album art</change>
 		<change>Fix pressing play from artist screen not playing all albums</change>
