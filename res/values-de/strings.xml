@@ -44,7 +44,7 @@
 	<string name="main.about_text">Autor: Scott Jackson
 		\nEmail: dsub.android@gmail.com
 		\nVersion: %1$s
-		\nFiles Cached: %2$s
+		\nLokal gespeicherte Titel: %2$s
 		\nGenutzter Speicher: %3$s von %4$s
 		\nVerfügbarer Speicher: %5$s von %6$s</string>
     <string name="main.select_server">Wähle Server</string>
