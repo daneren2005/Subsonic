@@ -35,8 +35,9 @@
 	<string name="main.about_text">Автор: Scott Jackson
 		\nEmail: dsub.android@gmail.com
 		\nВерсия: %1$s
-		\nИспользовано места: %2$s из %3$s
-		\nДоступно места: %4$s из %5$s</string>
+		\nFiles Cached: %2$s
+		\nИспользовано места: %3$s из %4$s
+		\nДоступно места: %5$s из %6$s</string>
     <string name="main.select_server">Выбрать сервер</string>
     <string name="main.shuffle">Случайное воспроизведение</string>
     <string name="main.offline">Отключиться</string>

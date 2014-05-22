@@ -44,8 +44,9 @@
 	<string name="main.about_text">Fejlesztő: Scott Jackson
 		\nEmail: dsub.android@gmail.com
 		\nVerzió: %1$s
-		\nFelhasznált tároló: %2$s/%3$s
-		\nFelhasználható tároló: %4$s/%5$s</string>
+		\nFiles Cached: %2$s
+		\nFelhasznált tároló: %3$s/%4$s
+		\nFelhasználható tároló: %5$s/%6$s</string>
     <string name="main.select_server">Kiszolgáló kiválasztása</string>
     <string name="main.shuffle">Lejátszás kevert sorrendben</string>
     <string name="main.offline">Offline mód</string>

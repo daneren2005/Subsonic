@@ -44,8 +44,9 @@
 	<string name="main.about_text">Autor: Scott Jackson
 		\nEmail: dsub.android@gmail.com
 		\nVersion: %1$s
-		\nGenutzter Speicher: %2$s von %3$s
-		\nVerfügbarer Speicher: %4$s von %5$s</string>
+		\nFiles Cached: %2$s
+		\nGenutzter Speicher: %3$s von %4$s
+		\nVerfügbarer Speicher: %5$s von %6$s</string>
     <string name="main.select_server">Wähle Server</string>
     <string name="main.shuffle">Zufallswiedergabe</string>
     <string name="main.offline">Gehe Offline</string>

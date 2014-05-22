@@ -510,16 +510,23 @@ public class FileUtil {
         return index == -1 ? name : name.substring(0, index);
     }
 	
-	public static long getUsedSize(Context context, File file) {
+	public static Pair<Long, Long> getUsedSize(Context context, File file) {
+		long number = 0L;
 		long size = 0L;
 		
 		if(file.isFile()) {
-			return file.length();
+			if(isMediaFile(file)) {
+				return new Pair<Long, Long>(1L, file.length());
+			} else {
+				return new Pair<Long, Long>(0L, 0L);
+			}
 		} else {
 			for (File child : FileUtil.listFiles(file)) {
-				size += getUsedSize(context, child);
+				Pair<Long, Long> pair = getUsedSize(context, child);
+				number += pair.getFirst();
+				size += pair.getSecond();
 			}
-			return size;
+			return new Pair<Long, Long>(number, size);
 		}
 	}
 

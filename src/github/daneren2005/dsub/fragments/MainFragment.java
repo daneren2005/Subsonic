@@ -24,6 +24,7 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LoadingTask;
+import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.view.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.service.MusicService;
@@ -319,22 +320,34 @@ public class MainFragment extends SubsonicFragment {
 	}
 
 	private void showAboutDialog() {
-		try {
-			File rootFolder = FileUtil.getMusicDirectory(context);
-			StatFs stat = new StatFs(rootFolder.getPath());
-			long bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
-			long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+		new LoadingTask<String>(context) {
+			@Override
+			protected String doInBackground() throws Throwable {
+				File rootFolder = FileUtil.getMusicDirectory(context);
+				StatFs stat = new StatFs(rootFolder.getPath());
+				long bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
+				long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
 
-			String msg = getResources().getString(R.string.main_about_text,
-				context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName,
-				Util.formatBytes(FileUtil.getUsedSize(context, rootFolder)),
-				Util.formatBytes(Util.getCacheSizeMB(context) * 1024L * 1024L),
-				Util.formatBytes(bytesAvailableFs),
-				Util.formatBytes(bytesTotalFs));
-			Util.info(context, R.string.main_about_title, msg);
-		} catch(Exception e) {
-			Util.toast(context, "Failed to open dialog");
-		}
+				Pair<Long, Long> used = FileUtil.getUsedSize(context, rootFolder);
+
+				return getResources().getString(R.string.main_about_text,
+					context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName,
+					used.getFirst(),
+					Util.formatBytes(used.getSecond()),
+					Util.formatBytes(Util.getCacheSizeMB(context) * 1024L * 1024L),
+					Util.formatBytes(bytesAvailableFs),
+					Util.formatBytes(bytesTotalFs));
+			}
+
+			@Override
+			protected void done(String msg) {
+				try {
+					Util.info(context, R.string.main_about_title, msg);
+				} catch(Exception e) {
+					Util.toast(context, "Failed to open dialog");
+				}
+			}
+		}.execute();
 	}
 
 	private void getLogs() {
