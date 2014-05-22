@@ -468,11 +468,14 @@ public class DownloadFile implements BufferFile {
 				if (wifiLock != null) {
 					wifiLock.release();
 				}
-                new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
-				if(DownloadService.getInstance() != null) {
-					DownloadService.getInstance().checkDownloads();
-				}
-            }
+			}
+			
+			// Only run these if not interrupted, ie: cancelled
+			new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
+            
+			if(DownloadService.getInstance() != null) {
+				DownloadService.getInstance().checkDownloads();
+			}
 
 			return null;
         }
