@@ -368,7 +368,7 @@ public class MainFragment extends SubsonicFragment {
 						progs.add("time");
 						progs.add("-d");
 						progs.add("-f");
-						progs.add(logcat.getPath());
+						progs.add(logcat.getCanonicalPath());
 						progs.add("*:I");
 
 						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
