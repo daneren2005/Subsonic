@@ -168,16 +168,24 @@ public class MusicDirectory implements Serializable {
 			}
 		}
 		public void rebaseTitleOffPath() {
-			String filename = getPath();
-			if(filename.indexOf('/') != -1) {
-				filename = filename.substring(filename.lastIndexOf('/') + 1);
-				if(getTrack() != null) {
-					filename = filename.replace(String.format("%02d ", getTrack()), "");
+			try {
+				String filename = getPath();
+				int index = filename.lastIndexOf('/');
+				if (index != -1) {
+					filename = filename.substring(index + 1);
+					if (getTrack() != null) {
+						filename = filename.replace(String.format("%02d ", getTrack()), "");
+					}
+
+					index = filename.lastIndexOf('.');
+					if(index != -1) {
+						filename = filename.substring(0, index);
+					}
+
+					setTitle(filename);
 				}
-
-				filename = filename.substring(0, filename.lastIndexOf('.'));
-
-				setTitle(filename);
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to update title based off of path", e);
 			}
 		}
 
