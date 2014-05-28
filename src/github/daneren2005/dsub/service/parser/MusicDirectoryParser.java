@@ -61,18 +61,21 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 					Entry entry = parseEntry(artist);
 					entry.setGrandParent(dir.getParent());
 
-					// Check if duplicates
-					Entry duplicate = titleMap.get(entry.getTitle());
-					if(duplicate != null) {
-						// Check if the first already has been rebased or not
-						if(duplicate.getTitle().equals(entry.getTitle())) {
-							duplicate.rebaseTitleOffPath();
-						}
+					// Only check for songs
+					if(!entry.isDirectory()) {
+						// Check if duplicates
+						Entry duplicate = titleMap.get(entry.getTitle());
+						if (duplicate != null) {
+							// Check if the first already has been rebased or not
+							if (duplicate.getTitle().equals(entry.getTitle())) {
+								duplicate.rebaseTitleOffPath();
+							}
 
-						// Rebase if this is the second instance of this title found
-						entry.rebaseTitleOffPath();
-					} else {
-						titleMap.put(entry.getTitle(), entry);
+							// Rebase if this is the second instance of this title found
+							entry.rebaseTitleOffPath();
+						} else {
+							titleMap.put(entry.getTitle(), entry);
+						}
 					}
 
                     dir.addChild(entry);
