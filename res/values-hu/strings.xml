@@ -44,7 +44,7 @@
 	<string name="main.about_text">Fejlesztő: Scott Jackson
 		\nEmail: dsub.android@gmail.com
 		\nVerzió: %1$s
-		\nFiles Cached: %2$s
+		\nGyorsítótárazott fájlok: %2$s
 		\nFelhasznált tároló: %3$s/%4$s
 		\nFelhasználható tároló: %5$s/%6$s</string>
     <string name="main.select_server">Kiszolgáló kiválasztása</string>
@@ -67,7 +67,7 @@
 	<string name="menu.search">Keresés</string>
 	<string name="menu.shuffle">Lejátszás kevert sorrendben</string>
 	<string name="menu.refresh">Frissítés</string>
-	<string name="menu.select">Összes kijelölése be/ki</string>
+	<string name="menu.select">Összes jelölése be/ki</string>
 	<string name="menu.play">Lejátszás</string>
 	<string name="menu.play_last">Sorbaállítás utolsónak</string>
     <string name="menu.exit">Kilépés</string>
@@ -114,7 +114,7 @@
     <string name="music_library.label_offline">Kapcsolat nélküli médiák</string>
 
     <string name="select_album.empty">Nem található média!</string>
-    <string name="select_album.select">Összes kijelölése be/ki</string>
+    <string name="select_album.select">Összes jelölése be/ki</string>
     <string name="select_album.n_selected">%d dal kijelölve.</string>
     <string name="select_album.n_unselected">%d dal visszavonva.</string>
     <string name="select_album.more">Továbbiak</string>
@@ -169,6 +169,7 @@
 	<string name="download.menu_toggle">Váltás</string>
     <string name="download.menu_save">Mentés lejátszási listába</string>
     <string name="download.menu_shuffle_notification">Lejátszás kevert sorrendben</string>
+	<string name="download.menu_remove_played_songs">Lejátszottak eltávolítása</string>
     <string name="download.playlist_title">Mentés lejátszási listába</string>
     <string name="download.playlist_name">Lejátszási lista neve:</string>
     <string name="download.playlist_saving">\"%s\" lejátszási lista mentése...</string>
@@ -405,7 +406,7 @@
 	<string name="settings.play_now_after">Lejátszás utána</string>
 	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik minden dal lejátszása a kijelölt elem után (mint a Subsonic webes felületén)</string>
 	<string name="settings.large_album_art">Nagy méretű albumborítók</string>
-	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben nagy méretű albumborítóval a listanézet helyett.</string>
+	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben és nagy méretű albumborítóval, a listanézet helyett.</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
