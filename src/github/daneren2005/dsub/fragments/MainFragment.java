@@ -316,6 +316,7 @@ public class MainFragment extends SubsonicFragment {
 	private void deleteOffline() {
 		SharedPreferences.Editor offline = Util.getOfflineSync(context).edit();
 		offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		offline.putInt(Constants.OFFLINE_STAR_COUNT, 0);
 		offline.commit();
 	}
 
