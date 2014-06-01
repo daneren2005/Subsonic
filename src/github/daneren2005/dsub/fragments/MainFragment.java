@@ -356,7 +356,7 @@ public class MainFragment extends SubsonicFragment {
 	}
 
 	private void showFAQDialog() {
-		Util.info(context, R.string.main_faq_title, R.string.main_faq_text);
+		Util.showHTMLDialog(context, R.string.main_faq_title, R.string.main_faq_text);
 	}
 
 	private void getLogs() {

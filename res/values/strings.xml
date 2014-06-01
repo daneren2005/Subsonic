@@ -49,10 +49,12 @@
 		\nAvailable Space: %5$s of %6$s</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
-		Cache vs Permanent Cache:
-		\nWhen songs are downloaded by DSub, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
-		\n\nChromeCast fails:
-		\nMake sure you are not using a self-signed certificate, because the Chromecast will automatically reject them.
+	<![CDATA[
+		<font color="red">Cache vs Permanent Cache</font>:
+		<br/>When songs are downloaded by DSub, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
+		<p/><font color="red">ChromeCast fails</font>:
+		<br/>Make sure you are not using a self-signed certificate, because the Chromecast will automatically reject them.
+	]]>
 	</string>
     <string name="main.select_server">Select server</string>
     <string name="main.shuffle">Shuffle play</string>

@@ -43,6 +43,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -971,6 +972,19 @@ public final class Util {
 		
 		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
+	public static void showHTMLDialog(Context context, int title, int message) {
+		AlertDialog dialog = new AlertDialog.Builder(context)
+			.setIcon(android.R.drawable.ic_dialog_info)
+			.setTitle(title)
+			.setMessage(Html.fromHtml(context.getResources().getString(message)))
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int i) {
+					dialog.dismiss();
+				}
+			})
+			.show();
+	}
 
 	public static void showPlayingNotification(final Context context, final DownloadService downloadService, Handler handler, MusicDirectory.Entry song) {
         // Set the icon, scrolling text and timestamp
