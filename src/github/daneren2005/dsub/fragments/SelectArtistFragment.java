@@ -209,7 +209,7 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 
 	private void createMusicFolderButton() {
 		if(folderButton == null) {
-			folderButtonParent = getLayoutInflater(null).inflate(R.layout.select_artist_header, listView, false);
+			folderButtonParent = context.getLayoutInflater().inflate(R.layout.select_artist_header, listView, false);
 			folderName = (TextView) folderButtonParent.findViewById(R.id.select_artist_folder_2);
 			listView.addHeaderView(folderButtonParent);
 			folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
