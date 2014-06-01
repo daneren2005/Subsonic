@@ -47,6 +47,13 @@
 		\nFiles Cached: %2$s
 		\nUsed Space: %3$s of %4$s
 		\nAvailable Space: %5$s of %6$s</string>
+	<string name="main.faq_title">FAQ</string>
+	<string name="main.faq_text">
+		Cache vs Permanent Cache:
+		\nWhen songs are downloaded by DSub, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
+		\n\nChromeCast fails:
+		\nMake sure you are not using a self-signed certificate, because the Chromecast will automatically reject them.
+	</string>
     <string name="main.select_server">Select server</string>
     <string name="main.shuffle">Shuffle play</string>
     <string name="main.offline">Go Offline</string>
@@ -89,6 +96,7 @@
 	<string name="menu.share">Share</string>
 	<string name="menu.delete_cache">Delete Cache</string>
 	<string name="menu.cast">Cast To Device</string>
+	<string name="menu.faq">FAQ</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>

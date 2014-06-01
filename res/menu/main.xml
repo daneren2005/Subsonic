@@ -16,6 +16,10 @@
 	<item 
 		android:id="@+id/menu_about"
 		android:title="@string/menu.about"/>
+
+	<item
+		android:id="@+id/menu_faq"
+		android:title="@string/menu.faq"/>
 		
 	<item 
 		android:id="@+id/menu_log"

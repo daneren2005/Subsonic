@@ -89,6 +89,10 @@ public class MainFragment extends SubsonicFragment {
 			case R.id.menu_changelog:
 				ChangeLog changeLog = new ChangeLog(context, Util.getPreferences(context));
 				changeLog.getFullLogDialog().show();
+				return true;
+			case R.id.menu_faq:
+				showFAQDialog();
+				return true;
 		}
 
 		return false;
@@ -349,6 +353,10 @@ public class MainFragment extends SubsonicFragment {
 				}
 			}
 		}.execute();
+	}
+
+	private void showFAQDialog() {
+		Util.info(context, R.string.main_faq_title, R.string.main_faq_text);
 	}
 
 	private void getLogs() {
