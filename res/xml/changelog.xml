@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.6.5" versioncode="110" releasedate="6/1/2014">
+		<change>Fix issue with some folders not being browseable</change>
+		<change>Fix deleting offline sync info not deleting stars</change>
+		<change>Bug fixes</change>
+	</release>
 	<release version="4.6.4" versioncode="109" releasedate="5/21/2014">
 		<change>Add option to remove already played songs from queue</change>
 		<change>Add total song count to About dialog</change>
