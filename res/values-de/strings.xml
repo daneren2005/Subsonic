@@ -47,6 +47,15 @@
 		\nLokal gespeicherte Titel: %2$s
 		\nGenutzter Speicher: %3$s von %4$s
 		\nVerfügbarer Speicher: %5$s von %6$s</string>
+        <string name="main.faq_title">FAQ</string>
+        <string name="main.faq_text">
+        <![CDATA[
+                <font color="red">Cache vs Permanenter Cache</font>:
+                <br/>Von DSub heruntergelade Titel im Cache können automatisch gelöscht werden, um Platz für neue Titel zu schaffen. Titel im permanenten Cache werden dagegen nie automatisch gelöscht.
+                <p/><font color="red">ChromeCast funktioniert nicht</font>:
+                <br/>Bitte stellen Sie sicher, das keine selbstsignierten Zertifikate verwendet werden, da Chromecast diese nicht akzeptiert.
+        ]]>
+        </string>
     <string name="main.select_server">Wähle Server</string>
     <string name="main.shuffle">Zufallswiedergabe</string>
     <string name="main.offline">Gehe Offline</string>
@@ -89,6 +98,7 @@
 	<string name="menu.share">Freigeben</string>
 	<string name="menu.delete_cache">Lösche Cache</string>
 	<string name="menu.cast">An Chromecast senden</string>
+	<string name="menu.faq">FAQ</string>
 
     <string name="playlist.label">Wiedergabelisten</string>
 	<string name="playlist.update_info">Aktualisiere Informationen</string>
