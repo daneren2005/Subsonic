@@ -495,13 +495,7 @@ public class DownloadFile implements BufferFile {
 					// Check if album art already exists, don't want to needlessly load into memory
 					File albumArtFile = FileUtil.getAlbumArtFile(context, song);
 					if(!albumArtFile.exists()) {
-						DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-						int size = Math.min(metrics.widthPixels, metrics.heightPixels);
-						Bitmap bitmap = musicService.getCoverArt(context, song, size, null);
-						// Not being used, get rid of it immediately
-						if(bitmap != null) {
-							bitmap.recycle();
-						}
+						musicService.getCoverArt(context, song, 0, null);
 					}
                 }
             } catch (Exception x) {
