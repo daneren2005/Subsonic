@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -474,6 +476,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 			setTheme(R.style.Theme_DSub_Light);
 		} else {
 			setTheme(R.style.Theme_DSub_Holo);
+		}
+
+		SharedPreferences prefs = Util.getPreferences(this);
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
+			Configuration config = new Configuration();
+			config.locale = Locale.ENGLISH;
+			getResources().updateConfiguration(config,getResources().getDisplayMetrics());
 		}
 	}
 
