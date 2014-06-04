@@ -176,7 +176,7 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 
 	private void update() {
 		DownloadService downloadService = getDownloadService();
-		if (downloadService == null) {
+		if (downloadService == null || objects == null || adapter == null) {
 			return;
 		}
 
