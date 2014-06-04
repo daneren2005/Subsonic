@@ -1025,7 +1025,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			msg += "\nLength: " + Util.formatDuration(song.getDuration());
 		}
 		if(song instanceof PodcastEpisode) {
-			msg += "\nDescription: " + song.getAlbum();
+			msg += "\n\nDescription: " + song.getAlbum();
 		}
 
 		Util.info(context, song.getTitle(), msg);
