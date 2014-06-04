@@ -1148,11 +1148,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 		}
 
-		TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
+		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
 		if(podcastDescription != null) {
 			artistView.setText(podcastDescription);
 			artistView.setSingleLine(false);
 			artistView.setLines(5);
+			artistView.setTextAppearance(context, android.R.style.TextAppearance_Small);
+
+			artistView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(artistView.getMaxLines() == 5) {
+						artistView.setMaxLines(100);
+					} else {
+						artistView.setMaxLines(5);
+					}
+				}
+			});
 		} else if (artists.size() == 1) {
 			String artistText = artists.iterator().next();
 			if(years.size() == 1) {
