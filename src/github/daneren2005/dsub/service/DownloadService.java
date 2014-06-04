@@ -23,6 +23,7 @@ import static github.daneren2005.dsub.domain.PlayerState.COMPLETED;
 import static github.daneren2005.dsub.domain.PlayerState.DOWNLOADING;
 import static github.daneren2005.dsub.domain.PlayerState.IDLE;
 import static github.daneren2005.dsub.domain.PlayerState.PAUSED;
+import static github.daneren2005.dsub.domain.PlayerState.PAUSED_TEMP;
 import static github.daneren2005.dsub.domain.PlayerState.PREPARED;
 import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
 import static github.daneren2005.dsub.domain.PlayerState.STARTED;
@@ -913,6 +914,9 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void pause() {
+		pause(false);
+	}
+	public synchronized void pause(boolean temp) {
 		try {
 			if (playerState == STARTED) {
 				if (remoteState != RemoteControlState.LOCAL) {
@@ -920,7 +924,7 @@ public class DownloadService extends Service {
 				} else {
 					mediaPlayer.pause();
 				}
-				setPlayerState(PAUSED);
+				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
 			}
 		} catch (Exception x) {
 			handleError(x);
@@ -1048,6 +1052,7 @@ public class DownloadService extends Service {
 			} else {
 				Util.hidePlayingNotification(this, this, handler);
 			}
+			Util.abandonAudioFocus(this);
 		} else if(hide) {
 			Util.hidePlayingNotification(this, this, handler);
 		}

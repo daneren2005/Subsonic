@@ -109,7 +109,7 @@ public final class Util {
 	public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
 	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
 
-	private static boolean hasFocus = false;
+	private static OnAudioFocusChangeListener focusListener;
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
 
@@ -1250,10 +1250,9 @@ public final class Util {
     
     @TargetApi(8)
 	public static void requestAudioFocus(final Context context) {
-    	if (Build.VERSION.SDK_INT >= 8 && !hasFocus) {
+    	if (Build.VERSION.SDK_INT >= 8 && focusListener == null) {
     		final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-			hasFocus = true;
-    		audioManager.requestAudioFocus(new OnAudioFocusChangeListener() {
+    		audioManager.requestAudioFocus(focusListener = new OnAudioFocusChangeListener() {
 				public void onAudioFocusChange(int focusChange) {
 					DownloadService downloadService = (DownloadService)context;
 					if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isRemoteEnabled()) {
@@ -1265,7 +1264,7 @@ public final class Util {
 								downloadService.setVolume(0.1f);
 							} else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
 								pauseFocus = true;
-								downloadService.pause();
+								downloadService.pause(true);
 							}
 						}
 					} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
@@ -1277,7 +1276,7 @@ public final class Util {
 							downloadService.setVolume(1.0f);
 						}
 					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isRemoteEnabled()) {
-						hasFocus = false;
+						focusListener = null;
 						downloadService.pause();
 						audioManager.abandonAudioFocus(this);
 					}
@@ -1285,6 +1284,14 @@ public final class Util {
 			}, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     	}
     }
+
+	public static void abandonAudioFocus(Context context) {
+		if(focusListener != null) {
+			final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+			audioManager.abandonAudioFocus(focusListener);
+			focusListener = null;
+		}
+	}
 
     /**
      * <p>Broadcasts the given song info as the new song being played.</p>

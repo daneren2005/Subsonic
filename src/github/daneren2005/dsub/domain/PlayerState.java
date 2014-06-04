@@ -32,6 +32,7 @@ public enum PlayerState {
     STARTED(RemoteControlClient.PLAYSTATE_PLAYING),
     STOPPED(RemoteControlClient.PLAYSTATE_STOPPED),
     PAUSED(RemoteControlClient.PLAYSTATE_PAUSED),
+	PAUSED_TEMP(RemoteControlClient.PLAYSTATE_PAUSED),
     COMPLETED(RemoteControlClient.PLAYSTATE_STOPPED);
     
     private final int mRemoteControlClientPlayState;
