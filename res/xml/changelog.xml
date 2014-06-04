@@ -33,7 +33,6 @@
 		<change>Control remote playing (Jukebox/Chromecast) volume from outside app (JB+)</change>
 		<change>Rate limiting for background sync while phone is in use</change>
 		<change>Fix issue with playlist sync not picking up changes</change>
-		<change>Fix DSub preempting all bluetooth events</change>
 		<change>Fix case of drag/dropping where next song isn't updated correctly</change>
 		<change>Fix cache location not being correct on devices with empty SD card slot</change>
 	</release>
