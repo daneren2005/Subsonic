@@ -130,6 +130,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private boolean seekInProgress = false;
 	private boolean startFlipped = false;
 	private boolean scrollWhenLoaded = false;
+	private int lastY = 0;
 
 	/**
 	 * Called when the activity is first created.
@@ -218,7 +219,15 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		visualizerButton.setOnTouchListener(touchListener);
 		bookmarkButton.setOnTouchListener(touchListener);
 		emptyTextView.setOnTouchListener(touchListener);
-		albumArtImageView.setOnTouchListener(touchListener);
+		albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent me) {
+				if(me.getAction() == MotionEvent.ACTION_DOWN) {
+					lastY = (int) me.getRawY();
+				}
+				return gestureScanner.onTouchEvent(me);
+			}
+		});
 
 		previousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -394,16 +403,25 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		});
 
-		View.OnClickListener toggleListener = new View.OnClickListener() {
+		toggleListButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				toggleFullscreenAlbumArt();
 				setControlsVisible(true);
 			}
-		};
+		});
 
-		toggleListButton.setOnClickListener(toggleListener);
-		albumArtImageView.setOnClickListener(toggleListener);
+		View overlay = rootView.findViewById(R.id.download_overlay_buttons);
+		final int overlayHeight = overlay != null ? overlay.getHeight() : -1;
+		albumArtImageView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(overlayHeight == -1 || lastY < (view.getBottom() - overlayHeight)) {
+					toggleFullscreenAlbumArt();
+					setControlsVisible(true);
+				}
+			}
+		});
 
 		progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
