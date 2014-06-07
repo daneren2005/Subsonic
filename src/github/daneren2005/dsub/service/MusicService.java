@@ -38,6 +38,7 @@ import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
+import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -160,6 +161,10 @@ public interface MusicService {
 	void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception;
 
 	void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception;
+
+	User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception;
+
+	List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 	

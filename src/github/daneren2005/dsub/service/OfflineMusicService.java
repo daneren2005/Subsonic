@@ -46,6 +46,7 @@ import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
+import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -688,8 +689,18 @@ public class OfflineMusicService extends RESTMusicService {
 	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException("Deleting bookmarks not available in offline mode");
 	}
-    
-    @Override
+
+	@Override
+	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Getting user not available in offline mode");
+	}
+
+	@Override
+	public List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Getting users not available in offline mode");
+	}
+
+	@Override
     public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
     }

@@ -35,6 +35,7 @@
 	<string name="button_bar.bookmarks">Bookmarks</string>
 	<string name="button_bar.shares">Shares</string>
 	<string name="button_bar.chat">Chat</string>
+	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Downloading</string>
 
     <string name="main.welcome_title">Welcome!</string>
@@ -99,6 +100,7 @@
 	<string name="menu.delete_cache">Delete Cache</string>
 	<string name="menu.cast">Cast To Device</string>
 	<string name="menu.faq">FAQ</string>
+	<string name="menu.add_user">Add User</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -416,6 +418,8 @@
 	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
 	<string name="settings.large_album_art">Large Album Art</string>
 	<string name="settings.large_album_art_summary">Display albums with large album art instead of in a list</string>
+	<string name="settings.admin_enabled">Admin Enabled</string>
+	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

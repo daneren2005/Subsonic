@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.fragments.AdminFragment;
 import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.DownloadFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
@@ -392,6 +393,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			return new SelectBookmarkFragment();
 		} else if("Share".equals(fragmentType)) {
 			return new SelectShareFragment();
+		} else if("Admin".equals(fragmentType)) {
+			return new AdminFragment();
 		} else if("Download".equals(fragmentType)) {
 			return new DownloadFragment();
 		} else {

@@ -139,6 +139,12 @@
 				android:summary="@string/settings.shares_enabled_summary"
 				android:key="sharedEnabled"
 				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/settings.admin_enabled"
+				android:summary="@string/settings.admin_enabled_summary"
+				android:key="adminEnabled"
+				android:defaultValue="true"/>
 		</PreferenceCategory>
 
 		<PreferenceCategory

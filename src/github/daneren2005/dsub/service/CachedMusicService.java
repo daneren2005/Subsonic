@@ -41,6 +41,7 @@ import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
+import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -504,6 +505,38 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
 		musicService.deleteBookmark(id, context, progressListener);
+	}
+
+	@Override
+	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
+		User result = null;
+
+		if(!refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "user"), User.class);
+		}
+
+		if(result == null) {
+			result = musicService.getUser(refresh, username, context, progressListener);
+			FileUtil.serialize(context, result, getCacheName(context, "user"));
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		List<User> result = null;
+
+		if(!refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "users"), ArrayList.class);
+		}
+
+		if(result == null) {
+			result = musicService.getUsers(refresh, context, progressListener);
+			FileUtil.serialize(context, new ArrayList<User>(result), getCacheName(context, "users"));
+		}
+
+		return result;
 	}
 
 	@Override
