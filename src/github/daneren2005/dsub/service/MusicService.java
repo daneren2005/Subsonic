@@ -165,6 +165,16 @@ public interface MusicService {
 	User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception;
 
 	List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+
+	void createUser(User user, Context context, ProgressListener progressListener) throws Exception;
+
+	void updateUser(User user, Context context, ProgressListener progressListener) throws Exception;
+
+	void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception;
+
+	void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception;
+
+	Bitmap getAvatar(String username, Context context, ProgressListener progressListener) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 	

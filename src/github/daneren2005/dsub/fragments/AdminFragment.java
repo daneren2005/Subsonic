@@ -15,10 +15,15 @@
 
 package github.daneren2005.dsub.fragments;
 
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +32,37 @@ import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.UserAdapter;
 
 public class AdminFragment extends SelectListFragment<User> {
+	private static String TAG = AdminFragment.class.getSimpleName();
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, view, menuInfo);
+
+		MenuInflater inflater = context.getMenuInflater();
+		inflater.inflate(R.menu.admin_context, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+		User user = objects.get(info.position);
+
+		switch(menuItem.getItemId()) {
+			case R.id.admin_update_permissions:
+				break;
+			case R.id.admin_change_password:
+				break;
+			case R.id.admin_delete_user:
+				break;
+		}
+
+		return true;
+	}
+
 	@Override
 	public int getOptionsMenu() {
 		return R.menu.admin;
@@ -46,8 +79,14 @@ public class AdminFragment extends SelectListFragment<User> {
 			// Will only work if user is admin
 			return musicService.getUsers(refresh, context, listener);
 		} catch(SubsonicRESTException e) {
+			// Delete cached users if not allowed to get them
+			String s = Util.getRestUrl(context, null, false);
+			String cache = "users-" + s.hashCode() + ".ser";
+			File file = new File(context.getCacheDir(), cache);
+			file.delete();
+
 			List<User> users = new ArrayList<User>();
-			users.add(musicService.getUser(refresh, "scott", context, listener));
+			users.add(musicService.getUser(refresh, Util.getCurrentUsername(context), context, listener));
 			return users;
 		}
 	}

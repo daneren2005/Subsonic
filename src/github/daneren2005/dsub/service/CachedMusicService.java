@@ -512,12 +512,12 @@ public class CachedMusicService implements MusicService {
 		User result = null;
 
 		if(!refresh) {
-			result = FileUtil.deserialize(context, getCacheName(context, "user"), User.class);
+			result = FileUtil.deserialize(context, getCacheName(context, "user-" + username), User.class);
 		}
 
 		if(result == null) {
 			result = musicService.getUser(refresh, username, context, progressListener);
-			FileUtil.serialize(context, result, getCacheName(context, "user"));
+			FileUtil.serialize(context, result, getCacheName(context, "user-" + username));
 		}
 
 		return result;
@@ -537,6 +537,31 @@ public class CachedMusicService implements MusicService {
 		}
 
 		return result;
+	}
+
+	@Override
+	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		musicService.createUser(user, context, progressListener);
+	}
+
+	@Override
+	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		musicService.updateUser(user, context, progressListener);
+	}
+
+	@Override
+	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
+		musicService.deleteUser(username, context, progressListener);
+	}
+
+	@Override
+	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
+		musicService.changePassword(username, password, context, progressListener);
+	}
+
+	@Override
+	public Bitmap getAvatar(String username, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getAvatar(username, context, progressListener);
 	}
 
 	@Override

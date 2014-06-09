@@ -1219,6 +1219,51 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
+	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "createUser", null);
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "createUser", null);
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "deleteUser", null, Arrays.asList("username"), Arrays.<Object>asList(username));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "changePassword", null, Arrays.asList("username", "password"), Arrays.<Object>asList(username, password));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public Bitmap getAvatar(String username, Context context, ProgressListener progressListener) throws Exception {
+		return null;
+	}
+
+	@Override
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return processOfflineScrobbles(context, progressListener) + processOfflineStars(context, progressListener);
 	}

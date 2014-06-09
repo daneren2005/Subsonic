@@ -701,6 +701,31 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 
 	@Override
+	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Creating users not available in offline mode");
+	}
+
+	@Override
+	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Updating users not available in offline mode");
+	}
+
+	@Override
+	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Deleting users not available in offline mode");
+	}
+
+	@Override
+	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Changing passwords not available in offline mode");
+	}
+
+	@Override
+	public Bitmap getAvatar(String username, Context context, ProgressListener progressListener) throws Exception {
+		return null;
+	}
+
+	@Override
     public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
     }
