@@ -1230,7 +1230,22 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "createUser", null);
+		checkServerVersion(context, "1.10", "Updating user is not supported");
+
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		names.add("username");
+		values.add(user.getUsername());
+
+		for(User.Setting setting: user.getSettings()) {
+			if(setting.getName().indexOf("Role") != -1) {
+				names.add(setting.getName());
+				values.add(setting.getValue());
+			}
+		}
+
+		Reader reader = getReader(context, progressListener, "updateUser", null, names, values);
 		try {
 			new ErrorParser(context).parse(reader);
 		} finally {

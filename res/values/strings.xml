@@ -448,6 +448,8 @@
 	<string name="share.delete">Delete Share</string>
 
 	<string name="admin.update_permissions">Update Permissions</string>
+	<string name="admin.update_permissions_success">Successfully updated permission for %1$s</string>
+	<string name="admin.update_permissions_error">Failed to update permissions for %1$s</string>
 	<string name="admin.change_password">Change Password</string>
 	<string name="admin.change_password_success">Successfully changed password for %1$s</string>
 	<string name="admin.change_password_error">Failed to change password for %1$s</string>

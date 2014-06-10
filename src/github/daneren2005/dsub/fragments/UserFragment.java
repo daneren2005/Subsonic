@@ -16,6 +16,7 @@
 package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +27,14 @@ import android.widget.ListView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.SettingsAdapter;
 
 public class UserFragment extends SubsonicFragment{
 	private ListView listView;
@@ -38,8 +46,15 @@ public class UserFragment extends SubsonicFragment{
 		this.inflater = inflater;
 		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
+		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout.setEnabled(false);
+
 		Bundle args = getArguments();
 		user = (User) args.getSerializable(Constants.INTENT_EXTRA_NAME_ID);
+
+		listView = (ListView)rootView.findViewById(R.id.fragment_list);
+		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), true));
+
 		setTitle(user.getUsername());
 
 		return rootView;
@@ -51,11 +66,49 @@ public class UserFragment extends SubsonicFragment{
 			return;
 		}
 
-		menuInflater.inflate(R.menu.empty, menu);
+		menuInflater.inflate(R.menu.user, menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return super.onOptionsItemSelected(item);
+		if(super.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		switch (item.getItemId()) {
+			case R.id.menu_update_permissions:
+				updateSettings();
+				return true;
+		}
+
+		return false;
+	}
+
+	private void updateSettings() {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.updateUser(user, context, null);
+				return null;
+			}
+
+			@Override
+			protected void done(Void v) {
+				Util.toast(context, context.getResources().getString(R.string.admin_update_permissions_success, user.getUsername()));
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(R.string.admin_update_permissions_error, user.getUsername());
+				}
+
+				Util.toast(context, msg);
+			}
+		}.execute();
 	}
 }

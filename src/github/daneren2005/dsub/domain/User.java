@@ -16,24 +16,15 @@
 package github.daneren2005.dsub.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable {
 	private String username;
 	private String password;
 	private String email;
-	private Boolean scrobblingEnabled;
 
-	private Boolean adminRole;
-	private Boolean settingsRole;
-	private Boolean downloadRole;
-	private Boolean uploadRole;
-	private Boolean playlistRole;
-	private Boolean coverArtRole;
-	private Boolean commentRole;
-	private Boolean podcastRole;
-	private Boolean streamRole;
-	private Boolean jukeboxRole;
-	private Boolean shareRole;
+	private List<Setting> settings = new ArrayList<Setting>();
 
 	public User() {
 
@@ -63,99 +54,30 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public Boolean getScrobblingEnabled() {
-		return scrobblingEnabled;
+	public List<Setting> getSettings() {
+		return settings;
+	}
+	public void addSetting(String name, Boolean value) {
+		settings.add(new Setting(name, value));
 	}
 
-	public void setScrobblingEnabled(Boolean scrobblingEnabled) {
-		this.scrobblingEnabled = scrobblingEnabled;
-	}
+	public static class Setting implements Serializable {
+		String name;
+		Boolean value;
 
-	public Boolean getAdminRole() {
-		return adminRole;
-	}
+		public Setting(String name, Boolean value) {
+			this.name = name;
+			this.value = value;
+		}
 
-	public void setAdminRole(Boolean adminRole) {
-		this.adminRole = adminRole;
-	}
-
-	public Boolean getSettingsRole() {
-		return settingsRole;
-	}
-
-	public void setSettingsRole(Boolean settingsRole) {
-		this.settingsRole = settingsRole;
-	}
-
-	public Boolean getDownloadRole() {
-		return downloadRole;
-	}
-
-	public void setDownloadRole(Boolean downloadRole) {
-		this.downloadRole = downloadRole;
-	}
-
-	public Boolean getUploadRole() {
-		return uploadRole;
-	}
-
-	public void setUploadRole(Boolean uploadRole) {
-		this.uploadRole = uploadRole;
-	}
-
-	public Boolean getPlaylistRole() {
-		return playlistRole;
-	}
-
-	public void setPlaylistRole(Boolean playlistRole) {
-		this.playlistRole = playlistRole;
-	}
-
-	public Boolean getCoverArtRole() {
-		return coverArtRole;
-	}
-
-	public void setCoverArtRole(Boolean coverArtRole) {
-		this.coverArtRole = coverArtRole;
-	}
-
-	public Boolean getCommentRole() {
-		return commentRole;
-	}
-
-	public void setCommentRole(Boolean commentRole) {
-		this.commentRole = commentRole;
-	}
-
-	public Boolean getPodcastRole() {
-		return podcastRole;
-	}
-
-	public void setPodcastRole(Boolean podcastRole) {
-		this.podcastRole = podcastRole;
-	}
-
-	public Boolean getStreamRole() {
-		return streamRole;
-	}
-
-	public void setStreamRole(Boolean streamRole) {
-		this.streamRole = streamRole;
-	}
-
-	public Boolean getJukeboxRole() {
-		return jukeboxRole;
-	}
-
-	public void setJukeboxRole(Boolean jukeboxRole) {
-		this.jukeboxRole = jukeboxRole;
-	}
-
-	public Boolean getShareRole() {
-		return shareRole;
-	}
-
-	public void setShareRole(Boolean shareRole) {
-		this.shareRole = shareRole;
+		public String getName() {
+			return name;
+		}
+		public Boolean getValue() {
+			return value;
+		}
+		public void setValue(Boolean value) {
+			this.value = value;
+		}
 	}
 }

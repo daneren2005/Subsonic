@@ -46,18 +46,18 @@ public class UserParser extends AbstractParser {
 
 					user.setUsername(get("username"));
 					user.setEmail(get("email"));
-					user.setScrobblingEnabled(getBoolean("scrobblingEnabled"));
-					user.setAdminRole(getBoolean("adminRole"));
-					user.setSettingsRole(getBoolean("settingsRole"));
-					user.setDownloadRole(getBoolean("downloadRole"));
-					user.setUploadRole(getBoolean("uploadRole"));
-					user.setPlaylistRole(getBoolean("playlistRole"));
-					user.setCoverArtRole(getBoolean("coverArtRole"));
-					user.setCommentRole(getBoolean("commentRole"));
-					user.setPodcastRole(getBoolean("podcastRole"));
-					user.setStreamRole(getBoolean("streamRole"));
-					user.setJukeboxRole(getBoolean("jukeboxRole"));
-					user.setShareRole(getBoolean("shareRole"));
+					parseSetting(user, "scrobblingEnabled");
+					parseSetting(user, "adminRole");
+					parseSetting(user, "settingsRole");
+					parseSetting(user, "downloadRole");
+					parseSetting(user, "uploadRole");
+					// Depreciated: parseSetting(user, "playlistRole");
+					parseSetting(user, "coverArtRole");
+					parseSetting(user, "commentRole");
+					parseSetting(user, "podcastRole");
+					parseSetting(user, "streamRole");
+					parseSetting(user, "jukeboxRole");
+					parseSetting(user, "shareRole");
 
 					result.add(user);
 				} else if ("error".equals(name)) {
@@ -69,5 +69,9 @@ public class UserParser extends AbstractParser {
 		validate();
 
 		return result;
+	}
+	
+	private void parseSetting(User user, String name) {
+		user.addSetting(name, getBoolean(name));
 	}
 }

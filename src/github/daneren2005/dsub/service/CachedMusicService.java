@@ -547,6 +547,10 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
 		musicService.updateUser(user, context, progressListener);
+
+		// Delete cached users if anything updated
+		File file = new File(context.getCacheDir(), getCacheName(context, "users"));
+		file.delete();
 	}
 
 	@Override

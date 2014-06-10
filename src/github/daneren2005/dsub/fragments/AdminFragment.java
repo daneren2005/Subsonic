@@ -61,8 +61,6 @@ public class AdminFragment extends SelectListFragment<User> {
 		User user = objects.get(info.position);
 
 		switch(menuItem.getItemId()) {
-			case R.id.admin_update_permissions:
-				break;
 			case R.id.admin_change_password:
 				changePassword(user);
 				break;
