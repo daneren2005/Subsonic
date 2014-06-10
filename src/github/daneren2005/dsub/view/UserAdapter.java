@@ -26,7 +26,6 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
 
 public class UserAdapter extends ArrayAdapter<User> {
-
 	private final Context activity;
 
 	public UserAdapter(Context activity, List<User> users) {

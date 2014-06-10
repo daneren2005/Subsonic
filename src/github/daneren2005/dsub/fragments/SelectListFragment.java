@@ -107,12 +107,14 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return super.onOptionsItemSelected(item);
-
 	}
 
 	@Override
 	protected void refresh(final boolean refresh) {
-		setTitle(getTitleResource());
+		int titleRes = getTitleResource();
+		if(titleRes != 0) {
+			setTitle(getTitleResource());
+		}
 		listView.setVisibility(View.INVISIBLE);
 		emptyView.setVisibility(View.GONE);
 
