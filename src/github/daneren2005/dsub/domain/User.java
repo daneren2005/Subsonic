@@ -65,6 +65,9 @@ public class User implements Serializable {
 		String name;
 		Boolean value;
 
+		public Setting() {
+			
+		}
 		public Setting(String name, Boolean value) {
 			this.name = name;
 			this.value = value;
