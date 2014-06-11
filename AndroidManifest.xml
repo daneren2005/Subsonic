@@ -120,18 +120,15 @@
 
         <receiver android:name="github.daneren2005.dsub.receiver.MediaButtonIntentReceiver">
         	<intent-filter>
-			<action android:name="android.intent.action.MEDIA_BUTTON" />
-		</intent-filter>
+				<action android:name="android.intent.action.MEDIA_BUTTON" />
+			</intent-filter>
         </receiver>
 
-        <receiver android:name="github.daneren2005.dsub.receiver.BluetoothIntentReceiver">
-            <intent-filter>
-                <action android:name="android.bluetooth.a2dp.action.SINK_STATE_CHANGED"/>
-				<action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED"/> <!-- API Level 11 -->
-				<action android:name="android.bluetooth.device.action.ACL_CONNECTED"/>
-				<action android:name="android.bluetooth.device.action.ACL_DISCONNECTED"/>
-            </intent-filter>
-        </receiver>
+		<receiver android:name="github.daneren2005.dsub.receiver.AudioNoisyReceiver">
+			<intent-filter>
+				<action android:name="android.media.AUDIO_BECOMING_NOISY" />
+			</intent-filter>
+		</receiver>
 		
 		<receiver android:name="github.daneren2005.dsub.receiver.A2dpIntentReceiver">
 			<intent-filter>

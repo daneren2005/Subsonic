@@ -355,9 +355,7 @@
 	<string name="settings.temp_loss_lower">Always lower volume</string>
 	<string name="settings.temp_loss_nothing">Do Nothing</string>
 	<string name="settings.disconnect_pause_title">Pause on Disconnect</string>
-	<string name="settings.disconnect_pause_both">Pause on either</string>
-	<string name="settings.disconnect_pause_headphone">Pause only for headphone</string>
-	<string name="settings.disconnect_pause_bluetooth">Pause only for bluetooth</string>
+	<string name="settings.disconnect_pause_both">Pause</string>
 	<string name="settings.disconnect_pause_neither">Do Nothing</string>
 	<string name="settings.persistent_title">Persistent Notification</string>
 	<string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>

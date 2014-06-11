@@ -347,8 +347,6 @@
 	<string name="settings.temp_loss_nothing">Ne csináljon semmit.</string>
 	<string name="settings.disconnect_pause_title">Megállítás kapcsolatbontás esetén</string>
 	<string name="settings.disconnect_pause_both">Megállítás minden esetben.</string>
-	<string name="settings.disconnect_pause_headphone">Megállítás fejhallgató használata esetén.</string>
-	<string name="settings.disconnect_pause_bluetooth">Megállítás bluetooth használata esetén.</string>
 	<string name="settings.disconnect_pause_neither">Ne csináljon semmit.</string>
 	<string name="settings.persistent_title">Állandó kijelzés</string>
 	<string name="settings.persistent_summary">Kijelzés az értesítési sávon a lejátszás megállítása után is. Nyomja meg a stop gombot a törléséhez!</string>

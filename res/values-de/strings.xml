@@ -336,8 +336,6 @@
 	<string name="settings.temp_loss_nothing">Nichts machen</string>
 	<string name="settings.disconnect_pause_title">Verhalten bei Verbindungsverlust</string>
 	<string name="settings.disconnect_pause_both">Immer pausieren</string>
-	<string name="settings.disconnect_pause_headphone">Nur bei Kopfhörer pausieren</string>
-	<string name="settings.disconnect_pause_bluetooth">Nur bei Bluetooth pausieren</string>
 	<string name="settings.disconnect_pause_neither">Nichts machen</string>
 	<string name="settings.persistent_title">Dauerhafte Benachrichtigung</string>
 	<string name="settings.persistent_summary">Zeige die Benachrichtigung auch nach pausieren der Wiedergabe.  Zum entfernen Stop auswählen.</string>

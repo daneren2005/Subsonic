@@ -180,14 +180,10 @@
 
 	<string-array name="disconnectPauseValues">
 		<item>0</item>
-		<item>1</item>
-		<item>2</item>
 		<item>3</item>
 	</string-array>
 	<string-array name="disconnectPauseNames">
 		<item>@string/settings.disconnect_pause_both</item>
-		<item>@string/settings.disconnect_pause_headphone</item>
-		<item>@string/settings.disconnect_pause_bluetooth</item>
 		<item>@string/settings.disconnect_pause_neither</item>
 	</string-array>
 

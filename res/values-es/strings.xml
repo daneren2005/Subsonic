@@ -328,8 +328,6 @@
 	<string name="settings.temp_loss_nothing">No hacer nada</string>
 	<string name="settings.disconnect_pause_title">Pausar al desconectar</string>
 	<string name="settings.disconnect_pause_both">Pausar en todos los casos</string>
-	<string name="settings.disconnect_pause_headphone">Pausar sólo con auriculares</string>
-	<string name="settings.disconnect_pause_bluetooth">Pausar sólo en bluetooth</string>
 	<string name="settings.disconnect_pause_neither">No hacer nada</string>
 	<string name="settings.persistent_title">Notificación permanente</string>
 	<string name="settings.persistent_summary">Mostrar la notificación incluso tras pausar. Pulsar botón stop para quitarlo.</string>

@@ -54,7 +54,6 @@ public class DownloadServiceLifecycleSupport {
 	private final DownloadService downloadService;
 	private Looper eventLooper;
 	private Handler eventHandler;
-	private BroadcastReceiver headsetEventReceiver;
 	private BroadcastReceiver ejectEventReceiver;
 	private PhoneStateListener phoneStateListener;
 	private boolean externalStorageAvailable= true;
@@ -117,29 +116,6 @@ public class DownloadServiceLifecycleSupport {
 				Looper.loop();
 			}
 		}, "DownloadServiceLifecycleSupport").start();
-
-		// Pause when headset is unplugged.
-		headsetEventReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				Log.i(TAG, "Headset event for: " + intent.getExtras().get("name"));
-				if (intent.getExtras().getInt("state") == 0) {
-					eventHandler.post(new Runnable() {
-						@Override
-						public void run() {
-							if(!downloadService.isRemoteEnabled()) {
-								SharedPreferences prefs = Util.getPreferences(downloadService);
-								int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
-								if(pausePref == 0 || pausePref == 1) {
-									downloadService.pause();
-								}
-							}
-						}
-					});
-				}
-			}
-		};
-		downloadService.registerReceiver(headsetEventReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
 
 		// Stop when SD card is ejected.
 		ejectEventReceiver = new BroadcastReceiver() {
@@ -210,7 +186,6 @@ public class DownloadServiceLifecycleSupport {
 		eventLooper.quit();
 		serializeDownloadQueueNow();
 		downloadService.unregisterReceiver(ejectEventReceiver);
-		downloadService.unregisterReceiver(headsetEventReceiver);
 		downloadService.unregisterReceiver(intentReceiver);
 
 		TelephonyManager telephonyManager = (TelephonyManager) downloadService.getSystemService(Context.TELEPHONY_SERVICE);
