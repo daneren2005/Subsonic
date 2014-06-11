@@ -10,6 +10,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.domain.ChatMessage;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 
 import java.text.DateFormat;
@@ -47,7 +48,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         Date messageTime = new java.util.Date(message.getTime());
         String messageText = message.getMessage();
         
-        String me = Util.getUserName(activity, Util.getActiveServer(activity));
+        String me = UserUtil.getCurrentUsername(activity);
         
         if (messageUser.equals(me)) {
         	layout = R.layout.chat_item_reverse;

@@ -63,6 +63,7 @@ import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ChangeLog;
 
@@ -467,6 +468,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
 			editor.commit();
 		}
+
+		UserUtil.seedCurrentUser(this);
 	}
 
 	private void resetCacheLocation(SharedPreferences prefs) {

@@ -33,6 +33,7 @@ import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.SettingsAdapter;
 
@@ -53,7 +54,7 @@ public class UserFragment extends SubsonicFragment{
 		user = (User) args.getSerializable(Constants.INTENT_EXTRA_NAME_ID);
 
 		listView = (ListView)rootView.findViewById(R.id.fragment_list);
-		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), true));
+		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin(context)));
 
 		setTitle(user.getUsername());
 
@@ -66,7 +67,11 @@ public class UserFragment extends SubsonicFragment{
 			return;
 		}
 
-		menuInflater.inflate(R.menu.user, menu);
+		if(UserUtil.isCurrentAdmin(context)) {
+			menuInflater.inflate(R.menu.user, menu);
+		} else {
+			menuInflater.inflate(R.menu.empty, menu);
+		}
 	}
 
 	@Override

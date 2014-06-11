@@ -25,6 +25,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.view.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.service.MusicService;
@@ -207,6 +208,7 @@ public class MainFragment extends SubsonicFragment {
 			}
 			Util.setActiveServer(context, instance);
 			context.invalidate();
+			UserUtil.seedCurrentUser(context);
 		}
 	}
 
@@ -218,13 +220,15 @@ public class MainFragment extends SubsonicFragment {
 		if (service != null) {
 			service.setOnline(isOffline);
 		}
-		
+
+		// Coming back online
 		if(isOffline) {
 			int scrobblesCount = Util.offlineScrobblesCount(context);
 			int starsCount = Util.offlineStarsCount(context);
 			if(scrobblesCount > 0 || starsCount > 0){
 				showOfflineSyncDialog(scrobblesCount, starsCount);
 			}
+			UserUtil.seedCurrentUser(context);
 		}
 	}
 

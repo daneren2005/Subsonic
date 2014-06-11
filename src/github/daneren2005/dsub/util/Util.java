@@ -169,11 +169,6 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
     }
-
-	public static String getCurrentUsername(Context context) {
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getString(Constants.PREFERENCES_KEY_USERNAME + getActiveServer(context), null);
-	}
 	
 	public static boolean checkServerVersion(Context context, String requiredVersion) {
 		Version version = Util.getServerRestVersion(context);
@@ -231,14 +226,6 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
     }
-	
-	public static String getUserName(Context context, int instance) {
-		if (instance == 0) {
-			return context.getResources().getString(R.string.main_offline);
-		}
-		SharedPreferences prefs = getPreferences(context);
-		return prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
-	}
 
     public static void setServerRestVersion(Context context, Version version) {
 		int instance = getActiveServer(context);

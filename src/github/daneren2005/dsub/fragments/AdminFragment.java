@@ -41,6 +41,7 @@ import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.UserAdapter;
 
@@ -52,7 +53,11 @@ public class AdminFragment extends SelectListFragment<User> {
 		super.onCreateContextMenu(menu, view, menuInfo);
 
 		MenuInflater inflater = context.getMenuInflater();
-		inflater.inflate(R.menu.admin_context, menu);
+		if(UserUtil.isCurrentAdmin(context) && Util.checkServerVersion(context, "1.10")) {
+			inflater.inflate(R.menu.admin_context, menu);
+		} else {
+			inflater.inflate(R.menu.admin_context_user, menu);
+		}
 	}
 
 	@Override
@@ -74,7 +79,11 @@ public class AdminFragment extends SelectListFragment<User> {
 
 	@Override
 	public int getOptionsMenu() {
-		return R.menu.admin;
+		if(UserUtil.isCurrentAdmin(context)) {
+			return R.menu.admin;
+		} else {
+			return R.menu.empty;
+		}
 	}
 
 	@Override
@@ -95,7 +104,7 @@ public class AdminFragment extends SelectListFragment<User> {
 			file.delete();
 
 			List<User> users = new ArrayList<User>();
-			users.add(musicService.getUser(refresh, Util.getCurrentUsername(context), context, listener));
+			users.add(musicService.getUser(refresh, UserUtil.getCurrentUsername(context), context, listener));
 			return users;
 		}
 	}
