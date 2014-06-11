@@ -577,8 +577,8 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public Bitmap getAvatar(String username, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getAvatar(username, context, progressListener);
+	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getAvatar(username, size, context, progressListener);
 	}
 
 	@Override

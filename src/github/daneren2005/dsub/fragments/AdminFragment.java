@@ -91,7 +91,7 @@ public class AdminFragment extends SelectListFragment<User> {
 
 	@Override
 	public ArrayAdapter getAdapter(List<User> objs) {
-		return new UserAdapter(context, objs);
+		return new UserAdapter(context, objs, getImageLoader());
 	}
 
 	@Override

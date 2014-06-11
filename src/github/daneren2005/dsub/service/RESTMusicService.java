@@ -1284,8 +1284,57 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public Bitmap getAvatar(String username, Context context, ProgressListener progressListener) throws Exception {
-		return null;
+	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
+		// Return silently if server is too old
+		if (!Util.checkServerVersion(context, "1.8")) {
+			return null;
+		}
+
+		// Synchronize on the username so that we don't download concurrently for
+		// the same user.
+		synchronized (username) {
+			// Use cached file, if existing.
+			Bitmap bitmap = FileUtil.getAvatarBitmap(context, username, size);
+			if(bitmap != null) {
+				return bitmap;
+			}
+
+			String url = Util.getRestUrl(context, "getAvatar");
+			InputStream in = null;
+			try
+			{
+				List<String> parameterNames;
+				List<Object> parameterValues;
+
+				parameterNames = Collections.singletonList("username");
+				parameterValues = Arrays.<Object>asList(username);
+
+				HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener);
+				in = entity.getContent();
+
+				// If content type is XML, an error occurred. Get it.
+				String contentType = Util.getContentType(entity);
+				if (contentType != null && contentType.startsWith("text/xml"))
+				{
+					new ErrorParser(context).parse(new InputStreamReader(in, Constants.UTF_8));
+					return null; // Never reached.
+				}
+
+				byte[] bytes = Util.toByteArray(in);
+				OutputStream out = null;
+				try {
+					out = new FileOutputStream(FileUtil.getAvatarFile(context, username));
+					out.write(bytes);
+				} finally {
+					Util.close(out);
+				}
+
+				return FileUtil.getSampledBitmap(bytes, size);
+			}
+			finally {
+				Util.close(in);
+			}
+		}
 	}
 
 	@Override

@@ -24,13 +24,16 @@ import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.util.ImageLoader;
 
 public class UserAdapter extends ArrayAdapter<User> {
 	private final Context activity;
+	private final ImageLoader imageLoader;
 
-	public UserAdapter(Context activity, List<User> users) {
+	public UserAdapter(Context activity, List<User> users, ImageLoader imageLoader) {
 		super(activity, R.layout.basic_list_item, users);
 		this.activity = activity;
+		this.imageLoader = imageLoader;
 	}
 
 	@Override
@@ -42,7 +45,7 @@ public class UserAdapter extends ArrayAdapter<User> {
 		} else {
 			view = new UserView(activity);
 		}
-		view.setObject(entry);
+		view.setObject(entry, imageLoader);
 		return view;
 	}
 }

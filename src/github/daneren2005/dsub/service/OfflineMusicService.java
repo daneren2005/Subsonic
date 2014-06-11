@@ -726,7 +726,7 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 
 	@Override
-	public Bitmap getAvatar(String username, Context context, ProgressListener progressListener) throws Exception {
+	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
 		return null;
 	}
 

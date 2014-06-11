@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
@@ -57,6 +59,7 @@ public class UserFragment extends SubsonicFragment{
 		user = (User) args.getSerializable(Constants.INTENT_EXTRA_NAME_ID);
 
 		listView = (ListView)rootView.findViewById(R.id.fragment_list);
+		createHeader();
 		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin()));
 
 		setTitle(user.getUsername());
@@ -103,5 +106,25 @@ public class UserFragment extends SubsonicFragment{
 		}
 
 		return false;
+	}
+
+	private void createHeader() {
+		View header = LayoutInflater.from(context).inflate(R.layout.user_header, listView, false);
+
+		final ImageLoader imageLoader = getImageLoader();
+		ImageView coverArtView = (ImageView) header.findViewById(R.id.user_avatar);
+		imageLoader.loadAvatar(context, coverArtView, user.getUsername());
+
+		TextView usernameView = (TextView) header.findViewById(R.id.user_username);
+		usernameView.setText(user.getUsername());
+
+		final TextView emailView = (TextView) header.findViewById(R.id.user_email);
+		if(user.getEmail() != null) {
+			emailView.setText(user.getEmail());
+		} else {
+			emailView.setVisibility(View.GONE);
+		}
+
+		listView.addHeaderView(header);
 	}
 }

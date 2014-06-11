@@ -200,6 +200,34 @@ public class FileUtil {
         }
         return null;
     }
+
+	public static File getAvatarDirectory(Context context) {
+		File avatarDir = new File(getSubsonicDirectory(context), "avatars");
+		ensureDirectoryExistsAndIsReadWritable(avatarDir);
+		ensureDirectoryExistsAndIsReadWritable(new File(avatarDir, ".nomedia"));
+		return avatarDir;
+	}
+
+	public static File getAvatarFile(Context context, String username) {
+		return new File(getAvatarDirectory(context), Util.md5Hex(username) + ".jpeg");
+	}
+
+	public static Bitmap getAvatarBitmap(Context context, String username, int size) {
+		File avatarFile = getAvatarFile(context, username);
+		if (avatarFile.exists()) {
+			final BitmapFactory.Options opt = new BitmapFactory.Options();
+			opt.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(avatarFile.getPath(), opt);
+			opt.inPurgeable = true;
+			opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
+			opt.inJustDecodeBounds = false;
+
+			Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getPath(), opt);
+			return bitmap == null ? null : getScaledBitmap(bitmap, size);
+		}
+		return null;
+	}
+
 	public static Bitmap getSampledBitmap(byte[] bytes, int size) {
 		final BitmapFactory.Options opt = new BitmapFactory.Options();
 		opt.inJustDecodeBounds = true;

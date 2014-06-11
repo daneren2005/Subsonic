@@ -23,18 +23,21 @@ import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.util.ImageLoader;
 
 public class UserView extends UpdateView {
 	private User user;
 
-	private TextView userNameView;
+	private TextView usernameView;
+	private ImageView avatarView;
 
 	public UserView(Context context) {
 		super(context);
 		this.context = context;
-		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
+		LayoutInflater.from(context).inflate(R.layout.user_list_item, this, true);
 
-		userNameView = (TextView) findViewById(R.id.item_name);
+		usernameView = (TextView) findViewById(R.id.item_name);
+		avatarView = (ImageView) findViewById(R.id.item_avatar);
 		moreButton = (ImageView) findViewById(R.id.item_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -43,8 +46,9 @@ public class UserView extends UpdateView {
 		});
 	}
 
-	protected void setObjectImpl(Object obj) {
+	protected void setObjectImpl(Object obj, Object obj2) {
 		this.user = (User) obj;
-		userNameView.setText(user.getUsername());
+		usernameView.setText(user.getUsername());
+		((ImageLoader)obj2).loadAvatar(context, avatarView, user.getUsername());
 	}
 }
