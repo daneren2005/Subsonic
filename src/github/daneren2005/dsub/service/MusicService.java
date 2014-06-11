@@ -172,6 +172,8 @@ public interface MusicService {
 
 	void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception;
 
+	void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception;
+
 	void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception;
 
 	Bitmap getAvatar(String username, Context context, ProgressListener progressListener) throws Exception;

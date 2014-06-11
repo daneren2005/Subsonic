@@ -15,14 +15,24 @@
 
 package github.daneren2005.dsub.util;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.io.File;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
 
 public final class UserUtil {
 	private static User currentUser;
@@ -55,15 +65,15 @@ public final class UserUtil {
 		return getCurrentUsername(context, Util.getActiveServer(context));
 	}
 
-	public static boolean isCurrentAdmin(Context context) {
+	public static boolean isCurrentAdmin() {
 		if(currentUser == null) {
 			return false;
 		} else {
-			return isCurrentRole(context, "adminRole");
+			return isCurrentRole("adminRole");
 		}
 	}
 
-	public static boolean isCurrentRole(Context context, String role) {
+	public static boolean isCurrentRole(String role) {
 		if(currentUser == null) {
 			return false;
 		}
@@ -75,5 +85,173 @@ public final class UserUtil {
 		}
 
 		return false;
+	}
+
+	public static void changePassword(final Activity context, final User user) {
+		View layout = context.getLayoutInflater().inflate(R.layout.change_password, null);
+		final TextView passwordView = (TextView) layout.findViewById(R.id.new_password);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.admin_change_password)
+				.setView(layout)
+				.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						final String password = passwordView.getText().toString();
+						// Don't allow blank passwords
+						if ("".equals(password)) {
+							Util.toast(context, R.string.admin_change_password_invalid);
+							return;
+						}
+
+						new SilentBackgroundTask<Void>(context) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								MusicService musicService = MusicServiceFactory.getMusicService(context);
+								musicService.changePassword(user.getUsername(), password, context, null);
+								return null;
+							}
+
+							@Override
+							protected void done(Void v) {
+								Util.toast(context, context.getResources().getString(R.string.admin_change_password_success, user.getUsername()));
+							}
+
+							@Override
+							protected void error(Throwable error) {
+								String msg;
+								if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+									msg = getErrorMessage(error);
+								} else {
+									msg = context.getResources().getString(R.string.admin_change_password_error, user.getUsername());
+								}
+
+								Util.toast(context, msg);
+							}
+						}.execute();
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null)
+				.setCancelable(true);
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	public static void updateSettings(final Context context, final User user) {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.updateUser(user, context, null);
+				return null;
+			}
+
+			@Override
+			protected void done(Void v) {
+				Util.toast(context, context.getResources().getString(R.string.admin_update_permissions_success, user.getUsername()));
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(R.string.admin_update_permissions_error, user.getUsername());
+				}
+
+				Util.toast(context, msg);
+			}
+		}.execute();
+	}
+
+	public static void changeEmail(final Activity context, final User user) {
+		View layout = context.getLayoutInflater().inflate(R.layout.change_email, null);
+		final TextView emailView = (TextView) layout.findViewById(R.id.new_email);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.admin_change_email)
+				.setView(layout)
+				.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						final String email = emailView.getText().toString();
+						// Don't allow blank emails
+						if ("".equals(email)) {
+							Util.toast(context, R.string.admin_change_email_invalid);
+							return;
+						}
+
+						new SilentBackgroundTask<Void>(context) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								MusicService musicService = MusicServiceFactory.getMusicService(context);
+								musicService.changeEmail(user.getUsername(), email, context, null);
+								return null;
+							}
+
+							@Override
+							protected void done(Void v) {
+								Util.toast(context, context.getResources().getString(R.string.admin_change_email_success, user.getUsername()));
+							}
+
+							@Override
+							protected void error(Throwable error) {
+								String msg;
+								if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+									msg = getErrorMessage(error);
+								} else {
+									msg = context.getResources().getString(R.string.admin_change_email_error, user.getUsername());
+								}
+
+								Util.toast(context, msg);
+							}
+						}.execute();
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null)
+				.setCancelable(true);
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	public static void deleteUser(final Context context, final User user, final ArrayAdapter adapter) {
+		Util.confirmDialog(context, R.string.common_delete, user.getUsername(), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						musicService.deleteUser(user.getUsername(), context, null);
+						return null;
+					}
+
+					@Override
+					protected void done(Void v) {
+						if(adapter != null) {
+							adapter.remove(user);
+							adapter.notifyDataSetChanged();
+						}
+
+						Util.toast(context, context.getResources().getString(R.string.admin_delete_user_success, user.getUsername()));
+					}
+
+					@Override
+					protected void error(Throwable error) {
+						String msg;
+						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+							msg = getErrorMessage(error);
+						} else {
+							msg = context.getResources().getString(R.string.admin_delete_user_error, user.getUsername());
+						}
+
+						Util.toast(context, msg);
+					}
+				}.execute();
+			}
+		});
 	}
 }

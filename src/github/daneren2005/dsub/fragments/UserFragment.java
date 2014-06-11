@@ -15,6 +15,9 @@
 
 package github.daneren2005.dsub.fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -24,8 +27,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -39,12 +44,10 @@ import github.daneren2005.dsub.view.SettingsAdapter;
 
 public class UserFragment extends SubsonicFragment{
 	private ListView listView;
-	private LayoutInflater inflater;
 	private User user;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		this.inflater = inflater;
 		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
 
 		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
@@ -54,7 +57,7 @@ public class UserFragment extends SubsonicFragment{
 		user = (User) args.getSerializable(Constants.INTENT_EXTRA_NAME_ID);
 
 		listView = (ListView)rootView.findViewById(R.id.fragment_list);
-		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin(context)));
+		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin()));
 
 		setTitle(user.getUsername());
 
@@ -62,15 +65,22 @@ public class UserFragment extends SubsonicFragment{
 	}
 
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		activity.invalidateOptionsMenu();
+	}
+
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		if(!primaryFragment) {
+		// For some reason this is called before onAttach
+		if(!primaryFragment || context == null) {
 			return;
 		}
 
-		if(UserUtil.isCurrentAdmin(context)) {
+		if(UserUtil.isCurrentAdmin() && Util.checkServerVersion(context, "1.10")) {
 			menuInflater.inflate(R.menu.user, menu);
 		} else {
-			menuInflater.inflate(R.menu.empty, menu);
+			menuInflater.inflate(R.menu.user_user, menu);
 		}
 	}
 
@@ -82,38 +92,16 @@ public class UserFragment extends SubsonicFragment{
 
 		switch (item.getItemId()) {
 			case R.id.menu_update_permissions:
-				updateSettings();
+				UserUtil.updateSettings(context, user);
+				return true;
+			case R.id.menu_change_password:
+				UserUtil.changePassword(context, user);
+				return true;
+			case R.id.menu_change_email:
+				UserUtil.changeEmail(context, user);
 				return true;
 		}
 
 		return false;
-	}
-
-	private void updateSettings() {
-		new SilentBackgroundTask<Void>(context) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.updateUser(user, context, null);
-				return null;
-			}
-
-			@Override
-			protected void done(Void v) {
-				Util.toast(context, context.getResources().getString(R.string.admin_update_permissions_success, user.getUsername()));
-			}
-
-			@Override
-			protected void error(Throwable error) {
-				String msg;
-				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-					msg = getErrorMessage(error);
-				} else {
-					msg = context.getResources().getString(R.string.admin_update_permissions_error, user.getUsername());
-				}
-
-				Util.toast(context, msg);
-			}
-		}.execute();
 	}
 }

@@ -53,7 +53,7 @@ public class AdminFragment extends SelectListFragment<User> {
 		super.onCreateContextMenu(menu, view, menuInfo);
 
 		MenuInflater inflater = context.getMenuInflater();
-		if(UserUtil.isCurrentAdmin(context) && Util.checkServerVersion(context, "1.10")) {
+		if(UserUtil.isCurrentAdmin()) {
 			inflater.inflate(R.menu.admin_context, menu);
 		} else {
 			inflater.inflate(R.menu.admin_context_user, menu);
@@ -66,11 +66,14 @@ public class AdminFragment extends SelectListFragment<User> {
 		User user = objects.get(info.position);
 
 		switch(menuItem.getItemId()) {
+			case R.id.admin_change_email:
+				UserUtil.changeEmail(context, user);
+				break;
 			case R.id.admin_change_password:
-				changePassword(user);
+				UserUtil.changePassword(context, user);
 				break;
 			case R.id.admin_delete_user:
-				deleteUser(user);
+				UserUtil.deleteUser(context, user, adapter);
 				break;
 		}
 
@@ -79,7 +82,7 @@ public class AdminFragment extends SelectListFragment<User> {
 
 	@Override
 	public int getOptionsMenu() {
-		if(UserUtil.isCurrentAdmin(context)) {
+		if(UserUtil.isCurrentAdmin()) {
 			return R.menu.admin;
 		} else {
 			return R.menu.empty;
@@ -124,92 +127,5 @@ public class AdminFragment extends SelectListFragment<User> {
 		fragment.setArguments(args);
 
 		replaceFragment(fragment);
-	}
-
-	private void changePassword(final User user) {
-		View layout = context.getLayoutInflater().inflate(R.layout.change_password, null);
-		final TextView passwordView = (TextView) layout.findViewById(R.id.new_password);
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(R.string.admin_change_password)
-				.setView(layout)
-				.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						final String password = passwordView.getText().toString();
-						// Don't allow blank passwords
-						if ("".equals(password)) {
-							Util.toast(context, R.string.admin_change_password_invalid);
-							return;
-						}
-
-						new SilentBackgroundTask<Void>(context) {
-							@Override
-							protected Void doInBackground() throws Throwable {
-								MusicService musicService = MusicServiceFactory.getMusicService(context);
-								musicService.changePassword(user.getUsername(), password, context, null);
-								return null;
-							}
-
-							@Override
-							protected void done(Void v) {
-								Util.toast(context, context.getResources().getString(R.string.admin_change_password_success, user.getUsername()));
-							}
-
-							@Override
-							protected void error(Throwable error) {
-								String msg;
-								if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-									msg = getErrorMessage(error);
-								} else {
-									msg = context.getResources().getString(R.string.admin_change_password_error, user.getUsername());
-								}
-
-								Util.toast(context, msg);
-							}
-						}.execute();
-					}
-				})
-				.setNegativeButton(R.string.common_cancel, null)
-				.setCancelable(true);
-
-		AlertDialog dialog = builder.create();
-		dialog.show();
-	}
-
-	private void deleteUser(final User user) {
-		Util.confirmDialog(context, R.string.common_delete, user.getUsername(), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						musicService.deleteUser(user.getUsername(), context, null);
-						return null;
-					}
-
-					@Override
-					protected void done(Void v) {
-						adapter.remove(user);
-						adapter.notifyDataSetChanged();
-
-						Util.toast(context, context.getResources().getString(R.string.admin_delete_user_success, user.getUsername()));
-					}
-
-					@Override
-					protected void error(Throwable error) {
-						String msg;
-						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-							msg = getErrorMessage(error);
-						} else {
-							msg = context.getResources().getString(R.string.admin_delete_user_error, user.getUsername());
-						}
-
-						Util.toast(context, msg);
-					}
-				}.execute();
-			}
-		});
 	}
 }

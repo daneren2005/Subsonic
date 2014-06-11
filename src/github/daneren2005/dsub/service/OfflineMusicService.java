@@ -716,6 +716,11 @@ public class OfflineMusicService extends RESTMusicService {
 	}
 
 	@Override
+	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException("Changing email not available in offline mode");
+	}
+
+	@Override
 	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException("Changing passwords not available in offline mode");
 	}

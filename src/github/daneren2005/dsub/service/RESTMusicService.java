@@ -1264,6 +1264,16 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
+	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "updateUser", null, Arrays.asList("username", "email"), Arrays.<Object>asList(username, email));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
 	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "changePassword", null, Arrays.asList("username", "password"), Arrays.<Object>asList(username, password));
 		try {

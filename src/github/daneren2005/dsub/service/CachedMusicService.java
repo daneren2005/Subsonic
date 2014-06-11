@@ -563,6 +563,15 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
+	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
+		musicService.changeEmail(username, email, context, progressListener);
+
+		// Delete cached users if any have been removed from list
+		File file = new File(context.getCacheDir(), getCacheName(context, "users"));
+		file.delete();
+	}
+
+	@Override
 	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
 		musicService.changePassword(username, password, context, progressListener);
 	}
