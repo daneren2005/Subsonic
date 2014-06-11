@@ -1052,7 +1052,6 @@ public class DownloadService extends Service {
 			} else {
 				Util.hidePlayingNotification(this, this, handler);
 			}
-			Util.abandonAudioFocus(this);
 		} else if(hide) {
 			Util.hidePlayingNotification(this, this, handler);
 		}
