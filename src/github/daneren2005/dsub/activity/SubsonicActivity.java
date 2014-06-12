@@ -75,7 +75,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private String[] drawerItemsDescriptions;
 	private String[] drawerItems;
 	private boolean drawerIdle = true;
-	private boolean[] enabledItems = {true, true, true, true};
+	private boolean[] enabledItems = {true, true, true, true, true};
 	private boolean destroyed = false;
 	private boolean finished = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
@@ -386,8 +386,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this);
 		boolean sharedEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SHARED_ENABLED, true) && !Util.isOffline(this);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
+		boolean adminEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_ADMIN_ENABLED, true) && !Util.isOffline(this);
 		
-		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == sharedEnabled || !enabledItems[3] == chatEnabled) {
+		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == sharedEnabled || !enabledItems[3] == chatEnabled || !enabledItems[4] == adminEnabled) {
 			drawerItems = getResources().getStringArray(R.array.drawerItems);
 			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
 
@@ -419,8 +420,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			if(!chatEnabled) {
 				drawerItemsVisibleList.set(6, false);
 			}
-			if(!getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
+			if(!adminEnabled) {
 				drawerItemsVisibleList.set(7, false);
+			}
+			if(!getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
+				drawerItemsVisibleList.set(8, false);
 			}
 			
 			drawerList.setAdapter(drawerAdapter = new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList, drawerItemsVisibleList));
@@ -428,6 +432,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			enabledItems[1] = bookmarksEnabled;
 			enabledItems[2] = sharedEnabled;
 			enabledItems[3] = chatEnabled;
+			enabledItems[4] = adminEnabled;
 
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
 			if(fragmentType != null && lastSelectedPosition == 0) {

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:compat="http://schemas.android.com/apk/res-auto">
+
+	<item
+		android:id="@+id/admin_change_email"
+		android:title="@string/admin.change_email"/>
+
+	<item
+		android:id="@+id/admin_change_password"
+		android:title="@string/admin.change_password"/>
+
+	<item
+		android:id="@+id/admin_delete_user"
+		android:title="@string/admin.delete_user"/>
+</menu>

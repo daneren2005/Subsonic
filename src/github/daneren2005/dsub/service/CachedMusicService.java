@@ -41,6 +41,7 @@ import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
+import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -504,6 +505,80 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
 		musicService.deleteBookmark(id, context, progressListener);
+	}
+
+	@Override
+	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
+		User result = null;
+
+		if(!refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "user-" + username), User.class);
+		}
+
+		if(result == null) {
+			result = musicService.getUser(refresh, username, context, progressListener);
+			FileUtil.serialize(context, result, getCacheName(context, "user-" + username));
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		List<User> result = null;
+
+		if(!refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "users"), ArrayList.class);
+		}
+
+		if(result == null) {
+			result = musicService.getUsers(refresh, context, progressListener);
+			FileUtil.serialize(context, new ArrayList<User>(result), getCacheName(context, "users"));
+		}
+
+		return result;
+	}
+
+	@Override
+	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		musicService.createUser(user, context, progressListener);
+	}
+
+	@Override
+	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		musicService.updateUser(user, context, progressListener);
+
+		// Delete cached users if anything updated
+		File file = new File(context.getCacheDir(), getCacheName(context, "users"));
+		file.delete();
+	}
+
+	@Override
+	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
+		musicService.deleteUser(username, context, progressListener);
+
+		// Delete cached users if any have been removed from list
+		File file = new File(context.getCacheDir(), getCacheName(context, "users"));
+		file.delete();
+	}
+
+	@Override
+	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
+		musicService.changeEmail(username, email, context, progressListener);
+
+		// Delete cached users if any have been removed from list
+		File file = new File(context.getCacheDir(), getCacheName(context, "users"));
+		file.delete();
+	}
+
+	@Override
+	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
+		musicService.changePassword(username, password, context, progressListener);
+	}
+
+	@Override
+	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getAvatar(username, size, context, progressListener);
 	}
 
 	@Override

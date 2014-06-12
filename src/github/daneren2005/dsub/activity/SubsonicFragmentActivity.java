@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.fragments.AdminFragment;
 import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.DownloadFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
@@ -62,6 +63,7 @@ import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ChangeLog;
 
@@ -392,6 +394,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			return new SelectBookmarkFragment();
 		} else if("Share".equals(fragmentType)) {
 			return new SelectShareFragment();
+		} else if("Admin".equals(fragmentType)) {
+			return new AdminFragment();
 		} else if("Download".equals(fragmentType)) {
 			return new DownloadFragment();
 		} else {
@@ -464,6 +468,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
 			editor.commit();
 		}
+
+		UserUtil.seedCurrentUser(this);
 	}
 
 	private void resetCacheLocation(SharedPreferences prefs) {

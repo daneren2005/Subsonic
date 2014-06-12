@@ -88,6 +88,7 @@ import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
 import github.daneren2005.dsub.service.parser.ShareParser;
 import github.daneren2005.dsub.service.parser.StarredListParser;
+import github.daneren2005.dsub.service.parser.UserParser;
 import github.daneren2005.dsub.service.parser.VersionParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
 import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
@@ -1186,6 +1187,168 @@ public class RESTMusicService implements MusicService {
 			new ErrorParser(context).parse(reader);
 		} finally {
 			Util.close(reader);
+		}
+	}
+
+	@Override
+	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "getUser", null, Arrays.asList("username"), Arrays.<Object>asList(username));
+		try {
+			List<User> users = new UserParser(context).parse(reader, progressListener);
+			if(users.size() > 0) {
+				// Should only have returned one anyways
+				return users.get(0);
+			} else {
+				return null;
+			}
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.8", "Getting user list is not supported");
+
+		Reader reader = getReader(context, progressListener, "getUsers", null);
+		try {
+			return new UserParser(context).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		names.add("username");
+		values.add(user.getUsername());
+		names.add("email");
+		values.add(user.getEmail());
+		names.add("password");
+		values.add(user.getPassword());
+
+		for(User.Setting setting: user.getSettings()) {
+			names.add(setting.getName());
+			values.add(setting.getValue());
+		}
+
+		Reader reader = getReader(context, progressListener, "createUser", null, names, values);
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.10", "Updating user is not supported");
+
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		names.add("username");
+		values.add(user.getUsername());
+
+		for(User.Setting setting: user.getSettings()) {
+			if(setting.getName().indexOf("Role") != -1) {
+				names.add(setting.getName());
+				values.add(setting.getValue());
+			}
+		}
+
+		Reader reader = getReader(context, progressListener, "updateUser", null, names, values);
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "deleteUser", null, Arrays.asList("username"), Arrays.<Object>asList(username));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "updateUser", null, Arrays.asList("username", "email"), Arrays.<Object>asList(username, email));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "changePassword", null, Arrays.asList("username", "password"), Arrays.<Object>asList(username, password));
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
+		// Return silently if server is too old
+		if (!Util.checkServerVersion(context, "1.8")) {
+			return null;
+		}
+
+		// Synchronize on the username so that we don't download concurrently for
+		// the same user.
+		synchronized (username) {
+			// Use cached file, if existing.
+			Bitmap bitmap = FileUtil.getAvatarBitmap(context, username, size);
+			if(bitmap != null) {
+				return bitmap;
+			}
+
+			String url = Util.getRestUrl(context, "getAvatar");
+			InputStream in = null;
+			try
+			{
+				List<String> parameterNames;
+				List<Object> parameterValues;
+
+				parameterNames = Collections.singletonList("username");
+				parameterValues = Arrays.<Object>asList(username);
+
+				HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener);
+				in = entity.getContent();
+
+				// If content type is XML, an error occurred. Get it.
+				String contentType = Util.getContentType(entity);
+				if (contentType != null && contentType.startsWith("text/xml"))
+				{
+					new ErrorParser(context).parse(new InputStreamReader(in, Constants.UTF_8));
+					return null; // Never reached.
+				}
+
+				byte[] bytes = Util.toByteArray(in);
+				OutputStream out = null;
+				try {
+					out = new FileOutputStream(FileUtil.getAvatarFile(context, username));
+					out.write(bytes);
+				} finally {
+					Util.close(out);
+				}
+
+				return FileUtil.getSampledBitmap(bytes, size);
+			}
+			finally {
+				Util.close(in);
+			}
 		}
 	}
 

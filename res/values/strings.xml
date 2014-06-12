@@ -35,6 +35,7 @@
 	<string name="button_bar.bookmarks">Bookmarks</string>
 	<string name="button_bar.shares">Shares</string>
 	<string name="button_bar.chat">Chat</string>
+	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Downloading</string>
 
     <string name="main.welcome_title">Welcome!</string>
@@ -99,6 +100,7 @@
 	<string name="menu.delete_cache">Delete Cache</string>
 	<string name="menu.cast">Cast To Device</string>
 	<string name="menu.faq">FAQ</string>
+	<string name="menu.add_user">Add User</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -414,6 +416,8 @@
 	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
 	<string name="settings.large_album_art">Large Album Art</string>
 	<string name="settings.large_album_art_summary">Display albums with large album art instead of in a list</string>
+	<string name="settings.admin_enabled">Admin Enabled</string>
+	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
@@ -440,6 +444,29 @@
 	<string name="share.updated_info_error">Failed to update share information for %s</string>
 	<string name="share.via">Share via</string>
 	<string name="share.delete">Delete Share</string>
+
+	<string name="admin.add_user_username">Username:</string>
+	<string name="admin.add_user_email">Email:</string>
+	<string name="admin.add_user_password">Password:</string>
+	<string name="admin.create_user_success">Successfully created new user</string>
+	<string name="admin.create_user_error">Failed to create new user</string>
+	<string name="admin.change_username_invalid">Enter a valid username</string>
+	<string name="admin.update_permissions">Update Permissions</string>
+	<string name="admin.update_permissions_success">Successfully updated permission for %1$s</string>
+	<string name="admin.update_permissions_error">Failed to update permissions for %1$s</string>
+	<string name="admin.change_email">Change Email</string>
+	<string name="admin.change_email_success">Successfully changed email for %1$s</string>
+	<string name="admin.change_email_error">Failed to change email for %1$s</string>
+	<string name="admin.change_email_label">New Email:</string>
+	<string name="admin.change_email_invalid">Enter a valid email</string>
+	<string name="admin.change_password">Change Password</string>
+	<string name="admin.change_password_success">Successfully changed password for %1$s</string>
+	<string name="admin.change_password_error">Failed to change password for %1$s</string>
+	<string name="admin.change_password_label">New Password:</string>
+	<string name="admin.change_password_invalid">Enter a valid password</string>
+	<string name="admin.delete_user">Delete User</string>
+	<string name="admin.delete_user_success">Successfully deleted %1$s</string>
+	<string name="admin.delete_user_error">Failed to delete %1$s</string>
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
 

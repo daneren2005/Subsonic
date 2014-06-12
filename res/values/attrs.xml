@@ -21,5 +21,7 @@
 	<attr name="downloading" format="reference"/>
 	<attr name="bookmark" format="reference"/>
 	<attr name="share" format="reference"/>
+	<attr name="add_person" format="reference"/>
+	<attr name="password" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
 </resources>

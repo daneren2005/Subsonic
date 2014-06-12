@@ -18,7 +18,6 @@
  */
 package github.daneren2005.dsub.util;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,7 +25,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.RemoteControlClient;
 import android.os.Build;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.support.v4.util.LruCache;
@@ -37,9 +35,6 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Asynchronous loading of images, with caching.
@@ -56,6 +51,7 @@ public class ImageLoader {
 	private Bitmap nowPlaying;
 	private final int imageSizeDefault;
 	private final int imageSizeLarge;
+	private final int avatarSizeDefault;
 	private Drawable largeUnknownImage;
 
 	public ImageLoader(Context context) {
@@ -86,6 +82,7 @@ public class ImageLoader {
 		imageSizeDefault = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
 		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		imageSizeLarge = Math.round(Math.min(metrics.widthPixels, metrics.heightPixels));
+		avatarSizeDefault = context.getResources().getDrawable(R.drawable.ic_social_person).getIntrinsicHeight();
 
 		createLargeUnknownImage(context);
 	}
@@ -171,6 +168,17 @@ public class ImageLoader {
 
 		setUnknownImage(remoteControl);
 		new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl).execute();
+	}
+
+	public void loadAvatar(Context context, ImageView view, String username) {
+		Bitmap bitmap = cache.get(username);
+		if (bitmap != null && !bitmap.isRecycled()) {
+			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
+			view.setImageDrawable(drawable);
+			return;
+		}
+
+		new AvatarTask(context, view, username).execute();
 	}
 
 	private String getKey(String coverArtId, int size) {
@@ -320,6 +328,47 @@ public class ImageLoader {
 		@Override
 		protected void done(Void result) {
 			setImage(mRemoteControl, mDrawable);
+		}
+	}
+
+	private class AvatarTask extends SilentBackgroundTask<Void> {
+		private final Context mContext;
+		private final String mUsername;
+		private final ImageView mView;
+		private Drawable mDrawable;
+
+		public AvatarTask(Context context, ImageView view, String username) {
+			super(context);
+			mContext = context;
+			mView = view;
+			mUsername = username;
+		}
+
+		@Override
+		protected Void doInBackground() throws Throwable {
+			try {
+				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
+				Bitmap bitmap = musicService.getAvatar(mUsername, avatarSizeDefault, mContext, null);
+				if(bitmap != null) {
+					cache.put(mUsername, bitmap);
+					// Make sure key is the most recently "used"
+					cache.get(mUsername);
+
+					mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
+				}
+			} catch (Throwable x) {
+				Log.e(TAG, "Failed to download album art.", x);
+				cancelled = true;
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void done(Void result) {
+			if(mDrawable != null) {
+				mView.setImageDrawable(mDrawable);
+			}
 		}
 	}
 }
