@@ -35,6 +35,7 @@
 	<string name="button_bar.bookmarks">Lesezeichen</string>
 	<string name="button_bar.shares">Freigaben</string>
 	<string name="button_bar.chat">Chat</string>
+	<string name="button_bar.admin">Administration</string>
 	<string name="button_bar.downloading">Downloads</string>
 
     <string name="main.welcome_title">Willkommen!</string>
@@ -99,6 +100,7 @@
 	<string name="menu.delete_cache">Lösche Cache</string>
 	<string name="menu.cast">An Chromecast senden</string>
 	<string name="menu.faq">FAQ</string>
+	<string name="menu.add_user">Nutzer hinzufügen</string>
 
     <string name="playlist.label">Wiedergabelisten</string>
 	<string name="playlist.update_info">Aktualisiere Informationen</string>
@@ -394,6 +396,8 @@
 	<string name="settings.play_now_after_summary">\"Jetzt wiedergeben\" im Kontextmenü spielt das ausgewählte Lied und alle in der Liste nachfolgenden Lieder ab (wie in der Web-Schnittstelle des Subsonic-Server)</string>
 	<string name="settings.large_album_art">Große Cover anzeigen</string>
 	<string name="settings.large_album_art_summary">Verwende große Cover zur Anzeige der Alben anstatt einer Liste</string>
+	<string name="settings.admin_enabled">Administration aktiviert</string>
+	<string name="settings.admin_enabled_summary">Administration im Seitenmenü anzeigen</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
@@ -420,6 +424,29 @@
 	<string name="share.updated_info_error">Aktualisierung der Freigabe %s fehlgeschlagen</string>
 	<string name="share.via">Teile via</string>
 	<string name="share.delete">Lösche Freigabe</string>
+
+	<string name="admin.add_user_username">Nutzername:</string>
+	<string name="admin.add_user_email">Email:</string>
+	<string name="admin.add_user_password">Passwort:</string>
+	<string name="admin.create_user_success">Neuen Nutzer wurde erfolgreich angelegt</string>
+	<string name="admin.create_user_error">Neuer Nutzer konnte nicht erzeugt werden</string>
+	<string name="admin.change_username_invalid">Bitte gültigen Nutzernamen angeben</string>
+	<string name="admin.update_permissions">Aktualisiere Berechtigungen</string>
+	<string name="admin.update_permissions_success">Berechtigungen für %1$s erfolgreich aktualisiert</string>
+	<string name="admin.update_permissions_error">Änderung der Berechtigungen für %1$s fehlgeschlagen</string>
+	<string name="admin.change_email">Email ändern</string>
+	<string name="admin.change_email_success">Email für %1$s wurde geändert</string>
+	<string name="admin.change_email_error">Konnte Email für %1$s nicht ändern</string>
+	<string name="admin.change_email_label">Neue Email:</string>
+	<string name="admin.change_email_invalid">Bitte gültige Email angeben</string>
+	<string name="admin.change_password">Passwort ändern</string>
+	<string name="admin.change_password_success">Passwort für %1$s erfolgreich geändert</string>
+	<string name="admin.change_password_error">Passwortänderung für %1$s ist fehlgeschlagen</string>
+	<string name="admin.change_password_label">Neues Passwort:</string>
+	<string name="admin.change_password_invalid">Bitte ein gültiges Passwort eingeben</string>
+	<string name="admin.delete_user">Nutzer löschen</string>
+	<string name="admin.delete_user_success">Nutzer %1$s erfolgreich gelöscht</string>
+	<string name="admin.delete_user_error">Nutzer %1$s konnte nicht gelöscht werden</string>
 
     <string name="music_service.retry">Ein Netzwerkfehler ist aufgetreten. Versuch %1$d von %2$d.</string>
 
