@@ -460,13 +460,25 @@
 	<string name="admin.change_email_label">New Email:</string>
 	<string name="admin.change_email_invalid">Enter a valid email</string>
 	<string name="admin.change_password">Change Password</string>
-	<string name="admin.change_password_success">Successfully changed password for %1$s</string>
+	<string name="admin.change_password_success">Successfully changedp assword for %1$s</string>
 	<string name="admin.change_password_error">Failed to change password for %1$s</string>
 	<string name="admin.change_password_label">New Password:</string>
 	<string name="admin.change_password_invalid">Enter a valid password</string>
 	<string name="admin.delete_user">Delete User</string>
 	<string name="admin.delete_user_success">Successfully deleted %1$s</string>
 	<string name="admin.delete_user_error">Failed to delete %1$s</string>
+	
+	<string name="admin.scrobblingEnabled">Scrobbling allowed</string>
+	<string name="admin.role.admin">Administrator</string>
+	<string name="admin.role.settings">Change settings</string>
+	<string name="admin.role.download">Download original files</string>
+	<string name="admin.role.upload">Upload to server</string>
+	<string name="admin.role.coverArt">Change cover art</string>
+	<string name="admin.role.comment">Add comments</string>
+	<string name="admin.role.podcast">Manage podcasts</string>
+	<string name="admin.role.stream">Stream music</String>
+	<string name="admin.role.jukebox">Control jukebox</string>
+	<string name="admin.role.share">Manage shares</string>
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
 
