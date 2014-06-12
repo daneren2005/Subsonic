@@ -46,18 +46,10 @@ public class UserParser extends AbstractParser {
 
 					user.setUsername(get("username"));
 					user.setEmail(get("email"));
-					parseSetting(user, "scrobblingEnabled");
-					parseSetting(user, "adminRole");
-					parseSetting(user, "settingsRole");
-					parseSetting(user, "downloadRole");
-					parseSetting(user, "uploadRole");
-					// Depreciated: parseSetting(user, "playlistRole");
-					parseSetting(user, "coverArtRole");
-					parseSetting(user, "commentRole");
-					parseSetting(user, "podcastRole");
-					parseSetting(user, "streamRole");
-					parseSetting(user, "jukeboxRole");
-					parseSetting(user, "shareRole");
+					parseSetting(user, User.SCROBBLING);
+					for(String role: User.ROLES) {
+						parseSetting(user, role);
+					}
 
 					result.add(user);
 				} else if ("error".equals(name)) {
