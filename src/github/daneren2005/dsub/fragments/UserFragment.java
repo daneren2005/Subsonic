@@ -60,7 +60,7 @@ public class UserFragment extends SubsonicFragment{
 
 		listView = (ListView)rootView.findViewById(R.id.fragment_list);
 		createHeader();
-		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin()));
+		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin() && Util.checkServerVersion(context, "1.10")));
 
 		setTitle(user.getUsername());
 
