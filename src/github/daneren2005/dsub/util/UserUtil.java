@@ -260,16 +260,13 @@ public final class UserUtil {
 
 	public static void addNewUser(final Activity context, final SubsonicFragment fragment) {
 		final User user = new User();
-		user.addSetting("adminRole", false);
-		user.addSetting("settingsRole", true);
-		user.addSetting("downloadRole", false);
-		user.addSetting("uploadRole", false);
-		user.addSetting("coverArtRole", false);
-		user.addSetting("commentRole", false);
-		user.addSetting("podcastRole", false);
-		user.addSetting("streamRole", true);
-		user.addSetting("jukeboxRole", false);
-		user.addSetting("shareRole", false);
+		for(String role: User.ROLES) {
+			if(role.equals(User.SETTINGS) || role.equals(User.STREAM)) {
+				user.addSetting(role, true);
+			} else {
+				user.addSetting(role, false);
+			}
+		}
 
 		View layout = context.getLayoutInflater().inflate(R.layout.create_user, null);
 		final TextView usernameView = (TextView) layout.findViewById(R.id.username);
