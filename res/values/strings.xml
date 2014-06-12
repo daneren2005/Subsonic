@@ -447,6 +447,12 @@
 	<string name="share.via">Share via</string>
 	<string name="share.delete">Delete Share</string>
 
+	<string name="admin.add_user_username">Username:</string>
+	<string name="admin.add_user_email">Email:</string>
+	<string name="admin.add_user_password">Password:</string>
+	<string name="admin.create_user_success">Successfully created new user</string>
+	<string name="admin.create_user_error">Failed to create new user</string>
+	<string name="admin.change_username_invalid">Enter a valid username</string>
 	<string name="admin.update_permissions">Update Permissions</string>
 	<string name="admin.update_permissions_success">Successfully updated permission for %1$s</string>
 	<string name="admin.update_permissions_error">Failed to update permissions for %1$s</string>

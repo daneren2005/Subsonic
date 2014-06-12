@@ -49,6 +49,21 @@ public class AdminFragment extends SelectListFragment<User> {
 	private static String TAG = AdminFragment.class.getSimpleName();
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(super.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		switch (item.getItemId()) {
+			case R.id.menu_add_user:
+				UserUtil.addNewUser(context, this);
+				break;
+		}
+
+		return false;
+	}
+
+	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
 

@@ -23,16 +23,19 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
+import github.daneren2005.dsub.view.SettingsAdapter;
 
 public final class UserUtil {
 	private static User currentUser;
@@ -253,5 +256,90 @@ public final class UserUtil {
 				}.execute();
 			}
 		});
+	}
+
+	public static void addNewUser(final Activity context, final SubsonicFragment fragment) {
+		final User user = new User();
+		user.addSetting("adminRole", false);
+		user.addSetting("settingsRole", true);
+		user.addSetting("downloadRole", false);
+		user.addSetting("uploadRole", false);
+		user.addSetting("coverArtRole", false);
+		user.addSetting("commentRole", false);
+		user.addSetting("podcastRole", false);
+		user.addSetting("streamRole", true);
+		user.addSetting("jukeboxRole", false);
+		user.addSetting("shareRole", false);
+
+		View layout = context.getLayoutInflater().inflate(R.layout.create_user, null);
+		final TextView usernameView = (TextView) layout.findViewById(R.id.username);
+		final TextView emailView = (TextView) layout.findViewById(R.id.email);
+		final TextView passwordView = (TextView) layout.findViewById(R.id.password);
+		final ListView listView = (ListView) layout.findViewById(R.id.settings_list);
+		listView.setAdapter(new SettingsAdapter(context, user, true));
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.menu_add_user)
+				.setView(layout)
+				.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						final String username = usernameView.getText().toString();
+						// Don't allow blank emails
+						if ("".equals(username)) {
+							Util.toast(context, R.string.admin_change_username_invalid);
+							return;
+						}
+
+						final String email = emailView.getText().toString();
+						// Don't allow blank emails
+						if ("".equals(email)) {
+							Util.toast(context, R.string.admin_change_email_invalid);
+							return;
+						}
+
+						final String password = passwordView.getText().toString();
+						if ("".equals(password)) {
+							Util.toast(context, R.string.admin_change_password_invalid);
+							return;
+						}
+
+						user.setUsername(username);
+						user.setEmail(email);
+						user.setPassword(password);
+
+						new SilentBackgroundTask<Void>(context) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								MusicService musicService = MusicServiceFactory.getMusicService(context);
+								musicService.createUser(user, context, null);
+								return null;
+							}
+
+							@Override
+							protected void done(Void v) {
+								fragment.onRefresh();
+								Util.toast(context, context.getResources().getString(R.string.admin_create_user_success));
+							}
+
+							@Override
+							protected void error(Throwable error) {
+								String msg;
+								if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+									msg = getErrorMessage(error);
+								} else {
+									msg = context.getResources().getString(R.string.admin_create_user_error);
+								}
+
+								Util.toast(context, msg);
+							}
+						}.execute();
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null)
+				.setCancelable(true);
+
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 }

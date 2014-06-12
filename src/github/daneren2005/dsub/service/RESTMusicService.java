@@ -1220,7 +1220,22 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "createUser", null);
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		names.add("username");
+		values.add(user.getUsername());
+		names.add("email");
+		values.add(user.getEmail());
+		names.add("password");
+		values.add(user.getPassword());
+
+		for(User.Setting setting: user.getSettings()) {
+			names.add(setting.getName());
+			values.add(setting.getValue());
+		}
+
+		Reader reader = getReader(context, progressListener, "createUser", null, names, values);
 		try {
 			new ErrorParser(context).parse(reader);
 		} finally {

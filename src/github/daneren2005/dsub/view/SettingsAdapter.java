@@ -23,12 +23,19 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.User;
 
 import static github.daneren2005.dsub.domain.User.Setting;
 
 public class SettingsAdapter extends ArrayAdapter<Setting> {
 	private final Context context;
 	private final boolean editable;
+
+	public SettingsAdapter(Context context, User user, boolean editable) {
+		super(context, R.layout.basic_list_item, user.getSettings());
+		this.context = context;
+		this.editable = editable;
+	}
 
 	public SettingsAdapter(Context context, List<Setting> settings, boolean editable) {
 		super(context, R.layout.basic_list_item, settings);
