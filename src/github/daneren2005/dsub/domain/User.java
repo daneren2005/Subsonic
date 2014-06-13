@@ -34,15 +34,14 @@ public class User implements Serializable {
 	public static final List<String> ROLES = new ArrayList<String>();
 	
 	static {
-		ROLES.add(scrobbling);
 		ROLES.add(ADMIN);
 		ROLES.add(SETTINGS);
+		ROLES.add(STREAM);
 		ROLES.add(DOWNLOAD);
 		ROLES.add(UPLOAD);
 		ROLES.add(COVERART);
 		ROLES.add(COMMENT);
 		ROLES.add(PODCAST);
-		ROLES.add(STREAM);
 		ROLES.add(JUKEBOX);
 		ROLES.add(SHARE);
 	}

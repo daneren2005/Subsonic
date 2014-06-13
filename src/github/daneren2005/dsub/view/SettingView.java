@@ -20,6 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckedTextView;
 
+import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.User;
+
 import static github.daneren2005.dsub.domain.User.Setting;
 
 public class SettingView extends UpdateView {
@@ -46,7 +49,7 @@ public class SettingView extends UpdateView {
 		
 		int res = -1;
 		if(User.SCROBBLING.equals(name)) {
-			res = R.string.scrobblingEnabled;
+			res = R.string.admin_scrobblingEnabled;
 		} else if(User.ADMIN.equals(name)) {
 			res = R.string.admin_role_admin;
 		} else if(User.SETTINGS.equals(name)) {
@@ -69,7 +72,7 @@ public class SettingView extends UpdateView {
 			res = R.string.admin_role_share;
 		} else {
 			// Last resort to display the raw value
-			view.setText(name;
+			view.setText(name);
 		}
 		
 		if(res != -1) {

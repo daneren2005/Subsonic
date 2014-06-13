@@ -476,7 +476,7 @@
 	<string name="admin.role.coverArt">Change cover art</string>
 	<string name="admin.role.comment">Add comments</string>
 	<string name="admin.role.podcast">Manage podcasts</string>
-	<string name="admin.role.stream">Stream music</String>
+	<string name="admin.role.stream">Stream music</string>
 	<string name="admin.role.jukebox">Control jukebox</string>
 	<string name="admin.role.share">Manage shares</string>
 
