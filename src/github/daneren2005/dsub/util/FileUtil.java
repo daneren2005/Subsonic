@@ -585,6 +585,9 @@ public class FileUtil {
 			Input in = null;
 			try {
 				File file = new File(context.getCacheDir(), fileName);
+				if(!file.exists()) {
+					return null;
+				}
 
 				if(hoursOld != 0) {
 					Date fileDate = new Date(file.lastModified());
