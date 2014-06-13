@@ -38,15 +38,44 @@ public class SettingView extends UpdateView {
 	protected void setObjectImpl(Object obj, Object editable) {
 		this.setting = (Setting) obj;
 
-		String display = setting.getName();
 		// Can't edit non-role parts
-		if(display.indexOf("Role") == -1) {
+		String name = setting.getName();
+		if(name.indexOf("Role") == -1) {
 			editable = false;
 		}
-		display = display.replace("Role", "");
-		display = Character.toUpperCase(display.charAt(0)) + display.substring(1);
+		
+		int res = -1;
+		if(User.SCROBBLING.equals(name)) {
+			res = R.string.scrobblingEnabled;
+		} else if(User.ADMIN.equals(name)) {
+			res = R.string.admin_role_admin;
+		} else if(User.SETTINGS.equals(name)) {
+			res = R.string.admin_role_settings;
+		} else if(User.DOWNLOAD.equals(name)) {
+			res = R.string.admin_role_download;
+		} else if(User.UPLOAD.equals(name)) {
+			res = R.string.admin_role_upload;
+		} else if(User.COVERART.equals(name)) {
+			res = R.string.admin_role_coverArt;
+		} else if(User.COMMENT.equals(name)) {
+			res = R.string.admin_role_comment;
+		} else if(User.PODCAST.equals(name)) {
+			res = R.string.admin_role_podcast;
+		} else if(User.STREAM.equals(name)) {
+			res = R.string.admin_role_stream;
+		} else if(User.JUKEBOX.equals(name)) {
+			res = R.string.admin_role_jukebox;
+		} else if(User.SHARE.equals(name)) {
+			res = R.string.admin_role_share;
+		} else {
+			// Last resort to display the raw value
+			view.setText(name;
+		}
+		
+		if(res != -1) {
+			view.setText(res);
+		}
 
-		view.setText(display);
 		if(setting.getValue()) {
 			view.setChecked(setting.getValue());
 		} else {
