@@ -1147,6 +1147,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 			}
 		}
+		if(songCount == 0) {
+			return null;
+		}
 
 		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
 		if(podcastDescription != null) {
