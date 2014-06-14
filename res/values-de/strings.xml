@@ -448,6 +448,18 @@
 	<string name="admin.delete_user_success">Nutzer %1$s erfolgreich gelöscht</string>
 	<string name="admin.delete_user_error">Nutzer %1$s konnte nicht gelöscht werden</string>
 
+	<string name="admin.scrobblingEnabled">Erlaube Scrobbeln</string>
+	<string name="admin.role.admin">Administrator</string>
+	<string name="admin.role.settings">Einstellungen ändern</string>
+	<string name="admin.role.download">Dateien herunterladen</string>
+	<string name="admin.role.upload">Hochladen zum Server</string>
+	<string name="admin.role.coverArt">Cover ändern</string>
+	<string name="admin.role.comment">Kommentare hinzufügen</string>
+	<string name="admin.role.podcast">Podcasts verwalten</string>
+	<string name="admin.role.stream">Musik streamen</string>
+	<string name="admin.role.jukebox">Jukebox kontrollieren</string>
+	<string name="admin.role.share">Freigaben verwalten</string>
+
     <string name="music_service.retry">Ein Netzwerkfehler ist aufgetreten. Versuch %1$d von %2$d.</string>
 
     <string name="background_task.wait">Bitte warten...</string>
