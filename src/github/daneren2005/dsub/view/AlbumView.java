@@ -70,11 +70,7 @@ public class AlbumView extends UpdateView {
 
 	protected void setObjectImpl(Object obj1, Object obj2) {
 		this.album = (MusicDirectory.Entry) obj1;
-		if(album.getAlbum() == null) {
-			titleView.setText(album.getTitle());
-		} else {
-			titleView.setText(album.getAlbum());
-		}
+		titleView.setText(album.getAlbumDisplay());
 		String artist = album.getArtist();
 		if(artist == null) {
 			artist = "";

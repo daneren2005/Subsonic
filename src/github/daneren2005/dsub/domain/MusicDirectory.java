@@ -249,6 +249,14 @@ public class MusicDirectory implements Serializable {
             return album;
         }
 
+		public String getAlbumDisplay() {
+			if(album != null && title.startsWith("Disc ")) {
+				return album;
+			} else {
+				return title;
+			}
+		}
+
         public void setAlbum(String album) {
             this.album = album;
         }
