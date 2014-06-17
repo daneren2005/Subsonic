@@ -129,7 +129,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		syncMostRecent = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
 		
 		settings = Util.getPreferences(this);
-		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
+		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
 
 		findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
