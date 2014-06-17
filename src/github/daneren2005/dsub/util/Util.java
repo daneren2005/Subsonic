@@ -1140,7 +1140,7 @@ public final class Util {
 
     	NotificationCompat.Builder builder;
     	builder = new NotificationCompat.Builder(context)
-    		.setSmallIcon(R.drawable.stat_notify_download)
+    		.setSmallIcon(android.R.drawable.stat_sys_download)
     		.setContentTitle(context.getResources().getString(R.string.download_downloading_title, size))
     		.setContentText(context.getResources().getString(R.string.download_downloading_summary, currentDownloading))
 			.setStyle(new NotificationCompat.BigTextStyle()
