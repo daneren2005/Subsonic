@@ -36,6 +36,7 @@
 	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.shares">Compartidos</string>
 	<string name="button_bar.downloading">Descargando</string>
+	<string name="button_bar.admin">Admin</string>
 
     <string name="main.welcome_title">Bienvenido!</string>
     <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
@@ -43,7 +44,7 @@
 	<string name="main.about_text">Autor: Scott Jackson
 		\nEmail: dsub.android@gmail.com
 		\nVersión: %1$s
-		\nFiles Cached: %2$s
+		\nArchivos en caché: %2$s
 		\nEspacio usado: %3$s of %4$s
 		\nEspacio disponible: %5$s of %6$s</string>
     <string name="main.select_server">Seleccionar servidor</string>
@@ -61,6 +62,14 @@
 	<string name="main.albums_genres">Géneros</string>
 	<string name="main.back_confirm">Pulsa atrás de nuevo para salir</string>
 	<string name="main.albums_year">Décadas</string>
+	<string name="main.faq_text">
+	<![CDATA[
+		<font color="red">Cache vs Cache permanente</font>:
+		<br/>Cuando DSub descarga las canciones, pueden ser eliminadas para dejar espacio a nuevas descargas.  La música en Caché Permanente, nunca será eliminada automáticamente.
+		<p/><font color="red">ChromeCast falla</font>:
+		<br/>Asegúrate que no estás utilizando un certificado auto-firmado, porque Chromecast automáticamente lo rechazará.
+	]]>
+   </string>
 
 	<string name="menu.search">Buscar</string>
 	<string name="menu.shuffle">Aleatorio</string>
@@ -87,6 +96,7 @@
 	<string name="menu.share">Compartir</string>
 	<string name="menu.delete_cache">Borrar cache</string>
 	<string name="menu.cast">Hacer streaming al dispositivo</string>
+	<string name="menu.add_user">Añadir usuario</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -199,6 +209,7 @@
 		\nTamaño medio: %2$s
 	</string>
 	<string name="download.failed_to_load">Error al cargar</string>
+	<string name="download.menu_remove_played_songs">Borrar canciones reproducidas</string>
     
 	<string name="starring_content_starred">Marcado con estrella \"%s\"</string>
 	<string name="starring_content_unstarred">Sin marca de estrella \"%s\"</string>
@@ -390,6 +401,10 @@
 	<string name="settings.drawer_items_title">Items del menú</string>
 	<string name="settings.play_now_after">Reproducir ahora - Después</string>
 	<string name="settings.play_now_after_summary">Pulsar "Reproducir ahora" desde el menú contextual actúa como la interfaz web de Subsonic, reproduciendo todos los items a partir del seleccionado</string>
+	<string name="settings.large_album_art">Carátulas grandes</string>
+	<string name="settings.large_album_art_summary">Mostrar los discos con carátulas grandes en vez de en lista</string>
+	<string name="settings.admin_enabled">Admin Habilitado</string>
+	<string name="settings.admin_enabled_summary">Mostrar u ocultar la pestaña de Admin en el menú</string>
 
 	<string name="share.info">Dueño: %1$s
 		\nDescripción: %2$s
@@ -409,6 +424,42 @@
 	<string name="share.updated_info_error">Error al actualizar información de compartición para %s</string>
 	<string name="share.via">Compartir vía</string>
 	<string name="share.delete">Borrar compartido</string>
+
+	<string name="admin.add_user_username">Usuario:</string>
+	<string name="admin.add_user_email">Email:</string>
+	<string name="admin.add_user_password">Contraseña:</string>
+	<string name="admin.create_user_success">Usuario creado satisfactoriamente</string>
+	<string name="admin.create_user_error">Error al crear nuevo usuario</string>
+	<string name="admin.change_username_invalid">Introduce un nombre de usuario válido</string>
+	<string name="admin.update_permissions">Actualizar permisos</string>
+	<string name="admin.update_permissions_success">Permisos de %1$s actualizados satisfactoriamente</string>
+	<string name="admin.update_permissions_error">Error al actualizar permisos de %1$s</string>
+	<string name="admin.change_email">Cambiar email</string>
+	<string name="admin.change_email_success">Email de %1$s cambiado satisfactoriamente</string>
+	<string name="admin.change_email_error">Error al cambiar el email de %1$s</string>
+	<string name="admin.change_email_label">Nuevo email:</string>
+	<string name="admin.change_email_invalid">Introduce un email válido</string>
+	<string name="admin.change_password">Cambiar contraseña</string>
+	<string name="admin.change_password_success">Contraseña de %1$s cambiada satisfactoriamente</string>
+	<string name="admin.change_password_error">Error al cambiar la contraseña de %1$s</string>
+	<string name="admin.change_password_label">Nueva contraseña:</string>
+	<string name="admin.change_password_invalid">Introduce una contraseña válida</string>
+	<string name="admin.delete_user">Eliminar usuario</string>
+	<string name="admin.delete_user_success">%1$s eliminado satisfactoriamente</string>
+	<string name="admin.delete_user_error">Error al eliminar %1$s</string>
+
+
+	<string name="admin.scrobblingEnabled">Scrobbling permitido</string>
+	<string name="admin.role.admin">Administrador</string>
+	<string name="admin.role.settings">Cambiar ajustes</string>
+	<string name="admin.role.download">Descargar archivos originales</string>
+	<string name="admin.role.upload">Subir al servidor</string>
+	<string name="admin.role.coverArt">Cambiar carátula</string>
+	<string name="admin.role.comment">Añadir comentarios</string>
+	<string name="admin.role.podcast">Gestionar podcasts</string>
+	<string name="admin.role.stream">Hacer Stream de música</string>
+	<string name="admin.role.jukebox">Controlar el jukebox</string>
+	<string name="admin.role.share">Gestionar compartidos</string>
 
 	<string name="sync.title">DSub: Nuevo contenido multimedia disponible</string>
 	<string name="sync.new_podcasts">Nuevos podcasts: %s</string>
