@@ -19,7 +19,7 @@
 	<string name="common.comment">Megjegyzés</string>
 	<string name="common.public">Nyilvános</string>
 	<string name="common.play_external">Videólejátszás</string>
-	<string name="common.stream_external">Stream Videó</string>
+	<string name="common.stream_external">Videó streamelése</string>
 	<string name="common.confirm">Jóváhagyás</string>
 	<string name="common.confirm_message">Biztos benne: %1$s %2$s?</string>
 	<string name="common.confirm_message_cache">cache</string>
@@ -35,6 +35,7 @@
 	<string name="button_bar.bookmarks">Könyvjelzők</string>
 	<string name="button_bar.shares">Megosztások</string>
 	<string name="button_bar.chat">Csevegés (Chat)</string>
+	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Letöltések</string>
 
     <string name="main.welcome_title">Üdvözlet!</string>
@@ -47,6 +48,15 @@
 		\nGyorsítótárazott fájlok: %2$s
 		\nFelhasznált tároló: %3$s/%4$s
 		\nFelhasználható tároló: %5$s/%6$s</string>
+	<string name="main.faq_title">FAQ</string>
+	<string name="main.faq_text">
+	<![CDATA[
+		<font color="red">Gyorsítótárazás vs Tárolás</font>:
+		<br/>Míg a normál módon gyorsítótárazott dalok törlődhetnek amikor újak kerülnek letöltésre, addig a "Letöltés tárolásra (megőrzés)" menüpont segítségével letöltött dalok soha nem törlődnek automatikusan.
+		<p/><font color="red">Ha a ChromeCast sikertelen</font>:
+		<br/>Győződjön meg róla, hogy nem használ saját aláírású tanúsítványt, mert a ChromeCast azt automatikusan visszautasítja!
+	]]>
+	</string>
     <string name="main.select_server">Kiszolgáló kiválasztása</string>
     <string name="main.shuffle">Lejátszás kevert sorrendben</string>
     <string name="main.offline">Offline mód</string>
@@ -74,7 +84,7 @@
     <string name="menu.settings">Beállítások</string>
     <string name="menu.help">Súgó</string>
 	<string name="menu.about">Névjegy</string>
-	<string name="menu.add_playlist">Hozzáadás a lejátszási listához</string>
+	<string name="menu.add_playlist">Hozzáadás lejátszási listához</string>
 	<string name="menu.remove_playlist">Eltávolítás a lejátszási listából</string>
 	<string name="menu.deleted_playlist">\"%s\" lejátszási lista törölve</string>
 	<string name="menu.deleted_playlist_error">\"%s\" lejátszási lista törlése sikertelen!</string>
@@ -89,13 +99,15 @@
 	<string name="menu.share">Megosztás</string>
 	<string name="menu.delete_cache">Gyorsítótár törlése</string>
 	<string name="menu.cast">Továbbítás eszközhöz</string>
+	<string name="menu.faq">FAQ</string>
+	<string name="menu.add_user">Felhasználó hozzáadása</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
 	<string name="playlist.updated_info">\"%s\" lejátszási lista módosítva</string>
 	<string name="playlist.updated_info_error">\"%s\" lejátszási lista módosítása sikertelen!</string>
 	<string name="playlist.overwrite">Létező lejátszási lista felülírása</string>
-	<string name="playlist.add_to">Hozzáadás a lejátszási listához</string>
+	<string name="playlist.add_to">Hozzáadás lejátszási listához</string>
 	<string name="playlist.create_new">Új lejátszási lista</string>
 	<string name="playlist.delete">Lejátszási lista törlése</string>
 
@@ -306,8 +318,8 @@
     <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
     <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
     <string name="settings.max_bitrate_unlimited">Korlátlan</string>
-    <string name="settings.wifi_required_title">Streaming csak Wi-Fivel</string>
-    <string name="settings.wifi_required_summary">Streaming csak Wi-Fi hálózaton keresztül.</string>
+    <string name="settings.wifi_required_title">Streamelés csak Wi-Fivel</string>
+    <string name="settings.wifi_required_summary">Streamelés csak Wi-Fi hálózaton keresztül.</string>
 	<string name="settings.network_timeout_title">Hálózati időtúllépés</string>
 	<string name="settings.network_timeout_10000">10 másodperc</string>
 	<string name="settings.network_timeout_15000">15 másodperc</string>
@@ -405,6 +417,8 @@
 	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik minden dal lejátszása a kijelölt elem után (mint a Subsonic webes felületén)</string>
 	<string name="settings.large_album_art">Nagy méretű albumborítók</string>
 	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben és nagy méretű albumborítóval, a listanézet helyett.</string>
+	<string name="settings.admin_enabled">Admin engedélyezése</string>
+	<string name="settings.admin_enabled_summary">Admin menüpont megjelenítése az elhúzható oldalsávon.</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -431,6 +445,41 @@
 	<string name="share.updated_info_error">\"%s\" megosztás információinak frissítése sikertelen!</string>
 	<string name="share.via">Megosztás ezzel</string>
 	<string name="share.delete">Megosztás törlése</string>
+
+	<string name="admin.add_user_username">Felhasználónév:</string>
+	<string name="admin.add_user_email">Email:</string>
+	<string name="admin.add_user_password">Jelszó:</string>
+	<string name="admin.create_user_success">A felhasználó létrehozva</string>
+	<string name="admin.create_user_error">A felhasználó létrehozása sikertelen!</string>
+	<string name="admin.change_username_invalid">Adjon meg egy érvényes felhasználónevet!</string>
+	<string name="admin.update_permissions">Jogosultságok módosítása</string>
+	<string name="admin.update_permissions_success">%1$s jogosultságainak módosítása sikerült</string>
+	<string name="admin.update_permissions_error">%1$s jogosultságainak módosítása sikertelen!</string>
+	<string name="admin.change_email">Email csere</string>
+	<string name="admin.change_email_success">%1$s email címének módosítása sikerült</string>
+	<string name="admin.change_email_error">%1$s email címének módosítása sikertelen!</string>
+	<string name="admin.change_email_label">Új email:</string>
+	<string name="admin.change_email_invalid">Adjon meg egy érvényes email címet!</string>
+	<string name="admin.change_password">Jelszó csere</string>
+	<string name="admin.change_password_success">%1$s jelszavának módosítása sikerült</string>
+	<string name="admin.change_password_error">%1$s jelszavának módosítása sikertelen!</string>
+	<string name="admin.change_password_label">Új jelszó:</string>
+	<string name="admin.change_password_invalid">Adjon meg egy érvényes jelszót!</string>
+	<string name="admin.delete_user">Felhasználó törlése</string>
+	<string name="admin.delete_user_success">%1$s felhasználó létrehozva</string>
+	<string name="admin.delete_user_error">%1$s felhasználó törlése sikertelen!</string>
+	
+	<string name="admin.scrobblingEnabled">Scrobbling használata</string>
+	<string name="admin.role.admin">Adminisztrátor</string>
+	<string name="admin.role.settings">Beállítások módosítása</string>
+	<string name="admin.role.download">Eredeti fájlok letöltése</string>
+	<string name="admin.role.upload">Feltöltés a kiszolgálóra</string>
+	<string name="admin.role.coverArt">Albumborító cseréje</string>
+	<string name="admin.role.comment">Megjegyzések hozzáadása</string>
+	<string name="admin.role.podcast">Podcastok kezelése</string>
+	<string name="admin.role.stream">Zene streamelése</string>
+	<string name="admin.role.jukebox">Jukebox vezérlése</string>
+	<string name="admin.role.share">Megosztások kezelése</string>
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
 
