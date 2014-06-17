@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.7 Beta" versioncode="111" releasedate="6/11/2014">
+	<release version="4.7" versioncode="112" releasedate="6/16/2014">
 		<change>Admin tab</change>
-		<change>Create/delete users if admin</change>
-		<change>Change own password, others emails, passwords, and permissions if admin</change>
+		<change>Create/delete users, change others passwords/emails/permissions if admin</change>
+		<change>Change own password either way</change>
 		<change>FAQ dialog</change>
 		<change>Click on Podcast Channel description to expand it</change>
 		<change>Add Podcast Episode description to Details dialog</change>
