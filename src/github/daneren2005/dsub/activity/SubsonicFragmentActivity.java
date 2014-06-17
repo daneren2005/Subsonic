@@ -465,7 +465,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 		if(!prefs.contains(Constants.PREFERENCES_KEY_SERVER_COUNT)) {
 			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 3);
+			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
 			editor.commit();
 		}
 
