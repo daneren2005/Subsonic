@@ -482,8 +482,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			
 			@Override
 			protected void done(Pair<MusicDirectory, Boolean> result) {
+				SelectDirectoryFragment.this.name = result.getFirst().getName();
+				setTitle(SelectDirectoryFragment.this.name);
 				super.done(result);
-				setTitle(result.getFirst().getName());
 			}
 		}.execute();
 	}
@@ -523,8 +524,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			
 			@Override
 			protected void done(Pair<MusicDirectory, Boolean> result) {
+				SelectDirectoryFragment.this.name = result.getFirst().getName();
+				setTitle(SelectDirectoryFragment.this.name);
 				super.done(result);
-				setTitle(result.getFirst().getName());
 			}
 		}.execute();
 	}
