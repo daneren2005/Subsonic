@@ -1655,18 +1655,16 @@ public class DownloadService extends Service {
 			if((preloaded + 1 == n || preloaded >= Util.getPreloadCount(this) || downloadList.isEmpty()) && !backgroundDownloadList.isEmpty()) {
 				for(int i = 0; i < backgroundDownloadList.size(); i++) {
 					DownloadFile downloadFile = backgroundDownloadList.get(i);
-					if(downloadFile.isWorkDone() && (!downloadFile.shouldSave() || downloadFile.isSaved())) {
+					if(downloadFile.isWorkDone() && (!downloadFile.shouldSave() || downloadFile.isSaved()) || downloadFile.isFailedMax()) {
 						// Don't need to keep list like active song list
 						backgroundDownloadList.remove(i);
 						revision++;
 						i--;
 					} else {
-						if(!downloadFile.isFailedMax()) {
-							currentDownloading = downloadFile;
-							currentDownloading.download();
-							cleanupCandidates.add(currentDownloading);
-							break;
-						}
+						currentDownloading = downloadFile;
+						currentDownloading.download();
+						cleanupCandidates.add(currentDownloading);
+						break;
 					}
 				}
 			}
