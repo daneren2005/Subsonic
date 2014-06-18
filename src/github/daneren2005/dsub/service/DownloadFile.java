@@ -357,7 +357,6 @@ public class DownloadFile implements BufferFile {
                     PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                     wakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, toString());
                     wakeLock.acquire();
-                    Log.i(TAG, "Acquired wake lock " + wakeLock);
                 }
 				
 				wifiLock = Util.createWifiLock(context, toString());
@@ -365,6 +364,7 @@ public class DownloadFile implements BufferFile {
 
                 if (saveFile.exists()) {
                     Log.i(TAG, saveFile + " already exists. Skipping.");
+                    checkDownloads();
                     return null;
                 }
                 if (completeFile.exists()) {
@@ -377,6 +377,7 @@ public class DownloadFile implements BufferFile {
                     } else {
                         Log.i(TAG, completeFile + " already exists. Skipping.");
                     }
+                    checkDownloads();
                     return null;
                 }
 
@@ -477,12 +478,16 @@ public class DownloadFile implements BufferFile {
 			
 			// Only run these if not interrupted, ie: cancelled
 			new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
-            
-			if(DownloadService.getInstance() != null) {
-				DownloadService.getInstance().checkDownloads();
-			}
+            		checkDownloads();
 
 			return null;
+        }
+        
+        private void checkDownloads() {
+        	DownloadService downloadService = DownloadService.getInstance();
+        	if(downloadService != null) {
+        		downloadService.checkDownloads();
+        	}
         }
 
         @Override
