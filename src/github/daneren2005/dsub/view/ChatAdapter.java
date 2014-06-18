@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.domain.ChatMessage;
+import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 
@@ -22,14 +24,16 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 	
 	private final SubsonicActivity activity;
 	private ArrayList<ChatMessage> messages;
+	private final ImageLoader imageLoader;
 	
     private static final String phoneRegex = "1?\\W*([2-9][0-8][0-9])\\W*([2-9][0-9]{2})\\W*([0-9]{4})"; //you can just place your support phone here
     private static final Pattern phoneMatcher = Pattern.compile(phoneRegex);
 
-    public ChatAdapter(SubsonicActivity activity, ArrayList<ChatMessage> messages) {
+    public ChatAdapter(SubsonicActivity activity, ArrayList<ChatMessage> messages, ImageLoader imageLoader) {
         super(activity, R.layout.chat_item, messages);
         this.activity = activity;
         this.messages = messages;
+		this.imageLoader = imageLoader;
     }
     
     @Override
@@ -74,6 +78,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 	        holder.message = messageView;
 			holder.username = usernameView;
 			holder.time = timeView;
+			holder.avatar = (ImageView) convertView.findViewById(R.id.chat_avatar);
 			
 			convertView.setTag(holder);
 		}
@@ -89,6 +94,8 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         holder.message.setText(messageText);
     	holder.time.setText(messageTimeFormatted);
 
+		imageLoader.loadAvatar(activity, holder.avatar, messageUser);
+
 		return convertView;
 	}
     
@@ -97,5 +104,6 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 		TextView message;
 		TextView username;
 		TextView time;
+		ImageView avatar;
 	}
 }

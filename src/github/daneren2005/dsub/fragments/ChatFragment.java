@@ -124,7 +124,7 @@ public class ChatFragment extends SubsonicFragment {
 				}
 			}
 
-			ChatAdapter chatAdapter = new ChatAdapter(context, messageList);
+			ChatAdapter chatAdapter = new ChatAdapter(context, messageList, getImageLoader());
 			chatListView.setAdapter(chatAdapter);
 		}
 		setTitle(R.string.button_bar_chat);
@@ -216,7 +216,7 @@ public class ChatFragment extends SubsonicFragment {
 					Collections.reverse(result);
 					messageList.addAll(result);
 
-					ChatAdapter chatAdapter = new ChatAdapter(context, messageList);
+					ChatAdapter chatAdapter = new ChatAdapter(context, messageList, getImageLoader());
 					chatListView.setAdapter(chatAdapter);
 				}
 			}

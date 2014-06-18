@@ -37,7 +37,7 @@
 				android:layout_weight="1"
 				android:autoLink="all"
 				android:hint="@string/chat.send_a_message"
-				android:inputType="textEmailAddress|textMultiLine"
+				android:inputType="textCapSentences|textAutoCorrect|textLongMessage"
 				android:linksClickable="true"
 				android:paddingBottom="10dip"
 				android:paddingTop="10dip" />
