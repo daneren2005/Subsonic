@@ -201,6 +201,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
+		if(!Util.checkServerVersion(context, "1.8")) {
+			menu.setGroupVisible(R.id.server_1_8, false);
+			menu.setGroupVisible(R.id.hide_star, false);
+		}
 		if(!Util.checkServerVersion(context, "1.10.1")) {
 			menu.setGroupVisible(R.id.server_1_10, false);
 		}
