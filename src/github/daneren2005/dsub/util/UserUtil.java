@@ -55,7 +55,7 @@ public final class UserUtil {
 		}.execute();
 	}
 
-	public static User getCurrentUser(Context context) {
+	public static User getCurrentUser() {
 		return currentUser;
 	}
 
