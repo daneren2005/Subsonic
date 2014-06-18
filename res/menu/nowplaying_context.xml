@@ -37,8 +37,10 @@
 			android:id="@+id/menu_share"
 			android:title="@string/menu.share"/>
 	</group>
-		
-	<item 
-		android:id="@+id/menu_add_playlist"
-		android:title="@string/menu.add_playlist"/>
+	
+	<group android:id="@+id/server_1.8">	
+		<item
+			android:id="@+id/menu_add_playlist"
+			android:title="@string/menu.add_playlist"/>
+	</group>
 </menu>
