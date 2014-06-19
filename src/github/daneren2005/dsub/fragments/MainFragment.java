@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -316,6 +317,7 @@ public class MainFragment extends SubsonicFragment {
 
 			@Override
 			protected void error(Throwable error) {
+				Log.w(TAG, "Failed to sync offline stats", error);
 				String msg = context.getResources().getString(R.string.offline_sync_error) + " " + getErrorMessage(error);
 				Util.toast(context, msg);
 			}
