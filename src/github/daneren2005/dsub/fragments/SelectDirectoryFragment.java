@@ -68,6 +68,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	String name;
 	String playlistId;
 	String playlistName;
+	boolean playlistOwner;
 	String podcastId;
 	String podcastName;
 	String podcastDescription;
@@ -109,6 +110,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			name = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
 			playlistId = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
 			playlistName = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
+			playlistOwner = args.getBoolean(Constants.INTENT_EXTRA_NAME_PLAYLIST_OWNER, false);
 			podcastId = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_ID);
 			podcastName = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_NAME);
 			podcastDescription = args.getString(Constants.INTENT_EXTRA_NAME_PODCAST_DESCRIPTION);
@@ -222,7 +224,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				else {
 					menuInflater.inflate(R.menu.select_song, menu);
 
-					if(playlistId == null) {
+					if(playlistId == null || !playlistOwner) {
 						menu.removeItem(R.id.menu_remove_playlist);
 					}
 				}
@@ -323,7 +325,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		onCreateContextMenu(menu, view, menuInfo, entry);
-		if(!entry.isVideo() && !Util.isOffline(context) && playlistId == null && (podcastId == null  || Util.isOffline(context) && podcastId != null)) {
+		if(!entry.isVideo() && !Util.isOffline(context) && (playlistId == null || !playlistOwner) && (podcastId == null  || Util.isOffline(context) && podcastId != null)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
 		// Remove show artists if parent is not set and if not on a album list
