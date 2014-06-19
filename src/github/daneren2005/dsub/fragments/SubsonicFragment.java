@@ -65,6 +65,7 @@ import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import java.io.File;
 import java.text.DateFormat;
@@ -73,6 +74,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -792,13 +794,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			@Override
 			protected List<Playlist> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<Playlist> playlists = musicService.getPlaylists(false, context, this);
+				List<Playlist> playlists = new ArrayList<Playlist>();
+				playlists.addAll(musicService.getPlaylists(false, context, this));
 				
 				// Iterate through and remove all non owned public playlists
 				Iterator<Playlist> it = playlists.iterator();
 				while(it.hasNext()) {
 					Playlist playlist = it.next();
-					if(playlist.getPublic() == true && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner)) {
+					if(playlist.getPublic() == true && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
 						it.remove();
 					}
 				}
