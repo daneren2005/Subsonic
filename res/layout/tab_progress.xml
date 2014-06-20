@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/tab_progress"
-              android:orientation="horizontal"
-              android:visibility="gone"
-              android:padding="10dp"
-              android:layout_gravity="top"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/tab_progress"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 
-    <ProgressBar
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="6dp"/>
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_gravity="center">
 
-    <TextView
-            android:id="@+id/tab_progress_message"
-            android:text="@string/progress.wait"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"/>
+		<ProgressBar
+			style="?android:attr/progressBarStyleLarge"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginRight="6dp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
 
-</LinearLayout>
+		<TextView
+			android:id="@+id/tab_progress_message"
+			android:text="@string/progress.wait"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
+	</LinearLayout>
+</FrameLayout>
