@@ -65,10 +65,6 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 		folderButton = null;
 		super.onCreateView(inflater, container, bundle);
 
-		if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-			listView.setFastScrollAlwaysVisible(true);
-		}
-
 		if(objects != null) {
 			if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
 				folderButton.setVisibility(View.GONE);
