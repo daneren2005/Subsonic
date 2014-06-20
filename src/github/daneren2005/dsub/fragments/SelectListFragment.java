@@ -52,7 +52,6 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	private static final String TAG = SelectListFragment.class.getSimpleName();
 	protected ListView listView;
 	protected ArrayAdapter adapter;
-	protected View emptyView;
 	protected List<T> objects;
 	protected boolean serialize = true;
 
@@ -84,7 +83,6 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 		listView.setOnItemClickListener(this);
 		setupScrollList(listView);
 		registerForContextMenu(listView);
-		emptyView = rootView.findViewById(R.id.fragment_list_empty);
 
 		if(objects == null) {
 			refresh(false);
@@ -115,8 +113,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 		if(titleRes != 0) {
 			setTitle(getTitleResource());
 		}
-		listView.setVisibility(View.INVISIBLE);
-		emptyView.setVisibility(View.GONE);
+		listView.setVisibility(View.GONE);
 
 		BackgroundTask<List<T>> task = new TabBackgroundTask<List<T>>(this) {
 			@Override
@@ -136,11 +133,12 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 
 			@Override
 			protected void done(List<T> result) {
-				emptyView.setVisibility(result == null || result.isEmpty() ? View.VISIBLE : View.GONE);
-
-				if (result != null) {
+				if (result != null && !result.isEmpty()) {
 					listView.setAdapter(adapter = getAdapter(result));
 					listView.setVisibility(View.VISIBLE);
+				} else {
+					setEmpty(true);
+					refreshLayout.setEnabled(true);
 				}
 			}
 		};

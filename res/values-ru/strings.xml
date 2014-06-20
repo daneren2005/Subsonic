@@ -88,7 +88,6 @@
     <string name="music_library.label">Медиатека</string>
     <string name="music_library.label_offline">Оффлайн медиа</string>
 
-    <string name="select_album.empty">Медиафайлы не найдены</string>
     <string name="select_album.select">Выбрать все</string>
     <string name="select_album.n_selected">%d композиций выбрано.</string>
     <string name="select_album.n_unselected">Выбор снят с %d композиций.</string>

@@ -434,6 +434,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		View view = rootView.findViewById(R.id.tab_progress);
 		if (view != null) {
 			view.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+			if(visible) {
+				View progress = rootView.findViewById(R.id.tab_progress_spinner);
+				progress.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 
@@ -441,6 +446,21 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		TextView view = (TextView) rootView.findViewById(R.id.tab_progress_message);
 		if (view != null) {
 			view.setText(message);
+		}
+	}
+
+	public void setEmpty(boolean empty) {
+		View view = rootView.findViewById(R.id.tab_progress);
+		if(empty) {
+			view.setVisibility(View.VISIBLE);
+
+			View progress = view.findViewById(R.id.tab_progress_spinner);
+			progress.setVisibility(View.GONE);
+
+			TextView text = (TextView) view.findViewById(R.id.tab_progress_message);
+			text.setText(R.string.common_empty);
+		} else {
+			view.setVisibility(View.GONE);
 		}
 	}
 

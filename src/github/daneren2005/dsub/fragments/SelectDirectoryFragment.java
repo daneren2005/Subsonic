@@ -54,7 +54,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 	private GridView albumList;
 	private ListView entryList;
-	private View emptyView;
 	private boolean hideButtons = false;
 	private Boolean licenseValid;
 	private boolean showHeader = true;
@@ -181,8 +180,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				replaceFragment(fragment, true);
 			}
 		});
-
-		emptyView = rootView.findViewById(R.id.select_album_empty);
 
 		registerForContextMenu(entryList);
 		registerForContextMenu(albumList);
@@ -445,7 +442,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 		
 		entryList.setVisibility(View.INVISIBLE);
-		emptyView.setVisibility(View.INVISIBLE);
 		if (playlistId != null) {
 			getPlaylist(playlistId, playlistName, refresh);
 		} else if(podcastId != null) {
@@ -658,7 +654,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			addAlbumHeader = false;
 		}
 
-		emptyView.setVisibility((entries.isEmpty() && albums.isEmpty()) ? View.VISIBLE : View.GONE);
+		boolean validData = !entries.isEmpty() || !albums.isEmpty();
+		if(!validData) {
+			setEmpty(true);
+		}
 		// Always going to have entries in entryAdapter
 		entryAdapter = new EntryAdapter(context, getImageLoader(), entries, (podcastId == null));
 		ListAdapter listAdapter = entryAdapter;
@@ -683,7 +682,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 		}
 		entryList.setAdapter(listAdapter);
-        entryList.setVisibility(View.VISIBLE);
+		if(validData) {
+			entryList.setVisibility(View.VISIBLE);
+		}
         context.supportInvalidateOptionsMenu();
 
         Bundle args = getArguments();

@@ -23,7 +23,7 @@
 	<string name="common.confirm">Confirm</string>
 	<string name="common.confirm_message">Do you want to %1$s %2$s?</string>
 	<string name="common.confirm_message_cache">cache</string>
-	<string name="common.empty">None found</string>
+	<string name="common.empty">No data</string>
 	<string name="common.warning">Warning</string>
 
     <string name="button_bar.home">Home</string>
@@ -125,7 +125,6 @@
     <string name="music_library.label">Media library</string>
     <string name="music_library.label_offline">Offline media</string>
 
-    <string name="select_album.empty">No media found</string>
     <string name="select_album.select">Select all</string>
     <string name="select_album.n_selected">%d tracks selected.</string>
     <string name="select_album.n_unselected">%d tracks unselected.</string>

@@ -125,7 +125,6 @@
     <string name="music_library.label">Médiakönyvtár</string>
     <string name="music_library.label_offline">Kapcsolat nélküli médiák</string>
 
-    <string name="select_album.empty">Nem található média!</string>
     <string name="select_album.select">Összes jelölése be/ki</string>
     <string name="select_album.n_selected">%d dal kijelölve.</string>
     <string name="select_album.n_unselected">%d dal visszavonva.</string>
