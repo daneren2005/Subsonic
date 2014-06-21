@@ -32,7 +32,8 @@
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:singleLine="true"
 				android:ellipsize="marquee"
-				android:text="@string/search.albums"/>
+				android:text="@string/search.albums"
+				android:textColor="?android:textColorPrimary"/>
 
 			<LinearLayout
 				android:layout_width="fill_parent"
