@@ -254,6 +254,9 @@ public class SearchFragment extends SubsonicFragment {
 			}
 
 			boolean empty = searchResult.getArtists().isEmpty() && searchResult.getAlbums().isEmpty() && searchResult.getSongs().isEmpty();
+			if(empty) {
+				setEmpty(true);
+			}
 		}
 
 		list.setAdapter(mergeAdapter);
