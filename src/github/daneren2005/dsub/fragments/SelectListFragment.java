@@ -138,7 +138,6 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 					listView.setVisibility(View.VISIBLE);
 				} else {
 					setEmpty(true);
-					refreshLayout.setEnabled(true);
 				}
 			}
 		};

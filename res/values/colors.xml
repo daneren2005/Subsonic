@@ -9,4 +9,9 @@
 	<color name="overlayColor">#80000000</color>
 	<color name="ics_opaque">#8033b5e5</color>
 	<color name="cyan">#ff0099cc</color>
+
+	<color name="holo_blue_light">#ff33b5e5</color>
+	<color name="holo_orange_light">#ffffbb33</color>
+	<color name="holo_green_light">#ff99cc00</color>
+	<color name="holo_red_light">#ffff4444</color>
 </resources>

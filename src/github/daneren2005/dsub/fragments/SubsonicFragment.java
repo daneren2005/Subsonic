@@ -498,6 +498,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				refreshLayout.setEnabled(topRowVerticalPosition >= 0 && listView.getFirstVisiblePosition() == 0);
 			}
 		});
+
+		refreshLayout.setColorScheme(
+			R.color.holo_blue_light,
+			R.color.holo_orange_light,
+			R.color.holo_green_light,
+			R.color.holo_red_light);
 	}
 
 	protected void warnIfNetworkOrStorageUnavailable() {
