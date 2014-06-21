@@ -36,7 +36,6 @@ import github.daneren2005.dsub.domain.RemoteStatus;
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();
 	protected DownloadService downloadService;
-	private VolumeToast volumeToast;
 
 	public abstract void create(boolean playing, int seconds);
 	public abstract void start();
@@ -91,33 +90,6 @@ public abstract class RemoteController {
 
 		void clear() {
 			queue.clear();
-		}
-	}
-	
-	protected VolumeToast getVolumeToast() {
-		if(volumeToast == null) {
-			volumeToast = new VolumeToast(downloadService);
-		}
-		return volumeToast;
-	}
-	
-	protected static class VolumeToast extends Toast {
-		private final ProgressBar progressBar;
-		
-		public VolumeToast(Context context) {
-			super(context);
-			setDuration(Toast.LENGTH_SHORT);
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View view = inflater.inflate(R.layout.jukebox_volume, null);
-			progressBar = (ProgressBar) view.findViewById(R.id.jukebox_volume_progress_bar);
-			
-			setView(view);
-			setGravity(Gravity.TOP, 0, 0);
-		}
-		
-		public void setVolume(float volume) {
-			progressBar.setProgress(Math.round(100 * volume));
-			show();
 		}
 	}
 }

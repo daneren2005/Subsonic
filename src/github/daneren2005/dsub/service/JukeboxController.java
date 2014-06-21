@@ -127,7 +127,6 @@ public class JukeboxController extends RemoteController {
 	public void setVolume(int volume) {
 		gain = volume / 10.0f;
 
-		getVolumeToast().setVolume(gain);
 		tasks.remove(SetGain.class);
 		tasks.add(new SetGain(gain));
 	}
@@ -137,8 +136,7 @@ public class JukeboxController extends RemoteController {
 		gain += delta;
 		gain = Math.max(gain, 0.0f);
 		gain = Math.min(gain, 1.0f);
-		
-		getVolumeToast().setVolume(gain);
+
 		tasks.remove(SetGain.class);
 		tasks.add(new SetGain(gain));
 	}

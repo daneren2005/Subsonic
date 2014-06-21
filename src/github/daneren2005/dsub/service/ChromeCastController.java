@@ -203,7 +203,6 @@ public class ChromeCastController extends RemoteController {
 	public void setVolume(int volume) {
 		gain = volume / 10.0;
 
-		getVolumeToast().setVolume((float) gain);
 		try {
 			Cast.CastApi.setVolume(apiClient, gain);
 		} catch(Exception e) {
@@ -217,7 +216,6 @@ public class ChromeCastController extends RemoteController {
 		gain = Math.max(gain, 0.0);
 		gain = Math.min(gain, 1.0);
 
-		getVolumeToast().setVolume((float) gain);
 		try {
 			Cast.CastApi.setVolume(apiClient, gain);
 		} catch(Exception e) {

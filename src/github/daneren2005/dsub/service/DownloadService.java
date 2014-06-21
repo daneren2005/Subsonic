@@ -1275,11 +1275,8 @@ public class DownloadService extends Service {
 	}
 
 	public void updateRemoteVolume(boolean up) {
-		if(remoteState == RemoteControlState.JUKEBOX_SERVER) {
-			mediaRouter.getSelectedRoute().requestUpdateVolume(up ? 1 : -1);
-		} else {
-			remoteController.updateVolume(up);
-		}
+		AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+		audioManager.adjustVolume(up ? AudioManager.ADJUST_RAISE : AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
 	}
 
 	public void startRemoteScan() {
