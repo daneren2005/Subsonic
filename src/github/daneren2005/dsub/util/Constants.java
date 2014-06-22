@@ -62,10 +62,6 @@ public final class Constants {
 	public static final String INTENT_EXTRA_FRAGMENT_TYPE = "fragmentType";
 	public static final String INTENT_EXTRA_REFRESH_LISTINGS = "refreshListings";
 
-    // Notification IDs.
-    public static final int NOTIFICATION_ID_PLAYING = 100;
-    public static final int NOTIFICATION_ID_DOWNLOADING = 102;
-
     // Preferences keys.
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";
 	public static final String PREFERENCES_KEY_SERVER_COUNT = "serverCount";

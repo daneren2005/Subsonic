@@ -39,6 +39,7 @@ import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
+import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MediaRouteManager;
@@ -275,8 +276,8 @@ public class DownloadService extends Service {
 			proxy = null;
 		}
 		mediaRouter.destroy();
-		Util.hidePlayingNotification(this, this, handler);
-		Util.hideDownloadingNotification(this);
+		Notifications.hidePlayingNotification(this, this, handler);
+		Notifications.hideDownloadingNotification(this);
 	}
 
 	public static DownloadService getInstance() {
@@ -522,7 +523,7 @@ public class DownloadService extends Service {
 		}
 		backgroundDownloadList.clear();
 		revision++;
-		Util.hideDownloadingNotification(this);
+		Notifications.hideDownloadingNotification(this);
 	}
 
 	public synchronized void clearIncomplete() {
@@ -665,7 +666,7 @@ public class DownloadService extends Service {
 			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
 		} else {
 			Util.broadcastNewTrackInfo(this, null);
-			Util.hidePlayingNotification(this, this, handler);
+			Notifications.hidePlayingNotification(this, this, handler);
 		}
 	}
 
@@ -765,7 +766,7 @@ public class DownloadService extends Service {
 			reset();
 			if(index >= size && size != 0) {
 				setCurrentPlaying(0, false);
-				Util.hidePlayingNotification(this, this, handler);
+				Notifications.hidePlayingNotification(this, this, handler);
 			} else {
 				setCurrentPlaying(null, false);
 			}
@@ -1044,16 +1045,16 @@ public class DownloadService extends Service {
 		}
 
 		if (show) {
-			Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
 		} else if (pause) {
 			SharedPreferences prefs = Util.getPreferences(this);
 			if(prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
-				Util.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+				Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
 			} else {
-				Util.hidePlayingNotification(this, this, handler);
+				Notifications.hidePlayingNotification(this, this, handler);
 			}
 		} else if(hide) {
-			Util.hidePlayingNotification(this, this, handler);
+			Notifications.hidePlayingNotification(this, this, handler);
 		}
 		if(mRemoteControl != null) {
 			mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
@@ -1668,10 +1669,10 @@ public class DownloadService extends Service {
 		}
 
 		if(!backgroundDownloadList.isEmpty()) {
-			Util.showDownloadingNotification(this, currentDownloading, backgroundDownloadList.size());
+			Notifications.showDownloadingNotification(this, currentDownloading, backgroundDownloadList.size());
 			downloadOngoing = true;
 		} else if(backgroundDownloadList.isEmpty() && downloadOngoing) {
-			Util.hideDownloadingNotification(this);
+			Notifications.hideDownloadingNotification(this);
 			downloadOngoing = false;
 		}
 
