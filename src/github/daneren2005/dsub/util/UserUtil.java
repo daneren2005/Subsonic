@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
@@ -38,6 +39,7 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.view.SettingsAdapter;
 
 public final class UserUtil {
+	private static final String TAG = UserUtil.class.getSimpleName();
 	private static User currentUser;
 
 	public static void seedCurrentUser(final Context context) {
@@ -51,6 +53,12 @@ public final class UserUtil {
 			protected Void doInBackground() throws Throwable {
 				currentUser = MusicServiceFactory.getMusicService(context).getUser(false, getCurrentUsername(context), context, null);
 				return null;
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				// Don't do anything, supposed to be background pull
+				Log.e(TAG, "Failed to seed user information");
 			}
 		}.execute();
 	}
