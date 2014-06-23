@@ -104,6 +104,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 		setContentView(R.layout.abstract_fragment_activity);
 
+		UserUtil.seedCurrentUser(this);
 		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
 			boolean firstRun = false;
@@ -468,8 +469,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
 			editor.commit();
 		}
-
-		UserUtil.seedCurrentUser(this);
 	}
 
 	private void resetCacheLocation(SharedPreferences prefs) {
