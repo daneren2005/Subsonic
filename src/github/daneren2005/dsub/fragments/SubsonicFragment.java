@@ -220,7 +220,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
 			menu.setGroupVisible(R.id.hide_star, false);
 		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true)) {
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || !UserUtil.canShare()) {
 			menu.setGroupVisible(R.id.hide_share, false);
 		}
 	}
