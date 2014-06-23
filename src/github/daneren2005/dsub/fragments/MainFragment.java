@@ -229,8 +229,9 @@ public class MainFragment extends SubsonicFragment {
 			if(scrobblesCount > 0 || starsCount > 0){
 				showOfflineSyncDialog(scrobblesCount, starsCount);
 			}
-			UserUtil.seedCurrentUser(context);
 		}
+		
+		UserUtil.seedCurrentUser(context);
 	}
 
 	private void showAlbumList(String type) {
