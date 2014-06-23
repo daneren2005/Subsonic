@@ -40,6 +40,7 @@ import github.daneren2005.dsub.view.SettingsAdapter;
 
 public final class UserUtil {
 	private static final String TAG = UserUtil.class.getSimpleName();
+	private static int instance = -1;
 	private static User currentUser;
 
 	public static void seedCurrentUser(final Context context) {
@@ -47,11 +48,18 @@ public final class UserUtil {
 		if(Util.isOffline(context)) {
 			return;
 		}
+		
+		final int instance = Util.getActiveServer(context);
+		if(this.instance == instance && currentUser != null) {
+			return;
+		} else {
+			this.instance = instance;
+		}
 
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				currentUser = MusicServiceFactory.getMusicService(context).getUser(false, getCurrentUsername(context), context, null);
+				currentUser = MusicServiceFactory.getMusicService(context).getUser(false, getCurrentUsername(context, instance), context, null);
 				return null;
 			}
 
@@ -77,11 +85,17 @@ public final class UserUtil {
 	}
 
 	public static boolean isCurrentAdmin() {
-		if(currentUser == null) {
-			return false;
-		} else {
-			return isCurrentRole("adminRole");
-		}
+		return isCurrentRole("adminRole");
+	}
+	
+	public static boolean canPodcast() {
+		return isCurrentRole("podcastRole");
+	}
+	public static boolean canShare() {
+		return isCurrentRole("shareRole");
+	}
+	public static boolean canJukebox() {
+		return isCurrentRole("jukeboxRole");
 	}
 
 	public static boolean isCurrentRole(String role) {
