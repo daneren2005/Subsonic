@@ -42,6 +42,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.TabBackgroundTask;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.AlbumListAdapter;
 import java.util.ArrayList;
@@ -239,6 +240,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 				else {
 					menuInflater.inflate(R.menu.select_podcast_episode, menu);
+					
+					if(!UserUtil.canPodcast()) {
+						menu.removeItem(R.id.menu_download_all);
+					}
 				}
 			}
 		}
@@ -330,9 +335,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			menu.removeItem(R.id.album_menu_show_artist);
 		}
 		if(podcastId != null && !Util.isOffline(context)) {
-			String status = ((PodcastEpisode)entry).getStatus();
-			if("completed".equals(status)) {
+			if(UserUtil.canPodcast()) {
+				String status = ((PodcastEpisode)entry).getStatus();
+				if("completed".equals(status)) {
+					menu.removeItem(R.id.song_menu_server_download);
+				}
+			} else {
 				menu.removeItem(R.id.song_menu_server_download);
+				menu.removeItem(R.id.song_menu_server_delete);
 			}
 		}
 
