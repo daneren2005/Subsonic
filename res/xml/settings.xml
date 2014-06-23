@@ -355,7 +355,7 @@
 				android:title="@string/settings.scrobble_title"
 				android:summary="@string/settings.scrobble_summary"
 				android:key="scrobble"
-				android:defaultValue="false"/>
+				android:defaultValue="true"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.media_button_title"
