@@ -46,6 +46,7 @@ public final class UserUtil {
 	public static void seedCurrentUser(final Context context) {
 		// Only try to seed if online
 		if(Util.isOffline(context)) {
+			currentUser = null;
 			return;
 		}
 		
