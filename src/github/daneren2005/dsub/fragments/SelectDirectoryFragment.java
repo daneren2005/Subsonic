@@ -1208,7 +1208,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		if(add) {
 			ImageView shareButton = (ImageView) header.findViewById(R.id.select_album_share);
-			if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true)) {
+			if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) && !Util.isOffline(context) && UserUtil.canShare()) {
 				shareButton.setVisibility(View.GONE);
 			} else {
 				shareButton.setOnClickListener(new View.OnClickListener() {
