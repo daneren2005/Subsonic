@@ -154,7 +154,7 @@ public final class Util {
 
     public static boolean isScrobblingEnabled(Context context) {
         SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, false);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, true) && (isOffline(context) || UserUtil.isCurrentRole("scrobblingEnabled"));
     }
 
     public static void setActiveServer(Context context, int instance) {
