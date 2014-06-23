@@ -39,6 +39,7 @@ import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PodcastChannelAdapter;
 
@@ -74,8 +75,8 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
 
-		if(!Util.isOffline(context)) {
-			android.view.MenuInflater inflater = context.getMenuInflater();
+		android.view.MenuInflater inflater = context.getMenuInflater();
+		if(!Util.isOffline(context) && UserUtil.canPodcast()) {
 			inflater.inflate(R.menu.select_podcasts_context, menu);
 
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -85,6 +86,8 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 			} else {
 				menu.removeItem(R.id.podcast_menu_stop_sync);
 			}
+		} else {
+			inflater.inflate(R.menu_select_podcasts_context_offline, menu);
 		}
 
 		recreateContextMenu(menu);
@@ -119,7 +122,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 
 	@Override
 	public int getOptionsMenu() {
-		return R.menu.select_podcasts;
+		return (UserUtil.canPodcast() && !Util.isOffline()) ? R.menu.select_podcasts : R.menu.abstract_top_menu;
 	}
 
 	@Override
