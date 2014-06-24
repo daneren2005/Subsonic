@@ -136,11 +136,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
 	public void cancel() {
 		cancelled = true;
-		if(task != null) {
-			task.cancel();
-		}
 		if(cancelListener != null) {
 			cancelListener.onCancel();
+		} else if(task != null) {
+			task.cancel();
 		}
 	}
 	public boolean isCancelled() {
