@@ -32,6 +32,7 @@ import java.io.File;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
@@ -65,6 +66,13 @@ public final class UserUtil {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				currentUser = MusicServiceFactory.getMusicService(context).getUser(false, getCurrentUsername(context, instance), context, null);
+
+				// If running, redo cast selector
+				DownloadService downloadService = DownloadService.getInstance();
+				if(downloadService != null) {
+					downloadService.userSettingsChanged();
+				}
+
 				return null;
 			}
 

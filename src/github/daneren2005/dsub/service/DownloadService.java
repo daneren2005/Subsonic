@@ -561,6 +561,9 @@ public class DownloadService extends Service {
 			}
 		});
 	}
+	public void userSettingsChanged() {
+		mediaRouter.buildSelector();
+	}
 
 	public synchronized int size() {
 		return downloadList.size();

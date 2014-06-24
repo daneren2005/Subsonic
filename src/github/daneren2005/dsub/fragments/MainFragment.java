@@ -209,7 +209,7 @@ public class MainFragment extends SubsonicFragment {
 			}
 			Util.setActiveServer(context, instance);
 			context.invalidate();
-			UserUtil.seedCurrentUser(context);
+			UserUtil.refreshCurrentUser(context);
 		}
 	}
 

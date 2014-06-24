@@ -157,9 +157,11 @@ public class MediaRouteManager extends MediaRouter.Callback {
 			addOfflineProviders();
 		}
 	}
-	private void buildSelector() {
+	public void buildSelector() {
 		MediaRouteSelector.Builder builder = new MediaRouteSelector.Builder();
-		builder.addControlCategory(JukeboxRouteProvider.CATEGORY_JUKEBOX_ROUTE);
+		if(UserUtil.canJukebox()) {
+			builder.addControlCategory(JukeboxRouteProvider.CATEGORY_JUKEBOX_ROUTE);
+		}
 		if(castAvailable) {
 			builder.addControlCategory(CastCompat.getCastControlCategory());
 		}
