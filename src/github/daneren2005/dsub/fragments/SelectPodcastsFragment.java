@@ -87,7 +87,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 				menu.removeItem(R.id.podcast_menu_stop_sync);
 			}
 		} else {
-			inflater.inflate(R.menu_select_podcasts_context_offline, menu);
+			inflater.inflate(R.menu.select_podcasts_context_offline, menu);
 		}
 
 		recreateContextMenu(menu);
@@ -122,7 +122,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 
 	@Override
 	public int getOptionsMenu() {
-		return (UserUtil.canPodcast() && !Util.isOffline()) ? R.menu.select_podcasts : R.menu.abstract_top_menu;
+		return (UserUtil.canPodcast() && !Util.isOffline(context)) ? R.menu.select_podcasts : R.menu.abstract_top_menu;
 	}
 
 	@Override

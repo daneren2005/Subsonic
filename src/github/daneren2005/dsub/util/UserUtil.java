@@ -43,6 +43,10 @@ public final class UserUtil {
 	private static int instance = -1;
 	private static User currentUser;
 
+	public static void refreshCurrentUser(Context context) {
+		currentUser = null;
+		seedCurrentUser(context);
+	}
 	public static void seedCurrentUser(final Context context) {
 		// Only try to seed if online
 		if(Util.isOffline(context)) {
@@ -51,10 +55,10 @@ public final class UserUtil {
 		}
 		
 		final int instance = Util.getActiveServer(context);
-		if(this.instance == instance && currentUser != null) {
+		if(UserUtil.instance == instance && currentUser != null) {
 			return;
 		} else {
-			this.instance = instance;
+			UserUtil.instance = instance;
 		}
 
 		new SilentBackgroundTask<Void>(context) {
