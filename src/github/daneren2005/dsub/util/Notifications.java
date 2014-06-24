@@ -49,9 +49,13 @@ public final class Notifications {
 	public static final int NOTIFICATION_ID_PLAYING = 100;
 	public static final int NOTIFICATION_ID_DOWNLOADING = 102;
 
+	private static boolean playShowing = false;
+	private static boolean downloadShowing = false;
+	private static boolean downloadForeground = false;
+
 	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
 
-	public static void showPlayingNotification(final Context context, final DownloadService downloadService, Handler handler, MusicDirectory.Entry song) {
+	public static void showPlayingNotification(final Context context, final DownloadService downloadService, final Handler handler, MusicDirectory.Entry song) {
 		// Set the icon, scrolling text and timestamp
 		final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
 		notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
@@ -73,6 +77,17 @@ public final class Notifications {
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+		playShowing = true;
+		if(downloadForeground && downloadShowing) {
+			downloadForeground = false;
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					downloadService.stopForeground(true);
+					showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
+				}
+			});
+		}
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
@@ -114,13 +129,13 @@ public final class Notifications {
 		rv.setTextViewText(R.id.notification_artist, arist);
 		rv.setTextViewText(R.id.notification_album, album);
 
-		/*Pair<Integer, Integer> colors = getNotificationTextColors(context);
+		Pair<Integer, Integer> colors = getNotificationTextColors(context);
 		if (colors.getFirst() != null) {
 			rv.setTextColor(R.id.notification_title, colors.getFirst());
 		}
 		if (colors.getSecond() != null) {
 			rv.setTextColor(R.id.notification_artist, colors.getSecond());
-		}*/
+		}
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
 			rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_play);
@@ -185,6 +200,8 @@ public final class Notifications {
 	}
 
 	public static void hidePlayingNotification(final Context context, final DownloadService downloadService, Handler handler) {
+		playShowing = false;
+
 		// Remove notification and remove the service from the foreground
 		handler.post(new Runnable() {
 			@Override
@@ -193,11 +210,16 @@ public final class Notifications {
 			}
 		});
 
+		// Get downloadNotification in foreground if playing
+		if(downloadShowing) {
+			showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
+		}
+
 		// Update widget
 		DSubWidgetProvider.notifyInstances(context, downloadService, false);
 	}
 
-	public static void showDownloadingNotification(final Context context, DownloadFile file, int size) {
+	public static void showDownloadingNotification(final Context context, final DownloadService downloadService, Handler handler, DownloadFile file, int size) {
 		Intent cancelIntent = new Intent(context, DownloadService.class);
 		cancelIntent.setAction(DownloadService.CANCEL_DOWNLOADS);
 		PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, 0);
@@ -230,13 +252,36 @@ public final class Notifications {
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		builder.setContentIntent(PendingIntent.getActivity(context, 1, notificationIntent, 0));
 
-		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify(NOTIFICATION_ID_DOWNLOADING, builder.build());
+		final Notification notification = builder.build();
+		downloadShowing = true;
+		if(playShowing) {
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.notify(NOTIFICATION_ID_DOWNLOADING, notification);
+		} else {
+			downloadForeground = true;
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					downloadService.startForeground(NOTIFICATION_ID_DOWNLOADING, notification);
+				}
+			});
+		}
 
 	}
-	public static void hideDownloadingNotification(final Context context) {
-		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.cancel(NOTIFICATION_ID_DOWNLOADING);
+	public static void hideDownloadingNotification(final Context context, final DownloadService downloadService, Handler handler) {
+		downloadShowing = false;
+		if(playShowing) {
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.cancel(NOTIFICATION_ID_DOWNLOADING);
+		} else {
+			downloadForeground = false;
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					downloadService.stopForeground(true);
+				}
+			});
+		}
 	}
 
 	/**

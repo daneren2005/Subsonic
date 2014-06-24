@@ -277,7 +277,7 @@ public class DownloadService extends Service {
 		}
 		mediaRouter.destroy();
 		Notifications.hidePlayingNotification(this, this, handler);
-		Notifications.hideDownloadingNotification(this);
+		Notifications.hideDownloadingNotification(this, this, handler);
 	}
 
 	public static DownloadService getInstance() {
@@ -523,7 +523,7 @@ public class DownloadService extends Service {
 		}
 		backgroundDownloadList.clear();
 		revision++;
-		Notifications.hideDownloadingNotification(this);
+		Notifications.hideDownloadingNotification(this, this, handler);
 	}
 
 	public synchronized void clearIncomplete() {
@@ -1672,10 +1672,10 @@ public class DownloadService extends Service {
 		}
 
 		if(!backgroundDownloadList.isEmpty()) {
-			Notifications.showDownloadingNotification(this, currentDownloading, backgroundDownloadList.size());
+			Notifications.showDownloadingNotification(this, this, handler, currentDownloading, backgroundDownloadList.size());
 			downloadOngoing = true;
 		} else if(backgroundDownloadList.isEmpty() && downloadOngoing) {
-			Notifications.hideDownloadingNotification(this);
+			Notifications.hideDownloadingNotification(this, this, handler);
 			downloadOngoing = false;
 		}
 
