@@ -136,10 +136,12 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
 	public void cancel() {
 		cancelled = true;
+		if(task != null) {
+			task.cancel();
+		}
+
 		if(cancelListener != null) {
 			cancelListener.onCancel();
-		} else if(task != null) {
-			task.cancel();
 		}
 	}
 	public boolean isCancelled() {
@@ -253,6 +255,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 					Task task = queue.take();
 					task.execute();
 				} catch(InterruptedException stop) {
+					Log.e(TAG, "Thread died");
 					running = false;
 					threads.remove(Thread.currentThread());
 				} catch(Throwable t) {
