@@ -77,6 +77,13 @@ public final class UserUtil {
 			}
 
 			@Override
+			protected void done(Void result) {
+				if(context instanceof Activity) {
+					((Activity) context).invalidateOptionsMenu();
+				}
+			}
+
+			@Override
 			protected void error(Throwable error) {
 				// Don't do anything, supposed to be background pull
 				Log.e(TAG, "Failed to seed user information");
