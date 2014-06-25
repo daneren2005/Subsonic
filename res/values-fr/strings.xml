@@ -531,9 +531,9 @@
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="one">No songs</item>
+        <item quantity="zero">No songs</item>
         <item quantity="one">One song</item>
-        <item quantity="zero">%d songs</item>
+        <item quantity="other">%d songs</item>
     </plurals>
     <plurals name="select_album_n_songs_downloading">
         <item quantity="one">One song scheduled for download.</item>
