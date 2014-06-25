@@ -85,15 +85,17 @@ public final class Notifications {
 				public void run() {
 					downloadService.stopForeground(true);
 					showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
+					downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+				}
+			});
+		} else {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
 				}
 			});
 		}
-		handler.post(new Runnable() {
-			@Override
-			public void run() {
-				downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
-			}
-		});
 
 		// Update widget
 		DSubWidgetProvider.notifyInstances(context, downloadService, playing);
