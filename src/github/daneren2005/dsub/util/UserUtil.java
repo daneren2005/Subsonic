@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
@@ -78,7 +79,7 @@ public final class UserUtil {
 
 			@Override
 			protected void done(Void result) {
-				if(context instanceof Activity) {
+				if(context instanceof Activity && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 					((Activity) context).invalidateOptionsMenu();
 				}
 			}
