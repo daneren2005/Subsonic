@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.1" versioncode="113" releasedate="6/25/2014">
+		<change>Only show podcast, share, and jukebox options when user has server permissions</change>
+		<change>Remove playlist options from public, non-owned lists (throws error anyways)</change>
+		<change>Add avatars to chat tab</change>
+		<change>Better refresh status</change>
+		<change>Better downloading notification</change>
+		<change>Use system volume menu for Jukebox/casting</change>
+		<change>Fix infinite errors when selecting bad server</change>
+		<change>Fix context menu errors on old small album art view</change>
+		<change>Fix issue with background downloads stalling</change>
+		<change>New language: French (thanks Cotib)</change>
+	</release>
 	<release version="4.7" versioncode="112" releasedate="6/16/2014">
 		<change>Admin tab</change>
 		<change>Create/delete users, change others passwords/emails/permissions if admin</change>
