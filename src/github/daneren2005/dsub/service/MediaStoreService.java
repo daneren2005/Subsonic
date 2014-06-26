@@ -56,10 +56,17 @@ public class MediaStoreService {
         values.put(MediaStore.MediaColumns.TITLE, song.getTitle());
         values.put(MediaStore.Audio.AudioColumns.ARTIST, song.getArtist());
         values.put(MediaStore.Audio.AudioColumns.ALBUM, song.getAlbum());
-        values.put(MediaStore.Audio.AudioColumns.TRACK, song.getTrack());
-        values.put(MediaStore.Audio.AudioColumns.YEAR, song.getYear());
         values.put(MediaStore.MediaColumns.DATA, songFile.getAbsolutePath());
         values.put(MediaStore.MediaColumns.MIME_TYPE, song.getContentType());
+		if(song.getDuration() != null) {
+			values.put(MediaStore.Audio.AudioColumns.DURATION, song.getDuration() * 1000L);
+		}
+		if(song.getTrack() != null) {
+			values.put(MediaStore.Audio.AudioColumns.TRACK, song.getTrack());
+		}
+		if(song.getYear() != null) {
+			values.put(MediaStore.Audio.AudioColumns.YEAR, song.getYear());
+		}
         values.put(MediaStore.Audio.AudioColumns.IS_MUSIC, 1);
 
         Uri uri = contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
