@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.daneren2005.dsub"
           android:installLocation="internalOnly"
-          android:versionCode="113"
+          android:versionCode="114"
           android:versionName="4.7.1">
 
     <uses-permission android:name="android.permission.INTERNET"/>
