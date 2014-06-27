@@ -410,6 +410,7 @@ public class DownloadService extends Service {
 		removePlayed = enabled;
 		if(removePlayed) {
 			checkDownloads();
+			lifecycleSupport.serializeDownloadQueue();
 		}
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, enabled);
