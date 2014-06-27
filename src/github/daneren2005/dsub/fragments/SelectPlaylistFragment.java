@@ -56,7 +56,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 			
 			if(!Util.checkServerVersion(context, "1.8")) {
 				menu.removeItem(R.id.playlist_update_info);
-			} else if(playlist.getPublic() != null && playlist.getPublic() == true && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
+			} else if(playlist.getPublic() != null && playlist.getPublic() == true && playlist.getId().indexOf(".m3u") == -1 && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
 				menu.removeItem(R.id.playlist_update_info);
 				menu.removeItem(R.id.playlist_menu_delete);
 			}
