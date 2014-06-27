@@ -67,6 +67,7 @@ public final class Notifications {
 			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
 			setupViews(expandedContentView,context,song, playing, remote);
 			notification.bigContentView = expandedContentView;
+			notification.priority = Notification.PRIORITY_HIGH;
 		}
 
 		RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
