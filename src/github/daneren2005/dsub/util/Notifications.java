@@ -48,6 +48,7 @@ public final class Notifications {
 	// Notification IDs.
 	public static final int NOTIFICATION_ID_PLAYING = 100;
 	public static final int NOTIFICATION_ID_DOWNLOADING = 102;
+	public static final String NOTIFICATION_SYNC_GROUP = "github.daneren2005.dsub.sync";
 
 	private static boolean playShowing = false;
 	private static boolean downloadShowing = false;
@@ -296,7 +297,9 @@ public final class Notifications {
 					.setContentTitle(context.getResources().getString(R.string.sync_title))
 					.setContentText(content)
 					.setStyle(new NotificationCompat.BigTextStyle().bigText(content.replace(", ", "\n")))
-					.setOngoing(false);
+					.setOngoing(false)
+					.setGroup(NOTIFICATION_SYNC_GROUP)
+					.setPriority(NotificationCompat.PRIORITY_LOW);
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
