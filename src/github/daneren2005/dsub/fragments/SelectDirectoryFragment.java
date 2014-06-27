@@ -1164,6 +1164,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 		if(songCount == 0) {
 			showHeader = false;
+			hideButtons = true;
 			return null;
 		}
 
