@@ -32,6 +32,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
+import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.SyncUtil.SyncSet;
 import github.daneren2005.dsub.util.FileUtil;
@@ -104,7 +105,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 			// Make sure there are is at least one change before re-syncing
 			if(updated.size() > 0) {
 				FileUtil.serialize(context, podcastList, SyncUtil.getPodcastSyncFile(context, instance));
-				SyncUtil.showSyncNotification(context, R.string.sync_new_podcasts, SyncUtil.joinNames(updated));
+				Notifications.showSyncNotification(context, R.string.sync_new_podcasts, SyncUtil.joinNames(updated));
 			}
 		} catch(Exception e) {
 			Log.w(TAG, "Failed to get podcasts for " + Util.getServerName(context, instance));
