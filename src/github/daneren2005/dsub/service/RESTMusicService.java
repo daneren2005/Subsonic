@@ -1539,12 +1539,12 @@ public class RESTMusicService implements MusicService {
                 task.setOnCancelListener(new BackgroundTask.OnCancelListener() {
                     @Override
                     public void onCancel() {
-					try {
-						isCancelled.set(true);
-						request.abort();
-					} catch(Exception e) {
-						Log.e(TAG, "Failed to stop http task");
-					}
+						try {
+							isCancelled.set(true);
+							request.abort();
+						} catch(Exception e) {
+							Log.e(TAG, "Failed to stop http task");
+						}
                     }
                 });
             }
