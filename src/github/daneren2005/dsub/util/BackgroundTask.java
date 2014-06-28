@@ -44,7 +44,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     private static final String TAG = BackgroundTask.class.getSimpleName();
 
     private final Context context;
-	protected boolean cancelled = false;
+	protected AtomicBoolean cancelled =  new AtomicBoolean(false);
 	protected OnCancelListener cancelListener;
 	protected Task task;
 
@@ -135,24 +135,20 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     }
 
 	public void cancel() {
-		if(cancelled) {
-			// Already cancelled, don't do anything
-			return;
-		}
+		if(cancelled.compareAndSet(false, true)) {
+			if(task != null && task.isRunning()) {
+				if(cancelListener != null) {
+					cancelListener.onCancel();
+				} else {
+					task.cancel();
+				}
 
-		cancelled = true;
-		if(task != null && task.isRunning()) {
-			if(cancelListener != null) {
-				cancelListener.onCancel();
-			} else {
-				task.cancel();
+				task = null;
 			}
-
-			task = null;
 		}
 	}
 	public boolean isCancelled() {
-		return cancelled;
+		return cancelled.get();
 	}
 	public void setOnCancelListener(OnCancelListener listener) {
 		cancelListener = listener;

@@ -237,7 +237,7 @@ public class DownloadFile implements BufferFile {
 
 	@Override
 	public synchronized void onResume() {
-		if(!isFailedMax() && !isDownloading()) {
+		if(!isFailedMax() && !isDownloading() && !isDownloadCancelled()) {
 			download();
 		}
 	}
@@ -477,8 +477,10 @@ public class DownloadFile implements BufferFile {
 			}
 			
 			// Only run these if not interrupted, ie: cancelled
-			new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
-            		checkDownloads();
+			if(!isCancelled()) {
+				new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
+				checkDownloads();
+			}
 
 			return null;
         }

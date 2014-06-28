@@ -292,7 +292,7 @@ public class ImageLoader {
 				mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
 			} catch (Throwable x) {
 				Log.e(TAG, "Failed to download album art.", x);
-				cancelled = true;
+				cancelled.set(true);
 			}
 
 			return null;
@@ -358,7 +358,7 @@ public class ImageLoader {
 				}
 			} catch (Throwable x) {
 				Log.e(TAG, "Failed to download album art.", x);
-				cancelled = true;
+				cancelled.set(true);
 			}
 
 			return null;

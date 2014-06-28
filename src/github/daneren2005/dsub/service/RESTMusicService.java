@@ -92,6 +92,7 @@ import github.daneren2005.dsub.service.parser.UserParser;
 import github.daneren2005.dsub.service.parser.VersionParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
 import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
+import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
@@ -1526,7 +1527,7 @@ public class RESTMusicService implements MusicService {
 		HttpConnectionParams.setSoTimeout(newParams, networkTimeout);
 		httpClient.setParams(newParams);
 
-        final AtomicReference<Boolean> cancelled = new AtomicReference<Boolean>(false);
+        final AtomicReference<Boolean> isCancelled = new AtomicReference<Boolean>(false);
         int attempts = 0;
         while (true) {
             attempts++;
@@ -1535,10 +1536,11 @@ public class RESTMusicService implements MusicService {
 
             if (task != null) {
                 // Attempt to abort the HTTP request if the task is cancelled.
-                task.setOnCancelListener(new SilentBackgroundTask.OnCancelListener() {
+                task.setOnCancelListener(new BackgroundTask.OnCancelListener() {
                     @Override
                     public void onCancel() {
 						try {
+							isCancelled.set(true);
 							request.abort();
 						} catch(Exception e) {
 							Log.e(TAG, "Failed to stop http task");
@@ -1579,14 +1581,14 @@ public class RESTMusicService implements MusicService {
                 return response;
             } catch (IOException x) {
                 request.abort();
-                if (attempts >= HTTP_REQUEST_MAX_ATTEMPTS || cancelled.get()) {
+                if (attempts >= HTTP_REQUEST_MAX_ATTEMPTS || isCancelled.get()) {
                     throw x;
                 }
                 if (progressListener != null) {
                     String msg = context.getResources().getString(R.string.music_service_retry, attempts, HTTP_REQUEST_MAX_ATTEMPTS - 1);
                     progressListener.updateProgress(msg);
                 }
-                Log.w(TAG, "Got IOException (" + attempts + "), will retry", x);
+                Log.w(TAG, "Got IOException " + x + " (" + attempts + "), will retry");
                 increaseTimeouts(requestParams);
 				Thread.sleep(2000L);
             }

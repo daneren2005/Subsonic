@@ -36,7 +36,7 @@ public abstract class TabBackgroundTask<T> extends BackgroundTask<T> {
 
 	@Override
     public boolean isCancelled() {
-        return !tabFragment.isAdded() || cancelled;
+        return !tabFragment.isAdded() || cancelled.get();
     }
 
     @Override
