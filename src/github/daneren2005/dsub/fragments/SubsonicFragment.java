@@ -67,6 +67,8 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.UpdateView;
+
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -124,6 +126,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	@Override
 	public void onResume() {
 		super.onResume();
+		UpdateView.triggerUpdate();
 	}
 
 	@Override
