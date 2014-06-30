@@ -69,6 +69,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.DownloadFileAdapter;
 import github.daneren2005.dsub.view.FadeOutAnimation;
 import github.daneren2005.dsub.view.SongView;
+import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.VisualizerView;
 
@@ -1008,6 +1009,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			playlistFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_in));
 			playlistFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_out));
 			playlistFlipper.setDisplayedChild(1);
+			
+			UpdateView.triggerUpdate();
 		}
 	}
 
