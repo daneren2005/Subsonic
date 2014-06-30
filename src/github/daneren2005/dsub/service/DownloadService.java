@@ -593,7 +593,7 @@ public class DownloadService extends Service {
 		reset();
 		downloadList.clear();
 		revision++;
-		if (currentDownloading != null) {
+		if (currentDownloading != null && !backgroundDownloadList.contains(currentDownloading)) {
 			currentDownloading.cancelDownload();
 			currentDownloading = null;
 		}
