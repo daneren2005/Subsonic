@@ -70,7 +70,7 @@ public class AdminFragment extends SelectListFragment<User> {
 		MenuInflater inflater = context.getMenuInflater();
 		if(UserUtil.isCurrentAdmin()) {
 			inflater.inflate(R.menu.admin_context, menu);
-		} else if(UserUtil.isCurrentRole("settingsRole")) {
+		} else if(UserUtil.isCurrentRole(User.SETTINGS)) {
 			inflater.inflate(R.menu.admin_context_user, menu);
 		}
 	}
