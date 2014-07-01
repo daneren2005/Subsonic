@@ -82,7 +82,7 @@ public class UserFragment extends SubsonicFragment{
 
 		if(UserUtil.isCurrentAdmin() && Util.checkServerVersion(context, "1.10")) {
 			menuInflater.inflate(R.menu.user, menu);
-		} else if(UserUtil.isCurrentRole("settingsRole")) {
+		} else if(UserUtil.isCurrentRole(User.SETTINGS)) {
 			menuInflater.inflate(R.menu.user_user, menu);
 		} else {
 			menuInflater.inflate(R.menu.empty, menu);
