@@ -107,17 +107,17 @@ public final class UserUtil {
 	}
 
 	public static boolean isCurrentAdmin() {
-		return isCurrentRole("adminRole");
+		return isCurrentRole(User.ADMIN);
 	}
 	
 	public static boolean canPodcast() {
-		return isCurrentRole("podcastRole");
+		return isCurrentRole(User.PODCAST);
 	}
 	public static boolean canShare() {
-		return isCurrentRole("shareRole");
+		return isCurrentRole(User.SHARE);
 	}
 	public static boolean canJukebox() {
-		return isCurrentRole("jukeboxRole");
+		return isCurrentRole(User.JUKEBOX);
 	}
 
 	public static boolean isCurrentRole(String role) {
