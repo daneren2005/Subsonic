@@ -114,7 +114,9 @@ public class AdminFragment extends SelectListFragment<User> {
 		try {
 			// Will only work if user is admin
 			List<User> users = musicService.getUsers(refresh, context, listener);
-			UserUtil.refreshCurrentUser(context);
+			if(refresh) {
+				UserUtil.refreshCurrentUser(context, true);
+			}
 			return users;
 		} catch(SubsonicRESTException e) {
 			// Delete cached users if not allowed to get them
@@ -126,7 +128,7 @@ public class AdminFragment extends SelectListFragment<User> {
 			List<User> users = new ArrayList<User>();
 			users.add(musicService.getUser(refresh, UserUtil.getCurrentUsername(context), context, listener));
 
-			UserUtil.refreshCurrentUser(context);
+			UserUtil.refreshCurrentUser(context, false);
 			return users;
 		}
 	}
