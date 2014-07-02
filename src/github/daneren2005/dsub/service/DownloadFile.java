@@ -263,15 +263,22 @@ public class DownloadFile implements BufferFile {
 
     public void delete() {
         cancelDownload();
+        
+        // Remove from mediaStore BEFORE deleting file since it calls getCompleteFile
+		deleteFromStore();
+		
+		// Delete all possible versions of the file
         Util.delete(partialFile);
         Util.delete(completeFile);
         Util.delete(saveFile);
-        mediaStoreService.deleteFromMediaStore(this);
     }
 
     public void unpin() {
         if (saveFile.exists()) {
+        	// Delete old store entry before renaming to pinned file
+			deleteFromStore();
             saveFile.renameTo(completeFile);
+			saveToStore();
         }
     }
 
@@ -305,14 +312,17 @@ public class DownloadFile implements BufferFile {
 	public void setPlaying(boolean isPlaying) {
 		try {
 			if(saveWhenDone && !isPlaying) {
+				deleteFromStore();
 				Util.renameFile(completeFile, saveFile);
+				saveToStore();
 				saveWhenDone = false;
 			} else if(completeWhenDone && !isPlaying) {
 				if(save) {
 					Util.renameFile(partialFile, saveFile);
-                    mediaStoreService.saveInMediaStore(DownloadFile.this);
+                    saveToStore();
 				} else {
 					Util.renameFile(partialFile, completeFile);
+					saveToStore();
 				}
 				completeWhenDone = false;
 			}
@@ -325,12 +335,28 @@ public class DownloadFile implements BufferFile {
 	public void renamePartial() {
 		try {
 			Util.renameFile(partialFile, completeFile);
+			saveToStore();
 		} catch(IOException ex) {
 			Log.w(TAG, "Failed to rename file " + partialFile + " to " + completeFile, ex);
 		}
 	}
 	public boolean getPlaying() {
 		return isPlaying;
+	}
+	
+	private void deleteFromStore() {
+		try {
+			mediaStoreService.deleteFromMediaStore(this);
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to remove from store", e);
+		}
+	}
+	private void saveToStore() {
+		try {
+			mediaStoreService.saveInMediaStore(this);
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to save in media store", e);
+		}
 	}
 
     @Override
@@ -372,7 +398,9 @@ public class DownloadFile implements BufferFile {
 						if(isPlaying) {
 							saveWhenDone = true;
 						} else {
+							deleteFromStore();
 							Util.renameFile(completeFile, saveFile);
+							DownloadFile.this.saveToStore();
 						}
                     } else {
                         Log.i(TAG, completeFile + " already exists. Skipping.");
@@ -429,14 +457,10 @@ public class DownloadFile implements BufferFile {
 				} else {
 					if(save) {
 						Util.renameFile(partialFile, saveFile);
-						try {
-							mediaStoreService.saveInMediaStore(DownloadFile.this);
-						} catch(Exception e) {
-							Log.w(TAG, "Failed to save in media store", e);
-						}
 					} else {
 						Util.renameFile(partialFile, completeFile);
 					}
+					DownloadFile.this.saveToStore();
 				}
 
             } catch(InterruptedException x) {
