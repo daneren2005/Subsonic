@@ -237,7 +237,7 @@ public class DownloadFile implements BufferFile {
 
 	@Override
 	public synchronized void onResume() {
-		if(!isFailedMax() && !isDownloading() && !isDownloadCancelled()) {
+		if(!isWorkDone() && !isFailedMax() && !isDownloading() && !isDownloadCancelled()) {
 			download();
 		}
 	}
