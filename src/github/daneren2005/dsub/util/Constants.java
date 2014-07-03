@@ -61,6 +61,7 @@ public final class Constants {
 	public static final String INTENT_EXTRA_NAME_SHARE = "subsonic.share";
 	public static final String INTENT_EXTRA_FRAGMENT_TYPE = "fragmentType";
 	public static final String INTENT_EXTRA_REFRESH_LISTINGS = "refreshListings";
+	public static final String INTENT_EXTRA_SEARCH_SONG = "searchSong";
 
     // Preferences keys.
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";

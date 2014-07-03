@@ -80,6 +80,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	boolean restoredInstance = false;
 	boolean lookupParent = false;
 	boolean largeAlbums = false;
+	String lookupEntry;
 	
 	public SelectDirectoryFragment() {
 		super();
@@ -121,6 +122,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
 			artist = args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false);
+			lookupEntry = args.getString(Constants.INTENT_EXTRA_SEARCH_SONG);
 
 			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);
 			if(childId != null) {
@@ -698,6 +700,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			entryList.setVisibility(View.VISIBLE);
 		}
         context.supportInvalidateOptionsMenu();
+
+		if(lookupEntry != null) {
+			for(int i = 0; i < entries.size(); i++) {
+				if(lookupEntry.equals(entries.get(i).getTitle())) {
+					entryList.setSelection(i + entryList.getHeaderViewsCount());
+					lookupEntry = null;
+					break;
+				}
+			}
+		}
 
         Bundle args = getArguments();
         boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
