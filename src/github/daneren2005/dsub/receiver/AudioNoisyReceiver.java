@@ -39,7 +39,7 @@ public class AudioNoisyReceiver extends BroadcastReceiver {
 		}
 
 		if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals (intent.getAction ())) {
-				if(!downloadService.isRemoteEnabled()  && downloadService.getPlayerState() == PlayerState.STARTED) {
+				if(!downloadService.isRemoteEnabled()  && (downloadService.getPlayerState() == PlayerState.STARTED || downloadService.getPlayerState() == PlayerState.PAUSED_TEMP)) {
 					SharedPreferences prefs = Util.getPreferences(downloadService);
 					int pausePref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT, "0"));
 					if(pausePref == 0) {
