@@ -245,7 +245,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d(TAG, "Preference changed: " + key);
+		// Random error I have no idea how to reproduce
+        if(sharedPreferences == null) {
+			return;
+		}
+
         update();
 
         if (Constants.PREFERENCES_KEY_HIDE_MEDIA.equals(key)) {
