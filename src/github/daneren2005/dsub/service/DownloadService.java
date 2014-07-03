@@ -1606,7 +1606,7 @@ public class DownloadService extends Service {
 			checkShufflePlay();
 		}
 
-		if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this) || Util.isOffline(this)) {
+		if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this, true) || Util.isOffline(this)) {
 			return;
 		}
 
