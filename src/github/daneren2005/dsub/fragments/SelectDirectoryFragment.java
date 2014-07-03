@@ -680,9 +680,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 
 			listAdapter = new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize);
-		} else if((albumListType == null || "starred".equals(albumListType)) && largeAlbums) {
+		} else if(albumListType == null || "starred".equals(albumListType)) {
 			// Only set standard album adapter if not album list and largeAlbums is true
-			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
+			if(largeAlbums) {
+				albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
+			}
 		} else {
 			// If album list, use infinite adapters for either depending on whether or not largeAlbums is true
 			if(largeAlbums) {
