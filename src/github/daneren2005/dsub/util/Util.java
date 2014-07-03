@@ -873,15 +873,22 @@ public final class Util {
 		return Util.getScaledHeight((double) bitmap.getHeight(), (double) bitmap.getWidth(), width);
 	}
 
-    public static boolean isNetworkConnected(Context context) {
+	public static boolean isNetworkConnected(Context context) {
+		return isNetworkConnected(context, false);
+	}
+    public static boolean isNetworkConnected(Context context, boolean streaming) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean connected = networkInfo != null && networkInfo.isConnected();
 
-        boolean wifiConnected = connected && networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
-        boolean wifiRequired = isWifiRequiredForDownload(context);
+		if(streaming) {
+			boolean wifiConnected = connected && networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+			boolean wifiRequired = isWifiRequiredForDownload(context);
 
-        return connected && (!wifiRequired || wifiConnected);
+			return connected && (!wifiRequired || wifiConnected);
+		} else {
+			return connected;
+		}
     }
 	public static boolean isWifiConnected(Context context) {
 		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
