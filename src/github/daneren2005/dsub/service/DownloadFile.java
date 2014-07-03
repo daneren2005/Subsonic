@@ -352,10 +352,12 @@ public class DownloadFile implements BufferFile {
 		}
 	}
 	private void saveToStore() {
-		try {
-			mediaStoreService.saveInMediaStore(this);
-		} catch(Exception e) {
-			Log.w(TAG, "Failed to save in media store", e);
+		if(!Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HIDE_MEDIA, false)) {
+			try {
+				mediaStoreService.saveInMediaStore(this);
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to save in media store", e);
+			}
 		}
 	}
 
