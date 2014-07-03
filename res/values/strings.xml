@@ -344,7 +344,7 @@
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
 	<string name="settings.playlist_title">Play</string>
-	<string name="settings.playlist_random_size_title">Random Size</string>
+	<string name="settings.playlist_random_size_title">Shuffle Playlist Size</string>
 	<string name="settings.sleep_timer_title">Sleep Timer</string>
 	<string name="settings.sleep_timer_duration_title">Sleep Timer Duration</string>
 	<string name="settings.sleep_timer_off">Off</string>

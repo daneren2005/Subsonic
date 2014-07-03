@@ -150,11 +150,7 @@
 		<PreferenceCategory
 			android:title="@string/settings.other_title">
 
-			<CheckBoxPreference
-				android:title="@string/settings.play_now_after"
-				android:summary="@string/settings.play_now_after_summary"
-				android:key="playNowAfter"
-				android:defaultValue="false"/>
+
 		</PreferenceCategory>
 	</PreferenceScreen>
 
@@ -334,6 +330,12 @@
 					android:title="@string/settings.persistent_title"
 					android:summary="@string/settings.persistent_summary"
 					android:key="persistentNotification"
+					android:defaultValue="false"/>
+
+				<CheckBoxPreference
+					android:title="@string/settings.play_now_after"
+					android:summary="@string/settings.play_now_after_summary"
+					android:key="playNowAfter"
 					android:defaultValue="false"/>
 		</PreferenceCategory>
 
