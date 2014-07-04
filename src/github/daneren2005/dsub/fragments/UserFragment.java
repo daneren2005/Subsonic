@@ -70,7 +70,7 @@ public class UserFragment extends SubsonicFragment{
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		activity.invalidateOptionsMenu();
+		((SubsonicActivity) activity).supportInvalidateOptionsMenu();
 	}
 
 	@Override
