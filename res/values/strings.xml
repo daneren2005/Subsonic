@@ -410,7 +410,7 @@
 	<string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.  Requires Subsonic 4.7+</string>
 	<string name="settings.override_system_language">Override System Language</string>
 	<string name="settings.override_system_language_summary">Display app in english even if the system language is something DSub has a translation for.  May need to clear the app from memory for changes to take affect.</string>
-	<string name="settings.drawer_items_title">Drawer Items</string>
+	<string name="settings.drawer_items_title">Drawer Tabs</string>
 	<string name="settings.play_now_after">Play Now - After</string>
 	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
 	<string name="settings.large_album_art">Large Album Art</string>

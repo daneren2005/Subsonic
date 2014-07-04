@@ -102,22 +102,10 @@
 				android:defaultValue="true"/>
 
 		</PreferenceCategory>
+	</PreferenceScreen>
 
-		<PreferenceCategory
-			android:title="@string/button_bar.chat">
-
-			<CheckBoxPreference
-				android:title="@string/settings.chat_enabled"
-				android:summary="@string/settings.chat_enabled_summary"
-				android:key="chatEnabled"
-				android:defaultValue="true"/>
-
-			<EditTextPreference
-				android:title="@string/settings.chat_refresh"
-				android:key="chatRefreshRate"
-				android:defaultValue="30"
-				android:digits="0123456789"/>
-		</PreferenceCategory>
+	<PreferenceScreen
+		android:title="@string/settings.drawer_items_title">
 
 		<PreferenceCategory
 			android:title="@string/settings.drawer_items_title">
@@ -141,6 +129,12 @@
 				android:defaultValue="true"/>
 
 			<CheckBoxPreference
+				android:title="@string/settings.chat_enabled"
+				android:summary="@string/settings.chat_enabled_summary"
+				android:key="chatEnabled"
+				android:defaultValue="true"/>
+
+			<CheckBoxPreference
 				android:title="@string/settings.admin_enabled"
 				android:summary="@string/settings.admin_enabled_summary"
 				android:key="adminEnabled"
@@ -148,9 +142,13 @@
 		</PreferenceCategory>
 
 		<PreferenceCategory
-			android:title="@string/settings.other_title">
+			android:title="@string/button_bar.chat">
 
-
+			<EditTextPreference
+				android:title="@string/settings.chat_refresh"
+				android:key="chatRefreshRate"
+				android:defaultValue="30"
+				android:digits="0123456789"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 
