@@ -155,7 +155,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-		if(Util.checkServerVersion(context, "1.8") && UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
+		if(Util.checkServerVersion(context, "1.8") && playlist.getOwner() != null && playlist.getOwner().equals(UserUtil.getCurrentUsername(context))) {
 			args.putBoolean(Constants.INTENT_EXTRA_NAME_PLAYLIST_OWNER, true);
 		}
 		fragment.setArguments(args);
