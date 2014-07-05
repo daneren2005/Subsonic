@@ -27,7 +27,7 @@
 			<ListPreference
 				android:title="@string/settings.theme_title"
 				android:key="theme"
-				android:defaultValue="holo"
+				android:defaultValue="light"
 				android:entryValues="@array/themeValues"
 				android:entries="@array/themeNames"/>
 				

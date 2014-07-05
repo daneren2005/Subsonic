@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -84,6 +85,7 @@ import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -273,6 +275,25 @@ public final class Util {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putString(Constants.PREFERENCES_KEY_THEME, theme);
 		editor.commit();
+	}
+
+	public static void applyTheme(Context context, String theme) {
+		if ("dark".equals(theme)) {
+			context.setTheme(R.style.Theme_DSub_Dark);
+		} else if ("black".equals(theme)) {
+			context.setTheme(R.style.Theme_DSub_Black);
+		} else if ("holo".equals(theme)) {
+			context.setTheme(R.style.Theme_DSub_Holo);
+		} else {
+			context.setTheme(R.style.Theme_DSub_Light);
+		}
+
+		SharedPreferences prefs = Util.getPreferences(context);
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
+			Configuration config = new Configuration();
+			config.locale = Locale.ENGLISH;
+			context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+		}
 	}
 	
 	public static boolean getDisplayTrack(Context context) {

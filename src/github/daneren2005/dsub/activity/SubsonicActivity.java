@@ -629,22 +629,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			Util.setTheme(this, theme);
 		}
 		
-		if ("dark".equals(theme)) {
-			setTheme(R.style.Theme_DSub_Dark);
-		} else if ("black".equals(theme)) {
-			setTheme(R.style.Theme_DSub_Black);
-		} else if ("light".equals(theme)) {
-			setTheme(R.style.Theme_DSub_Light);
-		} else {
-			setTheme(R.style.Theme_DSub_Holo);
-		}
-
-		SharedPreferences prefs = Util.getPreferences(this);
-		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
-			Configuration config = new Configuration();
-			config.locale = Locale.ENGLISH;
-			getResources().updateConfiguration(config,getResources().getDisplayMetrics());
-		}
+		Util.applyTheme(this, theme);
 	}
 	private void applyFullscreen() {
 		fullScreen = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false);
