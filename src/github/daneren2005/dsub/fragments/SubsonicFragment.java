@@ -732,11 +732,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		downloadRecursively(id, name, isDirectory, save, append, autoplay, shuffle, background, false);
 	}
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
-		LoadingTask<List<MusicDirectory.Entry>> task = new LoadingTask<List<MusicDirectory.Entry>>(context) {
+		LoadingTask<Boolean> task = new LoadingTask<Boolean>(context) {
 			private static final int MAX_SONGS = 500;
 
 			@Override
-			protected List<MusicDirectory.Entry> doInBackground() throws Throwable {
+			protected Boolean doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				MusicDirectory root;
 				if(share != null) {
@@ -755,7 +755,26 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 				List<MusicDirectory.Entry> songs = new LinkedList<MusicDirectory.Entry>();
 				getSongsRecursively(root, songs);
-				return songs;
+
+				DownloadService downloadService = getDownloadService();
+				boolean transition = false;
+				if (!songs.isEmpty() && downloadService != null) {
+					if (!append) {
+						downloadService.clear();
+					}
+					if(!background) {
+						downloadService.download(songs, save, autoplay, playNext, false);
+						if(!append) {
+							transition = true;
+						}
+					}
+					else {
+						downloadService.downloadBackground(songs, save);
+					}
+				}
+				artistOverride = false;
+
+				return transition;
 			}
 
 			private void getSongsRecursively(MusicDirectory parent, List<MusicDirectory.Entry> songs) throws Exception {
@@ -782,24 +801,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 
 			@Override
-			protected void done(List<MusicDirectory.Entry> songs) {
-				DownloadService downloadService = getDownloadService();
-				if (!songs.isEmpty() && downloadService != null) {
-					if (!append) {
-						downloadService.clear();
-					}
-					warnIfNetworkOrStorageUnavailable();
-					if(!background) {
-						downloadService.download(songs, save, autoplay, playNext, false);
-						if(!append) {
-							Util.startActivityWithoutTransition(context, DownloadActivity.class);
-						}
-					}
-					else {
-						downloadService.downloadBackground(songs, save);
-					}
+			protected void done(Boolean result) {
+				warnIfNetworkOrStorageUnavailable();
+
+				if(result) {
+					Util.startActivityWithoutTransition(context, DownloadActivity.class);
 				}
-				artistOverride = false;
 			}
 		};
 
