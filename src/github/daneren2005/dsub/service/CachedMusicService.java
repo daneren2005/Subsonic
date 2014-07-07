@@ -511,13 +511,15 @@ public class CachedMusicService implements MusicService {
 	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
 		User result = null;
 
-		if(!refresh) {
-			result = FileUtil.deserialize(context, getCacheName(context, "user-" + username), User.class);
-		}
-
-		if(result == null) {
+		try {
 			result = musicService.getUser(refresh, username, context, progressListener);
 			FileUtil.serialize(context, result, getCacheName(context, "user-" + username));
+		} catch(Exception e) {
+			// Don't care
+		}
+		
+		if(result == null && !refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "user-" + username), User.class);
 		}
 
 		return result;
