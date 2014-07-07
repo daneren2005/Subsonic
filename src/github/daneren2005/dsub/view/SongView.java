@@ -87,11 +87,6 @@ public class SongView extends UpdateView implements Checkable {
 		boolean checkable = (Boolean) obj2;
 		
         StringBuilder artist = new StringBuilder(40);
-
-        String bitRate = null;
-        if (song.getBitRate() != null) {
-        	bitRate = String.format(getContext().getString(R.string.song_details_kbps), song.getBitRate());
-        }
         
         String fileFormat = null;
         if (song.getTranscodedSuffix() != null && !song.getTranscodedSuffix().equals(song.getSuffix())) {
@@ -112,20 +107,24 @@ public class SongView extends UpdateView implements Checkable {
 				artist.append(song.getArtist());
 			}
 			
-			String status = (song instanceof PodcastEpisode) ? ((PodcastEpisode)song).getStatus() : "";
-			artist.append(" (");
-			if("error".equals(status)) {
-				artist.append(getContext().getString(R.string.song_details_error));
-			} else if("skipped".equals(status)) {
-				artist.append(getContext().getString(R.string.song_details_skipped));
-			} else if("downloading".equals(status)) {
-				artist.append(getContext().getString(R.string.song_details_downloading));
-			} else {
-				artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
+			if(song instanceof PodcastEpisode) {
+				String status = ((PodcastEpisode) song).getStatus();
+				int statusRes = -1;
+				
+				if("error".equals(status)) {
+					statusRes = R.string.song_details_error;
+				} else if("skipped".equals(status)) {
+					statusRes = R.string.song_details_skipped;
+				} else if("downloading".equals(status)) {
+					statusRes = R.string.song_details_downloading;
+				}
+				
+				if(statusRes != -1) {
+					artist.append(" (");
+					artist.append(getContext().getString(statusRes));
+					artist.append(")");
+				}
 			}
-			artist.append(")");
-		} else {
-			artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
 		}
 		
 		String title = song.getTitle();
