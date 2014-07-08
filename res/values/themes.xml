@@ -120,6 +120,10 @@
 	<style name="DSub.TextViewStyle" parent="android:Widget.TextView">
 	</style>
 
+	<style name="DSub.TextViewStyle.Bold" parent="android:Widget.TextView">
+		<item name="android:textStyle">bold</item>
+	</style>
+
 	<style name="DSub.ButtonStyle.Dark" parent="android:Widget.Holo.Button">
 	</style>
 	<style name="DSub.ButtonStyle.Light" parent="android:Widget.Holo.Light.Button">

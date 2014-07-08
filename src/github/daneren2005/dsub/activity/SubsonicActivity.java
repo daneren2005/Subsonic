@@ -50,6 +50,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -90,7 +91,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	ActionBarDrawerToggle drawerToggle;
 	DrawerAdapter drawerAdapter;
 	ListView drawerList;
-	View lastSelectedView = null;
+	TextView lastSelectedView = null;
 	int lastSelectedPosition = 0;
 	boolean drawerOpen = false;
 
@@ -177,10 +178,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 					if(lastSelectedView != view) {
 						if(lastSelectedView != null) {
-							lastSelectedView.setBackgroundResource(android.R.color.transparent);
+							lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle);
 						}
-						view.setBackgroundResource(R.color.dividerColor);
-						lastSelectedView = view;
+						lastSelectedView = (TextView) view.findViewById(R.id.drawer_name);
+						lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
 						lastSelectedPosition = position;
 					}
 				}
@@ -209,9 +210,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				}
 
 				if(lastSelectedView == null) {
-					lastSelectedView = drawerList.getChildAt(lastSelectedPosition);
+					lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
 					if(lastSelectedView != null) {
-						lastSelectedView.setBackgroundResource(R.color.dividerColor);
+						lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
 					}
 				}
 
@@ -442,6 +443,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 						lastSelectedPosition = drawerAdapter.getAdapterPosition(i);
 						break;
 					}
+				}
+			}
+
+			if(drawerList.getChildAt(lastSelectedPosition) == null) {
+				drawerAdapter.setSelectedPosition(lastSelectedPosition);
+			} else {
+				lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
+				if(lastSelectedView != null) {
+					lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
 				}
 			}
 		}

@@ -4,6 +4,10 @@
 		<item name="android:fontFamily">sans-serif-light</item>
 	</style>
 
+	<style name="DSub.TextViewStyle.Bold" parent="android:Widget.TextView">
+		<item name="android:fontFamily">sans-serif-regular</item>
+	</style>
+
 	<style name="DSub.ButtonStyle" parent="android:Widget.Holo.Button">
 		<item name="android:fontFamily">sans-serif-light</item>
 	</style>
