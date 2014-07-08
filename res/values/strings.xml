@@ -237,8 +237,6 @@
 		\nLast Updated: %4$s
 		\nComment: %5$s</string>
 
-    <string name="song_details.all">%1$s %2$s</string>
-    <string name="song_details.kbps">%d kbps</string>
 	<string name="song_details.error">Error</string>
 	<string name="song_details.skipped">Skipped</string>
 	<string name="song_details.downloading">Downloading</string>

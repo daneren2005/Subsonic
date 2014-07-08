@@ -149,9 +149,6 @@
     <string name="updated_playlist_error">Не удалось обновить \"%s\", пожалуйста, попробуйте позже.</string>
 	<string name="removed_playlist">Удалено %1$s из \"%2$s\" композиций</string>
 
-    <string name="song_details.all">%1$s %2$s</string>
-    <string name="song_details.kbps">%d kbps</string>
-
     <string name="lyrics.nomatch">Текст не найден</string>
 
     <string name="error.label">Ошибка</string>

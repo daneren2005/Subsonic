@@ -237,8 +237,6 @@
 		\nMis à jour : %4$s
 		\nCommentaire : %5$s</string>
 
-    <string name="song_details.all">%1$s %2$s</string>
-    <string name="song_details.kbps">%d kbps</string>
 	<string name="song_details.error">Erreur</string>
 	<string name="song_details.skipped">Ignoré</string>
 	<string name="song_details.downloading">Chargement</string>
