@@ -87,13 +87,6 @@ public class SongView extends UpdateView implements Checkable {
 		boolean checkable = (Boolean) obj2;
 		
         StringBuilder artist = new StringBuilder(40);
-        
-        String fileFormat = null;
-        if (song.getTranscodedSuffix() != null && !song.getTranscodedSuffix().equals(song.getSuffix())) {
-        	fileFormat = String.format("%s > %s", song.getSuffix(), song.getTranscodedSuffix());
-    	} else {
-            fileFormat = song.getSuffix();
-        }
 
 		if(!song.isVideo()) {
 			if(song instanceof PodcastEpisode) {
