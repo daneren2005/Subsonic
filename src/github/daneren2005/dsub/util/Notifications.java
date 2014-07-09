@@ -65,13 +65,13 @@ public final class Notifications {
 		boolean remote = downloadService.isRemoteEnabled();
 		if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
 			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-			setupViews(expandedContentView,context,song, playing, remote);
+			setupViews(expandedContentView ,context, song, true, playing, remote);
 			notification.bigContentView = expandedContentView;
 			notification.priority = Notification.PRIORITY_HIGH;
 		}
 
 		RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
-		setupViews(smallContentView, context, song, playing, remote);
+		setupViews(smallContentView, context, song, false, playing, remote);
 		notification.contentView = smallContentView;
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
@@ -103,7 +103,7 @@ public final class Notifications {
 		DSubWidgetProvider.notifyInstances(context, downloadService, playing);
 	}
 
-	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean playing, boolean remote){
+	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote){
 
 		// Use the same text for the ticker and the expanded notification
 		String title = song.getTitle();
@@ -141,7 +141,8 @@ public final class Notifications {
 			rv.setTextColor(R.id.notification_artist, colors.getSecond());
 		}
 
-		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+		boolean persistent = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false);
+		if(persistent && !expanded) {
 			rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_play);
 			rv.setImageViewResource(R.id.control_pause, R.drawable.notification_next);
 			rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
@@ -150,7 +151,7 @@ public final class Notifications {
 		// Create actions for media buttons
 		PendingIntent pendingIntent;
 		int previous = 0, pause = 0, next = 0, close = 0;
-		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+		if(persistent && !expanded) {
 			pause = R.id.control_previous;
 			next = R.id.control_pause;
 			close = R.id.control_next;
@@ -160,7 +161,7 @@ public final class Notifications {
 			next = R.id.control_next;
 		}
 
-		if(remote && close == 0) {
+		if((remote || persistent) && close == 0) {
 			close = R.id.notification_close;
 			rv.setViewVisibility(close, View.VISIBLE);
 		}
