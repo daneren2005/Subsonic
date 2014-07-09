@@ -662,7 +662,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		// Needs to be added here, GB crashes if you to try to remove the header view before adapter is set
 		if(addAlbumHeader) {
-			entryList.addHeaderView(albumList);
+			if(showHeader) {
+				entryList.addHeaderView(albumList);
+			} else {
+				ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
+				albumList = (GridView) inflater.inflate(R.layout.grid_view, rootGroup, false);
+				rootGroup.removeView(entryList);
+				rootGroup.addView(albumList);
+				
+				setupScrollList(albumList);
+			}
 			addAlbumHeader = false;
 		}
 
