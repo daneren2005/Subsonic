@@ -114,6 +114,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		getSupportActionBar().setCustomView(actionbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
+
+		if(getIntent().hasExtra(Constants.FRAGMENT_POSITION)) {
+			lastSelectedPosition = getIntent().getIntExtra(Constants.FRAGMENT_POSITION, 0);
+		}
 	}
 
 	@Override
@@ -154,6 +158,14 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public void finish() {
 		super.finish();
 		Util.disablePendingTransition(this);
+	}
+
+	@Override
+	public void startActivity(Intent intent) {
+		if("github.daneren2005.dsub.activity.DownloadActivity".equals(intent.getComponent().getClassName())) {
+			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+		}
+		super.startActivity(intent);
 	}
 
 	@Override
