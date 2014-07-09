@@ -67,6 +67,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
 		if(selectedPosition == position) {
 			textView.setTextAppearance(context, R.style.DSub_TextViewStyle_Bold);
+			selectedPosition = -1;
 		}
 
 		ImageView iconView = (ImageView) convertView.findViewById(R.id.drawer_icon);
