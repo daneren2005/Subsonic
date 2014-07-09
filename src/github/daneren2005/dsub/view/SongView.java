@@ -118,6 +118,11 @@ public class SongView extends UpdateView implements Checkable {
 					artist.append(")");
 				}
 			}
+
+			durationTextView.setText(Util.formatDuration(song.getDuration()));
+		} else {
+			findViewById(R.id.song_bottom).setVisibility(View.GONE);
+			statusTextView.setText(Util.formatDuration(song.getDuration()));
 		}
 		
 		String title = song.getTitle();
@@ -128,7 +133,6 @@ public class SongView extends UpdateView implements Checkable {
 
         titleTextView.setText(title);
 		artistTextView.setText(artist);
-        durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
 		revision = -1;
