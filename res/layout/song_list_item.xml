@@ -64,10 +64,12 @@
 				android:visibility="gone"/>
         </LinearLayout>
 
-        <LinearLayout android:orientation="horizontal"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_gravity="center_vertical">
+        <LinearLayout
+			android:id="@+id/song_bottom"
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical">
 
             <TextView
                     android:id="@+id/song_artist"

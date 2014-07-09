@@ -50,6 +50,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -90,7 +91,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	ActionBarDrawerToggle drawerToggle;
 	DrawerAdapter drawerAdapter;
 	ListView drawerList;
-	View lastSelectedView = null;
+	TextView lastSelectedView = null;
 	int lastSelectedPosition = 0;
 	boolean drawerOpen = false;
 
@@ -113,6 +114,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		getSupportActionBar().setCustomView(actionbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
+
+		if(getIntent().hasExtra(Constants.FRAGMENT_POSITION)) {
+			lastSelectedPosition = getIntent().getIntExtra(Constants.FRAGMENT_POSITION, 0);
+		}
 	}
 
 	@Override
@@ -156,6 +161,14 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 
 	@Override
+	public void startActivity(Intent intent) {
+		if("github.daneren2005.dsub.activity.DownloadActivity".equals(intent.getComponent().getClassName())) {
+			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+		}
+		super.startActivity(intent);
+	}
+
+	@Override
 	public void setContentView(int viewId) {
 		super.setContentView(R.layout.abstract_activity);
 		rootView = (ViewGroup) findViewById(R.id.content_frame);
@@ -177,10 +190,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 					if(lastSelectedView != view) {
 						if(lastSelectedView != null) {
-							lastSelectedView.setBackgroundResource(android.R.color.transparent);
+							lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle);
 						}
-						view.setBackgroundResource(R.color.dividerColor);
-						lastSelectedView = view;
+						lastSelectedView = (TextView) view.findViewById(R.id.drawer_name);
+						lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
 						lastSelectedPosition = position;
 					}
 				}
@@ -209,9 +222,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				}
 
 				if(lastSelectedView == null) {
-					lastSelectedView = drawerList.getChildAt(lastSelectedPosition);
+					lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
 					if(lastSelectedView != null) {
-						lastSelectedView.setBackgroundResource(R.color.dividerColor);
+						lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
 					}
 				}
 
@@ -444,6 +457,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					}
 				}
 			}
+
+			if(drawerList.getChildAt(lastSelectedPosition) == null) {
+				drawerAdapter.setSelectedPosition(lastSelectedPosition);
+			} else {
+				lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
+				if(lastSelectedView != null) {
+					lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
+				}
+			}
 		}
 	}
 
@@ -629,22 +651,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			Util.setTheme(this, theme);
 		}
 		
-		if ("dark".equals(theme)) {
-			setTheme(R.style.Theme_DSub_Dark);
-		} else if ("black".equals(theme)) {
-			setTheme(R.style.Theme_DSub_Black);
-		} else if ("light".equals(theme)) {
-			setTheme(R.style.Theme_DSub_Light);
-		} else {
-			setTheme(R.style.Theme_DSub_Holo);
-		}
-
-		SharedPreferences prefs = Util.getPreferences(this);
-		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
-			Configuration config = new Configuration();
-			config.locale = Locale.ENGLISH;
-			getResources().updateConfiguration(config,getResources().getDisplayMetrics());
-		}
+		Util.applyTheme(this, theme);
 	}
 	private void applyFullscreen() {
 		fullScreen = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false);

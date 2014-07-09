@@ -326,7 +326,7 @@ public class DownloadServiceLifecycleSupport {
 						case TelephonyManager.CALL_STATE_OFFHOOK:
 							if (downloadService.getPlayerState() == PlayerState.STARTED) {
 								resumeAfterCall = true;
-								downloadService.pause();
+								downloadService.pause(true);
 							}
 							break;
 						case TelephonyManager.CALL_STATE_IDLE:

@@ -27,7 +27,7 @@
 			<ListPreference
 				android:title="@string/settings.theme_title"
 				android:key="theme"
-				android:defaultValue="holo"
+				android:defaultValue="light"
 				android:entryValues="@array/themeValues"
 				android:entries="@array/themeNames"/>
 				
@@ -102,22 +102,10 @@
 				android:defaultValue="true"/>
 
 		</PreferenceCategory>
+	</PreferenceScreen>
 
-		<PreferenceCategory
-			android:title="@string/button_bar.chat">
-
-			<CheckBoxPreference
-				android:title="@string/settings.chat_enabled"
-				android:summary="@string/settings.chat_enabled_summary"
-				android:key="chatEnabled"
-				android:defaultValue="true"/>
-
-			<EditTextPreference
-				android:title="@string/settings.chat_refresh"
-				android:key="chatRefreshRate"
-				android:defaultValue="30"
-				android:digits="0123456789"/>
-		</PreferenceCategory>
+	<PreferenceScreen
+		android:title="@string/settings.drawer_items_title">
 
 		<PreferenceCategory
 			android:title="@string/settings.drawer_items_title">
@@ -141,6 +129,12 @@
 				android:defaultValue="true"/>
 
 			<CheckBoxPreference
+				android:title="@string/settings.chat_enabled"
+				android:summary="@string/settings.chat_enabled_summary"
+				android:key="chatEnabled"
+				android:defaultValue="true"/>
+
+			<CheckBoxPreference
 				android:title="@string/settings.admin_enabled"
 				android:summary="@string/settings.admin_enabled_summary"
 				android:key="adminEnabled"
@@ -148,13 +142,13 @@
 		</PreferenceCategory>
 
 		<PreferenceCategory
-			android:title="@string/settings.other_title">
+			android:title="@string/button_bar.chat">
 
-			<CheckBoxPreference
-				android:title="@string/settings.play_now_after"
-				android:summary="@string/settings.play_now_after_summary"
-				android:key="playNowAfter"
-				android:defaultValue="false"/>
+			<EditTextPreference
+				android:title="@string/settings.chat_refresh"
+				android:key="chatRefreshRate"
+				android:defaultValue="30"
+				android:digits="0123456789"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 
@@ -334,6 +328,12 @@
 					android:title="@string/settings.persistent_title"
 					android:summary="@string/settings.persistent_summary"
 					android:key="persistentNotification"
+					android:defaultValue="false"/>
+
+				<CheckBoxPreference
+					android:title="@string/settings.play_now_after"
+					android:summary="@string/settings.play_now_after_summary"
+					android:key="playNowAfter"
 					android:defaultValue="false"/>
 		</PreferenceCategory>
 

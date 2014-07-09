@@ -52,12 +52,12 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 
 	@Override
     public boolean isCancelled() {
-        return (tabActivity instanceof SubsonicActivity && ((SubsonicActivity) tabActivity).isDestroyedCompat()) || cancelled;
+        return (tabActivity instanceof SubsonicActivity && ((SubsonicActivity) tabActivity).isDestroyedCompat()) || cancelled.get();
     }
 	
 	@Override
     public void updateProgress(final String message) {
-		if(!cancelled) {
+		if(!cancelled.get()) {
 			getHandler().post(new Runnable() {
 				@Override
 				public void run() {

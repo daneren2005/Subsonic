@@ -80,6 +80,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	boolean restoredInstance = false;
 	boolean lookupParent = false;
 	boolean largeAlbums = false;
+	String lookupEntry;
 	
 	public SelectDirectoryFragment() {
 		super();
@@ -121,6 +122,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			albumListSize = args.getInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 0);
 			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
 			artist = args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false);
+			lookupEntry = args.getString(Constants.INTENT_EXTRA_SEARCH_SONG);
 
 			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);
 			if(childId != null) {
@@ -680,9 +682,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 
 			listAdapter = new AlbumListAdapter(context, entryAdapter, albumListType, albumListExtra, albumListSize);
-		} else if((albumListType == null || "starred".equals(albumListType)) && largeAlbums) {
+		} else if(albumListType == null || "starred".equals(albumListType)) {
 			// Only set standard album adapter if not album list and largeAlbums is true
-			albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
+			if(largeAlbums) {
+				albumList.setAdapter(new AlbumGridAdapter(context, getImageLoader(), albums, !artist));
+			}
 		} else {
 			// If album list, use infinite adapters for either depending on whether or not largeAlbums is true
 			if(largeAlbums) {
@@ -696,6 +700,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			entryList.setVisibility(View.VISIBLE);
 		}
         context.supportInvalidateOptionsMenu();
+
+		if(lookupEntry != null) {
+			for(int i = 0; i < entries.size(); i++) {
+				if(lookupEntry.equals(entries.get(i).getTitle())) {
+					entryList.setSelection(i + entryList.getHeaderViewsCount());
+					lookupEntry = null;
+					break;
+				}
+			}
+		}
 
         Bundle args = getArguments();
         boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
@@ -1164,6 +1178,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 		if(songCount == 0) {
 			showHeader = false;
+			hideButtons = true;
 			return null;
 		}
 

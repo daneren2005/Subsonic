@@ -226,8 +226,6 @@
 		\nComentario: %2$s
 		\nPosición: %3$s</string>
 
-    <string name="song_details.all">%1$s %2$s</string>
-    <string name="song_details.kbps">%d kbps</string>
 	<string name="song_details.error">Error</string>
 	<string name="song_details.skipped">Saltados</string>
 	<string name="song_details.downloading">Descargando</string>

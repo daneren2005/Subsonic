@@ -61,6 +61,7 @@ public final class Constants {
 	public static final String INTENT_EXTRA_NAME_SHARE = "subsonic.share";
 	public static final String INTENT_EXTRA_FRAGMENT_TYPE = "fragmentType";
 	public static final String INTENT_EXTRA_REFRESH_LISTINGS = "refreshListings";
+	public static final String INTENT_EXTRA_SEARCH_SONG = "searchSong";
 
     // Preferences keys.
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";
@@ -73,6 +74,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SERVER_INTERNAL_URL = "serverInternalUrl";
 	public static final String PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID = "serverLocalNetworkSSID";
 	public static final String PREFERENCES_KEY_SERVER_VERSION = "serverVersion";
+	public static final String PREFERENCES_KEY_SERVER_TYPE = "serverType";
 	public static final String PREFERENCES_KEY_TEST_CONNECTION = "serverTestConnection";
 	public static final String PREFERENCES_KEY_OPEN_BROWSER = "openBrowser";
     public static final String PREFERENCES_KEY_MUSIC_FOLDER_ID = "musicFolderId";

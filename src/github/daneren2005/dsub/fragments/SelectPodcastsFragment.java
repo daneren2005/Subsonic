@@ -238,7 +238,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 			"\nURL: " + channel.getUrl() +
 			"\nStatus: " + channel.getStatus() +
 			((channel.getErrorMessage()) == null ? "" : "\nError Message: " + channel.getErrorMessage()) +
-			((channel.getDescription()) == null ? "" : "\nDescription: " + channel.getDescription());
+			((channel.getDescription()) == null ? "" : "\n\nDescription: " + channel.getDescription());
 		
 		Util.info(context, channel.getName(), message);
 	}

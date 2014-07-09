@@ -181,27 +181,6 @@ public final class SyncUtil {
 		return "sync-most_recent-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
 	}
 
-	public static void showSyncNotification(final Context context, int stringId, String extra) {
-		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION, true)) {
-			String content = (extra != null) ? context.getResources().getString(stringId, extra) : context.getResources().getString(stringId);
-
-			NotificationCompat.Builder builder;
-			builder = new NotificationCompat.Builder(context)
-					.setSmallIcon(R.drawable.stat_notify_sync)
-					.setContentTitle(context.getResources().getString(R.string.sync_title))
-					.setContentText(content)
-					.setStyle(new NotificationCompat.BigTextStyle().bigText(content.replace(", ", "\n")))
-					.setOngoing(false);
-
-			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
-			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0));
-
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.notify(stringId, builder.build());
-		}
-	}
-
 	public static String joinNames(List<String> names) {
 		StringBuilder builder = new StringBuilder();
 		for (String val : names) {

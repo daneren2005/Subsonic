@@ -20,6 +20,7 @@
 package github.daneren2005.dsub.service.sync;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.content.Context;
 import android.util.Log;
 
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 
@@ -69,7 +71,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 
 			SyncUtil.setSyncedStarred(syncedList, context, instance);
 			if(updated) {
-				SyncUtil.showSyncNotification(context, R.string.sync_new_starred, null);
+				Notifications.showSyncNotification(context, R.string.sync_new_starred, null);
 			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to get starred list for " + Util.getServerName(context, instance));

@@ -64,6 +64,10 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		folderButton = null;
 		super.onCreateView(inflater, container, bundle);
+		
+		if("4.4.2".equals(Build.VERSION.RELEASE)) {
+			listView.setFastScrollAlwaysVisible(true);
+		}
 
 		if(objects != null) {
 			if (Util.isOffline(context) || Util.isTagBrowsing(context)) {

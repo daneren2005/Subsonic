@@ -237,8 +237,6 @@
 		\nLast Updated: %4$s
 		\nComment: %5$s</string>
 
-    <string name="song_details.all">%1$s %2$s</string>
-    <string name="song_details.kbps">%d kbps</string>
 	<string name="song_details.error">Error</string>
 	<string name="song_details.skipped">Skipped</string>
 	<string name="song_details.downloading">Downloading</string>
@@ -344,7 +342,7 @@
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
 	<string name="settings.playlist_title">Play</string>
-	<string name="settings.playlist_random_size_title">Random Size</string>
+	<string name="settings.playlist_random_size_title">Shuffle Playlist Size</string>
 	<string name="settings.sleep_timer_title">Sleep Timer</string>
 	<string name="settings.sleep_timer_duration_title">Sleep Timer Duration</string>
 	<string name="settings.sleep_timer_off">Off</string>
@@ -410,7 +408,7 @@
 	<string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.  Requires Subsonic 4.7+</string>
 	<string name="settings.override_system_language">Override System Language</string>
 	<string name="settings.override_system_language_summary">Display app in english even if the system language is something DSub has a translation for.  May need to clear the app from memory for changes to take affect.</string>
-	<string name="settings.drawer_items_title">Drawer Items</string>
+	<string name="settings.drawer_items_title">Drawer Tabs</string>
 	<string name="settings.play_now_after">Play Now - After</string>
 	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
 	<string name="settings.large_album_art">Large Album Art</string>

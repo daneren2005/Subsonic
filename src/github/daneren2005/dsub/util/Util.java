@@ -8,7 +8,6 @@
 
  Subsonic is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
@@ -29,6 +28,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,6 +62,7 @@ import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
+import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
@@ -84,6 +85,7 @@ import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -154,7 +156,7 @@ public final class Util {
 
     public static boolean isScrobblingEnabled(Context context) {
         SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, true) && (isOffline(context) || UserUtil.isCurrentRole("scrobblingEnabled"));
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, true) && (isOffline(context) || UserUtil.isCurrentRole(User.SCROBBLING));
     }
 
     public static void setActiveServer(Context context, int instance) {
@@ -273,6 +275,25 @@ public final class Util {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putString(Constants.PREFERENCES_KEY_THEME, theme);
 		editor.commit();
+	}
+
+	public static void applyTheme(Context context, String theme) {
+		if ("dark".equals(theme)) {
+			context.setTheme(R.style.Theme_DSub_Dark);
+		} else if ("black".equals(theme)) {
+			context.setTheme(R.style.Theme_DSub_Black);
+		} else if ("holo".equals(theme)) {
+			context.setTheme(R.style.Theme_DSub_Holo);
+		} else {
+			context.setTheme(R.style.Theme_DSub_Light);
+		}
+
+		SharedPreferences prefs = Util.getPreferences(context);
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
+			Configuration config = new Configuration();
+			config.locale = Locale.ENGLISH;
+			context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+		}
 	}
 	
 	public static boolean getDisplayTrack(Context context) {
@@ -873,15 +894,22 @@ public final class Util {
 		return Util.getScaledHeight((double) bitmap.getHeight(), (double) bitmap.getWidth(), width);
 	}
 
-    public static boolean isNetworkConnected(Context context) {
+	public static boolean isNetworkConnected(Context context) {
+		return isNetworkConnected(context, false);
+	}
+    public static boolean isNetworkConnected(Context context, boolean streaming) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean connected = networkInfo != null && networkInfo.isConnected();
 
-        boolean wifiConnected = connected && networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
-        boolean wifiRequired = isWifiRequiredForDownload(context);
+		if(streaming) {
+			boolean wifiConnected = connected && networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+			boolean wifiRequired = isWifiRequiredForDownload(context);
 
-        return connected && (!wifiRequired || wifiConnected);
+			return connected && (!wifiRequired || wifiConnected);
+		} else {
+			return connected;
+		}
     }
 	public static boolean isWifiConnected(Context context) {
 		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

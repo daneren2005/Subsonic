@@ -24,6 +24,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
+import android.util.Log;
 
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.util.Constants;
@@ -37,7 +38,9 @@ import github.daneren2005.dsub.provider.DSubSearchProvider;
  */
 public class QueryReceiverActivity extends Activity {
 
-    @Override
+	private static final String TAG = QueryReceiverActivity.class.getSimpleName();
+
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -68,6 +71,9 @@ public class QueryReceiverActivity extends Activity {
 			if(albumId.indexOf("ar-") == 0) {
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 				albumId = albumId.replace("ar-", "");
+			} else if(albumId.indexOf("so-") == 0) {
+				intent.putExtra(Constants.INTENT_EXTRA_SEARCH_SONG, name);
+				albumId = albumId.replace("so-", "");
 			}
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, albumId);
 			if (name != null) {

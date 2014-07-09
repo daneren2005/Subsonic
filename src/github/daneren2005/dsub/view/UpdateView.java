@@ -123,6 +123,14 @@ public class UpdateView extends LinearLayout {
 		}, "UpdateView").start();
     }
 
+	public static synchronized void triggerUpdate() {
+		if(backgroundHandler != null) {
+			uiHandler.removeCallbacksAndMessages(null);
+			backgroundHandler.removeCallbacksAndMessages(null);
+			uiHandler.post(updateRunnable);
+		}
+	}
+
     private static void updateAll() {
         try {
 			// If nothing can see this, stop updating

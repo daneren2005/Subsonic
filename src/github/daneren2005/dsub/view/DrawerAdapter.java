@@ -41,6 +41,7 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 	private List<String> items;
 	private List<Integer> icons;
 	private List<Boolean> visible;
+	private int selectedPosition = -1;
 
 	public DrawerAdapter(Context context, List<String> items, List<Integer> icons, List<Boolean> visible) {
 		super(context, R.layout.drawer_list_item, items);
@@ -63,6 +64,12 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 
 		TextView textView = (TextView) convertView.findViewById(R.id.drawer_name);
 		textView.setText(item);
+
+		if(selectedPosition == position) {
+			textView.setTextAppearance(context, R.style.DSub_TextViewStyle_Bold);
+			selectedPosition = -1;
+		}
+
 		ImageView iconView = (ImageView) convertView.findViewById(R.id.drawer_icon);
 		iconView.setImageResource(icon);
 
@@ -108,5 +115,9 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 	}
 	public void setDownloadVisible(boolean visible) {
 		setItemVisible(items.size() - 2, visible);
+	}
+
+	public void setSelectedPosition(int position) {
+		selectedPosition = position;
 	}
 }

@@ -24,6 +24,11 @@ public class Scrobbler {
         if (song == null || !Util.isScrobblingEnabled(context)) {
             return;
         }
+        
+		// Ignore if online with no network access
+		if(!Util.isOffline(context) && !Util.isNetworkConnected(context)) {
+			return;
+		}
 
 		// Ignore podcasts
 		if(song.getSong() instanceof PodcastEpisode) {

@@ -29,6 +29,7 @@ import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
 import static github.daneren2005.dsub.domain.PlayerState.STARTED;
 import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.audiofx.AudioEffectsController;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.audiofx.VisualizerController;
@@ -45,6 +46,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MediaRouteManager;
 import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
+import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
 import github.daneren2005.serverproxy.BufferProxy;
@@ -263,9 +265,11 @@ public class DownloadService extends Service {
 
 		if(bufferTask != null) {
 			bufferTask.cancel();
+			bufferTask = null;
 		}
 		if(nextPlayingTask != null) {
 			nextPlayingTask.cancel();
+			nextPlayingTask = null;
 		}
 		if(remoteController != null) {
 			remoteController.stop();
@@ -410,6 +414,7 @@ public class DownloadService extends Service {
 		removePlayed = enabled;
 		if(removePlayed) {
 			checkDownloads();
+			lifecycleSupport.serializeDownloadQueue();
 		}
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, enabled);
@@ -588,7 +593,7 @@ public class DownloadService extends Service {
 		reset();
 		downloadList.clear();
 		revision++;
-		if (currentDownloading != null) {
+		if (currentDownloading != null && !backgroundDownloadList.contains(currentDownloading)) {
 			currentDownloading.cancelDownload();
 			currentDownloading = null;
 		}
@@ -974,6 +979,7 @@ public class DownloadService extends Service {
 	public synchronized void reset() {
 		if (bufferTask != null) {
 			bufferTask.cancel();
+			bufferTask = null;
 		}
 		try {
 			// Only set to idle if it's not being killed to start RemoteController
@@ -1600,7 +1606,7 @@ public class DownloadService extends Service {
 			checkShufflePlay();
 		}
 
-		if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this) || Util.isOffline(this)) {
+		if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this, true) || Util.isOffline(this)) {
 			return;
 		}
 

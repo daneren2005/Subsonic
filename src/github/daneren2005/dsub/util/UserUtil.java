@@ -46,11 +46,15 @@ public final class UserUtil {
 	private static int instance = -1;
 	private static User currentUser;
 
-	public static void refreshCurrentUser(Context context) {
+	public static void refreshCurrentUser(Context context, boolean forceRefresh) {
 		currentUser = null;
-		seedCurrentUser(context);
+		seedCurrentUser(context, forceRefresh);
 	}
-	public static void seedCurrentUser(final Context context) {
+
+	public static void seedCurrentUser(Context context) {
+		seedCurrentUser(context, false);
+	}
+	public static void seedCurrentUser(final Context context, final boolean refresh) {
 		// Only try to seed if online
 		if(Util.isOffline(context)) {
 			currentUser = null;
@@ -67,7 +71,7 @@ public final class UserUtil {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				currentUser = MusicServiceFactory.getMusicService(context).getUser(false, getCurrentUsername(context, instance), context, null);
+				currentUser = MusicServiceFactory.getMusicService(context).getUser(refresh, getCurrentUsername(context, instance), context, null);
 
 				// If running, redo cast selector
 				DownloadService downloadService = DownloadService.getInstance();
@@ -107,17 +111,17 @@ public final class UserUtil {
 	}
 
 	public static boolean isCurrentAdmin() {
-		return isCurrentRole("adminRole");
+		return isCurrentRole(User.ADMIN);
 	}
 	
 	public static boolean canPodcast() {
-		return isCurrentRole("podcastRole");
+		return isCurrentRole(User.PODCAST);
 	}
 	public static boolean canShare() {
-		return isCurrentRole("shareRole");
+		return isCurrentRole(User.SHARE);
 	}
 	public static boolean canJukebox() {
-		return isCurrentRole("jukeboxRole");
+		return isCurrentRole(User.JUKEBOX);
 	}
 
 	public static boolean isCurrentRole(String role) {

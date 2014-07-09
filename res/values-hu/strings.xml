@@ -238,8 +238,6 @@
 		\nUtolsó módosítás: %4$s
 		\nMegjegyzés: %5$s</string>
 
-    <string name="song_details.all">%1$s %2$s</string>
-    <string name="song_details.kbps">%d kbps</string>
 	<string name="song_details.error">Hiba</string>
 	<string name="song_details.skipped">Átlépve</string>
 	<string name="song_details.downloading">Letöltés</string>

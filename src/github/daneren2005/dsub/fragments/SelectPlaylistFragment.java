@@ -56,7 +56,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 			
 			if(!Util.checkServerVersion(context, "1.8")) {
 				menu.removeItem(R.id.playlist_update_info);
-			} else if(playlist.getPublic() != null && playlist.getPublic() == true && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
+			} else if(playlist.getPublic() != null && playlist.getPublic() == true && playlist.getId().indexOf(".m3u") == -1 && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
 				menu.removeItem(R.id.playlist_update_info);
 				menu.removeItem(R.id.playlist_menu_delete);
 			}
@@ -155,7 +155,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-		if(Util.checkServerVersion(context, "1.8") && UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
+		if(Util.checkServerVersion(context, "1.8") && playlist.getOwner() != null && playlist.getOwner().equals(UserUtil.getCurrentUsername(context))) {
 			args.putBoolean(Constants.INTENT_EXTRA_NAME_PLAYLIST_OWNER, true);
 		}
 		fragment.setArguments(args);

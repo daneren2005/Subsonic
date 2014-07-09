@@ -7,10 +7,10 @@
     <string name="common.cancel">Annuler</string>
     <string name="common.play_now">Jouer</string>
 	<string name="common.play_shuffled">Jouer au hasard</string>
-    <string name="common.play_next">Suivante</string>
+    <string name="common.play_next">Suivant</string>
     <string name="common.play_last">Précédent</string>
-	<string name="common.download">Cache</string>
-    <string name="common.pin">Cache Permanent</string>
+	<string name="common.download">Mettre en cache</string>
+    <string name="common.pin">Mettre en cache Permanent</string>
     <string name="common.delete">Supprimer</string>
 	<string name="common.star">Favori</string>
 	<string name="common.unstar">Supp. favori</string>
@@ -39,8 +39,8 @@
 	<string name="button_bar.downloading">Téléchargement</string>
 
     <string name="main.welcome_title">Bienvenue !</string>
-    <string name="main.welcome_text">Bienvenue dans DSub ! Cette appli est actuellement configurée pour se connecter au serveur de démo Subsonic. Vous pouvez configurer votre serveur dans les paramètres.<b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
-	<string name="main.about_title">A propos de DSub</string>
+    <string name="main.welcome_text">Bienvenue dans DSub ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
+    	<string name="main.about_title">A propos de DSub</string>
 	<string name="main.about_text">Auteur : Scott Jackson
 		\nEmail : dsub.android@gmail.com
 		\nVersion : %1$s
@@ -50,10 +50,10 @@
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
-		<font color="red">Cache vs Permanent Cache</font>:
-		<br/>When songs are downloaded by DSub, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
-		<p/><font color="red">ChromeCast fails</font>:
-		<br/>Make sure you are not using a self-signed certificate, because the Chromecast will automatically reject them.
+		<font color="red">Cache vs Cache permanent</font>:
+		<br/>Lorsque des titres sont téléchargés par DSub, ils peuvent être supprimés pour libérer de l\'espace pour de nouveaux téléchargements. Le cache permanent premet, lui, de ne jamais supprimer automatiquement la musique téléchargée.
+		<p/><font color="red">ChromeCast a échoué</font>:
+		<br/>Assurez-vous de ne pas utiliser un certificat auto-signé, Chromecast les rejette systématiquement.
 	]]>
 	</string>
     <string name="main.select_server">Choisir un serveur</string>
@@ -65,7 +65,7 @@
     <string name="main.albums_newest">Ajoutés récemments</string>
     <string name="main.albums_recent">Joués récemment</string>
     <string name="main.albums_frequent">Les plus joués</string>
-    <string name="main.albums_highest">Mieux notés</string>
+    <string name="main.albums_highest">Les mieux notés</string>
     <string name="main.albums_starred">Favoris</string>
     <string name="main.albums_random">Au hazard</string>
 	<string name="main.albums_genres">Par genres</string>
@@ -78,7 +78,8 @@
 	<string name="menu.refresh">Recharger</string>
 	<string name="menu.select">Tout sélectionner</string>
 	<string name="menu.play">Jouer</string>
-	<string name="menu.exit">Exit</string><string name="menu.play_last">Jouer dernier</string>
+	<string name="menu.exit">Quitter</string>
+	<string name="menu.play_last">Jouer dernier</string>
     
     <string name="menu.settings">Paramètres</string>
     <string name="menu.help">Aide</string>
@@ -96,13 +97,13 @@
 	<string name="menu.show_all">Afficher tous les media</string>
 	<string name="menu.show_artist">Afficher l\'artiste</string>
 	<string name="menu.share">Partager</string>
-	<string name="menu.delete_cache">Supprimer le cache</string>
+	<string name="menu.delete_cache">Supprimer du cache</string>
 	<string name="menu.cast">Diffuser vers appareil</string>
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Ajouter utilisateur</string>
 
     <string name="playlist.label">Playlists</string>
-	<string name="playlist.update_info">Mise à jour information</string>
+	<string name="playlist.update_info">Mise à jour informations</string>
 	<string name="playlist.updated_info">Informations de la playlist %s mises à jour</string>
 	<string name="playlist.updated_info_error">Echec de la mise à jour des informations de la playlist %s</string>
 	<string name="playlist.overwrite">Remplacer la playlist existante</string>
@@ -131,7 +132,7 @@
     <string name="select_album.offline">Déconnecté</string>
     <string name="select_album.searching">Recherche en cours...</string>
     <string name="select_album.no_sdcard">Erreur : Aucune carte SD card disponible.</string>
-    <string name="select_album.no_network">Warning : Aucun réseau disponible.</string>
+    <string name="select_album.no_network">Problème : Aucun réseau disponible.</string>
     <string name="select_album.not_licensed">Serveur sans licence valide. %d jours restant.</string>
     <string name="select_album.donate_dialog_message">Téléchargement illimité en supportant Subsonic.</string>
     <string name="select_album.donate_dialog_now">Maintenant</string>
@@ -236,8 +237,6 @@
 		\nMis à jour : %4$s
 		\nCommentaire : %5$s</string>
 
-    <string name="song_details.all">%1$s %2$s</string>
-    <string name="song_details.kbps">%d kbps</string>
 	<string name="song_details.error">Erreur</string>
 	<string name="song_details.skipped">Ignoré</string>
 	<string name="song_details.downloading">Chargement</string>
@@ -318,12 +317,12 @@
     <string name="settings.wifi_required_title">Streaming en Wifi uniquement</string>
     <string name="settings.wifi_required_summary">Ne lire les média qu\'avec une connexion Wifi</string>
 	<string name="settings.network_timeout_title">Délai d\'attente réseau (timeout)</string>
-	<string name="settings.network_timeout_10000">10 seconds</string>
-	<string name="settings.network_timeout_15000">15 seconds</string>
-	<string name="settings.network_timeout_30000">30 seconds</string>
-	<string name="settings.network_timeout_45000">45 seconds</string>
-	<string name="settings.network_timeout_60000">60 seconds</string>
-    <string name="settings.preload_0">0 titres</string>
+	<string name="settings.network_timeout_10000">10 secondes</string>
+	<string name="settings.network_timeout_15000">15 secondes</string>
+	<string name="settings.network_timeout_30000">30 secondes</string>
+	<string name="settings.network_timeout_45000">45 secondes</string>
+	<string name="settings.network_timeout_60000">60 secondes</string>
+    <string name="settings.preload_0">0 titre</string>
     <string name="settings.preload_1">1 titre</string>
     <string name="settings.preload_2">2 titres</string>
     <string name="settings.preload_3">3 titres</string>
@@ -337,11 +336,11 @@
     <string name="settings.scrobble_summary">Penser à paramétrer votre compte Last.fm sur le serveur Subsonic</string>
     <string name="settings.hide_media_title">Invisible pour les autres</string>
     <string name="settings.hide_media_summary">Rendre les fichiers de musique indisponibles pour les autres applications.</string>
-    <string name="settings.hide_media_toast">Prendra effet à la prochaine recherce de musique d\'Android.</string>
+    <string name="settings.hide_media_toast">Prendra effet au prochain scan de musique d\'Android.</string>
     <string name="settings.media_button_title">Boutons physique</string>
     <string name="settings.media_button_summary">Répondre aux boutons du mobile, du casque filaire ou bluetooth</string>
     <string name="settings.screen_lit_title">Garder l\'écran allumé</string>
-    <string name="settings.screen_lit_summary">Garder l\'écran allumer augmente la vitesse de téléchargement.</string>
+    <string name="settings.screen_lit_summary">Garder l\'écran allumé augmente la vitesse de téléchargement.</string>
 	<string name="settings.playlist_title">Lecture</string>
 	<string name="settings.playlist_random_size_title">Random Size</string>
 	<string name="settings.sleep_timer_title">Temporisateur</string>
@@ -375,11 +374,11 @@
 	<string name="settings.hide_widget_title">Cacher le Widget</string>
 	<string name="settings.hide_widget_summary">Cacher le widget après avoir quitté l\'application</string>
 	<string name="settings.podcasts_enabled">Podcasts autorisés</string>
-	<string name="settings.podcasts_enabled_summary">Afficher ou non la liste des podcasts</string>
+	<string name="settings.podcasts_enabled_summary">Afficher ou non l\'accès aux podcasts</string>
 	<string name="settings.bookmarks_enabled">Favoris autorisés</string>
-	<string name="settings.bookmarks_enabled_summary">Afficher ou non la liste des favoris</string>
+	<string name="settings.bookmarks_enabled_summary">Afficher ou non l\'accès aux favoris</string>
 	<string name="settings.shares_enabled">Partages autorisés</string>
-	<string name="settings.shares_enabled_summary">Afficher ou non la liste des partages</string>
+	<string name="settings.shares_enabled_summary">Afficher ou non l\'accès aux partages</string>
 	<string name="settings.sync_title">Sync</string>
 	<string name="settings.sync_enabled">Sync autorisée</string>
 	<string name="settings.sync_enabled_summary">Controler ou non périodiquement si les playlists et podcasts ont été mis à jour</string>
@@ -402,44 +401,44 @@
 	<string name="settings.sync_notification_summary">Afficher une notification dès qu\'un média a été synchronisé</string>
 	<string name="settings.menu_options.title">Options de menu optionnelles</string>
 	<string name="settings.menu_options.play_next_summary">Afficher Lire suivant dans les menus</string>
-	<string name="settings.menu_options.play_last_summary">Afficher lire dernier dans les menus</string>
+	<string name="settings.menu_options.play_last_summary">Afficher Lire dernier dans les menus</string>
 	<string name="settings.menu_options.star_summary">Afficher Noter dans les menus</string>
 	<string name="settings.menu_options.shared_summary">Afficher Partager dans les menus</string>
 	<string name="settings.browse_by_tags">Naviguer via les tags</string>
-	<string name="settings.browse_by_tags_summary">Naviguer via les tags plutôt que via l\'arborescence de fichier.  Necessite Subsonic 4.7+</string>
+	<string name="settings.browse_by_tags_summary">Naviguer via les tags plutôt que via l\'arborescence de fichier.  Nécessite Subsonic 4.7+</string>
 	<string name="settings.override_system_language">Ne pas utiliser la langue du système</string>
 	<string name="settings.override_system_language_summary">Afficher DSub en Anglais même si une traduction existe pour la langue système. Peut nécessiter un vidage du cache de l\'application.</string>
-	<string name="settings.drawer_items_title">Drawer Items</string>
-	<string name="settings.play_now_after">Play Now - After</string>
+	<string name="settings.drawer_items_title">Eléments du menu principal</string>
+	<string name="settings.play_now_after">Jouer maintenant - Plus tard</string>
 	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
-	<string name="settings.large_album_art">Large Album Art</string>
-	<string name="settings.large_album_art_summary">Display albums with large album art instead of in a list</string>
-	<string name="settings.admin_enabled">Admin Enabled</string>
-	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
+	<string name="settings.large_album_art">Pochettes larges</string>
+	<string name="settings.large_album_art_summary">Afficher les pochettes en grand plutôt qu\'en liste.</string>
+	<string name="settings.admin_enabled">Administration</string>
+	<string name="settings.admin_enabled_summary">Afficher ou non l\'accès aux outils d\'administration</string>
 
 	<string name="shuffle.title">Shuffle By</string>
-	<string name="shuffle.startYear">Start Year:</string>
-	<string name="shuffle.endYear">End Year:</string>
-	<string name="shuffle.genre">Genre:</string>
-	<string name="shuffle.pick_genre">Pick a genre</string>
+	<string name="shuffle.startYear">Année début :</string>
+	<string name="shuffle.endYear">Année fin :</string>
+	<string name="shuffle.genre">Genre :</string>
+	<string name="shuffle.pick_genre">Choisir un genre</string>
 
-	<string name="share.info">Owner: %1$s
+	<string name="share.info">Propriétaire : %1$s
 		\nDescription: %2$s
 		\nURL: %3$s
-		\nCreation: %4$s
-		\nLast Visited: %5$s
-		\nExpiration: %6$s
-		\nVisit Count: %7$s
+		\nCréation : %4$s
+		\nDernière visite : %5$s
+		\nExpiration : %6$s
+		\nNombre de visites : %7$s
 
 	</string>
-	<string name="share.expires">Expires: %s</string>
-	<string name="share.expires_never">Never Expires</string>
-	<string name="share.deleted">Deleted share %s</string>
-	<string name="share.deleted_error">Failed to delete share %s</string>
-	<string name="share.no_expiration">No expiration</string>
-	<string name="share.expiration">Expires:</string>
-	<string name="share.updated_info">Updated share information for %s</string>
-	<string name="share.updated_info_error">Failed to update share information for %s</string>
+	<string name="share.expires">Expiration : %s</string>
+	<string name="share.expires_never">N\'expire jamais</string>
+	<string name="share.deleted">Supprimer le partage %s</string>
+	<string name="share.deleted_error">Echec de la suppression du partage %s</string>
+	<string name="share.no_expiration">Pas d\'expiration</string>
+	<string name="share.expiration">Expiration :</string>
+	<string name="share.updated_info">Informations de partage mises à jour pour %s</string>
+	<string name="share.updated_info_error">Echec de la mise à jour des informations de partage pour %s</string>
 	<string name="share.via">Partager via</string>
 	<string name="share.delete">Supprimer le partage</string>
 
@@ -531,21 +530,21 @@
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="zero">No songs</item>
-        <item quantity="one">One song</item>
-        <item quantity="other">%d songs</item>
+        <item quantity="zero">Aucun titre</item>
+        <item quantity="one">Un titre</item>
+        <item quantity="other">%d titres</item>
     </plurals>
     <plurals name="select_album_n_songs_downloading">
-        <item quantity="one">One song scheduled for download.</item>
-        <item quantity="other">%d songs scheduled for download.</item>
+        <item quantity="one">Téléchargement programmé pour un titre.</item>
+        <item quantity="other">Téléchargement programmé pour %d titres.</item>
     </plurals>
     <plurals name="select_album_n_songs_added">
-        <item quantity="one">One song added to play queue.</item>
-        <item quantity="other">%d songs added to play queue.</item>
+        <item quantity="one">Un titre a été ajouté à la liste de lecture en cours.</item>
+        <item quantity="other">%d titres ont été ajoutés à la liste de lecture en cours.</item>
     </plurals>
     <plurals name="select_album_donate_dialog_n_trial_days_left">
-        <item quantity="one">One day left of trial period</item>
-        <item quantity="other">%d days left of trial period</item>
+        <item quantity="one">Dernier jour avant la fin de période d\'essai.</item>
+        <item quantity="other">%d jours avant la fin de période d\'essai.</item>
     </plurals>
 
 </resources>

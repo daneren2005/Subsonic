@@ -32,6 +32,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.SyncUtil.SyncSet;
 import github.daneren2005.dsub.util.Util;
@@ -89,7 +90,7 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 					musicService.getIndexes(Util.getSelectedMusicFolderId(context), true, context, null);
 				}
 
-				SyncUtil.showSyncNotification(context, R.string.sync_new_albums, SyncUtil.joinNames(updated));
+				Notifications.showSyncNotification(context, R.string.sync_new_albums, SyncUtil.joinNames(updated));
 			} else if(firstRun) {
 				FileUtil.serialize(context, syncedList, SyncUtil.getMostRecentSyncFile(context, instance));
 			}

@@ -88,18 +88,6 @@ public class SongView extends UpdateView implements Checkable {
 		
         StringBuilder artist = new StringBuilder(40);
 
-        String bitRate = null;
-        if (song.getBitRate() != null) {
-        	bitRate = String.format(getContext().getString(R.string.song_details_kbps), song.getBitRate());
-        }
-        
-        String fileFormat = null;
-        if (song.getTranscodedSuffix() != null && !song.getTranscodedSuffix().equals(song.getSuffix())) {
-        	fileFormat = String.format("%s > %s", song.getSuffix(), song.getTranscodedSuffix());
-    	} else {
-            fileFormat = song.getSuffix();
-        }
-
 		if(!song.isVideo()) {
 			if(song instanceof PodcastEpisode) {
 				String date = ((PodcastEpisode)song).getDate();
@@ -112,20 +100,29 @@ public class SongView extends UpdateView implements Checkable {
 				artist.append(song.getArtist());
 			}
 			
-			String status = (song instanceof PodcastEpisode) ? ((PodcastEpisode)song).getStatus() : "";
-			artist.append(" (");
-			if("error".equals(status)) {
-				artist.append(getContext().getString(R.string.song_details_error));
-			} else if("skipped".equals(status)) {
-				artist.append(getContext().getString(R.string.song_details_skipped));
-			} else if("downloading".equals(status)) {
-				artist.append(getContext().getString(R.string.song_details_downloading));
-			} else {
-				artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
+			if(song instanceof PodcastEpisode) {
+				String status = ((PodcastEpisode) song).getStatus();
+				int statusRes = -1;
+				
+				if("error".equals(status)) {
+					statusRes = R.string.song_details_error;
+				} else if("skipped".equals(status)) {
+					statusRes = R.string.song_details_skipped;
+				} else if("downloading".equals(status)) {
+					statusRes = R.string.song_details_downloading;
+				}
+				
+				if(statusRes != -1) {
+					artist.append(" (");
+					artist.append(getContext().getString(statusRes));
+					artist.append(")");
+				}
 			}
-			artist.append(")");
+
+			durationTextView.setText(Util.formatDuration(song.getDuration()));
 		} else {
-			artist.append(String.format(getContext().getString(R.string.song_details_all), bitRate == null ? "" : bitRate, fileFormat));
+			findViewById(R.id.song_bottom).setVisibility(View.GONE);
+			statusTextView.setText(Util.formatDuration(song.getDuration()));
 		}
 		
 		String title = song.getTitle();
@@ -136,7 +133,6 @@ public class SongView extends UpdateView implements Checkable {
 
         titleTextView.setText(title);
 		artistTextView.setText(artist);
-        durationTextView.setText(Util.formatDuration(song.getDuration()));
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
 		revision = -1;

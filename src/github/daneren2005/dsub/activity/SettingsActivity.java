@@ -245,7 +245,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d(TAG, "Preference changed: " + key);
+		// Random error I have no idea how to reproduce
+        if(sharedPreferences == null) {
+			return;
+		}
+
         update();
 
         if (Constants.PREFERENCES_KEY_HIDE_MEDIA.equals(key)) {
@@ -468,22 +472,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 	private void applyTheme() {
 		String activeTheme = Util.getTheme(this);
-		if ("dark".equals(activeTheme)) {
-			setTheme(R.style.Theme_DSub_Dark);
-		} else if ("black".equals(activeTheme)) {
-			setTheme(R.style.Theme_DSub_Black);
-		} else if ("light".equals(activeTheme)) {
-			setTheme(R.style.Theme_DSub_Light);
-		} else {
-			setTheme(R.style.Theme_DSub_Holo);
-		}
-
-		SharedPreferences prefs = Util.getPreferences(this);
-		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
-			Configuration config = new Configuration();
-			config.locale = Locale.ENGLISH;
-			getResources().updateConfiguration(config,getResources().getDisplayMetrics());
-		}
+		Util.applyTheme(this, activeTheme);
 	}
 
     private void setHideMedia(boolean hide) {
