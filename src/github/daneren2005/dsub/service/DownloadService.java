@@ -934,6 +934,8 @@ public class DownloadService extends Service {
 					mediaPlayer.pause();
 				}
 				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
+			} else if(playerState == PAUSED_TEMP) {
+				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
 			}
 		} catch (Exception x) {
 			handleError(x);
