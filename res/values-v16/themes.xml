@@ -5,7 +5,8 @@
 	</style>
 
 	<style name="DSub.TextViewStyle.Bold" parent="android:Widget.TextView">
-		<item name="android:fontFamily">sans-serif-regular</item>
+		<item name="android:fontFamily">sans-serif</item>
+		<item name="android:textStyle">bold</item>
 	</style>
 
 	<style name="DSub.ButtonStyle" parent="android:Widget.Holo.Button">
