@@ -142,10 +142,14 @@ public final class Notifications {
 		}
 
 		boolean persistent = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false);
-		if(persistent && !expanded) {
-			rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_play);
-			rv.setImageViewResource(R.id.control_pause, R.drawable.notification_next);
-			rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
+		if(persistent) {
+			if(expanded) {
+				rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_pause : R.drawable.notification_play);
+			} else {
+				rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_play);
+				rv.setImageViewResource(R.id.control_pause, R.drawable.notification_next);
+				rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
+			}
 		}
 
 		// Create actions for media buttons
