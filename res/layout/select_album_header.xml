@@ -80,7 +80,7 @@
 		android:padding="10dip"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentRight="true"
-		android:background="@drawable/menubar_button"/>
+		android:background="?android:selectableItemBackground"/>
 </RelativeLayout>
 
 

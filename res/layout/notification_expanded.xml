@@ -40,7 +40,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:src="@drawable/notification_close"
-				android:background="@drawable/btn_bg"
+				android:background="?android:selectableItemBackground"
 				android:padding="10dip"
 				android:layout_gravity="right"
 				android:visibility="gone"/>
@@ -86,7 +86,7 @@
 	            android:layout_gravity="center"
 	            android:layout_weight="1"
 				android:padding="10dip"
-	            android:background="@drawable/btn_bg"
+	            android:background="?android:selectableItemBackground"
 	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_previous" />
 
@@ -97,7 +97,7 @@
 				android:layout_gravity="center"
 				android:layout_weight="1"
 				android:padding="10dip"
-	            android:background="@drawable/btn_bg"
+	            android:background="?android:selectableItemBackground"
 	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_pause" />
 
@@ -108,7 +108,7 @@
 				android:layout_gravity="center"
 				android:layout_weight="1"
 				android:padding="10dip"
-	            android:background="@drawable/btn_bg"
+	            android:background="?android:selectableItemBackground"
 	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_next" />
 	    </LinearLayout>
