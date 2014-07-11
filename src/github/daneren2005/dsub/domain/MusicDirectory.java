@@ -102,8 +102,8 @@ public class MusicDirectory implements Serializable {
 		return children.size();
 	}
 	
-	public void sortChildren() {
-		EntryComparator.sort(children);
+	public void sortChildren(boolean byYear) {
+		EntryComparator.sort(children, byYear);
 	}
 
     public static class Entry implements Serializable {

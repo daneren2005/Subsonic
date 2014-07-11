@@ -134,7 +134,7 @@ public class OfflineMusicService extends RESTMusicService {
 				result.addChild(createEntry(context, file, name, true, isPodcast));
 			}
 		}
-		result.sortChildren();
+		result.sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true));
 		return result;
 	}
 
