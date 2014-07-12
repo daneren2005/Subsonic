@@ -105,6 +105,21 @@ public class MediaStoreService {
 		}
 	}
 
+	public void renameInMediaStore(File start, File end) {
+		ContentResolver contentResolver = context.getContentResolver();
+
+		ContentValues values = new ContentValues();
+		values.put(MediaStore.MediaColumns.DATA, end.getAbsolutePath());
+
+		int n = contentResolver.update(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+				values,
+				MediaStore.MediaColumns.DATA + "=?",
+				new String[]{start.getAbsolutePath()});
+		if (n > 0) {
+			Log.i(TAG, "Rename media store row for " + start + " to " + end);
+		}
+	}
+
     private void insertAlbumArt(int albumId, DownloadFile downloadFile) {
         ContentResolver contentResolver = context.getContentResolver();
 

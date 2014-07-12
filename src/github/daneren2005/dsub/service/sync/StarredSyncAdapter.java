@@ -66,7 +66,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 
 			for(String path: oldSyncedList) {
 				File saveFile = new File(path);
-				FileUtil.unpinSong(saveFile);
+				FileUtil.unpinSong(context, saveFile);
 			}
 
 			SyncUtil.setSyncedStarred(syncedList, context, instance);

@@ -102,7 +102,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				if(origPathList.size() > 0) {
 					for(String path: origPathList) {
 						File saveFile = new File(path);
-						FileUtil.unpinSong(saveFile);
+						FileUtil.unpinSong(context, saveFile);
 						cachedPlaylist.synced.remove(path);
 					}
 

@@ -277,9 +277,8 @@ public class DownloadFile implements BufferFile {
     public void unpin() {
         if (saveFile.exists()) {
         	// Delete old store entry before renaming to pinned file
-			deleteFromStore();
             saveFile.renameTo(completeFile);
-			saveToStore();
+			renameInStore(saveFile, completeFile);
         }
     }
 
@@ -313,9 +312,8 @@ public class DownloadFile implements BufferFile {
 	public void setPlaying(boolean isPlaying) {
 		try {
 			if(saveWhenDone && !isPlaying) {
-				deleteFromStore();
 				Util.renameFile(completeFile, saveFile);
-				saveToStore();
+				renameInStore(completeFile, saveFile);
 				saveWhenDone = false;
 			} else if(completeWhenDone && !isPlaying) {
 				if(save) {
@@ -361,6 +359,13 @@ public class DownloadFile implements BufferFile {
 			}
 		}
 	}
+	private void renameInStore(File start, File end) {
+		try {
+			mediaStoreService.renameInMediaStore(start, end);
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to rename in store", e);
+		}
+	}
 
     @Override
     public String toString() {
@@ -401,9 +406,8 @@ public class DownloadFile implements BufferFile {
 						if(isPlaying) {
 							saveWhenDone = true;
 						} else {
-							deleteFromStore();
 							Util.renameFile(completeFile, saveFile);
-							DownloadFile.this.saveToStore();
+							renameInStore(completeFile, saveFile);
 						}
                     } else {
                         Log.i(TAG, completeFile + " already exists. Skipping.");
