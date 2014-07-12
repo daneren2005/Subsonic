@@ -68,6 +68,7 @@ import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.MediaStoreService;
 
 import org.apache.http.HttpEntity;
 
@@ -615,18 +616,20 @@ public final class Util {
         }
         return true;
     }
-	public static boolean recursiveDelete(File dir) {
+	public static boolean recursiveDelete(File dir, MediaStoreService mediaStore) {
 		if (dir != null && dir.exists()) {
 			File[] list = dir.listFiles();
 			if(list != null) {
 				for(File file: list) {
 					if(file.isDirectory()) {
-						if(!recursiveDelete(file)) {
+						if(!recursiveDelete(file, mediaStore)) {
 							return false;
 						}
 					} else if(file.exists()) {
 						if(!file.delete()) {
 							return false;
+						} else {
+							mediaStore.deleteFromMediaStore(file);
 						}
 					}
 				}

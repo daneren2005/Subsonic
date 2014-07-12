@@ -55,6 +55,7 @@ import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.MediaStoreService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
@@ -1173,7 +1174,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		File dir = FileUtil.getArtistDirectory(context, artist);
 		if(dir == null) return;
 
-		Util.recursiveDelete(dir);
+		MediaStoreService mediaStore = new MediaStoreService(context);
+		Util.recursiveDelete(dir, mediaStore);
 		if(Util.isOffline(context)) {
 			refresh();
 		}
@@ -1183,7 +1185,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		File dir = FileUtil.getAlbumDirectory(context, album);
 		if(dir == null) return;
 
-		Util.recursiveDelete(dir);
+		MediaStoreService mediaStore = new MediaStoreService(context);
+		Util.recursiveDelete(dir, mediaStore);
 		if(Util.isOffline(context)) {
 			refresh();
 		}

@@ -14,6 +14,8 @@ import android.os.StatFs;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.MediaStoreService;
+
 import java.util.*;
 
 /**
@@ -27,10 +29,12 @@ public class CacheCleaner {
 
     private final Context context;
     private final DownloadService downloadService;
+	private final MediaStoreService mediaStore;
 
     public CacheCleaner(Context context, DownloadService downloadService) {
         this.context = context;
         this.downloadService = downloadService;
+		this.mediaStore = new MediaStoreService(context);
     }
 
     public void clean() {
@@ -112,6 +116,7 @@ public class CacheCleaner {
                     long size = file.length();
                     if (Util.delete(file)) {
                         bytesDeleted += size;
+						mediaStore.deleteFromMediaStore(file);
                     }
                 }
             }

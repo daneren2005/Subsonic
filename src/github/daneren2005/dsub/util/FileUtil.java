@@ -55,6 +55,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.PodcastEpisode;
+import github.daneren2005.dsub.service.MediaStoreService;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -365,7 +366,8 @@ public class FileUtil {
     }
 	public static boolean deleteMusicDirectory(Context context) {
 		File musicDirectory = FileUtil.getMusicDirectory(context);
-		return Util.recursiveDelete(musicDirectory);
+		MediaStoreService mediaStore = new MediaStoreService(context);
+		return Util.recursiveDelete(musicDirectory, mediaStore);
 	}
 	public static void deleteSerializedCache(Context context) {
 		for(File file: context.getCacheDir().listFiles()) {

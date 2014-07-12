@@ -94,6 +94,17 @@ public class MediaStoreService {
         }
     }
 
+	public void deleteFromMediaStore(File file) {
+		ContentResolver contentResolver = context.getContentResolver();
+
+		int n = contentResolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+				MediaStore.MediaColumns.DATA + "=?",
+				new String[]{file.getAbsolutePath()});
+		if (n > 0) {
+			Log.i(TAG, "Deleting media store row for " + file);
+		}
+	}
+
     private void insertAlbumArt(int albumId, DownloadFile downloadFile) {
         ContentResolver contentResolver = context.getContentResolver();
 
