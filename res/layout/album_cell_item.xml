@@ -68,7 +68,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="right|center_vertical"
 			android:paddingRight="2dp"
-			android:background="@drawable/menubar_button"/>
+			android:background="?android:selectableItemBackground"/>
 	</LinearLayout>
 
 </LinearLayout>

@@ -48,6 +48,7 @@ public class SongView extends UpdateView implements Checkable {
     private TextView durationTextView;
     private TextView statusTextView;
 	private ImageView statusImageView;
+	private View bottomRowView;
 	
 	private DownloadService downloadService;
 	private long revision = -1;
@@ -80,6 +81,7 @@ public class SongView extends UpdateView implements Checkable {
 				v.showContextMenu();
 			}
 		});
+		bottomRowView = findViewById(R.id.song_bottom);
     }
 
     public void setObjectImpl(Object obj1, Object obj2) {
@@ -120,8 +122,9 @@ public class SongView extends UpdateView implements Checkable {
 			}
 
 			durationTextView.setText(Util.formatDuration(song.getDuration()));
+			bottomRowView.setVisibility(View.VISIBLE);
 		} else {
-			findViewById(R.id.song_bottom).setVisibility(View.GONE);
+			bottomRowView.setVisibility(View.GONE);
 			statusTextView.setText(Util.formatDuration(song.getDuration()));
 		}
 		

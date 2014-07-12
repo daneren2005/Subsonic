@@ -700,6 +700,7 @@ public class DownloadService extends Service {
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.execute();
 		} else {
+			resetNext();
 			nextPlaying = null;
 		}
 	}
@@ -934,6 +935,8 @@ public class DownloadService extends Service {
 					mediaPlayer.pause();
 				}
 				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
+			} else if(playerState == PAUSED_TEMP) {
+				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
 			}
 		} catch (Exception x) {
 			handleError(x);
@@ -991,6 +994,25 @@ public class DownloadService extends Service {
 			mediaPlayer.reset();
 		} catch (Exception x) {
 			handleError(x);
+		}
+	}
+
+	public synchronized void resetNext() {
+		try {
+			if (nextMediaPlayer != null) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
+					mediaPlayer.setNextMediaPlayer(null);
+					nextSetup = false;
+				}
+
+				nextMediaPlayer.setOnCompletionListener(null);
+				nextMediaPlayer.setOnErrorListener(null);
+				nextMediaPlayer.reset();
+				nextMediaPlayer.release();
+				nextMediaPlayer = null;
+			}
+		} catch (Exception e) {
+			Log.w(TAG, "Failed to reset next media player");
 		}
 	}
 
@@ -1395,13 +1417,7 @@ public class DownloadService extends Service {
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
 			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-			if(nextMediaPlayer != null) {
-				nextMediaPlayer.setOnCompletionListener(null);
-				nextMediaPlayer.setOnErrorListener(null);
-				nextMediaPlayer.reset();
-				nextMediaPlayer.release();
-				nextMediaPlayer = null;
-			}
+			resetNext();
 
 			// Exit when using remote controllers
 			if(remoteState != RemoteControlState.LOCAL) {

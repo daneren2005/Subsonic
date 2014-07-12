@@ -164,28 +164,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 			setupScrollList(albumList);
 		}
-		albumList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
-				SubsonicFragment fragment = new SelectDirectoryFragment();
-				Bundle args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
-				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
-				if ("newest".equals(albumListType)) {
-					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
-				}
-				if(entry.getArtist() == null && entry.getParent() == null) {
-					args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
-				}
-				fragment.setArguments(args);
-
-				replaceFragment(fragment, true);
-			}
-		});
-
 		registerForContextMenu(entryList);
-		registerForContextMenu(albumList);
+		setupAlbumList();
 
 		if(entries == null) {
 			if(primaryFragment || secondaryFragment) {
@@ -662,7 +642,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		// Needs to be added here, GB crashes if you to try to remove the header view before adapter is set
 		if(addAlbumHeader) {
-			entryList.addHeaderView(albumList);
+			if(entries.size() > 0) {
+				entryList.addHeaderView(albumList);
+			} else {
+				ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
+				albumList = (GridView) context.getLayoutInflater().inflate(R.layout.grid_view, rootGroup, false);
+				rootGroup.removeView(entryList);
+				rootGroup.addView(albumList);
+				
+				setupScrollList(albumList);
+				setupAlbumList();
+			}
 			addAlbumHeader = false;
 		}
 
@@ -717,6 +707,31 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
             playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
         }
     }
+
+	private void setupAlbumList() {
+		albumList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
+				SubsonicFragment fragment = new SelectDirectoryFragment();
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
+				if ("newest".equals(albumListType)) {
+					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
+				}
+				if(entry.getArtist() == null && entry.getParent() == null) {
+					args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+				}
+				fragment.setArguments(args);
+
+				replaceFragment(fragment, true);
+			}
+		});
+
+		registerForContextMenu(entryList);
+		registerForContextMenu(albumList);
+	}
 
 	private void playNow(final boolean shuffle, final boolean append) {
 		playNow(shuffle, append, false);

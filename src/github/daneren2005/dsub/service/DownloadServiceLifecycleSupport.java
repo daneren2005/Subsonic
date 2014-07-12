@@ -332,7 +332,9 @@ public class DownloadServiceLifecycleSupport {
 						case TelephonyManager.CALL_STATE_IDLE:
 							if (resumeAfterCall) {
 								resumeAfterCall = false;
-								downloadService.start();
+								if(downloadService.getPlayerState() == PlayerState.PAUSED_TEMP) {
+									downloadService.start();
+								}
 							}
 							break;
 						default:

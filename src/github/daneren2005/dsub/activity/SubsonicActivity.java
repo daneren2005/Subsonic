@@ -494,7 +494,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 
 	public boolean onBackPressedSupport() {
-		if(backStack.size() > 0) {
+		if(drawerOpen) {
+			drawer.closeDrawers();
+			return false;
+		} else if(backStack.size() > 0) {
 			removeCurrent();
 			return false;
 		} else {

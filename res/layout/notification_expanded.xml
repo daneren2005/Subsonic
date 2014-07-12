@@ -40,7 +40,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:src="@drawable/notification_close"
-				android:background="@drawable/btn_bg"
+				android:background="?android:selectableItemBackground"
 				android:padding="10dip"
 				android:layout_gravity="right"
 				android:visibility="gone"/>
@@ -70,6 +70,11 @@
 	        android:id="@+id/textView1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="fill_parent" />
+
+		<ImageView
+			android:background="?android:dividerHorizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="1.0px"/>
 	    
 	    <LinearLayout
 	        xmlns:android="http://schemas.android.com/apk/res/android"
@@ -86,7 +91,7 @@
 	            android:layout_gravity="center"
 	            android:layout_weight="1"
 				android:padding="10dip"
-	            android:background="@drawable/btn_bg"
+	            android:background="?android:selectableItemBackground"
 	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_previous" />
 
@@ -97,7 +102,7 @@
 				android:layout_gravity="center"
 				android:layout_weight="1"
 				android:padding="10dip"
-	            android:background="@drawable/btn_bg"
+	            android:background="?android:selectableItemBackground"
 	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_pause" />
 
@@ -108,7 +113,7 @@
 				android:layout_gravity="center"
 				android:layout_weight="1"
 				android:padding="10dip"
-	            android:background="@drawable/btn_bg"
+	            android:background="?android:selectableItemBackground"
 	            android:scaleType="fitCenter"
 	            android:src="@drawable/notification_next" />
 	    </LinearLayout>
