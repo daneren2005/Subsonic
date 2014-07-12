@@ -700,6 +700,7 @@ public class DownloadService extends Service {
 			nextPlayingTask = new CheckCompletionTask(nextPlaying);
 			nextPlayingTask.execute();
 		} else {
+			resetNext();
 			nextPlaying = null;
 		}
 	}
@@ -993,6 +994,21 @@ public class DownloadService extends Service {
 			mediaPlayer.reset();
 		} catch (Exception x) {
 			handleError(x);
+		}
+	}
+
+	public synchronized void resetNext() {
+		if(nextMediaPlayer != null) {
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+				mediaPlayer.setNextMediaPlayer(null);
+				nextSetup = false;
+			}
+
+			nextMediaPlayer.setOnCompletionListener(null);
+			nextMediaPlayer.setOnErrorListener(null);
+			nextMediaPlayer.reset();
+			nextMediaPlayer.release();
+			nextMediaPlayer = null;
 		}
 	}
 
@@ -1397,13 +1413,7 @@ public class DownloadService extends Service {
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
 			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-			if(nextMediaPlayer != null) {
-				nextMediaPlayer.setOnCompletionListener(null);
-				nextMediaPlayer.setOnErrorListener(null);
-				nextMediaPlayer.reset();
-				nextMediaPlayer.release();
-				nextMediaPlayer = null;
-			}
+			resetNext();
 
 			// Exit when using remote controllers
 			if(remoteState != RemoteControlState.LOCAL) {
