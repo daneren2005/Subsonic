@@ -998,17 +998,21 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void resetNext() {
-		if(nextMediaPlayer != null) {
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-				mediaPlayer.setNextMediaPlayer(null);
-				nextSetup = false;
-			}
+		try {
+			if (nextMediaPlayer != null) {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
+					mediaPlayer.setNextMediaPlayer(null);
+					nextSetup = false;
+				}
 
-			nextMediaPlayer.setOnCompletionListener(null);
-			nextMediaPlayer.setOnErrorListener(null);
-			nextMediaPlayer.reset();
-			nextMediaPlayer.release();
-			nextMediaPlayer = null;
+				nextMediaPlayer.setOnCompletionListener(null);
+				nextMediaPlayer.setOnErrorListener(null);
+				nextMediaPlayer.reset();
+				nextMediaPlayer.release();
+				nextMediaPlayer = null;
+			}
+		} catch (Exception e) {
+			Log.w(TAG, "Failed to reset next media player");
 		}
 	}
 
