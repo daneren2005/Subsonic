@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
 	<release version="4.7.2" versioncode="115" releasedate="7/10/2014">
-		<changelog>Android Wear notification support</changelog>
-		<changelog>Selected drawer tab is now bold</changelog>
-		<changelog>Scroll to song when clicked in search results</changelog>
-		<changelog>Custom sort is now a toggle between sorting by year and alphabetical</changelog>
-		<changelog>For persistent notification, use standard notification layout + x in corner</changelog>
-		<changelog>Don't display type information for each song</changelog>
-		<changelog>Return fast scrolling hack for devices still on Android 4.4.2</changelog>
-		<changelog>Various bug fixes and enhancements</changelog>
+		<change>Android Wear notification support</change>
+		<change>Selected drawer tab is now bold</change>
+		<change>Scroll to song when clicked in search results</change>
+		<change>Custom sort is now a toggle between sorting by year and alphabetical</change>
+		<change>For persistent notification, use standard notification layout + x in corner</change>
+		<change>Don't display type information for each song</change>
+		<change>Return fast scrolling hack for devices still on Android 4.4.2</change>
+		<change>Various bug fixes and enhancements</change>
 	</release>
 	<release version="4.7.1" versioncode="113" releasedate="6/25/2014">
 		<change>Only show podcast, share, and jukebox options when user has server permissions</change>
