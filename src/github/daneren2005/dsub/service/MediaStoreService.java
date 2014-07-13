@@ -57,7 +57,11 @@ public class MediaStoreService {
         values.put(MediaStore.Audio.AudioColumns.ARTIST, song.getArtist());
         values.put(MediaStore.Audio.AudioColumns.ALBUM, song.getAlbum());
         values.put(MediaStore.MediaColumns.DATA, songFile.getAbsolutePath());
-        values.put(MediaStore.MediaColumns.MIME_TYPE, song.getContentType());
+		if(song.getTranscodedContentType() != null) {
+			values.put(MediaStore.MediaColumns.MIME_TYPE, song.getTranscodedContentType());
+		} else {
+			values.put(MediaStore.MediaColumns.MIME_TYPE, song.getContentType());
+		}
 		if(song.getDuration() != null) {
 			values.put(MediaStore.Audio.AudioColumns.DURATION, song.getDuration() * 1000L);
 		}
