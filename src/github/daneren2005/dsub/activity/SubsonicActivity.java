@@ -180,22 +180,20 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
 				position = drawerAdapter.getActualPosition(position);
 				if("Settings".equals(drawerItemsDescriptions[position])) {
 					startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
 					drawer.closeDrawers();
-				} else {
-					startFragmentActivity(drawerItemsDescriptions[position]);
-
-					if(lastSelectedView != view) {
-						if(lastSelectedView != null) {
-							lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle);
+				} else if("Admin".equals(drawerItemsDescriptions[position]) && UserUtil.isCurrentAdmin()) {
+					UserUtil.confirmCredentials(context, new Runnable() {
+						@Override
+						public void run() {
+							drawerItemSelected(position, view);
 						}
-						lastSelectedView = (TextView) view.findViewById(R.id.drawer_name);
-						lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
-						lastSelectedPosition = position;
-					}
+					});
+				} else {
+					drawerItemSelected(position, view);
 				}
 			}
 		});
@@ -466,6 +464,20 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
 				}
 			}
+		}
+	}
+	
+	private void drawerItemSelected(int position, View view) {
+		startFragmentActivity(drawerItemsDescriptions[position]);
+		
+		if(lastSelectedView != view) {
+			if(lastSelectedView != null) {
+				lastSelectedView.setTextAppearance(this, R.style.Dsub_TextViewStyle);
+			}
+			
+			lastSelectedView = (TextView) view.findViewById(R.id.drawer_name);
+			lastSelectedView.setTextAppearance(this, R.style.Dsub_TextViewStyle_Bold);
+			lastSelectedPosition = position;
 		}
 	}
 
