@@ -43,8 +43,11 @@ import github.daneren2005.dsub.view.SettingsAdapter;
 
 public final class UserUtil {
 	private static final String TAG = UserUtil.class.getSimpleName();
+	private static final long MIN_VERIFY_DURATION = 1000L * 60L * 60L;
+	
 	private static int instance = -1;
 	private static User currentUser;
+	private static long lastVerifiedTime = 0;
 
 	public static void refreshCurrentUser(Context context, boolean forceRefresh) {
 		currentUser = null;
@@ -136,6 +139,42 @@ public final class UserUtil {
 		}
 
 		return false;
+	}
+	
+	public static void confirmCredentials(final Context context, final Runnable onSuccess) {
+		final long currentTime = System.currentTimeMillis();
+		// If already ran this check within last x time, just go ahead and auth
+		if((currentTime - lastVerified) < MIN_VERIFY_DURATION) {
+			onSuccess.run();
+		} else {
+			View layout = context.getLayoutInflater().inflate(R.layout.verify_password, null);
+			final TextView passwordView = (TextView) layout.findViewById(R.id.password);
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setTitle(R.string.admin_confirm_password)
+				.setView(layout)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						String password = passwordView.getText().toString();
+						
+						SharedPreferences prefs = Util.getPreferences(context);
+						String correctPassword = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null);
+						
+						if(password != null && password.equals(correctPassword)) {
+							lastVerified = currentTime;
+							onSuccess.run();
+						} else {
+							Util.toast(context, R.string.admin_confirm_password_bad);
+						}
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null)
+				.setCancellable(true);
+			
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
 	}
 
 	public static void changePassword(final Activity context, final User user) {
