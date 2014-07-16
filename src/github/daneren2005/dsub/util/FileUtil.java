@@ -237,7 +237,11 @@ public class FileUtil {
 		opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
 		opt.inJustDecodeBounds = false;
 		Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opt);
-		return getScaledBitmap(bitmap, size);
+		if(bitmap == null) {
+			return null;
+		} else {
+			return getScaledBitmap(bitmap, size);
+		}
 	}
 	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
 		return Bitmap.createScaledBitmap(bitmap, size, Util.getScaledHeight(bitmap, size), true);
