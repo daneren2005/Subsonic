@@ -33,8 +33,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
+
+import org.apache.http.HttpResponse;
+
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Bookmark;
+import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.PodcastEpisode;
@@ -46,10 +50,13 @@ import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
+import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import java.io.*;
 import java.util.Comparator;
@@ -58,10 +65,16 @@ import java.util.SortedSet;
 /**
  * @author Sindre Mehus
  */
-public class OfflineMusicService extends RESTMusicService {
+public class OfflineMusicService implements MusicService {
 	private static final String TAG = OfflineMusicService.class.getSimpleName();
+	private static final String ERRORMSG = "Not available in offline mode";
 
-    @Override
+	@Override
+	public void ping(Context context, ProgressListener progressListener) throws Exception {
+
+	}
+
+	@Override
     public boolean isLicenseValid(Context context, ProgressListener progressListener) throws Exception {
         return true;
     }
@@ -140,12 +153,12 @@ public class OfflineMusicService extends RESTMusicService {
 
 	@Override
 	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Artist by tags not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Album by tags not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	private String getName(File file) {
@@ -234,9 +247,29 @@ public class OfflineMusicService extends RESTMusicService {
 		}
     }
 
-    @Override
+	@Override
+	public HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public Version getLocalVersion(Context context) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public Version getLatestVersion(Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
     public List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Music folders not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 
     @Override
@@ -304,7 +337,12 @@ public class OfflineMusicService extends RESTMusicService {
 		
 		return new SearchResult(artists, albums, songs);
     }
-	
+
+	@Override
+	public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
 	private void recursiveAlbumSearch(String artistName, File file, SearchCritera criteria, Context context, List<MusicDirectory.Entry> albums, List<MusicDirectory.Entry> songs) {
 		int closeness;
 		for(File albumFile : FileUtil.listMediaFiles(file)) {
@@ -446,37 +484,37 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Playlists not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 	
 	@Override
 	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Playlists not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Updating playlist not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Removing from playlist not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Overwriting playlist not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Updating playlist not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
     @Override
     public Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Lyrics not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 
     @Override
@@ -509,12 +547,12 @@ public class OfflineMusicService extends RESTMusicService {
 
     @Override
     public MusicDirectory getAlbumList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Album lists not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 
 	@Override
 	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Album lists not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
     @Override
@@ -524,42 +562,42 @@ public class OfflineMusicService extends RESTMusicService {
 	
 	@Override
     public String getVideoStreamUrl(String format, int maxBitrate, Context context, String id) throws Exception {
-        return null;
+		throw new OfflineException(ERRORMSG);
     }
 	
 	@Override
 	public String getHlsUrl(String id, int bitRate, Context context) throws Exception {
-		return null;
+		throw new OfflineException(ERRORMSG);
 	}
 
     @Override
     public RemoteStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Jukebox not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 
     @Override
     public RemoteStatus skipJukebox(int index, int offsetSeconds, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Jukebox not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 
     @Override
     public RemoteStatus stopJukebox(Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Jukebox not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 
     @Override
     public RemoteStatus startJukebox(Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Jukebox not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 
     @Override
     public RemoteStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Jukebox not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 
     @Override
     public RemoteStatus setJukeboxGain(float gain, Context context, ProgressListener progressListener) throws Exception {
-        throw new OfflineException("Jukebox not available in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
 	
 	@Override
@@ -586,15 +624,45 @@ public class OfflineMusicService extends RESTMusicService {
 		offlineEditor.putInt(Constants.OFFLINE_STAR_COUNT, stars);
 		offlineEditor.commit();
 	}
-	
+
+	@Override
+	public List<Share> getShares(Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public List<Share> createShare(List<String> ids, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public void deleteShare(String id, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public void updateShare(String id, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
 	@Override
 	public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Getting Genres not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Getting Songs By Genre not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
     @Override
@@ -615,7 +683,12 @@ public class OfflineMusicService extends RESTMusicService {
 
         return result;
     }
-	
+
+	@Override
+	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		List<PodcastChannel> channels = new ArrayList<PodcastChannel>();
@@ -647,97 +720,97 @@ public class OfflineMusicService extends RESTMusicService {
 	
 	@Override
 	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Getting Podcasts not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception{
-		throw new OfflineException("Getting Podcasts not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception{
-		throw new OfflineException("Getting Podcasts not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
-		throw new OfflineException("Getting Podcasts not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 	
 	@Override
 	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
-		throw new OfflineException("Getting Podcasts not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Setting ratings not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Getting bookmarks not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Creating bookmarks not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Deleting bookmarks not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Getting user not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public List<User> getUsers(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Getting users not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Creating users not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Updating users not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Deleting users not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Changing email not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException("Changing passwords not available in offline mode");
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
 	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
-		return null;
+		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
     public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
-		throw new OfflineException("Offline scrobble cached can not be processes while in offline mode");
+		throw new OfflineException(ERRORMSG);
     }
     
     @Override
     public void setInstance(Integer instance) throws Exception{
-    	throw new OfflineException("Offline servers only have one instance");
+		throw new OfflineException(ERRORMSG);
     }
 
     private void listFilesRecursively(File parent, List<File> children) {
