@@ -49,8 +49,15 @@ public final class UserUtil {
 	private static User currentUser;
 	private static long lastVerifiedTime = 0;
 
+
 	public static void refreshCurrentUser(Context context, boolean forceRefresh) {
+		refreshCurrentUser(context, forceRefresh, false);
+	}
+	public static void refreshCurrentUser(Context context, boolean forceRefresh, boolean unAuth) {
 		currentUser = null;
+		if(unAuth) {
+			lastVerifiedTime = 0;
+		}
 		seedCurrentUser(context, forceRefresh);
 	}
 
@@ -141,13 +148,13 @@ public final class UserUtil {
 		return false;
 	}
 	
-	public static void confirmCredentials(final Context context, final Runnable onSuccess) {
+	public static void confirmCredentials(final Activity context, final Runnable onSuccess) {
 		final long currentTime = System.currentTimeMillis();
 		// If already ran this check within last x time, just go ahead and auth
-		if((currentTime - lastVerified) < MIN_VERIFY_DURATION) {
+		if((currentTime - lastVerifiedTime) < MIN_VERIFY_DURATION) {
 			onSuccess.run();
 		} else {
-			View layout = context.getLayoutInflater().inflate(R.layout.verify_password, null);
+			View layout = context.getLayoutInflater().inflate(R.layout.confirm_password, null);
 			final TextView passwordView = (TextView) layout.findViewById(R.id.password);
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -162,7 +169,7 @@ public final class UserUtil {
 						String correctPassword = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null);
 						
 						if(password != null && password.equals(correctPassword)) {
-							lastVerified = currentTime;
+							lastVerifiedTime = currentTime;
 							onSuccess.run();
 						} else {
 							Util.toast(context, R.string.admin_confirm_password_bad);
@@ -170,7 +177,7 @@ public final class UserUtil {
 					}
 				})
 				.setNegativeButton(R.string.common_cancel, null)
-				.setCancellable(true);
+				.setCancelable(true);
 			
 			AlertDialog dialog = builder.create();
 			dialog.show();

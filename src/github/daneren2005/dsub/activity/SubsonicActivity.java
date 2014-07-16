@@ -181,19 +181,19 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
-				position = drawerAdapter.getActualPosition(position);
-				if("Settings".equals(drawerItemsDescriptions[position])) {
+				final int actualPosition = drawerAdapter.getActualPosition(position);
+				if("Settings".equals(drawerItemsDescriptions[actualPosition])) {
 					startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
 					drawer.closeDrawers();
-				} else if("Admin".equals(drawerItemsDescriptions[position]) && UserUtil.isCurrentAdmin()) {
-					UserUtil.confirmCredentials(context, new Runnable() {
+				} else if("Admin".equals(drawerItemsDescriptions[actualPosition]) && UserUtil.isCurrentAdmin()) {
+					UserUtil.confirmCredentials(SubsonicActivity.this, new Runnable() {
 						@Override
 						public void run() {
-							drawerItemSelected(position, view);
+							drawerItemSelected(actualPosition, view);
 						}
 					});
 				} else {
-					drawerItemSelected(position, view);
+					drawerItemSelected(actualPosition, view);
 				}
 			}
 		});
@@ -472,11 +472,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		
 		if(lastSelectedView != view) {
 			if(lastSelectedView != null) {
-				lastSelectedView.setTextAppearance(this, R.style.Dsub_TextViewStyle);
+				lastSelectedView.setTextAppearance(this, R.style.DSub_TextViewStyle);
 			}
 			
 			lastSelectedView = (TextView) view.findViewById(R.id.drawer_name);
-			lastSelectedView.setTextAppearance(this, R.style.Dsub_TextViewStyle_Bold);
+			lastSelectedView.setTextAppearance(this, R.style.DSub_TextViewStyle_Bold);
 			lastSelectedPosition = position;
 		}
 	}
