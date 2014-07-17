@@ -295,13 +295,15 @@ public final class Notifications {
 
 	public static void showSyncNotification(final Context context, int stringId, String extra) {
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION, true)) {
-			String content = (extra != null) ? context.getResources().getString(stringId, extra) : context.getResources().getString(stringId);
+			if(extra == null) {
+				extra = "";
+			}
 
 			NotificationCompat.Builder builder;
 			builder = new NotificationCompat.Builder(context)
 					.setSmallIcon(R.drawable.stat_notify_sync)
-					.setContentTitle(context.getResources().getString(R.string.sync_title))
-					.setContentText(content)
+					.setContentTitle(context.getResources().getString(stringId))
+					.setContentText(extra)
 					.setStyle(new NotificationCompat.BigTextStyle().bigText(content.replace(", ", "\n")))
 					.setOngoing(false)
 					.setGroup(NOTIFICATION_SYNC_GROUP)
