@@ -617,7 +617,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				albums = result.getFirst().getChildren(true, false);
 				entries = result.getFirst().getChildren(false, true);
 			} else {
-				albums = new ArrayList<MusicDirectory.Entry>();
+				albums = result.getFirst().getChildren(true, false);
 				entries = result.getFirst().getChildren();
 			}
             licenseValid = result.getSecond();
