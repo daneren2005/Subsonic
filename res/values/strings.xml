@@ -211,11 +211,10 @@
 		\nEstimated Size: %2$s</string>
 	<string name="download.failed_to_load">Failed to load</string>
 
-	<string name="sync.title">DSub: New media is available</string>
-	<string name="sync.new_podcasts">New podcasts: %s</string>
-	<string name="sync.new_playlists">New in playlists: %s</string>
-	<string name="sync.new_albums">New albums: %s</string>
-	<string name="sync.new_starred">New starred songs</string>
+	<string name="sync.new_podcasts">New podcasts available</string>
+	<string name="sync.new_playlists">New songs in playlists</string>
+	<string name="sync.new_albums">New albums available</string>
+	<string name="sync.new_starred">New starred songs available</string>
     
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
