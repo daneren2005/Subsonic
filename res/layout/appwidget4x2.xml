@@ -32,7 +32,7 @@
             android:orientation="vertical"
             android:paddingTop="4dip"
             android:paddingBottom="4dip"
-			android:background="?android:selectableItemBackground">
+			style="@style/BasicButton">
 
             <TextView
                 android:id="@+id/title"
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:scaleType="center"
-                android:background="?android:selectableItemBackground"          
+                style="@style/BasicButton"
                 android:src="@drawable/ic_appwidget_music_previous" />
 
             <ImageButton
@@ -114,7 +114,7 @@
                 android:layout_weight="1"
                 android:scaleType="center"              
                 android:src="@drawable/ic_appwidget_music_play"
-				android:background="?android:selectableItemBackground" />
+				style="@style/BasicButton" />
 
             <ImageButton
                 android:id="@+id/control_next"
@@ -123,7 +123,7 @@
                 android:layout_weight="1"
                 android:scaleType="center"
                 android:src="@drawable/ic_appwidget_music_next"
-				android:background="?android:selectableItemBackground" />
+				style="@style/BasicButton" />
         </LinearLayout>
     </LinearLayout>
 
