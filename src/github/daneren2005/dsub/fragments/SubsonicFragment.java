@@ -744,7 +744,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					root = share.getMusicDirectory();
 				}
 				else if(isDirectory) {
-					root = getMusicDirectory(id, name, false, musicService, this);
+					if(id != null) {
+						root = getMusicDirectory(id, name, false, musicService, this);
+					} else {
+						root = musicService.getStarredList(context, this);
+					}
 				}
 				else {
 					root = musicService.getPlaylist(true, id, name, context, this);
