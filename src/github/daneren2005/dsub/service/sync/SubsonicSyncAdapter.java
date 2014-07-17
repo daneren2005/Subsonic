@@ -131,7 +131,9 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 				DownloadFile file = new DownloadFile(context, song, save);
 				while(!(save && file.isSaved() || !save && file.isCompleteFileAvailable()) && !file.isFailedMax()) {
 					file.downloadNow(musicService);
-					downloaded = true;
+					if(!file.isFailed()) {
+						downloaded = true;
+					}
 				}
 
 				if(paths != null && file.isCompleteFileAvailable()) {
