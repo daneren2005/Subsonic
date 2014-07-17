@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="PlaybackControl">
-        <item name="android:background">?android:selectableItemBackground</item>
+	<style name="BasicButton">
+		<item name="android:background">@drawable/abc_item_background_holo_light</item>
+	</style>
+
+    <style name="PlaybackControl" parent="@style/BasicButton">
         <item name="android:scaleType">fitCenter</item>
         <item name="android:padding">6dip</item>
         <item name="android:layout_marginLeft">4dip</item>

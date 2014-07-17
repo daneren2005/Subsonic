@@ -15,7 +15,7 @@
 		android:id="@+id/bottom_bar"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:background="?android:selectableItemBackground"
+		style="@style/BasicButton"
 		android:orientation="horizontal">
 
 		<ImageView
