@@ -162,7 +162,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	@Override
 	public void startActivity(Intent intent) {
-		if("github.daneren2005.dsub.activity.DownloadActivity".equals(intent.getComponent().getClassName())) {
+		if(intent.getComponent() != null && "github.daneren2005.dsub.activity.DownloadActivity".equals(intent.getComponent().getClassName())) {
 			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
 		}
 		super.startActivity(intent);
