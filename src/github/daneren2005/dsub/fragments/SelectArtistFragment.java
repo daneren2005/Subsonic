@@ -154,36 +154,8 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 	}
 
 	@Override
-	protected void refresh(final boolean refresh) {
-		listView.setVisibility(View.INVISIBLE);
-
-		BackgroundTask<Indexes> task = new TabBackgroundTask<Indexes>(this) {
-			@Override
-			protected Indexes doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				if (!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
-					musicFolders = musicService.getMusicFolders(refresh, context, this);
-				}
-				String musicFolderId = Util.getSelectedMusicFolderId(context);
-				return musicService.getIndexes(musicFolderId, refresh, context, this);
-			}
-
-			@Override
-			protected void done(Indexes result) {
-				objects = new ArrayList<Artist>(result.getShortcuts().size() + result.getArtists().size());
-				objects.addAll(result.getShortcuts());
-				objects.addAll(result.getArtists());
-				listView.setFastScrollEnabled(false);
-				listView.setAdapter(adapter = getAdapter(objects));
-				listView.setFastScrollEnabled(true);
-				entries = result.getEntries();
-
-				setMusicFolders();
-				listView.setVisibility(View.VISIBLE);
-				refreshLayout.setRefreshing(false);
-			}
-		};
-		task.execute();
+	protected void onFinishRefresh() {
+		setMusicFolders();
 	}
 
 	@Override
@@ -199,7 +171,18 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	public List<Artist> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		return null;
+		if(!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
+			musicFolders = musicService.getMusicFolders(refresh, context, listener);
+		}
+		String musicFolderId = Util.getSelectedMusicFolderId(context);
+		
+		Indexes indexes = musicService.getIndexes(musicFolderId, refresh, context, listener);
+		List<Artist> artists = new ArrayList<Artist>(indexes.getShortcuts().size() + indexes.getArtists().size());
+		artists.addAll(indexes.getShortcuts());
+		artists.addAll(indexes.getArtists());
+		entries = indexes.getEntries();
+		
+		return artists;
 	}
 
 	@Override
