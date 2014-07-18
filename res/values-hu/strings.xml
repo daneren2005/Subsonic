@@ -212,10 +212,9 @@
 	</string>
 	<string name="download.failed_to_load">A beolvasás sikertelen!</string>
 
-	<string name="sync.title">DSub: Új média érhető el!</string>
-	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
-	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
-	<string name="sync.new_albums">Új albumok: \"%s\"</string>
+	<string name="sync.new_podcasts">Új podcastok</string>
+	<string name="sync.new_playlists">Új lejátszási listák</string>
+	<string name="sync.new_albums">Új albumok</string>
 	<string name="sync.new_starred">Új csillagozott dalok</string>
     
 	<string name="starring_content_starred">\"%s\" csillagozás be</string>

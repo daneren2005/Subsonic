@@ -304,7 +304,7 @@ public final class Notifications {
 					.setSmallIcon(R.drawable.stat_notify_sync)
 					.setContentTitle(context.getResources().getString(stringId))
 					.setContentText(extra)
-					.setStyle(new NotificationCompat.BigTextStyle().bigText(content.replace(", ", "\n")))
+					.setStyle(new NotificationCompat.BigTextStyle().bigText(extra.replace(", ", "\n")))
 					.setOngoing(false)
 					.setGroup(NOTIFICATION_SYNC_GROUP)
 					.setPriority(NotificationCompat.PRIORITY_LOW);

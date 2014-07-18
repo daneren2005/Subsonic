@@ -211,10 +211,9 @@
 		\nTaille estimée : %2$s</string>
 	<string name="download.failed_to_load">Echec du chargement</string>
 
-	<string name="sync.title">DSub : un nouveau média est disponible</string>
-	<string name="sync.new_podcasts">Nouveaux podcasts : %s</string>
-	<string name="sync.new_playlists">Playlists mises à jour : %s</string>
-	<string name="sync.new_albums">Nouveaux albums : %s</string>
+	<string name="sync.new_podcasts">Nouveaux podcasts</string>
+	<string name="sync.new_playlists">Playlists mises à jour</string>
+	<string name="sync.new_albums">Nouveaux albums</string>
 	<string name="sync.new_starred">Nouveaux titres notés</string>
     
 	<string name="starring_content_starred">Noté \&quot;%s\&quot;</string>

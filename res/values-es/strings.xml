@@ -458,10 +458,9 @@
 	<string name="admin.role.jukebox">Controlar el jukebox</string>
 	<string name="admin.role.share">Gestionar compartidos</string>
 
-	<string name="sync.title">DSub: Nuevo contenido multimedia disponible</string>
-	<string name="sync.new_podcasts">Nuevos podcasts: %s</string>
-	<string name="sync.new_playlists">Nuevos en listas de reproducción: %s</string>
-	<string name="sync.new_albums">Nuevos álbumes: %s</string>
+	<string name="sync.new_podcasts">Nuevos podcasts</string>
+	<string name="sync.new_playlists">Nuevos en listas de reproducción</string>
+	<string name="sync.new_albums">Nuevos álbumes</string>
 	<string name="sync.new_starred">Nuevas canciones con estrella</string>
 
 	<string name="shuffle.title">Iniciar aleatorio por</string>
