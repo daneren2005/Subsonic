@@ -39,8 +39,8 @@
 	<string name="button_bar.downloading">Letöltések</string>
 
     <string name="main.welcome_title">Üdvözlet!</string>
-    <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás még nincs beállítva. Miután konfigurálta
-	saját kiszolgálóját (elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba, és adja meg csatlakozási adatokat!</string>
+    <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás még nincs beállítva. Miután konfigurálta saját kiszolgálóját 
+	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba, és adja meg csatlakozási adatokat!</string>
 	<string name="main.about_title">DSub információk</string>
 	<string name="main.about_text">Fejlesztő: Scott Jackson
 		\nEmail: dsub.android@gmail.com
@@ -52,7 +52,7 @@
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Gyorsítótárazás vs Tárolás</font>:
-		<br/>Míg a normál módon gyorsítótárazott dalok törlődhetnek amikor újak kerülnek letöltésre, addig a "Letöltés tárolásra (megőrzés)" menüpont segítségével letöltött dalok soha nem törlődnek automatikusan.
+		<br/>Míg a normál módon gyorsítótárazott dalok törlődhetnek amikor újak kerülnek letöltésre, addig a \"Letöltés tárolásra (megőrzés)\" menüpont segítségével letöltött dalok soha nem törlődnek automatikusan.
 		<p/><font color="red">Ha a ChromeCast sikertelen</font>:
 		<br/>Győződjön meg róla, hogy nem használ saját aláírású tanúsítványt, mert a ChromeCast azt automatikusan visszautasítja!
 	]]>
@@ -133,7 +133,7 @@
     <string name="select_album.searching">Keresés...</string>
     <string name="select_album.no_sdcard">Hiba: SD kártya nem áll rendelkezésre!</string>
     <string name="select_album.no_network">Figyelem: Hálózat nem áll rendelkezésre!</string>
-    <string name="select_album.not_licensed">A kiszolgálónak nincs licensze! %d próbanap van hátra!</string>
+    <string name="select_album.not_licensed">A kiszolgálónak nincs licence! %d próbanap van hátra!</string>
     <string name="select_album.donate_dialog_message">Korlátlan letöltéshez juthat a Subsonic támogatásával!</string>
     <string name="select_album.donate_dialog_now">Most</string>
     <string name="select_album.donate_dialog_later">Később</string>
@@ -196,7 +196,7 @@
     <string name="download.jukebox_volume">Hangerő távvezérlése</string>
     <string name="download.jukebox_server_too_old">A távvezérlés nem támogatott. Kérjük, frissítse a Subsonic kiszolgálót!</string>
     <string name="download.jukebox_offline">A távvezérlés nem lehetséges offline módban!</string>
-    <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Kérjük, engedélyezze a jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
+    <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Engedélyezze a Jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
 	<string name="download.timer_length">Időhossz:</string>
 	<string name="download.start_timer">Időzítő indítása</string>
 	<string name="download.stop_timer">Időzítő megállítása</string>
@@ -270,10 +270,10 @@
 	<string name="settings.cache_clear_complete">Gyorsítótár törlése kész!</string>
     <string name="settings.testing_connection">Kapcsolat tesztelése...</string>
     <string name="settings.testing_ok">Kapcsolat OK!</string>
-    <string name="settings.testing_unlicensed">Kapcsolat OK! A kiszolgálónak nincs licensze!</string>
+    <string name="settings.testing_unlicensed">Kapcsolat OK! A kiszolgálónak nincs licence!</string>
     <string name="settings.connection_failure">Csatlakozási hiba!</string>
     <string name="settings.invalid_url">Adjon meg egy érvényes URL-t!</string>
-    <string name="settings.invalid_username">Adjon meg érvényes felhasználónevet (szóközt nem tartalmazhat)!</string>
+    <string name="settings.invalid_username">Adjon meg egy érvényes felhasználónevet (szóközt nem tartalmazhat)!</string>
     <string name="settings.appearance_title">Megjelenés</string>
     <string name="settings.theme_title">Témák</string>
     <string name="settings.theme_light">Világos</string>
@@ -281,9 +281,9 @@
 	<string name="settings.theme_black">Fekete</string>
 	<string name="settings.theme_holo">Holo</string>
 	<string name="settings.theme_fullscreen">Teljes képernyős</string>
-	<string name="settings.theme_fullscreen_summary">Teljes képernyős üzemmód (értesítési sáv rejtése).</string>
-	<string name="settings.track_title">Dalsorszám megjelenítése #</string>
-	<string name="settings.track_summary">Dalsorszám megjelenítése # a dal címe előtt, ha létezik.</string>
+	<string name="settings.theme_fullscreen_summary">Teljes képernyős üzemmód (értesítési sáv elrejtése).</string>
+	<string name="settings.track_title">Dalsorszám megjelenítése</string>
+	<string name="settings.track_summary">Dalsorszám megjelenítése a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
 	<string name="settings.custom_sort_summary">A kiszolgáló alapértelmezett rendezésének felülbírálása, rendezés a lemez sorszáma és a kiadás éve alapján.</string>
 	<string name="settings.open_to_library">Médiakönyvtár megnyitása</string>
@@ -359,7 +359,7 @@
 	<string name="settings.persistent_title">Állandó kijelzés</string>
 	<string name="settings.persistent_summary">Kijelzés az értesítési sávon a lejátszás megállítása után is. Nyomja meg a stop gombot a törléséhez!</string>
 	<string name="settings.gapless_playback">Egybefüggő lejátszás (Gapless)</string>
-	<string name="settings.gapless_playback_summary">Ha Galaxy S3 telefonnál lefagyásokat/furcsaságokat tapasztal az egybefüggő lejátszás (Gapless) engedélyezése után, a probléma megoldásához kapcsolja ki a funkciót!</string>
+	<string name="settings.gapless_playback_summary">Ha lefagyásokat/furcsaságokat tapasztal az egybefüggő lejátszás (Gapless) engedélyezése után, a probléma megoldásához kapcsolja ki a funkciót!</string>
 	<string name="settings.chat_refresh">Csevegés frissítési gyakorisága (mp.)</string>
 	<string name="settings.chat_enabled">Csevegés (Chat) engedélyezése</string>
 	<string name="settings.chat_enabled_summary">Csevegés (Chat) menüpont megjelenítése az elhúzható oldalsávon.</string>
@@ -464,6 +464,8 @@
 	<string name="admin.delete_user">Felhasználó törlése</string>
 	<string name="admin.delete_user_success">%1$s felhasználó létrehozva</string>
 	<string name="admin.delete_user_error">%1$s felhasználó törlése sikertelen!</string>
+	<string name="admin.confirm_password">Jelszó megerősítése</string>
+	<string name="admin.confirm_password_bad">A beírt jelszó nem egyezik!</string>
 	
 	<string name="admin.scrobblingEnabled">Scrobbling használata</string>
 	<string name="admin.role.admin">Adminisztrátor</string>
