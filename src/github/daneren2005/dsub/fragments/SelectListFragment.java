@@ -52,6 +52,7 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	private static final String TAG = SelectListFragment.class.getSimpleName();
 	protected ListView listView;
 	protected ArrayAdapter adapter;
+	protected BackgroundTask<List<T>> currentTask;
 	protected List<T> objects;
 	protected boolean serialize = true;
 
@@ -114,8 +115,13 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 			setTitle(getTitleResource());
 		}
 		listView.setVisibility(View.GONE);
+		
+		// Cancel current running task before starting another one
+		if(currentTask != null) {
+			currentTask.cancel();
+		}
 
-		BackgroundTask<List<T>> task = new TabBackgroundTask<List<T>>(this) {
+		currentTask = new TabBackgroundTask<List<T>>(this) {
 			@Override
 			protected List<T> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
@@ -144,9 +150,11 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 				} else {
 					setEmpty(true);
 				}
+				
+				currentTask = null;
 			}
 		};
-		task.execute();
+		currentTask.execute();
 	}
 
 	public abstract int getOptionsMenu();
