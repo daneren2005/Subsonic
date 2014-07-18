@@ -635,7 +635,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
             }
         } else {
             showHeader = false;
-			if(!"root".equals(id) && entries.size() == 0) {
+			if(!"root".equals(id) && (entries.size() == 0 || !largeAlbums && albums.size() == entries.size())) {
             	hideButtons = true;
 			}
         }
