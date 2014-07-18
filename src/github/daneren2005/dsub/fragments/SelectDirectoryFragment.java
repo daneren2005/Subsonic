@@ -63,6 +63,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private List<MusicDirectory.Entry> entries;
 	private boolean albumContext = false;
 	private boolean addAlbumHeader = false;
+	private LoadTask currentTask;
 
 	String id;
 	String name;
@@ -433,6 +434,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			refresh = true;
 		}
 		
+		if(currentTask != null) {
+			currentTask.cancel();
+		}
+		
 		entryList.setVisibility(View.INVISIBLE);
 		if (playlistId != null) {
 			getPlaylist(playlistId, playlistName, refresh);
@@ -599,6 +604,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		public LoadTask() {
 			super(SelectDirectoryFragment.this);
+			
+			currentTask = this;
 		}
 
 		protected abstract MusicDirectory load(MusicService service) throws Exception;
@@ -622,6 +629,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
             licenseValid = result.getSecond();
             finishLoading();
+            
+			currentTask = null;
 		}
 	}
 
