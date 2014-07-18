@@ -134,10 +134,13 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 			@Override
 			protected void done(List<T> result) {
 				if (result != null && !result.isEmpty()) {
+					// Toggle fast scroll to get around issue when length of list changes
+					listView.setFastScrollEnabled(false);
 					listView.setAdapter(adapter = getAdapter(result));
-					listView.setVisibility(View.VISIBLE);
+					listView.setFastScrollEnabled(true);
 					
 					onFinishRefresh();
+					listView.setVisibility(View.VISIBLE);
 				} else {
 					setEmpty(true);
 				}
