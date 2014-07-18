@@ -136,6 +136,8 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 				if (result != null && !result.isEmpty()) {
 					listView.setAdapter(adapter = getAdapter(result));
 					listView.setVisibility(View.VISIBLE);
+					
+					onFinishRefresh();
 				} else {
 					setEmpty(true);
 				}
@@ -148,4 +150,8 @@ public abstract class SelectListFragment<T> extends SubsonicFragment implements 
 	public abstract ArrayAdapter getAdapter(List<T> objs);
 	public abstract List<T> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception;
 	public abstract int getTitleResource();
+	
+	public void onFinishRefresh() {
+		
+	}
 }
