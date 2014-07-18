@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.3" versioncode="119" releasedate="7/18/2014">
+		<change>Require password for entering admin tab for security</change>
+		<change>Improvements to sync notifications</change>
+		<change>Fix crash on sharing</change>
+		<change>Misc bug fixes</change>
+	</release>
 	<release version="4.7.2" versioncode="116" releasedate="7/10/2014">
 		<change>Android Wear notification support</change>
 		<change>Selected drawer tab is now bold</change>
