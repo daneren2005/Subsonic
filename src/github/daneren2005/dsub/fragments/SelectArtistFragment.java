@@ -69,7 +69,7 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 			listView.setFastScrollAlwaysVisible(true);
 		}
 
-		if(objects != null) {
+		if(objects != null && currentTask == null) {
 			if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
 				folderButton.setVisibility(View.GONE);
 			}
@@ -154,7 +154,7 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 	}
 
 	@Override
-	protected void onFinishRefresh() {
+	public void onFinishRefresh() {
 		setMusicFolders();
 	}
 
