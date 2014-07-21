@@ -564,35 +564,9 @@ public final class Util {
         return count;
     }
 
-    public static void atomicCopy(File from, File to) throws IOException {
-        FileInputStream in = null;
-        FileOutputStream out = null;
-        File tmp = null;
-        try {
-            tmp = new File(to.getPath() + ".tmp");
-            in = new FileInputStream(from);
-            out = new FileOutputStream(tmp);
-            in.getChannel().transferTo(0, from.length(), out.getChannel());
-            out.close();
-            if (!tmp.renameTo(to)) {
-                throw new IOException("Failed to rename " + tmp + " to " + to);
-            }
-            Log.i(TAG, "Copied " + from + " to " + to);
-        } catch (IOException x) {
-            close(out);
-            delete(to);
-            throw x;
-        } finally {
-            close(in);
-            close(out);
-            delete(tmp);
-        }
-    }
 	public static void renameFile(File from, File to) throws IOException {
-		if(from.renameTo(to)) {
-			Log.i(TAG, "Renamed " + from + " to " + to);
-		} else {
-			atomicCopy(from, to);
+		if(!from.renameTo(to)) {
+			Log.i(TAG, "Failed to rename " + from + " to " + to);
 		}
 	}
 
