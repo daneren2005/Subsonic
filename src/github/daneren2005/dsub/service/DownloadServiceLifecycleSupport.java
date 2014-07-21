@@ -159,7 +159,15 @@ public class DownloadServiceLifecycleSupport {
 
 	public void onStart(Intent intent) {
 		if (intent != null) {
-			if(intent.getExtras() != null) {
+			String action = intent.getAction();
+			if(DownloadService.START_PLAY.equals(action)) {
+				if(intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
+					downloadService.setShufflePlayEnabled(true);
+				}
+				downloadService.play();
+			} else if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
+				downloadService.clearBackground();
+			} else if(intent.getExtras() != null) {
 				final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
 				if (event != null) {
 					eventHandler.post(new Runnable() {
@@ -172,11 +180,6 @@ public class DownloadServiceLifecycleSupport {
 							handleKeyEvent(event);
 						}
 					});
-				}
-			} else {
-				String action = intent.getAction();
-				if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
-					downloadService.clearBackground();
 				}
 			}
 		}
