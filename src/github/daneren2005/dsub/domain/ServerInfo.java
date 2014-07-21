@@ -26,62 +26,113 @@ package github.daneren2005.dsub.domain;
 public class ServerInfo implements Serializable {
 	public static final int TYPE_SUBSONIC = 1;
 	public static final int TYPE_MADSONIC = 2;
+	private static final Map<Integer, ServerInfo> SERVERS = new ConcurrentHashMap<Integer, ServerInfo>();
 	
-    private boolean isLicenseValid;
-    private Version restVersion;
+	private boolean isLicenseValid;
+	private Version restVersion;
 	private int type;
 	
 	public ServerInfo() {
 		type = TYPE_SUBSONIC;
 	}
 
-    public boolean isLicenseValid() {
-        return isLicenseValid;
-    }
+	public boolean isLicenseValid() {
+		return isLicenseValid;
+	}
 
-    public void setLicenseValid(boolean licenseValid) {
-        isLicenseValid = licenseValid;
-    }
+	public void setLicenseValid(boolean licenseValid) {
+		isLicenseValid = licenseValid;
+	}
 
-    public Version getRestVersion() {
-        return restVersion;
-    }
+	public Version getRestVersion() {
+		return restVersion;
+	}
 
-    public void setRestVersion(Version restVersion) {
-        this.restVersion = restVersion;
-    }
+	public void setRestVersion(Version restVersion) {
+		this.restVersion = restVersion;
+	}
     
-    public int getRestType() {
-    	return type;
-    }
-    public void setRestType(int type) {
-    	this.type = type;
-    }
-    
-    public boolean isStockSubsonic() {
-    	return type == TYPE_SUBSONIC;
-    }
-    public boolean isMadsonic() {
-    	return type == TYPE_MADSONIC;
-    }
-    
-    @Override
-    public boolean equals(Object o) {
-    	if(this == 0) {
-    		return true;
-    	} else if(o == null || getClass() != o.getClass()) {
-    		return false;
-    	}
-    	
-    	final ServerInfo info = (ServerInfo) o;
-    	
-    	if(this.type != info.type) {
-    		return false;
-    	} else if(this.restVersion == null || info.restVersion == null) {
-    		// Should never be null unless just starting up
-    		return false;
-    	} else {
-    		return this.restVersion.equals(info.restVersion);
-    	}
-    }
+	public int getRestType() {
+		return type;
+	}
+	public void setRestType(int type) {
+		this.type = type;
+	}
+	
+	public boolean isStockSubsonic() {
+		return type == TYPE_SUBSONIC;
+	}
+	public boolean isMadsonic() {
+		return type == TYPE_MADSONIC;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(this == 0) {
+			return true;
+		} else if(o == null || getClass() != o.getClass()) {
+			return false;
+		}
+	    
+		final ServerInfo info = (ServerInfo) o;
+	    
+		if(this.type != info.type) {
+			return false;
+		} else if(this.restVersion == null || info.restVersion == null) {
+			// Should never be null unless just starting up
+			return false;
+		} else {
+			return this.restVersion.equals(info.restVersion);
+		}
+	}
+
+	public void saveServerInfo(Context context) {
+		saveServerInfo(context, Util.getActiveServer(context));
+	}
+	public void saveServerInfo(Context context, int instance) {
+		ServerInfo current = SERVERS.get(instance);
+		if(!this.equals(current)) {
+			SERVERS.put(instance, this);
+			FileUtil.serialize(context, this, getCacheName(context, instance));
+		}
+	}
+	
+	public static ServerInfo getServerInfo(Context context) {
+		return getServerInfo(context, Util.getActiveServer(context));
+	}
+	public static ServerInfo getServerInfo(Context context, int instance) {
+		ServerInfo current = SERVERS.get(instance);
+		if(current != null) {
+			return current;
+		}
+		
+		current = FileUtil.deserialize(context, getCacheName(context, instance), ServerInfo.class);
+		if(current != null) {
+			SERVERS.put(instance, current);
+		}
+		
+		return current;
+	}
+
+	public static boolean checkServerVersion(Context context, String requiredVersion) {
+		return checkServerVersion(context, requiredVersion, Util.getActiveServer(context));
+	}
+	public static boolean checkServerVersion(Context context, String requiredVersion, int instance) {
+		ServerInfo server = getServerInfo(context, instance);
+		if(server == null) {
+			return false;
+		}
+		
+		Version version = server.getRestVersion();
+		if(version == null) {
+			return false;
+		}
+		
+		Version required = new Version(requiredVersion);
+		return version.compareTo(required) >= 0;
+	}
+	
+	private static String getCacheName(context, instance) {
+		return "server-" + Util.getRestUrl(context, null, instance, false).hashCode() + ".ser";
+	}
 }
