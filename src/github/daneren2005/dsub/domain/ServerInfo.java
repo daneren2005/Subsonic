@@ -23,10 +23,17 @@ package github.daneren2005.dsub.domain;
  *
  * @author Sindre Mehus
  */
-public class ServerInfo {
-
+public class ServerInfo implements Serializable {
+	public static final int TYPE_SUBSONIC = 1;
+	public static final int TYPE_MADSONIC = 2;
+	
     private boolean isLicenseValid;
     private Version restVersion;
+	private int type;
+	
+	public ServerInfo() {
+		type = TYPE_SUBSONIC;
+	}
 
     public boolean isLicenseValid() {
         return isLicenseValid;
@@ -42,5 +49,39 @@ public class ServerInfo {
 
     public void setRestVersion(Version restVersion) {
         this.restVersion = restVersion;
+    }
+    
+    public int getRestType() {
+    	return type;
+    }
+    public void setRestType(int type) {
+    	this.type = type;
+    }
+    
+    public boolean isStockSubsonic() {
+    	return type == TYPE_SUBSONIC;
+    }
+    public boolean isMadsonic() {
+    	return type == TYPE_MADSONIC;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if(this == 0) {
+    		return true;
+    	} else if(o == null || getClass() != o.getClass()) {
+    		return false;
+    	}
+    	
+    	final ServerInfo info = (ServerInfo) o;
+    	
+    	if(this.type != info.type) {
+    		return false;
+    	} else if(this.restVersion == null || info.restVersion == null) {
+    		// Should never be null unless just starting up
+    		return false;
+    	} else {
+    		return this.restVersion.equals(info.restVersion);
+    	}
     }
 }
