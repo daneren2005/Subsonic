@@ -127,7 +127,13 @@ public abstract class AbstractParser {
             rootElementFound = true;
             String version = get("version");
             if (version != null) {
-                Util.setServerRestVersion(context, new Version(version));
+            	ServerInfo server = new Server();
+            	server.setRestVersion(new Version(version));
+            	
+            	if("madsonic".equals(get("type"))) {
+					server.setRestType(ServerInfo.TYPE_MADSONIC);
+            	}
+            	server.saveServerInfo(context);
             }
         }
         return name;
