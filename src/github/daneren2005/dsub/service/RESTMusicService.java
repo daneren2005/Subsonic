@@ -626,7 +626,7 @@ public class RESTMusicService implements MusicService {
     }
 
     private void checkServerVersion(Context context, String version, String text) throws ServerTooOldException {
-        Version serverVersion = Util.getServerRestVersion(context);
+        Version serverVersion = ServerInfo.getServerVersion(context);
         Version requiredVersion = new Version(version);
         boolean ok = serverVersion == null || serverVersion.compareTo(requiredVersion) >= 0;
 
@@ -1302,7 +1302,7 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
 		// Return silently if server is too old
-		if (!Util.checkServerVersion(context, "1.8")) {
+		if (!ServerInfo.checkServerVersion(context, "1.8")) {
 			return null;
 		}
 

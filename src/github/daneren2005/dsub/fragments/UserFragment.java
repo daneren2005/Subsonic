@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -60,7 +61,7 @@ public class UserFragment extends SubsonicFragment{
 
 		listView = (ListView)rootView.findViewById(R.id.fragment_list);
 		createHeader();
-		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin() && Util.checkServerVersion(context, "1.10")));
+		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10")));
 
 		setTitle(user.getUsername());
 
@@ -80,7 +81,7 @@ public class UserFragment extends SubsonicFragment{
 			return;
 		}
 
-		if(UserUtil.isCurrentAdmin() && Util.checkServerVersion(context, "1.10")) {
+		if(UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10")) {
 			menuInflater.inflate(R.menu.user, menu);
 		} else if(UserUtil.isCurrentRole(User.SETTINGS)) {
 			menuInflater.inflate(R.menu.user_user, menu);

@@ -62,6 +62,7 @@ import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.provider.DSubWidgetProvider;
@@ -115,8 +116,6 @@ public final class Util {
 	private static OnAudioFocusChangeListener focusListener;
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
-
-    private static final Map<Integer, Version> SERVER_REST_VERSIONS = new ConcurrentHashMap<Integer, Version>();
 
     // Used by hexEncode()
     private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -172,12 +171,6 @@ public final class Util {
         return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
     }
 	
-	public static boolean checkServerVersion(Context context, String requiredVersion) {
-		Version version = Util.getServerRestVersion(context);
-		Version required = new Version(requiredVersion);
-		return version != null && version.compareTo(required) >= 0;
-	}
-	
 	public static int getServerCount(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
@@ -227,31 +220,6 @@ public final class Util {
     public static String getServerName(Context context, int instance) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
-    }
-
-    public static void setServerRestVersion(Context context, Version version) {
-		int instance = getActiveServer(context);
-		Version current = SERVER_REST_VERSIONS.get(instance);
-		if(current != version) {
-			SERVER_REST_VERSIONS.put(instance, version);
-			SharedPreferences.Editor editor = getPreferences(context).edit();
-			editor.putString(Constants.PREFERENCES_KEY_SERVER_VERSION + instance, version.getVersion());
-			editor.commit();
-		}
-    }
-
-    public static Version getServerRestVersion(Context context) {
-		int instance = getActiveServer(context);
-        Version version = SERVER_REST_VERSIONS.get(instance);
-		if(version == null) {
-			SharedPreferences prefs = getPreferences(context);
-			String versionString = prefs.getString(Constants.PREFERENCES_KEY_SERVER_VERSION + instance, null);
-			if(versionString != null && versionString != "") {
-				version = new Version(versionString);
-				SERVER_REST_VERSIONS.put(instance, version);
-			}
-		}
-		return version;
     }
 
     public static void setSelectedMusicFolderId(Context context, String musicFolderId) {

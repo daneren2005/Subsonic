@@ -52,6 +52,7 @@ import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastEpisode;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
@@ -211,11 +212,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void hideMenuItems(ContextMenu menu) {
-		if(!Util.checkServerVersion(context, "1.8")) {
+		if(!ServerInfo.checkServerVersion(context, "1.8")) {
 			menu.setGroupVisible(R.id.server_1_8, false);
 			menu.setGroupVisible(R.id.hide_star, false);
 		}
-		if(!Util.checkServerVersion(context, "1.10.1")) {
+		if(!ServerInfo.checkServerVersion(context, "1.10.1")) {
 			menu.setGroupVisible(R.id.server_1_10, false);
 		}
 
@@ -543,7 +544,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		final String oldGenre = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, "");
 
 		boolean _useCombo = false;
-		if(Util.checkServerVersion(context, "1.9.0")) {
+		if(ServerInfo.checkServerVersion(context, "1.9.0")) {
 			genreBox.setVisibility(View.GONE);
 			genreCombo.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
@@ -931,7 +932,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			if (playlistName != null) {
 				playlistNameView.setText(playlistName);
 				try {
-					if(Util.checkServerVersion(context, "1.8.0") && Integer.parseInt(getDownloadService().getSuggestedPlaylistId()) != -1) {
+					if(ServerInfo.checkServerVersion(context, "1.8.0") && Integer.parseInt(getDownloadService().getSuggestedPlaylistId()) != -1) {
 						overwriteCheckBox.setChecked(true);
 						overwriteCheckBox.setVisibility(View.VISIBLE);
 					}

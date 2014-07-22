@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import com.commonsware.cwac.endless.EndlessAdapter;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Util;
@@ -55,7 +56,7 @@ public class AlbumListAdapter extends EndlessAdapter {
 	protected boolean cacheInBackground() throws Exception {
 		MusicService service = MusicServiceFactory.getMusicService(context);
 		MusicDirectory result;
-		if(("genres".equals(type) && Util.checkServerVersion(context, "1.10.0")) || "years".equals(type)) {
+		if(("genres".equals(type) && ServerInfo.checkServerVersion(context, "1.10.0")) || "years".equals(type)) {
 			result = service.getAlbumList(type, extra, size, offset, context, null);
 		} else if("genres".equals(type) || "genres-songs".equals(type)) {
 			result = service.getSongsByGenre(extra, size, offset, context, null);

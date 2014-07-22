@@ -18,6 +18,15 @@
  */
 package github.daneren2005.dsub.domain;
 
+import android.content.Context;
+
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Util;
+
 /**
  * Information about the Subsonic server.
  *
@@ -68,7 +77,7 @@ public class ServerInfo implements Serializable {
 	
 	@Override
 	public boolean equals(Object o) {
-		if(this == 0) {
+		if(this == o) {
 			return true;
 		} else if(o == null || getClass() != o.getClass()) {
 			return false;
@@ -114,6 +123,18 @@ public class ServerInfo implements Serializable {
 		return current;
 	}
 
+	public static Version getServerVersion(Context context) {
+		return getServerVersion(context, Util.getActiveServer(context));
+	}
+	public static Version getServerVersion(Context context, int instance) {
+		ServerInfo server = getServerInfo(context, instance);
+		if(server == null) {
+			return null;
+		}
+
+		return server.getRestVersion();
+	}
+
 	public static boolean checkServerVersion(Context context, String requiredVersion) {
 		return checkServerVersion(context, requiredVersion, Util.getActiveServer(context));
 	}
@@ -132,7 +153,7 @@ public class ServerInfo implements Serializable {
 		return version.compareTo(required) >= 0;
 	}
 	
-	private static String getCacheName(context, instance) {
+	private static String getCacheName(Context context, int instance) {
 		return "server-" + Util.getRestUrl(context, null, instance, false).hashCode() + ".ser";
 	}
 }

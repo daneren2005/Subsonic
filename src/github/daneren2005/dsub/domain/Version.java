@@ -18,13 +18,15 @@
  */
 package github.daneren2005.dsub.domain;
 
+import java.io.Serializable;
+
 /**
  * Represents the version number of the Subsonic Android app.
  *
  * @author Sindre Mehus
  * @version $Revision: 1.3 $ $Date: 2006/01/20 21:25:16 $
  */
-public class Version implements Comparable<Version> {
+public class Version implements Comparable<Version>, Serializable {
     private int major;
     private int minor;
     private int beta;

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -54,7 +55,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 				menu.removeItem(R.id.playlist_menu_stop_sync);
 			}
 			
-			if(!Util.checkServerVersion(context, "1.8")) {
+			if(!ServerInfo.checkServerVersion(context, "1.8")) {
 				menu.removeItem(R.id.playlist_update_info);
 			} else if(playlist.getPublic() != null && playlist.getPublic() == true && playlist.getId().indexOf(".m3u") == -1 && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
 				menu.removeItem(R.id.playlist_update_info);
@@ -155,7 +156,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-		if(Util.checkServerVersion(context, "1.8") && playlist.getOwner() != null && playlist.getOwner().equals(UserUtil.getCurrentUsername(context))) {
+		if(ServerInfo.checkServerVersion(context, "1.8") && playlist.getOwner() != null && playlist.getOwner().equals(UserUtil.getCurrentUsername(context))) {
 			args.putBoolean(Constants.INTENT_EXTRA_NAME_PLAYLIST_OWNER, true);
 		}
 		fragment.setArguments(args);

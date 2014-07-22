@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.AlbumGridAdapter;
@@ -584,7 +585,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				MusicDirectory result;
 				if ("starred".equals(albumListType)) {
 					result = service.getStarredList(context, this);
-				} else if(("genres".equals(albumListType) && Util.checkServerVersion(context, "1.10.0")) || "years".equals(albumListType)) {
+				} else if(("genres".equals(albumListType) && ServerInfo.checkServerVersion(context, "1.10.0")) || "years".equals(albumListType)) {
 					result = service.getAlbumList(albumListType, albumListExtra, size, 0, context, this);
 					if(result.getChildrenSize() == 0 && "genres".equals(albumListType)) {
 						SelectDirectoryFragment.this.albumListType = "genres-songs";

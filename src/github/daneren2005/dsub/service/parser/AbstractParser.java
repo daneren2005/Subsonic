@@ -25,6 +25,7 @@ import org.xmlpull.v1.XmlPullParser;
 import android.content.Context;
 import android.util.Xml;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
@@ -127,7 +128,7 @@ public abstract class AbstractParser {
             rootElementFound = true;
             String version = get("version");
             if (version != null) {
-            	ServerInfo server = new Server();
+            	ServerInfo server = new ServerInfo();
             	server.setRestVersion(new Version(version));
             	
             	if("madsonic".equals(get("type"))) {
