@@ -197,6 +197,35 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
     }
+    
+	@Override
+	public void startRescan(Context context, ProgressListener listener) throws Exception {
+		Reader reader = getReader(context, listener, "startRescan", null);
+		try {
+			new ErrorParser(context).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+		
+		// Now check if still running
+		boolean done = false;
+		while(!done) {
+			reader = getReader(context, listener, "scanstatus", null);
+			try {
+				ScanStatus status = new ScanStatusParser(context).parse(reader);
+				if(status.isRunning()) {
+					// Don't run system ragged trying to query too much
+					Thread.sleep(100L);
+				} else {
+					done = true;
+				}
+			} catch(Exception e) {
+				done = true;
+			} finally {
+				Util.close(reader);
+			}
+		}
+	}
 
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
