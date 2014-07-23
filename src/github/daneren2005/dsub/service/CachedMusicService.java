@@ -118,7 +118,12 @@ public class CachedMusicService implements MusicService {
         return result;
     }
 
-    @Override
+	@Override
+	public void startRescan(Context context, ProgressListener listener) throws Exception {
+		musicService.startRescan(context, listener);
+	}
+
+	@Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         checkSettingsChanged(context);
         if (refresh) {

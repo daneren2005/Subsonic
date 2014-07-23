@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
@@ -73,6 +74,10 @@ public class MainFragment extends SubsonicFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.main, menu);
+
+		if(!ServerInfo.isMadsonic(context) || !UserUtil.isCurrentAdmin()) {
+			menu.setGroupVisible(R.id.madsonic, false);
+		}
 	}
 
 	@Override
@@ -94,6 +99,9 @@ public class MainFragment extends SubsonicFragment {
 				return true;
 			case R.id.menu_faq:
 				showFAQDialog();
+				return true;
+			case R.id.menu_rescan:
+				rescanServer();
 				return true;
 		}
 
@@ -364,6 +372,22 @@ public class MainFragment extends SubsonicFragment {
 
 	private void showFAQDialog() {
 		Util.showHTMLDialog(context, R.string.main_faq_title, R.string.main_faq_text);
+	}
+
+	private void rescanServer() {
+		new LoadingTask<Void>(context, false) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.startRescan(context, this);
+				return null;
+			}
+
+			@Override
+			protected void done(Void value) {
+				Util.toast(context, R.string.main_scan_complete);
+			}
+		}.execute();
 	}
 
 	private void getLogs() {

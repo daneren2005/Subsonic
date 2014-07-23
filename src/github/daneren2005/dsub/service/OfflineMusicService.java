@@ -272,7 +272,12 @@ public class OfflineMusicService implements MusicService {
 		throw new OfflineException(ERRORMSG);
     }
 
-    @Override
+	@Override
+	public void startRescan(Context context, ProgressListener listener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
     public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
 		List<Artist> artists = new ArrayList<Artist>();
 		List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();

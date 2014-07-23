@@ -73,6 +73,7 @@
 	<string name="main.albums_year">Decades</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Press back again to exit</string>
+	<string name="main.scan_complete">Completed scan of Server</string>
 
 	<string name="menu.search">Search</string>
 	<string name="menu.shuffle">Shuffle</string>
@@ -101,6 +102,7 @@
 	<string name="menu.cast">Cast To Device</string>
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Add User</string>
+	<string name="menu.rescan">Rescan Server</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -495,6 +497,7 @@
     <string name="parser.not_authorized">Not authorized. Check user permissions in Subsonic server.</string>
     <string name="parser.artist_count">Got %d artists.</string>
 	<string name="parser.server_error">Server error: %s</string>
+	<string name="parser.scan_count">Scanned %d entries</string>
 
     <string name="select_artist.refresh">Refresh</string>
     <string name="select_artist.folder">Select folder</string>
@@ -526,7 +529,7 @@
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">More…</string>
 
-	<string name="chat.send_a_message">Send a message</string> 
+	<string name="chat.send_a_message">Send a message</string>
 
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
 

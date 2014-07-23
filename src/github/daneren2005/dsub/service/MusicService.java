@@ -54,6 +54,8 @@ public interface MusicService {
 
     List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
+	void startRescan(Context context, ProgressListener listener) throws Exception;
+
     Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
     MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception;

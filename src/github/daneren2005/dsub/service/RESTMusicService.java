@@ -84,6 +84,7 @@ import github.daneren2005.dsub.service.parser.PlaylistsParser;
 import github.daneren2005.dsub.service.parser.PodcastChannelParser;
 import github.daneren2005.dsub.service.parser.PodcastEntryParser;
 import github.daneren2005.dsub.service.parser.RandomSongsParser;
+import github.daneren2005.dsub.service.parser.ScanStatusParser;
 import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
 import github.daneren2005.dsub.service.parser.ShareParser;
@@ -210,10 +211,10 @@ public class RESTMusicService implements MusicService {
 		// Now check if still running
 		boolean done = false;
 		while(!done) {
-			reader = getReader(context, listener, "scanstatus", null);
+			reader = getReader(context, null, "scanstatus", null);
 			try {
-				ScanStatus status = new ScanStatusParser(context).parse(reader);
-				if(status.isRunning()) {
+				boolean running = new ScanStatusParser(context).parse(reader, listener);
+				if(running) {
 					// Don't run system ragged trying to query too much
 					Thread.sleep(100L);
 				} else {
@@ -233,18 +234,6 @@ public class RESTMusicService implements MusicService {
         if (cachedIndexes != null && !refresh) {
             return cachedIndexes;
         }
-
-		// If manual refresh, try to start server scan for madsonic servers
-		/*if(refresh) {
-			Reader reader = getReader(context, progressListener, "startRescan", null);
-			try {
-				new ErrorParser(context).parse(reader);
-			} catch(Exception e) {
-				// Probably not madsonic, don't care
-			} finally {
-				Util.close(reader);
-			}
-		}*/
 
         long lastModified = (cachedIndexes == null || refresh) ? 0L : cachedIndexes.getLastModified();
 
@@ -1548,7 +1537,9 @@ public class RESTMusicService implements MusicService {
                                           List<String> parameterNames, List<Object> parameterValues,
                                           List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		// Strip out sensitive information from log
-        Log.i(TAG, stripUrlInfo(url));
+		if(url.indexOf("scanstatus") == -1) {
+			Log.i(TAG, stripUrlInfo(url));
+		}
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, "15000"));

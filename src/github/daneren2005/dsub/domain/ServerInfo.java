@@ -152,6 +152,36 @@ public class ServerInfo implements Serializable {
 		Version required = new Version(requiredVersion);
 		return version.compareTo(required) >= 0;
 	}
+
+	public static int getServerType(Context context) {
+		return getServerType(context, Util.getActiveServer(context));
+	}
+	public static int getServerType(Context context, int instance) {
+		if(Util.isOffline(context)) {
+			return 0;
+		}
+
+		ServerInfo server = getServerInfo(context, instance);
+		if(server == null) {
+			return 0;
+		}
+
+		return server.getRestType();
+	}
+
+	public static boolean isStockSubsonic(Context context) {
+		return isStockSubsonic(context, Util.getActiveServer(context));
+	}
+	public static boolean isStockSubsonic(Context context, int instance) {
+		return getServerType(context, instance) == TYPE_SUBSONIC;
+	}
+
+	public static boolean isMadsonic(Context context) {
+		return isMadsonic(context, Util.getActiveServer(context));
+	}
+	public static boolean isMadsonic(Context context, int instance) {
+		return getServerType(context, instance) == TYPE_MADSONIC;
+	}
 	
 	private static String getCacheName(Context context, int instance) {
 		return "server-" + Util.getRestUrl(context, null, instance, false).hashCode() + ".ser";
