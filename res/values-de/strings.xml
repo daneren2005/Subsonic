@@ -73,6 +73,7 @@
 	<string name="main.albums_year">Jahrzehnt</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Zum beenden nochmal zurück drücken</string>
+	<string name="main.scan_complete">Durchsuchen des Server abgeschlossen</string>
 
 	<string name="menu.search">Suche</string>
 	<string name="menu.shuffle">Zufall</string>
@@ -101,6 +102,7 @@
 	<string name="menu.cast">An Chromecast senden</string>
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Nutzer hinzufügen</string>
+	<string name="menu.rescan">Server neu durchsuchen</string>
 
     <string name="playlist.label">Wiedergabelisten</string>
 	<string name="playlist.update_info">Aktualisiere Informationen</string>
@@ -211,10 +213,10 @@
 		\nGeschätzte Größe: %2$s</string>
 	<string name="download.failed_to_load">Laden fehlgeschlagen</string>
 
-	<string name="sync.new_podcasts">Neuer Podcast</string>
+	<string name="sync.new_podcasts">Neuer Podcast verfügbar</string>
 	<string name="sync.new_playlists">Neu in Wiedergabeliste</string>
-	<string name="sync.new_albums">Neues Album</string>
-	<string name="sync.new_starred">Neue Favoriten</string>
+	<string name="sync.new_albums">Neues Album verfügbar</string>
+	<string name="sync.new_starred">Neue Favoriten verfügbar</string>
     
 	<string name="starring_content_starred">Favorit \"%s\"</string>
 	<string name="starring_content_unstarred">Kein Favorit \"%s\"</string>
@@ -321,7 +323,7 @@
     <string name="settings.screen_lit_title">Bildschirm aktiv halten</string>
     <string name="settings.screen_lit_summary">Ein aktiver Bildschirm verbessert die Downloadgeschwindigkeit.</string>
 	<string name="settings.playlist_title">Wiedergeben</string>
-	<string name="settings.playlist_random_size_title">Zufallsgröße</string>
+	<string name="settings.playlist_random_size_title">Länge der Zufallswiedergabeliste</string>
 	<string name="settings.sleep_timer_title">Einschlaftimer</string>
 	<string name="settings.sleep_timer_duration_title">Einschlafdauer</string>
 	<string name="settings.sleep_timer_off">Aus</string>
@@ -457,6 +459,7 @@
 	<string name="admin.role.stream">Musik streamen</string>
 	<string name="admin.role.jukebox">Jukebox kontrollieren</string>
 	<string name="admin.role.share">Freigaben verwalten</string>
+	<string name="admin.role.lastfm">Last.FM nutzen</string>
 
     <string name="music_service.retry">Ein Netzwerkfehler ist aufgetreten. Versuch %1$d von %2$d.</string>
 
@@ -475,6 +478,7 @@
     <string name="parser.not_authorized">Nicht authorisiert. Bitte prüfen Sie die Einstellungen im Subsonic-Server.</string>
     <string name="parser.artist_count">%d Künstler.</string>
 	<string name="parser.server_error">Serverfehler: %s</string>
+	<string name="parser.scan_count">%d Einträge gefunden</string>
 
     <string name="select_artist.refresh">Aktualisieren</string>
     <string name="select_artist.folder">Wähle Ordner</string>
