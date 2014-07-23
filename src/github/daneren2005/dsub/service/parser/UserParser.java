@@ -50,6 +50,7 @@ public class UserParser extends AbstractParser {
 					for(String role: User.ROLES) {
 						parseSetting(user, role);
 					}
+					parseSetting(user, User.LASTFM);
 
 					result.add(user);
 				} else if ("error".equals(name)) {

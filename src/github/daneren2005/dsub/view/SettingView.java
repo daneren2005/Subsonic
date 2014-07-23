@@ -70,6 +70,8 @@ public class SettingView extends UpdateView {
 			res = R.string.admin_role_jukebox;
 		} else if(User.SHARE.equals(name)) {
 			res = R.string.admin_role_share;
+		} else if(User.LASTFM.equals(name)) {
+			res = R.string.admin_role_lastfm;
 		} else {
 			// Last resort to display the raw value
 			view.setText(name);

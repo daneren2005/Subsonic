@@ -31,6 +31,7 @@ public class User implements Serializable {
 	public static final String STREAM = "streamRole";
 	public static final String JUKEBOX = "jukeboxRole";
 	public static final String SHARE = "shareRole";
+	public static final String LASTFM = "lastFMRole";
 	public static final List<String> ROLES = new ArrayList<String>();
 	
 	static {
