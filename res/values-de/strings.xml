@@ -502,6 +502,11 @@
 
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
 
+	<string name="tasker.start_playing">Starte Wiedergabe mit DSub</string>
+	<string name="tasker.start_playing_shuffled">Starte Zufallswiedergabe mit DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Starte DSub</string>
+	<string name="tasker.edit_shuffle_mode">Starte im Zufallsmodus: </string>
+
     <plurals name="select_album_n_songs">
         <item quantity="zero">Keine Lieder</item>
         <item quantity="one">Ein Lied</item>
