@@ -40,12 +40,9 @@ import github.daneren2005.dsub.util.Util;
  */
 public class IndexesParser extends MusicDirectoryEntryParser {
     private static final String TAG = IndexesParser.class.getSimpleName();
-	
-	private Context context;
 
-    public IndexesParser(Context context) {
-        super(context);
-		this.context = context;
+    public IndexesParser(Context context, int instance) {
+        super(context, instance);
     }
 
     public Indexes parse(Reader reader, ProgressListener progressListener) throws Exception {

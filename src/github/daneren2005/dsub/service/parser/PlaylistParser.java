@@ -31,9 +31,9 @@ import java.io.Reader;
  */
 public class PlaylistParser extends MusicDirectoryEntryParser {
 
-    public PlaylistParser(Context context) {
-        super(context);
-    }
+    public PlaylistParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

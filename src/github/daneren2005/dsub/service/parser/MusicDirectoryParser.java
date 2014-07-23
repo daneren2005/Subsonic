@@ -40,11 +40,9 @@ import static github.daneren2005.dsub.domain.MusicDirectory.*;
 public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 
     private static final String TAG = MusicDirectoryParser.class.getSimpleName();
-	private Context context;
 
-    public MusicDirectoryParser(Context context) {
-        super(context);
-		this.context = context;
+    public MusicDirectoryParser(Context context, int instance) {
+        super(context, instance);
     }
 
     public MusicDirectory parse(String artist, Reader reader, ProgressListener progressListener) throws Exception {
@@ -98,7 +96,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
         validate();
 		
 		// Only apply sorting on server version 4.7 and greater, where disc is supported
-		if(ServerInfo.checkServerVersion(context, "1.8.0")) {
+		if(ServerInfo.checkServerVersion(context, "1.8.0", instance)) {
 			dir.sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true));
 		}
 

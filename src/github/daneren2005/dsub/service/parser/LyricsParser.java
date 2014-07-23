@@ -31,9 +31,9 @@ import java.io.Reader;
  */
 public class LyricsParser extends AbstractParser {
 
-    public LyricsParser(Context context) {
-        super(context);
-    }
+    public LyricsParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public Lyrics parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

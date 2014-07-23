@@ -32,9 +32,9 @@ import java.util.List;
  * @author Scott Jackson
  */
 public class BookmarkParser extends MusicDirectoryEntryParser {
-    public BookmarkParser(Context context) {
-        super(context);
-    }
+    public BookmarkParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public List<Bookmark> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

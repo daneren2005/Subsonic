@@ -31,9 +31,9 @@ import github.daneren2005.dsub.domain.Version;
  */
 public class LicenseParser extends AbstractParser {
 
-    public LicenseParser(Context context) {
-        super(context);
-    }
+    public LicenseParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public ServerInfo parse(Reader reader) throws Exception {
 

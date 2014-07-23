@@ -28,8 +28,8 @@ import github.daneren2005.dsub.util.ProgressListener;
 
 public class UserParser extends AbstractParser {
 
-	public UserParser(Context context) {
-		super(context);
+	public UserParser(Context context, int instance) {
+		super(context, instance);
 	}
 
 	public List<User> parse(Reader reader, ProgressListener progressListener) throws Exception {

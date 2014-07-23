@@ -34,9 +34,9 @@ import org.xmlpull.v1.XmlPullParser;
 public class PodcastEntryParser extends AbstractParser {
 	private static int bogusId = -1;
 	
-	public PodcastEntryParser(Context context) {
-        super(context);
-    }
+	public PodcastEntryParser(Context context, int instance) {
+		super(context, instance);
+	}
 	
 	public MusicDirectory parse(String channel, Reader reader, ProgressListener progressListener) throws Exception {
 		init(reader);

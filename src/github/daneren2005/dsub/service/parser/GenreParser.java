@@ -40,9 +40,9 @@ import java.util.List;
 public class GenreParser extends AbstractParser {
 	private static final String TAG = GenreParser.class.getSimpleName();
 	
-    public GenreParser(Context context) {
-        super(context);
-    }
+    public GenreParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public List<Genre> parse(Reader reader, ProgressListener progressListener) throws Exception {
         List<Genre> result = new ArrayList<Genre>();

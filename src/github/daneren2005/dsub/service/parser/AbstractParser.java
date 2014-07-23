@@ -36,11 +36,13 @@ import github.daneren2005.dsub.util.Util;
 public abstract class AbstractParser {
 
     protected final Context context;
+	protected final int instance;
     private XmlPullParser parser;
     private boolean rootElementFound;
 
-    public AbstractParser(Context context) {
+    public AbstractParser(Context context, int instance) {
         this.context = context;
+		this.instance = instance;
     }
 
     protected Context getContext() {
@@ -134,7 +136,7 @@ public abstract class AbstractParser {
             	if("madsonic".equals(get("type"))) {
 					server.setRestType(ServerInfo.TYPE_MADSONIC);
             	}
-            	server.saveServerInfo(context);
+            	server.saveServerInfo(context, instance);
             }
         }
         return name;

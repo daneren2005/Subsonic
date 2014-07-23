@@ -38,9 +38,9 @@ import java.util.List;
 public class ShareParser extends MusicDirectoryEntryParser {
 	private static final String TAG = ShareParser.class.getSimpleName();
 
-	public ShareParser(Context context) {
-        super(context);
-    }
+	public ShareParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public List<Share> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

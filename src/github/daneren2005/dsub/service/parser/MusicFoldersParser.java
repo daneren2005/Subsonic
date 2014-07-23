@@ -34,9 +34,9 @@ import github.daneren2005.dsub.util.ProgressListener;
  */
 public class MusicFoldersParser extends AbstractParser {
 
-    public MusicFoldersParser(Context context) {
-        super(context);
-    }
+    public MusicFoldersParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public List<MusicFolder> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

@@ -28,9 +28,9 @@ import java.io.Reader;
  */
 public class ErrorParser extends AbstractParser {
 
-    public ErrorParser(Context context) {
-        super(context);
-    }
+    public ErrorParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public void parse(Reader reader) throws Exception {
 

@@ -33,9 +33,9 @@ import java.util.List;
  */
 public class ChatMessageParser extends AbstractParser {
 
-	public ChatMessageParser(Context context) {
-        super(context);
-    }
+	public ChatMessageParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public List<ChatMessage> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

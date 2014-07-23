@@ -25,8 +25,8 @@ import github.daneren2005.dsub.util.ProgressListener;
 
 public class ScanStatusParser extends AbstractParser {
 
-	public ScanStatusParser(Context context) {
-		super(context);
+	public ScanStatusParser(Context context, int instance) {
+		super(context, instance);
 	}
 
 	public boolean parse(Reader reader, ProgressListener progressListener) throws Exception {

@@ -95,8 +95,9 @@ public class ServerInfo implements Serializable {
 		}
 	}
 
-	public void saveServerInfo(Context context) {
-		saveServerInfo(context, Util.getActiveServer(context));
+	// Stub to make sure this is never used, too easy to screw up
+	private void saveServerInfo(Context context) {
+
 	}
 	public void saveServerInfo(Context context, int instance) {
 		ServerInfo current = SERVERS.get(instance);

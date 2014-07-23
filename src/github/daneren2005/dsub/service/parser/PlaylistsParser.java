@@ -34,9 +34,9 @@ import java.util.List;
  */
 public class PlaylistsParser extends AbstractParser {
 
-    public PlaylistsParser(Context context) {
-        super(context);
-    }
+    public PlaylistsParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public List<Playlist> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

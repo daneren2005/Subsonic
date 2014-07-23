@@ -31,9 +31,9 @@ import java.io.Reader;
  */
 public class RandomSongsParser extends MusicDirectoryEntryParser {
 
-    public RandomSongsParser(Context context) {
-        super(context);
-    }
+    public RandomSongsParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

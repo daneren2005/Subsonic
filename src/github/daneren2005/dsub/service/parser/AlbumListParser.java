@@ -31,8 +31,8 @@ import java.io.Reader;
  */
 public class AlbumListParser extends MusicDirectoryEntryParser {
 
-    public AlbumListParser(Context context) {
-        super(context);
+    public AlbumListParser(Context context, int instance) {
+        super(context, instance);
     }
 
     public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {

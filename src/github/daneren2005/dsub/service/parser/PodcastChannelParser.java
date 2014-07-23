@@ -32,8 +32,8 @@ import org.xmlpull.v1.XmlPullParser;
  * @author Scott
  */
 public class PodcastChannelParser extends AbstractParser {
-	public PodcastChannelParser(Context context) {
-		super(context);
+	public PodcastChannelParser(Context context, int instance) {
+		super(context, instance);
 	}
 
 	public List<PodcastChannel> parse(Reader reader, ProgressListener progressListener) throws Exception {

@@ -35,9 +35,9 @@ import java.util.ArrayList;
  */
 public class SearchResult2Parser extends MusicDirectoryEntryParser {
 
-    public SearchResult2Parser(Context context) {
-        super(context);
-    }
+    public SearchResult2Parser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public SearchResult parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);

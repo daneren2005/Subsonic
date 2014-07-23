@@ -165,7 +165,7 @@ public class RESTMusicService implements MusicService {
     public void ping(Context context, ProgressListener progressListener) throws Exception {
         Reader reader = getReader(context, progressListener, "ping", null);
         try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -176,7 +176,7 @@ public class RESTMusicService implements MusicService {
       
       Reader reader = getReader(context, progressListener, "getLicense", null);
         try {
-            ServerInfo serverInfo = new LicenseParser(context).parse(reader);
+            ServerInfo serverInfo = new LicenseParser(context, getInstance(context)).parse(reader);
             return serverInfo.isLicenseValid();
         } finally {
             Util.close(reader);
@@ -186,7 +186,7 @@ public class RESTMusicService implements MusicService {
     public List<MusicFolder> getMusicFolders(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         Reader reader = getReader(context, progressListener, "getMusicFolders", null);
         try {
-            return new MusicFoldersParser(context).parse(reader, progressListener);
+            return new MusicFoldersParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -196,7 +196,7 @@ public class RESTMusicService implements MusicService {
 	public void startRescan(Context context, ProgressListener listener) throws Exception {
 		Reader reader = getReader(context, listener, "startRescan", null);
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -206,7 +206,7 @@ public class RESTMusicService implements MusicService {
 		while(!done) {
 			reader = getReader(context, null, "scanstatus", null);
 			try {
-				boolean running = new ScanStatusParser(context).parse(reader, listener);
+				boolean running = new ScanStatusParser(context, getInstance(context)).parse(reader, listener);
 				if(running) {
 					// Don't run system ragged trying to query too much
 					Thread.sleep(100L);
@@ -245,7 +245,7 @@ public class RESTMusicService implements MusicService {
 
         Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtists" : "getIndexes", null, parameterNames, parameterValues);
         try {
-            Indexes indexes = new IndexesParser(context).parse(reader, progressListener);
+            Indexes indexes = new IndexesParser(context, getInstance(context)).parse(reader, progressListener);
             if (indexes != null) {
                 writeCachedIndexes(context, indexes, musicFolderId);
                 return indexes;
@@ -292,7 +292,7 @@ public class RESTMusicService implements MusicService {
 		
         Reader reader = getReader(context, progressListener, "getMusicDirectory", null, "id", id);
         try {
-            return new MusicDirectoryParser(context).parse(name, reader, progressListener);
+            return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -302,7 +302,7 @@ public class RESTMusicService implements MusicService {
 	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "getArtist", null, "id", id);
 		try {
-			return new MusicDirectoryParser(context).parse(name, reader, progressListener);
+			return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -312,7 +312,7 @@ public class RESTMusicService implements MusicService {
 	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "getAlbum", null, "id", id);
 		try {
-			return new MusicDirectoryParser(context).parse(name, reader, progressListener);
+			return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -336,7 +336,7 @@ public class RESTMusicService implements MusicService {
         List<Object> parameterValues = Arrays.<Object>asList(critera.getQuery(), critera.getSongCount());
         Reader reader = getReader(context, progressListener, "search", null, parameterNames, parameterValues);
         try {
-            return new SearchResultParser(context).parse(reader, progressListener);
+            return new SearchResultParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -353,7 +353,7 @@ public class RESTMusicService implements MusicService {
                                                              critera.getAlbumCount(), critera.getSongCount());
         Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "search3" : "search2", null, parameterNames, parameterValues);
         try {
-            return new SearchResult2Parser(context).parse(reader, progressListener);
+            return new SearchResult2Parser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -366,7 +366,7 @@ public class RESTMusicService implements MusicService {
 
         Reader reader = getReader(context, progressListener, "getPlaylist", params, "id", id);
         try {
-			return new PlaylistParser(context).parse(reader, progressListener);
+			return new PlaylistParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -376,7 +376,7 @@ public class RESTMusicService implements MusicService {
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         Reader reader = getReader(context, progressListener, "getPlaylists", null);
         try {
-            return new PlaylistsParser(context).parse(reader, progressListener);
+            return new PlaylistsParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -402,7 +402,7 @@ public class RESTMusicService implements MusicService {
 
         Reader reader = getReader(context, progressListener, "createPlaylist", null, parameterNames, parameterValues);
         try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -412,7 +412,7 @@ public class RESTMusicService implements MusicService {
 	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {		
 		Reader reader = getReader(context, progressListener, "deletePlaylist", null, "id", id);
 		try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -431,7 +431,7 @@ public class RESTMusicService implements MusicService {
 		}
 		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
     	try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -450,7 +450,7 @@ public class RESTMusicService implements MusicService {
 		}
 		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
     	try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -475,7 +475,7 @@ public class RESTMusicService implements MusicService {
 		}
 		Reader reader = getReader(context, progressListener, "updatePlaylist", null, names, values);
     	try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -486,7 +486,7 @@ public class RESTMusicService implements MusicService {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
 		Reader reader = getReader(context, progressListener, "updatePlaylist", null, Arrays.asList("playlistId", "name", "comment", "public"), Arrays.<Object>asList(id, name, comment, pub));
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -496,7 +496,7 @@ public class RESTMusicService implements MusicService {
     public Lyrics getLyrics(String artist, String title, Context context, ProgressListener progressListener) throws Exception {
         Reader reader = getReader(context, progressListener, "getLyrics", null, Arrays.asList("artist", "title"), Arrays.<Object>asList(artist, title));
         try {
-            return new LyricsParser(context).parse(reader, progressListener);
+            return new LyricsParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -518,7 +518,7 @@ public class RESTMusicService implements MusicService {
         else
         	reader = getReader(context, progressListener, "scrobble", null, Arrays.asList("id", "submission"), Arrays.<Object>asList(id, submission));
         try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -529,7 +529,7 @@ public class RESTMusicService implements MusicService {
         Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getAlbumList2" : "getAlbumList",
                                   null, Arrays.asList("type", "size", "offset"), Arrays.<Object>asList(type, size, offset));
         try {
-            return new AlbumListParser(context).parse(reader, progressListener);
+            return new AlbumListParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -568,7 +568,7 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getAlbumList2" : "getAlbumList", null, names, values);
 		try {
-			return new AlbumListParser(context).parse(reader, progressListener);
+			return new AlbumListParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -578,7 +578,7 @@ public class RESTMusicService implements MusicService {
     public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
         Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getStarred2" : "getStarred", null);
         try {
-            return new StarredListParser(context).parse(reader, progressListener);
+            return new StarredListParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -614,7 +614,7 @@ public class RESTMusicService implements MusicService {
 
         Reader reader = getReader(context, progressListener, "getRandomSongs", params, names, values);
         try {
-            return new RandomSongsParser(context).parse(reader, progressListener);
+            return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -661,7 +661,7 @@ public class RESTMusicService implements MusicService {
                 // If content type is XML, an error occured.  Get it.
                 String contentType = Util.getContentType(entity);
                 if (contentType != null && contentType.startsWith("text/xml")) {
-                    new ErrorParser(context).parse(new InputStreamReader(in, Constants.UTF_8));
+                    new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
                     return null; // Never reached.
                 }
 
@@ -712,7 +712,7 @@ public class RESTMusicService implements MusicService {
         if (contentType != null && contentType.startsWith("text/xml")) {
             InputStream in = response.getEntity().getContent();
             try {
-                new ErrorParser(context).parse(new InputStreamReader(in, Constants.UTF_8));
+                new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
             } finally {
                 Util.close(in);
             }
@@ -823,7 +823,7 @@ public class RESTMusicService implements MusicService {
         checkServerVersion(context, "1.7", "Jukebox not supported.");
         Reader reader = getReader(context, progressListener, "jukeboxControl", null, parameterNames, parameterValues);
         try {
-            return new JukeboxStatusParser(context).parse(reader);
+            return new JukeboxStatusParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -862,7 +862,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, names, values);
     	try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -874,7 +874,7 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, "getShares", null);
 		try {
-			return new ShareParser(context).parse(reader, progressListener);
+			return new ShareParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -902,7 +902,7 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, "createShare", null, parameterNames, parameterValues);
 		try {
-			return new ShareParser(context).parse(reader, progressListener);
+			return new ShareParser(context, getInstance(context)).parse(reader, progressListener);
 		}
 		finally {
 			Util.close(reader);
@@ -925,7 +925,7 @@ public class RESTMusicService implements MusicService {
 		Reader reader = getReader(context, progressListener, "deleteShare", params, parameterNames, parameterValues);
 
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		}
 		finally {
 			Util.close(reader);
@@ -955,7 +955,7 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, "updateShare", params, parameterNames, parameterValues);
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		}
 		finally {
 			Util.close(reader);
@@ -978,7 +978,7 @@ public class RESTMusicService implements MusicService {
 		Reader reader = getReader(context, progressListener, "getChatMessages", params, parameterNames, parameterValues);
 
 		try {
-			return new ChatMessageParser(context).parse(reader, progressListener);
+			return new ChatMessageParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -1000,7 +1000,7 @@ public class RESTMusicService implements MusicService {
 		Reader reader = getReader(context, progressListener, "addChatMessage", params, parameterNames, parameterValues);
 
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1012,7 +1012,7 @@ public class RESTMusicService implements MusicService {
 		
         Reader reader = getReader(context, progressListener, "getGenres", null);
         try {
-            return new GenreParser(context).parse(reader, progressListener);
+            return new GenreParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -1038,7 +1038,7 @@ public class RESTMusicService implements MusicService {
 		Reader reader = getReader(context, progressListener, "getSongsByGenre", params, parameterNames, parameterValues);
 
 		try {
-			return new RandomSongsParser(context).parse(reader, progressListener);
+			return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -1050,7 +1050,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("includeEpisodes"), Arrays.<Object>asList("false"));
         try {
-            List<PodcastChannel> channels = new PodcastChannelParser(context).parse(reader, progressListener);
+            List<PodcastChannel> channels = new PodcastChannelParser(context, getInstance(context)).parse(reader, progressListener);
 			
 			String content = "";
 			for(PodcastChannel channel: channels) {
@@ -1072,7 +1072,7 @@ public class RESTMusicService implements MusicService {
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("id"), Arrays.<Object>asList(id));
         try {
-            return new PodcastEntryParser(context).parse(id, reader, progressListener);
+            return new PodcastEntryParser(context, getInstance(context)).parse(id, reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -1084,7 +1084,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "refreshPodcasts", null);
 		try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -1096,7 +1096,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "createPodcastChannel", null, "url", url);
 		try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -1108,7 +1108,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "deletePodcastChannel", null, "id", id);
 		try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -1120,7 +1120,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "downloadPodcastEpisode", null, "id", id);
 		try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -1132,7 +1132,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "deletePodcastEpisode", null, "id", id);
 		try {
-            new ErrorParser(context).parse(reader);
+            new ErrorParser(context, getInstance(context)).parse(reader);
         } finally {
             Util.close(reader);
         }
@@ -1144,7 +1144,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "setRating", null, Arrays.asList("id", "rating"), Arrays.<Object>asList(id, rating));
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1156,7 +1156,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "getBookmarks", null);
 		try {
-			return new BookmarkParser(context).parse(reader, progressListener);
+			return new BookmarkParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -1168,7 +1168,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "createBookmark", null, Arrays.asList("id", "position", "comment"), Arrays.<Object>asList(id, position, comment));
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1180,7 +1180,7 @@ public class RESTMusicService implements MusicService {
 		
 		Reader reader = getReader(context, progressListener, "deleteBookmark", null, Arrays.asList("id"), Arrays.<Object>asList(id));
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1190,7 +1190,7 @@ public class RESTMusicService implements MusicService {
 	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "getUser", null, Arrays.asList("username"), Arrays.<Object>asList(username));
 		try {
-			List<User> users = new UserParser(context).parse(reader, progressListener);
+			List<User> users = new UserParser(context, getInstance(context)).parse(reader, progressListener);
 			if(users.size() > 0) {
 				// Should only have returned one anyways
 				return users.get(0);
@@ -1208,7 +1208,7 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, "getUsers", null);
 		try {
-			return new UserParser(context).parse(reader, progressListener);
+			return new UserParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
@@ -1233,7 +1233,7 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, "createUser", null, names, values);
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1258,7 +1258,7 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, "updateUser", null, names, values);
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1268,7 +1268,7 @@ public class RESTMusicService implements MusicService {
 	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "deleteUser", null, Arrays.asList("username"), Arrays.<Object>asList(username));
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1278,7 +1278,7 @@ public class RESTMusicService implements MusicService {
 	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "updateUser", null, Arrays.asList("username", "email"), Arrays.<Object>asList(username, email));
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1288,7 +1288,7 @@ public class RESTMusicService implements MusicService {
 	public void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "changePassword", null, Arrays.asList("username", "password"), Arrays.<Object>asList(username, password));
 		try {
-			new ErrorParser(context).parse(reader);
+			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
 			Util.close(reader);
 		}
@@ -1327,7 +1327,7 @@ public class RESTMusicService implements MusicService {
 				String contentType = Util.getContentType(entity);
 				if (contentType != null && contentType.startsWith("text/xml"))
 				{
-					new ErrorParser(context).parse(new InputStreamReader(in, Constants.UTF_8));
+					new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
 					return null; // Never reached.
 				}
 

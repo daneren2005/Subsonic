@@ -25,8 +25,8 @@ import github.daneren2005.dsub.domain.MusicDirectory;
  * @author Sindre Mehus
  */
 public class MusicDirectoryEntryParser extends AbstractParser {
-    public MusicDirectoryEntryParser(Context context) {
-        super(context);
+    public MusicDirectoryEntryParser(Context context, int instance) {
+        super(context, instance);
     }
 
     protected MusicDirectory.Entry parseEntry(String artist) {

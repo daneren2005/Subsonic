@@ -30,9 +30,9 @@ import github.daneren2005.dsub.domain.RemoteStatus;
  */
 public class JukeboxStatusParser extends AbstractParser {
 
-    public JukeboxStatusParser(Context context) {
-        super(context);
-    }
+    public JukeboxStatusParser(Context context, int instance) {
+		super(context, instance);
+	}
 
     public RemoteStatus parse(Reader reader) throws Exception {
 
