@@ -52,7 +52,6 @@ import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
-import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -254,16 +253,6 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
 	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public Version getLocalVersion(Context context) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public Version getLatestVersion(Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

@@ -42,7 +42,6 @@ import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
-import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TimeLimitedCache;
@@ -316,16 +315,6 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-    public Version getLocalVersion(Context context) throws Exception {
-        return musicService.getLocalVersion(context);
-    }
-
-    @Override
-    public Version getLatestVersion(Context context, ProgressListener progressListener) throws Exception {
-        return musicService.getLatestVersion(context, progressListener);
-    }
-
-    @Override
     public String getVideoUrl(int maxBitrate, Context context, String id) {
         return musicService.getVideoUrl(maxBitrate, context, id);
     }

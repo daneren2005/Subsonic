@@ -61,7 +61,6 @@ import org.apache.http.protocol.HttpContext;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -90,7 +89,6 @@ import github.daneren2005.dsub.service.parser.SearchResultParser;
 import github.daneren2005.dsub.service.parser.ShareParser;
 import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.UserParser;
-import github.daneren2005.dsub.service.parser.VersionParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
 import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
 import github.daneren2005.dsub.util.BackgroundTask;
@@ -117,11 +115,6 @@ public class RESTMusicService implements MusicService {
 
     // Allow 20 seconds extra timeout per MB offset.
     private static final double TIMEOUT_MILLIS_PER_OFFSET_BYTE = 20000.0 / 1000000.0;
-
-    /**
-     * URL from which to fetch latest versions.
-     */
-    private static final String VERSION_URL = "http://subsonic.org/backend/version.view";
 
     private static final int HTTP_REQUEST_MAX_ATTEMPTS = 5;
     private static final long REDIRECTION_CHECK_INTERVAL_MILLIS = 60L * 60L * 1000L;
@@ -627,23 +620,7 @@ public class RESTMusicService implements MusicService {
         }
     }
 
-    @Override
-    public Version getLocalVersion(Context context) throws Exception {
-        PackageInfo packageInfo = context.getPackageManager().getPackageInfo("github.daneren2005.dsub", 0);
-        return new Version(packageInfo.versionName);
-    }
-
-    @Override
-    public Version getLatestVersion(Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReaderForURL(context, VERSION_URL, null, null, null, progressListener);
-        try {
-            return new VersionParser().parse(reader);
-        } finally {
-            Util.close(reader);
-        }
-    }
-
-    private void checkServerVersion(Context context, String version, String text) throws ServerTooOldException {
+	private void checkServerVersion(Context context, String version, String text) throws ServerTooOldException {
         Version serverVersion = ServerInfo.getServerVersion(context);
         Version requiredVersion = new Version(version);
         boolean ok = serverVersion == null || serverVersion.compareTo(requiredVersion) >= 0;

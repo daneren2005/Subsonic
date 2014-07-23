@@ -102,11 +102,7 @@ public interface MusicService {
 
 	String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception;
 
-    Version getLocalVersion(Context context) throws Exception;
-
-    Version getLatestVersion(Context context, ProgressListener progressListener) throws Exception;
-
-    String getVideoUrl(int maxBitrate, Context context, String id);
+	String getVideoUrl(int maxBitrate, Context context, String id);
 	
 	String getVideoStreamUrl(String format, int Bitrate, Context context, String id) throws Exception;
 	
