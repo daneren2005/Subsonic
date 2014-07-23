@@ -174,6 +174,8 @@ public final class Constants {
 	public static final String SYNC_ACCOUNT_STARRED_AUTHORITY = "github.daneren2005.dsub.starred.provider";
 	public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = "github.daneren2005.dsub.mostrecent.provider";
 
+	public static final String TASKER_EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
+
     // Number of free trial days for non-licensed servers.
     public static final int FREE_TRIAL_DAYS = 30;
 

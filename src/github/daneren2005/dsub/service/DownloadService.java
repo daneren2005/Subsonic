@@ -91,6 +91,7 @@ public class DownloadService extends Service {
 	public static final String CMD_PREVIOUS = "github.daneren2005.dsub.CMD_PREVIOUS";
 	public static final String CMD_NEXT = "github.daneren2005.dsub.CMD_NEXT";
 	public static final String CANCEL_DOWNLOADS = "github.daneren2005.dsub.CANCEL_DOWNLOADS";
+	public static final String START_PLAY = "github.daneren2005.dsub.START_PLAYING";
 	public static final int FAST_FORWARD = 30000;
 	public static final int REWIND = 10000;
 
