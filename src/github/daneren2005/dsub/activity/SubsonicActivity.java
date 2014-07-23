@@ -634,6 +634,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			currentFragment.invalidate();
 			populateDrawer();
 		}
+		
+		supportInvalidateOptionsMenu();
 	}
 	
 	protected void recreateSpinner() {
