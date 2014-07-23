@@ -65,9 +65,9 @@ public class UserParser extends AbstractParser {
 	}
 	
 	private void parseSetting(User user, String name) {
-		Boolean value = getBoolean(name);
+		String value = get(name);
 		if(value != null) {
-			user.addSetting(name, getBoolean(name));
+			user.addSetting(name, "true".equals(value));
 		}
 	}
 }
