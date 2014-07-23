@@ -32,6 +32,10 @@ public class Version implements Comparable<Version>, Serializable {
     private int beta;
     private int bugfix;
 
+	public Version() {
+		// For Kryo
+	}
+
     /**
      * Creates a new version instance by parsing the given string.
      * @param version A string of the format "1.27", "1.27.2" or "1.27.beta3".
