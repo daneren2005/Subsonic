@@ -283,8 +283,8 @@
 	<string name="settings.theme_fullscreen_summary">Verstecke soviel der Benutzerschnittstelle wie von Android ermöglicht.</string>
 	<string name="settings.track_title">Titelnummer anzeigen</string>
 	<string name="settings.track_summary">Zeige Titelnummer vor dem Titel</string>
-	<string name="settings.custom_sort">Benutzerdefinierte Sortierung</string>
-	<string name="settings.custom_sort_summary">Sortiere nach CD-Nummer und Jahr.</string>
+	<string name="settings.custom_sort">Sortiere nach Jahr</string>
+	<string name="settings.custom_sort_summary">Sortiere Alben nach Jahr, oder alphabetisch.</string>
 	<string name="settings.open_to_library">Bibliothek öffnen</string>
 	<string name="settings.open_to_library_summary">Direkt die Bibliothek anstatt der Startseite öffnen.</string>
     <string name="settings.network_title">Netzwerk</string>
@@ -443,6 +443,8 @@
 	<string name="admin.delete_user">Nutzer löschen</string>
 	<string name="admin.delete_user_success">Nutzer %1$s erfolgreich gelöscht</string>
 	<string name="admin.delete_user_error">Nutzer %1$s konnte nicht gelöscht werden</string>
+	<string name="admin.confirm_password">Passwort bestätigen</string>
+	<string name="admin.confirm_password_bad">Eingegebenes Passwort ist falsch</string>
 
 	<string name="admin.scrobblingEnabled">Erlaube Scrobbeln</string>
 	<string name="admin.role.admin">Administrator</string>
@@ -498,6 +500,11 @@
 	<string name="chat.send_a_message">Nachricht senden</string> 
 
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+
+	<string name="tasker.start_playing">Starte Wiedergabe mit DSub</string>
+	<string name="tasker.start_playing_shuffled">Starte Zufallswiedergabe mit DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Starte DSub</string>
+	<string name="tasker.edit_shuffle_mode">Starte im Zufallsmodus: </string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Keine Lieder</item>
