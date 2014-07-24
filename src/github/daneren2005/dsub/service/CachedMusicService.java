@@ -131,7 +131,16 @@ public class CachedMusicService implements MusicService {
         }
         Indexes result = cachedIndexes.get();
         if (result == null) {
-            result = musicService.getIndexes(musicFolderId, refresh, context, progressListener);
+			String name = Util.isTagBrowsing(context, musicService.getInstance(context)) ? "artists" : "indexes";
+			name = getCacheName(context, name, musicFolderId);
+			if(!refresh) {
+				result = FileUtil.deserialize(context, name, Indexes.class);
+			}
+        	
+        	if(result == null) {
+            	result = musicService.getIndexes(musicFolderId, refresh, context, progressListener);
+            	FileUtil.serialize(context, result, name);
+        	}
             cachedIndexes.set(result);
         }
         return result;
