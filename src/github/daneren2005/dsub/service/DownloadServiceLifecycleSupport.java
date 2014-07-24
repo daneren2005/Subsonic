@@ -163,8 +163,9 @@ public class DownloadServiceLifecycleSupport {
 			if(DownloadService.START_PLAY.equals(action)) {
 				if(intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
 					downloadService.setShufflePlayEnabled(true);
+				} else {
+					downloadService.start();
 				}
-				downloadService.play();
 			} else if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
 				downloadService.clearBackground();
 			} else if(intent.getExtras() != null) {
