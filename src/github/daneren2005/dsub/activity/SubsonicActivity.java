@@ -457,6 +457,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 
 			if(drawerList.getChildAt(lastSelectedPosition) == null) {
+				lastSelectedView = null;
 				drawerAdapter.setSelectedPosition(lastSelectedPosition);
 			} else {
 				lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
