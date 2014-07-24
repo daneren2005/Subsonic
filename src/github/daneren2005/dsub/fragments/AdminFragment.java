@@ -126,7 +126,10 @@ public class AdminFragment extends SelectListFragment<User> {
 			file.delete();
 
 			List<User> users = new ArrayList<User>();
-			users.add(musicService.getUser(refresh, UserUtil.getCurrentUsername(context), context, listener));
+			User user = musicService.getUser(refresh, UserUtil.getCurrentUsername(context), context, listener);
+			if(user != null) {
+				users.add(user);
+			}
 
 			UserUtil.refreshCurrentUser(context, false);
 			return users;
