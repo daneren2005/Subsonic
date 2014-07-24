@@ -223,56 +223,20 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        Indexes cachedIndexes = readCachedIndexes(context, musicFolderId);
-        if (cachedIndexes != null && !refresh) {
-            return cachedIndexes;
-        }
-
-        long lastModified = (cachedIndexes == null || refresh) ? 0L : cachedIndexes.getLastModified();
-
         List<String> parameterNames = new ArrayList<String>();
         List<Object> parameterValues = new ArrayList<Object>();
 
-		if(lastModified != 0L) {
-			parameterNames.add("ifModifiedSince");
-			parameterValues.add(lastModified);
-		}
-
-        if (musicFolderId != null) {
+	if (musicFolderId != null) {
             parameterNames.add("musicFolderId");
             parameterValues.add(musicFolderId);
         }
 
         Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtists" : "getIndexes", null, parameterNames, parameterValues);
         try {
-            Indexes indexes = new IndexesParser(context, getInstance(context)).parse(reader, progressListener);
-            if (indexes != null) {
-                writeCachedIndexes(context, indexes, musicFolderId);
-                return indexes;
-            }
-			if(cachedIndexes != null) {
-				return cachedIndexes;
-			} else {
-				return new Indexes(0, new ArrayList<Artist>(), new ArrayList<Artist>());
-			}
+            return new IndexesParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
-    }
-
-    private Indexes readCachedIndexes(Context context, String musicFolderId) {
-        String filename = getCachedIndexesFilename(context, musicFolderId);
-        return FileUtil.deserialize(context, filename, Indexes.class);
-    }
-
-    private void writeCachedIndexes(Context context, Indexes indexes, String musicFolderId) {
-        String filename = getCachedIndexesFilename(context, musicFolderId);
-        FileUtil.serialize(context, indexes, filename);
-    }
-
-    private String getCachedIndexesFilename(Context context, String musicFolderId) {
-        String s = getRestUrl(context, null) + musicFolderId;
-        return (Util.isTagBrowsing(context, getInstance(context)) ? "artists-" : "indexes-") + Math.abs(s.hashCode()) + ".ser";
     }
 
     @Override
