@@ -32,7 +32,7 @@ public class UserView extends UpdateView {
 	private ImageView avatarView;
 
 	public UserView(Context context) {
-		super(context);
+		super(context, false);
 		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.user_list_item, this, true);
 
