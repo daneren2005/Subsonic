@@ -38,7 +38,7 @@ public class ShareView extends UpdateView {
 	private TextView descriptionView;
 
 	public ShareView(Context context) {
-		super(context);
+		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.complex_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.item_name);
