@@ -645,10 +645,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					if(entry.getParent() == null || entry.getArtist() == null) {
-						musicService.setStarred(null, Arrays.asList(entry.getId()), null, starred, context, null);
-					} else {
+					if(entry.getParent() != null || entry.getArtist() != null) {
 						musicService.setStarred(null, null, Arrays.asList(entry.getId()), starred, context, null);
+					} else {
+						musicService.setStarred(null, Arrays.asList(entry.getId()), null, starred, context, null);
 					}
 				} else {
 					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
