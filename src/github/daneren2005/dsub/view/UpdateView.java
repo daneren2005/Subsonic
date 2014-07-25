@@ -54,15 +54,23 @@ public class UpdateView extends LinearLayout {
 	protected boolean starred = false;
 	protected boolean isStarred = false;
 	
+	protected final boolean autoUpdate;
+	
 	public UpdateView(Context context) {
+		UpdateView(context, true);
+	}
+	public UpdateView(Context context, boolean autoUpdate) {
 		super(context);
 		this.context = context;
+		this.autoUpdate = autoUpdate;
 		
 		setLayoutParams(new AbsListView.LayoutParams(
 			ViewGroup.LayoutParams.FILL_PARENT,
 			ViewGroup.LayoutParams.WRAP_CONTENT));
 		
-		INSTANCES.put(this, null);
+		if(autoUpdate) {
+			INSTANCES.put(this, null);
+		}
 		startUpdater();
 	}
 	
