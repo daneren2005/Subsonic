@@ -92,8 +92,18 @@ public class PodcastChannel implements Serializable {
 
 		@Override
 		public int compare(PodcastChannel podcast1, PodcastChannel podcast2) {
-			String lhs = podcast1.getName().toLowerCase();
-			String rhs = podcast2.getName().toLowerCase();
+			String lhs = podcast1.getName();
+			String rhs = podcast2.getName();
+			if(lhs == null && rhs == null) {
+				return 0;
+			} else if(lhs == null) {
+				return 1;
+			} else if(rhs == null) {
+				return -1;
+			}
+			
+			lhs = lhs.toLowerCase();
+			rhs = rhs.toLowerCase();
 
 			for(String article: ignoredArticles) {
 				int index = lhs.indexOf(article.toLowerCase() + " ");
