@@ -33,7 +33,7 @@ public class GenreView extends UpdateView {
 	private TextView albumsView;
 
 	public GenreView(Context context) {
-		super(context);
+		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.genre_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.genre_name);
