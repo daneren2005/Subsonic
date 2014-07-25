@@ -51,7 +51,7 @@ public class DSubSearchProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 		String query = selectionArgs[0] + "*";
 		SearchResult searchResult = search(query);
-		return createCursor(searchResult);
+		return createCursor(selectionArgs[0], searchResult);
 	}
 
 	private SearchResult search(String query) {
@@ -67,23 +67,73 @@ public class DSubSearchProvider extends ContentProvider {
 		}
 	}
 
-	private Cursor createCursor(SearchResult searchResult) {
+	private Cursor createCursor(String query, SearchResult searchResult) {
 		MatrixCursor cursor = new MatrixCursor(COLUMNS);
 		if (searchResult == null) {
 			return cursor;
 		}
-
-		for (Artist artist : searchResult.getArtists()) {
-			String icon = RESOURCE_PREFIX + R.drawable.ic_action_artist;
-			cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "ar-" + artist.getId(), artist.getName(), icon});
+		
+		// Add all results into one pot
+		List<Object> results = new ArrayList<Object>();
+		results.addAll(searchResult.getArtists());
+		results.addAll(searchResults.getAlbums());
+		results.addAll(searchResults.getSongs());
+		
+		// For each, calculate its string distance to the query
+		for(Object obj: results) {
+			if(obj instanceof Artist) {
+				Artist artist = (Artist) obj;
+				artist.setCloseness(Util.getStringDistance(query, artist.getName());
+			} else {
+				MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
+				entry.setCloseness(Util.getStringDistance(query, entry.getTitle());
+			}
 		}
-		for (MusicDirectory.Entry album : searchResult.getAlbums()) {
-			String icon = RESOURCE_PREFIX + R.drawable.ic_action_album;
-			cursor.addRow(new Object[]{album.getId().hashCode(), album.getTitle(), album.getArtist(), album.getId(), album.getTitle(), icon});
-		}
-		for (MusicDirectory.Entry song : searchResult.getSongs()) {
-			String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
-			cursor.addRow(new Object[]{song.getId().hashCode(), song.getTitle(), song.getArtist(), "so-" + song.getParent(), song.getTitle(), icon});
+		
+		// Sort based on the closeness paramater
+		Collections.sort(results, new Comparator<Object>() {
+			@Override
+			public int compare(Object lhs, Object rhs) {
+				// Get the closeness of the two objects
+				int left, right;
+				if(lhs instanceof Artist) {
+					left = ((Artist) lhs).getCloseness();
+				} else {
+					left = ((MusicDirectory.Entry) lhs).getCloseness();
+				}
+				if(rhs instanceof Artist) {
+					right = ((Artist) rhs).getCloseness();
+				} else {
+					right = ((MusicDirectory.Entry) rhs).getCloseness();
+				}
+				
+				if(left == right) {
+					return 0;
+				} else if(left > right) {
+					return -1
+				} else {
+					return 1;
+				}
+			}
+		});
+		
+		// Done sorting, add results to cursor
+		for(Object obj: results) {
+			if(obj instanceof Artist) {
+				Artist artist = (Artist) obj;
+				String icon = RESOURCE_PREFIX + R.drawable.ic_action_artist;
+				cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "ar-" + artist.getId(), artist.getName(), icon});
+			} else {
+				MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
+				
+				if(entry.isDirectory()) {
+					String icon = RESOURCE_PREFIX + R.drawable.ic_action_album;
+					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), entry.getId(), entry.getTitle(), icon});
+				} else {
+					String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
+					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), "so-" + entry.getParent(), entry.getTitle(), icon});
+				}
+			}
 		}
 		return cursor;
 	}
