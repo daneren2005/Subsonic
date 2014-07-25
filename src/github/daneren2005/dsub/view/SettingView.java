@@ -31,7 +31,7 @@ public class SettingView extends UpdateView {
 	CheckedTextView view;
 
 	public SettingView(Context context) {
-		super(context);
+		super(context, false);
 		this.context = context;
 		LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_multiple_choice, this, true);
 
