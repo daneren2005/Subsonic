@@ -57,7 +57,7 @@ public class UpdateView extends LinearLayout {
 	protected final boolean autoUpdate;
 	
 	public UpdateView(Context context) {
-		UpdateView(context, true);
+		this(context, true);
 	}
 	public UpdateView(Context context, boolean autoUpdate) {
 		super(context);
