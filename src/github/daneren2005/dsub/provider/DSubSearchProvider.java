@@ -25,6 +25,11 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -32,6 +37,7 @@ import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * Provides search suggestions based on recent searches.
@@ -76,17 +82,17 @@ public class DSubSearchProvider extends ContentProvider {
 		// Add all results into one pot
 		List<Object> results = new ArrayList<Object>();
 		results.addAll(searchResult.getArtists());
-		results.addAll(searchResults.getAlbums());
-		results.addAll(searchResults.getSongs());
+		results.addAll(searchResult.getAlbums());
+		results.addAll(searchResult.getSongs());
 		
 		// For each, calculate its string distance to the query
 		for(Object obj: results) {
 			if(obj instanceof Artist) {
 				Artist artist = (Artist) obj;
-				artist.setCloseness(Util.getStringDistance(query, artist.getName());
+				artist.setCloseness(Util.getStringDistance(query, artist.getName()));
 			} else {
 				MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
-				entry.setCloseness(Util.getStringDistance(query, entry.getTitle());
+				entry.setCloseness(Util.getStringDistance(query, entry.getTitle()));
 			}
 		}
 		
@@ -96,23 +102,23 @@ public class DSubSearchProvider extends ContentProvider {
 			public int compare(Object lhs, Object rhs) {
 				// Get the closeness of the two objects
 				int left, right;
-				if(lhs instanceof Artist) {
+				if (lhs instanceof Artist) {
 					left = ((Artist) lhs).getCloseness();
 				} else {
 					left = ((MusicDirectory.Entry) lhs).getCloseness();
 				}
-				if(rhs instanceof Artist) {
+				if (rhs instanceof Artist) {
 					right = ((Artist) rhs).getCloseness();
 				} else {
 					right = ((MusicDirectory.Entry) rhs).getCloseness();
 				}
-				
-				if(left == right) {
+
+				if (left == right) {
 					return 0;
-				} else if(left > right) {
-					return -1
-				} else {
+				} else if (left > right) {
 					return 1;
+				} else {
+					return -1;
 				}
 			}
 		});
