@@ -102,19 +102,29 @@ public class DSubSearchProvider extends ContentProvider {
 			public int compare(Object lhs, Object rhs) {
 				// Get the closeness of the two objects
 				int left, right;
-				if (lhs instanceof Artist) {
+				boolean leftArtist = lhs instanceof Artist;
+				boolean rightArtist = rhs instanceof Artist;
+				if (leftArtist) {
 					left = ((Artist) lhs).getCloseness();
 				} else {
 					left = ((MusicDirectory.Entry) lhs).getCloseness();
 				}
-				if (rhs instanceof Artist) {
+				if (rightArtist) {
 					right = ((Artist) rhs).getCloseness();
 				} else {
 					right = ((MusicDirectory.Entry) rhs).getCloseness();
 				}
 
 				if (left == right) {
-					return 0;
+					if(leftArtist && rightArtist) {
+						return 0;
+					} else if(leftArtist) {
+						return -1;
+					} else if(rightArtist) {
+						return 1;
+					} else {
+						return 0;
+					}
 				} else if (left > right) {
 					return 1;
 				} else {
