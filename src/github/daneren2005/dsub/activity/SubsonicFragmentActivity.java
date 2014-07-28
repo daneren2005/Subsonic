@@ -80,6 +80,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private TextView artistView;
 	private ImageButton startButton;
 	private long lastBackPressTime = 0;
+	private long currentRevision = -1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -406,11 +407,19 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	} 
 
 	private void update() {
-		if (getDownloadService() == null) {
+		DownloadService downloadService = getDownloadService();
+		if (downloadService == null) {
 			return;
 		}
+		
+		long revision = downloadService.getDownloadListUpdateRevision();
+		if(currentRevision == revision) {
+			return;
+		} else {
+			currentRevision = revision;
+		}
 
-		DownloadFile current = getDownloadService().getCurrentPlaying();
+		DownloadFile current = downloadService.getCurrentPlaying();
 		if(current == null) {
 			trackView.setText("Title");
 			artistView.setText("Artist");
