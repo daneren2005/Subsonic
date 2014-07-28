@@ -115,7 +115,7 @@ public class ImageLoader {
 		return bitmap;
 	}
 
-	public void loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
+	public ImageTask loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
 		if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled()) {
 			createLargeUnknownImage(view.getContext());
 		}
@@ -129,7 +129,7 @@ public class ImageLoader {
 		}
 		if (entry == null || entry.getCoverArt() == null) {
 			setUnknownImage(view, large);
-			return;
+			return null;
 		}
 
 		int size = large ? imageSizeLarge : imageSizeDefault;
@@ -140,45 +140,45 @@ public class ImageLoader {
 			if(large) {
 				nowPlaying = bitmap;
 			}
-			return;
+			return null;
 		}
 
 		if (!large) {
 			setUnknownImage(view, large);
 		}
-		new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade).execute();
+		return new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade).execute();
 	}
 
-	public void loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
+	public ImageTask loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
 		if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled()) {
 			createLargeUnknownImage(context);
 		}
 
 		if (entry == null || entry.getCoverArt() == null) {
 			setUnknownImage(remoteControl);
-			return;
+			return null;
 		}
 
 		Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), imageSizeLarge));
 		if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
 			setImage(remoteControl, drawable);
-			return;
+			return null;
 		}
 
 		setUnknownImage(remoteControl);
-		new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl).execute();
+		return new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl).execute();
 	}
 
-	public void loadAvatar(Context context, ImageView view, String username) {
+	public ImageTask loadAvatar(Context context, ImageView view, String username) {
 		Bitmap bitmap = cache.get(username);
 		if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
 			view.setImageDrawable(drawable);
-			return;
+			return null;
 		}
 
-		new AvatarTask(context, view, username).execute();
+		return new AvatarTask(context, view, username).execute();
 	}
 
 	private String getKey(String coverArtId, int size) {
@@ -262,7 +262,7 @@ public class ImageLoader {
 		setImage(remoteControl, largeUnknownImage);
 	}
 
-	private abstract class ImageTask extends SilentBackgroundTask<Void> {
+	public abstract class ImageTask extends SilentBackgroundTask<Void> {
 		private final Context mContext;
 		private final MusicDirectory.Entry mEntry;
 		private final int mSize;
