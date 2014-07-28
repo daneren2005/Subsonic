@@ -80,7 +80,7 @@ public class AlbumView extends UpdateView {
 		}
 		artistView.setText(artist);
 		artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
-		((ImageLoader)obj2).loadImage(coverArtView, album, false, true);
+		imageTask = ((ImageLoader)obj2).loadImage(coverArtView, album, false, true);
 		file = null;
 	}
 
