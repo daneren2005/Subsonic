@@ -49,6 +49,6 @@ public class UserView extends UpdateView {
 	protected void setObjectImpl(Object obj, Object obj2) {
 		this.user = (User) obj;
 		usernameView.setText(user.getUsername());
-		((ImageLoader)obj2).loadAvatar(context, avatarView, user.getUsername());
+		imageTask = ((ImageLoader)obj2).loadAvatar(context, avatarView, user.getUsername());
 	}
 }
