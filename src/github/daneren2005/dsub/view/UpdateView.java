@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 
+import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.R;
 
 public class UpdateView extends LinearLayout {
@@ -53,6 +54,7 @@ public class UpdateView extends LinearLayout {
 	protected boolean shaded = false;
 	protected boolean starred = false;
 	protected boolean isStarred = false;
+	protected ImageLoader.ImageTask imageTask = null;
 	
 	protected final boolean autoUpdate;
 	
@@ -85,6 +87,11 @@ public class UpdateView extends LinearLayout {
 		update();
 	}
 	public void setObject(Object obj1, Object obj2) {
+		if(imageTask != null) {
+			imageTask.cancel();
+			imageTask = null;
+		}
+		
 		setObjectImpl(obj1, obj2);
 		backgroundHandler.post(new Runnable() {
 			@Override
