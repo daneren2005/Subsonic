@@ -185,13 +185,13 @@ public class ImageLoader {
 		return coverArtId + size;
 	}
 
-	private void setImage(View view, Drawable drawable, boolean crossfade) {
+	private void setImage(View view, final Drawable drawable, boolean crossfade) {
 		if (view instanceof TextView) {
 			// Cross-fading is not implemented for TextView since it's not in use.  It would be easy to add it, though.
 			TextView textView = (TextView) view;
 			textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 		} else if (view instanceof ImageView) {
-			ImageView imageView = (ImageView) view;
+			final ImageView imageView = (ImageView) view;
 			if (crossfade) {
 				Drawable existingDrawable = imageView.getDrawable();
 				if (existingDrawable == null) {
@@ -202,27 +202,30 @@ public class ImageLoader {
 						emptyImage = Bitmap.createBitmap(imageSizeDefault, imageSizeDefault, Bitmap.Config.ARGB_8888);
 					}
 					existingDrawable = new BitmapDrawable(context.getResources(), emptyImage);
-				} else {
-					// Try to get rid of old transitions
-					try {
-						TransitionDrawable tmp = (TransitionDrawable) existingDrawable;
-						int layers = tmp.getNumberOfLayers();
-						existingDrawable = tmp.getDrawable(layers - 1);
-					} catch(Exception e) {
-						// Do nothing, just means that the drawable is a flat image
+				} else if(existingDrawable instanceof TransitionDrawable) {
+					// This should only ever be used if user is skipping through many songs quickly
+					TransitionDrawable tmp = (TransitionDrawable) existingDrawable;
+					exisitingDrawable = tmp.getDrawable(tmp.getNumberOfLayers() - 1);
+				}
+				
+				Drawable[] layers = new Drawable[] {existingDrawable, drawable};
+				final TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
+				imageView.setImageDrawable(transitionDrawable);
+				transitionDrawable.startTransition(250);
+				
+				// Get rid of transition drawable after transition occurs
+				imageView.getHandler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						// Only execute if still on same transition drawable
+						if(imageView.getDrawable() == transitionDrawable) {
+							imageView.setImageDrawable(drawable);
+						}
 					}
-				}
-				if (!(((BitmapDrawable)existingDrawable).getBitmap().isRecycled()))
-				{ // We will flow through to the non-transition if the old image is recycled... Yay 4.3
-					Drawable[] layers = new Drawable[]{existingDrawable, drawable};
-
-					TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
-					imageView.setImageDrawable(transitionDrawable);
-					transitionDrawable.startTransition(250);
-					return;
-				}
+				}, 500L);
+			} else {
+				imageView.setImageDrawable(drawable);
 			}
-			imageView.setImageDrawable(drawable);
 		}
 	}
 
