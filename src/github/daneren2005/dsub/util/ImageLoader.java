@@ -25,6 +25,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.media.RemoteControlClient;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.support.v4.util.LruCache;
@@ -48,6 +50,7 @@ public class ImageLoader {
 
 	private Context context;
 	private LruCache<String, Bitmap> cache;
+	private Handler handler;
 	private Bitmap nowPlaying;
 	private final int imageSizeDefault;
 	private final int imageSizeLarge;
@@ -56,6 +59,7 @@ public class ImageLoader {
 
 	public ImageLoader(Context context) {
 		this.context = context;
+		handler = new Handler(Looper.getMainLooper());
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 		final int cacheSize = maxMemory / 4;
 		cache = new LruCache<String, Bitmap>(cacheSize) {
@@ -136,7 +140,7 @@ public class ImageLoader {
 		Bitmap bitmap = cache.get(getKey(entry.getCoverArt(), size));
 		if (bitmap != null && !bitmap.isRecycled()) {
 			final Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
-			setImage(view, drawable, large);
+			setImage(view, drawable, crossfade);
 			if(large) {
 				nowPlaying = bitmap;
 			}
@@ -220,7 +224,7 @@ public class ImageLoader {
 				transitionDrawable.startTransition(250);
 				
 				// Get rid of transition drawable after transition occurs
-				imageView.getHandler().postDelayed(new Runnable() {
+				handler.postDelayed(new Runnable() {
 					@Override
 					public void run() {
 						// Only execute if still on same transition drawable
