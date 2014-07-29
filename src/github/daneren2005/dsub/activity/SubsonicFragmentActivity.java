@@ -80,7 +80,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private TextView artistView;
 	private ImageButton startButton;
 	private long lastBackPressTime = 0;
-	private long currentRevision = -1;
+	private DownloadFile currentPlaying;
+	private PlayerState currentState;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -411,15 +412,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		if (downloadService == null) {
 			return;
 		}
-		
-		long revision = downloadService.getDownloadListUpdateRevision();
-		if(currentRevision == revision) {
-			return;
-		} else {
-			currentRevision = revision;
-		}
 
 		DownloadFile current = downloadService.getCurrentPlaying();
+		PlayerState state = downloadService.getPlayerState();
+		if(current == currentPlaying && state == currentState) {
+			return;
+		} else {
+			currentPlaying = current;
+			currentState = state;
+		}
+
 		if(current == null) {
 			trackView.setText("Title");
 			artistView.setText("Artist");
@@ -431,7 +433,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		trackView.setText(song.getTitle());
 		artistView.setText(song.getArtist());
 		getImageLoader().loadImage(coverArtView, song, false, false);
-		int[] attrs = new int[] {(getDownloadService().getPlayerState() == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
+		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
 		TypedArray typedArray = this.obtainStyledAttributes(attrs);
 		startButton.setImageResource(typedArray.getResourceId(0, 0));
 		typedArray.recycle();
