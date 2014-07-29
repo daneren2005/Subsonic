@@ -136,15 +136,15 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
 	public void cancel() {
 		if(cancelled.compareAndSet(false, true)) {
-			if(task != null && task.isRunning()) {
+			if(isRunning()) {
 				if(cancelListener != null) {
 					cancelListener.onCancel();
 				} else {
 					task.cancel();
 				}
-
-				task = null;
 			}
+
+			task = null;
 		}
 	}
 	public boolean isCancelled() {
@@ -172,17 +172,21 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
 	protected class Task {
 		private Thread thread;
-		private AtomicBoolean taskStart = new AtomicBoolean(true);
+		private AtomicBoolean taskStart = new AtomicBoolean(false);
 
 		private void execute() throws Exception {
-			if(!taskStart.get()) {
+			// Don't run if cancelled already
+			if(isCancelled()) {
 				return;
 			}
 
-			thread = Thread.currentThread();
 			try {
+				thread = Thread.currentThread();
+				taskStart.set(true);
+
 				final T result = doInBackground();
 				if(isCancelled()) {
+					taskStart.set(false);
 					return;
 				}
 
@@ -190,7 +194,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
-							onDone(result);
+							if(!isCancelled()) {
+								onDone(result);
+							}
+
 							taskStart.set(false);
 						}
 					});
@@ -204,6 +211,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 				}
 			} catch(final Throwable t) {
 				if(isCancelled()) {
+					taskStart.set(false);
 					return;
 				}
 
@@ -211,24 +219,39 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
-							try {
-								onError(t);
-								taskStart.set(false);
-							} catch(Exception e) {
-								// Don't care
+							if(!isCancelled()) {
+								try {
+									onError(t);
+								} catch(Exception e) {
+									// Don't care
+								}
 							}
+
+							taskStart.set(false);
 						}
 					});
 				} else {
 					taskStart.set(false);
 				}
+			} finally {
+				thread = null;
 			}
 		}
 
 		public void cancel() {
-			taskStart.set(false);
-			if(thread != null) {
-				thread.interrupt();
+			if(taskStart.compareAndSet(true, false)) {
+				if (thread != null) {
+					thread.interrupt();
+				}
+			}
+		}
+		public boolean isCancelled() {
+			if(Thread.interrupted()) {
+				return true;
+			} else if(BackgroundTask.this.isCancelled()) {
+				return true;
+			} else {
+				return false;
 			}
 		}
 		public void onDone(T result) {
