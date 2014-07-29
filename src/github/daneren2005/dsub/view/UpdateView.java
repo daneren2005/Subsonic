@@ -35,6 +35,7 @@ import java.util.WeakHashMap;
 
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 
 public class UpdateView extends LinearLayout {
 	private static final String TAG = UpdateView.class.getSimpleName();
@@ -54,7 +55,7 @@ public class UpdateView extends LinearLayout {
 	protected boolean shaded = false;
 	protected boolean starred = false;
 	protected boolean isStarred = false;
-	protected ImageLoader.ImageTask imageTask = null;
+	protected SilentBackgroundTask<Void> imageTask = null;
 	
 	protected final boolean autoUpdate;
 	

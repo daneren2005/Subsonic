@@ -146,10 +146,12 @@ public class ImageLoader {
 		if (!large) {
 			setUnknownImage(view, large);
 		}
-		return new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade).execute();
+		ImageTask task = new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
+		task.execute();
+		return task;
 	}
 
-	public ImageTask loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
+	public SilentBackgroundTask<Void> loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
 		if (largeUnknownImage != null && ((BitmapDrawable)largeUnknownImage).getBitmap().isRecycled()) {
 			createLargeUnknownImage(context);
 		}
@@ -167,10 +169,12 @@ public class ImageLoader {
 		}
 
 		setUnknownImage(remoteControl);
-		return new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl).execute();
+		ImageTask task = new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl);
+		task.execute();
+		return task;
 	}
 
-	public ImageTask loadAvatar(Context context, ImageView view, String username) {
+	public SilentBackgroundTask<Void> loadAvatar(Context context, ImageView view, String username) {
 		Bitmap bitmap = cache.get(username);
 		if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
@@ -178,7 +182,9 @@ public class ImageLoader {
 			return null;
 		}
 
-		return new AvatarTask(context, view, username).execute();
+		SilentBackgroundTask<Void> task = new AvatarTask(context, view, username);
+		task.execute();
+		return task;
 	}
 
 	private String getKey(String coverArtId, int size) {
@@ -205,7 +211,7 @@ public class ImageLoader {
 				} else if(existingDrawable instanceof TransitionDrawable) {
 					// This should only ever be used if user is skipping through many songs quickly
 					TransitionDrawable tmp = (TransitionDrawable) existingDrawable;
-					exisitingDrawable = tmp.getDrawable(tmp.getNumberOfLayers() - 1);
+					existingDrawable = tmp.getDrawable(tmp.getNumberOfLayers() - 1);
 				}
 				
 				Drawable[] layers = new Drawable[] {existingDrawable, drawable};
