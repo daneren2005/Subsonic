@@ -1160,14 +1160,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 				AlertDialog.Builder imageDialog = new AlertDialog.Builder(context);
 				ImageView fullScreenView = new ImageView(context);
-				imageLoader.loadImage(fullScreenView, albumRep, true, false);
+				imageLoader.loadImage(fullScreenView, albumRep, true, true);
 				imageDialog.setView(fullScreenView);
 				imageDialog.setCancelable(true);
 				imageDialog.create();
 				imageDialog.show();
 			}
 		});
-		imageLoader.loadImage(coverArtView, albumRep, false, false);
+		imageLoader.loadImage(coverArtView, albumRep, false, true);
 
 		TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
 		if(playlistName != null) {
