@@ -72,6 +72,7 @@
 	<string name="main.albums_year">Par décennies</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Presser retour à nouveau pour quitter</string>
+	<string name="main.scan_complete">Completed scan of Server</string>
 
 	<string name="menu.search">Recherche</string>
 	<string name="menu.shuffle">Hazard</string>
@@ -101,6 +102,7 @@
 	<string name="menu.cast">Diffuser vers appareil</string>
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Ajouter utilisateur</string>
+	<string name="menu.rescan">Relire le server</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Mise à jour informations</string>
@@ -211,10 +213,10 @@
 		\nTaille estimée : %2$s</string>
 	<string name="download.failed_to_load">Echec du chargement</string>
 
-	<string name="sync.new_podcasts">Nouveaux podcasts</string>
-	<string name="sync.new_playlists">Playlists mises à jour</string>
-	<string name="sync.new_albums">Nouveaux albums</string>
-	<string name="sync.new_starred">Nouveaux titres notés</string>
+	<string name="sync.new_podcasts">Nouveaux podcasts disponibles</string>
+	<string name="sync.new_playlists">Nouveaux titres dans les playlists</string>
+	<string name="sync.new_albums">Nouveaux albums disponibles</string>
+	<string name="sync.new_starred">Nouveaux titres notés disponibles</string>
     
 	<string name="starring_content_starred">Noté \&quot;%s\&quot;</string>
 	<string name="starring_content_unstarred">Dévalués \&quot;%s\&quot;</string>
@@ -283,8 +285,8 @@
 	<string name="settings.theme_fullscreen_summary">Cacher autant d\'élément graphique que possible</string>
 	<string name="settings.track_title">Afficher n° piste</string>
 	<string name="settings.track_summary">Afficher le n° de piste devant les titres</string>
-	<string name="settings.custom_sort">Tri personnalisé</string>
-	<string name="settings.custom_sort_summary">Remplacer le tri du serveur pour trier par n° de disque et année.</string>
+	<string name="settings.custom_sort">Trier par années</string>
+	<string name="settings.custom_sort_summary">Trier les albums par année, ou par ordre alphabétique</string>
 	<string name="settings.open_to_library">Ouvrir dans la bibliothèque</string>
 	<string name="settings.open_to_library_summary">Ouvrir directement la bibliothèque plutôt que l\'écran d\'accueil.</string>
     <string name="settings.network_title">Réseau</string>
@@ -341,7 +343,7 @@
     <string name="settings.screen_lit_title">Garder l\'écran allumé</string>
     <string name="settings.screen_lit_summary">Garder l\'écran allumé augmente la vitesse de téléchargement.</string>
 	<string name="settings.playlist_title">Lecture</string>
-	<string name="settings.playlist_random_size_title">Random Size</string>
+	<string name="settings.playlist_random_size_title">Taille de la liste de lecture aléatoire</string>
 	<string name="settings.sleep_timer_title">Temporisateur</string>
 	<string name="settings.sleep_timer_duration_title">Durée temporisation</string>
 	<string name="settings.sleep_timer_off">Eteindre</string>
@@ -407,7 +409,7 @@
 	<string name="settings.browse_by_tags_summary">Naviguer via les tags plutôt que via l\'arborescence de fichier.  Nécessite Subsonic 4.7+</string>
 	<string name="settings.override_system_language">Ne pas utiliser la langue du système</string>
 	<string name="settings.override_system_language_summary">Afficher DSub en Anglais même si une traduction existe pour la langue système. Peut nécessiter un vidage du cache de l\'application.</string>
-	<string name="settings.drawer_items_title">Eléments du menu principal</string>
+	<string name="settings.drawer_items_title">Entrées de menu</string>
 	<string name="settings.play_now_after">Jouer maintenant - Plus tard</string>
 	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
 	<string name="settings.large_album_art">Pochettes larges</string>
@@ -463,6 +465,8 @@
 	<string name="admin.delete_user">Supprimer l\'utilisateur</string>
 	<string name="admin.delete_user_success">Suppression effectuée %1$s</string>
 	<string name="admin.delete_user_error">Echec de la suppression %1$s</string>
+	<string name="admin.confirm_password">Confirmer le mot de passe</string>
+	<string name="admin.confirm_password_bad">Mot de passe saisi erroné</string>
 	
 	<string name="admin.scrobblingEnabled">Diffusion autorisée</string>
 	<string name="admin.role.admin">Administrateur</string>
@@ -475,6 +479,7 @@
 	<string name="admin.role.stream">Ecouter de la musique</string>
 	<string name="admin.role.jukebox">Télécommander la lecture (jukebox)</string>
 	<string name="admin.role.share">Gérer les partages</string>
+	<string name="admin.role.lastfm">Utiliser Last.FM</string>
 
     <string name="music_service.retry">Erreur réseau. Nouvelle tentative %1$d de %2$d.</string>
 
@@ -493,6 +498,7 @@
     <string name="parser.not_authorized">Non autorisé. Vérifier les droit de l\'utilisateur sur le serveur Subsonic.</string>
     <string name="parser.artist_count">%d artistes récupérés.</string>
 	<string name="parser.server_error">Erreur serveur : %s</string>
+	<string name="parser.scan_count">%d entrées trouvées</string>
 
     <string name="select_artist.refresh">Recharger</string>
     <string name="select_artist.folder">Sélectionner un dossier</string>
@@ -527,6 +533,11 @@
 	<string name="chat.send_a_message">Envoyer un message</string> 
 
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+
+	<string name="tasker.start_playing">Commencer la lecture DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Démarrer DSub</string>
+	<string name="tasker.edit_shuffle_mode">Démarrer en mode lecture aléatoire : </string>
+	<string name="tasker.start_playing_shuffled">Démarrer la lecture DSub en mode lecture aléatoire</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Aucun titre</item>
