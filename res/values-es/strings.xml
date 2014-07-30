@@ -23,7 +23,7 @@
 	<string name="common.confirm">Confirmar</string>
 	<string name="common.confirm_message">Quieres %1$s %2$s?</string>
 	<string name="common.confirm_message_cache">cache</string>
-	<string name="common.empty">No se ha encontrado nada</string>
+	<string name="common.empty">No hay datos</string>
 	<string name="common.warning">Aviso</string>
 
     <string name="button_bar.home">Inicio</string>
@@ -70,6 +70,7 @@
 		<br/>Asegúrate que no estás utilizando un certificado auto-firmado, porque Chromecast automáticamente lo rechazará.
 	]]>
    </string>
+	<string name="main.scan_complete">Escaneado del servidor completado</string>
 
 	<string name="menu.search">Buscar</string>
 	<string name="menu.shuffle">Aleatorio</string>
@@ -97,6 +98,7 @@
 	<string name="menu.delete_cache">Borrar cache</string>
 	<string name="menu.cast">Hacer streaming al dispositivo</string>
 	<string name="menu.add_user">Añadir usuario</string>
+	<string name="menu.rescan">Reescanear servidor</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -269,6 +271,8 @@
 	<string name="settings.theme_fullscreen_summary">Esconder tantos elementos de la interfaz como Android permita</string>
 	<string name="settings.track_title">Mostrar número de pista</string>
 	<string name="settings.track_summary">Mostrar número de pista al inicio de la canción si existe</string>
+	<string name="settings.custom_sort">Ordenar por año</string>
+	<string name="settings.custom_sort_summary">Ordenar discos por año o alfabeticamente</string>
     <string name="settings.network_title">Red</string>
     <string name="settings.max_bitrate_wifi">Bitrate máximo - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Bitrate máximo - Móvil</string>
@@ -323,7 +327,7 @@
     <string name="settings.screen_lit_title">Mantener pantalla encendida</string>
     <string name="settings.screen_lit_summary">Mantener la pantalla encendida durantes las descargas mejora la velocidad de descarga.</string>
 	<string name="settings.playlist_title">Listas de reproducción</string>
-	<string name="settings.playlist_random_size_title">Tamaño aleatorio</string>
+	<string name="settings.playlist_random_size_title">Tamaño de la lista de reproducción en aleatorio</string>
 	<string name="settings.sleep_timer_title">Temporizador</string>
 	<string name="settings.sleep_timer_duration_title">Duración del temporizador</string>
 	<string name="settings.sleep_timer_off">Encendido</string>
@@ -395,7 +399,7 @@
 	<string name="settings.open_to_library_summary">Acceder directamente a la pantalla de la biblioteca en lugar de abrir primero la pantalla principal.</string>
 	<string name="settings.override_system_language">Sobreescribir idioma del sistema</string>
 	<string name="settings.override_system_language_summary">Mostrar la aplicación en inglés aún teniendo disponible DSub en el idioma del sistema. Probablemente necesite borrar la aplicación de la memoria para efectuar los cambios.</string>
-	<string name="settings.drawer_items_title">Items del menú</string>
+	<string name="settings.drawer_items_title">Pestañas</string>
 	<string name="settings.play_now_after">Reproducir ahora - Después</string>
 	<string name="settings.play_now_after_summary">Pulsar "Reproducir ahora" desde el menú contextual actúa como la interfaz web de Subsonic, reproduciendo todos los items a partir del seleccionado</string>
 	<string name="settings.large_album_art">Carátulas grandes</string>
@@ -444,7 +448,8 @@
 	<string name="admin.delete_user">Eliminar usuario</string>
 	<string name="admin.delete_user_success">%1$s eliminado satisfactoriamente</string>
 	<string name="admin.delete_user_error">Error al eliminar %1$s</string>
-
+	<string name="admin.confirm_password">Confirmar contraseña</string>
+	<string name="admin.confirm_password_bad">La contraseña no es correcta</string>
 
 	<string name="admin.scrobblingEnabled">Scrobbling permitido</string>
 	<string name="admin.role.admin">Administrador</string>
@@ -457,11 +462,12 @@
 	<string name="admin.role.stream">Hacer Stream de música</string>
 	<string name="admin.role.jukebox">Controlar el jukebox</string>
 	<string name="admin.role.share">Gestionar compartidos</string>
+	<string name="admin.role.lastfm">Utilizar Last.FM</string>
 
-	<string name="sync.new_podcasts">Nuevos podcasts</string>
-	<string name="sync.new_playlists">Nuevos en listas de reproducción</string>
-	<string name="sync.new_albums">Nuevos álbumes</string>
-	<string name="sync.new_starred">Nuevas canciones con estrella</string>
+	<string name="sync.new_podcasts">Nuevos podcasts disponibles</string>
+	<string name="sync.new_playlists">Nuevas canciones en la lista de reproducción</string>
+	<string name="sync.new_albums">Nuevos discos disponibles</string>
+	<string name="sync.new_starred">Nuevas canciones favoritas disponibles</string>
 
 	<string name="shuffle.title">Iniciar aleatorio por</string>
 	<string name="shuffle.startYear">Año inicial:</string>
@@ -485,6 +491,7 @@
     <string name="parser.not_authenticated">Usuario o contraseña inconrrectos.</string>
     <string name="parser.not_authorized">Sin autorización. Compruebe los permisos en el servidor Subsonic.</string>
     <string name="parser.artist_count">Recibidos %d artistas.</string>
+	<string name="parser.scan_count">Escaneados %d entradas</string>
 
     <string name="select_artist.refresh">Actualizar</string>
     <string name="select_artist.folder">Seleccionar carpeta</string>
@@ -520,6 +527,11 @@
 	<string name="chat.send_a_message">Enviar un mensaje</string> 
 
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+
+	<string name="tasker.start_playing">Comenzar reproduciendo DSub</string>
+	<string name="tasker.start_playing_title">Tasker -> Encender DSub</string>
+	<string name="tasker.edit_shuffle_mode">Comenzar en modo aleatorio: </string>
+	<string name="tasker.start_playing_shuffled">Comenzar DSub en modo aleatorio</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Sin canciones</item>
