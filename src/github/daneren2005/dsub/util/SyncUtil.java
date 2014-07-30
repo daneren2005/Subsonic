@@ -1,16 +1,9 @@
 package github.daneren2005.dsub.util;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SyncRequest;
-import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import java.io.File;
@@ -29,87 +22,6 @@ public final class SyncUtil {
 	private static ArrayList<SyncSet> syncedPlaylists;
 	private static ArrayList<SyncSet> syncedPodcasts;
 	private static String url;
-
-	public static void createAccounts(final Context context) {
-		new SilentBackgroundTask<Void>(context) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				SharedPreferences prefs = Util.getPreferences(context);
-				boolean syncEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SYNC_ENABLED, true);
-				long syncInterval = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SYNC_INTERVAL, "60")) * 60L;
-				boolean starred = syncEnabled && prefs.getBoolean(Constants.PREFERENCES_KEY_SYNC_STARRED, false);
-				boolean recent = syncEnabled && prefs.getBoolean(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT, false);
-
-				AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
-				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
-				accountManager.addAccountExplicitly(account, null, null);
-
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-					createAccountsImpl(context, account, syncEnabled, syncInterval, starred, recent);
-				} else {
-					createAccountsLegacy(context, account, syncEnabled, syncInterval, starred, recent);
-				}
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-
-			}
-		}.execute();
-	}
-
-	private static void createAccountsImpl(Context context, Account account, boolean syncEnabled, long syncInterval, boolean starred, boolean recent) {
-		// Set wiggle room at 10% instead of default 4%, doesn't really matter when it executes
-		long wiggleRoom = syncInterval / 10;
-		boolean wifiRequired = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SYNC_WIFI, true);
-
-		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
-		SyncRequest playlistRequest = new SyncRequest.Builder()
-				.setSyncAdapter(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY)
-				.syncPeriodic(syncInterval, wiggleRoom)
-				.setDisallowMetered(wifiRequired)
-				.build();
-		ContentResolver.requestSync(playlistRequest);
-
-		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, syncEnabled);
-		SyncRequest podcastRequest = new SyncRequest.Builder()
-				.setSyncAdapter(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY)
-				.syncPeriodic(syncInterval, wiggleRoom)
-				.setDisallowMetered(wifiRequired)
-				.build();
-		ContentResolver.requestSync(podcastRequest);
-
-		// Add for starred/recently added
-		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_STARRED_AUTHORITY, starred);
-		SyncRequest starredRequest = new SyncRequest.Builder()
-				.setSyncAdapter(account, Constants.SYNC_ACCOUNT_STARRED_AUTHORITY)
-				.syncPeriodic(syncInterval, wiggleRoom)
-				.setDisallowMetered(wifiRequired)
-				.build();
-		ContentResolver.requestSync(starredRequest);
-
-		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_MOST_RECENT_AUTHORITY, recent);
-		SyncRequest recentRequest = new SyncRequest.Builder()
-				.setSyncAdapter(account, Constants.SYNC_ACCOUNT_MOST_RECENT_AUTHORITY)
-				.syncPeriodic(syncInterval, wiggleRoom)
-				.setDisallowMetered(wifiRequired)
-				.build();
-		ContentResolver.requestSync(recentRequest);
-	}
-	private static void createAccountsLegacy(Context context, Account account, boolean syncEnabled, long syncInterval, boolean starred, boolean recent) {
-		// Add enabled/frequency to playlist/podcasts syncing
-		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
-		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), syncInterval);
-		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, syncEnabled);
-		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, new Bundle(), syncInterval);
-
-		// Add for starred/recently added
-		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_STARRED_AUTHORITY, starred);
-		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_STARRED_AUTHORITY, new Bundle(), syncInterval);
-		ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_MOST_RECENT_AUTHORITY, recent);
-		ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_MOST_RECENT_AUTHORITY, new Bundle(), syncInterval);
-	}
 
 	private static void checkRestURL(Context context) {
 		int instance = Util.getActiveServer(context);
