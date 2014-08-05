@@ -1149,7 +1149,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		final ImageLoader imageLoader = getImageLoader();
-		final MusicDirectory.Entry albumRep = entries.get(random.nextInt(entries.size()));
+		
+		// Try a few times to get a random cover art
+		MusicDirectory.Entry coverArt = null;
+		for(int i = 0; (i < 3) && (coverArt == null || coverArt.getCoverArt() == null); i++) {
+			coverArt = entries.get(random.nextInt(entries.size()));
+		}
+		
+		final MusicDirectory.Entry albumRep = coverArt;
 		View coverArtView = header.findViewById(R.id.select_album_art);
 		coverArtView.setOnClickListener(new View.OnClickListener() {
 			@Override
