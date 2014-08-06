@@ -534,10 +534,10 @@
 
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
 
-	<string name="tasker.start_playing">Commencer la lecture DSub</string>
+	<string name="tasker.start_playing">Commencer la lecture</string>
 	<string name="tasker.start_playing_title">Tasker -> Démarrer DSub</string>
 	<string name="tasker.edit_shuffle_mode">Démarrer en mode lecture aléatoire : </string>
-	<string name="tasker.start_playing_shuffled">Démarrer la lecture DSub en mode lecture aléatoire</string>
+	<string name="tasker.start_playing_shuffled">Démarrer la lecture en mode lecture aléatoire</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Aucun titre</item>
