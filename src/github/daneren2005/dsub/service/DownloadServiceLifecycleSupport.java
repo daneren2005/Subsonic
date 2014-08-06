@@ -157,15 +157,25 @@ public class DownloadServiceLifecycleSupport {
 		new CacheCleaner(downloadService, downloadService).clean();
 	}
 
-	public void onStart(Intent intent) {
+	public void onStart(final Intent intent) {
 		if (intent != null) {
 			String action = intent.getAction();
 			if(DownloadService.START_PLAY.equals(action)) {
-				if(intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
-					downloadService.setShufflePlayEnabled(true);
-				} else {
-					downloadService.start();
-				}
+				eventHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						if(!setup.get()) {
+							lock.lock();
+							lock.unlock();
+						}
+
+						if(intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
+							downloadService.setShufflePlayEnabled(true);
+						} else {
+							downloadService.start();
+						}
+					}
+				});
 			} else if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
 				downloadService.clearBackground();
 			} else if(intent.getExtras() != null) {
