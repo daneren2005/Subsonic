@@ -311,6 +311,29 @@ public final class Notifications {
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			
+			String tab, type;
+			switch(stringId) {
+				case R.string.sync_new_albums:
+					type = "newest";
+					break;
+				case R.string.sync_new_playlists:
+					tab = "Playlist";
+					break;
+				case R.string.sync_new_podcasts:
+					tab = "Podcast";
+					break;
+				case R.string.sync_new_starred:
+					type = "starred";
+					break;
+			}
+			if(tab != null) {
+				notificationIntent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, tab);
+			}
+			if(type != null) {
+				notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
+			}
+			
 			builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0));
 
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
