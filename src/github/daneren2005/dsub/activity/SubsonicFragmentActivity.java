@@ -129,6 +129,20 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				SearchFragment fragment = new SearchFragment();
 				replaceFragment(fragment, fragment.getSupportTag());
 			}
+			
+			// If a album type is set, switch to that album type view
+			String albumType = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
+			if(albumType != null) {
+				SubsonicFragment fragment = new SelectDirectoryFragment();
+				
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, albumType);
+				args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
+				args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
+				
+				fragment.setArguments(args);
+				replaceFragment(fragment, fragment.getSupportTag());
+			}
 		}
 
 		bottomBar = findViewById(R.id.bottom_bar);
