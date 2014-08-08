@@ -307,12 +307,13 @@ public final class Notifications {
 					.setStyle(new NotificationCompat.BigTextStyle().bigText(extra.replace(", ", "\n")))
 					.setOngoing(false)
 					.setGroup(NOTIFICATION_SYNC_GROUP)
-					.setPriority(NotificationCompat.PRIORITY_LOW);
+					.setPriority(NotificationCompat.PRIORITY_LOW)
+					.setAutoCancel(true);
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			
-			String tab, type;
+			String tab = null, type = null;
 			switch(stringId) {
 				case R.string.sync_new_albums:
 					type = "newest";
@@ -333,8 +334,8 @@ public final class Notifications {
 			if(type != null) {
 				notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
 			}
-			
-			builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0));
+
+			builder.setContentIntent(PendingIntent.getActivity(context, stringId, notificationIntent, 0));
 
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(stringId, builder.build());
