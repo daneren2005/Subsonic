@@ -545,35 +545,58 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
+	public void createUser(final User user, Context context, ProgressListener progressListener) throws Exception {
 		musicService.createUser(user, context, progressListener);
+		
+		new UserUpdater(Context, "") {
+			@Override
+			public boolean checkResult(User check) {
+				return true;
+			}
+			
+			@Override
+			public void updateResult(List<User> users, User result) {
+				users.add(user);
+			}
+		}
 	}
 
 	@Override
-	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
+	public void updateUser(final User user, Context context, ProgressListener progressListener) throws Exception {
 		musicService.updateUser(user, context, progressListener);
 
-		// Delete cached users if anything updated
-		File file = new File(context.getCacheDir(), getCacheName(context, "users"));
-		file.delete();
+		new UserUpdater(context, user.getUsername()) {
+			@Override
+			public void updateResult(List<User> users, User result) {
+				result.setEmail(user.getEmail());
+				result.setSettings(user.getSettings());
+			}
+		}.execute();
 	}
 
 	@Override
 	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
 		musicService.deleteUser(username, context, progressListener);
 
-		// Delete cached users if any have been removed from list
-		File file = new File(context.getCacheDir(), getCacheName(context, "users"));
-		file.delete();
+		new UserUpdater(context, username) {
+			@Override
+			public void updateResult(List<User> users, User result) {
+				users.remove(result);
+			}
+		}.execute();
 	}
 
 	@Override
-	public void changeEmail(String username, String email, Context context, ProgressListener progressListener) throws Exception {
+	public void changeEmail(String username, final String email, Context context, ProgressListener progressListener) throws Exception {
 		musicService.changeEmail(username, email, context, progressListener);
-
-		// Delete cached users if any have been removed from list
-		File file = new File(context.getCacheDir(), getCacheName(context, "users"));
-		file.delete();
+		
+		// Update cached email for user
+		new UserUpdater(context, username) {
+			@Override
+			public void updateResult(List<User> users, User result) {
+				result.setEmail(email);
+			}
+		}.execute();
 	}
 
 	@Override
@@ -603,6 +626,53 @@ public class CachedMusicService implements MusicService {
   	private String getCacheName(Context context, String name) {
   		String s = musicService.getRestUrl(context, null, false);
   		return name + "-" + s.hashCode() + ".ser";
+  	}
+  	
+  	private abstract class SerializeUpdater<T> {
+  		final Context context;
+  		final String cacheName;
+  		
+  		public SerializeUpdater(Context context, String cacheName) {
+  			this.context = context;
+  			this.cacheName = getCacheName(context, cacheName);
+  		}
+  		
+  		public abstract boolean checkResult(T check);
+  		public abstract void updateResult(List<T> objects, T result);
+  		
+  		public void execute() {
+  			ArrayList<T> objects = FileUtil.deserialize(context, cacheName, ArrayList.class);
+  			
+  			// Only execute if something to check against
+  			if(objects != null) {
+  				T object = null;
+  				for(T check: objects) {
+  					if(checkResult(check) {
+  						object = check;
+  						break;
+  					}
+  				}
+  				
+  				// Only reserialize if a match was found
+  				if(object) {
+  					updateResult(objects, object);
+  					FileUtil.serialize(context, objects, cacheName);
+  				}
+  			}
+  		}
+  	}
+  	private class UserUpdater extends SerializeUpdater<User> {
+  		String username;
+  		
+  		UserUpdater(Context context, String username) {
+  			super(context, "users");
+  			this.username = username;
+  		}
+  		
+  		@Override
+  		public boolean checkResult(User check) {
+  			return username.equals(check.getUsername());
+  		}
   	}
 
     private void checkSettingsChanged(Context context) {
