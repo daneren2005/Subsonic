@@ -1493,7 +1493,7 @@ public class DownloadService extends Service {
 
 				int pos = cachedPosition;
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
-				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
+				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000)) || nextSetup) {
 					playNext();
 
 					// Finished loading, delete when list is cleared
