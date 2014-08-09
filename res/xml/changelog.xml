@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.4" versioncode="120" releasedate="8/8/2014">
+		<change>Tasker Plugin: Start + optional start Shuffle Mode</change>
+		<change>Madsonic 5.1+: Add Rescan Server option to Home tab</change>
+		<change>Sort quick search results by closeness to query (instead of Artists -> Albums -> Songs)</change>
+		<change>Clicking on Sync notifications goes to corresponding tab</change>
+		<change>Fix no podcasts showing up if one of them is the error state</change>
+		<change>Fix starring some albums when browsing by tags</change>
+		<change>A few crash fixes</change>
+	</release>
 	<release version="4.7.3" versioncode="119" releasedate="7/18/2014">
 		<change>Require password for entering admin tab for security</change>
 		<change>Improvements to sync notifications</change>
@@ -42,114 +51,5 @@
 		<change>Fix background bluetooth disconnects causing playback to stop</change>
 		<change>Fix app trying to upsample songs in mp3 -> mp3 transcode</change>
 		<change>Fix for DSub preempting bluetooth events</change>
-	</release>
-	<release version="4.6.5" versioncode="110" releasedate="6/1/2014">
-		<change>Fix issue with some folders not being browseable</change>
-		<change>Fix deleting offline sync info not deleting stars</change>
-		<change>Bug fixes</change>
-	</release>
-	<release version="4.6.4" versioncode="109" releasedate="5/21/2014">
-		<change>Add option to remove already played songs from queue</change>
-		<change>Add total song count to About dialog</change>
-		<change>For songs with identical titles, treat filename as title</change>
-		<change>Fix Most Recent sync not working with Tag Browsing checked</change>
-		<change>Fix hide from other apps not hiding all music</change>
-		<change>Fix Nexus 4 layout issue</change>
-	</release>
-	<release version="4.6.3" versioncode="108" releasedate="5/7/2014">
-		<change>Fix infinite scroll with small album art</change>
-		<change>Fix pressing play from artist screen not playing all albums</change>
-		<change>Only hide artist if the artist is the same for all the albums</change>
-		<change>Several random crash fixes</change>
-	</release>
-	<release version="4.6.2" versioncode="107" releasedate="5/5/2014">
-		<change>Fix DSub not being recognized as a Bluetooth Media Player</change>
-		<change>Fix a couple of crashes</change>
-	</release>
-	<release version="4.6.1" versioncode="106" releasedate="5/3/2014">
-		<change>Fix crash on ICS and below</change>
-		<change>Fix crash on browsing root folder</change>
-	</release>
-	<release version="4.6" versioncode="105" releasedate="5/2/2014">
-		<change>Large album art view (optional)</change>
-		<change>Pull to refresh</change>
-		<change>Control remote playing (Jukebox/Chromecast) volume from outside app (JB+)</change>
-		<change>Rate limiting for background sync while phone is in use</change>
-		<change>Fix issue with playlist sync not picking up changes</change>
-		<change>Fix case of drag/dropping where next song isn't updated correctly</change>
-		<change>Fix cache location not being correct on devices with empty SD card slot</change>
-	</release>
-	<release version="4.5.8" versioncode="100" releasedate="4/15/2014">
-		<change>Downloads list now in own sub tab - only visible when something is downloading</change>
-		<change>Remember folder selection when switching between servers</change>
-		<change>Option to have play now play everything after it like the Subsonic Web GUI does (disabled by default)</change>
-		<change>Add app override to use English instead of incomplete translation</change>
-		<change>Fix several issues with Chromecast using https servers</change>
-		<change>Improve translations</change>
-		<change>Decrease apk size</change>
-		<change>Remove Froyo support</change>
-		<change>Random bug fixes</change>
-	</release>
-	<release version="4.5.7" versioncode="98" releasedate="4/1/2014">
-		<change>Add X to notification when casting for quick disconnect</change>
-		<change>Chromecast obeys repeat preferences</change>
-		<change>Shuffle by album by default (shuffle on now playing screen if you want by song)</change>
-		<change>Don't show Chromecast as option if Play Services isn't installed</change>
-		<change>Improve the handling of cover art for multi-disc albums</change>
-		<change>Pause for calls when using DSub as remote</change>
-		<change>German translation (thanks thknepper)</change>
-		<change>Several minor bug fixes</change>
-	</release>
-	<release version="4.5.6" versioncode="97" releasedate="3/22/2014">
-		<change>Fix issues with Chromecast reconnecting</change>
-		<change>Work around for Samsung's bluetooth metadata for 4.3+ devices</change>
-		<change>Work around for Show Artist not working when playing from playlists</change>
-		<change>Fix a crash on Froyo devices</change>
-		<change>Fix for some songs showing as downloaded when the server only sent a 0 length file</change>
-	</release>
-	<release version="4.5.5" versioncode="96" releasedate="3/14/2014">
-		<change>Now Playing screen improvements</change>
-		<change>Bass Booster/Voice Booster added in the EQ settings</change>
-		<change>Equalizer fixes and improvements</change>
-		<change>Added Show Artist to Now Playing screen</change>
-		<change>Screen On/Off changed to a checkbox</change>
-		<change>Click on album art opens list view</change>
-		<change>ChromeCast bug fixes</change>
-		<change>Fix genres not auto adding more if songs > 20 and albums = 0</change>
-		<change>Fix rotating screen after using Show Album</change>
-		<change>Improve memory usage</change>
-	</release>
-	<release version="4.5.4" versioncode="94" releasedate="3/3/2014">
-		<change>Fix cache location reset for Samsung upgrades</change>
-	</release>
-	<release version="4.5.3" versioncode="93" releasedate="2/26/2014">
-		<change>WARNING: Please read the first change!</change>
-		<change>Google changed Android so that apps can only write to a specific location on a SD card for 4.4+.  Samsung is currently upgrading their phones to 4.4, so if you have a Galaxy phone you will probably receive a notification that the cache location has been changed to the only place DSub can write to now.  Everyone else's settings will be left alone, but the default cache location has also been changed.</change>
-		<change>When your only playing one song, next/previous buttons skip within song (mostly useful for podcasts)</change>
-		<change>Added option to auto open to Library instead of the Home tab (under Settings -> Appearance)</change>
-		<change>Add more information to Send Log function for easier debugging</change>
-		<change>Some minor bug fixes</change>
-	</release>
-	<release version="4.5.2" versioncode="92" releasedate="2/23/2014">
-		<change>Add support for casting in offline mode</change>
-		<change>Use internal IP for ChromeCast if using a http address</change>
-		<change>Fix loading getting stuck on 4.1 and below devices</change>
-	</release>
-	<release version="4.5.1" versioncode="91" releasedate="2/21/2014">
-		<change>Fix crash on Android 2.2/2.3 devices</change>
-	</release>
-	<release version="4.5" versioncode="90" releasedate="2/21/2014">
-		<change>Add ChromeCast support for music only (Android 2.3+ only)</change>
-		<change>Video/Offline mode to follow</change>
-		<change>More detailed download notification (Android 4.2+)</change>
-		<change>Cancel button on download notification (Android 4.2+)</change>
-		<change>Update background threading architecture to be more efficient</change>
-		<change>Memory optimizations</change>
-		<change>Never sync the demo server</change>
-		<change>Clear album art cache on exit</change>
-		<change>Fix cache cleaner not using pinned music in space calculations</change>
-		<change>Don't scrobble podcasts</change>
-		<change>Fix offline scrobbling bug</change>
-		<change>Fix some offline caching issues when sync is on with multiple servers</change>
 	</release>
 </changelog>

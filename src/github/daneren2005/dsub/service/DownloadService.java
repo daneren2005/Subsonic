@@ -1487,13 +1487,13 @@ public class DownloadService extends Service {
 				// Acquire a temporary wakelock, since when we return from
 				// this callback the MediaPlayer will release its wakelock
 				// and allow the device to go to sleep.
-				wakeLock.acquire(60000);
+				wakeLock.acquire(30000);
 
 				setPlayerStateCompleted();
 
 				int pos = cachedPosition;
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
-				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
+				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000)) || nextSetup) {
 					playNext();
 
 					// Finished loading, delete when list is cleared
