@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.4" versioncode="120" releasedate="8/8/2014">
+		<change>Tasker Plugin: Start + optional start Shuffle Mode</change>
+		<change>Madsonic: Add Rescan Server option to Home tab</change>
+		<change>Sort quick search results by closeness to query (instead of Artists -> Albums -> Songs)</change>
+		<change>Clicking on Sync notifications goes to corresponding tab</change>
+		<change>Fix no podcasts showing up if one of them is the error state</change>
+		<change>Fix starring some albums when browsing by tags</change>
+		<change>A few crash fixes</change>
+	</release>
 	<release version="4.7.3" versioncode="119" releasedate="7/18/2014">
 		<change>Require password for entering admin tab for security</change>
 		<change>Improvements to sync notifications</change>
