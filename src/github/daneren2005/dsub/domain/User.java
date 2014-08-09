@@ -84,6 +84,10 @@ public class User implements Serializable {
 	public List<Setting> getSettings() {
 		return settings;
 	}
+	public void setSettings(List<Setting> settings) {
+		this.settings.clear();
+		this.settings.addAll(settings);
+	}
 	public void addSetting(String name, Boolean value) {
 		settings.add(new Setting(name, value));
 	}

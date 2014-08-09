@@ -245,6 +245,7 @@ public final class UserUtil {
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.updateUser(user, context, null);
+				user.setSettings(user.getSettings());
 				return null;
 			}
 
@@ -296,6 +297,7 @@ public final class UserUtil {
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.changeEmail(user.getUsername(), email, context, null);
+						user.setEmail(email);
 						return null;
 					}
 

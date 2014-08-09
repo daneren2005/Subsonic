@@ -548,7 +548,7 @@ public class CachedMusicService implements MusicService {
 	public void createUser(final User user, Context context, ProgressListener progressListener) throws Exception {
 		musicService.createUser(user, context, progressListener);
 		
-		new UserUpdater(Context, "") {
+		new UserUpdater(context, "") {
 			@Override
 			public boolean checkResult(User check) {
 				return true;
@@ -558,7 +558,7 @@ public class CachedMusicService implements MusicService {
 			public void updateResult(List<User> users, User result) {
 				users.add(user);
 			}
-		}
+		}.execute();
 	}
 
 	@Override
@@ -647,21 +647,21 @@ public class CachedMusicService implements MusicService {
   			if(objects != null) {
   				T object = null;
   				for(T check: objects) {
-  					if(checkResult(check) {
+  					if(checkResult(check)) {
   						object = check;
   						break;
   					}
   				}
   				
   				// Only reserialize if a match was found
-  				if(object) {
+  				if(object != null) {
   					updateResult(objects, object);
   					FileUtil.serialize(context, objects, cacheName);
   				}
   			}
   		}
   	}
-  	private class UserUpdater extends SerializeUpdater<User> {
+  	private abstract class UserUpdater extends SerializeUpdater<User> {
   		String username;
   		
   		UserUpdater(Context context, String username) {
