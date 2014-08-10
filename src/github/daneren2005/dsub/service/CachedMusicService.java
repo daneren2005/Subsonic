@@ -20,18 +20,22 @@ package github.daneren2005.dsub.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -47,6 +51,8 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TimeLimitedCache;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
+
+import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
 
 /**
  * @author Sindre Mehus
@@ -237,7 +243,7 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
+    public void createPlaylist(String id, String name, List<Entry> entries, Context context, ProgressListener progressListener) throws Exception {
 		cachedPlaylists.clear();
 		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist")));
         musicService.createPlaylist(id, name, entries, context, progressListener);
@@ -245,32 +251,86 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
-		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist")));
 		musicService.deletePlaylist(id, context, progressListener);
+
+		new PlaylistUpdater(context, id) {
+			@Override
+			public void updateResult(List<Playlist> objects, Playlist result) {
+				objects.remove(result);
+				cachedPlaylists.set(objects);
+			}
+		}.execute();
 	}
 	
 	@Override
-	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist", id)));
+	public void addToPlaylist(String id, final List<Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		musicService.addToPlaylist(id, toAdd, context, progressListener);
+
+		new MusicDirectoryUpdater(context, "playlist", id) {
+			@Override
+			public boolean checkResult(Entry check) {
+				return true;
+			}
+
+			@Override
+			public void updateResult(List<Entry> objects, Entry result) {
+				objects.addAll(toAdd);
+			}
+		}.execute();
 	}
 	
 	@Override
-	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
-		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist", id)));
+	public void removeFromPlaylist(String id, final List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
 		musicService.removeFromPlaylist(id, toRemove, context, progressListener);
+
+		new MusicDirectoryUpdater(context, "playlist", id) {
+			@Override
+			public boolean checkResult(Entry check) {
+				return true;
+			}
+
+			@Override
+			public void updateResult(List<Entry> objects, Entry result) {
+				// Remove in reverse order so indexes are still correct as we iterate through
+				for(ListIterator<Integer> iterator = toRemove.listIterator(toRemove.size()); iterator.hasPrevious(); ) {
+					objects.remove((int) iterator.previous());
+				}
+			}
+		}.execute();
 	}
 	
 	@Override
-	public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
-		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist", id)));
+	public void overwritePlaylist(String id, String name, int toRemove, final List<Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		musicService.overwritePlaylist(id, name, toRemove, toAdd, context, progressListener);
+
+		new MusicDirectoryUpdater(context, "playlist", id) {
+			@Override
+			public boolean checkResult(Entry check) {
+				return true;
+			}
+
+			@Override
+			public void updateResult(List<Entry> objects, Entry result) {
+				objects.clear();
+				objects.addAll(toAdd);
+			}
+		}.execute();
 	}
 	
 	@Override
-	public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
-		Util.delete(new File(context.getCacheDir(), getCacheName(context, "playlist", id)));
+	public void updatePlaylist(String id, final String name, final String comment, final boolean pub, Context context, ProgressListener progressListener) throws Exception {
 		musicService.updatePlaylist(id, name, comment, pub, context, progressListener);
+
+		new PlaylistUpdater(context, id) {
+			@Override
+			public void updateResult(List<Playlist> objects, Playlist result) {
+				result.setName(name);
+				result.setComment(comment);
+				result.setPublic(pub);
+
+				cachedPlaylists.set(objects);
+			}
+		}.execute();
 	}
 
     @Override
@@ -304,22 +364,22 @@ public class CachedMusicService implements MusicService {
     }
 
 	@Override
-	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
+	public String getCoverArtUrl(Context context, Entry entry) throws Exception {
 		return musicService.getCoverArtUrl(context, entry);
 	}
 
 	@Override
-    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception {
+    public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener) throws Exception {
         return musicService.getCoverArt(context, entry, size, progressListener);
     }
 
     @Override
-    public HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+    public HttpResponse getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
         return musicService.getDownloadInputStream(context, song, offset, maxBitrate, task);
     }
 
 	@Override
-	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
+	public String getMusicUrl(Context context, Entry song, int maxBitrate) throws Exception {
 		return musicService.getMusicUrl(context, song, maxBitrate);
 	}
 
@@ -468,15 +528,23 @@ public class CachedMusicService implements MusicService {
 	
 	@Override
 	public void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception{
-		Util.delete(new File(context.getCacheDir(), getCacheName(context, "podcast")));
-		cachedPodcastChannels.clear();
 		musicService.createPodcastChannel(url, context, progressListener);
 	}
 	
 	@Override
-	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception{
-		Util.delete(new File(context.getCacheDir(), getCacheName(context, "podcast")));
-		cachedPodcastChannels.clear();
+	public void deletePodcastChannel(final String id, Context context, ProgressListener progressListener) throws Exception{
+		new SerializeUpdater<PodcastChannel>(context, "podcast") {
+			@Override
+			public boolean checkResult(PodcastChannel check) {
+				return id.equals(check.getId());
+			}
+
+			@Override
+			public void updateResult(List<PodcastChannel> objects, PodcastChannel result) {
+				objects.remove(result);
+				cachedPodcastChannels.set(objects);
+			}
+		}.execute();
 		musicService.deletePodcastChannel(id, context, progressListener);
 	}
 	
@@ -486,8 +554,20 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	@Override
-	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+	public void deletePodcastEpisode(final String id, Context context, ProgressListener progressListener) throws Exception{
 		musicService.deletePodcastEpisode(id, context, progressListener);
+
+		new SerializeUpdater<PodcastEpisode>(context, "directory", "p-" + id) {
+			@Override
+			public boolean checkResult(PodcastEpisode check) {
+				return id.equals(check.getId());
+			}
+
+			@Override
+			public void updateResult(List<PodcastEpisode> objects, PodcastEpisode result) {
+				objects.remove(result);
+			}
+		}.execute();
 	}
 
 	@Override
@@ -636,12 +716,22 @@ public class CachedMusicService implements MusicService {
   			this.context = context;
   			this.cacheName = getCacheName(context, cacheName);
   		}
-  		
+		public SerializeUpdater(Context context, String cacheName, String id) {
+			this.context = context;
+			this.cacheName = getCacheName(context, cacheName, id);
+		}
+
+		public ArrayList<T> getArrayList() {
+			return FileUtil.deserialize(context, cacheName, ArrayList.class);
+		}
   		public abstract boolean checkResult(T check);
   		public abstract void updateResult(List<T> objects, T result);
+		public void save(ArrayList<T> objects) {
+			FileUtil.serialize(context, objects, cacheName);
+		}
   		
   		public void execute() {
-  			ArrayList<T> objects = FileUtil.deserialize(context, cacheName, ArrayList.class);
+  			ArrayList<T> objects = getArrayList();
   			
   			// Only execute if something to check against
   			if(objects != null) {
@@ -656,7 +746,7 @@ public class CachedMusicService implements MusicService {
   				// Only reserialize if a match was found
   				if(object != null) {
   					updateResult(objects, object);
-  					FileUtil.serialize(context, objects, cacheName);
+  					save(objects);
   				}
   			}
   		}
@@ -664,7 +754,7 @@ public class CachedMusicService implements MusicService {
   	private abstract class UserUpdater extends SerializeUpdater<User> {
   		String username;
   		
-  		UserUpdater(Context context, String username) {
+  		public UserUpdater(Context context, String username) {
   			super(context, "users");
   			this.username = username;
   		}
@@ -674,6 +764,36 @@ public class CachedMusicService implements MusicService {
   			return username.equals(check.getUsername());
   		}
   	}
+	private abstract class PlaylistUpdater extends SerializeUpdater<Playlist> {
+		String id;
+
+		public PlaylistUpdater(Context context, String id) {
+			super(context, "playlist");
+			this.id = id;
+		}
+
+		@Override
+		public boolean checkResult(Playlist check) {
+			return id.equals(check.getId());
+		}
+	}
+	private abstract class MusicDirectoryUpdater extends SerializeUpdater<Entry> {
+		private MusicDirectory musicDirectory;
+
+		public MusicDirectoryUpdater(Context context, String cacheName, String id) {
+			super(context, cacheName, id);
+		}
+
+		@Override
+		public ArrayList<Entry> getArrayList() {
+			musicDirectory = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
+			return new ArrayList<Entry>(musicDirectory.getChildren());
+		}
+		public void save(ArrayList<Entry> objects) {
+			musicDirectory.replaceChildren(objects);
+			FileUtil.serialize(context, musicDirectory, cacheName);
+		}
+	}
 
     private void checkSettingsChanged(Context context) {
         String newUrl = musicService.getRestUrl(context, null, false);

@@ -241,7 +241,6 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 
 						@Override
 						protected void done(Void result) {
-							refresh();
 							Util.toast(context, context.getResources().getString(R.string.playlist_updated_info, playlist.getName()));
 						}
 
