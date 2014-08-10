@@ -234,8 +234,17 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 					new LoadingTask<Void>(context, false) {
 						@Override
 						protected Void doInBackground() throws Throwable {
+							String name = nameBox.getText().toString();
+							String comment = commentBox.getText().toString();
+							boolean isPublic = publicBox.isChecked();
+
 							MusicService musicService = MusicServiceFactory.getMusicService(context);
-							musicService.updatePlaylist(playlist.getId(), nameBox.getText().toString(), commentBox.getText().toString(), publicBox.isChecked(), context, null);
+							musicService.updatePlaylist(playlist.getId(), name, comment, isPublic, context, null);
+
+							playlist.setName(name);
+							playlist.setComment(comment);
+							playlist.setPublic(isPublic);
+
 							return null;
 						}
 
