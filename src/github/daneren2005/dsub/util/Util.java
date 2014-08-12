@@ -183,23 +183,30 @@ public final class Util {
 
 		int newInstance = instance + 1;
 
+		// Get what the +1 server details are
 		String server = prefs.getString(Constants.PREFERENCES_KEY_SERVER_KEY + newInstance, null);
 		String serverName = prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + newInstance, null);
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
 		String userName = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
 		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
+		String musicFolderId = prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
 
+		// Store the +1 server details in the to be deleted instance
 		editor.putString(Constants.PREFERENCES_KEY_SERVER_KEY + instance, server);
 		editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, serverName);
 		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + instance, serverUrl);
 		editor.putString(Constants.PREFERENCES_KEY_USERNAME + instance, userName);
 		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + instance, password);
+		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, musicFolderId);
 
+		// Delete the +1 server instance
+		// Calling method will loop up to fill this in if +2 server exists
 		editor.putString(Constants.PREFERENCES_KEY_SERVER_KEY + newInstance, null);
 		editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + newInstance, null);
 		editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
 		editor.putString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
 		editor.putString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
+		editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
 		editor.commit();
 
 		if (instance == activeInstance) {
