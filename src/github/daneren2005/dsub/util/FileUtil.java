@@ -577,7 +577,6 @@ public class FileUtil {
 				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
 				out = new Output(new FileOutputStream(file.getFD()));
 				kryo.writeObject(out, obj);
-				Log.i(TAG, "Serialized object to " + fileName);
 				return true;
 			} catch (Throwable x) {
 				Log.w(TAG, "Failed to serialize object to " + fileName);
@@ -614,7 +613,6 @@ public class FileUtil {
 
 				in = new Input(new FileInputStream(randomFile.getFD()));
 				T result = (T) kryo.readObject(in, tClass);
-				Log.i(TAG, "Deserialized object from " + fileName);
 				return result;
 			} catch(FileNotFoundException e) {
 				// Different error message
@@ -636,7 +634,6 @@ public class FileUtil {
 				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
 				out = new Output(new DeflaterOutputStream(new FileOutputStream(file.getFD())));
 				kryo.writeObject(out, obj);
-				Log.i(TAG, "Serialized compressed object to " + fileName);
 				return true;
 			} catch (Throwable x) {
 				Log.w(TAG, "Failed to serialize compressed object to " + fileName);
@@ -656,7 +653,6 @@ public class FileUtil {
 
 				in = new Input(new InflaterInputStream(new FileInputStream(file.getFD())));
 				T result = (T) kryo.readObject(in, tClass);
-				Log.i(TAG, "Deserialized compressed object from " + fileName);
 				return result;
 			} catch(FileNotFoundException e) {
 				// Different error message
