@@ -232,10 +232,12 @@ public final class Util {
     }
 
     public static String getSelectedMusicFolderId(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-        int instance = getActiveServer(context);
-        return prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
+        return getSelectedMusicFolderId(context, getActiveServer(context));
     }
+	public static String getSelectedMusicFolderId(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
+	}
 
     public static String getTheme(Context context) {
         SharedPreferences prefs = getPreferences(context);

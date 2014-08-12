@@ -67,6 +67,12 @@ public class Indexes implements Serializable {
         return artists;
     }
 
+	public void setArtists(List<Artist> artists) {
+		this.shortcuts = new ArrayList<Artist>();
+		this.artists.clear();
+		this.artists.addAll(artists);
+	}
+
 	public List<MusicDirectory.Entry> getEntries() {
 		return entries;
 	}

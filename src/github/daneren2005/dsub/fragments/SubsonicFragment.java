@@ -645,20 +645,20 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					if(entry.getParent() != null || entry.getArtist() != null) {
-						musicService.setStarred(null, null, Arrays.asList(entry.getId()), starred, context, null);
+					if(entry.isAlbum()) {
+						musicService.setStarred(null, null, Arrays.asList(entry.getId()), Arrays.asList(entry.getArtistId()), starred, null, context);
 					} else {
-						musicService.setStarred(null, Arrays.asList(entry.getId()), null, starred, context, null);
+						musicService.setStarred(null, Arrays.asList(entry.getId()), null, null, starred, null, context);
 					}
 				} else {
-					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
+					List<String> parents = null;
+					if(entry.getParent() != null) {
+						parents = Arrays.asList(entry.getParent());
+					}
+
+					musicService.setStarred(Arrays.asList(entry.getId()), null, null, parents, starred, null, context);
 				}
-				
-				// Make sure to clear parent cache
-				String s = Util.getRestUrl(context, null) + entry.getParent();
-				String parentCache = "directory-" + s.hashCode() + ".ser";
-				File file = new File(context.getCacheDir(), parentCache);
-				file.delete();
+
 				return null;
 			}
 
@@ -692,9 +692,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					musicService.setStarred(null, Arrays.asList(entry.getId()), null, starred, context, null);
+					musicService.setStarred(null, Arrays.asList(entry.getId()), null, null, starred, null, context);
 				} else {
-					musicService.setStarred(Arrays.asList(entry.getId()), null, null, starred, context, null);
+					musicService.setStarred(Arrays.asList(entry.getId()), null, null, null, starred, null, context);
 				}
 				return null;
 			}
@@ -707,6 +707,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void error(Throwable error) {
+				Log.w(TAG, "Failed to star", error);
 				entry.setStarred(!starred);
 
 				String msg;

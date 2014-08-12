@@ -20,7 +20,6 @@ package github.daneren2005.dsub.service;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +30,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
@@ -429,8 +429,87 @@ public class CachedMusicService implements MusicService {
     }
     
 	@Override
-	public void setStarred(List<String> id, List<String> artistId, List<String> albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
-		musicService.setStarred(id, artistId, albumId, starred, context, progressListener);
+	public void setStarred(List<String> id, List<String> artistId, List<String> albumId, List<String> parents, final boolean starred, ProgressListener progressListener, Context context) throws Exception {
+		musicService.setStarred(id, artistId, albumId, parents, starred, progressListener, context);
+
+		// Fuzzy logic to update parents serialization
+		List<String> ids;
+		if(artistId != null && artistId.size() > 0) {
+			ids = artistId;
+		} else if(albumId != null && albumId.size() > 0) {
+			ids = albumId;
+		} else {
+			ids = id;
+		}
+
+		// Make sure list is not somehow null here
+		if(ids == null) {
+			Log.w(TAG, "There should never be no ids in setStarred");
+			return;
+		}
+
+		// Define another variable final because Java is retarded
+		final List<String> checkIds = ids;
+
+		// If parents is null, or artist id's are set, then we are looking at artists
+		if(parents != null && (artistId == null || artistId.size() == 0)) {
+			for (String parent : parents) {
+				new MusicDirectoryUpdater(context, "directory", parent) {
+					@Override
+					public boolean checkResult(Entry check) {
+						for (String id : checkIds) {
+							if(id.equals(check.getId())) {
+								return true;
+							}
+						}
+
+						return false;
+					}
+
+					@Override
+					public void updateResult(List<Entry> objects, Entry result) {
+						Log.d(TAG, result.getId());
+						result.setStarred(starred);
+					}
+				}.execute();
+			}
+		} else {
+			String name = Util.isTagBrowsing(context, musicService.getInstance(context)) ? "artists" : "indexes";
+			new SerializeUpdater<Artist>(context, name, Util.getSelectedMusicFolderId(context, musicService.getInstance(context))) {
+				Indexes indexes;
+
+				@Override
+				public ArrayList<Artist> getArrayList() {
+					indexes = FileUtil.deserialize(context, cacheName, Indexes.class);
+
+					ArrayList<Artist> artists = new ArrayList<Artist>();
+					artists.addAll(indexes.getArtists());
+					artists.addAll(indexes.getShortcuts());
+					return artists;
+				}
+				public void save(ArrayList<Artist> objects) {
+					indexes.setArtists(objects);
+					FileUtil.serialize(context, indexes, cacheName);
+					cachedIndexes.set(indexes);
+				}
+
+				@Override
+				public boolean checkResult(Artist check) {
+					for (String id : checkIds) {
+						if(id.equals(check.getId())) {
+							return true;
+						}
+					}
+
+					return false;
+				}
+
+				@Override
+				public void updateResult(List<Artist> objects, Artist result) {
+					result.setStarred(starred);
+				}
+			}.execute();
+		}
 	}
 	
 	@Override

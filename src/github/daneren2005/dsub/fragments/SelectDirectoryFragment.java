@@ -1048,18 +1048,21 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				List<String> ids = new ArrayList<String>();
 				List<String> artists = new ArrayList<String>();
 				List<String> albums = new ArrayList<String>();
+				List<String> parents = new ArrayList<String>();
 				for(MusicDirectory.Entry entry: unstar) {
 					if(entry.isDirectory()) {
-						if(entry.getArtist() == null || entry.getParent() == null) {
-							artists.add(entry.getId());
-						} else {
+						if(entry.isAlbum()) {
 							albums.add(entry.getId());
+							parents.add(entry.getArtistId());
+						} else {
+							artists.add(entry.getId());
 						}
 					} else {
 						ids.add(entry.getId());
+						parents.add(entry.getParent());
 					}
 				}
-				musicService.setStarred(ids, artists, albums, false, context, this);
+				musicService.setStarred(ids, artists, albums, parents, false, this, context);
 				return null;
 			}
 

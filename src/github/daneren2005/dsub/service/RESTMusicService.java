@@ -794,7 +794,7 @@ public class RESTMusicService implements MusicService {
     }
     
     @Override
-    public void setStarred(List<String> ids, List<String> artistId, List<String> albumId, boolean starred, Context context, ProgressListener progressListener) throws Exception {
+    public void setStarred(List<String> ids, List<String> artistId, List<String> albumId, List<String> parents, boolean starred, ProgressListener progressListener, Context context) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
 
 		List<String> names = new ArrayList<String>();
@@ -1363,7 +1363,7 @@ public class RESTMusicService implements MusicService {
 			String id = offline.getString(Constants.OFFLINE_STAR_ID + i, null);
 			boolean starred = offline.getBoolean(Constants.OFFLINE_STAR_SETTING + i, false);
 			if(id != null) {
-				setStarred(Arrays.asList(id), null, null, starred, context, progressListener);
+				setStarred(Arrays.asList(id), null, null, null, starred, progressListener, context);
 			} else {
 				String search = offline.getString(Constants.OFFLINE_STAR_SEARCH + i, "");
 				try{
@@ -1371,10 +1371,10 @@ public class RESTMusicService implements MusicService {
 					SearchResult result = searchNew(critera, context, progressListener);
 					if(result.getSongs().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
-						setStarred(Arrays.asList(result.getSongs().get(0).getId()), null, null, starred, context, progressListener);
+						setStarred(Arrays.asList(result.getSongs().get(0).getId()), null, null, null, starred, progressListener, context);
 					} else if(result.getAlbums().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getAlbums().get(0).getTitle() + " by " + result.getAlbums().get(0).getArtist() + " with id " + result.getAlbums().get(0).getId());
-						setStarred(Arrays.asList(result.getAlbums().get(0).getId()), null, null, starred, context, progressListener);
+						setStarred(Arrays.asList(result.getAlbums().get(0).getId()), null, null, null, starred, progressListener, context);
 					}
 					else{
 						throw new Exception("Song not found on server");
