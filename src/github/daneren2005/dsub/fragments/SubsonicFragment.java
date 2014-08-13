@@ -670,6 +670,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void error(Throwable error) {
+				Log.w(TAG, "Failed to star", error);
 				entry.setStarred(!starred);
 
 				String msg;
