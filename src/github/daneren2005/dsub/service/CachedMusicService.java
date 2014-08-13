@@ -453,8 +453,22 @@ public class CachedMusicService implements MusicService {
 
 		// If parents is null, or artist id's are set, then we are looking at artists
 		if(parents != null && (artistId == null || artistId.size() == 0)) {
+			String cacheName;
+			
+			// If using tag browsing, need to do lookup off of different criteria
+			if(Util.isTagBrowsing(context, musicService.getInstance(context))) {
+				// If using id's, we are starring songs and need to use album listings
+				if(id != null && id.size() > 0) {
+					cacheName = "album";
+				} else {
+					cacheName = "artist";
+				}
+			} else {
+				cacheName = "directory";
+			}
+			
 			for (String parent : parents) {
-				new MusicDirectoryUpdater(context, "directory", parent) {
+				new MusicDirectoryUpdater(context, cacheName, parent) {
 					@Override
 					public boolean checkResult(Entry check) {
 						for (String id : checkIds) {
@@ -468,7 +482,6 @@ public class CachedMusicService implements MusicService {
 
 					@Override
 					public void updateResult(List<Entry> objects, Entry result) {
-						Log.d(TAG, result.getId());
 						result.setStarred(starred);
 					}
 				}.execute();
