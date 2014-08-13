@@ -652,8 +652,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					}
 				} else {
 					List<String> parents = null;
-					if(entry.getParent() != null) {
-						parents = Arrays.asList(entry.getParent());
+					if(Util.isTagBrowsing(context)) {
+						if(entry.getAlbumId() != null) {
+							parents = Arrays.asList(entry.getAlbumId());
+						}
+					} else {
+						if(entry.getParent() != null) {
+							parents = Arrays.asList(entry.getParent());
+						}
 					}
 
 					musicService.setStarred(Arrays.asList(entry.getId()), null, null, parents, starred, null, context);
