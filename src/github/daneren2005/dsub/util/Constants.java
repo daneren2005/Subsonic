@@ -141,6 +141,8 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_PLAY_NOW_AFTER = "playNowAfter";
 	public static final String PREFERENCES_KEY_LARGE_ALBUM_ART = "largeAlbumArt";
 	public static final String PREFERENCES_KEY_ADMIN_ENABLED = "adminEnabled";
+	public static final String PREFERENCES_KEY_PLAYLIST_NAME = "suggestedPlaylistName";
+	public static final String PREFERENCES_KEY_PLAYLIST_ID = "suggestedPlaylistId";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
