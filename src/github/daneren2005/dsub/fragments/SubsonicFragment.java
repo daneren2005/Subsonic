@@ -923,7 +923,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 	
-	protected void createNewPlaylist(final List<MusicDirectory.Entry> songs, boolean getSuggestion) {
+	protected void createNewPlaylist(final List<MusicDirectory.Entry> songs, final boolean getSuggestion) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
 		final CheckBox overwriteCheckBox = (CheckBox) layout.findViewById(R.id.save_playlist_overwrite);
@@ -955,10 +955,18 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
+					String playlistName = String.valueOf(playlistNameView.getText());
 					if(overwriteCheckBox.isChecked()) {
-						overwritePlaylist(songs, String.valueOf(playlistNameView.getText()), getDownloadService().getSuggestedPlaylistId());
+						overwritePlaylist(songs, playlistName, getDownloadService().getSuggestedPlaylistId());
 					} else {
-						createNewPlaylist(songs, String.valueOf(playlistNameView.getText()));
+						createNewPlaylist(songs, playlistName);
+						
+						if(getSuggestion) {
+							DownloadService downloadService = getDownloadService();
+							if(downloadService != null) {
+								downloadService.setSuggestedPlaylistName(playlistName, null);
+							}
+						}
 					}
 				}
 			})
