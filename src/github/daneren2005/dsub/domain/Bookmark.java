@@ -33,7 +33,6 @@ public class Bookmark implements Serializable {
 	private String comment;
 	private Date created;
 	private Date changed;
-	private MusicDirectory.Entry entry;
 
 	public int getPosition() {
 		return position;
@@ -89,13 +88,5 @@ public class Bookmark implements Serializable {
 		} else {
 			this.changed = null;
 		}
-	}
-	
-	public MusicDirectory.Entry getEntry() {
-		return this.entry;
-	}
-	
-	public void setEntry(MusicDirectory.Entry entry) {
-		this.entry = entry;
 	}
 }
