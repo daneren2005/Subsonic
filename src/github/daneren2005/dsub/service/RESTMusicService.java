@@ -1091,7 +1091,7 @@ public class RESTMusicService implements MusicService {
 	}
 	
 	@Override
-	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+	public void deletePodcastEpisode(String id, String parent, ProgressListener progressListener, Context context) throws Exception{
 		checkServerVersion(context, "1.9", "Deleting podcasts not supported.");
 		
 		Reader reader = getReader(context, progressListener, "deletePodcastEpisode", null, "id", id);

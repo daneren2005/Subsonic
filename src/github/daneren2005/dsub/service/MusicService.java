@@ -150,7 +150,7 @@ public interface MusicService {
 	
 	void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception;
 	
-	void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception;
+	void deletePodcastEpisode(String id, String parent, ProgressListener progressListener, Context context) throws Exception;
 
 	void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception;
 

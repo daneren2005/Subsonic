@@ -733,7 +733,7 @@ public class OfflineMusicService implements MusicService {
 	}
 	
 	@Override
-	public void deletePodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
+	public void deletePodcastEpisode(String id, String parent, ProgressListener progressListener, Context context) throws Exception{
 		throw new OfflineException(ERRORMSG);
 	}
 

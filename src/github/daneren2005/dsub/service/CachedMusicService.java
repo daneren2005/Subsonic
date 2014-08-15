@@ -718,17 +718,17 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	@Override
-	public void deletePodcastEpisode(final String id, Context context, ProgressListener progressListener) throws Exception{
-		musicService.deletePodcastEpisode(id, context, progressListener);
+	public void deletePodcastEpisode(final String id, String parent, ProgressListener progressListener, Context context) throws Exception{
+		musicService.deletePodcastEpisode(id, parent, progressListener, context);
 
-		new SerializeUpdater<PodcastEpisode>(context, "directory", "p-" + id) {
+		new MusicDirectoryUpdater(context, "directory", "p-" + parent) {
 			@Override
-			public boolean checkResult(PodcastEpisode check) {
-				return id.equals(check.getId());
+			public boolean checkResult(Entry check) {
+				return id.equals(((PodcastEpisode) check).getEpisodeId());
 			}
 
 			@Override
-			public void updateResult(List<PodcastEpisode> objects, PodcastEpisode result) {
+			public void updateResult(List<Entry> objects, Entry result) {
 				objects.remove(result);
 			}
 		}.execute();

@@ -1006,7 +1006,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					@Override
 					protected Void doInBackground() throws Throwable {				
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						musicService.deletePodcastEpisode(episode.getEpisodeId(), context, null);
+						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
 						if (getDownloadService() != null) {
 							List<MusicDirectory.Entry> episodeList = new ArrayList<MusicDirectory.Entry>(1);
 							episodeList.add(episode);
@@ -1023,6 +1023,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 					@Override
 					protected void error(Throwable error) {
+						Log.w(TAG, "Failed to delete podcast episode", error);
 						Util.toast(context, getErrorMessage(error), false);
 					}
 				}.execute();

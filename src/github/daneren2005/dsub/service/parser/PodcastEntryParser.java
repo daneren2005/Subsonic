@@ -63,6 +63,7 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setEpisodeId(get("id"));
 					episode.setId(get("streamId"));
 					episode.setTitle(get("title"));
+					episode.setParent(episodes.getId());
 					episode.setArtist(episodes.getName());
 					episode.setAlbum(get("description"));
 					episode.setDate(get("publishDate"));
