@@ -440,7 +440,7 @@ public class CachedMusicService implements MusicService {
 
 					@Override
 					public void updateResult(List<Entry> objects, Entry result) {
-						result.setStarred(true);
+						result.setStarred(starred);
 					}
 				}.execute();
 			}
