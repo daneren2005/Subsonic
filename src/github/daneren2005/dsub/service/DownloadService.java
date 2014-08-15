@@ -409,6 +409,9 @@ public class DownloadService extends Service {
 				this.toDelete.add(forSong(entry));
 			}
 		}
+		
+		suggestedPlaylistName = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_NAME, null);
+		suggestedPlaylistId = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_ID, null);
 	}
 
 	public synchronized void setRemovePlayed(boolean enabled) {
@@ -1152,6 +1155,11 @@ public class DownloadService extends Service {
 	public void setSuggestedPlaylistName(String name, String id) {
 		this.suggestedPlaylistName = name;
 		this.suggestedPlaylistId = id;
+		
+		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
+		editor.putString(Constants.PREFERENCES_KEY_PLAYLIST_NAME, name);
+		editor.putString(Constants.PREFERENCES_KEY_PLAYLIST_ID, id);
+		editor.commit();
 	}
 
 	public String getSuggestedPlaylistName() {
