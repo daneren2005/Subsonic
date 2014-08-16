@@ -440,7 +440,7 @@ public class CachedMusicService implements MusicService {
 
 					@Override
 					public void updateResult(List<Entry> objects, Entry result) {
-						result.setStarred(starred);
+						setEntryStarred(result, starred);
 					}
 				}.execute();
 			}
@@ -571,7 +571,7 @@ public class CachedMusicService implements MusicService {
 
 					@Override
 					public void updateResult(List<Entry> objects, Entry result) {
-						result.setStarred(starred);
+						setEntryStarred(result, starred);
 					}
 				}.execute();
 			}
@@ -594,6 +594,21 @@ public class CachedMusicService implements MusicService {
 					result.setStarred(starred);
 				}
 			}.execute();
+		}
+	}
+	private void setEntryStarred(Entry entry, boolean starred) {
+		entry.setStarred(starred);
+
+		DownloadService downloadService = DownloadService.getInstance();
+		if(downloadService != null && !entry.isDirectory()) {
+			List<DownloadFile> files = downloadService.getDownloads();
+			for(DownloadFile file: files) {
+				Entry check = file.getSong();
+				if(entry.getId().equals(check.getId())) {
+					check.setStarred(starred);
+					break;
+				}
+			}
 		}
 	}
 	
