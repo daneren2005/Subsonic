@@ -700,9 +700,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				MusicDirectory.Entry check = file.getSong();
 				if(entry.getId().equals(check.getId())) {
 					check.setStarred(starred);
+					downloadService.serializeQueue();
 					break;
 				}
 			}
+		}
+
+		MusicDirectory.Entry find = UpdateView.findEntry(entry);
+		if(find != null) {
+			find.setStarred(starred);
 		}
 	}
 
