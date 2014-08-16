@@ -1132,8 +1132,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(!entryExists(entry)) {
 			Util.toast(context, R.string.download_need_download);
 		} else {
+			DownloadFile check = new DownloadFile(context, entry, false);
+			String path = check.getCompleteFile().getAbsolutePath();
+
 			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
+			intent.setDataAndType(Uri.parse(path), "video/*");
+			intent.putExtra(Intent.EXTRA_TITLE, entry.getTitle());
 
 			List<ResolveInfo> intents = context.getPackageManager()
 				.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);

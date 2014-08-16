@@ -118,11 +118,22 @@ public class FileUtil {
 
         fileName.append(fileSystemSafe(song.getTitle())).append(".");
 
-        if (song.getTranscodedSuffix() != null) {
-            fileName.append(song.getTranscodedSuffix());
-        } else {
-            fileName.append(song.getSuffix());
-        }
+		if(song.isVideo()) {
+			String videoPlayerType = Util.getVideoPlayerType(context);
+			if("hls".equals(videoPlayerType)) {
+				// HLS should be able to transcode to mp4 automatically
+				fileName.append("mp4");
+			} else if("raw".equals(videoPlayerType)) {
+				// Download the original video without any transcoding
+				fileName.append(song.getSuffix());
+			}
+		} else {
+			if (song.getTranscodedSuffix() != null) {
+				fileName.append(song.getTranscodedSuffix());
+			} else {
+				fileName.append(song.getSuffix());
+			}
+		}
 
         return new File(dir, fileName.toString());
     }
