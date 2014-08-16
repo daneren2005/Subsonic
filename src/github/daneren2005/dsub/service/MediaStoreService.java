@@ -29,74 +29,108 @@ import android.provider.MediaStore;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * @author Sindre Mehus
  */
 public class MediaStoreService {
 
-    private static final String TAG = MediaStoreService.class.getSimpleName();
-    private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
+	private static final String TAG = MediaStoreService.class.getSimpleName();
+	private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
 
-    private final Context context;
+	private final Context context;
 
-    public MediaStoreService(Context context) {
-        this.context = context;
-    }
+	public MediaStoreService(Context context) {
+		this.context = context;
+	}
 
-    public void saveInMediaStore(DownloadFile downloadFile) {
-        MusicDirectory.Entry song = downloadFile.getSong();
-        File songFile = downloadFile.getCompleteFile();
+	public void saveInMediaStore(DownloadFile downloadFile) {
+		MusicDirectory.Entry song = downloadFile.getSong();
+		File songFile = downloadFile.getCompleteFile();
 
-        // Delete existing row in case the song has been downloaded before.
-        deleteFromMediaStore(downloadFile);
+		// Delete existing row in case the song has been downloaded before.
+		deleteFromMediaStore(downloadFile);
 
-        ContentResolver contentResolver = context.getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.MediaColumns.TITLE, song.getTitle());
-        values.put(MediaStore.Audio.AudioColumns.ARTIST, song.getArtist());
-        values.put(MediaStore.Audio.AudioColumns.ALBUM, song.getAlbum());
-        values.put(MediaStore.MediaColumns.DATA, songFile.getAbsolutePath());
-		if(song.getTranscodedContentType() != null) {
-			values.put(MediaStore.MediaColumns.MIME_TYPE, song.getTranscodedContentType());
+		ContentResolver contentResolver = context.getContentResolver();
+		ContentValues values = new ContentValues();
+		if(!song.isVideo()) {
+			values.put(MediaStore.MediaColumns.TITLE, song.getTitle());
+			values.put(MediaStore.MediaColumns.DATA, songFile.getAbsolutePath());
+			values.put(MediaStore.Audio.AudioColumns.ARTIST, song.getArtist());
+			values.put(MediaStore.Audio.AudioColumns.ALBUM, song.getAlbum());
+			if (song.getDuration() != null) {
+				values.put(MediaStore.Audio.AudioColumns.DURATION, song.getDuration() * 1000L);
+			}
+			if (song.getTrack() != null) {
+				values.put(MediaStore.Audio.AudioColumns.TRACK, song.getTrack());
+			}
+			if (song.getYear() != null) {
+				values.put(MediaStore.Audio.AudioColumns.YEAR, song.getYear());
+			}
+			if(song.getTranscodedContentType() != null) {
+				values.put(MediaStore.MediaColumns.MIME_TYPE, song.getTranscodedContentType());
+			} else {
+				values.put(MediaStore.MediaColumns.MIME_TYPE, song.getContentType());
+			}
+			values.put(MediaStore.Audio.AudioColumns.IS_MUSIC, 1);
+
+			Uri uri = contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+
+			// Look up album, and add cover art if found.
+			Cursor cursor = contentResolver.query(uri, new String[]{MediaStore.Audio.AudioColumns.ALBUM_ID}, null, null, null);
+			if (cursor.moveToFirst()) {
+				int albumId = cursor.getInt(0);
+				insertAlbumArt(albumId, downloadFile);
+			}
+
+			cursor.close();
 		} else {
-			values.put(MediaStore.MediaColumns.MIME_TYPE, song.getContentType());
-		}
-		if(song.getDuration() != null) {
-			values.put(MediaStore.Audio.AudioColumns.DURATION, song.getDuration() * 1000L);
-		}
-		if(song.getTrack() != null) {
-			values.put(MediaStore.Audio.AudioColumns.TRACK, song.getTrack());
-		}
-		if(song.getYear() != null) {
-			values.put(MediaStore.Audio.AudioColumns.YEAR, song.getYear());
-		}
-        values.put(MediaStore.Audio.AudioColumns.IS_MUSIC, 1);
+			values.put(MediaStore.Video.VideoColumns.TITLE, song.getTitle());
+			values.put(MediaStore.Video.VideoColumns.DISPLAY_NAME, song.getTitle());
+			values.put(MediaStore.Video.VideoColumns.ARTIST, song.getArtist());
+			values.put(MediaStore.Video.VideoColumns.DATA, songFile.getAbsolutePath());
+			if (song.getDuration() != null) {
+				values.put(MediaStore.Video.VideoColumns.DURATION, song.getDuration() * 1000L);
+			}
 
-        Uri uri = contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values);
+			String videoPlayerType = Util.getVideoPlayerType(context);
+			if("hls".equals(videoPlayerType)) {
+				// HLS should be able to transcode to mp4 automatically
+				values.put(MediaStore.MediaColumns.MIME_TYPE, "video/mpeg");
+			} else if("raw".equals(videoPlayerType) || song.getTranscodedContentType() == null) {
+				// Download the original video without any transcoding
+				values.put(MediaStore.MediaColumns.MIME_TYPE, song.getContentType());
+			} else {
+				values.put(MediaStore.MediaColumns.MIME_TYPE, song.getTranscodedContentType());
+			}
 
-        // Look up album, and add cover art if found.
-        Cursor cursor = contentResolver.query(uri, new String[]{MediaStore.Audio.AudioColumns.ALBUM_ID}, null, null, null);
-        if (cursor.moveToFirst()) {
-            int albumId = cursor.getInt(0);
-            insertAlbumArt(albumId, downloadFile);
-        }
-        cursor.close();
-    }
+			Uri uri = contentResolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+			if(uri == null) {
+				Log.e(TAG, "Failed to insert");
+			}
+		}
+	}
 
-    public void deleteFromMediaStore(DownloadFile downloadFile) {
-        ContentResolver contentResolver = context.getContentResolver();
-        MusicDirectory.Entry song = downloadFile.getSong();
-        File file = downloadFile.getCompleteFile();
+	public void deleteFromMediaStore(DownloadFile downloadFile) {
+		ContentResolver contentResolver = context.getContentResolver();
+		MusicDirectory.Entry song = downloadFile.getSong();
+		File file = downloadFile.getCompleteFile();
 
-        int n = contentResolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                MediaStore.Audio.AudioColumns.TITLE_KEY + "=? AND " +
-                        MediaStore.MediaColumns.DATA + "=?",
-                new String[]{MediaStore.Audio.keyFor(song.getTitle()), file.getAbsolutePath()});
-        if (n > 0) {
-            Log.i(TAG, "Deleting media store row for " + song);
-        }
-    }
+		Uri uri;
+		if(song.isVideo()) {
+			uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+		} else {
+			uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		}
+
+		int n = contentResolver.delete(uri,
+				MediaStore.MediaColumns.DATA + "=?",
+				new String[]{file.getAbsolutePath()});
+		if (n > 0) {
+			Log.i(TAG, "Deleting media store row for " + song);
+		}
+	}
 
 	public void deleteFromMediaStore(File file) {
 		ContentResolver contentResolver = context.getContentResolver();
@@ -124,23 +158,23 @@ public class MediaStoreService {
 		}
 	}
 
-    private void insertAlbumArt(int albumId, DownloadFile downloadFile) {
-        ContentResolver contentResolver = context.getContentResolver();
+	private void insertAlbumArt(int albumId, DownloadFile downloadFile) {
+		ContentResolver contentResolver = context.getContentResolver();
 
-        Cursor cursor = contentResolver.query(Uri.withAppendedPath(ALBUM_ART_URI, String.valueOf(albumId)), null, null, null, null);
-        if (!cursor.moveToFirst()) {
+		Cursor cursor = contentResolver.query(Uri.withAppendedPath(ALBUM_ART_URI, String.valueOf(albumId)), null, null, null, null);
+		if (!cursor.moveToFirst()) {
 
-            // No album art found, add it.
-            File albumArtFile = FileUtil.getAlbumArtFile(context, downloadFile.getSong());
-            if (albumArtFile.exists()) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Audio.AlbumColumns.ALBUM_ID, albumId);
-                values.put(MediaStore.MediaColumns.DATA, albumArtFile.getPath());
-                contentResolver.insert(ALBUM_ART_URI, values);
-                Log.i(TAG, "Added album art: " + albumArtFile);
-            }
-        }
-        cursor.close();
-    }
+			// No album art found, add it.
+			File albumArtFile = FileUtil.getAlbumArtFile(context, downloadFile.getSong());
+			if (albumArtFile.exists()) {
+				ContentValues values = new ContentValues();
+				values.put(MediaStore.Audio.AlbumColumns.ALBUM_ID, albumId);
+				values.put(MediaStore.MediaColumns.DATA, albumArtFile.getPath());
+				contentResolver.insert(ALBUM_ART_URI, values);
+				Log.i(TAG, "Added album art: " + albumArtFile);
+			}
+		}
+		cursor.close();
+	}
 
 }
