@@ -386,6 +386,11 @@ public class CachedMusicService implements MusicService {
 
 	private void updateStarredList(Context context, List<Entry> list, final boolean starred, final boolean isTagBrowsing) {
 		for(final Entry entry: list) {
+			// Don't waste time when status is the same
+			if(entry.isStarred() == starred) {
+				continue;
+			}
+
 			String cacheName, parent = null;
 			boolean isArtist = false;
 			if(isTagBrowsing) {
@@ -594,6 +599,30 @@ public class CachedMusicService implements MusicService {
 					result.setStarred(starred);
 				}
 			}.execute();
+		}
+
+		// Update playlist caches if there is at least one song to be starred
+		if(ids != null && ids.size() > 0) {
+			List<Playlist> playlists = FileUtil.deserialize(context, getCacheName(context, "playlist"), ArrayList.class);
+			for(Playlist playlist: playlists) {
+				new MusicDirectoryUpdater(context, "playlist", playlist.getId()) {
+					@Override
+					public boolean checkResult(Entry check) {
+						for (String id : checkIds) {
+							if (id.equals(check.getId())) {
+								return true;
+							}
+						}
+
+						return false;
+					}
+
+					@Override
+					public void updateResult(List<Entry> objects, Entry result) {
+						result.setStarred(starred);
+					}
+				}.execute();
+			}
 		}
 	}
 	
