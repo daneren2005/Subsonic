@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
@@ -210,6 +211,19 @@ public class UpdateView extends LinearLayout {
 	}
 	public static void removeActiveActivity() {
 		activeActivities--;
+	}
+
+	public static MusicDirectory.Entry findEntry(MusicDirectory.Entry entry) {
+		for(UpdateView view: INSTANCES.keySet()) {
+			if(view instanceof SongView) {
+				MusicDirectory.Entry check = ((SongView) view).getEntry();
+				if(check != null && entry != check && check.getId().equals(entry.getId())) {
+					return check;
+				}
+			}
+		}
+
+		return null;
 	}
 	
 	protected void updateBackground() {

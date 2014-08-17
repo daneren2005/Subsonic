@@ -665,6 +665,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					musicService.setStarred(Arrays.asList(entry.getId()), null, null, parents, starred, null, context);
 				}
 
+				setEntryStarred(entry, starred);
+
 				return null;
 			}
 
@@ -690,6 +692,26 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}.execute();
 	}
+	protected void setEntryStarred(MusicDirectory.Entry entry, boolean starred) {
+		DownloadService downloadService = DownloadService.getInstance();
+		if(downloadService != null && !entry.isDirectory()) {
+			List<DownloadFile> files = downloadService.getDownloads();
+			for(DownloadFile file: files) {
+				MusicDirectory.Entry check = file.getSong();
+				if(entry.getId().equals(check.getId())) {
+					check.setStarred(starred);
+					downloadService.serializeQueue();
+					break;
+				}
+			}
+		}
+
+		MusicDirectory.Entry find = UpdateView.findEntry(entry);
+		if(find != null) {
+			find.setStarred(starred);
+		}
+	}
+
 	public void toggleStarred(final Artist entry) {
 		final boolean starred = !entry.isStarred();
 		entry.setStarred(starred);

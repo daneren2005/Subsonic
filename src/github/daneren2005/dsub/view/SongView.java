@@ -248,4 +248,8 @@ public class SongView extends UpdateView implements Checkable {
     public void toggle() {
         checkedTextView.toggle();
     }
+
+	public MusicDirectory.Entry getEntry() {
+		return song;
+	}
 }

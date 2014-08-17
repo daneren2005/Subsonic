@@ -1598,6 +1598,12 @@ public class DownloadService extends Service {
 		}
 	}
 
+	public synchronized void serializeQueue() {
+		if(playerState == PlayerState.PAUSED) {
+			lifecycleSupport.serializeDownloadQueue();
+		}
+	}
+
 	private void handleError(Exception x) {
 		Log.w(TAG, "Media player error: " + x, x);
 		if(mediaPlayer != null) {
