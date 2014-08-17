@@ -154,7 +154,7 @@ public interface MusicService {
 
 	void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception;
 
-	List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+	MusicDirectory getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 
 	void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception;
 

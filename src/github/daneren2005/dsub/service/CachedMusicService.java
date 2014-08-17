@@ -32,7 +32,6 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
@@ -769,7 +768,7 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getBookmarks(refresh, context, progressListener);
 	}
 

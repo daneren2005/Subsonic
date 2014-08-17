@@ -294,9 +294,11 @@ public class DownloadService extends Service {
 		return binder;
 	}
 
-	public synchronized void download(Bookmark bookmark) {
+	public synchronized void download(MusicDirectory.Entry entry) {
+		Bookmark bookmark = entry.getBookmark();
+
 		clear();
-		DownloadFile downloadFile = new DownloadFile(this, bookmark.getEntry(), false);
+		DownloadFile downloadFile = new DownloadFile(this, entry, false);
 		downloadList.add(downloadFile);
 		revision++;
 		updateJukeboxPlaylist();

@@ -1115,7 +1115,7 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Bookmarks not supported.");
 		
 		Reader reader = getReader(context, progressListener, "getBookmarks", null);
