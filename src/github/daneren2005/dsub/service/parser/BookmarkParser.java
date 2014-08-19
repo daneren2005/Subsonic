@@ -58,6 +58,10 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
                 	bookmark.setUsername(get("username"));
                 } else if ("entry".equals(name)) {
 					MusicDirectory.Entry entry = parseEntry(null);
+					// Work around for bookmarks showing entry with a track when podcast listings don't
+					if("podcast".equals(get("type"))) {
+						entry.setTrack(null);
+					}
 					entry.setBookmark(bookmark);
                 	bookmarks.add(entry);
                 } else if ("error".equals(name)) {
