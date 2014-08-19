@@ -581,7 +581,7 @@ public class CachedMusicService implements MusicService {
 			}
 			
 			for (String parent : parents) {
-				new MusicDirectoryUpdater(context, cacheName, parent) {
+				new MusicDirectoryUpdater(context, cacheName, parent, checkIds.size() == 1) {
 					@Override
 					public boolean checkResult(Entry check) {
 						for (String id : checkIds) {
@@ -1036,14 +1036,23 @@ public class CachedMusicService implements MusicService {
   	private abstract class SerializeUpdater<T> {
   		final Context context;
   		final String cacheName;
+  		final boolean singleUpdate;
   		
   		public SerializeUpdater(Context context, String cacheName) {
+  			this(context, cacheName, true);
+  		}
+  		public SerializeUpdater(Context context, String cacheName, boolean singleUpdate) {
   			this.context = context;
   			this.cacheName = getCacheName(context, cacheName);
+  			this.singleUpdate = singleUpdate;
   		}
-		public SerializeUpdater(Context context, String cacheName, String id) {
+  		public SerializeUpdater(Context context, String cacheName, String id) {
+  			this(context, cacheName, id, true);
+  		}
+		public SerializeUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
 			this.context = context;
 			this.cacheName = getCacheName(context, cacheName, id);
+			this.singleUpdate = singleUpdate;
 		}
 
 		public ArrayList<T> getArrayList() {
@@ -1064,6 +1073,9 @@ public class CachedMusicService implements MusicService {
   				for(T check: objects) {
   					if(checkResult(check)) {
   						objects.push(check);
+  						if(singleUpdate) {
+  							break;
+  						}
   					}
   				}
   				
@@ -1109,7 +1121,10 @@ public class CachedMusicService implements MusicService {
 		private MusicDirectory musicDirectory;
 
 		public MusicDirectoryUpdater(Context context, String cacheName, String id) {
-			super(context, cacheName, id);
+			super(context, cacheName, id, true);
+		}
+		public MusicDirectoryUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
+			super(context, cacheName, id, singleUpdate);
 		}
 
 		@Override
@@ -1144,7 +1159,7 @@ public class CachedMusicService implements MusicService {
 			}
 			
 			for(Playlist playlist: playlists) {
-				new MusicDirectoryUpdater(context, "playlist", playlist.getId()) {
+				new MusicDirectoryUpdater(context, "playlist", playlist.getId(), false) {
 					@Override
 					public boolean checkResult(Entry check) {
 						return PlaylistDirectoryUpdater.this.checkResult(check);
