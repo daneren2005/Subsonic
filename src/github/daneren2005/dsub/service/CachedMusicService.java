@@ -372,31 +372,47 @@ public class CachedMusicService implements MusicService {
 			// Left overs in oldList need to be unstarred
 			updateStarredList(context, oldList, false, isTagBrowsing);
 			
-			new PlaylistDirectoryUpdater(context) {
-				@Override
-				public boolean checkResult(Entry check) {
-					for(Entry entry: oldList) {
-						if(check.getId().equals(entry.getId())) {
-							check.setStarred(false);
-							return true;
+			
+			// Remove non-songs from lists before updating playlists
+			for(Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
+				if(it.next().isDirectory()) {
+					it.remove();
+				}
+			}
+			for(Iterator<Entry> it = newList.iterator(); it.hasNext(); ) {
+				if(it.next().isDirectory()) {
+					it.remove();
+				}
+			}
+			
+			// Only try to update playlists if there was at least one song in new or old set
+			if(newList.size() > 0 || oldList.size() > 0) {
+				new PlaylistDirectoryUpdater(context) {
+					@Override
+					public boolean checkResult(Entry check) {
+						for(Entry entry: oldList) {
+							if(check.getId().equals(entry.getId()) && check.isStarred() != false) {
+								check.setStarred(false);
+								return true;
+							}
 						}
+						
+						for(Entry entry: newList) {
+							if(check.getId().equals(entry.getId()) && check.isStarred() != true) {
+								check.setStarred(true);
+								return true;
+							}
+						}
+						
+						return false;
 					}
 					
-					for(Entry entry: newList) {
-						if(check.getId().equals(entry.getId())) {
-							check.setStarred(true);
-							return true;
-						}
+					@Override
+					public void updateResult(Entry result) {
+						
 					}
-					
-					return false;
-				}
-				
-				@Override
-				public void updateResult(Entry result) {
-					
-				}
-			}.execute();
+				}.execute();
+			}
 		}
 		FileUtil.serialize(context, dir, "starred");
 
@@ -405,11 +421,6 @@ public class CachedMusicService implements MusicService {
 
 	private void updateStarredList(Context context, List<Entry> list, final boolean starred, final boolean isTagBrowsing) {
 		for(final Entry entry: list) {
-			// Don't waste time when status is the same
-			if(entry.isStarred() == starred) {
-				continue;
-			}
-
 			String cacheName, parent = null;
 			boolean isArtist = false;
 			if(isTagBrowsing) {
@@ -439,7 +450,7 @@ public class CachedMusicService implements MusicService {
 				new IndexesUpdater(context, isTagBrowsing ? "artists" : "indexes") {
 					@Override
 					public boolean checkResult(Artist check) {
-						if(entry.getId().equals(check.getId())) {
+						if(entry.getId().equals(check.getId()) && check.isStarred() != starred) {
 							return true;
 						}
 
@@ -455,7 +466,7 @@ public class CachedMusicService implements MusicService {
 				new MusicDirectoryUpdater(context, cacheName, parent) {
 					@Override
 					public boolean checkResult(Entry check) {
-						if (entry.getId().equals(check.getId())) {
+						if (entry.getId().equals(check.getId()) && entry.isStarred() != starred) {
 							return true;
 						}
 
@@ -801,30 +812,35 @@ public class CachedMusicService implements MusicService {
 			// Add new bookmarks for things in new list
 			setBookmarkCache(context, newList, false);
 			
-			new PlaylistDirectoryUpdater(context) {
-				@Override
-				public boolean checkResult(Entry check) {
-					for(Entry entry: oldList) {
-						if(entry.getId().equals(check.getId())) {
-							setBookmarkCache(check, -1);
-							return true;
+			if(oldList.size() > 0 || nextList.size() > 0) {
+				new PlaylistDirectoryUpdater(context) {
+					@Override
+					public boolean checkResult(Entry check) {
+						for(Entry entry: oldList) {
+							if(entry.getId().equals(check.getId()) && check.getBookmark() != null) {
+								check.setBookmark(null);
+								return true;
+							}
 						}
-					}
-					for(Entry entry: newList) {
-						if(entry.getId().equals(check.getId())) {
-							setBookmarkCache(check, entry.getBookmark().getPosition());
-							return true;
+						for(Entry entry: newList) {
+							if(entry.getId().equals(check.getId())) {
+								int newPosition = entry.getBookmark().getPosition();
+								if(check.getBookmark() == null || check.getBookmark().getPosition() != newPosition) {
+									setBookmarkCache(check, newPosition);
+									return true;
+								}
+							}
 						}
+						
+						return false;
 					}
 					
-					return false;
-				}
-				
-				@Override
-				public void updateResult(Entry result) {
-					
-				}
-			}.execute();
+					@Override
+					public void updateResult(Entry result) {
+						
+					}
+				}.execute();
+			}
 		}
 		FileUtil.serialize(context, bookmarks, "bookmarks");
 		
@@ -863,7 +879,7 @@ public class CachedMusicService implements MusicService {
 		new MusicDirectoryUpdater(context, "directory", parent) {
 			@Override
 			public boolean checkResult(Entry check) {
-				return id.equals(check.getId());
+				return shouldBookmarkUpdate(check, id, position);
 			}
 			
 			@Override
@@ -877,7 +893,7 @@ public class CachedMusicService implements MusicService {
 		new PlaylistDirectoryUpdater(context) {
 			@Override
 			public boolean checkResult(Entry check) {
-				return id.equals(check.getId());
+				return shouldBookmarkUpdate(check, id, position);
 			}
 			
 			@Override
@@ -885,6 +901,18 @@ public class CachedMusicService implements MusicService {
 				setBookmarkCache(result, position);
 			}
 		}.execute();
+	}
+	
+	private boolean shouldBookmarkUpdate(Entry check, String id, int position) {
+		if(id.equals(check.getId()) {
+			if(position == -1 && check.getBookmark() != null) {
+				return true;
+			} else if(position >= 0 && (check.getBookmark() == null || check.getBookmark().getPosition() != position)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	private void setBookmarkCache(Entry result, int position) {
