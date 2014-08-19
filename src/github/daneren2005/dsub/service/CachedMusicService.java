@@ -363,13 +363,7 @@ public class CachedMusicService implements MusicService {
 			newList.addAll(dir.getChildren());
 			List<Entry> oldList = oldDir.getChildren();
 
-			for(Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
-				// Remove any entries from newList
-				if(newList.remove(it.next())) {
-					// If it was removed, then remove from oldList as well
-					it.remove();
-				}
-			}
+			removeDuplicates(oldList, newList);
 
 			// Left overs in newList need to be starred
 			boolean isTagBrowsing = Util.isTagBrowsing(context, musicService.getInstance(context));
@@ -769,17 +763,78 @@ public class CachedMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getBookmarks(refresh, context, progressListener);
+		MusicDirectory bookmarks = musicService.getBookmarks(refresh, context, progressListener);
+		
+		MusicDirectory oldBookmarks = FileUtil.deserailize(context, "bookmarks", MusicDirectory.class);
+		if(oldBookmarks != null) {
+			List<Entry> oldList = oldBookmarks.getChildren();
+			List<Entry> newList = new ArrayList<>();
+			newList.addAll(bookmarks.getChildren());
+			
+			removeDuplicates(oldList, newList);
+			
+			// Remove bookmarks from thinsg still in old list
+			setBookmarkCache(context, oldList, true);
+			// Add new bookmarks for things in new list
+			setBookmarkCache(context, oldList, false);
+		}
+		FileUtil.serialize(context, bookmarks, "bookmarks");
+		
+		return bookmarks;
 	}
 
 	@Override
-	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+	public void createBookmark(String id, String parent, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		musicService.createBookmark(id, position, comment, context, progressListener);
+		setBookmarkCache(context, id, parent, position);
 	}
 
 	@Override
-	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
+	public void deleteBookmark(String id, String parent, Context context, ProgressListener progressListener) throws Exception {
 		musicService.deleteBookmark(id, context, progressListener);
+		setBookmarkCache(context, id, parent, -1);
+	}
+	
+	private void setBookmarkCache(Context context, List<Entry> entries, boolean remove) {
+		for(final Entry entry: entries) {
+			if(remove) {
+				setBookmarkCache(context, entry.getId(), entry.getParent(), -1);
+			} else {
+				setBookmarkCache(context, entry.getId(), entry.getParent(), entry.getBookmark().getPosition());
+			}
+		}
+	}
+	private void setBookmarkCache(Context context, final String id, final String parent, final int position) {
+		// Update the parent directory with bookmark data
+		new MusicDirectoryUpdater(context, "directory", parent) {
+			@Override
+			public boolean checkResult(Entry check) {
+				return id.equals(check.getId());
+			}
+			
+			@Override
+			public void updateResult(List<Entry> objects, Entry result) {
+				setBookmarkCache(result, position);
+			}
+		}.execute();
+	}
+	
+	private void setBookmarkCache(Entry result, int position) {
+		// If position == -1, then it is a delete
+		if(result.getBookmark() != null && position == -1) {
+			result.setBookmark(null);
+		} else if(position >= 0) {
+			Bookmark bookmark = result.getBookmark();
+			
+			// Create one if empty
+			if(bookmark == null) {
+				bookmark = new Bookmark();
+				result.setBookmark(bookmark);
+			}
+			
+			// Update bookmark position no matter what
+			bookmark.setPosition(position);
+		}
 	}
 
 	@Override
@@ -898,6 +953,16 @@ public class CachedMusicService implements MusicService {
   	private String getCacheName(Context context, String name) {
   		String s = musicService.getRestUrl(context, null, false);
   		return name + "-" + s.hashCode() + ".ser";
+  	}
+  	
+  	private void removeDuplicates(List<Entry> oldList, List<Entry> newList) {
+  		for(Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
+  			// Remove entries from newList
+  			if(newList.remove(it.next()) {
+  				// If it was removed, then remove it from old list as well
+  				it.remove();
+  			}
+  		}
   	}
   	
   	private abstract class SerializeUpdater<T> {
