@@ -371,6 +371,32 @@ public class CachedMusicService implements MusicService {
 
 			// Left overs in oldList need to be unstarred
 			updateStarredList(context, oldList, false, isTagBrowsing);
+			
+			new PlaylistDirectoryUpdater(context) {
+				@Override
+				public boolean checkResult(Entry check) {
+					for(Entry entry: oldList) {
+						if(check.getId().equals(entry.getId())) {
+							check.setStarred(false);
+							return true;
+						}
+					}
+					
+					for(Entry entry: newList) {
+						if(check.getId().equals(entry.getId())) {
+							check.setStarred(true);
+							return true;
+						}
+					}
+					
+					return false;
+				}
+				
+				@Override
+				public void updateResult(Entry result) {
+					
+				}
+			}.execute();
 		}
 		FileUtil.serialize(context, dir, "starred");
 
@@ -596,26 +622,23 @@ public class CachedMusicService implements MusicService {
 
 		// Update playlist caches if there is at least one song to be starred
 		if(ids != null && ids.size() > 0) {
-			List<Playlist> playlists = FileUtil.deserialize(context, getCacheName(context, "playlist"), ArrayList.class);
-			for(Playlist playlist: playlists) {
-				new MusicDirectoryUpdater(context, "playlist", playlist.getId()) {
-					@Override
-					public boolean checkResult(Entry check) {
-						for (String id : checkIds) {
-							if (id.equals(check.getId())) {
-								return true;
-							}
+			new PlaylistDirectoryUpdater(context) {
+				@Override
+				public boolean checkResult(Entry check) {
+					for (String id : checkIds) {
+						if (id.equals(check.getId())) {
+							return true;
 						}
-
-						return false;
 					}
 
-					@Override
-					public void updateResult(List<Entry> objects, Entry result) {
-						result.setStarred(starred);
-					}
-				}.execute();
-			}
+					return false;
+				}
+
+				@Override
+				public void updateResult(Entry result) {
+					result.setStarred(starred);
+				}
+			}.execute();
 		}
 	}
 	
@@ -776,7 +799,32 @@ public class CachedMusicService implements MusicService {
 			// Remove bookmarks from thinsg still in old list
 			setBookmarkCache(context, oldList, true);
 			// Add new bookmarks for things in new list
-			setBookmarkCache(context, oldList, false);
+			setBookmarkCache(context, newList, false);
+			
+			new PlaylistDirectoryUpdater(context) {
+				@Override
+				public boolean checkResult(Entry check) {
+					for(Entry entry: oldList) {
+						if(entry.getId().equals(check.getId())) {
+							setBookmarkCache(check, -1);
+							return true;
+						}
+					}
+					for(Entry entry: newList) {
+						if(entry.getId().equals(check.getId())) {
+							setBookmarkCache(check, entry.getBookmark().getPosition());
+							return true;
+						}
+					}
+					
+					return false;
+				}
+				
+				@Override
+				public void updateResult(Entry result) {
+					
+				}
+			}.execute();
 		}
 		FileUtil.serialize(context, bookmarks, "bookmarks");
 		
@@ -786,13 +834,19 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void createBookmark(String id, String parent, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		musicService.createBookmark(id, position, comment, context, progressListener);
+		// Add to directory cache
 		setBookmarkCache(context, id, parent, position);
+		// Add to playlist cache
+		setBookmarkCache(context, id, position);
 	}
 
 	@Override
 	public void deleteBookmark(String id, String parent, Context context, ProgressListener progressListener) throws Exception {
 		musicService.deleteBookmark(id, context, progressListener);
+		// Delete from directory cache
 		setBookmarkCache(context, id, parent, -1);
+		// Delete from playlist cache
+		setBookmarkCache(context, id, -1);
 	}
 	
 	private void setBookmarkCache(Context context, List<Entry> entries, boolean remove) {
@@ -814,6 +868,20 @@ public class CachedMusicService implements MusicService {
 			
 			@Override
 			public void updateResult(List<Entry> objects, Entry result) {
+				setBookmarkCache(result, position);
+			}
+		}.execute();
+	}
+	private void setBookmarkCache(Context context, final String id, final int position) {
+		// Update playlists with bookmark data
+		new PlaylistDirectoryUpdater(context) {
+			@Override
+			public boolean checkResult(Entry check) {
+				return id.equals(check.getId());
+			}
+			
+			@Override
+			public void updateResult(Entry result) {
 				setBookmarkCache(result, position);
 			}
 		}.execute();
@@ -992,17 +1060,20 @@ public class CachedMusicService implements MusicService {
   			
   			// Only execute if something to check against
   			if(objects != null) {
-  				T object = null;
+  				List<T> objects = new ArrayList<T>();
   				for(T check: objects) {
   					if(checkResult(check)) {
-  						object = check;
-  						break;
+  						objects.push(check);
   					}
   				}
   				
-  				// Only reserialize if a match was found
-  				if(object != null) {
+  				// Iterate through and update each object matched
+  				for(T object: objects) {
   					updateResult(objects, object);
+  				}
+  				
+  				// Only reserialize if at least one match was found
+  				if(objects.size() > 0) {
   					save(objects);
   				}
   			}
@@ -1053,6 +1124,38 @@ public class CachedMusicService implements MusicService {
 		public void save(ArrayList<Entry> objects) {
 			musicDirectory.replaceChildren(objects);
 			FileUtil.serialize(context, musicDirectory, cacheName);
+		}
+	}
+	private abstract class PlaylistDirectoryUpdater {
+		Context context;
+		
+		public PlaylistDirectoryUpdater(Context context) {
+			this.context = context;
+		}
+		
+		public abstract boolean checkResult(Entry check);
+		public abstract boolean updateResult(Entry result);
+		
+		public void execute() {
+			List<Playlist> playlists = FileUtil.deserialize(context, getCacheName(context, "playlist"), ArrayList.class);
+			if(playlists == null) {
+				// No playlist list cache, nothing to update!
+				return;
+			}
+			
+			for(Playlist playlist: playlists) {
+				new MusicDirectoryUpdater(context, "playlist", playlist.getId()) {
+					@Override
+					public boolean checkResult(Entry check) {
+						return PlaylistDirectoryUpdater.this.checkResult(check);
+					}
+					
+					@Override
+					public void updateResult(List<Entry> objects, Entry result) {
+						PlaylistDirectoryUpdater.this.updateResult(result);
+					}
+				}.execute();
+			}
 		}
 	}
 	private abstract class IndexesUpdater extends SerializeUpdater<Artist> {
