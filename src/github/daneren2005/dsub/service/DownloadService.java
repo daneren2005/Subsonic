@@ -294,19 +294,10 @@ public class DownloadService extends Service {
 		return binder;
 	}
 
-	public synchronized void download(MusicDirectory.Entry entry) {
-		Bookmark bookmark = entry.getBookmark();
-
-		clear();
-		DownloadFile downloadFile = new DownloadFile(this, entry, false);
-		downloadList.add(downloadFile);
-		revision++;
-		updateJukeboxPlaylist();
-		play(0, true, bookmark.getPosition());
-		lifecycleSupport.serializeDownloadQueue();
-	}
-
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
+		download(songs, save, autoplay, playNext, shuffle, 0);
+	}
+	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle, int position) {
 		setShufflePlayEnabled(false);
 		int offset = 1;
 
@@ -345,7 +336,7 @@ public class DownloadService extends Service {
 		}
 
 		if (autoplay) {
-			play(0);
+			play(0, true, position);
 		} else {
 			if (currentPlaying == null) {
 				currentPlaying = downloadList.get(0);

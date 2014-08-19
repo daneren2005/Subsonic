@@ -19,6 +19,8 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
+
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 
 /**
@@ -59,6 +61,11 @@ public class MusicDirectoryEntryParser extends AbstractParser {
             entry.setPath(get("path"));
             entry.setVideo(getBoolean("isVideo"));
 			entry.setDiscNumber(getInteger("discNumber"));
+
+			Integer bookmark = getInteger("bookmarkPosition");
+			if(bookmark != null) {
+				entry.setBookmark(new Bookmark(bookmark));
+			}
         } else if(!"".equals(artist)) {
 			entry.setPath(artist + "/" + entry.getTitle());
 		}

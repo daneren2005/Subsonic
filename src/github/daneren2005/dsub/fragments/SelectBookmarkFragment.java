@@ -41,6 +41,7 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.Entry> {
@@ -106,7 +107,7 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				downloadService.download(bookmark);
+				downloadService.download(Arrays.asList(bookmark), false, true, false, false, bookmark.getBookmark().getPosition());
 				return null;
 			}
 			

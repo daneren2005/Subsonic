@@ -34,6 +34,13 @@ public class Bookmark implements Serializable {
 	private Date created;
 	private Date changed;
 
+	public Bookmark() {
+
+	}
+	public Bookmark(int position) {
+		this.position = position;
+	}
+
 	public int getPosition() {
 		return position;
 	}

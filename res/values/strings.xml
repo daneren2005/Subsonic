@@ -237,6 +237,10 @@
 		\nCreated: %3$s
 		\nLast Updated: %4$s
 		\nComment: %5$s</string>
+	<string name="bookmark.resume_title">Resume playing?</string>
+	<string name="bookmark.resume">Resume playing \'%1$s\' from %2$s</string>
+	<string name="bookmark.action_resume">Resume</string>
+	<string name="bookmark.action_start_over">Start Over</string>
 
 	<string name="song_details.error">Error</string>
 	<string name="song_details.skipped">Skipped</string>
