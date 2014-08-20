@@ -330,13 +330,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				createShare(songs);
 				break;
 			case R.id.song_menu_play_now:
-				if(entry.getBookmark() != null) {
-					playBookmark(songs);
-				} else {
-					getDownloadService().clear();
-					getDownloadService().download(songs, false, true, true, false);
-					Util.startActivityWithoutTransition(context, DownloadActivity.class);
-				}
+				playNow(songs);
 				break;
 			case R.id.song_menu_play_next:
 				getDownloadService().download(songs, false, false, true, false);
@@ -1310,55 +1304,79 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		return gestureScanner;
 	}
 
-	protected void playBookmark(final List<Entry> songs) {
-		if(songs.size() == 1) {
-			final Entry song = songs.get(0);
-			final Integer position = song.getBookmark().getPosition();
+	protected void playBookmark(final List<Entry> songs, final Entry song) {
+		final Integer position = song.getBookmark().getPosition();
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(context);
-			builder.setTitle(R.string.bookmark_resume_title)
-					.setMessage(getResources().getString(R.string.bookmark_resume, song.getTitle(), Util.formatDuration(position / 1000)))
-					.setPositiveButton(R.string.bookmark_action_resume, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int id) {
-							getDownloadService().clear();
-							getDownloadService().download(songs, false, true, true, false, position);
-							Util.startActivityWithoutTransition(context, DownloadActivity.class);
-						}
-					})
-					.setNegativeButton(R.string.bookmark_action_start_over, new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int id) {
-							new SilentBackgroundTask<Void>(context) {
-								@Override
-								protected Void doInBackground() throws Throwable {
-									MusicService musicService = MusicServiceFactory.getMusicService(context);
-									musicService.deleteBookmark(song.getId(), Util.getParentFromEntry(context, song), context, null);
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.bookmark_resume_title)
+				.setMessage(getResources().getString(R.string.bookmark_resume, song.getTitle(), Util.formatDuration(position / 1000)))
+				.setPositiveButton(R.string.bookmark_action_resume, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						playNow(entries, song, position);
+					}
+				})
+				.setNegativeButton(R.string.bookmark_action_start_over, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						new SilentBackgroundTask<Void>(context) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								MusicService musicService = MusicServiceFactory.getMusicService(context);
+								musicService.deleteBookmark(song.getId(), Util.getParentFromEntry(context, song), context, null);
 
-									song.setBookmark(null);
-									return null;
+								song.setBookmark(null);
+								return null;
+							}
+
+							@Override
+							protected void error(Throwable error) {
+								String msg;
+								if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+									msg = getErrorMessage(error);
+								} else {
+									msg = context.getResources().getString(R.string.bookmark_deleted_error, song.getTitle()) + " " + getErrorMessage(error);
 								}
 
-								@Override
-								protected void error(Throwable error) {
-									String msg;
-									if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-										msg = getErrorMessage(error);
-									} else {
-										msg = context.getResources().getString(R.string.bookmark_deleted_error, song.getTitle()) + " " + getErrorMessage(error);
-									}
+								Util.toast(context, msg, false);
+							}
+						}.execute();
 
-									Util.toast(context, msg, false);
-								}
-							}.execute();
-
-							getDownloadService().clear();
-							getDownloadService().download(songs, false, true, true, false);
-							Util.startActivityWithoutTransition(context, DownloadActivity.class);
-						}
-					});
-			AlertDialog dialog = builder.create();
-			dialog.show();
+						playNow(entries, 0);
+					}
+				});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	protected void playNow(List<Entry> entries) {
+		Entry bookmark = null;
+		for(Entry entry: entries) {
+			if(entry.getBookmark() != null) {
+				bookmark = entry;
+				break;
+			}
 		}
+		
+		// If no bookmark found, just play from start
+		if(bookmark == null) {
+			playNow(entries, 0);
+		} else {
+			// If bookmark found, then give user choice to start from there or to start over
+			playBookmark(entries, bookmark);
+		}
+	}
+	protected void playNow(List<Entry> entries, int position) {
+		playNow(entries, 0, position);
+	}
+	protected void playNow(List<Entry> entries, Entry song, int position) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService() == null) {
+			return;
+		}
+		
+		downloadService.clear();
+		downloadService.download(songs, false, true, true, false, entries.indexOf(song), position);
+		Util.startActivityWithoutTransition(context, DownloadActivity.class);
 	}
 }
