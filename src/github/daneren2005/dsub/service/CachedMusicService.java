@@ -805,8 +805,21 @@ public class CachedMusicService implements MusicService {
 			final List<Entry> oldList = oldBookmarks.getChildren();
 			final List<Entry> newList = new ArrayList<Entry>();
 			newList.addAll(bookmarks.getChildren());
-			
-			removeDuplicates(oldList, newList);
+
+			for(Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
+				Entry oldEntry = it.next();
+				// Remove entries from newList
+				int position = newList.indexOf(oldEntry);
+				if(position != -1) {
+					Entry newEntry = newList.get(position);
+					if(newEntry.getBookmark().getPosition() == oldEntry.getBookmark().getPosition()) {
+						newList.remove(position);
+					}
+
+					// Remove from old regardless of whether position is wrong
+					it.remove();
+				}
+			}
 			
 			// Remove bookmarks from thinsg still in old list
 			setBookmarkCache(context, oldList, true);
