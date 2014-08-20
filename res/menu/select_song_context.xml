@@ -59,4 +59,10 @@
 			android:id="@+id/song_menu_share"
 			android:title="@string/menu.share"/>
 	</group>
+	
+	<group android:id="@+id/server_1.9">
+		<item
+			android:id="@+id/bookmark_menu_delete"
+			android:title="@string/bookmark.delete"/>
+	</group>
 </menu>
