@@ -844,6 +844,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		final List<MusicDirectory.Entry> songs = getSelectedSongs();
 		warnIfNetworkOrStorageUnavailable();
+		
+		// Conditions for using play now button
+		if(!append && !save && autoplay && !playNext && !shuffle) {
+			// Call playNow which goes through and tries to use bookmark information
+			playNow(songs);
+		}
+		
 		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
