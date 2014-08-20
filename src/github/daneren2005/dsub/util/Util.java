@@ -385,6 +385,20 @@ public final class Util {
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance, false);
 	}
 
+	public static String getParentFromEntry(Context context, MusicDirectory.Entry entry) {
+		if(Util.isTagBrowsing(context)) {
+			if(!entry.isDirectory()) {
+				return entry.getAlbumId();
+			} else if(entry.isAlbum()) {
+				return entry.getArtistId();
+			} else {
+				return null;
+			}
+		} else {
+			return entry.getParent();
+		}
+	}
+
 	public static boolean isOpenToLibrary(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_OPEN_TO_LIBRARY, false);

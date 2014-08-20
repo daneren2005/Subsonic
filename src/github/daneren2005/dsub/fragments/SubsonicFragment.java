@@ -1326,7 +1326,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 								@Override
 								protected Void doInBackground() throws Throwable {
 									MusicService musicService = MusicServiceFactory.getMusicService(context);
-									musicService.deleteBookmark(song.getId(), context, null);
+									musicService.deleteBookmark(song.getId(), Util.getParentFromEntry(context, song), context, null);
+
+									song.setBookmark(null);
 									return null;
 								}
 

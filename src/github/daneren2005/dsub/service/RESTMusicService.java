@@ -1127,7 +1127,7 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+	public void createBookmark(String id, String parent, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Creating bookmarks not supported.");
 		
 		Reader reader = getReader(context, progressListener, "createBookmark", null, Arrays.asList("id", "position", "comment"), Arrays.<Object>asList(id, position, comment));
@@ -1139,7 +1139,7 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
+	public void deleteBookmark(String id, String parent, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Deleting bookmarks not supported.");
 		
 		Reader reader = getReader(context, progressListener, "deleteBookmark", null, Arrays.asList("id"), Arrays.<Object>asList(id));

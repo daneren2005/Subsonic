@@ -32,6 +32,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
@@ -359,9 +360,9 @@ public class CachedMusicService implements MusicService {
 
 		MusicDirectory oldDir = FileUtil.deserialize(context, "starred", MusicDirectory.class);
 		if(oldDir != null) {
-			List<Entry> newList = new ArrayList<Entry>();
+			final List<Entry> newList = new ArrayList<Entry>();
 			newList.addAll(dir.getChildren());
-			List<Entry> oldList = oldDir.getChildren();
+			final List<Entry> oldList = oldDir.getChildren();
 
 			removeDuplicates(oldList, newList);
 
@@ -466,7 +467,7 @@ public class CachedMusicService implements MusicService {
 				new MusicDirectoryUpdater(context, cacheName, parent) {
 					@Override
 					public boolean checkResult(Entry check) {
-						if (entry.getId().equals(check.getId()) && entry.isStarred() != starred) {
+						if (entry.getId().equals(check.getId()) && check.isStarred() != starred) {
 							return true;
 						}
 
@@ -799,10 +800,10 @@ public class CachedMusicService implements MusicService {
 	public MusicDirectory getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		MusicDirectory bookmarks = musicService.getBookmarks(refresh, context, progressListener);
 		
-		MusicDirectory oldBookmarks = FileUtil.deserailize(context, "bookmarks", MusicDirectory.class);
+		MusicDirectory oldBookmarks = FileUtil.deserialize(context, "bookmarks", MusicDirectory.class);
 		if(oldBookmarks != null) {
-			List<Entry> oldList = oldBookmarks.getChildren();
-			List<Entry> newList = new ArrayList<>();
+			final List<Entry> oldList = oldBookmarks.getChildren();
+			final List<Entry> newList = new ArrayList<Entry>();
 			newList.addAll(bookmarks.getChildren());
 			
 			removeDuplicates(oldList, newList);
@@ -812,7 +813,7 @@ public class CachedMusicService implements MusicService {
 			// Add new bookmarks for things in new list
 			setBookmarkCache(context, newList, false);
 			
-			if(oldList.size() > 0 || nextList.size() > 0) {
+			if(oldList.size() > 0 || newList.size() > 0) {
 				new PlaylistDirectoryUpdater(context) {
 					@Override
 					public boolean checkResult(Entry check) {
@@ -849,7 +850,7 @@ public class CachedMusicService implements MusicService {
 
 	@Override
 	public void createBookmark(String id, String parent, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
-		musicService.createBookmark(id, position, comment, context, progressListener);
+		musicService.createBookmark(id, null, position, comment, context, progressListener);
 		// Add to directory cache
 		setBookmarkCache(context, id, parent, position);
 		// Add to playlist cache
@@ -858,7 +859,7 @@ public class CachedMusicService implements MusicService {
 
 	@Override
 	public void deleteBookmark(String id, String parent, Context context, ProgressListener progressListener) throws Exception {
-		musicService.deleteBookmark(id, context, progressListener);
+		musicService.deleteBookmark(id, null, context, progressListener);
 		// Delete from directory cache
 		setBookmarkCache(context, id, parent, -1);
 		// Delete from playlist cache
@@ -868,15 +869,22 @@ public class CachedMusicService implements MusicService {
 	private void setBookmarkCache(Context context, List<Entry> entries, boolean remove) {
 		for(final Entry entry: entries) {
 			if(remove) {
-				setBookmarkCache(context, entry.getId(), entry.getParent(), -1);
+				setBookmarkCache(context, entry.getId(), Util.getParentFromEntry(context, entry), -1);
 			} else {
-				setBookmarkCache(context, entry.getId(), entry.getParent(), entry.getBookmark().getPosition());
+				setBookmarkCache(context, entry.getId(), Util.getParentFromEntry(context, entry), entry.getBookmark().getPosition());
 			}
 		}
 	}
 	private void setBookmarkCache(Context context, final String id, final String parent, final int position) {
+		String cacheName;
+		if(isTagBrowsing) {
+			cacheName = "album";
+		} else {
+			cacheName = "directory";
+		}
+
 		// Update the parent directory with bookmark data
-		new MusicDirectoryUpdater(context, "directory", parent) {
+		new MusicDirectoryUpdater(context, cacheName, parent) {
 			@Override
 			public boolean checkResult(Entry check) {
 				return shouldBookmarkUpdate(check, id, position);
@@ -904,7 +912,7 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	private boolean shouldBookmarkUpdate(Entry check, String id, int position) {
-		if(id.equals(check.getId()) {
+		if(id.equals(check.getId())) {
 			if(position == -1 && check.getBookmark() != null) {
 				return true;
 			} else if(position >= 0 && (check.getBookmark() == null || check.getBookmark().getPosition() != position)) {
@@ -1054,7 +1062,7 @@ public class CachedMusicService implements MusicService {
   	private void removeDuplicates(List<Entry> oldList, List<Entry> newList) {
   		for(Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
   			// Remove entries from newList
-  			if(newList.remove(it.next()) {
+  			if(newList.remove(it.next())) {
   				// If it was removed, then remove it from old list as well
   				it.remove();
   			}
@@ -1097,10 +1105,10 @@ public class CachedMusicService implements MusicService {
   			
   			// Only execute if something to check against
   			if(objects != null) {
-  				List<T> objects = new ArrayList<T>();
+  				List<T> results = new ArrayList<T>();
   				for(T check: objects) {
   					if(checkResult(check)) {
-  						objects.push(check);
+						results.add(check);
   						if(singleUpdate) {
   							break;
   						}
@@ -1108,12 +1116,12 @@ public class CachedMusicService implements MusicService {
   				}
   				
   				// Iterate through and update each object matched
-  				for(T object: objects) {
-  					updateResult(objects, object);
+  				for(T result: results) {
+  					updateResult(objects, result);
   				}
   				
   				// Only reserialize if at least one match was found
-  				if(objects.size() > 0) {
+  				if(results.size() > 0) {
   					save(objects);
   				}
   			}
@@ -1177,7 +1185,7 @@ public class CachedMusicService implements MusicService {
 		}
 		
 		public abstract boolean checkResult(Entry check);
-		public abstract boolean updateResult(Entry result);
+		public abstract void updateResult(Entry result);
 		
 		public void execute() {
 			List<Playlist> playlists = FileUtil.deserialize(context, getCacheName(context, "playlist"), ArrayList.class);

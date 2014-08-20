@@ -140,7 +140,7 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 					@Override
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						musicService.deleteBookmark(entry.getId(), context, null);
+						musicService.deleteBookmark(entry.getId(), Util.getParentFromEntry(context, entry), context, null);
 						return null;
 					}
 					
