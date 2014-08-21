@@ -94,6 +94,7 @@ public class DownloadService extends Service {
 	public static final String START_PLAY = "github.daneren2005.dsub.START_PLAYING";
 	public static final int FAST_FORWARD = 30000;
 	public static final int REWIND = 10000;
+	private static final double DELETE_CUTOFF = 0.90;
 
 	private RemoteControlClientHelper mRemoteControl;
 
@@ -577,7 +578,7 @@ public class DownloadService extends Service {
 			int duration = getPlayerDuration();
 
 			// Make sure > 90% of the way through
-			int cutoffPoint = (int)(duration * 0.90);
+			int cutoffPoint = (int)(duration * DELETE_CUTOFF);
 			if(duration > 0 && cachedPosition > cutoffPoint) {
 				currentPlaying.delete();
 			}
@@ -586,6 +587,9 @@ public class DownloadService extends Service {
 			podcast.delete();
 		}
 		toDelete.clear();
+		
+		// Clear bookmarks from current playing if past a certain point
+		clearCurrentBookmark();
 
 		reset();
 		downloadList.clear();
@@ -899,11 +903,12 @@ public class DownloadService extends Service {
 			int duration = getPlayerDuration();
 
 			// Make sure > 90% of the way through
-			int cutoffPoint = (int)(duration * 0.90);
+			int cutoffPoint = (int)(duration * DELETE_CUTOFF);
 			if(duration > 0 && cachedPosition > cutoffPoint) {
 				toDelete.add(currentPlaying);
 			}
 		}
+		clearCurrentBookmark();
 
 		int index = getCurrentPlayingIndex();
 		int nextPlayingIndex = getNextPlayingIndex();
@@ -1501,6 +1506,7 @@ public class DownloadService extends Service {
 					if(downloadFile.getSong() instanceof PodcastEpisode) {
 						toDelete.add(downloadFile);
 					}
+					clearCurrentBookmark(false);
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadService.this) {
@@ -1776,6 +1782,54 @@ public class DownloadService extends Service {
 					iterator.remove();
 				}
 			}
+		}
+	}
+	
+	private void clearCurrentBookmark() {
+		clearCurrentBookmark(true);
+	}
+	private void clearCurrentBookmark(boolean checkPosition) {
+		// If current is null, nothing to do
+		if(currentPlaying == null) {
+			return;
+		}
+		
+		final MusicDirectory.Entry entry = currentPlaying.getSong();
+		// If no bookmark, move on
+		if(entry.getBookmark() == null) {
+			return;
+		}
+		
+		int duration = getPlayerDuration();
+		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
+		if(duration > 0 && cachedPosition > cutoffPoint || !checkPosition) {
+			new SilentBackgroundTask<Void>(this) {
+				@Override
+				public Void doInBackground() throws Throwable {
+					MusicService musicService = MusicServiceFactory.getMusicService(DownloadService.this);
+					musicService.deleteBookmark(entry.getId(), Util.getParentFromEntry(DownloadService.this, entry), DownloadService.this, null);
+					
+					entry.setBookmark(null);
+					MusicDirectory.Entry found = UpdateView.findEntry(entry);
+					if(found != null) {
+						found.setBookmark(null);
+					}
+				}
+				
+				@Override
+				public void error(Throwable error) {
+					Log.e(TAG, "Failed to delete bookmark", error);
+					
+					String msg;
+					if(error instanceof OfflineException || error instanceof ServerTooOldException) {
+						msg = getErrorMessage(error);
+					} else {
+						msg = DownloadService.this.getResources().getString(R.string.bookmark_deleted_error, entry.getTitle()) + " " + getErrorMessage(error);
+					}
+					
+					Util.toast(DownloadService.this, msg, false);
+				}
+			}.execute();
 		}
 	}
 
