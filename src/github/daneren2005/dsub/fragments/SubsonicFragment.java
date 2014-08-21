@@ -39,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -324,7 +325,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				displaySongInfo(entry);
 				break;
 			case R.id.album_menu_show_artist:
-				showArtist((Entry) selectedItem);
+				showAlbumArtist((Entry) selectedItem);
 				break;
 			case R.id.album_menu_share:
 				createShare(songs);
@@ -364,6 +365,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.song_menu_share:
 				createShare(songs);
+				break;
+			case R.id.song_menu_show_album:
+				showAlbum((Entry) selectedItem);
+				break;
+			case R.id.song_menu_show_artist:
+				showArtist((Entry) selectedItem);
+				break;
+			case R.id.bookmark_menu_delete:
+				deleteBookmark(entry, null);
 				break;
 			default:
 				return false;
@@ -1242,7 +1252,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 
-	public void showArtist(Entry entry) {
+	public void showAlbumArtist(Entry entry) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		if(Util.isTagBrowsing(context)) {
@@ -1252,6 +1262,37 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
 		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, true);
+	}
+	public void showArtist(Entry entry) {
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		if(Util.isTagBrowsing(context)) {
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getArtistId());
+		} else {
+			if(entry.getGrandParent() == null) {
+				args.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getParent());
+			} else {
+				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getGrandParent());
+			}
+		}
+		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, true);
+	}
+	public void showAlbum(Entry entry) {
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		if(Util.isTagBrowsing(context)) {
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getAlbumId());
+		} else {
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+		}
+		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getAlbum());
 		fragment.setArguments(args);
 
 		replaceFragment(fragment, true);
@@ -1313,7 +1354,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				.setPositiveButton(R.string.bookmark_action_resume, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						playNow(entries, song, position);
+						playNow(songs, song, position);
 					}
 				})
 				.setNegativeButton(R.string.bookmark_action_start_over, new DialogInterface.OnClickListener() {
@@ -1342,7 +1383,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 							}
 						}.execute();
 
-						playNow(entries, 0);
+						playNow(songs, 0);
 					}
 				});
 		AlertDialog dialog = builder.create();
@@ -1367,16 +1408,55 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 	protected void playNow(List<Entry> entries, int position) {
-		playNow(entries, 0, position);
+		playNow(entries, entries.get(0), position);
 	}
 	protected void playNow(List<Entry> entries, Entry song, int position) {
 		DownloadService downloadService = getDownloadService();
-		if(downloadService() == null) {
+		if(downloadService == null) {
 			return;
 		}
 		
 		downloadService.clear();
-		downloadService.download(songs, false, true, true, false, entries.indexOf(song), position);
+		downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
 		Util.startActivityWithoutTransition(context, DownloadActivity.class);
+	}
+
+	protected void deleteBookmark(final MusicDirectory.Entry entry, final ArrayAdapter adapter) {
+		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new LoadingTask<Void>(context, false) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						musicService.deleteBookmark(entry.getId(), Util.getParentFromEntry(context, entry), context, null);
+
+						entry.setBookmark(null);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						if(adapter != null) {
+							adapter.remove(entry);
+							adapter.notifyDataSetChanged();
+						}
+						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
+					}
+
+					@Override
+					protected void error(Throwable error) {
+						String msg;
+						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+							msg = getErrorMessage(error);
+						} else {
+							msg = context.getResources().getString(R.string.bookmark_deleted_error, entry.getTitle()) + " " + getErrorMessage(error);
+						}
+
+						Util.toast(context, msg, false);
+					}
+				}.execute();
+			}
+		});
 	}
 }

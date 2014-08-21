@@ -63,10 +63,10 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 		switch(menuItem.getItemId()) {
 			case R.id.bookmark_menu_info:
 				displayBookmarkInfo(bookmark);
-				break;
+				return true;
 			case R.id.bookmark_menu_delete:
-				deleteBookmark(bookmark);
-				break;
+				deleteBookmark(bookmark, adapter);
+				return true;
 		}
 		
 		if(onContextItemSelected(menuItem, bookmark)) {
@@ -107,7 +107,7 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				downloadService.download(Arrays.asList(bookmark), false, true, false, false, bookmark.getBookmark().getPosition());
+				downloadService.download(Arrays.asList(bookmark), false, true, false, false, 0, bookmark.getBookmark().getPosition());
 				return null;
 			}
 			
@@ -131,39 +131,5 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 			formatter.format(bookmark.getCreated()), formatter.format(bookmark.getChanged()), comment);
 		
 		Util.info(context, R.string.bookmark_details_title, msg, false);
-	}
-	private void deleteBookmark(final MusicDirectory.Entry entry) {
-		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				new LoadingTask<Void>(context, false) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						musicService.deleteBookmark(entry.getId(), Util.getParentFromEntry(context, entry), context, null);
-						return null;
-					}
-					
-					@Override
-					protected void done(Void result) {
-						adapter.remove(entry);
-						adapter.notifyDataSetChanged();
-						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
-					}
-					
-					@Override
-					protected void error(Throwable error) {
-						String msg;
-						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-							msg = getErrorMessage(error);
-						} else {
-							msg = context.getResources().getString(R.string.bookmark_deleted_error, entry.getTitle()) + " " + getErrorMessage(error);
-						}
-						
-						Util.toast(context, msg, false);
-					}
-				}.execute();
-			}
-		});
 	}
 }

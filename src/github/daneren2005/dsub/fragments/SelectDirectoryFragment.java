@@ -849,6 +849,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(!append && !save && autoplay && !playNext && !shuffle) {
 			// Call playNow which goes through and tries to use bookmark information
 			playNow(songs);
+			return;
 		}
 		
 		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {

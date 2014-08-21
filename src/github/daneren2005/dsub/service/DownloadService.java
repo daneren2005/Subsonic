@@ -297,7 +297,7 @@ public class DownloadService extends Service {
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
 		download(songs, save, autoplay, playNext, shuffle, 0, 0);
 	}
-	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle, int index, int position) {
+	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle, int start, int position) {
 		setShufflePlayEnabled(false);
 		int offset = 1;
 
@@ -336,7 +336,7 @@ public class DownloadService extends Service {
 		}
 
 		if (autoplay) {
-			play(index, true, position);
+			play(start, true, position);
 		} else {
 			if (currentPlaying == null) {
 				currentPlaying = downloadList.get(0);
