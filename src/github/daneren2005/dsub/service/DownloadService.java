@@ -575,12 +575,9 @@ public class DownloadService extends Service {
 
 	public synchronized void clear(boolean serialize) {
 		// Delete podcast if fully listened to
+		boolean cutoff = isPastCutoff();
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
-			int duration = getPlayerDuration();
-
-			// Make sure > 90% of the way through
-			int cutoffPoint = (int)(duration * DELETE_CUTOFF);
-			if(duration > 0 && cachedPosition > cutoffPoint) {
+			if(cutoff) {
 				currentPlaying.delete();
 			}
 		}
@@ -590,7 +587,12 @@ public class DownloadService extends Service {
 		toDelete.clear();
 		
 		// Clear bookmarks from current playing if past a certain point
-		clearCurrentBookmark();
+		if(cutoff) {
+			clearCurrentBookmark(true);
+		} else {
+			// Check if we should be adding a new bookmark here
+			checkAddBookmark();
+		}
 
 		reset();
 		downloadList.clear();
@@ -901,11 +903,7 @@ public class DownloadService extends Service {
 
 		// Delete podcast if fully listened to
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
-			int duration = getPlayerDuration();
-
-			// Make sure > 90% of the way through
-			int cutoffPoint = (int)(duration * DELETE_CUTOFF);
-			if(duration > 0 && cachedPosition > cutoffPoint) {
+			if(isPastCutoff()) {
 				toDelete.add(currentPlaying);
 			}
 		}
@@ -1507,7 +1505,7 @@ public class DownloadService extends Service {
 					if(downloadFile.getSong() instanceof PodcastEpisode) {
 						toDelete.add(downloadFile);
 					}
-					clearCurrentBookmark(downloadFile.getSong(), false);
+					clearCurrentBookmark(downloadFile.getSong(), true);
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadService.this) {
@@ -1786,23 +1784,36 @@ public class DownloadService extends Service {
 		}
 	}
 	
+	private boolean isPastCutoff() {
+		int duration = getPlayerDuration();
+		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
+		return duration > 0 && cachedPosition > cutoffPoint;
+	}
+	
 	private void clearCurrentBookmark() {
+		clearCurrentBookmark(false);
+	}
+	private void clearCurrentBookmark(boolean delete) {
 		// If current is null, nothing to do
 		if(currentPlaying == null) {
 			return;
 		}
 
-		clearCurrentBookmark(currentPlaying.getSong(), true);
+		clearCurrentBookmark(currentPlaying.getSong(), delete);
 	}
-	private void clearCurrentBookmark(final MusicDirectory.Entry entry, boolean checkPosition) {
+	private void clearCurrentBookmark(final MusicDirectory.Entry entry, boolean delete) {
 		// If no bookmark, move on
 		if(entry.getBookmark() == null) {
 			return;
 		}
 		
-		int duration = getPlayerDuration();
-		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
-		if(duration > 0 && cachedPosition > cutoffPoint || !checkPosition) {
+		// If delete is not specified, check position
+		if(!delete) {
+			delete = isPastCutoff();
+		}
+		
+		// If supposed to delete
+		if(delete) {
 			new SilentBackgroundTask<Void>(this) {
 				@Override
 				public Void doInBackground() throws Throwable {
@@ -1829,6 +1840,35 @@ public class DownloadService extends Service {
 					}
 					
 					Util.toast(DownloadService.this, msg, false);
+				}
+			}.execute();
+		}
+	}
+	
+	private void checkAddBookmark() {
+		// Don't do anything if no current playing
+		if(currentPlaying == null) {
+			return;
+		}
+		
+		final MusicDirectory.Entry entry = currentPlaying.getSong();
+		
+		// If song is podcast go ahead and auto add a bookmark
+		if(entry instanceof PodcastEpisode) {
+			Context context = this;
+			new SilentBackgroundTask<Void>(context) {
+				@Override
+				public Void doInBackground() {
+					MusicService musicService = MusicServiceFactory.getMusicService(context);
+					musicService.createBookmark(entry.getId(), Util.getParentFromEntry(context, entry), position, "Auto created by DSub", context, null);
+					
+					entry.setBookmark(new Bookmark(position));
+					MusicDirectory.Entry found = UpdateView.findEntry(entry);
+					if(found != null) {
+						found.setBookmark(new Bookmark(position));
+					}
+					
+					return null;
 				}
 			}.execute();
 		}
