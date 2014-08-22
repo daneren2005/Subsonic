@@ -73,6 +73,7 @@ import github.daneren2005.dsub.view.ChangeLog;
 public class SubsonicFragmentActivity extends SubsonicActivity {
 	private static String TAG = SubsonicFragmentActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
+	private static boolean sessionInitialized = false;
 	private ScheduledExecutorService executorService;
 	private View bottomBar;
 	private View coverArtView;
@@ -119,7 +120,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			
 			if("".equals(fragmentType) || fragmentType == null || firstRun) {
 				// Initial startup stuff
-				loadSettings();
+				if(!sessionInitialized) {
+					loadSession();
+				}
 			}
 			
 			currentFragment.setPrimaryFragment(true);
@@ -465,6 +468,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 	}
 
+	private void loadSession() {
+		loadSettings();
+		loadBookmarks();
+		
+		sessionInitialized = true;
+	}
 	private void loadSettings() {
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 		SharedPreferences prefs = Util.getPreferences(this);
@@ -501,6 +510,22 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory(this).getPath());
 		editor.commit();
+	}
+	
+	private void loadBookmarks() {
+		final Context context = this;
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			public Void doInBackground() {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.getBookmarks(true, context, null);
+			}
+			
+			@Override
+			public void error(Throwable error) {
+				Log.e(TAG, "Failed to get bookmarks", error);
+			}
+		}.execute();
 	}
 
 	private void createAccount() {
