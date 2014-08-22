@@ -470,7 +470,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	private void loadSession() {
 		loadSettings();
-		loadBookmarks();
+		if(!Util.isOffline(this) && ServerInfo.checkServerVersion(this, "1.9")) {
+			loadBookmarks();
+		}
 		
 		sessionInitialized = true;
 	}
