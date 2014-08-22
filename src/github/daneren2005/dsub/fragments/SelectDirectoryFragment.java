@@ -359,10 +359,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				songs.add((MusicDirectory.Entry) it.next());
 			}
 
-			getDownloadService().clear();
-			getDownloadService().download(songs, false, true, true, false);
-			Util.startActivityWithoutTransition(context, DownloadActivity.class);
-
+			playNow(songs);
 			return true;
 		}
 		
