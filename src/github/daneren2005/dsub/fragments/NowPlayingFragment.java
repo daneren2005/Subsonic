@@ -1320,7 +1320,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				MusicDirectory.Entry currentSong = currentDownload.getSong();
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				int position = getDownloadService().getPlayerPosition();
-				musicService.createBookmark(currentSong.getId(), Util.getParentFromEntry(context, currentSong), getDownloadService().getPlayerPosition(), comment, context, null);
+				musicService.createBookmark(currentSong.getId(), Util.getParentFromEntry(context, currentSong), position, comment, context, null);
 
 				currentSong.setBookmark(new Bookmark(position));
 				MusicDirectory.Entry find = UpdateView.findEntry(currentSong);
