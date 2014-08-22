@@ -349,6 +349,8 @@ public class DownloadService extends Service {
 				currentPlaying = downloadList.get(0);
 				currentPlayingIndex = 0;
 				currentPlaying.setPlaying(true);
+			} else {
+				currentPlayingIndex = downloadList.indexOf(currentPlaying);
 			}
 			checkDownloads();
 		}
