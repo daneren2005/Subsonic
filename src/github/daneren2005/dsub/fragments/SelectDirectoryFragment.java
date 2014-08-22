@@ -415,11 +415,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					return;
 				}
 				
-				getDownloadService().clear();
-				List<MusicDirectory.Entry> podcasts = new ArrayList<MusicDirectory.Entry>(1);
-				podcasts.add(entry);
-				getDownloadService().download(podcasts, false, true, true, false);
-				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				playNow(Arrays.asList(entry));
 			}
 		}
 	}
