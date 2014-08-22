@@ -52,7 +52,6 @@ import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
 import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -1361,29 +1360,20 @@ public class DownloadService extends Service {
 			} catch(Throwable e) {
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			}
+			String dataSource = file.getAbsolutePath();
 			if(isPartial) {
 				if (proxy == null) {
 					proxy = new BufferProxy(this);
 					proxy.start();
 				}
 				proxy.setBufferFile(downloadFile);
-				String dataSource = proxy.getPrivateAddress(dataSource);
+				dataSource = proxy.getPrivateAddress(dataSource);
 				Log.i(TAG, "Data Source: " + dataSource);
-				mediaPlayer.setDataSource(dataSource);
-			} else {
-				if(proxy != null) {
-					proxy.stop();
-					proxy = null;
-				}
-				
-				RandomAccessFile accessFile;
-				try {
-					accessFile = new RandomAccessFile(file, "r");
-					mediaPlayer.setDataSource(accessFile.getFD());
-				} finally {
-					Util.close(accessFile);
-				}
+			} else if(proxy != null) {
+				proxy.stop();
+				proxy = null;
 			}
+			mediaPlayer.setDataSource(dataSource);
 			setPlayerState(PREPARING);
 
 			mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
@@ -1450,14 +1440,7 @@ public class DownloadService extends Service {
 			} catch(Throwable e) {
 				nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			}
-			
-			RandomAccessFile accessFile;
-			try {
-				accessFile = new RandomAccessFile(file, "r");
-				nextMediaPlayer.setDataSource(accessFile.getFD());
-			} finally {
-				Util.close(accessFile);
-			}
+			nextMediaPlayer.setDataSource(file.getPath());
 			setNextPlayerState(PREPARING);
 
 			nextMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
