@@ -49,6 +49,7 @@ import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
+import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
@@ -556,7 +557,7 @@ public class DownloadService extends Service {
 		lifecycleSupport.post(new Runnable() {
 			@Override
 			public void run() {
-				if(online) {
+				if (online) {
 					checkDownloads();
 				} else {
 					clearIncomplete();
@@ -1377,7 +1378,7 @@ public class DownloadService extends Service {
 			mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
 				public void onBufferingUpdate(MediaPlayer mp, int percent) {
 					Log.i(TAG, "Buffered " + percent + "%");
-					if(percent == 100) {
+					if (percent == 100) {
 						mediaPlayer.setOnBufferingUpdateListener(null);
 					}
 				}
@@ -1506,7 +1507,7 @@ public class DownloadService extends Service {
 					if(downloadFile.getSong() instanceof PodcastEpisode) {
 						toDelete.add(downloadFile);
 					}
-					clearCurrentBookmark(false);
+					clearCurrentBookmark(downloadFile.getSong(), false);
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadService.this) {
@@ -1786,15 +1787,14 @@ public class DownloadService extends Service {
 	}
 	
 	private void clearCurrentBookmark() {
-		clearCurrentBookmark(true);
-	}
-	private void clearCurrentBookmark(boolean checkPosition) {
 		// If current is null, nothing to do
 		if(currentPlaying == null) {
 			return;
 		}
-		
-		final MusicDirectory.Entry entry = currentPlaying.getSong();
+
+		clearCurrentBookmark(currentPlaying.getSong(), true);
+	}
+	private void clearCurrentBookmark(final MusicDirectory.Entry entry, boolean checkPosition) {
 		// If no bookmark, move on
 		if(entry.getBookmark() == null) {
 			return;
@@ -1814,6 +1814,7 @@ public class DownloadService extends Service {
 					if(found != null) {
 						found.setBookmark(null);
 					}
+					return null;
 				}
 				
 				@Override
