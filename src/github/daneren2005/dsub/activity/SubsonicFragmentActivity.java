@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.fragments.AdminFragment;
 import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.DownloadFragment;
@@ -58,6 +59,8 @@ import github.daneren2005.dsub.fragments.SelectShareFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.updates.Updater;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
@@ -518,9 +521,11 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		final Context context = this;
 		new SilentBackgroundTask<Void>(context) {
 			@Override
-			public Void doInBackground() {
+			public Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.getBookmarks(true, context, null);
+
+				return null;
 			}
 			
 			@Override

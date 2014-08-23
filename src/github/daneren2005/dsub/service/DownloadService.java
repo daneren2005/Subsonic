@@ -1852,13 +1852,21 @@ public class DownloadService extends Service {
 		}
 		
 		final MusicDirectory.Entry entry = currentPlaying.getSong();
+		int duration = getPlayerDuration();
 		
-		// If song is podcast go ahead and auto add a bookmark
-		if(entry instanceof PodcastEpisode) {
-			Context context = this;
+		// If song is podcast or long go ahead and auto add a bookmark
+		if(entry instanceof PodcastEpisode || duration > (10L * 60L * 1000L)) {
+			final Context context = this;
+			final int position = getPlayerPosition();
+
+			// Don't bother when at beginning
+			if(position < 5000L) {
+				return;
+			}
+
 			new SilentBackgroundTask<Void>(context) {
 				@Override
-				public Void doInBackground() {
+				public Void doInBackground() throws Throwable {
 					MusicService musicService = MusicServiceFactory.getMusicService(context);
 					musicService.createBookmark(entry.getId(), Util.getParentFromEntry(context, entry), position, "Auto created by DSub", context, null);
 					

@@ -107,6 +107,7 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
+				downloadService.clear();
 				downloadService.download(Arrays.asList(bookmark), false, true, false, false, 0, bookmark.getBookmark().getPosition());
 				return null;
 			}
