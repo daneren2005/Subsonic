@@ -41,9 +41,10 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 
-public class SelectBookmarkFragment extends SelectListFragment<Bookmark> {
+public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.Entry> {
 	private static final String TAG = SelectBookmarkFragment.class.getSimpleName();
 
 	@Override
@@ -57,18 +58,18 @@ public class SelectBookmarkFragment extends SelectListFragment<Bookmark> {
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Bookmark bookmark = objects.get(info.position);
+		MusicDirectory.Entry bookmark = objects.get(info.position);
 		
 		switch(menuItem.getItemId()) {
 			case R.id.bookmark_menu_info:
 				displayBookmarkInfo(bookmark);
-				break;
+				return true;
 			case R.id.bookmark_menu_delete:
-				deleteBookmark(bookmark);
-				break;
+				deleteBookmark(bookmark, adapter);
+				return true;
 		}
 		
-		if(onContextItemSelected(menuItem, bookmark.getEntry())) {
+		if(onContextItemSelected(menuItem, bookmark)) {
 			return true;
 		}
 
@@ -81,13 +82,13 @@ public class SelectBookmarkFragment extends SelectListFragment<Bookmark> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<Bookmark> bookmarks) {
+	public ArrayAdapter getAdapter(List<MusicDirectory.Entry> bookmarks) {
 		return new BookmarkAdapter(context, bookmarks);
 	}
 
 	@Override
-	public List<Bookmark> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		return musicService.getBookmarks(refresh, context, listener);
+	public List<MusicDirectory.Entry> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+		return musicService.getBookmarks(refresh, context, listener).getChildren();
 	}
 
 	@Override
@@ -102,11 +103,12 @@ public class SelectBookmarkFragment extends SelectListFragment<Bookmark> {
 			return;
 		}
 
-		final Bookmark bookmark = (Bookmark) parent.getItemAtPosition(position);
+		final MusicDirectory.Entry bookmark = (MusicDirectory.Entry) parent.getItemAtPosition(position);
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				downloadService.download(bookmark);
+				downloadService.clear();
+				downloadService.download(Arrays.asList(bookmark), false, true, false, false, 0, bookmark.getBookmark().getPosition());
 				return null;
 			}
 			
@@ -117,7 +119,8 @@ public class SelectBookmarkFragment extends SelectListFragment<Bookmark> {
 		}.execute();
 	}
 	
-	private void displayBookmarkInfo(final Bookmark bookmark) {
+	private void displayBookmarkInfo(final MusicDirectory.Entry entry) {
+		Bookmark bookmark = entry.getBookmark();
 		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String comment = bookmark.getComment();
 		if(comment == null) {
@@ -125,44 +128,9 @@ public class SelectBookmarkFragment extends SelectListFragment<Bookmark> {
 		}
 
 		String msg = context.getResources().getString(R.string.bookmark_details,
-			bookmark.getEntry().getTitle(), Util.formatDuration(bookmark.getPosition() / 1000),
+			entry.getTitle(), Util.formatDuration(bookmark.getPosition() / 1000),
 			formatter.format(bookmark.getCreated()), formatter.format(bookmark.getChanged()), comment);
 		
 		Util.info(context, R.string.bookmark_details_title, msg, false);
-	}
-	private void deleteBookmark(final Bookmark bookmark) {
-		final MusicDirectory.Entry entry = bookmark.getEntry();
-		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				new LoadingTask<Void>(context, false) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						musicService.deleteBookmark(entry.getId(), context, null);
-						return null;
-					}
-					
-					@Override
-					protected void done(Void result) {
-						adapter.remove(bookmark);
-						adapter.notifyDataSetChanged();
-						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
-					}
-					
-					@Override
-					protected void error(Throwable error) {
-						String msg;
-						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-							msg = getErrorMessage(error);
-						} else {
-							msg = context.getResources().getString(R.string.bookmark_deleted_error, entry.getTitle()) + " " + getErrorMessage(error);
-						}
-						
-						Util.toast(context, msg, false);
-					}
-				}.execute();
-			}
-		});
 	}
 }

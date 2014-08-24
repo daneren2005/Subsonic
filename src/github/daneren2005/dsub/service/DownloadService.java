@@ -49,6 +49,7 @@ import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
+import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
@@ -94,6 +95,7 @@ public class DownloadService extends Service {
 	public static final String START_PLAY = "github.daneren2005.dsub.START_PLAYING";
 	public static final int FAST_FORWARD = 30000;
 	public static final int REWIND = 10000;
+	private static final double DELETE_CUTOFF = 0.90;
 
 	private RemoteControlClientHelper mRemoteControl;
 
@@ -294,17 +296,10 @@ public class DownloadService extends Service {
 		return binder;
 	}
 
-	public synchronized void download(Bookmark bookmark) {
-		clear();
-		DownloadFile downloadFile = new DownloadFile(this, bookmark.getEntry(), false);
-		downloadList.add(downloadFile);
-		revision++;
-		updateJukeboxPlaylist();
-		play(0, true, bookmark.getPosition());
-		lifecycleSupport.serializeDownloadQueue();
-	}
-
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
+		download(songs, save, autoplay, playNext, shuffle, 0, 0);
+	}
+	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle, int start, int position) {
 		setShufflePlayEnabled(false);
 		int offset = 1;
 
@@ -343,7 +338,7 @@ public class DownloadService extends Service {
 		}
 
 		if (autoplay) {
-			play(0);
+			play(start, true, position);
 		} else {
 			if (currentPlaying == null) {
 				currentPlaying = downloadList.get(0);
@@ -564,7 +559,7 @@ public class DownloadService extends Service {
 		lifecycleSupport.post(new Runnable() {
 			@Override
 			public void run() {
-				if(online) {
+				if (online) {
 					checkDownloads();
 				} else {
 					clearIncomplete();
@@ -582,12 +577,9 @@ public class DownloadService extends Service {
 
 	public synchronized void clear(boolean serialize) {
 		// Delete podcast if fully listened to
+		boolean cutoff = isPastCutoff();
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
-			int duration = getPlayerDuration();
-
-			// Make sure > 90% of the way through
-			int cutoffPoint = (int)(duration * 0.90);
-			if(duration > 0 && cachedPosition > cutoffPoint) {
+			if(cutoff) {
 				currentPlaying.delete();
 			}
 		}
@@ -595,6 +587,14 @@ public class DownloadService extends Service {
 			podcast.delete();
 		}
 		toDelete.clear();
+		
+		// Clear bookmarks from current playing if past a certain point
+		if(cutoff) {
+			clearCurrentBookmark(true);
+		} else {
+			// Check if we should be adding a new bookmark here
+			checkAddBookmark();
+		}
 
 		reset();
 		downloadList.clear();
@@ -905,14 +905,11 @@ public class DownloadService extends Service {
 
 		// Delete podcast if fully listened to
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
-			int duration = getPlayerDuration();
-
-			// Make sure > 90% of the way through
-			int cutoffPoint = (int)(duration * 0.90);
-			if(duration > 0 && cachedPosition > cutoffPoint) {
+			if(isPastCutoff()) {
 				toDelete.add(currentPlaying);
 			}
 		}
+		clearCurrentBookmark();
 
 		int index = getCurrentPlayingIndex();
 		int nextPlayingIndex = getNextPlayingIndex();
@@ -1381,7 +1378,7 @@ public class DownloadService extends Service {
 			mediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
 				public void onBufferingUpdate(MediaPlayer mp, int percent) {
 					Log.i(TAG, "Buffered " + percent + "%");
-					if(percent == 100) {
+					if (percent == 100) {
 						mediaPlayer.setOnBufferingUpdateListener(null);
 					}
 				}
@@ -1510,6 +1507,7 @@ public class DownloadService extends Service {
 					if(downloadFile.getSong() instanceof PodcastEpisode) {
 						toDelete.add(downloadFile);
 					}
+					clearCurrentBookmark(downloadFile.getSong(), true);
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadService.this) {
@@ -1785,6 +1783,104 @@ public class DownloadService extends Service {
 					iterator.remove();
 				}
 			}
+		}
+	}
+	
+	private boolean isPastCutoff() {
+		int duration = getPlayerDuration();
+		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
+		return duration > 0 && cachedPosition > cutoffPoint;
+	}
+	
+	private void clearCurrentBookmark() {
+		clearCurrentBookmark(false);
+	}
+	private void clearCurrentBookmark(boolean delete) {
+		// If current is null, nothing to do
+		if(currentPlaying == null) {
+			return;
+		}
+
+		clearCurrentBookmark(currentPlaying.getSong(), delete);
+	}
+	private void clearCurrentBookmark(final MusicDirectory.Entry entry, boolean delete) {
+		// If no bookmark, move on
+		if(entry.getBookmark() == null) {
+			return;
+		}
+		
+		// If delete is not specified, check position
+		if(!delete) {
+			delete = isPastCutoff();
+		}
+		
+		// If supposed to delete
+		if(delete) {
+			new SilentBackgroundTask<Void>(this) {
+				@Override
+				public Void doInBackground() throws Throwable {
+					MusicService musicService = MusicServiceFactory.getMusicService(DownloadService.this);
+					musicService.deleteBookmark(entry.getId(), Util.getParentFromEntry(DownloadService.this, entry), DownloadService.this, null);
+					
+					entry.setBookmark(null);
+					MusicDirectory.Entry found = UpdateView.findEntry(entry);
+					if(found != null) {
+						found.setBookmark(null);
+					}
+					return null;
+				}
+				
+				@Override
+				public void error(Throwable error) {
+					Log.e(TAG, "Failed to delete bookmark", error);
+					
+					String msg;
+					if(error instanceof OfflineException || error instanceof ServerTooOldException) {
+						msg = getErrorMessage(error);
+					} else {
+						msg = DownloadService.this.getResources().getString(R.string.bookmark_deleted_error, entry.getTitle()) + " " + getErrorMessage(error);
+					}
+					
+					Util.toast(DownloadService.this, msg, false);
+				}
+			}.execute();
+		}
+	}
+	
+	private void checkAddBookmark() {
+		// Don't do anything if no current playing
+		if(currentPlaying == null) {
+			return;
+		}
+		
+		final MusicDirectory.Entry entry = currentPlaying.getSong();
+		int duration = getPlayerDuration();
+		
+		// If song is podcast or long go ahead and auto add a bookmark
+		if(entry instanceof PodcastEpisode || duration > (10L * 60L * 1000L)) {
+			final Context context = this;
+			final int position = getPlayerPosition();
+
+			// Don't bother when at beginning
+			if(position < 5000L) {
+				return;
+			}
+
+			new SilentBackgroundTask<Void>(context) {
+				@Override
+				public Void doInBackground() throws Throwable {
+					MusicService musicService = MusicServiceFactory.getMusicService(context);
+					musicService.createBookmark(entry.getId(), Util.getParentFromEntry(context, entry), position, "Auto created by DSub", context, null);
+					
+					entry.setBookmark(new Bookmark(position));
+					MusicDirectory.Entry found = UpdateView.findEntry(entry);
+					if(found != null) {
+						found.setBookmark(new Bookmark(position));
+					}
+					
+					return null;
+				}
+			}.execute();
 		}
 	}
 

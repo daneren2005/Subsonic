@@ -36,10 +36,10 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
 		super(context, instance);
 	}
 
-    public List<Bookmark> parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-        List<Bookmark> bookmarks = new ArrayList<Bookmark>();
+		List<MusicDirectory.Entry> bookmarks = new ArrayList<MusicDirectory.Entry>();
         Bookmark bookmark = null;
         int eventType;
         
@@ -58,9 +58,12 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
                 	bookmark.setUsername(get("username"));
                 } else if ("entry".equals(name)) {
 					MusicDirectory.Entry entry = parseEntry(null);
-					entry.setTrack(null);
-                	bookmark.setEntry(entry);
-                	bookmarks.add(bookmark);
+					// Work around for bookmarks showing entry with a track when podcast listings don't
+					if("podcast".equals(get("type"))) {
+						entry.setTrack(null);
+					}
+					entry.setBookmark(bookmark);
+                	bookmarks.add(entry);
                 } else if ("error".equals(name)) {
                     handleError();
                 }
@@ -69,6 +72,6 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
 
         validate();
 
-        return bookmarks;
+        return new MusicDirectory(bookmarks);
     }
 }

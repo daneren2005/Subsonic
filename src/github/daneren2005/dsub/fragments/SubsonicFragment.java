@@ -39,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -82,6 +83,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
 
 public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
@@ -162,8 +165,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo, Object selected) {
 		MenuInflater inflater = context.getMenuInflater();
 		
-		if(selected instanceof MusicDirectory.Entry) {
-			MusicDirectory.Entry entry = (MusicDirectory.Entry) selected;
+		if(selected instanceof Entry) {
+			Entry entry = (Entry) selected;
 			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
 				if(Util.isOffline(context)) {
 					inflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
@@ -186,6 +189,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 				else {
 					inflater.inflate(R.menu.select_song_context, menu);
+					
+					if(entry.getBookmark() == null) {
+						menu.removeItem(R.id.bookmark_menu_delete);
+					}
 				}
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else {
@@ -215,6 +222,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(!ServerInfo.checkServerVersion(context, "1.8")) {
 			menu.setGroupVisible(R.id.server_1_8, false);
 			menu.setGroupVisible(R.id.hide_star, false);
+		}
+		if(!ServerInfo.checkServerVersion(context, "1.9")) {
+			menu.setGroupVisible(R.id.server_1_9, false);
 		}
 		if(!ServerInfo.checkServerVersion(context, "1.10.1")) {
 			menu.setGroupVisible(R.id.server_1_10, false);
@@ -252,8 +262,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
 		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
-		MusicDirectory.Entry entry = selectedItem instanceof MusicDirectory.Entry ? (MusicDirectory.Entry) selectedItem : null;
-		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(1);
+		Entry entry = selectedItem instanceof Entry ? (Entry) selectedItem : null;
+		List<Entry> songs = new ArrayList<Entry>(1);
 		songs.add(entry);
 
 		switch (menuItem.getItemId()) {
@@ -315,15 +325,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				displaySongInfo(entry);
 				break;
 			case R.id.album_menu_show_artist:
-				showArtist((MusicDirectory.Entry) selectedItem);
+				showAlbumArtist((Entry) selectedItem);
 				break;
 			case R.id.album_menu_share:
 				createShare(songs);
 				break;
 			case R.id.song_menu_play_now:
-				getDownloadService().clear();
-				getDownloadService().download(songs, false, true, true, false);
-				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				playNow(songs);
 				break;
 			case R.id.song_menu_play_next:
 				getDownloadService().download(songs, false, false, true, false);
@@ -357,6 +365,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.song_menu_share:
 				createShare(songs);
+				break;
+			case R.id.song_menu_show_album:
+				showAlbum((Entry) selectedItem);
+				break;
+			case R.id.song_menu_show_artist:
+				showArtist((Entry) selectedItem);
+				break;
+			case R.id.bookmark_menu_delete:
+				deleteBookmark(entry, null);
 				break;
 			default:
 				return false;
@@ -636,7 +653,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		dialog.show();
 	}
 
-	public void toggleStarred(final MusicDirectory.Entry entry) {
+	public void toggleStarred(final Entry entry) {
 		final boolean starred = !entry.isStarred();
 		entry.setStarred(starred);
 
@@ -692,12 +709,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}.execute();
 	}
-	protected void setEntryStarred(MusicDirectory.Entry entry, boolean starred) {
+	protected void setEntryStarred(Entry entry, boolean starred) {
 		DownloadService downloadService = DownloadService.getInstance();
 		if(downloadService != null && !entry.isDirectory()) {
 			List<DownloadFile> files = downloadService.getDownloads();
 			for(DownloadFile file: files) {
-				MusicDirectory.Entry check = file.getSong();
+				Entry check = file.getSong();
 				if(entry.getId().equals(check.getId())) {
 					check.setStarred(starred);
 					downloadService.serializeQueue();
@@ -706,7 +723,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
-		MusicDirectory.Entry find = UpdateView.findEntry(entry);
+		Entry find = UpdateView.findEntry(entry);
 		if(find != null) {
 			find.setStarred(starred);
 		}
@@ -789,7 +806,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					Collections.shuffle(root.getChildren());
 				}
 
-				List<MusicDirectory.Entry> songs = new LinkedList<MusicDirectory.Entry>();
+				List<Entry> songs = new LinkedList<Entry>();
 				getSongsRecursively(root, songs);
 
 				DownloadService downloadService = getDownloadService();
@@ -813,17 +830,17 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				return transition;
 			}
 
-			private void getSongsRecursively(MusicDirectory parent, List<MusicDirectory.Entry> songs) throws Exception {
+			private void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
 				if (songs.size() > MAX_SONGS) {
 					return;
 				}
 
-				for (MusicDirectory.Entry song : parent.getChildren(false, true)) {
+				for (Entry song : parent.getChildren(false, true)) {
 					if (!song.isVideo()) {
 						songs.add(song);
 					}
 				}
-				for (MusicDirectory.Entry dir : parent.getChildren(true, false)) {
+				for (Entry dir : parent.getChildren(true, false)) {
 					MusicService musicService = MusicServiceFactory.getMusicService(context);
 
 					MusicDirectory musicDirectory;
@@ -861,7 +878,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 
-	protected void addToPlaylist(final List<MusicDirectory.Entry> songs) {
+	protected void addToPlaylist(final List<Entry> songs) {
 		if(songs.isEmpty()) {
 			Util.toast(context, "No songs selected");
 			return;
@@ -925,7 +942,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	private void addToPlaylist(final Playlist playlist, final List<MusicDirectory.Entry> songs) {		
+	private void addToPlaylist(final Playlist playlist, final List<Entry> songs) {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -953,7 +970,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 	
-	protected void createNewPlaylist(final List<MusicDirectory.Entry> songs, final boolean getSuggestion) {
+	protected void createNewPlaylist(final List<Entry> songs, final boolean getSuggestion) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
 		final CheckBox overwriteCheckBox = (CheckBox) layout.findViewById(R.id.save_playlist_overwrite);
@@ -1011,7 +1028,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
-	private void createNewPlaylist(final List<MusicDirectory.Entry> songs, final String name) {
+	private void createNewPlaylist(final List<Entry> songs, final String name) {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -1032,13 +1049,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}.execute();
 	}
-	private void overwritePlaylist(final List<MusicDirectory.Entry> songs, final String name, final String id) {
+	private void overwritePlaylist(final List<Entry> songs, final String name, final String id) {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				MusicDirectory playlist = musicService.getPlaylist(true, id, name, context, null);
-				List<MusicDirectory.Entry> toDelete = playlist.getChildren();
+				List<Entry> toDelete = playlist.getChildren();
 				musicService.overwritePlaylist(id, name, toDelete.size(), songs, context, null);
 				return null;
 			}
@@ -1062,7 +1079,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	public void displaySongInfo(final MusicDirectory.Entry song) {
+	public void displaySongInfo(final Entry song) {
 		Integer bitrate = null;
 		String format = null;
 		long size = 0;
@@ -1134,7 +1151,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		Util.info(context, song.getTitle(), msg);
 	}
 	
-	protected void playVideo(MusicDirectory.Entry entry) {
+	protected void playVideo(Entry entry) {
 		if(entryExists(entry)) {
 			playExternalPlayer(entry);
 		} else {
@@ -1142,7 +1159,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 
-	protected void playWebView(MusicDirectory.Entry entry) {
+	protected void playWebView(Entry entry) {
 		int maxBitrate = Util.getMaxVideoBitrate(context);
 
 		Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -1150,7 +1167,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		startActivity(intent);
 	}
-	protected void playExternalPlayer(MusicDirectory.Entry entry) {
+	protected void playExternalPlayer(Entry entry) {
 		if(!entryExists(entry)) {
 			Util.toast(context, R.string.download_need_download);
 		} else {
@@ -1166,7 +1183,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 	}
-	protected void streamExternalPlayer(MusicDirectory.Entry entry) {
+	protected void streamExternalPlayer(Entry entry) {
 		String videoPlayerType = Util.getVideoPlayerType(context);
 		if("flash".equals(videoPlayerType)) {
 			playWebView(entry);
@@ -1178,7 +1195,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			streamExternalPlayer(entry, entry.getTranscodedSuffix());
 		}
 	}
-	protected void streamExternalPlayer(MusicDirectory.Entry entry, String format) {
+	protected void streamExternalPlayer(Entry entry, String format) {
 		try {
 			int maxBitrate = Util.getMaxVideoBitrate(context);
 
@@ -1208,7 +1225,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 
-	protected boolean entryExists(MusicDirectory.Entry entry) {
+	protected boolean entryExists(Entry entry) {
 		DownloadFile check = new DownloadFile(context, entry, false);
 		return check.isCompleteFileAvailable();
 	}
@@ -1224,7 +1241,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 	
-	public void deleteRecursively(MusicDirectory.Entry album) {
+	public void deleteRecursively(Entry album) {
 		File dir = FileUtil.getAlbumDirectory(context, album);
 		if(dir == null) return;
 
@@ -1235,7 +1252,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 
-	public void showArtist(MusicDirectory.Entry entry) {
+	public void showAlbumArtist(Entry entry) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		if(Util.isTagBrowsing(context)) {
@@ -1249,13 +1266,44 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		replaceFragment(fragment, true);
 	}
+	public void showArtist(Entry entry) {
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		if(Util.isTagBrowsing(context)) {
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getArtistId());
+		} else {
+			if(entry.getGrandParent() == null) {
+				args.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getParent());
+			} else {
+				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getGrandParent());
+			}
+		}
+		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getArtist());
+		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+		fragment.setArguments(args);
 
-	public void createShare(final List<MusicDirectory.Entry> entries) {
+		replaceFragment(fragment, true);
+	}
+	public void showAlbum(Entry entry) {
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle();
+		if(Util.isTagBrowsing(context)) {
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getAlbumId());
+		} else {
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getParent());
+		}
+		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getAlbum());
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, true);
+	}
+
+	public void createShare(final List<Entry> entries) {
 		new LoadingTask<List<Share>>(context, true) {
 			@Override
 			protected List<Share> doInBackground() throws Throwable {
 				List<String> ids = new ArrayList<String>(entries.size());
-				for(MusicDirectory.Entry entry: entries) {
+				for(Entry entry: entries) {
 					ids.add(entry.getId());
 				}
 
@@ -1295,5 +1343,120 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	
 	public GestureDetector getGestureDetector() {
 		return gestureScanner;
+	}
+
+	protected void playBookmark(final List<Entry> songs, final Entry song) {
+		final Integer position = song.getBookmark().getPosition();
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.bookmark_resume_title)
+				.setMessage(getResources().getString(R.string.bookmark_resume, song.getTitle(), Util.formatDuration(position / 1000)))
+				.setPositiveButton(R.string.bookmark_action_resume, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						playNow(songs, song, position);
+					}
+				})
+				.setNegativeButton(R.string.bookmark_action_start_over, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						new SilentBackgroundTask<Void>(context) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								MusicService musicService = MusicServiceFactory.getMusicService(context);
+								musicService.deleteBookmark(song.getId(), Util.getParentFromEntry(context, song), context, null);
+
+								song.setBookmark(null);
+								return null;
+							}
+
+							@Override
+							protected void error(Throwable error) {
+								String msg;
+								if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+									msg = getErrorMessage(error);
+								} else {
+									msg = context.getResources().getString(R.string.bookmark_deleted_error, song.getTitle()) + " " + getErrorMessage(error);
+								}
+
+								Util.toast(context, msg, false);
+							}
+						}.execute();
+
+						playNow(songs, 0);
+					}
+				});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	protected void playNow(List<Entry> entries) {
+		Entry bookmark = null;
+		for(Entry entry: entries) {
+			if(entry.getBookmark() != null) {
+				bookmark = entry;
+				break;
+			}
+		}
+		
+		// If no bookmark found, just play from start
+		if(bookmark == null) {
+			playNow(entries, 0);
+		} else {
+			// If bookmark found, then give user choice to start from there or to start over
+			playBookmark(entries, bookmark);
+		}
+	}
+	protected void playNow(List<Entry> entries, int position) {
+		playNow(entries, entries.get(0), position);
+	}
+	protected void playNow(List<Entry> entries, Entry song, int position) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService == null) {
+			return;
+		}
+		
+		downloadService.clear();
+		downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
+		Util.startActivityWithoutTransition(context, DownloadActivity.class);
+	}
+
+	protected void deleteBookmark(final MusicDirectory.Entry entry, final ArrayAdapter adapter) {
+		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new LoadingTask<Void>(context, false) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						musicService.deleteBookmark(entry.getId(), Util.getParentFromEntry(context, entry), context, null);
+
+						entry.setBookmark(null);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						if(adapter != null) {
+							adapter.remove(entry);
+							adapter.notifyDataSetChanged();
+						}
+						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
+					}
+
+					@Override
+					protected void error(Throwable error) {
+						String msg;
+						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+							msg = getErrorMessage(error);
+						} else {
+							msg = context.getResources().getString(R.string.bookmark_deleted_error, entry.getTitle()) + " " + getErrorMessage(error);
+						}
+
+						Util.toast(context, msg, false);
+					}
+				}.execute();
+			}
+		});
 	}
 }
