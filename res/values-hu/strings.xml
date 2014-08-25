@@ -27,7 +27,7 @@
 	<string name="common.warning">Figyelem!</string>
 
     <string name="button_bar.home">Főoldal</string>
-    <string name="button_bar.browse">Médiakönyvtár</string>
+    <string name="button_bar.browse">Médiatár</string>
     <string name="button_bar.search">Keresés</string>
     <string name="button_bar.playlists">Lejátszási listák</string>
     <string name="button_bar.now_playing">Várólista</string>
@@ -73,6 +73,7 @@
 	<string name="main.albums_year">Évtizedek</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Nyomja meg még egyszer a kilépéshez!</string>
+	<string name="main.scan_complete">A médiatár frissítése befejeződött a kiszolgálón!</string>
 
 	<string name="menu.search">Keresés</string>
 	<string name="menu.shuffle">Lejátszás kevert sorrendben</string>
@@ -101,6 +102,7 @@
 	<string name="menu.cast">Továbbítás eszközhöz</string>
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Felhasználó hozzáadása</string>
+	<string name="menu.rescan">Médiatár frissítése a kiszolgálón</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -122,7 +124,7 @@
 
     <string name="progress.wait">Kérem várjon...</string>
 
-    <string name="music_library.label">Médiakönyvtár</string>
+    <string name="music_library.label">Médiatár</string>
     <string name="music_library.label_offline">Kapcsolat nélküli médiák</string>
 
     <string name="select_album.select">Összes jelölése be/ki</string>
@@ -212,9 +214,9 @@
 	</string>
 	<string name="download.failed_to_load">A beolvasás sikertelen!</string>
 
-	<string name="sync.new_podcasts">Új podcastok</string>
-	<string name="sync.new_playlists">Új lejátszási listák</string>
-	<string name="sync.new_albums">Új albumok</string>
+	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
+	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
+	<string name="sync.new_albums">Új albumok: \"%s\"</string>
 	<string name="sync.new_starred">Új csillagozott dalok</string>
     
 	<string name="starring_content_starred">\"%s\" csillagozás be</string>
@@ -236,6 +238,10 @@
 		\nLétrehozva: %3$s
 		\nUtolsó módosítás: %4$s
 		\nMegjegyzés: %5$s</string>
+	<string name="bookmark.resume_title">Folytatja a lejátszást?</string>
+	<string name="bookmark.resume">\'%1$s\' folytatása innen: \'%2$s\'</string>
+	<string name="bookmark.action_resume">Folytatás</string>
+	<string name="bookmark.action_start_over">Kezdés</string>
 
 	<string name="song_details.error">Hiba</string>
 	<string name="song_details.skipped">Átlépve</string>
@@ -286,8 +292,8 @@
 	<string name="settings.track_summary">Dalsorszám megjelenítése a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
 	<string name="settings.custom_sort_summary">A kiszolgáló alapértelmezett rendezésének felülbírálása, rendezés a lemez sorszáma és a kiadás éve alapján.</string>
-	<string name="settings.open_to_library">Médiakönyvtár megnyitása</string>
-	<string name="settings.open_to_library_summary">A Médiakönyvtár megnyitása a Főoldal helyett.</string>
+	<string name="settings.open_to_library">Médiatár megnyitása</string>
+	<string name="settings.open_to_library_summary">A Médiatár megnyitása a Főoldal helyett.</string>
     <string name="settings.network_title">Hálózat</string>
     <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
@@ -478,6 +484,7 @@
 	<string name="admin.role.stream">Zene streamelése</string>
 	<string name="admin.role.jukebox">Jukebox vezérlése</string>
 	<string name="admin.role.share">Megosztások kezelése</string>
+	<string name="admin.role.lastfm">Last.fm funkció használata</string>
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
 
@@ -494,8 +501,9 @@
     <string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Subsonic kiszolgálót!</string>
     <string name="parser.not_authenticated">Hibás felhasználónév vagy jelszó!</string>
     <string name="parser.not_authorized">Nincs engedélyezve! Ellenőrizze a felhasználó jogosultságait a Subsonic kiszolgálón!</string>
-    <string name="parser.artist_count">%d előadó található a médiakönyvtárban.</string>
+    <string name="parser.artist_count">%d előadó található a médiatárban.</string>
 	<string name="parser.server_error">Kiszolgáló hiba: %s</string>
+	<string name="parser.scan_count">%d tétel átvizsgálva.</string>
 
     <string name="select_artist.refresh">Frissítés</string>
     <string name="select_artist.folder">Mappa kiválasztása</string>
