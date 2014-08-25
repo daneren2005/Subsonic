@@ -147,6 +147,10 @@ public class DownloadService extends Service {
 	private boolean autoPlayStart = false;
 
 	private MediaRouteManager mediaRouter;
+	
+	// Variables to manage getCurrentPosition sometimes starting from an arbitrary non-zero number
+	private long subtractNextPosition = 0;
+	private int subtractPosition = 0;
 
 	@Override
 	public void onCreate() {
@@ -818,6 +822,7 @@ public class DownloadService extends Service {
 		Util.broadcastPlaybackStatusChange(this, currentPlaying.getSong(), PlayerState.PREPARED);
 		
 		// Swap the media players since nextMediaPlayer is ready to play
+		subtractPosition = 0;
 		if(start) {
 			nextMediaPlayer.start();
 		} else if(!nextMediaPlayer.isPlaying()) {
@@ -825,6 +830,9 @@ public class DownloadService extends Service {
 			nextMediaPlayer.start();
 		} else {
 			Log.i(TAG, "nextMediaPlayer already playing");
+			
+			// Next time the cachedPosition is updated, use that as position 0
+			subtractNextPosition = System.currentTimeMillis();
 		}
 		MediaPlayer tmp = mediaPlayer;
 		mediaPlayer = nextMediaPlayer;
@@ -1027,7 +1035,7 @@ public class DownloadService extends Service {
 			if (remoteState != RemoteControlState.LOCAL) {
 				return remoteController.getRemotePosition() * 1000;
 			} else {
-				return cachedPosition;
+				return cachedPosition - subtractPosition;
 			}
 		} catch (Exception x) {
 			handleError(x);
@@ -1124,6 +1132,11 @@ public class DownloadService extends Service {
 				try {
 					if(mediaPlayer != null && playerState == STARTED) {
 						cachedPosition = mediaPlayer.getCurrentPosition();
+						if(subtractNextPosition > 0) {
+							// Subtraction amount is current position - how long ago onCompletionListener was called
+							subtractPosition = cachedPosition - (System.currentTimeMillis() - subtractNextPosition);
+							subtractNextPosition = 0;
+						}
 					}
 					Thread.sleep(1000L);
 				}
