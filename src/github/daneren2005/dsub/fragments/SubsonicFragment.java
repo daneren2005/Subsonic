@@ -812,6 +812,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				DownloadService downloadService = getDownloadService();
 				boolean transition = false;
 				if (!songs.isEmpty() && downloadService != null) {
+					// Conditions for a standard play now operation
+					if(!append && !save && autoplay && !playNext && !shuffle && !background) {
+						playNow(songs);
+						return;
+					}
+					
 					if (!append) {
 						downloadService.clear();
 					}
