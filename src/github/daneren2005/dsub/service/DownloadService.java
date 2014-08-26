@@ -1134,7 +1134,10 @@ public class DownloadService extends Service {
 						cachedPosition = mediaPlayer.getCurrentPosition();
 						if(subtractNextPosition > 0) {
 							// Subtraction amount is current position - how long ago onCompletionListener was called
-							subtractPosition = cachedPosition - (System.currentTimeMillis() - subtractNextPosition);
+							subtractPosition = cachedPosition - (int) (System.currentTimeMillis() - subtractNextPosition);
+							if(subtractPosition < 0) {
+								subtractPosition = 0;
+							}
 							subtractNextPosition = 0;
 						}
 					}
