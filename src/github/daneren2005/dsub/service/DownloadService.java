@@ -873,6 +873,7 @@ public class DownloadService extends Service {
 			} else {
 				mediaPlayer.seekTo(position);
 				cachedPosition = position;
+				subtractPosition = 0;
 			}
 		} catch (Exception x) {
 			handleError(x);
@@ -1035,7 +1036,7 @@ public class DownloadService extends Service {
 			if (remoteState != RemoteControlState.LOCAL) {
 				return remoteController.getRemotePosition() * 1000;
 			} else {
-				return cachedPosition - subtractPosition;
+				return Math.max(0, cachedPosition - subtractPosition);
 			}
 		} catch (Exception x) {
 			handleError(x);
@@ -1367,6 +1368,7 @@ public class DownloadService extends Service {
 			boolean isPartial = file.equals(downloadFile.getPartialFile());
 			downloadFile.updateModificationDate();
 
+			subtractPosition = 0;
 			mediaPlayer.setOnCompletionListener(null);
 			mediaPlayer.reset();
 			setPlayerState(IDLE);
@@ -1491,7 +1493,7 @@ public class DownloadService extends Service {
 		mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
 				Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
-				int pos = cachedPosition;
+				int pos = getPlayerPosition();
 				reset();
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
 					playNext();
@@ -1514,7 +1516,7 @@ public class DownloadService extends Service {
 
 				setPlayerStateCompleted();
 
-				int pos = cachedPosition;
+				int pos = getPlayerPosition();
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000)) || nextSetup) {
 					playNext();
@@ -1805,7 +1807,7 @@ public class DownloadService extends Service {
 	private boolean isPastCutoff() {
 		int duration = getPlayerDuration();
 		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
-		return duration > 0 && cachedPosition > cutoffPoint;
+		return duration > 0 && getPlayerPosition() > cutoffPoint;
 	}
 	
 	private void clearCurrentBookmark() {
