@@ -133,6 +133,7 @@ public class MusicDirectory implements Serializable {
 		private boolean starred;
 		private Integer rating;
 		private Bookmark bookmark;
+		private int type;
 		private int closeness;
 		
 		public void loadMetadata(File file) {
