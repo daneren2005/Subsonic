@@ -108,7 +108,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		int servers = Util.getServerCount(context);
 		for(int i = 1; i <= servers; i++) {
 			try {
-				if(isValidServer(context, i)) {
+				if(isValidServer(context, i) && Util.isSyncEnabled(context, instance)) {
 					tagBrowsing = Util.isTagBrowsing(context, i);
 					musicService.setInstance(i);
 					onExecuteSync(context, i);
