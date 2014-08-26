@@ -783,6 +783,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
 		LoadingTask<Boolean> task = new LoadingTask<Boolean>(context) {
 			private static final int MAX_SONGS = 500;
+			private boolean playNowOverride = false;
+			private List<Entry> songs;
 
 			@Override
 			protected Boolean doInBackground() throws Throwable {
@@ -806,7 +808,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					Collections.shuffle(root.getChildren());
 				}
 
-				List<Entry> songs = new LinkedList<Entry>();
+				songs = new LinkedList<Entry>();
 				getSongsRecursively(root, songs);
 
 				DownloadService downloadService = getDownloadService();
@@ -814,8 +816,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if (!songs.isEmpty() && downloadService != null) {
 					// Conditions for a standard play now operation
 					if(!append && !save && autoplay && !playNext && !shuffle && !background) {
-						playNow(songs);
-						return;
+						playNowOverride = true;
+						return false;
 					}
 					
 					if (!append) {
@@ -861,6 +863,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void done(Boolean result) {
+				if(playNowOverride) {
+					playNow(songs);
+					return;
+				}
+
 				warnIfNetworkOrStorageUnavailable();
 
 				if(result) {
