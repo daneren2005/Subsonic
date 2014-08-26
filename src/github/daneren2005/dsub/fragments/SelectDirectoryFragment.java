@@ -342,19 +342,19 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Object selectedItem;
+		int headers = entryList.getHeaderViewsCount();
 		if(albumContext) {
-			selectedItem = albums.get(showHeader ? (info.position - 1) : info.position);
+			selectedItem = albums.get(info.position);
 		} else {
 			if(info.position == 0) {
 				return false;
 			}
-			info.position--;
-			selectedItem = entries.get(showHeader ? (info.position - 1) : info.position);
+			selectedItem = entries.get(info.position - headers);
 		}
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false) && menuItem.getItemId() == R.id.song_menu_play_now) {
 			List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
-			Iterator it = entries.listIterator(info.position - 1);
+			Iterator it = entries.listIterator(info.position - headers);
 			while(it.hasNext()) {
 				songs.add((MusicDirectory.Entry) it.next());
 			}
@@ -369,7 +369,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		switch (menuItem.getItemId()) {
 			case R.id.song_menu_remove_playlist:
-				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(info.position - 1));
+				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(info.position - headers));
 				break;
 			case R.id.song_menu_server_download:
 				downloadPodcastEpisode((PodcastEpisode)selectedItem);
