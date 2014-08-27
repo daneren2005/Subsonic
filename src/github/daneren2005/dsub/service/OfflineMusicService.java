@@ -66,6 +66,7 @@ import java.util.SortedSet;
 public class OfflineMusicService implements MusicService {
 	private static final String TAG = OfflineMusicService.class.getSimpleName();
 	private static final String ERRORMSG = "Not available in offline mode";
+	private static final Random random = new Random();
 
 	@Override
 	public void ping(Context context, ProgressListener progressListener) throws Exception {
@@ -668,7 +669,6 @@ public class OfflineMusicService implements MusicService {
         if (children.isEmpty()) {
             return result;
         }
-        Random random = new Random();
         for (int i = 0; i < size; i++) {
             File file = children.get(random.nextInt(children.size()));
             result.addChild(createEntry(context, file, getName(file)));
