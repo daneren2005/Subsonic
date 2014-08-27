@@ -207,6 +207,7 @@ public class MainFragment extends SubsonicFragment {
 			}
 		});
 		setTitle(R.string.common_appname);
+		getMostRecentCount();
 	}
 
 	private void setActiveServer(int instance) {
@@ -441,5 +442,63 @@ public class MainFragment extends SubsonicFragment {
 				}
 			}.execute();
 		} catch(Exception e) {}
+	}
+	
+	private void getMostRecentCount() {
+		new SilentBackgroundTask<Integer>(context) {
+			@Override
+			public Integer doInBackground() {
+				String recentAddedFile = "mostrecent" + (Util.getRestUrl(context, null, false)).hashCode() + ".ser";
+				ArrayList<String> recents = FileUtil.deserialize(context, recentAddedFile, ArrayList.class);
+				if(recents == null) {
+					recents = new ArrayList<String>();
+				}
+				
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				MusicDirectory recentlyAdded = musicService.getAlbumList("newest", 20, 0, context, null);
+				
+				// If first run, just put everything in it and return 0
+				boolean firstRun = recents.isEmpty();
+				
+				// Count how many new albums are in the list
+				int count = 0;
+				for(MusicDirectory.Entry album: recentlyAdded.getChildren()) {
+					if(!recents.contains(album.getId()) {
+						recents.add(album.getId());
+						count++;
+					}
+				}
+				
+				if(firstRun) {
+					return 0;
+				} else {
+					return count;
+				}
+			}
+			
+			@Override
+			public void done(Integer result) {
+				TextView countView = rootView.findViewById(R.id.main_albums_recent_count);
+				
+				String displayValue;
+				if(result < 0) {
+					countView.setVisibility(View.GONE);
+				} else {
+					if(result < 10) {
+						displayValue = "0" + result;
+					} else {
+						displayValue = "" + result;
+					}
+					
+					countView.setText(displayValue);
+					countView.setVisibility(View.VISIBLE);
+				}
+			}
+			
+			@Override
+			public void error(Throwable x) {
+				Log.w(TAG, "Failed to refresh most recent count", x);
+			}
+		}.execute();
 	}
 }
