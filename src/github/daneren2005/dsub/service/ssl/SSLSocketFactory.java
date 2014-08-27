@@ -27,6 +27,8 @@
 
 package github.daneren2005.dsub.service.ssl;
 
+import android.util.Log;
+
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.scheme.HostNameResolver;
 import org.apache.http.conn.scheme.LayeredSocketFactory;
@@ -140,7 +142,7 @@ import java.security.UnrecoverableKeyException;
  * @since 4.0
  */
 public class SSLSocketFactory implements LayeredSocketFactory {
-
+	private static final String TAG = SSLSocketFactory.class.getSimpleName();
     public static final String TLS   = "TLS";
     public static final String SSL   = "SSL";
     public static final String SSLV2 = "SSLv2";
@@ -341,13 +343,17 @@ public class SSLSocketFactory implements LayeredSocketFactory {
     @SuppressWarnings("cast")
     public Socket createSocket(final HttpParams params) throws IOException {
         // the cast makes sure that the factory is working as expected
-        return (SSLSocket) this.socketfactory.createSocket();
+		SSLSocket sslsocket = (SSLSocket) this.socketfactory.createSocket();
+		sslsocket.setEnabledProtocols(sslsocket.getSupportedProtocols());
+		return sslsocket;
     }
 
     @SuppressWarnings("cast")
     public Socket createSocket() throws IOException {
         // the cast makes sure that the factory is working as expected
-        return (SSLSocket) this.socketfactory.createSocket();
+		SSLSocket sslSocket = (SSLSocket) this.socketfactory.createSocket();
+		sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
+		return sslSocket;
     }
 
     /**
@@ -370,6 +376,7 @@ public class SSLSocketFactory implements LayeredSocketFactory {
             sslsock.bind(localAddress);
         }
 
+		setHostName(sslsock, remoteAddress.getHostName());
         int connTimeout = HttpConnectionParams.getConnectionTimeout(params);
         int soTimeout = HttpConnectionParams.getSoTimeout(params);
 
@@ -437,6 +444,7 @@ public class SSLSocketFactory implements LayeredSocketFactory {
               port,
               autoClose
         );
+		sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
         if (this.hostnameVerifier != null) {
             this.hostnameVerifier.verify(host, sslSocket);
         }
@@ -491,7 +499,18 @@ public class SSLSocketFactory implements LayeredSocketFactory {
             final Socket socket,
             final String host, int port,
             boolean autoClose) throws IOException, UnknownHostException {
-        return createLayeredSocket(socket, host, port, autoClose);
+		SSLSocket sslSocket = (SSLSocket) this.socketfactory.createSocket(socket, host, port, autoClose);
+		sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
+		setHostName(sslSocket, host);
+		return sslSocket;
     }
 
+	private void setHostName(SSLSocket sslsock, String hostname){
+		try {
+			java.lang.reflect.Method setHostnameMethod = sslsock.getClass().getMethod("setHostname", String.class);
+			setHostnameMethod.invoke(sslsock, hostname);
+		} catch (Exception e) {
+			Log.w(TAG, "SNI not useable", e);
+		}
+	}
 }
