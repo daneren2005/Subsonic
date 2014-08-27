@@ -251,6 +251,16 @@ public class MainFragment extends SubsonicFragment {
 			SubsonicFragment fragment = new SelectYearFragment();
 			replaceFragment(fragment);
 		} else {
+			// Clear out recently added count when viewing
+			if("newest".equals(type)) {
+				SharedPreferences.Editor editor = Util.getPreferences(Context).edit();
+				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT, 0);
+				editor.commit();
+				
+				// Clear immediately so doesn't still show when pressing back
+				setMostRecentCount(0);
+			}
+			
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
@@ -445,10 +455,15 @@ public class MainFragment extends SubsonicFragment {
 	}
 	
 	private void getMostRecentCount() {
+		// Use stashed value until after refresh occurs
+		SharedPreferences prefs = Util.getPreferences(context);
+		final int startCount = prefs.getInt(Constants.PREFERENCES_KEY_RECENT_COUNT, 0);
+		setMostRecentCount(startCount);
+		
 		new SilentBackgroundTask<Integer>(context) {
 			@Override
 			public Integer doInBackground() {
-				String recentAddedFile = "mostrecent" + (Util.getRestUrl(context, null, false)).hashCode() + ".ser";
+				String recentAddedFile = "recent_count" + (Util.getRestUrl(context, null, false)).hashCode() + ".ser";
 				ArrayList<String> recents = FileUtil.deserialize(context, recentAddedFile, ArrayList.class);
 				if(recents == null) {
 					recents = new ArrayList<String>();
@@ -468,31 +483,24 @@ public class MainFragment extends SubsonicFragment {
 						count++;
 					}
 				}
+				FileUtil.serialize(context, recents, recentAddedFile);
 				
 				if(firstRun) {
 					return 0;
 				} else {
+					// Add the old count which will get cleared out after viewing recents
+					count += startCount;
+					SharedPreferences.Editor editor = Util.getPreferences(context).edit();
+					editor.putInt(Constants.PEFERENCES_KEY_RECENT_COUNT, count);
+					editor.commit();
+					
 					return count;
 				}
 			}
 			
 			@Override
 			public void done(Integer result) {
-				TextView countView = rootView.findViewById(R.id.main_albums_recent_count);
-				
-				String displayValue;
-				if(result < 0) {
-					countView.setVisibility(View.GONE);
-				} else {
-					if(result < 10) {
-						displayValue = "0" + result;
-					} else {
-						displayValue = "" + result;
-					}
-					
-					countView.setText(displayValue);
-					countView.setVisibility(View.VISIBLE);
-				}
+				setMostRecentCount(result);
 			}
 			
 			@Override
@@ -500,5 +508,23 @@ public class MainFragment extends SubsonicFragment {
 				Log.w(TAG, "Failed to refresh most recent count", x);
 			}
 		}.execute();
+	}
+	
+	private void setMostRecentCount(int count) {
+		TextView countView = rootView.findViewById(R.id.main_albums_recent_count);
+		
+		if(count < 0) {
+			countView.setVisibility(View.GONE);
+		} else {
+			String displayValue;
+			if(result < 10) {
+				displayValue = "0" + count;
+			} else {
+				displayValue = "" + count;
+			}
+			
+			countView.setText(displayValue);
+			countView.setVisibility(View.VISIBLE);
+		}
 	}
 }
