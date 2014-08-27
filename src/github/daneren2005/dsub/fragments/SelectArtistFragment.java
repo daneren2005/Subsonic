@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -202,6 +203,26 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 			folderButton.setVisibility(View.GONE);
 		} else {
 			folderButton.setVisibility(View.VISIBLE);
+		}
+	}
+
+	@Override
+	public void setEmpty(boolean empty) {
+		super.setEmpty(empty);
+
+		if(empty && !Util.isOffline(context)) {
+			createMusicFolderButton();
+			setMusicFolders();
+
+			objects.clear();
+			listView.setAdapter(new ArtistAdapter(context, objects));
+			listView.setVisibility(View.VISIBLE);
+
+			View view = rootView.findViewById(R.id.tab_progress);
+			LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+			params.height = 0;
+			params.weight = 5;
+			view.setLayoutParams(params);
 		}
 	}
 
