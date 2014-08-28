@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
@@ -42,6 +43,7 @@ import java.util.List;
 public class MainFragment extends SubsonicFragment {
 	private static final String TAG = MainFragment.class.getSimpleName();
 	private LayoutInflater inflater;
+	private TextView countView;
 
 	private static final int MENU_GROUP_SERVER = 10;
 	private static final int MENU_ITEM_SERVER_BASE = 100;
@@ -152,6 +154,7 @@ public class MainFragment extends SubsonicFragment {
 
 		final View albumsTitle = buttons.findViewById(R.id.main_albums);
 		final View albumsNewestButton = buttons.findViewById(R.id.main_albums_newest);
+		countView = (TextView) buttons.findViewById(R.id.main_albums_recent_count);
 		final View albumsRandomButton = buttons.findViewById(R.id.main_albums_random);
 		final View albumsHighestButton = buttons.findViewById(R.id.main_albums_highest);
 		final View albumsRecentButton = buttons.findViewById(R.id.main_albums_recent);
@@ -207,7 +210,10 @@ public class MainFragment extends SubsonicFragment {
 			}
 		});
 		setTitle(R.string.common_appname);
-		getMostRecentCount();
+
+		if(!Util.isOffline(context)) {
+			getMostRecentCount();
+		}
 	}
 
 	private void setActiveServer(int instance) {
@@ -253,7 +259,7 @@ public class MainFragment extends SubsonicFragment {
 		} else {
 			// Clear out recently added count when viewing
 			if("newest".equals(type)) {
-				SharedPreferences.Editor editor = Util.getPreferences(Context).edit();
+				SharedPreferences.Editor editor = Util.getPreferences(context).edit();
 				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT, 0);
 				editor.commit();
 				
@@ -462,7 +468,7 @@ public class MainFragment extends SubsonicFragment {
 		
 		new SilentBackgroundTask<Integer>(context) {
 			@Override
-			public Integer doInBackground() {
+			public Integer doInBackground() throws Exception {
 				String recentAddedFile = "recent_count" + (Util.getRestUrl(context, null, false)).hashCode() + ".ser";
 				ArrayList<String> recents = FileUtil.deserialize(context, recentAddedFile, ArrayList.class);
 				if(recents == null) {
@@ -478,7 +484,7 @@ public class MainFragment extends SubsonicFragment {
 				// Count how many new albums are in the list
 				int count = 0;
 				for(MusicDirectory.Entry album: recentlyAdded.getChildren()) {
-					if(!recents.contains(album.getId()) {
+					if(!recents.contains(album.getId())) {
 						recents.add(album.getId());
 						count++;
 					}
@@ -491,7 +497,7 @@ public class MainFragment extends SubsonicFragment {
 					// Add the old count which will get cleared out after viewing recents
 					count += startCount;
 					SharedPreferences.Editor editor = Util.getPreferences(context).edit();
-					editor.putInt(Constants.PEFERENCES_KEY_RECENT_COUNT, count);
+					editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT, count);
 					editor.commit();
 					
 					return count;
@@ -511,13 +517,11 @@ public class MainFragment extends SubsonicFragment {
 	}
 	
 	private void setMostRecentCount(int count) {
-		TextView countView = rootView.findViewById(R.id.main_albums_recent_count);
-		
-		if(count < 0) {
+		if(count <= 0) {
 			countView.setVisibility(View.GONE);
 		} else {
 			String displayValue;
-			if(result < 10) {
+			if(count < 10) {
 				displayValue = "0" + count;
 			} else {
 				displayValue = "" + count;

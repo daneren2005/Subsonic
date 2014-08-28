@@ -144,6 +144,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_PLAYLIST_NAME = "suggestedPlaylistName";
 	public static final String PREFERENCES_KEY_PLAYLIST_ID = "suggestedPlaylistId";
 	public static final String PREFERENCES_KEY_SERVER_SYNC = "serverSync";
+	public static final String PREFERENCES_KEY_RECENT_COUNT = "mostRecentCount";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
