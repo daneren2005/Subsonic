@@ -384,6 +384,11 @@ public final class Util {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance, false);
 	}
+	
+	public static boolean isSyncEnabled(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_SYNC + instance, true);
+	}
 
 	public static String getParentFromEntry(Context context, MusicDirectory.Entry entry) {
 		if(Util.isTagBrowsing(context)) {

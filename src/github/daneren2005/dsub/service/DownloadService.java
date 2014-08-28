@@ -111,7 +111,7 @@ public class DownloadService extends Service {
 	private final Handler handler = new Handler();
 	private Handler mediaPlayerHandler;
 	private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
-	private final ShufflePlayBuffer shufflePlayBuffer = new ShufflePlayBuffer(this);
+	private ShufflePlayBuffer shufflePlayBuffer;
 
 	private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<MusicDirectory.Entry, DownloadFile>(100);
 	private final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
@@ -228,6 +228,7 @@ public class DownloadService extends Service {
 
 		instance = this;
 		lifecycleSupport.onCreate();
+		shufflePlayBuffer = new ShufflePlayBuffer(this);
 	}
 
 	@Override

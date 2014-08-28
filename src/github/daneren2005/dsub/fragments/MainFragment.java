@@ -21,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
@@ -42,6 +43,7 @@ import java.util.List;
 public class MainFragment extends SubsonicFragment {
 	private static final String TAG = MainFragment.class.getSimpleName();
 	private LayoutInflater inflater;
+	private TextView countView;
 
 	private static final int MENU_GROUP_SERVER = 10;
 	private static final int MENU_ITEM_SERVER_BASE = 100;
@@ -152,6 +154,7 @@ public class MainFragment extends SubsonicFragment {
 
 		final View albumsTitle = buttons.findViewById(R.id.main_albums);
 		final View albumsNewestButton = buttons.findViewById(R.id.main_albums_newest);
+		countView = (TextView) buttons.findViewById(R.id.main_albums_recent_count);
 		final View albumsRandomButton = buttons.findViewById(R.id.main_albums_random);
 		final View albumsHighestButton = buttons.findViewById(R.id.main_albums_highest);
 		final View albumsRecentButton = buttons.findViewById(R.id.main_albums_recent);
@@ -207,6 +210,10 @@ public class MainFragment extends SubsonicFragment {
 			}
 		});
 		setTitle(R.string.common_appname);
+
+		if(!Util.isOffline(context)) {
+			getMostRecentCount();
+		}
 	}
 
 	private void setActiveServer(int instance) {
@@ -250,6 +257,16 @@ public class MainFragment extends SubsonicFragment {
 			SubsonicFragment fragment = new SelectYearFragment();
 			replaceFragment(fragment);
 		} else {
+			// Clear out recently added count when viewing
+			if("newest".equals(type)) {
+				SharedPreferences.Editor editor = Util.getPreferences(context).edit();
+				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT, 0);
+				editor.commit();
+				
+				// Clear immediately so doesn't still show when pressing back
+				setMostRecentCount(0);
+			}
+			
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, type);
@@ -441,5 +458,77 @@ public class MainFragment extends SubsonicFragment {
 				}
 			}.execute();
 		} catch(Exception e) {}
+	}
+	
+	private void getMostRecentCount() {
+		// Use stashed value until after refresh occurs
+		SharedPreferences prefs = Util.getPreferences(context);
+		final int startCount = prefs.getInt(Constants.PREFERENCES_KEY_RECENT_COUNT, 0);
+		setMostRecentCount(startCount);
+		
+		new SilentBackgroundTask<Integer>(context) {
+			@Override
+			public Integer doInBackground() throws Exception {
+				String recentAddedFile = "recent_count" + (Util.getRestUrl(context, null, false)).hashCode() + ".ser";
+				ArrayList<String> recents = FileUtil.deserialize(context, recentAddedFile, ArrayList.class);
+				if(recents == null) {
+					recents = new ArrayList<String>();
+				}
+				
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				MusicDirectory recentlyAdded = musicService.getAlbumList("newest", 20, 0, context, null);
+				
+				// If first run, just put everything in it and return 0
+				boolean firstRun = recents.isEmpty();
+				
+				// Count how many new albums are in the list
+				int count = 0;
+				for(MusicDirectory.Entry album: recentlyAdded.getChildren()) {
+					if(!recents.contains(album.getId())) {
+						recents.add(album.getId());
+						count++;
+					}
+				}
+				FileUtil.serialize(context, recents, recentAddedFile);
+				
+				if(firstRun) {
+					return 0;
+				} else {
+					// Add the old count which will get cleared out after viewing recents
+					count += startCount;
+					SharedPreferences.Editor editor = Util.getPreferences(context).edit();
+					editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT, count);
+					editor.commit();
+					
+					return count;
+				}
+			}
+			
+			@Override
+			public void done(Integer result) {
+				setMostRecentCount(result);
+			}
+			
+			@Override
+			public void error(Throwable x) {
+				Log.w(TAG, "Failed to refresh most recent count", x);
+			}
+		}.execute();
+	}
+	
+	private void setMostRecentCount(int count) {
+		if(count <= 0) {
+			countView.setVisibility(View.GONE);
+		} else {
+			String displayValue;
+			if(count < 10) {
+				displayValue = "0" + count;
+			} else {
+				displayValue = "" + count;
+			}
+			
+			countView.setText(displayValue);
+			countView.setVisibility(View.VISIBLE);
+		}
 	}
 }

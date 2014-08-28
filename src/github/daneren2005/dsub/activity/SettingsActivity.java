@@ -394,6 +394,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverTagPreference.setTitle(R.string.settings_browse_by_tags);
 		serverPasswordPreference.setDialogTitle(R.string.settings_server_password);
 		
+		final CheckBoxPreference serverSyncPreference = new CheckBoxPreference(this);
+		serverSyncPreference.setKey(Constants.PREFERENCES_KEY_SERVER_SYNC + instance);
+		serverSyncPreference.setChecked(Util.isSyncEnabled(this, instance));
+		serverSyncPreference.setSummary(R.string.settings_server_sync_summary);
+		serverSyncPreference.setTitle(R.string.settings_server_sync);
+		
 		final Preference serverOpenBrowser = new Preference(this);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
 		serverOpenBrowser.setPersistent(false);
@@ -461,6 +467,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		screen.addPreference(serverUsernamePreference);
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverTagPreference);
+		screen.addPreference(serverSyncPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
 		screen.addPreference(serverRemoveServerPreference);
