@@ -918,18 +918,64 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void done(final List<Playlist> playlists) {
-				List<String> names = new ArrayList<String>();
-				String createNew = context.getResources().getString(R.string.playlist_create_new);
-				names.add(createNew);
-				for(Playlist playlist: playlists) {
-					names.add(playlist.getName());
-				}
+				// Create adapter to show playlists
+				Playlist createNew = new Playlist("-1", context.getResources().getString(R.string.playlist_create_new));
+				playlists.add(0, createNew);
+				ArrayAdapter playlistAdapter = new ArrayAdapter<Playlist>(context, R.layout.basic_count_item, playlists) {
+					@Override
+					public View getView(int position, View convertView, ViewGroup parent) {
+						Playlist playlist = getItem(position);
+						
+						// Create new if not getting a convert view to use
+						LinearLayout view;
+						if(convertView == null) {
+							view = LayoutInflater.from(context).inflate(R.layout.basic_count_item, parent, false);
+						} else {
+							view = (LinearLayout) convertView;
+						}
+						
+						TextView nameView = (TextView) view.findViewById(R.id.basic_count_name);
+						nameView.setText(playlist.getName());
+						
+						TextView countView = (TextView) view.findViewById(R.id.basic_count_count);
+						
+						// Count up song duplicates in playlist
+						int count = 0;
+						// Don't try to lookup playlist for Create New
+						if(!"-1".equals(playlist.getId())) {
+							String cacheName = "playlist" + (Util.getRestUrl(context, null, false) + playlist.getId()).hashCode() + ".ser";
+							MusicDirectory playlist = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
+							if(playlist != null) {
+								// Try to find song instances in the given playlists
+								for(MusicDirectory song: songs) {
+									if(playlist.getChildren().contains(song)) {
+										count++;
+									}
+								}
+							}
+						}
+						
+						// Update count display with appropriate information
+						if(count <= 0) {
+							countView.setVisibility(View.GONE);
+						} else {
+							String displayName;
+							if(count < 10) {
+								displayName = "0" + count;
+							} else {
+								displayName = "" + count;
+							}
+							
+							countView.setText(displayName);
+							countView.setVisibility(View.VISIBLE);
+						}
+					}
+				};
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setTitle(R.string.playlist_add_to)
-					.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+					.setAdapter(playlistAdapter, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						
 						if(which > 0) {
 							addToPlaylist(playlists.get(which - 1), songs);
 						} else {
