@@ -43,6 +43,8 @@ import github.daneren2005.dsub.util.Util;
 
 public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	private static String TAG = PlaylistSyncAdapter.class.getSimpleName();
+	// Update playlists at least once a week
+	private static int MAX_PLAYLIST_AGE = 24 * 7;
 
 	public PlaylistSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
@@ -56,9 +58,10 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	public void onExecuteSync(Context context, int instance) {
 		String serverName = Util.getServerName(context, instance);
 
+		List<Playlist> remainder;
 		try {
 			// Just update playlist listings so user doesn't have to
-			musicService.getPlaylists(true, context, null);
+			remainder = musicService.getPlaylists(true, context, null);
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to refresh playlist list for " + serverName);
 		}
@@ -69,6 +72,9 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 		for(int i = 0; i < playlistList.size(); i++) {
 			SyncSet cachedPlaylist = playlistList.get(i);
 			String id = cachedPlaylist.id;
+			
+			// Remove playlist from remainder list
+			remainder.remove(id);
 			try {
 				MusicDirectory playlist = musicService.getPlaylist(true, id, serverName, context, null);
 
@@ -119,6 +125,15 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 
 			if(updated.size() > 0 || removed) {
 				SyncUtil.setSyncedPlaylists(context, instance, playlistList);
+			}
+		}
+		
+		// For remaining playlists, check to make sure they have been updated recently
+		for(Playlist playlist: remainder) {
+			String cacheName = "playlist" + (Util.getRestUrl(context, null, instance, false) + playlist.getId()).hashCode() + ".ser";
+			MusicDirectory dir = FileUtil.deserialize(context, cacheName, MusicDirectory.class, MAX_PLAYLIST_AGE);
+			if(dir == null) {
+				musicService.getPlaylist(true, playlist.getId(), serverName, context, null);
 			}
 		}
 
