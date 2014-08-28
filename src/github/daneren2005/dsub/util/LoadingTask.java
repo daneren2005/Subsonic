@@ -38,13 +38,17 @@ public abstract class LoadingTask<T> extends BackgroundTask<T> {
 		queue.offer(task = new Task() {
 			@Override
 			public void onDone(T result) {
-				loading.dismiss();
+				if(loading.isShowing()) {
+					loading.dismiss();
+				}
 				done(result);
 			}
 
 			@Override
 			public void onError(Throwable t) {
-				loading.dismiss();
+				if(loading.isShowing()) {
+					loading.dismiss();
+				}
 				error(t);
 			}
 		});
