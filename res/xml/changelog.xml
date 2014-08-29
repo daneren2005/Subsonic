@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.6 Beta" versioncode="122" releasedate="8/29/2014">
+		<change>Playback position fix for Nexus 5.  Please let me know if you see any odd behavior with the playback position after this update.</change>
+		<change>Windows Server: SNI Support</change>
+	</release>
 	<release version="4.7.5" versioncode="121" releasedate="8/24/2014">
 		<change>Bookmarks: Resume from albums/playlists</change>
 		<change>Bookmarks: Auto bookmark long songs/podcasts</change>
