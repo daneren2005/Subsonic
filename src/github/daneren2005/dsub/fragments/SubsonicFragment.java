@@ -34,15 +34,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
@@ -929,7 +932,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						// Create new if not getting a convert view to use
 						LinearLayout view;
 						if(convertView == null) {
-							view = LayoutInflater.from(context).inflate(R.layout.basic_count_item, parent, false);
+							view = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.basic_count_item, parent, false);
 						} else {
 							view = (LinearLayout) convertView;
 						}
@@ -943,12 +946,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						int count = 0;
 						// Don't try to lookup playlist for Create New
 						if(!"-1".equals(playlist.getId())) {
-							String cacheName = "playlist" + (Util.getRestUrl(context, null, false) + playlist.getId()).hashCode() + ".ser";
-							MusicDirectory playlist = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
-							if(playlist != null) {
+							MusicDirectory cache = FileUtil.deserialize(context, Util.getCacheName(context, "playlist", playlist.getId()), MusicDirectory.class);
+							if(cache != null) {
 								// Try to find song instances in the given playlists
-								for(MusicDirectory song: songs) {
-									if(playlist.getChildren().contains(song)) {
+								for(MusicDirectory.Entry song: songs) {
+									if(cache.getChildren().contains(song)) {
 										count++;
 									}
 								}
@@ -969,20 +971,22 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 							countView.setText(displayName);
 							countView.setVisibility(View.VISIBLE);
 						}
+
+						return view;
 					}
 				};
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setTitle(R.string.playlist_add_to)
 					.setAdapter(playlistAdapter, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						if(which > 0) {
-							addToPlaylist(playlists.get(which - 1), songs);
-						} else {
-							createNewPlaylist(songs, false);
+						public void onClick(DialogInterface dialog, int which) {
+							if (which > 0) {
+								addToPlaylist(playlists.get(which - 1), songs);
+							} else {
+								createNewPlaylist(songs, false);
+							}
 						}
-					}
-				});
+					});
 				AlertDialog dialog = builder.create();
 				dialog.show();
 			}
