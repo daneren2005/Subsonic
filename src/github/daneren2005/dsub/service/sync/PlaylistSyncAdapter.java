@@ -29,6 +29,7 @@ import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.FileUtil;
@@ -58,7 +59,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	public void onExecuteSync(Context context, int instance) {
 		String serverName = Util.getServerName(context, instance);
 
-		List<Playlist> remainder;
+		List<Playlist> remainder = null;
 		try {
 			// Just update playlist listings so user doesn't have to
 			remainder = musicService.getPlaylists(true, context, null);
@@ -74,7 +75,10 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 			String id = cachedPlaylist.id;
 			
 			// Remove playlist from remainder list
-			remainder.remove(id);
+			if(remainder != null) {
+				remainder.remove(new Playlist(id, ""));
+			}
+
 			try {
 				MusicDirectory playlist = musicService.getPlaylist(true, id, serverName, context, null);
 
@@ -129,11 +133,16 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 		}
 		
 		// For remaining playlists, check to make sure they have been updated recently
-		for(Playlist playlist: remainder) {
-			String cacheName = "playlist" + (Util.getRestUrl(context, null, instance, false) + playlist.getId()).hashCode() + ".ser";
-			MusicDirectory dir = FileUtil.deserialize(context, cacheName, MusicDirectory.class, MAX_PLAYLIST_AGE);
-			if(dir == null) {
-				musicService.getPlaylist(true, playlist.getId(), serverName, context, null);
+		if(remainder != null) {
+			for (Playlist playlist : remainder) {
+				MusicDirectory dir = FileUtil.deserialize(context, Util.getCacheName(context, instance, "playlist", playlist.getId()), MusicDirectory.class, MAX_PLAYLIST_AGE);
+				if (dir == null) {
+					try {
+						musicService.getPlaylist(true, playlist.getId(), serverName, context, null);
+					} catch(Exception e) {
+						Log.w(TAG, "Failed to update playlist for " + playlist.getName());
+					}
+				}
 			}
 		}
 

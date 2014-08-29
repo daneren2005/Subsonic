@@ -123,6 +123,6 @@ public class Playlist implements Serializable {
 		}
 		
 		Playlist playlist = (Playlist) o;
-		return o.id.equals(this.id);
+		return playlist.id.equals(this.id);
 	}
 }

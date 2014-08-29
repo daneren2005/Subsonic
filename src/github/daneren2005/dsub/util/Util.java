@@ -430,6 +430,21 @@ public final class Util {
 		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
 		editor.commit();
 	}
+
+	public static String getCacheName(Context context, String name, String id) {
+		return getCacheName(context, getActiveServer(context), name, id);
+	}
+	public static String getCacheName(Context context, int instance, String name, String id) {
+		String s = getRestUrl(context, null, instance, false) + id;
+		return name + "-" + s.hashCode() + ".ser";
+	}
+	public static String getCacheName(Context context, String name) {
+		return getCacheName(context, getActiveServer(context), name);
+	}
+	public static String getCacheName(Context context, int instance, String name) {
+		String s = getRestUrl(context, null, instance, false);
+		return name + "-" + s.hashCode() + ".ser";
+	}
 	
 	public static int offlineScrobblesCount(Context context) {
 		SharedPreferences offline = getOfflineSync(context);
