@@ -932,10 +932,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						
 						// Create new if not getting a convert view to use
 						PlaylistSongView view;
-						if(convertView == null) {
-							view = (PlaylistSongView) new PlaylistSongView(context);
-						} else {
+						if(convertView instanceof PlaylistSongView) {
 							view = (PlaylistSongView) convertView;
+						} else {
+							view =  new PlaylistSongView(context);
 						}
 
 						view.setObject(playlist, songs);
