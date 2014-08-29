@@ -73,6 +73,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.PlaylistSongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
@@ -930,47 +931,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						Playlist playlist = getItem(position);
 						
 						// Create new if not getting a convert view to use
-						LinearLayout view;
+						PlaylistSongView view;
 						if(convertView == null) {
-							view = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.basic_count_item, parent, false);
+							view = (PlaylistSongView) new PlaylistSongView(context);
 						} else {
-							view = (LinearLayout) convertView;
+							view = (PlaylistSongView) convertView;
 						}
-						
-						TextView nameView = (TextView) view.findViewById(R.id.basic_count_name);
-						nameView.setText(playlist.getName());
-						
-						TextView countView = (TextView) view.findViewById(R.id.basic_count_count);
-						
-						// Count up song duplicates in playlist
-						int count = 0;
-						// Don't try to lookup playlist for Create New
-						if(!"-1".equals(playlist.getId())) {
-							MusicDirectory cache = FileUtil.deserialize(context, Util.getCacheName(context, "playlist", playlist.getId()), MusicDirectory.class);
-							if(cache != null) {
-								// Try to find song instances in the given playlists
-								for(MusicDirectory.Entry song: songs) {
-									if(cache.getChildren().contains(song)) {
-										count++;
-									}
-								}
-							}
-						}
-						
-						// Update count display with appropriate information
-						if(count <= 0) {
-							countView.setVisibility(View.GONE);
-						} else {
-							String displayName;
-							if(count < 10) {
-								displayName = "0" + count;
-							} else {
-								displayName = "" + count;
-							}
-							
-							countView.setText(displayName);
-							countView.setVisibility(View.VISIBLE);
-						}
+
+						view.setObject(playlist, songs);
 
 						return view;
 					}
@@ -981,7 +949,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					.setAdapter(playlistAdapter, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							if (which > 0) {
-								addToPlaylist(playlists.get(which - 1), songs);
+								addToPlaylist(playlists.get(which), songs);
 							} else {
 								createNewPlaylist(songs, false);
 							}
