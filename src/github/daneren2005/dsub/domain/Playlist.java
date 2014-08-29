@@ -105,8 +105,24 @@ public class Playlist implements Serializable {
 		this.pub = pub;
 	}
 
-    @Override
-    public String toString() {
-        return name;
-    }
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o == this) {
+			return true;
+		} else if(o == null) {
+			return false;
+		} else if(o instanceof String) {
+			return o.equals(this.id);
+		} else if(o.getClass() != getClass()) {
+			return false;
+		}
+		
+		Playlist playlist = (Playlist) o;
+		return playlist.id.equals(this.id);
+	}
 }

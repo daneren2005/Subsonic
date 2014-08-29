@@ -342,27 +342,24 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		Object selectedItem;
+		int headers = entryList.getHeaderViewsCount();
 		if(albumContext) {
-			selectedItem = albums.get(showHeader ? (info.position - 1) : info.position);
+			selectedItem = albums.get(info.position);
 		} else {
 			if(info.position == 0) {
 				return false;
 			}
-			info.position--;
-			selectedItem = entries.get(showHeader ? (info.position - 1) : info.position);
+			selectedItem = entries.get(info.position - headers);
 		}
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false) && menuItem.getItemId() == R.id.song_menu_play_now) {
 			List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
-			Iterator it = entries.listIterator(info.position - 1);
+			Iterator it = entries.listIterator(info.position - headers);
 			while(it.hasNext()) {
 				songs.add((MusicDirectory.Entry) it.next());
 			}
 
-			getDownloadService().clear();
-			getDownloadService().download(songs, false, true, true, false);
-			Util.startActivityWithoutTransition(context, DownloadActivity.class);
-
+			playNow(songs);
 			return true;
 		}
 		
@@ -372,7 +369,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		switch (menuItem.getItemId()) {
 			case R.id.song_menu_remove_playlist:
-				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(info.position - 1));
+				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(info.position - headers));
 				break;
 			case R.id.song_menu_server_download:
 				downloadPodcastEpisode((PodcastEpisode)selectedItem);
@@ -415,11 +412,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					return;
 				}
 				
-				getDownloadService().clear();
-				List<MusicDirectory.Entry> podcasts = new ArrayList<MusicDirectory.Entry>(1);
-				podcasts.add(entry);
-				getDownloadService().download(podcasts, false, true, true, false);
-				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				playNow(Arrays.asList(entry));
 			}
 		}
 	}
@@ -844,6 +837,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		final List<MusicDirectory.Entry> songs = getSelectedSongs();
 		warnIfNetworkOrStorageUnavailable();
+		
+		// Conditions for using play now button
+		if(!append && !save && autoplay && !playNext && !shuffle) {
+			// Call playNow which goes through and tries to use bookmark information
+			playNow(songs);
+			return;
+		}
+		
 		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -1064,6 +1065,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					}
 				}
 				musicService.setStarred(ids, artists, albums, parents, false, this, context);
+
+				for(MusicDirectory.Entry entry: unstar) {
+					setEntryStarred(entry, false);
+				}
+
 				return null;
 			}
 

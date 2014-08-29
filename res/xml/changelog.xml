@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.5" versioncode="121" releasedate="8/24/2014">
+		<change>Bookmarks: Resume from albums/playlists</change>
+		<change>Bookmarks: Auto bookmark long songs/podcasts</change>
+		<change>Bookmarks: Auto delete after played</change>
+		<change>Bookmarks Tab: Show artist/album</change>
+		<change>Bookmarks: Delete from album/playlist</change>
+		<change>Stars: Update without refresh</change>
+	</release>
 	<release version="4.7.4" versioncode="120" releasedate="8/8/2014">
 		<change>Tasker Plugin: Start + optional start Shuffle Mode</change>
 		<change>Madsonic 5.1+: Add Rescan Server option to Home tab</change>

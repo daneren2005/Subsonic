@@ -32,18 +32,19 @@ import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.Util;
 
-public class BookmarkAdapter extends ArrayAdapter<Bookmark> {
+public class BookmarkAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 	private final static String TAG = BookmarkAdapter.class.getSimpleName();
 	private Context activity;
 	
-	public BookmarkAdapter(Context activity, List<Bookmark> bookmarks) {
+	public BookmarkAdapter(Context activity, List<MusicDirectory.Entry> bookmarks) {
 		super(activity, android.R.layout.simple_list_item_1, bookmarks);
 		this.activity = activity;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Bookmark bookmark = getItem(position);
-		MusicDirectory.Entry entry = bookmark.getEntry();
+		MusicDirectory.Entry entry = getItem(position);
+		Bookmark bookmark = entry.getBookmark();
+
 		SongView view;
 		if (convertView != null) {
 			view = (SongView) convertView;

@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.fragments.AdminFragment;
 import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.DownloadFragment;
@@ -58,6 +59,8 @@ import github.daneren2005.dsub.fragments.SelectShareFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.updates.Updater;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
@@ -73,6 +76,7 @@ import github.daneren2005.dsub.view.ChangeLog;
 public class SubsonicFragmentActivity extends SubsonicActivity {
 	private static String TAG = SubsonicFragmentActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
+	private static boolean sessionInitialized = false;
 	private ScheduledExecutorService executorService;
 	private View bottomBar;
 	private View coverArtView;
@@ -119,7 +123,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			
 			if("".equals(fragmentType) || fragmentType == null || firstRun) {
 				// Initial startup stuff
-				loadSettings();
+				if(!sessionInitialized) {
+					loadSession();
+				}
 			}
 			
 			currentFragment.setPrimaryFragment(true);
@@ -465,6 +471,14 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 	}
 
+	private void loadSession() {
+		loadSettings();
+		if(!Util.isOffline(this) && ServerInfo.checkServerVersion(this, "1.9")) {
+			loadBookmarks();
+		}
+		
+		sessionInitialized = true;
+	}
 	private void loadSettings() {
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 		SharedPreferences prefs = Util.getPreferences(this);
@@ -501,6 +515,24 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory(this).getPath());
 		editor.commit();
+	}
+	
+	private void loadBookmarks() {
+		final Context context = this;
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			public Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.getBookmarks(true, context, null);
+
+				return null;
+			}
+			
+			@Override
+			public void error(Throwable error) {
+				Log.e(TAG, "Failed to get bookmarks", error);
+			}
+		}.execute();
 	}
 
 	private void createAccount() {

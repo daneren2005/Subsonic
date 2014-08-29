@@ -60,10 +60,36 @@
 		android:text="@string/main.albums_title"
 		style="@style/MainAlbumButtonLabel"/>
 
-	<TextView
+	<LinearLayout
 		android:id="@+id/main_albums_newest"
-		android:text="@string/main.albums_newest"
-		style="@style/MainAlbumButton"/>
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:minHeight="46dip">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:text="@string/main.albums_newest"
+			style="@style/MainAlbumButton"/>
+
+		<TextView
+			android:id="@+id/main_albums_recent_count"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_marginRight="12dp"
+			android:background="@drawable/ic_number_border"
+			android:focusable="false"
+			android:paddingRight="10dp"
+			android:layout_marginLeft="20px"
+			android:layout_marginBottom="4px"
+			android:text="99"
+			android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
+			android:textSize="11sp"
+			android:gravity="right|center_vertical"
+			android:layout_gravity="center_vertical"
+			android:visibility="gone"/>
+	</LinearLayout>
+
 	<TextView
 		android:id="@+id/main_albums_recent"
 		android:text="@string/main.albums_recent"

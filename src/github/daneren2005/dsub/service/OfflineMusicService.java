@@ -37,7 +37,6 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 
 import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
@@ -67,6 +66,7 @@ import java.util.SortedSet;
 public class OfflineMusicService implements MusicService {
 	private static final String TAG = OfflineMusicService.class.getSimpleName();
 	private static final String ERRORMSG = "Not available in offline mode";
+	private static final Random random = new Random();
 
 	@Override
 	public void ping(Context context, ProgressListener progressListener) throws Exception {
@@ -669,7 +669,6 @@ public class OfflineMusicService implements MusicService {
         if (children.isEmpty()) {
             return result;
         }
-        Random random = new Random();
         for (int i = 0; i < size; i++) {
             File file = children.get(random.nextInt(children.size()));
             result.addChild(createEntry(context, file, getName(file)));
@@ -743,17 +742,17 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public List<Bookmark> getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
-	public void createBookmark(String id, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+	public void createBookmark(String id, String parent, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
-	public void deleteBookmark(String id, Context context, ProgressListener progressListener) throws Exception {
+	public void deleteBookmark(String id, String parent, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

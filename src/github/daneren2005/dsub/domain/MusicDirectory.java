@@ -107,30 +107,33 @@ public class MusicDirectory implements Serializable {
 	}
 
     public static class Entry implements Serializable {
-        private String id;
-        private String parent;
+		private String id;
+		private String parent;
 		private String grandParent;
 		private String albumId;
 		private String artistId;
-        private boolean directory;
-        private String title;
-        private String album;
-        private String artist;
-        private Integer track;
-        private Integer year;
-        private String genre;
-        private String contentType;
-        private String suffix;
-        private String transcodedContentType;
-        private String transcodedSuffix;
-        private String coverArt;
-        private Long size;
-        private Integer duration;
-        private Integer bitRate;
-        private String path;
-        private boolean video;
+		private boolean directory;
+		private String title;
+		private String album;
+		private String artist;
+		private Integer track;
+		private Integer year;
+		private String genre;
+		private String contentType;
+		private String suffix;
+		private String transcodedContentType;
+		private String transcodedSuffix;
+		private String coverArt;
+		private Long size;
+		private Integer duration;
+		private Integer bitRate;
+		private String path;
+		private boolean video;
 		private Integer discNumber;
-        private boolean starred;
+		private boolean starred;
+		private Integer rating;
+		private Bookmark bookmark;
+		private int type;
 		private int closeness;
 		
 		public void loadMetadata(File file) {
@@ -392,6 +395,20 @@ public class MusicDirectory implements Serializable {
         public void setStarred(boolean starred) {
             this.starred = starred;
         }
+        
+		public Integer getRating() {
+			return rating;
+		}
+		public void setRating(Integer rating) {
+			this.rating = rating;
+		}
+		
+		public Bookmark getBookmark() {
+			return bookmark;
+		}
+		public void setBookmark(Bookmark bookmark) {
+			this.bookmark = bookmark;
+		}
 		
 		public int getCloseness() {
 			return closeness;

@@ -42,8 +42,6 @@ public class ShufflePlayBuffer {
 
 	private static final String TAG = ShufflePlayBuffer.class.getSimpleName();
 	private static final String CACHE_FILENAME = "shuffleBuffer.ser";
-	private static final int CAPACITY = 50;
-	private static final int REFILL_THRESHOLD = 40;
 
 	private ScheduledExecutorService executorService;
 	private Runnable runnable;
@@ -52,6 +50,8 @@ public class ShufflePlayBuffer {
 	private int lastCount = -1;
 	private DownloadService context;
 	private boolean awaitingResults = false;
+	private int capacity;
+	private int refillThreshold;
 
 	private SharedPreferences.OnSharedPreferenceChangeListener listener;
 	private int currentServer;
@@ -71,6 +71,15 @@ public class ShufflePlayBuffer {
 			}
 		};
 		executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
+		
+		// Calculate out the capacity and refill threshold based on the user's random size preference
+		int shuffleListSize = Integer.parseInt(Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20"));
+		// ex: default 20 -> 50
+		capacity = shuffleListSize * 5 / 2;
+		capacity = Math.min(500, capacity);
+		
+		// ex: default 20 -> 40
+		refillThreshold = capacity * 4 / 5;
 	}
 
 	public List<MusicDirectory.Entry> get(int size) {
@@ -105,7 +114,7 @@ public class ShufflePlayBuffer {
 
 	private void restart() {
 		synchronized(buffer) {
-			if(buffer.size() <= REFILL_THRESHOLD && lastCount != 0 && executorService.isShutdown()) {
+			if(buffer.size() <= refillThreshold && lastCount != 0 && executorService.isShutdown()) {
 				executorService = Executors.newSingleThreadScheduledExecutor();
 				executorService.scheduleWithFixedDelay(runnable, 0, 10, TimeUnit.SECONDS);
 			}
@@ -116,14 +125,16 @@ public class ShufflePlayBuffer {
 		// Check if active server has changed.
 		clearBufferIfnecessary();
 
-		if (buffer != null && (buffer.size() > REFILL_THRESHOLD || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
+		if (buffer != null && (buffer.size() > refillThreshold || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
 			executorService.shutdown();
 			return;
 		}
 
 		try {
 			MusicService service = MusicServiceFactory.getMusicService(context);
-			int n = CAPACITY - buffer.size();
+			
+			// Get capacity based 
+			int n = capacity - buffer.size();
 			String folder = null;
 			if(!Util.isTagBrowsing(context)) {
 				folder = Util.getSelectedMusicFolderId(context);
@@ -131,9 +142,14 @@ public class ShufflePlayBuffer {
 			MusicDirectory songs = service.getRandomSongs(n, folder, genre, startYear, endYear, context, null);
 
 			synchronized (buffer) {
-				buffer.addAll(songs.getChildren());
-				Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildrenSize() + " songs.");
-				lastCount = songs.getChildrenSize();
+				lastCount = 0;
+				for(MusicDirectory.Entry entry: songs.getChildren()) {
+					if(!buffer.contains(entry)) {
+						buffer.add(entry);
+						lastCount++;
+					}
+				}
+				Log.i(TAG, "Refilled shuffle play buffer with " + lastCount + " songs.");
 
 				// Cache buffer
 				FileUtil.serialize(context, buffer, CACHE_FILENAME);

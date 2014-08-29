@@ -630,7 +630,7 @@ public class FileUtil {
 				Log.w(TAG, "No serialization for object from " + fileName);
 				return null;
 			} catch (Throwable x) {
-				Log.w(TAG, "Failed to deserialize object from " + fileName, x);
+				Log.w(TAG, "Failed to deserialize object from " + fileName);
 				return null;
 			} finally {
 				Util.close(in);
@@ -670,7 +670,7 @@ public class FileUtil {
 				Log.w(TAG, "No serialization compressed for object from " + fileName);
 				return null;
 			} catch (Throwable x) {
-				Log.w(TAG, "Failed to deserialize compressed object from " + fileName, x);
+				Log.w(TAG, "Failed to deserialize compressed object from " + fileName);
 				return null;
 			} finally {
 				Util.close(in);

@@ -30,7 +30,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteButton;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -46,7 +45,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -57,6 +55,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
@@ -68,7 +67,6 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.DownloadFileAdapter;
 import github.daneren2005.dsub.view.FadeOutAnimation;
-import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.VisualizerView;
@@ -1321,7 +1319,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			protected Void doInBackground() throws Throwable {
 				MusicDirectory.Entry currentSong = currentDownload.getSong();
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.createBookmark(currentSong.getId(), getDownloadService().getPlayerPosition(), comment, context, null);
+				int position = getDownloadService().getPlayerPosition();
+				musicService.createBookmark(currentSong.getId(), Util.getParentFromEntry(context, currentSong), position, comment, context, null);
+
+				currentSong.setBookmark(new Bookmark(position));
+				MusicDirectory.Entry find = UpdateView.findEntry(currentSong);
+				if(find != null && find != currentSong) {
+					find.setBookmark(new Bookmark(position));
+				}
 
 				return null;
 			}

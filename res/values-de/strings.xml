@@ -237,6 +237,10 @@
 		\nErzeugt: %3$s
 		\nZuletzt aktualisiert: %4$s
 		\nKommentar: %5$s</string>
+	<string name="bookmark.resume_title">Wiedergabe fortsetzen?</string>
+	<string name="bookmark.resume">\'%1$s\' fortsetzen bei %2$s</string>
+	<string name="bookmark.action_resume">Fortsetzen</string>
+	<string name="bookmark.action_start_over">Neu beginnen</string>
 
 	<string name="song_details.error">Fehler</string>
 	<string name="song_details.skipped">Überspringen</string>

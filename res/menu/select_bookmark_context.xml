@@ -5,6 +5,14 @@
 	<item
 		android:id="@+id/bookmark_menu_info"
 		android:title="@string/common.info"/>
+
+	<item
+		android:id="@+id/song_menu_show_album"
+		android:title="@string/download.menu_show_album"/>
+		
+	<item
+		android:id="@+id/song_menu_show_artist"
+		android:title="@string/menu.show_artist"/>
 		
 	<item 
 		android:id="@+id/song_menu_download"

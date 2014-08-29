@@ -20,6 +20,7 @@ package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.util.FileUtil;
@@ -86,6 +87,11 @@ public class PodcastEntryParser extends AbstractParser {
 						episode.setPath(FileUtil.getPodcastPath(context, episode));
 					} else if(episode.getPath().indexOf("Podcasts/") == 0) {
 						episode.setPath(episode.getPath().substring("Podcasts/".length()));
+					}
+
+					Integer bookmark = getInteger("bookmarkPosition");
+					if(bookmark != null) {
+						episode.setBookmark(new Bookmark(bookmark));
 					}
 					
 					if(episode.getId() == null) {

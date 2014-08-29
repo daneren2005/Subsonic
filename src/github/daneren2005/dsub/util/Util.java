@@ -384,6 +384,25 @@ public final class Util {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance, false);
 	}
+	
+	public static boolean isSyncEnabled(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_SYNC + instance, true);
+	}
+
+	public static String getParentFromEntry(Context context, MusicDirectory.Entry entry) {
+		if(Util.isTagBrowsing(context)) {
+			if(!entry.isDirectory()) {
+				return entry.getAlbumId();
+			} else if(entry.isAlbum()) {
+				return entry.getArtistId();
+			} else {
+				return null;
+			}
+		} else {
+			return entry.getParent();
+		}
+	}
 
 	public static boolean isOpenToLibrary(Context context) {
 		SharedPreferences prefs = getPreferences(context);
@@ -410,6 +429,21 @@ public final class Util {
 		SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
 		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
 		editor.commit();
+	}
+
+	public static String getCacheName(Context context, String name, String id) {
+		return getCacheName(context, getActiveServer(context), name, id);
+	}
+	public static String getCacheName(Context context, int instance, String name, String id) {
+		String s = getRestUrl(context, null, instance, false) + id;
+		return name + "-" + s.hashCode() + ".ser";
+	}
+	public static String getCacheName(Context context, String name) {
+		return getCacheName(context, getActiveServer(context), name);
+	}
+	public static String getCacheName(Context context, int instance, String name) {
+		String s = getRestUrl(context, null, instance, false);
+		return name + "-" + s.hashCode() + ".ser";
 	}
 	
 	public static int offlineScrobblesCount(Context context) {

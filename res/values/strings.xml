@@ -237,6 +237,10 @@
 		\nCreated: %3$s
 		\nLast Updated: %4$s
 		\nComment: %5$s</string>
+	<string name="bookmark.resume_title">Resume playing?</string>
+	<string name="bookmark.resume">Resume playing \'%1$s\' from %2$s</string>
+	<string name="bookmark.action_resume">Resume</string>
+	<string name="bookmark.action_start_over">Start Over</string>
 
 	<string name="song_details.error">Error</string>
 	<string name="song_details.skipped">Skipped</string>
@@ -260,6 +264,8 @@
     <string name="settings.server_username">Username</string>
     <string name="settings.server_password">Password</string>
 	<string name="settings.server_open_browser">Open in browser</string>
+	<string name="settings.server_sync_summary">Whether or not syncing is enabled for this server</string>
+	<string name="settings.server_sync">Sync Enabled</string>
     <string name="settings.cache_title">Music cache</string>
     <string name="settings.preload_wifi">Songs to preload (Wifi)</string>
 	<string name="settings.preload_mobile">Songs to preload (Mobile)</string>

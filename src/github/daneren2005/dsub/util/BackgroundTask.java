@@ -48,7 +48,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	protected OnCancelListener cancelListener;
 	protected Task task;
 
-	private static final int DEFAULT_CONCURRENCY = 5;
+	private static final int DEFAULT_CONCURRENCY = 8;
 	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>());
 	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
 	private static Handler handler = null;
