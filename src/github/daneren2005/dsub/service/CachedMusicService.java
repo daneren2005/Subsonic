@@ -792,8 +792,15 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
-		musicService.setRating(id, rating, context, progressListener);
+	public void setRating(final String id, String parent, final int rating, Context context, ProgressListener progressListener) throws Exception {
+		musicService.setRating(id, parent, rating, context, progressListener);
+		
+		new GenericSongUpdater(context, parent, id) {
+			@Override
+			public void updateResult(Entry result) {
+				result.setRating(rating);
+			}
+		}.execute();
 	}
 
 	@Override
@@ -1220,6 +1227,47 @@ public class CachedMusicService implements MusicService {
 					}
 				}.execute();
 			}
+		}
+	}
+	private abstract class GenericSongUpdater {
+		Context context;
+		String id;
+		String parent;
+		
+		public GenericSongUpdater(Context context, String id, String parent) {
+			this.context = context;
+			this.id = id;
+			this.parent = parent;
+		}
+		
+		public boolean checkResult(Entry check) {
+			return id.equals(check.getId());
+		}
+		public abstract void updateResult(Entry result);
+		
+		public void execute() {
+			new MusicDirectoryUpdater(context, "directory", parent) {
+				@Override
+				public boolean checkResult(Entry check) {
+					return GenericSongUpdater.this.checkResult(check);
+				}
+				
+				@Override void updateResult(List<Entry> objects, Entry result) {
+					GenericSongUpdater.this.updateResult(result);
+				}
+			}.execute();
+			
+			new PlaylistDirectoryUpdater(context) {
+				@Override
+				public boolean checkResult(Entry check) {
+					return GenericSongUpdater.this.checkResult(check);
+				}
+				
+				@Override
+				public void updateResult(Entry result) {
+					GenericSongUpdater.this.updateResult(result);
+				}
+			}.execute();
 		}
 	}
 	private abstract class IndexesUpdater extends SerializeUpdater<Artist> {
