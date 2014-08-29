@@ -65,6 +65,9 @@ public class PlaylistSongView extends UpdateView {
 
 	@Override
 	protected void updateBackground() {
+		// Make sure to reset when starting count
+		count = 0;
+		
 		// Don't try to lookup playlist for Create New
 		if(!"-1".equals(playlist.getId())) {
 			MusicDirectory cache = FileUtil.deserialize(context, Util.getCacheName(context, "playlist", playlist.getId()), MusicDirectory.class);
