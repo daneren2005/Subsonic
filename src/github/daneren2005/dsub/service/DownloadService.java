@@ -544,6 +544,8 @@ public class DownloadService extends Service {
 				if(currentPlaying == downloadFile) {
 					reset();
 				}
+
+				currentPlayingIndex = downloadList.indexOf(currentPlaying);
 			}
 		}
 		lifecycleSupport.serializeDownloadQueue();
