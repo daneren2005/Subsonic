@@ -66,6 +66,13 @@ public class MusicDirectoryEntryParser extends AbstractParser {
 			if(bookmark != null) {
 				entry.setBookmark(new Bookmark(bookmark));
 			}
+
+			String type = get("type");
+			if("podcast".equals(type)) {
+				entry.setType(MusicDirectory.Entry.TYPE_PODCAST);
+			} else if("audiobook".equals(type)) {
+				entry.setType(MusicDirectory.Entry.TYPE_AUDIO_BOOK);
+			}
         } else if(!"".equals(artist)) {
 			entry.setPath(artist + "/" + entry.getTitle());
 		}

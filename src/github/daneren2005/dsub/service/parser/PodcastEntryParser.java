@@ -93,6 +93,7 @@ public class PodcastEntryParser extends AbstractParser {
 					if(bookmark != null) {
 						episode.setBookmark(new Bookmark(bookmark));
 					}
+					episode.setType(MusicDirectory.Entry.TYPE_PODCAST);
 					
 					if(episode.getId() == null) {
 						episode.setId(String.valueOf(bogusId));
