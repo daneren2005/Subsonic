@@ -1252,7 +1252,8 @@ public class CachedMusicService implements MusicService {
 					return GenericSongUpdater.this.checkResult(check);
 				}
 				
-				@Override void updateResult(List<Entry> objects, Entry result) {
+				@Override
+				public void updateResult(List<Entry> objects, Entry result) {
 					GenericSongUpdater.this.updateResult(result);
 				}
 			}.execute();

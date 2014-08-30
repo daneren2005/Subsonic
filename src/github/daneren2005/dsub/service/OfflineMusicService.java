@@ -737,7 +737,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
+	public void setRating(String id, String parent, int rating, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
