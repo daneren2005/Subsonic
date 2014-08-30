@@ -1244,7 +1244,14 @@ public class CachedMusicService implements MusicService {
 		public abstract void updateResult(Entry result);
 		
 		public void execute() {
-			new MusicDirectoryUpdater(context, "directory", entry.getParent()) {
+			String cacheName;
+			if(Util.isTagBrowsing(context, musicService.getInstance(context))) {
+				cacheName = "album";
+			} else {
+				cacheName = "directory";
+			}
+
+			new MusicDirectoryUpdater(context, cacheName, entry.getParent()) {
 				@Override
 				public boolean checkResult(Entry check) {
 					return GenericSongUpdater.this.checkResult(check);
