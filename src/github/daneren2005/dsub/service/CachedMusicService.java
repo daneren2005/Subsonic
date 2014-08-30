@@ -1246,7 +1246,12 @@ public class CachedMusicService implements MusicService {
 		public void execute() {
 			String cacheName;
 			if(Util.isTagBrowsing(context, musicService.getInstance(context))) {
-				cacheName = "album";
+				// If using id's, we are starring songs and need to use album listings
+				if(entry.isAlbum()) {
+					cacheName = "album";
+				} else {
+					cacheName = "artist";
+				}
 			} else {
 				cacheName = "directory";
 			}
