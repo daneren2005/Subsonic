@@ -1494,4 +1494,29 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		});
 	}
+
+	protected void setRating(final Entry entry, final int rating) {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.setRating(entry, rating, context, null);
+
+				entry.setRating(rating);
+				return null;
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(R.string.rating_set_rating_failed, entry.getTitle()) + " " + getErrorMessage(error);
+				}
+
+				Util.toast(context, msg, false);
+			}
+		}.execute();
+	}
 }

@@ -71,6 +71,7 @@ import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.VisualizerView;
 
+import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import static github.daneren2005.dsub.domain.PlayerState.*;
 import github.daneren2005.dsub.util.*;
 import github.daneren2005.dsub.view.AutoRepeatButton;
@@ -113,6 +114,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private View toggleListButton;
 	private ImageButton starButton;
 	private ImageButton bookmarkButton;
+	private ImageButton rateBadButton;
+	private ImageButton rateGoodButton;
 	private View mainLayout;
 	private ScheduledExecutorService executorService;
 	private DownloadFile currentPlaying;
@@ -185,6 +188,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		equalizerButton = (Button)rootView.findViewById(R.id.download_equalizer);
 		visualizerButton = (Button)rootView.findViewById(R.id.download_visualizer);
 		bookmarkButton = (ImageButton) rootView.findViewById(R.id.download_bookmark);
+		rateBadButton = (ImageButton) rootView.findViewById(R.id.download_rating_bad);
+		rateGoodButton = (ImageButton) rootView.findViewById(R.id.download_rating_good);
 		LinearLayout visualizerViewLayout = (LinearLayout)rootView.findViewById(R.id.download_visualizer_view_layout);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
 
@@ -195,7 +200,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				public void onClick(View v) {
 					DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
 					if (currentDownload != null) {
-						MusicDirectory.Entry currentSong = currentDownload.getSong();
+						Entry currentSong = currentDownload.getSong();
 						toggleStarred(currentSong);
 						starButton.setImageResource(currentSong.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
 					}
@@ -402,6 +407,21 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		});
 
+		rateBadButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Entry entry = getDownloadService().getCurrentPlaying().getSong();
+				setRating(entry, 1);
+			}
+		});
+		rateGoodButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Entry entry = getDownloadService().getCurrentPlaying().getSong();
+				setRating(entry, 5);
+			}
+		});
+
 		toggleListButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -595,7 +615,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
 		switch (menuItemId) {
 			case R.id.menu_show_album: case R.id.menu_show_artist:
-				MusicDirectory.Entry entry = song.getSong();
+				Entry entry = song.getSong();
 
 				Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 				intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
@@ -672,7 +692,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}.execute();
 				return true;
 			case R.id.menu_delete:
-				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(1);
+				List<Entry> songs = new ArrayList<Entry>(1);
 				songs.add(song.getSong());
 				getDownloadService().delete(songs);
 				return true;
@@ -729,7 +749,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}.execute();
 				return true;
 			case R.id.menu_save_playlist:
-				List<MusicDirectory.Entry> entries = new LinkedList<MusicDirectory.Entry>();
+				List<Entry> entries = new LinkedList<Entry>();
 				for (DownloadFile downloadFile : getDownloadService().getSongs()) {
 					entries.add(downloadFile.getSong());
 				}
@@ -747,7 +767,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 				return true;
 			case R.id.menu_add_playlist:
-				songs = new ArrayList<MusicDirectory.Entry>(1);
+				songs = new ArrayList<Entry>(1);
 				songs.add(song.getSong());
 				addToPlaylist(songs);
 				return true;
@@ -755,7 +775,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				displaySongInfo(song.getSong());
 				return true;
 			case R.id.menu_share:
-				songs = new ArrayList<MusicDirectory.Entry>(1);
+				songs = new ArrayList<Entry>(1);
 				songs.add(song.getSong());
 				createShare(songs);
 			default:
@@ -1130,7 +1150,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			protected void done(Void result) {
 				if (currentPlaying != null) {
-					MusicDirectory.Entry song = currentPlaying.getSong();
+					Entry song = currentPlaying.getSong();
 					songTitleTextView.setText(song.getTitle());
 					getImageLoader().loadImage(albumArtImageView, song, true, true);
 					starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
@@ -1317,13 +1337,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				MusicDirectory.Entry currentSong = currentDownload.getSong();
+				Entry currentSong = currentDownload.getSong();
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				int position = getDownloadService().getPlayerPosition();
 				musicService.createBookmark(currentSong.getId(), Util.getParentFromEntry(context, currentSong), position, comment, context, null);
 
 				currentSong.setBookmark(new Bookmark(position));
-				MusicDirectory.Entry find = UpdateView.findEntry(currentSong);
+				Entry find = UpdateView.findEntry(currentSong);
 				if(find != null && find != currentSong) {
 					find.setBookmark(new Bookmark(position));
 				}

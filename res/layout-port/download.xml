@@ -55,6 +55,11 @@
 								android:layout_height="wrap_content"
 								android:layout_gravity="center_horizontal">
 
+								<ImageButton
+									android:id="@+id/download_rating_bad"
+									style="@style/DownloadActionImageButton"
+									android:src="@drawable/ic_action_rating_bad_dark"/>
+
 								<Button
 									android:id="@+id/download_equalizer"
 									android:text="EQ"
@@ -74,6 +79,11 @@
 									android:id="@+id/download_bookmark"
 									style="@style/DownloadActionImageButton"
 									android:src="@drawable/ic_menu_bookmark_dark"/>
+
+								<ImageButton
+									android:id="@+id/download_rating_good"
+									style="@style/DownloadActionImageButton"
+									android:src="@drawable/ic_action_rating_good_dark"/>
 							</LinearLayout>
 						</LinearLayout>
 					</RelativeLayout>

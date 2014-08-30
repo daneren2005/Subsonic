@@ -242,6 +242,9 @@
 	<string name="bookmark.action_resume">Resume</string>
 	<string name="bookmark.action_start_over">Start Over</string>
 
+	<string name="rating.set_rating_failed">Failed to set rating for \"%s\"</string>
+	<string name="rating.remove_rating_failed">Failed to remove rating for \"%s\"</string>
+
 	<string name="song_details.error">Error</string>
 	<string name="song_details.skipped">Skipped</string>
 	<string name="song_details.downloading">Downloading</string>

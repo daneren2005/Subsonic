@@ -792,10 +792,10 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public void setRating(final String id, String parent, final int rating, Context context, ProgressListener progressListener) throws Exception {
-		musicService.setRating(id, parent, rating, context, progressListener);
+	public void setRating(final Entry entry, final int rating, Context context, ProgressListener progressListener) throws Exception {
+		musicService.setRating(entry, rating, context, progressListener);
 		
-		new GenericSongUpdater(context, parent, id) {
+		new GenericSongUpdater(context, entry) {
 			@Override
 			public void updateResult(Entry result) {
 				result.setRating(rating);
@@ -1231,22 +1231,20 @@ public class CachedMusicService implements MusicService {
 	}
 	private abstract class GenericSongUpdater {
 		Context context;
-		String id;
-		String parent;
+		Entry entry;
 		
-		public GenericSongUpdater(Context context, String id, String parent) {
+		public GenericSongUpdater(Context context, Entry entry) {
 			this.context = context;
-			this.id = id;
-			this.parent = parent;
+			this.entry = entry;
 		}
 		
 		public boolean checkResult(Entry check) {
-			return id.equals(check.getId());
+			return entry.getId().equals(check.getId());
 		}
 		public abstract void updateResult(Entry result);
 		
 		public void execute() {
-			new MusicDirectoryUpdater(context, "directory", parent) {
+			new MusicDirectoryUpdater(context, "directory", entry.getParent()) {
 				@Override
 				public boolean checkResult(Entry check) {
 					return GenericSongUpdater.this.checkResult(check);
