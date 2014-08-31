@@ -1507,6 +1507,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 
 			@Override
+			protected void done(Void result) {
+				Util.toast(context, getResources().getString(R.string.rating_set_rating, entry.getTitle()));
+			}
+
+			@Override
 			protected void error(Throwable error) {
 				String msg;
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
