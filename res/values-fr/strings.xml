@@ -191,8 +191,6 @@
     <string name="download.repeat_off">Répéter inactif</string>
     <string name="download.repeat_all">Répéter tout</string>
     <string name="download.repeat_single">Répéter titre</string>
-    <string name="download.visualizer_on">Activer visualisation.</string>
-    <string name="download.visualizer_off">Désactiver visualisation.</string>
     <string name="download.jukebox_on">Télécommande activée. La musique est diffusée sur l\'ordinateur.</string>
     <string name="download.jukebox_off">Télécommande désactivée. La musique est diffusée sur le mobile.</string>
     <string name="download.jukebox_volume">Volume distant</string>

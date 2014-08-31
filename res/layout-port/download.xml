@@ -60,11 +60,6 @@
 									style="@style/DownloadActionImageButton"
 									android:src="@drawable/ic_action_rating_bad_dark"/>
 
-								<Button
-									android:id="@+id/download_visualizer"
-									android:text="VIS"
-									style="@style/DownloadActionButton"/>
-
 								<ImageButton
 									android:id="@+id/download_star"
 									style="@style/DownloadActionImageButton"
@@ -82,15 +77,6 @@
 							</LinearLayout>
 						</LinearLayout>
 					</RelativeLayout>
-
-					<LinearLayout
-						android:id="@+id/download_visualizer_view_layout"
-						android:orientation="horizontal"
-						android:layout_width="fill_parent"
-						android:layout_height="60dip"
-						android:layout_marginLeft="16dip"
-						android:layout_marginRight="16dip"
-						android:layout_gravity="center_horizontal|bottom"/>
 				</FrameLayout>
 
 				<TextView

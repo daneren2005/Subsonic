@@ -186,8 +186,6 @@
     <string name="download.repeat_off">Repetir off</string>
     <string name="download.repeat_all">Repetir todo</string>
     <string name="download.repeat_single">Repetir canción</string>
-    <string name="download.visualizer_on">Visualizador encendido.</string>
-    <string name="download.visualizer_off">Visualizador apagado.</string>
     <string name="download.jukebox_on">Control remoto encendido. La música se está reproduciendo en el ordenador.</string>
     <string name="download.jukebox_off">Control remoto apagado. La música se está reproduciendo en el dispositivo móvil.</string>
     <string name="download.jukebox_volume">Volumen remoto</string>

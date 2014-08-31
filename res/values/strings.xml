@@ -191,8 +191,6 @@
     <string name="download.repeat_off">Repeat off</string>
     <string name="download.repeat_all">Repeat all</string>
     <string name="download.repeat_single">Repeat song</string>
-    <string name="download.visualizer_on">Turned on visualizer.</string>
-    <string name="download.visualizer_off">Turned off visualizer.</string>
     <string name="download.jukebox_on">Turned on remote control. Music is played on the computer.</string>
     <string name="download.jukebox_off">Turned off remote control. Music is played on the phone.</string>
     <string name="download.jukebox_volume">Remote volume</string>

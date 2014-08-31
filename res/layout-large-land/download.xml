@@ -44,15 +44,6 @@
 						android:orientation="vertical">
 
 						<LinearLayout
-							android:id="@+id/download_visualizer_view_layout"
-							android:orientation="horizontal"
-							android:layout_width="fill_parent"
-							android:layout_height="60dip"
-							android:layout_marginLeft="12dip"
-							android:layout_marginRight="12dip"
-							android:layout_above="@+id/download_other_controls_layout"/>
-
-						<LinearLayout
 							android:id="@+id/download_other_controls_layout"
 							android:orientation="horizontal"
 							android:layout_width="wrap_content"
@@ -64,11 +55,6 @@
 								android:id="@+id/download_rating_bad"
 								style="@style/DownloadActionImageButton"
 								android:src="?attr/rating_bad"/>
-
-							<Button
-								android:id="@+id/download_visualizer"
-								android:text="VIS"
-								style="@style/DownloadActionButton"/>
 
 							<ImageButton
 								android:id="@+id/download_star"

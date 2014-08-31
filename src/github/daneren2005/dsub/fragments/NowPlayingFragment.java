@@ -71,7 +71,6 @@ import github.daneren2005.dsub.view.DownloadFileAdapter;
 import github.daneren2005.dsub.view.FadeOutAnimation;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.VisualizerView;
 
 import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import static github.daneren2005.dsub.domain.PlayerState.*;
@@ -111,7 +110,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private View stopButton;
 	private View startButton;
 	private ImageButton repeatButton;
-	private Button visualizerButton;
 	private View toggleListButton;
 	private ImageButton starButton;
 	private ImageButton bookmarkButton;
@@ -123,7 +121,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private long currentRevision;
 	private int swipeDistance;
 	private int swipeVelocity;
-	private VisualizerView visualizerView;
 	private ScheduledFuture<?> hideControlsFuture;
 	private List<DownloadFile> songList;
 	private DownloadFileAdapter songListAdapter;
@@ -186,11 +183,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		stopButton =rootView.findViewById(R.id.download_stop);
 		startButton =rootView.findViewById(R.id.download_start);
 		repeatButton = (ImageButton)rootView.findViewById(R.id.download_repeat);
-		visualizerButton = (Button)rootView.findViewById(R.id.download_visualizer);
 		bookmarkButton = (ImageButton) rootView.findViewById(R.id.download_bookmark);
 		rateBadButton = (ImageButton) rootView.findViewById(R.id.download_rating_bad);
 		rateGoodButton = (ImageButton) rootView.findViewById(R.id.download_rating_good);
-		LinearLayout visualizerViewLayout = (LinearLayout)rootView.findViewById(R.id.download_visualizer_view_layout);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
 
 		starButton = (ImageButton)rootView.findViewById(R.id.download_star);
@@ -219,7 +214,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		pauseButton.setOnTouchListener(touchListener);
 		stopButton.setOnTouchListener(touchListener);
 		startButton.setOnTouchListener(touchListener);
-		visualizerButton.setOnTouchListener(touchListener);
 		bookmarkButton.setOnTouchListener(touchListener);
 		rateBadButton.setOnTouchListener(touchListener);
 		rateGoodButton.setOnTouchListener(touchListener);
@@ -369,23 +363,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		});
 
-		visualizerButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				boolean active = !visualizerView.isActive();
-				visualizerView.setActive(active);
-				boolean isActive = visualizerView.isActive();
-				getDownloadService().setShowVisualization(isActive);
-				updateButtons();
-				if(active == isActive) {
-					Util.toast(context, active ? R.string.download_visualizer_on : R.string.download_visualizer_off);
-				} else {
-					Util.toast(context, "Failed to start visualizer.  Try restarting.");
-				}
-				setControlsVisible(true);
-			}
-		});
-
 		bookmarkButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -517,18 +494,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			context.getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE);
 			warnIfNetworkOrStorageUnavailable();
 			downloadService.setShufflePlayEnabled(true);
-		}
-
-		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
-
-		if (!equalizerAvailable) {
-			visualizerButton.setVisibility(View.GONE);
-		} else {
-			visualizerView = new VisualizerView(context);
-			if(downloadService.getShowVisualization()) {
-				visualizerView.setActive(true);
-			}
-			visualizerViewLayout.addView(visualizerView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 		}
 
 		if(Build.MODEL.equals("Nexus 4")) {
@@ -842,10 +807,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			context.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
 
-		if (visualizerView != null && downloadService != null && downloadService.getShowVisualization()) {
-			visualizerView.setActive(true);
-		}
-
 		updateButtons();
 
 		if(currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
@@ -860,9 +821,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	public void onPause() {
 		super.onPause();
 		executorService.shutdown();
-		if (visualizerView != null && visualizerView.isActive()) {
-			visualizerView.setActive(false);
-		}
 		if(getDownloadService() != null) {
 			getDownloadService().stopRemoteScan();
 		}
@@ -917,10 +875,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private void updateButtons() {
 		if(context == null) {
 			return;
-		}
-
-		if (visualizerView != null) {
-			visualizerButton.setTextColor(visualizerView.isActive() ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
 		}
 		
 		if(Util.isOffline(context)) {

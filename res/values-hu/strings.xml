@@ -191,8 +191,6 @@
     <string name="download.repeat_off">Ismétlés ki</string>
     <string name="download.repeat_all">Összes ismétlése</string>
     <string name="download.repeat_single">Dal ismétlése</string>
-    <string name="download.visualizer_on">Visualizer bekapcsolva.</string>
-    <string name="download.visualizer_off">Visualizer kikapcsolva.</string>
     <string name="download.jukebox_on">Távvezérlés bekapcsolása. A zenelejátszás a számítógépen történik.</string>
     <string name="download.jukebox_off">Távvezérlés kikapcsolása. A zenelejátszás az eszközön történik.</string>
     <string name="download.jukebox_volume">Hangerő távvezérlése</string>
