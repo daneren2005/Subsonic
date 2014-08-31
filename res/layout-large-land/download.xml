@@ -60,10 +60,10 @@
 							android:layout_centerHorizontal="true"
 							android:layout_alignParentBottom="true">
 
-							<Button
-								android:id="@+id/download_equalizer"
-								android:text="EQ"
-								style="@style/DownloadActionButton"/>
+							<ImageButton
+								android:id="@+id/download_rating_bad"
+								style="@style/DownloadActionImageButton"
+								android:src="?attr/rating_bad"/>
 
 							<Button
 								android:id="@+id/download_visualizer"
@@ -79,6 +79,11 @@
 								android:id="@+id/download_bookmark"
 								style="@style/DownloadActionImageButton"
 								android:src="?attr/bookmark"/>
+
+							<ImageButton
+								android:id="@+id/download_rating_good"
+								style="@style/DownloadActionImageButton"
+								android:src="?attr/rating_good"/>
 						</LinearLayout>
 					</RelativeLayout>
 

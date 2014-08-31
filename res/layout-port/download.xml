@@ -61,11 +61,6 @@
 									android:src="@drawable/ic_action_rating_bad_dark"/>
 
 								<Button
-									android:id="@+id/download_equalizer"
-									android:text="EQ"
-									style="@style/DownloadActionButton"/>
-
-								<Button
 									android:id="@+id/download_visualizer"
 									android:text="VIS"
 									style="@style/DownloadActionButton"/>

@@ -70,11 +70,6 @@
 							android:src="?attr/rating_bad"/>
 
 						<Button
-							android:id="@+id/download_equalizer"
-							android:text="EQ"
-							style="@style/DownloadActionButton"/>
-
-						<Button
 							android:id="@+id/download_visualizer"
 							android:text="VIS"
 							style="@style/DownloadActionButton"/>

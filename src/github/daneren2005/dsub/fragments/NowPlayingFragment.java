@@ -111,7 +111,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private View stopButton;
 	private View startButton;
 	private ImageButton repeatButton;
-	private Button equalizerButton;
 	private Button visualizerButton;
 	private View toggleListButton;
 	private ImageButton starButton;
@@ -187,7 +186,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		stopButton =rootView.findViewById(R.id.download_stop);
 		startButton =rootView.findViewById(R.id.download_start);
 		repeatButton = (ImageButton)rootView.findViewById(R.id.download_repeat);
-		equalizerButton = (Button)rootView.findViewById(R.id.download_equalizer);
 		visualizerButton = (Button)rootView.findViewById(R.id.download_visualizer);
 		bookmarkButton = (ImageButton) rootView.findViewById(R.id.download_bookmark);
 		rateBadButton = (ImageButton) rootView.findViewById(R.id.download_rating_bad);
@@ -221,9 +219,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		pauseButton.setOnTouchListener(touchListener);
 		stopButton.setOnTouchListener(touchListener);
 		startButton.setOnTouchListener(touchListener);
-		equalizerButton.setOnTouchListener(touchListener);
 		visualizerButton.setOnTouchListener(touchListener);
 		bookmarkButton.setOnTouchListener(touchListener);
+		rateBadButton.setOnTouchListener(touchListener);
+		rateGoodButton.setOnTouchListener(touchListener);
 		emptyTextView.setOnTouchListener(touchListener);
 		albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
@@ -367,21 +366,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 						break;
 				}
 				setControlsVisible(true);
-			}
-		});
-
-		equalizerButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				DownloadService downloadService = getDownloadService();
-				if(downloadService != null && downloadService.getEqualizerController() != null
-						&& downloadService.getEqualizerController().getEqualizer() != null) {
-					SubsonicFragment fragment = new EqualizerFragment();
-					replaceFragment(fragment);
-					setControlsVisible(true);
-				} else {
-					Util.toast(context, "Failed to start equalizer.  Try restarting.");
-				}
 			}
 		});
 
@@ -538,7 +522,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
 
 		if (!equalizerAvailable) {
-			equalizerButton.setVisibility(View.GONE);
 			visualizerButton.setVisibility(View.GONE);
 		} else {
 			visualizerView = new VisualizerView(context);
@@ -574,6 +557,19 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(downloadService != null && downloadService.isRemovePlayed()) {
 			menu.findItem(R.id.menu_remove_played).setChecked(true);
 		}
+
+		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
+		if(equalizerAvailable) {
+			SharedPreferences prefs = Util.getPreferences(context);
+			boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
+			if (equalizerOn && getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
+					getDownloadService().getEqualizerController().isEnabled()) {
+				menu.findItem(R.id.menu_equalizer).setChecked(true);
+			}
+		} else {
+			menu.removeItem(R.id.menu_equalizer);
+		}
+
 		if(downloadService != null) {
 			MenuItem mediaRouteItem = menu.findItem(R.id.menu_mediaroute);
 			if(mediaRouteItem != null) {
@@ -687,16 +683,16 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				Util.startActivityWithoutTransition(context, intent);
 				return true;
-			case R.id.menu_lyrics:
+			case R.id.menu_lyrics: {
 				SubsonicFragment fragment = new LyricsFragment();
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ARTIST, song.getSong().getArtist());
 				args.putString(Constants.INTENT_EXTRA_NAME_TITLE, song.getSong().getTitle());
 				fragment.setArguments(args);
-				
+
 				replaceFragment(fragment);
 				return true;
-			case R.id.menu_remove:
+			} case R.id.menu_remove:
 				new SilentBackgroundTask<Void>(context) {
 					@Override
 					protected Void doInBackground() throws Throwable {
@@ -797,7 +793,19 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				songs = new ArrayList<Entry>(1);
 				songs.add(song.getSong());
 				createShare(songs);
-			default:
+				return true;
+			case R.id.menu_equalizer: {
+				DownloadService downloadService = getDownloadService();
+				if (downloadService != null && downloadService.getEqualizerController() != null
+						&& downloadService.getEqualizerController().getEqualizer() != null) {
+					SubsonicFragment fragment = new EqualizerFragment();
+					replaceFragment(fragment);
+					setControlsVisible(true);
+				} else {
+					Util.toast(context, "Failed to start equalizer.  Try restarting.");
+				}
+				return true;
+			} default:
 				return false;
 		}
 	}
@@ -911,23 +919,18 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			return;
 		}
 
-		SharedPreferences prefs = Util.getPreferences(context);
-		boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
-		if(equalizerOn && getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
-				getDownloadService().getEqualizerController().isEnabled()) {
-			equalizerButton.setTextColor(COLOR_BUTTON_ENABLED);
-		} else {
-			equalizerButton.setTextColor(COLOR_BUTTON_DISABLED);
-		}
-
 		if (visualizerView != null) {
 			visualizerButton.setTextColor(visualizerView.isActive() ? COLOR_BUTTON_ENABLED : COLOR_BUTTON_DISABLED);
 		}
 		
 		if(Util.isOffline(context)) {
 			bookmarkButton.setVisibility(View.GONE);
+			rateBadButton.setVisibility(View.GONE);
+			rateGoodButton.setVisibility(View.GONE);
 		} else {
 			bookmarkButton.setVisibility(View.VISIBLE);
+			rateBadButton.setVisibility(View.VISIBLE);
+			rateGoodButton.setVisibility(View.VISIBLE);
 		}
 	}
 

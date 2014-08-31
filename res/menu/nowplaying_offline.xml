@@ -20,10 +20,16 @@
         android:icon="?attr/remove"
         android:title="@string/download.menu_remove_all"
         compat:showAsAction="ifRoom|withText"/>
+
+	<item
+		android:id="@+id/menu_equalizer"
+		android:title="@string/equalizer.label"
+		android:checkable="true"/>
 	
 	<item
         android:id="@+id/menu_screen_on_off"
-        android:title="@string/download.menu_screen_on"/>
+        android:title="@string/download.menu_screen_on"
+		android:checkable="true"/>
 
 	<item
 		android:id="@+id/menu_remove_played"
