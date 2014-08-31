@@ -375,14 +375,27 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				Entry entry = getDownloadService().getCurrentPlaying().getSong();
-				setRating(entry, 1);
-				rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_selected);
 
-				// Make sure good rating is blank
-				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-					rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
+				// If rating == 1, already set so unset
+				if(entry.getRating() == 1) {
+					setRating(entry, 0);
+
+					if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+						rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
+					} else {
+						rateBadButton.setImageResource(Util.getAttribute(context, R.attr.rating_bad));
+					}
 				} else {
-					rateGoodButton.setImageResource(Util.getAttribute(context, R.attr.rating_good));
+					// Otherwise set rating to 1
+					setRating(entry, 1);
+					rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_selected);
+
+					// Make sure good rating is blank
+					if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+						rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
+					} else {
+						rateGoodButton.setImageResource(Util.getAttribute(context, R.attr.rating_good));
+					}
 				}
 			}
 		});
@@ -390,14 +403,27 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				Entry entry = getDownloadService().getCurrentPlaying().getSong();
-				setRating(entry, 5);
-				rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_selected);
 
-				// Make sure bad rating is blank
-				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-					rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
+				// If rating == 5, already set so unset
+				if(entry.getRating() == 5) {
+					setRating(entry, 0);
+
+					if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+						rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
+					} else {
+						rateGoodButton.setImageResource(Util.getAttribute(context, R.attr.rating_good));
+					}
 				} else {
-					rateBadButton.setImageResource(Util.getAttribute(context, R.attr.rating_bad));
+					// Otherwise set rating to maximum
+					setRating(entry, 5);
+					rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_selected);
+
+					// Make sure bad rating is blank
+					if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+						rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
+					} else {
+						rateBadButton.setImageResource(Util.getAttribute(context, R.attr.rating_bad));
+					}
 				}
 			}
 		});

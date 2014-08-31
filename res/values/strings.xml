@@ -242,6 +242,7 @@
 
 	<string name="rating.set_rating">Rating set for \"%s\"</string>
 	<string name="rating.set_rating_failed">Failed to set rating for \"%s\"</string>
+	<string name="rating.remove_rating">Rating removed for \"%s\"</string>
 	<string name="rating.remove_rating_failed">Failed to remove rating for \"%s\"</string>
 
 	<string name="song_details.error">Error</string>
