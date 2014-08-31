@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -1088,6 +1089,15 @@ public final class Util {
             return new BitmapDrawable(bitmap);
         }
     }
+
+	public static int getAttribute(Context context, int attr) {
+		int res;
+		int[] attrs = new int[] {attr};
+		TypedArray typedArray = context.obtainStyledAttributes(attrs);
+		res = typedArray.getResourceId(0, 0);
+		typedArray.recycle();
+		return res;
+	}
 
     public static void registerMediaButtonEventReceiver(Context context) {
 

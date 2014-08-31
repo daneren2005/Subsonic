@@ -24,6 +24,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -404,6 +406,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				createBookmark();
+				bookmarkButton.setImageResource(R.drawable.ic_menu_bookmark_selected);
 			}
 		});
 
@@ -412,6 +415,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onClick(View view) {
 				Entry entry = getDownloadService().getCurrentPlaying().getSong();
 				setRating(entry, 1);
+				rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_selected);
+
+				// Make sure good rating is blank
+				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
+				} else {
+					rateGoodButton.setImageResource(Util.getAttribute(context, R.attr.rating_good));
+				}
 			}
 		});
 		rateGoodButton.setOnClickListener(new View.OnClickListener() {
@@ -419,6 +430,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onClick(View view) {
 				Entry entry = getDownloadService().getCurrentPlaying().getSong();
 				setRating(entry, 5);
+				rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_selected);
+
+				// Make sure bad rating is blank
+				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
+				} else {
+					rateBadButton.setImageResource(Util.getAttribute(context, R.attr.rating_bad));
+				}
 			}
 		});
 
@@ -1155,6 +1174,34 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					getImageLoader().loadImage(albumArtImageView, song, true, true);
 					starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
 					setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, currentPlayingSize));
+
+					int badRating, goodRating, bookmark;
+					if(song.getRating() == 1) {
+						badRating = R.drawable.ic_action_rating_bad_selected;
+					} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+						badRating = R.drawable.ic_action_rating_bad_dark;
+					} else {
+						badRating = Util.getAttribute(context, R.attr.rating_bad);
+					}
+					rateBadButton.setImageResource(badRating);
+
+					if(song.getRating() == 5) {
+						goodRating = R.drawable.ic_action_rating_good_selected;
+					} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+						goodRating = R.drawable.ic_action_rating_good_dark;
+					} else {
+						goodRating = Util.getAttribute(context, R.attr.rating_good);
+					}
+					rateGoodButton.setImageResource(goodRating);
+
+					if(song.getBookmark() != null) {
+						bookmark = R.drawable.ic_menu_bookmark_selected;
+					} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+						bookmark = R.drawable.ic_menu_bookmark_dark;
+					} else {
+						bookmark = Util.getAttribute(context, R.attr.bookmark);
+					}
+					bookmarkButton.setImageResource(bookmark);
 				} else {
 					songTitleTextView.setText(null);
 					getImageLoader().loadImage(albumArtImageView, null, true, false);
