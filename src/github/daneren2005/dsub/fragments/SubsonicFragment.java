@@ -379,6 +379,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.bookmark_menu_delete:
 				deleteBookmark(entry, null);
 				break;
+			case R.id.menu_rate:
+				setRating(entry);
+				break;
 			default:
 				return false;
 		}
@@ -1493,6 +1496,27 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}.execute();
 			}
 		});
+	}
+	
+	protected void setRating(final Entry entry) {
+		final RatingBar ratingBar = new RatingBar(context);
+		ratingBar.setNumStars(5);
+		ratingBar.setRating((float) entry.getRating());
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(context.getResources().getString(R.string.rating_title, entry.getTitle()))
+			.setView(ratingBar)
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					int rating = (int) ratingBar.getRating();
+					setRating(entry, rating);
+				}
+			})
+			.setNegativeButton(R.string.common_cancel);
+		
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 
 	protected void setRating(final Entry entry, final int rating) {
