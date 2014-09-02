@@ -20,6 +20,7 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -65,6 +66,8 @@ public class SongView extends UpdateView implements Checkable {
 	private boolean loaded = false;
 	private boolean isBookmarked = false;
 	private boolean bookmarked = false;
+	private int isRated = 0;
+	private int rating = 0;
 
     public SongView(Context context) {
         super(context);
@@ -144,6 +147,9 @@ public class SongView extends UpdateView implements Checkable {
 		artistTextView.setText(artist);
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
+		this.setBackgroundColor(0x00000000);
+		rating = 0;
+
 		revision = -1;
 		loaded = false;
     }
@@ -169,6 +175,7 @@ public class SongView extends UpdateView implements Checkable {
 		partialFileExists = partialFile.exists();
 		isStarred = song.isStarred();
 		isBookmarked = song.getBookmark() != null;
+		isRated = song.getRating();
 		
 		// Check if needs to load metadata: check against all fields that we know are null in offline mode
 		if(song.getBitRate() == null && song.getDuration() == null && song.getDiscNumber() == null && isWorkDone) {
@@ -249,6 +256,22 @@ public class SongView extends UpdateView implements Checkable {
 				bookmarkButton.setVisibility(View.GONE);
 				bookmarked = false;
 			}
+		}
+
+		if(isRated != rating) {
+			// Color the entire row based on rating
+			if(isRated > 3) {
+				this.setBackgroundColor(Color.GREEN);
+				this.getBackground().setAlpha(5 * (isRated - 3));
+			} else if(isRated < 3 && isRated > 0) {
+				this.setBackgroundColor(Color.RED);
+				// Use darker colors the lower the rating goes
+				this.getBackground().setAlpha(10 * (3 - isRated));
+			} else {
+				this.setBackgroundColor(0x00000000);
+			}
+
+			rating = isRated;
 		}
     }
 
