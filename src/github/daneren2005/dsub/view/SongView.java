@@ -48,6 +48,7 @@ public class SongView extends UpdateView implements Checkable {
     private TextView durationTextView;
     private TextView statusTextView;
 	private ImageView statusImageView;
+	private ImageView bookmarkButton;
 	private View bottomRowView;
 	
 	private DownloadService downloadService;
@@ -62,6 +63,8 @@ public class SongView extends UpdateView implements Checkable {
 	private File partialFile;
 	private boolean partialFileExists = false;
 	private boolean loaded = false;
+	private boolean isBookmarked = false;
+	private boolean bookmarked = false;
 
     public SongView(Context context) {
         super(context);
@@ -75,6 +78,8 @@ public class SongView extends UpdateView implements Checkable {
 		statusImageView = (ImageView) findViewById(R.id.song_status_icon);
         starButton = (ImageButton) findViewById(R.id.song_star);
         starButton.setFocusable(false);
+		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
+		bookmarkButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.artist_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -163,6 +168,7 @@ public class SongView extends UpdateView implements Checkable {
 		partialFile = downloadFile.getPartialFile();
 		partialFileExists = partialFile.exists();
 		isStarred = song.isStarred();
+		isBookmarked = song.getBookmark() != null;
 		
 		// Check if needs to load metadata: check against all fields that we know are null in offline mode
 		if(song.getBitRate() == null && song.getDuration() == null && song.getDiscNumber() == null && isWorkDone) {
@@ -230,6 +236,18 @@ public class SongView extends UpdateView implements Checkable {
 			if(this.playing) {
 				this.playing = playing;
             	titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			}
+		}
+
+		if(isBookmarked) {
+			if(!bookmarked) {
+				bookmarkButton.setVisibility(View.VISIBLE);
+				bookmarked = true;
+			}
+		} else {
+			if(bookmarked) {
+				bookmarkButton.setVisibility(View.GONE);
+				bookmarked = false;
 			}
 		}
     }
