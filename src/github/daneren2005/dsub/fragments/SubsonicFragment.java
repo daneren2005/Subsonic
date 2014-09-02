@@ -1503,6 +1503,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				musicService.setRating(entry, rating, context, null);
 
 				entry.setRating(rating);
+
+				Entry findEntry = UpdateView.findEntry(entry);
+				if(findEntry != null) {
+					findEntry.setRating(rating);
+				}
 				return null;
 			}
 
