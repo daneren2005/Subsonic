@@ -859,7 +859,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 
 				for (Entry song : parent.getChildren(false, true)) {
-					if (!song.isVideo()) {
+					if (!song.isVideo() && song.getRating() != 1) {
 						songs.add(song);
 					}
 				}
