@@ -274,7 +274,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				addToPlaylist(getSelectedSongs());
 				return true;
 			case R.id.menu_remove_playlist:
-				// TODO: getSelected is returning offset
 				removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
 				return true;
 			case R.id.menu_download_all:
@@ -808,7 +807,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		for (int i = 0; i < count; i++) {
 			if (entryList.isItemChecked(i)) {
 				MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(i);
-				if(!entry.isDirectory()) {
+				// Don't try to add directories or 1-starred songs
+				if(!entry.isDirectory() && entry.getRating() != 1) {
 					songs.add(entry);
 				}
 			}
