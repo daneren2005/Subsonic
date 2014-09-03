@@ -441,14 +441,20 @@ public class FileUtil {
 	public static boolean verifyCanWrite(File dir) {
 		if(ensureDirectoryExistsAndIsReadWritable(dir)) {
 			try {
-				File tmp = new File(dir, "tmp");
-				if(tmp.createNewFile()) {
-					tmp.delete();
-					return true;
+				File tmp = new File(dir, "checkWrite");
+				tmp.createNewFile();
+				if(tmp.exists()) {
+					if(tmp.delete()) {
+						return true;
+					} else {
+						Log.w(TAG, "Failed to delete temp file");
+					}
 				} else {
+					Log.w(TAG, "Temp file does not actually exist");
 					return false;
 				}
 			} catch(Exception e) {
+				Log.w(TAG, "Failed to create tmp file", e);
 				return false;
 			}
 		} else {
