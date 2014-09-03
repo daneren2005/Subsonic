@@ -509,7 +509,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			visualizerViewLayout.addView(visualizerView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 		}
 
-		if(Build.MODEL.equals("Nexus 4")) {
+		if(Build.MODEL.equals("Nexus 4") || Build.MODEL.equals("GT-I9100")) {
 			View slider = rootView.findViewById(R.id.download_slider);
 			slider.setPadding(0, 0, 0, 0);
 		}
