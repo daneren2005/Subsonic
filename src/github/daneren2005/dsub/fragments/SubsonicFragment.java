@@ -1462,15 +1462,24 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void playNow(List<Entry> entries, int position) {
 		playNow(entries, entries.get(0), position);
 	}
-	protected void playNow(List<Entry> entries, Entry song, int position) {
-		DownloadService downloadService = getDownloadService();
-		if(downloadService == null) {
-			return;
-		}
-		
-		downloadService.clear();
-		downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
-		Util.startActivityWithoutTransition(context, DownloadActivity.class);
+	protected void playNow(final List<Entry> entries, final Entry song, final int position) {
+		new LoadingTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				DownloadService downloadService = getDownloadService();
+				if(downloadService == null) {
+					return;
+				}
+				
+				downloadService.clear();
+				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
+			}
+			
+			@Override
+			protected void done(Void result) {
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+			}
+		}.execute();
 	}
 
 	protected void deleteBookmark(final MusicDirectory.Entry entry, final ArrayAdapter adapter) {
