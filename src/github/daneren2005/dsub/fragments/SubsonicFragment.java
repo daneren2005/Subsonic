@@ -46,6 +46,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
@@ -1179,7 +1180,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			msg += "\nLength: " + Util.formatDuration(song.getDuration());
 		}
 		if(song.getBookmark() != null) {
-			msg += "\nBookmark Position: " + Util.formatDuration(song.getBookmark().getPosition());
+			msg += "\nBookmark Position: " + Util.formatDuration(song.getBookmark().getPosition() / 1000);
 		}
 		if(song.getRating() != 0) {
 			msg += "\nRating: " + song.getRating() + " stars";
@@ -1505,13 +1506,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 	
 	protected void setRating(final Entry entry) {
-		final RatingBar ratingBar = new RatingBar(context);
-		ratingBar.setNumStars(5);
+		View layout = context.getLayoutInflater().inflate(R.layout.rating, null);
+		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
 		ratingBar.setRating((float) entry.getRating());
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(context.getResources().getString(R.string.rating_title, entry.getTitle()))
-			.setView(ratingBar)
+			.setView(layout)
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
@@ -1519,7 +1520,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					setRating(entry, rating);
 				}
 			})
-			.setNegativeButton(R.string.common_cancel);
+			.setNegativeButton(R.string.common_cancel, null);
 		
 		AlertDialog dialog = builder.create();
 		dialog.show();

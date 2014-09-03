@@ -62,7 +62,7 @@
 	
 	<item
 		android:id="@+id/menu_rate"
-		android:title="@/string/menu.rate"/>
+		android:title="@string/menu.rate"/>
 	
 	<group android:id="@+id/server_1.9">
 		<item
