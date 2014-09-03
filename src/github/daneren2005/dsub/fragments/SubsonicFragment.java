@@ -186,6 +186,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 				else {
 					inflater.inflate(R.menu.select_album_context, menu);
+
+					if(Util.isTagBrowsing(context)) {
+						menu.removeItem(R.id.menu_rate);
+					}
 				}
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else if(!entry.isVideo()) {
