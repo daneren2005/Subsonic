@@ -47,6 +47,7 @@ public class MusicDirectoryEntryParser extends AbstractParser {
         entry.setYear(getInteger("year"));
         entry.setGenre(get("genre"));
 		entry.setAlbum(get("album"));
+		entry.setRating(getInteger("userRating"));
 
         if (!entry.isDirectory()) {
 			entry.setAlbumId(get("albumId"));
@@ -73,7 +74,6 @@ public class MusicDirectoryEntryParser extends AbstractParser {
 			} else if("audiobook".equals(type)) {
 				entry.setType(MusicDirectory.Entry.TYPE_AUDIO_BOOK);
 			}
-			entry.setRating(getInteger("userRating"));
         } else if(!"".equals(artist)) {
 			entry.setPath(artist + "/" + entry.getTitle());
 		}
