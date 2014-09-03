@@ -248,6 +248,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || !UserUtil.canShare()) {
 			menu.setGroupVisible(R.id.hide_share, false);
 		}
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
+			menu.setGroupVisible(R.id.hide_rating, false);
+		}
 	}
 
 	protected void recreateContextMenu(ContextMenu menu) {

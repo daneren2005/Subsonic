@@ -101,6 +101,12 @@
 				android:key="showShared"
 				android:defaultValue="true"/>
 
+			<CheckBoxPreference
+				android:title="@string/menu.rate"
+				android:summary="@string/settings.menu_options.rate_summary"
+				android:key="showRating"
+				android:defaultValue="true"/>
+
 		</PreferenceCategory>
 	</PreferenceScreen>
 
