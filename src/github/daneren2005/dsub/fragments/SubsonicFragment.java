@@ -178,6 +178,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 				else {
 					inflater.inflate(R.menu.select_podcast_episode_context, menu);
+					
+					if(entry.getBookmark() == null) {
+						menu.removeItem(R.id.bookmark_menu_delete);
+					}
 				}
 			}
 			else if (entry.isDirectory()) {
