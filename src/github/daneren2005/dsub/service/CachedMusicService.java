@@ -795,7 +795,7 @@ public class CachedMusicService implements MusicService {
 	public void setRating(final Entry entry, final int rating, Context context, ProgressListener progressListener) throws Exception {
 		musicService.setRating(entry, rating, context, progressListener);
 		
-		new GenericSongUpdater(context, entry) {
+		new GenericEntryUpdater(context, entry) {
 			@Override
 			public void updateResult(Entry result) {
 				result.setRating(rating);
@@ -1229,74 +1229,120 @@ public class CachedMusicService implements MusicService {
 			}
 		}
 	}
-	private abstract class GenericSongUpdater {
+	private abstract class GenericEntryUpdater {
 		Context context;
-		Entry entry;
+		List<Entry> entries;
 		
-		public GenericSongUpdater(Context context, Entry entry) {
+		public GenericEntryUpdater(Context context, Entry entry) {
 			this.context = context;
-			this.entry = entry;
+			this.entries = Arrays.asList(entry);
+		}
+		public GenericEntryUpdater(Context context, List<Entry> entries) {
+			this.context = context;
+			this.entries = entries;
 		}
 		
-		public boolean checkResult(Entry check) {
+		public boolean checkResult(Entry entry, Entry check) {
 			return entry.getId().equals(check.getId());
 		}
 		public abstract void updateResult(Entry result);
 		
 		public void execute() {
 			String cacheName, parent;
-			if(Util.isTagBrowsing(context, musicService.getInstance(context))) {
-				// If starring album, needs to reference artist instead
-				if(entry.isDirectory()) {
-					cacheName = "artist";
-					parent = entry.getArtistId();
+			boolean isTagBrowsing = Util.isTagBrowsing(context, musicService.getInstance(context));
+			
+			// Run through each entry, trying to update the directory it is in
+			List<Entry> songs;
+			for(final Entry entry: entries) {
+				if(isTagBrowsing) {
+					// If starring album, needs to reference artist instead
+					if(entry.isDirectory()) {
+						if(entry.isAlbum()) {
+							cacheName = "artist";
+							parent = entry.getArtistId();
+						} else {
+							cacheName = "artists";
+							parent = null;
+						}
+					} else {
+						cacheName = "album";
+						parent = entry.getAlbumId();
+					}
 				} else {
-					cacheName = "album";
-					parent = entry.getAlbumId();
+					if(entry.isDirectory() && !entry.isAlbum()) {
+						cacheName = "indexes";
+						parent = null;
+					} else {
+						cacheName = "directory";
+						parent = entry.getParent();
+					}
 				}
-			} else {
-				cacheName = "directory";
-				parent = entry.getParent();
-			}
 
-			new MusicDirectoryUpdater(context, cacheName, parent) {
-				@Override
-				public boolean checkResult(Entry check) {
-					return GenericSongUpdater.this.checkResult(check);
+				// Parent is only null when it is an artist
+				if(parent == null) {
+					new IndexesUpdater(context, cacheName) {
+						@Override
+						public boolean checkResult(Artist check) {
+							return checkResult(entry, new Entry(check));
+						}
+						
+						@Override
+						public void updateResult(List<Artist> objects, Artist result) {
+							updateResult(new Entry(result));
+						}
+					}.execute();
+				} else {
+					new MusicDirectoryUpdater(context, cacheName, parent) {
+						@Override
+						public boolean checkResult(Entry check) {
+							return checkResult(entry, check);
+						}
+						
+						@Override
+						public void updateResult(List<Entry> objects, Entry result) {
+							updateResult(result);
+						}
+					}.execute();
 				}
 				
-				@Override
-				public void updateResult(List<Entry> objects, Entry result) {
-					GenericSongUpdater.this.updateResult(result);
+				if(entry instanceof PodcastEpisode) {
+					PodcastEpisode episode = (PodcastEpisode) entry;
+					new MusicDirectoryUpdater(context, cacheName, "p-" + entry.getId()) {
+						@Override
+						public boolean checkResult(Entry check) {
+							return checkResult(entry, check);
+						}
+						
+						@Override
+						public void updateResult(List<Entry> objects, Entry result) {
+							updateResult(result);
+						}
+					}.execute();
+				} else if(!entry.isDirectory()) {
+					songs.add(entry);
 				}
-			}.execute();
+			}
 			
-			if(entry instanceof PodcastEpisode) {
-				PodcastEpisode episode = (PodcastEpisode) entry;
-				new MusicDirectoryUpdater(context, cacheName, "p-" + entry.getId()) {
+			// Only run through playlists once and check each song against it
+			if(songs.size() > 0) {
+				new PlaylistDirectoryUpdater(context) {
 					@Override
 					public boolean checkResult(Entry check) {
-						return GenericSongUpdater.this.checkResult(check);
+						for(Entry entry: songs) {
+							if(checkResult(entry, check)) {
+								return true;
+							}
+						}
+						
+						return false;
 					}
 					
 					@Override
-					public void updateResult(List<Entry> objects, Entry result) {
-						GenericSongUpdater.this.updateResult(result);
+					public void updateResult(Entry result) {
+						GenericEntryUpdater.this.updateResult(result);
 					}
 				}.execute();
 			}
-			
-			new PlaylistDirectoryUpdater(context) {
-				@Override
-				public boolean checkResult(Entry check) {
-					return GenericSongUpdater.this.checkResult(check);
-				}
-				
-				@Override
-				public void updateResult(Entry result) {
-					GenericSongUpdater.this.updateResult(result);
-				}
-			}.execute();
 		}
 	}
 	private abstract class IndexesUpdater extends SerializeUpdater<Artist> {
