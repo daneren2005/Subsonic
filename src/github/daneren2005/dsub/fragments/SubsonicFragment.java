@@ -1468,11 +1468,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			protected Void doInBackground() throws Throwable {
 				DownloadService downloadService = getDownloadService();
 				if(downloadService == null) {
-					return;
+					return null;
 				}
 				
 				downloadService.clear();
 				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
+
+				return null;
 			}
 			
 			@Override
