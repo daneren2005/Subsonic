@@ -448,6 +448,7 @@ public class FileUtil {
 						return true;
 					} else {
 						Log.w(TAG, "Failed to delete temp file");
+						return false;
 					}
 				} else {
 					Log.w(TAG, "Temp file does not actually exist");
