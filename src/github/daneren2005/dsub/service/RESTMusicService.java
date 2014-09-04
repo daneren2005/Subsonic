@@ -1126,10 +1126,10 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
+	public void setRating(MusicDirectory.Entry entry, int rating, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Setting ratings not supported.");
 		
-		Reader reader = getReader(context, progressListener, "setRating", null, Arrays.asList("id", "rating"), Arrays.<Object>asList(id, rating));
+		Reader reader = getReader(context, progressListener, "setRating", null, Arrays.asList("id", "rating"), Arrays.<Object>asList(entry.getId(), rating));
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {

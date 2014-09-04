@@ -44,8 +44,8 @@ import github.daneren2005.dsub.util.Util;
 
 public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	private static String TAG = PlaylistSyncAdapter.class.getSimpleName();
-	// Update playlists at least once a week
-	private static int MAX_PLAYLIST_AGE = 24 * 7;
+	// Update playlists every day to make sure they are still valid
+	private static int MAX_PLAYLIST_AGE = 24;
 
 	public PlaylistSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);

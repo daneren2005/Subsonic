@@ -46,6 +46,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
@@ -185,6 +186,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 				else {
 					inflater.inflate(R.menu.select_album_context, menu);
+
+					if(Util.isTagBrowsing(context)) {
+						menu.removeItem(R.id.menu_rate);
+					}
 				}
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else if(!entry.isVideo()) {
@@ -246,6 +251,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || !UserUtil.canShare()) {
 			menu.setGroupVisible(R.id.hide_share, false);
+		}
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
+			menu.setGroupVisible(R.id.hide_rating, false);
 		}
 	}
 
@@ -378,6 +386,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.bookmark_menu_delete:
 				deleteBookmark(entry, null);
+				break;
+			case R.id.menu_rate:
+				setRating(entry);
 				break;
 			default:
 				return false;
@@ -848,7 +859,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 
 				for (Entry song : parent.getChildren(false, true)) {
-					if (!song.isVideo()) {
+					if (!song.isVideo() && song.getRating() != 1) {
 						songs.add(song);
 					}
 				}
@@ -1175,6 +1186,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(song.getDuration() != null && song.getDuration() != 0) {
 			msg += "\nLength: " + Util.formatDuration(song.getDuration());
 		}
+		if(song.getBookmark() != null) {
+			msg += "\nBookmark Position: " + Util.formatDuration(song.getBookmark().getPosition() / 1000);
+		}
+		if(song.getRating() != 0) {
+			msg += "\nRating: " + song.getRating() + " stars";
+		}
 		if(song instanceof PodcastEpisode) {
 			msg += "\n\nDescription: " + song.getAlbum();
 		}
@@ -1446,17 +1463,26 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		Entry selected = entries.isEmpty() ? null : entries.get(0);
 		playNow(entries, selected, position);
 	}
-	protected void playNow(List<Entry> entries, Entry song, int position) {
-		DownloadService downloadService = getDownloadService();
-		if(downloadService == null) {
-			return;
-		}
-		
-		downloadService.clear();
-		if(song != null) {
-			downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
-		}
-		Util.startActivityWithoutTransition(context, DownloadActivity.class);
+	protected void playNow(final List<Entry> entries, final Entry song, final int position) {
+		new LoadingTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				DownloadService downloadService = getDownloadService();
+				if(downloadService == null) {
+					return null;
+				}
+				
+				downloadService.clear();
+				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
+
+				return null;
+			}
+			
+			@Override
+			protected void done(Void result) {
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+			}
+		}.execute();
 	}
 
 	protected void deleteBookmark(final MusicDirectory.Entry entry, final ArrayAdapter adapter) {
@@ -1496,5 +1522,61 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}.execute();
 			}
 		});
+	}
+	
+	protected void setRating(final Entry entry) {
+		View layout = context.getLayoutInflater().inflate(R.layout.rating, null);
+		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
+		ratingBar.setRating((float) entry.getRating());
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(context.getResources().getString(R.string.rating_title, entry.getTitle()))
+			.setView(layout)
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					int rating = (int) ratingBar.getRating();
+					setRating(entry, rating);
+				}
+			})
+			.setNegativeButton(R.string.common_cancel, null);
+		
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	protected void setRating(final Entry entry, final int rating) {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.setRating(entry, rating, context, null);
+
+				entry.setRating(rating);
+
+				Entry findEntry = UpdateView.findEntry(entry);
+				if(findEntry != null) {
+					findEntry.setRating(rating);
+				}
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, getResources().getString(rating > 0 ? R.string.rating_set_rating : R.string.rating_remove_rating, entry.getTitle()));
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(rating > 0 ? R.string.rating_set_rating_failed : R.string.rating_remove_rating_failed, entry.getTitle()) + " " + getErrorMessage(error);
+				}
+
+				Util.toast(context, msg, false);
+			}
+		}.execute();
 	}
 }

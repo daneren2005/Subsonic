@@ -23,5 +23,7 @@
 	<attr name="share" format="reference"/>
 	<attr name="add_person" format="reference"/>
 	<attr name="password" format="reference"/>
+	<attr name="rating_bad" format="reference"/>
+	<attr name="rating_good" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
 </resources>

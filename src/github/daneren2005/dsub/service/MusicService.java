@@ -152,7 +152,7 @@ public interface MusicService {
 	
 	void deletePodcastEpisode(String id, String parent, ProgressListener progressListener, Context context) throws Exception;
 
-	void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception;
+	void setRating(MusicDirectory.Entry entry, int rating, Context context, ProgressListener progressListener) throws Exception;
 
 	MusicDirectory getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 

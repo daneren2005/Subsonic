@@ -400,8 +400,8 @@ public class MusicDirectory implements Serializable {
             this.starred = starred;
         }
         
-		public Integer getRating() {
-			return rating;
+		public int getRating() {
+			return rating == null ? 0 : rating;
 		}
 		public void setRating(Integer rating) {
 			this.rating = rating;

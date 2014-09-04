@@ -178,7 +178,11 @@ public class MainFragment extends SubsonicFragment {
 		adapter.addView(offlineButton, true);
 		if (!Util.isOffline(context)) {
 			adapter.addView(albumsTitle, false);
-			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton, albumsHighestButton, albumsStarredButton, albumsGenresButton, albumsYearButton, albumsRecentButton, albumsFrequentButton), true);
+			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton), true);
+			if(!Util.isTagBrowsing(context)) {
+				adapter.addView(albumsHighestButton, true);
+			}
+			adapter.addViews(Arrays.asList(albumsStarredButton, albumsGenresButton, albumsYearButton, albumsRecentButton, albumsFrequentButton), true);
 		}
 		list.setAdapter(adapter);
 		registerForContextMenu(dummyView);

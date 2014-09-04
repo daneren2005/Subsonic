@@ -191,8 +191,6 @@
     <string name="download.repeat_off">Keine Wiederholung</string>
     <string name="download.repeat_all">Wiederhole alle</string>
     <string name="download.repeat_single">Aktuelles Lied wiederholen</string>
-    <string name="download.visualizer_on">Visualisierung aktiviert.</string>
-    <string name="download.visualizer_off">Visualisierung deaktiviert.</string>
     <string name="download.jukebox_on">Fernbedienung aktiviert. Musik wird auf dem Computer abgespielt.</string>
     <string name="download.jukebox_off">Fernbedienung deaktiviert. Musik wird auf dem Telefon abgespielt.</string>
     <string name="download.jukebox_volume">Lautstärke</string>

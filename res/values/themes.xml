@@ -26,6 +26,8 @@
 		<item name="share">@drawable/ic_menu_share_light</item>
 		<item name="add_person">@drawable/ic_menu_add_person_light</item>
 		<item name="password">@drawable/ic_menu_password_light</item>
+		<item name="rating_bad">@drawable/ic_action_rating_bad_light</item>
+		<item name="rating_good">@drawable/ic_action_rating_good_light</item>
 		<item name="drawerItemsIcons">@array/drawerItemIconsLight</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Light</item>
@@ -57,6 +59,8 @@
 		<item name="share">@drawable/ic_menu_share_dark</item>
 		<item name="add_person">@drawable/ic_menu_add_person_dark</item>
 		<item name="password">@drawable/ic_menu_password_dark</item>
+		<item name="rating_bad">@drawable/ic_action_rating_bad_dark</item>
+		<item name="rating_good">@drawable/ic_action_rating_good_dark</item>
 		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Dark</item>
@@ -91,6 +95,8 @@
 		<item name="share">@drawable/ic_menu_share_dark</item>
 		<item name="add_person">@drawable/ic_menu_add_person_dark</item>
 		<item name="password">@drawable/ic_menu_password_dark</item>
+		<item name="rating_bad">@drawable/ic_action_rating_bad_dark</item>
+		<item name="rating_good">@drawable/ic_action_rating_good_dark</item>
 		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Dark</item>

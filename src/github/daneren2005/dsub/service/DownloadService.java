@@ -32,7 +32,6 @@ import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.audiofx.AudioEffectsController;
 import github.daneren2005.dsub.audiofx.EqualizerController;
-import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -137,7 +136,6 @@ public class DownloadService extends Service {
 	private boolean downloadOngoing = false;
 
 	private AudioEffectsController effectsController;
-	private boolean showVisualization;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
 	private PositionCache positionCache;
 	private BufferProxy proxy;
@@ -186,10 +184,6 @@ public class DownloadService extends Service {
 				effectsController = new AudioEffectsController(DownloadService.this, audioSessionId);
 				if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
 					getEqualizerController();
-				}
-				if(prefs.getBoolean(Constants.PREFERENCES_VISUALIZER_ON, false)) {
-					getVisualizerController();
-					showVisualization = true;
 				}
 
 				mediaPlayerLooper = Looper.myLooper();
@@ -474,17 +468,6 @@ public class DownloadService extends Service {
 		SharedPreferences prefs = Util.getPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, keepScreenOn);
-		editor.commit();
-	}
-
-	public boolean getShowVisualization() {
-		return showVisualization;
-	}
-
-	public void setShowVisualization(boolean showVisualization) {
-		this.showVisualization = showVisualization;
-		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
-		editor.putBoolean(Constants.PREFERENCES_VISUALIZER_ON, showVisualization);
 		editor.commit();
 	}
 
@@ -1178,10 +1161,6 @@ public class DownloadService extends Service {
 
 	public EqualizerController getEqualizerController() {
 		return effectsController.getEqualizerController();
-	}
-
-	public VisualizerController getVisualizerController() {
-		return effectsController.getVisualizerController();
 	}
 
 	public MediaRouteSelector getRemoteSelector() {

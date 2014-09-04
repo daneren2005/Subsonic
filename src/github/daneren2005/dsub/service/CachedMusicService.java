@@ -792,8 +792,15 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
-		musicService.setRating(id, rating, context, progressListener);
+	public void setRating(final Entry entry, final int rating, Context context, ProgressListener progressListener) throws Exception {
+		musicService.setRating(entry, rating, context, progressListener);
+		
+		new GenericSongUpdater(context, entry) {
+			@Override
+			public void updateResult(Entry result) {
+				result.setRating(rating);
+			}
+		}.execute();
 	}
 
 	@Override
@@ -1220,6 +1227,61 @@ public class CachedMusicService implements MusicService {
 					}
 				}.execute();
 			}
+		}
+	}
+	private abstract class GenericSongUpdater {
+		Context context;
+		Entry entry;
+		
+		public GenericSongUpdater(Context context, Entry entry) {
+			this.context = context;
+			this.entry = entry;
+		}
+		
+		public boolean checkResult(Entry check) {
+			return entry.getId().equals(check.getId());
+		}
+		public abstract void updateResult(Entry result);
+		
+		public void execute() {
+			String cacheName, parent;
+			if(Util.isTagBrowsing(context, musicService.getInstance(context))) {
+				// If starring album, needs to reference artist instead
+				if(entry.isDirectory()) {
+					cacheName = "artist";
+					parent = entry.getArtistId();
+				} else {
+					cacheName = "album";
+					parent = entry.getAlbumId();
+				}
+			} else {
+				cacheName = "directory";
+				parent = entry.getParent();
+			}
+
+			new MusicDirectoryUpdater(context, cacheName, parent) {
+				@Override
+				public boolean checkResult(Entry check) {
+					return GenericSongUpdater.this.checkResult(check);
+				}
+				
+				@Override
+				public void updateResult(List<Entry> objects, Entry result) {
+					GenericSongUpdater.this.updateResult(result);
+				}
+			}.execute();
+			
+			new PlaylistDirectoryUpdater(context) {
+				@Override
+				public boolean checkResult(Entry check) {
+					return GenericSongUpdater.this.checkResult(check);
+				}
+				
+				@Override
+				public void updateResult(Entry result) {
+					GenericSongUpdater.this.updateResult(result);
+				}
+			}.execute();
 		}
 	}
 	private abstract class IndexesUpdater extends SerializeUpdater<Artist> {
