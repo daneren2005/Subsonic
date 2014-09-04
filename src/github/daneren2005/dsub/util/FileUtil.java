@@ -118,11 +118,22 @@ public class FileUtil {
 
         fileName.append(fileSystemSafe(song.getTitle())).append(".");
 
-        if (song.getTranscodedSuffix() != null) {
-            fileName.append(song.getTranscodedSuffix());
-        } else {
-            fileName.append(song.getSuffix());
-        }
+		if(song.isVideo()) {
+			String videoPlayerType = Util.getVideoPlayerType(context);
+			if("hls".equals(videoPlayerType)) {
+				// HLS should be able to transcode to mp4 automatically
+				fileName.append("mp4");
+			} else if("raw".equals(videoPlayerType)) {
+				// Download the original video without any transcoding
+				fileName.append(song.getSuffix());
+			}
+		} else {
+			if (song.getTranscodedSuffix() != null) {
+				fileName.append(song.getTranscodedSuffix());
+			} else {
+				fileName.append(song.getSuffix());
+			}
+		}
 
         return new File(dir, fileName.toString());
     }
@@ -430,14 +441,21 @@ public class FileUtil {
 	public static boolean verifyCanWrite(File dir) {
 		if(ensureDirectoryExistsAndIsReadWritable(dir)) {
 			try {
-				File tmp = new File(dir, "tmp");
-				if(tmp.createNewFile()) {
-					tmp.delete();
-					return true;
+				File tmp = new File(dir, "checkWrite");
+				tmp.createNewFile();
+				if(tmp.exists()) {
+					if(tmp.delete()) {
+						return true;
+					} else {
+						Log.w(TAG, "Failed to delete temp file");
+						return false;
+					}
 				} else {
+					Log.w(TAG, "Temp file does not actually exist");
 					return false;
 				}
 			} catch(Exception e) {
+				Log.w(TAG, "Failed to create tmp file", e);
 				return false;
 			}
 		} else {

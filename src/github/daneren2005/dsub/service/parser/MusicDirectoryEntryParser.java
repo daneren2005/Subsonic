@@ -47,6 +47,7 @@ public class MusicDirectoryEntryParser extends AbstractParser {
         entry.setYear(getInteger("year"));
         entry.setGenre(get("genre"));
 		entry.setAlbum(get("album"));
+		entry.setRating(getInteger("userRating"));
 
         if (!entry.isDirectory()) {
 			entry.setAlbumId(get("albumId"));
@@ -65,6 +66,13 @@ public class MusicDirectoryEntryParser extends AbstractParser {
 			Integer bookmark = getInteger("bookmarkPosition");
 			if(bookmark != null) {
 				entry.setBookmark(new Bookmark(bookmark));
+			}
+
+			String type = get("type");
+			if("podcast".equals(type)) {
+				entry.setType(MusicDirectory.Entry.TYPE_PODCAST);
+			} else if("audiobook".equals(type)) {
+				entry.setType(MusicDirectory.Entry.TYPE_AUDIO_BOOK);
 			}
         } else if(!"".equals(artist)) {
 			entry.setPath(artist + "/" + entry.getTitle());

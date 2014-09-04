@@ -103,6 +103,7 @@
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Add User</string>
 	<string name="menu.rescan">Rescan Server</string>
+	<string name="menu.rate">Set Rating</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -191,8 +192,6 @@
     <string name="download.repeat_off">Repeat off</string>
     <string name="download.repeat_all">Repeat all</string>
     <string name="download.repeat_single">Repeat song</string>
-    <string name="download.visualizer_on">Turned on visualizer.</string>
-    <string name="download.visualizer_off">Turned off visualizer.</string>
     <string name="download.jukebox_on">Turned on remote control. Music is played on the computer.</string>
     <string name="download.jukebox_off">Turned off remote control. Music is played on the phone.</string>
     <string name="download.jukebox_volume">Remote volume</string>
@@ -241,6 +240,12 @@
 	<string name="bookmark.resume">Resume playing \'%1$s\' from %2$s</string>
 	<string name="bookmark.action_resume">Resume</string>
 	<string name="bookmark.action_start_over">Start Over</string>
+
+	<string name="rating.title">Rate \"%s\"</string>
+	<string name="rating.set_rating">Rating set for \"%s\"</string>
+	<string name="rating.set_rating_failed">Failed to set rating for \"%s\"</string>
+	<string name="rating.remove_rating">Rating removed for \"%s\"</string>
+	<string name="rating.remove_rating_failed">Failed to remove rating for \"%s\"</string>
 
 	<string name="song_details.error">Error</string>
 	<string name="song_details.skipped">Skipped</string>
@@ -411,6 +416,7 @@
 	<string name="settings.menu_options.play_last_summary">Show Play last in menus</string>
 	<string name="settings.menu_options.star_summary">Show Star in menus</string>
 	<string name="settings.menu_options.shared_summary">Show Share in menus</string>
+	<string name="settings.menu_options.rate_summary">Show Rating in menus</string>
 	<string name="settings.browse_by_tags">Browse By Tags</string>
 	<string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.  Requires Subsonic 4.7+</string>
 	<string name="settings.override_system_language">Override System Language</string>

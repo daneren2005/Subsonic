@@ -133,10 +133,16 @@ public final class UserUtil {
 	public static boolean canJukebox() {
 		return isCurrentRole(User.JUKEBOX);
 	}
+	public static boolean canScrobble() {
+		return isCurrentRole(User.SCROBBLING, true);
+	}
 
 	public static boolean isCurrentRole(String role) {
+		return isCurrentRole(role, false);
+	}
+	public static boolean isCurrentRole(String role, boolean defaultValue) {
 		if(currentUser == null) {
-			return false;
+			return defaultValue;
 		}
 
 		for(User.Setting setting: currentUser.getSettings()) {
@@ -145,7 +151,7 @@ public final class UserUtil {
 			}
 		}
 
-		return false;
+		return defaultValue;
 	}
 	
 	public static void confirmCredentials(final Activity context, final Runnable onSuccess) {

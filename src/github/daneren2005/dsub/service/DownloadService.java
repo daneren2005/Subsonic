@@ -32,7 +32,6 @@ import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.audiofx.AudioEffectsController;
 import github.daneren2005.dsub.audiofx.EqualizerController;
-import github.daneren2005.dsub.audiofx.VisualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -137,7 +136,6 @@ public class DownloadService extends Service {
 	private boolean downloadOngoing = false;
 
 	private AudioEffectsController effectsController;
-	private boolean showVisualization;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
 	private PositionCache positionCache;
 	private BufferProxy proxy;
@@ -190,10 +188,6 @@ public class DownloadService extends Service {
 				effectsController = new AudioEffectsController(DownloadService.this, audioSessionId);
 				if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
 					getEqualizerController();
-				}
-				if(prefs.getBoolean(Constants.PREFERENCES_VISUALIZER_ON, false)) {
-					getVisualizerController();
-					showVisualization = true;
 				}
 
 				mediaPlayerLooper = Looper.myLooper();
@@ -481,17 +475,6 @@ public class DownloadService extends Service {
 		editor.commit();
 	}
 
-	public boolean getShowVisualization() {
-		return showVisualization;
-	}
-
-	public void setShowVisualization(boolean showVisualization) {
-		this.showVisualization = showVisualization;
-		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
-		editor.putBoolean(Constants.PREFERENCES_VISUALIZER_ON, showVisualization);
-		editor.commit();
-	}
-
 	public synchronized DownloadFile forSong(MusicDirectory.Entry song) {
 		DownloadFile returnFile = null;
 		for (DownloadFile downloadFile : downloadList) {
@@ -548,6 +531,8 @@ public class DownloadService extends Service {
 				if(currentPlaying == downloadFile) {
 					reset();
 				}
+
+				currentPlayingIndex = downloadList.indexOf(currentPlaying);
 			}
 		}
 		lifecycleSupport.serializeDownloadQueue();
@@ -1193,10 +1178,6 @@ public class DownloadService extends Service {
 
 	public EqualizerController getEqualizerController() {
 		return effectsController.getEqualizerController();
-	}
-
-	public VisualizerController getVisualizerController() {
-		return effectsController.getVisualizerController();
 	}
 
 	public MediaRouteSelector getRemoteSelector() {
@@ -1876,7 +1857,7 @@ public class DownloadService extends Service {
 		int duration = getPlayerDuration();
 		
 		// If song is podcast or long go ahead and auto add a bookmark
-		if(entry instanceof PodcastEpisode || duration > (10L * 60L * 1000L)) {
+		if(entry.isPodcast() || entry.isAudiBook() || duration > (10L * 60L * 1000L)) {
 			final Context context = this;
 			final int position = getPlayerPosition();
 

@@ -178,7 +178,11 @@ public class MainFragment extends SubsonicFragment {
 		adapter.addView(offlineButton, true);
 		if (!Util.isOffline(context)) {
 			adapter.addView(albumsTitle, false);
-			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton, albumsHighestButton, albumsStarredButton, albumsGenresButton, albumsYearButton, albumsRecentButton, albumsFrequentButton), true);
+			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton), true);
+			if(!Util.isTagBrowsing(context)) {
+				adapter.addView(albumsHighestButton, true);
+			}
+			adapter.addViews(Arrays.asList(albumsStarredButton, albumsGenresButton, albumsYearButton, albumsRecentButton, albumsFrequentButton), true);
 		}
 		list.setAdapter(adapter);
 		registerForContextMenu(dummyView);
@@ -469,7 +473,7 @@ public class MainFragment extends SubsonicFragment {
 		new SilentBackgroundTask<Integer>(context) {
 			@Override
 			public Integer doInBackground() throws Exception {
-				String recentAddedFile = "recent_count" + (Util.getRestUrl(context, null, false)).hashCode() + ".ser";
+				String recentAddedFile = Util.getCacheName(context, "recent_count");
 				ArrayList<String> recents = FileUtil.deserialize(context, recentAddedFile, ArrayList.class);
 				if(recents == null) {
 					recents = new ArrayList<String>();

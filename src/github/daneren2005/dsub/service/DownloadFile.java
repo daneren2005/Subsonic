@@ -75,7 +75,7 @@ public class DownloadFile implements BufferFile {
         this.song = song;
         this.save = save;
         saveFile = FileUtil.getSongFile(context, song);
-        bitRate = Util.getMaxBitrate(context);
+        bitRate = getActualBitrate();
         partialFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
                 ".partial." + FileUtil.getExtension(saveFile.getName()));
         completeFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +

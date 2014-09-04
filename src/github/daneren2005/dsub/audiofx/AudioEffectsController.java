@@ -34,7 +34,6 @@ public class AudioEffectsController {
 	private boolean available = false;
 
 	private EqualizerController equalizerController;
-	private VisualizerController visualizerController;
 
     public AudioEffectsController(Context context, int audioSessionId) {
         this.context = context;
@@ -53,9 +52,6 @@ public class AudioEffectsController {
 		if(equalizerController != null) {
 			equalizerController.release();
 		}
-		if(visualizerController != null) {
-			visualizerController.release();
-		}
 	}
 
 	public EqualizerController getEqualizerController() {
@@ -68,15 +64,6 @@ public class AudioEffectsController {
 			}
 		}
 		return equalizerController;
-	}
-	public VisualizerController getVisualizerController() {
-		if (available && visualizerController == null) {
-			visualizerController = new VisualizerController(context, audioSessionId);
-			if (!visualizerController.isAvailable()) {
-				visualizerController = null;
-			}
-		}
-		return visualizerController;
 	}
 }
 

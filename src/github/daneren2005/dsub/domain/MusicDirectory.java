@@ -107,6 +107,10 @@ public class MusicDirectory implements Serializable {
 	}
 
     public static class Entry implements Serializable {
+		public static final int TYPE_SONG = 0;
+		public static final int TYPE_PODCAST = 1;
+		public static final int TYPE_AUDIO_BOOK = 2;
+
 		private String id;
 		private String parent;
 		private String grandParent;
@@ -133,7 +137,7 @@ public class MusicDirectory implements Serializable {
 		private boolean starred;
 		private Integer rating;
 		private Bookmark bookmark;
-		private int type;
+		private int type = 0;
 		private int closeness;
 		
 		public void loadMetadata(File file) {
@@ -396,8 +400,8 @@ public class MusicDirectory implements Serializable {
             this.starred = starred;
         }
         
-		public Integer getRating() {
-			return rating;
+		public int getRating() {
+			return rating == null ? 0 : rating;
 		}
 		public void setRating(Integer rating) {
 			this.rating = rating;
@@ -408,6 +412,22 @@ public class MusicDirectory implements Serializable {
 		}
 		public void setBookmark(Bookmark bookmark) {
 			this.bookmark = bookmark;
+		}
+
+		public int getType() {
+			return type;
+		}
+		public void setType(int type) {
+			this.type = type;
+		}
+		public boolean isSong() {
+			return type == TYPE_SONG;
+		}
+		public boolean isPodcast() {
+			return this instanceof PodcastEpisode || type == TYPE_PODCAST;
+		}
+		public boolean isAudiBook() {
+			return type == TYPE_AUDIO_BOOK;
 		}
 		
 		public int getCloseness() {

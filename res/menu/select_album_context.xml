@@ -58,4 +58,10 @@
 			android:id="@+id/album_menu_share"
 			android:title="@string/menu.share"/>
 	</group>
+
+	<group android:id="@+id/hide_rating">
+		<item
+			android:id="@+id/menu_rate"
+			android:title="@string/menu.rate"/>
+	</group>
 </menu>

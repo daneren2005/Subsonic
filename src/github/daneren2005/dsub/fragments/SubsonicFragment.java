@@ -34,15 +34,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
@@ -70,6 +74,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.PlaylistSongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
@@ -181,6 +186,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 				else {
 					inflater.inflate(R.menu.select_album_context, menu);
+
+					if(Util.isTagBrowsing(context)) {
+						menu.removeItem(R.id.menu_rate);
+					}
 				}
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else if(!entry.isVideo()) {
@@ -242,6 +251,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || !UserUtil.canShare()) {
 			menu.setGroupVisible(R.id.hide_share, false);
+		}
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
+			menu.setGroupVisible(R.id.hide_rating, false);
 		}
 	}
 
@@ -374,6 +386,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.bookmark_menu_delete:
 				deleteBookmark(entry, null);
+				break;
+			case R.id.menu_rate:
+				setRating(entry);
 				break;
 			default:
 				return false;
@@ -844,7 +859,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 
 				for (Entry song : parent.getChildren(false, true)) {
-					if (!song.isVideo()) {
+					if (!song.isVideo() && song.getRating() != 1) {
 						songs.add(song);
 					}
 				}
@@ -918,25 +933,39 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void done(final List<Playlist> playlists) {
-				List<String> names = new ArrayList<String>();
-				String createNew = context.getResources().getString(R.string.playlist_create_new);
-				names.add(createNew);
-				for(Playlist playlist: playlists) {
-					names.add(playlist.getName());
-				}
+				// Create adapter to show playlists
+				Playlist createNew = new Playlist("-1", context.getResources().getString(R.string.playlist_create_new));
+				playlists.add(0, createNew);
+				ArrayAdapter playlistAdapter = new ArrayAdapter<Playlist>(context, R.layout.basic_count_item, playlists) {
+					@Override
+					public View getView(int position, View convertView, ViewGroup parent) {
+						Playlist playlist = getItem(position);
+						
+						// Create new if not getting a convert view to use
+						PlaylistSongView view;
+						if(convertView instanceof PlaylistSongView) {
+							view = (PlaylistSongView) convertView;
+						} else {
+							view =  new PlaylistSongView(context);
+						}
+
+						view.setObject(playlist, songs);
+
+						return view;
+					}
+				};
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setTitle(R.string.playlist_add_to)
-					.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						
-						if(which > 0) {
-							addToPlaylist(playlists.get(which - 1), songs);
-						} else {
-							createNewPlaylist(songs, false);
+					.setAdapter(playlistAdapter, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							if (which > 0) {
+								addToPlaylist(playlists.get(which), songs);
+							} else {
+								createNewPlaylist(songs, false);
+							}
 						}
-					}
-				});
+					});
 				AlertDialog dialog = builder.create();
 				dialog.show();
 			}
@@ -1157,6 +1186,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(song.getDuration() != null && song.getDuration() != 0) {
 			msg += "\nLength: " + Util.formatDuration(song.getDuration());
 		}
+		if(song.getBookmark() != null) {
+			msg += "\nBookmark Position: " + Util.formatDuration(song.getBookmark().getPosition() / 1000);
+		}
+		if(song.getRating() != 0) {
+			msg += "\nRating: " + song.getRating() + " stars";
+		}
 		if(song instanceof PodcastEpisode) {
 			msg += "\n\nDescription: " + song.getAlbum();
 		}
@@ -1184,8 +1219,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(!entryExists(entry)) {
 			Util.toast(context, R.string.download_need_download);
 		} else {
+			DownloadFile check = new DownloadFile(context, entry, false);
+			File file = check.getCompleteFile();
+
 			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setDataAndType(Uri.parse(entry.getPath()), "video/*");
+			intent.setDataAndType(Uri.fromFile(file), "video/*");
+			intent.putExtra(Intent.EXTRA_TITLE, entry.getTitle());
 
 			List<ResolveInfo> intents = context.getPackageManager()
 				.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
@@ -1421,17 +1460,29 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 	protected void playNow(List<Entry> entries, int position) {
-		playNow(entries, entries.get(0), position);
+		Entry selected = entries.isEmpty() ? null : entries.get(0);
+		playNow(entries, selected, position);
 	}
-	protected void playNow(List<Entry> entries, Entry song, int position) {
-		DownloadService downloadService = getDownloadService();
-		if(downloadService == null) {
-			return;
-		}
-		
-		downloadService.clear();
-		downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
-		Util.startActivityWithoutTransition(context, DownloadActivity.class);
+	protected void playNow(final List<Entry> entries, final Entry song, final int position) {
+		new LoadingTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				DownloadService downloadService = getDownloadService();
+				if(downloadService == null) {
+					return null;
+				}
+				
+				downloadService.clear();
+				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
+
+				return null;
+			}
+			
+			@Override
+			protected void done(Void result) {
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+			}
+		}.execute();
 	}
 
 	protected void deleteBookmark(final MusicDirectory.Entry entry, final ArrayAdapter adapter) {
@@ -1450,7 +1501,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 					@Override
 					protected void done(Void result) {
-						if(adapter != null) {
+						if (adapter != null) {
 							adapter.remove(entry);
 							adapter.notifyDataSetChanged();
 						}
@@ -1471,5 +1522,61 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}.execute();
 			}
 		});
+	}
+	
+	protected void setRating(final Entry entry) {
+		View layout = context.getLayoutInflater().inflate(R.layout.rating, null);
+		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
+		ratingBar.setRating((float) entry.getRating());
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(context.getResources().getString(R.string.rating_title, entry.getTitle()))
+			.setView(layout)
+			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					int rating = (int) ratingBar.getRating();
+					setRating(entry, rating);
+				}
+			})
+			.setNegativeButton(R.string.common_cancel, null);
+		
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	protected void setRating(final Entry entry, final int rating) {
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.setRating(entry, rating, context, null);
+
+				entry.setRating(rating);
+
+				Entry findEntry = UpdateView.findEntry(entry);
+				if(findEntry != null) {
+					findEntry.setRating(rating);
+				}
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, getResources().getString(rating > 0 ? R.string.rating_set_rating : R.string.rating_remove_rating, entry.getTitle()));
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				String msg;
+				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(rating > 0 ? R.string.rating_set_rating_failed : R.string.rating_remove_rating_failed, entry.getTitle()) + " " + getErrorMessage(error);
+				}
+
+				Util.toast(context, msg, false);
+			}
+		}.execute();
 	}
 }

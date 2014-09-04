@@ -667,8 +667,31 @@ public class RESTMusicService implements MusicService {
         if (offset > 0) {
             headers.add(new BasicHeader("Range", "bytes=" + offset + "-"));
         }
-        List<String> parameterNames = Arrays.asList("id", "maxBitRate");
-        List<Object> parameterValues = Arrays.<Object>asList(song.getId(), maxBitrate);
+
+		List<String> parameterNames = new ArrayList<String>();
+		parameterNames.add("id");
+		parameterNames.add("maxBitRate");
+
+		List<Object> parameterValues = new ArrayList<Object>();
+		parameterValues.add(song.getId());
+		parameterValues.add(maxBitrate);
+
+		// If video specify what format to download
+		if(song.isVideo()) {
+			String videoPlayerType = Util.getVideoPlayerType(context);
+			if("hls".equals(videoPlayerType)) {
+				// HLS should be able to transcode to mp4 automatically
+				parameterNames.add("format");
+				parameterValues.add("mp4");
+
+				parameterNames.add("hls");
+				parameterValues.add("true");
+			} else if("raw".equals(videoPlayerType)) {
+				// Download the original video without any transcoding
+				parameterNames.add("format");
+				parameterValues.add("raw");
+			}
+		}
         HttpResponse response = getResponseForURL(context, url, params, parameterNames, parameterValues, headers, null, task);
 
         // If content type is XML, an error occurred.  Get it.
@@ -1103,10 +1126,10 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public void setRating(String id, int rating, Context context, ProgressListener progressListener) throws Exception {
+	public void setRating(MusicDirectory.Entry entry, int rating, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Setting ratings not supported.");
 		
-		Reader reader = getReader(context, progressListener, "setRating", null, Arrays.asList("id", "rating"), Arrays.<Object>asList(id, rating));
+		Reader reader = getReader(context, progressListener, "setRating", null, Arrays.asList("id", "rating"), Arrays.<Object>asList(entry.getId(), rating));
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {

@@ -108,7 +108,6 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_SHUFFLE_GENRE = "genre";
 	public static final String PREFERENCES_KEY_KEEP_SCREEN_ON = "keepScreenOn";
 	public static final String PREFERENCES_EQUALIZER_ON = "equalizerOn";
-	public static final String PREFERENCES_VISUALIZER_ON = "visualizerOn";
 	public static final String PREFERENCES_EQUALIZER_SETTINGS = "equalizerSettings";
 	public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";
 	public static final String PREFERENCES_KEY_GAPLESS_PLAYBACK = "gaplessPlayback";
@@ -145,6 +144,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_PLAYLIST_ID = "suggestedPlaylistId";
 	public static final String PREFERENCES_KEY_SERVER_SYNC = "serverSync";
 	public static final String PREFERENCES_KEY_RECENT_COUNT = "mostRecentCount";
+	public static final String PREFERENCES_KEY_MENU_RATING = "showRating";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";

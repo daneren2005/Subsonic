@@ -124,8 +124,6 @@
     <string name="download.repeat_off">Повторение отключено</string>
     <string name="download.repeat_all">Повторять все</string>
     <string name="download.repeat_single">Повторять композицию</string>
-    <string name="download.visualizer_on">Визуализация включена</string>
-    <string name="download.visualizer_off">Визуализация отключена</string>
     <string name="download.jukebox_on">Удаленное управление включено. Музыка воспроизводится на компьютере.</string>
     <string name="download.jukebox_off">Удаленное управление отключено. Музыка воспроизводится на устройстве.</string>
     <string name="download.jukebox_volume">Удаленное управление громкостью</string>

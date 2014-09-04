@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -157,7 +158,7 @@ public final class Util {
 
     public static boolean isScrobblingEnabled(Context context) {
         SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, true) && (isOffline(context) || UserUtil.isCurrentRole(User.SCROBBLING));
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_SCROBBLE, true) && (isOffline(context) || UserUtil.canScrobble());
     }
 
     public static void setActiveServer(Context context, int instance) {
@@ -429,6 +430,21 @@ public final class Util {
 		SharedPreferences.Editor editor = Util.getOfflineSync(context).edit();
 		editor.putString(Constants.OFFLINE_SYNC_DEFAULT, defaultValue);
 		editor.commit();
+	}
+
+	public static String getCacheName(Context context, String name, String id) {
+		return getCacheName(context, getActiveServer(context), name, id);
+	}
+	public static String getCacheName(Context context, int instance, String name, String id) {
+		String s = getRestUrl(context, null, instance, false) + id;
+		return name + "-" + s.hashCode() + ".ser";
+	}
+	public static String getCacheName(Context context, String name) {
+		return getCacheName(context, getActiveServer(context), name);
+	}
+	public static String getCacheName(Context context, int instance, String name) {
+		String s = getRestUrl(context, null, instance, false);
+		return name + "-" + s.hashCode() + ".ser";
 	}
 	
 	public static int offlineScrobblesCount(Context context) {
@@ -1073,6 +1089,15 @@ public final class Util {
             return new BitmapDrawable(bitmap);
         }
     }
+
+	public static int getAttribute(Context context, int attr) {
+		int res;
+		int[] attrs = new int[] {attr};
+		TypedArray typedArray = context.obtainStyledAttributes(attrs);
+		res = typedArray.getResourceId(0, 0);
+		typedArray.recycle();
+		return res;
+	}
 
     public static void registerMediaButtonEventReceiver(Context context) {
 

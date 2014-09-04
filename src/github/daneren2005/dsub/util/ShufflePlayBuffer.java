@@ -142,9 +142,14 @@ public class ShufflePlayBuffer {
 			MusicDirectory songs = service.getRandomSongs(n, folder, genre, startYear, endYear, context, null);
 
 			synchronized (buffer) {
-				buffer.addAll(songs.getChildren());
-				Log.i(TAG, "Refilled shuffle play buffer with " + songs.getChildrenSize() + " songs.");
-				lastCount = songs.getChildrenSize();
+				lastCount = 0;
+				for(MusicDirectory.Entry entry: songs.getChildren()) {
+					if(!buffer.contains(entry)) {
+						buffer.add(entry);
+						lastCount++;
+					}
+				}
+				Log.i(TAG, "Refilled shuffle play buffer with " + lastCount + " songs.");
 
 				// Cache buffer
 				FileUtil.serialize(context, buffer, CACHE_FILENAME);
