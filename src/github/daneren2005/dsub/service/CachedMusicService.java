@@ -1271,6 +1271,21 @@ public class CachedMusicService implements MusicService {
 				}
 			}.execute();
 			
+			if(entry instanceof PodcastEpisode) {
+				PodcastEpisode episode = (PodcastEpisode) entry;
+				new MusicDirectoryUpdater(context, cacheName, "p-" + entry.getId()) {
+					@Override
+					public boolean checkResult(Entry check) {
+						return GenericSongUpdater.this.checkResult(check);
+					}
+					
+					@Override
+					public void updateResult(List<Entry> objects, Entry result) {
+						GenericSongUpdater.this.updateResult(result);
+					}
+				}.execute();
+			}
+			
 			new PlaylistDirectoryUpdater(context) {
 				@Override
 				public boolean checkResult(Entry check) {
