@@ -1861,6 +1861,20 @@ public class DownloadService extends Service {
 					
 					return null;
 				}
+				
+				@Override
+				public void error(Throwable error) {
+					Log.w(TAG, "Failed to create automatic bookmark", error);
+					
+					String msg;
+					if(error instanceof OfflineException || error instanceof ServerTooOldException) {
+						msg = getErrorMessage(error);
+					} else {
+						msg = context.getResources().getString(R.string.download_save_bookmark_failed) + getErrorMessage(error);
+					}
+					
+					Util.toast(context, msg, false);
+				}
 			}.execute();
 		}
 	}
