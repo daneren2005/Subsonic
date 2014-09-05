@@ -1403,18 +1403,22 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				.setNegativeButton(R.string.bookmark_action_start_over, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
+						final Bookmark oldBookmark = song.getBookmark();
+						song.setBookmark(null);
+						
 						new SilentBackgroundTask<Void>(context) {
 							@Override
 							protected Void doInBackground() throws Throwable {
 								MusicService musicService = MusicServiceFactory.getMusicService(context);
 								musicService.deleteBookmark(song, context, null);
 
-								song.setBookmark(null);
 								return null;
 							}
 
 							@Override
 							protected void error(Throwable error) {
+								song.setBookmark(oldBookmark);
+								
 								String msg;
 								if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 									msg = getErrorMessage(error);
@@ -1480,11 +1484,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				final Bookmark oldBookmark = entry.getBookmark();
+				entry.setBookmark(null);
+				
 				new LoadingTask<Void>(context, false) {
 					@Override
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						entry.setBookmark(null);
 						musicService.deleteBookmark(entry, context, null);
 
 						return null;
@@ -1501,6 +1507,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 					@Override
 					protected void error(Throwable error) {
+						entry.setBookmark(oldBookmark);
+						
 						String msg;
 						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 							msg = getErrorMessage(error);
@@ -1537,13 +1545,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void setRating(final Entry entry, final int rating) {
+		final int oldRating = entry.getRating();
+		entry.setRating(rating);
+		
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.setRating(entry, rating, context, null);
-
-				entry.setRating(rating);
 
 				Entry findEntry = UpdateView.findEntry(entry);
 				if(findEntry != null) {
@@ -1559,6 +1568,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void error(Throwable error) {
+				entry.setRating(oldRating);
+				
 				String msg;
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
