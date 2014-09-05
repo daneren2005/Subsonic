@@ -1368,14 +1368,20 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		dialog.show();
 	}
 	private void createBookmark(final DownloadFile currentDownload, final String comment) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService == null) {
+			return;
+		}
+		
+		final Entry currentSong = currentDownload.getSong();
+		final int position = downloadService.getPlayerPosition();
+		final Bookmark oldBookmark = currentSong.getBookmark();
+		currentSong.setBookmark(new Bookmark(position));
+		
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				Entry currentSong = currentDownload.getSong();
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				int position = getDownloadService().getPlayerPosition();
-
-				currentSong.setBookmark(new Bookmark(position));
 				musicService.createBookmark(currentSong, position, comment, context, null);
 
 				Entry find = UpdateView.findEntry(currentSong);
@@ -1390,6 +1396,21 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			protected void done(Void result) {
 				Util.toast(context, R.string.download_save_bookmark);
 				setControlsVisible(true);
+			}
+			
+			@Override
+			protected void error(Throwable error) {
+				Log.w(TAG, "Failed to create bookmark", error);
+				currentSong.setBookmark(oldBookmark);
+				
+				String msg;
+				if(error instanceof OfflineException || error instance of ServerTooOldException) {
+					msg = getErrorMessage(error);
+				} else {
+					msg = context.getResources().getString(R.string.download_save_bookmark_failed) + getErrorMessage(error);
+				}
+				
+				Util.toast(context, msg, false);
 			}
 		}.execute();
 	}
