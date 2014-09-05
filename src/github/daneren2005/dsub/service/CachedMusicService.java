@@ -381,24 +381,7 @@ public class CachedMusicService implements MusicService {
 			totalList.addAll(oldList);
 			totalList.addAll(newList);
 
-			new GenericEntryUpdater(context, totalList) {
-				@Override
-				public boolean checkResult(Entry entry, Entry check) {
-					if (entry.getId().equals(check.getId())) {
-						if(entry.isStarred() != check.isStarred()) {
-							check.setStarred(entry.isStarred());
-							return true;
-						}
-					}
-
-					return false;
-				}
-
-				@Override
-				public void updateResult(Entry result) {
-
-				}
-			}.execute();
+			new StarUpdater(context, totalList).execute();
 		}
 		FileUtil.serialize(context, dir, "starred");
 
@@ -491,12 +474,7 @@ public class CachedMusicService implements MusicService {
 			allEntries.addAll(entries);
 		}
 
-		new GenericEntryUpdater(context, allEntries) {
-			@Override
-			public void updateResult(Entry result) {
-				result.setStarred(starred);
-			}
-		}.execute();
+		new StarUpdater(context, allEntries).execute();
 	}
 	
 	@Override
@@ -1018,7 +996,7 @@ public class CachedMusicService implements MusicService {
 						
 						@Override
 						public void updateResult(List<Artist> objects, Artist result) {
-							GenericEntryUpdater.this.updateResult(new Entry(result));
+							// Don't try to put anything here, as the Entry update method will not be called since it's a artist!
 						}
 					}.execute();
 				} else {
@@ -1118,6 +1096,28 @@ public class CachedMusicService implements MusicService {
 
 		}
 	}
+	private class StarUpdater extends GenericEntryUpdater {
+		public StarUpdater(Context context, List<Entry> entries) {
+			super(context, entries);
+		}
+
+		@Override
+		public boolean checkResult(Entry entry, Entry check) {
+			if (entry.getId().equals(check.getId())) {
+				if(entry.isStarred() != check.isStarred()) {
+					check.setStarred(entry.isStarred());
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public void updateResult(Entry result) {
+
+		}
+	};
 	private abstract class IndexesUpdater extends SerializeUpdater<Artist> {
 		Indexes indexes;
 
