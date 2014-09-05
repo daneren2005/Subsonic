@@ -25,7 +25,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,18 +46,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.Bookmark;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.service.DownloadFile;
@@ -1378,9 +1374,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				Entry currentSong = currentDownload.getSong();
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				int position = getDownloadService().getPlayerPosition();
-				musicService.createBookmark(currentSong.getId(), Util.getParentFromEntry(context, currentSong), position, comment, context, null);
 
 				currentSong.setBookmark(new Bookmark(position));
+				musicService.createBookmark(currentSong, position, comment, context, null);
+
 				Entry find = UpdateView.findEntry(currentSong);
 				if(find != null && find != currentSong) {
 					find.setBookmark(new Bookmark(position));

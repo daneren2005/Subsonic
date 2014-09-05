@@ -413,7 +413,11 @@ public class MusicDirectory implements Serializable {
 			return rating == null ? 0 : rating;
 		}
 		public void setRating(Integer rating) {
-			this.rating = rating;
+			if(rating == null || rating == 0) {
+				this.rating = null;
+			} else {
+				this.rating = rating;
+			}
 		}
 		
 		public Bookmark getBookmark() {

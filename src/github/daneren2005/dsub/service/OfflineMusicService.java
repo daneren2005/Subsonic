@@ -747,12 +747,12 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public void createBookmark(String id, String parent, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+	public void createBookmark(MusicDirectory.Entry entry, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
-	public void deleteBookmark(String id, String parent, Context context, ProgressListener progressListener) throws Exception {
+	public void deleteBookmark(MusicDirectory.Entry entry, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

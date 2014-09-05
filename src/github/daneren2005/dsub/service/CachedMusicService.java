@@ -826,43 +826,16 @@ public class CachedMusicService implements MusicService {
 
 					// Remove from old regardless of whether position is wrong
 					it.remove();
+				} else {
+					oldEntry.setBookmark(null);
 				}
 			}
-			
-			// Remove bookmarks from thinsg still in old list
-			setBookmarkCache(context, oldList, true);
-			// Add new bookmarks for things in new list
-			setBookmarkCache(context, newList, false);
-			
-			if(oldList.size() > 0 || newList.size() > 0) {
-				new PlaylistDirectoryUpdater(context) {
-					@Override
-					public boolean checkResult(Entry check) {
-						for(Entry entry: oldList) {
-							if(entry.getId().equals(check.getId()) && check.getBookmark() != null) {
-								check.setBookmark(null);
-								return true;
-							}
-						}
-						for(Entry entry: newList) {
-							if(entry.getId().equals(check.getId())) {
-								int newPosition = entry.getBookmark().getPosition();
-								if(check.getBookmark() == null || check.getBookmark().getPosition() != newPosition) {
-									setBookmarkCache(check, newPosition);
-									return true;
-								}
-							}
-						}
-						
-						return false;
-					}
-					
-					@Override
-					public void updateResult(Entry result) {
-						
-					}
-				}.execute();
-			}
+
+			List<Entry> totalList = new ArrayList<Entry>();
+			totalList.addAll(oldList);
+			totalList.addAll(newList);
+
+			new BookmarkUpdater(context, totalList).execute();
 		}
 		FileUtil.serialize(context, bookmarks, "bookmarks");
 		
@@ -870,96 +843,17 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public void createBookmark(String id, String parent, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
-		musicService.createBookmark(id, null, position, comment, context, progressListener);
-		// Add to directory cache
-		setBookmarkCache(context, id, parent, position);
-		// Add to playlist cache
-		setBookmarkCache(context, id, position);
+	public void createBookmark(Entry entry, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+		musicService.createBookmark(entry, position, comment, context, progressListener);
+
+		new BookmarkUpdater(context, entry).execute();
 	}
 
 	@Override
-	public void deleteBookmark(String id, String parent, Context context, ProgressListener progressListener) throws Exception {
-		musicService.deleteBookmark(id, null, context, progressListener);
-		// Delete from directory cache
-		setBookmarkCache(context, id, parent, -1);
-		// Delete from playlist cache
-		setBookmarkCache(context, id, -1);
-	}
-	
-	private void setBookmarkCache(Context context, List<Entry> entries, boolean remove) {
-		for(final Entry entry: entries) {
-			if(remove) {
-				setBookmarkCache(context, entry.getId(), Util.getParentFromEntry(context, entry), -1);
-			} else {
-				setBookmarkCache(context, entry.getId(), Util.getParentFromEntry(context, entry), entry.getBookmark().getPosition());
-			}
-		}
-	}
-	private void setBookmarkCache(Context context, final String id, final String parent, final int position) {
-		String cacheName;
-		if(isTagBrowsing) {
-			cacheName = "album";
-		} else {
-			cacheName = "directory";
-		}
+	public void deleteBookmark(Entry entry, Context context, ProgressListener progressListener) throws Exception {
+		musicService.deleteBookmark(entry, context, progressListener);
 
-		// Update the parent directory with bookmark data
-		new MusicDirectoryUpdater(context, cacheName, parent) {
-			@Override
-			public boolean checkResult(Entry check) {
-				return shouldBookmarkUpdate(check, id, position);
-			}
-			
-			@Override
-			public void updateResult(List<Entry> objects, Entry result) {
-				setBookmarkCache(result, position);
-			}
-		}.execute();
-	}
-	private void setBookmarkCache(Context context, final String id, final int position) {
-		// Update playlists with bookmark data
-		new PlaylistDirectoryUpdater(context) {
-			@Override
-			public boolean checkResult(Entry check) {
-				return shouldBookmarkUpdate(check, id, position);
-			}
-			
-			@Override
-			public void updateResult(Entry result) {
-				setBookmarkCache(result, position);
-			}
-		}.execute();
-	}
-	
-	private boolean shouldBookmarkUpdate(Entry check, String id, int position) {
-		if(id.equals(check.getId())) {
-			if(position == -1 && check.getBookmark() != null) {
-				return true;
-			} else if(position >= 0 && (check.getBookmark() == null || check.getBookmark().getPosition() != position)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private void setBookmarkCache(Entry result, int position) {
-		// If position == -1, then it is a delete
-		if(result.getBookmark() != null && position == -1) {
-			result.setBookmark(null);
-		} else if(position >= 0) {
-			Bookmark bookmark = result.getBookmark();
-			
-			// Create one if empty
-			if(bookmark == null) {
-				bookmark = new Bookmark();
-				result.setBookmark(bookmark);
-			}
-			
-			// Update bookmark position no matter what
-			bookmark.setPosition(position);
-		}
+		new BookmarkUpdater(context, entry).execute();
 	}
 
 	@Override
@@ -1343,6 +1237,50 @@ public class CachedMusicService implements MusicService {
 					}
 				}.execute();
 			}
+		}
+	}
+	private class BookmarkUpdater extends GenericEntryUpdater {
+		public BookmarkUpdater(Context context, Entry entry) {
+			super(context, entry);
+		}
+		public BookmarkUpdater(Context context, List<Entry> entries) {
+			super(context, entries);
+		}
+
+		@Override
+		public boolean checkResult(Entry entry, Entry check) {
+			if(entry.getId().equals(check.getId())) {
+				int position;
+				if(entry.getBookmark() == null) {
+					position = -1;
+				} else {
+					position = entry.getBookmark().getPosition();
+				}
+
+				if(position == -1 && check.getBookmark() != null) {
+					check.setBookmark(null);
+					return true;
+				} else if(position  >= 0 && (check.getBookmark() == null || check.getBookmark().getPosition() != position)) {
+					Bookmark bookmark = check.getBookmark();
+
+					// Create one if empty
+					if(bookmark == null) {
+						bookmark = new Bookmark();
+						check.setBookmark(bookmark);
+					}
+
+					// Update bookmark position no matter what
+					bookmark.setPosition(position);
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		@Override
+		public void updateResult(Entry result) {
+
 		}
 	}
 	private abstract class IndexesUpdater extends SerializeUpdater<Artist> {

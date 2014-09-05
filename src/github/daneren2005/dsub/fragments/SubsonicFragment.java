@@ -34,7 +34,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,7 +44,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -1420,7 +1418,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 							@Override
 							protected Void doInBackground() throws Throwable {
 								MusicService musicService = MusicServiceFactory.getMusicService(context);
-								musicService.deleteBookmark(song.getId(), Util.getParentFromEntry(context, song), context, null);
+								musicService.deleteBookmark(song, context, null);
 
 								song.setBookmark(null);
 								return null;
@@ -1497,9 +1495,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					@Override
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						musicService.deleteBookmark(entry.getId(), Util.getParentFromEntry(context, entry), context, null);
-
 						entry.setBookmark(null);
+						musicService.deleteBookmark(entry, context, null);
+
 						return null;
 					}
 
