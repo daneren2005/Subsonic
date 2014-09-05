@@ -405,69 +405,6 @@ public class CachedMusicService implements MusicService {
 		return dir;
     }
 
-	private void updateStarredList(Context context, List<Entry> list, final boolean starred, final boolean isTagBrowsing) {
-		for(final Entry entry: list) {
-			String cacheName, parent = null;
-			boolean isArtist = false;
-			if(isTagBrowsing) {
-				if(entry.isDirectory()) {
-					if(entry.isAlbum()) {
-						cacheName = "artist";
-						parent = entry.getArtistId();
-					} else {
-						isArtist = true;
-						cacheName = "artists";
-					}
-				} else {
-					cacheName = "album";
-					parent = entry.getAlbumId();
-				}
-			} else {
-				if(entry.isDirectory() && !entry.isAlbum()) {
-					isArtist = true;
-					cacheName = "indexes";
-				} else {
-					cacheName = "directory";
-					parent = entry.getParent();
-				}
-			}
-
-			if(isArtist) {
-				new IndexesUpdater(context, isTagBrowsing ? "artists" : "indexes") {
-					@Override
-					public boolean checkResult(Artist check) {
-						if(entry.getId().equals(check.getId()) && check.isStarred() != starred) {
-							return true;
-						}
-
-						return false;
-					}
-
-					@Override
-					public void updateResult(List<Artist> objects, Artist result) {
-						result.setStarred(starred);
-					}
-				}.execute();
-			} else {
-				new MusicDirectoryUpdater(context, cacheName, parent) {
-					@Override
-					public boolean checkResult(Entry check) {
-						if (entry.getId().equals(check.getId()) && check.isStarred() != starred) {
-							return true;
-						}
-
-						return false;
-					}
-
-					@Override
-					public void updateResult(List<Entry> objects, Entry result) {
-						result.setStarred(starred);
-					}
-				}.execute();
-			}
-		}
-	}
-
     @Override
     public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         return musicService.getRandomSongs(size, folder, genre, startYear, endYear, context, progressListener);
