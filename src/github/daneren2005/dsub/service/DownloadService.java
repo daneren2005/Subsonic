@@ -989,6 +989,7 @@ public class DownloadService extends Service {
 			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.setOnCompletionListener(null);
 			mediaPlayer.reset();
+			subtractPosition = 0;
 		} catch (Exception x) {
 			handleError(x);
 		}
