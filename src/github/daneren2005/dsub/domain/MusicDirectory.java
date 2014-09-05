@@ -139,6 +139,15 @@ public class MusicDirectory implements Serializable {
 		private Bookmark bookmark;
 		private int type = 0;
 		private int closeness;
+
+		public Entry() {
+
+		}
+		public Entry(Artist artist) {
+			this.id = artist.getId();
+			this.title = artist.getName();
+			this.directory = true;
+		}
 		
 		public void loadMetadata(File file) {
 			try {

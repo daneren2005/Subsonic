@@ -20,6 +20,7 @@ package github.daneren2005.dsub.service;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -1252,7 +1253,7 @@ public class CachedMusicService implements MusicService {
 			boolean isTagBrowsing = Util.isTagBrowsing(context, musicService.getInstance(context));
 			
 			// Run through each entry, trying to update the directory it is in
-			List<Entry> songs;
+			final List<Entry> songs = new ArrayList<Entry>();
 			for(final Entry entry: entries) {
 				if(isTagBrowsing) {
 					// If starring album, needs to reference artist instead
@@ -1283,39 +1284,38 @@ public class CachedMusicService implements MusicService {
 					new IndexesUpdater(context, cacheName) {
 						@Override
 						public boolean checkResult(Artist check) {
-							return checkResult(entry, new Entry(check));
+							return GenericEntryUpdater.this.checkResult(entry, new Entry(check));
 						}
 						
 						@Override
 						public void updateResult(List<Artist> objects, Artist result) {
-							updateResult(new Entry(result));
+							GenericEntryUpdater.this.updateResult(new Entry(result));
 						}
 					}.execute();
 				} else {
 					new MusicDirectoryUpdater(context, cacheName, parent) {
 						@Override
 						public boolean checkResult(Entry check) {
-							return checkResult(entry, check);
+							return GenericEntryUpdater.this.checkResult(entry, check);
 						}
 						
 						@Override
 						public void updateResult(List<Entry> objects, Entry result) {
-							updateResult(result);
+							GenericEntryUpdater.this.updateResult(result);
 						}
 					}.execute();
 				}
 				
 				if(entry instanceof PodcastEpisode) {
-					PodcastEpisode episode = (PodcastEpisode) entry;
-					new MusicDirectoryUpdater(context, cacheName, "p-" + entry.getId()) {
+					new MusicDirectoryUpdater(context, cacheName, "p-" + entry.getParent()) {
 						@Override
 						public boolean checkResult(Entry check) {
-							return checkResult(entry, check);
+							return GenericEntryUpdater.this.checkResult(entry, check);
 						}
 						
 						@Override
 						public void updateResult(List<Entry> objects, Entry result) {
-							updateResult(result);
+							GenericEntryUpdater.this.updateResult(result);
 						}
 					}.execute();
 				} else if(!entry.isDirectory()) {
@@ -1329,7 +1329,7 @@ public class CachedMusicService implements MusicService {
 					@Override
 					public boolean checkResult(Entry check) {
 						for(Entry entry: songs) {
-							if(checkResult(entry, check)) {
+							if(GenericEntryUpdater.this.checkResult(entry, check)) {
 								return true;
 							}
 						}
