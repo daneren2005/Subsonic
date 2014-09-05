@@ -688,7 +688,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					musicService.setStarred(Arrays.asList(entry), null, null, starred, null, context);
 				}
 
-				setEntryStarred(entry, starred);
+				new EntryInstanceUpdater(entry) {
+					@Override
+					public void update(Entry found) {
+						found.setStarred(starred);
+					}
+				}.execute();
 
 				return null;
 			}
@@ -714,25 +719,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				Util.toast(context, msg, false);
 			}
 		}.execute();
-	}
-	protected void setEntryStarred(Entry entry, boolean starred) {
-		DownloadService downloadService = DownloadService.getInstance();
-		if(downloadService != null && !entry.isDirectory()) {
-			List<DownloadFile> files = downloadService.getDownloads();
-			for(DownloadFile file: files) {
-				Entry check = file.getSong();
-				if(entry.getId().equals(check.getId())) {
-					check.setStarred(starred);
-					downloadService.serializeQueue();
-					break;
-				}
-			}
-		}
-
-		Entry find = UpdateView.findEntry(entry);
-		if(find != null) {
-			find.setStarred(starred);
-		}
 	}
 
 	public void toggleStarred(final Artist entry) {
@@ -1492,6 +1478,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deleteBookmark(entry, context, null);
+						
+						new EntryInstanceUpdater(entry) {
+							@Override
+							public void update(Entry found) {
+								found.setBookmark(null);
+							}
+						}.execute();
 
 						return null;
 					}
@@ -1554,10 +1547,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.setRating(entry, rating, context, null);
 
-				Entry findEntry = UpdateView.findEntry(entry);
-				if(findEntry != null) {
-					findEntry.setRating(rating);
-				}
+				new EntryInstanceUpdater(entry) {
+					@Override
+					public void update(Entry found) {
+						found.setRating(rating);
+					}
+				}.execute();
 				return null;
 			}
 
@@ -1580,5 +1575,39 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				Util.toast(context, msg, false);
 			}
 		}.execute();
+	}
+	
+	protected abstract class EntryInstanceUpdater {
+		private Entry entry;
+		
+		public EntryInstanceUpdater(Entry entry) {
+			this.entry = entry;
+		}
+		
+		public abstract void update(Entry found);
+		
+		public void execute() {
+			DownloadService downloadService = getDownloadService();
+			if(downloadService != null && !entry.isDirectory()) {
+				private boolean serializeChanges = false;
+				List<DownloadFile> downloadFiles = downloadService.getDownloads();
+				for(DownloadFile file: downloadFiles) {
+					Entry check = file.getSong();
+					if(entry.getId().equals(check.getId())) {
+						update(entry);
+						serializeChanges = true;
+					}
+				}
+				
+				if(serializeChanges) {
+					downloadService.serializeQueue();
+				}
+			}
+			
+			Entry find = UpdateView.findEntry(entry);
+			if(find != null) {
+				update(find);
+			}
+		}
 	}
 }
