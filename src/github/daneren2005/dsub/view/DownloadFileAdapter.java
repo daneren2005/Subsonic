@@ -42,6 +42,7 @@ public class DownloadFileAdapter extends ArrayAdapter<DownloadFile> {
 		}
 		DownloadFile downloadFile = getItem(position);
 		view.setObject(downloadFile.getSong(), false);
+		view.setDownloadFile(downloadFile);
 		return view;
 	}
 }
