@@ -139,6 +139,18 @@ public class MusicDirectory implements Serializable {
 		private Bookmark bookmark;
 		private int type = 0;
 		private int closeness;
+
+		public Entry() {
+
+		}
+		public Entry(String id) {
+			this.id = id;
+		}
+		public Entry(Artist artist) {
+			this.id = artist.getId();
+			this.title = artist.getName();
+			this.directory = true;
+		}
 		
 		public void loadMetadata(File file) {
 			try {
@@ -404,7 +416,11 @@ public class MusicDirectory implements Serializable {
 			return rating == null ? 0 : rating;
 		}
 		public void setRating(Integer rating) {
-			this.rating = rating;
+			if(rating == null || rating == 0) {
+				this.rating = null;
+			} else {
+				this.rating = rating;
+			}
 		}
 		
 		public Bookmark getBookmark() {

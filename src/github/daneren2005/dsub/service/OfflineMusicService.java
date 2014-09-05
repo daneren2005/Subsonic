@@ -595,7 +595,7 @@ public class OfflineMusicService implements MusicService {
     }
 	
 	@Override
-	public void setStarred(List<String> ids, List<String> artistId, List<String> albumId, List<String> parents, boolean starred, ProgressListener progressListener, Context context) throws Exception {
+	public void setStarred(List<MusicDirectory.Entry> entries, List<MusicDirectory.Entry> artists, List<MusicDirectory.Entry> albums, boolean starred, ProgressListener progressListener, Context context) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 
@@ -604,7 +604,7 @@ public class OfflineMusicService implements MusicService {
 		stars++;
 		SharedPreferences.Editor offlineEditor = offline.edit();
 
-		String id = ids.get(0);
+		String id = entries.get(0).getId();
 		if(id.indexOf(cacheLocn) != -1) {
 			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
 			offlineEditor.putString(Constants.OFFLINE_STAR_SEARCH + stars, searchCriteria);
@@ -747,12 +747,12 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public void createBookmark(String id, String parent, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+	public void createBookmark(MusicDirectory.Entry entry, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
-	public void deleteBookmark(String id, String parent, Context context, ProgressListener progressListener) throws Exception {
+	public void deleteBookmark(MusicDirectory.Entry entry, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
