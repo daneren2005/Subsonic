@@ -817,33 +817,33 @@ public class RESTMusicService implements MusicService {
     }
     
     @Override
-    public void setStarred(List<String> ids, List<String> artistId, List<String> albumId, List<String> parents, boolean starred, ProgressListener progressListener, Context context) throws Exception {
+    public void setStarred(List<MusicDirectory.Entry> entries, List<MusicDirectory.Entry> artists, List<MusicDirectory.Entry> albums, boolean starred, ProgressListener progressListener, Context context) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
 
 		List<String> names = new ArrayList<String>();
 		List<Object> values = new ArrayList<Object>();
 
-		if(ids != null && ids.size() > 0) {
-			if(ids.size() > 1) {
-				for (String id : ids) {
+		if(entries != null && entries.size() > 0) {
+			if(entries.size() > 1) {
+				for (MusicDirectory.Entry entry : entries) {
 					names.add("id");
-					values.add(id);
+					values.add(entry.getId());
 				}
 			} else {
 				names.add("id");
-				values.add(getOfflineSongId(ids.get(0), context, progressListener));
+				values.add(getOfflineSongId(entries.get(0).getId(), context, progressListener));
 			}
 		}
-		if(artistId != null && artistId.size() > 0) {
-			for (String id : artistId) {
+		if(artists != null && artists.size() > 0) {
+			for (MusicDirectory.Entry artist : artists) {
 				names.add("artistId");
-				values.add(id);
+				values.add(artist.getId());
 			}
 		}
-		if(albumId != null && albumId.size() > 0) {
-			for (String id : albumId) {
+		if(albums != null && albums.size() > 0) {
+			for (MusicDirectory.Entry album : albums) {
 				names.add("albumId");
-				values.add(id);
+				values.add(album.getId());
 			}
 		}
 		
@@ -1386,7 +1386,7 @@ public class RESTMusicService implements MusicService {
 			String id = offline.getString(Constants.OFFLINE_STAR_ID + i, null);
 			boolean starred = offline.getBoolean(Constants.OFFLINE_STAR_SETTING + i, false);
 			if(id != null) {
-				setStarred(Arrays.asList(id), null, null, null, starred, progressListener, context);
+				setStarred(Arrays.asList(new MusicDirectory.Entry(id)), null, null, starred, progressListener, context);
 			} else {
 				String search = offline.getString(Constants.OFFLINE_STAR_SEARCH + i, "");
 				try{
@@ -1394,10 +1394,10 @@ public class RESTMusicService implements MusicService {
 					SearchResult result = searchNew(critera, context, progressListener);
 					if(result.getSongs().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
-						setStarred(Arrays.asList(result.getSongs().get(0).getId()), null, null, null, starred, progressListener, context);
+						setStarred(Arrays.asList(result.getSongs().get(0)), null, null, starred, progressListener, context);
 					} else if(result.getAlbums().size() == 1){
 						Log.i(TAG, "Query '" + search + "' returned song " + result.getAlbums().get(0).getTitle() + " by " + result.getAlbums().get(0).getArtist() + " with id " + result.getAlbums().get(0).getId());
-						setStarred(Arrays.asList(result.getAlbums().get(0).getId()), null, null, null, starred, progressListener, context);
+						setStarred(Arrays.asList(result.getAlbums().get(0)), null, null, starred, progressListener, context);
 					}
 					else{
 						throw new Exception("Song not found on server");

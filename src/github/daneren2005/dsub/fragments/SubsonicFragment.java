@@ -680,23 +680,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
 					if(entry.isAlbum()) {
-						musicService.setStarred(null, null, Arrays.asList(entry.getId()), Arrays.asList(entry.getArtistId()), starred, null, context);
+						musicService.setStarred(null, null, Arrays.asList(entry), starred, null, context);
 					} else {
-						musicService.setStarred(null, Arrays.asList(entry.getId()), null, null, starred, null, context);
+						musicService.setStarred(null, Arrays.asList(entry), null, starred, null, context);
 					}
 				} else {
-					List<String> parents = null;
-					if(Util.isTagBrowsing(context)) {
-						if(entry.getAlbumId() != null) {
-							parents = Arrays.asList(entry.getAlbumId());
-						}
-					} else {
-						if(entry.getParent() != null) {
-							parents = Arrays.asList(entry.getParent());
-						}
-					}
-
-					musicService.setStarred(Arrays.asList(entry.getId()), null, null, parents, starred, null, context);
+					musicService.setStarred(Arrays.asList(entry), null, null, starred, null, context);
 				}
 
 				setEntryStarred(entry, starred);
@@ -755,9 +744,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					musicService.setStarred(null, Arrays.asList(entry.getId()), null, null, starred, null, context);
+					musicService.setStarred(null, Arrays.asList(new Entry(entry)), null, starred, null, context);
 				} else {
-					musicService.setStarred(Arrays.asList(entry.getId()), null, null, null, starred, null, context);
+					musicService.setStarred(Arrays.asList(new Entry(entry)), null, null, starred, null, context);
 				}
 				return null;
 			}

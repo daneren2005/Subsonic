@@ -1047,24 +1047,21 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<String> ids = new ArrayList<String>();
-				List<String> artists = new ArrayList<String>();
-				List<String> albums = new ArrayList<String>();
-				List<String> parents = new ArrayList<String>();
+				List<MusicDirectory.Entry> entries = new ArrayList<MusicDirectory.Entry>();
+				List<MusicDirectory.Entry> artists = new ArrayList<MusicDirectory.Entry>();
+				List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
 				for(MusicDirectory.Entry entry: unstar) {
 					if(entry.isDirectory()) {
 						if(entry.isAlbum()) {
-							albums.add(entry.getId());
-							parents.add(entry.getArtistId());
+							albums.add(entry);
 						} else {
-							artists.add(entry.getId());
+							artists.add(entry);
 						}
 					} else {
-						ids.add(entry.getId());
-						parents.add(entry.getParent());
+						entries.add(entry);
 					}
 				}
-				musicService.setStarred(ids, artists, albums, parents, false, this, context);
+				musicService.setStarred(entries, artists, albums, false, this, context);
 
 				for(MusicDirectory.Entry entry: unstar) {
 					setEntryStarred(entry, false);

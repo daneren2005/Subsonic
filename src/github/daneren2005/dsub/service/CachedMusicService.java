@@ -365,56 +365,40 @@ public class CachedMusicService implements MusicService {
 			newList.addAll(dir.getChildren());
 			final List<Entry> oldList = oldDir.getChildren();
 
-			removeDuplicates(oldList, newList);
-
-			// Left overs in newList need to be starred
-			boolean isTagBrowsing = Util.isTagBrowsing(context, musicService.getInstance(context));
-			updateStarredList(context, newList, true, isTagBrowsing);
-
-			// Left overs in oldList need to be unstarred
-			updateStarredList(context, oldList, false, isTagBrowsing);
-			
-			
-			// Remove non-songs from lists before updating playlists
 			for(Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
-				if(it.next().isDirectory()) {
+				Entry oldEntry = it.next();
+
+				// Remove entries from newList
+				if(newList.remove(oldEntry)) {
+					// If it was removed, then remove it from old list as well
 					it.remove();
+				} else {
+					oldEntry.setStarred(false);
 				}
 			}
-			for(Iterator<Entry> it = newList.iterator(); it.hasNext(); ) {
-				if(it.next().isDirectory()) {
-					it.remove();
+
+			List<Entry> totalList = new ArrayList<Entry>();
+			totalList.addAll(oldList);
+			totalList.addAll(newList);
+
+			new GenericEntryUpdater(context, totalList) {
+				@Override
+				public boolean checkResult(Entry entry, Entry check) {
+					if (entry.getId().equals(check.getId())) {
+						if(entry.isStarred() != check.isStarred()) {
+							check.setStarred(entry.isStarred());
+							return true;
+						}
+					}
+
+					return false;
 				}
-			}
-			
-			// Only try to update playlists if there was at least one song in new or old set
-			if(newList.size() > 0 || oldList.size() > 0) {
-				new PlaylistDirectoryUpdater(context) {
-					@Override
-					public boolean checkResult(Entry check) {
-						for(Entry entry: oldList) {
-							if(check.getId().equals(entry.getId()) && check.isStarred() != false) {
-								check.setStarred(false);
-								return true;
-							}
-						}
-						
-						for(Entry entry: newList) {
-							if(check.getId().equals(entry.getId()) && check.isStarred() != true) {
-								check.setStarred(true);
-								return true;
-							}
-						}
-						
-						return false;
-					}
-					
-					@Override
-					public void updateResult(Entry result) {
-						
-					}
-				}.execute();
-			}
+
+				@Override
+				public void updateResult(Entry result) {
+
+				}
+			}.execute();
 		}
 		FileUtil.serialize(context, dir, "starred");
 
@@ -555,104 +539,27 @@ public class CachedMusicService implements MusicService {
     }
     
 	@Override
-	public void setStarred(List<String> id, List<String> artistId, List<String> albumId, List<String> parents, final boolean starred, ProgressListener progressListener, Context context) throws Exception {
-		musicService.setStarred(id, artistId, albumId, parents, starred, progressListener, context);
+	public void setStarred(List<Entry> entries, List<Entry> artists, List<Entry> albums, final boolean starred, ProgressListener progressListener, Context context) throws Exception {
+		musicService.setStarred(entries, artists, albums, starred, progressListener, context);
 
 		// Fuzzy logic to update parents serialization
-		List<String> ids;
-		if(artistId != null && artistId.size() > 0) {
-			ids = artistId;
-		} else if(albumId != null && albumId.size() > 0) {
-			ids = albumId;
-		} else {
-			ids = id;
+		List<Entry> allEntries = new ArrayList<Entry>();
+		if(artists != null) {
+			allEntries.addAll(artists);
+		}
+		if(albums != null) {
+			allEntries.addAll(albums);
+		}
+		if (entries != null) {
+			allEntries.addAll(entries);
 		}
 
-		// Make sure list is not somehow null here
-		if(ids == null) {
-			Log.w(TAG, "There should never be no ids in setStarred");
-			return;
-		}
-
-		// Define another variable final because Java is retarded
-		final List<String> checkIds = ids;
-
-		// If parents is null, or artist id's are set, then we are looking at artists
-		if(parents != null && (artistId == null || artistId.size() == 0)) {
-			String cacheName;
-			
-			// If using tag browsing, need to do lookup off of different criteria
-			if(Util.isTagBrowsing(context, musicService.getInstance(context))) {
-				// If using id's, we are starring songs and need to use album listings
-				if(id != null && id.size() > 0) {
-					cacheName = "album";
-				} else {
-					cacheName = "artist";
-				}
-			} else {
-				cacheName = "directory";
+		new GenericEntryUpdater(context, allEntries) {
+			@Override
+			public void updateResult(Entry result) {
+				result.setStarred(starred);
 			}
-			
-			for (String parent : parents) {
-				new MusicDirectoryUpdater(context, cacheName, parent, checkIds.size() == 1) {
-					@Override
-					public boolean checkResult(Entry check) {
-						for (String id : checkIds) {
-							if(id.equals(check.getId())) {
-								return true;
-							}
-						}
-
-						return false;
-					}
-
-					@Override
-					public void updateResult(List<Entry> objects, Entry result) {
-						result.setStarred(starred);
-					}
-				}.execute();
-			}
-		} else {
-			String name = Util.isTagBrowsing(context, musicService.getInstance(context)) ? "artists" : "indexes";
-			new IndexesUpdater(context, name) {
-				@Override
-				public boolean checkResult(Artist check) {
-					for (String id : checkIds) {
-						if(id.equals(check.getId())) {
-							return true;
-						}
-					}
-
-					return false;
-				}
-
-				@Override
-				public void updateResult(List<Artist> objects, Artist result) {
-					result.setStarred(starred);
-				}
-			}.execute();
-		}
-
-		// Update playlist caches if there is at least one song to be starred
-		if(ids != null && ids.size() > 0) {
-			new PlaylistDirectoryUpdater(context) {
-				@Override
-				public boolean checkResult(Entry check) {
-					for (String id : checkIds) {
-						if (id.equals(check.getId())) {
-							return true;
-						}
-					}
-
-					return false;
-				}
-
-				@Override
-				public void updateResult(Entry result) {
-					result.setStarred(starred);
-				}
-			}.execute();
-		}
+		}.execute();
 	}
 	
 	@Override
@@ -974,16 +881,6 @@ public class CachedMusicService implements MusicService {
   		return name + "-" + s.hashCode() + ".ser";
   	}
   	
-  	private void removeDuplicates(List<Entry> oldList, List<Entry> newList) {
-  		for(Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
-  			// Remove entries from newList
-  			if(newList.remove(it.next())) {
-  				// If it was removed, then remove it from old list as well
-  				it.remove();
-  			}
-  		}
-  	}
-  	
   	private abstract class SerializeUpdater<T> {
   		final Context context;
   		final String cacheName;
@@ -1144,7 +1041,8 @@ public class CachedMusicService implements MusicService {
 		
 		public void execute() {
 			String cacheName, parent;
-			boolean isTagBrowsing = Util.isTagBrowsing(context, musicService.getInstance(context));
+			// Make sure it is up to date
+			isTagBrowsing = Util.isTagBrowsing(context, musicService.getInstance(context));
 			
 			// Run through each entry, trying to update the directory it is in
 			final List<Entry> songs = new ArrayList<Entry>();

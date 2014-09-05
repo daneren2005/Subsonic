@@ -143,6 +143,9 @@ public class MusicDirectory implements Serializable {
 		public Entry() {
 
 		}
+		public Entry(String id) {
+			this.id = id;
+		}
 		public Entry(Artist artist) {
 			this.id = artist.getId();
 			this.title = artist.getName();
