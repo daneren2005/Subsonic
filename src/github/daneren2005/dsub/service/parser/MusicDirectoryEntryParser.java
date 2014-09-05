@@ -71,7 +71,7 @@ public class MusicDirectoryEntryParser extends AbstractParser {
 			String type = get("type");
 			if("podcast".equals(type)) {
 				entry.setType(MusicDirectory.Entry.TYPE_PODCAST);
-			} else if("audiobook".equals(type)) {
+			} else if("audiobook".equals(type) || (entry.getGenre() != null && "audiobook".equals(entry.getGenre().toLowerCase()))) {
 				entry.setType(MusicDirectory.Entry.TYPE_AUDIO_BOOK);
 			}
         } else if(!"".equals(artist)) {
