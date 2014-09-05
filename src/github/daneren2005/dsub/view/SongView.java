@@ -55,6 +55,7 @@ public class SongView extends UpdateView implements Checkable {
 	private DownloadService downloadService;
 	private long revision = -1;
 	private DownloadFile downloadFile;
+	private boolean dontChangeDownloadFile = false;
 
 	private boolean playing = false;
 	private boolean rightImage = false;
@@ -152,7 +153,13 @@ public class SongView extends UpdateView implements Checkable {
 
 		revision = -1;
 		loaded = false;
-    }
+		dontChangeDownloadFile = false;
+	}
+    
+	public void setDownloadFile(DownloadFile downloadFile) {
+		this.downloadFile = downloadFile;
+		dontChangeDownloadFile = true;
+	}
 	
 	@Override
 	protected void updateBackground() {
@@ -164,7 +171,7 @@ public class SongView extends UpdateView implements Checkable {
         }
 
 		long newRevision = downloadService.getDownloadListUpdateRevision();
-		if(revision != newRevision || downloadFile == null) {
+		if((revision != newRevision && dontChangeDownloadFile == false) || downloadFile == null) {
 			downloadFile = downloadService.forSong(song);
 			revision = newRevision;
 		}
