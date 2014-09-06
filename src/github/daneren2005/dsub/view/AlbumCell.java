@@ -92,5 +92,6 @@ public class AlbumCell  extends UpdateView {
 
 		exists = file.exists();
 		isStarred = album.isStarred();
+		isRated = album.getRating();
 	}
 }

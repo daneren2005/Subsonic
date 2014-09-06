@@ -67,8 +67,6 @@ public class SongView extends UpdateView implements Checkable {
 	private boolean loaded = false;
 	private boolean isBookmarked = false;
 	private boolean bookmarked = false;
-	private int isRated = 0;
-	private int rating = 0;
 
     public SongView(Context context) {
         super(context);
@@ -267,10 +265,7 @@ public class SongView extends UpdateView implements Checkable {
 
 		if(isRated != rating) {
 			// Color the entire row based on rating
-			if(isRated > 3) {
-				this.setBackgroundColor(Color.GREEN);
-				this.getBackground().setAlpha(5 * (isRated - 3));
-			} else if(isRated < 3 && isRated > 0) {
+			if(isRated < 3 && isRated > 0) {
 				this.setBackgroundColor(Color.RED);
 				// Use darker colors the lower the rating goes
 				this.getBackground().setAlpha(10 * (3 - isRated));

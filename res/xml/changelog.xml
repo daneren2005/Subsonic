@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.6" versioncode="123" releasedate="9/5/2014">
+		<change>Ratings: set album/song ratings</change>
+		<change>Ratings: quick thumbs up/down from now playing screen</change>
+		<change>Ratings: automatically ignore 1-starred songs</change>
+		<change>Add To Playlist: show when song already in</change>
+		<change>Recently Added: show count from Home</change>
+		<change>Bookmarks: auto bookmark tagged Audio Books</change>
+		<change>Bookmarks: show indicator in listing/now playing screen</change>
+		<change>Video: Download using hls transcode settings</change>
+		<change>Sync: Disable per server</change>
+		<change>Global Shuffle: optimize for large list preferences</change>
+		<change>Global Shuffle: don't add duplicates</change>
+		<change>Offline Shuffle: improve randomness</change>
+		<change>Move EQ to options menu</change>
+		<change>Fix issue with empty folder</change>
+		<change>Fix various cache coherency issues</change>
+		<change>Old Servers: fix broken scrobbling</change>
+		<change>Fix cache location reseting</change>
+	</release>
 	<release version="4.7.5" versioncode="121" releasedate="8/24/2014">
 		<change>Bookmarks: Resume from albums/playlists</change>
 		<change>Bookmarks: Auto bookmark long songs/podcasts</change>

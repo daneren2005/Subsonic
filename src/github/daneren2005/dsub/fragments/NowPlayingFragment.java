@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteButton;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -61,6 +62,8 @@ import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.DownloadFileAdapter;
@@ -374,8 +377,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(downloadService == null) {
 					return;
 				}
-				
-				Entry entry = downloadService.getCurrentPlaying().getSong();
+
+				DownloadFile downloadFile = downloadService.getCurrentPlaying();
+				if(downloadFile == null) {
+					return;
+				}
+				Entry entry = downloadFile.getSong();
 
 				// If rating == 1, already set so unset
 				if(entry.getRating() == 1) {
@@ -406,7 +413,16 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		rateGoodButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Entry entry = getDownloadService().getCurrentPlaying().getSong();
+				DownloadService downloadService = getDownloadService();
+				if(downloadService == null) {
+					return;
+				}
+
+				DownloadFile downloadFile = downloadService.getCurrentPlaying();
+				if(downloadFile == null) {
+					return;
+				}
+				Entry entry = downloadFile.getSong();
 
 				// If rating == 5, already set so unset
 				if(entry.getRating() == 5) {
@@ -1404,7 +1420,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				currentSong.setBookmark(oldBookmark);
 				
 				String msg;
-				if(error instanceof OfflineException || error instance of ServerTooOldException) {
+				if(error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
 				} else {
 					msg = context.getResources().getString(R.string.download_save_bookmark_failed) + getErrorMessage(error);
