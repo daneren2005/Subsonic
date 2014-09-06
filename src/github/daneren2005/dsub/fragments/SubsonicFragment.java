@@ -51,6 +51,7 @@ import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
@@ -1589,7 +1590,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		public void execute() {
 			DownloadService downloadService = getDownloadService();
 			if(downloadService != null && !entry.isDirectory()) {
-				private boolean serializeChanges = false;
+				boolean serializeChanges = false;
 				List<DownloadFile> downloadFiles = downloadService.getDownloads();
 				for(DownloadFile file: downloadFiles) {
 					Entry check = file.getSong();

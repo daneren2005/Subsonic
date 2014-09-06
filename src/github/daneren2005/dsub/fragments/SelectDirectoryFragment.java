@@ -1064,7 +1064,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				musicService.setStarred(entries, artists, albums, false, this, context);
 
 				for(MusicDirectory.Entry entry: unstar) {
-					setEntryStarred(entry, false);
+					new EntryInstanceUpdater(entry) {
+						@Override
+						public void update(MusicDirectory.Entry found) {
+							found.setStarred(false);
+						}
+					}.execute();
 				}
 
 				return null;

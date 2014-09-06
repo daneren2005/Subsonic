@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteButton;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -61,6 +62,8 @@ import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.service.OfflineException;
+import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.DownloadFileAdapter;
@@ -1404,7 +1407,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				currentSong.setBookmark(oldBookmark);
 				
 				String msg;
-				if(error instanceof OfflineException || error instance of ServerTooOldException) {
+				if(error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
 				} else {
 					msg = context.getResources().getString(R.string.download_save_bookmark_failed) + getErrorMessage(error);
