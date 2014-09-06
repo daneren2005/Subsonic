@@ -377,8 +377,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(downloadService == null) {
 					return;
 				}
-				
-				Entry entry = downloadService.getCurrentPlaying().getSong();
+
+				DownloadFile downloadFile = downloadService.getCurrentPlaying();
+				if(downloadFile == null) {
+					return;
+				}
+				Entry entry = downloadFile.getSong();
 
 				// If rating == 1, already set so unset
 				if(entry.getRating() == 1) {
@@ -409,7 +413,16 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		rateGoodButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Entry entry = getDownloadService().getCurrentPlaying().getSong();
+				DownloadService downloadService = getDownloadService();
+				if(downloadService == null) {
+					return;
+				}
+
+				DownloadFile downloadFile = downloadService.getCurrentPlaying();
+				if(downloadFile == null) {
+					return;
+				}
+				Entry entry = downloadFile.getSong();
 
 				// If rating == 5, already set so unset
 				if(entry.getRating() == 5) {
