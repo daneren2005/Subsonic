@@ -20,6 +20,7 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -56,6 +57,8 @@ public class UpdateView extends LinearLayout {
 	protected boolean shaded = false;
 	protected boolean starred = false;
 	protected boolean isStarred = false;
+	protected int isRated = 0;
+	protected int rating = 0;
 	protected SilentBackgroundTask<Void> imageTask = null;
 	
 	protected final boolean autoUpdate;
@@ -258,6 +261,19 @@ public class UpdateView extends LinearLayout {
 					starred = false;
 				}
 			}
+		}
+
+		if(isRated != rating) {
+			// Color the entire row based on rating
+			if(isRated < 3 && isRated > 0) {
+				this.setBackgroundColor(Color.RED);
+				// Use darker colors the lower the rating goes
+				this.getBackground().setAlpha(10 * (3 - isRated));
+			} else {
+				this.setBackgroundColor(0x00000000);
+			}
+
+			rating = isRated;
 		}
 	}
 }
