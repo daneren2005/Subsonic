@@ -50,14 +50,14 @@
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
-		<font color="red">Cache vs Cache permanent</font>:
+		<font color="red">Cache vs Cache permanent</font> :
 		<br/>Lorsque des titres sont téléchargés par DSub, ils peuvent être supprimés pour libérer de l\'espace pour de nouveaux téléchargements. Le cache permanent premet, lui, de ne jamais supprimer automatiquement la musique téléchargée.
-		<p/><font color="red">ChromeCast a échoué</font>:
+		<p/><font color="red">ChromeCast a échoué</font> :
 		<br/>Assurez-vous de ne pas utiliser un certificat auto-signé, Chromecast les rejette systématiquement.
 	]]>
 	</string>
     <string name="main.select_server">Choisir un serveur</string>
-    <string name="main.shuffle">Jouer au hazard</string>
+    <string name="main.shuffle">Jouer au hasard</string>
     <string name="main.offline">Déconnecter</string>
 	<string name="main.online">Connecter</string>
     <string name="main.settings">Paramètres</string>
@@ -67,7 +67,7 @@
     <string name="main.albums_frequent">Les plus joués</string>
     <string name="main.albums_highest">Les mieux notés</string>
     <string name="main.albums_starred">Favoris</string>
-    <string name="main.albums_random">Au hazard</string>
+    <string name="main.albums_random">Au hasard</string>
 	<string name="main.albums_genres">Par genres</string>
 	<string name="main.albums_year">Par décennies</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
@@ -75,7 +75,7 @@
 	<string name="main.scan_complete">Completed scan of Server</string>
 
 	<string name="menu.search">Recherche</string>
-	<string name="menu.shuffle">Hazard</string>
+	<string name="menu.shuffle">Hasard</string>
 	<string name="menu.refresh">Recharger</string>
 	<string name="menu.select">Tout sélectionner</string>
 	<string name="menu.play">Jouer</string>
