@@ -388,7 +388,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(entry.getRating() == 1) {
 					setRating(entry, 0);
 
-					if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
 					} else {
 						rateBadButton.setImageResource(Util.getAttribute(context, R.attr.rating_bad));
@@ -402,7 +402,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_selected);
 
 					// Make sure good rating is blank
-					if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
 					} else {
 						rateGoodButton.setImageResource(Util.getAttribute(context, R.attr.rating_good));
@@ -428,7 +428,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(entry.getRating() == 5) {
 					setRating(entry, 0);
 
-					if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
 					} else {
 						rateGoodButton.setImageResource(Util.getAttribute(context, R.attr.rating_good));
@@ -439,7 +439,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_selected);
 
 					// Make sure bad rating is blank
-					if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
 					} else {
 						rateBadButton.setImageResource(Util.getAttribute(context, R.attr.rating_bad));
@@ -1181,7 +1181,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					int badRating, goodRating, bookmark;
 					if(song.getRating() == 1) {
 						badRating = R.drawable.ic_action_rating_bad_selected;
-					} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					} else if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						badRating = R.drawable.ic_action_rating_bad_dark;
 					} else {
 						badRating = Util.getAttribute(context, R.attr.rating_bad);
@@ -1190,7 +1190,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 					if(song.getRating() == 5) {
 						goodRating = R.drawable.ic_action_rating_good_selected;
-					} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					} else if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						goodRating = R.drawable.ic_action_rating_good_dark;
 					} else {
 						goodRating = Util.getAttribute(context, R.attr.rating_good);
@@ -1199,7 +1199,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 					if(song.getBookmark() != null) {
 						bookmark = R.drawable.ic_menu_bookmark_selected;
-					} else if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					} else if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						bookmark = R.drawable.ic_menu_bookmark_dark;
 					} else {
 						bookmark = Util.getAttribute(context, R.attr.bookmark);
