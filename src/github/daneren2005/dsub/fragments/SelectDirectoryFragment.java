@@ -358,7 +358,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				songs.add((MusicDirectory.Entry) it.next());
 			}
 
-			playNow(songs);
+			ssongs);
 			return true;
 		}
 		
@@ -841,7 +841,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		// Conditions for using play now button
 		if(!append && !save && autoplay && !playNext && !shuffle) {
 			// Call playNow which goes through and tries to use bookmark information
-			playNow(songs);
+			playNow(songs, playlistName, playlistId);
 			return;
 		}
 		
