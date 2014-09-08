@@ -1445,7 +1445,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		Entry selected = entries.isEmpty() ? null : entries.get(0);
 		playNow(entries, selected, position);
 	}
-	protected void playNow(final List<Entry> entries, final Entry song, final int position) {
+	protected void playNow(List<Entry> entries, Entry song, int position) {
+		playNow(entries, song, position, null, null);
+	}
+	protected void playNow(final List<Entry> entries, final Entry song, final int position, final String playlistName, final String playlistId) {
 		new LoadingTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -1456,6 +1459,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				
 				downloadService.clear();
 				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
+				downloadService.setSuggestedPlaylistName(playlistName, playlistId);
 
 				return null;
 			}
