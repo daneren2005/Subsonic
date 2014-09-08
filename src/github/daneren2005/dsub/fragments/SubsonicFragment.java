@@ -1425,6 +1425,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 	
 	protected void playNow(List<Entry> entries) {
+		playNow(entries, null, null);
+	}
+	protected void playNow(List<Entry> entries, String playlistName, String playlistId) {
 		Entry bookmark = null;
 		for(Entry entry: entries) {
 			if(entry.getBookmark() != null) {
@@ -1435,15 +1438,18 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		
 		// If no bookmark found, just play from start
 		if(bookmark == null) {
-			playNow(entries, 0);
+			playNow(entries, 0, playlistName, playlistId);
 		} else {
 			// If bookmark found, then give user choice to start from there or to start over
-			playBookmark(entries, bookmark);
+			playBookmark(entries, bookmark, playlistName, playlistId);
 		}
 	}
-	protected void playNow(List<Entry> entries, int position) {
+	protected void playNow(List<Entry> entries int position) {
+		playNow(entries, position, null, null);
+	}
+	protected void playNow(List<Entry> entries, int position, String playlistName, String playlistId) {
 		Entry selected = entries.isEmpty() ? null : entries.get(0);
-		playNow(entries, selected, position);
+		playNow(entries, selected, position, playlistName, playlistID);
 	}
 	protected void playNow(List<Entry> entries, Entry song, int position) {
 		playNow(entries, song, position, null, null);
