@@ -358,7 +358,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				songs.add((MusicDirectory.Entry) it.next());
 			}
 
-			ssongs);
+			playNow(songs);
 			return true;
 		}
 		

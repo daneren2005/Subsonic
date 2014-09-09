@@ -1375,7 +1375,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		return gestureScanner;
 	}
 
-	protected void playBookmark(final List<Entry> songs, final Entry song) {
+	protected void playBookmark(List<Entry> songs, Entry song) {
+		playBookmark(songs, song, null, null);
+	}
+	protected void playBookmark(final List<Entry> songs, final Entry song, final String playlistName, final String playlistId) {
 		final Integer position = song.getBookmark().getPosition();
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -1444,12 +1447,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			playBookmark(entries, bookmark, playlistName, playlistId);
 		}
 	}
-	protected void playNow(List<Entry> entries int position) {
+	protected void playNow(List<Entry> entries, int position) {
 		playNow(entries, position, null, null);
 	}
 	protected void playNow(List<Entry> entries, int position, String playlistName, String playlistId) {
 		Entry selected = entries.isEmpty() ? null : entries.get(0);
-		playNow(entries, selected, position, playlistName, playlistID);
+		playNow(entries, selected, position, playlistName, playlistId);
 	}
 	protected void playNow(List<Entry> entries, Entry song, int position) {
 		playNow(entries, song, position, null, null);
