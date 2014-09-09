@@ -135,7 +135,14 @@ public class MediaStoreService {
 	public void deleteFromMediaStore(File file) {
 		ContentResolver contentResolver = context.getContentResolver();
 
-		int n = contentResolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+		Uri uri;
+		if(FileUtil.isVideoFile(file)) {
+			uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+		} else {
+			uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+		}
+
+		int n = contentResolver.delete(uri,
 				MediaStore.MediaColumns.DATA + "=?",
 				new String[]{file.getAbsolutePath()});
 		if (n > 0) {
