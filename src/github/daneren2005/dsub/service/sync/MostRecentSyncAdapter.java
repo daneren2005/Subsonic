@@ -83,6 +83,10 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 			}
 
 			if(updated.size() > 0) {
+				while(syncedList.size() > 40) {
+					syncedList.remove(0);
+				}
+				
 				FileUtil.serialize(context, syncedList, SyncUtil.getMostRecentSyncFile(context, instance));
 
 				// If there is a new album on the active server, chances are artists need to be refreshed
