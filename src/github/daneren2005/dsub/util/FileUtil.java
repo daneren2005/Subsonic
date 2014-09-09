@@ -255,7 +255,12 @@ public class FileUtil {
 		}
 	}
 	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
-		return Bitmap.createScaledBitmap(bitmap, size, Util.getScaledHeight(bitmap, size), true);
+		// Don't waste time scaling if the difference is minor
+		if(bitmap.getWidth() < (size * 1.1)) {
+			return bitmap;
+		} else {
+			return Bitmap.createScaledBitmap(bitmap, size, Util.getScaledHeight(bitmap, size), true);
+		}
 	}
 
 	public static File getAlbumArtDirectory(Context context) {
