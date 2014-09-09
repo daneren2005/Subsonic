@@ -103,6 +103,7 @@
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Ajouter utilisateur</string>
 	<string name="menu.rescan">Relire le server</string>
+	<string name="menu.rate">Noter</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Mise à jour informations</string>
@@ -210,6 +211,7 @@
 	<string name="download.downloading_summary_expanded">En cours : %1$s
 		\nTaille estimée : %2$s</string>
 	<string name="download.failed_to_load">Echec du chargement</string>
+	<string name="download.save_bookmark_failed">Echec de la création du favori</string>
 
 	<string name="sync.new_podcasts">Nouveaux podcasts disponibles</string>
 	<string name="sync.new_playlists">Nouveaux titres dans les playlists</string>
@@ -235,6 +237,16 @@
 		\nCréé le : %3$s
 		\nMis à jour : %4$s
 		\nCommentaire : %5$s</string>
+	<string name="bookmark.resume_title">Reprendre la lecture ?</string>
+	<string name="bookmark.resume">Reprendre la lecture de \'%1$s\' depuis %2$s</string>
+	<string name="bookmark.action_resume">Reprendre</string>
+	<string name="bookmark.action_start_over">Start Over</string>
+
+	<string name="rating.title">Noter \"%s\"</string>
+	<string name="rating.set_rating">Note attribuée à \"%s\"</string>
+	<string name="rating.set_rating_failed">Echec de l'attribution de la note à \"%s\"</string>
+	<string name="rating.remove_rating">Note supprimée pour \"%s\"</string>
+	<string name="rating.remove_rating_failed">Echec de la suppression de la note pour \"%s\"</string>
 
 	<string name="song_details.error">Erreur</string>
 	<string name="song_details.skipped">Ignoré</string>
@@ -398,11 +410,14 @@
 	<string name="settings.sync_starred_summary">Charger automatiquement les titres, albums et artistes bien notés</string>
 	<string name="settings.sync_notification">Afficher des notifications de synchro</string>
 	<string name="settings.sync_notification_summary">Afficher une notification dès qu\'un média a été synchronisé</string>
+	<string name="settings.server_sync_summary">Synchron autorisée ou non sur ce serveur</string>
+	<string name="settings.server_sync">Synchro autorisée</string>
 	<string name="settings.menu_options.title">Options de menu optionnelles</string>
 	<string name="settings.menu_options.play_next_summary">Afficher Lire suivant dans les menus</string>
 	<string name="settings.menu_options.play_last_summary">Afficher Lire dernier dans les menus</string>
 	<string name="settings.menu_options.star_summary">Afficher Noter dans les menus</string>
 	<string name="settings.menu_options.shared_summary">Afficher Partager dans les menus</string>
+	<string name="settings.menu_options.rate_summary">Montrer les notes dans les menus</string>
 	<string name="settings.browse_by_tags">Naviguer via les tags</string>
 	<string name="settings.browse_by_tags_summary">Naviguer via les tags plutôt que via l\'arborescence de fichier.  Nécessite Subsonic 4.7+</string>
 	<string name="settings.override_system_language">Ne pas utiliser la langue du système</string>

@@ -99,6 +99,7 @@
 	<string name="menu.cast">Hacer streaming al dispositivo</string>
 	<string name="menu.add_user">Añadir usuario</string>
 	<string name="menu.rescan">Reescanear servidor</string>
+	<string name="menu.rate">Establecer valoración</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -209,6 +210,7 @@
 	</string>
 	<string name="download.failed_to_load">Error al cargar</string>
 	<string name="download.menu_remove_played_songs">Borrar canciones reproducidas</string>
+	<string name="download.save_bookmark_failed">Error al crear marcador</string>
     
 	<string name="starring_content_starred">Marcado con estrella \"%s\"</string>
 	<string name="starring_content_unstarred">Sin marca de estrella \"%s\"</string>
@@ -225,6 +227,15 @@
 	<string name="bookmark.details">Canción: %1$s
 		\nComentario: %2$s
 		\nPosición: %3$s</string>
+	<string name="bookmark.resume_title">Reanudar reproducción?</string>
+	<string name="bookmark.resume">Reanudar reproducción \'%1$s\' desde%2$s</string>
+	<string name="bookmark.action_resume">Reanudar</string>
+	<string name="bookmark.action_start_over">Volver a comenzar</string>
+	<string name="rating.title">Valoración\"%s\"</string>
+	<string name="rating.set_rating">Valoración establecida para \"%s\"</string>
+	<string name="rating.set_rating_failed">Error al establecer valoración para \"%s\"</string>
+	<string name="rating.remove_rating">Valoración eliminada a \"%s\"</string>
+	<string name="rating.remove_rating_failed">Error al eliminar valoración a \"%s\"</string>
 
 	<string name="song_details.error">Error</string>
 	<string name="song_details.skipped">Saltados</string>
@@ -404,6 +415,9 @@
 	<string name="settings.large_album_art_summary">Mostrar los discos con carátulas grandes en vez de en lista</string>
 	<string name="settings.admin_enabled">Admin Habilitado</string>
 	<string name="settings.admin_enabled_summary">Mostrar u ocultar la pestaña de Admin en el menú</string>
+	<string name="settings.server_sync_summary">Activar o no la sincronización en este server</string>
+	<string name="settings.server_sync">Sincronización activada</string>
+	<string name="settings.menu_options.rate_summary">Mostrar valoración en los menús</string>
 
 	<string name="share.info">Dueño: %1$s
 		\nDescripción: %2$s
