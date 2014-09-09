@@ -63,11 +63,11 @@
 	<string name="main.online">Online mód</string>
     <string name="main.settings">Beállítások</string>
     <string name="main.albums_title">Albumok</string>
-    <string name="main.albums_newest">Utoljára hozzáadott</string>
-    <string name="main.albums_recent">Utoljára lejátszott</string>
-    <string name="main.albums_frequent">Legtöbbször lejátszott</string>
-    <string name="main.albums_highest">Legjobbra értékelt</string>
-    <string name="main.albums_starred">Csillagozott</string>
+    <string name="main.albums_newest">Utoljára hozzáadottak</string>
+    <string name="main.albums_recent">Utoljára lejátszottak</string>
+    <string name="main.albums_frequent">Legtöbbször lejátszottak</string>
+    <string name="main.albums_highest">Legjobbra értékeltek</string>
+    <string name="main.albums_starred">Csillagozottak</string>
     <string name="main.albums_random">Véletlenszerű</string>
 	<string name="main.albums_genres">Műfajok</string>
 	<string name="main.albums_year">Évtizedek</string>
@@ -103,6 +103,7 @@
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Felhasználó hozzáadása</string>
 	<string name="menu.rescan">Médiatár frissítése a kiszolgálón</string>
+	<string name="menu.rate">Értékelés</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -186,7 +187,7 @@
     <string name="download.playlist_title">Mentés lejátszási listába</string>
     <string name="download.playlist_name">Lejátszási lista neve:</string>
     <string name="download.playlist_saving">\"%s\" lejátszási lista mentése...</string>
-    <string name="download.playlist_done">Lejátszási lista mentése sikeres.</string>
+    <string name="download.playlist_done">Lejátszási lista mentése sikeres</string>
     <string name="download.playlist_error">Lejátszási lista mentése sikertelen, próbálja később!</string>
     <string name="download.repeat_off">Ismétlés ki</string>
     <string name="download.repeat_all">Összes ismétlése</string>
@@ -205,6 +206,7 @@
 	<string name="download.playing_out_of">Lejátszás: %1$d/%2$d</string>
 	<string name="download.save_bookmark_title">Könyvjelző létrehozása</string>
 	<string name="download.save_bookmark">Könyvjelző létrehozva</string>
+	<string name="download.save_bookmark_failed">Könyvjelző létrehozása sikertelen!</string>
 	<string name="download.downloading_title">%1$d dal letöltése</string>
 	<string name="download.downloading_summary">Aktuális: %1$s</string>
 	<string name="download.downloading_summary_expanded">Aktuális: %1$s
@@ -241,6 +243,12 @@
 	<string name="bookmark.action_resume">Folytatás</string>
 	<string name="bookmark.action_start_over">Kezdés</string>
 
+	<string name="rating.title">\"%s\" értékelése</string>
+	<string name="rating.set_rating">\"%s\" értékelése</string>
+	<string name="rating.set_rating_failed">\"%s\" értékelése sikertelen!</string>
+	<string name="rating.remove_rating">\"%s\" értékelése visszavonva</string>
+	<string name="rating.remove_rating_failed">\"%s\" értékelésének visszavonása sikertelen!</string>
+
 	<string name="song_details.error">Hiba</string>
 	<string name="song_details.skipped">Átlépve</string>
 	<string name="song_details.downloading">Letöltés</string>
@@ -263,6 +271,8 @@
     <string name="settings.server_username">Felhasználónév</string>
     <string name="settings.server_password">Jelszó</string>
 	<string name="settings.server_open_browser">Megnyitás böngészőben</string>
+	<string name="settings.server_sync_summary">Függetlenül attól, hogy a szinkronizálás engedélyezett-e ezen a kiszolgálón.</string>
+	<string name="settings.server_sync">Szinkronizálás engedélyezve</string>
     <string name="settings.cache_title">Zene gyorsítótár (Cache)</string>
     <string name="settings.preload_wifi">Dalok előolvasása (Wi-Fi)</string>
 	<string name="settings.preload_mobile">Dalok előolvasása (Mobilhálózat)</string>
@@ -408,6 +418,7 @@
 	<string name="settings.menu_options.play_last_summary">Sorbaállítás utolsónak opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.star_summary">Csillagozás opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.shared_summary">Megosztás opció megjelenítése a menüben.</string>
+	<string name="settings.menu_options.rate_summary">Értékelés opció megjelenítése a menüben.</string>
 	<string name="settings.browse_by_tags">Böngészés ID3 Tag használatával</string>
 	<string name="settings.browse_by_tags_summary">ID3 Tag módszer használata a fájlredszer alapú mód helyett. Subsonic 4.7+ verzió felett!</string>
 	<string name="settings.override_system_language">A rendszer nyelvének felülbírálása</string>
@@ -519,7 +530,7 @@
 	<string name="widget.4x2">DSub (4x2)</string>
 	<string name="widget.4x3">DSub (4x3)</string>
 	<string name="widget.4x4">DSub (4x4)</string>
-    <string name="widget.initial_text">Érintse meg a zene kiválasztásához</string>
+    <string name="widget.initial_text">Érintse meg a zene kiválasztásához!</string>
     <string name="widget.sdcard_busy">Az SD kártya nem elérhető!</string>
     <string name="widget.sdcard_missing">Nincs SD kártya!</string>
 
@@ -536,6 +547,11 @@
 	<string name="chat.send_a_message">Üzenet küldése</string> 
 
     <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+
+	<string name="tasker.start_playing">Lejátszás indítása</string>
+	<string name="tasker.start_playing_shuffled">Lejátszás indítása kevert sorrendben</string>
+	<string name="tasker.start_playing_title">Tasker -> DSub indítása</string>
+	<string name="tasker.edit_shuffle_mode">Indítás kevert sorrendben: </string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Nincsenek dalok</item>
