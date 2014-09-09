@@ -493,6 +493,11 @@ public class MainFragment extends SubsonicFragment {
 						count++;
 					}
 				}
+				
+				// Keep recents list from growing infinitely
+				while(recents.size() > 40) {
+					recents.remove(0);
+				}
 				FileUtil.serialize(context, recents, recentAddedFile);
 				
 				if(firstRun) {
