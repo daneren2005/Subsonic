@@ -784,6 +784,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			case R.id.menu_star:
 				toggleStarred(song.getSong());
 				return true;
+			case R.id.menu_rate:
+				setRating(song.getSong());
+				return true;
 			case R.id.menu_toggle_timer:
 				if(getDownloadService().getSleepTimer()) {
 					getDownloadService().stopSleepTimer();
