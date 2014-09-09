@@ -96,9 +96,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
         validate();
 		
 		// Only apply sorting on server version 4.7 and greater, where disc is supported
-		if(ServerInfo.checkServerVersion(context, "1.8.0", instance)) {
-			dir.sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true));
-		}
+		dir.sortChildren(context, instance);
 
         return dir;
     }
