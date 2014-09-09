@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.7" versioncode="124" releasedate="9/8/2014">
+		<change>Add Set Rating to Now Playing's songs menu</change>
+		<change>Fix "overwrite existing playlist" not showing</change>
+		<change>Fix duplicate songs display status in Now Playing</change>
+	</release>
 	<release version="4.7.6" versioncode="123" releasedate="9/5/2014">
 		<change>Ratings: set album/song ratings</change>
 		<change>Ratings: quick thumbs up/down from now playing screen</change>
