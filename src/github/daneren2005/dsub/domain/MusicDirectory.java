@@ -102,6 +102,11 @@ public class MusicDirectory implements Serializable {
 		return children.size();
 	}
 	
+	public void sortChildren(Context context, int instance) {
+		if(ServerInfo.checkServerVersion(context, "1.8", instance)) {
+			sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true));
+		}
+	}
 	public void sortChildren(boolean byYear) {
 		EntryComparator.sort(children, byYear);
 	}
