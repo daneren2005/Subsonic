@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.domain;
 
+import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
+
+import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * @author Sindre Mehus
