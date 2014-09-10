@@ -92,40 +92,9 @@ public class OfflineMusicService implements MusicService {
             }
         }
 		
-		SharedPreferences prefs = Util.getPreferences(context);
-		String ignoredArticlesString = prefs.getString(Constants.CACHE_KEY_IGNORE, "The El La Los Las Le Les");
-		final String[] ignoredArticles = ignoredArticlesString.split(" ");
-		
-		Collections.sort(artists, new Comparator<Artist>() {
-			public int compare(Artist lhsArtist, Artist rhsArtist) {
-				String lhs = lhsArtist.getName().toLowerCase();
-				String rhs = rhsArtist.getName().toLowerCase();
-				
-				char lhs1 = lhs.charAt(0);
-				char rhs1 = rhs.charAt(0);
-				
-				if(Character.isDigit(lhs1) && !Character.isDigit(rhs1)) {
-					return 1;
-				} else if(Character.isDigit(rhs1) && !Character.isDigit(lhs1)) {
-					return -1;
-				}
-				
-				for(String article: ignoredArticles) {
-					int index = lhs.indexOf(article.toLowerCase() + " ");
-					if(index == 0) {
-						lhs = lhs.substring(article.length() + 1);
-					}
-					index = rhs.indexOf(article.toLowerCase() + " ");
-					if(index == 0) {
-						rhs = rhs.substring(article.length() + 1);
-					}
-				}
-				
-				return lhs.compareTo(rhs);
-			}
-		});
-		
-        return new Indexes(0L, Collections.<Artist>emptyList(), artists);
+        Indexes indexes = new Indexes(0L, Collections.<Artist>emptyList(), artists);
+		indexes.sortChildren(context);
+		return indexes;
     }
 
     @Override

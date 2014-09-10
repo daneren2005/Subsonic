@@ -18,9 +18,15 @@
  */
 package github.daneren2005.dsub.domain;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+
+import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.Util;
 
 /**
  * @author Sindre Mehus
@@ -75,5 +81,14 @@ public class Indexes implements Serializable {
 
 	public List<MusicDirectory.Entry> getEntries() {
 		return entries;
+	}
+
+	public void sortChildren(Context context) {
+		SharedPreferences prefs = Util.getPreferences(context);
+		String ignoredArticlesString = prefs.getString(Constants.CACHE_KEY_IGNORE, "The El La Los Las Le Les");
+		final String[] ignoredArticles = ignoredArticlesString.split(" ");
+
+		Artist.sort(shortcuts, ignoredArticles);
+		Artist.sort(artists, ignoredArticles);
 	}
 }

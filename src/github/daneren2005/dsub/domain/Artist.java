@@ -18,12 +18,18 @@
  */
 package github.daneren2005.dsub.domain;
 
+import android.util.Log;
+
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Sindre Mehus
  */
 public class Artist implements Serializable {
+	private static final String TAG = Artist.class.getSimpleName();
 
     private String id;
     private String name;
@@ -71,8 +77,69 @@ public class Artist implements Serializable {
 		this.closeness = closeness;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		Artist entry = (Artist) o;
+		return id.equals(entry.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+
     @Override
     public String toString() {
         return name;
     }
+
+	public static class ArtistComparator implements Comparator<Artist> {
+		private String[] ignoredArticles;
+
+		public ArtistComparator(String[] ignoredArticles) {
+			this.ignoredArticles = ignoredArticles;
+		}
+
+		public int compare(Artist lhsArtist, Artist rhsArtist) {
+			String lhs = lhsArtist.getName().toLowerCase();
+			String rhs = rhsArtist.getName().toLowerCase();
+
+			char lhs1 = lhs.charAt(0);
+			char rhs1 = rhs.charAt(0);
+
+			if (Character.isDigit(lhs1) && !Character.isDigit(rhs1)) {
+				return 1;
+			} else if (Character.isDigit(rhs1) && !Character.isDigit(lhs1)) {
+				return -1;
+			}
+
+			for (String article : ignoredArticles) {
+				int index = lhs.indexOf(article.toLowerCase() + " ");
+				if (index == 0) {
+					lhs = lhs.substring(article.length() + 1);
+				}
+				index = rhs.indexOf(article.toLowerCase() + " ");
+				if (index == 0) {
+					rhs = rhs.substring(article.length() + 1);
+				}
+			}
+
+			return lhs.compareTo(rhs);
+		}
+	}
+
+	public static void sort(List<Artist> artists, String[] ignoredArticles) {
+		try {
+			Collections.sort(artists, new ArtistComparator(ignoredArticles));
+		} catch (Exception e) {
+			Log.w(TAG, "Failed to sort artists", e);
+		}
+	}
 }
