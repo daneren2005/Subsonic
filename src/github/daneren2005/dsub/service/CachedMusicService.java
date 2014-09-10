@@ -387,7 +387,7 @@ public class CachedMusicService implements MusicService {
 							public void updateResult(List<Entry> objects, Entry result) {
 								// Only add if it doesn't already exist in it!
 								if(!objects.contains(album)) {
-									objects.add(result);
+									objects.add(album);
 									changed = true;
 								}
 							}
@@ -400,6 +400,39 @@ public class CachedMusicService implements MusicService {
 									// Reapply sort after addition
 									musicDirectory.sortChildren(context, instance);
 									FileUtil.serialize(context, musicDirectory, cacheName);
+								}
+							}
+						}.execute();
+					} else {
+						// If parent is null, then this is a root level album
+						Artist artist = new Artist();
+						artist.setId(album.getId());
+						artist.setName(album.getTitle();
+						
+						new IndexesUpdater(context, isTagBrowsing ? "artists" : "indexes") {
+							private boolean changed = false;
+							
+							@Override
+							public boolean checkResult(Artist check) {
+								return true;
+							}
+							
+							@Override
+							public void updateResult(List<Artist> objects, Artist result) {
+								if(!objects.contains(artist)) {
+									objects.add(artist);
+									changed = true;
+								}
+							}
+							
+							@Override
+							public void save(ArrayList<Artist> objects) {
+								if(changed) {
+									indexes.setArtists(objects);
+									// Reapply sort after addition
+									indexes.sortChildren(context);
+									FileUtil.serialize(context, indexes, cacheName);
+									cachedIndexes.set(indexes);
 								}
 							}
 						}.execute();
