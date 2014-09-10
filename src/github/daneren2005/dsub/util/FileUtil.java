@@ -256,7 +256,8 @@ public class FileUtil {
 	}
 	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
 		// Don't waste time scaling if the difference is minor
-		if(bitmap.getWidth() < (size * 1.1)) {
+		// Large album arts still need to be scaled since displayed as is on now playing!
+		if(size < 500 && bitmap.getWidth() < (size * 1.1)) {
 			return bitmap;
 		} else {
 			return Bitmap.createScaledBitmap(bitmap, size, Util.getScaledHeight(bitmap, size), true);
