@@ -244,7 +244,7 @@
 
 	<string name="rating.title">Noter \"%s\"</string>
 	<string name="rating.set_rating">Note attribuée à \"%s\"</string>
-	<string name="rating.set_rating_failed">Echec de l'attribution de la note à \"%s\"</string>
+	<string name="rating.set_rating_failed">Echec de l\'attribution de la note à \"%s\"</string>
 	<string name="rating.remove_rating">Note supprimée pour \"%s\"</string>
 	<string name="rating.remove_rating_failed">Echec de la suppression de la note pour \"%s\"</string>
 
