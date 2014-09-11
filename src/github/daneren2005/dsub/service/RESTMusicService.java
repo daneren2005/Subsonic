@@ -1563,7 +1563,9 @@ public class RESTMusicService implements MusicService {
                     request.addHeader(header);
                 }
             }
-			request.addHeader("Accept-Encoding", "gzip");
+			if(url.indexOf("getCoverArt") == -1 && url.indexOf("stream") == -1 && url.indexOf("getAvatar") == -1) {
+				request.addHeader("Accept-Encoding", "gzip");
+			}
 
             // Set credentials to get through apache proxies that require authentication.
             int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
