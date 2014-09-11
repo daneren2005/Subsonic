@@ -620,7 +620,12 @@ public class RESTMusicService implements MusicService {
                 List<String> parameterNames = Arrays.asList("id");
                 List<Object> parameterValues = Arrays.<Object>asList(entry.getCoverArt());
                 HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener);
-                in = entity.getContent();
+
+				in = entity.getContent();
+				Header contentEncoding = entity.getContentEncoding();
+				if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+					in = new GZIPInputStream(in);
+				}
 
                 // If content type is XML, an error occured.  Get it.
                 String contentType = Util.getContentType(entity);
@@ -698,6 +703,10 @@ public class RESTMusicService implements MusicService {
         String contentType = Util.getContentType(response.getEntity());
         if (contentType != null && contentType.startsWith("text/xml")) {
             InputStream in = response.getEntity().getContent();
+			Header contentEncoding = response.getEntity().getContentEncoding();
+			if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+				in = new GZIPInputStream(in);
+			}
             try {
                 new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
             } finally {
@@ -1309,6 +1318,10 @@ public class RESTMusicService implements MusicService {
 
 				HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener);
 				in = entity.getContent();
+				Header contentEncoding = entity.getContentEncoding();
+				if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+					in = new GZIPInputStream(in);
+				}
 
 				// If content type is XML, an error occurred. Get it.
 				String contentType = Util.getContentType(entity);
