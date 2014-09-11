@@ -30,6 +30,8 @@ import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -49,6 +51,7 @@ public class UpdateView extends LinearLayout {
 	private static int activeActivities = 0;
 
 	protected Context context;
+	protected RatingBar ratingBar;
 	protected ImageButton starButton;
 	protected ImageView moreButton;
 	
@@ -263,16 +266,14 @@ public class UpdateView extends LinearLayout {
 			}
 		}
 
-		if(isRated != rating) {
-			// Color the entire row based on rating
-			if(isRated < 3 && isRated > 0) {
-				this.setBackgroundColor(Color.RED);
-				// Use darker colors the lower the rating goes
-				this.getBackground().setAlpha(10 * (3 - isRated));
-			} else {
-				this.setBackgroundColor(0x00000000);
+		if(ratingBar != null && isRated != rating) {
+			if(isRated > 0 && rating == 0) {
+				ratingBar.setVisibility(View.VISIBLE);
+			} else if(isRated == 0 && rating > 0) {
+				ratingBar.setVisibility(View.GONE);
 			}
 
+			ratingBar.setRating(isRated);
 			rating = isRated;
 		}
 	}

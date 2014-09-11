@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.io.File;
@@ -50,6 +51,8 @@ public class AlbumCell  extends UpdateView {
 		titleView = (TextView) findViewById(R.id.album_title);
 		artistView = (TextView) findViewById(R.id.album_artist);
 
+		ratingBar = (RatingBar) findViewById(R.id.album_rating);
+		ratingBar.setFocusable(false);
 		starButton = (ImageButton) findViewById(R.id.album_star);
 		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.album_more);

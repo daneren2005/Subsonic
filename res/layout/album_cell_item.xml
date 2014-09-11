@@ -4,12 +4,28 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<github.daneren2005.dsub.view.SquareImageView
-		android:id="@+id/album_coverart"
+	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1"
-		android:src="@drawable/unknown_album"/>
+		android:layout_weight="1">
+
+		<github.daneren2005.dsub.view.SquareImageView
+			android:id="@+id/album_coverart"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:src="@drawable/unknown_album"/>
+
+		<RatingBar
+			android:id="@+id/album_rating"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:isIndicator="true"
+			android:layout_centerHorizontal="true"
+			android:numStars="5"
+			style="@android:style/Widget.Holo.RatingBar.Small"
+			android:layout_alignParentBottom="true"
+			android:visibility="gone"/>
+	</RelativeLayout>
 
 	<LinearLayout
 		android:layout_width="fill_parent"
