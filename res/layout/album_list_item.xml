@@ -5,11 +5,28 @@
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content">
 
-	<ImageView
-		android:id="@+id/album_coverart"
+	<RelativeLayout
 		android:layout_width="@dimen/AlbumArt.Small"
-		android:layout_height="@dimen/AlbumArt.Small"
-		android:layout_gravity="left|center_vertical"/>
+		android:layout_height="@dimen/AlbumArt.Small">
+
+		<ImageView
+			android:id="@+id/album_coverart"
+			android:layout_width="@dimen/AlbumArt.Small"
+			android:layout_height="@dimen/AlbumArt.Small"
+			android:layout_gravity="left|center_vertical"
+			android:src="@drawable/unknown_album"/>
+
+		<RatingBar
+			android:id="@+id/album_rating"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:isIndicator="true"
+			android:layout_centerHorizontal="true"
+			android:numStars="5"
+			style="@android:style/Widget.Holo.RatingBar.Small"
+			android:layout_alignParentBottom="true"
+			android:visibility="gone"/>
+	</RelativeLayout>
 
 	<LinearLayout
 		android:orientation="vertical"
@@ -26,7 +43,8 @@
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:singleLine="true"
-			android:ellipsize="marquee"/>
+			android:ellipsize="marquee"
+			android:paddingBottom="6dip"/>
 
 		<TextView
 			android:id="@+id/album_artist"
