@@ -124,7 +124,7 @@ public class ImageLoader {
 			createLargeUnknownImage(view.getContext());
 		}
 
-		if(entry != null && entry.getCoverArt() == null && entry.isDirectory()) {
+		if(entry != null && entry.getCoverArt() == null && entry.isDirectory() && !Util.isOffline(context)) {
 			// Try to lookup child cover art
 			MusicDirectory.Entry firstChild = FileUtil.lookupChild(context, entry, true);
 			if(firstChild != null) {
