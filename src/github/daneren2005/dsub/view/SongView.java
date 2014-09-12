@@ -78,6 +78,7 @@ public class SongView extends UpdateView implements Checkable {
         durationTextView = (TextView) findViewById(R.id.song_duration);
         statusTextView = (TextView) findViewById(R.id.song_status);
 		statusImageView = (ImageView) findViewById(R.id.song_status_icon);
+		ratingBar = (RatingBar) findViewById(R.id.song_rating);
         starButton = (ImageButton) findViewById(R.id.song_star);
         starButton.setFocusable(false);
 		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
@@ -147,6 +148,7 @@ public class SongView extends UpdateView implements Checkable {
         checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
 
 		this.setBackgroundColor(0x00000000);
+		ratingBar.setVisibility(View.GONE);
 		rating = 0;
 
 		revision = -1;
@@ -264,12 +266,24 @@ public class SongView extends UpdateView implements Checkable {
 		}
 
 		if(isRated != rating) {
-			// Color the entire row based on rating
-			if(isRated < 3 && isRated > 0) {
+			if(isRated > 1) {
+				if(rating <= 1) {
+					ratingBar.setVisibility(View.VISIBLE);
+				}
+
+				ratingBar.setNumStars(isRated);
+				ratingBar.setRating(isRated);
+			} else if(isRated <= 1) {
+				if(rating > 1) {
+					ratingBar.setVisibility(View.GONE);
+				}
+			}
+
+			// Still highlight red if a 1-star
+			if(isRated == 1) {
 				this.setBackgroundColor(Color.RED);
-				// Use darker colors the lower the rating goes
-				this.getBackground().setAlpha(10 * (3 - isRated));
-			} else {
+				this.getBackground().setAlpha(20);
+			} else if(rating == 1) {
 				this.setBackgroundColor(0x00000000);
 			}
 
