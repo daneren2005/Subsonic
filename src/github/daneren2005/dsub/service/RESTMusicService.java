@@ -1405,18 +1405,24 @@ public class RESTMusicService implements MusicService {
 				try{
 					SearchCritera critera = new SearchCritera(search, 0, 1, 1);
 					SearchResult result = searchNew(critera, context, progressListener);
-					if(result.getSongs().size() == 1){
-						Log.i(TAG, "Query '" + search + "' returned song " + result.getSongs().get(0).getTitle() + " by " + result.getSongs().get(0).getArtist() + " with id " + result.getSongs().get(0).getId());
-						setStarred(Arrays.asList(result.getSongs().get(0)), null, null, starred, progressListener, context);
-					} else if(result.getAlbums().size() == 1){
-						Log.i(TAG, "Query '" + search + "' returned song " + result.getAlbums().get(0).getTitle() + " by " + result.getAlbums().get(0).getArtist() + " with id " + result.getAlbums().get(0).getId());
-						setStarred(Arrays.asList(result.getAlbums().get(0)), null, null, starred, progressListener, context);
+					if(result.getSongs().size() == 1) {
+						MusicDirectory.Entry song = result.getSongs().get(0);
+						Log.i(TAG, "Query '" + search + "' returned song " + song.getTitle() + " by " + song.getArtist() + " with id " + song.getId());
+						setStarred(Arrays.asList(song), null, null, starred, progressListener, context);
+					} else if(result.getAlbums().size() == 1) {
+						MusicDirectory.Entry album = result.getAlbums().get(0);
+						Log.i(TAG, "Query '" + search + "' returned album " + album.getTitle() + " by " + album.getArtist() + " with id " + album.getId());
+						if(Util.isTagBrowsing(context, getInstance(context))) {
+							setStarred(null, null, Arrays.asList(album), starred, progressListener, context);
+						} else {
+							setStarred(Arrays.asList(album), null, null, starred, progressListener, context);
+						}
 					}
-					else{
+					else {
 						throw new Exception("Song not found on server");
 					}
 				}
-				catch(Exception e){
+				catch(Exception e) {
 					Log.e(TAG, e.toString());
 					retry++;
 				}
