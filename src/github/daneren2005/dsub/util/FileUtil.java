@@ -74,6 +74,7 @@ public class FileUtil {
 	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Arrays.asList("m3u");
     private static File DEFAULT_MUSIC_DIR;
 	private static final Kryo kryo = new Kryo();
+	private static HashMap<String, MusicDirectory.Entry> entryLookup;
 
 	static {
 		kryo.register(MusicDirectory.Entry.class);
@@ -286,10 +287,13 @@ public class FileUtil {
             File f = new File(fileSystemSafeDir(entry.getPath()));
             dir = new File(getMusicDirectory(context).getPath() + "/" + (entry.isDirectory() ? f.getPath() : f.getParent()));
         } else {
-			MusicDirectory.Entry firstSong = lookupChild(context, entry, false);
-			if(firstSong != null) {
-				File songFile = FileUtil.getSongFile(context, firstSong);
-				dir = songFile.getParentFile();
+			MusicDirectory.Entry firstSong;
+			if(!Util.isOffline(context)) {
+				firstSong = lookupChild(context, entry, false);
+				if(firstSong != null) {
+					File songFile = FileUtil.getSongFile(context, firstSong);
+					dir = songFile.getParentFile();
+				}
 			}
 
 			if(dir == null) {
@@ -305,6 +309,23 @@ public class FileUtil {
     }
 
 	public static MusicDirectory.Entry lookupChild(Context context, MusicDirectory.Entry entry, boolean allowDir) {
+		// Initialize lookupMap if first time called
+		String cacheName = Util.getCacheName(context, "entryLookup");
+		if(entryLookup == null) {
+			entryLookup = deserialize(context, cacheName, HashMap.class);
+			
+			// Create it if 
+			if(entryLookup == null) {
+				entryLookup = new HashMap<String, MusicDirectory.Entry>();
+			}
+		}
+		
+		// Check if this lookup has already been done before
+		MusicDirectory.Entry child = entryLookup.get(entry.getId());
+		if(child != null) {
+			return child;
+		}
+		
 		// Do a special lookup since 4.7+ doesn't match artist/album to entry.getPath
 		String s = Util.getRestUrl(context, null, false) + entry.getId();
 		String cacheName = (Util.isTagBrowsing(context) ? "album-" : "directory-") + s.hashCode() + ".ser";
@@ -313,7 +334,10 @@ public class FileUtil {
 		if(entryDir != null) {
 			List<MusicDirectory.Entry> songs = entryDir.getChildren(allowDir, true);
 			if(songs.size() > 0) {
-				return songs.get(0);
+				child = songs.get(0);
+				entryLookup.put(entry.getId(), child);
+				serialize(context, entryLookup, cacheName);
+				return child;
 			}
 		}
 
