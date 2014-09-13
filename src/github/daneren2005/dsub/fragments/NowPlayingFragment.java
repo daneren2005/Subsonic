@@ -194,9 +194,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				public void onClick(View v) {
 					DownloadFile currentDownload = getDownloadService().getCurrentPlaying();
 					if (currentDownload != null) {
-						Entry currentSong = currentDownload.getSong();
-						toggleStarred(currentSong);
-						starButton.setImageResource(currentSong.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+						final Entry currentSong = currentDownload.getSong();
+						toggleStarred(currentSong, new OnStarChange() {
+							@Override
+							void starChange(boolean starred) {
+								starButton.setImageResource(currentSong.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+							}
+						});
 					}
 				}
 			});

@@ -17,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -70,6 +72,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 	String id;
 	String name;
+	boolean starred;
+	int rating;
 	String playlistId;
 	String playlistName;
 	boolean playlistOwner;
@@ -113,6 +117,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(args != null) {
 			id = args.getString(Constants.INTENT_EXTRA_NAME_ID);
 			name = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
+			starred = args.getBoolean(Constants.INTENT_EXTRA_NAME_STARRED, false);
+			rating = args.getInt(Constants.INTENT_EXTRA_NAME_RATING, 0);
 			playlistId = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
 			playlistName = args.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME);
 			playlistOwner = args.getBoolean(Constants.INTENT_EXTRA_NAME_PLAYLIST_OWNER, false);
@@ -392,6 +398,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
+				args.putBoolean(Constants.INTENT_EXTRA_NAME_STARRED, entry.isStarred());
+				args.putInt(Constants.INTENT_EXTRA_NAME_RATING, entry.getRating());
 				if ("newest".equals(albumListType)) {
 					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
 				}
@@ -722,6 +730,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
+				args.putBoolean(Constants.INTENT_EXTRA_NAME_STARRED, entry.isStarred());
+				args.putInt(Constants.INTENT_EXTRA_NAME_RATING, entry.getRating());
 				if ("newest".equals(albumListType)) {
 					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
 				}
@@ -1280,6 +1290,50 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 						createShare(SelectDirectoryFragment.this.entries);
 					}
 				});
+			}
+
+			final Entry album = new Entry();
+			album.setId(id);
+			album.setTitle(name);
+			album.setDirectory(true);
+			album.setStarred(starred);
+			album.setRating(rating);
+
+			final ImageButton starButton = (ImageButton) header.findViewById(R.id.select_album_star);
+			if(id != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
+				starButton.setImageResource(album.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+				starButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						toggleStarred(album, new OnStarChange() {
+							@Override
+							void starChange(boolean starred) {
+								starButton.setImageResource(album.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+							}
+						});
+					}
+				});
+			} else {
+				starButton.setVisibility(View.GONE);
+			}
+
+			View ratingBarWrapper = header.findViewById(R.id.select_album_rate_wrapper);
+			final RatingBar ratingBar = (RatingBar) header.findViewById(R.id.select_album_rate);
+			if(id != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true) && !Util.isOffline(context)) {
+				ratingBar.setRating(album.getRating());
+				ratingBarWrapper.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						setRating(album, new OnRatingChange() {
+							@Override
+							void ratingChange(int rating) {
+								ratingBar.setRating(album.getRating());
+							}
+						});
+					}
+				});
+			} else {
+				ratingBar.setVisibility(View.GONE);
 			}
 		}
 

@@ -71,16 +71,44 @@
 
 	</LinearLayout>
 
-	<ImageView
-		android:id="@+id/select_album_share"
-		android:layout_height="wrap_content"
+	<LinearLayout
 		android:layout_width="wrap_content"
-		android:scaleType="fitCenter"
-		android:src="?attr/share"
-		android:padding="10dip"
+		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentRight="true"
-		style="@style/BasicButton"/>
+		android:padding="10dip">
+
+		<LinearLayout
+			android:id="@+id/select_album_rate_wrapper"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent">
+
+			<RatingBar
+				android:id="@+id/select_album_rate"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:numStars="5"
+				style="@android:style/Widget.Holo.RatingBar.Small"
+				android:layout_gravity="center_vertical"/>
+		</LinearLayout>
+
+		<ImageButton
+			android:id="@+id/select_album_star"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="@style/BasicButton"
+			android:src="@android:drawable/star_big_off"
+			android:layout_gravity="center_vertical"/>
+
+		<ImageView
+			android:id="@+id/select_album_share"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:scaleType="fitCenter"
+			android:src="?attr/share"
+			style="@style/BasicButton"
+			android:layout_gravity="center_vertical"/>
+	</LinearLayout>
 </RelativeLayout>
 
 

@@ -37,6 +37,8 @@ public final class Constants {
     // Names for intent extras.
     public static final String INTENT_EXTRA_NAME_ID = "subsonic.id";
     public static final String INTENT_EXTRA_NAME_NAME = "subsonic.name";
+	public static final String INTENT_EXTRA_NAME_STARRED = "subsonic.starred";
+	public static final String INTENT_EXTRA_NAME_RATING = "subsonic.rating";
 	public static final String INTENT_EXTRA_NAME_CHILD_ID = "subsonic.child.id";
     public static final String INTENT_EXTRA_NAME_ARTIST = "subsonic.artist";
     public static final String INTENT_EXTRA_NAME_TITLE = "subsonic.title";
@@ -73,8 +75,6 @@ public final class Constants {
     public static final String PREFERENCES_KEY_SERVER_URL = "serverUrl";
 	public static final String PREFERENCES_KEY_SERVER_INTERNAL_URL = "serverInternalUrl";
 	public static final String PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID = "serverLocalNetworkSSID";
-	public static final String PREFERENCES_KEY_SERVER_VERSION = "serverVersion";
-	public static final String PREFERENCES_KEY_SERVER_TYPE = "serverType";
 	public static final String PREFERENCES_KEY_TEST_CONNECTION = "serverTestConnection";
 	public static final String PREFERENCES_KEY_OPEN_BROWSER = "openBrowser";
     public static final String PREFERENCES_KEY_MUSIC_FOLDER_ID = "musicFolderId";

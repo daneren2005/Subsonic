@@ -97,4 +97,8 @@ public class AlbumCell  extends UpdateView {
 		isStarred = album.isStarred();
 		isRated = album.getRating();
 	}
+
+	public MusicDirectory.Entry getEntry() {
+		return album;
+	}
 }

@@ -221,11 +221,17 @@ public class UpdateView extends LinearLayout {
 
 	public static MusicDirectory.Entry findEntry(MusicDirectory.Entry entry) {
 		for(UpdateView view: INSTANCES.keySet()) {
+			MusicDirectory.Entry check = null;
 			if(view instanceof SongView) {
-				MusicDirectory.Entry check = ((SongView) view).getEntry();
-				if(check != null && entry != check && check.getId().equals(entry.getId())) {
-					return check;
-				}
+				check = ((SongView) view).getEntry();
+			} else if(view instanceof AlbumCell) {
+				check = ((AlbumCell) view).getEntry();
+			} else if(view instanceof AlbumView) {
+				check = ((AlbumView) view).getEntry();
+			}
+
+			if(check != null && entry != check && check.getId().equals(entry.getId())) {
+				return check;
 			}
 		}
 

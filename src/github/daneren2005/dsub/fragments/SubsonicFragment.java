@@ -671,9 +671,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		dialog.show();
 	}
 
-	public void toggleStarred(final Entry entry) {
+	public void toggleStarred(Entry entry) {
+		toggleStarred(entry, null);
+	}
+	public void toggleStarred(final Entry entry, final OnStarChange onStarChange) {
 		final boolean starred = !entry.isStarred();
 		entry.setStarred(starred);
+		if(onStarChange != null) {
+			onStarChange.starChange(starred);
+		}
 
 		new SilentBackgroundTask<Void>(context) {
 			@Override
@@ -709,6 +715,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			protected void error(Throwable error) {
 				Log.w(TAG, "Failed to star", error);
 				entry.setStarred(!starred);
+				if(onStarChange != null) {
+					onStarChange.starChange(!starred);
+				}
 
 				String msg;
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
@@ -1529,8 +1538,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		});
 	}
-	
-	protected void setRating(final Entry entry) {
+
+	protected void setRating(Entry entry) {
+		setRating(entry, null);
+	}
+	protected void setRating(final Entry entry, final OnRatingChange onRatingChange) {
 		View layout = context.getLayoutInflater().inflate(R.layout.rating, null);
 		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
 		ratingBar.setRating((float) entry.getRating());
@@ -1542,7 +1554,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					int rating = (int) ratingBar.getRating();
-					setRating(entry, rating);
+					setRating(entry, rating, onRatingChange);
 				}
 			})
 			.setNegativeButton(R.string.common_cancel, null);
@@ -1551,9 +1563,16 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		dialog.show();
 	}
 
-	protected void setRating(final Entry entry, final int rating) {
+	protected void setRating(Entry entry, int rating) {
+		setRating(entry, rating, null);
+	}
+	protected void setRating(final Entry entry, final int rating, final OnRatingChange onRatingChange) {
 		final int oldRating = entry.getRating();
 		entry.setRating(rating);
+
+		if(onRatingChange != null) {
+			onRatingChange.ratingChange(rating);
+		}
 		
 		new SilentBackgroundTask<Void>(context) {
 			@Override
@@ -1578,6 +1597,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			@Override
 			protected void error(Throwable error) {
 				entry.setRating(oldRating);
+				if(onRatingChange != null) {
+					onRatingChange.ratingChange(oldRating);
+				}
 				
 				String msg;
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
@@ -1623,5 +1645,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				update(find);
 			}
 		}
+	}
+
+	public abstract class OnRatingChange {
+		abstract void ratingChange(int rating);
+	}
+	public abstract class OnStarChange {
+		abstract void starChange(boolean starred);
 	}
 }
