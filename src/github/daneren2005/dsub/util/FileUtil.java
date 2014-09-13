@@ -30,6 +30,7 @@ import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Iterator;
@@ -310,9 +311,9 @@ public class FileUtil {
 
 	public static MusicDirectory.Entry lookupChild(Context context, MusicDirectory.Entry entry, boolean allowDir) {
 		// Initialize lookupMap if first time called
-		String cacheName = Util.getCacheName(context, "entryLookup");
+		String lookupName = Util.getCacheName(context, "entryLookup");
 		if(entryLookup == null) {
-			entryLookup = deserialize(context, cacheName, HashMap.class);
+			entryLookup = deserialize(context, lookupName, HashMap.class);
 			
 			// Create it if 
 			if(entryLookup == null) {
@@ -336,7 +337,7 @@ public class FileUtil {
 			if(songs.size() > 0) {
 				child = songs.get(0);
 				entryLookup.put(entry.getId(), child);
-				serialize(context, entryLookup, cacheName);
+				serialize(context, entryLookup, lookupName);
 				return child;
 			}
 		}
