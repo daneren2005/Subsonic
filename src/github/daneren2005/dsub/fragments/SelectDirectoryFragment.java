@@ -51,6 +51,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
+
 public class SelectDirectoryFragment extends SubsonicFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
@@ -60,8 +62,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private Boolean licenseValid;
 	private boolean showHeader = true;
 	private EntryAdapter entryAdapter;
-	private List<MusicDirectory.Entry> albums;
-	private List<MusicDirectory.Entry> entries;
+	private List<Entry> albums;
+	private List<Entry> entries;
 	private boolean albumContext = false;
 	private boolean addAlbumHeader = false;
 	private LoadTask currentTask;
@@ -92,8 +94,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		if(bundle != null) {
-			entries = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
-			albums = (List<MusicDirectory.Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
+			entries = (List<Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+			albums = (List<Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
 			restoredInstance = true;
 		}
 	}
@@ -132,11 +134,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				lookupParent = true;
 			}
 			if(entries == null) {
-				entries = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
-				albums = (List<MusicDirectory.Entry>) args.getSerializable(Constants.FRAGMENT_LIST2);
+				entries = (List<Entry>) args.getSerializable(Constants.FRAGMENT_LIST);
+				albums = (List<Entry>) args.getSerializable(Constants.FRAGMENT_LIST2);
 
 				if(albums == null) {
-					albums = new ArrayList<MusicDirectory.Entry>();
+					albums = new ArrayList<Entry>();
 				}
 			}
 		}
@@ -298,15 +300,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
-		MusicDirectory.Entry entry;
+		Entry entry;
 		if(view.getId() == R.id.select_album_entries) {
 			if(info.position == 0) {
 				return;
 			}
-			entry = (MusicDirectory.Entry) entryList.getItemAtPosition(info.position);
+			entry = (Entry) entryList.getItemAtPosition(info.position);
 			albumContext = false;
 		} else {
-			entry = (MusicDirectory.Entry) albumList.getItemAtPosition(info.position);
+			entry = (Entry) albumList.getItemAtPosition(info.position);
 			albumContext = true;
 		}
 
@@ -352,10 +354,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false) && menuItem.getItemId() == R.id.song_menu_play_now) {
-			List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+			List<Entry> songs = new ArrayList<Entry>();
 			Iterator it = entries.listIterator(info.position - headers);
 			while(it.hasNext()) {
-				songs.add((MusicDirectory.Entry) it.next());
+				songs.add((Entry) it.next());
 			}
 
 			playNow(songs);
@@ -384,7 +386,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (position >= 0) {
-			MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
+			Entry entry = (Entry) parent.getItemAtPosition(position);
 			if (entry.isDirectory()) {
 				SubsonicFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
@@ -490,15 +492,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				} else {
 					root = share.getMusicDirectory();
 				}
-				List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+				List<Entry> songs = new ArrayList<Entry>();
 				getSongsRecursively(root, songs);
 				root.replaceChildren(songs);
 				return root;
 			}
 			
-			private void getSongsRecursively(MusicDirectory parent, List<MusicDirectory.Entry> songs) throws Exception {
+			private void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
 				songs.addAll(parent.getChildren(false, true));
-				for (MusicDirectory.Entry dir : parent.getChildren(true, false)) {
+				for (Entry dir : parent.getChildren(true, false)) {
 					MusicService musicService = MusicServiceFactory.getMusicService(context);
 
 					MusicDirectory musicDirectory;
@@ -715,7 +717,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		albumList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
+				Entry entry = (Entry) parent.getItemAtPosition(position);
 				SubsonicFragment fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
@@ -751,7 +753,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private void playAll(final boolean shuffle, final boolean append) {
 		boolean hasSubFolders = false;
 		for (int i = 0; i < entryList.getCount(); i++) {
-			MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(i);
+			Entry entry = (Entry) entryList.getItemAtPosition(i);
 			if (entry != null && entry.isDirectory()) {
 				hasSubFolders = true;
 				break;
@@ -774,7 +776,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		boolean someUnselected = false;
 		int count = entryList.getCount();
 		for (int i = 0; i < count; i++) {
-			if (!entryList.isItemChecked(i) && entryList.getItemAtPosition(i) instanceof MusicDirectory.Entry) {
+			if (!entryList.isItemChecked(i) && entryList.getItemAtPosition(i) instanceof Entry) {
 				someUnselected = true;
 				break;
 			}
@@ -786,7 +788,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		int count = entryList.getCount();
 		int selectedCount = 0;
 		for (int i = 0; i < count; i++) {
-			MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(i);
+			Entry entry = (Entry) entryList.getItemAtPosition(i);
 			if (entry != null && !entry.isDirectory() && !entry.isVideo()) {
 				entryList.setItemChecked(i, selected);
 				selectedCount++;
@@ -801,12 +803,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 	}
 
-	private List<MusicDirectory.Entry> getSelectedSongs() {
-		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>(10);
+	private List<Entry> getSelectedSongs() {
+		List<Entry> songs = new ArrayList<Entry>(10);
 		int count = entryList.getCount();
 		for (int i = 0; i < count; i++) {
 			if (entryList.isItemChecked(i)) {
-				MusicDirectory.Entry entry = (MusicDirectory.Entry) entryList.getItemAtPosition(i);
+				Entry entry = (Entry) entryList.getItemAtPosition(i);
 				// Don't try to add directories or 1-starred songs
 				if(!entry.isDirectory() && entry.getRating() != 1) {
 					songs.add(entry);
@@ -835,7 +837,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			return;
 		}
 
-		final List<MusicDirectory.Entry> songs = getSelectedSongs();
+		final List<Entry> songs = getSelectedSongs();
 		warnIfNetworkOrStorageUnavailable();
 		
 		// Conditions for using play now button
@@ -878,14 +880,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		checkLicenseAndTrialPeriod(onValid);
 	}
 	private void downloadBackground(final boolean save) {
-		List<MusicDirectory.Entry> songs = getSelectedSongs();
+		List<Entry> songs = getSelectedSongs();
 		if(songs.isEmpty()) {
 			selectAll(true, false);
 			songs = getSelectedSongs();
 		}
 		downloadBackground(save, songs);
 	}
-	private void downloadBackground(final boolean save, final List<MusicDirectory.Entry> songs) {
+	private void downloadBackground(final boolean save, final List<Entry> songs) {
 		if (getDownloadService() == null) {
 			return;
 		}
@@ -908,7 +910,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	private void delete() {
-		List<MusicDirectory.Entry> songs = getSelectedSongs();
+		List<Entry> songs = getSelectedSongs();
 		if(songs.isEmpty()) {
 			selectAll(true, false);
 			songs = getSelectedSongs();
@@ -1009,7 +1011,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
 						if (getDownloadService() != null) {
-							List<MusicDirectory.Entry> episodeList = new ArrayList<MusicDirectory.Entry>(1);
+							List<Entry> episodeList = new ArrayList<Entry>(1);
 							episodeList.add(episode);
 							getDownloadService().delete(episodeList);
 						}
@@ -1033,24 +1035,24 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	public void unstarSelected() {
-		List<MusicDirectory.Entry> selected = getSelectedSongs();
+		List<Entry> selected = getSelectedSongs();
 		if(selected.size() == 0) {
 			selected = entries;
 		}
 		if(selected.size() == 0) {
 			return;
 		}
-		final List<MusicDirectory.Entry> unstar = new ArrayList<MusicDirectory.Entry>();
+		final List<Entry> unstar = new ArrayList<Entry>();
 		unstar.addAll(selected);
 
 		new LoadingTask<Void>(context, true) {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<MusicDirectory.Entry> entries = new ArrayList<MusicDirectory.Entry>();
-				List<MusicDirectory.Entry> artists = new ArrayList<MusicDirectory.Entry>();
-				List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
-				for(MusicDirectory.Entry entry: unstar) {
+				List<Entry> entries = new ArrayList<Entry>();
+				List<Entry> artists = new ArrayList<Entry>();
+				List<Entry> albums = new ArrayList<Entry>();
+				for(Entry entry: unstar) {
 					if(entry.isDirectory()) {
 						if(entry.isAlbum()) {
 							albums.add(entry);
@@ -1063,10 +1065,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 				musicService.setStarred(entries, artists, albums, false, this, context);
 
-				for(MusicDirectory.Entry entry: unstar) {
+				for(Entry entry: unstar) {
 					new EntryInstanceUpdater(entry) {
 						@Override
-						public void update(MusicDirectory.Entry found) {
+						public void update(Entry found) {
 							found.setStarred(false);
 						}
 					}.execute();
@@ -1079,7 +1081,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			protected void done(Void result) {
 				Util.toast(context, context.getResources().getString(R.string.starring_content_unstarred, Integer.toString(unstar.size())));
 
-				for(MusicDirectory.Entry entry: unstar) {
+				for(Entry entry: unstar) {
 					entries.remove(entry);
 				}
 				entryAdapter.notifyDataSetChanged();
@@ -1154,7 +1156,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		builder.create().show();
 	}
 
-	private View createHeader(List<MusicDirectory.Entry> entries) {
+	private View createHeader(List<Entry> entries) {
 		View header = entryList.findViewById(R.id.select_album_header);
 		boolean add = false;
 		if(header == null) {
@@ -1165,12 +1167,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		final ImageLoader imageLoader = getImageLoader();
 		
 		// Try a few times to get a random cover art
-		MusicDirectory.Entry coverArt = null;
+		Entry coverArt = null;
 		for(int i = 0; (i < 3) && (coverArt == null || coverArt.getCoverArt() == null); i++) {
 			coverArt = entries.get(random.nextInt(entries.size()));
 		}
 		
-		final MusicDirectory.Entry albumRep = coverArt;
+		final Entry albumRep = coverArt;
 		View coverArtView = header.findViewById(R.id.select_album_art);
 		coverArtView.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -1207,7 +1209,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		Set<String> artists = new HashSet<String>();
 		Set<Integer> years = new HashSet<Integer>();
 		Integer totalDuration = 0;
-		for (MusicDirectory.Entry entry : entries) {
+		for (Entry entry : entries) {
 			if (!entry.isDirectory()) {
 				songCount++;
 				if (entry.getArtist() != null) {
