@@ -370,7 +370,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				createBookmark();
-				bookmarkButton.setImageResource(R.drawable.ic_menu_bookmark_selected);
 			}
 		});
 
@@ -1400,6 +1399,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		final int position = downloadService.getPlayerPosition();
 		final Bookmark oldBookmark = currentSong.getBookmark();
 		currentSong.setBookmark(new Bookmark(position));
+		bookmarkButton.setImageResource(R.drawable.ic_menu_bookmark_selected);
 		
 		new SilentBackgroundTask<Void>(context) {
 			@Override
@@ -1427,6 +1427,17 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			protected void error(Throwable error) {
 				Log.w(TAG, "Failed to create bookmark", error);
 				currentSong.setBookmark(oldBookmark);
+				
+				// If no bookmark at start, then return to no bookmark
+				if(oldBookmark == null) {
+					int bookmark;
+					if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+						bookmark = R.drawable.ic_menu_bookmark_dark;
+					} else {
+						bookmark = Util.getAttribute(context, R.attr.bookmark);
+					}
+					bookmarkButton.setImageResource(bookmark);
+				}
 				
 				String msg;
 				if(error instanceof OfflineException || error instanceof ServerTooOldException) {
