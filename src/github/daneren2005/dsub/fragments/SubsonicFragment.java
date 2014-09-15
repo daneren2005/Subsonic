@@ -784,13 +784,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
 		LoadingTask<Boolean> task = new LoadingTask<Boolean>(context) {
+			private MusicService musicService;
 			private static final int MAX_SONGS = 500;
 			private boolean playNowOverride = false;
 			private List<Entry> songs;
 
 			@Override
 			protected Boolean doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService = MusicServiceFactory.getMusicService(context);
 				MusicDirectory root;
 				if(share != null) {
 					root = share.getMusicDirectory();
@@ -851,7 +852,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					}
 				}
 				for (Entry dir : parent.getChildren(true, false)) {
-					MusicService musicService = MusicServiceFactory.getMusicService(context);
+					if(dir.getRating() == 1) {
+						continue;
+					}
 
 					MusicDirectory musicDirectory;
 					if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
