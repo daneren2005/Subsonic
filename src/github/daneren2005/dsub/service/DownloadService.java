@@ -144,6 +144,10 @@ public class DownloadService extends Service {
 	private boolean autoPlayStart = false;
 
 	private MediaRouteManager mediaRouter;
+	
+	// Variables to manage getCurrentPosition sometimes starting from an arbitrary non-zero number
+	private long subtractNextPosition = 0;
+	private int subtractPosition = 0;
 
 	@Override
 	public void onCreate() {
@@ -803,6 +807,7 @@ public class DownloadService extends Service {
 		Util.broadcastPlaybackStatusChange(this, currentPlaying.getSong(), PlayerState.PREPARED);
 		
 		// Swap the media players since nextMediaPlayer is ready to play
+		subtractPosition = 0;
 		if(start) {
 			nextMediaPlayer.start();
 		} else if(!nextMediaPlayer.isPlaying()) {
@@ -810,6 +815,9 @@ public class DownloadService extends Service {
 			nextMediaPlayer.start();
 		} else {
 			Log.i(TAG, "nextMediaPlayer already playing");
+			
+			// Next time the cachedPosition is updated, use that as position 0
+			subtractNextPosition = System.currentTimeMillis();
 		}
 		MediaPlayer tmp = mediaPlayer;
 		mediaPlayer = nextMediaPlayer;
@@ -850,6 +858,7 @@ public class DownloadService extends Service {
 			} else {
 				mediaPlayer.seekTo(position);
 				cachedPosition = position;
+				subtractPosition = 0;
 			}
 		} catch (Exception x) {
 			handleError(x);
@@ -980,6 +989,7 @@ public class DownloadService extends Service {
 			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.setOnCompletionListener(null);
 			mediaPlayer.reset();
+			subtractPosition = 0;
 		} catch (Exception x) {
 			handleError(x);
 		}
@@ -1012,7 +1022,7 @@ public class DownloadService extends Service {
 			if (remoteState != RemoteControlState.LOCAL) {
 				return remoteController.getRemotePosition() * 1000;
 			} else {
-				return cachedPosition;
+				return Math.max(0, cachedPosition - subtractPosition);
 			}
 		} catch (Exception x) {
 			handleError(x);
@@ -1109,6 +1119,14 @@ public class DownloadService extends Service {
 				try {
 					if(mediaPlayer != null && playerState == STARTED) {
 						cachedPosition = mediaPlayer.getCurrentPosition();
+						if(subtractNextPosition > 0) {
+							// Subtraction amount is current position - how long ago onCompletionListener was called
+							subtractPosition = cachedPosition - (int) (System.currentTimeMillis() - subtractNextPosition);
+							if(subtractPosition < 0) {
+								subtractPosition = 0;
+							}
+							subtractNextPosition = 0;
+						}
 					}
 					Thread.sleep(1000L);
 				}
@@ -1332,6 +1350,7 @@ public class DownloadService extends Service {
 			boolean isPartial = file.equals(downloadFile.getPartialFile());
 			downloadFile.updateModificationDate();
 
+			subtractPosition = 0;
 			mediaPlayer.setOnCompletionListener(null);
 			mediaPlayer.reset();
 			setPlayerState(IDLE);
@@ -1456,7 +1475,7 @@ public class DownloadService extends Service {
 		mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
 				Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
-				int pos = cachedPosition;
+				int pos = getPlayerPosition();
 				reset();
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000))) {
 					playNext();
@@ -1479,7 +1498,7 @@ public class DownloadService extends Service {
 
 				setPlayerStateCompleted();
 
-				int pos = cachedPosition;
+				int pos = getPlayerPosition();
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000)) || nextSetup) {
 					playNext();
@@ -1770,7 +1789,7 @@ public class DownloadService extends Service {
 	private boolean isPastCutoff() {
 		int duration = getPlayerDuration();
 		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
-		return duration > 0 && cachedPosition > cutoffPoint;
+		return duration > 0 && getPlayerPosition() > cutoffPoint;
 	}
 	
 	private void clearCurrentBookmark() {
