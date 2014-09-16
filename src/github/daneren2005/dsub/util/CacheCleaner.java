@@ -26,6 +26,7 @@ public class CacheCleaner {
 
     private static final String TAG = CacheCleaner.class.getSimpleName();
 	private static final long MIN_FREE_SPACE = 500 * 1024L * 1024L;
+	private static final long MAX_COVER_ART_SPACE = 100 * 1024L * 1024L;
 
     private final Context context;
     private final DownloadService downloadService;
@@ -169,6 +170,41 @@ public class CacheCleaner {
         undeletable.add(FileUtil.getMusicDirectory(context));
         return undeletable;
     }
+    
+	private void cleanupCoverArt(Context context) {
+		File dir = FileUtil.getAlbumArtDirectory(context);
+		
+		List<File> files = new ArrayList<File>();
+		long bytesUsed = 0L;
+		for(File file: dir.listFiles()) {
+			if(file.isFile()) {
+				files.add(file);
+				bytesUsed += file.length();
+			}
+		}
+		
+		// Don't waste time sorting if under limit already
+		if(bytesUsed < MAX_COVER_ART_SPACE) {
+			return;
+		}
+		
+		sortByAscendingModificationTime(files);
+		long bytesDeleted = 0L;
+		for(File file: files) {
+			// End as soon as the space used is below the threshold
+			if(bytesUsed < MAX_COVER_ART_SPACE) {
+				break;
+			}
+			
+			long bytes = file.length();
+			if(file.delete()) {
+				bytesUsed -= bytes;
+				bytesDeleted += bytes;
+			}
+		}
+		
+		Log.i(TAG, "Deleted " + Util.formatBytes(bytesDeleted) + " worth of cover art");
+	}
 	
 	private class BackgroundCleanup extends SilentBackgroundTask<Void> {
 		public BackgroundCleanup(Context context) {
@@ -194,6 +230,9 @@ public class CacheCleaner {
 
 				deleteFiles(files, undeletable, getMinimumDelete(files, pinned), true);
 				deleteEmptyDirs(dirs, undeletable);
+				
+				// Make sure cover art directory does not grow too large
+				cleanupCoverArt();
 			} catch (RuntimeException x) {
 				Log.e(TAG, "Error in cache cleaning.", x);
 			}
