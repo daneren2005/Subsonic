@@ -1409,7 +1409,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 				new EntryInstanceUpdater(currentSong) {
 					@Override
-					public void updater(Entry found) {
+					public void update(Entry found) {
 						found.setBookmark(new Bookmark(position));
 					}
 				}.execute();

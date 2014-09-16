@@ -396,7 +396,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
-				args.putSerializable(Constants.INTENT_EXTRA_DIRECTORY, entry);
+				args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, entry);
 				if ("newest".equals(albumListType)) {
 					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
 				}
@@ -727,7 +727,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, entry.getId());
 				args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getTitle());
-				args.putSerializable(Constants.INTENT_EXTRA_DIRECTORY, entry);
+				args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, entry);
 				if ("newest".equals(albumListType)) {
 					args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
 				}

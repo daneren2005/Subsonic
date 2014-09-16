@@ -37,8 +37,7 @@ public final class Constants {
     // Names for intent extras.
     public static final String INTENT_EXTRA_NAME_ID = "subsonic.id";
     public static final String INTENT_EXTRA_NAME_NAME = "subsonic.name";
-	public static final String INTENT_EXTRA_NAME_STARRED = "subsonic.starred";
-	public static final String INTENT_EXTRA_NAME_RATING = "subsonic.rating";
+	public static final String INTENT_EXTRA_NAME_DIRECTORY = "subsonic.directory";
 	public static final String INTENT_EXTRA_NAME_CHILD_ID = "subsonic.child.id";
     public static final String INTENT_EXTRA_NAME_ARTIST = "subsonic.artist";
     public static final String INTENT_EXTRA_NAME_TITLE = "subsonic.title";
