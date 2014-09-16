@@ -880,13 +880,13 @@ public class DownloadService extends Service {
 
 		// Restart song if played more than five seconds.
 		if (getPlayerPosition() > 5000 || (index == 0 && getRepeatMode() != RepeatMode.ALL)) {
-			play(index);
+			seekTo(0);
 		} else {
 			if(index == 0) {
 				index = size();
 			}
 
-			play(index - 1);
+			play(index - 1, playerState != PAUSED && playerState != STOPPED && playerState != IDLE);
 		}
 	}
 
@@ -912,7 +912,7 @@ public class DownloadService extends Service {
 			nextPlayingIndex++;
 		}
 		if (index != -1 && nextPlayingIndex < size()) {
-			play(nextPlayingIndex);
+			play(nextPlayingIndex, playerState != PAUSED && playerState != STOPPED && playerState != IDLE);
 		}
 	}
 
