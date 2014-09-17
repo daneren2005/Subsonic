@@ -232,7 +232,7 @@ public class CacheCleaner {
 				deleteEmptyDirs(dirs, undeletable);
 				
 				// Make sure cover art directory does not grow too large
-				cleanupCoverArt();
+				cleanupCoverArt(context);
 			} catch (RuntimeException x) {
 				Log.e(TAG, "Error in cache cleaning.", x);
 			}
