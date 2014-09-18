@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.7.8" versioncode="125" releasedate="9/17/2014">
+		<change>Rating: show rating directly on albums</change>
+		<change>Albums: rate/star from album's screen</change>
+		<change>Limit misc artwork from growing above 100 MB</change>
+		<change>Fix cover art bug with latest Subsonic Beta</change>
+		<change>Fix Set Rating from now playing screen</change>
+		<change>Fix offline starring of albums with tag browsing</change>
+		<change>Fix current position on Nexus 5 going above duration</change>
+		<change>Windows Server: SNI support</change>
+		<change>Minor memory optimizations</change>
+		<change>Misc bug fixes</change>
+	</release>
 	<release version="4.7.7" versioncode="124" releasedate="9/8/2014">
 		<change>Add Set Rating to Now Playing's songs menu</change>
 		<change>Fix "overwrite existing playlist" not showing</change>
