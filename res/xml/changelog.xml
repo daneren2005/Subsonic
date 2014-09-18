@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.7.8" versioncode="125" releasedate="9/17/2014">
+	<release version="4.7.8" versioncode="126" releasedate="9/17/2014">
 		<change>Rating: show rating directly on albums</change>
 		<change>Albums: rate/star from album's screen</change>
 		<change>Limit misc artwork from growing above 100 MB</change>
