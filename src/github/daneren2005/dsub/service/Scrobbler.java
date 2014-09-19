@@ -14,11 +14,22 @@ import github.daneren2005.dsub.util.Util;
  * @version $Id$
  */
 public class Scrobbler {
-
     private static final String TAG = Scrobbler.class.getSimpleName();
+    private static final int FOUR_MINUTES = 4 * 60 * 1000;
 
     private String lastSubmission;
     private String lastNowPlaying;
+    
+    public void conditionalScrobble(Context context, DownloadFile song, int playerPosition, int duration) {
+    	// More than 4 minutes
+    	if(playerPosition > FOUR_MINUTES) {
+    		scrobble(context, song, true);
+    	}
+    	// More than 50% played
+    	else if(duration > 0 && playerPosition > (duration / 2)) {
+    		scrobble(context, song, true);
+    	}
+    }
 
     public void scrobble(final Context context, final DownloadFile song, final boolean submission) {
         if (song == null || !Util.isScrobblingEnabled(context)) {
