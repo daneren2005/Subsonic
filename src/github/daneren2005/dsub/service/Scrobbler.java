@@ -34,6 +34,11 @@ public class Scrobbler {
 		if(song.getSong() instanceof PodcastEpisode) {
 			return;
 		}
+		
+		// Ignore songs which are under 30 seconds per Last.FM guidelines
+		if(song.getDuration() != null && song.getDuration() > 0 && song.getDuration < 30) {
+			return;
+		}
 
         final String id = song.getSong().getId();
 
