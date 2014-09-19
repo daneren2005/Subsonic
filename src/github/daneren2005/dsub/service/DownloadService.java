@@ -968,7 +968,13 @@ public class DownloadService extends Service {
 			if (remoteState != RemoteControlState.LOCAL) {
 				remoteController.start();
 			} else {
-				mediaPlayer.start();
+				// Only start if done preparing
+				if(playerState != PREPARING) {
+					mediaPlayer.start();
+				} else {
+					// Otherwise, we need to set it up to start when done preparing
+					autoPlayStart = true;
+				}
 			}
 			setPlayerState(STARTED);
 		} catch (Exception x) {
@@ -1396,9 +1402,12 @@ public class DownloadService extends Service {
 							}
 							cachedPosition = position;
 
-							if (start) {
+							if (start || autoPlayStart) {
 								mediaPlayer.start();
 								setPlayerState(STARTED);
+								
+								// Disable autoPlayStart after done
+								autoPlayStart = false;
 							} else {
 								setPlayerState(PAUSED);
 							}
