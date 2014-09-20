@@ -566,7 +566,9 @@ public class DownloadService extends Service {
 
 	public synchronized void clear(boolean serialize) {
 		// Delete podcast if fully listened to
-		boolean cutoff = isPastCutoff();
+		int position = getPlayerPosition();
+		int duration = getPlayerDuration();
+		boolean cutoff = isPastCutoff(position, duration);
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
 			if(cutoff) {
 				currentPlaying.delete();
@@ -583,6 +585,9 @@ public class DownloadService extends Service {
 		} else {
 			// Check if we should be adding a new bookmark here
 			checkAddBookmark();
+		}
+		if(currentPlaying != null) {
+			scrobbler.conditionalScrobble(this, currentPlaying, position, duration);
 		}
 
 		reset();
@@ -898,12 +903,20 @@ public class DownloadService extends Service {
 		}
 
 		// Delete podcast if fully listened to
+		int position = getPlayerPosition();
+		int duration = getPlayerDuration();
+		boolean cutoff = isPastCutoff(position, duration);
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
-			if(isPastCutoff()) {
+			if(cutoff) {
 				toDelete.add(currentPlaying);
 			}
 		}
-		clearCurrentBookmark();
+		if(cutoff) {
+			clearCurrentBookmark(true);
+		}
+		if(currentPlaying != null) {
+			scrobbler.conditionalScrobble(this, currentPlaying, position, duration);
+		}
 
 		int index = getCurrentPlayingIndex();
 		int nextPlayingIndex = getNextPlayingIndex();
@@ -1796,35 +1809,37 @@ public class DownloadService extends Service {
 	}
 	
 	private boolean isPastCutoff() {
-		int duration = getPlayerDuration();
+		return isPastCutoff(getPlayerPosition(), getPlayerDuration());
+	}
+	private boolean isPastCutoff(int position, int duration) {
 		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
-		return duration > 0 && getPlayerPosition() > cutoffPoint;
+		return duration > 0 && position > cutoffPoint;
 	}
 	
 	private void clearCurrentBookmark() {
 		clearCurrentBookmark(false);
 	}
-	private void clearCurrentBookmark(boolean delete) {
+	private void clearCurrentBookmark(boolean checkDelete) {
 		// If current is null, nothing to do
 		if(currentPlaying == null) {
 			return;
 		}
 
-		clearCurrentBookmark(currentPlaying.getSong(), delete);
+		clearCurrentBookmark(currentPlaying.getSong(), checkDelete);
 	}
-	private void clearCurrentBookmark(final MusicDirectory.Entry entry, boolean delete) {
+	private void clearCurrentBookmark(final MusicDirectory.Entry entry, boolean checkDelete) {
 		// If no bookmark, move on
 		if(entry.getBookmark() == null) {
 			return;
 		}
 		
 		// If delete is not specified, check position
-		if(!delete) {
-			delete = isPastCutoff();
+		if(!checkDelete) {
+			checkDelete = isPastCutoff();
 		}
 		
 		// If supposed to delete
-		if(delete) {
+		if(checkDelete) {
 			new SilentBackgroundTask<Void>(this) {
 				@Override
 				public Void doInBackground() throws Throwable {

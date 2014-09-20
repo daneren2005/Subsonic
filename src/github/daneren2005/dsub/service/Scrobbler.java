@@ -14,17 +14,28 @@ import github.daneren2005.dsub.util.Util;
  * @version $Id$
  */
 public class Scrobbler {
+	private static final String TAG = Scrobbler.class.getSimpleName();
+	private static final int FOUR_MINUTES = 4 * 60 * 1000;
 
-    private static final String TAG = Scrobbler.class.getSimpleName();
+	private String lastSubmission;
+	private String lastNowPlaying;
 
-    private String lastSubmission;
-    private String lastNowPlaying;
+	public void conditionalScrobble(Context context, DownloadFile song, int playerPosition, int duration) {
+		// More than 4 minutes
+		if(playerPosition > FOUR_MINUTES) {
+			scrobble(context, song, true);
+		}
+		// More than 50% played
+		else if(duration > 0 && playerPosition > (duration / 2)) {
+			scrobble(context, song, true);
+		}
+	}
 
-    public void scrobble(final Context context, final DownloadFile song, final boolean submission) {
-        if (song == null || !Util.isScrobblingEnabled(context)) {
-            return;
-        }
-        
+	public void scrobble(final Context context, final DownloadFile song, final boolean submission) {
+		if (song == null || !Util.isScrobblingEnabled(context)) {
+			return;
+		}
+
 		// Ignore if online with no network access
 		if(!Util.isOffline(context) && !Util.isNetworkConnected(context)) {
 			return;
@@ -35,34 +46,40 @@ public class Scrobbler {
 			return;
 		}
 
-        final String id = song.getSong().getId();
+		// Ignore songs which are under 30 seconds per Last.FM guidelines
+		Integer duration = song.getSong().getDuration();
+		if(duration != null && duration > 0 && duration < 30) {
+			return;
+		}
 
-        // Avoid duplicate registrations.
-        if (submission && id.equals(lastSubmission)) {
-            return;
-        }
-        if (!submission && id.equals(lastNowPlaying)) {
-            return;
-        }
+		final String id = song.getSong().getId();
 
-        if (submission) {
-            lastSubmission = id;
-        } else {
-            lastNowPlaying = id;
-        }
+		// Avoid duplicate registrations.
+		if (submission && id.equals(lastSubmission)) {
+			return;
+		}
+		if (!submission && id.equals(lastNowPlaying)) {
+			return;
+		}
 
-        new SilentBackgroundTask<Void>(context) {
-            @Override
-            protected Void doInBackground() {
-                MusicService service = MusicServiceFactory.getMusicService(context);
-                try {
-                    service.scrobble(id, submission, context, null);
-                    Log.i(TAG, "Scrobbled '" + (submission ? "submission" : "now playing") + "' for " + song);
-                } catch (Exception x) {
-                    Log.i(TAG, "Failed to scrobble'" + (submission ? "submission" : "now playing") + "' for " + song, x);
-                }
+		if (submission) {
+			lastSubmission = id;
+		} else {
+			lastNowPlaying = id;
+		}
+
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() {
+				MusicService service = MusicServiceFactory.getMusicService(context);
+				try {
+					service.scrobble(id, submission, context, null);
+					Log.i(TAG, "Scrobbled '" + (submission ? "submission" : "now playing") + "' for " + song);
+				} catch (Exception x) {
+					Log.i(TAG, "Failed to scrobble'" + (submission ? "submission" : "now playing") + "' for " + song, x);
+				}
 				return null;
-            }
-        }.execute();
-    }
+			}
+		}.execute();
+	}
 }
