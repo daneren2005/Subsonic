@@ -915,7 +915,7 @@ public class DownloadService extends Service {
 			clearCurrentBookmark(true);
 		}
 		if(currentPlaying != null) {
-			scrobbler.conditionalScrobble(context, currentPlaying, position, duration);
+			scrobbler.conditionalScrobble(this, currentPlaying, position, duration);
 		}
 
 		int index = getCurrentPlayingIndex();

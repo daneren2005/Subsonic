@@ -47,7 +47,8 @@ public class Scrobbler {
 		}
 		
 		// Ignore songs which are under 30 seconds per Last.FM guidelines
-		if(song.getDuration() != null && song.getDuration() > 0 && song.getDuration < 30) {
+		Integer duration = song.getSong().getDuration();
+		if(duration != null && duration > 0 && duration < 30) {
 			return;
 		}
 
