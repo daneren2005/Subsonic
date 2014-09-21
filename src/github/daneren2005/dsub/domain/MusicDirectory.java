@@ -73,9 +73,11 @@ public class MusicDirectory implements Serializable {
 		this.parent = parent;
 	}
 
-    public void addChild(Entry child) {
-        children.add(child);
-    }
+	public void addChild(Entry child) {
+		if(child != null) {
+			children.add(child);
+		}
+	}
 	public void addChildren(List<Entry> children) {
 		this.children.addAll(children);
 	}
@@ -95,7 +97,7 @@ public class MusicDirectory implements Serializable {
 
         List<Entry> result = new ArrayList<Entry>(children.size());
         for (Entry child : children) {
-            if (child.isDirectory() && includeDirs || !child.isDirectory() && includeFiles) {
+            if (child != null && child.isDirectory() && includeDirs || !child.isDirectory() && includeFiles) {
                 result.add(child);
             }
         }
