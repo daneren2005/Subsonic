@@ -47,10 +47,13 @@ import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
+import github.daneren2005.dsub.util.tags.BastpUtil;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -1415,6 +1418,8 @@ public class DownloadService extends Service {
 							}
 							cachedPosition = position;
 
+							applyReplayGain(mediaPlayer, downloadFile);
+
 							if (start || autoPlayStart) {
 								mediaPlayer.start();
 								setPlayerState(STARTED);
@@ -1473,6 +1478,8 @@ public class DownloadService extends Service {
 							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
+
+						applyReplayGain(nextMediaPlayer, downloadFile);
 					} catch (Exception x) {
 						handleErrorNext(x);
 					}
@@ -1919,6 +1926,48 @@ public class DownloadService extends Service {
 					Util.toast(context, msg, false);
 				}
 			}.execute();
+		}
+	}
+
+	private void applyReplayGain(MediaPlayer mediaPlayer, DownloadFile downloadFile) {
+		if(currentPlaying == null) {
+			return;
+		}
+
+		try {
+			float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
+			float adjust = 0f;
+			if (true /*mReplayGainAlbumEnabled*/) {
+				adjust = (rg[0] != 0 ? rg[0] : adjust); /* do we have track adjustment ? */
+				adjust = (rg[1] != 0 ? rg[1] : adjust); /* ..or, even better, album adj? */
+			}
+			if (/*mReplayGainTrackEnabled || (mReplayGainAlbumEnabled && */ adjust == 0) {
+				adjust = (rg[1] != 0 ? rg[1] : adjust); /* do we have album adjustment ? */
+				adjust = (rg[0] != 0 ? rg[0] : adjust); /* ..or, even better, track adj? */
+			}
+			if (adjust == 0) {
+				/* No RG value found: decrease volume for untagged song if requested by user */
+				// adjust = (mReplayGainUntaggedDeBump - 150) / 10f;
+			} else {
+				/* This song has some replay gain info, we are now going to apply the 'bump' value
+				** The preferences stores the raw value of the seekbar, that's 0-150
+				** But we want -15 <-> +15, so 75 shall be zero */
+				// adjust += 2 * (mReplayGainBump - 75) / 10f; /* 2* -> we want +-15, not +-7.5 */
+			}
+			/*if (mReplayGainAlbumEnabled == false && mReplayGainTrackEnabled == false) {
+				// Feature is disabled: Make sure that we are going to 100% volume
+				adjust = 0f;
+			}*/
+			float rg_result = ((float) Math.pow(10, (adjust / 20)))/* * mFadeOut*/;
+			if (rg_result > 1.0f) {
+				rg_result = 1.0f; /* android would IGNORE the change if this is > 1 and we would end up with the wrong volume */
+			} else if (rg_result < 0.0f) {
+				rg_result = 0.0f;
+			}
+			Log.d(TAG, "Applied volume of " + rg_result);
+			mediaPlayer.setVolume(rg_result, rg_result);
+		} catch(IOException e) {
+			Log.w(TAG, "Failed to apply replay gain values", e);
 		}
 	}
 

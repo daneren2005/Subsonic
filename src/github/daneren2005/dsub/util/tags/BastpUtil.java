@@ -21,17 +21,12 @@ import android.util.LruCache;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class BastpUtil {
-	private RGLruCache rgCache;
-	
-	public BastpUtil() {
-		rgCache = new RGLruCache(16); /* Cache up to 16 entries */
-	}
-	
-	
+public final class BastpUtil {
+	private static final RGLruCache rgCache = new RGLruCache(16);
+
 	/** Returns the ReplayGain values of 'path' as <track,album>
 	 */
-	public float[] getReplayGainValues(String path) {
+	public static float[] getReplayGainValues(String path) {
 		float[] cached = rgCache.get(path);
 
 		if(cached == null) {
@@ -45,7 +40,7 @@ public class BastpUtil {
 	
 	/** Parse given file and return track,album replay gain values
 	 */
-	private float[] getReplayGainValuesFromFile(String path) {
+	private static float[] getReplayGainValuesFromFile(String path) {
 		String[] keys = { "REPLAYGAIN_TRACK_GAIN", "REPLAYGAIN_ALBUM_GAIN" };
 		float[] adjust= { 0f                     , 0f                      };
 		HashMap tags  = (new Bastp()).getTags(path);
@@ -68,7 +63,7 @@ public class BastpUtil {
 	
 	/** LRU cache for ReplayGain values
 	 */
-	private class RGLruCache extends LruCache<String, float[]> {
+	private static class RGLruCache extends LruCache<String, float[]> {
 		public RGLruCache(int size) {
 			super(size);
 		}
