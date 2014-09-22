@@ -136,6 +136,7 @@ public class DownloadService extends Service {
 	private boolean keepScreenOn;
 	private int cachedPosition = 0;
 	private boolean downloadOngoing = false;
+	private float volume = 1.0f;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
@@ -1599,7 +1600,8 @@ public class DownloadService extends Service {
 	public void setVolume(float volume) {
 		if(mediaPlayer != null && (playerState == STARTED || playerState == PAUSED || playerState == STOPPED)) {
 			try {
-				mediaPlayer.setVolume(volume, volume);
+				this.volume = volume;
+				applyReplayGain(mediaPlayer, currentPlaying);
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to set volume");
 			}
@@ -1958,7 +1960,7 @@ public class DownloadService extends Service {
 				// Feature is disabled: Make sure that we are going to 100% volume
 				adjust = 0f;
 			}*/
-			float rg_result = ((float) Math.pow(10, (adjust / 20)))/* * mFadeOut*/;
+			float rg_result = ((float) Math.pow(10, (adjust / 20))) * volume;
 			if (rg_result > 1.0f) {
 				rg_result = 1.0f; /* android would IGNORE the change if this is > 1 and we would end up with the wrong volume */
 			} else if (rg_result < 0.0f) {
