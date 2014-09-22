@@ -137,6 +137,7 @@ public class DownloadService extends Service {
 	private int cachedPosition = 0;
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
+	private boolean singleAlbum = false;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
@@ -1939,14 +1940,17 @@ public class DownloadService extends Service {
 		try {
 			float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 			float adjust = 0f;
-			if (true /*mReplayGainAlbumEnabled*/) {
-				adjust = (rg[0] != 0 ? rg[0] : adjust); /* do we have track adjustment ? */
-				adjust = (rg[1] != 0 ? rg[1] : adjust); /* ..or, even better, album adj? */
+			if (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, true)) {
+				// If playing a single album or no track gain, use album gain
+				if((singleAlbum || rg[0] == 0) && rg[1] != 0) {
+					adjust = rg[1];
+				} else {
+					// Otherwise, give priority to track gain
+					adjust = rg[0];
+				}
 			}
-			if (/*mReplayGainTrackEnabled || (mReplayGainAlbumEnabled && */ adjust == 0) {
-				adjust = (rg[1] != 0 ? rg[1] : adjust); /* do we have album adjustment ? */
-				adjust = (rg[0] != 0 ? rg[0] : adjust); /* ..or, even better, track adj? */
-			}
+			
+			// TODO: Figure out if I want any of this logic
 			if (adjust == 0) {
 				/* No RG value found: decrease volume for untagged song if requested by user */
 				// adjust = (mReplayGainUntaggedDeBump - 150) / 10f;
@@ -1956,10 +1960,7 @@ public class DownloadService extends Service {
 				** But we want -15 <-> +15, so 75 shall be zero */
 				// adjust += 2 * (mReplayGainBump - 75) / 10f; /* 2* -> we want +-15, not +-7.5 */
 			}
-			/*if (mReplayGainAlbumEnabled == false && mReplayGainTrackEnabled == false) {
-				// Feature is disabled: Make sure that we are going to 100% volume
-				adjust = 0f;
-			}*/
+			
 			float rg_result = ((float) Math.pow(10, (adjust / 20))) * volume;
 			if (rg_result > 1.0f) {
 				rg_result = 1.0f; /* android would IGNORE the change if this is > 1 and we would end up with the wrong volume */
