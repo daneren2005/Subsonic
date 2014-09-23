@@ -293,7 +293,7 @@ public class ImageLoader {
 		protected Void doInBackground() throws Throwable {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
-				Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, null);
+				Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, null, this);
 				String key = getKey(mEntry.getCoverArt(), mSize);
 				cache.put(key, bitmap);
 				// Make sure key is the most recently "used"
@@ -361,7 +361,7 @@ public class ImageLoader {
 		protected Void doInBackground() throws Throwable {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
-				Bitmap bitmap = musicService.getAvatar(mUsername, avatarSizeDefault, mContext, null);
+				Bitmap bitmap = musicService.getAvatar(mUsername, avatarSizeDefault, mContext, null, this);
 				if(bitmap != null) {
 					cache.put(mUsername, bitmap);
 					// Make sure key is the most recently "used"
