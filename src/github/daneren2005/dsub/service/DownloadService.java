@@ -1873,7 +1873,7 @@ public class DownloadService extends Service {
 	
 	private void checkAddBookmark() {
 		// Don't do anything if no current playing
-		if(currentPlaying == null) {
+		if(currentPlaying == null || !ServerInfo.canBookmark(this)) {
 			return;
 		}
 		
