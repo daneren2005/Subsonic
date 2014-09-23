@@ -934,7 +934,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			rateBadButton.setVisibility(View.GONE);
 			rateGoodButton.setVisibility(View.GONE);
 		} else {
-			bookmarkButton.setVisibility(View.VISIBLE);
+			if(ServerInfo.canBookmark(context)) {
+				bookmarkButton.setVisibility(View.VISIBLE);
+			} else {
+				bookmarkButton.setVisibility(View.GONE);
+			}
 			rateBadButton.setVisibility(View.VISIBLE);
 			rateGoodButton.setVisibility(View.VISIBLE);
 		}
