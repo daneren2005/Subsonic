@@ -138,6 +138,7 @@ public class DownloadService extends Service {
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
 	private boolean singleAlbum = false;
+	private String singleAlbumName;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
@@ -316,7 +317,7 @@ public class DownloadService extends Service {
 			for (MusicDirectory.Entry song : songs) {
 				if(song != null) {
 					DownloadFile downloadFile = new DownloadFile(this, song, save);
-					downloadList.add(getCurrentPlayingIndex() + offset, downloadFile);
+					addToDownloadList(downloadFile, getCurrentPlayingIndex() + offset);
 					offset++;
 				}
 			}
@@ -327,7 +328,7 @@ public class DownloadService extends Service {
 			int index = getCurrentPlayingIndex();
 			for (MusicDirectory.Entry song : songs) {
 				DownloadFile downloadFile = new DownloadFile(this, song, save);
-				downloadList.add(downloadFile);
+				addToDownloadList(downloadFile, -1);
 			}
 			if(!autoplay && (size - 1) == index) {
 				setNextPlaying();
@@ -353,6 +354,27 @@ public class DownloadService extends Service {
 			checkDownloads();
 		}
 		lifecycleSupport.serializeDownloadQueue();
+	}
+	private void addToDownloadList(DownloadFile file, int offset) {
+		if(offset == -1) {
+			downloadList.add(downloadList);
+		} else {
+			downloadList.add(offset, file);
+		}
+		
+		// Check if we are still dealing with a single album
+		// Don't bother with check if it is already false
+		if(singleAlbum) {
+			// If first download, set album to it
+			if(singleAlbumName == null) {
+				singleAlbumName = file.getSong().getAlbum();
+			} else {
+				// Otherwise, check again previous album name
+				if(!singleAlbumName.equals(file.getSong().getAlbum())) {
+					singleAlbum = false;
+				}
+			}
+		}
 	}
 	public synchronized void downloadBackground(List<MusicDirectory.Entry> songs, boolean save) {
 		for (MusicDirectory.Entry song : songs) {
@@ -616,6 +638,8 @@ public class DownloadService extends Service {
 
 		suggestedPlaylistName = null;
 		suggestedPlaylistId = null;
+		singleAlbum = true;
+		singleAlbumName = null;
 	}
 
 	public synchronized void remove(int which) {
@@ -1792,6 +1816,7 @@ public class DownloadService extends Service {
 			}
 		}
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
+		singleAlbum = false;
 
 		if (revisionBefore != revision) {
 			updateJukeboxPlaylist();
