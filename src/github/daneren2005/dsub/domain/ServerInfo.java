@@ -187,4 +187,8 @@ public class ServerInfo implements Serializable {
 	private static String getCacheName(Context context, int instance) {
 		return "server-" + Util.getRestUrl(context, null, instance, false).hashCode() + ".ser";
 	}
+	
+	public static boolean canBookmark(Context context) {
+		return checkServerVersion(context, "1.9");
+	}
 }
