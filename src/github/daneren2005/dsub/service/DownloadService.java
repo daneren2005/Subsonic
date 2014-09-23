@@ -1940,7 +1940,7 @@ public class DownloadService extends Service {
 		try {
 			float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 			float adjust = 0f;
-			if (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, true)) {
+			if (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
 				// If playing a single album or no track gain, use album gain
 				if((singleAlbum || rg[0] == 0) && rg[1] != 0) {
 					adjust = rg[1];
