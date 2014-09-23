@@ -1962,12 +1962,12 @@ public class DownloadService extends Service {
 			}
 			
 			float rg_result = ((float) Math.pow(10, (adjust / 20))) * volume;
+			Log.d(TAG, "Applied volume of " + rg_result + " +- " + adjust);
 			if (rg_result > 1.0f) {
 				rg_result = 1.0f; /* android would IGNORE the change if this is > 1 and we would end up with the wrong volume */
 			} else if (rg_result < 0.0f) {
 				rg_result = 0.0f;
 			}
-			Log.d(TAG, "Applied volume of " + rg_result);
 			mediaPlayer.setVolume(rg_result, rg_result);
 		} catch(IOException e) {
 			Log.w(TAG, "Failed to apply replay gain values", e);
