@@ -602,7 +602,7 @@ public class RESTMusicService implements MusicService {
 	}
 
     @Override
-    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception {
+    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 
         // Synchronize on the entry so that we don't download concurrently for the same song.
         synchronized (entry) {
@@ -619,7 +619,7 @@ public class RESTMusicService implements MusicService {
             try {
                 List<String> parameterNames = Arrays.asList("id");
                 List<Object> parameterValues = Arrays.<Object>asList(entry.getCoverArt());
-                HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener);
+                HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener, task);
 
 				in = entity.getContent();
 				Header contentEncoding = entity.getContentEncoding();
@@ -1291,7 +1291,7 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
+	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		// Return silently if server is too old
 		if (!ServerInfo.checkServerVersion(context, "1.8")) {
 			return null;
@@ -1316,7 +1316,7 @@ public class RESTMusicService implements MusicService {
 				parameterNames = Collections.singletonList("username");
 				parameterValues = Arrays.<Object>asList(username);
 
-				HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener);
+				HttpEntity entity = getEntityForURL(context, url, null, parameterNames, parameterValues, progressListener, task);
 				in = entity.getContent();
 				Header contentEncoding = entity.getContentEncoding();
 				if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
@@ -1490,9 +1490,14 @@ public class RESTMusicService implements MusicService {
         return new InputStreamReader(in, Constants.UTF_8);
     }
 
+	private HttpEntity getEntityForUrl(Context context, String url, HttpParams requestParams, List<String> parameterNames,
+		List<Ojbect> parameterValues, ProgressListener progressListener) throws Exception {
+		
+		return getEntryForUrl(context, url, requestParams, parameterNames, parameterValues, progressListener, null);
+	}
     private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-                                       List<Object> parameterValues, ProgressListener progressListener) throws Exception {
-        return getResponseForURL(context, url, requestParams, parameterNames, parameterValues, null, progressListener, null).getEntity();
+                                       List<Object> parameterValues, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+        return getResponseForURL(context, url, requestParams, parameterNames, parameterValues, null, progressListener, task).getEntity();
     }
 
     private HttpResponse getResponseForURL(Context context, String url, HttpParams requestParams,
