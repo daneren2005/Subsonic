@@ -64,6 +64,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Looper;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
@@ -1521,7 +1522,7 @@ public class RESTMusicService implements MusicService {
         return executeWithRetry(context, rewrittenUrl, url, requestParams, parameterNames, parameterValues, headers, progressListener, task);
     }
 
-    private HttpResponse executeWithRetry(Context context, String url, String originalUrl, HttpParams requestParams,
+    private HttpResponse executeWithRetry(final Context context, String url, String originalUrl, HttpParams requestParams,
                                           List<String> parameterNames, List<Object> parameterValues,
                                           List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		// Strip out sensitive information from log
@@ -1549,9 +1550,19 @@ public class RESTMusicService implements MusicService {
                     public void onCancel() {
 						try {
 							isCancelled.set(true);
-							request.abort();
+							if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
+								new SilentBackgroundTask<Void>(context) {
+									@Override
+									protected Void doInBackground() throws Throwable {
+										request.abort();
+										return null;
+									}
+								}.execute();
+							} else {
+								request.abort();
+							}
 						} catch(Exception e) {
-							Log.e(TAG, "Failed to stop http task");
+							Log.e(TAG, "Failed to stop http task", e);
 						}
                     }
                 });
