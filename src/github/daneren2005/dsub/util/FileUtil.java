@@ -478,8 +478,17 @@ public class FileUtil {
 					if(tmp.delete()) {
 						return true;
 					} else {
-						Log.w(TAG, "Failed to delete temp file");
-						return false;
+						Log.w(TAG, "Failed to delete temp file, retrying");
+						
+						// This should never be reached since this is a file DSub created!
+						Thread.sleep(100L);
+						tmp = new File(dir, "checkWrite");
+						if(tmp.delete()) {
+							return true;
+						} else {
+							Log.w(TAG, "Failed retry to delete temp file");
+							return false;
+						}
 					}
 				} else {
 					Log.w(TAG, "Temp file does not actually exist");
