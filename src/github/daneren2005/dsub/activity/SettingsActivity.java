@@ -267,6 +267,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		}
 		else if(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT.equals(key)) {
 			SyncUtil.removeMostRecentSyncFiles(this);
+		} else if(Constants.PREFERENCES_KEY_REPLAY_GAIN.equals(key)) {
+			DownloadService downloadService = DownloadService.getInstance();
+			if(downloadService != null) {
+				downloadService.reapplyVolume();
+			}
 		}
 		
 		scheduleBackup();

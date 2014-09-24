@@ -1626,11 +1626,14 @@ public class DownloadService extends Service {
 		if(mediaPlayer != null && (playerState == STARTED || playerState == PAUSED || playerState == STOPPED)) {
 			try {
 				this.volume = volume;
-				applyReplayGain(mediaPlayer, currentPlaying);
+				reapplyVolume();
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to set volume");
 			}
 		}
+	}
+	public void reapplyVolume() {
+		applyReplayGain(mediaPlayer, currentPlaying);
 	}
 
 	public synchronized void swap(boolean mainList, int from, int to) {
