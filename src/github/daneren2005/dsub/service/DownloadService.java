@@ -959,6 +959,7 @@ public class DownloadService extends Service {
 			if (playerState == STARTED) {
 				if (remoteState != RemoteControlState.LOCAL) {
 					remoteController.stop();
+					setPlayerState(STOPPED);
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
@@ -967,8 +968,8 @@ public class DownloadService extends Service {
 					});
 				} else {
 					mediaPlayer.pause();
+					setPlayerState(STOPPED);
 				}
-				setPlayerState(STOPPED);
 			} else if(playerState == PAUSED) {
 				setPlayerState(STOPPED);
 			}
