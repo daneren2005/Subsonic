@@ -1009,6 +1009,10 @@ public class DownloadService extends Service {
 			}
 			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.setOnCompletionListener(null);
+			if(Build.VERSION.SKD_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
+				mediaPlayer.setNextMediaPlayer(null);
+				nextSetup = false;
+			}
 			mediaPlayer.reset();
 			subtractPosition = 0;
 		} catch (Exception x) {
@@ -1198,7 +1202,26 @@ public class DownloadService extends Service {
 	}
 
 	public EqualizerController getEqualizerController() {
-		return effectsController.getEqualizerController();
+		try {
+			return effectsController.getEqualizerController();
+		} catch(Exception e) {
+			// If we failed, we are going to try to reinitialize the MediaPlayer
+			boolean playing = playerState == STARTED;
+			int pos = getPlayerPosition();
+			reset();
+			
+			EqualizerController controller;
+			try {
+				controller = effectsController.getEqualizerController();
+			} catch(Exception e) {
+				// Don't try again, just resetup media player
+			}
+			
+			// Restart from same position and state we left off in
+			play(getCurrentPlayingIndex(), playing, pos);
+			
+			return controller;
+		}
 	}
 
 	public MediaRouteSelector getRemoteSelector() {
