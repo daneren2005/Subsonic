@@ -96,7 +96,7 @@ public interface MusicService {
 
 	String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception;
 
-    Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception;
+    Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 
     HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception;
 
@@ -174,7 +174,7 @@ public interface MusicService {
 
 	void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception;
 
-	Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception;
+	Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 	

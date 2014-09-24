@@ -1490,10 +1490,10 @@ public class RESTMusicService implements MusicService {
         return new InputStreamReader(in, Constants.UTF_8);
     }
 
-	private HttpEntity getEntityForUrl(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-		List<Ojbect> parameterValues, ProgressListener progressListener) throws Exception {
+	private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
+		List<Object> parameterValues, ProgressListener progressListener) throws Exception {
 		
-		return getEntryForUrl(context, url, requestParams, parameterNames, parameterValues, progressListener, null);
+		return getEntityForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, null);
 	}
     private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
                                        List<Object> parameterValues, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {

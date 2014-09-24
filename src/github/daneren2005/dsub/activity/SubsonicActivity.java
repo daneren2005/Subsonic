@@ -60,6 +60,7 @@ import java.util.List;
 import java.util.Locale;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;

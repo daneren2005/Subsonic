@@ -30,7 +30,6 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Bookmark;
@@ -499,8 +498,8 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-    public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener) throws Exception {
-        return musicService.getCoverArt(context, entry, size, progressListener);
+    public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+        return musicService.getCoverArt(context, entry, size, progressListener, task);
     }
 
     @Override
@@ -873,8 +872,8 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getAvatar(username, size, context, progressListener);
+	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+		return musicService.getAvatar(username, size, context, progressListener, task);
 	}
 
 	@Override

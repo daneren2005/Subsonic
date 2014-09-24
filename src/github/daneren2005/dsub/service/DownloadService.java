@@ -38,6 +38,7 @@ import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
@@ -1526,14 +1527,14 @@ public class DownloadService extends Service {
 					playNext();
 
 					// Finished loading, delete when list is cleared
-					if(downloadFile.getSong() instanceof PodcastEpisode) {
+					if (downloadFile.getSong() instanceof PodcastEpisode) {
 						toDelete.add(downloadFile);
 					}
 					clearCurrentBookmark(downloadFile.getSong(), true);
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadService.this) {
-						if(downloadFile.isWorkDone()) {
+						if (downloadFile.isWorkDone()) {
 							// Complete was called early even though file is fully buffered
 							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
 							reset();

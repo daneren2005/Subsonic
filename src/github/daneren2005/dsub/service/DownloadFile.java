@@ -26,10 +26,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.Constants;
@@ -538,7 +536,7 @@ public class DownloadFile implements BufferFile {
 					// Check if album art already exists, don't want to needlessly load into memory
 					File albumArtFile = FileUtil.getAlbumArtFile(context, song);
 					if(!albumArtFile.exists()) {
-						musicService.getCoverArt(context, song, 0, null);
+						musicService.getCoverArt(context, song, 0, null, null);
 					}
                 }
             } catch (Exception x) {

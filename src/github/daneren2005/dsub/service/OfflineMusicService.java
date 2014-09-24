@@ -207,7 +207,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
     @Override
-    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener) throws Exception {
+    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		try {
 			return FileUtil.getAlbumArtBitmap(context, entry, size);
 		} catch(Exception e) {
@@ -761,7 +761,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener) throws Exception {
+	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
