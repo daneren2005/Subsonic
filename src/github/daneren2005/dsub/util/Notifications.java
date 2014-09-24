@@ -165,7 +165,7 @@ public final class Notifications {
 			next = R.id.control_next;
 		}
 
-		if((remote || persistent) && close == 0) {
+		if((remote || persistent) && close == 0 && expanded) {
 			close = R.id.notification_close;
 			rv.setViewVisibility(close, View.VISIBLE);
 		}
