@@ -357,7 +357,7 @@ public class DownloadService extends Service {
 	}
 	private void addToDownloadList(DownloadFile file, int offset) {
 		if(offset == -1) {
-			downloadList.add(downloadList);
+			downloadList.add(file);
 		} else {
 			downloadList.add(offset, file);
 		}
@@ -1987,7 +1987,7 @@ public class DownloadService extends Service {
 			}
 			
 			float rg_result = ((float) Math.pow(10, (adjust / 20))) * volume;
-			Log.d(TAG, "Applied volume of " + rg_result + " +- " + adjust);
+			Log.d(TAG, "Applied volume of " + rg_result + " +- " + adjust + " (" + singleAlbum + ")");
 			if (rg_result > 1.0f) {
 				rg_result = 1.0f; /* android would IGNORE the change if this is > 1 and we would end up with the wrong volume */
 			} else if (rg_result < 0.0f) {
