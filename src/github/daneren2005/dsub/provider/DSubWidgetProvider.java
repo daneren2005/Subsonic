@@ -88,6 +88,11 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         defaultAppWidget(context, appWidgetIds);
     }
+    
+	@Override
+	public void onEnabled(Context context) {
+		notifyInstances(context, DownloadService.getInstance(), false);
+	}
 	
 	protected int getLayout() {
 		return 0;
@@ -155,7 +160,23 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 			}
 		}
 
-        MusicDirectory.Entry currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
+	// Get Entry from current playing DownloadFile
+	DownloadFile currentFile;
+        MusicDirectory.Entry currentPlaying = null;
+        if(service == null) {
+        	// Deserialize from playling list to setup
+        	DownloadServiceLifecycleSupport.State state = FileUtil.deserialize(context, DownloadLifecycleSupport.FILENAME_DOWNLOADS_SER, DownloadServiceLifecycleSupport.State.class);
+        	if(state != null && state.currentPlayingIndex != -1) {
+        		currentFile = state.songs.get(state.currentPlayingIndex);
+        	}
+        } else {
+        	currentFile = service.getCurrentPlaying();
+        }
+        
+        if(currentFile != null) {
+        	currentPlaying = currentFile.getSong();
+        }
+        
         String title = currentPlaying == null ? null : currentPlaying.getTitle();
         CharSequence artist = currentPlaying == null ? null : currentPlaying.getArtist();
 		CharSequence album = currentPlaying == null ? null : currentPlaying.getAlbum();
