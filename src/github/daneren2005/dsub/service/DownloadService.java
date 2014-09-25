@@ -1965,10 +1965,11 @@ public class DownloadService extends Service {
 			return;
 		}
 
+		SharedPreferences prefs = Util.getPeferences(this);
 		try {
 			float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 			float adjust = 0f;
-			if (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
+			if (prefs.getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
 				// If playing a single album or no track gain, use album gain
 				if((singleAlbum || rg[0] == 0) && rg[1] != 0) {
 					adjust = rg[1];
@@ -1976,17 +1977,18 @@ public class DownloadService extends Service {
 					// Otherwise, give priority to track gain
 					adjust = rg[0];
 				}
-			}
 			
-			// TODO: Figure out if I want any of this logic
-			if (adjust == 0) {
-				/* No RG value found: decrease volume for untagged song if requested by user */
-				// adjust = (mReplayGainUntaggedDeBump - 150) / 10f;
-			} else {
-				/* This song has some replay gain info, we are now going to apply the 'bump' value
-				** The preferences stores the raw value of the seekbar, that's 0-150
-				** But we want -15 <-> +15, so 75 shall be zero */
-				// adjust += 2 * (mReplayGainBump - 75) / 10f; /* 2* -> we want +-15, not +-7.5 */
+				if (adjust == 0) {
+					/* No RG value found: decrease volume for untagged song if requested by user */
+					int untagged = prefs.getInt(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED, 0);
+					adjust = (untagged - 150) / 10f;
+				} else {
+					/* This song has some replay gain info, we are now going to apply the 'bump' value
+					** The preferences stores the raw value of the seekbar, that's 0-150
+					** But we want -15 <-> +15, so 75 shall be zero */
+					int bump = prefs.getInt(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP, 0);
+					adjust += 2 * (bump - 75) / 10f;
+				}
 			}
 			
 			float rg_result = ((float) Math.pow(10, (adjust / 20))) * volume;
