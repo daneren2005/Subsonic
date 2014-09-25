@@ -574,7 +574,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
-		if(equalizerAvailable) {
+		if(equalizerAvailable && !downloadService.isRemoteEnabled()) {
 			SharedPreferences prefs = Util.getPreferences(context);
 			boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
 			if (equalizerOn && getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
