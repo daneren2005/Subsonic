@@ -1210,11 +1210,15 @@ public class DownloadService extends Service {
 			int pos = getPlayerPosition();
 			reset();
 			
+			// Resetup media player
+			mediaPlaye.setAudioSessionId(audioSessionId);
+			
 			EqualizerController controller = null;
 			try {
 				controller = effectsController.getEqualizerController();
 			} catch(Exception e2) {
-				// Don't try again, just resetup media player
+				Log.w(TAG, "Failed to setup EQ even after reinitialization");
+				// Don't try again, just resetup media player and continue on
 			}
 			
 			// Restart from same position and state we left off in
