@@ -1009,7 +1009,7 @@ public class DownloadService extends Service {
 			}
 			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.setOnCompletionListener(null);
-			if(Build.VERSION.SKD_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
 				mediaPlayer.setNextMediaPlayer(null);
 				nextSetup = false;
 			}
@@ -1210,10 +1210,10 @@ public class DownloadService extends Service {
 			int pos = getPlayerPosition();
 			reset();
 			
-			EqualizerController controller;
+			EqualizerController controller = null;
 			try {
 				controller = effectsController.getEqualizerController();
-			} catch(Exception e) {
+			} catch(Exception e2) {
 				// Don't try again, just resetup media player
 			}
 			
