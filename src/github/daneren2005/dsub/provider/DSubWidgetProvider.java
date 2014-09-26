@@ -44,8 +44,11 @@ import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.DownloadServiceLifecycleSupport;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 
@@ -161,20 +164,15 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 		}
 
 	// Get Entry from current playing DownloadFile
-	DownloadFile currentFile;
         MusicDirectory.Entry currentPlaying = null;
         if(service == null) {
         	// Deserialize from playling list to setup
-        	DownloadServiceLifecycleSupport.State state = FileUtil.deserialize(context, DownloadLifecycleSupport.FILENAME_DOWNLOADS_SER, DownloadServiceLifecycleSupport.State.class);
+        	DownloadServiceLifecycleSupport.State state = FileUtil.deserialize(context, DownloadServiceLifecycleSupport.FILENAME_DOWNLOADS_SER, DownloadServiceLifecycleSupport.State.class);
         	if(state != null && state.currentPlayingIndex != -1) {
-        		currentFile = state.songs.get(state.currentPlayingIndex);
+        		currentPlaying = state.songs.get(state.currentPlayingIndex);
         	}
         } else {
-        	currentFile = service.getCurrentPlaying();
-        }
-        
-        if(currentFile != null) {
-        	currentPlaying = currentFile.getSong();
+			currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
         }
         
         String title = currentPlaying == null ? null : currentPlaying.getTitle();

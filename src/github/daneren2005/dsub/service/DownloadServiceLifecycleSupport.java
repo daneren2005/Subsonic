@@ -361,10 +361,10 @@ public class DownloadServiceLifecycleSupport {
 	public static class State implements Serializable {
 		private static final long serialVersionUID = -6346438781062572271L;
 
-		private List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
-		private List<MusicDirectory.Entry> toDelete = new ArrayList<MusicDirectory.Entry>();
-		private int currentPlayingIndex;
-		private int currentPlayingPosition;
-		private boolean renameCurrent = false;
+		public List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+		public List<MusicDirectory.Entry> toDelete = new ArrayList<MusicDirectory.Entry>();
+		public int currentPlayingIndex;
+		public int currentPlayingPosition;
+		public boolean renameCurrent = false;
 	}
 }
