@@ -86,6 +86,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private CheckBoxPreference syncNotification;
 	private CheckBoxPreference syncStarred;
 	private CheckBoxPreference syncMostRecent;
+	private CheckBoxPreference replayGain;
+	private Preference replayGainBump;
+	private Preference replayGainUntagged;
 	private String internalSSID;
 	
 	private int serverCount = 3;
@@ -127,6 +130,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		syncNotification = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
 		syncStarred = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
 		syncMostRecent = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
+		replayGain = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
+		replayGainBump = (Preference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
+		replayGainUntagged = (Preference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
 		
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
@@ -267,7 +273,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		}
 		else if(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT.equals(key)) {
 			SyncUtil.removeMostRecentSyncFiles(this);
-		} else if(Constants.PREFERENCES_KEY_REPLAY_GAIN.equals(key)) {
+		} else if(Constants.PREFERENCES_KEY_REPLAY_GAIN.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED.equals(key)) {
 			DownloadService downloadService = DownloadService.getInstance();
 			if(downloadService != null) {
 				downloadService.reapplyVolume();
@@ -331,6 +337,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 				syncMostRecent.setEnabled(false);
 			}
 		}
+		if(replayGain.isChecked()) {
+			replayGainBump.setEnabled(true);
+			replayGainUntagged.setEnabled(true);
+		} else {
+			replayGainBump.setEnabled(false);
+			replayGainUntagged.setEnabled(false);
+		}
+
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }
