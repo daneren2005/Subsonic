@@ -1211,7 +1211,7 @@ public class DownloadService extends Service {
 			reset();
 			
 			// Resetup media player
-			mediaPlaye.setAudioSessionId(audioSessionId);
+			mediaPlayer.setAudioSessionId(audioSessionId);
 			
 			EqualizerController controller = null;
 			try {

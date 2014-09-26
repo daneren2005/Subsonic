@@ -47,12 +47,8 @@ public class EqualizerController {
 
 	public EqualizerController(Context context, int audioSessionId) {
 		this.context = context;
-		try {
-			this.audioSessionId = audioSessionId;
-			init();
-		} catch (Throwable x) {
-			Log.w(TAG, "Failed to create equalizer.", x);
-		}
+		this.audioSessionId = audioSessionId;
+		init();
 	}
 
 	private void init() {
