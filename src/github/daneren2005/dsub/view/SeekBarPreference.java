@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ import github.daneren2005.dsub.util.Constants;
  * SeekBar preference to set the shake force threshold.
  */
 public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
+	private static final String TAG = SeekBarPreference.class.getSimpleName();
 	/**
 	 * The current value.
 	 */
@@ -67,7 +69,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		mStepSize = a.getFloat(R.styleable.SeekBarPreference_stepSize, 1f);
 		mDisplay = a.getString(R.styleable.SeekBarPreference_display);
 		if(mDisplay == null) {
-			mDisplay = "%+.1f";
+			mDisplay = "%.0f";
 		}
 	}
 

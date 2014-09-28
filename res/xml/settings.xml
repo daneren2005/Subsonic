@@ -151,11 +151,13 @@
 		<PreferenceCategory
 			android:title="@string/button_bar.chat">
 
-			<EditTextPreference
+			<github.daneren2005.dsub.view.SeekBarPreference
 				android:title="@string/settings.chat_refresh"
 				android:key="chatRefreshRate"
 				android:defaultValue="30"
-				android:digits="0123456789"/>
+				android:dialogLayout="@layout/seekbar_preference"
+				myns:max="120"
+				myns:display="%.0f seconds"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 
@@ -210,11 +212,13 @@
 		<PreferenceCategory
 			android:title="@string/settings.cache_title">
 
-			<EditTextPreference
+			<github.daneren2005.dsub.view.SeekBarPreference
 				android:title="@string/settings.cache_size"
 				android:key="cacheSize"
 				android:defaultValue="2000"
-				android:digits="0123456789"/>
+				android:dialogLayout="@layout/seekbar_preference"
+				myns:max="50000"
+				myns:display="%.0f MB"/>
 
 			<EditTextPreference
 				android:title="@string/settings.cache_location"
@@ -311,11 +315,12 @@
 		<PreferenceCategory
 				android:title="@string/settings.playback_title">
 
-				<EditTextPreference
+				<github.daneren2005.dsub.view.SeekBarPreference
 					android:title="@string/settings.playlist_random_size_title"
 					android:key="randomSize"
 					android:defaultValue="20"
-					android:digits="0123456789"/>
+					android:dialogLayout="@layout/seekbar_preference"
+					myns:max="100"/>
 
 				<ListPreference
 					android:title="@string/settings.temp_loss_title"
