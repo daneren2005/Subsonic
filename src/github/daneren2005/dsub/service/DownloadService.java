@@ -1231,19 +1231,25 @@ public class DownloadService extends Service {
 	}
 
 	public EqualizerController getEqualizerController() {
+		EqualizerController controller = null;
 		try {
-			return effectsController.getEqualizerController();
+			controller = effectsController.getEqualizerController();
+			if(controller.getEqualizer() == null) {
+				throw new Exception("Failed to get EQ");
+			}
 		} catch(Exception e) {
+			Log.w(TAG, "Failed to start EQ, retrying with new mediaPlayer: " + e);
+
 			// If we failed, we are going to try to reinitialize the MediaPlayer
 			boolean playing = playerState == STARTED;
 			int pos = getPlayerPosition();
 			reset();
-			
-			// Resetup media player
-			mediaPlayer.setAudioSessionId(audioSessionId);
-			
-			EqualizerController controller = null;
+
 			try {
+				// Resetup media player
+				mediaPlayer.setAudioSessionId(audioSessionId);
+				mediaPlayer.setDataSource(currentPlaying.getFile().getCanonicalPath());
+
 				controller = effectsController.getEqualizerController();
 			} catch(Exception e2) {
 				Log.w(TAG, "Failed to setup EQ even after reinitialization");
@@ -1252,9 +1258,9 @@ public class DownloadService extends Service {
 			
 			// Restart from same position and state we left off in
 			play(getCurrentPlayingIndex(), playing, pos);
-			
-			return controller;
 		}
+
+		return controller;
 	}
 
 	public MediaRouteSelector getRemoteSelector() {
