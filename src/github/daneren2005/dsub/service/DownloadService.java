@@ -48,10 +48,13 @@ import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
+import github.daneren2005.dsub.util.tags.BastpUtil;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -134,6 +137,9 @@ public class DownloadService extends Service {
 	private boolean keepScreenOn;
 	private int cachedPosition = 0;
 	private boolean downloadOngoing = false;
+	private float volume = 1.0f;
+	private boolean singleAlbum = false;
+	private String singleAlbumName;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
@@ -312,7 +318,7 @@ public class DownloadService extends Service {
 			for (MusicDirectory.Entry song : songs) {
 				if(song != null) {
 					DownloadFile downloadFile = new DownloadFile(this, song, save);
-					downloadList.add(getCurrentPlayingIndex() + offset, downloadFile);
+					addToDownloadList(downloadFile, getCurrentPlayingIndex() + offset);
 					offset++;
 				}
 			}
@@ -323,7 +329,7 @@ public class DownloadService extends Service {
 			int index = getCurrentPlayingIndex();
 			for (MusicDirectory.Entry song : songs) {
 				DownloadFile downloadFile = new DownloadFile(this, song, save);
-				downloadList.add(downloadFile);
+				addToDownloadList(downloadFile, -1);
 			}
 			if(!autoplay && (size - 1) == index) {
 				setNextPlaying();
@@ -349,6 +355,27 @@ public class DownloadService extends Service {
 			checkDownloads();
 		}
 		lifecycleSupport.serializeDownloadQueue();
+	}
+	private void addToDownloadList(DownloadFile file, int offset) {
+		if(offset == -1) {
+			downloadList.add(file);
+		} else {
+			downloadList.add(offset, file);
+		}
+		
+		// Check if we are still dealing with a single album
+		// Don't bother with check if it is already false
+		if(singleAlbum) {
+			// If first download, set album to it
+			if(singleAlbumName == null) {
+				singleAlbumName = file.getSong().getAlbum();
+			} else {
+				// Otherwise, check again previous album name
+				if(!singleAlbumName.equals(file.getSong().getAlbum())) {
+					singleAlbum = false;
+				}
+			}
+		}
 	}
 	public synchronized void downloadBackground(List<MusicDirectory.Entry> songs, boolean save) {
 		for (MusicDirectory.Entry song : songs) {
@@ -612,6 +639,8 @@ public class DownloadService extends Service {
 
 		suggestedPlaylistName = null;
 		suggestedPlaylistId = null;
+		singleAlbum = true;
+		singleAlbumName = null;
 	}
 
 	public synchronized void remove(int which) {
@@ -1444,6 +1473,8 @@ public class DownloadService extends Service {
 							}
 							cachedPosition = position;
 
+							applyReplayGain(mediaPlayer, downloadFile);
+
 							if (start || autoPlayStart) {
 								mediaPlayer.start();
 								setPlayerState(STARTED);
@@ -1502,6 +1533,8 @@ public class DownloadService extends Service {
 							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}
+
+						applyReplayGain(nextMediaPlayer, downloadFile);
 					} catch (Exception x) {
 						handleErrorNext(x);
 					}
@@ -1621,11 +1654,15 @@ public class DownloadService extends Service {
 	public void setVolume(float volume) {
 		if(mediaPlayer != null && (playerState == STARTED || playerState == PAUSED || playerState == STOPPED)) {
 			try {
-				mediaPlayer.setVolume(volume, volume);
+				this.volume = volume;
+				reapplyVolume();
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to set volume");
 			}
 		}
+	}
+	public void reapplyVolume() {
+		applyReplayGain(mediaPlayer, currentPlaying);
 	}
 
 	public synchronized void swap(boolean mainList, int from, int to) {
@@ -1811,6 +1848,7 @@ public class DownloadService extends Service {
 			}
 		}
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
+		singleAlbum = false;
 
 		if (revisionBefore != revision) {
 			updateJukeboxPlaylist();
@@ -1948,6 +1986,49 @@ public class DownloadService extends Service {
 					Util.toast(context, msg, false);
 				}
 			}.execute();
+		}
+	}
+
+	private void applyReplayGain(MediaPlayer mediaPlayer, DownloadFile downloadFile) {
+		if(currentPlaying == null) {
+			return;
+		}
+
+		SharedPreferences prefs = Util.getPreferences(this);
+		try {
+			float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
+			float adjust = 0f;
+			if (prefs.getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
+				// If playing a single album or no track gain, use album gain
+				if((singleAlbum || rg[0] == 0) && rg[1] != 0) {
+					adjust = rg[1];
+				} else {
+					// Otherwise, give priority to track gain
+					adjust = rg[0];
+				}
+			
+				if (adjust == 0) {
+					/* No RG value found: decrease volume for untagged song if requested by user */
+					int untagged = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED, "0"));
+					adjust = (untagged - 150) / 10f;
+				} else {
+					/* This song has some replay gain info, we are now going to apply the 'bump' value
+					** The preferences stores the raw value of the seekbar, that's 0-150
+					** But we want -15 <-> +15, so 75 shall be zero */
+					int bump = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP, "0"));
+					adjust += (bump - 150) / 10f;
+				}
+			}
+			
+			float rg_result = ((float) Math.pow(10, (adjust / 20))) * volume;
+			if (rg_result > 1.0f) {
+				rg_result = 1.0f; /* android would IGNORE the change if this is > 1 and we would end up with the wrong volume */
+			} else if (rg_result < 0.0f) {
+				rg_result = 0.0f;
+			}
+			mediaPlayer.setVolume(rg_result, rg_result);
+		} catch(IOException e) {
+			Log.w(TAG, "Failed to apply replay gain values", e);
 		}
 	}
 

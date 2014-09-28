@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myns="http://schemas.android.com/apk/res/github.daneren2005.dsub"
 	android:title="@string/settings.title">
 
     <PreferenceScreen
@@ -150,11 +151,13 @@
 		<PreferenceCategory
 			android:title="@string/button_bar.chat">
 
-			<EditTextPreference
+			<github.daneren2005.dsub.view.SeekBarPreference
 				android:title="@string/settings.chat_refresh"
 				android:key="chatRefreshRate"
 				android:defaultValue="30"
-				android:digits="0123456789"/>
+				android:dialogLayout="@layout/seekbar_preference"
+				myns:max="120"
+				myns:display="%.0f seconds"/>
 		</PreferenceCategory>
 	</PreferenceScreen>
 
@@ -209,11 +212,13 @@
 		<PreferenceCategory
 			android:title="@string/settings.cache_title">
 
-			<EditTextPreference
+			<github.daneren2005.dsub.view.SeekBarPreference
 				android:title="@string/settings.cache_size"
 				android:key="cacheSize"
 				android:defaultValue="2000"
-				android:digits="0123456789"/>
+				android:dialogLayout="@layout/seekbar_preference"
+				myns:max="50000"
+				myns:display="%.0f MB"/>
 
 			<EditTextPreference
 				android:title="@string/settings.cache_location"
@@ -310,11 +315,12 @@
 		<PreferenceCategory
 				android:title="@string/settings.playback_title">
 
-				<EditTextPreference
+				<github.daneren2005.dsub.view.SeekBarPreference
 					android:title="@string/settings.playlist_random_size_title"
 					android:key="randomSize"
 					android:defaultValue="20"
-					android:digits="0123456789"/>
+					android:dialogLayout="@layout/seekbar_preference"
+					myns:max="100"/>
 
 				<ListPreference
 					android:title="@string/settings.temp_loss_title"
@@ -355,6 +361,36 @@
 		</PreferenceCategory>
 
 		<PreferenceCategory
+			android:title="@string/settings.replay_gain">
+
+			<CheckBoxPreference
+				android:title="@string/settings.replay_gain"
+				android:summary="@string/settings.replay_gain_summary"
+				android:key="replayGain"
+				android:defaultValue="false"/>
+
+			<github.daneren2005.dsub.view.SeekBarPreference
+				android:key="replayGainBump2"
+				android:dialogLayout="@layout/seekbar_preference"
+				android:title="@string/settings.replay_gain_bump"
+				android:defaultValue="75"
+				myns:max="150"
+				myns:min="-150"
+				myns:stepSize="10"
+				myns:display="%+.1f dB"/>
+
+			<github.daneren2005.dsub.view.SeekBarPreference
+				android:key="replayGainUntagged2"
+				android:dialogLayout="@layout/seekbar_preference"
+				android:title="@string/settings.replay_gain_untagged"
+				android:defaultValue="150"
+				myns:max="0"
+				myns:min="-150"
+				myns:stepSize="10"
+				myns:display="%+.1f dB"/>
+		</PreferenceCategory>
+
+		<PreferenceCategory
 			android:title="@string/settings.other_title">
 
 			<CheckBoxPreference
@@ -368,6 +404,12 @@
 				android:summary="@string/settings.media_button_summary"
 				android:key="mediaButtons"
 				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/settings.replay_gain"
+				android:summary="@string/settings.replay_gain_summary"
+				android:key="replayGain"
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.gapless_playback"

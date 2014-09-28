@@ -44,8 +44,11 @@ import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.DownloadServiceLifecycleSupport;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 
@@ -88,6 +91,11 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         defaultAppWidget(context, appWidgetIds);
     }
+    
+	@Override
+	public void onEnabled(Context context) {
+		notifyInstances(context, DownloadService.getInstance(), false);
+	}
 	
 	protected int getLayout() {
 		return 0;
@@ -155,7 +163,18 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 			}
 		}
 
-        MusicDirectory.Entry currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
+	// Get Entry from current playing DownloadFile
+        MusicDirectory.Entry currentPlaying = null;
+        if(service == null) {
+        	// Deserialize from playling list to setup
+        	DownloadServiceLifecycleSupport.State state = FileUtil.deserialize(context, DownloadServiceLifecycleSupport.FILENAME_DOWNLOADS_SER, DownloadServiceLifecycleSupport.State.class);
+        	if(state != null && state.currentPlayingIndex != -1) {
+        		currentPlaying = state.songs.get(state.currentPlayingIndex);
+        	}
+        } else {
+			currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
+        }
+        
         String title = currentPlaying == null ? null : currentPlaying.getTitle();
         CharSequence artist = currentPlaying == null ? null : currentPlaying.getArtist();
 		CharSequence album = currentPlaying == null ? null : currentPlaying.getAlbum();

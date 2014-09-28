@@ -69,16 +69,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private ListPreference maxVideoBitrateWifi;
     private ListPreference maxVideoBitrateMobile;
 	private ListPreference networkTimeout;
-    private EditTextPreference cacheSize;
     private EditTextPreference cacheLocation;
     private ListPreference preloadCountWifi;
 	private ListPreference preloadCountMobile;
-	private EditTextPreference randomSize;
 	private ListPreference tempLoss;
 	private ListPreference pauseDisconnect;
 	private Preference addServerPreference;
 	private PreferenceCategory serversCategory;
-	private EditTextPreference chatRefreshRate;
 	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
 	private CheckBoxPreference syncEnabled;
@@ -86,6 +83,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private CheckBoxPreference syncNotification;
 	private CheckBoxPreference syncStarred;
 	private CheckBoxPreference syncMostRecent;
+	private CheckBoxPreference replayGain;
+	private Preference replayGainBump;
+	private Preference replayGainUntagged;
 	private String internalSSID;
 	
 	private int serverCount = 3;
@@ -110,16 +110,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		maxVideoBitrateWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
         maxVideoBitrateMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
 		networkTimeout = (ListPreference) findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
-        cacheSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
         cacheLocation = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
         preloadCountWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
 		preloadCountMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE);
-		randomSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_RANDOM_SIZE);
 		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		pauseDisconnect = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
 		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
-		chatRefreshRate = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CHAT_REFRESH);
 		videoPlayer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		syncInterval = (ListPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
 		syncEnabled = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
@@ -127,6 +124,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		syncNotification = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
 		syncStarred = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
 		syncMostRecent = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
+		replayGain = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
+		replayGainBump = (Preference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
+		replayGainUntagged = (Preference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
 		
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
@@ -267,6 +267,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		}
 		else if(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT.equals(key)) {
 			SyncUtil.removeMostRecentSyncFiles(this);
+		} else if(Constants.PREFERENCES_KEY_REPLAY_GAIN.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP.equals(key) || Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED.equals(key)) {
+			DownloadService downloadService = DownloadService.getInstance();
+			if(downloadService != null) {
+				downloadService.reapplyVolume();
+			}
 		}
 		
 		scheduleBackup();
@@ -299,14 +304,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
         maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
 		networkTimeout.setSummary(networkTimeout.getEntry());
-        cacheSize.setSummary(cacheSize.getText());
         cacheLocation.setSummary(cacheLocation.getText());
         preloadCountWifi.setSummary(preloadCountWifi.getEntry());
 		preloadCountMobile.setSummary(preloadCountMobile.getEntry());
-		randomSize.setSummary(randomSize.getText());
 		tempLoss.setSummary(tempLoss.getEntry());
 		pauseDisconnect.setSummary(pauseDisconnect.getEntry());
-		chatRefreshRate.setSummary(chatRefreshRate.getText());
 		videoPlayer.setSummary(videoPlayer.getEntry());
 		syncInterval.setSummary(syncInterval.getEntry());
 		if(syncEnabled.isChecked()) {
@@ -326,6 +328,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 				syncMostRecent.setEnabled(false);
 			}
 		}
+		if(replayGain.isChecked()) {
+			replayGainBump.setEnabled(true);
+			replayGainUntagged.setEnabled(true);
+		} else {
+			replayGainBump.setEnabled(false);
+			replayGainUntagged.setEnabled(false);
+		}
+
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();
         }
