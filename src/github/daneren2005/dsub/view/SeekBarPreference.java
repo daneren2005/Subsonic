@@ -41,6 +41,10 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	 * The current value.
 	 */
 	private String mValue;
+	private int mMin;
+	private int mMax;
+	private float mStepSize;
+	private String mDisplay;
 
 	/**
 	 * Our context (needed for getResources())
@@ -56,6 +60,15 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	{
 		super(context, attrs);
 		mContext = context;
+
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SeekBarPreference);
+		mMin = a.getInteger(R.styleable.SeekBarPreference_min, 0);
+		mMax = a.getInteger(R.styleable.SeekBarPreference_max, 100);
+		mStepSize = a.getFloat(R.styleable.SeekBarPreference_stepSize, 1f);
+		mDisplay = a.getString(R.styleable.SeekBarPreference_display);
+		if(mDisplay == null) {
+			mDisplay = "%+.1f";
+		}
 	}
 
 	@Override
@@ -84,13 +97,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	 */
 	private String getSummary(String value) {
 		int val = Integer.parseInt(value);
-		if(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED.equals(getKey())) {
-			return String.format("%+.1f dB", (val - 150) / 10f);
-		} else if(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP.equals(getKey())) {
-			return String.format("%+.1f dB", 2 * (val - 75) / 10f);
-		} else {
-			return String.format("%+.1f", val);
-		}
+		return String.format(mDisplay, (val + mMin) / mStepSize);
 	}
 
 	@Override
@@ -102,7 +109,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		mValueText.setText(getSummary(mValue));
 
 		SeekBar seekBar = (SeekBar)view.findViewById(R.id.seek_bar);
-		seekBar.setMax(150);
+		seekBar.setMax(mMax - mMin);
 		seekBar.setProgress(Integer.parseInt(mValue));
 		seekBar.setOnSeekBarChangeListener(this);
 
@@ -112,8 +119,10 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	@Override
 	protected void onDialogClosed(boolean positiveResult)
 	{
-		persistString(mValue);
-		notifyChanged();
+		if(positiveResult) {
+			persistString(mValue);
+			notifyChanged();
+		}
 	}
 
 	@Override

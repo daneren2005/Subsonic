@@ -26,4 +26,11 @@
 	<attr name="rating_bad" format="reference"/>
 	<attr name="rating_good" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
+
+	<declare-styleable name="SeekBarPreference">
+		<attr name="min" format="integer"/>
+		<attr name="max" format="integer"/>
+		<attr name="stepSize" format="float"/>
+		<attr name="display" format="string"/>
+	</declare-styleable>
 </resources>

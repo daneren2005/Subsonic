@@ -1989,7 +1989,7 @@ public class DownloadService extends Service {
 					** The preferences stores the raw value of the seekbar, that's 0-150
 					** But we want -15 <-> +15, so 75 shall be zero */
 					int bump = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP, "0"));
-					adjust += 2 * (bump - 75) / 10f;
+					adjust += (bump - 150) / 10f;
 				}
 			}
 			
