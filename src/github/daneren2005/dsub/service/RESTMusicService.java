@@ -1341,7 +1341,7 @@ public class RESTMusicService implements MusicService {
 					Util.close(out);
 				}
 
-				return FileUtil.getSampledBitmap(bytes, size);
+				return FileUtil.getSampledBitmap(bytes, size, false);
 			}
 			finally {
 				Util.close(in);
