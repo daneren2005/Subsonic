@@ -257,9 +257,12 @@ public class FileUtil {
 		}
 	}
 	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
+		return getScaledBitmap(bitmap, size, true);
+	}
+	public static Bitmap getScaledBitmap(Bitmap bitmap, int size, boolean allowUnscaled) {
 		// Don't waste time scaling if the difference is minor
 		// Large album arts still need to be scaled since displayed as is on now playing!
-		if(size < 400 && bitmap.getWidth() < (size * 1.1)) {
+		if(allowUnscaled && size < 400 && bitmap.getWidth() < (size * 1.1)) {
 			return bitmap;
 		} else {
 			return Bitmap.createScaledBitmap(bitmap, size, Util.getScaledHeight(bitmap, size), true);
