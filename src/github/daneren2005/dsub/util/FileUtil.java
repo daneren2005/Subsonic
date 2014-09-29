@@ -237,7 +237,7 @@ public class FileUtil {
 			opt.inJustDecodeBounds = false;
 
 			Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getPath(), opt);
-			return bitmap == null ? null : getScaledBitmap(bitmap, size);
+			return bitmap == null ? null : getScaledBitmap(bitmap, size, false);
 		}
 		return null;
 	}
