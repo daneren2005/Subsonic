@@ -243,6 +243,9 @@ public class FileUtil {
 	}
 
 	public static Bitmap getSampledBitmap(byte[] bytes, int size) {
+		return getSampledBitmap(bytes, size, true);
+	}
+	public static Bitmap getSampledBitmap(byte[] bytes, int size, boolean allowUnscaled) {
 		final BitmapFactory.Options opt = new BitmapFactory.Options();
 		opt.inJustDecodeBounds = true;
 		BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opt);
@@ -253,7 +256,7 @@ public class FileUtil {
 		if(bitmap == null) {
 			return null;
 		} else {
-			return getScaledBitmap(bitmap, size);
+			return getScaledBitmap(bitmap, size, allowUnscaled);
 		}
 	}
 	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
