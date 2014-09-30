@@ -1234,6 +1234,7 @@ public class DownloadService extends Service {
 		EqualizerController controller = null;
 		try {
 			controller = effectsController.getEqualizerController();
+			// TODO: Start, open EQ, close, start, open EQ crashes here
 			if(controller.getEqualizer() == null) {
 				throw new Exception("Failed to get EQ");
 			}
