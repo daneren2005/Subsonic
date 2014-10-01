@@ -372,8 +372,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	
 	@Override
 	public void setTitle(CharSequence title) {
-		getSupportActionBar().setTitle(title);
-		recreateSpinner();
+		if(!title.equals(getSupportActionBar().getTitle())) {
+			getSupportActionBar().setTitle(title);
+			recreateSpinner();
+		}
 	}
 	public void setSubtitle(CharSequence title) {
 		getSupportActionBar().setSubtitle(title);
@@ -653,6 +655,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	
 	protected void recreateSpinner() {
+		if(currentFragment.getTitle() == null) {
+			return;
+		}
+
 		if(backStack.size() > 0) {
 			spinnerAdapter.clear();
 			for(int i = 0; i < backStack.size(); i++) {

@@ -96,7 +96,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	private int tag;
 	
 	protected SubsonicActivity context;
-	protected CharSequence title = "DSub";
+	protected CharSequence title = null;
 	protected CharSequence subtitle = null;
 	protected View rootView;
 	protected boolean primaryFragment = false;
@@ -420,7 +420,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void setPrimaryFragment(boolean primary) {
 		primaryFragment = primary;
 		if(primary) {
-			if(context != null) {
+			if(context != null && title != null) {
 				context.setTitle(title);
 				context.setSubtitle(subtitle);
 			}
