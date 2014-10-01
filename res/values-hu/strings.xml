@@ -12,7 +12,7 @@
 	<string name="common.download">Letöltés gyorsítótárba</string>
     <string name="common.pin">Letöltés tárolásra (megőrzés)</string>
     <string name="common.delete">Törlés</string>
-	<string name="common.star">Csillagozás be</string>
+	<string name="common.star">Csillagozás</string>
 	<string name="common.unstar">Csillagozás ki</string>
 	<string name="common.info">Részletek</string>
 	<string name="common.name">Név</string>
@@ -21,7 +21,7 @@
 	<string name="common.play_external">Videólejátszás</string>
 	<string name="common.stream_external">Videó streamelése</string>
 	<string name="common.confirm">Jóváhagyás</string>
-	<string name="common.confirm_message">Biztos benne: %1$s %2$s?</string>
+	<string name="common.confirm_message">Biztos benne? %1$s -> \"%2$s\"</string>
 	<string name="common.confirm_message_cache">cache</string>
 	<string name="common.empty">Nem található!</string>
 	<string name="common.warning">Figyelem!</string>
@@ -68,7 +68,7 @@
     <string name="main.albums_frequent">Legtöbbször lejátszottak</string>
     <string name="main.albums_highest">Legjobbra értékeltek</string>
     <string name="main.albums_starred">Csillagozottak</string>
-    <string name="main.albums_random">Véletlenszerű</string>
+    <string name="main.albums_random">Véletlenszerű kiválasztás</string>
 	<string name="main.albums_genres">Műfajok</string>
 	<string name="main.albums_year">Évtizedek</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
@@ -239,12 +239,12 @@
 		\nUtolsó módosítás: %4$s
 		\nMegjegyzés: %5$s</string>
 	<string name="bookmark.resume_title">Folytatja a lejátszást?</string>
-	<string name="bookmark.resume">\'%1$s\' folytatása innen: \'%2$s\'</string>
+	<string name="bookmark.resume">\"%1$s\" folytatása innen: \"%2$s\"</string>
 	<string name="bookmark.action_resume">Folytatás</string>
 	<string name="bookmark.action_start_over">Kezdés</string>
 
-	<string name="rating.title">\"%s\" értékelése</string>
-	<string name="rating.set_rating">\"%s\" értékelése</string>
+	<string name="rating.title">\"%s\" értékelve</string>
+	<string name="rating.set_rating">\"%s\" értékelve</string>
 	<string name="rating.set_rating_failed">\"%s\" értékelése sikertelen!</string>
 	<string name="rating.remove_rating">\"%s\" értékelése visszavonva</string>
 	<string name="rating.remove_rating_failed">\"%s\" értékelésének visszavonása sikertelen!</string>
@@ -430,6 +430,10 @@
 	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben és nagy méretű albumborítóval, a listanézet helyett.</string>
 	<string name="settings.admin_enabled">Admin engedélyezése</string>
 	<string name="settings.admin_enabled_summary">Admin menüpont megjelenítése az elhúzható oldalsávon.</string>
+	<string name="settings.replay_gain">Hangerő-kiegyenlítés (Replay Gain)</string>
+	<string name="settings.replay_gain_summary">Hangerő kiegyenlítése (normalizálása) a dal és az album hangerőszint értékei alapján.</string>
+	<string name="settings.replay_gain_bump">Hangerő-kiegyenlítés előerősítés</string>
+	<string name="settings.replay_gain_untagged">Dalok hangerő-kiegyenlítés nélkül</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -464,21 +468,21 @@
 	<string name="admin.create_user_error">A felhasználó létrehozása sikertelen!</string>
 	<string name="admin.change_username_invalid">Adjon meg egy érvényes felhasználónevet!</string>
 	<string name="admin.update_permissions">Jogosultságok módosítása</string>
-	<string name="admin.update_permissions_success">%1$s jogosultságainak módosítása sikerült</string>
-	<string name="admin.update_permissions_error">%1$s jogosultságainak módosítása sikertelen!</string>
+	<string name="admin.update_permissions_success">\"%1$s\" jogosultságainak módosítása sikerült</string>
+	<string name="admin.update_permissions_error">\"%1$s\" jogosultságainak módosítása sikertelen!</string>
 	<string name="admin.change_email">Email csere</string>
-	<string name="admin.change_email_success">%1$s email címének módosítása sikerült</string>
-	<string name="admin.change_email_error">%1$s email címének módosítása sikertelen!</string>
+	<string name="admin.change_email_success">\"%1$s\" email címének módosítása sikerült</string>
+	<string name="admin.change_email_error">\"%1$s\" email címének módosítása sikertelen!</string>
 	<string name="admin.change_email_label">Új email:</string>
 	<string name="admin.change_email_invalid">Adjon meg egy érvényes email címet!</string>
 	<string name="admin.change_password">Jelszó csere</string>
-	<string name="admin.change_password_success">%1$s jelszavának módosítása sikerült</string>
-	<string name="admin.change_password_error">%1$s jelszavának módosítása sikertelen!</string>
+	<string name="admin.change_password_success">\"%1$s\" jelszavának módosítása sikerült</string>
+	<string name="admin.change_password_error">\"%1$s\" jelszavának módosítása sikertelen!</string>
 	<string name="admin.change_password_label">Új jelszó:</string>
 	<string name="admin.change_password_invalid">Adjon meg egy érvényes jelszót!</string>
 	<string name="admin.delete_user">Felhasználó törlése</string>
-	<string name="admin.delete_user_success">%1$s felhasználó létrehozva</string>
-	<string name="admin.delete_user_error">%1$s felhasználó törlése sikertelen!</string>
+	<string name="admin.delete_user_success">\"%1$s\" felhasználó létrehozva</string>
+	<string name="admin.delete_user_error">\"%1$s\" felhasználó törlése sikertelen!</string>
 	<string name="admin.confirm_password">Jelszó megerősítése</string>
 	<string name="admin.confirm_password_bad">A beírt jelszó nem egyezik!</string>
 	
