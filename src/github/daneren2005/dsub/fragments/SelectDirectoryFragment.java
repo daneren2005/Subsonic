@@ -1187,12 +1187,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					return;
 				}
 
-				AlertDialog.Builder imageDialog = new AlertDialog.Builder(context);
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				ImageView fullScreenView = new ImageView(context);
 				imageLoader.loadImage(fullScreenView, albumRep, true, true);
-				imageDialog.setView(fullScreenView);
-				imageDialog.setCancelable(true);
-				imageDialog.create();
+				builder.setCancelable(true);
+				
+				AlertDialog imageDialog = builder.create();
+				// Set view here with unecessary 0's to remove top/bottom border
+				imageDialog.setView(fullScreenView, 0, 0, 0, 0);
 				imageDialog.show();
 			}
 		});
