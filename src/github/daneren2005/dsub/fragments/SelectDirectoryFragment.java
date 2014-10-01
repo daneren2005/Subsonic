@@ -615,22 +615,21 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		protected Pair<MusicDirectory, Boolean> doInBackground() throws Throwable {
 		  MusicService musicService = MusicServiceFactory.getMusicService(context);
 			MusicDirectory dir = load(musicService);
-			boolean valid = musicService.isLicenseValid(context, this);	
-			return new Pair<MusicDirectory, Boolean>(dir, valid);
+			licenseValid = musicService.isLicenseValid(context, this);
+			
+			albums = dir.getChildren(true, false);
+			if(largeAlbums) {
+				entries = dir.getChildren(false, true);
+			} else {
+				entries = dir.getChildren();
+			}
+			
+			return new Pair<MusicDirectory, Boolean>(dir, licenseValid);
 		}
 
 		@Override
 		protected void done(Pair<MusicDirectory, Boolean> result) {
-			if(largeAlbums) {
-				albums = result.getFirst().getChildren(true, false);
-				entries = result.getFirst().getChildren(false, true);
-			} else {
-				albums = result.getFirst().getChildren(true, false);
-				entries = result.getFirst().getChildren();
-			}
-            licenseValid = result.getSecond();
-            finishLoading();
-            
+			finishLoading();
 			currentTask = null;
 		}
 	}
@@ -646,7 +645,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
         } else {
             showHeader = false;
 			if(!"root".equals(id) && (entries.size() == 0 || !largeAlbums && albums.size() == entries.size())) {
-            	hideButtons = true;
+				hideButtons = true;
 			}
         }
 
@@ -699,7 +698,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(validData) {
 			entryList.setVisibility(View.VISIBLE);
 		}
-        context.supportInvalidateOptionsMenu();
+		context.supportInvalidateOptionsMenu();
 
 		if(lookupEntry != null) {
 			for(int i = 0; i < entries.size(); i++) {
@@ -711,12 +710,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 		}
 
-        Bundle args = getArguments();
-        boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-        if (playAll && !restoredInstance) {
-            playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
-        }
-    }
+		Bundle args = getArguments();
+		boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+		if (playAll && !restoredInstance) {
+			playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
+		}
+	}
 
 	private void setupAlbumList() {
 		albumList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
