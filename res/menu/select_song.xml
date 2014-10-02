@@ -14,10 +14,6 @@
 		compat:showAsAction="ifRoom|withText"/>
 		
 	<item 
-		android:id="@+id/menu_select"
-		android:title="@string/menu.select"/>
-		
-	<item 
 		android:id="@+id/menu_download"
 		android:title="@string/common.download"/>
 		
