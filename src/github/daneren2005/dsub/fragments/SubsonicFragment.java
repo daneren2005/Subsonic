@@ -74,6 +74,7 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistSongView;
+import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
@@ -204,6 +205,31 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
+					}
+					
+					// If we are looking at a standard song view, get downloadFile to cache what options to show
+					if(view instanceof SongView) {
+						SongView songView = (SongView) view;
+						DownloadFile downloadFile = songView.getDownloadFile();
+						
+						try {
+							if(downloadFile != null) {
+								if(downloadFile.isWorkDone()) {
+									// Remove permanent cache menu if already perma cached
+									if(downloadFile.isSaved()) {
+										menu.removeItem(R.id.song_menu_pin);
+									}
+									
+									// Remove cache option no matter what if already downloaded
+									menu.removeItem(R.id.song_menu_download);
+								} else {
+									// Remove delete option if nothing to delete
+									menu.removeItem(R.id.menu_delete);
+								}
+							}
+						} catch(Exception e) {
+							Log.w(TAG, "Failed to lookup downloadFile info", e);
+						}
 					}
 				}
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
