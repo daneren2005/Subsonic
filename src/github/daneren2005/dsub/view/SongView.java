@@ -161,6 +161,10 @@ public class SongView extends UpdateView implements Checkable {
 		dontChangeDownloadFile = true;
 	}
 	
+	public DownloadFile getDownloadFile() {
+		return downloadFile;
+	}
+	
 	@Override
 	protected void updateBackground() {
         if (downloadService == null) {
