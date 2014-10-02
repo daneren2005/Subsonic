@@ -258,9 +258,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			case R.id.menu_shuffle:
 				playNow(true, false);
 				return true;
-			case R.id.menu_select:
-				selectAllOrNone();
-				return true;
 			case R.id.menu_download:
 				downloadBackground(false);
 				selectAll(false, false);
@@ -776,18 +773,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			download(append, false, !append, false, shuffle);
 			selectAll(false, false);
 		}
-	}
-
-	private void selectAllOrNone() {
-		boolean someUnselected = false;
-		int count = entryList.getCount();
-		for (int i = 0; i < count; i++) {
-			if (!entryList.isItemChecked(i) && entryList.getItemAtPosition(i) instanceof Entry) {
-				someUnselected = true;
-				break;
-			}
-		}
-		selectAll(someUnselected, true);
 	}
 
 	private void selectAll(boolean selected, boolean toast) {
