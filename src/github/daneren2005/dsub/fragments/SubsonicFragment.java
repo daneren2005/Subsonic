@@ -207,32 +207,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
 					}
-					
-					// If we are looking at a standard song view, get downloadFile to cache what options to show
-					AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-					if(info.targetView instanceof SongView) {
-						SongView songView = (SongView) info.targetView;
-						DownloadFile downloadFile = songView.getDownloadFile();
-						
-						try {
-							if(downloadFile != null) {
-								if(downloadFile.isWorkDone()) {
-									// Remove permanent cache menu if already perma cached
-									if(downloadFile.isSaved()) {
-										menu.removeItem(R.id.song_menu_pin);
-									}
-									
-									// Remove cache option no matter what if already downloaded
-									menu.removeItem(R.id.song_menu_download);
-								} else {
-									// Remove delete option if nothing to delete
-									menu.removeItem(R.id.song_menu_delete);
-								}
-							}
-						} catch(Exception e) {
-							Log.w(TAG, "Failed to lookup downloadFile info", e);
-						}
-					}
 				}
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else {
@@ -255,10 +229,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
-		hideMenuItems(menu);
+		hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
 	}
 
-	protected void hideMenuItems(ContextMenu menu) {
+	protected void hideMenuItems(ContextMenu menu, AdapterView.AdapterContextMenuInfo info) {
 		if(!ServerInfo.checkServerVersion(context, "1.8")) {
 			menu.setGroupVisible(R.id.server_1_8, false);
 			menu.setGroupVisible(R.id.hide_star, false);
@@ -285,6 +259,31 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
 			menu.setGroupVisible(R.id.hide_rating, false);
+		}
+
+		// If we are looking at a standard song view, get downloadFile to cache what options to show
+		if(info.targetView instanceof SongView) {
+			SongView songView = (SongView) info.targetView;
+			DownloadFile downloadFile = songView.getDownloadFile();
+
+			try {
+				if(downloadFile != null) {
+					if(downloadFile.isWorkDone()) {
+						// Remove permanent cache menu if already perma cached
+						if(downloadFile.isSaved()) {
+							menu.removeItem(R.id.song_menu_pin);
+						}
+
+						// Remove cache option no matter what if already downloaded
+						menu.removeItem(R.id.song_menu_download);
+					} else {
+						// Remove delete option if nothing to delete
+						menu.removeItem(R.id.song_menu_delete);
+					}
+				}
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to lookup downloadFile info", e);
+			}
 		}
 	}
 
