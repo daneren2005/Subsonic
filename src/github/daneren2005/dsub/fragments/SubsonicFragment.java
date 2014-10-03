@@ -110,6 +110,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean artist = false;
 	protected boolean artistOverride = false;
 	protected SwipeRefreshLayout refreshLayout;
+	protected boolean firstRun;
 	
 	public SubsonicFragment() {
 		super();
@@ -126,6 +127,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				title = name;
 			}
 		}
+		firstRun = true;
 	}
 
 	@Override
@@ -137,7 +139,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	@Override
 	public void onResume() {
 		super.onResume();
-		UpdateView.triggerUpdate();
+		if(firstRun) {
+			firstRun = false;
+		} else {
+			UpdateView.triggerUpdate();
+		}
 	}
 
 	@Override
