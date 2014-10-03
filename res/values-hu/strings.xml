@@ -78,7 +78,6 @@
 	<string name="menu.search">Keresés</string>
 	<string name="menu.shuffle">Lejátszás kevert sorrendben</string>
 	<string name="menu.refresh">Frissítés</string>
-	<string name="menu.select">Összes jelölése be/ki</string>
 	<string name="menu.play">Lejátszás</string>
 	<string name="menu.play_last">Sorbaállítás utolsónak</string>
     <string name="menu.exit">Kilépés</string>
