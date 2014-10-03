@@ -261,28 +261,52 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			menu.setGroupVisible(R.id.hide_rating, false);
 		}
 
-		// If we are looking at a standard song view, get downloadFile to cache what options to show
-		if(info.targetView instanceof SongView) {
-			SongView songView = (SongView) info.targetView;
-			DownloadFile downloadFile = songView.getDownloadFile();
-
-			try {
-				if(downloadFile != null) {
-					if(downloadFile.isWorkDone()) {
-						// Remove permanent cache menu if already perma cached
-						if(downloadFile.isSaved()) {
-							menu.removeItem(R.id.song_menu_pin);
+		if(!Util.isOffline(context)) {
+			// If we are looking at a standard song view, get downloadFile to cache what options to show
+			if(info.targetView instanceof SongView) {
+				SongView songView = (SongView) info.targetView;
+				DownloadFile downloadFile = songView.getDownloadFile();
+	
+				try {
+					if(downloadFile != null) {
+						if(downloadFile.isWorkDone()) {
+							// Remove permanent cache menu if already perma cached
+							if(downloadFile.isSaved()) {
+								menu.removeItem(R.id.song_menu_pin);
+							}
+	
+							// Remove cache option no matter what if already downloaded
+							menu.removeItem(R.id.song_menu_download);
+						} else {
+							// Remove delete option if nothing to delete
+							menu.removeItem(R.id.song_menu_delete);
 						}
-
-						// Remove cache option no matter what if already downloaded
-						menu.removeItem(R.id.song_menu_download);
-					} else {
-						// Remove delete option if nothing to delete
-						menu.removeItem(R.id.song_menu_delete);
 					}
+				} catch(Exception e) {
+					Log.w(TAG, "Failed to lookup downloadFile info", e);
 				}
-			} catch(Exception e) {
-				Log.w(TAG, "Failed to lookup downloadFile info", e);
+			}
+			// Apply similar logic to album views
+			else if(info.targetView instanceof AlbumCell || info.targetView instanceof AlbumView
+					|| info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
+				File folder;
+				if(info.targetView instanceof AlbumCell) {
+					folder = ((AlbumCell) info.targetView).getFile();
+				} else if(info.targetView instanceof AlbumView) {
+					folder = ((AlbumView) info.targetView).getFile();
+				} else if(info.targetView instanceof ArtistView) {
+					folder = ((ArtistView) info.targetView).getFile();
+				} else if(info.targetView instanceof ArtistEntryView) {
+					folder = ((ArtistEntryView) info.targetView).getFile();
+				}
+				
+				try {
+					if(!folder.exists()) {
+						menu.removeItem(R.id.album_menu_delete);
+					}
+				} catch(Exception e) {
+					Log.w(TAG, "Failed to lookup album directory info", e);
+				}
 			}
 		}
 	}
