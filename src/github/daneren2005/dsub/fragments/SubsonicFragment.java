@@ -290,19 +290,24 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			else if(info.targetView instanceof AlbumCell || info.targetView instanceof AlbumView
 					|| info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
 				File folder;
+				int id;
 				if(info.targetView instanceof AlbumCell) {
 					folder = ((AlbumCell) info.targetView).getFile();
+					id = R.id.album_menu_delete;
 				} else if(info.targetView instanceof AlbumView) {
 					folder = ((AlbumView) info.targetView).getFile();
+					id = R.id.album_menu_delete;
 				} else if(info.targetView instanceof ArtistView) {
 					folder = ((ArtistView) info.targetView).getFile();
+					id = R.id.artist_menu_delete;
 				} else if(info.targetView instanceof ArtistEntryView) {
 					folder = ((ArtistEntryView) info.targetView).getFile();
+					id = R.id.artist_menu_delete;
 				}
 				
 				try {
 					if(!folder.exists()) {
-						menu.removeItem(R.id.album_menu_delete);
+						menu.removeItem(id);
 					}
 				} catch(Exception e) {
 					Log.w(TAG, "Failed to lookup album directory info", e);
