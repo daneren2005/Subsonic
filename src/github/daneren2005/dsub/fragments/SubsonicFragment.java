@@ -40,6 +40,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -169,7 +170,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo, Object selected) {
 		MenuInflater inflater = context.getMenuInflater();
-		
+
 		if(selected instanceof Entry) {
 			Entry entry = (Entry) selected;
 			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
@@ -208,8 +209,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					}
 					
 					// If we are looking at a standard song view, get downloadFile to cache what options to show
-					if(view instanceof SongView) {
-						SongView songView = (SongView) view;
+					AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+					if(info.targetView instanceof SongView) {
+						SongView songView = (SongView) info.targetView;
 						DownloadFile downloadFile = songView.getDownloadFile();
 						
 						try {
@@ -224,7 +226,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 									menu.removeItem(R.id.song_menu_download);
 								} else {
 									// Remove delete option if nothing to delete
-									menu.removeItem(R.id.menu_delete);
+									menu.removeItem(R.id.song_menu_delete);
 								}
 							}
 						} catch(Exception e) {
