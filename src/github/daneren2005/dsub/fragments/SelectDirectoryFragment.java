@@ -258,9 +258,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			case R.id.menu_shuffle:
 				playNow(true, false);
 				return true;
-			case R.id.menu_select:
-				selectAllOrNone();
-				return true;
 			case R.id.menu_download:
 				downloadBackground(false);
 				selectAll(false, false);
@@ -777,18 +774,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 	}
 
-	private void selectAllOrNone() {
-		boolean someUnselected = false;
-		int count = entryList.getCount();
-		for (int i = 0; i < count; i++) {
-			if (!entryList.isItemChecked(i) && entryList.getItemAtPosition(i) instanceof Entry) {
-				someUnselected = true;
-				break;
-			}
-		}
-		selectAll(someUnselected, true);
-	}
-
 	private void selectAll(boolean selected, boolean toast) {
 		int count = entryList.getCount();
 		int selectedCount = 0;
@@ -1186,12 +1171,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					return;
 				}
 
-				AlertDialog.Builder imageDialog = new AlertDialog.Builder(context);
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				ImageView fullScreenView = new ImageView(context);
 				imageLoader.loadImage(fullScreenView, albumRep, true, true);
-				imageDialog.setView(fullScreenView);
-				imageDialog.setCancelable(true);
-				imageDialog.create();
+				builder.setCancelable(true);
+				
+				AlertDialog imageDialog = builder.create();
+				// Set view here with unecessary 0's to remove top/bottom border
+				imageDialog.setView(fullScreenView, 0, 0, 0, 0);
 				imageDialog.show();
 			}
 		});

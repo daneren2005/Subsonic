@@ -75,7 +75,6 @@
 	<string name="menu.search">Buscar</string>
 	<string name="menu.shuffle">Aleatorio</string>
 	<string name="menu.refresh">Actualizar</string>
-	<string name="menu.select">Seleccionar todo</string>
 	<string name="menu.play">Reproducir</string>
 	<string name="menu.play_last">Reproducir al final</string>
     <string name="menu.exit">Salir</string>

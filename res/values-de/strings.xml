@@ -78,7 +78,6 @@
 	<string name="menu.search">Suche</string>
 	<string name="menu.shuffle">Zufall</string>
 	<string name="menu.refresh">Aktualisieren</string>
-	<string name="menu.select">Wähle Alle</string>
 	<string name="menu.play">Abspielen</string>
 	<string name="menu.play_last">Ans Ende der Wiedergabeliste</string>
     <string name="menu.exit">Beenden</string>

@@ -40,6 +40,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -74,6 +75,7 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.PlaylistSongView;
+import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
@@ -168,7 +170,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo, Object selected) {
 		MenuInflater inflater = context.getMenuInflater();
-		
+
 		if(selected instanceof Entry) {
 			Entry entry = (Entry) selected;
 			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
@@ -227,10 +229,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
-		hideMenuItems(menu);
+		hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
 	}
 
-	protected void hideMenuItems(ContextMenu menu) {
+	protected void hideMenuItems(ContextMenu menu, AdapterView.AdapterContextMenuInfo info) {
 		if(!ServerInfo.checkServerVersion(context, "1.8")) {
 			menu.setGroupVisible(R.id.server_1_8, false);
 			menu.setGroupVisible(R.id.hide_star, false);
@@ -257,6 +259,31 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
 			menu.setGroupVisible(R.id.hide_rating, false);
+		}
+
+		// If we are looking at a standard song view, get downloadFile to cache what options to show
+		if(info.targetView instanceof SongView) {
+			SongView songView = (SongView) info.targetView;
+			DownloadFile downloadFile = songView.getDownloadFile();
+
+			try {
+				if(downloadFile != null) {
+					if(downloadFile.isWorkDone()) {
+						// Remove permanent cache menu if already perma cached
+						if(downloadFile.isSaved()) {
+							menu.removeItem(R.id.song_menu_pin);
+						}
+
+						// Remove cache option no matter what if already downloaded
+						menu.removeItem(R.id.song_menu_download);
+					} else {
+						// Remove delete option if nothing to delete
+						menu.removeItem(R.id.song_menu_delete);
+					}
+				}
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to lookup downloadFile info", e);
+			}
 		}
 	}
 
