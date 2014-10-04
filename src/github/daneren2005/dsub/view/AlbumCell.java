@@ -101,4 +101,8 @@ public class AlbumCell  extends UpdateView {
 	public MusicDirectory.Entry getEntry() {
 		return album;
 	}
+
+	public File getFile() {
+		return file;
+	}
 }

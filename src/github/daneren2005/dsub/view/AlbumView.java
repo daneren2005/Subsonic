@@ -100,4 +100,8 @@ public class AlbumView extends UpdateView {
 	public MusicDirectory.Entry getEntry() {
 		return album;
 	}
+
+	public File getFile() {
+		return file;
+	}
 }

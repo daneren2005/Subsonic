@@ -71,4 +71,8 @@ public class ArtistView extends UpdateView {
 		exists = file.exists();
 		isStarred = artist.isStarred();
 	}
+
+	public File getFile() {
+		return file;
+	}
 }

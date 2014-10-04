@@ -74,6 +74,10 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.AlbumCell;
+import github.daneren2005.dsub.view.AlbumView;
+import github.daneren2005.dsub.view.ArtistEntryView;
+import github.daneren2005.dsub.view.ArtistView;
 import github.daneren2005.dsub.view.PlaylistSongView;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
@@ -289,8 +293,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			// Apply similar logic to album views
 			else if(info.targetView instanceof AlbumCell || info.targetView instanceof AlbumView
 					|| info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
-				File folder;
-				int id;
+				File folder = null;
+				int id = 0;
 				if(info.targetView instanceof AlbumCell) {
 					folder = ((AlbumCell) info.targetView).getFile();
 					id = R.id.album_menu_delete;
@@ -306,7 +310,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 				
 				try {
-					if(!folder.exists()) {
+					if(folder != null && !folder.exists()) {
 						menu.removeItem(id);
 					}
 				} catch(Exception e) {
