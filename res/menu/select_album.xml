@@ -20,4 +20,16 @@
 	<item
 		android:id="@+id/menu_show_all"
 		android:title="@string/menu.show_all"/>
+
+	<item
+		android:id="@+id/menu_download"
+		android:title="@string/common.download"/>
+
+	<item
+		android:id="@+id/menu_cache"
+		android:title="@string/common.pin"/>
+
+	<item
+		android:id="@+id/menu_delete"
+		android:title="@string/menu.delete_cache"/>
 </menu>

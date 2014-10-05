@@ -895,10 +895,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private void downloadBackground(final boolean save) {
 		List<Entry> songs = getSelectedSongs();
 		if(songs.isEmpty()) {
-			selectAll(true, false);
-			songs = getSelectedSongs();
+			// Get both songs and albums
+			downloadRecursively(id, save, false, false, false, true);
+		} else {
+			downloadBackground(save, songs);
 		}
-		downloadBackground(save, songs);
 	}
 	private void downloadBackground(final boolean save, final List<Entry> songs) {
 		if (getDownloadService() == null) {
@@ -927,6 +928,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		if(songs.isEmpty()) {
 			selectAll(true, false);
 			songs = getSelectedSongs();
+
+			// Also delete all directories
+			for(Entry album: albums) {
+				deleteRecursively(album);
+			}
 		}
 		if (getDownloadService() != null) {
 			getDownloadService().delete(songs);
