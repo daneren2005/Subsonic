@@ -495,7 +495,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 
 	protected void exit() {
-		if(this.getClass() != SubsonicFragmentActivity.class) {
+		if(((Object) this).getClass() != SubsonicFragmentActivity.class) {
 			Intent intent = new Intent(this, SubsonicFragmentActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
@@ -656,7 +656,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 
 	protected void restart() {
-		Intent intent = new Intent(this, this.getClass());
+		Intent intent = new Intent(this, ((Object) this).getClass());
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtras(getIntent());
 		Util.startActivityWithoutTransition(this, intent);

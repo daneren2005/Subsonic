@@ -524,7 +524,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void exit() {
-		if(context.getClass() != SubsonicFragmentActivity.class) {
+		if(((Object) context).getClass() != SubsonicFragmentActivity.class) {
 			Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
