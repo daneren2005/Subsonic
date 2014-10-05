@@ -39,6 +39,10 @@ import android.preference.PreferenceScreen;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.service.DownloadService;
@@ -55,6 +59,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.security.acl.Group;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -87,6 +92,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private Preference replayGainBump;
 	private Preference replayGainUntagged;
 	private String internalSSID;
+	private String internalSSIDDisplay;
 	
 	private int serverCount = 3;
 	private SharedPreferences settings;
@@ -102,7 +108,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		if(internalSSID == null) {
 			internalSSID = "";
 		}
-		internalSSID = this.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
+		internalSSIDDisplay = this.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
 
         theme = (ListPreference) findPreference(Constants.PREFERENCES_KEY_THEME);
         maxBitrateWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
@@ -372,11 +378,26 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverUrlPreference.setSummary(serverUrlPreference.getText());
 		screen.setSummary(serverUrlPreference.getText());
 		
-		final EditTextPreference serverLocalNetworkSSIDPreference = new EditTextPreference(this);
+		final EditTextPreference serverLocalNetworkSSIDPreference = new EditTextPreference(this) {
+			@Override
+			protected void onAddEditTextToDialogView(View dialogView, final EditText editText) {
+				super.onAddEditTextToDialogView(dialogView, editText);
+				ViewGroup root = (ViewGroup) ((ViewGroup) dialogView).getChildAt(0);
+
+				Button defaultButton = new Button(getContext());
+				defaultButton.setText(internalSSIDDisplay);
+				defaultButton.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						editText.setText(internalSSID);
+					}
+				});
+				root.addView(defaultButton);
+			}
+		};
 		serverLocalNetworkSSIDPreference.setKey(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
 		serverLocalNetworkSSIDPreference.setTitle(R.string.settings_server_local_network_ssid);
 		serverLocalNetworkSSIDPreference.setDialogTitle(R.string.settings_server_local_network_ssid);
-		serverLocalNetworkSSIDPreference.setDialogMessage(internalSSID);
 
 		final EditTextPreference serverInternalUrlPreference = new EditTextPreference(this);
 		serverInternalUrlPreference.setKey(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
