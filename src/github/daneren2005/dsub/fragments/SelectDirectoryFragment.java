@@ -133,6 +133,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			artist = args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false);
 			lookupEntry = args.getString(Constants.INTENT_EXTRA_SEARCH_SONG);
 			topTracks = args.getBoolean(Constants.INTENT_EXTRA_TOP_TRACKS);
+			showAll = args.getBoolean(Constants.INTENT_EXTRA_SHOW_ALL);
 
 			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);
 			if(childId != null) {
@@ -289,8 +290,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				downloadAllPodcastEpisodes();
 				return true;
 			case R.id.menu_show_all:
-				showAll = true;
-				refresh(true);
+				setShowAll();
 				return true;
 			case R.id.menu_unstar:
 				unstarSelected();
@@ -1178,6 +1178,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		replaceFragment(fragment, true);
 	}
 
+	private void setShowAll() {
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle(getArguments());
+		args.putBoolean(Constants.INTENT_EXTRA_SHOW_ALL, true);
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, true);
+	}
+
 	private View createHeader(List<Entry> entries) {
 		View header = entryList.findViewById(R.id.select_album_header);
 		boolean add = false;
@@ -1273,6 +1282,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			});
 		} else if(topTracks) {
 			artistView.setText(R.string.menu_top_tracks);
+			artistView.setVisibility(View.VISIBLE);
+		} else if(showAll) {
+			artistView.setText(R.string.menu_show_all);
 			artistView.setVisibility(View.VISIBLE);
 		} else if (artists.size() == 1) {
 			String artistText = artists.iterator().next();
