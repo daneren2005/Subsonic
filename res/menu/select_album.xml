@@ -14,6 +14,10 @@
 		compat:showAsAction="ifRoom|withText"/>
 
 	<item
+		android:id="@+id/menu_top_tracks"
+		android:title="@string/menu.top_tracks"/>
+
+	<item
 		android:id="@+id/menu_show_all"
 		android:title="@string/menu.show_all"/>
 </menu>

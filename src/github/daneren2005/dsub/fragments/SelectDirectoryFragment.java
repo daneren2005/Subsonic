@@ -87,6 +87,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	boolean restoredInstance = false;
 	boolean lookupParent = false;
 	boolean largeAlbums = false;
+	boolean topTracks = false;
 	String lookupEntry;
 	
 	public SelectDirectoryFragment() {
@@ -131,6 +132,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			refreshListing = args.getBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS);
 			artist = args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false);
 			lookupEntry = args.getString(Constants.INTENT_EXTRA_SEARCH_SONG);
+			topTracks = args.getBoolean(Constants.INTENT_EXTRA_TOP_TRACKS);
 
 			String childId = args.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID);
 			if(childId != null) {
@@ -203,6 +205,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				menuInflater.inflate(R.menu.empty, menu);
 			} else {
 				menuInflater.inflate(R.menu.select_album, menu);
+
+				if(!ServerInfo.isMadsonic(context)) {
+					menu.removeItem(R.id.menu_top_tracks);
+				}
 			}
 		} else {
 			if(podcastId == null) {
@@ -288,6 +294,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				return true;
 			case R.id.menu_unstar:
 				unstarSelected();
+				return true;
+			case R.id.menu_top_tracks:
+				showTopTracks();
 				return true;
 		}
 
@@ -452,6 +461,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		} else {
 			if(showAll) {
 				getRecursiveMusicDirectory(id, name, refresh);
+			} else if(topTracks) {
+				getTopTracks(id, name, refresh);
 			} else {
 				getMusicDirectory(id, name, refresh);
 			}
@@ -553,6 +564,17 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return share.getMusicDirectory();
+			}
+		}.execute();
+	}
+
+	private void getTopTracks(final String id, final String name, final boolean refresh) {
+		setTitle(name);
+
+		new LoadTask() {
+			@Override
+			protected MusicDirectory load(MusicService service) throws Exception {
+				return service.getTopTrackSongs(name, 20, context, this);
 			}
 		}.execute();
 	}
@@ -1147,6 +1169,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		builder.create().show();
 	}
 
+	private void showTopTracks() {
+		SubsonicFragment fragment = new SelectDirectoryFragment();
+		Bundle args = new Bundle(getArguments());
+		args.putBoolean(Constants.INTENT_EXTRA_TOP_TRACKS, true);
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, true);
+	}
+
 	private View createHeader(List<Entry> entries) {
 		View header = entryList.findViewById(R.id.select_album_header);
 		boolean add = false;
@@ -1240,6 +1271,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					}
 				}
 			});
+		} else if(topTracks) {
+			artistView.setText(R.string.menu_top_tracks);
+			artistView.setVisibility(View.VISIBLE);
 		} else if (artists.size() == 1) {
 			String artistText = artists.iterator().next();
 			if(years.size() == 1) {

@@ -63,6 +63,7 @@ public final class Constants {
 	public static final String INTENT_EXTRA_FRAGMENT_TYPE = "fragmentType";
 	public static final String INTENT_EXTRA_REFRESH_LISTINGS = "refreshListings";
 	public static final String INTENT_EXTRA_SEARCH_SONG = "searchSong";
+	public static final String INTENT_EXTRA_TOP_TRACKS = "topTracks";
 
     // Preferences keys.
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";

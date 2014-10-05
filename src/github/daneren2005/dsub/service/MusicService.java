@@ -137,6 +137,8 @@ public interface MusicService {
 	List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 	
 	MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;
+
+	MusicDirectory getTopTrackSongs(String artist, int size, Context context, ProgressListener progressListener) throws Exception;
 	
 	List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 	

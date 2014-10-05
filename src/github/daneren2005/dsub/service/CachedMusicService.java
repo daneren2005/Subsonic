@@ -626,7 +626,12 @@ public class CachedMusicService implements MusicService {
 	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getSongsByGenre(genre, count, offset, context, progressListener);
 	}
-	
+
+	@Override
+	public MusicDirectory getTopTrackSongs(String artist, int size, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getTopTrackSongs(artist, size, context, progressListener);
+	}
+
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkSettingsChanged(context);
