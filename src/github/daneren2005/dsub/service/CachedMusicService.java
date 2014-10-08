@@ -157,13 +157,31 @@ public class CachedMusicService implements MusicService {
     public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
 
+		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
 		if(!refresh) {
-			dir = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
+			dir = cached;
 		}
 
 		if(dir == null) {
 			dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
 			FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
+			
+			// If a cached copy exists to check against, look for removes
+			if(cached != null) {
+				List<Entry> oldList = new ArrayList<Entry>();
+				oldList.addAll(cached.getChildren());
+				
+				// Remove all current items from old list
+				for(Entry entry: dir.getChildren()) {
+					oldList.remove(entry);
+				}
+				
+				// Anything remaining has been removed from server
+				MediaStoreService store = new MediaStoreService(context);
+				for(Entry entry: oldList) {
+					Util.recursiveDelete(entry, store);
+				}
+			}
 		}
 
 		return dir;
