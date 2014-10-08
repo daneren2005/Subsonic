@@ -479,6 +479,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 				if(lookupParent && dir.getParent() != null) {
 					dir = getMusicDirectory(dir.getParent(), name, refresh, service, this);
+
+					// Update the fragment pointers so other stuff works correctly
+					SelectDirectoryFragment.this.id = dir.getId();
+					SelectDirectoryFragment.this.name = dir.getName();
 				}
 
 				return dir;
