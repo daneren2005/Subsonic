@@ -1987,8 +1987,6 @@ public class DownloadService extends Service {
 						if(matched >= REQUIRED_ALBUM_MATCHES) {
 							singleAlbum = true;
 						}
-
-						Log.d(TAG, "Single album: " + singleAlbum);
 					}
 				}
 				// 2 => Use album tags
