@@ -1956,7 +1956,7 @@ public class DownloadService extends Service {
 			if (prefs.getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
 				boolean singleAlbum = false;
 				
-				String replayGainType = prefs.getString(Constants.PREFERENCE_KEY_REPLAY_GAIN_TYPE, "1");
+				String replayGainType = prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE, "1");
 				// 1 => Smart replay gain
 				if("1".equals(replayGainType)) {
 					// Check if part of at least <REQUIRED_ALBUM_MATCHES> consequetive songs of the same album
@@ -1987,6 +1987,8 @@ public class DownloadService extends Service {
 						if(matched >= REQUIRED_ALBUM_MATCHES) {
 							singleAlbum = true;
 						}
+
+						Log.d(TAG, "Single album: " + singleAlbum);
 					}
 				}
 				// 2 => Use album tags

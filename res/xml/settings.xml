@@ -369,6 +369,13 @@
 				android:key="replayGain"
 				android:defaultValue="false"/>
 
+			<ListPreference
+				android:title="@string/settings.replay_gain_type"
+				android:key="replayGainType"
+				android:defaultValue="1"
+				android:entryValues="@array/replayGainTypeValues"
+				android:entries="@array/replayGainTypeNames"/>
+
 			<github.daneren2005.dsub.view.SeekBarPreference
 				android:key="replayGainBump2"
 				android:dialogLayout="@layout/seekbar_preference"

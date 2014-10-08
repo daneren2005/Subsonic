@@ -89,6 +89,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private CheckBoxPreference syncStarred;
 	private CheckBoxPreference syncMostRecent;
 	private CheckBoxPreference replayGain;
+	private ListPreference replayGainType;
 	private Preference replayGainBump;
 	private Preference replayGainUntagged;
 	private String internalSSID;
@@ -131,6 +132,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		syncStarred = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
 		syncMostRecent = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
 		replayGain = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
+		replayGainType = (ListPreference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE);
 		replayGainBump = (Preference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
 		replayGainUntagged = (Preference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
 		
@@ -335,12 +337,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 			}
 		}
 		if(replayGain.isChecked()) {
+			replayGainType.setEnabled(true);
 			replayGainBump.setEnabled(true);
 			replayGainUntagged.setEnabled(true);
 		} else {
+			replayGainType.setEnabled(false);
 			replayGainBump.setEnabled(false);
 			replayGainUntagged.setEnabled(false);
 		}
+		replayGainType.setSummary(replayGainType.getEntry());
 
         for (ServerSettings ss : serverSettings.values()) {
             ss.update();

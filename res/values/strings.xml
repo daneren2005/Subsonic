@@ -431,6 +431,10 @@
 	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
 	<string name="settings.replay_gain">Replay Gain</string>
 	<string name="settings.replay_gain_summary">Whether or not to scale playback volume by track and album replay gain tags</string>
+	<string name="settings.replay_gain_type">Read from tags</string>
+	<string name="settings.replay_gain_type.smart">Smart detection</string>
+	<string name="settings.replay_gain_type.album">Album tags</string>
+	<string name="settings.replay_gain_type.track">Track tags</string>
 	<string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
 	<string name="settings.replay_gain_untagged">Songs without Replay Gain</string>
 
