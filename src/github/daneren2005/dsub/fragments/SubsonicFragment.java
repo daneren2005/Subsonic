@@ -102,7 +102,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	private int tag;
 	
 	protected SubsonicActivity context;
-	protected CharSequence title = "DSub";
+	protected CharSequence title = null;
 	protected CharSequence subtitle = null;
 	protected View rootView;
 	protected boolean primaryFragment = false;
@@ -114,6 +114,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean artist = false;
 	protected boolean artistOverride = false;
 	protected SwipeRefreshLayout refreshLayout;
+	protected boolean firstRun;
 	
 	public SubsonicFragment() {
 		super();
@@ -130,6 +131,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				title = name;
 			}
 		}
+		firstRun = true;
 	}
 
 	@Override
@@ -141,7 +143,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	@Override
 	public void onResume() {
 		super.onResume();
-		UpdateView.triggerUpdate();
+		if(firstRun) {
+			firstRun = false;
+		} else {
+			UpdateView.triggerUpdate();
+		}
 	}
 
 	@Override
@@ -480,7 +486,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void setPrimaryFragment(boolean primary) {
 		primaryFragment = primary;
 		if(primary) {
-			if(context != null) {
+			if(context != null && title != null) {
 				context.setTitle(title);
 				context.setSubtitle(subtitle);
 			}
