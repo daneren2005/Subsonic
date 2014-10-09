@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.8" versioncode="127" releasedate="10/8/2014">
+		<change>ReplayGain: read tags to normalize sound</change>
+		<change>ReplayGain: choose smart tag reading or specify track/album tags</change>
+		<change>Scrobbling: implemented according to Last.FM standard</change>
+		<change>Scrobbling: scrobble if more then 4 minutes or 50% in</change>
+		<change>Scrobbling: do not scrobble if less then 30 seconds</change>
+		<change>Madsonic: view artists Top Tracks from Last.FM (Madsonic 5.1+)</change>
+		<change>Settings: changed a few to be seek bars</change>
+		<change>Tasker: fix issue with not always starting</change>
+		<change>Artist view: add recursive cache/delete menu options</change>
+		<change>SSID Settings: added copy current button</change>
+		<change>Conditionally remove Cache/Delete Cache from context menus</change>
+		<change>Added transition animations</change>
+		<change>Fix crash when casting on GB</change>
+		<change>Fix widget showing blank on restart</change>
+		<change>Fix Show all media</change>
+		<change>Various bug fixes</change>
+	</release>
 	<release version="4.7.8" versioncode="126" releasedate="9/17/2014">
 		<change>Rating: show rating directly on albums</change>
 		<change>Albums: rate/star from album's screen</change>
