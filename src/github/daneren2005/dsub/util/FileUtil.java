@@ -105,6 +105,14 @@ public class FileUtil {
 		
 		return null;
 	}
+	
+	public static File getEntryFile(Context context, MusicDirectory.Entry entry) {
+		if(entry.isDirectory()) {
+			return getAlbumDirectory(context, entry);
+		} else {
+			return getSongFile(context, entry);
+		}
+	}
 
     public static File getSongFile(Context context, MusicDirectory.Entry song) {
         File dir = getAlbumDirectory(context, song);
