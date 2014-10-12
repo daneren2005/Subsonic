@@ -380,7 +380,7 @@
 				android:key="replayGainBump2"
 				android:dialogLayout="@layout/seekbar_preference"
 				android:title="@string/settings.replay_gain_bump"
-				android:defaultValue="75"
+				android:defaultValue="150"
 				myns:max="150"
 				myns:min="-150"
 				myns:stepSize="10"
