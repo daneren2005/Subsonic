@@ -156,7 +156,6 @@ public class CachedMusicService implements MusicService {
     @Override
     public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
-
 		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
 		if(!refresh) {
 			dir = cached;
@@ -167,22 +166,7 @@ public class CachedMusicService implements MusicService {
 			FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
 			
 			// If a cached copy exists to check against, look for removes
-			if(cached != null) {
-				List<Entry> oldList = new ArrayList<Entry>();
-				oldList.addAll(cached.getChildren());
-				
-				// Remove all current items from old list
-				for(Entry entry: dir.getChildren()) {
-					oldList.remove(entry);
-				}
-				
-				// Anything remaining has been removed from server
-				MediaStoreService store = new MediaStoreService(context);
-				for(Entry entry: oldList) {
-					File file = FileUtil.getEntryFile(context, entry);
-					Util.recursiveDelete(file, store);
-				}
-			}
+			deleteRemovedEntries(context, dir, cached);
 		}
 
 		return dir;
@@ -191,14 +175,17 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
-
+		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
 		if(!refresh) {
-			dir = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
+			dir = cached;
 		}
 
 		if(dir == null) {
 			dir = musicService.getArtist(id, name, refresh, context, progressListener);
 			FileUtil.serialize(context, dir, getCacheName(context, "artist", id));
+
+			// If a cached copy exists to check against, look for removes
+			deleteRemovedEntries(context, dir, cached);
 		}
 
 		return dir;
@@ -207,14 +194,17 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
-
+		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
 		if(!refresh) {
-			dir = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
+			dir = cached;
 		}
 
 		if(dir == null) {
 			dir = musicService.getAlbum(id, name, refresh, context, progressListener);
 			FileUtil.serialize(context, dir, getCacheName(context, "album", id));
+
+			// If a cached copy exists to check against, look for removes
+			deleteRemovedEntries(context, dir, cached);
 		}
 
 		return dir;
@@ -918,6 +908,25 @@ public class CachedMusicService implements MusicService {
   		String s = musicService.getRestUrl(context, null, false);
   		return name + "-" + s.hashCode() + ".ser";
   	}
+
+	private void deleteRemovedEntries(Context context, MusicDirectory dir, MusicDirectory cached) {
+		if(cached != null) {
+			List<Entry> oldList = new ArrayList<Entry>();
+			oldList.addAll(cached.getChildren());
+
+			// Remove all current items from old list
+			for(Entry entry: dir.getChildren()) {
+				oldList.remove(entry);
+			}
+
+			// Anything remaining has been removed from server
+			MediaStoreService store = new MediaStoreService(context);
+			for(Entry entry: oldList) {
+				File file = FileUtil.getEntryFile(context, entry);
+				Util.recursiveDelete(file, store);
+			}
+		}
+	}
   	
   	private abstract class SerializeUpdater<T> {
   		final Context context;
