@@ -17,7 +17,7 @@
  
 package github.daneren2005.dsub.util.tags;
 
-import android.util.LruCache;
+import android.support.v4.util.LruCache;
 import java.util.HashMap;
 import java.util.Vector;
 
