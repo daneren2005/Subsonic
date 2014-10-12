@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.8.1" versioncode="128" releasedate="10/12/2014">
+		<change>Delete songs removed from server</change>
+		<change>Fix crash on GB devices</change>
+	</release>
 	<release version="4.8" versioncode="127" releasedate="10/8/2014">
 		<change>ReplayGain: read tags to normalize sound</change>
 		<change>ReplayGain: choose smart tag reading or specify track/album tags</change>
