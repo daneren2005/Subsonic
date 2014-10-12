@@ -584,6 +584,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 			
 			// Add fragment to the right container
+			trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
 			trans.add(R.id.fragment_second_container, fragment, tag + "");
 			
 			// Commit it all
@@ -611,12 +612,12 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
 			
 			// Remove old right fragment
-			// trans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
+			trans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
 			trans.remove(oldFrag);
 
 			// Only switch places if there is a backstack, otherwise primary container is correct
 			if(backStack.size() > 0) {
-				// trans.setCustomAnimations(0, 0, 0, 0);
+				trans.setCustomAnimations(0, 0, 0, 0);
 				// Add current left fragment to right side
 				trans.remove(currentFragment);
 
@@ -632,7 +633,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				newLeftFragment.setSecondaryFragment(true);
 				trans.show(newLeftFragment);
 			} else {
-				// secondaryContainer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.exit_to_right));
+				secondaryContainer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.exit_to_right));
 				secondaryContainer.setVisibility(View.GONE);
 			}
 			
@@ -655,7 +656,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	
 	protected void recreateSpinner() {
-		if(currentFragment.getTitle() == null) {
+		if(currentFragment == null || currentFragment.getTitle() == null) {
 			return;
 		}
 
