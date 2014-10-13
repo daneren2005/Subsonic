@@ -22,13 +22,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.util.Constants;
 
 public class EditPlayActionActivity extends SubsonicActivity {
-	private CheckBox checkBox;
+	private CheckBox shuffleCheckbox;
+	private Spinner offlineSpinner;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,10 +39,15 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		setTitle(R.string.tasker_start_playing_title);
 		setContentView(R.layout.edit_play_action);
 
-		checkBox = (CheckBox) findViewById(R.id.edit_shuffle_checkbox);
+		shuffleCheckbox = (CheckBox) findViewById(R.id.edit_shuffle_checkbox);
 		if(getIntent().getBundleExtra(Constants.TASKER_EXTRA_BUNDLE) != null && getIntent().getBundleExtra(Constants.TASKER_EXTRA_BUNDLE).getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE)) {
-			checkBox.setChecked(true);
+			shuffleCheckbox.setChecked(true);
 		}
+
+		offlineSpinner = (Spinner) findViewById(R.id.edit_offline_spinner);
+		ArrayAdapter<CharSequence> offlineAdapter = ArrayAdapter.createFromResource(this, R.array.editServerOptions, android.R.layout.simple_spinner_item);
+		offlineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		offlineSpinner.setAdapter(offlineAdapter);
 
 		drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 	}
@@ -70,11 +78,11 @@ public class EditPlayActionActivity extends SubsonicActivity {
 	private void accept() {
 		Intent intent = new Intent();
 
-		String blurb = getResources().getString(checkBox.isChecked() ? R.string.tasker_start_playing_shuffled : R.string.tasker_start_playing);
+		String blurb = getResources().getString(shuffleCheckbox.isChecked() ? R.string.tasker_start_playing_shuffled : R.string.tasker_start_playing);
 		intent.putExtra("com.twofortyfouram.locale.intent.extra.BLURB", blurb);
 
 		Bundle data = new Bundle();
-		data.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, checkBox.isChecked());
+		data.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, shuffleCheckbox.isChecked());
 		intent.putExtra(Constants.TASKER_EXTRA_BUNDLE, data);
 
 		setResult(Activity.RESULT_OK, intent);

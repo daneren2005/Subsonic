@@ -559,6 +559,8 @@
 	<string name="tasker.start_playing_shuffled">Start playing in Shuffle Mode</string>
 	<string name="tasker.start_playing_title">Tasker -> Start DSub</string>
 	<string name="tasker.edit_shuffle_mode">Start in shuffle mode: </string>
+	<string name="tasker.edit_server_offline">Toggle offline: </string>
+	<string name="tasker.edit_do_nothing">Do Nothing</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>
