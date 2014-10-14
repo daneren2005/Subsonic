@@ -264,7 +264,7 @@ public class MainFragment extends SubsonicFragment {
 			// Clear out recently added count when viewing
 			if("newest".equals(type)) {
 				SharedPreferences.Editor editor = Util.getPreferences(context).edit();
-				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT, 0);
+				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
 				editor.commit();
 				
 				// Clear immediately so doesn't still show when pressing back
@@ -467,7 +467,7 @@ public class MainFragment extends SubsonicFragment {
 	private void getMostRecentCount() {
 		// Use stashed value until after refresh occurs
 		SharedPreferences prefs = Util.getPreferences(context);
-		final int startCount = prefs.getInt(Constants.PREFERENCES_KEY_RECENT_COUNT, 0);
+		final int startCount = prefs.getInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
 		setMostRecentCount(startCount);
 		
 		new SilentBackgroundTask<Integer>(context) {
@@ -506,7 +506,7 @@ public class MainFragment extends SubsonicFragment {
 					// Add the old count which will get cleared out after viewing recents
 					count += startCount;
 					SharedPreferences.Editor editor = Util.getPreferences(context).edit();
-					editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT, count);
+					editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), count);
 					editor.commit();
 					
 					return count;
