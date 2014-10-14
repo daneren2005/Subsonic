@@ -1178,6 +1178,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	public void displaySongInfo(final Entry song) {
+		Integer duration = null;
 		Integer bitrate = null;
 		String format = null;
 		long size = 0;
@@ -1188,10 +1189,21 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if(file.exists()) {
 					MediaMetadataRetriever metadata = new MediaMetadataRetriever();
 					metadata.setDataSource(file.getAbsolutePath());
-					String tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-					bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
+					
+					String tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+					duration = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
 					format = FileUtil.getExtension(file.getName());
 					size = file.length();
+					
+					// If no duration try to read bitrate tag
+					if(duration == null) {
+						tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+						bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
+					} else {
+						// Otherwise do a calculation for it
+						// Divide by 1000 so in kbps
+						bitrate = (size / duration) / 1000;
+					}
 	
 					if(Util.isOffline(context)) {
 						song.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
