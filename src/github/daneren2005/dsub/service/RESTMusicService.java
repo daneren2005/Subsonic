@@ -636,6 +636,12 @@ public class RESTMusicService implements MusicService {
                 }
 
                 byte[] bytes = Util.toByteArray(in);
+                
+				// Handle case where partial was downloaded before being cancelled
+				if(task != null && task.isCancelled()) {
+					return null;
+				}
+                
 				OutputStream out = null;
 				try {
 					out = new FileOutputStream(FileUtil.getAlbumArtFile(context, entry));
@@ -1351,6 +1357,11 @@ public class RESTMusicService implements MusicService {
 				}
 
 				byte[] bytes = Util.toByteArray(in);
+				if(task != null && task.isCancelled()) {
+					// Handle case where partial is downloaded and cancelled
+					return null;
+				}
+				
 				OutputStream out = null;
 				try {
 					out = new FileOutputStream(FileUtil.getAvatarFile(context, username));
