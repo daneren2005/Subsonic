@@ -428,12 +428,20 @@ public class OfflineMusicService implements MusicService {
 	    	if(!"#EXTM3U".equals(line)) return playlist;
 			
 			while( (line = buffer.readLine()) != null ){
+				// No matter what, end file can't have .complete in it
+				line = line.replace(".complete", "");
 				File entryFile = new File(line);
-				if(!entryFile.exists()) {
-					entryFile = new File(line.replace(".complete", ""));
+				
+				// Don't add file to playlist if it doesn't exist as cached or pinned!
+				File checkFile = entryFile;
+				if(!checkFile.exists()) {
+					// If normal file doens't exist, check if .complete version does
+					checkFile = new File(entryFile.getParent(), FileUtil.getBaseName(entryFile.getName())
+						+ ".complete" + FileUtil.getExtension(entryFile.getName()));
 				}
+				
 				String entryName = getName(entryFile);
-				if(entryFile.exists() && entryName != null){
+				if(checkFile.exists() && entryName != null){
 					playlist.addChild(createEntry(context, entryFile, entryName, false));
 				}
 			}
