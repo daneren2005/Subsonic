@@ -1202,7 +1202,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					} else {
 						// Otherwise do a calculation for it
 						// Divide by 1000 so in kbps
-						bitrate = (size / duration) / 1000;
+						bitrate = (int) (size / duration) / 1000 * 8;
 					}
 	
 					if(Util.isOffline(context)) {
