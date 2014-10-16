@@ -437,7 +437,7 @@ public class OfflineMusicService implements MusicService {
 				if(!checkFile.exists()) {
 					// If normal file doens't exist, check if .complete version does
 					checkFile = new File(entryFile.getParent(), FileUtil.getBaseName(entryFile.getName())
-						+ ".complete" + FileUtil.getExtension(entryFile.getName()));
+						+ ".complete." + FileUtil.getExtension(entryFile.getName()));
 				}
 				
 				String entryName = getName(entryFile);
