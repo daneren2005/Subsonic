@@ -1393,7 +1393,7 @@ public class DownloadService extends Service {
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			}
 			String dataSource = file.getAbsolutePath();
-			if(isPartial) {
+			if(isPartial && !Util.isOffline(this)) {
 				if (proxy == null) {
 					proxy = new BufferProxy(this);
 					proxy.start();
