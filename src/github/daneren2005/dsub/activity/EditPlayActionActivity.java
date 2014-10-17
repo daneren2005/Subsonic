@@ -157,12 +157,12 @@ public class EditPlayActionActivity extends SubsonicActivity {
 				shuffleCheckbox.setChecked(true);
 			}
 			
-			String startYear = extras.getString(Constants.PREFERENCES_KEY_START_YEAR, null);
+			String startYear = extras.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, null);
 			if(startYear != null) {
 				startYearCheckbox.setEnabled(true);
 				startYearBox.setText(startYear);
 			}
-			String endYear = extras.getString(Constants.PREFERENCES_KEY_END_YEAR, null);
+			String endYear = extras.getString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, null);
 			if(endYear != null) {
 				endYearCheckbox.setEnabled(true);
 				endYearBox.setText(endYear);
@@ -211,8 +211,28 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		String blurb = getResources().getString(shuffleCheckbox.isChecked() ? R.string.tasker_start_playing_shuffled : R.string.tasker_start_playing);
 		intent.putExtra("com.twofortyfouram.locale.intent.extra.BLURB", blurb);
 
+		// Get settings user specified
 		Bundle data = new Bundle();
-		data.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, shuffleCheckbox.isChecked());
+		boolean shuffle = shuffleCheckbox.isChecked();
+		data.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, shuffle);
+		if(shuffle) {
+			if(startYearCheckbox.isChecked()) {
+				data.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYearBox.getText());
+			}
+			if(endYearCheckbox.isChecked()) {
+				data.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYearBox.getText());
+			}
+			String genre = genreButton.getText();
+			if(!genre.equals(doNothing)) {
+				data.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
+			}
+		}
+		
+		int offline = offlineSpinner.getSelectedItemPosition();
+		if(offline != 0) {
+			data.putShort(Constants.PREFERENCES_KEY_OFFLINE, (short) offline);
+		}
+		
 		intent.putExtra(Constants.TASKER_EXTRA_BUNDLE, data);
 
 		setResult(Activity.RESULT_OK, intent);
