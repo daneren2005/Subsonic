@@ -53,6 +53,8 @@ public class EditPlayActionActivity extends SubsonicActivity {
 	private EditText endYearBox;
 	private Button genreButton;
 	private Spinner offlineSpinner;
+	
+	private String doNothing;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -60,16 +62,36 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		setTitle(R.string.tasker_start_playing_title);
 		setContentView(R.layout.edit_play_action);
 		final Activity context = this;
+		doNothing = context.getResources().getString(R.string.tasker_edit_do_nothing);
 
 		shuffleCheckbox = (CheckBox) findViewById(R.id.edit_shuffle_checkbox);
-		if(getIntent().getBundleExtra(Constants.TASKER_EXTRA_BUNDLE) != null && getIntent().getBundleExtra(Constants.TASKER_EXTRA_BUNDLE).getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE)) {
-			shuffleCheckbox.setChecked(true);
-		}
+		shuffleCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChange(CompoundView view, boolean isChecked) {
+				startYearCheckbox.setEnabled(isChecked);
+				endYearCheckbox.setEnabled(isChecked);
+				genreButton.setEnabled(isChecked);
+			}
+		});
 
 		startYearCheckbox = (CheckBox) findViewById(R.id.edit_start_year_checkbox);
 		startYearBox = (EditText) findViewById(R.id.edit_start_year);
+		// Disable/enable number box if checked
+		startYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChange(CompoundView view, boolean isChecked) {
+				startYearBox.setEnabled(isChecked);
+			}
+		});
+		
 		endYearCheckbox = (CheckBox) findViewById(R.id.edit_end_year_checkbox);
 		endYearBox = (EditText) findViewById(R.id.edit_end_year);
+		endYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChange(CompoundView view, boolean isChecked) {
+				endYearBox.setEnabled(isChecked);
+			}
+		});
 
 		genreButton = (Button) findViewById(R.id.edit_genre_spinner);
 		genreButton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +107,6 @@ public class EditPlayActionActivity extends SubsonicActivity {
 					protected void done(final List<Genre> genres) {
 						List<String> names = new ArrayList<String>();
 						String blank = context.getResources().getString(R.string.select_genre_blank);
-						String doNothing = context.getResources().getString(R.string.tasker_edit_do_nothing);
 						names.add(doNothing);
 						names.add(blank);
 						for(Genre genre: genres) {
@@ -122,12 +143,41 @@ public class EditPlayActionActivity extends SubsonicActivity {
 				}.execute();
 			}
 		});
-		genreButton.setText("Do Nothing");
+		genreButton.setText(doNothing);
 
 		offlineSpinner = (Spinner) findViewById(R.id.edit_offline_spinner);
 		ArrayAdapter<CharSequence> offlineAdapter = ArrayAdapter.createFromResource(this, R.array.editServerOptions, android.R.layout.simple_spinner_item);
 		offlineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		offlineSpinner.setAdapter(offlineAdapter);
+		
+		// Setup default for everything
+		Bundle extras = getIntent().getBundleExtra(Constants.TASKER_EXTRA_BUNDLE);
+		if(extras != null) {
+			if(extras.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE)) {
+				shuffleCheckbox.setChecked(true);
+			}
+			
+			String startYear = extras.getString(Constants.PREFERENCES_KEY_START_YEAR, null);
+			if(startYear != null) {
+				startYearCheckbox.setEnabled(true);
+				startYearBox.setText(startYear);
+			}
+			String endYear = extras.getString(Constants.PREFERENCES_KEY_END_YEAR, null);
+			if(endYear != null) {
+				endYearCheckbox.setEnabled(true);
+				endYearBox.setText(endYear);
+			}
+			
+			String genre = extras.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, doNothing);
+			if(genre != null)
+				genreButton.setText(genre);
+			}
+			
+			short offline = extras.getShort(Constants.PREFERENCES_KEY_OFFLINE, 0);
+			if(offline != 0) {
+				offline.setSelection((int) offline);
+			}
+		}
 
 		drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 	}
