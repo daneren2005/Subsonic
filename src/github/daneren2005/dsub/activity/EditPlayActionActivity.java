@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -46,6 +47,10 @@ import github.daneren2005.dsub.util.Util;
 
 public class EditPlayActionActivity extends SubsonicActivity {
 	private CheckBox shuffleCheckbox;
+	private CheckBox startYearCheckbox;
+	private EditText startYearBox;
+	private CheckBox endYearCheckbox;
+	private EditText endYearBox;
 	private Button genreButton;
 	private Spinner offlineSpinner;
 
@@ -60,6 +65,11 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		if(getIntent().getBundleExtra(Constants.TASKER_EXTRA_BUNDLE) != null && getIntent().getBundleExtra(Constants.TASKER_EXTRA_BUNDLE).getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE)) {
 			shuffleCheckbox.setChecked(true);
 		}
+
+		startYearCheckbox = (CheckBox) findViewById(R.id.edit_start_year_checkbox);
+		startYearBox = (EditText) findViewById(R.id.edit_start_year);
+		endYearCheckbox = (CheckBox) findViewById(R.id.edit_end_year_checkbox);
+		endYearBox = (EditText) findViewById(R.id.edit_end_year);
 
 		genreButton = (Button) findViewById(R.id.edit_genre_spinner);
 		genreButton.setOnClickListener(new View.OnClickListener() {
