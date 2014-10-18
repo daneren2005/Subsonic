@@ -39,7 +39,8 @@
 			android:id="@+id/edit_start_year_checkbox"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:longClickable="true"/>
+			android:longClickable="true"
+			android:enabled="false"/>
 
 		<EditText
 			android:id="@+id/edit_start_year"
@@ -66,7 +67,8 @@
 			android:id="@+id/edit_end_year_checkbox"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:longClickable="true"/>
+			android:longClickable="true"
+			android:enabled="false"/>
 
 		<EditText
 			android:id="@+id/edit_end_year"
@@ -93,7 +95,8 @@
 			android:id="@+id/edit_genre_spinner"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			style="?android:attr/spinnerStyle"/>
+			style="?android:attr/spinnerStyle"
+			android:enabled="false"/>
 	</LinearLayout>
 
 	<LinearLayout

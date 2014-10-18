@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -67,7 +68,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		shuffleCheckbox = (CheckBox) findViewById(R.id.edit_shuffle_checkbox);
 		shuffleCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChange(CompoundView view, boolean isChecked) {
+			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
 				startYearCheckbox.setEnabled(isChecked);
 				endYearCheckbox.setEnabled(isChecked);
 				genreButton.setEnabled(isChecked);
@@ -79,7 +80,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		// Disable/enable number box if checked
 		startYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChange(CompoundView view, boolean isChecked) {
+			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
 				startYearBox.setEnabled(isChecked);
 			}
 		});
@@ -88,7 +89,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		endYearBox = (EditText) findViewById(R.id.edit_end_year);
 		endYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChange(CompoundView view, boolean isChecked) {
+			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
 				endYearBox.setEnabled(isChecked);
 			}
 		});
@@ -169,13 +170,13 @@ public class EditPlayActionActivity extends SubsonicActivity {
 			}
 			
 			String genre = extras.getString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, doNothing);
-			if(genre != null)
+			if(genre != null) {
 				genreButton.setText(genre);
 			}
 			
-			short offline = extras.getShort(Constants.PREFERENCES_KEY_OFFLINE, 0);
+			short offline = extras.getShort(Constants.PREFERENCES_KEY_OFFLINE, (short) 0);
 			if(offline != 0) {
-				offline.setSelection((int) offline);
+				offlineSpinner.setSelection((int) offline);
 			}
 		}
 
@@ -217,12 +218,12 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		data.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, shuffle);
 		if(shuffle) {
 			if(startYearCheckbox.isChecked()) {
-				data.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYearBox.getText());
+				data.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYearBox.getText().toString());
 			}
 			if(endYearCheckbox.isChecked()) {
-				data.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYearBox.getText());
+				data.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYearBox.getText().toString());
 			}
-			String genre = genreButton.getText();
+			String genre = genreButton.getText().toString();
 			if(!genre.equals(doNothing)) {
 				data.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
 			}
