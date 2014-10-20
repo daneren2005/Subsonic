@@ -431,8 +431,12 @@
 	<string name="settings.admin_enabled">Admin engedélyezése</string>
 	<string name="settings.admin_enabled_summary">Admin menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.replay_gain">Hangerő-kiegyenlítés (Replay Gain)</string>
-	<string name="settings.replay_gain_summary">Hangerő kiegyenlítése (normalizálása) a dal és az album hangerőszint értékei alapján.</string>
-	<string name="settings.replay_gain_bump">Hangerő-kiegyenlítés előerősítés</string>
+	<string name="settings.replay_gain_summary">Hangerő kiegyenlítése (normalizálása) a dal vagy az album hangerőszint értékei (tags) alapján.</string>
+	<string name="settings.replay_gain_type">Hangerőszint meghatározása</string>
+	<string name="settings.replay_gain_type.smart">Intelligens módon</string>
+	<string name="settings.replay_gain_type.album">Album értékeiből</string>
+	<string name="settings.replay_gain_type.track">Dal értékeiből</string>
+	<string name="settings.replay_gain_bump">Hangerő-kiegyenlítés előerősítése</string>
 	<string name="settings.replay_gain_untagged">Dalok hangerő-kiegyenlítés nélkül</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
