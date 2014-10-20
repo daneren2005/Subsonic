@@ -113,6 +113,7 @@ public class EqualizerController {
 				init();
 			} catch (Throwable x) {
 				equalizer = null;
+				released = true;
 				Log.w(TAG, "Failed to create equalizer.", x);
 			}
 		}

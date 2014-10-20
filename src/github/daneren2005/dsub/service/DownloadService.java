@@ -70,6 +70,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
+import android.media.audiofx.Equalizer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -1235,6 +1236,9 @@ public class DownloadService extends Service {
 				mediaPlayer.setDataSource(currentPlaying.getFile().getCanonicalPath());
 
 				controller = effectsController.getEqualizerController();
+				if(controller.getEqualizer() == null) {
+					throw new Exception("Failed to get EQ");
+				}
 			} catch(Exception e2) {
 				Log.w(TAG, "Failed to setup EQ even after reinitialization");
 				// Don't try again, just resetup media player and continue on
