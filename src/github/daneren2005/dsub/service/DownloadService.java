@@ -1218,7 +1218,6 @@ public class DownloadService extends Service {
 		EqualizerController controller = null;
 		try {
 			controller = effectsController.getEqualizerController();
-			// TODO: Start, open EQ, close, start, open EQ crashes here
 			if(controller.getEqualizer() == null) {
 				throw new Exception("Failed to get EQ");
 			}
@@ -1228,6 +1227,8 @@ public class DownloadService extends Service {
 			// If we failed, we are going to try to reinitialize the MediaPlayer
 			boolean playing = playerState == STARTED;
 			int pos = getPlayerPosition();
+			mediaPlayer.pause();
+			Util.sleepQuietly(10L);
 			reset();
 
 			try {
@@ -1246,7 +1247,7 @@ public class DownloadService extends Service {
 			}
 			
 			// Restart from same position and state we left off in
-			play(getCurrentPlayingIndex(), playing, pos);
+			play(getCurrentPlayingIndex(), false, pos);
 		}
 
 		return controller;
