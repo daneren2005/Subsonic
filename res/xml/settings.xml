@@ -369,11 +369,18 @@
 				android:key="replayGain"
 				android:defaultValue="false"/>
 
+			<ListPreference
+				android:title="@string/settings.replay_gain_type"
+				android:key="replayGainType"
+				android:defaultValue="1"
+				android:entryValues="@array/replayGainTypeValues"
+				android:entries="@array/replayGainTypeNames"/>
+
 			<github.daneren2005.dsub.view.SeekBarPreference
 				android:key="replayGainBump2"
 				android:dialogLayout="@layout/seekbar_preference"
 				android:title="@string/settings.replay_gain_bump"
-				android:defaultValue="75"
+				android:defaultValue="150"
 				myns:max="150"
 				myns:min="-150"
 				myns:stepSize="10"
@@ -404,12 +411,6 @@
 				android:summary="@string/settings.media_button_summary"
 				android:key="mediaButtons"
 				android:defaultValue="true"/>
-
-			<CheckBoxPreference
-				android:title="@string/settings.replay_gain"
-				android:summary="@string/settings.replay_gain_summary"
-				android:key="replayGain"
-				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.gapless_playback"

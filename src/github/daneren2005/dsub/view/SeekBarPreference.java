@@ -98,8 +98,12 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	 * @return A string representation of the threshold.
 	 */
 	private String getSummary(String value) {
-		int val = Integer.parseInt(value);
-		return String.format(mDisplay, (val + mMin) / mStepSize);
+		try {
+			int val = Integer.parseInt(value);
+			return String.format(mDisplay, (val + mMin) / mStepSize);
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	@Override

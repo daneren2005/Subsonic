@@ -78,7 +78,6 @@
 	<string name="menu.search">Search</string>
 	<string name="menu.shuffle">Shuffle</string>
 	<string name="menu.refresh">Refresh</string>
-	<string name="menu.select">Select All</string>
 	<string name="menu.play">Play</string>
 	<string name="menu.play_last">Play Last</string>
     <string name="menu.exit">Exit</string>
@@ -104,6 +103,7 @@
 	<string name="menu.add_user">Add User</string>
 	<string name="menu.rescan">Rescan Server</string>
 	<string name="menu.rate">Set Rating</string>
+	<string name="menu.top_tracks">Last.FM Top Tracks</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -174,7 +174,7 @@
     <string name="download.playerstate_downloading">Downloading - %s</string>
     <string name="download.playerstate_buffering">Buffering</string>
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
-    <string name="download.menu_show_album">Show album</string>
+    <string name="download.menu_show_album">Show Album</string>
     <string name="download.menu_lyrics">Lyrics</string>
     <string name="download.menu_remove">Remove from queue</string>
     <string name="download.menu_remove_all">Remove all</string>
@@ -431,6 +431,10 @@
 	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
 	<string name="settings.replay_gain">Replay Gain</string>
 	<string name="settings.replay_gain_summary">Whether or not to scale playback volume by track and album replay gain tags</string>
+	<string name="settings.replay_gain_type">Read from tags</string>
+	<string name="settings.replay_gain_type.smart">Smart detection</string>
+	<string name="settings.replay_gain_type.album">Album tags</string>
+	<string name="settings.replay_gain_type.track">Track tags</string>
 	<string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
 	<string name="settings.replay_gain_untagged">Songs without Replay Gain</string>
 

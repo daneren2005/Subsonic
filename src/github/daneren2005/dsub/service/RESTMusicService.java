@@ -636,6 +636,12 @@ public class RESTMusicService implements MusicService {
                 }
 
                 byte[] bytes = Util.toByteArray(in);
+                
+				// Handle case where partial was downloaded before being cancelled
+				if(task != null && task.isCancelled()) {
+					return null;
+				}
+                
 				OutputStream out = null;
 				try {
 					out = new FileOutputStream(FileUtil.getAlbumArtFile(context, entry));
@@ -1040,7 +1046,25 @@ public class RESTMusicService implements MusicService {
 			Util.close(reader);
 		}
 	}
-	
+
+	@Override
+	public MusicDirectory getTopTrackSongs(String artist, int size, Context context, ProgressListener progressListener) throws Exception {
+		List<String> parameterNames = new ArrayList<String>();
+		List<Object> parameterValues = new ArrayList<Object>();
+
+		parameterNames.add("artist");
+		parameterValues.add(artist);
+		parameterNames.add("size");
+		parameterValues.add(size);
+
+		Reader reader = getReader(context, progressListener, "getTopTrackSongs", null, parameterNames, parameterValues);
+		try {
+			return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Podcasts not supported.");
@@ -1333,6 +1357,11 @@ public class RESTMusicService implements MusicService {
 				}
 
 				byte[] bytes = Util.toByteArray(in);
+				if(task != null && task.isCancelled()) {
+					// Handle case where partial is downloaded and cancelled
+					return null;
+				}
+				
 				OutputStream out = null;
 				try {
 					out = new FileOutputStream(FileUtil.getAvatarFile(context, username));
@@ -1341,7 +1370,7 @@ public class RESTMusicService implements MusicService {
 					Util.close(out);
 				}
 
-				return FileUtil.getSampledBitmap(bytes, size);
+				return FileUtil.getSampledBitmap(bytes, size, false);
 			}
 			finally {
 				Util.close(in);

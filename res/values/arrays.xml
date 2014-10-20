@@ -225,4 +225,14 @@
 		<item>@string/settings.sync_interval_1440</item>
 	</string-array>
 
+	<string-array name="replayGainTypeValues">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+	<string-array name="replayGainTypeNames">
+		<item>@string/settings.replay_gain_type.smart</item>
+		<item>@string/settings.replay_gain_type.album</item>
+		<item>@string/settings.replay_gain_type.track</item>
+	</string-array>
 </resources>

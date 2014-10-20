@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -39,6 +41,8 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
+import github.daneren2005.dsub.view.SongView;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -53,6 +57,8 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 
 		MenuInflater inflater = context.getMenuInflater();
 		inflater.inflate(R.menu.select_bookmark_context, menu);
+
+		hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
 	}
 
 	@Override

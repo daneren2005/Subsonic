@@ -627,7 +627,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				menu.findItem(R.id.menu_show_artist).setVisible(false);
 			}
 
-			hideMenuItems(menu);
+			hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
 		}
 	}
 

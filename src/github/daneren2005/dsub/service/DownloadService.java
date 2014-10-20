@@ -98,6 +98,7 @@ public class DownloadService extends Service {
 	public static final int FAST_FORWARD = 30000;
 	public static final int REWIND = 10000;
 	private static final double DELETE_CUTOFF = 0.84;
+	private static final int REQUIRED_ALBUM_MATCHES = 4;
 
 	private RemoteControlClientHelper mRemoteControl;
 
@@ -138,8 +139,6 @@ public class DownloadService extends Service {
 	private int cachedPosition = 0;
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
-	private boolean singleAlbum = false;
-	private String singleAlbumName;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = RemoteControlState.LOCAL;
@@ -361,20 +360,6 @@ public class DownloadService extends Service {
 			downloadList.add(file);
 		} else {
 			downloadList.add(offset, file);
-		}
-		
-		// Check if we are still dealing with a single album
-		// Don't bother with check if it is already false
-		if(singleAlbum) {
-			// If first download, set album to it
-			if(singleAlbumName == null) {
-				singleAlbumName = file.getSong().getAlbum();
-			} else {
-				// Otherwise, check again previous album name
-				if(!singleAlbumName.equals(file.getSong().getAlbum())) {
-					singleAlbum = false;
-				}
-			}
 		}
 	}
 	public synchronized void downloadBackground(List<MusicDirectory.Entry> songs, boolean save) {
@@ -639,8 +624,6 @@ public class DownloadService extends Service {
 
 		suggestedPlaylistName = null;
 		suggestedPlaylistId = null;
-		singleAlbum = true;
-		singleAlbumName = null;
 	}
 
 	public synchronized void remove(int which) {
@@ -1444,7 +1427,7 @@ public class DownloadService extends Service {
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			}
 			String dataSource = file.getAbsolutePath();
-			if(isPartial) {
+			if(isPartial && !Util.isOffline(this)) {
 				if (proxy == null) {
 					proxy = new BufferProxy(this);
 					proxy.start();
@@ -1855,7 +1838,6 @@ public class DownloadService extends Service {
 			}
 		}
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
-		singleAlbum = false;
 
 		if (revisionBefore != revision) {
 			updateJukeboxPlaylist();
@@ -2006,6 +1988,49 @@ public class DownloadService extends Service {
 			float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 			float adjust = 0f;
 			if (prefs.getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
+				boolean singleAlbum = false;
+				
+				String replayGainType = prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE, "1");
+				// 1 => Smart replay gain
+				if("1".equals(replayGainType)) {
+					// Check if part of at least <REQUIRED_ALBUM_MATCHES> consequetive songs of the same album
+					
+					int index = downloadList.indexOf(downloadFile);
+					if(index != -1) {
+						String albumName = downloadFile.getSong().getAlbum();
+						int matched = 0;
+						
+						// Check forwards
+						for(int i = index + 1; i < downloadList.size() && matched < REQUIRED_ALBUM_MATCHES; i++) {
+							if(albumName.equals(downloadList.get(i).getSong().getAlbum())) {
+								matched++;
+							} else {
+								break;
+							}
+						}
+						
+						// Check backwards
+						for(int i = index - 1; i >= 0 && matched < REQUIRED_ALBUM_MATCHES; i--) {
+							if(albumName.equals(downloadList.get(i).getSong().getAlbum())) {
+								matched++;
+							} else {
+								break;
+							}
+						}
+						
+						if(matched >= REQUIRED_ALBUM_MATCHES) {
+							singleAlbum = true;
+						}
+					}
+				}
+				// 2 => Use album tags
+				else if("2".equals(replayGainType)) {
+					singleAlbum = true;
+				}
+				// 3 => Use track tags
+				// Already false, no need to do anything here
+				
+				
 				// If playing a single album or no track gain, use album gain
 				if((singleAlbum || rg[0] == 0) && rg[1] != 0) {
 					adjust = rg[1];
@@ -2019,10 +2044,7 @@ public class DownloadService extends Service {
 					int untagged = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED, "0"));
 					adjust = (untagged - 150) / 10f;
 				} else {
-					/* This song has some replay gain info, we are now going to apply the 'bump' value
-					** The preferences stores the raw value of the seekbar, that's 0-150
-					** But we want -15 <-> +15, so 75 shall be zero */
-					int bump = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP, "0"));
+					int bump = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP, "150"));
 					adjust += (bump - 150) / 10f;
 				}
 			}

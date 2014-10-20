@@ -40,6 +40,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -73,7 +74,12 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.AlbumCell;
+import github.daneren2005.dsub.view.AlbumView;
+import github.daneren2005.dsub.view.ArtistEntryView;
+import github.daneren2005.dsub.view.ArtistView;
 import github.daneren2005.dsub.view.PlaylistSongView;
+import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
@@ -96,7 +102,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	private int tag;
 	
 	protected SubsonicActivity context;
-	protected CharSequence title = "DSub";
+	protected CharSequence title = null;
 	protected CharSequence subtitle = null;
 	protected View rootView;
 	protected boolean primaryFragment = false;
@@ -108,6 +114,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean artist = false;
 	protected boolean artistOverride = false;
 	protected SwipeRefreshLayout refreshLayout;
+	protected boolean firstRun;
 	
 	public SubsonicFragment() {
 		super();
@@ -124,6 +131,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				title = name;
 			}
 		}
+		firstRun = true;
 	}
 
 	@Override
@@ -135,7 +143,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	@Override
 	public void onResume() {
 		super.onResume();
-		UpdateView.triggerUpdate();
+		if(firstRun) {
+			firstRun = false;
+		} else {
+			UpdateView.triggerUpdate();
+		}
 	}
 
 	@Override
@@ -168,7 +180,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo, Object selected) {
 		MenuInflater inflater = context.getMenuInflater();
-		
+
 		if(selected instanceof Entry) {
 			Entry entry = (Entry) selected;
 			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
@@ -227,10 +239,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
-		hideMenuItems(menu);
+		hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
 	}
 
-	protected void hideMenuItems(ContextMenu menu) {
+	protected void hideMenuItems(ContextMenu menu, AdapterView.AdapterContextMenuInfo info) {
 		if(!ServerInfo.checkServerVersion(context, "1.8")) {
 			menu.setGroupVisible(R.id.server_1_8, false);
 			menu.setGroupVisible(R.id.hide_star, false);
@@ -257,6 +269,60 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
 			menu.setGroupVisible(R.id.hide_rating, false);
+		}
+
+		if(!Util.isOffline(context)) {
+			// If we are looking at a standard song view, get downloadFile to cache what options to show
+			if(info.targetView instanceof SongView) {
+				SongView songView = (SongView) info.targetView;
+				DownloadFile downloadFile = songView.getDownloadFile();
+	
+				try {
+					if(downloadFile != null) {
+						if(downloadFile.isWorkDone()) {
+							// Remove permanent cache menu if already perma cached
+							if(downloadFile.isSaved()) {
+								menu.removeItem(R.id.song_menu_pin);
+							}
+	
+							// Remove cache option no matter what if already downloaded
+							menu.removeItem(R.id.song_menu_download);
+						} else {
+							// Remove delete option if nothing to delete
+							menu.removeItem(R.id.song_menu_delete);
+						}
+					}
+				} catch(Exception e) {
+					Log.w(TAG, "Failed to lookup downloadFile info", e);
+				}
+			}
+			// Apply similar logic to album views
+			else if(info.targetView instanceof AlbumCell || info.targetView instanceof AlbumView
+					|| info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
+				File folder = null;
+				int id = 0;
+				if(info.targetView instanceof AlbumCell) {
+					folder = ((AlbumCell) info.targetView).getFile();
+					id = R.id.album_menu_delete;
+				} else if(info.targetView instanceof AlbumView) {
+					folder = ((AlbumView) info.targetView).getFile();
+					id = R.id.album_menu_delete;
+				} else if(info.targetView instanceof ArtistView) {
+					folder = ((ArtistView) info.targetView).getFile();
+					id = R.id.artist_menu_delete;
+				} else if(info.targetView instanceof ArtistEntryView) {
+					folder = ((ArtistEntryView) info.targetView).getFile();
+					id = R.id.artist_menu_delete;
+				}
+				
+				try {
+					if(folder != null && !folder.exists()) {
+						menu.removeItem(id);
+					}
+				} catch(Exception e) {
+					Log.w(TAG, "Failed to lookup album directory info", e);
+				}
+			}
 		}
 	}
 
@@ -420,7 +486,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void setPrimaryFragment(boolean primary) {
 		primaryFragment = primary;
 		if(primary) {
-			if(context != null) {
+			if(context != null && title != null) {
 				context.setTitle(title);
 				context.setSubtitle(subtitle);
 			}
@@ -464,7 +530,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void exit() {
-		if(context.getClass() != SubsonicFragmentActivity.class) {
+		if(((Object) context).getClass() != SubsonicFragmentActivity.class) {
 			Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
@@ -1112,6 +1178,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	public void displaySongInfo(final Entry song) {
+		Integer duration = null;
 		Integer bitrate = null;
 		String format = null;
 		long size = 0;
@@ -1122,10 +1189,21 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if(file.exists()) {
 					MediaMetadataRetriever metadata = new MediaMetadataRetriever();
 					metadata.setDataSource(file.getAbsolutePath());
-					String tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
-					bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
+					
+					String tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+					duration = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
 					format = FileUtil.getExtension(file.getName());
 					size = file.length();
+					
+					// If no duration try to read bitrate tag
+					if(duration == null) {
+						tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
+						bitrate = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
+					} else {
+						// Otherwise do a calculation for it
+						// Divide by 1000 so in kbps
+						bitrate = (int) (size / duration) / 1000 * 8;
+					}
 	
 					if(Util.isOffline(context)) {
 						song.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));

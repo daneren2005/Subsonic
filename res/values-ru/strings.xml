@@ -54,7 +54,6 @@
 	<string name="menu.search">Поиск</string>
 	<string name="menu.shuffle">Перемешать</string>
 	<string name="menu.refresh">Обновить</string>
-	<string name="menu.select">Выбрать все</string>
 	<string name="menu.play">Воспроизвести</string>
 	<string name="menu.play_last">Воспроизвести последним</string>
     <string name="menu.exit">Выход</string>

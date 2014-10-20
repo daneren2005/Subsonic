@@ -105,6 +105,14 @@ public class FileUtil {
 		
 		return null;
 	}
+	
+	public static File getEntryFile(Context context, MusicDirectory.Entry entry) {
+		if(entry.isDirectory()) {
+			return getAlbumDirectory(context, entry);
+		} else {
+			return getSongFile(context, entry);
+		}
+	}
 
     public static File getSongFile(Context context, MusicDirectory.Entry song) {
         File dir = getAlbumDirectory(context, song);
@@ -237,12 +245,15 @@ public class FileUtil {
 			opt.inJustDecodeBounds = false;
 
 			Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getPath(), opt);
-			return bitmap == null ? null : getScaledBitmap(bitmap, size);
+			return bitmap == null ? null : getScaledBitmap(bitmap, size, false);
 		}
 		return null;
 	}
 
 	public static Bitmap getSampledBitmap(byte[] bytes, int size) {
+		return getSampledBitmap(bytes, size, true);
+	}
+	public static Bitmap getSampledBitmap(byte[] bytes, int size, boolean allowUnscaled) {
 		final BitmapFactory.Options opt = new BitmapFactory.Options();
 		opt.inJustDecodeBounds = true;
 		BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opt);
@@ -253,13 +264,16 @@ public class FileUtil {
 		if(bitmap == null) {
 			return null;
 		} else {
-			return getScaledBitmap(bitmap, size);
+			return getScaledBitmap(bitmap, size, allowUnscaled);
 		}
 	}
 	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
+		return getScaledBitmap(bitmap, size, true);
+	}
+	public static Bitmap getScaledBitmap(Bitmap bitmap, int size, boolean allowUnscaled) {
 		// Don't waste time scaling if the difference is minor
 		// Large album arts still need to be scaled since displayed as is on now playing!
-		if(size < 400 && bitmap.getWidth() < (size * 1.1)) {
+		if(allowUnscaled && size < 400 && bitmap.getWidth() < (size * 1.1)) {
 			return bitmap;
 		} else {
 			return Bitmap.createScaledBitmap(bitmap, size, Util.getScaledHeight(bitmap, size), true);

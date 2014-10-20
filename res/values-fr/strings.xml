@@ -77,7 +77,6 @@
 	<string name="menu.search">Recherche</string>
 	<string name="menu.shuffle">Hasard</string>
 	<string name="menu.refresh">Recharger</string>
-	<string name="menu.select">Tout sélectionner</string>
 	<string name="menu.play">Jouer</string>
 	<string name="menu.exit">Quitter</string>
 	<string name="menu.play_last">Jouer dernier</string>
