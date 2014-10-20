@@ -167,8 +167,33 @@ public class DownloadServiceLifecycleSupport {
 							lock.lock();
 							lock.unlock();
 						}
+						
+						short offline = intent.getShortExtra(Constants.INTENT_EXTRA_OFFLINE, 0);
+						if(offline != 0) {
+							boolean offline = (offline == 2);
+							Util.setOffline(context, offline);
+							downloadService.setOnline(!offline);
+						}
 
 						if(intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
+							// Add shuffle parameters
+							SharedPreferences.Editor editor = Util.getPreferences(context).edit();
+							String startYear = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, null);
+							if(startYear != null) {
+								editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
+							}
+							
+							String endYear = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, null);
+							if(endYear != null) {
+								editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYear);
+							}
+							
+							String genre = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, null);
+							if(genre != null) {
+								editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
+							}
+							editor.commit();
+							
 							downloadService.setShufflePlayEnabled(true);
 						} else {
 							downloadService.start();
