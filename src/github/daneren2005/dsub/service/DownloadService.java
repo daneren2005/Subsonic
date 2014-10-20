@@ -1242,6 +1242,7 @@ public class DownloadService extends Service {
 			} catch(Exception e2) {
 				Log.w(TAG, "Failed to setup EQ even after reinitialization");
 				// Don't try again, just resetup media player and continue on
+				controller = null;
 			}
 			
 			// Restart from same position and state we left off in

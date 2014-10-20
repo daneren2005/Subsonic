@@ -55,6 +55,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
@@ -814,14 +815,19 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				return true;
 			case R.id.menu_equalizer: {
 				DownloadService downloadService = getDownloadService();
-				if (downloadService != null && downloadService.getEqualizerController() != null
-						&& downloadService.getEqualizerController().getEqualizer() != null) {
-					SubsonicFragment fragment = new EqualizerFragment();
-					replaceFragment(fragment);
-					setControlsVisible(true);
-				} else {
-					Util.toast(context, "Failed to start equalizer.  Try restarting.");
+				if (downloadService != null) {
+					EqualizerController controller = downloadService.getEqualizerController();
+					if(controller != null) {
+						SubsonicFragment fragment = new EqualizerFragment();
+						replaceFragment(fragment);
+						setControlsVisible(true);
+
+						return true;
+					}
 				}
+
+				// Any failed condition will get here
+				Util.toast(context, "Failed to start equalizer.  Try restarting.");
 				return true;
 			} default:
 				return false;
