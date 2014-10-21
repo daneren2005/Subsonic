@@ -174,9 +174,9 @@ public class EditPlayActionActivity extends SubsonicActivity {
 				genreButton.setText(genre);
 			}
 			
-			short offline = extras.getShort(Constants.PREFERENCES_KEY_OFFLINE, (short) 0);
+			int offline = extras.getInt(Constants.PREFERENCES_KEY_OFFLINE, 0);
 			if(offline != 0) {
-				offlineSpinner.setSelection((int) offline);
+				offlineSpinner.setSelection(offline);
 			}
 		}
 
@@ -231,7 +231,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		
 		int offline = offlineSpinner.getSelectedItemPosition();
 		if(offline != 0) {
-			data.putShort(Constants.PREFERENCES_KEY_OFFLINE, (short) offline);
+			data.putInt(Constants.PREFERENCES_KEY_OFFLINE, offline);
 		}
 		
 		intent.putExtra(Constants.TASKER_EXTRA_BUNDLE, data);
