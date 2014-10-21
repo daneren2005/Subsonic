@@ -102,6 +102,8 @@
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Nutzer hinzufügen</string>
 	<string name="menu.rescan">Server neu durchsuchen</string>
+	<string name="menu.rate">Setze Bewertung</string>
+	<string name="menu.top_tracks">Last.FM Top Medien</string>
 
     <string name="playlist.label">Wiedergabelisten</string>
 	<string name="playlist.update_info">Aktualisiere Informationen</string>
@@ -204,6 +206,7 @@
 	<string name="download.playing_out_of">Wiedergabe: %1$d/%2$d</string>
 	<string name="download.save_bookmark_title">Setze Lesezeichen</string>
 	<string name="download.save_bookmark">Lesezeichen gesetzt</string>
+	<string name="download.save_bookmark_failed">Lesezeichen konnte nicht gesetzt werden.</string>
 	<string name="download.downloading_title">Lade %1$d Lieder</string>
 	<string name="download.downloading_summary">Aktuell: %1$s</string>
 	<string name="download.downloading_summary_expanded">Aktuell: %1$s
@@ -239,6 +242,12 @@
 	<string name="bookmark.action_resume">Fortsetzen</string>
 	<string name="bookmark.action_start_over">Neu beginnen</string>
 
+	<string name="rating.title">Bewerte \"%s\"</string>
+	<string name="rating.set_rating">Setze Bewertung für \"%s\"</string>
+	<string name="rating.set_rating_failed">Konnte Bewertung für \"%s\" nicht setzen</string>
+	<string name="rating.remove_rating">Bewertung für \"%s\" entfernt</string>
+	<string name="rating.remove_rating_failed">Konnte Bewertung für \"%s\" nicht entfernen</string>
+
 	<string name="song_details.error">Fehler</string>
 	<string name="song_details.skipped">Überspringen</string>
 	<string name="song_details.downloading">Wird geladen</string>
@@ -261,6 +270,8 @@
     <string name="settings.server_username">Nutzername</string>
     <string name="settings.server_password">Passwort</string>
 	<string name="settings.server_open_browser">Im Browser öffnen</string>
+	<string name="settings.server_sync_summary">Synchronisierung für diesen Server de-/aktivieren</string>
+	<string name="settings.server_sync">Synchronisierung aktivieren</string>
     <string name="settings.cache_title">Musik Cache</string>
     <string name="settings.preload_wifi">Im Vorraus zu laden (Wifi)</string>
 	<string name="settings.preload_mobile">Im Vorraus zu laden (Mobil)</string>
@@ -386,6 +397,7 @@
 	<string name="settings.menu_options.play_last_summary">Zeige \"Als letztes abspielen\" im Menü</string>
 	<string name="settings.menu_options.star_summary">Zeige Favorit im Menü</string>
 	<string name="settings.menu_options.shared_summary">Zeige \"Freigeben\" im Menü</string>
+	<string name="settings.menu_options.rate_summary">Zeige \"Bewerten\" im Menü</string>
 	<string name="settings.browse_by_tags">Tags nutzen</string>
 	<string name="settings.browse_by_tags_summary">Tags statt Ordner verwenden.  Benötigt Subsonic 4.7+</string>
 	<string name="settings.override_system_language">In Englisch anzeigen</string>
@@ -397,6 +409,14 @@
 	<string name="settings.large_album_art_summary">Verwende große Cover zur Anzeige der Alben anstatt einer Liste</string>
 	<string name="settings.admin_enabled">Administration aktiviert</string>
 	<string name="settings.admin_enabled_summary">Administration im Seitenmenü anzeigen</string>
+	<string name="settings.replay_gain">Wiedergabeverstärkung</string>
+	<string name="settings.replay_gain_summary">Gibt an, ob die Wiedergabeverstärkung anhand von Tags erfolgen soll.</string>
+	<string name="settings.replay_gain_type">Anhand der Tags</string>
+	<string name="settings.replay_gain_type.smart">Automatische Erkennung</string>
+	<string name="settings.replay_gain_type.album">Album Tag</string>
+	<string name="settings.replay_gain_type.track">Track Tag</string>
+	<string name="settings.replay_gain_bump">Wiedergabevorverstärkung</string>
+	<string name="settings.replay_gain_untagged">Lieder ohne Wiedergabeverstärkung</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
@@ -510,6 +530,11 @@
 	<string name="tasker.start_playing_shuffled">Starte Zufallswiedergabe</string>
 	<string name="tasker.start_playing_title">Tasker -> Starte DSub</string>
 	<string name="tasker.edit_shuffle_mode">Starte im Zufallsmodus: </string>
+	<string name="tasker.edit_shuffle_start_year">Startjahr:</string>
+	<string name="tasker.edit_shuffle_end_year">Endjahr:</string>
+	<string name="tasker.edit_shuffle_genre">Genre:</string>
+	<string name="tasker.edit_server_offline">Zwischen On-/Offline-Modus wechseln: </string>
+	<string name="tasker.edit_do_nothing">Nichts tun</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Keine Lieder</item>
