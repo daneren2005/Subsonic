@@ -235,4 +235,10 @@
 		<item>@string/settings.replay_gain_type.album</item>
 		<item>@string/settings.replay_gain_type.track</item>
 	</string-array>
+	
+	<string-array name="editServerOptions">
+		<item>@string/tasker.edit_do_nothing</item>
+		<item>@string/main.online</item>
+		<item>@string/main.offline</item>
+	</string-array>
 </resources>

@@ -10,7 +10,6 @@
 		android:layout_height="wrap_content">
 
 		<TextView
-			android:id="@+id/edit_shuffle"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
@@ -22,5 +21,99 @@
 			android:layout_height="wrap_content"
 			android:longClickable="true"
 			/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="4dp"
+			android:textSize="20dp"
+			android:text="@string/tasker.edit_shuffle_start_year" />
+
+		<CheckBox
+			android:id="@+id/edit_start_year_checkbox"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:longClickable="true"
+			android:enabled="false"/>
+
+		<EditText
+			android:id="@+id/edit_start_year"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="number"
+			android:hint="@string/shuffle.startYear"
+			android:enabled="false"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="4dp"
+			android:textSize="20dp"
+			android:text="@string/tasker.edit_shuffle_end_year" />
+
+		<CheckBox
+			android:id="@+id/edit_end_year_checkbox"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:longClickable="true"
+			android:enabled="false"/>
+
+		<EditText
+			android:id="@+id/edit_end_year"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="number"
+			android:hint="@string/shuffle.endYear"
+			android:enabled="false"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="4dp"
+			android:textSize="20dp"
+			android:text="@string/tasker.edit_shuffle_genre"/>
+
+		<Button
+			android:id="@+id/edit_genre_spinner"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			style="?android:attr/spinnerStyle"
+			android:enabled="false"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="4dp"
+			android:textSize="20dp"
+			android:text="@string/tasker.edit_server_offline"/>
+
+		<Spinner
+			android:id="@+id/edit_offline_spinner"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
 	</LinearLayout>
 </LinearLayout>
