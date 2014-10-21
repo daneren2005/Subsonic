@@ -1321,7 +1321,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			if("hls".equals(format)) {
-				intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getHlsUrl(entry.getId(), maxBitrate, context)), "video/*");
+				intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getHlsUrl(entry.getId(), maxBitrate, context)), "application/x-mpegURL");
 			} else {
 				intent.setDataAndType(Uri.parse(MusicServiceFactory.getMusicService(context).getVideoStreamUrl(format, maxBitrate, context, entry.getId())), "video/*");
 			}
