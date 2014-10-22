@@ -1890,7 +1890,18 @@ public class DownloadService extends Service {
 	}
 	private boolean isPastCutoff(int position, int duration) {
 		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
-		return duration > 0 && position > cutoffPoint;
+		boolean isPastCutoff = duration > 0 && position > cutoffPoint;
+		
+		// Check to make sure song isn't within 10 seconds of where it was created
+		MusicDirectory.Entry entry = currentPlaying.getSong();
+		if(entry != null && entry.getBookmark() != null) {
+			Bookmark bookmark = entry.getBookmark();
+			if(position < (bookmark.getPosition() + 10000)) {
+				isPastCutoff = false;
+			}
+		}
+		
+		return isPastCutoff;
 	}
 	
 	private void clearCurrentBookmark() {
