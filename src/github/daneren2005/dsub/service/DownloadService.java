@@ -116,6 +116,7 @@ public class DownloadService extends Service {
 	private Handler mediaPlayerHandler;
 	private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
 	private ShufflePlayBuffer shufflePlayBuffer;
+	private Random random = new Random();
 
 	private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<MusicDirectory.Entry, DownloadFile>(100);
 	private final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
@@ -130,7 +131,8 @@ public class DownloadService extends Service {
 	private PlayerState playerState = IDLE;
 	private PlayerState nextPlayerState = IDLE;
 	private boolean removePlayed;
-	private boolean shufflePlay;
+	private boolean shuffleRemote;
+	private boolean shuffleMode;
 	private long revision;
 	private static DownloadService instance;
 	private String suggestedPlaylistName;
@@ -305,7 +307,7 @@ public class DownloadService extends Service {
 		download(songs, save, autoplay, playNext, shuffle, 0, 0);
 	}
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle, int start, int position) {
-		setShufflePlayEnabled(false);
+		setShuffleRemote(false);
 		int offset = 1;
 
 		if (songs.isEmpty()) {
@@ -337,10 +339,6 @@ public class DownloadService extends Service {
 			revision++;
 		}
 		updateJukeboxPlaylist();
-
-		if(shuffle) {
-			shuffle();
-		}
 
 		if (autoplay) {
 			play(start, true, position);
@@ -396,12 +394,12 @@ public class DownloadService extends Service {
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, false)) {
 			removePlayed = true;
 		}
-		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
+		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_REMOTE, false);
 		download(songs, false, false, false, false);
 		if(startShufflePlay) {
-			shufflePlay = true;
+			shuffleRemote = true;
 			SharedPreferences.Editor editor = prefs.edit();
-			editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, true);
+			editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_REMOTE, true);
 			editor.commit();
 		}
 		if (currentPlayingIndex != -1) {
@@ -437,33 +435,29 @@ public class DownloadService extends Service {
 		return removePlayed;
 	}
 
-	public synchronized void setShufflePlayEnabled(boolean enabled) {
-		shufflePlay = enabled;
-		if (shufflePlay) {
+	public synchronized void setShuffleRemote(boolean enabled) {
+		shuffleRemote = enabled;
+		if (shuffleRemote) {
 			clear();
 			checkDownloads();
 		}
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
-		editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, enabled);
+		editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_REMOTE, enabled);
 		editor.commit();
 	}
 
-	public boolean isShufflePlayEnabled() {
-		return shufflePlay;
+	public boolean isShuffleRemote() {
+		return shuffleRemote;
 	}
-
-	public synchronized void shuffle() {
-		Collections.shuffle(downloadList);
-		currentPlayingIndex = downloadList.indexOf(currentPlaying);
-		if (currentPlaying != null) {
-			downloadList.remove(getCurrentPlayingIndex());
-			downloadList.add(0, currentPlaying);
-			currentPlayingIndex = 0;
-		}
-		revision++;
-		lifecycleSupport.serializeDownloadQueue();
-		updateJukeboxPlaylist();
-		setNextPlaying();
+	
+	public synchronized void setShuffleMode(boolean shuffleMode) {
+		this.shuffleMode = shuffleMode;
+		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, shuffleMode);
+		editor.commit();
+	}
+	public boolean isShuffleMode() {
+		return shuffleMode;
 	}
 
 	public RepeatMode getRepeatMode() {
@@ -724,13 +718,16 @@ public class DownloadService extends Service {
 	}
 	private int getNextPlayingIndex() {
 		int index = getCurrentPlayingIndex();
+		int newIndex = index;
+		
+		// Increment based off of repeat mode
 		if (index != -1) {
 			switch (getRepeatMode()) {
 				case OFF:
-					index = index + 1;
+					newIndex = index + 1;
 					break;
 				case ALL:
-					index = (index + 1) % size();
+					newIndex = (index + 1) % size();
 					break;
 				case SINGLE:
 					break;
@@ -738,7 +735,17 @@ public class DownloadService extends Service {
 					break;
 			}
 		}
-		return index;
+		
+		// If we are in shuffle mode and index changed, get random index
+		if(shuffleMode && index != newIndex) {
+			// Retry if next random is same as current
+			// Add size condition to prevent infinite loop
+			do {
+				newIndex = random.nextInt(size());
+			} while(index == newIndex && size() > 1)
+		}
+		
+		return newIndex;
 	}
 
 	public DownloadFile getCurrentPlaying() {
@@ -1717,7 +1724,7 @@ public class DownloadService extends Service {
 		if(removePlayed) {
 			checkRemovePlayed();
 		}
-		if (shufflePlay) {
+		if (shuffleRemote) {
 			checkShufflePlay();
 		}
 
