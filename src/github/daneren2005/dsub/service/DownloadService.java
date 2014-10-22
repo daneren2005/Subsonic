@@ -917,6 +917,9 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void next() {
+		
+	}
+	public synchronized void next(boolean forceCutoff) {
 		// If only one song, just skip within song
 		if(size() == 1) {
 			seekTo(getPlayerPosition() + FAST_FORWARD);
@@ -926,7 +929,12 @@ public class DownloadService extends Service {
 		// Delete podcast if fully listened to
 		int position = getPlayerPosition();
 		int duration = getPlayerDuration();
-		boolean cutoff = isPastCutoff(position, duration);
+		boolean cutoff;
+		if(forceCutoff) {
+			cutoff = true;
+		} else {
+			cutoff = isPastCutoff(position, duration);
+		}
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
 			if(cutoff) {
 				toDelete.add(currentPlaying);
