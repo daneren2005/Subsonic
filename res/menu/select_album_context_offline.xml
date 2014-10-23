@@ -5,12 +5,6 @@
         android:id="@+id/album_menu_play_now"
         android:title="@string/common.play_now"
         />
-		
-	<item 
-        android:id="@+id/album_menu_play_shuffled"
-        android:title="@string/common.play_shuffled"
-        />
-
 	<group android:id="@+id/hide_play_next">
 		<item
 			android:id="@+id/album_menu_play_next"

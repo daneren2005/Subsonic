@@ -18,8 +18,6 @@
 */
 package github.daneren2005.dsub.fragments;
 
-import android.content.DialogInterface;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,18 +28,12 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.service.OfflineException;
-import github.daneren2005.dsub.service.ServerTooOldException;
-import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BookmarkAdapter;
-import github.daneren2005.dsub.view.SongView;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -114,7 +106,7 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 			@Override
 			protected Void doInBackground() throws Throwable {
 				downloadService.clear();
-				downloadService.download(Arrays.asList(bookmark), false, true, false, false, 0, bookmark.getBookmark().getPosition());
+				downloadService.download(Arrays.asList(bookmark), false, true, false, 0, bookmark.getBookmark().getPosition());
 				return null;
 			}
 			
