@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -231,6 +232,7 @@ public class DownloadService extends Service {
 		instance = this;
 		lifecycleSupport.onCreate();
 		shufflePlayBuffer = new ShufflePlayBuffer(this);
+		shuffleMode = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
 	}
 
 	@Override
@@ -742,7 +744,7 @@ public class DownloadService extends Service {
 			// Add size condition to prevent infinite loop
 			do {
 				newIndex = random.nextInt(size());
-			} while(index == newIndex && size() > 1)
+			} while(index == newIndex && size() > 1);
 		}
 		
 		return newIndex;
