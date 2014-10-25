@@ -82,7 +82,7 @@ public class DownloadServiceTest extends
 		// Download two songs
 		downloadService.getDownloads().clear();
 		downloadService.download(this.createMusicSongs(2), false, false, false,
-				false, 0, 0);
+				0, 0);
 
 		Log.w("testPreviousWithPlayList", "Start waiting to downloads");
 		Thread.sleep(5000);
@@ -106,7 +106,7 @@ public class DownloadServiceTest extends
 		// Download two songs
 		downloadService.getDownloads().clear();
 		downloadService.download(this.createMusicSongs(2), false, false, false,
-				false, 0, 0);
+				0, 0);
 
 		Log.w("testPreviousWithPlayList", "Start waiting downloads");
 		Thread.sleep(5000);
@@ -185,7 +185,7 @@ public class DownloadServiceTest extends
 		// Download two songs
 		downloadService.getDownloads().clear();
 		downloadService.download(this.createMusicSongs(2), false, false, false,
-				false, 0, 0);
+				0, 0);
 
 		Log.w("testPreviousWithPlayList", "Start waiting downloads");
 		Thread.sleep(5000);
@@ -209,7 +209,7 @@ public class DownloadServiceTest extends
 		// Download one songs
 		downloadService.getDownloads().clear();
 		downloadService.download(this.createMusicSongs(1), false, true, false,
-				false, 0, 0);
+				0, 0);
 
 		Log.w("testPreviousWithPlayList", "Start waiting downloads");
 		Thread.sleep(5000);
@@ -242,7 +242,7 @@ public class DownloadServiceTest extends
 
 		// Launch download
 		downloadService.download(this.createMusicSongs(1), false, false, false,
-				false, 0, 0);
+				0, 0);
 
 		// Check number of download after
 		int afterDownloadAction = 0;

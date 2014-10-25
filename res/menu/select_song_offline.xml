@@ -8,12 +8,6 @@
 		compat:showAsAction="always|withText"/>
 		
 	<item 
-		android:id="@+id/menu_shuffle"
-		android:icon="?attr/shuffle"
-		android:title="@string/menu.shuffle"
-		compat:showAsAction="ifRoom|withText"/>
-		
-	<item 
 		android:id="@+id/menu_delete"
 		android:title="@string/menu.delete_cache"/>
 

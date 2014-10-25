@@ -98,17 +98,6 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 
 				replaceFragment(fragment);
 				break;
-			case R.id.playlist_menu_play_shuffled:
-				fragment = new SelectDirectoryFragment();
-				args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
-				fragment.setArguments(args);
-
-				replaceFragment(fragment);
-				break;
 			case R.id.playlist_menu_delete:
 				deletePlaylist(playlist);
 				break;
