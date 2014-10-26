@@ -200,7 +200,7 @@ public class SongView extends UpdateView implements Checkable {
 		if(loaded) {
 			setObjectImpl(song, checkedTextView.getVisibility() == View.VISIBLE);
 		}
-        if (downloadService == null) {
+        if (downloadService == null || downloadFile == null) {
             return;
         }
 
