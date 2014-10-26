@@ -1888,6 +1888,10 @@ public class DownloadService extends Service {
 		return isPastCutoff(getPlayerPosition(), getPlayerDuration());
 	}
 	private boolean isPastCutoff(int position, int duration) {
+		if(currentPlaying == null) {
+			return false;
+		}
+
 		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
 		boolean isPastCutoff = duration > 0 && position > cutoffPoint;
 		
