@@ -1987,7 +1987,7 @@ public class DownloadService extends Service {
 		int duration = getPlayerDuration();
 		
 		// If song is podcast or long go ahead and auto add a bookmark
-		if(entry.isPodcast() || entry.isAudiBook() || duration > (10L * 60L * 1000L)) {
+		if(entry.isPodcast() || entry.isAudioBook() || duration > (10L * 60L * 1000L)) {
 			final Context context = this;
 			final int position = getPlayerPosition();
 
