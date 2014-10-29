@@ -916,7 +916,7 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void next() {
-		
+		next(false);
 	}
 	public synchronized void next(boolean forceCutoff) {
 		// If only one song, just skip within song
