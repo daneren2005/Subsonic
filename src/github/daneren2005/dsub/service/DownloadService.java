@@ -575,7 +575,7 @@ public class DownloadService extends Service {
 		// Delete podcast if fully listened to
 		int position = getPlayerPosition();
 		int duration = getPlayerDuration();
-		boolean cutoff = isPastCutoff(position, duration);
+		boolean cutoff = isPastCutoff(position, duration, true);
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
 			if(cutoff) {
 				currentPlaying.delete();
@@ -916,6 +916,9 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void next() {
+		next(false);
+	}
+	public synchronized void next(boolean forceCutoff) {
 		// If only one song, just skip within song
 		if(size() == 1) {
 			seekTo(getPlayerPosition() + FAST_FORWARD);
@@ -925,7 +928,12 @@ public class DownloadService extends Service {
 		// Delete podcast if fully listened to
 		int position = getPlayerPosition();
 		int duration = getPlayerDuration();
-		boolean cutoff = isPastCutoff(position, duration);
+		boolean cutoff;
+		if(forceCutoff) {
+			cutoff = true;
+		} else {
+			cutoff = isPastCutoff(position, duration);
+		}
 		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
 			if(cutoff) {
 				toDelete.add(currentPlaying);
@@ -1880,8 +1888,38 @@ public class DownloadService extends Service {
 		return isPastCutoff(getPlayerPosition(), getPlayerDuration());
 	}
 	private boolean isPastCutoff(int position, int duration) {
+		return isPastCutoff(position, duration, false);
+	}
+	private boolean isPastCutoff(int position, int duration, boolean allowSkipping) {
+		if(currentPlaying == null) {
+			return false;
+		}
+
 		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
-		return duration > 0 && position > cutoffPoint;
+		boolean isPastCutoff = duration > 0 && position > cutoffPoint;
+		
+		// Check to make sure song isn't within 10 seconds of where it was created
+		MusicDirectory.Entry entry = currentPlaying.getSong();
+		if(entry != null && entry.getBookmark() != null) {
+			Bookmark bookmark = entry.getBookmark();
+			if(position < (bookmark.getPosition() + 10000)) {
+				isPastCutoff = false;
+			}
+		}
+		
+		// Check to make sure we aren't in a series of similar content before deleting bookmark
+		if(isPastCutoff && allowSkipping) {
+			// Check to make sure:
+			// Is an audio book
+			// Next playing exists and is not a wrap around or a shuffle
+			// Next playing is from same context as current playing, so not at end of list
+			if(entry.isAudioBook() && nextPlaying != null && downloadList.indexOf(nextPlaying) != 0 && !shuffleMode && !shuffleRemote
+					&& entry.getParent() != null && entry.getParent().equals(nextPlaying.getSong().getParent())) {
+				isPastCutoff = false;
+			}
+		}
+		
+		return isPastCutoff;
 	}
 	
 	private void clearCurrentBookmark() {
@@ -1949,7 +1987,7 @@ public class DownloadService extends Service {
 		int duration = getPlayerDuration();
 		
 		// If song is podcast or long go ahead and auto add a bookmark
-		if(entry.isPodcast() || entry.isAudiBook() || duration > (10L * 60L * 1000L)) {
+		if(entry.isPodcast() || entry.isAudioBook() || duration > (10L * 60L * 1000L)) {
 			final Context context = this;
 			final int position = getPlayerPosition();
 

@@ -453,7 +453,7 @@ public class MusicDirectory implements Serializable {
 		public boolean isPodcast() {
 			return this instanceof PodcastEpisode || type == TYPE_PODCAST;
 		}
-		public boolean isAudiBook() {
+		public boolean isAudioBook() {
 			return type == TYPE_AUDIO_BOOK;
 		}
 		

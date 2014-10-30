@@ -400,7 +400,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					}
 				} else {
 					// Immediately skip to the next song
-					downloadService.next();
+					downloadService.next(true);
 					
 					// Otherwise set rating to 1
 					setRating(entry, 1);
