@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.8.2" versioncode="129" releasedate="10/30/2014">
+		<change>Changed from shuffle option to persistent shuffle toggle</change>
+		<change>Improve automatic bookmark logic</change>
+		<change>Tasker: Toggle online/offline</change>
+		<change>Tasker: Set start/end year + genre for shuffle</change>
+		<change>Remove files no longer on server</change>
+		<change>Calculate bitrate instead of relying on tags</change>
+		<change>Work around for issue of EQ sometimes not starting</change>
+		<change>Fix issues with offline playlists</change>
+		<change>Fix all servers sharing a recently added count</change>
+		<change>Fix star options not showing up when using Show Album</change>
+	</release>
 	<release version="4.8.1" versioncode="128" releasedate="10/12/2014">
 		<change>Delete songs removed from server</change>
 		<change>Fix crash on GB devices</change>
