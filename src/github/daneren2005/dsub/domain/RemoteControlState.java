@@ -23,7 +23,8 @@ public enum RemoteControlState {
 	LOCAL(0),
 	JUKEBOX_SERVER(1),
 	CHROMECAST(2),
-	REMOTE_CLIENT(3);
+	REMOTE_CLIENT(3),
+	DLNA(4);
 	
 	private final int mRemoteControlState;
 	
