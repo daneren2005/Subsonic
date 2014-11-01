@@ -23,8 +23,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaRouter;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.media.MediaControlIntent;
 import android.support.v7.media.MediaRouteDescriptor;
 import android.support.v7.media.MediaRouteDiscoveryRequest;
@@ -34,6 +32,7 @@ import android.support.v7.media.MediaRouteProviderDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 
+import github.daneren2005.dsub.domain.DLNADevice;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.RemoteController;
@@ -47,7 +46,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	private DownloadService downloadService;
 	private RemoteController controller;
 
-	private HashMap<String, Device> devices = new HashMap<String, Device>();
+	private HashMap<String, DLNADevice> devices = new HashMap<String, DLNADevice>();
 
 	public DLNARouteProvider(Context context) {
 		super(context);
@@ -66,8 +65,8 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		MediaRouteProviderDescriptor.Builder providerBuilder = new MediaRouteProviderDescriptor.Builder();
 
 		// Create route descriptor
-		for(Map.Entry<String, Device> deviceEntry: devices.entrySet()) {
-			Device device = deviceEntry.getValue();
+		for(Map.Entry<String, DLNADevice> deviceEntry: devices.entrySet()) {
+			DLNADevice device = deviceEntry.getValue();
 
 			MediaRouteDescriptor.Builder routeBuilder = new MediaRouteDescriptor.Builder(device.id, device.name);
 			routeBuilder.addControlFilter(routeIntentFilter)
@@ -142,54 +141,6 @@ public class DLNARouteProvider extends MediaRouteProvider {
 				controller.setVolume(volume);
 			}
 			broadcastDescriptors();
-		}
-	}
-
-	static public class Device implements Parcelable {
-		public String id;
-		public String name;
-		public String description;
-		public int volume;
-		public int volumeMax;
-
-		public static final Parcelable.Creator<Device> CREATOR = new Parcelable.Creator<Device>() {
-			public Device createFromParcel(Parcel in) {
-				return new Device(in);
-			}
-
-			public Device[] newArray(int size) {
-				return new Device[size];
-			}
-		};
-
-		private Device(Parcel in) {
-			id = in.readString();
-			name = in.readString();
-			description = in.readString();
-			volume = in.readInt();
-			volumeMax = in.readInt();
-		}
-
-		public Device(String id, String name, String description, int volume, int volumeMax) {
-			this.id = id;
-			this.name = name;
-			this.description = description;
-			this.volume = volume;
-			this.volumeMax = volumeMax;
-		}
-
-		@Override
-		public int describeContents() {
-			return 0;
-		}
-
-		@Override
-		public void writeToParcel(Parcel dest, int flags) {
-			dest.writeString(id);
-			dest.writeString(name);
-			dest.writeString(description);
-			dest.writeInt(volume);
-			dest.writeInt(volumeMax);
 		}
 	}
 }
