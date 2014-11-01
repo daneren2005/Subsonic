@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.RemoteControlState;
+import github.daneren2005.dsub.provider.DLNARouteProvider;
 import github.daneren2005.dsub.provider.JukeboxRouteProvider;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.RemoteController;
@@ -145,6 +146,11 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		router.addProvider(jukeboxProvider);
 		providers.add(jukeboxProvider);
 		offlineProviders.add(jukeboxProvider);
+
+		DLNARouteProvider dlnaProvider = new DLNARouteProvider(downloadService);
+		router.addProvider(dlnaProvider);
+		providers.add(dlnaProvider);
+		offlineProviders.add(dlnaProvider);
 	}
 	public void removeOfflineProviders() {
 		for(MediaRouteProvider provider: offlineProviders) {
@@ -165,6 +171,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		if(castAvailable) {
 			builder.addControlCategory(CastCompat.getCastControlCategory());
 		}
+		builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);
 		selector = builder.build();
 	}
 }
