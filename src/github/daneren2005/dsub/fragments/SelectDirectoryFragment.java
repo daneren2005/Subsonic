@@ -780,7 +780,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 	private void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
 		if(getSelectedSongs().size() > 0) {
-			download(append, false, !append, playNext);
+			download(append, false, !append, playNext, shuffle);
 			selectAll(false, false);
 		}
 		else {
@@ -804,7 +804,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			downloadRecursively(id, false, append, !append, shuffle, false);
 		} else {
 			selectAll(true, false);
-			download(append, false, !append, false);
+			download(append, false, !append, false, shuffle);
 			selectAll(false, false);
 		}
 	}
@@ -857,7 +857,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		return indexes;
 	}
 
-	private void download(final boolean append, final boolean save, final boolean autoplay, final boolean playNext) {
+	private void download(final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle) {
 		if (getDownloadService() == null) {
 			return;
 		}
@@ -866,7 +866,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		warnIfNetworkOrStorageUnavailable();
 		
 		// Conditions for using play now button
-		if(!append && !save && autoplay && !playNext) {
+		if(!append && !save && autoplay && !playNext && !shuffle) {
 			// Call playNow which goes through and tries to use bookmark information
 			playNow(songs, playlistName, playlistId);
 			return;
@@ -879,7 +879,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					getDownloadService().clear();
 				}
 
-				getDownloadService().download(songs, save, autoplay, playNext);
+				getDownloadService().download(songs, save, autoplay, playNext, shuffle);
 				if (playlistName != null) {
 					getDownloadService().setSuggestedPlaylistName(playlistName, playlistId);
 				} else {

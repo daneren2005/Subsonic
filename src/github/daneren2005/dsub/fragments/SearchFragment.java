@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -324,7 +325,7 @@ public class SearchFragment extends SubsonicFragment {
 			if (!append) {
 				downloadService.clear();
 			}
-			downloadService.download(Arrays.asList(song), save, false, playNext);
+			downloadService.download(Arrays.asList(song), save, false, playNext, false);
 			if (autoplay) {
 				downloadService.play(downloadService.size() - 1);
 			}

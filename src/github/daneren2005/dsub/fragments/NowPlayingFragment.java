@@ -111,7 +111,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private View stopButton;
 	private View startButton;
 	private ImageButton repeatButton;
-	private ImageButton shuffleButton;
+	private View toggleListButton;
 	private ImageButton starButton;
 	private ImageButton bookmarkButton;
 	private ImageButton rateBadButton;
@@ -187,7 +187,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		bookmarkButton = (ImageButton) rootView.findViewById(R.id.download_bookmark);
 		rateBadButton = (ImageButton) rootView.findViewById(R.id.download_rating_bad);
 		rateGoodButton = (ImageButton) rootView.findViewById(R.id.download_rating_good);
-		shuffleButton = (ImageButton) rootView.findViewById(R.id.download_shuffle);
+		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
 
 		starButton = (ImageButton)rootView.findViewById(R.id.download_star);
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
@@ -350,7 +350,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onClick(View view) {
 				RepeatMode repeatMode = getDownloadService().getRepeatMode().next();
 				getDownloadService().setRepeatMode(repeatMode);
-				updateButtons();
+				onDownloadListChanged();
 				switch (repeatMode) {
 					case OFF:
 						Util.toast(context, R.string.download_repeat_off);
@@ -453,18 +453,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		});
 
-		shuffleButton.setOnClickListener(new View.OnClickListener() {
+		toggleListButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				DownloadService downloadService = getDownloadService();
-				downloadService.setShuffleMode(!downloadService.isShuffleMode());
-				updateButtons();
+				toggleFullscreenAlbumArt();
 				setControlsVisible(true);
-				if(downloadService.isShuffleMode()) {
-					Util.toast(context, R.string.download_shuffle_on);
-				} else {
-					Util.toast(context, R.string.download_shuffle_off);
-				}
 			}
 		});
 
@@ -551,7 +544,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if (downloadService != null && context.getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
 			context.getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE);
 			warnIfNetworkOrStorageUnavailable();
-			downloadService.setShuffleRemote(true);
+			downloadService.setShufflePlayEnabled(true);
 		}
 
 		if(Build.MODEL.equals("Nexus 4") || Build.MODEL.equals("GT-I9100")) {
@@ -741,7 +734,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 						new SilentBackgroundTask<Void>(context) {
 							@Override
 							protected Void doInBackground() throws Throwable {
-								getDownloadService().setShuffleRemote(false);
+								getDownloadService().setShufflePlayEnabled(false);
 								getDownloadService().clear();
 								return null;
 							}
@@ -772,9 +765,19 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 				context.supportInvalidateOptionsMenu();
 				return true;
-			case R.id.menu_toggle_list:
-				toggleFullscreenAlbumArt();
-				setControlsVisible(true);
+			case R.id.menu_shuffle:
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().shuffle();
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						Util.toast(context, R.string.download_menu_shuffle_notification);
+					}
+				}.execute();
 				return true;
 			case R.id.menu_save_playlist:
 				List<Entry> entries = new LinkedList<Entry>();
@@ -946,39 +949,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			rateBadButton.setVisibility(View.VISIBLE);
 			rateGoodButton.setVisibility(View.VISIBLE);
 		}
-
-		DownloadService downloadService = getDownloadService();
-		if(downloadService == null) {
-			return;
-		}
-
-		switch (downloadService.getRepeatMode()) {
-			case OFF:
-				if("light".equals(SubsonicActivity.getThemeName()) | "light_fullscreen".equals(SubsonicActivity.getThemeName())) {
-					repeatButton.setImageResource(R.drawable.media_repeat_off_light);
-				} else {
-					repeatButton.setImageResource(R.drawable.media_repeat_off);
-				}
-				break;
-			case ALL:
-				repeatButton.setImageResource(R.drawable.media_repeat_all);
-				break;
-			case SINGLE:
-				repeatButton.setImageResource(R.drawable.media_repeat_single);
-				break;
-			default:
-				break;
-		}
-
-		if(downloadService.isShuffleMode()) {
-			shuffleButton.setImageResource(R.drawable.ic_menu_shuffle_selected);
-		} else {
-			if("light".equals(SubsonicActivity.getThemeName())) {
-				shuffleButton.setImageResource(R.drawable.ic_menu_shuffle_light);
-			} else {
-				shuffleButton.setImageResource(R.drawable.ic_menu_shuffle_dark);
-			}
-		}
 	}
 
 	// Scroll to current playing/downloading.
@@ -1143,7 +1113,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				List<DownloadFile> list;
 				list = downloadService.getSongs();
 				
-				if(downloadService.isShuffleRemote()) {
+				if(downloadService.isShufflePlayEnabled()) {
 					emptyTextView.setText(R.string.download_shuffle_loading);
 				}
 				else {
@@ -1162,6 +1132,24 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				
 				emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
 				currentRevision = downloadService.getDownloadListUpdateRevision();
+
+				switch (downloadService.getRepeatMode()) {
+					case OFF:
+						if("light".equals(SubsonicActivity.getThemeName()) | "light_fullscreen".equals(SubsonicActivity.getThemeName())) {
+							repeatButton.setImageResource(R.drawable.media_repeat_off_light);
+						} else {
+							repeatButton.setImageResource(R.drawable.media_repeat_off);
+						}
+						break;
+					case ALL:
+						repeatButton.setImageResource(R.drawable.media_repeat_all);
+						break;
+					case SINGLE:
+						repeatButton.setImageResource(R.drawable.media_repeat_single);
+						break;
+					default:
+						break;
+				}
 				
 				if(scrollWhenLoaded) {
 					scrollToCurrent();

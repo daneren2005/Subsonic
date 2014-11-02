@@ -376,6 +376,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				artistOverride = true;
 				downloadRecursively(entry.getId(), false, false, true, false, false);
 				break;
+			case R.id.album_menu_play_shuffled:
+				artistOverride = true;
+				downloadRecursively(entry.getId(), false, false, true, true, false);
+				break;
 			case R.id.album_menu_play_next:
 				artistOverride = true;
 				downloadRecursively(entry.getId(), false, true, false, false, false, true);
@@ -411,10 +415,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				playNow(songs);
 				break;
 			case R.id.song_menu_play_next:
-				getDownloadService().download(songs, false, false, true);
+				getDownloadService().download(songs, false, false, true, false);
 				break;
 			case R.id.song_menu_play_last:
-				getDownloadService().download(songs, false, false, false);
+				getDownloadService().download(songs, false, false, false, false);
 				break;
 			case R.id.song_menu_download:
 				getDownloadService().downloadBackground(songs, false);
@@ -889,7 +893,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						downloadService.clear();
 					}
 					if(!background) {
-						downloadService.download(songs, save, autoplay, playNext);
+						downloadService.download(songs, save, autoplay, playNext, false);
 						if(!append) {
 							transition = true;
 						}
@@ -1553,7 +1557,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 				
 				downloadService.clear();
-				downloadService.download(entries, false, true, true, entries.indexOf(song), position);
+				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
 				downloadService.setSuggestedPlaylistName(playlistName, playlistId);
 
 				return null;
