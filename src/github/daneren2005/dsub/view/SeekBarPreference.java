@@ -116,7 +116,11 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 
 		SeekBar seekBar = (SeekBar)view.findViewById(R.id.seek_bar);
 		seekBar.setMax(mMax - mMin);
-		seekBar.setProgress(Integer.parseInt(mValue));
+		try {
+			seekBar.setProgress(Integer.parseInt(mValue));
+		} catch(Exception e) {
+			seekBar.setProgress(0);
+		}
 		seekBar.setOnSeekBarChangeListener(this);
 
 		return view;

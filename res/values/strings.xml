@@ -212,8 +212,6 @@
 	<string name="download.downloading_summary_expanded">Current: %1$s
 		\nEstimated Size: %2$s</string>
 	<string name="download.failed_to_load">Failed to load</string>
-	<string name="download.shuffle_on">Shuffle on</string>
-	<string name="download.shuffle_off">Shuffle off</string>
 
 	<string name="sync.new_podcasts">New podcasts available</string>
 	<string name="sync.new_playlists">New songs in playlists</string>

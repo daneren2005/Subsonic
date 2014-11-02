@@ -198,7 +198,7 @@ public class DownloadServiceLifecycleSupport {
 							}
 							editor.commit();
 							
-							downloadService.setShuffleRemote(true);
+							downloadService.setShufflePlayEnabled(true);
 						} else {
 							downloadService.start();
 						}

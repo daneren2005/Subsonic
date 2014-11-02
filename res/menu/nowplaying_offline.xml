@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/menu_shuffle"
+        android:icon="?attr/shuffle"
+        android:title="@string/download.menu_shuffle"
+        compat:showAsAction="always|withText"/>
+
 	<item
 		android:id="@+id/menu_mediaroute"
 		compat:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
 		compat:actionViewClass="android.support.v7.app.MediaRouteButton"
 		compat:showAsAction="always"
 		android:title="@string/menu.cast"/>
-
-    <item
-        android:id="@+id/menu_toggle_list"
-        android:icon="?attr/toggle_list"
-		android:title="@string/download.menu_toggle"
-        compat:showAsAction="always|withText"/>
 		
 	<item
         android:id="@+id/menu_remove_all"
