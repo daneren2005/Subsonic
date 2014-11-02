@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.8.2" versioncode="129" releasedate="10/30/2014">
+	<release version="4.8.2" versioncode="130" releasedate="11/2/2014">
 		<change>Improve automatic bookmark logic</change>
 		<change>Tasker: Toggle online/offline</change>
 		<change>Tasker: Set start/end year + genre for shuffle</change>
