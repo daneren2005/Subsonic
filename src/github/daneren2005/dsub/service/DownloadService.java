@@ -300,6 +300,10 @@ public class DownloadService extends Service {
 	public IBinder onBind(Intent intent) {
 		return binder;
 	}
+	
+	public void post(Runnable r) {
+		handler.post(r);
+	}
 
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
 		download(songs, save, autoplay, playNext, shuffle, 0, 0);
