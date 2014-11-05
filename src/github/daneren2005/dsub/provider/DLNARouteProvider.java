@@ -33,15 +33,21 @@ import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteProviderDescriptor;
 import android.util.Log;
 
-import org.fourthline.cling.android.AndroidUpnpService;
-import org.fourthline.cling.android.AndroidUpnpServiceImpl;
-import org.fourthline.cling.model.meta.Device;
-import org.fourthline.cling.model.meta.LocalDevice;
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.registry.Registry;
-import org.fourthline.cling.registry.RegistryListener;
+import org.teleal.cling.android.AndroidUpnpService;
+import org.teleal.cling.android.AndroidUpnpServiceImpl;
+import org.teleal.cling.model.action.ActionInvocation;
+import org.teleal.cling.model.message.UpnpResponse;
+import org.teleal.cling.model.meta.Device;
+import org.teleal.cling.model.meta.LocalDevice;
+import org.teleal.cling.model.meta.RemoteDevice;
+import org.teleal.cling.model.meta.StateVariable;
+import org.teleal.cling.model.meta.StateVariableAllowedValueRange;
+import org.teleal.cling.registry.Registry;
+import org.teleal.cling.registry.RegistryListener;
+import org.teleal.cling.support.renderingcontrol.callback.GetVolume;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import github.daneren2005.dsub.domain.DLNADevice;
@@ -128,7 +134,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 				dlnaService = null;
 			}
 		};
-		context.bindService(new Intent(context, AndroidUpnpServiceImpl.class), dlnaServiceConnection,Context.BIND_AUTO_CREATE);
+		context.bindService(new Intent(context, AndroidUpnpServiceImpl.class), dlnaServiceConnection, Context.BIND_AUTO_CREATE);
 	}
 
 	private void broadcastDescriptors() {
@@ -172,16 +178,35 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		return new DLNARouteController(downloadService);
 	}
 
-	private void deviceAdded(Device device) {
-		if(device.getType().getType().equals("MediaRenderer") && device instanceof RemoteDevice) {
-			String id = device.getIdentity().getUdn().toString();
-			String name = device.getDetails().getFriendlyName();
-			String displayName = device.getDisplayString();
-			Log.d(TAG, displayName);
+	private void deviceAdded(final Device device) {
+		final org.teleal.cling.model.meta.Service renderingControl = null;
 
-			DLNADevice newDevice = new DLNADevice(id, name, displayName, 0, 10);
-			devices.put(id, newDevice);
-			broadcastDescriptors();
+		if(device.getType().getType().equals("MediaRenderer") && device instanceof RemoteDevice) {
+			dlnaService.getControlPoint().execute(new GetVolume(renderingControl) {
+				@Override
+				public void received(ActionInvocation actionInvocation, int currentVolume) {
+					int maxVolume = 100;
+					StateVariable volume = renderingControl.getStateVariable("Volume");
+					if(volume != null) {
+						StateVariableAllowedValueRange volumeRange = volume.getTypeDetails().getAllowedValueRange();
+						maxVolume = (int) volumeRange.getMaximum();
+					}
+
+					String id = device.getIdentity().getUdn().toString();
+					String name = device.getDetails().getFriendlyName();
+					String displayName = device.getDisplayString();
+
+					DLNADevice newDevice = new DLNADevice(id, name, displayName, currentVolume, maxVolume);
+					devices.put(id, newDevice);
+					broadcastDescriptors();
+				}
+
+				@Override
+				public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String s) {
+					Log.w(TAG, "Failed to get default volume for DLNA route");
+					Log.w(TAG, "Reason: " + s);
+				}
+			});
 		}
 	}
 	private void deviceRemoved(Device device) {
