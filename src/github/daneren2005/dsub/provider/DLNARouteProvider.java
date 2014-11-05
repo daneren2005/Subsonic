@@ -175,7 +175,13 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 	@Override
 	public RouteController onCreateRouteController(String routeId) {
-		return new DLNARouteController(downloadService);
+		DLNADevice device = devices.get(routeId);
+		if(device == null) {
+			Log.w(TAG, "No device exists for " + routeId);
+			return null;
+		}
+		
+		return new DLNARouteController(device);
 	}
 
 	private void deviceAdded(final Device device) {
@@ -213,15 +219,22 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		if(device.getType().getType().equals("MediaRenderer") && device instanceof RemoteDevice) {
 			String id = device.getIdentity().getUdn().toString();
 			devices.remove(id);
-			broadcastDescriptors();
+			
+			// Make sure we do this on the main thread
+			downloadService.post(new Runnable() {
+				@Override
+				public void run() {
+					broadcastDescriptors();
+				}
+			});
 		}
 	}
 
 	private class DLNARouteController extends RouteController {
-		private DownloadService downloadService;
+		private DLNADevice device;
 
-		public DLNARouteController(DownloadService downloadService) {
-			this.downloadService = downloadService;
+		public DLNARouteController(DLNADevice device) {
+			this.device = device;
 		}
 
 		@Override
@@ -241,8 +254,8 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 		@Override
 		public void onSelect() {
-			downloadService.setRemoteEnabled(RemoteControlState.DLNA);
-			controller = downloadService.getRemoteController();
+			// controller = new DLNAController(device);
+			downloadService.setRemoteEnabled(RemoteControlState.DLNA, controller);
 		}
 
 		@Override
