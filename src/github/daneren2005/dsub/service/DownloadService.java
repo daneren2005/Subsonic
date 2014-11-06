@@ -53,7 +53,6 @@ import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,7 +69,6 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
-import android.media.audiofx.Equalizer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -558,9 +556,9 @@ public class DownloadService extends Service {
 
 	public void setOnline(final boolean online) {
 		if(online) {
-			mediaRouter.addOfflineProviders();
+			mediaRouter.addOnlineProviders();
 		} else {
-			mediaRouter.removeOfflineProviders();
+			mediaRouter.removeOnlineProviders();
 		}
 
 		lifecycleSupport.post(new Runnable() {

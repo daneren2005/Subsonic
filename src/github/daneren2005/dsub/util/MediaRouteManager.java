@@ -141,7 +141,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		}
 	}
 
-	public void addOfflineProviders() {
+	public void addOnlineProviders() {
 		JukeboxRouteProvider jukeboxProvider = new JukeboxRouteProvider(downloadService);
 		router.addProvider(jukeboxProvider);
 		providers.add(jukeboxProvider);
@@ -152,7 +152,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		providers.add(dlnaProvider);
 		offlineProviders.add(dlnaProvider);
 	}
-	public void removeOfflineProviders() {
+	public void removeOnlineProviders() {
 		for(MediaRouteProvider provider: offlineProviders) {
 			router.removeProvider(provider);
 		}
@@ -160,7 +160,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 
 	private void addProviders() {
 		if(!Util.isOffline(downloadService)) {
-			addOfflineProviders();
+			addOnlineProviders();
 		}
 	}
 	public void buildSelector() {
