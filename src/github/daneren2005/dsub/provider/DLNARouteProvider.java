@@ -42,10 +42,12 @@ import org.teleal.cling.model.meta.LocalDevice;
 import org.teleal.cling.model.meta.RemoteDevice;
 import org.teleal.cling.model.meta.StateVariable;
 import org.teleal.cling.model.meta.StateVariableAllowedValueRange;
+import org.teleal.cling.model.types.ServiceType;
 import org.teleal.cling.registry.Registry;
 import org.teleal.cling.registry.RegistryListener;
 import org.teleal.cling.support.renderingcontrol.callback.GetVolume;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +68,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	private RemoteController controller;
 
 	private HashMap<String, DLNADevice> devices = new HashMap<String, DLNADevice>();
-	private List<String> adding = new List<String>();
+	private List<String> adding = new ArrayList<String>();
 	private AndroidUpnpService dlnaService;
 	private ServiceConnection dlnaServiceConnection;
 
@@ -216,7 +218,12 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 					DLNADevice newDevice = new DLNADevice(id, name, displayName, currentVolume, maxVolume);
 					devices.put(id, newDevice);
-					broadcastDescriptors();
+					downloadService.post(new Runnable() {
+						@Override
+						public void run() {
+							broadcastDescriptors();
+						}
+					});
 					adding.remove(id);
 				}
 
