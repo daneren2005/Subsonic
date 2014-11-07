@@ -54,6 +54,7 @@ import java.util.Map;
 
 import github.daneren2005.dsub.domain.DLNADevice;
 import github.daneren2005.dsub.domain.RemoteControlState;
+import github.daneren2005.dsub.service.DLNAController;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.RemoteController;
 
@@ -275,7 +276,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 		@Override
 		public void onSelect() {
-			// controller = new DLNAController(device);
+			controller = new DLNAController(device);
 			downloadService.setRemoteEnabled(RemoteControlState.DLNA, controller);
 		}
 
