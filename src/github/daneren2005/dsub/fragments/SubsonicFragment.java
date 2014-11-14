@@ -889,7 +889,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						return false;
 					}
 					
-					if (!append) {
+					if (!append && !background) {
 						downloadService.clear();
 					}
 					if(!background) {
