@@ -443,7 +443,7 @@ public class FileUtil {
 				".complete." + FileUtil.getExtension(saveFile.getName()));
 
 		if(!saveFile.renameTo(completeFile)) {
-			Log.w(TAG, "Failed to rename " + saveFile + " to " + completeFile);
+			Log.w(TAG, "Failed to upin " + saveFile + " to " + completeFile);
 		} else {
 			try {
 				new MediaStoreService(context).renameInMediaStore(completeFile, saveFile);
