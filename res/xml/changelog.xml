@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.8.3" versioncode="131" releasedate="11/14/2014">
+		<change>Fix color on Lolipop lockscreen notification</change>
+		<change>Various bug fixes</change>
+	</release>
 	<release version="4.8.2" versioncode="130" releasedate="11/2/2014">
 		<change>Improve automatic bookmark logic</change>
 		<change>Tasker: Toggle online/offline</change>
