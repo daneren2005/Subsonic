@@ -558,6 +558,10 @@ public class DownloadService extends Service {
 		} else {
 			mediaRouter.removeOfflineProviders();
 		}
+		if(shufflePlay) {
+			setShufflePlayEnabled(false);
+		}
+		Log.d(TAG, "Shuffle mode: " + shufflePlay);
 
 		lifecycleSupport.post(new Runnable() {
 			@Override
