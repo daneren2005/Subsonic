@@ -905,6 +905,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		checkLicenseAndTrialPeriod(onValid);
 	}
 	private void downloadBackground(final boolean save) {
+		if(playlistId != null) {
+			selectAll(true, false);
+		}
+
 		List<Entry> songs = getSelectedSongs();
 		if(songs.isEmpty()) {
 			// Get both songs and albums
