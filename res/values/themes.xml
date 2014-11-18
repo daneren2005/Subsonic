@@ -31,6 +31,7 @@
 		<item name="drawerItemsIcons">@array/drawerItemIconsLight</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Light</item>
+		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="@style/Theme.AppCompat">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
@@ -64,6 +65,7 @@
 		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Dark</item>
+		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
 	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@android:color/black</item>
@@ -100,6 +102,7 @@
 		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Dark</item>
+		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
 	</style>
 	
 	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.AppCompat.Light.ActionBar.Solid">
@@ -133,5 +136,9 @@
 	<style name="DSub.ButtonStyle.Dark" parent="android:Widget.Holo.Button">
 	</style>
 	<style name="DSub.ButtonStyle.Light" parent="android:Widget.Holo.Light.Button">
+	</style>
+
+	<style name="DSub.DrawerArrow" parent="Widget.AppCompat.DrawerArrowToggle">
+		<item name="spinBars">true</item>
 	</style>
 </resources>

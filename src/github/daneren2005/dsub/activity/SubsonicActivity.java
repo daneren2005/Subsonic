@@ -28,7 +28,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -201,7 +201,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		});
 
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerToggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer, R.string.common_appname, R.string.common_appname) {
+		drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.common_appname, R.string.common_appname) {
 			@Override
 			public void onDrawerClosed(View view) {
 				setTitle(currentFragment.getTitle());
