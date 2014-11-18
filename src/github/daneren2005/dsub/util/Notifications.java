@@ -69,6 +69,9 @@ public final class Notifications {
 			notification.bigContentView = expandedContentView;
 			notification.priority = Notification.PRIORITY_HIGH;
 		}
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			notification.visibility = Notification.VISIBILITY_PUBLIC;
+		}
 
 		RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
 		setupViews(smallContentView, context, song, false, playing, remote);
