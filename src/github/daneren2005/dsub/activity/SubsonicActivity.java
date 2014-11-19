@@ -221,7 +221,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					drawerAdapter.setDownloadVisible(true);
 				}
 
-				if(lastSelectedView == null) {
+				if(lastSelectedView == null && drawerList.getCount() > lastSelectedPosition) {
 					lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
 					if(lastSelectedView != null) {
 						lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
