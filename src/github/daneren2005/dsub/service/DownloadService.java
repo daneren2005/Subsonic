@@ -580,7 +580,6 @@ public class DownloadService extends Service {
 		if(shufflePlay) {
 			setShufflePlayEnabled(false);
 		}
-		Log.d(TAG, "Shuffle mode: " + shufflePlay);
 
 		lifecycleSupport.post(new Runnable() {
 			@Override
