@@ -1187,7 +1187,16 @@ public class DownloadService extends Service {
 			while(isRunning) {
 				try {
 					if(mediaPlayer != null && playerState == STARTED) {
-						cachedPosition = mediaPlayer.getCurrentPosition();
+						int newPosition = mediaPlayer.getCurrentPosition();
+
+						// If sudden jump in position, something is wrong
+						if(subtractNextPosition == 0 && newPosition > (cachedPosition + 5000)) {
+							// Only 1 second should have gone by, subtract the rest
+							subtractPosition += (newPosition - cachedPosition) - 1000;
+						}
+
+						cachedPosition = newPosition;
+
 						if(subtractNextPosition > 0) {
 							// Subtraction amount is current position - how long ago onCompletionListener was called
 							subtractPosition = cachedPosition - (int) (System.currentTimeMillis() - subtractNextPosition);
@@ -1226,7 +1235,7 @@ public class DownloadService extends Service {
 	public void setSuggestedPlaylistName(String name, String id) {
 		this.suggestedPlaylistName = name;
 		this.suggestedPlaylistId = id;
-		
+
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putString(Constants.PREFERENCES_KEY_PLAYLIST_NAME, name);
 		editor.putString(Constants.PREFERENCES_KEY_PLAYLIST_ID, id);
@@ -1276,7 +1285,7 @@ public class DownloadService extends Service {
 				// Don't try again, just resetup media player and continue on
 				controller = null;
 			}
-			
+
 			// Restart from same position and state we left off in
 			play(getCurrentPlayingIndex(), false, pos);
 		}
@@ -1505,7 +1514,7 @@ public class DownloadService extends Service {
 							if (start || autoPlayStart) {
 								mediaPlayer.start();
 								setPlayerState(STARTED);
-								
+
 								// Disable autoPlayStart after done
 								autoPlayStart = false;
 							} else {
