@@ -588,13 +588,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
                 previousInstance = Util.getActiveServer(SettingsActivity.this);
                 testingConnection = true;
-                Util.setActiveServer(SettingsActivity.this, instance);
+				MusicService musicService = MusicServiceFactory.getMusicService(SettingsActivity.this);
                 try {
-                    MusicService musicService = MusicServiceFactory.getMusicService(SettingsActivity.this);
+					musicService.setInstance(instance);
                     musicService.ping(SettingsActivity.this, this);
                     return musicService.isLicenseValid(SettingsActivity.this, null);
                 } finally {
-                    Util.setActiveServer(SettingsActivity.this, previousInstance);
+					musicService.setInstance(null);
                     testingConnection = false;
                 }
             }
