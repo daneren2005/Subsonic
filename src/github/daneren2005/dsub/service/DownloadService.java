@@ -307,6 +307,8 @@ public class DownloadService extends Service {
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle, int start, int position) {
 		setShufflePlayEnabled(false);
 		int offset = 1;
+		boolean noNetwork = !Util.isOffline(this) && !Util.isNetworkConnected(this);
+		boolean warnNetwork = false;
 
 		if (songs.isEmpty()) {
 			return;
@@ -319,6 +321,11 @@ public class DownloadService extends Service {
 				if(song != null) {
 					DownloadFile downloadFile = new DownloadFile(this, song, save);
 					addToDownloadList(downloadFile, getCurrentPlayingIndex() + offset);
+					if(noNetwork && !warnNetwork) {
+						if(!downloadFile.isCompleteFileAvailable()) {
+							warnNetwork = true;
+						}
+					}
 					offset++;
 				}
 			}
@@ -330,6 +337,11 @@ public class DownloadService extends Service {
 			for (MusicDirectory.Entry song : songs) {
 				DownloadFile downloadFile = new DownloadFile(this, song, save);
 				addToDownloadList(downloadFile, -1);
+				if(noNetwork && !warnNetwork) {
+					if(!downloadFile.isCompleteFileAvailable()) {
+						warnNetwork = true;
+					}
+				}
 			}
 			if(!autoplay && (size - 1) == index) {
 				setNextPlaying();
@@ -340,6 +352,9 @@ public class DownloadService extends Service {
 
 		if(shuffle) {
 			shuffle();
+		}
+		if(warnNetwork) {
+			Util.toast(this, R.string.select_album_no_network);
 		}
 
 		if (autoplay) {
@@ -375,6 +390,10 @@ public class DownloadService extends Service {
 			}
 		}
 		revision++;
+
+		if(!Util.isOffline(this) && !Util.isNetworkConnected(this)) {
+			Util.toast(this, R.string.select_album_no_network);
+		}
 
 		checkDownloads();
 		lifecycleSupport.serializeDownloadQueue();

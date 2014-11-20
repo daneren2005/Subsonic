@@ -863,7 +863,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		final List<Entry> songs = getSelectedSongs();
-		warnIfNetworkOrStorageUnavailable();
+		warnIfStorageUnavailable();
 		
 		// Conditions for using play now button
 		if(!append && !save && autoplay && !playNext && !shuffle) {
@@ -922,7 +922,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			return;
 		}
 
-		warnIfNetworkOrStorageUnavailable();
+		warnIfStorageUnavailable();
 		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
