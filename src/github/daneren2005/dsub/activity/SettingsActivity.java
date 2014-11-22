@@ -292,11 +292,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 			Object manager = managerConstructor.newInstance(this);
 			Method m = managerClass.getMethod("dataChanged");
 			m.invoke(manager);
-			Log.d(TAG, "Backup requested");
 		} catch(ClassNotFoundException e) {
-			Log.d(TAG, "No backup manager found");
+			Log.e(TAG, "No backup manager found");
 		} catch(Throwable t) {
-			Log.d(TAG, "Scheduling backup failed " + t);
+			Log.e(TAG, "Scheduling backup failed " + t);
 			t.printStackTrace();
 		}
     }
