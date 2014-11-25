@@ -32,11 +32,11 @@
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Light</item>
 		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
+		<item name="colorAccent">@color/cyan</item>
 	</style>
 	<style name="Theme.DSub.Dark" parent="@style/Theme.AppCompat">
 		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
 		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
-		<item name="android:textColorSecondary">@color/cyan</item>
 		<item name="offline_icon">@drawable/main_offline_dark</item>
 		<item name="media_button_backward">@drawable/media_backward_dark</item>
 		<item name="media_button_forward">@drawable/media_forward_dark</item>
@@ -66,43 +66,13 @@
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Dark</item>
 		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
+		<item name="colorAccent">@color/cyan</item>
 	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@android:color/black</item>
 	</style>
-	<style name="Theme.DSub.Holo" parent="@style/Theme.AppCompat">
-		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
-		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Holo</item>
+	<style name="Theme.DSub.Holo" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@drawable/background</item>
-		<item name="offline_icon">@drawable/main_offline_dark</item>
-		<item name="media_button_backward">@drawable/media_backward_dark</item>
-		<item name="media_button_forward">@drawable/media_forward_dark</item>
-		<item name="media_button_pause">@drawable/media_pause_dark</item>
-		<item name="media_button_repeat_off">@drawable/media_repeat_off</item>
-		<item name="media_button_start">@drawable/media_start_dark</item>
-		<item name="media_button_stop">@drawable/media_stop_dark</item>
-		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
-		<item name="add">@drawable/ic_action_add_dark</item>
-		<item name="download_none">@drawable/download_none_dark</item>
-		<item name="shuffle">@drawable/ic_menu_shuffle_dark</item>
-		<item name="refresh">@drawable/ic_menu_refresh_dark</item>
-		<item name="search">@drawable/ic_menu_search_dark</item>
-		<item name="remove">@drawable/ic_menu_remove_dark</item>
-		<item name="save">@drawable/ic_menu_save_dark</item>
-		<item name="volume">@drawable/ic_action_volume_dark</item>
-		<item name="toggle_list">@drawable/action_toggle_list_dark</item>
-		<item name="select_server">@drawable/main_select_server_dark</item>
-		<item name="downloading">@drawable/downloading_dark</item>
-		<item name="bookmark">@drawable/ic_menu_bookmark_dark</item>
-		<item name="share">@drawable/ic_menu_share_dark</item>
-		<item name="add_person">@drawable/ic_menu_add_person_dark</item>
-		<item name="password">@drawable/ic_menu_password_dark</item>
-		<item name="rating_bad">@drawable/ic_action_rating_bad_dark</item>
-		<item name="rating_good">@drawable/ic_action_rating_good_dark</item>
-		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
-		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
-		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Dark</item>
-		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
 	</style>
 	
 	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.AppCompat.Light.ActionBar.Solid">
@@ -111,15 +81,8 @@
 		<item name="backgroundStacked">@android:color/transparent</item>
 		<item name="android:backgroundStacked">@android:color/transparent</item>
 	</style>
-	
+
 	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.AppCompat.ActionBar.Solid">
-		<item name="background">@android:color/transparent</item>
-		<item name="android:background">@android:color/transparent</item>
-		<item name="backgroundStacked">@android:color/transparent</item>
-		<item name="android:backgroundStacked">@android:color/transparent</item>
-	</style>
-	
-	<style name="Widget.DSub.ActionBarStyle.Holo" parent="Widget.AppCompat.ActionBar.Solid">
 		<item name="background">@android:color/transparent</item>
 		<item name="android:background">@android:color/transparent</item>
 		<item name="backgroundStacked">@android:color/transparent</item>
