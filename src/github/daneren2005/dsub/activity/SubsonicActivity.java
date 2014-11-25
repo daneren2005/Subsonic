@@ -101,8 +101,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected void onCreate(Bundle bundle) {
 		setUncaughtExceptionHandler();
 		applyTheme();
-		super.onCreate(bundle);
 		applyFullscreen();
+		super.onCreate(bundle);
 		startService(new Intent(this, DownloadService.class));
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
