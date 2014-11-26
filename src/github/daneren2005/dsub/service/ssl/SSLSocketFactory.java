@@ -49,6 +49,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -58,8 +59,13 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.UnrecoverableKeyException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Layered socket factory for TLS/SSL connections.
@@ -144,8 +150,6 @@ import java.security.UnrecoverableKeyException;
 public class SSLSocketFactory implements LayeredSocketFactory {
 	private static final String TAG = SSLSocketFactory.class.getSimpleName();
     public static final String TLS   = "TLS";
-    public static final String SSL   = "SSL";
-    public static final String SSLV2 = "SSLv2";
 
     public static final X509HostnameVerifier ALLOW_ALL_HOSTNAME_VERIFIER
         = new AllowAllHostnameVerifier();
@@ -343,16 +347,18 @@ public class SSLSocketFactory implements LayeredSocketFactory {
     @SuppressWarnings("cast")
     public Socket createSocket(final HttpParams params) throws IOException {
         // the cast makes sure that the factory is working as expected
-		SSLSocket sslsocket = (SSLSocket) this.socketfactory.createSocket();
-		sslsocket.setEnabledProtocols(sslsocket.getSupportedProtocols());
-		return sslsocket;
+		SSLSocket sslSocket = (SSLSocket) this.socketfactory.createSocket();
+		sslSocket.setEnabledProtocols(getProtocols(sslSocket));
+		sslSocket.setEnabledCipherSuites(getCiphers(sslSocket));
+		return sslSocket;
     }
 
     @SuppressWarnings("cast")
     public Socket createSocket() throws IOException {
         // the cast makes sure that the factory is working as expected
 		SSLSocket sslSocket = (SSLSocket) this.socketfactory.createSocket();
-		sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
+		sslSocket.setEnabledProtocols(getProtocols(sslSocket));
+		sslSocket.setEnabledCipherSuites(getCiphers(sslSocket));
 		return sslSocket;
     }
 
@@ -444,7 +450,8 @@ public class SSLSocketFactory implements LayeredSocketFactory {
               port,
               autoClose
         );
-		sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
+		sslSocket.setEnabledProtocols(getProtocols(sslSocket));
+		sslSocket.setEnabledCipherSuites(getCiphers(sslSocket));
         if (this.hostnameVerifier != null) {
             this.hostnameVerifier.verify(host, sslSocket);
         }
@@ -500,7 +507,8 @@ public class SSLSocketFactory implements LayeredSocketFactory {
             final String host, int port,
             boolean autoClose) throws IOException, UnknownHostException {
 		SSLSocket sslSocket = (SSLSocket) this.socketfactory.createSocket(socket, host, port, autoClose);
-		sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
+		sslSocket.setEnabledProtocols(getProtocols(sslSocket));
+		sslSocket.setEnabledCipherSuites(getCiphers(sslSocket));
 		setHostName(sslSocket, host);
 		return sslSocket;
     }
@@ -512,5 +520,30 @@ public class SSLSocketFactory implements LayeredSocketFactory {
 		} catch (Exception e) {
 			Log.w(TAG, "SNI not useable", e);
 		}
+	}
+
+	private String[] getProtocols(SSLSocket sslSocket) {
+		String[] protocols = sslSocket.getEnabledProtocols();
+
+		// Remove SSLv3 if it is not the only option
+		if(protocols.length > 1) {
+			List<String> protocolList = new ArrayList(Arrays.asList(protocols));
+			protocolList.remove("SSLv3");
+			protocols = protocolList.toArray(new String[protocolList.size()]);
+		}
+
+		return protocols;
+	}
+
+	private String[] getCiphers(SSLSocket sslSocket) {
+		String[] ciphers = sslSocket.getEnabledCipherSuites();
+
+		List<String> enabledCiphers = new ArrayList(Arrays.asList(ciphers));
+		// On Android 5.0 release, Jetty doesn't seem to play nice with these ciphers
+		enabledCiphers.remove("TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA");
+		enabledCiphers.remove("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA");
+
+		ciphers = enabledCiphers.toArray(new String[enabledCiphers.size()]);
+		return ciphers;
 	}
 }

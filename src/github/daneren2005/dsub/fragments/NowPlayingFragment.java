@@ -236,7 +236,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		previousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				warnIfNetworkOrStorageUnavailable();
+				warnIfStorageUnavailable();
 				new SilentBackgroundTask<Void>(context) {
 					@Override
 					protected Void doInBackground() throws Throwable {
@@ -262,7 +262,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				warnIfNetworkOrStorageUnavailable();
+				warnIfStorageUnavailable();
 				new SilentBackgroundTask<Boolean>(context) {
 					@Override
 					protected Boolean doInBackground() throws Throwable {
@@ -328,7 +328,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		startButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				warnIfNetworkOrStorageUnavailable();
+				warnIfStorageUnavailable();
 				new SilentBackgroundTask<Void>(context) {
 					@Override
 					protected Void doInBackground() throws Throwable {
@@ -507,7 +507,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-				warnIfNetworkOrStorageUnavailable();
+				warnIfStorageUnavailable();
 				new SilentBackgroundTask<Void>(context) {
 					@Override
 					protected Void doInBackground() throws Throwable {
@@ -543,7 +543,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		DownloadService downloadService = getDownloadService();
 		if (downloadService != null && context.getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
 			context.getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE);
-			warnIfNetworkOrStorageUnavailable();
+			warnIfStorageUnavailable();
 			downloadService.setShufflePlayEnabled(true);
 		}
 
@@ -1077,7 +1077,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if (state == PAUSED || state == COMPLETED || state == STOPPED) {
 			service.start();
 		} else if (state == STOPPED || state == IDLE) {
-			warnIfNetworkOrStorageUnavailable();
+			warnIfStorageUnavailable();
 			int current = service.getCurrentPlayingIndex();
 			// TODO: Use play() method.
 			if (current == -1) {
@@ -1495,7 +1495,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 		if(action > 0) {
 			final int performAction = action;
-			warnIfNetworkOrStorageUnavailable();
+			warnIfStorageUnavailable();
 			new SilentBackgroundTask<Void>(context) {
 				@Override
 				protected Void doInBackground() throws Throwable {

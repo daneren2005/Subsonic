@@ -129,8 +129,6 @@
     <string name="download.jukebox_server_too_old">Удаленное управление не поддерживается. Пожалуйста, обновите Ваш сервер Subsonic.</string>
     <string name="download.jukebox_offline">Удаленное управление не поддерживается в оффлайн режиме.</string>
     <string name="download.jukebox_not_authorized">Удаленное управление запрещено. Пожалуйста, активируйте режим jukebox в разделе <b>Настройки &gt; Проигрыватели</b> на вашем сервере Subsonic.</string>
-	<string name="download.show_downloading">Показать закачки</string>
-	<string name="download.show_now_playing">Показать воспроизведение</string>
 	<string name="download.timer_length">Длительность</string>
 	<string name="download.start_timer">Запустить таймер</string>
 	<string name="download.stop_timer">Остановить таймер</string>

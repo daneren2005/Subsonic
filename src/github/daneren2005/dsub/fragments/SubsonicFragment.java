@@ -617,11 +617,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			R.color.holo_red_light);
 	}
 
-	protected void warnIfNetworkOrStorageUnavailable() {
+	protected void warnIfStorageUnavailable() {
 		if (!Util.isExternalStoragePresent()) {
 			Util.toast(context, R.string.select_album_no_sdcard);
-		} else if (!Util.isOffline(context) && !Util.isNetworkConnected(context)) {
-			Util.toast(context, R.string.select_album_no_network);
 		}
 	}
 
@@ -889,7 +887,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						return false;
 					}
 					
-					if (!append) {
+					if (!append && !background) {
 						downloadService.clear();
 					}
 					if(!background) {
@@ -934,12 +932,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void done(Boolean result) {
+				warnIfStorageUnavailable();
+
 				if(playNowOverride) {
 					playNow(songs);
 					return;
 				}
-
-				warnIfNetworkOrStorageUnavailable();
 
 				if(result) {
 					Util.startActivityWithoutTransition(context, DownloadActivity.class);

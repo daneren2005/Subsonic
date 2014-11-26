@@ -192,8 +192,6 @@
     <string name="download.jukebox_server_too_old">Control remoto no soportado. Por favor, actualice su servidor Subsonic.</string>
     <string name="download.jukebox_offline">Control remoto no disponible en modo offline.</string>
     <string name="download.jukebox_not_authorized">Control remoto no permitido. Por favor, active el modo jukebox en <b>Users &gt; Settings</b> en su servidor Subsonic.</string>
-	<string name="download.show_downloading">Mostrar descargas</string>
-	<string name="download.show_now_playing">Mostrar reproduciendo ahora</string>
 	<string name="download.timer_length">Temporizador</string>
 	<string name="download.start_timer">Iniciar temporizador</string>
 	<string name="download.stop_timer">Detener temporizador</string>

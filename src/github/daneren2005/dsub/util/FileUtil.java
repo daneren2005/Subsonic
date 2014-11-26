@@ -438,12 +438,17 @@ public class FileUtil {
 	}
 
 	public static void unpinSong(Context context, File saveFile) {
+		// Don't try to unpin a song which isn't actually pinned
+		if(saveFile.getName().contains(".complete")) {
+			return;
+		}
+
 		// Unpin file, rename to .complete
 		File completeFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
 				".complete." + FileUtil.getExtension(saveFile.getName()));
 
 		if(!saveFile.renameTo(completeFile)) {
-			Log.w(TAG, "Failed to rename " + saveFile + " to " + completeFile);
+			Log.w(TAG, "Failed to upin " + saveFile + " to " + completeFile);
 		} else {
 			try {
 				new MediaStoreService(context).renameInMediaStore(completeFile, saveFile);

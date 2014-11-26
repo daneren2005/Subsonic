@@ -227,7 +227,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         update();
 
-		if(Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+		if(Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH && getActionBar() != null) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 			getActionBar().setHomeButtonEnabled(true);
 		}
@@ -292,11 +292,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 			Object manager = managerConstructor.newInstance(this);
 			Method m = managerClass.getMethod("dataChanged");
 			m.invoke(manager);
-			Log.d(TAG, "Backup requested");
 		} catch(ClassNotFoundException e) {
-			Log.d(TAG, "No backup manager found");
+			Log.e(TAG, "No backup manager found");
 		} catch(Throwable t) {
-			Log.d(TAG, "Scheduling backup failed " + t);
+			Log.e(TAG, "Scheduling backup failed " + t);
 			t.printStackTrace();
 		}
     }
@@ -588,13 +587,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
                 previousInstance = Util.getActiveServer(SettingsActivity.this);
                 testingConnection = true;
-                Util.setActiveServer(SettingsActivity.this, instance);
+				MusicService musicService = MusicServiceFactory.getMusicService(SettingsActivity.this);
                 try {
-                    MusicService musicService = MusicServiceFactory.getMusicService(SettingsActivity.this);
+					musicService.setInstance(instance);
                     musicService.ping(SettingsActivity.this, this);
                     return musicService.isLicenseValid(SettingsActivity.this, null);
                 } finally {
-                    Util.setActiveServer(SettingsActivity.this, previousInstance);
+					musicService.setInstance(null);
                     testingConnection = false;
                 }
             }

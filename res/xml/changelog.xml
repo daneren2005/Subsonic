@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.8.5" versioncode="133" releasedate="11/26/2014">
+		<change>Fix crash on GB</change>
+		<change>Fix some theme issues</change>
+	</release>
+	<release version="4.8.4" versioncode="132" releasedate="11/22/2014">
+		<change>Partial Material Theme update</change>
+		<change>Make playing notification public for Lolipop</change>
+		<change>Fix Lolipop connectivity issues for some users</change>
+		<change>Fix cache from playlist view downloading starred songs instead</change>
+		<change>Fix remove from playlist not showing up on MusicCabinet servers</change>
+	</release>
+	<release version="4.8.3" versioncode="131" releasedate="11/14/2014">
+		<change>Fix color on Lolipop lockscreen notification</change>
+		<change>Various bug fixes</change>
+	</release>
 	<release version="4.8.2" versioncode="130" releasedate="11/2/2014">
 		<change>Improve automatic bookmark logic</change>
 		<change>Tasker: Toggle online/offline</change>

@@ -147,7 +147,13 @@ public class DSubSearchProvider extends ContentProvider {
 					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), entry.getId(), entry.getTitle(), icon});
 				} else {
 					String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
-					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), "so-" + entry.getParent(), entry.getTitle(), icon});
+					String id;
+					if(Util.isTagBrowsing(getContext())) {
+						id = entry.getAlbumId();
+					} else {
+						id = entry.getParent();
+					}
+					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), "so-" + id, entry.getTitle(), icon});
 				}
 			}
 		}

@@ -320,6 +320,10 @@ public class OfflineMusicService implements MusicService {
 
 				for(File songFile : FileUtil.listMediaFiles(albumFile)) {
 					String songName = getName(songFile);
+					if(songName == null) {
+						continue;
+					}
+
 					if(songFile.isDirectory()) {
 						recursiveAlbumSearch(artistName, songFile, criteria, context, albums, songs);
 					}
