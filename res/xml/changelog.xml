@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.8.5" versioncode="133" releasedate="11/26/2014">
+		<change>Fix crash on GB</change>
+		<change>Fix some theme issues</change>
+	</release>
 	<release version="4.8.4" versioncode="132" releasedate="11/22/2014">
 		<change>Partial Material Theme update</change>
 		<change>Make playing notification public for Lolipop</change>
