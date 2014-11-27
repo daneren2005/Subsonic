@@ -22,10 +22,13 @@ package github.daneren2005.dsub.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.teleal.cling.model.meta.Device;
+
 /**
  * Created by Scott on 11/1/2014.
  */
 public class DLNADevice implements Parcelable {
+	public Device renderer;
 	public String id;
 	public String name;
 	public String description;
@@ -50,7 +53,8 @@ public class DLNADevice implements Parcelable {
 		volumeMax = in.readInt();
 	}
 
-	public DLNADevice(String id, String name, String description, int volume, int volumeMax) {
+	public DLNADevice(Device renderer, String id, String name, String description, int volume, int volumeMax) {
+		this.renderer = renderer;
 		this.id = id;
 		this.name = name;
 		this.description = description;

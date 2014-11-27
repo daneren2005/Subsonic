@@ -1345,7 +1345,7 @@ public class DownloadService extends Service {
 			case JUKEBOX_SERVER:
 				remoteController = new JukeboxController(this, handler);
 				break;
-			case CHROMECAST:
+			case CHROMECAST: case DLNA:
 				if(ref == null) {
 					remoteState = RemoteControlState.LOCAL;
 					break;

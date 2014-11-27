@@ -217,7 +217,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 					String name = device.getDetails().getFriendlyName();
 					String displayName = device.getDisplayString();
 
-					DLNADevice newDevice = new DLNADevice(id, name, displayName, currentVolume, maxVolume);
+					DLNADevice newDevice = new DLNADevice(device, id, name, displayName, currentVolume, maxVolume);
 					devices.put(id, newDevice);
 					downloadService.post(new Runnable() {
 						@Override
@@ -276,7 +276,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 		@Override
 		public void onSelect() {
-			controller = new DLNAController(device);
+			controller = new DLNAController(downloadService, dlnaService.getControlPoint(), device);
 			downloadService.setRemoteEnabled(RemoteControlState.DLNA, controller);
 		}
 
