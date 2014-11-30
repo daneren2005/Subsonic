@@ -31,6 +31,7 @@ import org.teleal.cling.model.state.StateVariableValue;
 import org.teleal.cling.model.types.ServiceType;
 import org.teleal.cling.support.avtransport.callback.Pause;
 import org.teleal.cling.support.avtransport.callback.Play;
+import org.teleal.cling.support.avtransport.callback.Seek;
 import org.teleal.cling.support.avtransport.callback.SetAVTransportURI;
 import org.teleal.cling.support.avtransport.callback.Stop;
 import org.teleal.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
@@ -38,14 +39,16 @@ import org.teleal.cling.support.avtransport.lastchange.AVTransportVariable;
 import org.teleal.cling.support.contentdirectory.DIDLParser;
 import org.teleal.cling.support.lastchange.LastChange;
 import org.teleal.cling.support.model.DIDLContent;
-import org.teleal.cling.support.model.Res;
+import org.teleal.cling.support.model.SeekMode;
 import org.teleal.cling.support.model.item.Item;
 import org.teleal.cling.support.model.item.MusicTrack;
 import org.teleal.cling.support.model.item.VideoItem;
-import org.teleal.common.util.MimeType;
+import org.teleal.cling.support.renderingcontrol.callback.SetVolume;
 
-import java.util.Iterator;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.DLNADevice;
@@ -117,6 +120,7 @@ public class DLNAController extends RemoteController {
 							boolean failed = false;
 							for(StateVariableValue val: m.values()) {
 								if(val.toString().indexOf("TransportStatus val=\"ERROR_OCCURRED\"") != -1) {
+									Log.w(TAG, "Failed to load with event: val.toString()");
 									failed = true;
 								}
 							}
@@ -204,32 +208,49 @@ public class DLNAController extends RemoteController {
 
 	@Override
 	public void updatePlaylist() {
-
+		if(downloadService.getCurrentPlaying() == null) {
+			startSong(null, false, 0);
+		}
 	}
 
 	@Override
 	public void changePosition(int seconds) {
-
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
+		controlPoint.execute(new Seek(device.renderer.findService(new ServiceType("schemas-upnp-org", "AVTransport")), SeekMode.REL_TIME, df.format(new Date(seconds * 1000))) {
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMessage) {
+				Log.w(TAG, "Seek failed: " + defaultMessage);
+			}
+		});
 	}
 
 	@Override
 	public void changeTrack(int index, DownloadFile song) {
-
+		startSong(song, true, 0);
 	}
 
 	@Override
 	public void setVolume(int volume) {
-
+		device.volume = volume;
+		controlPoint.execute(new SetVolume(device.renderer.findService(new ServiceType("schemas-upnp-org", "RenderingControl")), volume) {
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMessage) {
+				Log.w(TAG, "Set volume failed: " + defaultMessage);
+			}
+		});
 	}
 
 	@Override
 	public void updateVolume(boolean up) {
-
+		setVolume(device.volume + (up ? 1 : -1));
 	}
 
 	@Override
 	public double getVolume() {
-		return 0;
+		return device.volume;
 	}
 
 	@Override
