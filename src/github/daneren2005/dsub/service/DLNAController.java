@@ -15,6 +15,8 @@
 
 package github.daneren2005.dsub.service;
 
+import android.content.SharedPreferences;
+import android.os.Looper;
 import android.util.Log;
 
 import org.teleal.cling.controlpoint.ControlPoint;
@@ -24,6 +26,7 @@ import org.teleal.cling.model.gena.CancelReason;
 import org.teleal.cling.model.gena.GENASubscription;
 import org.teleal.cling.model.message.UpnpResponse;
 import org.teleal.cling.model.meta.Device;
+import org.teleal.cling.model.meta.StateVariable;
 import org.teleal.cling.model.state.StateVariableValue;
 import org.teleal.cling.model.types.ServiceType;
 import org.teleal.cling.support.avtransport.callback.Pause;
@@ -32,15 +35,25 @@ import org.teleal.cling.support.avtransport.callback.SetAVTransportURI;
 import org.teleal.cling.support.avtransport.callback.Stop;
 import org.teleal.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.teleal.cling.support.avtransport.lastchange.AVTransportVariable;
+import org.teleal.cling.support.contentdirectory.DIDLParser;
 import org.teleal.cling.support.lastchange.LastChange;
+import org.teleal.cling.support.model.DIDLContent;
+import org.teleal.cling.support.model.Res;
+import org.teleal.cling.support.model.item.Item;
+import org.teleal.cling.support.model.item.MusicTrack;
+import org.teleal.cling.support.model.item.VideoItem;
+import org.teleal.common.util.MimeType;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.DLNADevice;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.serverproxy.FileProxy;
 
 public class DLNAController extends RemoteController {
 	private static final String TAG = DLNAController.class.getSimpleName();
@@ -49,10 +62,17 @@ public class DLNAController extends RemoteController {
 	ControlPoint controlPoint;
 	SubscriptionCallback callback;
 
+	private FileProxy proxy;
+	String rootLocation = "";
+	boolean error = false;
+
 	public DLNAController(DownloadService downloadService, ControlPoint controlPoint, DLNADevice device) {
 		this.downloadService = downloadService;
 		this.controlPoint = controlPoint;
 		this.device = device;
+
+		SharedPreferences prefs = Util.getPreferences(downloadService);
+		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 	}
 
 	@Override
@@ -94,7 +114,18 @@ public class DLNAController extends RemoteController {
 							downloadService.setPlayerState(PlayerState.PAUSED);
 							break;
 						case STOPPED:
-							downloadService.setPlayerState(PlayerState.STOPPED);
+							boolean failed = false;
+							for(StateVariableValue val: m.values()) {
+								if(val.toString().indexOf("TransportStatus val=\"ERROR_OCCURRED\"") != -1) {
+									failed = true;
+								}
+							}
+
+							if(failed) {
+								failedLoad();
+							} else {
+								downloadService.setPlayerState(PlayerState.STOPPED);
+							}
 							break;
 						case TRANSITIONING:
 							downloadService.setPlayerState(PlayerState.PREPARING);
@@ -121,6 +152,12 @@ public class DLNAController extends RemoteController {
 
 	@Override
 	public void start() {
+		if(error) {
+			Log.w(TAG, "Attempting to restart song");
+			startSong(downloadService.getCurrentPlaying(), true, 0);
+			return;
+		}
+
 		controlPoint.execute(new Play(device.renderer.findService(new ServiceType("schemas-upnp-org", "AVTransport"))) {
 			@Override
 			public void success(ActionInvocation invocation) {
@@ -205,15 +242,57 @@ public class DLNAController extends RemoteController {
 			downloadService.setPlayerState(PlayerState.IDLE);
 			return;
 		}
+		error = false;
 
 		downloadService.setPlayerState(PlayerState.PREPARING);
 		MusicDirectory.Entry song = currentPlaying.getSong();
 
 		try {
+			// Get url for entry
 			MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-			String url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
-			url = Util.replaceInternalUrl(downloadService, url);
+			String url;
+			if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
+				if(proxy == null) {
+					proxy = new FileProxy(downloadService);
+					proxy.start();
+				}
+
+				url = proxy.getPublicAddress(song.getId());
+			} else {
+				if(proxy != null) {
+					proxy.stop();
+					proxy = null;
+				}
+
+				if(song.isVideo()) {
+					url = musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService);
+				} else {
+					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
+				}
+
+				url = Util.replaceInternalUrl(downloadService, url);
+			}
+
+			// Create metadata for entry
+			Item track;
+			if(song.isVideo()) {
+				track = new VideoItem(song.getId(), song.getParent(), song.getTitle(), song.getArtist());
+			} else {
+				MusicTrack musicTrack = new MusicTrack(song.getId(), song.getParent(), song.getTitle(), song.getArtist(), song.getAlbum(), song.getArtist());
+				musicTrack.setOriginalTrackNumber(song.getTrack());
+				track = musicTrack;
+			}
+
+			DIDLParser parser = new DIDLParser();
+			DIDLContent didl = new DIDLContent();
+			didl.addItem(track);
+
 			String metadata = "";
+			try {
+				// metadata = parser.generate(didl);
+			} catch(Exception e) {
+				Log.w(TAG, "Metadata generation failed", e);
+			}
 
 			controlPoint.execute(new SetAVTransportURI(device.renderer.findService(new ServiceType("schemas-upnp-org", "AVTransport")), url, metadata) {
 				@Override
@@ -249,7 +328,18 @@ public class DLNAController extends RemoteController {
 	}
 
 	private void failedLoad() {
-		Util.toast(downloadService, downloadService.getResources().getString(R.string.download_failed_to_load));
 		downloadService.setPlayerState(PlayerState.STOPPED);
+		error = true;
+
+		if(Looper.myLooper() != Looper.getMainLooper()) {
+			downloadService.post(new Runnable() {
+				@Override
+				public void run() {
+					Util.toast(downloadService, downloadService.getResources().getString(R.string.download_failed_to_load));
+				}
+			});
+		} else {
+			Util.toast(downloadService, downloadService.getResources().getString(R.string.download_failed_to_load));
+		}
 	}
 }
