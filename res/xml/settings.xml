@@ -215,13 +215,11 @@
 			<PreferenceCategory
 				android:title="@string/settings.cache_title">
 
-				<github.daneren2005.dsub.view.SeekBarPreference
+				<EditTextPreference
 					android:title="@string/settings.cache_size"
 					android:key="cacheSize"
 					android:defaultValue="2000"
-					android:dialogLayout="@layout/seekbar_preference"
-					myns:max="20000"
-					myns:display="%.0f MB"/>
+                    android:digits="0123456789"/>
 
 				<EditTextPreference
 					android:title="@string/settings.cache_location"
