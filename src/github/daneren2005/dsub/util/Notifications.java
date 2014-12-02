@@ -231,7 +231,7 @@ public final class Notifications {
 		String currentDownloading, currentSize;
 		if(file != null) {
 			currentDownloading = file.getSong().getTitle();
-			currentSize = Util.formatBytes(file.getEstimatedSize());
+			currentSize = Util.formatLocalizedBytes(file.getEstimatedSize(), context);
 		} else {
 			currentDownloading = "none";
 			currentSize = "0";
