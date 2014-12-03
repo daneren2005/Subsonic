@@ -13,8 +13,7 @@
 			android:id="@+id/album_coverart"
 			android:layout_width="@dimen/AlbumArt.Small"
 			android:layout_height="@dimen/AlbumArt.Small"
-			android:layout_gravity="left|center_vertical"
-			android:src="@drawable/unknown_album"/>
+			android:layout_gravity="left|center_vertical"/>
 
 		<RatingBar
 			android:id="@+id/album_rating"
