@@ -194,8 +194,7 @@ public class ImageLoader {
 		}
 
 		if (!large) {
-			bitmap = getUnknownImage(entry, size);
-			setImage(view, Util.createDrawableFromBitmap(context, bitmap), crossfade);
+			setImage(view, Util.createDrawableFromBitmap(context, null), false);
 		}
 		ImageTask task = new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
 		task.execute();
@@ -217,8 +216,7 @@ public class ImageLoader {
 			return null;
 		}
 
-		bitmap = getUnknownImage(entry, imageSizeLarge);
-		setImage(remoteControl, Util.createDrawableFromBitmap(context, bitmap));
+		setImage(remoteControl, Util.createDrawableFromBitmap(context, null));
 		ImageTask task = new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl);
 		task.execute();
 		return task;
@@ -289,7 +287,7 @@ public class ImageLoader {
 	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
 		if(remoteControl != null && drawable != null) {
 			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && origBitmap != null) {
 				origBitmap = origBitmap.copy(origBitmap.getConfig(), false);
 			}
 			if ( origBitmap != null && !origBitmap.isRecycled()) {
