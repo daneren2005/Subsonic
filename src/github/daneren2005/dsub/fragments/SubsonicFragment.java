@@ -1247,7 +1247,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			msg += "\nCached Bitrate: " + bitrate + " kbps";
 		}
 		if(size != 0) {
-			msg += "\nSize: " + Util.formatBytes(size);
+			msg += "\nSize: " + Util.formatLocalizedBytes(size, context);
 		}
 		if(song.getDuration() != null && song.getDuration() != 0) {
 			msg += "\nLength: " + Util.formatDuration(song.getDuration());

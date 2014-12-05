@@ -60,6 +60,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.acl.Group;
+import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -94,9 +95,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private Preference replayGainUntagged;
 	private String internalSSID;
 	private String internalSSIDDisplay;
+    private EditTextPreference cacheSize;
 	
 	private int serverCount = 3;
 	private SharedPreferences settings;
+	private DecimalFormat megabyteFromat;
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     @Override
@@ -123,7 +126,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		pauseDisconnect = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
-		addServerPreference = (Preference) findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+		addServerPreference = findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		videoPlayer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		syncInterval = (ListPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
 		syncEnabled = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
@@ -133,8 +136,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		syncMostRecent = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
 		replayGain = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
 		replayGainType = (ListPreference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE);
-		replayGainBump = (Preference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
-		replayGainUntagged = (Preference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
+		replayGainBump = findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
+		replayGainUntagged = findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
+        cacheSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
 		
 		settings = Util.getPreferences(this);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
@@ -318,6 +322,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		pauseDisconnect.setSummary(pauseDisconnect.getEntry());
 		videoPlayer.setSummary(videoPlayer.getEntry());
 		syncInterval.setSummary(syncInterval.getEntry());
+		try {
+			if(megabyteFromat == null) {
+				megabyteFromat = new DecimalFormat(getResources().getString(R.string.util_bytes_format_megabyte));
+			}
+
+			cacheSize.setSummary(megabyteFromat.format((double) Integer.parseInt(cacheSize.getText())).replace(".00", ""));
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to format cache size", e);
+			cacheSize.setSummary(cacheSize.getText());
+		}
 		if(syncEnabled.isChecked()) {
 			if(!syncInterval.isEnabled()) {
 				syncInterval.setEnabled(true);

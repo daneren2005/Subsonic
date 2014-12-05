@@ -6,7 +6,6 @@
 		
 	<ImageView
 		android:id="@+id/select_album_art"
-		android:src="@drawable/unknown_album"
 		android:layout_width="@dimen/AlbumArt.Header"
 		android:layout_height="@dimen/AlbumArt.Header"
 		android:layout_alignParentTop="true"

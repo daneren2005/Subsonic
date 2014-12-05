@@ -231,7 +231,9 @@ public class SongView extends UpdateView implements Checkable {
 		}
 
         if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {
-			statusTextView.setText(Util.formatLocalizedBytes(partialFile.length(), getContext()));
+			double percentage = (partialFile.length() * 100.0) / downloadFile.getEstimatedSize();
+			percentage = Math.min(percentage, 100);
+			statusTextView.setText((int)percentage + " %");
 			if(!rightImage) {
 				statusImageView.setVisibility(View.VISIBLE);
 				rightImage = true;

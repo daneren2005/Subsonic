@@ -1023,6 +1023,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
+        lengthBar.setProgress(length);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_set_timer)

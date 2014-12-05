@@ -403,7 +403,13 @@ public class FileUtil {
 
     public static File getDefaultMusicDirectory(Context context) {
 		if(DEFAULT_MUSIC_DIR == null) {
-			File[] dirs = ContextCompat.getExternalFilesDirs(context, null);
+			File[] dirs;
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				dirs = context.getExternalMediaDirs();
+			} else {
+				dirs = ContextCompat.getExternalFilesDirs(context, null);
+			}
+
 			for(int i = dirs.length - 1; i >= 0; i--) {
 				DEFAULT_MUSIC_DIR = new File(dirs[i], "music");
 				if(dirs[i] != null) {
