@@ -19,31 +19,30 @@ import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
 
-import org.teleal.cling.controlpoint.ControlPoint;
-import org.teleal.cling.controlpoint.SubscriptionCallback;
-import org.teleal.cling.model.action.ActionInvocation;
-import org.teleal.cling.model.gena.CancelReason;
-import org.teleal.cling.model.gena.GENASubscription;
-import org.teleal.cling.model.message.UpnpResponse;
-import org.teleal.cling.model.meta.Device;
-import org.teleal.cling.model.meta.StateVariable;
-import org.teleal.cling.model.state.StateVariableValue;
-import org.teleal.cling.model.types.ServiceType;
-import org.teleal.cling.support.avtransport.callback.Pause;
-import org.teleal.cling.support.avtransport.callback.Play;
-import org.teleal.cling.support.avtransport.callback.Seek;
-import org.teleal.cling.support.avtransport.callback.SetAVTransportURI;
-import org.teleal.cling.support.avtransport.callback.Stop;
-import org.teleal.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
-import org.teleal.cling.support.avtransport.lastchange.AVTransportVariable;
-import org.teleal.cling.support.contentdirectory.DIDLParser;
-import org.teleal.cling.support.lastchange.LastChange;
-import org.teleal.cling.support.model.DIDLContent;
-import org.teleal.cling.support.model.SeekMode;
-import org.teleal.cling.support.model.item.Item;
-import org.teleal.cling.support.model.item.MusicTrack;
-import org.teleal.cling.support.model.item.VideoItem;
-import org.teleal.cling.support.renderingcontrol.callback.SetVolume;
+import org.fourthline.cling.controlpoint.ControlPoint;
+import org.fourthline.cling.controlpoint.SubscriptionCallback;
+import org.fourthline.cling.model.action.ActionInvocation;
+import org.fourthline.cling.model.gena.CancelReason;
+import org.fourthline.cling.model.gena.GENASubscription;
+import org.fourthline.cling.model.message.UpnpResponse;
+import org.fourthline.cling.model.meta.Device;
+import org.fourthline.cling.model.state.StateVariableValue;
+import org.fourthline.cling.model.types.ServiceType;
+import org.fourthline.cling.support.avtransport.callback.Pause;
+import org.fourthline.cling.support.avtransport.callback.Play;
+import org.fourthline.cling.support.avtransport.callback.Seek;
+import org.fourthline.cling.support.avtransport.callback.SetAVTransportURI;
+import org.fourthline.cling.support.avtransport.callback.Stop;
+import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
+import org.fourthline.cling.support.avtransport.lastchange.AVTransportVariable;
+import org.fourthline.cling.support.contentdirectory.DIDLParser;
+import org.fourthline.cling.support.lastchange.LastChange;
+import org.fourthline.cling.support.model.DIDLContent;
+import org.fourthline.cling.support.model.SeekMode;
+import org.fourthline.cling.support.model.item.Item;
+import org.fourthline.cling.support.model.item.MusicTrack;
+import org.fourthline.cling.support.model.item.VideoItem;
+import org.fourthline.cling.support.renderingcontrol.callback.SetVolume;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -120,7 +119,7 @@ public class DLNAController extends RemoteController {
 							boolean failed = false;
 							for(StateVariableValue val: m.values()) {
 								if(val.toString().indexOf("TransportStatus val=\"ERROR_OCCURRED\"") != -1) {
-									Log.w(TAG, "Failed to load with event: val.toString()");
+									Log.w(TAG, "Failed to load with event: " + val.toString());
 									failed = true;
 								}
 							}
@@ -195,7 +194,7 @@ public class DLNAController extends RemoteController {
 	public void shutdown() {
 		controlPoint.execute(new Stop(device.renderer.findService(new ServiceType("schemas-upnp-org", "AVTransport"))) {
 			@Override
-			public void failure(ActionInvocation invocation, org.teleal.cling.model.message.UpnpResponse operation, String defaultMessage) {
+			public void failure(ActionInvocation invocation, org.fourthline.cling.model.message.UpnpResponse operation, String defaultMessage) {
 				Log.w(TAG, "Stop failed: " + defaultMessage);
 			}
 		});

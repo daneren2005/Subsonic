@@ -22,7 +22,7 @@ package github.daneren2005.dsub.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.teleal.cling.model.meta.Device;
+import org.fourthline.cling.model.meta.Device;
 
 /**
  * Created by Scott on 11/1/2014.
