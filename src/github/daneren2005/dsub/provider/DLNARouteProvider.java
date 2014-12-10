@@ -345,15 +345,15 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		}
 
 		public void info(String msg, Object... args) {
-			Log.i(TAG, msg);
+			// Log.i(TAG, msg);
 		}
 
 		public void info(Throwable th) {
-			Log.i(TAG, "", th);
+			// Log.i(TAG, "", th);
 		}
 
 		public void info(String msg, Throwable th) {
-			Log.i(TAG, msg, th);
+			// Log.i(TAG, msg, th);
 		}
 
 		public boolean isDebugEnabled() {
