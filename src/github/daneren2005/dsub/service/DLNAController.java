@@ -232,6 +232,12 @@ public class DLNAController extends RemoteController {
 
 	@Override
 	public void setVolume(int volume) {
+		if(volume < 0) {
+			volume = 0;
+		} else if(volume > device.volumeMax) {
+			volume = device.volumeMax;
+		}
+
 		device.volume = volume;
 		controlPoint.execute(new SetVolume(device.renderer.findService(new ServiceType("schemas-upnp-org", "RenderingControl")), volume) {
 			@SuppressWarnings("rawtypes")
@@ -244,7 +250,8 @@ public class DLNAController extends RemoteController {
 
 	@Override
 	public void updateVolume(boolean up) {
-		setVolume(device.volume + (up ? 1 : -1));
+		int increment = device.volumeMax / 10;
+		setVolume(device.volume + (up ? increment : -increment));
 	}
 
 	@Override

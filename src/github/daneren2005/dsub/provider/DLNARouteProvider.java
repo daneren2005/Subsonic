@@ -161,13 +161,17 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		for(Map.Entry<String, DLNADevice> deviceEntry: devices.entrySet()) {
 			DLNADevice device = deviceEntry.getValue();
 
+			int increments = device.volumeMax / 10;
+			int volume = controller == null ? device.volume : (int) controller.getVolume();
+			volume = volume / increments;
+
 			MediaRouteDescriptor.Builder routeBuilder = new MediaRouteDescriptor.Builder(device.id, device.name);
 			routeBuilder.addControlFilter(routeIntentFilter)
 					.setPlaybackStream(AudioManager.STREAM_MUSIC)
 					.setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
 					.setDescription(device.description)
-					.setVolume(controller == null ? 5 : (int) (controller.getVolume() * 10))
-					.setVolumeMax(device.volumeMax)
+					.setVolume(volume)
+					.setVolumeMax(10)
 					.setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_VARIABLE);
 			providerBuilder.addRoute(routeBuilder.build());
 		}
