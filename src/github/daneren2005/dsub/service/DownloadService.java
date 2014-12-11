@@ -302,6 +302,9 @@ public class DownloadService extends Service {
 	public void post(Runnable r) {
 		handler.post(r);
 	}
+	public void postDelayed(Runnable r, long millis) {
+		handler.postDelayed(r, millis);
+	}
 
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
 		download(songs, save, autoplay, playNext, shuffle, 0, 0);
@@ -703,6 +706,7 @@ public class DownloadService extends Service {
 		this.currentPlaying = currentPlaying;
 		if(currentPlaying == null) {
 			currentPlayingIndex = -1;
+			setPlayerState(IDLE);
 		} else {
 			currentPlayingIndex = downloadList.indexOf(currentPlaying);
 		}
