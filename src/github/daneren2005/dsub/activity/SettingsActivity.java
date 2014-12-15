@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,9 +32,9 @@ import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
@@ -43,8 +42,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.fragments.PreferenceCompatFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -59,16 +60,15 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.security.acl.Group;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 
-public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsActivity extends SubsonicActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = SettingsActivity.class.getSimpleName();
     private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<String, ServerSettings>();
     private boolean testingConnection;
+	private PreferenceCompatFragment fragment;
     private ListPreference theme;
     private ListPreference maxBitrateWifi;
     private ListPreference maxBitrateMobile;
@@ -96,7 +96,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	private String internalSSID;
 	private String internalSSIDDisplay;
     private EditTextPreference cacheSize;
-	
+
 	private int serverCount = 3;
 	private SharedPreferences settings;
 	private DecimalFormat megabyteFromat;
@@ -104,139 +104,25 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     @Override
     public void onCreate(Bundle savedInstanceState) {
-		applyTheme();
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings);
+		setContentView(0);
 
-		internalSSID = Util.getSSID(this);
-		if(internalSSID == null) {
-			internalSSID = "";
-		}
-		internalSSIDDisplay = this.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
-
-        theme = (ListPreference) findPreference(Constants.PREFERENCES_KEY_THEME);
-        maxBitrateWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
-        maxBitrateMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);
-		maxVideoBitrateWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
-        maxVideoBitrateMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
-		networkTimeout = (ListPreference) findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
-        cacheLocation = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
-        preloadCountWifi = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
-		preloadCountMobile = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE);
-		tempLoss = (ListPreference) findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
-		pauseDisconnect = (ListPreference) findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
-		serversCategory = (PreferenceCategory) findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
-		addServerPreference = findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
-		videoPlayer = (ListPreference) findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
-		syncInterval = (ListPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
-		syncEnabled = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
-		syncWifi = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
-		syncNotification = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
-		syncStarred = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
-		syncMostRecent = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
-		replayGain = (CheckBoxPreference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
-		replayGainType = (ListPreference) findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE);
-		replayGainBump = findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
-		replayGainUntagged = findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
-        cacheSize = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
-		
-		settings = Util.getPreferences(this);
-		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
-
-		findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+		fragment = new PreferenceCompatFragment() {
 			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				Util.confirmDialog(SettingsActivity.this, R.string.common_delete, R.string.common_confirm_message_cache, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						new LoadingTask<Void>(SettingsActivity.this, false) {
-							@Override
-							protected Void doInBackground() throws Throwable {
-								FileUtil.deleteMusicDirectory(SettingsActivity.this);
-								FileUtil.deleteSerializedCache(SettingsActivity.this);
-								return null;
-							}
-
-							@Override
-							protected void done(Void result) {
-								Util.toast(SettingsActivity.this, R.string.settings_cache_clear_complete);
-							}
-
-							@Override
-							protected void error(Throwable error) {
-								Util.toast(SettingsActivity.this, getErrorMessage(error), false);
-							}
-						}.execute();
-					}
-				});
-				return false;
+			public void onCreate(Bundle bundle) {
+				super.onCreate(bundle);
+				this.setTitle(getResources().getString(R.string.settings_title));
+				initSettings();
 			}
-		});
+		};
+		Bundle args = new Bundle();
+		args.putInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, R.xml.settings);
 
-		addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				serverCount++;
-				String instance = String.valueOf(serverCount);
-
-				Preference addServerPreference = findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
-				serversCategory.addPreference(addServer(serverCount));
-
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
-				// Reset set folder ID
-				editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
-				editor.commit();
-
-				serverSettings.put(instance, new ServerSettings(instance));
-            	
-                return true;
-            }
-        });
-
-		findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Boolean syncEnabled = (Boolean) newValue;
-
-				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
-				ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
-				ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, syncEnabled);
-
-				return true;
-			}
-		});
-		syncInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Integer syncInterval = Integer.parseInt(((String) newValue));
-
-				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
-				ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * syncInterval);
-				ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, new Bundle(), 60L * syncInterval);
-
-				return true;
-			}
-		});
-
-		serversCategory.setOrderingAsAdded(false);
-        for (int i = 1; i <= serverCount; i++) {
-            String instance = String.valueOf(i);
-			serversCategory.addPreference(addServer(i));
-            serverSettings.put(instance, new ServerSettings(instance));
-        }
-
-        SharedPreferences prefs = Util.getPreferences(this);
-        prefs.registerOnSharedPreferenceChangeListener(this);
-
-        update();
-
-		if(Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH && getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-			getActionBar().setHomeButtonEnabled(true);
-		}
+		fragment.setArguments(args);
+		this.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment, null).commit();
+		currentFragment = fragment;
     }
-	
+
 	@Override
     protected void onDestroy() {
         super.onDestroy();
@@ -285,10 +171,135 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 				downloadService.reapplyVolume();
 			}
 		}
-		
+
 		scheduleBackup();
     }
-    
+
+	private void initSettings() {
+		internalSSID = Util.getSSID(this);
+		if(internalSSID == null) {
+			internalSSID = "";
+		}
+		internalSSIDDisplay = this.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
+
+		theme = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_THEME);
+		maxBitrateWifi = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI);
+		maxBitrateMobile = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);
+		maxVideoBitrateWifi = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
+		maxVideoBitrateMobile = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
+		networkTimeout = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
+		cacheLocation = (EditTextPreference) fragment.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
+		preloadCountWifi = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
+		preloadCountMobile = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE);
+		tempLoss = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
+		pauseDisconnect = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
+		serversCategory = (PreferenceCategory) fragment.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
+		addServerPreference = fragment.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+		videoPlayer = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
+		syncInterval = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
+		syncEnabled = (CheckBoxPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
+		syncWifi = (CheckBoxPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
+		syncNotification = (CheckBoxPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
+		syncStarred = (CheckBoxPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
+		syncMostRecent = (CheckBoxPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
+		replayGain = (CheckBoxPreference) fragment.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
+		replayGainType = (ListPreference) fragment.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE);
+		replayGainBump = fragment.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
+		replayGainUntagged = fragment.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
+		cacheSize = (EditTextPreference) fragment.findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
+
+		settings = Util.getPreferences(this);
+		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
+
+		fragment.findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				Util.confirmDialog(SettingsActivity.this, R.string.common_delete, R.string.common_confirm_message_cache, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						new LoadingTask<Void>(SettingsActivity.this, false) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								FileUtil.deleteMusicDirectory(SettingsActivity.this);
+								FileUtil.deleteSerializedCache(SettingsActivity.this);
+								return null;
+							}
+
+							@Override
+							protected void done(Void result) {
+								Util.toast(SettingsActivity.this, R.string.settings_cache_clear_complete);
+							}
+
+							@Override
+							protected void error(Throwable error) {
+								Util.toast(SettingsActivity.this, getErrorMessage(error), false);
+							}
+						}.execute();
+					}
+				});
+				return false;
+			}
+		});
+
+		addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				serverCount++;
+				String instance = String.valueOf(serverCount);
+
+				Preference addServerPreference = fragment.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+				serversCategory.addPreference(addServer(serverCount));
+
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
+				// Reset set folder ID
+				editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
+				editor.commit();
+
+				serverSettings.put(instance, new ServerSettings(instance));
+
+				return true;
+			}
+		});
+
+		fragment.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Boolean syncEnabled = (Boolean) newValue;
+
+				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+				ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
+				ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, syncEnabled);
+
+				return true;
+			}
+		});
+		syncInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Integer syncInterval = Integer.parseInt(((String) newValue));
+
+				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+				ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * syncInterval);
+				ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, new Bundle(), 60L * syncInterval);
+
+				return true;
+			}
+		});
+
+		serversCategory.setOrderingAsAdded(false);
+		for (int i = 1; i <= serverCount; i++) {
+			String instance = String.valueOf(i);
+			serversCategory.addPreference(addServer(i));
+			serverSettings.put(instance, new ServerSettings(instance));
+		}
+
+		SharedPreferences prefs = Util.getPreferences(this);
+		prefs.registerOnSharedPreferenceChangeListener(this);
+
+		update();
+	}
+
     private void scheduleBackup() {
 		try {
 			Class managerClass = Class.forName("android.app.backup.BackupManager");
@@ -364,9 +375,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             ss.update();
         }
     }
-	
+
 	private PreferenceScreen addServer(final int instance) {
-		final PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(this);
+		final PreferenceScreen screen = fragment.getPreferenceManager().createPreferenceScreen(this);
 		screen.setTitle(R.string.settings_server_unused);
 		screen.setKey(Constants.PREFERENCES_KEY_SERVER_KEY + instance);
 
@@ -395,7 +406,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
 		serverUrlPreference.setSummary(serverUrlPreference.getText());
 		screen.setSummary(serverUrlPreference.getText());
-		
+
 		final EditTextPreference serverLocalNetworkSSIDPreference = new EditTextPreference(this) {
 			@Override
 			protected void onAddEditTextToDialogView(View dialogView, final EditText editText) {
@@ -442,13 +453,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		serverTagPreference.setSummary(R.string.settings_browse_by_tags_summary);
 		serverTagPreference.setTitle(R.string.settings_browse_by_tags);
 		serverPasswordPreference.setDialogTitle(R.string.settings_server_password);
-		
+
 		final CheckBoxPreference serverSyncPreference = new CheckBoxPreference(this);
 		serverSyncPreference.setKey(Constants.PREFERENCES_KEY_SERVER_SYNC + instance);
 		serverSyncPreference.setChecked(Util.isSyncEnabled(this, instance));
 		serverSyncPreference.setSummary(R.string.settings_server_sync_summary);
 		serverSyncPreference.setTitle(R.string.settings_server_sync);
-		
+
 		final Preference serverOpenBrowser = new Preference(this);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
 		serverOpenBrowser.setPersistent(false);
@@ -492,7 +503,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 						screen.getDialog().dismiss();
 					}
 				});
-				
+
 				return true;
 			}
 		});
@@ -542,7 +553,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to create " + nomediaDir, e);
 			}
-			
+
 			try {
 				if(!musicNoMedia.createNewFile()) {
 					Log.w(TAG, "Failed to create " + musicNoMedia);
@@ -636,17 +647,17 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         };
         task.execute();
     }
-	
+
 	private void openInBrowser(final int instance) {
-    	SharedPreferences prefs = Util.getPreferences(this);  
+    	SharedPreferences prefs = Util.getPreferences(this);
     	String url = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 		if(url == null) {
 			new ErrorDialog(SettingsActivity.this, R.string.settings_invalid_url, false);
 			return;
 		}
     	Uri uriServer = Uri.parse(url);
-    	
-    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, uriServer);            	
+
+    	Intent browserIntent = new Intent(Intent.ACTION_VIEW, uriServer);
     	startActivity(browserIntent);
     }
 
@@ -660,12 +671,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         private ServerSettings(String instance) {
 
-            screen = (PreferenceScreen) findPreference("server" + instance);
-            serverName = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
-            serverUrl = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_URL + instance);
-            serverLocalNetworkSSID = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
-			serverInternalUrl = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
-            username = (EditTextPreference) findPreference(Constants.PREFERENCES_KEY_USERNAME + instance);
+            screen = (PreferenceScreen) fragment.findPreference("server" + instance);
+            serverName = (EditTextPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
+            serverUrl = (EditTextPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SERVER_URL + instance);
+            serverLocalNetworkSSID = (EditTextPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
+			serverInternalUrl = (EditTextPreference) fragment.findPreference(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
+            username = (EditTextPreference) fragment.findPreference(Constants.PREFERENCES_KEY_USERNAME + instance);
 
             serverUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override

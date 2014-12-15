@@ -164,8 +164,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	@Override
 	public void startActivity(Intent intent) {
-		if(intent.getComponent() != null && "github.daneren2005.dsub.activity.DownloadActivity".equals(intent.getComponent().getClassName())) {
-			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+		if(intent.getComponent() != null) {
+			String name = intent.getComponent().getClassName();
+			if(name != null && name.indexOf("DownloadActivity") != -1) {
+				intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+			} else if(name != null && name.indexOf("SettingsActivity") != -1) {
+				intent.putExtra(Constants.FRAGMENT_POSITION, drawerItems.length - 1);
+			}
 		}
 		super.startActivity(intent);
 	}
@@ -174,9 +179,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public void setContentView(int viewId) {
 		super.setContentView(R.layout.abstract_activity);
 		rootView = (ViewGroup) findViewById(R.id.content_frame);
-		LayoutInflater layoutInflater = getLayoutInflater();
-		layoutInflater.inflate(viewId, rootView);
 
+		if(viewId != 0) {
+			LayoutInflater layoutInflater = getLayoutInflater();
+			layoutInflater.inflate(viewId, rootView);
+		}
 		
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
