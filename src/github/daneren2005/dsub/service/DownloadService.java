@@ -28,6 +28,7 @@ import static github.daneren2005.dsub.domain.PlayerState.PREPARED;
 import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
 import static github.daneren2005.dsub.domain.PlayerState.STARTED;
 import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
+import static github.daneren2005.dsub.domain.RemoteControlState.LOCAL;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.audiofx.AudioEffectsController;
@@ -140,7 +141,7 @@ public class DownloadService extends Service {
 	private float volume = 1.0f;
 
 	private AudioEffectsController effectsController;
-	private RemoteControlState remoteState = RemoteControlState.LOCAL;
+	private RemoteControlState remoteState = LOCAL;
 	private PositionCache positionCache;
 	private BufferProxy proxy;
 
@@ -405,7 +406,7 @@ public class DownloadService extends Service {
 	}
 
 	private void updateJukeboxPlaylist() {
-		if (remoteState != RemoteControlState.LOCAL) {
+		if (remoteState != LOCAL) {
 			remoteController.updatePlaylist();
 		}
 	}
@@ -413,7 +414,7 @@ public class DownloadService extends Service {
 	public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
 		SharedPreferences prefs = Util.getPreferences(this);
 		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
-		if(remoteState != RemoteControlState.LOCAL) {
+		if(remoteState != LOCAL) {
 			String id = prefs.getString(Constants.PREFERENCES_KEY_CONTROL_ID, null);
 			setRemoteState(remoteState, null, id);
 		}
@@ -828,10 +829,10 @@ public class DownloadService extends Service {
 				nextPlayingTask = null;
 			}
 			setCurrentPlaying(index, start);
-			if (start && remoteState != RemoteControlState.LOCAL) {
+			if (start && remoteState != LOCAL) {
 				remoteController.changeTrack(index, currentPlaying);
 			}
-			if (remoteState == RemoteControlState.LOCAL) {
+			if (remoteState == LOCAL) {
 				bufferAndPlay(position, start);
 				checkDownloads();
 				setNextPlaying();
@@ -900,7 +901,7 @@ public class DownloadService extends Service {
 		}
 
 		try {
-			if (remoteState != RemoteControlState.LOCAL) {
+			if (remoteState != LOCAL) {
 				remoteController.changePosition(position / 1000);
 			} else {
 				mediaPlayer.seekTo(position);
@@ -989,7 +990,7 @@ public class DownloadService extends Service {
 	public synchronized void pause(boolean temp) {
 		try {
 			if (playerState == STARTED) {
-				if (remoteState != RemoteControlState.LOCAL) {
+				if (remoteState != LOCAL) {
 					remoteController.stop();
 				} else {
 					mediaPlayer.pause();
@@ -1006,7 +1007,7 @@ public class DownloadService extends Service {
 	public synchronized void stop() {
 		try {
 			if (playerState == STARTED) {
-				if (remoteState != RemoteControlState.LOCAL) {
+				if (remoteState != LOCAL) {
 					remoteController.stop();
 					setPlayerState(STOPPED);
 					handler.post(new Runnable() {
@@ -1029,7 +1030,7 @@ public class DownloadService extends Service {
 
 	public synchronized void start() {
 		try {
-			if (remoteState != RemoteControlState.LOCAL) {
+			if (remoteState != LOCAL) {
 				remoteController.start();
 			} else {
 				// Only start if done preparing
@@ -1053,7 +1054,7 @@ public class DownloadService extends Service {
 		}
 		try {
 			// Only set to idle if it's not being killed to start RemoteController
-			if(remoteState == RemoteControlState.LOCAL) {
+			if(remoteState == LOCAL) {
 				setPlayerState(IDLE);
 			}
 			mediaPlayer.setOnErrorListener(null);
@@ -1093,7 +1094,7 @@ public class DownloadService extends Service {
 			if (playerState == IDLE || playerState == DOWNLOADING || playerState == PREPARING) {
 				return 0;
 			}
-			if (remoteState != RemoteControlState.LOCAL) {
+			if (remoteState != LOCAL) {
 				return remoteController.getRemotePosition() * 1000;
 			} else {
 				return Math.max(0, cachedPosition - subtractPosition);
@@ -1112,7 +1113,7 @@ public class DownloadService extends Service {
 			}
 		}
 		if (playerState != IDLE && playerState != DOWNLOADING && playerState != PlayerState.PREPARING) {
-			if(remoteState == RemoteControlState.LOCAL) {
+			if(remoteState == LOCAL) {
 				try {
 					return mediaPlayer.getDuration();
 				} catch (Exception x) {
@@ -1169,7 +1170,7 @@ public class DownloadService extends Service {
 			scrobbler.scrobble(this, currentPlaying, true);
 		}
 
-		if(playerState == STARTED && positionCache == null && remoteState == RemoteControlState.LOCAL) {
+		if(playerState == STARTED && positionCache == null && remoteState == LOCAL) {
 			positionCache = new PositionCache();
 			Thread thread = new Thread(positionCache, "PositionCache");
 			thread.start();
@@ -1303,7 +1304,7 @@ public class DownloadService extends Service {
 	}
 
 	public boolean isRemoteEnabled() {
-		return remoteState != RemoteControlState.LOCAL;
+		return remoteState != LOCAL;
 	}
 
 	public RemoteController getRemoteController() {
@@ -1339,7 +1340,7 @@ public class DownloadService extends Service {
 			remoteController.shutdown();
 			remoteController = null;
 
-			if(newState == RemoteControlState.LOCAL) {
+			if(newState == LOCAL) {
 				mediaRouter.setDefaultRoute();
 			}
 		}
@@ -1351,7 +1352,7 @@ public class DownloadService extends Service {
 				break;
 			case CHROMECAST: case DLNA:
 				if(ref == null) {
-					remoteState = RemoteControlState.LOCAL;
+					remoteState = LOCAL;
 					break;
 				}
 				remoteController = (RemoteController) ref;
@@ -1366,7 +1367,7 @@ public class DownloadService extends Service {
 			play(getCurrentPlayingIndex(), isPlaying, position);
 		}
 
-		if (remoteState != RemoteControlState.LOCAL) {
+		if (remoteState != LOCAL) {
 			reset();
 
 			// Cancel current download, if necessary.
@@ -1385,7 +1386,7 @@ public class DownloadService extends Service {
 			}
 		}
 
-		if(remoteState == RemoteControlState.LOCAL) {
+		if(remoteState == LOCAL) {
 			checkDownloads();
 		}
 
@@ -1395,7 +1396,7 @@ public class DownloadService extends Service {
 				public void run() {
 					RouteInfo info = mediaRouter.getRouteForId(routeId);
 					if(info == null) {
-						setRemoteState(RemoteControlState.LOCAL, null);
+						setRemoteState(LOCAL, null);
 					} else if(newState == RemoteControlState.CHROMECAST) {
 						RemoteController controller = mediaRouter.getRemoteController(info);
 						if(controller != null) {
@@ -1551,7 +1552,7 @@ public class DownloadService extends Service {
 			resetNext();
 
 			// Exit when using remote controllers
-			if(remoteState != RemoteControlState.LOCAL) {
+			if(remoteState != LOCAL) {
 				return;
 			}
 
@@ -1719,7 +1720,7 @@ public class DownloadService extends Service {
 		DownloadFile movedSong = list.remove(from);
 		list.add(to, movedSong);
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
-		if(remoteState != RemoteControlState.LOCAL && mainList) {
+		if(remoteState != LOCAL && mainList) {
 			updateJukeboxPlaylist();
 		} else if(mainList && (movedSong == nextPlaying || movedSong == currentPlaying || (currentPlayingIndex + 1) == to)) {
 			// Moving next playing, current playing, or moving a song to be next playing
@@ -1766,7 +1767,7 @@ public class DownloadService extends Service {
 			checkShufflePlay();
 		}
 
-		if (remoteState != RemoteControlState.LOCAL || !Util.isNetworkConnected(this, true) || Util.isOffline(this)) {
+		if (!Util.isNetworkConnected(this, true) || Util.isOffline(this)) {
 			return;
 		}
 
@@ -1774,8 +1775,8 @@ public class DownloadService extends Service {
 			return;
 		}
 
-		// Need to download current playing?
-		if (currentPlaying != null && currentPlaying != currentDownloading && !currentPlaying.isWorkDone()) {
+		// Need to download current playing and not casting?
+		if (currentPlaying != null && remoteState == LOCAL && currentPlaying != currentDownloading && !currentPlaying.isWorkDone()) {
 			// Cancel current download, if necessary.
 			if (currentDownloading != null) {
 				currentDownloading.cancelDownload();
@@ -1787,13 +1788,13 @@ public class DownloadService extends Service {
 		}
 
 		// Find a suitable target for download.
-		else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed() && (!downloadList.isEmpty() || !backgroundDownloadList.isEmpty())) {
+		else if (currentDownloading == null || currentDownloading.isWorkDone() || currentDownloading.isFailed() && ((!downloadList.isEmpty() && remoteState == LOCAL) || !backgroundDownloadList.isEmpty())) {
 			currentDownloading = null;
 			int n = size();
 
 			int preloaded = 0;
 
-			if(n != 0) {
+			if(n != 0 && remoteState == LOCAL) {
 				int start = currentPlaying == null ? 0 : getCurrentPlayingIndex();
 				if(start == -1) {
 					start = 0;
@@ -1819,7 +1820,7 @@ public class DownloadService extends Service {
 				} while (i != start);
 			}
 
-			if((preloaded + 1 == n || preloaded >= Util.getPreloadCount(this) || downloadList.isEmpty()) && !backgroundDownloadList.isEmpty()) {
+			if((preloaded + 1 == n || preloaded >= Util.getPreloadCount(this) || downloadList.isEmpty() || remoteState != LOCAL) && !backgroundDownloadList.isEmpty()) {
 				for(int i = 0; i < backgroundDownloadList.size(); i++) {
 					DownloadFile downloadFile = backgroundDownloadList.get(i);
 					if(downloadFile.isWorkDone() && (!downloadFile.shouldSave() || downloadFile.isSaved()) || downloadFile.isFailedMax()) {

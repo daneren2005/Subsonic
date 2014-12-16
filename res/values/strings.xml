@@ -256,7 +256,7 @@
 
     <string name="error.label">Error</string>
 
-    <string name="settings.title">DSub settings</string>
+    <string name="settings.title">Settings</string>
     <string name="settings.test_connection_title">Test connection</string>
 	<string name="settings.servers_add">Add Server</string>
 	<string name="settings.servers_remove">Remove Server</string>
