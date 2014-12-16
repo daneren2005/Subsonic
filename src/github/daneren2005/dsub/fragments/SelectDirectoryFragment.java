@@ -203,7 +203,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 		else if(hideButtons && !showAll) {
 			if(albumListType != null) {
-				menuInflater.inflate(R.menu.empty, menu);
+				menuInflater.inflate(R.menu.select_album_list, menu);
 			} else {
 				menuInflater.inflate(R.menu.select_album, menu);
 
@@ -802,6 +802,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		if (hasSubFolders && (id != null || share != null || "starred".equals(albumListType))) {
 			downloadRecursively(id, false, append, !append, shuffle, false);
+		} else if(hasSubFolders && albumListType != null) {
+			downloadRecursively(albums, shuffle, append);
 		} else {
 			selectAll(true, false);
 			download(append, false, !append, false, shuffle);

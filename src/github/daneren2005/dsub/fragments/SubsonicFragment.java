@@ -847,12 +847,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		downloadRecursively(id, name, isDirectory, save, append, autoplay, shuffle, background, false);
 	}
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
-		LoadingTask<Boolean> task = new LoadingTask<Boolean>(context) {
-			private MusicService musicService;
-			private static final int MAX_SONGS = 500;
-			private boolean playNowOverride = false;
-			private List<Entry> songs;
-
+		new RecursiveLoader(context) {
 			@Override
 			protected Boolean doInBackground() throws Throwable {
 				musicService = MusicServiceFactory.getMusicService(context);
@@ -904,48 +899,47 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 				return transition;
 			}
+		}.execute();
+	}
 
-			private void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
-				if (songs.size() > MAX_SONGS) {
-					return;
-				}
-
-				for (Entry song : parent.getChildren(false, true)) {
-					if (!song.isVideo() && song.getRating() != 1) {
-						songs.add(song);
-					}
-				}
-				for (Entry dir : parent.getChildren(true, false)) {
-					if(dir.getRating() == 1) {
-						continue;
-					}
-
-					MusicDirectory musicDirectory;
-					if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-						musicDirectory = musicService.getAlbum(dir.getId(), dir.getTitle(), false, context, this);
-					} else {
-						musicDirectory = musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this);
-					}
-					getSongsRecursively(musicDirectory, songs);
-				}
-			}
-
+	protected void downloadRecursively(final List<Entry> albums, final boolean shuffle, final boolean append) {
+		new RecursiveLoader(context) {
 			@Override
-			protected void done(Boolean result) {
-				warnIfStorageUnavailable();
+			protected Boolean doInBackground() throws Throwable {
+				musicService = MusicServiceFactory.getMusicService(context);
 
-				if(playNowOverride) {
-					playNow(songs);
-					return;
+				if(shuffle) {
+					Collections.shuffle(albums);
 				}
 
-				if(result) {
-					Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				songs = new LinkedList<Entry>();
+				MusicDirectory root = new MusicDirectory();
+				root.addChildren(albums);
+				getSongsRecursively(root, songs);
+
+				DownloadService downloadService = getDownloadService();
+				boolean transition = false;
+				if (!songs.isEmpty() && downloadService != null) {
+					// Conditions for a standard play now operation
+					if(!append && !shuffle) {
+						playNowOverride = true;
+						return false;
+					}
+
+					if (!append) {
+						downloadService.clear();
+					}
+
+					downloadService.download(songs, false, true, false, false);
+					if(!append) {
+						transition = true;
+					}
 				}
+				artistOverride = false;
+
+				return transition;
 			}
-		};
-
-		task.execute();
+		}.execute();
 	}
 
 	protected MusicDirectory getMusicDirectory(String id, String name, boolean refresh, MusicService service, ProgressListener listener) throws Exception {
@@ -1731,5 +1725,55 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 	public abstract class OnStarChange {
 		abstract void starChange(boolean starred);
+	}
+
+	public abstract class RecursiveLoader extends LoadingTask<Boolean> {
+		protected MusicService musicService;
+		protected static final int MAX_SONGS = 500;
+		protected boolean playNowOverride = false;
+		protected List<Entry> songs;
+
+		public RecursiveLoader(Activity context) {
+			super(context);
+		}
+
+		protected void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
+			if (songs.size() > MAX_SONGS) {
+				return;
+			}
+
+			for (Entry song : parent.getChildren(false, true)) {
+				if (!song.isVideo() && song.getRating() != 1) {
+					songs.add(song);
+				}
+			}
+			for (Entry dir : parent.getChildren(true, false)) {
+				if(dir.getRating() == 1) {
+					continue;
+				}
+
+				MusicDirectory musicDirectory;
+				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+					musicDirectory = musicService.getAlbum(dir.getId(), dir.getTitle(), false, context, this);
+				} else {
+					musicDirectory = musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this);
+				}
+				getSongsRecursively(musicDirectory, songs);
+			}
+		}
+
+		@Override
+		protected void done(Boolean result) {
+			warnIfStorageUnavailable();
+
+			if(playNowOverride) {
+				playNow(songs);
+				return;
+			}
+
+			if(result) {
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+			}
+		}
 	}
 }
