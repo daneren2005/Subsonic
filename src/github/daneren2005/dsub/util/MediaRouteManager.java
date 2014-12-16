@@ -15,6 +15,7 @@
 
 package github.daneren2005.dsub.util;
 
+import android.os.Build;
 import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
@@ -147,10 +148,12 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		providers.add(jukeboxProvider);
 		offlineProviders.add(jukeboxProvider);
 
-		DLNARouteProvider dlnaProvider = new DLNARouteProvider(downloadService);
-		router.addProvider(dlnaProvider);
-		providers.add(dlnaProvider);
-		offlineProviders.add(dlnaProvider);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			DLNARouteProvider dlnaProvider = new DLNARouteProvider(downloadService);
+			router.addProvider(dlnaProvider);
+			providers.add(dlnaProvider);
+			offlineProviders.add(dlnaProvider);
+		}
 	}
 	public void removeOnlineProviders() {
 		for(MediaRouteProvider provider: offlineProviders) {
@@ -171,7 +174,9 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		if(castAvailable) {
 			builder.addControlCategory(CastCompat.getCastControlCategory());
 		}
-		builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);
+		}
 		selector = builder.build();
 	}
 }
