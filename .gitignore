@@ -8,3 +8,5 @@ nbandroid/*
 subsonic-android.iml
 releases/
 proguard_logs/
+/out/
+/gen/
