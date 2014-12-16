@@ -442,16 +442,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			currentState = state;
 		}
 
-		if(current == null) {
+		MusicDirectory.Entry song = null;
+		if(current != null) {
+			song = current.getSong();
+			trackView.setText(song.getTitle());
+			artistView.setText(song.getArtist());
+		} else {
 			trackView.setText("Title");
 			artistView.setText("Artist");
-			getImageLoader().loadImage(coverArtView, null, false, false);
-			return;
 		}
 
-		MusicDirectory.Entry song = current.getSong();
-		trackView.setText(song.getTitle());
-		artistView.setText(song.getArtist());
 		getImageLoader().loadImage(coverArtView, song, false, false);
 		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
 		TypedArray typedArray = this.obtainStyledAttributes(attrs);
