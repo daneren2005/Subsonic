@@ -871,6 +871,10 @@ public final class Util {
 			throw new IllegalArgumentException("Strings must not be null");
 		}
 
+		if(t.toString().toLowerCase().indexOf(s.toString().toLowerCase()) != -1) {
+			return 1;
+		}
+
         int n = s.length();
 		int m = t.length();
 

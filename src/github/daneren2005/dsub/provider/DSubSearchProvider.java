@@ -24,6 +24,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +46,8 @@ import github.daneren2005.dsub.util.Util;
  * @author Sindre Mehus
  */
 public class DSubSearchProvider extends ContentProvider {
+	private static final String TAG = DSubSearchProvider.class.getSimpleName();
+
 	private static final String RESOURCE_PREFIX = "android.resource://github.daneren2005.dsub/";
 	private static final String[] COLUMNS = {"_id",
 			SearchManager.SUGGEST_COLUMN_TEXT_1,
