@@ -79,6 +79,7 @@ public class DLNAController extends RemoteController {
 	int currentPosition = 0;
 	String currentPlayingURI;
 	boolean running = true;
+	boolean seekable = false;
 
 	public DLNAController(DownloadService downloadService, ControlPoint controlPoint, DLNADevice device) {
 		this.downloadService = downloadService;
@@ -174,6 +175,7 @@ public class DLNAController extends RemoteController {
 		controlPoint.execute(new Play(getTransportService()) {
 			@Override
 			public void success(ActionInvocation invocation) {
+				lastUpdate.set(System.currentTimeMillis());
 				downloadService.setPlayerState(PlayerState.STARTED);
 			}
 
@@ -190,6 +192,9 @@ public class DLNAController extends RemoteController {
 		controlPoint.execute(new Pause(getTransportService()) {
 			@Override
 			public void success(ActionInvocation invocation) {
+				int secondsSinceLastUpdate = (int) ((System.currentTimeMillis() - lastUpdate.get()) / 1000L);
+				currentPosition += secondsSinceLastUpdate;
+
 				downloadService.setPlayerState(PlayerState.PAUSED);
 			}
 
@@ -273,8 +278,17 @@ public class DLNAController extends RemoteController {
 
 	@Override
 	public int getRemotePosition() {
-		int secondsSinceLastUpdate = (int) ((System.currentTimeMillis() - lastUpdate.get()) / 1000L);
-		return currentPosition + secondsSinceLastUpdate;
+		if(downloadService.getPlayerState() == PlayerState.STARTED) {
+			int secondsSinceLastUpdate = (int) ((System.currentTimeMillis() - lastUpdate.get()) / 1000L);
+			return currentPosition + secondsSinceLastUpdate;
+		} else {
+			return currentPosition;
+		}
+	}
+
+	@Override
+	public boolean isSeekable() {
+		return seekable;
 	}
 
 	private void startSong(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
@@ -348,6 +362,8 @@ public class DLNAController extends RemoteController {
 						downloadService.setPlayerState(PlayerState.PAUSED);
 					}
 
+					currentPosition = position;
+					lastUpdate.set(System.currentTimeMillis());
 					getUpdatedStatus();
 				}
 
@@ -396,6 +412,9 @@ public class DLNAController extends RemoteController {
 				if(!running) {
 					return;
 				}
+
+				long duration = positionInfo.getTrackDurationSeconds();
+				seekable = duration > 0;
 
 				lastUpdate.set(System.currentTimeMillis());
 

@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -872,7 +873,7 @@ public class DownloadService extends Service {
 		nextMediaPlayer = tmp;
 		setCurrentPlaying(nextPlaying, true);
 		setPlayerState(PlayerState.STARTED);
-		setupHandlers(currentPlaying, false);
+		setupHandlers(currentPlaying, false, start);
 		setNextPlaying();
 
 		// Proxy should not be being used here since the next player was already setup to play
@@ -1047,6 +1048,7 @@ public class DownloadService extends Service {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void reset() {
 		if (bufferTask != null) {
 			bufferTask.cancel();
@@ -1070,6 +1072,7 @@ public class DownloadService extends Service {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void resetNext() {
 		try {
 			if (nextMediaPlayer != null) {
@@ -1303,6 +1306,16 @@ public class DownloadService extends Service {
 		return mediaRouter.getSelector();
 	}
 
+	public boolean isSeekable() {
+		if(remoteState == LOCAL) {
+			return currentPlaying.isWorkDone() && playerState != PREPARING;
+		} else if(remoteController != null) {
+			return remoteController.isSeekable();
+		} else {
+			return false;
+		}
+	}
+
 	public boolean isRemoteEnabled() {
 		return remoteState != LOCAL;
 	}
@@ -1510,6 +1523,8 @@ public class DownloadService extends Service {
 
 						synchronized (DownloadService.this) {
 							if (position != 0) {
+								Util.sleepQuietly(10);
+
 								Log.i(TAG, "Restarting player from position " + position);
 								mediaPlayer.seekTo(position);
 							}
@@ -1538,7 +1553,7 @@ public class DownloadService extends Service {
 				}
 			});
 
-			setupHandlers(downloadFile, isPartial);
+			setupHandlers(downloadFile, isPartial, start);
 
 			mediaPlayer.prepareAsync();
 		} catch (Exception x) {
@@ -1546,6 +1561,7 @@ public class DownloadService extends Service {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
 			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
@@ -1596,7 +1612,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private void setupHandlers(final DownloadFile downloadFile, final boolean isPartial) {
+	private void setupHandlers(final DownloadFile downloadFile, final boolean isPartial, final boolean isPlaying) {
 		final int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
 		mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
@@ -1607,7 +1623,7 @@ public class DownloadService extends Service {
 					playNext();
 				} else {
 					downloadFile.setPlaying(false);
-					doPlay(downloadFile, pos, true);
+					doPlay(downloadFile, pos, isPlaying);
 					downloadFile.setPlaying(true);
 				}
 				return true;

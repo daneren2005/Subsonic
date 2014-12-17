@@ -1249,18 +1249,18 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 		onProgressChangedTask = new SilentBackgroundTask<Void>(context) {
 			DownloadService downloadService;
-			boolean isJukeboxEnabled;
 			int millisPlayed;
 			Integer duration;
 			PlayerState playerState;
+			boolean isSeekable;
 
 			@Override
 			protected Void doInBackground() throws Throwable {
 				downloadService = getDownloadService();
-				isJukeboxEnabled = downloadService.isRemoteEnabled();
 				millisPlayed = Math.max(0, downloadService.getPlayerPosition());
 				duration = downloadService.getPlayerDuration();
 				playerState = getDownloadService().getPlayerState();
+				isSeekable = downloadService.isSeekable();
 				return null;
 			}
 
@@ -1279,7 +1279,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					if(!seekInProgress) {
 						progressBar.setProgress(millisPlayed);
 					}
-					progressBar.setEnabled((currentPlaying.isWorkDone() || isJukeboxEnabled) && playerState != PlayerState.PREPARING);
+					progressBar.setEnabled(isSeekable);
 				} else {
 					positionTextView.setText("0:00");
 					durationTextView.setText("-:--");
