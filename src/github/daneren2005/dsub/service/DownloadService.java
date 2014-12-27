@@ -1308,7 +1308,7 @@ public class DownloadService extends Service {
 
 	public boolean isSeekable() {
 		if(remoteState == LOCAL) {
-			return currentPlaying.isWorkDone() && playerState != PREPARING;
+			return currentPlaying != null && currentPlaying.isWorkDone() && playerState != PREPARING;
 		} else if(remoteController != null) {
 			return remoteController.isSeekable();
 		} else {
