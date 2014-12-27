@@ -1523,8 +1523,6 @@ public class DownloadService extends Service {
 
 						synchronized (DownloadService.this) {
 							if (position != 0) {
-								Util.sleepQuietly(10);
-
 								Log.i(TAG, "Restarting player from position " + position);
 								mediaPlayer.seekTo(position);
 							}
