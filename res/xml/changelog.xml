@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9 Beta 1" versioncode="135" releasedate="12/27/2014">
+		<change>Early DLNA support</change>
+		<change>I have only tested against XBMC.  I need feedback on what does and doesn't work</change>
+		<change>I know no metadata shows up.  I haven't been able to figure that part out yet.</change>
+	</release>
 	<release version="4.8.6" versioncode="134" releasedate="12/27/2014">
-		<change>Join the Beta channel to try out DLNA casting!</change>
 		<change>Play/shuffle quick album lists such as Recently Added or Random</change>
 		<change>Change download status to a percentage</change>
 		<change>Improved unknown album art</change>
