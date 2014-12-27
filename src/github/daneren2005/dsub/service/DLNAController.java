@@ -69,7 +69,7 @@ import github.daneren2005.serverproxy.FileProxy;
 
 public class DLNAController extends RemoteController {
 	private static final String TAG = DLNAController.class.getSimpleName();
-	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 3L;
+	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 3000L;
 
 	DLNADevice device;
 	ControlPoint controlPoint;
@@ -141,9 +141,12 @@ public class DLNAController extends RemoteController {
 
 							if(failed) {
 								failedLoad();
-							} else {
+							} else if(downloadService.getPlayerState() == PlayerState.STARTED) {
+								// Played until the end
 								downloadService.setPlayerState(PlayerState.COMPLETED);
 								downloadService.next();
+							} else {
+								downloadService.setPlayerState(PlayerState.STOPPED);
 							}
 							break;
 						case TRANSITIONING:
