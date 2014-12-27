@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.8.6" versioncode="134" releasedate="12/27/2014">
+		<change>Join the Beta channel to try out DLNA casting!</change>
+		<change>Play/shuffle quick album lists such as Recently Added or Random</change>
+		<change>Change download status to a percentage</change>
+		<change>Improved unknown album art</change>
+		<change>Allow any size cache to be set</change>
+		<change>Improved search sort order</change>
+		<change>Fix settings coloring on older versions of Android</change>
+		<change>Fix sleep timer not remembering last value</change>
+		<change>Fix caching not working while casting</change>
+	</release>
 	<release version="4.8.5" versioncode="133" releasedate="11/26/2014">
 		<change>Fix crash on GB</change>
 		<change>Fix some theme issues</change>
