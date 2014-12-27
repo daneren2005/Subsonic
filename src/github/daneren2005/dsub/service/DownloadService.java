@@ -1344,6 +1344,11 @@ public class DownloadService extends Service {
 		setRemoteState(newState, ref, null);
 	}
 	private void setRemoteState(final RemoteControlState newState, final Object ref, final String routeId) {
+		// Don't try to do anything if already in the correct state
+		if(remoteState == newState) {
+			return;
+		}
+
 		boolean isPlaying = playerState == STARTED;
 		int position = getPlayerPosition();
 
@@ -1358,6 +1363,7 @@ public class DownloadService extends Service {
 			}
 		}
 
+		Log.i(TAG, remoteState.name() + " => " + newState.name() + " (" + currentPlaying + ")");
 		remoteState = newState;
 		switch(newState) {
 			case JUKEBOX_SERVER:
@@ -1484,6 +1490,7 @@ public class DownloadService extends Service {
 
 			subtractPosition = 0;
 			mediaPlayer.setOnCompletionListener(null);
+			mediaPlayer.setOnPreparedListener(null);
 			mediaPlayer.reset();
 			setPlayerState(IDLE);
 			try {
