@@ -39,15 +39,19 @@ import org.fourthline.cling.support.avtransport.callback.SetAVTransportURI;
 import org.fourthline.cling.support.avtransport.callback.Stop;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportVariable;
+import org.fourthline.cling.support.connectionmanager.callback.PrepareForConnection;
 import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.lastchange.LastChange;
 import org.fourthline.cling.support.model.DIDLContent;
+import org.fourthline.cling.support.model.PersonWithRole;
 import org.fourthline.cling.support.model.PositionInfo;
+import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.SeekMode;
 import org.fourthline.cling.support.model.item.Item;
 import org.fourthline.cling.support.model.item.MusicTrack;
 import org.fourthline.cling.support.model.item.VideoItem;
 import org.fourthline.cling.support.renderingcontrol.callback.SetVolume;
+import org.seamless.util.MimeType;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -138,7 +142,8 @@ public class DLNAController extends RemoteController {
 							if(failed) {
 								failedLoad();
 							} else {
-								downloadService.setPlayerState(PlayerState.STOPPED);
+								downloadService.setPlayerState(PlayerState.COMPLETED);
+								downloadService.next();
 							}
 							break;
 						case TRANSITIONING:
@@ -418,21 +423,8 @@ public class DLNAController extends RemoteController {
 
 				lastUpdate.set(System.currentTimeMillis());
 
-				// Playback was stopped
-				if(positionInfo.getTrackURI() == null) {
-					if(downloadService.getCurrentPlaying() != null && downloadService.getPlayerState() != PlayerState.IDLE) {
-						Log.w(TAG, "Nothing is playing on DLNA device");
-						downloadService.setCurrentPlaying(null, false);
-					}
-				}
-				// End device started playing something else, no idea what
-				else if(!positionInfo.getTrackURI().equals(currentPlayingURI) && downloadService.getPlayerState() != PlayerState.IDLE) {
-					Log.w(TAG, "A different song is playing on the remote device: " + positionInfo.getTrackURI());
-					downloadService.setCurrentPlaying(null, false);
-				} else {
-					// Let's get the updated position
-					currentPosition = (int) positionInfo.getTrackElapsedSeconds();
-				}
+				// Let's get the updated position
+				currentPosition = (int) positionInfo.getTrackElapsedSeconds();
 
 				downloadService.postDelayed(new Runnable() {
 					@Override
