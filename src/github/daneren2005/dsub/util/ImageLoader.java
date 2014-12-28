@@ -110,7 +110,16 @@ public class ImageLoader {
 			color = COLORS[0];
 		} else {
 			key = getKey(entry.getId() + "unknown", size);
-			color = COLORS[Math.abs(entry.getAlbum().hashCode()) % COLORS.length];
+			
+			String hash;
+			if(entry.getAlbum() != null) {
+				hash = entry.getAlbum();
+			} else if(entry.getArtist() != null) {
+				hash = entry.getArtist();
+			} else {
+				hash = entry.getId();
+			}
+			color = COLORS[Math.abs(hash.hashCode()) % COLORS.length];
 		}
 		Bitmap bitmap = cache.get(key);
 		if(bitmap == null) {
