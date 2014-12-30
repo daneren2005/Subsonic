@@ -31,6 +31,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,8 +96,16 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+		View root = super.onCreateView(inflater, container, bundle);
+
 		this.setTitle(getResources().getString(R.string.settings_title));
 		initSettings();
+
+		return root;
 	}
 
 	@Override
