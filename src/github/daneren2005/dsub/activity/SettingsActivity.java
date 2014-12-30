@@ -73,7 +73,7 @@ public class SettingsActivity extends SubsonicActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		setContentView(0);
+		setContentView(R.layout.download_activity);
 
 		if (savedInstanceState == null) {
 			fragment = new SettingsFragment();
@@ -82,8 +82,10 @@ public class SettingsActivity extends SubsonicActivity {
 
 			fragment.setArguments(args);
 			fragment.setRetainInstance(true);
-			this.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment, null).commit();
+
 			currentFragment = fragment;
+			currentFragment.setPrimaryFragment(true);
+			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 		}
     }
 }
