@@ -197,6 +197,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 							protected Void doInBackground() throws Throwable {
 								FileUtil.deleteMusicDirectory(context);
 								FileUtil.deleteSerializedCache(context);
+								FileUtil.deleteArtworkCache(context);
+								FileUtil.deleteAvatarCache(context);
 								return null;
 							}
 

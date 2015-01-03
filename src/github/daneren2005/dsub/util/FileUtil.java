@@ -442,6 +442,14 @@ public class FileUtil {
 			}
 		}
 	}
+	public static boolean deleteArtworkCache(Context context) {
+		File artDirectory = FileUtil.getAlbumArtDirectory(context);
+		return Util.recursiveDelete(artDirectory);
+	}
+	public static boolean deleteAvatarCache(Context context) {
+		File artDirectory = FileUtil.getAvatarDirectory(context);
+		return Util.recursiveDelete(artDirectory);
+	}
 
 	public static void unpinSong(Context context, File saveFile) {
 		// Don't try to unpin a song which isn't actually pinned

@@ -585,6 +585,26 @@ public final class Util {
         }
         return true;
     }
+	public static boolean recursiveDelete(File dir) {
+		if (dir != null && dir.exists()) {
+			File[] list = dir.listFiles();
+			if(list != null) {
+				for(File file: list) {
+					if(file.isDirectory()) {
+						if(!recursiveDelete(file)) {
+							return false;
+						}
+					} else if(file.exists()) {
+						if(!file.delete()) {
+							return false;
+						}
+					}
+				}
+			}
+			return dir.delete();
+		}
+		return false;
+	}
 	public static boolean recursiveDelete(File dir, MediaStoreService mediaStore) {
 		if (dir != null && dir.exists()) {
 			File[] list = dir.listFiles();
