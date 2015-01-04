@@ -298,6 +298,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			case R.id.menu_top_tracks:
 				showTopTracks();
 				return true;
+			case R.id.menu_similar_artists:
+				showSimilarArtists(id);
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -1206,6 +1209,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle(getArguments());
 		args.putBoolean(Constants.INTENT_EXTRA_SHOW_ALL, true);
+		fragment.setArguments(args);
+
+		replaceFragment(fragment, true);
+	}
+
+	private void showSimilarArtists(String artistId) {
+		SubsonicFragment fragment = new SimilarArtistFragment();
+		Bundle args = new Bundle();
+		args.putString(Constants.INTENT_EXTRA_NAME_ARTIST, artistId);
 		fragment.setArguments(args);
 
 		replaceFragment(fragment, true);

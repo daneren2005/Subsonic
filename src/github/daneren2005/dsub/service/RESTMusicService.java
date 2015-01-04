@@ -69,6 +69,7 @@ import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
+import github.daneren2005.dsub.service.parser.ArtistInfoParser;
 import github.daneren2005.dsub.service.parser.BookmarkParser;
 import github.daneren2005.dsub.service.parser.ChatMessageParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
@@ -1375,6 +1376,16 @@ public class RESTMusicService implements MusicService {
 			finally {
 				Util.close(in);
 			}
+		}
+	}
+
+	@Override
+	public ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtistInfo2" : "getArtistInfo", null, Arrays.asList("id"), Arrays.<Object>asList(id));
+		try {
+			return new ArtistInfoParser(context, getInstance(context)).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
 		}
 	}
 
