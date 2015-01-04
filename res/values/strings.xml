@@ -105,6 +105,7 @@
 	<string name="menu.rate">Set Rating</string>
 	<string name="menu.top_tracks">Last.FM Top Tracks</string>
 	<string name="menu.similar_artists">Similar Artists</string>
+	<string name="menu.show_missing">Show missing</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>

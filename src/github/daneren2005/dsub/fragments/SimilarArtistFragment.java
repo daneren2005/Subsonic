@@ -15,44 +15,33 @@
 
 package github.daneren2005.dsub.fragments;
 
-import android.os.Build;
+import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
+import android.text.method.LinkMovementMethod;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.ArtistInfo;
-import github.daneren2005.dsub.domain.Indexes;
-import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistAdapter;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import java.net.URLEncoder;
 import java.util.List;
 
 public class SimilarArtistFragment extends SelectListFragment<Artist> {
 	private static final String TAG = SimilarArtistFragment.class.getSimpleName();
+	private ArtistInfo info;
 	private String artistId;
 
 	@Override
@@ -61,6 +50,21 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 		artist = true;
 
 		artistId = getArguments().getString(Constants.INTENT_EXTRA_NAME_ARTIST);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(super.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		switch (item.getItemId()) {
+			case R.id.menu_show_missing:
+				showMissingArtists();
+				break;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -100,7 +104,7 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	public int getOptionsMenu() {
-		return R.menu.empty;
+		return R.menu.similar_artists;
 	}
 
 	@Override
@@ -110,12 +114,24 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	public List<Artist> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		ArtistInfo info = musicService.getArtistInfo(artistId, refresh, context, listener);
+		info = musicService.getArtistInfo(artistId, refresh, context, listener);
 		return info.getSimilarArtists();
 	}
 
 	@Override
 	public int getTitleResource() {
 		return R.string.menu_similar_artists;
+	}
+
+	private void showMissingArtists() {
+		StringBuilder b = new StringBuilder();
+
+		for(String name: info.getMissingArtists()) {
+			b.append("<h3><a href=\"https://www.google.com/#q=" + URLEncoder.encode(name) + "\">" + name + "</a></h3> ");
+		}
+
+		Util.showHTMLDialog(context, R.string.menu_similar_artists, b.toString());
+
+		// Util.info(context, R.string.menu_similar_artists, b.toString());
 	}
 }

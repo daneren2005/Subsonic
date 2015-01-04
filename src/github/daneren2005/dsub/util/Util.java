@@ -1040,10 +1040,13 @@ public final class Util {
 		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 	public static void showHTMLDialog(Context context, int title, int message) {
+		showHTMLDialog(context, title, context.getResources().getString(message));
+	}
+	public static void showHTMLDialog(Context context, int title, String message) {
 		AlertDialog dialog = new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(title)
-			.setMessage(Html.fromHtml(context.getResources().getString(message)))
+			.setMessage(Html.fromHtml(message))
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int i) {
@@ -1051,6 +1054,8 @@ public final class Util {
 				}
 			})
 			.show();
+
+		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
     public static void sleepQuietly(long millis) {
