@@ -1381,6 +1381,8 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.11", "Getting artist info is not supported");
+
 		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtistInfo2" : "getArtistInfo", null, Arrays.asList("id"), Arrays.<Object>asList(id));
 		try {
 			return new ArtistInfoParser(context, getInstance(context)).parse(reader, progressListener);

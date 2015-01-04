@@ -210,6 +210,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				if(!ServerInfo.isMadsonic(context)) {
 					menu.removeItem(R.id.menu_top_tracks);
 				}
+				if(!ServerInfo.checkServerVersion(context, "1.11")) {
+					menu.removeItem(R.id.menu_similar_artists);
+				}
 			}
 		} else {
 			if(podcastId == null) {
