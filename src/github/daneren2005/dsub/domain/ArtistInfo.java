@@ -24,6 +24,7 @@ public class ArtistInfo implements Serializable {
 	private String lastFMUrl;
 	private String imageUrl;
 	private List<Artist> similarArtists;
+	private List<String> missingArtists;
 
 	public String getBiography() {
 		return biography;
@@ -63,5 +64,13 @@ public class ArtistInfo implements Serializable {
 
 	public void setSimilarArtists(List<Artist> similarArtists) {
 		this.similarArtists = similarArtists;
+	}
+
+	public List<String> getMissingArtists() {
+		return missingArtists;
+	}
+
+	public void setMissingArtists(List<String> missingArtists) {
+		this.missingArtists = missingArtists;
 	}
 }

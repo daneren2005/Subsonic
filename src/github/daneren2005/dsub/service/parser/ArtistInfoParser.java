@@ -38,6 +38,7 @@ public class ArtistInfoParser extends AbstractParser {
 
 		ArtistInfo info = new ArtistInfo();
 		List<Artist> artists = new ArrayList<Artist>();
+		List<String> missingArtists = new ArrayList<String>();
 
 		int eventType;
 		do {
@@ -53,10 +54,16 @@ public class ArtistInfoParser extends AbstractParser {
 				} else if ("largeImageUrl".equals(name)) {
 					info.setImageUrl(getText());
 				} else if ("similarArtist".equals(name)) {
-					Artist artist = new Artist();
-					artist.setId(get("id"));
-					artist.setName(get("name"));
-					artists.add(artist);
+					String id = get("id");
+					if(id.equals("-1")) {
+						missingArtists.add(get("name"));
+					} else {
+						Artist artist = new Artist();
+						artist.setId(id);
+						artist.setName(get("name"));
+						artist.setStarred(get("starred") != null);
+						artists.add(artist);
+					}
 				} else if ("error".equals(name)) {
 					handleError();
 				}
@@ -64,6 +71,7 @@ public class ArtistInfoParser extends AbstractParser {
 		} while (eventType != XmlPullParser.END_DOCUMENT);
 
 		info.setSimilarArtists(artists);
+		info.setMissingArtists(missingArtists);
 		return info;
 	}
 }
