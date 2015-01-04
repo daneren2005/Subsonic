@@ -79,7 +79,7 @@ public class ImageLoader {
 			@Override
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
 				if(evicted) {
-					if(oldBitmap != nowPlaying) {
+					if(oldBitmap != nowPlaying && key.indexOf("unknown") == -1) {
 						if(sizeOf("", oldBitmap) > 500) {
 							oldBitmap.recycle();
 						}
