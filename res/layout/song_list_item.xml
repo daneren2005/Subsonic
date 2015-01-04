@@ -122,6 +122,5 @@
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:layout_gravity="right|center_vertical"
-		android:paddingRight="10dip"
-		style="@style/BasicButton"/>
+		style="@style/MoreButton"/>
 </LinearLayout>

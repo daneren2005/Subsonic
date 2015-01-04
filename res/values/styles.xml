@@ -4,6 +4,10 @@
 		<item name="android:background">@drawable/abc_item_background_holo_light</item>
 	</style>
 
+	<style name="MoreButton" parent="BasicButton">
+		<item name="android:paddingRight">14dip</item>
+	</style>
+
     <style name="PlaybackControl" parent="@style/BasicButton">
         <item name="android:scaleType">fitCenter</item>
         <item name="android:padding">6dip</item>
