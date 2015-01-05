@@ -131,7 +131,5 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 		}
 
 		Util.showHTMLDialog(context, R.string.menu_similar_artists, b.toString());
-
-		// Util.info(context, R.string.menu_similar_artists, b.toString());
 	}
 }
