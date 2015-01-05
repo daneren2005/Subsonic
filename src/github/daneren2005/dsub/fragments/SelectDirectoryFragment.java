@@ -1,10 +1,12 @@
 package github.daneren2005.dsub.fragments;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -60,9 +62,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 	private GridView albumList;
 	private ListView entryList;
-	private boolean hideButtons = false;
 	private Boolean licenseValid;
-	private boolean showHeader = true;
 	private EntryAdapter entryAdapter;
 	private List<Entry> albums;
 	private List<Entry> entries;
@@ -200,19 +200,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		if(licenseValid == null) {
 			menuInflater.inflate(R.menu.empty, menu);
-		}
-		else if(hideButtons && !showAll) {
-			if(albumListType != null) {
-				menuInflater.inflate(R.menu.select_album_list, menu);
-			} else {
-				menuInflater.inflate(R.menu.select_album, menu);
+		} else if(albumListType != null) {
+			menuInflater.inflate(R.menu.select_album_list, menu);
+		} else if(artist && !showAll) {
+			menuInflater.inflate(R.menu.select_album, menu);
 
-				if(!ServerInfo.isMadsonic(context)) {
-					menu.removeItem(R.id.menu_top_tracks);
-				}
-				if(!ServerInfo.checkServerVersion(context, "1.11")) {
-					menu.removeItem(R.id.menu_similar_artists);
-				}
+			if(!ServerInfo.isMadsonic(context)) {
+				menu.removeItem(R.id.menu_top_tracks);
+			}
+			if(!ServerInfo.checkServerVersion(context, "1.11")) {
+				menu.removeItem(R.id.menu_similar_artists);
 			}
 		} else {
 			if(podcastId == null) {
@@ -599,8 +596,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	private void getAlbumList(final String albumListType, final int size) {
-		showHeader = false;
-
 		if ("newest".equals(albumListType)) {
 			setTitle(R.string.main_albums_newest);
 		} else if ("random".equals(albumListType)) {
@@ -661,6 +656,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			} else {
 				entries = dir.getChildren();
 			}
+
+			// This isn't really an artist if no albums on it!
+			if(albums.size() == 0) {
+				artist = false;
+			}
 			
 			return new Pair<MusicDirectory, Boolean>(dir, licenseValid);
 		}
@@ -673,19 +673,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
     private void finishLoading() {
-        if (entries.size() > 0 && albums.size() == 0 && !"root".equals(id)) {
-            if(showHeader) {
-                View header = createHeader(entries);
-                if(header != null && entryList != null) {
-                    entryList.addHeaderView(header, null, false);
-                }
-            }
-        } else {
-            showHeader = false;
-			if(!"root".equals(id) && (entries.size() == 0 || !largeAlbums && albums.size() == entries.size())) {
-				hideButtons = true;
+		// Show header if not album list type and not root and not artist
+		if(albumListType == null && !"root".equals(id) && !artist) {
+			View header = createHeader(entries);
+			if(header != null && entryList != null) {
+				entryList.addHeaderView(header, null, false);
 			}
-        }
+		}
 
 		// Needs to be added here, GB crashes if you to try to remove the header view before adapter is set
 		if(addAlbumHeader) {
@@ -1297,8 +1291,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 		}
 		if(songCount == 0) {
-			showHeader = false;
-			hideButtons = true;
 			return null;
 		}
 
@@ -1310,6 +1302,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			artistView.setTextAppearance(context, android.R.style.TextAppearance_Small);
 
 			artistView.setOnClickListener(new View.OnClickListener() {
+				@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 				@Override
 				public void onClick(View v) {
 					if(artistView.getMaxLines() == 5) {
