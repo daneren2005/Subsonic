@@ -1012,7 +1012,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(fromUser) {
 					int length = getMinutes(progress);
 					lengthBox.setText(Util.formatDuration(length));
-					seekBar.setProgress(progress + 1);
+					seekBar.setProgress(progress);
 				}
 			}
 
@@ -1024,7 +1024,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
-        lengthBar.setProgress(length);
+        lengthBar.setProgress(length - 1);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_set_timer)
@@ -1032,7 +1032,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
-					int length = getMinutes(lengthBar.getProgress() - 1);
+					int length = getMinutes(lengthBar.getProgress());
 
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
