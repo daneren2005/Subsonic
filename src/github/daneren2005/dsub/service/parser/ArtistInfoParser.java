@@ -16,6 +16,7 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -28,6 +29,7 @@ import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.util.ProgressListener;
 
 public class ArtistInfoParser extends AbstractParser {
+	private static final String TAG = ArtistInfo.class.getSimpleName();
 
 	public ArtistInfoParser(Context context, int instance) {
 		super(context, instance);
@@ -40,20 +42,13 @@ public class ArtistInfoParser extends AbstractParser {
 		List<Artist> artists = new ArrayList<Artist>();
 		List<String> missingArtists = new ArrayList<String>();
 
+		String tagName = null;
 		int eventType;
 		do {
 			eventType = nextParseEvent();
 			if (eventType == XmlPullParser.START_TAG) {
-				String name = getElementName();
-				if ("biography".equals(name)) {
-					info.setBiography(getText());
-				} else if ("musicBrainzId".equals(name)) {
-					info.setMusicBrainzId(getText());
-				} else if ("lastFmUrl".equals(name)) {
-					info.setLastFMUrl(getText());
-				} else if ("largeImageUrl".equals(name)) {
-					info.setImageUrl(getText());
-				} else if ("similarArtist".equals(name)) {
+				tagName = getElementName();
+				if ("similarArtist".equals(tagName)) {
 					String id = get("id");
 					if(id.equals("-1")) {
 						missingArtists.add(get("name"));
@@ -64,8 +59,18 @@ public class ArtistInfoParser extends AbstractParser {
 						artist.setStarred(get("starred") != null);
 						artists.add(artist);
 					}
-				} else if ("error".equals(name)) {
+				} else if ("error".equals(tagName)) {
 					handleError();
+				}
+			} else if(eventType == XmlPullParser.TEXT) {
+				if ("biography".equals(tagName) && info.getBiography() == null) {
+					info.setBiography(getText());
+				} else if ("musicBrainzId".equals(tagName) && info.getMusicBrainzId() == null) {
+					info.setMusicBrainzId(getText());
+				} else if ("lastFmUrl".equals(tagName) && info.getLastFMUrl() == null) {
+					info.setLastFMUrl(getText());
+				} else if ("largeImageUrl".equals(tagName) && info.getImageUrl() == null) {
+					info.setImageUrl(getText());
 				}
 			}
 		} while (eventType != XmlPullParser.END_DOCUMENT);
