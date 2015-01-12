@@ -180,6 +180,8 @@ public interface MusicService {
 	Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 
 	ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+
+	Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 	

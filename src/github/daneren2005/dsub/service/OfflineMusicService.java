@@ -789,6 +789,11 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
+	public Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
     public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		throw new OfflineException(ERRORMSG);
     }

@@ -908,6 +908,11 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
+	public Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+		return musicService.getBitmap(url, size, context, progressListener, task);
+	}
+
+	@Override
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return musicService.processOfflineSyncs(context, progressListener);
 	}

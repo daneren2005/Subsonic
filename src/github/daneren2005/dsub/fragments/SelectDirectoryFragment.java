@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -26,6 +29,7 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Share;
@@ -69,6 +73,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private boolean albumContext = false;
 	private boolean addAlbumHeader = false;
 	private LoadTask currentTask;
+	ArtistInfo artistInfo;
 
 	String id;
 	String name;
@@ -89,7 +94,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	boolean largeAlbums = false;
 	boolean topTracks = false;
 	String lookupEntry;
-	
+
 	public SelectDirectoryFragment() {
 		super();
 	}
@@ -475,7 +480,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private void getMusicDirectory(final String id, final String name, final boolean refresh) {
 		setTitle(name);
 
-		new LoadTask() {
+		new LoadTask(refresh) {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				MusicDirectory dir = getMusicDirectory(id, name, refresh, service, this);
@@ -512,7 +517,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private void getRecursiveMusicDirectory(final String id, final String name, final boolean refresh) {
 		setTitle(name);
 
-		new LoadTask() {
+		new LoadTask(refresh) {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				MusicDirectory root;
@@ -554,7 +559,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private void getPlaylist(final String playlistId, final String playlistName, final boolean refresh) {
 		setTitle(playlistName);
 
-		new LoadTask() {
+		new LoadTask(refresh) {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return service.getPlaylist(refresh, playlistId, playlistName, context, this);
@@ -565,7 +570,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private void getPodcast(final String podcastId, final String podcastName, final boolean refresh) {
 		setTitle(podcastName);
 
-		new LoadTask() {
+		new LoadTask(refresh) {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return service.getPodcastEpisodes(refresh, podcastId, context, this);
@@ -576,7 +581,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private void getShare(final Share share, final boolean refresh) {
 		setTitle(share.getName());
 
-		new LoadTask() {
+		new LoadTask(refresh) {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return share.getMusicDirectory();
@@ -587,7 +592,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private void getTopTracks(final String id, final String name, final boolean refresh) {
 		setTitle(name);
 
-		new LoadTask() {
+		new LoadTask(refresh) {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				return service.getTopTrackSongs(name, 20, context, this);
@@ -612,7 +617,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			setTitle(albumListExtra);
 		}
 
-		new LoadTask() {
+		new LoadTask(true) {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
 				MusicDirectory result;
@@ -635,9 +640,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	private abstract class LoadTask extends TabBackgroundTask<Pair<MusicDirectory, Boolean>> {
+		private boolean refresh;
 
-		public LoadTask() {
+		public LoadTask(boolean refresh) {
 			super(SelectDirectoryFragment.this);
+			this.refresh = refresh;
 			
 			currentTask = this;
 		}
@@ -661,6 +668,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			if(albums.size() == 0) {
 				artist = false;
 			}
+
+			// If artist, we want to load the artist info to use later
+			if(artist) {
+				artistInfo = musicService.getArtistInfo(id, refresh, context, this);
+			}
 			
 			return new Pair<MusicDirectory, Boolean>(dir, licenseValid);
 		}
@@ -674,8 +686,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
     private void finishLoading() {
 		// Show header if not album list type and not root and not artist
-		if(albumListType == null && !"root".equals(id) && !artist) {
-			View header = createHeader(entries);
+		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
+		if(albumListType == null && !"root".equals(id) && (!artist || (ServerInfo.checkServerVersion(context, "1.11") && artistInfo != null))) {
+			View header = createHeader();
 			if(header != null && entryList != null) {
 				entryList.addHeaderView(header, null, false);
 			}
@@ -1220,7 +1233,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		replaceFragment(fragment, true);
 	}
 
-	private View createHeader(List<Entry> entries) {
+	private View createHeader() {
 		View header = entryList.findViewById(R.id.select_album_header);
 		boolean add = false;
 		if(header == null) {
@@ -1228,36 +1241,75 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			add = true;
 		}
 
-		final ImageLoader imageLoader = getImageLoader();
-		
-		// Try a few times to get a random cover art
-		Entry coverArt = null;
-		for(int i = 0; (i < 3) && (coverArt == null || coverArt.getCoverArt() == null); i++) {
-			coverArt = entries.get(random.nextInt(entries.size()));
+		setupCoverArt(header);
+		setupTextDisplay(header);
+
+		if(add) {
+			setupButtonEvents(header);
 		}
-		
-		final Entry albumRep = coverArt;
+
+		if(add) {
+			return header;
+		} else {
+			return null;
+		}
+	}
+
+	private void setupCoverArt(View header) {
+		final ImageLoader imageLoader = getImageLoader();
 		View coverArtView = header.findViewById(R.id.select_album_art);
-		coverArtView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(albumRep.getCoverArt() == null) {
-					return;
+
+		// Try a few times to get a random cover art
+		if(artistInfo != null) {
+			final String url = artistInfo.getImageUrl();
+			coverArtView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (url == null) {
+						return;
+					}
+
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					ImageView fullScreenView = new ImageView(context);
+					imageLoader.loadImage(fullScreenView, url, true);
+					builder.setCancelable(true);
+
+					AlertDialog imageDialog = builder.create();
+					// Set view here with unecessary 0's to remove top/bottom border
+					imageDialog.setView(fullScreenView, 0, 0, 0, 0);
+					imageDialog.show();
 				}
-
-				AlertDialog.Builder builder = new AlertDialog.Builder(context);
-				ImageView fullScreenView = new ImageView(context);
-				imageLoader.loadImage(fullScreenView, albumRep, true, true);
-				builder.setCancelable(true);
-				
-				AlertDialog imageDialog = builder.create();
-				// Set view here with unecessary 0's to remove top/bottom border
-				imageDialog.setView(fullScreenView, 0, 0, 0, 0);
-				imageDialog.show();
+			});
+			imageLoader.loadImage(coverArtView, url, false);
+		} else if(entries.size() > 0) {
+			Entry coverArt = null;
+			for (int i = 0; (i < 3) && (coverArt == null || coverArt.getCoverArt() == null); i++) {
+				coverArt = entries.get(random.nextInt(entries.size()));
 			}
-		});
-		imageLoader.loadImage(coverArtView, albumRep, false, true);
 
+			final Entry albumRep = coverArt;
+			coverArtView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (albumRep.getCoverArt() == null) {
+						return;
+					}
+
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					ImageView fullScreenView = new ImageView(context);
+					imageLoader.loadImage(fullScreenView, albumRep, true, true);
+					builder.setCancelable(true);
+
+					AlertDialog imageDialog = builder.create();
+					// Set view here with unecessary 0's to remove top/bottom border
+					imageDialog.setView(fullScreenView, 0, 0, 0, 0);
+					imageDialog.show();
+				}
+			});
+			imageLoader.loadImage(coverArtView, albumRep, false, true);
+		}
+	}
+	private void setupTextDisplay(View header) {
 		TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
 		if(playlistName != null) {
 			titleView.setText(playlistName);
@@ -1266,6 +1318,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			titleView.setPadding(0, 6, 4, 8);
 		} else if(name != null) {
 			titleView.setText(name);
+
+			if(artistInfo != null) {
+				titleView.setPadding(0, 6, 4, 8);
+			}
 		} else if(share != null) {
 			titleView.setVisibility(View.GONE);
 		}
@@ -1290,13 +1346,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				}
 			}
 		}
-		if(songCount == 0) {
-			return null;
-		}
 
 		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
-		if(podcastDescription != null) {
-			artistView.setText(podcastDescription);
+		if(podcastDescription != null || artistInfo != null) {
+			String text = podcastDescription != null ? podcastDescription : artistInfo.getBiography();
+			Spanned spanned = null;
+			if(text != null) {
+				spanned = Html.fromHtml(text);
+			}
+			artistView.setText(spanned);
 			artistView.setSingleLine(false);
 			artistView.setLines(5);
 			artistView.setTextAppearance(context, android.R.style.TextAppearance_Small);
@@ -1312,6 +1370,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					}
 				}
 			});
+			artistView.setMovementMethod(LinkMovementMethod.getInstance());
 		} else if(topTracks) {
 			artistView.setText(R.string.menu_top_tracks);
 			artistView.setVisibility(View.VISIBLE);
@@ -1339,62 +1398,55 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			songCountView.setVisibility(View.GONE);
 			songLengthView.setVisibility(View.GONE);
 		}
-
-		if(add) {
-			ImageView shareButton = (ImageView) header.findViewById(R.id.select_album_share);
-			if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || !UserUtil.canShare()) {
-				shareButton.setVisibility(View.GONE);
-			} else {
-				shareButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						createShare(SelectDirectoryFragment.this.entries);
-					}
-				});
-			}
-
-			final ImageButton starButton = (ImageButton) header.findViewById(R.id.select_album_star);
-			if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
-				starButton.setImageResource(directory.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-				starButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						toggleStarred(directory, new OnStarChange() {
-							@Override
-							void starChange(boolean starred) {
-								starButton.setImageResource(directory.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-							}
-						});
-					}
-				});
-			} else {
-				starButton.setVisibility(View.GONE);
-			}
-
-			View ratingBarWrapper = header.findViewById(R.id.select_album_rate_wrapper);
-			final RatingBar ratingBar = (RatingBar) header.findViewById(R.id.select_album_rate);
-			if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true) && !Util.isOffline(context)) {
-				ratingBar.setRating(directory.getRating());
-				ratingBarWrapper.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						setRating(directory, new OnRatingChange() {
-							@Override
-							void ratingChange(int rating) {
-								ratingBar.setRating(directory.getRating());
-							}
-						});
-					}
-				});
-			} else {
-				ratingBar.setVisibility(View.GONE);
-			}
+	}
+	private void setupButtonEvents(View header) {
+		ImageView shareButton = (ImageView) header.findViewById(R.id.select_album_share);
+		if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || !UserUtil.canShare()) {
+			shareButton.setVisibility(View.GONE);
+		} else {
+			shareButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					createShare(SelectDirectoryFragment.this.entries);
+				}
+			});
 		}
 
-		if(add) {
-			return header;
+		final ImageButton starButton = (ImageButton) header.findViewById(R.id.select_album_star);
+		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
+			starButton.setImageResource(directory.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+			starButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					toggleStarred(directory, new OnStarChange() {
+						@Override
+						void starChange(boolean starred) {
+							starButton.setImageResource(directory.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+						}
+					});
+				}
+			});
 		} else {
-			return null;
+			starButton.setVisibility(View.GONE);
+		}
+
+		View ratingBarWrapper = header.findViewById(R.id.select_album_rate_wrapper);
+		final RatingBar ratingBar = (RatingBar) header.findViewById(R.id.select_album_rate);
+		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true) && !Util.isOffline(context)) {
+			ratingBar.setRating(directory.getRating());
+			ratingBarWrapper.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					setRating(directory, new OnRatingChange() {
+						@Override
+						void ratingChange(int rating) {
+							ratingBar.setRating(directory.getRating());
+						}
+					});
+				}
+			});
+		} else {
+			ratingBar.setVisibility(View.GONE);
 		}
 	}
 }
