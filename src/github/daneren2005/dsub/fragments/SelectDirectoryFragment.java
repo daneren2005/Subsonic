@@ -54,6 +54,8 @@ import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.AlbumListAdapter;
+import github.daneren2005.dsub.view.HeaderGridView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -687,10 +689,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
     private void finishLoading() {
 		// Show header if not album list type and not root and not artist
 		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
+		View header = null;
 		if(albumListType == null && !"root".equals(id) && (!artist || (ServerInfo.checkServerVersion(context, "1.11") && artistInfo != null))) {
-			View header = createHeader();
-			if(header != null && entryList != null) {
+			header = createHeader();
+			// Only add header to entry list if we aren't going recreate album grid as root anyways
+			if(header != null && entryList != null && (!addAlbumHeader || entries.size() > 0)) {
 				entryList.addHeaderView(header, null, false);
+				header = null;
 			}
 		}
 
@@ -706,6 +711,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				
 				setupScrollList(albumList);
 				setupAlbumList();
+
+				// This should only not be null for a artist with only albums
+				if(header != null) {
+					HeaderGridView headerGridView = (HeaderGridView) albumList;
+					headerGridView.addHeaderView(header);
+				}
 			}
 			addAlbumHeader = false;
 		}
@@ -1390,13 +1401,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		TextView songCountView = (TextView) header.findViewById(R.id.select_album_song_count);
 		TextView songLengthView = (TextView) header.findViewById(R.id.select_album_song_length);
-		if(podcastDescription == null) {
+		if(podcastDescription != null || artistInfo != null) {
+			songCountView.setVisibility(View.GONE);
+			songLengthView.setVisibility(View.GONE);
+		} else {
 			String s = context.getResources().getQuantityString(R.plurals.select_album_n_songs, songCount, songCount);
 			songCountView.setText(s.toUpperCase());
 			songLengthView.setText(Util.formatDuration(totalDuration));
-		} else {
-			songCountView.setVisibility(View.GONE);
-			songLengthView.setVisibility(View.GONE);
 		}
 	}
 	private void setupButtonEvents(View header) {
