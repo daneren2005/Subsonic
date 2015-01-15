@@ -5,15 +5,21 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
+import android.text.Layout;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.LeadingMarginSpan;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ArtistInfo;
@@ -55,6 +62,7 @@ import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.AlbumListAdapter;
 import github.daneren2005.dsub.view.HeaderGridView;
+import github.daneren2005.dsub.view.MyLeadingMarginSpan2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1320,8 +1328,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			imageLoader.loadImage(coverArtView, albumRep, false, true);
 		}
 	}
-	private void setupTextDisplay(View header) {
-		TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
+	private void setupTextDisplay(final View header) {
+		final TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
 		if(playlistName != null) {
 			titleView.setText(playlistName);
 		} else if(podcastName != null) {
@@ -1370,12 +1378,36 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			artistView.setLines(5);
 			artistView.setTextAppearance(context, android.R.style.TextAppearance_Small);
 
+			final Spanned spannedText = spanned;
 			artistView.setOnClickListener(new View.OnClickListener() {
 				@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 				@Override
 				public void onClick(View v) {
 					if(artistView.getMaxLines() == 5) {
+						// Use LeadingMarginSpan2 to try to make text flow around image
+						Display display = context.getWindowManager().getDefaultDisplay();
+						View coverArtView = header.findViewById(R.id.select_album_art);
+						coverArtView.measure(display.getWidth(), display.getHeight());
+						ViewGroup.MarginLayoutParams vlp = (ViewGroup.MarginLayoutParams) coverArtView.getLayoutParams();
+						int height = coverArtView.getMeasuredHeight() + coverArtView.getPaddingBottom();
+						int width = coverArtView.getWidth() + coverArtView.getPaddingRight();
+						float textLineHeight = artistView.getPaint().getTextSize();
+						int lines = (int) Math.ceil(height / textLineHeight);
+
+						SpannableString ss = new SpannableString(spannedText);
+						ss.setSpan(new MyLeadingMarginSpan2(lines, width), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+						View linearLayout = header.findViewById(R.id.select_album_text_layout);
+						RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+						int[]rules = params.getRules();
+						rules[RelativeLayout.RIGHT_OF] = 0;
+						params.leftMargin = vlp.rightMargin;
+
+						artistView.setText(ss);
 						artistView.setMaxLines(100);
+
+						vlp = (ViewGroup.MarginLayoutParams) titleView.getLayoutParams();
+						vlp.leftMargin = width;
 					} else {
 						artistView.setMaxLines(5);
 					}
