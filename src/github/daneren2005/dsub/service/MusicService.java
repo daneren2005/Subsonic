@@ -25,6 +25,7 @@ import org.apache.http.HttpResponse;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
@@ -177,6 +178,10 @@ public interface MusicService {
 	void changePassword(String username, String password, Context context, ProgressListener progressListener) throws Exception;
 
 	Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
+
+	ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+
+	Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 	

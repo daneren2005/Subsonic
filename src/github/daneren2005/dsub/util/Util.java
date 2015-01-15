@@ -601,6 +601,26 @@ public final class Util {
         }
         return true;
     }
+	public static boolean recursiveDelete(File dir) {
+		if (dir != null && dir.exists()) {
+			File[] list = dir.listFiles();
+			if(list != null) {
+				for(File file: list) {
+					if(file.isDirectory()) {
+						if(!recursiveDelete(file)) {
+							return false;
+						}
+					} else if(file.exists()) {
+						if(!file.delete()) {
+							return false;
+						}
+					}
+				}
+			}
+			return dir.delete();
+		}
+		return false;
+	}
 	public static boolean recursiveDelete(File dir, MediaStoreService mediaStore) {
 		if (dir != null && dir.exists()) {
 			File[] list = dir.listFiles();
@@ -1036,10 +1056,13 @@ public final class Util {
 		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 	public static void showHTMLDialog(Context context, int title, int message) {
+		showHTMLDialog(context, title, context.getResources().getString(message));
+	}
+	public static void showHTMLDialog(Context context, int title, String message) {
 		AlertDialog dialog = new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(title)
-			.setMessage(Html.fromHtml(context.getResources().getString(message)))
+			.setMessage(Html.fromHtml(message))
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int i) {
@@ -1047,6 +1070,8 @@ public final class Util {
 				}
 			})
 			.show();
+
+		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
     public static void sleepQuietly(long millis) {

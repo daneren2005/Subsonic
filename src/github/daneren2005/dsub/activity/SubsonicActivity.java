@@ -379,7 +379,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	
 	@Override
 	public void setTitle(CharSequence title) {
-		if(!title.equals(getSupportActionBar().getTitle())) {
+		if(title != null && !title.equals(getSupportActionBar().getTitle())) {
 			getSupportActionBar().setTitle(title);
 			recreateSpinner();
 		}

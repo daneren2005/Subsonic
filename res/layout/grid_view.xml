@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+<github.daneren2005.dsub.view.HeaderGridView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/gridview"
 	android:layout_width="fill_parent"
 	android:layout_height="0dip"

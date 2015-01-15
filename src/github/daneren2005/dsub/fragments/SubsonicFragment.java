@@ -1343,25 +1343,35 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	public void deleteRecursively(Artist artist) {
-		File dir = FileUtil.getArtistDirectory(context, artist);
-		if(dir == null) return;
-
-		MediaStoreService mediaStore = new MediaStoreService(context);
-		Util.recursiveDelete(dir, mediaStore);
-		if(Util.isOffline(context)) {
-			refresh();
-		}
+		deleteRecursively(FileUtil.getArtistDirectory(context, artist));
 	}
 	
 	public void deleteRecursively(Entry album) {
-		File dir = FileUtil.getAlbumDirectory(context, album);
-		if(dir == null) return;
+		deleteRecursively(FileUtil.getAlbumDirectory(context, album));
 
-		MediaStoreService mediaStore = new MediaStoreService(context);
-		Util.recursiveDelete(dir, mediaStore);
-		if(Util.isOffline(context)) {
-			refresh();
+	}
+	public void deleteRecursively(final File dir) {
+		if(dir == null) {
+			return;
 		}
+
+		new LoadingTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MediaStoreService mediaStore = new MediaStoreService(context);
+				Util.recursiveDelete(dir, mediaStore);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				if(Util.isOffline(context)) {
+					refresh();
+				} else {
+					UpdateView.triggerUpdate();
+				}
+			}
+		}.execute();
 	}
 
 	public void showAlbumArtist(Entry entry) {

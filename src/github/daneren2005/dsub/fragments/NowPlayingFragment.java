@@ -869,7 +869,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		updateButtons();
 
 		if(currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
-			getImageLoader().loadImage(albumArtImageView, null, true, false);
+			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
 		}
 		if(downloadService != null) {
 			downloadService.startRemoteScan();
@@ -1012,6 +1012,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(fromUser) {
 					int length = getMinutes(progress);
 					lengthBox.setText(Util.formatDuration(length));
+					seekBar.setProgress(progress);
 				}
 			}
 
@@ -1023,7 +1024,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
-        lengthBar.setProgress(length);
+        lengthBar.setProgress(length - 1);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_set_timer)
@@ -1225,7 +1226,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					bookmarkButton.setImageResource(bookmark);
 				} else {
 					songTitleTextView.setText(null);
-					getImageLoader().loadImage(albumArtImageView, null, true, false);
+					getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
 					starButton.setImageResource(android.R.drawable.btn_star_big_off);
 					setSubtitle(null);
 				}

@@ -79,7 +79,7 @@ public class ImageLoader {
 			@Override
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
 				if(evicted) {
-					if(oldBitmap != nowPlaying) {
+					if(oldBitmap != nowPlaying && key.indexOf("unknown") == -1) {
 						if(sizeOf("", oldBitmap) > 500) {
 							oldBitmap.recycle();
 						}
@@ -108,9 +108,11 @@ public class ImageLoader {
 		if(entry == null) {
 			key = getKey("unknown", size);
 			color = COLORS[0];
+
+			return getUnknownImage(key, size, color, null, null);
 		} else {
 			key = getKey(entry.getId() + "unknown", size);
-			
+
 			String hash;
 			if(entry.getAlbum() != null) {
 				hash = entry.getAlbum();
@@ -120,16 +122,20 @@ public class ImageLoader {
 				hash = entry.getId();
 			}
 			color = COLORS[Math.abs(hash.hashCode()) % COLORS.length];
+
+			return getUnknownImage(key, size, color, entry.getAlbum(), entry.getArtist());
 		}
+	}
+	private Bitmap getUnknownImage(String key, int size, int color, String topText, String bottomText) {
 		Bitmap bitmap = cache.get(key);
 		if(bitmap == null) {
-			bitmap = createUnknownImage(entry, size, color);
+			bitmap = createUnknownImage(size, color, topText, bottomText);
 			cache.put(key, bitmap);
 		}
 
 		return bitmap;
 	}
-	private Bitmap createUnknownImage(MusicDirectory.Entry entry, int size, int primaryColor) {
+	private Bitmap createUnknownImage(int size, int primaryColor, String topText, String bottomText) {
 		Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 
@@ -140,18 +146,18 @@ public class ImageLoader {
 		color.setShader(new LinearGradient(0, 0, 0, size / 3.0f, Color.rgb(82, 82, 82), Color.BLACK, Shader.TileMode.MIRROR));
 		canvas.drawRect(0, size * 2.0f / 3.0f, size, size, color);
 
-		if(entry != null) {
+		if(topText != null || bottomText != null) {
 			Paint font = new Paint();
 			font.setFlags(Paint.ANTI_ALIAS_FLAG);
 			font.setColor(Color.WHITE);
 			font.setTextSize(3.0f + size * 0.07f);
 
-			if(entry.getAlbum() != null) {
-				canvas.drawText(entry.getAlbum(), size * 0.05f, size * 0.6f, font);
+			if(topText != null) {
+				canvas.drawText(topText, size * 0.05f, size * 0.6f, font);
 			}
 
-			if(entry.getArtist() != null) {
-				canvas.drawText(entry.getArtist(), size * 0.05f, size * 0.8f, font);
+			if(bottomText != null) {
+				canvas.drawText(bottomText, size * 0.05f, size * 0.8f, font);
 			}
 		}
 
@@ -206,6 +212,29 @@ public class ImageLoader {
 			setImage(view, Util.createDrawableFromBitmap(context, null), false);
 		}
 		ImageTask task = new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
+		task.execute();
+		return task;
+	}
+
+	public SilentBackgroundTask<Void> loadImage(View view, String url, boolean large) {
+		Bitmap bitmap;
+		int size = large ? imageSizeLarge : imageSizeDefault;
+		if (url == null) {
+			String key = getKey(url + "unknown", size);
+			int color = COLORS[Math.abs(key.hashCode()) % COLORS.length];
+			bitmap = getUnknownImage(key, size, color, null, null);
+			setImage(view, Util.createDrawableFromBitmap(context, bitmap), true);
+			return null;
+		}
+
+		bitmap = cache.get(getKey(url, size));
+		if (bitmap != null && !bitmap.isRecycled()) {
+			final Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
+			setImage(view, drawable, true);
+			return null;
+		}
+
+		SilentBackgroundTask<Void> task = new ViewUrlTask(view.getContext(), view, url, size);
 		task.execute();
 		return task;
 	}
@@ -379,6 +408,50 @@ public class ImageLoader {
 		@Override
 		protected void done(Void result) {
 			setImage(mRemoteControl, mDrawable);
+		}
+	}
+
+	private class ViewUrlTask extends SilentBackgroundTask<Void> {
+		private final Context mContext;
+		private final String mUrl;
+		private final ImageView mView;
+		private Drawable mDrawable;
+		private int mSize;
+
+		public ViewUrlTask(Context context, View view, String url, int size) {
+			super(context);
+			mContext = context;
+			mView = (ImageView) view;
+			mUrl = url;
+			mSize = size;
+		}
+
+		@Override
+		protected Void doInBackground() throws Throwable {
+			try {
+				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
+				Bitmap bitmap = musicService.getBitmap(mUrl, mSize, mContext, null, this);
+				if(bitmap != null) {
+					String key = getKey(mUrl, mSize);
+					cache.put(key, bitmap);
+					// Make sure key is the most recently "used"
+					cache.get(key);
+
+					mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
+				}
+			} catch (Throwable x) {
+				Log.e(TAG, "Failed to download from url " + mUrl, x);
+				cancelled.set(true);
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void done(Void result) {
+			if(mDrawable != null) {
+				mView.setImageDrawable(mDrawable);
+			}
 		}
 	}
 
