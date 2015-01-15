@@ -407,7 +407,7 @@ public class DownloadService extends Service {
 	}
 
 	private void updateJukeboxPlaylist() {
-		if (remoteState != LOCAL) {
+		if (remoteState != LOCAL && remoteController != null) {
 			remoteController.updatePlaylist();
 		}
 	}
