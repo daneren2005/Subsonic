@@ -211,39 +211,43 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		adding.add(id);
 
 		if(device.getType().getType().equals("MediaRenderer") && device instanceof RemoteDevice) {
-			dlnaService.getControlPoint().execute(new GetVolume(renderingControl) {
-				@Override
-				public void received(ActionInvocation actionInvocation, int currentVolume) {
-					int maxVolume = 100;
-					StateVariable volume = renderingControl.getStateVariable("Volume");
-					if(volume != null) {
-						StateVariableAllowedValueRange volumeRange = volume.getTypeDetails().getAllowedValueRange();
-						maxVolume = (int) volumeRange.getMaximum();
+			try {
+				dlnaService.getControlPoint().execute(new GetVolume(renderingControl) {
+					@Override
+					public void received(ActionInvocation actionInvocation, int currentVolume) {
+						int maxVolume = 100;
+						StateVariable volume = renderingControl.getStateVariable("Volume");
+						if (volume != null) {
+							StateVariableAllowedValueRange volumeRange = volume.getTypeDetails().getAllowedValueRange();
+							maxVolume = (int) volumeRange.getMaximum();
+						}
+
+						// Create a new DLNADevice to represent this item
+						String id = device.getIdentity().getUdn().toString();
+						String name = device.getDetails().getFriendlyName();
+						String displayName = device.getDisplayString();
+
+						DLNADevice newDevice = new DLNADevice(device, id, name, displayName, currentVolume, maxVolume);
+						devices.put(id, newDevice);
+						downloadService.post(new Runnable() {
+							@Override
+							public void run() {
+								broadcastDescriptors();
+							}
+						});
+						adding.remove(id);
 					}
 
-					// Create a new DLNADevice to represent this item
-					String id = device.getIdentity().getUdn().toString();
-					String name = device.getDetails().getFriendlyName();
-					String displayName = device.getDisplayString();
-
-					DLNADevice newDevice = new DLNADevice(device, id, name, displayName, currentVolume, maxVolume);
-					devices.put(id, newDevice);
-					downloadService.post(new Runnable() {
-						@Override
-						public void run() {
-							broadcastDescriptors();
-						}
-					});
-					adding.remove(id);
-				}
-
-				@Override
-				public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String s) {
-					Log.w(TAG, "Failed to get default volume for DLNA route");
-					Log.w(TAG, "Reason: " + s);
-					adding.remove(id);
-				}
-			});
+					@Override
+					public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String s) {
+						Log.w(TAG, "Failed to get default volume for DLNA route");
+						Log.w(TAG, "Reason: " + s);
+						adding.remove(id);
+					}
+				});
+			} catch(Exception e) {
+				Log.e(TAG, "Failed to add device", e);
+			}
 		} else {
 			adding.remove(id);
 		}
