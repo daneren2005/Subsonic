@@ -334,10 +334,18 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				return;
 			}
 			entry = (Entry) entryList.getItemAtPosition(info.position);
-			albumContext = false;
+			// When List has Grid embedded in header, this is called against the header as well
+			if(entry != null) {
+				albumContext = false;
+			}
 		} else {
 			entry = (Entry) albumList.getItemAtPosition(info.position);
 			albumContext = true;
+		}
+
+		// Don't try to display a context menu if error here
+		if(entry == null) {
+			return;
 		}
 
 		onCreateContextMenu(menu, view, menuInfo, entry);
