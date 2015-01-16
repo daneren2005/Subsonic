@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9 Beta 2" versioncode="136" releasedate="1/15/2014">
+		<change>Fixed issue of DLNA not showing up for some people</change>
+		<change>Add artist info header (Subsonic 5.1+)</change>
+		<change>Add Similar Artists option (Subsonic 5.1+)</change>
+		<change>View similar artists missing from Subsonic (Subsonic 5.1+)</change>
+		<change>Podcasts: clicking on description wraps around image to display everything</change>
+		<change>Delete artwork/avatars on Clean Cache</change>
+		<change>Fix sleep timer incrementing on it's own</change>
+		<change>Fixed various crashes</change>
+	</release>
 	<release version="4.9 Beta 1" versioncode="135" releasedate="12/27/2014">
 		<change>Early DLNA support</change>
 		<change>I have only tested against XBMC.  I need feedback on what does and doesn't work</change>
