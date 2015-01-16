@@ -414,10 +414,10 @@ public class DownloadService extends Service {
 
 	public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
 		SharedPreferences prefs = Util.getPreferences(this);
-		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
-		if(remoteState != LOCAL) {
+		RemoteControlState newState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
+		if(newState != LOCAL) {
 			String id = prefs.getString(Constants.PREFERENCES_KEY_CONTROL_ID, null);
-			setRemoteState(remoteState, null, id);
+			setRemoteState(newState, null, id);
 		}
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, false)) {
 			removePlayed = true;
