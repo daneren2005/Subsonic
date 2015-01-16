@@ -373,7 +373,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		Object selectedItem;
 		int headers = entryList.getHeaderViewsCount();
 		if(albumContext) {
-			selectedItem = albums.get(info.position);
+			selectedItem = albumList.getItemAtPosition(info.position);
 		} else {
 			if(info.position == 0) {
 				return false;
