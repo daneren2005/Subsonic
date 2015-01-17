@@ -1385,7 +1385,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 			artistView.setText(spanned);
 			artistView.setSingleLine(false);
-			artistView.setLines(5);
+			final int minLines = context.getResources().getInteger(R.integer.TextDescriptionLength);
+			artistView.setLines(minLines);
 			artistView.setTextAppearance(context, android.R.style.TextAppearance_Small);
 
 			final Spanned spannedText = spanned;
@@ -1393,7 +1394,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 				@Override
 				public void onClick(View v) {
-					if(artistView.getMaxLines() == 5) {
+					if(artistView.getMaxLines() == minLines) {
 						// Use LeadingMarginSpan2 to try to make text flow around image
 						Display display = context.getWindowManager().getDefaultDisplay();
 						View coverArtView = header.findViewById(R.id.select_album_art);
@@ -1424,7 +1425,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 						vlp = (ViewGroup.MarginLayoutParams) titleView.getLayoutParams();
 						vlp.leftMargin = width;
 					} else {
-						artistView.setMaxLines(5);
+						artistView.setMaxLines(minLines);
 
 						if(albumList instanceof HeaderGridView) {
 							HeaderGridView headerGridView = (HeaderGridView) albumList;
