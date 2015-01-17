@@ -27,6 +27,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -1414,10 +1416,20 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 						artistView.setText(ss);
 						artistView.setMaxLines(100);
 
+						if(albumList instanceof HeaderGridView) {
+							HeaderGridView headerGridView = (HeaderGridView) albumList;
+							((BaseAdapter) headerGridView.getAdapter()).notifyDataSetChanged();
+						}
+
 						vlp = (ViewGroup.MarginLayoutParams) titleView.getLayoutParams();
 						vlp.leftMargin = width;
 					} else {
 						artistView.setMaxLines(5);
+
+						if(albumList instanceof HeaderGridView) {
+							HeaderGridView headerGridView = (HeaderGridView) albumList;
+							((BaseAdapter) headerGridView.getAdapter()).notifyDataSetChanged();
+						}
 					}
 				}
 			});
