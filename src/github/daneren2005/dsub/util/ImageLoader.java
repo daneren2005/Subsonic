@@ -453,14 +453,20 @@ public class ImageLoader {
 				subTask = new ViewUrlTask(mContext, mView, url, mSize) {
 					@Override
 					protected void failedToDownload() {
-						new ViewImageTask(mContext, mEntry, mSize, mSaveSize, mIsNowPlaying, mView, mCrossfade).execute();
+						// Call loadImage so we can take advantage of all of it's logic checks
+						loadImage(mView, mEntry, mSize == imageSizeLarge, mCrossfade);
 
 						// Delete subTask so it doesn't get called in done
 						subTask = null;
 					}
 				};
-			} else {
+			} else if(mEntry != null && mEntry.getCoverArt() != null) {
 				subTask = new ViewImageTask(mContext, mEntry, mSize, mSaveSize, mIsNowPlaying, mView, mCrossfade);
+			} else {
+				// If entry is null as well, we need to just set as a blank image
+				Bitmap bitmap = getUnknownImage(mEntry, mSize);
+				mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
+				return null;
 			}
 
 			// Execute whichever way we decided to go
@@ -472,6 +478,8 @@ public class ImageLoader {
 		public void done(Void result) {
 			if(subTask != null) {
 				subTask.done(result);
+			} else if(mDrawable != null) {
+				setImage(mView, mDrawable, mCrossfade);
 			}
 		}
 	}
