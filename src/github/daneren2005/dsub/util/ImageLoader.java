@@ -454,6 +454,9 @@ public class ImageLoader {
 					@Override
 					protected void failedToDownload() {
 						new ViewImageTask(mContext, mEntry, mSize, mSaveSize, mIsNowPlaying, mView, mCrossfade).execute();
+
+						// Delete subTask so it doesn't get called in done
+						subTask = null;
 					}
 				};
 			} else {
