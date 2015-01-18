@@ -84,12 +84,9 @@ import github.daneren2005.dsub.activity.SubsonicActivity;
 
 public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();
-
-	public static final int DIALOG_SAVE_PLAYLIST = 100;
 	private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 10;
-	private static final int COLOR_BUTTON_ENABLED = Color.rgb(51, 181, 229);
-	private static final int COLOR_BUTTON_DISABLED = Color.rgb(206, 213, 211);
 	private static final int INCREMENT_TIME = 5000;
+	private static final int SERVICE_BACKOFF = 200;
 
 	private static final int ACTION_PREVIOUS = 1;
 	private static final int ACTION_NEXT = 2;
@@ -873,6 +870,21 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 		if(downloadService != null) {
 			downloadService.startRemoteScan();
+		} else {
+			// Make sure to call remote scan once the service is ready
+			final Runnable waitForService = new Runnable() {
+				@Override
+				public void run() {
+					DownloadService service = getDownloadService();
+					if(service != null) {
+						service.startRemoteScan();
+					} else {
+						handler.postDelayed(this, SERVICE_BACKOFF);
+					}
+				}
+			};
+
+			handler.postDelayed(waitForService, SERVICE_BACKOFF);
 		}
 	}
 
@@ -1009,7 +1021,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		lengthBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				if(fromUser) {
+				if (fromUser) {
 					int length = getMinutes(progress);
 					lengthBox.setText(Util.formatDuration(length));
 				}
