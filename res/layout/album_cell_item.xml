@@ -12,8 +12,7 @@
 		<github.daneren2005.dsub.view.SquareImageView
 			android:id="@+id/album_coverart"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:src="@drawable/unknown_album"/>
+			android:layout_height="match_parent"/>
 
 		<RatingBar
 			android:id="@+id/album_rating"

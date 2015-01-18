@@ -4,7 +4,7 @@
 	xmlns:myns="http://schemas.android.com/apk/res/github.daneren2005.dsub"
 	android:title="@string/settings.title">
 
-    <PreferenceScreen
+	<PreferenceScreen
 		android:title="@string/settings.servers_title">
 
 		<PreferenceCategory
@@ -17,7 +17,7 @@
 				android:title="@string/settings.servers_add"/>
 		</PreferenceCategory>
 
-    </PreferenceScreen>
+	</PreferenceScreen>
 
 	<PreferenceScreen
 		android:title="@string/settings.appearance_title">
@@ -31,7 +31,7 @@
 				android:defaultValue="light"
 				android:entryValues="@array/themeValues"
 				android:entries="@array/themeNames"/>
-				
+
 			<CheckBoxPreference
 				android:title="@string/settings.theme_fullscreen"
 				android:summary="@string/settings.theme_fullscreen_summary"
@@ -212,13 +212,11 @@
 		<PreferenceCategory
 			android:title="@string/settings.cache_title">
 
-			<github.daneren2005.dsub.view.SeekBarPreference
+			<EditTextPreference
 				android:title="@string/settings.cache_size"
 				android:key="cacheSize"
 				android:defaultValue="2000"
-				android:dialogLayout="@layout/seekbar_preference"
-				myns:max="20000"
-				myns:display="%.0f MB"/>
+				android:digits="0123456789"/>
 
 			<EditTextPreference
 				android:title="@string/settings.cache_location"

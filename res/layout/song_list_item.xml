@@ -10,7 +10,7 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center_vertical"
-            android:checkMark="@drawable/btn_check"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
             android:paddingLeft="3dip"/>
 
     <LinearLayout android:orientation="vertical"
@@ -122,6 +122,5 @@
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:layout_gravity="right|center_vertical"
-		android:paddingRight="10dip"
-		style="@style/BasicButton"/>
+		style="@style/MoreButton"/>
 </LinearLayout>

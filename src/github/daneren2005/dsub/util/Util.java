@@ -20,9 +20,6 @@ package github.daneren2005.dsub.util;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,33 +39,19 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.KeyEvent;
-import android.widget.LinearLayout;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SubsonicActivity;
-import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
-import github.daneren2005.dsub.domain.ServerInfo;
-import github.daneren2005.dsub.domain.User;
-import github.daneren2005.dsub.domain.Version;
-import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
-import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MediaStoreService;
 
@@ -77,8 +60,6 @@ import org.apache.http.HttpEntity;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -90,8 +71,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Sindre Mehus
@@ -378,6 +357,22 @@ public final class Util {
 		return builder.toString();
 	}
 
+	public static String replaceInternalUrl(Context context, String url) {
+		// Only change to internal when using https
+		if(url.indexOf("https") != -1) {
+			SharedPreferences prefs = Util.getPreferences(context);
+			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+			if(internalUrl != null && !"".equals(internalUrl)) {
+				String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+				url = url.replace(internalUrl, externalUrl);
+			}
+		}
+
+		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
+		return url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
+	}
+
 	public static boolean isTagBrowsing(Context context) {
 		return isTagBrowsing(context, Util.getActiveServer(context));
 	}
@@ -606,6 +601,26 @@ public final class Util {
         }
         return true;
     }
+	public static boolean recursiveDelete(File dir) {
+		if (dir != null && dir.exists()) {
+			File[] list = dir.listFiles();
+			if(list != null) {
+				for(File file: list) {
+					if(file.isDirectory()) {
+						if(!recursiveDelete(file)) {
+							return false;
+						}
+					} else if(file.exists()) {
+						if(!file.delete()) {
+							return false;
+						}
+					}
+				}
+			}
+			return dir.delete();
+		}
+		return false;
+	}
 	public static boolean recursiveDelete(File dir, MediaStoreService mediaStore) {
 		if (dir != null && dir.exists()) {
 			File[] list = dir.listFiles();
@@ -892,6 +907,10 @@ public final class Util {
 			throw new IllegalArgumentException("Strings must not be null");
 		}
 
+		if(t.toString().toLowerCase().indexOf(s.toString().toLowerCase()) != -1) {
+			return 1;
+		}
+
         int n = s.length();
 		int m = t.length();
 
@@ -1037,10 +1056,13 @@ public final class Util {
 		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }
 	public static void showHTMLDialog(Context context, int title, int message) {
+		showHTMLDialog(context, title, context.getResources().getString(message));
+	}
+	public static void showHTMLDialog(Context context, int title, String message) {
 		AlertDialog dialog = new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(title)
-			.setMessage(Html.fromHtml(context.getResources().getString(message)))
+			.setMessage(Html.fromHtml(message))
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int i) {
@@ -1048,6 +1070,8 @@ public final class Util {
 				}
 			})
 			.show();
+
+		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
     public static void sleepQuietly(long millis) {

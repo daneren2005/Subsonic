@@ -69,6 +69,9 @@ public final class Notifications {
 			notification.bigContentView = expandedContentView;
 			notification.priority = Notification.PRIORITY_HIGH;
 		}
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			notification.visibility = Notification.VISIBILITY_PUBLIC;
+		}
 
 		RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
 		setupViews(smallContentView, context, song, false, playing, remote);
@@ -132,14 +135,6 @@ public final class Notifications {
 		rv.setTextViewText(R.id.notification_title, title);
 		rv.setTextViewText(R.id.notification_artist, arist);
 		rv.setTextViewText(R.id.notification_album, album);
-
-		Pair<Integer, Integer> colors = getNotificationTextColors(context);
-		if (colors.getFirst() != null) {
-			rv.setTextColor(R.id.notification_title, colors.getFirst());
-		}
-		if (colors.getSecond() != null) {
-			rv.setTextColor(R.id.notification_artist, colors.getSecond());
-		}
 
 		boolean persistent = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false);
 		if(persistent) {
@@ -236,7 +231,7 @@ public final class Notifications {
 		String currentDownloading, currentSize;
 		if(file != null) {
 			currentDownloading = file.getSong().getTitle();
-			currentSize = Util.formatBytes(file.getEstimatedSize());
+			currentSize = Util.formatLocalizedBytes(file.getEstimatedSize(), context);
 		} else {
 			currentDownloading = "none";
 			currentSize = "0";
@@ -339,46 +334,6 @@ public final class Notifications {
 
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(stringId, builder.build());
-		}
-	}
-
-	/**
-	 * Resolves the default text color for notifications.
-	 *
-	 * Based on http://stackoverflow.com/questions/4867338/custom-notification-layouts-and-text-colors/7320604#7320604
-	 */
-	private static Pair<Integer, Integer> getNotificationTextColors(Context context) {
-		if (NOTIFICATION_TEXT_COLORS.getFirst() == null && NOTIFICATION_TEXT_COLORS.getSecond() == null) {
-			try {
-				Notification notification = new Notification();
-				String title = "title";
-				String content = "content";
-				notification.setLatestEventInfo(context, title, content, null);
-				LinearLayout group = new LinearLayout(context);
-				ViewGroup event = (ViewGroup) notification.contentView.apply(context, group);
-				findNotificationTextColors(event, title, content);
-				group.removeAllViews();
-			} catch (Exception x) {
-				Log.w(TAG, "Failed to resolve notification text colors.", x);
-			}
-		}
-		return NOTIFICATION_TEXT_COLORS;
-	}
-
-	private static void findNotificationTextColors(ViewGroup group, String title, String content) {
-		for (int i = 0; i < group.getChildCount(); i++) {
-			if (group.getChildAt(i) instanceof TextView) {
-				TextView textView = (TextView) group.getChildAt(i);
-				String text = textView.getText().toString();
-				if (title.equals(text)) {
-					NOTIFICATION_TEXT_COLORS.setFirst(textView.getTextColors().getDefaultColor());
-				}
-				else if (content.equals(text)) {
-					NOTIFICATION_TEXT_COLORS.setSecond(textView.getTextColors().getDefaultColor());
-				}
-			}
-			else if (group.getChildAt(i) instanceof ViewGroup)
-				findNotificationTextColors((ViewGroup) group.getChildAt(i), title, content);
 		}
 	}
 }

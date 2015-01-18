@@ -104,6 +104,8 @@
 	<string name="menu.rescan">Rescan Server</string>
 	<string name="menu.rate">Set Rating</string>
 	<string name="menu.top_tracks">Last.FM Top Tracks</string>
+	<string name="menu.similar_artists">Similar Artists</string>
+	<string name="menu.show_missing">Show missing</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>
@@ -256,7 +258,7 @@
 
     <string name="error.label">Error</string>
 
-    <string name="settings.title">DSub settings</string>
+    <string name="settings.title">Settings</string>
     <string name="settings.test_connection_title">Test connection</string>
 	<string name="settings.servers_add">Add Server</string>
 	<string name="settings.servers_remove">Remove Server</string>

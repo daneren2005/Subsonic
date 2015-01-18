@@ -32,6 +32,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
@@ -888,6 +889,27 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		return musicService.getAvatar(username, size, context, progressListener, task);
+	}
+
+	@Override
+	public ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		String cacheName = getCacheName(context, "artistInfo", id);
+		ArtistInfo info = null;
+		if(!refresh) {
+			info = FileUtil.deserialize(context, cacheName, ArtistInfo.class);
+		}
+
+		if(info == null) {
+			info = musicService.getArtistInfo(id, refresh, context, progressListener);
+			FileUtil.serialize(context, info, cacheName);
+		}
+
+		return info;
+	}
+
+	@Override
+	public Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+		return musicService.getBitmap(url, size, context, progressListener, task);
 	}
 
 	@Override

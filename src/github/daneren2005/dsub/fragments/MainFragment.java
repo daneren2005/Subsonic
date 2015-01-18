@@ -374,10 +374,10 @@ public class MainFragment extends SubsonicFragment {
 				return getResources().getString(R.string.main_about_text,
 					context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName,
 					used.getFirst(),
-					Util.formatBytes(used.getSecond()),
-					Util.formatBytes(Util.getCacheSizeMB(context) * 1024L * 1024L),
-					Util.formatBytes(bytesAvailableFs),
-					Util.formatBytes(bytesTotalFs));
+					Util.formatLocalizedBytes(used.getSecond(), context),
+					Util.formatLocalizedBytes(Util.getCacheSizeMB(context) * 1024L * 1024L, context),
+					Util.formatLocalizedBytes(bytesAvailableFs, context),
+					Util.formatLocalizedBytes(bytesTotalFs, context));
 			}
 
 			@Override

@@ -250,6 +250,33 @@ public class FileUtil {
 		return null;
 	}
 
+	public static File getMiscDirectory(Context context) {
+		File dir = new File(getSubsonicDirectory(context), "misc");
+		ensureDirectoryExistsAndIsReadWritable(dir);
+		ensureDirectoryExistsAndIsReadWritable(new File(dir, ".nomedia"));
+		return dir;
+	}
+
+	public static File getMiscFile(Context context, String url) {
+		return new File(getMiscDirectory(context), Util.md5Hex(url) + ".jpeg");
+	}
+
+	public static Bitmap getMiscBitmap(Context context, String url, int size) {
+		File avatarFile = getMiscFile(context, url);
+		if (avatarFile.exists()) {
+			final BitmapFactory.Options opt = new BitmapFactory.Options();
+			opt.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(avatarFile.getPath(), opt);
+			opt.inPurgeable = true;
+			opt.inSampleSize = Util.calculateInSampleSize(opt, size, Util.getScaledHeight(opt.outHeight, opt.outWidth, size));
+			opt.inJustDecodeBounds = false;
+
+			Bitmap bitmap = BitmapFactory.decodeFile(avatarFile.getPath(), opt);
+			return bitmap == null ? null : getScaledBitmap(bitmap, size, false);
+		}
+		return null;
+	}
+
 	public static Bitmap getSampledBitmap(byte[] bytes, int size) {
 		return getSampledBitmap(bytes, size, true);
 	}
@@ -403,7 +430,13 @@ public class FileUtil {
 
     public static File getDefaultMusicDirectory(Context context) {
 		if(DEFAULT_MUSIC_DIR == null) {
-			File[] dirs = ContextCompat.getExternalFilesDirs(context, null);
+			File[] dirs;
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				dirs = context.getExternalMediaDirs();
+			} else {
+				dirs = ContextCompat.getExternalFilesDirs(context, null);
+			}
+
 			for(int i = dirs.length - 1; i >= 0; i--) {
 				DEFAULT_MUSIC_DIR = new File(dirs[i], "music");
 				if(dirs[i] != null) {
@@ -436,14 +469,27 @@ public class FileUtil {
 			}
 		}
 	}
+	public static boolean deleteArtworkCache(Context context) {
+		File artDirectory = FileUtil.getAlbumArtDirectory(context);
+		return Util.recursiveDelete(artDirectory);
+	}
+	public static boolean deleteAvatarCache(Context context) {
+		File artDirectory = FileUtil.getAvatarDirectory(context);
+		return Util.recursiveDelete(artDirectory);
+	}
 
 	public static void unpinSong(Context context, File saveFile) {
+		// Don't try to unpin a song which isn't actually pinned
+		if(saveFile.getName().contains(".complete")) {
+			return;
+		}
+
 		// Unpin file, rename to .complete
 		File completeFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
 				".complete." + FileUtil.getExtension(saveFile.getName()));
 
 		if(!saveFile.renameTo(completeFile)) {
-			Log.w(TAG, "Failed to rename " + saveFile + " to " + completeFile);
+			Log.w(TAG, "Failed to upin " + saveFile + " to " + completeFile);
 		} else {
 			try {
 				new MediaStoreService(context).renameInMediaStore(completeFile, saveFile);

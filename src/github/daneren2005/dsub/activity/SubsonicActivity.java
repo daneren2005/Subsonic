@@ -28,7 +28,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -101,8 +101,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected void onCreate(Bundle bundle) {
 		setUncaughtExceptionHandler();
 		applyTheme();
-		super.onCreate(bundle);
 		applyFullscreen();
+		super.onCreate(bundle);
 		startService(new Intent(this, DownloadService.class));
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
@@ -164,8 +164,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	@Override
 	public void startActivity(Intent intent) {
-		if(intent.getComponent() != null && "github.daneren2005.dsub.activity.DownloadActivity".equals(intent.getComponent().getClassName())) {
-			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+		if(intent.getComponent() != null) {
+			String name = intent.getComponent().getClassName();
+			if(name != null && name.indexOf("DownloadActivity") != -1) {
+				intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+			} else if(name != null && name.indexOf("SettingsActivity") != -1) {
+				intent.putExtra(Constants.FRAGMENT_POSITION, drawerItems.length - 1);
+			}
 		}
 		super.startActivity(intent);
 	}
@@ -174,9 +179,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public void setContentView(int viewId) {
 		super.setContentView(R.layout.abstract_activity);
 		rootView = (ViewGroup) findViewById(R.id.content_frame);
-		LayoutInflater layoutInflater = getLayoutInflater();
-		layoutInflater.inflate(viewId, rootView);
 
+		if(viewId != 0) {
+			LayoutInflater layoutInflater = getLayoutInflater();
+			layoutInflater.inflate(viewId, rootView);
+		}
 		
 		drawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -201,7 +208,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		});
 
 		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerToggle = new ActionBarDrawerToggle(this, drawer, R.drawable.ic_drawer, R.string.common_appname, R.string.common_appname) {
+		drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.common_appname, R.string.common_appname) {
 			@Override
 			public void onDrawerClosed(View view) {
 				setTitle(currentFragment.getTitle());
@@ -221,7 +228,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					drawerAdapter.setDownloadVisible(true);
 				}
 
-				if(lastSelectedView == null) {
+				if(lastSelectedView == null && drawerList.getCount() > lastSelectedPosition) {
 					lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
 					if(lastSelectedView != null) {
 						lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
@@ -372,7 +379,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	
 	@Override
 	public void setTitle(CharSequence title) {
-		if(!title.equals(getSupportActionBar().getTitle())) {
+		if(title != null && !title.equals(getSupportActionBar().getTitle())) {
 			getSupportActionBar().setTitle(title);
 			recreateSpinner();
 		}

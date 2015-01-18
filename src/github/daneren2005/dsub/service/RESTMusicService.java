@@ -69,6 +69,7 @@ import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
+import github.daneren2005.dsub.service.parser.ArtistInfoParser;
 import github.daneren2005.dsub.service.parser.BookmarkParser;
 import github.daneren2005.dsub.service.parser.ChatMessageParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
@@ -598,7 +599,7 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
-		builder.append("&id=").append(entry.getId());
+		builder.append("&id=").append(entry.getCoverArt());
 		return builder.toString();
 	}
 
@@ -1379,6 +1380,66 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
+	public ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.11", "Getting artist info is not supported");
+
+		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtistInfo2" : "getArtistInfo", null, Arrays.asList("id", "includeNotPresent"), Arrays.<Object>asList(id, "true"));
+		try {
+			return new ArtistInfoParser(context, getInstance(context)).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+		// Synchronize on the url so that we don't download concurrently
+		synchronized (url) {
+			// Use cached file, if existing.
+			Bitmap bitmap = FileUtil.getMiscBitmap(context, url, size);
+			if(bitmap != null) {
+				return bitmap;
+			}
+
+			InputStream in = null;
+			try {
+				HttpEntity entity = getEntityForURL(context, url, null, null, null, progressListener, task);
+				in = entity.getContent();
+				Header contentEncoding = entity.getContentEncoding();
+				if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+					in = new GZIPInputStream(in);
+				}
+
+				// If content type is XML, an error occurred. Get it.
+				String contentType = Util.getContentType(entity);
+				if (contentType != null && contentType.startsWith("text/xml")) {
+					new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
+					return null; // Never reached.
+				}
+
+				byte[] bytes = Util.toByteArray(in);
+				if(task != null && task.isCancelled()) {
+					// Handle case where partial is downloaded and cancelled
+					return null;
+				}
+
+				OutputStream out = null;
+				try {
+					out = new FileOutputStream(FileUtil.getMiscFile(context, url));
+					out.write(bytes);
+				} finally {
+					Util.close(out);
+				}
+
+				return FileUtil.getSampledBitmap(bytes, size, false);
+			}
+			finally {
+				Util.close(in);
+			}
+		}
+	}
+
+	@Override
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return processOfflineScrobbles(context, progressListener) + processOfflineStars(context, progressListener);
 	}
@@ -1670,14 +1731,17 @@ public class RESTMusicService implements MusicService {
 			redirectedUrl = request.getURI().toString();
 		}
 
-        redirectFrom = originalUrl.substring(0, originalUrl.indexOf("/rest/"));
-        redirectTo = redirectedUrl.substring(0, redirectedUrl.indexOf("/rest/"));
+		int index = originalUrl.indexOf("/rest/");
+		if(index != -1) {
+			redirectFrom = originalUrl.substring(0, index);
+			redirectTo = redirectedUrl.substring(0, redirectedUrl.indexOf("/rest/"));
 
-		if(redirectFrom.compareTo(redirectTo) != 0) {
-        	Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
+			if (redirectFrom.compareTo(redirectTo) != 0) {
+				Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
+			}
+			redirectionLastChecked = System.currentTimeMillis();
+			redirectionNetworkType = getCurrentNetworkType(context);
 		}
-        redirectionLastChecked = System.currentTimeMillis();
-        redirectionNetworkType = getCurrentNetworkType(context);
     }
 
     private String rewriteUrlWithRedirect(Context context, String url) {

@@ -6,7 +6,6 @@
 		
 	<ImageView
 		android:id="@+id/select_album_art"
-		android:src="@drawable/unknown_album"
 		android:layout_width="@dimen/AlbumArt.Header"
 		android:layout_height="@dimen/AlbumArt.Header"
 		android:layout_alignParentTop="true"
@@ -16,6 +15,7 @@
 		android:contentDescription="@null"/>
 
 	<LinearLayout
+		android:id="@+id/select_album_text_layout"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_toRightOf="@+id/select_album_art"

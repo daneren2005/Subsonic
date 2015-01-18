@@ -23,8 +23,7 @@
 			android:layout_width="50dip"
 			android:layout_height="50dip"
 			android:layout_gravity="left|center"
-			android:scaleType="fitStart"
-			android:src="@drawable/unknown_album"/>
+			android:scaleType="fitStart"/>
 
 		<LinearLayout
 			android:layout_width="0dp"

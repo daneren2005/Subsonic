@@ -560,6 +560,11 @@
 	<string name="tasker.start_playing_shuffled">Lejátszás indítása kevert sorrendben</string>
 	<string name="tasker.start_playing_title">Tasker -> DSub indítása</string>
 	<string name="tasker.edit_shuffle_mode">Indítás kevert sorrendben: </string>
+	<string name="tasker.edit_shuffle_start_year">Kevert sorrend kezdő év:</string>
+	<string name="tasker.edit_shuffle_end_year">Kevert sorrend utolsó év:</string>
+	<string name="tasker.edit_shuffle_genre">Kevert sorrend műfaja:</string>
+	<string name="tasker.edit_server_offline">Offline kapcsoló: </string>
+	<string name="tasker.edit_do_nothing">Ne csináljon semmit</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Nincsenek dalok</item>

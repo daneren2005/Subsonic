@@ -18,6 +18,10 @@
 		android:title="@string/menu.top_tracks"/>
 
 	<item
+		android:id="@+id/menu_similar_artists"
+		android:title="@string/menu.similar_artists"/>
+
+	<item
 		android:id="@+id/menu_show_all"
 		android:title="@string/menu.show_all"/>
 

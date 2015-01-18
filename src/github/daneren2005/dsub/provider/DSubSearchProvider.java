@@ -24,6 +24,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +46,8 @@ import github.daneren2005.dsub.util.Util;
  * @author Sindre Mehus
  */
 public class DSubSearchProvider extends ContentProvider {
+	private static final String TAG = DSubSearchProvider.class.getSimpleName();
+
 	private static final String RESOURCE_PREFIX = "android.resource://github.daneren2005.dsub/";
 	private static final String[] COLUMNS = {"_id",
 			SearchManager.SUGGEST_COLUMN_TEXT_1,
@@ -147,7 +150,13 @@ public class DSubSearchProvider extends ContentProvider {
 					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), entry.getId(), entry.getTitle(), icon});
 				} else {
 					String icon = RESOURCE_PREFIX + R.drawable.ic_action_song;
-					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), "so-" + entry.getParent(), entry.getTitle(), icon});
+					String id;
+					if(Util.isTagBrowsing(getContext())) {
+						id = entry.getAlbumId();
+					} else {
+						id = entry.getParent();
+					}
+					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), "so-" + id, entry.getTitle(), icon});
 				}
 			}
 		}

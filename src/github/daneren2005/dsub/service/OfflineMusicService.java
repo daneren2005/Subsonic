@@ -37,6 +37,7 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
@@ -320,6 +321,10 @@ public class OfflineMusicService implements MusicService {
 
 				for(File songFile : FileUtil.listMediaFiles(albumFile)) {
 					String songName = getName(songFile);
+					if(songName == null) {
+						continue;
+					}
+
 					if(songFile.isDirectory()) {
 						recursiveAlbumSearch(artistName, songFile, criteria, context, albums, songs);
 					}
@@ -775,6 +780,16 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
 	public Bitmap getAvatar(String username, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
