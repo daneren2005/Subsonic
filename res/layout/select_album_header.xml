@@ -3,16 +3,6 @@
 	android:id="@+id/select_album_header"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-		
-	<ImageView
-		android:id="@+id/select_album_art"
-		android:layout_width="@dimen/AlbumArt.Header"
-		android:layout_height="@dimen/AlbumArt.Header"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentLeft="true"
-		android:layout_marginRight="10dip"
-		android:scaleType="fitCenter"
-		android:contentDescription="@null"/>
 
 	<LinearLayout
 		android:id="@+id/select_album_text_layout"
@@ -109,6 +99,16 @@
 			style="@style/BasicButton"
 			android:layout_gravity="center_vertical"/>
 	</LinearLayout>
+
+	<ImageView
+		android:id="@+id/select_album_art"
+		android:layout_width="@dimen/AlbumArt.Header"
+		android:layout_height="@dimen/AlbumArt.Header"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true"
+		android:layout_marginRight="10dip"
+		android:scaleType="fitCenter"
+		android:contentDescription="@null"/>
 </RelativeLayout>
 
 

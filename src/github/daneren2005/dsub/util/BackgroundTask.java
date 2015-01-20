@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -46,6 +47,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     private final Context context;
 	protected AtomicBoolean cancelled =  new AtomicBoolean(false);
 	protected OnCancelListener cancelListener;
+	protected Runnable onCompletionListener = null;
 	protected Task task;
 
 	private static final int DEFAULT_CONCURRENCY = 8;
@@ -170,6 +172,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         updateProgress(context.getResources().getString(messageId));
     }
 
+	public void setOnCompletionListener(Runnable onCompletionListener) {
+		this.onCompletionListener = onCompletionListener;
+	}
+
 	protected class Task {
 		private Thread thread;
 		private AtomicBoolean taskStart = new AtomicBoolean(false);
@@ -256,6 +262,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		}
 		public void onDone(T result) {
 			done(result);
+
+			if(onCompletionListener != null) {
+				onCompletionListener.run();
+			}
 		}
 		public void onError(Throwable t) {
 			error(t);

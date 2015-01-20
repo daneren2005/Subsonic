@@ -41,7 +41,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 
@@ -181,8 +183,14 @@ public class ImageLoader {
 		return bitmap;
 	}
 
-	public ImageTask loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
-		if(entry != null && entry.getCoverArt() == null && entry.isDirectory() && !Util.isOffline(context)) {
+	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
+		// TODO: If we know this a artist, try to load artist info instead
+		int size = large ? imageSizeLarge : imageSizeDefault;
+		if(entry != null && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
+			SilentBackgroundTask task = new ArtistImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
+			task.execute();
+			return task;
+		} else if(entry != null && entry.getCoverArt() == null && entry.isDirectory() && !Util.isOffline(context)) {
 			// Try to lookup child cover art
 			MusicDirectory.Entry firstChild = FileUtil.lookupChild(context, entry, true);
 			if(firstChild != null) {
@@ -191,7 +199,6 @@ public class ImageLoader {
 		}
 
 		Bitmap bitmap;
-		int size = large ? imageSizeLarge : imageSizeDefault;
 		if (entry == null || entry.getCoverArt() == null) {
 			bitmap = getUnknownImage(entry, size);
 			setImage(view, Util.createDrawableFromBitmap(context, bitmap), crossfade);
@@ -411,6 +418,72 @@ public class ImageLoader {
 		}
 	}
 
+	private class ArtistImageTask extends SilentBackgroundTask<Void> {
+		private final Context mContext;
+		private final MusicDirectory.Entry mEntry;
+		private final int mSize;
+		private final int mSaveSize;
+		private final boolean mIsNowPlaying;
+		private Drawable mDrawable;
+		private boolean mCrossfade;
+		private View mView;
+
+		private SilentBackgroundTask subTask;
+
+		public ArtistImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, View view, boolean crossfade) {
+			super(context);
+			mContext = context;
+			mEntry = entry;
+			mSize = size;
+			mSaveSize = saveSize;
+			mIsNowPlaying = isNowPlaying;
+			mView = view;
+			mCrossfade = crossfade;
+		}
+
+		@Override
+		protected Void doInBackground() throws Throwable {
+			MusicService musicService = MusicServiceFactory.getMusicService(mContext);
+			ArtistInfo artistInfo = musicService.getArtistInfo(mEntry.getId(), false, mContext, null);
+			String url = artistInfo.getImageUrl();
+
+			// Figure out whether we are going to get a artist image or the standard image
+			if(url != null) {
+				// If getting the artist image fails for any reason, retry for the standard version
+				subTask = new ViewUrlTask(mContext, mView, url, mSize) {
+					@Override
+					protected void failedToDownload() {
+						// Call loadImage so we can take advantage of all of it's logic checks
+						loadImage(mView, mEntry, mSize == imageSizeLarge, mCrossfade);
+
+						// Delete subTask so it doesn't get called in done
+						subTask = null;
+					}
+				};
+			} else if(mEntry != null && mEntry.getCoverArt() != null) {
+				subTask = new ViewImageTask(mContext, mEntry, mSize, mSaveSize, mIsNowPlaying, mView, mCrossfade);
+			} else {
+				// If entry is null as well, we need to just set as a blank image
+				Bitmap bitmap = getUnknownImage(mEntry, mSize);
+				mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
+				return null;
+			}
+
+			// Execute whichever way we decided to go
+			subTask.doInBackground();
+			return null;
+		}
+
+		@Override
+		public void done(Void result) {
+			if(subTask != null) {
+				subTask.done(result);
+			} else if(mDrawable != null) {
+				setImage(mView, mDrawable, mCrossfade);
+			}
+		}
+	}
+
 	private class ViewUrlTask extends SilentBackgroundTask<Void> {
 		private final Context mContext;
 		private final String mUrl;
@@ -451,7 +524,13 @@ public class ImageLoader {
 		protected void done(Void result) {
 			if(mDrawable != null) {
 				mView.setImageDrawable(mDrawable);
+			} else {
+				failedToDownload();
 			}
+		}
+
+		protected void failedToDownload() {
+
 		}
 	}
 

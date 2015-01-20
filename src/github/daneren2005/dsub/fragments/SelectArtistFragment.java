@@ -174,6 +174,12 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 	public List<Artist> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
 		if(!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
 			musicFolders = musicService.getMusicFolders(refresh, context, listener);
+
+			// Hide folders option if there is only one
+			if(musicFolders.size() == 1) {
+				musicFolders = null;
+				Util.setSelectedMusicFolderId(context, null);
+			}
 		}
 		String musicFolderId = Util.getSelectedMusicFolderId(context);
 		
@@ -199,7 +205,7 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 			folderButton = folderButtonParent.findViewById(R.id.select_artist_folder);
 		}
 
-		if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
+		if (Util.isOffline(context) || Util.isTagBrowsing(context) || musicFolders == null) {
 			folderButton.setVisibility(View.GONE);
 		} else {
 			folderButton.setVisibility(View.VISIBLE);

@@ -27,6 +27,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -688,7 +690,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 
 			// If artist, we want to load the artist info to use later
-			if(artist && ServerInfo.checkServerVersion(context, "1.11")) {
+			if(artist && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
 				artistInfo = musicService.getArtistInfo(id, refresh, context, this);
 			}
 			
@@ -1383,7 +1385,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			}
 			artistView.setText(spanned);
 			artistView.setSingleLine(false);
-			artistView.setLines(5);
+			final int minLines = context.getResources().getInteger(R.integer.TextDescriptionLength);
+			artistView.setLines(minLines);
 			artistView.setTextAppearance(context, android.R.style.TextAppearance_Small);
 
 			final Spanned spannedText = spanned;
@@ -1391,7 +1394,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 				@Override
 				public void onClick(View v) {
-					if(artistView.getMaxLines() == 5) {
+					if(artistView.getMaxLines() == minLines) {
 						// Use LeadingMarginSpan2 to try to make text flow around image
 						Display display = context.getWindowManager().getDefaultDisplay();
 						View coverArtView = header.findViewById(R.id.select_album_art);
@@ -1414,10 +1417,20 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 						artistView.setText(ss);
 						artistView.setMaxLines(100);
 
+						if(albumList instanceof HeaderGridView) {
+							HeaderGridView headerGridView = (HeaderGridView) albumList;
+							((BaseAdapter) headerGridView.getAdapter()).notifyDataSetChanged();
+						}
+
 						vlp = (ViewGroup.MarginLayoutParams) titleView.getLayoutParams();
 						vlp.leftMargin = width;
 					} else {
-						artistView.setMaxLines(5);
+						artistView.setMaxLines(minLines);
+
+						if(albumList instanceof HeaderGridView) {
+							HeaderGridView headerGridView = (HeaderGridView) albumList;
+							((BaseAdapter) headerGridView.getAdapter()).notifyDataSetChanged();
+						}
 					}
 				}
 			});
@@ -1452,7 +1465,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 	private void setupButtonEvents(View header) {
 		ImageView shareButton = (ImageView) header.findViewById(R.id.select_album_share);
-		if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || !UserUtil.canShare()) {
+		if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || !UserUtil.canShare() || artistInfo != null) {
 			shareButton.setVisibility(View.GONE);
 		} else {
 			shareButton.setOnClickListener(new View.OnClickListener() {

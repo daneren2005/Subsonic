@@ -905,6 +905,11 @@ public class DownloadService extends Service {
 			if (remoteState != LOCAL) {
 				remoteController.changePosition(position / 1000);
 			} else {
+				if(proxy != null && currentPlaying.isCompleteFileAvailable()) {
+					doPlay(currentPlaying, position, playerState == STARTED);
+					return;
+				}
+
 				mediaPlayer.seekTo(position);
 				cachedPosition = position;
 				subtractPosition = 0;

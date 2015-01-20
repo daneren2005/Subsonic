@@ -30,6 +30,7 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.ArtistInfo;
@@ -72,6 +73,7 @@ public class CachedMusicService implements MusicService {
     private final TimeLimitedCache<List<MusicFolder>> cachedMusicFolders = new TimeLimitedCache<List<MusicFolder>>(10 * 3600, TimeUnit.SECONDS);
 	private final TimeLimitedCache<List<PodcastChannel>> cachedPodcastChannels = new TimeLimitedCache<List<PodcastChannel>>(10 * 3600, TimeUnit.SECONDS);
     private String restUrl;
+	private String musicFolderId;
 	private boolean isTagBrowsing = false;
 
     public CachedMusicService(RESTMusicService musicService) {
@@ -1300,8 +1302,9 @@ public class CachedMusicService implements MusicService {
 	}
 
     private void checkSettingsChanged(Context context) {
+		int instance = musicService.getInstance(context);
         String newUrl = musicService.getRestUrl(context, null, false);
-		boolean newIsTagBrowsing = Util.isTagBrowsing(context);
+		boolean newIsTagBrowsing = Util.isTagBrowsing(context, instance);
         if (!Util.equals(newUrl, restUrl) || isTagBrowsing != newIsTagBrowsing) {
             cachedMusicFolders.clear();
             cachedLicenseValid.clear();
@@ -1311,5 +1314,11 @@ public class CachedMusicService implements MusicService {
             restUrl = newUrl;
 			isTagBrowsing = newIsTagBrowsing;
         }
+
+		String newMusicFolderId = Util.getSelectedMusicFolderId(context, instance);
+		if(!Util.equals(newMusicFolderId, musicFolderId)) {
+			cachedIndexes.clear();
+			musicFolderId = newMusicFolderId;
+		}
     }
 }
