@@ -448,7 +448,7 @@ public class ImageLoader {
 			String url = artistInfo.getImageUrl();
 
 			// Figure out whether we are going to get a artist image or the standard image
-			if(url != null) {
+			if(url != null && !"".equals(url.trim())) {
 				// If getting the artist image fails for any reason, retry for the standard version
 				subTask = new ViewUrlTask(mContext, mView, url, mSize) {
 					@Override
@@ -460,13 +460,23 @@ public class ImageLoader {
 						subTask = null;
 					}
 				};
-			} else if(mEntry != null && mEntry.getCoverArt() != null) {
-				subTask = new ViewImageTask(mContext, mEntry, mSize, mSaveSize, mIsNowPlaying, mView, mCrossfade);
 			} else {
-				// If entry is null as well, we need to just set as a blank image
-				Bitmap bitmap = getUnknownImage(mEntry, mSize);
-				mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
-				return null;
+				if (mEntry != null && mEntry.getCoverArt() == null && mEntry.isDirectory() && !Util.isOffline(context)) {
+					// Try to lookup child cover art
+					MusicDirectory.Entry firstChild = FileUtil.lookupChild(context, mEntry, true);
+					if (firstChild != null) {
+						mEntry.setCoverArt(firstChild.getCoverArt());
+					}
+				}
+
+				if (mEntry != null && mEntry.getCoverArt() != null) {
+					subTask = new ViewImageTask(mContext, mEntry, mSize, mSaveSize, mIsNowPlaying, mView, mCrossfade);
+				} else {
+					// If entry is null as well, we need to just set as a blank image
+					Bitmap bitmap = getUnknownImage(mEntry, mSize);
+					mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
+					return null;
+				}
 			}
 
 			// Execute whichever way we decided to go
