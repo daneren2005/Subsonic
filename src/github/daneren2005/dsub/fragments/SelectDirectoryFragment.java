@@ -217,7 +217,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		if(licenseValid == null) {
 			menuInflater.inflate(R.menu.empty, menu);
-		} else if(albumListType != null) {
+		} else if(albumListType != null && !"starred".equals(albumListType)) {
 			menuInflater.inflate(R.menu.select_album_list, menu);
 		} else if(artist && !showAll) {
 			menuInflater.inflate(R.menu.select_album, menu);
