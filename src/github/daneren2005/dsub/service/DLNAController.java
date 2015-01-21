@@ -16,9 +16,7 @@
 package github.daneren2005.dsub.service;
 
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 
 import org.fourthline.cling.controlpoint.ControlPoint;
@@ -27,7 +25,7 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.message.UpnpResponse;
-import org.fourthline.cling.model.meta.Device;
+import org.fourthline.cling.model.meta.Action;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.ServiceType;
@@ -39,12 +37,10 @@ import org.fourthline.cling.support.avtransport.callback.SetAVTransportURI;
 import org.fourthline.cling.support.avtransport.callback.Stop;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportVariable;
-import org.fourthline.cling.support.connectionmanager.callback.PrepareForConnection;
 import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.lastchange.LastChange;
 import org.fourthline.cling.support.model.DIDLContent;
 import org.fourthline.cling.support.model.DIDLObject;
-import org.fourthline.cling.support.model.PersonWithRole;
 import org.fourthline.cling.support.model.PositionInfo;
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.SeekMode;
@@ -78,6 +74,7 @@ public class DLNAController extends RemoteController {
 	DLNADevice device;
 	ControlPoint controlPoint;
 	SubscriptionCallback callback;
+	boolean supportsSeek = false;
 
 	private FileProxy proxy;
 	String rootLocation = "";
@@ -87,7 +84,7 @@ public class DLNAController extends RemoteController {
 	int currentPosition = 0;
 	String currentPlayingURI;
 	boolean running = true;
-	boolean seekable = false;
+	boolean hasDuration = false;
 
 	public DLNAController(DownloadService downloadService, ControlPoint controlPoint, DLNADevice device) {
 		this.downloadService = downloadService;
@@ -110,6 +107,13 @@ public class DLNAController extends RemoteController {
 
 			@Override
 			protected void established(GENASubscription genaSubscription) {
+				Action[] actions = genaSubscription.getService().getActions();
+				for(Action action: actions) {
+					if("Seek".equals(action.getName())) {
+						supportsSeek = true;
+					}
+				}
+
 				startSong(downloadService.getCurrentPlaying(), playing, seconds);
 			}
 
@@ -300,7 +304,7 @@ public class DLNAController extends RemoteController {
 
 	@Override
 	public boolean isSeekable() {
-		return seekable;
+		return supportsSeek && hasDuration;
 	}
 
 	private void startSong(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
@@ -469,7 +473,7 @@ public class DLNAController extends RemoteController {
 				}
 
 				long duration = positionInfo.getTrackDurationSeconds();
-				seekable = duration > 0;
+				hasDuration = duration > 0;
 
 				lastUpdate.set(System.currentTimeMillis());
 
