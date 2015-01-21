@@ -239,6 +239,11 @@ public class DLNAController extends RemoteController {
 			callback = null;
 		}
 
+		if(proxy != null) {
+			proxy.stop();
+			proxy = null;
+		}
+
 		running = false;
 	}
 
