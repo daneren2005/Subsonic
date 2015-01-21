@@ -1654,12 +1654,7 @@ public class DownloadService extends Service {
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000)) || nextSetup) {
 					playNext();
-
-					// Finished loading, delete when list is cleared
-					if (downloadFile.getSong() instanceof PodcastEpisode) {
-						toDelete.add(downloadFile);
-					}
-					clearCurrentBookmark(downloadFile.getSong(), true);
+					postPlayCleanup(downloadFile);
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadService.this) {
@@ -1940,6 +1935,17 @@ public class DownloadService extends Service {
 				}
 			}
 		}
+	}
+
+	public void postPlayCleanup() {
+		postPlayCleanup(currentPlaying);
+	}
+	public void postPlayCleanup(DownloadFile downloadFile) {
+		// Finished loading, delete when list is cleared
+		if (downloadFile.getSong() instanceof PodcastEpisode) {
+			toDelete.add(downloadFile);
+		}
+		clearCurrentBookmark(downloadFile.getSong(), true);
 	}
 	
 	private boolean isPastCutoff() {

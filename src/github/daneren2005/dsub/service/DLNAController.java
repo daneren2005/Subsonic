@@ -156,6 +156,7 @@ public class DLNAController extends RemoteController {
 							} else if(downloadService.getPlayerState() == PlayerState.STARTED) {
 								// Played until the end
 								downloadService.setPlayerState(PlayerState.COMPLETED);
+								downloadService.postPlayCleanup();
 								downloadService.onSongCompleted();
 							} else {
 								downloadService.setPlayerState(PlayerState.STOPPED);
