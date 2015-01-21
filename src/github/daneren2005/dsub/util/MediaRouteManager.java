@@ -47,7 +47,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private MediaRouter router;
 	private MediaRouteSelector selector;
 	private List<MediaRouteProvider> providers = new ArrayList<MediaRouteProvider>();
-	private List<MediaRouteProvider> offlineProviders = new ArrayList<MediaRouteProvider>();
+	private List<MediaRouteProvider> onlineProviders = new ArrayList<MediaRouteProvider>();
 
 	static {
 		try {
@@ -146,17 +146,10 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		JukeboxRouteProvider jukeboxProvider = new JukeboxRouteProvider(downloadService);
 		router.addProvider(jukeboxProvider);
 		providers.add(jukeboxProvider);
-		offlineProviders.add(jukeboxProvider);
-
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			DLNARouteProvider dlnaProvider = new DLNARouteProvider(downloadService);
-			router.addProvider(dlnaProvider);
-			providers.add(dlnaProvider);
-			offlineProviders.add(dlnaProvider);
-		}
+		onlineProviders.add(jukeboxProvider);
 	}
 	public void removeOnlineProviders() {
-		for(MediaRouteProvider provider: offlineProviders) {
+		for(MediaRouteProvider provider: onlineProviders) {
 			router.removeProvider(provider);
 		}
 	}
@@ -164,6 +157,12 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private void addProviders() {
 		if(!Util.isOffline(downloadService)) {
 			addOnlineProviders();
+		}
+
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			DLNARouteProvider dlnaProvider = new DLNARouteProvider(downloadService);
+			router.addProvider(dlnaProvider);
+			providers.add(dlnaProvider);
 		}
 	}
 	public void buildSelector() {

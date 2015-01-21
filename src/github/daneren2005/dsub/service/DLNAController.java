@@ -54,6 +54,7 @@ import org.fourthline.cling.support.model.item.VideoItem;
 import org.fourthline.cling.support.renderingcontrol.callback.SetVolume;
 import org.seamless.util.MimeType;
 
+import java.io.File;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,6 +67,7 @@ import github.daneren2005.dsub.domain.DLNADevice;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.serverproxy.FileProxy;
 
@@ -342,10 +344,16 @@ public class DLNAController extends RemoteController {
 			if(song.isVideo()) {
 				track = new VideoItem(song.getId(), song.getParent(), song.getTitle(), song.getArtist());
 			} else {
-				String contentType = song.getTranscodedContentType();
+				String contentType = null;
+				if(song.getTranscodedContentType() != null) {
+					contentType = song.getTranscodedContentType();
+				} else if(song.getContentType() != null) {
+					contentType = song.getContentType();
+				}
+
 				MimeType mimeType;
 				// If we can parse the content type, use it instead of hard coding
-				if(contentType.indexOf("/") != -1 && contentType.indexOf("/") != (contentType.length() - 1)) {
+				if(contentType != null && contentType.indexOf("/") != -1 && contentType.indexOf("/") != (contentType.length() - 1)) {
 					String[] typeParts = contentType.split("/");
 					mimeType = new MimeType(typeParts[0], typeParts[1]);
 				} else {
@@ -364,10 +372,21 @@ public class DLNAController extends RemoteController {
 				musicTrack.setOriginalTrackNumber(song.getTrack());
 
 				if(song.getCoverArt() != null) {
-					String coverArt = musicService.getCoverArtUrl(downloadService, song);
-					coverArt = Util.replaceInternalUrl(downloadService, coverArt);
-					DIDLObject.Property.UPNP.ALBUM_ART_URI albumArtUri = new DIDLObject.Property.UPNP.ALBUM_ART_URI(URI.create(coverArt));
-					musicTrack.addProperty(albumArtUri);
+					String coverArt = null;
+					if(proxy == null) {
+						coverArt = musicService.getCoverArtUrl(downloadService, song);
+						coverArt = Util.replaceInternalUrl(downloadService, coverArt);
+					} else {
+						File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
+						if(coverArtFile != null && coverArtFile.exists()) {
+							coverArt = proxy.getPublicAddress(coverArtFile.getPath());
+						}
+					}
+
+					if(coverArt != null) {
+						DIDLObject.Property.UPNP.ALBUM_ART_URI albumArtUri = new DIDLObject.Property.UPNP.ALBUM_ART_URI(URI.create(coverArt));
+						musicTrack.addProperty(albumArtUri);
+					}
 				}
 
 				track = musicTrack;
