@@ -27,6 +27,7 @@ import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Action;
 import org.fourthline.cling.model.meta.Service;
+import org.fourthline.cling.model.meta.StateVariable;
 import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.support.avtransport.callback.GetPositionInfo;
@@ -107,10 +108,13 @@ public class DLNAController extends RemoteController {
 
 			@Override
 			protected void established(GENASubscription genaSubscription) {
-				Action[] actions = genaSubscription.getService().getActions();
-				for(Action action: actions) {
-					if("Seek".equals(action.getName())) {
-						supportsSeek = true;
+				Action seekAction = genaSubscription.getService().getAction("Seek");
+				if(seekAction != null) {
+					StateVariable seekMode = genaSubscription.getService().getStateVariable("A_ARG_TYPE_SeekMode");
+					for(String allowedValue: seekMode.getTypeDetails().getAllowedValues()) {
+						if("REL_TIME".equals(allowedValue)) {
+							supportsSeek = true;
+						}
 					}
 				}
 
