@@ -943,8 +943,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected MusicDirectory getMusicDirectory(String id, String name, boolean refresh, MusicService service, ProgressListener listener) throws Exception {
+		return getMusicDirectory(id, name, refresh, false, service, listener);
+	}
+	protected MusicDirectory getMusicDirectory(String id, String name, boolean refresh, boolean forceArtist, MusicService service, ProgressListener listener) throws Exception {
 		if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-			if(artist && !artistOverride) {
+			if(artist && !artistOverride || forceArtist) {
 				return service.getArtist(id, name, refresh, context, listener);
 			} else {
 				return service.getAlbum(id, name, refresh, context, listener);

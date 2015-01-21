@@ -513,7 +513,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					SelectDirectoryFragment.this.name = dir.getName();
 				} else if(id != null && directory == null && dir.getParent() != null) {
 					// View Album, try to lookup parent to get a complete entry to use for starring
-					MusicDirectory parentDir = getMusicDirectory(dir.getParent(), name, refresh, service, this);
+					MusicDirectory parentDir = getMusicDirectory(dir.getParent(), name, refresh, true, service, this);
 					for(Entry child: parentDir.getChildren()) {
 						if(id.equals(child.getId())) {
 							directory = child;
