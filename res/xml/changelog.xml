@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9 Beta 3" versioncode="141" releasedate="1/23/2014">
+		<change>WARNING: Changing position while casting to DLNA doesn't work well</change>
+		<change>DLNA casts metadata</change>
+		<change>Offline DLNA casting</change>
+		<change>DLNA works with more devices</change>
+		<change>On starred list, load artist image if one exists</change>
+		<change>Hide folder selection if user only has one</change>
+		<change>Fix seeking after file finished downloading restarting the song</change>
+		<change>Fix more issues with artist headers</change>
+		<change>Fix issues when browsing offline</change>
+		<change>Fix bookmarks not being auto deleted while casting</change>
+		<change>Fix search with tag browsing on Ampache servers</change>
+	</release>
 	<release version="4.9 Beta 2" versioncode="136" releasedate="1/15/2014">
 		<change>Fixed issue of DLNA not showing up for some people</change>
 		<change>Add artist info header (Subsonic 5.1+)</change>
