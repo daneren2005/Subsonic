@@ -217,7 +217,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		if(licenseValid == null) {
 			menuInflater.inflate(R.menu.empty, menu);
-		} else if(albumListType != null) {
+		} else if(albumListType != null && !"starred".equals(albumListType)) {
 			menuInflater.inflate(R.menu.select_album_list, menu);
 		} else if(artist && !showAll) {
 			menuInflater.inflate(R.menu.select_album, menu);
@@ -513,7 +513,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					SelectDirectoryFragment.this.name = dir.getName();
 				} else if(id != null && directory == null && dir.getParent() != null) {
 					// View Album, try to lookup parent to get a complete entry to use for starring
-					MusicDirectory parentDir = getMusicDirectory(dir.getParent(), name, refresh, service, this);
+					MusicDirectory parentDir = getMusicDirectory(dir.getParent(), name, refresh, true, service, this);
 					for(Entry child: parentDir.getChildren()) {
 						if(id.equals(child.getId())) {
 							directory = child;
