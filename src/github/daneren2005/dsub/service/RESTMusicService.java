@@ -65,6 +65,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Looper;
+import android.support.v4.text.TextUtilsCompat;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
@@ -1601,7 +1602,7 @@ public class RESTMusicService implements MusicService {
             StringBuilder builder = new StringBuilder(url);
             for (int i = 0; i < parameterNames.size(); i++) {
                 builder.append("&").append(parameterNames.get(i)).append("=");
-                builder.append(URLEncoder.encode(String.valueOf(parameterValues.get(i)), "UTF-8"));
+                builder.append(TextUtilsCompat.htmlEncode(String.valueOf(parameterValues.get(i))));
             }
             url = builder.toString();
             parameterNames = null;
