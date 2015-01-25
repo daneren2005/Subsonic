@@ -131,7 +131,7 @@ public class DLNAController extends RemoteController {
 				Map<String, StateVariableValue> m = genaSubscription.getCurrentValues();
 				try {
 					LastChange lastChange = new LastChange(new AVTransportLastChangeParser(), m.get("LastChange").toString());
-					if (playing || lastChange.getEventedValue(0, AVTransportVariable.TransportState.class) == null) {
+					if (lastChange.getEventedValue(0, AVTransportVariable.TransportState.class) == null) {
 						return;
 					}
 
