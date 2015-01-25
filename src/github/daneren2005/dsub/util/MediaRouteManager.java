@@ -15,6 +15,7 @@
 
 package github.daneren2005.dsub.util;
 
+import android.os.Build;
 import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.RemoteControlState;
+import github.daneren2005.dsub.provider.DLNARouteProvider;
 import github.daneren2005.dsub.provider.JukeboxRouteProvider;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.RemoteController;
@@ -45,7 +47,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private MediaRouter router;
 	private MediaRouteSelector selector;
 	private List<MediaRouteProvider> providers = new ArrayList<MediaRouteProvider>();
-	private List<MediaRouteProvider> offlineProviders = new ArrayList<MediaRouteProvider>();
+	private List<MediaRouteProvider> onlineProviders = new ArrayList<MediaRouteProvider>();
 
 	static {
 		try {
@@ -140,21 +142,27 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		}
 	}
 
-	public void addOfflineProviders() {
+	public void addOnlineProviders() {
 		JukeboxRouteProvider jukeboxProvider = new JukeboxRouteProvider(downloadService);
 		router.addProvider(jukeboxProvider);
 		providers.add(jukeboxProvider);
-		offlineProviders.add(jukeboxProvider);
+		onlineProviders.add(jukeboxProvider);
 	}
-	public void removeOfflineProviders() {
-		for(MediaRouteProvider provider: offlineProviders) {
+	public void removeOnlineProviders() {
+		for(MediaRouteProvider provider: onlineProviders) {
 			router.removeProvider(provider);
 		}
 	}
 
 	private void addProviders() {
 		if(!Util.isOffline(downloadService)) {
-			addOfflineProviders();
+			addOnlineProviders();
+		}
+
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			DLNARouteProvider dlnaProvider = new DLNARouteProvider(downloadService);
+			router.addProvider(dlnaProvider);
+			providers.add(dlnaProvider);
 		}
 	}
 	public void buildSelector() {
@@ -164,6 +172,9 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		}
 		if(castAvailable) {
 			builder.addControlCategory(CastCompat.getCastControlCategory());
+		}
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+			builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);
 		}
 		selector = builder.build();
 	}

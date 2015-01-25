@@ -54,7 +54,6 @@ import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
 
 import java.io.File;
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,6 +62,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -71,7 +71,6 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
-import android.media.audiofx.Equalizer;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -301,6 +300,13 @@ public class DownloadService extends Service {
 	public IBinder onBind(Intent intent) {
 		return binder;
 	}
+	
+	public void post(Runnable r) {
+		handler.post(r);
+	}
+	public void postDelayed(Runnable r, long millis) {
+		handler.postDelayed(r, millis);
+	}
 
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
 		download(songs, save, autoplay, playNext, shuffle, 0, 0);
@@ -401,17 +407,17 @@ public class DownloadService extends Service {
 	}
 
 	private void updateJukeboxPlaylist() {
-		if (remoteState != LOCAL) {
+		if (remoteState != LOCAL && remoteController != null) {
 			remoteController.updatePlaylist();
 		}
 	}
 
 	public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
 		SharedPreferences prefs = Util.getPreferences(this);
-		remoteState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
-		if(remoteState != LOCAL) {
+		RemoteControlState newState = RemoteControlState.values()[prefs.getInt(Constants.PREFERENCES_KEY_CONTROL_MODE, 0)];
+		if(newState != LOCAL) {
 			String id = prefs.getString(Constants.PREFERENCES_KEY_CONTROL_ID, null);
-			setRemoteState(remoteState, null, id);
+			setRemoteState(newState, null, id);
 		}
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, false)) {
 			removePlayed = true;
@@ -574,9 +580,9 @@ public class DownloadService extends Service {
 
 	public void setOnline(final boolean online) {
 		if(online) {
-			mediaRouter.addOfflineProviders();
+			mediaRouter.addOnlineProviders();
 		} else {
-			mediaRouter.removeOfflineProviders();
+			mediaRouter.removeOnlineProviders();
 		}
 		if(shufflePlay) {
 			setShufflePlayEnabled(false);
@@ -702,6 +708,7 @@ public class DownloadService extends Service {
 		this.currentPlaying = currentPlaying;
 		if(currentPlaying == null) {
 			currentPlayingIndex = -1;
+			setPlayerState(IDLE);
 		} else {
 			currentPlayingIndex = downloadList.indexOf(currentPlaying);
 		}
@@ -866,7 +873,7 @@ public class DownloadService extends Service {
 		nextMediaPlayer = tmp;
 		setCurrentPlaying(nextPlaying, true);
 		setPlayerState(PlayerState.STARTED);
-		setupHandlers(currentPlaying, false);
+		setupHandlers(currentPlaying, false, start);
 		setNextPlaying();
 
 		// Proxy should not be being used here since the next player was already setup to play
@@ -1046,6 +1053,7 @@ public class DownloadService extends Service {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void reset() {
 		if (bufferTask != null) {
 			bufferTask.cancel();
@@ -1069,6 +1077,7 @@ public class DownloadService extends Service {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void resetNext() {
 		try {
 			if (nextMediaPlayer != null) {
@@ -1302,6 +1311,16 @@ public class DownloadService extends Service {
 		return mediaRouter.getSelector();
 	}
 
+	public boolean isSeekable() {
+		if(remoteState == LOCAL) {
+			return currentPlaying != null && currentPlaying.isWorkDone() && playerState != PREPARING;
+		} else if(remoteController != null) {
+			return remoteController.isSeekable();
+		} else {
+			return false;
+		}
+	}
+
 	public boolean isRemoteEnabled() {
 		return remoteState != LOCAL;
 	}
@@ -1330,6 +1349,11 @@ public class DownloadService extends Service {
 		setRemoteState(newState, ref, null);
 	}
 	private void setRemoteState(final RemoteControlState newState, final Object ref, final String routeId) {
+		// Don't try to do anything if already in the correct state
+		if(remoteState == newState) {
+			return;
+		}
+
 		boolean isPlaying = playerState == STARTED;
 		int position = getPlayerPosition();
 
@@ -1344,12 +1368,13 @@ public class DownloadService extends Service {
 			}
 		}
 
+		Log.i(TAG, remoteState.name() + " => " + newState.name() + " (" + currentPlaying + ")");
 		remoteState = newState;
 		switch(newState) {
 			case JUKEBOX_SERVER:
 				remoteController = new JukeboxController(this, handler);
 				break;
-			case CHROMECAST:
+			case CHROMECAST: case DLNA:
 				if(ref == null) {
 					remoteState = LOCAL;
 					break;
@@ -1470,6 +1495,7 @@ public class DownloadService extends Service {
 
 			subtractPosition = 0;
 			mediaPlayer.setOnCompletionListener(null);
+			mediaPlayer.setOnPreparedListener(null);
 			mediaPlayer.reset();
 			setPlayerState(IDLE);
 			try {
@@ -1537,7 +1563,7 @@ public class DownloadService extends Service {
 				}
 			});
 
-			setupHandlers(downloadFile, isPartial);
+			setupHandlers(downloadFile, isPartial, start);
 
 			mediaPlayer.prepareAsync();
 		} catch (Exception x) {
@@ -1545,6 +1571,7 @@ public class DownloadService extends Service {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
 			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
@@ -1595,7 +1622,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private void setupHandlers(final DownloadFile downloadFile, final boolean isPartial) {
+	private void setupHandlers(final DownloadFile downloadFile, final boolean isPartial, final boolean isPlaying) {
 		final int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
 		mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 			public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
@@ -1606,7 +1633,7 @@ public class DownloadService extends Service {
 					playNext();
 				} else {
 					downloadFile.setPlaying(false);
-					doPlay(downloadFile, pos, true);
+					doPlay(downloadFile, pos, isPlaying);
 					downloadFile.setPlaying(true);
 				}
 				return true;
@@ -1627,12 +1654,7 @@ public class DownloadService extends Service {
 				Log.i(TAG, "Ending position " + pos + " of " + duration);
 				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000)) || nextSetup) {
 					playNext();
-
-					// Finished loading, delete when list is cleared
-					if (downloadFile.getSong() instanceof PodcastEpisode) {
-						toDelete.add(downloadFile);
-					}
-					clearCurrentBookmark(downloadFile.getSong(), true);
+					postPlayCleanup(downloadFile);
 				} else {
 					// If file is not completely downloaded, restart the playback from the current position.
 					synchronized (DownloadService.this) {
@@ -1913,6 +1935,17 @@ public class DownloadService extends Service {
 				}
 			}
 		}
+	}
+
+	public void postPlayCleanup() {
+		postPlayCleanup(currentPlaying);
+	}
+	public void postPlayCleanup(DownloadFile downloadFile) {
+		// Finished loading, delete when list is cleared
+		if (downloadFile.getSong() instanceof PodcastEpisode) {
+			toDelete.add(downloadFile);
+		}
+		clearCurrentBookmark(downloadFile.getSong(), true);
 	}
 	
 	private boolean isPastCutoff() {

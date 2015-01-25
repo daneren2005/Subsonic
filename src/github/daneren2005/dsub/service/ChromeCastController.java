@@ -283,7 +283,7 @@ public class ChromeCastController extends RemoteController {
 					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
 				}
 
-				url = fixURLs(url);
+				url = Util.replaceInternalUrl(downloadService, url);
 			}
 
 			// Setup song/video information
@@ -300,7 +300,7 @@ public class ChromeCastController extends RemoteController {
 				String coverArt = "";
 				if(proxy == null) {
 					coverArt = musicService.getCoverArtUrl(downloadService, song);
-					coverArt = fixURLs(coverArt);
+					coverArt = Util.replaceInternalUrl(downloadService, coverArt);
 					meta.addImage(new WebImage(Uri.parse(coverArt)));
 				} else {
 					File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
@@ -352,22 +352,6 @@ public class ChromeCastController extends RemoteController {
 			Log.e(TAG, "Problem opening media during loading", e);
 			failedLoad();
 		}
-	}
-
-	private String fixURLs(String url) {
-		// Only change to internal when using https
-		if(url.indexOf("https") != -1) {
-			SharedPreferences prefs = Util.getPreferences(downloadService);
-			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
-			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-			if(internalUrl != null && !"".equals(internalUrl)) {
-				String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-				url = url.replace(internalUrl, externalUrl);
-			}
-		}
-
-		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
-		return url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
 	}
 
 	private void failedLoad() {
@@ -466,6 +450,7 @@ public class ChromeCastController extends RemoteController {
 							case MediaStatus.PLAYER_STATE_IDLE:
 								if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
 									downloadService.setPlayerState(PlayerState.COMPLETED);
+									downloadService.postPlayCleanup();
 									downloadService.onSongCompleted();
 								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
 									if (downloadService.getPlayerState() != PlayerState.PREPARING) {

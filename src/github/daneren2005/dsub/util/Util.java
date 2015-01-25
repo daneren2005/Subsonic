@@ -357,6 +357,22 @@ public final class Util {
 		return builder.toString();
 	}
 
+	public static String replaceInternalUrl(Context context, String url) {
+		// Only change to internal when using https
+		if(url.indexOf("https") != -1) {
+			SharedPreferences prefs = Util.getPreferences(context);
+			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+			if(internalUrl != null && !"".equals(internalUrl)) {
+				String externalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+				url = url.replace(internalUrl, externalUrl);
+			}
+		}
+
+		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
+		return url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
+	}
+
 	public static boolean isTagBrowsing(Context context) {
 		return isTagBrowsing(context, Util.getActiveServer(context));
 	}

@@ -48,6 +48,9 @@ public abstract class RemoteController {
 	public abstract void setVolume(int volume);
 	public abstract void updateVolume(boolean up);
 	public abstract double getVolume();
+	public boolean isSeekable() {
+		return true;
+	}
 	
 	public abstract int getRemotePosition();
 	public int getRemoteDuration() {
