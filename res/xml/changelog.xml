@@ -1,32 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.9 Beta 3" versioncode="141" releasedate="1/23/2014">
-		<change>WARNING: Changing position while casting to DLNA doesn't work well</change>
-		<change>DLNA casts metadata</change>
-		<change>Offline DLNA casting</change>
-		<change>DLNA works with more devices</change>
-		<change>On starred list, load artist image if one exists</change>
+	<release version="4.9" versioncode="141" releasedate="11/24/2014">
+		<change>Cast audio to DLNA (email me with issues)</change>
+		<change>Artist image + details header (Subsonic 5.1+)</change>
+		<change>Similar Artists option (Subsonic 5.1+)</change>
+		<change>View similar artists missing from your server (Subsonic 5.1+)</change>
+		<change>On starred list, load artist image (Subsonic 5.1+)</change>
+		<change>Podcasts: clicking on description wrapers around image</change>
 		<change>Hide folder selection if user only has one</change>
 		<change>Fix seeking after file finished downloading restarting the song</change>
-		<change>Fix more issues with artist headers</change>
-		<change>Fix issues when browsing offline</change>
-		<change>Fix bookmarks not being auto deleted while casting</change>
-		<change>Fix search with tag browsing on Ampache servers</change>
-	</release>
-	<release version="4.9 Beta 2" versioncode="136" releasedate="1/15/2014">
-		<change>Fixed issue of DLNA not showing up for some people</change>
-		<change>Add artist info header (Subsonic 5.1+)</change>
-		<change>Add Similar Artists option (Subsonic 5.1+)</change>
-		<change>View similar artists missing from Subsonic (Subsonic 5.1+)</change>
-		<change>Podcasts: clicking on description wraps around image to display everything</change>
-		<change>Delete artwork/avatars on Clean Cache</change>
 		<change>Fix sleep timer incrementing on it's own</change>
-		<change>Fixed various crashes</change>
-	</release>
-	<release version="4.9 Beta 1" versioncode="135" releasedate="12/27/2014">
-		<change>Early DLNA support</change>
-		<change>I have only tested against XBMC.  I need feedback on what does and doesn't work</change>
-		<change>I know no metadata shows up.  I haven't been able to figure that part out yet.</change>
+		<change>Fix bookmarks not being auto deleted while casting</change>
+		<change>Fix clean cache not deleting artwork/avatars</change>
+		<change>Fix search with tag browsing on Ampache servers</change>
 	</release>
 	<release version="4.8.6" versioncode="134" releasedate="12/27/2014">
 		<change>Play/shuffle quick album lists such as Recently Added or Random</change>
