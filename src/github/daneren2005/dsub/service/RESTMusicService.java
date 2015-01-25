@@ -601,7 +601,9 @@ public class RESTMusicService implements MusicService {
 	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
 		builder.append("&id=").append(entry.getCoverArt());
-		return builder.toString();
+		String url = builder.toString();
+		url = rewriteUrlWithRedirect(context, url);
+		return url;
 	}
 
     @Override
