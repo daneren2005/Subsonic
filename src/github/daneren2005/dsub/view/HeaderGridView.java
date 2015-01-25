@@ -62,7 +62,7 @@ public class HeaderGridView extends GridView {
 	private int mNumColumns = AUTO_FIT;
 	private View mViewForMeasureRowHeight = null;
 	private int mRowHeight = -1;
-	private static final String LOG_TAG = "grid-view-with-header-and-footer";
+	private static final String LOG_TAG = HeaderGridView.class.getSimpleName();
 
 	private ArrayList<FixedViewInfo> mHeaderViewInfos = new ArrayList<FixedViewInfo>();
 	private ArrayList<FixedViewInfo> mFooterViewInfos = new ArrayList<FixedViewInfo>();
