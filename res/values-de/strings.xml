@@ -104,6 +104,8 @@
 	<string name="menu.rescan">Server neu durchsuchen</string>
 	<string name="menu.rate">Setze Bewertung</string>
 	<string name="menu.top_tracks">Last.FM Top Medien</string>
+	<string name="menu.similar_artists">Ähnliche Künstler</string>
+	<string name="menu.show_missing">Zeige fehlende</string>
 
     <string name="playlist.label">Wiedergabelisten</string>
 	<string name="playlist.update_info">Aktualisiere Informationen</string>
