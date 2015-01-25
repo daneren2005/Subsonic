@@ -331,13 +331,20 @@ public class DLNAController extends RemoteController {
 			// Get url for entry
 			MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
 			String url;
+			// In offline mode or playing offline song
 			if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
 				if(proxy == null) {
 					proxy = new FileProxy(downloadService);
 					proxy.start();
 				}
 
-				url = proxy.getPublicAddress(song.getId());
+				// Offline song
+				if(song.getId().indexOf(rootLocation) != -1) {
+					url = proxy.getPublicAddress(song.getId());
+				} else {
+					// Playing online song in offline mode
+					url = proxy.getPublicAddress(currentPlaying.getCompleteFile().getPath());
+				}
 			} else {
 				if(proxy != null) {
 					proxy.stop();
