@@ -369,15 +369,15 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		}
 
 		public void warn(Throwable th) {
-			Log.w(TAG, "", th);
+			// Log.w(TAG, "", th);
 		}
 
 		public void warn(String msg, Object... args) {
-			Log.w(TAG, msg);
+			// Log.w(TAG, msg);
 		}
 
 		public void warn(String msg, Throwable th) {
-			Log.w(TAG, msg, th);
+			// Log.w(TAG, msg, th);
 		}
 
 		public boolean isIgnoredEnabled () {
