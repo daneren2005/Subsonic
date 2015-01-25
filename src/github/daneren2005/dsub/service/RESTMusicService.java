@@ -730,7 +730,14 @@ public class RESTMusicService implements MusicService {
 	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
 		builder.append("&id=").append(song.getId());
-		builder.append("&maxBitRate=").append(maxBitrate);
+
+		// If we are doing mp3 to mp3, just specify raw so that stuff works better
+		if("mp3".equals(song.getSuffix()) && (song.getTranscodedSuffix() == null || "mp3".equals(song.getTranscodedSuffix())) && ServerInfo.checkServerVersion(context, "1.9", getInstance(context))) {
+			builder.append("&format=raw");
+			builder.append("&estimateContentLength=true");
+		} else {
+			builder.append("&maxBitRate=").append(maxBitrate);
+		}
 
 		String url = builder.toString();
 		Log.i(TAG, "Using music URL: " + stripUrlInfo(url));
