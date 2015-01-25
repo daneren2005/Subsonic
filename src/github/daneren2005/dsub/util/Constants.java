@@ -166,6 +166,7 @@ public final class Constants {
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";
 	public static final String FRAGMENT_LIST = "fragmentList";
 	public static final String FRAGMENT_LIST2 = "fragmentList2";
+	public static final String FRAGMENT_EXTRA = "fragmentExtra";
 	public static final String FRAGMENT_DOWNLOAD_FLIPPER = "fragmentDownloadFlipper";
 	public static final String FRAGMENT_NAME = "fragmentName";
 	public static final String FRAGMENT_POSITION = "fragmentPosition";
