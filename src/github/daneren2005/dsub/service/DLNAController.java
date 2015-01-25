@@ -318,6 +318,20 @@ public class DLNAController extends RemoteController {
 	}
 
 	private void startSong(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
+		controlPoint.execute(new Stop(getTransportService()) {
+			@Override
+			public void success(ActionInvocation invocation) {
+				startSongRemote(currentPlaying, autoStart, position);
+			}
+
+			@Override
+			public void failure(ActionInvocation invocation, org.fourthline.cling.model.message.UpnpResponse operation, String defaultMessage) {
+				Log.w(TAG, "Stop failed before startSong: " + defaultMessage);
+				startSongRemote(currentPlaying, autoStart, position);
+			}
+		});
+	}
+	private void startSongRemote(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
 		if(currentPlaying == null) {
 			downloadService.setPlayerState(PlayerState.IDLE);
 			return;
