@@ -740,6 +740,7 @@ public class RESTMusicService implements MusicService {
 		}
 
 		String url = builder.toString();
+		url = rewriteUrlWithRedirect(context, url);
 		Log.i(TAG, "Using music URL: " + stripUrlInfo(url));
 		return url;
 	}
