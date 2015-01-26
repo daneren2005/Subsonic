@@ -370,8 +370,6 @@ public class DLNAController extends RemoteController {
 				} else {
 					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
 				}
-
-				url = Util.replaceInternalUrl(downloadService, url);
 			}
 
 			// Create metadata for entry
@@ -410,7 +408,6 @@ public class DLNAController extends RemoteController {
 					String coverArt = null;
 					if(proxy == null) {
 						coverArt = musicService.getCoverArtUrl(downloadService, song);
-						coverArt = Util.replaceInternalUrl(downloadService, coverArt);
 					} else {
 						File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
 						if(coverArtFile != null && coverArtFile.exists()) {

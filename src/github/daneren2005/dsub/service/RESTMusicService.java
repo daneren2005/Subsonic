@@ -602,6 +602,7 @@ public class RESTMusicService implements MusicService {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
 		builder.append("&id=").append(entry.getCoverArt());
 		String url = builder.toString();
+		url = Util.replaceInternalUrl(context, url);
 		url = rewriteUrlWithRedirect(context, url);
 		return url;
 	}
@@ -742,6 +743,7 @@ public class RESTMusicService implements MusicService {
 		}
 
 		String url = builder.toString();
+		url = Util.replaceInternalUrl(context, url);
 		url = rewriteUrlWithRedirect(context, url);
 		Log.i(TAG, "Using music URL: " + stripUrlInfo(url));
 		return url;

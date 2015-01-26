@@ -282,8 +282,6 @@ public class ChromeCastController extends RemoteController {
 				} else {
 					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
 				}
-
-				url = Util.replaceInternalUrl(downloadService, url);
 			}
 
 			// Setup song/video information
@@ -300,7 +298,6 @@ public class ChromeCastController extends RemoteController {
 				String coverArt = "";
 				if(proxy == null) {
 					coverArt = musicService.getCoverArtUrl(downloadService, song);
-					coverArt = Util.replaceInternalUrl(downloadService, coverArt);
 					meta.addImage(new WebImage(Uri.parse(coverArt)));
 				} else {
 					File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
