@@ -1419,20 +1419,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 						artistView.setText(ss);
 						artistView.setMaxLines(100);
 
-						if(albumList instanceof HeaderGridView) {
-							HeaderGridView headerGridView = (HeaderGridView) albumList;
-							((BaseAdapter) headerGridView.getAdapter()).notifyDataSetChanged();
-						}
-
 						vlp = (ViewGroup.MarginLayoutParams) titleView.getLayoutParams();
 						vlp.leftMargin = width;
 					} else {
 						artistView.setMaxLines(minLines);
+					}
 
-						if(albumList instanceof HeaderGridView) {
-							HeaderGridView headerGridView = (HeaderGridView) albumList;
-							((BaseAdapter) headerGridView.getAdapter()).notifyDataSetChanged();
-						}
+					if(albumList instanceof HeaderGridView) {
+						HeaderGridView headerGridView = (HeaderGridView) albumList;
+						((BaseAdapter) headerGridView.getAdapter()).notifyDataSetChanged();
 					}
 				}
 			});
