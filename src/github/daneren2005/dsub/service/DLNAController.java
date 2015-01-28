@@ -193,47 +193,59 @@ public class DLNAController extends RemoteController {
 			return;
 		}
 
-		controlPoint.execute(new Play(getTransportService()) {
-			@Override
-			public void success(ActionInvocation invocation) {
-				lastUpdate.set(System.currentTimeMillis());
-				downloadService.setPlayerState(PlayerState.STARTED);
-			}
+		try {
+			controlPoint.execute(new Play(getTransportService()) {
+				@Override
+				public void success(ActionInvocation invocation) {
+					lastUpdate.set(System.currentTimeMillis());
+					downloadService.setPlayerState(PlayerState.STARTED);
+				}
 
-			@Override
-			public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String msg) {
-				Log.w(TAG, "Failed to start playing: " + msg);
-				failedLoad();
-			}
-		});
+				@Override
+				public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String msg) {
+					Log.w(TAG, "Failed to start playing: " + msg);
+					failedLoad();
+				}
+			});
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to start", e);
+		}
 	}
 
 	@Override
 	public void stop() {
-		controlPoint.execute(new Pause(getTransportService()) {
-			@Override
-			public void success(ActionInvocation invocation) {
-				int secondsSinceLastUpdate = (int) ((System.currentTimeMillis() - lastUpdate.get()) / 1000L);
-				currentPosition += secondsSinceLastUpdate;
+		try {
+			controlPoint.execute(new Pause(getTransportService()) {
+				@Override
+				public void success(ActionInvocation invocation) {
+					int secondsSinceLastUpdate = (int) ((System.currentTimeMillis() - lastUpdate.get()) / 1000L);
+					currentPosition += secondsSinceLastUpdate;
 
-				downloadService.setPlayerState(PlayerState.PAUSED);
-			}
+					downloadService.setPlayerState(PlayerState.PAUSED);
+				}
 
-			@Override
-			public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String msg) {
-				Log.w(TAG, "Failed to pause playing: " + msg);
-			}
-		});
+				@Override
+				public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String msg) {
+					Log.w(TAG, "Failed to pause playing: " + msg);
+				}
+			});
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to stop", e);
+		}
 	}
 
 	@Override
 	public void shutdown() {
-		controlPoint.execute(new Stop(getTransportService()) {
-			@Override
-			public void failure(ActionInvocation invocation, org.fourthline.cling.model.message.UpnpResponse operation, String defaultMessage) {
-				Log.w(TAG, "Stop failed: " + defaultMessage);
-			}
-		});
+		try {
+			controlPoint.execute(new Stop(getTransportService()) {
+				@Override
+				public void failure(ActionInvocation invocation, org.fourthline.cling.model.message.UpnpResponse operation, String defaultMessage) {
+					Log.w(TAG, "Stop failed: " + defaultMessage);
+				}
+			});
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to shutdown", e);
+		}
 
 		if(callback != null) {
 			callback.end();
@@ -282,13 +294,17 @@ public class DLNAController extends RemoteController {
 		}
 
 		device.volume = volume;
-		controlPoint.execute(new SetVolume(device.renderer.findService(new ServiceType("schemas-upnp-org", "RenderingControl")), volume) {
-			@SuppressWarnings("rawtypes")
-			@Override
-			public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMessage) {
-				Log.w(TAG, "Set volume failed: " + defaultMessage);
-			}
-		});
+		try {
+			controlPoint.execute(new SetVolume(device.renderer.findService(new ServiceType("schemas-upnp-org", "RenderingControl")), volume) {
+				@SuppressWarnings("rawtypes")
+				@Override
+				public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMessage) {
+					Log.w(TAG, "Set volume failed: " + defaultMessage);
+				}
+			});
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to set volume");
+		}
 	}
 
 	@Override
@@ -318,18 +334,23 @@ public class DLNAController extends RemoteController {
 	}
 
 	private void startSong(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
-		controlPoint.execute(new Stop(getTransportService()) {
-			@Override
-			public void success(ActionInvocation invocation) {
-				startSongRemote(currentPlaying, autoStart, position);
-			}
+		try {
+			controlPoint.execute(new Stop(getTransportService()) {
+				@Override
+				public void success(ActionInvocation invocation) {
+					startSongRemote(currentPlaying, autoStart, position);
+				}
 
-			@Override
-			public void failure(ActionInvocation invocation, org.fourthline.cling.model.message.UpnpResponse operation, String defaultMessage) {
-				Log.w(TAG, "Stop failed before startSong: " + defaultMessage);
-				startSongRemote(currentPlaying, autoStart, position);
-			}
-		});
+				@Override
+				public void failure(ActionInvocation invocation, org.fourthline.cling.model.message.UpnpResponse operation, String defaultMessage) {
+					Log.w(TAG, "Stop failed before startSong: " + defaultMessage);
+					startSongRemote(currentPlaying, autoStart, position);
+				}
+			});
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to stop before startSong", e);
+			startSongRemote(currentPlaying, autoStart, position);
+		}
 	}
 	private void startSongRemote(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
 		if(currentPlaying == null) {
