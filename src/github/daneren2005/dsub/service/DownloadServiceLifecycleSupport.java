@@ -43,6 +43,8 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
+import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
+
 /**
  * @author Sindre Mehus
  */
@@ -107,6 +109,12 @@ public class DownloadServiceLifecycleSupport {
 				try {
 					lock.lock();
 					deserializeDownloadQueueNow();
+
+					// Wait until PREPARING is done to mark lifecycle as ready to receive events
+					while(downloadService.getPlayerState() == PREPARING) {
+						Util.sleepQuietly(50L);
+					}
+
 					setup.set(true);
 				} finally {
 					lock.unlock();
