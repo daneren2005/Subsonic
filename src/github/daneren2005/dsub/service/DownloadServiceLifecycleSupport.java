@@ -158,16 +158,17 @@ public class DownloadServiceLifecycleSupport {
 
 	public void onStart(final Intent intent) {
 		if (intent != null) {
-			String action = intent.getAction();
-			if(DownloadService.START_PLAY.equals(action)) {
-				eventHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						if(!setup.get()) {
-							lock.lock();
-							lock.unlock();
-						}
-						
+			final String action = intent.getAction();
+
+			eventHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					if(!setup.get()) {
+						lock.lock();
+						lock.unlock();
+					}
+
+					if(DownloadService.START_PLAY.equals(action)) {
 						int offlinePref = intent.getIntExtra(Constants.PREFERENCES_KEY_OFFLINE, 0);
 						if(offlinePref != 0) {
 							boolean offline = (offlinePref == 2);
@@ -186,41 +187,38 @@ public class DownloadServiceLifecycleSupport {
 							if(startYear != null) {
 								editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
 							}
-							
+
 							String endYear = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR);
 							if(endYear != null) {
 								editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYear);
 							}
-							
+
 							String genre = intent.getStringExtra(Constants.PREFERENCES_KEY_SHUFFLE_GENRE);
 							if(genre != null) {
 								editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
 							}
 							editor.commit();
-							
+
 							downloadService.setShufflePlayEnabled(true);
 						} else {
 							downloadService.start();
 						}
-					}
-				});
-			} else if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
-				downloadService.clearBackground();
-			} else if(intent.getExtras() != null) {
-				final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
-				if (event != null) {
-					eventHandler.post(new Runnable() {
-						@Override
-						public void run() {
-							if(!setup.get()) {
-								lock.lock();
-								lock.unlock();
-							}
+					} else if(DownloadService.CMD_TOGGLEPAUSE.equals(action)) {
+						downloadService.togglePlayPause();
+					} else if(DownloadService.CMD_NEXT.equals(action)) {
+						downloadService.next();
+					} else if(DownloadService.CMD_PREVIOUS.equals(action)) {
+						downloadService.previous();
+					} else if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
+						downloadService.clearBackground();
+					} else if(intent.getExtras() != null) {
+						final KeyEvent event = (KeyEvent) intent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+						if (event != null) {
 							handleKeyEvent(event);
 						}
-					});
+					}
 				}
-			}
+			});
 		}
 	}
 
