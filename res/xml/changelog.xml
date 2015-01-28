@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="4.9" versioncode="141" releasedate="11/24/2014">
+	<release version="4.9" versioncode="142" releasedate="11/27/2014">
 		<change>Cast audio to DLNA (email me with issues)</change>
 		<change>Artist image + details header (Subsonic 5.1+)</change>
 		<change>Similar Artists option (Subsonic 5.1+)</change>
