@@ -64,6 +64,7 @@ public class ImageLoader {
 	private final int imageSizeDefault;
 	private final int imageSizeLarge;
 	private final int avatarSizeDefault;
+	private boolean clearingCache = false;
 
 	private final static int[] COLORS = {0xFF33B5E5, 0xFFAA66CC, 0xFF99CC00, 0xFFFFBB33, 0xFFFF4444};
 
@@ -81,7 +82,7 @@ public class ImageLoader {
 			@Override
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
 				if(evicted) {
-					if(oldBitmap != nowPlaying && key.indexOf("unknown") == -1) {
+					if(oldBitmap != nowPlaying && key.indexOf("unknown") == -1 || clearingCache) {
 						if(sizeOf("", oldBitmap) > 500) {
 							oldBitmap.recycle();
 						}
@@ -101,7 +102,15 @@ public class ImageLoader {
 
 	public void clearCache() {
 		nowPlaying = null;
-		cache.evictAll();
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				clearingCache = true;
+				cache.evictAll();
+				clearingCache = false;
+				return null;
+			}
+		}.execute();
 	}
 
 	private Bitmap getUnknownImage(MusicDirectory.Entry entry, int size) {
