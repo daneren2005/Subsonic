@@ -315,22 +315,25 @@ public class ImageLoader {
 					TransitionDrawable tmp = (TransitionDrawable) existingDrawable;
 					existingDrawable = tmp.getDrawable(tmp.getNumberOfLayers() - 1);
 				}
-				
-				Drawable[] layers = new Drawable[] {existingDrawable, drawable};
-				final TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
-				imageView.setImageDrawable(transitionDrawable);
-				transitionDrawable.startTransition(250);
-				
-				// Get rid of transition drawable after transition occurs
-				handler.postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						// Only execute if still on same transition drawable
-						if(imageView.getDrawable() == transitionDrawable) {
-							imageView.setImageDrawable(drawable);
+				if(existingDrawable != null && drawable != null) {
+					Drawable[] layers = new Drawable[]{existingDrawable, drawable};
+					final TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
+					imageView.setImageDrawable(transitionDrawable);
+					transitionDrawable.startTransition(250);
+
+					// Get rid of transition drawable after transition occurs
+					handler.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							// Only execute if still on same transition drawable
+							if (imageView.getDrawable() == transitionDrawable) {
+								imageView.setImageDrawable(drawable);
+							}
 						}
-					}
-				}, 500L);
+					}, 500L);
+				} else {
+					imageView.setImageDrawable(drawable);
+				}
 			} else {
 				imageView.setImageDrawable(drawable);
 			}
