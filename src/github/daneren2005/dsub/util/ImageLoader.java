@@ -73,6 +73,14 @@ public class ImageLoader {
 		handler = new Handler(Looper.getMainLooper());
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 		final int cacheSize = maxMemory / 4;
+
+		// Determine the density-dependent image sizes.
+		imageSizeDefault = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
+		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		imageSizeLarge = Math.round(Math.min(metrics.widthPixels, metrics.heightPixels));
+		avatarSizeDefault = context.getResources().getDrawable(R.drawable.ic_social_person).getIntrinsicHeight();
+
+		final String UNKOWN_KEEP_PART = getKey("unknown", imageSizeDefault);
 		cache = new LruCache<String, Bitmap>(cacheSize) {
 			@Override
 			protected int sizeOf(String key, Bitmap bitmap) {
@@ -82,7 +90,7 @@ public class ImageLoader {
 			@Override
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
 				if(evicted) {
-					if(oldBitmap != nowPlaying && key.indexOf("unknown") == -1 || clearingCache) {
+					if(oldBitmap != nowPlaying && key.indexOf(UNKOWN_KEEP_PART) == -1 || clearingCache) {
 						if(sizeOf("", oldBitmap) > 500) {
 							oldBitmap.recycle();
 						}
@@ -92,12 +100,6 @@ public class ImageLoader {
 				}
 			}
 		};
-
-		// Determine the density-dependent image sizes.
-		imageSizeDefault = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
-		DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-		imageSizeLarge = Math.round(Math.min(metrics.widthPixels, metrics.heightPixels));
-		avatarSizeDefault = context.getResources().getDrawable(R.drawable.ic_social_person).getIntrinsicHeight();
 	}
 
 	public void clearCache() {
