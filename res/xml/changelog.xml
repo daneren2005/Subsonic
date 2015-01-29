@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9.1" versioncode="143" releasedate="11/29/2014">
+		<change>Fix searching with spaces in it</change>
+		<change>Fix pressing play on widget before app starts not working</change>
+	</release>
 	<release version="4.9" versioncode="142" releasedate="11/27/2014">
 		<change>Cast audio to DLNA (email me with issues)</change>
 		<change>Artist image + details header (Subsonic 5.1+)</change>
