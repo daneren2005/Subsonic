@@ -65,6 +65,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Looper;
+import android.support.v4.text.TextUtilsCompat;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
@@ -161,7 +162,7 @@ public class RESTMusicService implements MusicService {
             Log.e(TAG, "Failed to create custom SSL socket factory, using default.", x);
             return org.apache.http.conn.ssl.SSLSocketFactory.getSocketFactory();
         }
-    }    
+    }
 
     @Override
     public void ping(Context context, ProgressListener progressListener) throws Exception {
@@ -175,7 +176,7 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public boolean isLicenseValid(Context context, ProgressListener progressListener) throws Exception {
-      
+
       Reader reader = getReader(context, progressListener, "getLicense", null);
         try {
             ServerInfo serverInfo = new LicenseParser(context, getInstance(context)).parse(reader);
@@ -193,7 +194,7 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
     }
-    
+
 	@Override
 	public void startRescan(Context context, ProgressListener listener) throws Exception {
 		Reader reader = getReader(context, listener, "startRescan", null);
@@ -202,7 +203,7 @@ public class RESTMusicService implements MusicService {
 		} finally {
 			Util.close(reader);
 		}
-		
+
 		// Now check if still running
 		boolean done = false;
 		while(!done) {
@@ -255,7 +256,7 @@ public class RESTMusicService implements MusicService {
 				id = result.getAlbums().get(0).getId();
 			}
 		}
-		
+
         Reader reader = getReader(context, progressListener, "getMusicDirectory", null, "id", id);
         try {
             return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
@@ -373,9 +374,9 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
     }
-	
+
 	@Override
-	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {		
+	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "deletePlaylist", null, "id", id);
 		try {
             new ErrorParser(context, getInstance(context)).parse(reader);
@@ -383,7 +384,7 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
@@ -402,7 +403,7 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
@@ -421,7 +422,7 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
@@ -446,7 +447,7 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void updatePlaylist(String id, String name, String comment, boolean pub, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
@@ -473,7 +474,7 @@ public class RESTMusicService implements MusicService {
 		id = getOfflineSongId(id, context, progressListener);
 		scrobble(id, submission, 0, context, progressListener);
     }
-    
+
     public void scrobble(String id, boolean submission, long time, Context context, ProgressListener progressListener) throws Exception {
         checkServerVersion(context, "1.5", "Scrobbling not supported.");
         Reader reader;
@@ -554,7 +555,7 @@ public class RESTMusicService implements MusicService {
     public MusicDirectory getRandomSongs(int size, String musicFolderId, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         HttpParams params = new BasicHttpParams();
         HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_GET_RANDOM_SONGS);
-		
+
 		List<String> names = new ArrayList<String>();
         List<Object> values = new ArrayList<Object>();
 
@@ -640,12 +641,12 @@ public class RESTMusicService implements MusicService {
                 }
 
                 byte[] bytes = Util.toByteArray(in);
-                
+
 				// Handle case where partial was downloaded before being cancelled
 				if(task != null && task.isCancelled()) {
 					return null;
 				}
-                
+
 				OutputStream out = null;
 				try {
 					out = new FileOutputStream(FileUtil.getAlbumArtFile(context, entry));
@@ -759,7 +760,7 @@ public class RESTMusicService implements MusicService {
         Log.i(TAG, "Using video URL: " + stripUrlInfo(url));
         return url;
     }
-	
+
 	@Override
 	public String getVideoStreamUrl(String format, int maxBitrate, Context context, String id) throws Exception {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
@@ -774,11 +775,11 @@ public class RESTMusicService implements MusicService {
         Log.i(TAG, "Using video URL: " + stripUrlInfo(url));
         return url;
 	}
-	
+
 	@Override
 	public String getHlsUrl(String id, int bitRate, Context context) throws Exception {
 		checkServerVersion(context, "1.9", "HLS video streaming not supported.");
-		
+
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "hls"));
         builder.append("&id=").append(id);
 		if(bitRate > 0) {
@@ -844,7 +845,7 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
     }
-    
+
     @Override
     public void setStarred(List<MusicDirectory.Entry> entries, List<MusicDirectory.Entry> artists, List<MusicDirectory.Entry> albums, boolean starred, ProgressListener progressListener, Context context) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
@@ -875,7 +876,7 @@ public class RESTMusicService implements MusicService {
 				values.add(album.getId());
 			}
 		}
-		
+
 		Reader reader = getReader(context, progressListener, starred ? "star" : "unstar", null, names, values);
     	try {
             new ErrorParser(context, getInstance(context)).parse(reader);
@@ -883,7 +884,7 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
     }
-	
+
 	@Override
 	public List<Share> getShares(Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Shares not supported.");
@@ -1021,11 +1022,11 @@ public class RESTMusicService implements MusicService {
 			Util.close(reader);
 		}
 	}
-	
+
 	@Override
 	public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Genres not supported.");
-		
+
         Reader reader = getReader(context, progressListener, "getGenres", null);
         try {
             return new GenreParser(context, getInstance(context)).parse(reader, progressListener);
@@ -1081,27 +1082,27 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Podcasts not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("includeEpisodes"), Arrays.<Object>asList("false"));
         try {
             List<PodcastChannel> channels = new PodcastChannelParser(context, getInstance(context)).parse(reader, progressListener);
-			
+
 			String content = "";
 			for(PodcastChannel channel: channels) {
 				content += channel.getName() + "\n";
 			}
-			
+
 			File file = FileUtil.getPodcastFile(context, Util.getServerName(context, getInstance(context)));
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 			bw.write(content);
 			bw.close();
-			
+
 			return channels;
         } finally {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
 		Reader reader = getReader(context, progressListener, "getPodcasts", null, Arrays.asList("id"), Arrays.<Object>asList(id));
@@ -1111,11 +1112,11 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Refresh podcasts not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "refreshPodcasts", null);
 		try {
             new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1123,11 +1124,11 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void createPodcastChannel(String url, Context context, ProgressListener progressListener) throws Exception{
 		checkServerVersion(context, "1.9", "Creating podcasts not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "createPodcastChannel", null, "url", url);
 		try {
             new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1135,11 +1136,11 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void deletePodcastChannel(String id, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Deleting podcasts not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "deletePodcastChannel", null, "id", id);
 		try {
             new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1147,11 +1148,11 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void downloadPodcastEpisode(String id, Context context, ProgressListener progressListener) throws Exception{
 		checkServerVersion(context, "1.9", "Downloading podcasts not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "downloadPodcastEpisode", null, "id", id);
 		try {
             new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1159,11 +1160,11 @@ public class RESTMusicService implements MusicService {
             Util.close(reader);
         }
 	}
-	
+
 	@Override
 	public void deletePodcastEpisode(String id, String parent, ProgressListener progressListener, Context context) throws Exception{
 		checkServerVersion(context, "1.9", "Deleting podcasts not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "deletePodcastEpisode", null, "id", id);
 		try {
             new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1175,7 +1176,7 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public void setRating(MusicDirectory.Entry entry, int rating, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Setting ratings not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "setRating", null, Arrays.asList("id", "rating"), Arrays.<Object>asList(entry.getId(), rating));
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1187,7 +1188,7 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public MusicDirectory getBookmarks(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Bookmarks not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "getBookmarks", null);
 		try {
 			return new BookmarkParser(context, getInstance(context)).parse(reader, progressListener);
@@ -1199,7 +1200,7 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public void createBookmark(MusicDirectory.Entry entry, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Creating bookmarks not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "createBookmark", null, Arrays.asList("id", "position", "comment"), Arrays.<Object>asList(entry.getId(), position, comment));
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1211,7 +1212,7 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public void deleteBookmark(MusicDirectory.Entry entry, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Deleting bookmarks not supported.");
-		
+
 		Reader reader = getReader(context, progressListener, "deleteBookmark", null, Arrays.asList("id"), Arrays.<Object>asList(entry.getId()));
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
@@ -1374,7 +1375,7 @@ public class RESTMusicService implements MusicService {
 					// Handle case where partial is downloaded and cancelled
 					return null;
 				}
-				
+
 				OutputStream out = null;
 				try {
 					out = new FileOutputStream(FileUtil.getAvatarFile(context, username));
@@ -1455,7 +1456,7 @@ public class RESTMusicService implements MusicService {
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return processOfflineScrobbles(context, progressListener) + processOfflineStars(context, progressListener);
 	}
-	
+
 	public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception {
 		SharedPreferences offline = Util.getOfflineSync(context);
 		SharedPreferences.Editor offlineEditor = offline.edit();
@@ -1492,7 +1493,7 @@ public class RESTMusicService implements MusicService {
 
 		return count - retry;
 	}
-	
+
 	public int processOfflineStars(final Context context, final ProgressListener progressListener) throws Exception {
 		SharedPreferences offline = Util.getOfflineSync(context);
 		SharedPreferences.Editor offlineEditor = offline.edit();
@@ -1537,7 +1538,7 @@ public class RESTMusicService implements MusicService {
 
 		return count - retry;
 	}
-	
+
 	private String getOfflineSongId(String id, Context context, ProgressListener progressListener) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
@@ -1549,10 +1550,10 @@ public class RESTMusicService implements MusicService {
 				id = result.getSongs().get(0).getId();
 			}
 		}
-		
+
 		return id;
 	}
-	
+
 	@Override
 	public void setInstance(Integer instance)  throws Exception {
 		this.instance = instance;
@@ -1595,7 +1596,7 @@ public class RESTMusicService implements MusicService {
 
 	private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
 		List<Object> parameterValues, ProgressListener progressListener) throws Exception {
-		
+
 		return getEntityForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, null);
 	}
     private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
@@ -1613,7 +1614,9 @@ public class RESTMusicService implements MusicService {
             StringBuilder builder = new StringBuilder(url);
             for (int i = 0; i < parameterNames.size(); i++) {
                 builder.append("&").append(parameterNames.get(i)).append("=");
-                builder.append(URLEncoder.encode(String.valueOf(parameterValues.get(i)), "UTF-8"));
+				String part = URLEncoder.encode(String.valueOf(parameterValues.get(i)), "UTF-8");
+				part = part.replaceAll("\\%27", "&#39;");
+                builder.append(part);
             }
             url = builder.toString();
             parameterNames = null;
