@@ -124,8 +124,6 @@ public class ImageLoader {
 
 			return getUnknownImage(key, size, color, null, null);
 		} else {
-			key = getKey(entry.getId() + "unknown", size);
-
 			String hash;
 			if(entry.getAlbum() != null) {
 				hash = entry.getAlbum();
@@ -136,6 +134,7 @@ public class ImageLoader {
 			}
 			color = COLORS[Math.abs(hash.hashCode()) % COLORS.length];
 
+			key = getKey(color + "unknown", size);
 			return getUnknownImage(key, size, color, entry.getAlbum(), entry.getArtist());
 		}
 	}
