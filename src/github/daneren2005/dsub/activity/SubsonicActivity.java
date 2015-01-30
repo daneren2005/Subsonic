@@ -781,7 +781,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			try {
 
 				PackageInfo packageInfo = context.getPackageManager().getPackageInfo("github.daneren2005.dsub", 0);
-				file = new File(Environment.getExternalStorageDirectory(), "subsonic-stacktrace.txt");
+				file = new File(Environment.getExternalStorageDirectory(), "dsub-stacktrace.txt");
 				printWriter = new PrintWriter(file);
 				printWriter.println("Android API level: " + Build.VERSION.SDK);
 				printWriter.println("Subsonic version name: " + packageInfo.versionName);
