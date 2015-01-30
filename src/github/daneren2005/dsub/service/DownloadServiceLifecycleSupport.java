@@ -168,6 +168,13 @@ public class DownloadServiceLifecycleSupport {
 		if (intent != null) {
 			final String action = intent.getAction();
 
+			if(eventHandler == null) {
+				Util.sleepQuietly(100L);
+			}
+			if(eventHandler == null) {
+				return;
+			}
+
 			eventHandler.post(new Runnable() {
 				@Override
 				public void run() {
