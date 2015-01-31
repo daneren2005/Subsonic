@@ -123,7 +123,7 @@ public class DLNAController extends RemoteController {
 
 			@Override
 			protected void ended(GENASubscription genaSubscription, CancelReason cancelReason, UpnpResponse upnpResponse) {
-
+				Log.i(TAG, "Ended subscription");
 			}
 
 			@Override
@@ -179,7 +179,7 @@ public class DLNAController extends RemoteController {
 
 			@Override
 			protected void eventsMissed(GENASubscription genaSubscription, int i) {
-
+				Log.w(TAG, "Event missed: " + i);
 			}
 		};
 		controlPoint.execute(callback);
