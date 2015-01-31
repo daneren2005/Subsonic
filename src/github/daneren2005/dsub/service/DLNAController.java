@@ -124,6 +124,9 @@ public class DLNAController extends RemoteController {
 			@Override
 			protected void ended(GENASubscription genaSubscription, CancelReason cancelReason, UpnpResponse upnpResponse) {
 				Log.i(TAG, "Ended subscription");
+				Log.i(TAG, "Cancel Reason: " + cancelReason.toString());
+				Log.i(TAG, "Reponse Message: " + upnpResponse.getStatusMessage());
+				Log.i(TAG, "Response Details: " + upnpResponse.getResponseDetails());
 			}
 
 			@Override
