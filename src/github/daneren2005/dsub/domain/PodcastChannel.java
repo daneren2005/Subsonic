@@ -86,6 +86,19 @@ public class PodcastChannel implements Serializable {
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		PodcastChannel entry = (PodcastChannel) o;
+		return id.equals(entry.id);
+	}
 	
 	public static class PodcastComparator implements Comparator<PodcastChannel> {
 		private static String[] ignoredArticles;
