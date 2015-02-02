@@ -683,7 +683,7 @@ public class OfflineMusicService implements MusicService {
 				channel.setName(line);
 				channel.setStatus("completed");
 				
-				if(FileUtil.getPodcastDirectory(context, channel).exists()) { 
+				if(FileUtil.getPodcastDirectory(context, channel).exists() && !channels.contains(channel)) {
 					channels.add(channel);
 				}
 			}
