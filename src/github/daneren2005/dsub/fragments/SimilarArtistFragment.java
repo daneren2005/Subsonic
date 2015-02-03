@@ -30,13 +30,17 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.ArtistInfo;
+import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistAdapter;
 
 import java.net.URLEncoder;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SimilarArtistFragment extends SelectListFragment<Artist> {
@@ -54,17 +58,19 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(super.onOptionsItemSelected(item)) {
-			return true;
-		}
-
 		switch (item.getItemId()) {
+			case R.id.menu_play_now:
+				playAll(false);
+				return true;
+			case R.id.menu_shuffle:
+				playAll(true);
+				return true;
 			case R.id.menu_show_missing:
 				showMissingArtists();
 				break;
 		}
 
-		return false;
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -131,5 +137,38 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 		}
 
 		Util.showHTMLDialog(context, R.string.menu_similar_artists, b.toString());
+	}
+
+	private void playAll(final boolean shuffle) {
+		new RecursiveLoader(context) {
+			@Override
+			protected Boolean doInBackground() throws Throwable {
+				musicService = MusicServiceFactory.getMusicService(context);
+
+				MusicDirectory root = new MusicDirectory();
+				for(Artist artist: objects) {
+					if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+						root.addChildren(musicService.getArtist(artist.getId(), artist.getName(), false, context, this).getChildren());
+					} else {
+						root.addChildren(musicService.getMusicDirectory(artist.getId(), artist.getName(), false, context, this).getChildren());
+					}
+				}
+
+				if(shuffle) {
+					root.shuffleChildren();
+				}
+
+				songs = new LinkedList<MusicDirectory.Entry>();
+				getSongsRecursively(root, songs);
+
+				DownloadService downloadService = getDownloadService();
+				if (!songs.isEmpty() && downloadService != null) {
+					downloadService.clear();
+					downloadService.download(songs, false, true, false, false);
+				}
+
+				return true;
+			}
+		}.execute();
 	}
 }

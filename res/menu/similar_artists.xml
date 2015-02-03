@@ -3,6 +3,18 @@
 	  xmlns:compat="http://schemas.android.com/apk/res-auto">
 
 	<item
+		android:id="@+id/menu_play_now"
+		android:icon="?media_button_start"
+		android:title="@string/menu.play"
+		compat:showAsAction="always|withText"/>
+
+	<item
+		android:id="@+id/menu_shuffle"
+		android:icon="?attr/shuffle"
+		android:title="@string/menu.shuffle"
+		compat:showAsAction="ifRoom|withText"/>
+
+	<item
 		android:id="@+id/menu_show_missing"
 		android:title="@string/menu.show_missing"/>
 </menu>

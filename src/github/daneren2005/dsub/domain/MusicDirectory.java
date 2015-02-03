@@ -107,6 +107,10 @@ public class MusicDirectory implements Serializable {
 	public int getChildrenSize() {
 		return children.size();
 	}
+
+	public void shuffleChildren() {
+		Collections.shuffle(this.children);
+	}
 	
 	public void sortChildren(Context context, int instance) {
 		if(ServerInfo.checkServerVersion(context, "1.8", instance)) {
