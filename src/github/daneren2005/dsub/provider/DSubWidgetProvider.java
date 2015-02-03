@@ -36,7 +36,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RemoteViews;
 import github.daneren2005.dsub.R;
@@ -44,7 +43,6 @@ import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceLifecycleSupport;
 import github.daneren2005.dsub.util.Constants;
@@ -115,7 +113,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 		}
 
         linkButtons(context, views, false);
-        pushUpdate(context, appWidgetIds, views);
+		performUpdate(context, null, appWidgetIds, false);
     }
 
     private void pushUpdate(Context context, int[] appWidgetIds, RemoteViews views) {
