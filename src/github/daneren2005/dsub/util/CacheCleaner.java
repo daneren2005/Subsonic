@@ -54,18 +54,7 @@ public class CacheCleaner {
                 continue;
             }
 
-            File[] children = dir.listFiles();
-			
-			// No songs left in the folder
-			if(children.length == 1 && children[0].getPath().equals(FileUtil.getAlbumArtFile(dir).getPath())) {
-				Util.delete(children[0]);
-				children = dir.listFiles();
-			}
-
-            // Delete empty directory
-            if (children.length == 0) {
-                Util.delete(dir);
-            }
+            FileUtil.deleteEmptyDir(dir);
         }
     }
 	

@@ -53,7 +53,6 @@ import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.MediaStoreService;
 
 import org.apache.http.HttpEntity;
 
@@ -601,50 +600,8 @@ public final class Util {
         }
         return true;
     }
-	public static boolean recursiveDelete(File dir) {
-		if (dir != null && dir.exists()) {
-			File[] list = dir.listFiles();
-			if(list != null) {
-				for(File file: list) {
-					if(file.isDirectory()) {
-						if(!recursiveDelete(file)) {
-							return false;
-						}
-					} else if(file.exists()) {
-						if(!file.delete()) {
-							return false;
-						}
-					}
-				}
-			}
-			return dir.delete();
-		}
-		return false;
-	}
-	public static boolean recursiveDelete(File dir, MediaStoreService mediaStore) {
-		if (dir != null && dir.exists()) {
-			File[] list = dir.listFiles();
-			if(list != null) {
-				for(File file: list) {
-					if(file.isDirectory()) {
-						if(!recursiveDelete(file, mediaStore)) {
-							return false;
-						}
-					} else if(file.exists()) {
-						if(!file.delete()) {
-							return false;
-						} else {
-							mediaStore.deleteFromMediaStore(file);
-						}
-					}
-				}
-			}
-			return dir.delete();
-		}
-		return false;
-	}
 
-    public static void toast(Context context, int messageId) {
+	public static void toast(Context context, int messageId) {
         toast(context, messageId, true);
     }
 

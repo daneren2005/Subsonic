@@ -1362,7 +1362,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MediaStoreService mediaStore = new MediaStoreService(context);
-				Util.recursiveDelete(dir, mediaStore);
+				FileUtil.recursiveDelete(dir, mediaStore);
 				return null;
 			}
 

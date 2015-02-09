@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
@@ -35,7 +34,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.zip.DeflaterInputStream;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -44,7 +42,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
@@ -54,7 +51,6 @@ import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
-import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.MediaStoreService;
 
@@ -460,7 +456,7 @@ public class FileUtil {
 	public static boolean deleteMusicDirectory(Context context) {
 		File musicDirectory = FileUtil.getMusicDirectory(context);
 		MediaStoreService mediaStore = new MediaStoreService(context);
-		return Util.recursiveDelete(musicDirectory, mediaStore);
+		return recursiveDelete(musicDirectory, mediaStore);
 	}
 	public static void deleteSerializedCache(Context context) {
 		for(File file: context.getCacheDir().listFiles()) {
@@ -471,11 +467,52 @@ public class FileUtil {
 	}
 	public static boolean deleteArtworkCache(Context context) {
 		File artDirectory = FileUtil.getAlbumArtDirectory(context);
-		return Util.recursiveDelete(artDirectory);
+		return recursiveDelete(artDirectory);
 	}
 	public static boolean deleteAvatarCache(Context context) {
 		File artDirectory = FileUtil.getAvatarDirectory(context);
-		return Util.recursiveDelete(artDirectory);
+		return recursiveDelete(artDirectory);
+	}
+
+	public static boolean recursiveDelete(File dir) {
+		return recursiveDelete(dir, null);
+	}
+	public static boolean recursiveDelete(File dir, MediaStoreService mediaStore) {
+		if (dir != null && dir.exists()) {
+			File[] list = dir.listFiles();
+			if(list != null) {
+				for(File file: list) {
+					if(file.isDirectory()) {
+						if(!recursiveDelete(file, mediaStore)) {
+							return false;
+						}
+					} else if(file.exists()) {
+						if(!file.delete()) {
+							return false;
+						} else if(mediaStore != null) {
+							mediaStore.deleteFromMediaStore(file);
+						}
+					}
+				}
+			}
+			return dir.delete();
+		}
+		return false;
+	}
+
+	public static void deleteEmptyDir(File dir) {
+		File[] children = dir.listFiles();
+
+		// No songs left in the folder
+		if(children.length == 1 && children[0].getPath().equals(FileUtil.getAlbumArtFile(dir).getPath())) {
+			Util.delete(children[0]);
+			children = dir.listFiles();
+		}
+
+		// Delete empty directory
+		if (children.length == 0) {
+			Util.delete(dir);
+		}
 	}
 
 	public static void unpinSong(Context context, File saveFile) {

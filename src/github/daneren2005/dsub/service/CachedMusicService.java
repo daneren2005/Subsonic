@@ -30,7 +30,6 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.ArtistInfo;
@@ -947,7 +946,7 @@ public class CachedMusicService implements MusicService {
 			MediaStoreService store = new MediaStoreService(context);
 			for(Entry entry: oldList) {
 				File file = FileUtil.getEntryFile(context, entry);
-				Util.recursiveDelete(file, store);
+				FileUtil.recursiveDelete(file, store);
 			}
 		}
 	}
