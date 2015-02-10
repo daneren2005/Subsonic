@@ -55,10 +55,28 @@
 		android:paddingBottom="4dp"
 		android:minHeight="50dip"/>
 
-	<TextView
+	<LinearLayout
 		android:id="@+id/main_albums"
-		android:text="@string/main.albums_title"
-		style="@style/MainAlbumButtonLabel"/>
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<TextView
+			android:text="@string/main.albums_title"
+			style="@style/MainAlbumButtonLabel"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="fill_parent"/>
+
+		<CheckBox
+			android:id="@+id/main_albums_per_folder"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/main.albums_per_folder"
+			android:layout_marginRight="6dp"
+			android:layout_gravity="right"/>
+	</LinearLayout>
+
 
 	<LinearLayout
 		android:id="@+id/main_albums_newest"

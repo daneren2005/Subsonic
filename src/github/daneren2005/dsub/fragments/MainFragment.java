@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
@@ -164,6 +165,19 @@ public class MainFragment extends SubsonicFragment {
 		final View albumsYearButton = buttons.findViewById(R.id.main_albums_year);
 
 		final View dummyView = rootView.findViewById(R.id.main_dummy);
+
+		final CheckBox albumsPerFolderCheckbox = (CheckBox) buttons.findViewById(R.id.main_albums_per_folder);
+		if(!Util.isOffline(context) && ServerInfo.checkServerVersion(context, "1.11")) {
+			albumsPerFolderCheckbox.setChecked(Util.getAlbumListsPerFolder(context));
+			albumsPerFolderCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					Util.setAlbumListsPerFolder(context, isChecked);
+				}
+			});
+		} else {
+			albumsPerFolderCheckbox.setVisibility(View.GONE);
+		}
 
 		int instance = Util.getActiveServer(context);
 		String name = Util.getServerName(context, instance);

@@ -225,6 +225,21 @@ public final class Util {
 		return prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
 	}
 
+	public static boolean getAlbumListsPerFolder(Context context) {
+		return getAlbumListsPerFolder(context, getActiveServer(context));
+	}
+	public static boolean getAlbumListsPerFolder(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, false);
+	}
+	public static void setAlbumListsPerFolder(Context context, boolean perFolder) {
+		int instance = getActiveServer(context);
+		SharedPreferences prefs = getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, perFolder);
+		editor.commit();
+	}
+
     public static String getTheme(Context context) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_THEME, null);

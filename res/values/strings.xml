@@ -63,6 +63,7 @@
 	<string name="main.online">Go Online</string>
     <string name="main.settings">Settings</string>
     <string name="main.albums_title">Album Lists</string>
+	<string name="main.albums_per_folder">Per Folder</string>
     <string name="main.albums_newest">Recently added</string>
     <string name="main.albums_recent">Recently played</string>
     <string name="main.albums_frequent">Most played</string>

@@ -65,7 +65,6 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Looper;
-import android.support.v4.text.TextUtilsCompat;
 import android.util.Log;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
@@ -493,8 +492,28 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbumList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		names.add("type");
+		values.add(type);
+		names.add("size");
+		values.add(size);
+		names.add("offset");
+		values.add(offset);
+
+		// Add folder if it was set and is non null
+		int instance = getInstance(context);
+		if(Util.getAlbumListsPerFolder(context, instance)) {
+			String folderId = Util.getSelectedMusicFolderId(context, instance);
+			if(folderId != null) {
+				names.add("musicFolderId");
+				values.add(folderId);
+			}
+		}
+
         Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getAlbumList2" : "getAlbumList",
-                                  null, Arrays.asList("type", "size", "offset"), Arrays.<Object>asList(type, size, offset));
+                                  null, names, values);
         try {
             return new AlbumListParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
@@ -533,9 +552,19 @@ public class RESTMusicService implements MusicService {
 			values.add(decade + 10);
 		}
 
-		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getAlbumList2" : "getAlbumList", null, names, values);
+		// Add folder if it was set and is non null
+		int instance = getInstance(context);
+		if(Util.getAlbumListsPerFolder(context, instance)) {
+			String folderId = Util.getSelectedMusicFolderId(context, instance);
+			if(folderId != null) {
+				names.add("musicFolderId");
+				values.add(folderId);
+			}
+		}
+
+		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getAlbumList2" : "getAlbumList", null, names, values);
 		try {
-			return new AlbumListParser(context, getInstance(context)).parse(reader, progressListener);
+			return new AlbumListParser(context, instance).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
