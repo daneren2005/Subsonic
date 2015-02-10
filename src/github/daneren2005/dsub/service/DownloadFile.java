@@ -267,9 +267,11 @@ public class DownloadFile implements BufferFile {
 		deleteFromStore();
 		
 		// Delete all possible versions of the file
+		File parent = partialFile.getParentFile();
         Util.delete(partialFile);
         Util.delete(completeFile);
         Util.delete(saveFile);
+		FileUtil.deleteEmptyDir(parent);
     }
 
     public void unpin() {
