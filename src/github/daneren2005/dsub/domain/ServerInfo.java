@@ -187,6 +187,17 @@ public class ServerInfo implements Serializable {
 	private static String getCacheName(Context context, int instance) {
 		return "server-" + Util.getRestUrl(context, null, instance, false).hashCode() + ".ser";
 	}
+
+	public static boolean hasArtistInfo(Context context) {
+		if(isStockSubsonic(context) && ServerInfo.checkServerVersion(context, "1.11")) {
+			return true;
+		} else if(isMadsonic(context)) {
+			// TODO: When madsonic adds support, figure out what REST version it is added on
+			return false;
+		} else {
+			return false;
+		}
+	}
 	
 	public static boolean canBookmark(Context context) {
 		return checkServerVersion(context, "1.9");
