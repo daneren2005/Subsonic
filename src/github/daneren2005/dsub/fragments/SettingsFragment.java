@@ -88,6 +88,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private String internalSSID;
 	private String internalSSIDDisplay;
 	private EditTextPreference cacheSize;
+	private ListPreference openToTab;
 
 	private int serverCount = 3;
 	private SharedPreferences settings;
@@ -182,6 +183,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		replayGainBump = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
 		replayGainUntagged = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
 		cacheSize = (EditTextPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
+		openToTab = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_OPEN_TO_TAB);
 
 		settings = Util.getPreferences(context);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
@@ -308,6 +310,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		pauseDisconnect.setSummary(pauseDisconnect.getEntry());
 		videoPlayer.setSummary(videoPlayer.getEntry());
 		syncInterval.setSummary(syncInterval.getEntry());
+		openToTab.setSummary(openToTab.getEntry());
 		try {
 			if(megabyteFromat == null) {
 				megabyteFromat = new DecimalFormat(getResources().getString(R.string.util_bytes_format_megabyte));

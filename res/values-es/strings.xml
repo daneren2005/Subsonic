@@ -401,8 +401,6 @@
 	<string name="settings.server_local_network_ssid" >SSID Red local</string>
 	<string name="settings.server_local_network_ssid_hint">SSID Actual: %s</string>
 	<string name="settings.cache_location_reset">No se puede escribir en la ubicación seleccionada para la caché. Si has actualizado recientemente el sistema operativo de tu dispositivo a KitKat 4.4, la manera en la que las apps escriben en la Tarjeta SD ha cambiado, por lo que sólo pueden escribir en una ubicación específica. La ubicación que utiliza DSub ha sido automáticamente cambiada por la ubicación correcta. Para eliminar todos los datos de la app anterior, tendrás que introducir la Tarjeta SD en el ordenador y eliminar la carpeta manualmente.</string>
-	<string name="settings.open_to_library">Acceder directamente a la biblioteca</string>
-	<string name="settings.open_to_library_summary">Acceder directamente a la pantalla de la biblioteca en lugar de abrir primero la pantalla principal.</string>
 	<string name="settings.override_system_language">Sobreescribir idioma del sistema</string>
 	<string name="settings.override_system_language_summary">Mostrar la aplicación en inglés aún teniendo disponible DSub en el idioma del sistema. Probablemente necesite borrar la aplicación de la memoria para efectuar los cambios.</string>
 	<string name="settings.drawer_items_title">Pestañas</string>

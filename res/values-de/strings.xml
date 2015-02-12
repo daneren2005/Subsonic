@@ -301,8 +301,6 @@
 	<string name="settings.track_summary">Zeige Titelnummer vor dem Titel</string>
 	<string name="settings.custom_sort">Sortiere nach Jahr</string>
 	<string name="settings.custom_sort_summary">Sortiere Alben nach Jahr, oder alphabetisch.</string>
-	<string name="settings.open_to_library">Bibliothek öffnen</string>
-	<string name="settings.open_to_library_summary">Direkt die Bibliothek anstatt der Startseite öffnen.</string>
     <string name="settings.network_title">Netzwerk</string>
     <string name="settings.max_bitrate_wifi">Max Audio Bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio Bitrate - Mobil</string>

@@ -414,9 +414,9 @@ public final class Util {
 		}
 	}
 
-	public static boolean isOpenToLibrary(Context context) {
+	public static String openToTab(Context context) {
 		SharedPreferences prefs = getPreferences(context);
-		return prefs.getBoolean(Constants.PREFERENCES_KEY_OPEN_TO_LIBRARY, false);
+		return prefs.getString(Constants.PREFERENCES_KEY_OPEN_TO_TAB, null);
 	}
 
 	public static String getVideoPlayerType(Context context) {

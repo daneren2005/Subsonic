@@ -136,7 +136,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_MENU_SHARED = "showShared";
 	public static final String PREFERENCES_KEY_SHARED_ENABLED = "sharedEnabled";
 	public static final String PREFERENCES_KEY_BROWSE_TAGS = "browseTags";
-	public static final String PREFERENCES_KEY_OPEN_TO_LIBRARY = "openToLibrary";
+	public static final String PREFERENCES_KEY_OPEN_TO_TAB = "openToTab";
 	public static final String PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE = "overrideSystemLanguage";
 	public static final String PREFERENCES_KEY_PLAY_NOW_AFTER = "playNowAfter";
 	public static final String PREFERENCES_KEY_LARGE_ALBUM_ART = "largeAlbumArt";

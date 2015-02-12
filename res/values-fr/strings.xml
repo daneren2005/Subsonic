@@ -296,8 +296,6 @@
 	<string name="settings.track_summary">Afficher le n° de piste devant les titres</string>
 	<string name="settings.custom_sort">Trier par années</string>
 	<string name="settings.custom_sort_summary">Trier les albums par année, ou par ordre alphabétique</string>
-	<string name="settings.open_to_library">Ouvrir dans la bibliothèque</string>
-	<string name="settings.open_to_library_summary">Ouvrir directement la bibliothèque plutôt que l\'écran d\'accueil.</string>
     <string name="settings.network_title">Réseau</string>
     <string name="settings.max_bitrate_wifi">Débit audio max (Wifi)</string>
     <string name="settings.max_bitrate_mobile">Débit audio max (Mobile)</string>
