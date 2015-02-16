@@ -182,7 +182,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	@Override
 	public void onDiscoveryRequestChanged(MediaRouteDiscoveryRequest request) {
 		if (request != null && request.isActiveScan()) {
-
+			dlnaService.getControlPoint().search();
 		}
 	}
 
