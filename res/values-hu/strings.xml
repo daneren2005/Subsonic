@@ -40,7 +40,7 @@
 
     <string name="main.welcome_title">Üdvözlet!</string>
     <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás még nincs beállítva. Miután konfigurálta saját kiszolgálóját 
-	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba, és adja meg csatlakozási adatokat!</string>
+	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba, és adja meg a kapcsolódási adatokat!</string>
 	<string name="main.about_title">DSub információk</string>
 	<string name="main.about_text">Fejlesztő: Scott Jackson
 		\nEmail: dsub.android@gmail.com
@@ -54,7 +54,7 @@
 		<font color="red">Gyorsítótárazás vs Tárolás</font>:
 		<br/>Míg a normál módon gyorsítótárazott dalok törlődhetnek amikor újak kerülnek letöltésre, addig a \"Letöltés tárolásra (megőrzés)\" menüpont segítségével letöltött dalok soha nem törlődnek automatikusan.
 		<p/><font color="red">Ha a ChromeCast sikertelen</font>:
-		<br/>Győződjön meg róla, hogy nem használ saját aláírású tanúsítványt, mert a ChromeCast azt automatikusan visszautasítja!
+		<br/>Győződjön meg róla, hogy nem használ saját aláírású tanúsítványt, mert azt a ChromeCast automatikusan visszautasítja!
 	]]>
 	</string>
     <string name="main.select_server">Kiszolgáló kiválasztása</string>
@@ -63,6 +63,7 @@
 	<string name="main.online">Online mód</string>
     <string name="main.settings">Beállítások</string>
     <string name="main.albums_title">Albumok</string>
+	<string name="main.albums_per_folder">Mappánként</string>
     <string name="main.albums_newest">Utoljára hozzáadottak</string>
     <string name="main.albums_recent">Utoljára lejátszottak</string>
     <string name="main.albums_frequent">Legtöbbször lejátszottak</string>
@@ -104,6 +105,8 @@
 	<string name="menu.rescan">Médiatár frissítése a kiszolgálón</string>
 	<string name="menu.rate">Értékelés</string>
 	<string name="menu.top_tracks">Last.fm legjobb dalok</string>
+	<string name="menu.similar_artists">Hasonló előadók</string>
+	<string name="menu.show_missing">Hiányzó megjelenítése</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -210,8 +213,7 @@
 	<string name="download.downloading_title">%1$d dal letöltése</string>
 	<string name="download.downloading_summary">Aktuális: %1$s</string>
 	<string name="download.downloading_summary_expanded">Aktuális: %1$s
-		\nBecsült méret: %2$s
-	</string>
+		\nBecsült méret: %2$s</string>
 	<string name="download.failed_to_load">A beolvasás sikertelen!</string>
 
 	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
@@ -279,13 +281,13 @@
     <string name="settings.cache_size">Gyorsítótár mérete (MB)</string>
     <string name="settings.cache_location">Gyorsítótár helye</string>
     <string name="settings.cache_location_error">Hibás gyorsítótár hely! Az alapértelmezett használata.</string>
-    <string name="settings.cache_location_reset">A beállított gyorsítótár hely már nem írható! Ha a közelmúltban frissítette telefonja Android rendszerét 4.4.x KitKat verzióra, abban az SD kártya kezelése megváltozott, és az alkalmazások csak egy speciális helyre tudnak írni. A Dsub már automatikusan átállt a megfelelő helyre. Ahhoz, hogy a régi adatokat törölni tudja, csatlakoztassa az SD kártyát a számítógépéhez, és törölje a régi mappát!</string>
+    <string name="settings.cache_location_reset">A beállított gyorsítótár-hely már nem írható! Ha a közelmúltban frissítette telefonja Android rendszerét 4.4.x KitKat verzióra, abban az SD kártya kezelése megváltozott, és az alkalmazások csak egy speciális helyre tudnak írni. A Dsub már automatikusan átállt a megfelelő helyre. Ahhoz, hogy a régi adatokat törölni tudja, csatlakoztassa az SD kártyát a számítógépéhez, és törölje a régi mappát!</string>
 	<string name="settings.cache_clear">Gyorsítótár törlése</string>
 	<string name="settings.cache_clear_complete">Gyorsítótár törlése kész!</string>
     <string name="settings.testing_connection">Kapcsolat tesztelése...</string>
     <string name="settings.testing_ok">Kapcsolat OK!</string>
     <string name="settings.testing_unlicensed">Kapcsolat OK! A kiszolgálónak nincs licence!</string>
-    <string name="settings.connection_failure">Csatlakozási hiba!</string>
+    <string name="settings.connection_failure">Kapcsolódási hiba!</string>
     <string name="settings.invalid_url">Adjon meg egy érvényes URL-t!</string>
     <string name="settings.invalid_username">Adjon meg egy érvényes felhasználónevet (szóközt nem tartalmazhat)!</string>
     <string name="settings.appearance_title">Megjelenés</string>
@@ -300,6 +302,8 @@
 	<string name="settings.track_summary">Dalsorszám megjelenítése a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
 	<string name="settings.custom_sort_summary">A kiszolgáló alapértelmezett rendezésének felülbírálása, rendezés a lemez sorszáma és a kiadás éve alapján.</string>
+	<string name="settings.open_to_library">Médiatár megnyitása</string>
+	<string name="settings.open_to_library_summary">A Médiatár megnyitása a Főoldal helyett.</string>
     <string name="settings.network_title">Hálózat</string>
     <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
@@ -352,11 +356,11 @@
     <string name="settings.media_button_title">Média vezérlőgombok</string>
     <string name="settings.media_button_summary">A lejátszó irányítása a bluetooth eszköz vagy a fülhallgató vezérlőgombjaival.</string>
     <string name="settings.screen_lit_title">Képernyő ébrentartása</string>
-    <string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt, a magasabb letöltési sebesség érdekében.</string>
+    <string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt a magasabb letöltési sebesség érdekében.</string>
 	<string name="settings.playlist_title">Lejátszási listák</string>
 	<string name="settings.playlist_random_size_title">Véletlenszerű lejátszási lista mérete</string>
-	<string name="settings.sleep_timer_title">Alvás időzítő</string>
-	<string name="settings.sleep_timer_duration_title">Alvás időzítő időtartam</string>
+	<string name="settings.sleep_timer_title">Alvó üzemmód időzítő</string>
+	<string name="settings.sleep_timer_duration_title">Alvó üzemmód időtartam</string>
 	<string name="settings.sleep_timer_off">Ki</string>
 	<string name="settings.sleep_timer_on">Be</string>
 	<string name="settings.sleep_timer_always_on">Mindig be</string>
@@ -369,7 +373,7 @@
 	<string name="settings.disconnect_pause_both">Megállítás minden esetben.</string>
 	<string name="settings.disconnect_pause_neither">Ne csináljon semmit.</string>
 	<string name="settings.persistent_title">Állandó kijelzés</string>
-	<string name="settings.persistent_summary">Kijelzés az értesítési sávon a lejátszás megállítása után is. Nyomja meg a stop gombot a törléséhez!</string>
+	<string name="settings.persistent_summary">Kijelzés az értesítési sávon a lejátszás megállítása után is. Nyomja meg a bezárás gombot a törléséhez!</string>
 	<string name="settings.gapless_playback">Egybefüggő lejátszás (Gapless)</string>
 	<string name="settings.gapless_playback_summary">Ha lefagyásokat/furcsaságokat tapasztal az egybefüggő lejátszás (Gapless) engedélyezése után, a probléma megoldásához kapcsolja ki a funkciót!</string>
 	<string name="settings.chat_refresh">Csevegés frissítési gyakorisága (mp.)</string>
@@ -425,7 +429,7 @@
 	<string name="settings.play_now_after">Lejátszás utána</string>
 	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik minden dal lejátszása a kijelölt elem után (mint a Subsonic webes felületén)</string>
 	<string name="settings.large_album_art">Nagy méretű albumborítók</string>
-	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben és nagy méretű albumborítóval, a listanézet helyett.</string>
+	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben és nagy méretű albumborítóval a listanézet helyett.</string>
 	<string name="settings.admin_enabled">Admin engedélyezése</string>
 	<string name="settings.admin_enabled_summary">Admin menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.replay_gain">Hangerő-kiegyenlítés (Replay Gain)</string>
@@ -508,9 +512,9 @@
     <string name="background_task.no_network">Az alkalmazás hálózati hozzáférést igényel. Kérjük, kapcsolja be a Wi-Fi-t vagy a mobilhálózatot!</string>
     <string name="background_task.network_error">Hálózati hiba történt! Kérjük, ellenőrizze a kiszolgáló címét vagy próbálja később!</string>
     <string name="background_task.not_found">Az erőforrás nem található! Kérjük, ellenőrizze a kiszolgáló címét!</string>
-    <string name="background_task.parse_error">Hiba történt a kiszolgálóval történő kommunikációban. Kérjük, ellenőrizze a kiszolgáló címét, és próbáljon meg web böngészővel a kiszolgálóhoz csatlakozni!</string>
+    <string name="background_task.parse_error">Hiba történt a kiszolgálóval történő kommunikációban. Kérjük, ellenőrizze a kiszolgáló címét, és próbáljon meg web böngészővel kapcsolódni a kiszolgálóhoz!</string>
 
-    <string name="service.connecting">Csatlakozás a kiszolgálóhoz, kérem várjon...</string>
+    <string name="service.connecting">Kapcsolódás a kiszolgálóhoz, kérem várjon...</string>
 
     <string name="parser.upgrade_client">Nem kompatibilis verzió. Kérjük, frissítse a DSub Android alkalmazást!</string>
     <string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Subsonic kiszolgálót!</string>
@@ -527,10 +531,10 @@
     <string name="equalizer.label">Equalizer</string>
     <string name="equalizer.enabled">Engedélyezve</string>
     <string name="equalizer.preset">Profil kiválasztása</string>
-	<string name="equalizer.bass_booster">Bass Booster</string>
-	<string name="equalizer.voice_booster">Voice Booster</string>
+	<string name="equalizer.bass_booster">Basszus fokozás</string>
+	<string name="equalizer.voice_booster">Beszédhang fokozás</string>
 	<string name="equalizer.db_size">%d dB</string>
-	<string name="equalizer.bass_size">%d mille</string>
+	<string name="equalizer.bass_size">%d ezer</string>
 
 	<string name="widget.4x1">DSub (4x1)</string>
 	<string name="widget.4x2">DSub (4x2)</string>
