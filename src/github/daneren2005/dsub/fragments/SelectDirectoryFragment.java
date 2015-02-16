@@ -714,7 +714,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		// Show header if not album list type and not root and not artist
 		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
 		View header = null;
-		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null)) {
+		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null) && entryAdapter == null) {
 			header = createHeader();
 			// Only add header to entry list if we aren't going recreate album grid as root anyways
 			if(header != null && entryList != null && (!addAlbumHeader || entries.size() > 0)) {
@@ -724,7 +724,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		// Needs to be added here, GB crashes if you to try to remove the header view before adapter is set
-		if(addAlbumHeader) {
+		if(addAlbumHeader && entryAdapter == null) {
 			if(entries.size() > 0) {
 				entryList.addHeaderView(albumList);
 			} else {
