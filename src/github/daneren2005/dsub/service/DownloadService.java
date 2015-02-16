@@ -1941,6 +1941,10 @@ public class DownloadService extends Service {
 		postPlayCleanup(currentPlaying);
 	}
 	public void postPlayCleanup(DownloadFile downloadFile) {
+		if(downloadFile == null) {
+			return;
+		}
+
 		// Finished loading, delete when list is cleared
 		if (downloadFile.getSong() instanceof PodcastEpisode) {
 			toDelete.add(downloadFile);
