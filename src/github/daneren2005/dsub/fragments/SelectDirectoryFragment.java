@@ -42,6 +42,7 @@ import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Share;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.AlbumGridAdapter;
 import github.daneren2005.dsub.view.EntryAdapter;
@@ -227,8 +228,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			if(!ServerInfo.isMadsonic(context)) {
 				menu.removeItem(R.id.menu_top_tracks);
 			}
-			if(!ServerInfo.checkServerVersion(context, "1.11")) {
+			if(!ServerInfo.checkServerVersion(context, "1.11") || !ServerInfo.isStockSubsonic(context)) {
 				menu.removeItem(R.id.menu_similar_artists);
+				menu.removeItem(R.id.menu_radio);
 			}
 		} else {
 			if(podcastId == null) {
@@ -319,6 +321,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 				return true;
 			case R.id.menu_similar_artists:
 				showSimilarArtists(id);
+				return true;
+			case R.id.menu_radio:
+				startArtistRadio(id);
 				return true;
 		}
 
@@ -1266,6 +1271,26 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		fragment.setArguments(args);
 
 		replaceFragment(fragment, true);
+	}
+
+	private void startArtistRadio(final String artistId) {
+		new LoadingTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				DownloadService downloadService = getDownloadService();
+				downloadService.setArtistRadio(artistId);
+				if(downloadService.size() == 0) {
+					Log.e(TAG, "Failed to create artist radio");
+					throw new Exception("Failed to create artist radio");
+				}
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+			}
+		}.execute();
 	}
 
 	private View createHeader() {

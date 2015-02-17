@@ -41,6 +41,7 @@ import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
+import github.daneren2005.dsub.util.ArtistRadioBuffer;
 import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
@@ -100,6 +101,9 @@ public class DownloadService extends Service {
 	public static final int REWIND = 10000;
 	private static final double DELETE_CUTOFF = 0.84;
 	private static final int REQUIRED_ALBUM_MATCHES = 4;
+	private static final int SHUFFLE_MODE_NONE = 0;
+	private static final int SHUFFLE_MODE_ALL = 1;
+	private static final int SHUFFLE_MODE_ARTIST = 2;
 
 	private RemoteControlClientHelper mRemoteControl;
 
@@ -116,6 +120,7 @@ public class DownloadService extends Service {
 	private Handler mediaPlayerHandler;
 	private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
 	private ShufflePlayBuffer shufflePlayBuffer;
+	private ArtistRadioBuffer artistRadioBuffer;
 
 	private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<MusicDirectory.Entry, DownloadFile>(100);
 	private final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
@@ -131,6 +136,7 @@ public class DownloadService extends Service {
 	private PlayerState nextPlayerState = IDLE;
 	private boolean removePlayed;
 	private boolean shufflePlay;
+	private boolean artistRadio;
 	private long revision;
 	private static DownloadService instance;
 	private String suggestedPlaylistName;
@@ -229,6 +235,7 @@ public class DownloadService extends Service {
 		instance = this;
 		lifecycleSupport.onCreate();
 		shufflePlayBuffer = new ShufflePlayBuffer(this);
+		artistRadioBuffer = new ArtistRadioBuffer(this);
 	}
 
 	@Override
@@ -313,6 +320,7 @@ public class DownloadService extends Service {
 	}
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle, int start, int position) {
 		setShufflePlayEnabled(false);
+		setArtistRadio(null);
 		int offset = 1;
 		boolean noNetwork = !Util.isOffline(this) && !Util.isNetworkConnected(this);
 		boolean warnNetwork = false;
@@ -355,7 +363,7 @@ public class DownloadService extends Service {
 			}
 			revision++;
 		}
-		updateJukeboxPlaylist();
+		updateRemotePlaylist();
 
 		if(shuffle) {
 			shuffle();
@@ -406,7 +414,7 @@ public class DownloadService extends Service {
 		lifecycleSupport.serializeDownloadQueue();
 	}
 
-	private void updateJukeboxPlaylist() {
+	private void updateRemotePlaylist() {
 		if (remoteState != LOCAL && remoteController != null) {
 			remoteController.updatePlaylist();
 		}
@@ -422,12 +430,17 @@ public class DownloadService extends Service {
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, false)) {
 			removePlayed = true;
 		}
-		boolean startShufflePlay = prefs.getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, false);
+		int startShufflePlay = prefs.getInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, SHUFFLE_MODE_NONE);
 		download(songs, false, false, false, false);
-		if(startShufflePlay) {
-			shufflePlay = true;
+		if(startShufflePlay != SHUFFLE_MODE_NONE) {
+			if(startShufflePlay == SHUFFLE_MODE_ALL) {
+				shufflePlay = true;
+			} else {
+				artistRadio = true;
+				artistRadioBuffer.restoreArtist(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, null));
+			}
 			SharedPreferences.Editor editor = prefs.edit();
-			editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, true);
+			editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, startShufflePlay);
 			editor.commit();
 		}
 		if (currentPlayingIndex != -1) {
@@ -470,12 +483,26 @@ public class DownloadService extends Service {
 			checkDownloads();
 		}
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
-		editor.putBoolean(Constants.PREFERENCES_KEY_SHUFFLE_MODE, enabled);
+		editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, enabled ? SHUFFLE_MODE_ALL : SHUFFLE_MODE_NONE);
 		editor.commit();
 	}
 
 	public boolean isShufflePlayEnabled() {
 		return shufflePlay;
+	}
+
+	public void setArtistRadio(String artistId) {
+		if(artistId == null) {
+			artistRadio = false;
+		} else {
+			artistRadio = true;
+			artistRadioBuffer.setArtist(artistId);
+		}
+
+		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
+		editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, (artistId != null) ? SHUFFLE_MODE_ARTIST : SHUFFLE_MODE_NONE);
+		editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, artistId);
+		editor.commit();
 	}
 
 	public synchronized void shuffle() {
@@ -488,7 +515,7 @@ public class DownloadService extends Service {
 		}
 		revision++;
 		lifecycleSupport.serializeDownloadQueue();
-		updateJukeboxPlaylist();
+		updateRemotePlaylist();
 		setNextPlaying();
 	}
 
@@ -575,7 +602,7 @@ public class DownloadService extends Service {
 			}
 		}
 		lifecycleSupport.serializeDownloadQueue();
-		updateJukeboxPlaylist();
+		updateRemotePlaylist();
 	}
 
 	public void setOnline(final boolean online) {
@@ -586,6 +613,9 @@ public class DownloadService extends Service {
 		}
 		if(shufflePlay) {
 			setShufflePlayEnabled(false);
+		}
+		if(artistRadio) {
+			setArtistRadio(null);
 		}
 
 		lifecycleSupport.post(new Runnable() {
@@ -645,7 +675,7 @@ public class DownloadService extends Service {
 		if (serialize) {
 			lifecycleSupport.serializeDownloadQueue();
 		}
-		updateJukeboxPlaylist();
+		updateRemotePlaylist();
 		setNextPlaying();
 		if(proxy != null) {
 			proxy.stop();
@@ -675,7 +705,7 @@ public class DownloadService extends Service {
 		backgroundDownloadList.remove(downloadFile);
 		revision++;
 		lifecycleSupport.serializeDownloadQueue();
-		updateJukeboxPlaylist();
+		updateRemotePlaylist();
 		if(downloadFile == nextPlaying) {
 			setNextPlaying();
 		}
@@ -1742,7 +1772,7 @@ public class DownloadService extends Service {
 		list.add(to, movedSong);
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 		if(remoteState != LOCAL && mainList) {
-			updateJukeboxPlaylist();
+			updateRemotePlaylist();
 		} else if(mainList && (movedSong == nextPlaying || movedSong == currentPlaying || (currentPlayingIndex + 1) == to)) {
 			// Moving next playing, current playing, or moving a song to be next playing
 			setNextPlaying();
@@ -1786,6 +1816,9 @@ public class DownloadService extends Service {
 		}
 		if (shufflePlay) {
 			checkShufflePlay();
+		}
+		if(artistRadio) {
+			checkArtistRadio();
 		}
 
 		if (!Util.isNetworkConnected(this, true) || Util.isOffline(this)) {
@@ -1913,7 +1946,48 @@ public class DownloadService extends Service {
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 
 		if (revisionBefore != revision) {
-			updateJukeboxPlaylist();
+			updateRemotePlaylist();
+		}
+
+		if (wasEmpty && !downloadList.isEmpty()) {
+			play(0);
+		}
+	}
+
+	private synchronized void checkArtistRadio() {
+		// Get users desired random playlist size
+		SharedPreferences prefs = Util.getPreferences(this);
+		int listSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20"));
+		boolean wasEmpty = downloadList.isEmpty();
+
+		long revisionBefore = revision;
+
+		// First, ensure that list is at least 20 songs long.
+		int size = size();
+		if (size < listSize) {
+			for (MusicDirectory.Entry song : artistRadioBuffer.get(listSize - size)) {
+				DownloadFile downloadFile = new DownloadFile(this, song, false);
+				downloadList.add(downloadFile);
+				revision++;
+			}
+		}
+
+		int currIndex = currentPlaying == null ? 0 : getCurrentPlayingIndex();
+
+		// Only shift playlist if playing song #5 or later.
+		if (currIndex > 4) {
+			int songsToShift = currIndex - 2;
+			for (MusicDirectory.Entry song : artistRadioBuffer.get(songsToShift)) {
+				downloadList.add(new DownloadFile(this, song, false));
+				downloadList.get(0).cancelDownload();
+				downloadList.remove(0);
+				revision++;
+			}
+		}
+		currentPlayingIndex = downloadList.indexOf(currentPlaying);
+
+		if (revisionBefore != revision) {
+			updateRemotePlaylist();
 		}
 
 		if (wasEmpty && !downloadList.isEmpty()) {

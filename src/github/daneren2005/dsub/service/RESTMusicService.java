@@ -571,6 +571,28 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
+	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.11", "Artist radio is not supported");
+
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		names.add("id");
+		names.add("count");
+
+		values.add(artistId);
+		values.add(size);
+
+		int instance = getInstance(context);
+		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getSimilarSongs2" : "getSimilarSongs", null, names, values);
+		try {
+			return new RandomSongsParser(context, instance).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
     public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
         Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getStarred2" : "getStarred", null);
         try {

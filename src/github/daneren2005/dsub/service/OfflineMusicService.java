@@ -531,7 +531,12 @@ public class OfflineMusicService implements MusicService {
 		throw new OfflineException(ERRORMSG);
 	}
 
-    @Override
+	@Override
+	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
     public String getVideoUrl(int maxBitrate, Context context, String id) {
         return null;
     }

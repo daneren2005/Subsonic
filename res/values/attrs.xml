@@ -25,6 +25,7 @@
 	<attr name="password" format="reference"/>
 	<attr name="rating_bad" format="reference"/>
 	<attr name="rating_good" format="reference"/>
+	<attr name="radio" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
 
 	<declare-styleable name="SeekBarPreference">
