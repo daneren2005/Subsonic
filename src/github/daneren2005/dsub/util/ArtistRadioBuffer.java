@@ -44,8 +44,6 @@ public class ArtistRadioBuffer {
 
 	public ArtistRadioBuffer(DownloadService context) {
 		this.context = context;
-
-		executorService = Executors.newSingleThreadScheduledExecutor();
 		runnable = new Runnable() {
 			@Override
 			public void run() {
@@ -89,7 +87,7 @@ public class ArtistRadioBuffer {
 				result.add(buffer.remove(buffer.size() - 1));
 			}
 		}
-		Log.i(TAG, "Taking " + result.size() + " songs from shuffle play buffer. " + buffer.size() + " remaining.");
+		Log.i(TAG, "Taking " + result.size() + " songs from artist radio buffer. " + buffer.size() + " remaining.");
 		if(result.isEmpty()) {
 			awaitingResults = true;
 		}
@@ -102,7 +100,7 @@ public class ArtistRadioBuffer {
 
 	private void restart() {
 		synchronized(buffer) {
-			if(buffer.size() <= refillThreshold && lastCount != 0 && executorService.isShutdown()) {
+			if(buffer.size() <= refillThreshold && lastCount != 0 && (executorService == null || executorService.isShutdown())) {
 				executorService = Executors.newSingleThreadScheduledExecutor();
 				executorService.scheduleWithFixedDelay(runnable, 0, 10, TimeUnit.SECONDS);
 			}

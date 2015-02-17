@@ -435,8 +435,9 @@ public class DownloadService extends Service {
 		if(startShufflePlay != SHUFFLE_MODE_NONE) {
 			if(startShufflePlay == SHUFFLE_MODE_ALL) {
 				shufflePlay = true;
-			} else {
+			} else if(startShufflePlay == SHUFFLE_MODE_ARTIST) {
 				artistRadio = true;
+				Log.d(TAG, "Artist id: " + prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, null));
 				artistRadioBuffer.restoreArtist(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, null));
 			}
 			SharedPreferences.Editor editor = prefs.edit();
@@ -501,7 +502,9 @@ public class DownloadService extends Service {
 
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, (artistId != null) ? SHUFFLE_MODE_ARTIST : SHUFFLE_MODE_NONE);
-		editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, artistId);
+		if(artistId != null) {
+			editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, artistId);
+		}
 		editor.commit();
 	}
 
