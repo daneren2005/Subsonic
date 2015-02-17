@@ -70,6 +70,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	private List<String> adding = new ArrayList<String>();
 	private AndroidUpnpService dlnaService;
 	private ServiceConnection dlnaServiceConnection;
+	private boolean searchOnConnect = false;
 
 	public DLNARouteProvider(Context context) {
 		super(context);
@@ -85,12 +86,12 @@ public class DLNARouteProvider extends MediaRouteProvider {
 				dlnaService.getRegistry().addListener(new RegistryListener() {
 					@Override
 					public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice remoteDevice) {
-						Log.i(TAG, "Stared DLNA discovery");
+
 					}
 
 					@Override
 					public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice remoteDevice, Exception e) {
-						Log.w(TAG, "Failed to discover DLNA devices");
+						// Error is displayed in log anyways under W/trieveRemoteDescriptors
 					}
 
 					@Override
@@ -132,7 +133,9 @@ public class DLNARouteProvider extends MediaRouteProvider {
 				for (Device<?, ?, ?> device : dlnaService.getControlPoint().getRegistry().getDevices()) {
 					deviceAdded(device);
 				}
-				dlnaService.getControlPoint().search();
+				if(searchOnConnect) {
+					dlnaService.getControlPoint().search();
+				}
 			}
 
 			@Override
@@ -182,7 +185,11 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	@Override
 	public void onDiscoveryRequestChanged(MediaRouteDiscoveryRequest request) {
 		if (request != null && request.isActiveScan()) {
-			dlnaService.getControlPoint().search();
+			if(dlnaService != null) {
+				dlnaService.getControlPoint().search();
+			} else {
+				searchOnConnect = true;
+			}
 		}
 	}
 
