@@ -98,6 +98,11 @@ public class DrawerAdapter extends ArrayAdapter<String> {
 		return position;
 	}
 	public int getAdapterPosition(int position) {
+		if(!visible.get(position)) {
+			visible.set(position, true);
+			notifyDataSetChanged();
+		}
+
 		for(int i = position; i >= 0; i--) {
 			if(!visible.get(i)) {
 				position--;
