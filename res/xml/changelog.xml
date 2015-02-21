@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9.2" versioncode="145" releasedate="2/20/2015">
+		<change>Fix some more DLNA issues (still working on others)</change>
+		<change>Artist Radio (Subsonic 5.1+)</change>
+		<change>Checkbox to browse Recently Added, etc by folder (Subsonic 5.1+)</change>
+		<change>Ability to open straight to other tabs</change>
+		<change>Add play/shuffle to similar artists menu</change>
+		<change>Offline Podcasts: dont show duplicate folder</change>
+		<change>Fix crash with Madsonic servers</change>
+		<change>Fix widget not showing info when app is not running</change>
+		<change>Show folder as empty immediately after deleting last song in it</change>
+	</release>
 	<release version="4.9.1" versioncode="143" releasedate="1/29/2015">
 		<change>Fix searching with spaces in it</change>
 		<change>Fix pressing play on widget before app starts not working</change>
