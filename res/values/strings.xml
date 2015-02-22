@@ -441,6 +441,9 @@
 	<string name="settings.replay_gain_type.track">Track tags</string>
 	<string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
 	<string name="settings.replay_gain_untagged">Songs without Replay Gain</string>
+	<string name="settings.casting">Casting</string>
+	<string name="settings.casting_proxy">Use device proxy</string>
+	<string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates.</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
