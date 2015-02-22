@@ -93,7 +93,13 @@ public class EqualizerFragment extends SubsonicFragment {
 		enabledCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-				setEqualizerEnabled(b);
+				try {
+					setEqualizerEnabled(b);
+				} catch(Exception e) {
+					Log.e(TAG, "Failed to set EQ enabled", e);
+					Util.toast(context, "Failed to set EQ enabled");
+					context.onBackPressed();
+				}
 			}
 		});
 
