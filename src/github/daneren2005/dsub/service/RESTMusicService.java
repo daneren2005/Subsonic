@@ -594,9 +594,22 @@ public class RESTMusicService implements MusicService {
 
 	@Override
     public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
-        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getStarred2" : "getStarred", null);
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		// Add folder if it was set and is non null
+		int instance = getInstance(context);
+		if(Util.getAlbumListsPerFolder(context, instance)) {
+			String folderId = Util.getSelectedMusicFolderId(context, instance);
+			if(folderId != null) {
+				names.add("musicFolderId");
+				values.add(folderId);
+			}
+		}
+
+        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getStarred2" : "getStarred", null, names, values);
         try {
-            return new StarredListParser(context, getInstance(context)).parse(reader, progressListener);
+            return new StarredListParser(context, instance).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -1103,10 +1116,19 @@ public class RESTMusicService implements MusicService {
 		parameterNames.add("offset");
 		parameterValues.add(offset);
 
-		Reader reader = getReader(context, progressListener, "getSongsByGenre", params, parameterNames, parameterValues);
+		// Add folder if it was set and is non null
+		int instance = getInstance(context);
+		if(Util.getAlbumListsPerFolder(context, instance)) {
+			String folderId = Util.getSelectedMusicFolderId(context, instance);
+			if(folderId != null) {
+				parameterNames.add("musicFolderId");
+				parameterValues.add(folderId);
+			}
+		}
 
+		Reader reader = getReader(context, progressListener, "getSongsByGenre", params, parameterNames, parameterValues);
 		try {
-			return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
+			return new RandomSongsParser(context, instance).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
