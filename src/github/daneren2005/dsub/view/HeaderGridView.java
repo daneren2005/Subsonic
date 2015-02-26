@@ -308,7 +308,7 @@ public class HeaderGridView extends GridView {
 		int numColumns = getNumColumnsCompatible();
 
 		// adapter has not been set or has no views in it;
-		if (adapter == null || adapter.getCount() <= numColumns * (mHeaderViewInfos.size() + mFooterViewInfos.size()) || mNumColumns == -1) {
+		if (adapter == null || adapter.getCount() <= numColumns * (mHeaderViewInfos.size() + mFooterViewInfos.size()) || numColumns == -1) {
 			return -1;
 		}
 		int mColumnWidth = getColumnWidthCompatible();
