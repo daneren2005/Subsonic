@@ -36,7 +36,7 @@ import java.util.ArrayList;
  * See {@link HeaderGridView#addFooterView(View, Object, boolean)}
  */
 public class HeaderGridView extends GridView {
-
+	private static final String TAG = HeaderGridView.class.getSimpleName();
 	public static boolean DEBUG = false;
 
 	/**
@@ -308,7 +308,7 @@ public class HeaderGridView extends GridView {
 		int numColumns = getNumColumnsCompatible();
 
 		// adapter has not been set or has no views in it;
-		if (adapter == null || adapter.getCount() <= numColumns * (mHeaderViewInfos.size() + mFooterViewInfos.size())) {
+		if (adapter == null || adapter.getCount() <= numColumns * (mHeaderViewInfos.size() + mFooterViewInfos.size()) || mNumColumns == -1) {
 			return -1;
 		}
 		int mColumnWidth = getColumnWidthCompatible();
