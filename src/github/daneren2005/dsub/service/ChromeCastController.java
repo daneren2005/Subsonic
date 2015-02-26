@@ -45,6 +45,8 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.CastCompat;
 import github.daneren2005.serverproxy.FileProxy;
+import github.daneren2005.serverproxy.ServerProxy;
+import github.daneren2005.serverproxy.WebProxy;
 
 /**
  * Created by owner on 2/9/14.
@@ -61,7 +63,7 @@ public class ChromeCastController extends RemoteController {
 	private boolean ignoreNextPaused = false;
 	private String sessionId;
 
-	private FileProxy proxy;
+	private ServerProxy proxy;
 	private String rootLocation;
 	private RemoteMediaPlayer mediaPlayer;
 	private double gain = 0.5;
@@ -270,9 +272,26 @@ public class ChromeCastController extends RemoteController {
 					proxy.start();
 				}
 
-				url = proxy.getPublicAddress(song.getId());
+				// Offline song
+				if(song.getId().indexOf(rootLocation) != -1) {
+					url = proxy.getPublicAddress(song.getId());
+				} else {
+					// Playing online song in offline mode
+					url = proxy.getPublicAddress(currentPlaying.getCompleteFile().getPath());
+				}
 			} else {
-				if(proxy != null) {
+				// Check if we want a proxy going still
+				if(Util.isCastProxy(downloadService)) {
+					if(proxy instanceof FileProxy) {
+						proxy.stop();
+						proxy = null;
+					}
+
+					if(proxy == null) {
+						proxy = new WebProxy(downloadService);
+						proxy.start();
+					}
+				} else if(proxy != null) {
 					proxy.stop();
 					proxy = null;
 				}
@@ -281,6 +300,11 @@ public class ChromeCastController extends RemoteController {
 					url = musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService);
 				} else {
 					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
+				}
+
+				// If proxy is going, it is a WebProxy
+				if(proxy != null) {
+					url = proxy.getPublicAddress(url);
 				}
 			}
 
@@ -296,8 +320,14 @@ public class ChromeCastController extends RemoteController {
 				meta.putString(MediaMetadata.KEY_ALBUM_TITLE, song.getAlbum());
 
 				String coverArt = "";
-				if(proxy == null) {
+				if(proxy == null || proxy instanceof WebProxy) {
 					coverArt = musicService.getCoverArtUrl(downloadService, song);
+
+					// If proxy is going, it is a web proxy
+					if(proxy != null) {
+						coverArt = proxy.getPublicAddress(coverArt);
+					}
+
 					meta.addImage(new WebImage(Uri.parse(coverArt)));
 				} else {
 					File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
