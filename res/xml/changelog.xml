@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9.3" versioncode="146" releasedate="2/27/2015">
+		<change>Browse starred by folder as well (Subsonic 5.2+)</change>
+		<change>Crash fixes</change>
+	</release>
 	<release version="4.9.2" versioncode="145" releasedate="2/20/2015">
 		<change>Fix some more DLNA issues (still working on others)</change>
 		<change>Artist Radio (Subsonic 5.1+)</change>
