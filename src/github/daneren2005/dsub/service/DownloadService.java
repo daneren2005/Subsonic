@@ -233,9 +233,9 @@ public class DownloadService extends Service {
 		mediaRouter = new MediaRouteManager(this);
 
 		instance = this;
-		lifecycleSupport.onCreate();
 		shufflePlayBuffer = new ShufflePlayBuffer(this);
 		artistRadioBuffer = new ArtistRadioBuffer(this);
+		lifecycleSupport.onCreate();
 	}
 
 	@Override

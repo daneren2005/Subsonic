@@ -730,7 +730,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		// Needs to be added here, GB crashes if you to try to remove the header view before adapter is set
 		if(addAlbumHeader && entryAdapter == null) {
-			if(entries.size() > 0) {
+			if(entries.size() > 0 || playlistId != null || podcastId != null) {
 				entryList.addHeaderView(albumList);
 			} else {
 				ViewGroup rootGroup = (ViewGroup) rootView.findViewById(R.id.select_album_layout);
