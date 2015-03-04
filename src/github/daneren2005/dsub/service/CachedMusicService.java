@@ -1325,4 +1325,8 @@ public class CachedMusicService implements MusicService {
 			musicFolderId = newMusicFolderId;
 		}
     }
+
+	public RESTMusicService getMusicService() {
+		return musicService;
+	}
 }

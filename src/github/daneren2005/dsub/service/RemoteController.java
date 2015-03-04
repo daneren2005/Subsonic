@@ -99,8 +99,8 @@ public abstract class RemoteController {
 
 	protected WebProxy createWebProxy() {
 		MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-		if(musicService instanceof RESTMusicService) {
-			return new WebProxy(downloadService, ((RESTMusicService)musicService).getHttpClient());
+		if(musicService instanceof CachedMusicService) {
+			return new WebProxy(downloadService, ((CachedMusicService)musicService).getMusicService().getHttpClient());
 		} else {
 			return new WebProxy(downloadService);
 		}
