@@ -699,7 +699,7 @@ public class RESTMusicService implements MusicService {
 
                 // If content type is XML, an error occured.  Get it.
                 String contentType = Util.getContentType(entity);
-                if (contentType != null && contentType.startsWith("text/xml")) {
+				if (contentType != null && (contentType.startsWith("text/xml") || contentType.startsWith("text/html"))) {
                     new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
                     return null; // Never reached.
                 }
@@ -777,7 +777,7 @@ public class RESTMusicService implements MusicService {
 
         // If content type is XML, an error occurred.  Get it.
         String contentType = Util.getContentType(response.getEntity());
-        if (contentType != null && contentType.startsWith("text/xml")) {
+        if (contentType != null && (contentType.startsWith("text/xml") || contentType.startsWith("text/html"))) {
             InputStream in = response.getEntity().getContent();
 			Header contentEncoding = response.getEntity().getContentEncoding();
 			if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
@@ -1437,8 +1437,7 @@ public class RESTMusicService implements MusicService {
 
 				// If content type is XML, an error occurred. Get it.
 				String contentType = Util.getContentType(entity);
-				if (contentType != null && contentType.startsWith("text/xml"))
-				{
+				if (contentType != null && (contentType.startsWith("text/xml") || contentType.startsWith("text/html"))) {
 					new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
 					return null; // Never reached.
 				}
@@ -1498,7 +1497,7 @@ public class RESTMusicService implements MusicService {
 
 				// If content type is XML, an error occurred. Get it.
 				String contentType = Util.getContentType(entity);
-				if (contentType != null && contentType.startsWith("text/xml")) {
+				if (contentType != null && (contentType.startsWith("text/xml") || contentType.startsWith("text/html"))) {
 					new ErrorParser(context, getInstance(context)).parse(new InputStreamReader(in, Constants.UTF_8));
 					return null; // Never reached.
 				}
