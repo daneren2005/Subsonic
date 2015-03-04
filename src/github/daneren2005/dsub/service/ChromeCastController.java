@@ -288,7 +288,7 @@ public class ChromeCastController extends RemoteController {
 					}
 
 					if(proxy == null) {
-						proxy = new WebProxy(downloadService);
+						proxy = createWebProxy();
 						proxy.start();
 					}
 				} else if(proxy != null) {

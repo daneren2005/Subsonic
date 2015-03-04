@@ -39,6 +39,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -1877,5 +1878,9 @@ public class RESTMusicService implements MusicService {
 		} else {
 			return Util.getRestUrl(context, method, instance, allowAltAddress);
 		}
+	}
+
+	public HttpClient getHttpClient() {
+		return httpClient;
 	}
 }
