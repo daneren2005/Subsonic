@@ -70,6 +70,7 @@ import github.daneren2005.serverproxy.FileProxy;
 
 public class DLNAController extends RemoteController {
 	private static final String TAG = DLNAController.class.getSimpleName();
+	private static final long SEARCH_UPDATE_INTERVAL_SECONDS = 10L * 60L * 1000L;
 	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 3000L;
 
 	DLNADevice device;
@@ -86,6 +87,17 @@ public class DLNAController extends RemoteController {
 	String currentPlayingURI;
 	boolean running = true;
 	boolean hasDuration = false;
+	Runnable searchDLNA = new Runnable() {
+		@Override
+		public void run() {
+			if(controlPoint == null || !running) {
+				return;
+			}
+
+			controlPoint.search();
+			downloadService.postDelayed(searchDLNA, SEARCH_UPDATE_INTERVAL_SECONDS);
+		}
+	};
 
 	public DLNAController(DownloadService downloadService, ControlPoint controlPoint, DLNADevice device) {
 		this.downloadService = downloadService;
@@ -119,6 +131,7 @@ public class DLNAController extends RemoteController {
 				}
 
 				startSong(downloadService.getCurrentPlaying(), playing, seconds);
+				downloadService.postDelayed(searchDLNA, SEARCH_UPDATE_INTERVAL_SECONDS);
 			}
 
 			@Override
