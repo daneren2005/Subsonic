@@ -1428,11 +1428,18 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					if(artistView.getMaxLines() == minLines) {
 						// Use LeadingMarginSpan2 to try to make text flow around image
 						Display display = context.getWindowManager().getDefaultDisplay();
-						View coverArtView = header.findViewById(R.id.select_album_art);
+						ImageView coverArtView = (ImageView) header.findViewById(R.id.select_album_art);
 						coverArtView.measure(display.getWidth(), display.getHeight());
+
+						int height, width;
 						ViewGroup.MarginLayoutParams vlp = (ViewGroup.MarginLayoutParams) coverArtView.getLayoutParams();
-						int height = coverArtView.getMeasuredHeight() + coverArtView.getPaddingBottom();
-						int width = coverArtView.getWidth() + coverArtView.getPaddingRight();
+						if(coverArtView.getDrawable() != null) {
+							height = coverArtView.getMeasuredHeight() + coverArtView.getPaddingBottom();
+							width = coverArtView.getWidth() + coverArtView.getPaddingRight();
+						} else {
+							height = coverArtView.getHeight();
+							width = coverArtView.getWidth() + coverArtView.getPaddingRight();
+						}
 						float textLineHeight = artistView.getPaint().getTextSize();
 						int lines = (int) Math.ceil(height / textLineHeight);
 
