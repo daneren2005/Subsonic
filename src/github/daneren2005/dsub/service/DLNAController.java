@@ -67,6 +67,8 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.serverproxy.FileProxy;
+import github.daneren2005.serverproxy.ServerProxy;
+import github.daneren2005.serverproxy.WebProxy;
 
 public class DLNAController extends RemoteController {
 	private static final String TAG = DLNAController.class.getSimpleName();
@@ -78,7 +80,7 @@ public class DLNAController extends RemoteController {
 	SubscriptionCallback callback;
 	boolean supportsSeek = false;
 
-	private FileProxy proxy;
+	private ServerProxy proxy;
 	String rootLocation = "";
 	boolean error = false;
 
@@ -401,7 +403,18 @@ public class DLNAController extends RemoteController {
 					url = proxy.getPublicAddress(currentPlaying.getCompleteFile().getPath());
 				}
 			} else {
-				if(proxy != null) {
+				// Check if we want a proxy going still
+				if(Util.isCastProxy(downloadService)) {
+					if(proxy instanceof FileProxy) {
+						proxy.stop();
+						proxy = null;
+					}
+
+					if(proxy == null) {
+						proxy = createWebProxy();
+						proxy.start();
+					}
+				} else if(proxy != null) {
 					proxy.stop();
 					proxy = null;
 				}
@@ -410,6 +423,11 @@ public class DLNAController extends RemoteController {
 					url = musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService);
 				} else {
 					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
+				}
+
+				// If proxy is going, it is a WebProxy
+				if(proxy != null) {
+					url = proxy.getPublicAddress(url);
 				}
 			}
 
@@ -447,8 +465,13 @@ public class DLNAController extends RemoteController {
 
 				if(song.getCoverArt() != null) {
 					String coverArt = null;
-					if(proxy == null) {
+					if(proxy == null || proxy instanceof WebProxy) {
 						coverArt = musicService.getCoverArtUrl(downloadService, song);
+
+						// If proxy is going, it is a web proxy
+						if(proxy != null) {
+							coverArt = proxy.getPublicAddress(coverArt);
+						}
 					} else {
 						File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
 						if(coverArtFile != null && coverArtFile.exists()) {

@@ -361,6 +361,16 @@
 		</PreferenceCategory>
 
 		<PreferenceCategory
+			android:title="@string/settings.casting">
+
+			<CheckBoxPreference
+				android:title="@string/settings.casting_proxy"
+				android:summary="@string/settings.casting_proxy_summary"
+				android:key="castProxy"
+				android:defaultValue="false"/>
+		</PreferenceCategory>
+
+		<PreferenceCategory
 			android:title="@string/settings.replay_gain">
 
 			<CheckBoxPreference

@@ -560,6 +560,11 @@ public final class Util {
         return Math.max(0, Constants.FREE_TRIAL_DAYS - daysSinceInstall);
     }
 
+	public static boolean isCastProxy(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_CAST_PROXY, false);
+	}
+
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * <p/>

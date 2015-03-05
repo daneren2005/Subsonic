@@ -32,6 +32,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.RemoteStatus;
+import github.daneren2005.serverproxy.WebProxy;
 
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();
@@ -93,6 +94,15 @@ public abstract class RemoteController {
 
 		void clear() {
 			queue.clear();
+		}
+	}
+
+	protected WebProxy createWebProxy() {
+		MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
+		if(musicService instanceof CachedMusicService) {
+			return new WebProxy(downloadService, ((CachedMusicService)musicService).getMusicService().getHttpClient());
+		} else {
+			return new WebProxy(downloadService);
 		}
 	}
 }
