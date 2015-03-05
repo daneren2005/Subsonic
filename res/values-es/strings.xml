@@ -71,6 +71,7 @@
 	]]>
    </string>
 	<string name="main.scan_complete">Escaneado del servidor completado</string>
+	<string name="main.albums_per_folder">Por carpetar</string>
 
 	<string name="menu.search">Buscar</string>
 	<string name="menu.shuffle">Aleatorio</string>
@@ -99,6 +100,10 @@
 	<string name="menu.add_user">Añadir usuario</string>
 	<string name="menu.rescan">Reescanear servidor</string>
 	<string name="menu.rate">Establecer valoración</string>
+	<string name="menu.top_tracks">Tp Tracks de Last.FM</string>
+	<string name="menu.similar_artists">Artistas similares</string>
+	<string name="menu.show_missing">Mostrar los que faltan</string>
+	<string name="menu.start_radio">Iniciar radio</string>
 
     <string name="playlist.label">Listas de reproducción</string>
 	<string name="playlist.update_info">Actualizar información</string>
@@ -413,6 +418,16 @@
 	<string name="settings.server_sync_summary">Activar o no la sincronización en este server</string>
 	<string name="settings.server_sync">Sincronización activada</string>
 	<string name="settings.menu_options.rate_summary">Mostrar valoración en los menús</string>
+	<string name="settings.replay_gain">Ganancia de reproducción</string>
+	<string name="settings.replay_gain_summary">Modificar la ganancia de reproducción por tags de pista o album</string>
+	<string name="settings.replay_gain_bump">Ganancia de Pre-amp en la reproducciónReplay Gain Pre-amp</string>
+	<string name="settings.replay_gain_untagged">Canciones sin ganancia de reproducciónSongs without Replay Gain</string>
+	<string name="settings.replay_gain_type">Leer desde los tags</string>
+	<string name="settings.replay_gain_type.smart">Detección inteligente</string>
+	<string name="settings.replay_gain_type.album">Tags de albums</string>
+	<string name="settings.replay_gain_type.track">Tags de pistas</string>
+	<string name="settings.open_to_tab">Abrir en pestaña</string>
+	<string name="settings.open_to_tab_summary">Abrir directamente a esta pestaña</string>
 
 	<string name="share.info">Dueño: %1$s
 		\nDescripción: %2$s
@@ -539,6 +554,10 @@
 	<string name="tasker.start_playing_title">Tasker -> Encender DSub</string>
 	<string name="tasker.edit_shuffle_mode">Comenzar en modo aleatorio: </string>
 	<string name="tasker.start_playing_shuffled">Comenzar en modo aleatorio</string>
+	<string name="tasker.edit_do_nothing">No hacer nada</string>
+	<string name="tasker.edit_shuffle_genre">Aleatorio por género:</string>
+	<string name="tasker.edit_shuffle_start_year">Comenzar reproducción aleatoria desde el año:</string>
+	<string name="tasker.edit_shuffle_end_year">Último año de reproducción alteatoriar:</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Sin canciones</item>

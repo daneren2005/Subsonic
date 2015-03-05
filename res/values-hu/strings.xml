@@ -302,8 +302,6 @@
 	<string name="settings.track_summary">Dalsorszám megjelenítése a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
 	<string name="settings.custom_sort_summary">A kiszolgáló alapértelmezett rendezésének felülbírálása, rendezés a lemez sorszáma és a kiadás éve alapján.</string>
-	<string name="settings.open_to_library">Médiatár megnyitása</string>
-	<string name="settings.open_to_library_summary">A Médiatár megnyitása a Főoldal helyett.</string>
     <string name="settings.network_title">Hálózat</string>
     <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
