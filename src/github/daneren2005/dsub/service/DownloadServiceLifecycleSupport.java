@@ -334,7 +334,7 @@ public class DownloadServiceLifecycleSupport {
 						lastPressTime = System.currentTimeMillis();
 						downloadService.togglePlayPause();
 					} else {
-						downloadService.next();
+						downloadService.next(false, true);
 					}
 					break;
 				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:

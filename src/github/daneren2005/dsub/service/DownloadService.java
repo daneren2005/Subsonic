@@ -981,6 +981,9 @@ public class DownloadService extends Service {
 		next(false);
 	}
 	public synchronized void next(boolean forceCutoff) {
+		next(forceCutoff, false);
+	}
+	public synchronized void next(boolean forceCutoff, boolean forceStart) {
 		// If only one song, just skip within song
 		if(size() == 1) {
 			seekTo(getPlayerPosition() + FAST_FORWARD);
@@ -1015,7 +1018,7 @@ public class DownloadService extends Service {
 			nextPlayingIndex++;
 		}
 		if (index != -1 && nextPlayingIndex < size()) {
-			play(nextPlayingIndex, playerState != PAUSED && playerState != STOPPED && playerState != IDLE);
+			play(nextPlayingIndex, playerState != PAUSED && playerState != STOPPED && playerState != IDLE || forceStart);
 		}
 	}
 
