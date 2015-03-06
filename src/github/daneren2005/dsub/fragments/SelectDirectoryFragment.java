@@ -228,7 +228,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			if(!ServerInfo.isMadsonic(context)) {
 				menu.removeItem(R.id.menu_top_tracks);
 			}
-			if(!ServerInfo.checkServerVersion(context, "1.11") || !ServerInfo.isStockSubsonic(context)) {
+			if(!ServerInfo.checkServerVersion(context, "1.11") || !ServerInfo.isStockSubsonic(context) || (id != null && "root".equals(id))) {
 				menu.removeItem(R.id.menu_similar_artists);
 				menu.removeItem(R.id.menu_radio);
 			}
