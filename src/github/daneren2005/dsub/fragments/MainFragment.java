@@ -163,6 +163,7 @@ public class MainFragment extends SubsonicFragment {
 		final View albumsStarredButton = buttons.findViewById(R.id.main_albums_starred);
 		final View albumsGenresButton = buttons.findViewById(R.id.main_albums_genres);
 		final View albumsYearButton = buttons.findViewById(R.id.main_albums_year);
+		final View albumsAlphabeticalButton = buttons.findViewById(R.id.main_albums_alphabetical);
 
 		final View dummyView = rootView.findViewById(R.id.main_dummy);
 
@@ -193,6 +194,9 @@ public class MainFragment extends SubsonicFragment {
 		if (!Util.isOffline(context)) {
 			adapter.addView(albumsTitle, false);
 			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton), true);
+			if(ServerInfo.checkServerVersion(context, "1.8")) {
+				adapter.addView(albumsAlphabeticalButton, true);
+			}
 			if(!Util.isTagBrowsing(context)) {
 				adapter.addView(albumsHighestButton, true);
 			}
@@ -224,6 +228,8 @@ public class MainFragment extends SubsonicFragment {
 					showAlbumList("genres");
 				} else if(view == albumsYearButton) {
 					showAlbumList("years");
+				} else if(view == albumsAlphabeticalButton) {
+					showAlbumList("alphabeticalByName");
 				}
 			}
 		});

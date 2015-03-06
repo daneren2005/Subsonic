@@ -642,6 +642,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			setTitle(R.string.main_albums_starred);
 		} else if("genres".equals(albumListType) || "years".equals(albumListType)) {
 			setTitle(albumListExtra);
+		} else if("albumsAlphabeticalButton".equals(albumListType)) {
+			setTitle(R.string.main_albums_alphabetical);
 		}
 
 		new LoadTask(true) {

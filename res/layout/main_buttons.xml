@@ -136,6 +136,10 @@
 		android:id="@+id/main_albums_random"
 		android:text="@string/main.albums_random"
 		style="@style/MainAlbumButton"/>
+	<TextView
+		android:id="@+id/main_albums_alphabetical"
+		android:text="@string/main.albums_alphabetical"
+		style="@style/MainAlbumButton"/>
 
 </LinearLayout>
 
