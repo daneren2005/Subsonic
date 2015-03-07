@@ -384,7 +384,7 @@ public final class Util {
 		}
 
 		//  Use separate profile for Chromecast so users can do ogg on phone, mp3 for CC
-		return url.replace(Constants.REST_CLIENT_ID, Constants.CHROMECAST_CLIENT_ID);
+		return url.replace("c=" + Constants.REST_CLIENT_ID, "c=" + Constants.CHROMECAST_CLIENT_ID);
 	}
 
 	public static boolean isTagBrowsing(Context context) {
