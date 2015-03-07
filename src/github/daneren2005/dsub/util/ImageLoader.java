@@ -350,7 +350,9 @@ public class ImageLoader {
 			if ( origBitmap != null && !origBitmap.isRecycled()) {
 				remoteControl.editMetadata(false).putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, origBitmap).apply();
 			} else  {
-				Log.e(TAG, "Tried to load a recycled bitmap.");
+				if(origBitmap != null) {
+					Log.e(TAG, "Tried to load a recycled bitmap.");
+				}
 				remoteControl.editMetadata(false)
 					.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
 					.apply();
