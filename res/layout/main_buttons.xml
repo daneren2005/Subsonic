@@ -77,6 +77,13 @@
 			android:layout_gravity="right"/>
 	</LinearLayout>
 
+	<TextView
+		android:id="@+id/main_video_section"
+		android:text="@string/main.videos"
+		style="@style/MainAlbumButtonLabel"
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="fill_parent"/>
 
 	<LinearLayout
 		android:id="@+id/main_albums_newest"
@@ -139,6 +146,11 @@
 	<TextView
 		android:id="@+id/main_albums_alphabetical"
 		android:text="@string/main.albums_alphabetical"
+		style="@style/MainAlbumButton"/>
+
+	<TextView
+		android:id="@+id/main_videos"
+		android:text="@string/main.videos"
 		style="@style/MainAlbumButton"/>
 
 </LinearLayout>

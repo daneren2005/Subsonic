@@ -799,6 +799,11 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
+	public MusicDirectory getVideos(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
     public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		throw new OfflineException(ERRORMSG);
     }

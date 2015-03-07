@@ -92,6 +92,7 @@ import github.daneren2005.dsub.service.parser.SearchResultParser;
 import github.daneren2005.dsub.service.parser.ShareParser;
 import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.UserParser;
+import github.daneren2005.dsub.service.parser.VideosParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
 import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
 import github.daneren2005.dsub.util.BackgroundTask;
@@ -1522,6 +1523,16 @@ public class RESTMusicService implements MusicService {
 			finally {
 				Util.close(in);
 			}
+		}
+	}
+
+	@Override
+	public MusicDirectory getVideos(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "getVideos", null);
+		try {
+			return new VideosParser(context, getInstance(context)).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
 		}
 	}
 

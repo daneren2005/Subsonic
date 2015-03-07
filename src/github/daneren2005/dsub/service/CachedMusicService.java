@@ -919,6 +919,11 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
+	public MusicDirectory getVideos(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getVideos(refresh, context, progressListener);
+	}
+
+	@Override
 	public int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception{
 		return musicService.processOfflineSyncs(context, progressListener);
 	}

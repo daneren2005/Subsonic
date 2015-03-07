@@ -154,6 +154,7 @@ public class MainFragment extends SubsonicFragment {
 		offlineButton.setText(Util.isOffline(context) ? R.string.main_online : R.string.main_offline);
 
 		final View albumsTitle = buttons.findViewById(R.id.main_albums);
+		final View videoTitle = buttons.findViewById(R.id.main_video_section);
 		final View albumsNewestButton = buttons.findViewById(R.id.main_albums_newest);
 		countView = (TextView) buttons.findViewById(R.id.main_albums_recent_count);
 		final View albumsRandomButton = buttons.findViewById(R.id.main_albums_random);
@@ -164,6 +165,7 @@ public class MainFragment extends SubsonicFragment {
 		final View albumsGenresButton = buttons.findViewById(R.id.main_albums_genres);
 		final View albumsYearButton = buttons.findViewById(R.id.main_albums_year);
 		final View albumsAlphabeticalButton = buttons.findViewById(R.id.main_albums_alphabetical);
+		final View videosButton = buttons.findViewById(R.id.main_videos);
 
 		final View dummyView = rootView.findViewById(R.id.main_dummy);
 
@@ -201,6 +203,10 @@ public class MainFragment extends SubsonicFragment {
 				adapter.addView(albumsHighestButton, true);
 			}
 			adapter.addViews(Arrays.asList(albumsStarredButton, albumsGenresButton, albumsYearButton, albumsRecentButton, albumsFrequentButton), true);
+			if(ServerInfo.checkServerVersion(context, "1.8") && !Util.isTagBrowsing(context)) {
+				adapter.addView(videoTitle, false);
+				adapter.addView(videosButton, true);
+			}
 		}
 		list.setAdapter(adapter);
 		registerForContextMenu(dummyView);
@@ -230,6 +236,8 @@ public class MainFragment extends SubsonicFragment {
 					showAlbumList("years");
 				} else if(view == albumsAlphabeticalButton) {
 					showAlbumList("alphabeticalByName");
+				} else if(view == videosButton) {
+					showVideos();
 				}
 			}
 		});
@@ -300,6 +308,10 @@ public class MainFragment extends SubsonicFragment {
 
 			replaceFragment(fragment);
 		}
+	}
+	private void showVideos() {
+		SubsonicFragment fragment = new SelectVideoFragment();
+		replaceFragment(fragment);
 	}
 	
 	private void showOfflineSyncDialog(final int scrobbleCount, final int starsCount) {
