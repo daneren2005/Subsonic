@@ -586,7 +586,18 @@ public class RESTMusicService implements MusicService {
 		values.add(size);
 
 		int instance = getInstance(context);
-		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getSimilarSongs2" : "getSimilarSongs", null, names, values);
+		String method;
+		if(ServerInfo.isMadsonic(context, instance)) {
+			method = "getPandoraSongs";
+		} else {
+			if (Util.isTagBrowsing(context, instance)) {
+				method = "getSimilarSongs2";
+			} else {
+				method = "getSimilarSongs";
+			}
+		}
+
+		Reader reader = getReader(context, progressListener, method, null, names, values);
 		try {
 			return new RandomSongsParser(context, instance).parse(reader, progressListener);
 		} finally {
