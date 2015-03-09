@@ -52,7 +52,7 @@
 			android:layout_gravity="right"/>
 	</LinearLayout>
 
-	<ImageView
+	<github.daneren2005.dsub.view.RecyclingImageView
 		android:id="@+id/chat_avatar"
 		android:src="@drawable/ic_social_person"
 		android:layout_width="@dimen/AlbumArt.Small"

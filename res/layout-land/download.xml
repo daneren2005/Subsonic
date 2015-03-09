@@ -21,7 +21,7 @@
 				android:layout_height="fill_parent"
 				android:layout_weight="1">
 
-				<ImageView
+				<github.daneren2005.dsub.view.RecyclingImageView
 					android:id="@+id/download_album_art_image"
 					android:src="@drawable/unknown_album_large"
 					android:layout_width="wrap_content"

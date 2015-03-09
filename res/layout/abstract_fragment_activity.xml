@@ -18,7 +18,7 @@
 		style="@style/BasicButton"
 		android:orientation="horizontal">
 
-		<ImageView
+		<github.daneren2005.dsub.view.RecyclingImageView
 			android:id="@+id/album_art"
 			android:layout_width="50dip"
 			android:layout_height="50dip"

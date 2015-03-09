@@ -29,7 +29,7 @@
 					android:layout_height="wrap_content"
 					android:layout_alignParentTop="true">
 
-					<ImageView
+					<github.daneren2005.dsub.view.RecyclingImageView
 						android:id="@+id/download_album_art_image"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"

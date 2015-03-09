@@ -19,7 +19,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-public class SquareImageView extends ImageView {
+public class SquareImageView extends RecyclingImageView {
 	public SquareImageView(final Context context, final AttributeSet attrs) {
 		super(context, attrs);
 	}

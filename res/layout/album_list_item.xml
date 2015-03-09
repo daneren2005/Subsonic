@@ -9,7 +9,7 @@
 		android:layout_width="@dimen/AlbumArt.Small"
 		android:layout_height="@dimen/AlbumArt.Small">
 
-		<ImageView
+		<github.daneren2005.dsub.view.RecyclingImageView
 			android:id="@+id/album_coverart"
 			android:layout_width="@dimen/AlbumArt.Small"
 			android:layout_height="@dimen/AlbumArt.Small"
