@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9.4" versioncode="144" releasedate="3/9/2015">
+		<change>Cast proxy setting for fixing casting with self-signed certificates</change>
+		<change>View all albums in alphabetical order from Home tab</change>
+		<change>View all videso from Home tab</change>
+		<change>Artist Radio for Madsonic users</change>
+		<change>Minor bug fixes</change>
+	</release>
 	<release version="4.9.3" versioncode="146" releasedate="2/27/2015">
 		<change>Browse starred by folder as well (Subsonic 5.2+)</change>
 		<change>Crash fixes</change>
