@@ -5,22 +5,3 @@ git submodule update
 
 Go to DragSortListView/library, and ServerProxy and build project files with:
 android update project --path ./
-
-
-Roadmap of major planned features in rough order that I plan to work on them in (little features get sprinkled in wherever):
-
-Madsonic support
-	-Pandora Mode
-	-Top tracks for artist
-DLNA
-	-Casting
-	-Library Provider
-Album Art Grid View
-	-Display artists if supported (yes for tags, no for folders currently)
-	-Display playlists, pull info from cached listings
-New Tabs
-	-Internet Radio tab
-HLS Video
-	-Display video where album art is currently (double tap to fullscreen)
-	-Videos can play inline with songs
-	
