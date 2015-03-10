@@ -72,7 +72,7 @@ public class ImageLoader {
 		this.context = context;
 		handler = new Handler(Looper.getMainLooper());
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-		final int cacheSize = maxMemory / 3;
+		final int cacheSize = maxMemory / 4;
 
 		// Determine the density-dependent image sizes.
 		imageSizeDefault = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
