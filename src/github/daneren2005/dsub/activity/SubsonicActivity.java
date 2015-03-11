@@ -137,6 +137,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		// Make sure to update theme
 		if (theme != null && !theme.equals(Util.getTheme(this)) || fullScreen != Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false)) {
 			restart();
+			overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 		}
 		
 		populateDrawer();
