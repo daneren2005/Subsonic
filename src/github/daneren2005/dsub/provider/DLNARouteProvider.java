@@ -68,6 +68,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 	private HashMap<String, DLNADevice> devices = new HashMap<String, DLNADevice>();
 	private List<String> adding = new ArrayList<String>();
+	private List<String> removing = new ArrayList<String>();
 	private AndroidUpnpService dlnaService;
 	private ServiceConnection dlnaServiceConnection;
 	private boolean searchOnConnect = false;
@@ -215,6 +216,11 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		if(adding.contains(id)) {
 			return;
 		}
+		// Just a temp disconnect, already have it's info
+		if(removing.contains(id)) {
+			removing.remove(id);
+			return;
+		}
 		adding.add(id);
 
 		if(device.getType().getType().equals("MediaRenderer") && device instanceof RemoteDevice) {
@@ -261,16 +267,21 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	}
 	private void deviceRemoved(Device device) {
 		if(device.getType().getType().equals("MediaRenderer") && device instanceof RemoteDevice) {
-			String id = device.getIdentity().getUdn().toString();
-			devices.remove(id);
-			
-			// Make sure we do this on the main thread
-			downloadService.post(new Runnable() {
+			final String id = device.getIdentity().getUdn().toString();
+			removing.add(id);
+
+			// Delay removal for a few seconds to make sure that it isn't just a temp disconnect
+			dlnaService.getControlPoint().search();
+			downloadService.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					broadcastDescriptors();
+					if(removing.contains(id)) {
+						devices.remove(id);
+						removing.remove(id);
+						broadcastDescriptors();
+					}
 				}
-			});
+			}, 5000L);
 		}
 	}
 
