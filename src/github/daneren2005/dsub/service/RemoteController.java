@@ -37,6 +37,7 @@ import github.daneren2005.serverproxy.WebProxy;
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();
 	protected DownloadService downloadService;
+	protected boolean nextSupported = false;
 
 	public abstract void create(boolean playing, int seconds);
 	public abstract void start();
@@ -46,6 +47,13 @@ public abstract class RemoteController {
 	public abstract void updatePlaylist();
 	public abstract void changePosition(int seconds);
 	public abstract void changeTrack(int index, DownloadFile song);
+	// Really is abstract, just don't want to require RemoteController's support it
+	public void changeNextTrack(DownloadFile song) {
+
+	};
+	public boolean isNextSupported() {
+		return this.nextSupported;
+	}
 	public abstract void setVolume(int volume);
 	public abstract void updateVolume(boolean up);
 	public abstract double getVolume();

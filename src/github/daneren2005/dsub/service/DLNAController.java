@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
 
+import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
 import org.fourthline.cling.model.action.ActionInvocation;
@@ -30,6 +31,7 @@ import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.meta.StateVariable;
 import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.ServiceType;
+import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.support.avtransport.callback.GetPositionInfo;
 import org.fourthline.cling.support.avtransport.callback.Pause;
 import org.fourthline.cling.support.avtransport.callback.Play;
@@ -65,6 +67,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.serverproxy.FileProxy;
 import github.daneren2005.serverproxy.ServerProxy;
@@ -79,6 +82,7 @@ public class DLNAController extends RemoteController {
 	ControlPoint controlPoint;
 	SubscriptionCallback callback;
 	boolean supportsSeek = false;
+	boolean supportsSetupNext = false;
 
 	private ServerProxy proxy;
 	String rootLocation = "";
@@ -87,6 +91,8 @@ public class DLNAController extends RemoteController {
 	final AtomicLong lastUpdate = new AtomicLong();
 	int currentPosition = 0;
 	String currentPlayingURI;
+	String nextPlayingURI;
+	DownloadFile nextPlaying;
 	boolean running = true;
 	boolean hasDuration = false;
 	Runnable searchDLNA = new Runnable() {
@@ -108,6 +114,7 @@ public class DLNAController extends RemoteController {
 
 		SharedPreferences prefs = Util.getPreferences(downloadService);
 		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+		nextSupported = true;
 	}
 
 	@Override
@@ -130,6 +137,10 @@ public class DLNAController extends RemoteController {
 							supportsSeek = true;
 						}
 					}
+				}
+				Action setupNextAction = genaSubscription.getService().getAction("SetNextAVTransportURI");
+				if(setupNextAction != null) {
+					supportsSetupNext = true;
 				}
 
 				startSong(downloadService.getCurrentPlaying(), playing, seconds);
@@ -160,6 +171,11 @@ public class DLNAController extends RemoteController {
 					switch (lastChange.getEventedValue(0, AVTransportVariable.TransportState.class).getValue()) {
 						case PLAYING:
 							downloadService.setPlayerState(PlayerState.STARTED);
+
+							// Try to setup next playing after playback start has been registered
+							if(supportsSetupNext && downloadService.getNextPlayerState() == PlayerState.IDLE) {
+								downloadService.setNextPlaying();
+							}
 							break;
 						case PAUSED_PLAYBACK:
 							downloadService.setPlayerState(PlayerState.PAUSED);
@@ -308,6 +324,11 @@ public class DLNAController extends RemoteController {
 	}
 
 	@Override
+	public void changeNextTrack(DownloadFile song) {
+		setupNextSong(song);
+	}
+
+	@Override
 	public void setVolume(int volume) {
 		if(volume < 0) {
 			volume = 0;
@@ -382,125 +403,13 @@ public class DLNAController extends RemoteController {
 		error = false;
 
 		downloadService.setPlayerState(PlayerState.PREPARING);
-		MusicDirectory.Entry song = currentPlaying.getSong();
 
 		try {
-			// Get url for entry
-			MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-			String url;
-			// In offline mode or playing offline song
-			if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
-				if(proxy == null) {
-					proxy = new FileProxy(downloadService);
-					proxy.start();
-				}
+			Pair<String, String> songInfo = getSongInfo(currentPlaying);
 
-				// Offline song
-				if(song.getId().indexOf(rootLocation) != -1) {
-					url = proxy.getPublicAddress(song.getId());
-				} else {
-					// Playing online song in offline mode
-					url = proxy.getPublicAddress(currentPlaying.getCompleteFile().getPath());
-				}
-			} else {
-				// Check if we want a proxy going still
-				if(Util.isCastProxy(downloadService)) {
-					if(proxy instanceof FileProxy) {
-						proxy.stop();
-						proxy = null;
-					}
-
-					if(proxy == null) {
-						proxy = createWebProxy();
-						proxy.start();
-					}
-				} else if(proxy != null) {
-					proxy.stop();
-					proxy = null;
-				}
-
-				if(song.isVideo()) {
-					url = musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService);
-				} else {
-					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
-				}
-
-				// If proxy is going, it is a WebProxy
-				if(proxy != null) {
-					url = proxy.getPublicAddress(url);
-				}
-			}
-
-			// Create metadata for entry
-			Item track;
-			if(song.isVideo()) {
-				track = new VideoItem(song.getId(), song.getParent(), song.getTitle(), song.getArtist());
-			} else {
-				String contentType = null;
-				if(song.getTranscodedContentType() != null) {
-					contentType = song.getTranscodedContentType();
-				} else if(song.getContentType() != null) {
-					contentType = song.getContentType();
-				}
-
-				MimeType mimeType;
-				// If we can parse the content type, use it instead of hard coding
-				if(contentType != null && contentType.indexOf("/") != -1 && contentType.indexOf("/") != (contentType.length() - 1)) {
-					String[] typeParts = contentType.split("/");
-					mimeType = new MimeType(typeParts[0], typeParts[1]);
-				} else {
-					mimeType = new MimeType("audio", "mpeg");
-				}
-
-				Res res = new Res(mimeType, song.getSize(), url);
-
-				if(song.getDuration() != null) {
-					SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-					df.setTimeZone(TimeZone.getTimeZone("UTC"));
-					res.setDuration(df.format(new Date(song.getDuration() * 1000)));
-				}
-
-				MusicTrack musicTrack = new MusicTrack(song.getId(), song.getParent(), song.getTitle(), song.getArtist(), song.getAlbum(), song.getArtist(), res);
-				musicTrack.setOriginalTrackNumber(song.getTrack());
-
-				if(song.getCoverArt() != null) {
-					String coverArt = null;
-					if(proxy == null || proxy instanceof WebProxy) {
-						coverArt = musicService.getCoverArtUrl(downloadService, song);
-
-						// If proxy is going, it is a web proxy
-						if(proxy != null) {
-							coverArt = proxy.getPublicAddress(coverArt);
-						}
-					} else {
-						File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
-						if(coverArtFile != null && coverArtFile.exists()) {
-							coverArt = proxy.getPublicAddress(coverArtFile.getPath());
-						}
-					}
-
-					if(coverArt != null) {
-						DIDLObject.Property.UPNP.ALBUM_ART_URI albumArtUri = new DIDLObject.Property.UPNP.ALBUM_ART_URI(URI.create(coverArt));
-						musicTrack.addProperty(albumArtUri);
-					}
-				}
-
-				track = musicTrack;
-			}
-
-			DIDLParser parser = new DIDLParser();
-			DIDLContent didl = new DIDLContent();
-			didl.addItem(track);
-
-			String metadata = "";
-			try {
-				metadata = parser.generate(didl);
-			} catch(Exception e) {
-				Log.w(TAG, "Metadata generation failed", e);
-			}
-
-			currentPlayingURI = url;
-			controlPoint.execute(new SetAVTransportURI(getTransportService(), url, metadata) {
+			currentPlayingURI = songInfo.getFirst();
+			downloadService.setNextPlayerState(PlayerState.IDLE);
+			controlPoint.execute(new SetAVTransportURI(getTransportService(), songInfo.getFirst(), songInfo.getSecond()) {
 				@Override
 				public void success(ActionInvocation invocation) {
 					if(position != 0) {
@@ -528,6 +437,161 @@ public class DLNAController extends RemoteController {
 			Log.w(TAG, "Failed startSong", e);
 			failedLoad();
 		}
+	}
+	private void setupNextSong(final DownloadFile nextPlaying) {
+		this.nextPlaying = nextPlaying;
+		nextPlayingURI = null;
+		if(nextPlaying == null) {
+			downloadService.setNextPlayerState(PlayerState.IDLE);
+			Log.i(TAG, "Nothing to play next");
+			return;
+		}
+
+		downloadService.setNextPlayerState(PlayerState.PREPARING);
+		try {
+			Pair<String, String> songInfo = getSongInfo(nextPlaying);
+
+			nextPlayingURI = songInfo.getFirst();
+			controlPoint.execute(new SetNextAVTransportURI(getTransportService(), songInfo.getFirst(), songInfo.getSecond()) {
+				@Override
+				public void success(ActionInvocation invocation) {
+					downloadService.setNextPlayerState(PlayerState.PREPARED);
+				}
+
+				@Override
+				public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String msg) {
+					Log.w(TAG, "Set next URI failed: " + msg);
+					nextPlayingURI = null;
+					DLNAController.this.nextPlaying = null;
+					downloadService.setNextPlayerState(PlayerState.IDLE);
+				}
+			});
+		} catch (Exception e) {
+			Log.w(TAG, "Failed to setup next song", e);
+			nextPlayingURI = null;
+			this.nextPlaying = null;
+			downloadService.setNextPlayerState(PlayerState.IDLE);
+		}
+	}
+
+	Pair<String, String> getSongInfo(final DownloadFile downloadFile) throws Exception {
+		MusicDirectory.Entry song = downloadFile.getSong();
+
+		// Get url for entry
+		MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
+		String url;
+		// In offline mode or playing offline song
+		if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
+			if(proxy == null) {
+				proxy = new FileProxy(downloadService);
+				proxy.start();
+			}
+
+			// Offline song
+			if(song.getId().indexOf(rootLocation) != -1) {
+				url = proxy.getPublicAddress(song.getId());
+			} else {
+				// Playing online song in offline mode
+				url = proxy.getPublicAddress(downloadFile.getCompleteFile().getPath());
+			}
+		} else {
+			// Check if we want a proxy going still
+			if(Util.isCastProxy(downloadService)) {
+				if(proxy instanceof FileProxy) {
+					proxy.stop();
+					proxy = null;
+				}
+
+				if(proxy == null) {
+					proxy = createWebProxy();
+					proxy.start();
+				}
+			} else if(proxy != null) {
+				proxy.stop();
+				proxy = null;
+			}
+
+			if(song.isVideo()) {
+				url = musicService.getHlsUrl(song.getId(), downloadFile.getBitRate(), downloadService);
+			} else {
+				url = musicService.getMusicUrl(downloadService, song, downloadFile.getBitRate());
+			}
+
+			// If proxy is going, it is a WebProxy
+			if(proxy != null) {
+				url = proxy.getPublicAddress(url);
+			}
+		}
+
+		// Create metadata for entry
+		Item track;
+		if(song.isVideo()) {
+			track = new VideoItem(song.getId(), song.getParent(), song.getTitle(), song.getArtist());
+		} else {
+			String contentType = null;
+			if(song.getTranscodedContentType() != null) {
+				contentType = song.getTranscodedContentType();
+			} else if(song.getContentType() != null) {
+				contentType = song.getContentType();
+			}
+
+			MimeType mimeType;
+			// If we can parse the content type, use it instead of hard coding
+			if(contentType != null && contentType.indexOf("/") != -1 && contentType.indexOf("/") != (contentType.length() - 1)) {
+				String[] typeParts = contentType.split("/");
+				mimeType = new MimeType(typeParts[0], typeParts[1]);
+			} else {
+				mimeType = new MimeType("audio", "mpeg");
+			}
+
+			Res res = new Res(mimeType, song.getSize(), url);
+
+			if(song.getDuration() != null) {
+				SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+				df.setTimeZone(TimeZone.getTimeZone("UTC"));
+				res.setDuration(df.format(new Date(song.getDuration() * 1000)));
+			}
+
+			MusicTrack musicTrack = new MusicTrack(song.getId(), song.getParent(), song.getTitle(), song.getArtist(), song.getAlbum(), song.getArtist(), res);
+			musicTrack.setOriginalTrackNumber(song.getTrack());
+
+			if(song.getCoverArt() != null) {
+				String coverArt = null;
+				if(proxy == null || proxy instanceof WebProxy) {
+					coverArt = musicService.getCoverArtUrl(downloadService, song);
+
+					// If proxy is going, it is a web proxy
+					if(proxy != null) {
+						coverArt = proxy.getPublicAddress(coverArt);
+					}
+				} else {
+					File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
+					if(coverArtFile != null && coverArtFile.exists()) {
+						coverArt = proxy.getPublicAddress(coverArtFile.getPath());
+					}
+				}
+
+				if(coverArt != null) {
+					DIDLObject.Property.UPNP.ALBUM_ART_URI albumArtUri = new DIDLObject.Property.UPNP.ALBUM_ART_URI(URI.create(coverArt));
+					musicTrack.addProperty(albumArtUri);
+				}
+			}
+
+			track = musicTrack;
+		}
+
+		DIDLParser parser = new DIDLParser();
+		DIDLContent didl = new DIDLContent();
+		didl.addItem(track);
+
+		String metadata = "";
+		try {
+			metadata = parser.generate(didl);
+		} catch(Exception e) {
+			Log.w(TAG, "Metadata generation failed", e);
+		}
+
+		return new Pair<String, String>(url, metadata);
 	}
 
 	private void failedLoad() {
@@ -572,6 +636,12 @@ public class DLNAController extends RemoteController {
 				// Let's get the updated position
 				currentPosition = (int) positionInfo.getTrackElapsedSeconds();
 
+				if(positionInfo.getTrackURI() != null && positionInfo.getTrackURI().equals(nextPlayingURI) && downloadService.getNextPlayerState() == PlayerState.PREPARED) {
+					downloadService.setCurrentPlaying(nextPlaying, true);
+					downloadService.setPlayerState(PlayerState.STARTED);
+					downloadService.setNextPlaying();
+				}
+
 				downloadService.postDelayed(new Runnable() {
 					@Override
 					public void run() {
@@ -592,5 +662,26 @@ public class DLNAController extends RemoteController {
 				}, STATUS_UPDATE_INTERVAL_SECONDS);
 			}
 		});
+	}
+
+	private abstract class SetNextAVTransportURI extends ActionCallback {
+		public SetNextAVTransportURI(Service service, String uri) {
+			this(new UnsignedIntegerFourBytes(0), service, uri, null);
+		}
+
+		public SetNextAVTransportURI(Service service, String uri, String metadata) {
+			this(new UnsignedIntegerFourBytes(0), service, uri, metadata);
+		}
+
+		public SetNextAVTransportURI(UnsignedIntegerFourBytes instanceId, Service service, String uri) {
+			this(instanceId, service, uri, null);
+		}
+
+		public SetNextAVTransportURI(UnsignedIntegerFourBytes instanceId, Service service, String uri, String metadata) {
+			super(new ActionInvocation(service.getAction("SetNextAVTransportURI")));
+			getActionInvocation().setInput("InstanceID", instanceId);
+			getActionInvocation().setInput("NextURI", uri);
+			getActionInvocation().setInput("NextURIMetaData", metadata);
+		}
 	}
 }

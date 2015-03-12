@@ -757,11 +757,15 @@ public class DownloadService extends Service {
 
 	synchronized void setNextPlaying() {
 		SharedPreferences prefs = Util.getPreferences(DownloadService.this);
-		boolean gaplessPlayback = prefs.getBoolean(Constants.PREFERENCES_KEY_GAPLESS_PLAYBACK, true);
-		if(!gaplessPlayback) {
-			nextPlaying = null;
-			nextPlayerState = IDLE;
-			return;
+
+		// Only obey gapless playback for local
+		if(remoteState == LOCAL) {
+			boolean gaplessPlayback = prefs.getBoolean(Constants.PREFERENCES_KEY_GAPLESS_PLAYBACK, true);
+			if (!gaplessPlayback) {
+				nextPlaying = null;
+				nextPlayerState = IDLE;
+				return;
+			}
 		}
 		setNextPlayerState(IDLE);
 
@@ -774,10 +778,19 @@ public class DownloadService extends Service {
 		}
 		if(index < size() && index != -1 && index != currentPlayingIndex) {
 			nextPlaying = downloadList.get(index);
-			nextPlayingTask = new CheckCompletionTask(nextPlaying);
-			nextPlayingTask.execute();
+
+			if(remoteState == LOCAL) {
+				nextPlayingTask = new CheckCompletionTask(nextPlaying);
+				nextPlayingTask.execute();
+			} else if(remoteController != null) {
+				remoteController.changeNextTrack(nextPlaying);
+			}
 		} else {
-			resetNext();
+			if(remoteState == LOCAL) {
+				resetNext();
+			} else if(remoteController != null) {
+				remoteController.changeNextTrack(nextPlaying);
+			}
 			nextPlaying = null;
 		}
 	}
@@ -810,6 +823,10 @@ public class DownloadService extends Service {
 
 	public DownloadFile getCurrentDownloading() {
 		return currentDownloading;
+	}
+
+	public DownloadFile getNextPlaying() {
+		return nextPlaying;
 	}
 
 	public List<DownloadFile> getSongs() {
@@ -1174,6 +1191,10 @@ public class DownloadService extends Service {
 		return playerState;
 	}
 
+	public PlayerState getNextPlayerState() {
+		return nextPlayerState;
+	}
+
 	public synchronized void setPlayerState(final PlayerState playerState) {
 		Log.i(TAG, this.playerState.name() + " -> " + playerState.name() + " (" + currentPlaying + ")");
 
@@ -1277,7 +1298,7 @@ public class DownloadService extends Service {
 		scrobbler.scrobble(this, currentPlaying, true);
 	}
 
-	private synchronized void setNextPlayerState(PlayerState playerState) {
+	public synchronized void setNextPlayerState(PlayerState playerState) {
 		Log.i(TAG, "Next: " + this.nextPlayerState.name() + " -> " + playerState.name() + " (" + nextPlaying + ")");
 		this.nextPlayerState = playerState;
 	}
@@ -1777,11 +1798,15 @@ public class DownloadService extends Service {
 		DownloadFile movedSong = list.remove(from);
 		list.add(to, movedSong);
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
-		if(remoteState != LOCAL && mainList) {
-			updateRemotePlaylist();
-		} else if(mainList && (movedSong == nextPlaying || movedSong == currentPlaying || (currentPlayingIndex + 1) == to)) {
-			// Moving next playing, current playing, or moving a song to be next playing
-			setNextPlaying();
+		if(mainList) {
+			if(remoteState == LOCAL || (remoteController != null && remoteController.isNextSupported())) {
+				// Moving next playing, current playing, or moving a song to be next playing
+				if(movedSong == nextPlaying || movedSong == currentPlaying || (currentPlayingIndex + 1) == to) {
+					setNextPlaying();
+				}
+			} else {
+				updateRemotePlaylist();
+			}
 		}
 	}
 
