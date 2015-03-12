@@ -137,7 +137,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString(Constants.FRAGMENT_NAME, title.toString());
+		if(title != null) {
+			outState.putString(Constants.FRAGMENT_NAME, title.toString());
+		}
 	}
 
 	@Override

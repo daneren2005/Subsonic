@@ -671,9 +671,18 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(backStack.size() > 0) {
 			spinnerAdapter.clear();
 			for(int i = 0; i < backStack.size(); i++) {
-				spinnerAdapter.add(backStack.get(i).getTitle());
+				CharSequence title = backStack.get(i).getTitle();
+				if(title != null) {
+					spinnerAdapter.add(title);
+				} else {
+					spinnerAdapter.add("null");
+				}
 			}
-			spinnerAdapter.add(currentFragment.getTitle());
+			if(currentFragment.getTitle() != null) {
+				spinnerAdapter.add(currentFragment.getTitle());
+			} else {
+				spinnerAdapter.add("null");
+			}
 			spinnerAdapter.notifyDataSetChanged();
 			actionBarSpinner.setSelection(spinnerAdapter.getCount() - 1);
 			getSupportActionBar().setDisplayShowCustomEnabled(true);
