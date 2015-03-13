@@ -91,6 +91,7 @@ import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
 import github.daneren2005.dsub.service.parser.ShareParser;
 import github.daneren2005.dsub.service.parser.StarredListParser;
+import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.service.parser.UserParser;
 import github.daneren2005.dsub.service.parser.VideosParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
@@ -1829,7 +1830,7 @@ public class RESTMusicService implements MusicService {
         }
     }
 
-    private void detectRedirect(String originalUrl, Context context, HttpContext httpContext) {
+    private void detectRedirect(String originalUrl, Context context, HttpContext httpContext) throws Exception {
         HttpUriRequest request = (HttpUriRequest) httpContext.getAttribute(ExecutionContext.HTTP_REQUEST);
         HttpHost host = (HttpHost) httpContext.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
 		
@@ -1841,10 +1842,15 @@ public class RESTMusicService implements MusicService {
 			redirectedUrl = request.getURI().toString();
 		}
 
-		int index = originalUrl.indexOf("/rest/");
-		if(index != -1) {
-			redirectFrom = originalUrl.substring(0, index);
-			redirectTo = redirectedUrl.substring(0, redirectedUrl.indexOf("/rest/"));
+		if(redirectedUrl != null && "http://subsonic.org/pages/".equals(redirectedUrl)) {
+			throw new Exception("Invalid url, redirects to http://subsonic.org/pages/");
+		}
+
+		int fromIndex = originalUrl.indexOf("/rest/");
+		int toIndex = redirectedUrl.indexOf("/rest/");
+		if(fromIndex != -1 && toIndex != -1 && !Util.equals(originalUrl, redirectedUrl)) {
+			redirectFrom = originalUrl.substring(0, fromIndex);
+			redirectTo = redirectedUrl.substring(0, toIndex);
 
 			if (redirectFrom.compareTo(redirectTo) != 0) {
 				Log.i(TAG, redirectFrom + " redirects to " + redirectTo);
