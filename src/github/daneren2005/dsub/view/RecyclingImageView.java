@@ -17,9 +17,11 @@ package github.daneren2005.dsub.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -45,13 +47,45 @@ public class RecyclingImageView extends ImageView {
 	@Override
 	public void onDraw(Canvas canvas) {
 		Drawable drawable = this.getDrawable();
-		if(drawable != null && drawable instanceof BitmapDrawable) {
-			BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-			if(bitmapDrawable.getBitmap() != null && bitmapDrawable.getBitmap().isRecycled()) {
-				this.setImageDrawable(null);
+		if(drawable != null) {
+			if(drawable instanceof BitmapDrawable) {
+				if (isBitmapRecycled(drawable)) {
+					this.setImageDrawable(null);
+				}
+			} else if(drawable instanceof TransitionDrawable) {
+				TransitionDrawable transitionDrawable = (TransitionDrawable) drawable;
+
+				// If last bitmap in chain is recycled, just blank this out since it would be invalid anyways
+				Drawable lastDrawable = transitionDrawable.getDrawable(transitionDrawable.getNumberOfLayers() - 1);
+				if(isBitmapRecycled(lastDrawable)) {
+					this.setImageDrawable(null);
+				} else {
+					// Go through earlier bitmaps and make sure that they are not recycled
+					for (int i = 0; i < transitionDrawable.getNumberOfLayers(); i++) {
+						Drawable layerDrawable = transitionDrawable.getDrawable(i);
+						if (isBitmapRecycled(layerDrawable)) {
+							// If anything in the chain is broken, just get rid of transition and go to last drawable
+							this.setImageDrawable(lastDrawable);
+							break;
+						}
+					}
+				}
 			}
 		}
 
 		super.onDraw(canvas);
+	}
+
+	private boolean isBitmapRecycled(Drawable drawable) {
+		if(!(drawable instanceof BitmapDrawable)) {
+			return false;
+		}
+
+		BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+		if (bitmapDrawable.getBitmap() != null && bitmapDrawable.getBitmap().isRecycled()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
