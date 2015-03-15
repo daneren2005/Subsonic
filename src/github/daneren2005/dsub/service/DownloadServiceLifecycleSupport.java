@@ -238,8 +238,8 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	public void onDestroy() {
+		serializeDownloadQueue();
 		eventLooper.quit();
-		serializeDownloadQueueNow();
 		downloadService.unregisterReceiver(ejectEventReceiver);
 		downloadService.unregisterReceiver(intentReceiver);
 
@@ -256,12 +256,13 @@ public class DownloadServiceLifecycleSupport {
 			return;
 		}
 
+		final List<DownloadFile> songs = new ArrayList<DownloadFile>(downloadService.getSongs());
 		eventHandler.post(new Runnable() {
 			@Override
 			public void run() {
 				if(lock.tryLock()) {
 					try {
-						serializeDownloadQueueNow();
+						serializeDownloadQueueNow(songs);
 					} finally {
 						lock.unlock();
 					}
@@ -270,8 +271,7 @@ public class DownloadServiceLifecycleSupport {
 		});
 	}
 
-	public void serializeDownloadQueueNow() {
-		List<DownloadFile> songs = new ArrayList<DownloadFile>(downloadService.getSongs());
+	public void serializeDownloadQueueNow(List<DownloadFile> songs) {
 		State state = new State();
 		for (DownloadFile downloadFile : songs) {
 			state.songs.add(downloadFile.getSong());
