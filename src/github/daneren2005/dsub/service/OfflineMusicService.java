@@ -41,6 +41,7 @@ import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.Lyrics;
@@ -800,6 +801,16 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getVideos(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
+	public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

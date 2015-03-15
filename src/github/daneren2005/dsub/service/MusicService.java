@@ -30,6 +30,7 @@ import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.Lyrics;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -185,6 +186,10 @@ public interface MusicService {
 	Bitmap getBitmap(String url, int size, Context context, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 
 	MusicDirectory getVideos(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
+
+	void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception;
+
+	PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception;
 	
 	int processOfflineSyncs(final Context context, final ProgressListener progressListener) throws Exception;
 	

@@ -43,6 +43,7 @@ import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadServiceLifecycleSupport;
 import github.daneren2005.dsub.util.Constants;
@@ -165,7 +166,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
         MusicDirectory.Entry currentPlaying = null;
         if(service == null) {
         	// Deserialize from playling list to setup
-        	DownloadServiceLifecycleSupport.State state = FileUtil.deserialize(context, DownloadServiceLifecycleSupport.FILENAME_DOWNLOADS_SER, DownloadServiceLifecycleSupport.State.class);
+			PlayerQueue state = FileUtil.deserialize(context, DownloadServiceLifecycleSupport.FILENAME_DOWNLOADS_SER, PlayerQueue.class);
         	if(state != null && state.currentPlayingIndex != -1) {
         		currentPlaying = state.songs.get(state.currentPlayingIndex);
         	}

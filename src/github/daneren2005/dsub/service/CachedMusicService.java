@@ -37,6 +37,7 @@ import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.Lyrics;
@@ -921,6 +922,16 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public MusicDirectory getVideos(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getVideos(refresh, context, progressListener);
+	}
+
+	@Override
+	public void savePlayQueue(List<Entry> songs, Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
+		musicService.savePlayQueue(songs, currentPlaying, position, context, progressListener);
+	}
+
+	@Override
+	public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getPlayQueue(context, progressListener);
 	}
 
 	@Override

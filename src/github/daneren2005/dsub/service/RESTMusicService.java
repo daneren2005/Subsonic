@@ -81,6 +81,7 @@ import github.daneren2005.dsub.service.parser.LicenseParser;
 import github.daneren2005.dsub.service.parser.LyricsParser;
 import github.daneren2005.dsub.service.parser.MusicDirectoryParser;
 import github.daneren2005.dsub.service.parser.MusicFoldersParser;
+import github.daneren2005.dsub.service.parser.PlayQueueParser;
 import github.daneren2005.dsub.service.parser.PlaylistParser;
 import github.daneren2005.dsub.service.parser.PlaylistsParser;
 import github.daneren2005.dsub.service.parser.PodcastChannelParser;
@@ -1543,6 +1544,40 @@ public class RESTMusicService implements MusicService {
 		Reader reader = getReader(context, progressListener, "getVideos", null);
 		try {
 			return new VideosParser(context, getInstance(context)).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
+		List<String> parameterNames = new LinkedList<String>();
+		List<Object> parameterValues = new LinkedList<Object>();
+
+		for(MusicDirectory.Entry song: songs) {
+			parameterNames.add("id");
+			parameterValues.add(song.getId());
+		}
+
+		parameterNames.add("current");
+		parameterValues.add(currentPlaying.getId());
+
+		parameterNames.add("position");
+		parameterValues.add(position);
+
+		Reader reader = getReader(context, progressListener, "savePlayQueue", null, parameterNames, parameterValues);
+		try {
+			new ErrorParser(context, getInstance(context)).parse(reader);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "getPlayQueue", null);
+		try {
+			return new PlayQueueParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}

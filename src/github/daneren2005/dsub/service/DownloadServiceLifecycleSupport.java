@@ -20,6 +20,7 @@ package github.daneren2005.dsub.service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -37,10 +38,14 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.ServerInfo;
+import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.CacheCleaner;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 
 import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
@@ -61,6 +66,7 @@ public class DownloadServiceLifecycleSupport {
 	private ReentrantLock lock = new ReentrantLock();
 	private final AtomicBoolean setup = new AtomicBoolean(false);
 	private long lastPressTime = 0;
+	private SilentBackgroundTask<Void> currentSavePlayQueueTask = null;
 
 	/**
 	 * This receiver manages the intent that could come from other applications.
@@ -272,7 +278,7 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	public void serializeDownloadQueueNow(List<DownloadFile> songs) {
-		State state = new State();
+		final PlayerQueue state = new PlayerQueue();
 		for (DownloadFile downloadFile : songs) {
 			state.songs.add(downloadFile.getSong());
 		}
@@ -286,9 +292,41 @@ public class DownloadServiceLifecycleSupport {
 		if(currentPlaying != null) {
 			state.renameCurrent = currentPlaying.isWorkDone() && !currentPlaying.isCompleteFileAvailable();
 		}
+		state.changed = new Date();
 
 		Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
+
+		// If we are on Subsonic 5.2+, save play queue
+		if(ServerInfo.checkServerVersion(downloadService, "1.12") && !ServerInfo.isMadsonic(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0) {
+			// Cancel any currently running tasks
+			if(currentSavePlayQueueTask != null) {
+				currentSavePlayQueueTask.cancel();
+			}
+
+			currentSavePlayQueueTask = new SilentBackgroundTask<Void>(downloadService) {
+				@Override
+				protected Void doInBackground() throws Throwable {
+					try {
+						MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
+						musicService.savePlayQueue(state.songs, state.songs.get(state.currentPlayingIndex), state.currentPlayingPosition, downloadService, null);
+						currentSavePlayQueueTask = null;
+					} catch (Exception e) {
+						Log.e(TAG, "Failed to save playing queue to server", e);
+						currentSavePlayQueueTask = null;
+					}
+
+					return null;
+				}
+
+				@Override
+				protected void error(Throwable error) {
+					currentSavePlayQueueTask = null;
+					super.error(error);
+				}
+			};
+			currentSavePlayQueueTask.execute();
+		}
 	}
 
 	public void post(Runnable runnable) {
@@ -296,7 +334,7 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	private void deserializeDownloadQueueNow() {
-		State state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER, State.class);
+		PlayerQueue state = FileUtil.deserialize(downloadService, FILENAME_DOWNLOADS_SER, PlayerQueue.class);
 		if (state == null) {
 			return;
 		}
@@ -398,15 +436,5 @@ public class DownloadServiceLifecycleSupport {
 				}
 			});
 		}
-	}
-
-	public static class State implements Serializable {
-		private static final long serialVersionUID = -6346438781062572271L;
-
-		public List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
-		public List<MusicDirectory.Entry> toDelete = new ArrayList<MusicDirectory.Entry>();
-		public int currentPlayingIndex;
-		public int currentPlayingPosition;
-		public boolean renameCurrent = false;
 	}
 }
