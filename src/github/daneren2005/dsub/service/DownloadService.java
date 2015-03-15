@@ -58,6 +58,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
@@ -461,6 +462,10 @@ public class DownloadService extends Service {
 		
 		suggestedPlaylistName = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_NAME, null);
 		suggestedPlaylistId = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_ID, null);
+	}
+
+	public synchronized Date getLastStateChanged() {
+		return lifecycleSupport.getLastChange();
 	}
 
 	public synchronized void setRemovePlayed(boolean enabled) {

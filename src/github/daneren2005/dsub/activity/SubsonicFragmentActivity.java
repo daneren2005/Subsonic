@@ -23,6 +23,7 @@ import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -37,12 +38,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.fragments.AdminFragment;
@@ -478,6 +482,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		if(!Util.isOffline(this) && ServerInfo.canBookmark(this)) {
 			loadBookmarks();
 		}
+		// If we are on Subsonic 5.2+, save play queue
+		if(ServerInfo.canSavePlayQueue(this) && !Util.isOffline(this)) {
+			loadRemotePlayQueue();
+		}
 		
 		sessionInitialized = true;
 	}
@@ -535,6 +543,45 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				Log.e(TAG, "Failed to get bookmarks", error);
 			}
 		}.execute();
+	}
+	private void loadRemotePlayQueue() {
+		final Context context = this;
+		new SilentBackgroundTask<Void>(this) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				try {
+					MusicService musicService = MusicServiceFactory.getMusicService(context);
+					PlayerQueue remoteState = musicService.getPlayQueue(context, null);
+
+					// Make sure we wait until download service is ready
+					DownloadService downloadService = getDownloadService();
+					while(downloadService == null) {
+						Util.sleepQuietly(100L);
+						downloadService = getDownloadService();
+					}
+
+					// If we had a remote state and it's changed is more recent than our existing state
+					if(remoteState != null) {
+						Date localChange = downloadService.getLastStateChanged();
+						if(localChange == null || localChange.after(remoteState.changed)) {
+							promptRestoreFromRemoteQueue(remoteState);
+						}
+					}
+				} catch (Exception e) {
+					Log.e(TAG, "Failed to get playing queue to server", e);
+				}
+
+				return null;
+			}
+		}.execute();
+	}
+	private void promptRestoreFromRemoteQueue(final PlayerQueue remoteState) {
+		Util.confirmDialog(this, R.string.download_restore_play_queue, new SimpleDateFormat("MMM dd hh:mm").format(remoteState.changed), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				getDownloadService().restore(remoteState.songs, null, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
+			}
+		});
 	}
 
 	private void createAccount() {

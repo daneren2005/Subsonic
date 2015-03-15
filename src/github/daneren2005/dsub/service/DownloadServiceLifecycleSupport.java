@@ -67,6 +67,7 @@ public class DownloadServiceLifecycleSupport {
 	private final AtomicBoolean setup = new AtomicBoolean(false);
 	private long lastPressTime = 0;
 	private SilentBackgroundTask<Void> currentSavePlayQueueTask = null;
+	private Date lastChange = null;
 
 	/**
 	 * This receiver manages the intent that could come from other applications.
@@ -292,13 +293,13 @@ public class DownloadServiceLifecycleSupport {
 		if(currentPlaying != null) {
 			state.renameCurrent = currentPlaying.isWorkDone() && !currentPlaying.isCompleteFileAvailable();
 		}
-		state.changed = new Date();
+		state.changed = lastChange = new Date();
 
 		Log.i(TAG, "Serialized currentPlayingIndex: " + state.currentPlayingIndex + ", currentPlayingPosition: " + state.currentPlayingPosition);
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
 
 		// If we are on Subsonic 5.2+, save play queue
-		if(ServerInfo.checkServerVersion(downloadService, "1.12") && !ServerInfo.isMadsonic(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0) {
+		if(ServerInfo.canSavePlayQueue(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0) {
 			// Cancel any currently running tasks
 			if(currentSavePlayQueueTask != null) {
 				currentSavePlayQueueTask.cancel();
@@ -347,6 +348,14 @@ public class DownloadServiceLifecycleSupport {
 		}
 
 		downloadService.restore(state.songs, state.toDelete, state.currentPlayingIndex, state.currentPlayingPosition);
+
+		if(state != null) {
+			lastChange = state.changed;
+		}
+	}
+
+	public Date getLastChange() {
+		return lastChange;
 	}
 
 	private void handleKeyEvent(KeyEvent event) {
