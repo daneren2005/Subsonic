@@ -547,6 +547,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private void loadRemotePlayQueue() {
 		final Context context = this;
 		new SilentBackgroundTask<Void>(this) {
+			private PlayerQueue playerQueue;
+
 			@Override
 			protected Void doInBackground() throws Throwable {
 				try {
@@ -564,7 +566,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 					if(remoteState != null) {
 						Date localChange = downloadService.getLastStateChanged();
 						if(localChange == null || localChange.after(remoteState.changed)) {
-							promptRestoreFromRemoteQueue(remoteState);
+							playerQueue = remoteState;
 						}
 					}
 				} catch (Exception e) {
@@ -573,13 +575,28 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 				return null;
 			}
+
+			@Override
+			protected void done(Void arg) {
+				if(playerQueue != null) {
+					promptRestoreFromRemoteQueue(playerQueue);
+				}
+			}
 		}.execute();
 	}
 	private void promptRestoreFromRemoteQueue(final PlayerQueue remoteState) {
 		Util.confirmDialog(this, R.string.download_restore_play_queue, new SimpleDateFormat("MMM dd hh:mm").format(remoteState.changed), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				getDownloadService().restore(remoteState.songs, null, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
+				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						DownloadService downloadService = getDownloadService();
+						downloadService.clear();
+						downloadService.download(remoteState.songs, false, false, false, false, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
+						return null;
+					}
+				}.execute();
 			}
 		});
 	}
