@@ -375,6 +375,8 @@ public class DownloadService extends Service {
 
 		if (autoplay) {
 			play(start, true, position);
+		} else if(start != 0 || position != 0) {
+			play(start, false, position);
 		} else {
 			if (currentPlaying == null) {
 				currentPlaying = downloadList.get(0);
