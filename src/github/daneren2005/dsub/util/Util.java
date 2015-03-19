@@ -645,18 +645,24 @@ public final class Util {
     }
 	
 	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick);
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, null);
+	}
+	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, onCancel);
 	}
 	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick);
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, null);
 	}
-	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick) {
+	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, onCancel);
+	}
+	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
 		new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(R.string.common_confirm)
 			.setMessage(context.getResources().getString(R.string.common_confirm_message, action, subject))
 			.setPositiveButton(R.string.common_ok, onClick)
-			.setNegativeButton(R.string.common_cancel, null)
+			.setNegativeButton(R.string.common_cancel, onCancel)
 			.show();
 	}
 
