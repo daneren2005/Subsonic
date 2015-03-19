@@ -557,7 +557,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 					// Make sure we wait until download service is ready
 					DownloadService downloadService = getDownloadService();
-					while(downloadService == null) {
+					while(downloadService == null || !downloadService.isInitialized()) {
 						Util.sleepQuietly(100L);
 						downloadService = getDownloadService();
 					}

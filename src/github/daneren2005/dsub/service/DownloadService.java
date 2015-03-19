@@ -440,7 +440,6 @@ public class DownloadService extends Service {
 				shufflePlay = true;
 			} else if(startShufflePlay == SHUFFLE_MODE_ARTIST) {
 				artistRadio = true;
-				Log.d(TAG, "Artist id: " + prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, null));
 				artistRadioBuffer.restoreArtist(prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, null));
 			}
 			SharedPreferences.Editor editor = prefs.edit();
@@ -464,6 +463,10 @@ public class DownloadService extends Service {
 		
 		suggestedPlaylistName = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_NAME, null);
 		suggestedPlaylistId = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_ID, null);
+	}
+
+	public boolean isInitialized() {
+		return lifecycleSupport != null && lifecycleSupport.isInitialized();
 	}
 
 	public synchronized Date getLastStateChanged() {

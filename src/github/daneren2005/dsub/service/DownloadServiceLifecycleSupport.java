@@ -171,6 +171,10 @@ public class DownloadServiceLifecycleSupport {
 		new CacheCleaner(downloadService, downloadService).clean();
 	}
 
+	public boolean isInitialized() {
+		return setup.get();
+	}
+
 	public void onStart(final Intent intent) {
 		if (intent != null) {
 			final String action = intent.getAction();
