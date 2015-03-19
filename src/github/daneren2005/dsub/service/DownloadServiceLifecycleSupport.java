@@ -259,6 +259,9 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	public void serializeDownloadQueue() {
+		serializeDownloadQueue(true);
+	}
+	public void serializeDownloadQueue(final boolean serializeRemote) {
 		if(!setup.get()) {
 			return;
 		}
@@ -269,7 +272,7 @@ public class DownloadServiceLifecycleSupport {
 			public void run() {
 				if(lock.tryLock()) {
 					try {
-						serializeDownloadQueueNow(songs);
+						serializeDownloadQueueNow(songs, serializeRemote);
 					} finally {
 						lock.unlock();
 					}
@@ -278,7 +281,7 @@ public class DownloadServiceLifecycleSupport {
 		});
 	}
 
-	public void serializeDownloadQueueNow(List<DownloadFile> songs) {
+	public void serializeDownloadQueueNow(List<DownloadFile> songs, boolean serializeRemote) {
 		final PlayerQueue state = new PlayerQueue();
 		for (DownloadFile downloadFile : songs) {
 			state.songs.add(downloadFile.getSong());
@@ -299,7 +302,7 @@ public class DownloadServiceLifecycleSupport {
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
 
 		// If we are on Subsonic 5.2+, save play queue
-		if(ServerInfo.canSavePlayQueue(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0) {
+		if(serializeRemote && ServerInfo.canSavePlayQueue(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0) {
 			// Cancel any currently running tasks
 			if(currentSavePlayQueueTask != null) {
 				currentSavePlayQueueTask.cancel();

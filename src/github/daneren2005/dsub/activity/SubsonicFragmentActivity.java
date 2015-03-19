@@ -563,9 +563,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 					}
 
 					// If we had a remote state and it's changed is more recent than our existing state
-					if(remoteState != null) {
+					if(remoteState != null && remoteState.changed != null) {
 						Date localChange = downloadService.getLastStateChanged();
-						if(localChange == null || localChange.after(remoteState.changed)) {
+						if(localChange == null || localChange.before(remoteState.changed)) {
 							playerQueue = remoteState;
 						}
 					}
@@ -594,6 +594,18 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 						DownloadService downloadService = getDownloadService();
 						downloadService.clear();
 						downloadService.download(remoteState.songs, false, false, false, false, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
+						return null;
+					}
+				}.execute();
+			}
+		}, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						DownloadService downloadService = getDownloadService();
+						downloadService.serializeQueue(false);
 						return null;
 					}
 				}.execute();

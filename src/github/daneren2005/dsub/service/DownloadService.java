@@ -1818,8 +1818,11 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void serializeQueue() {
+		serializeQueue(true);
+	}
+	public synchronized void serializeQueue(boolean serializeRemote) {
 		if(playerState == PlayerState.PAUSED) {
-			lifecycleSupport.serializeDownloadQueue();
+			lifecycleSupport.serializeDownloadQueue(serializeRemote);
 		}
 	}
 
