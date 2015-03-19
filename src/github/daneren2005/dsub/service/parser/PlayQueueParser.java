@@ -23,12 +23,15 @@ import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.util.ProgressListener;
 
 public class PlayQueueParser extends MusicDirectoryEntryParser {
+	private static final String TAG = PlayQueueParser.class.getSimpleName();
+
 	public PlayQueueParser(Context context, int instance) {
 		super(context, instance);
 	}
@@ -38,7 +41,6 @@ public class PlayQueueParser extends MusicDirectoryEntryParser {
 
 		PlayerQueue state = new PlayerQueue();
 		String currentId = null;
-		String changed = null;
 		int eventType;
 		do {
 			eventType = nextParseEvent();
@@ -48,7 +50,9 @@ public class PlayQueueParser extends MusicDirectoryEntryParser {
 					currentId = get("current");
 					state.currentPlayingPosition = getInteger("position");
 					try {
-						state.changed = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(get("changed"));
+						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+						dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+						state.changed = dateFormat.parse(get("changed"));
 					} catch (ParseException e) {
 						state.changed = null;
 					}
