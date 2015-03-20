@@ -566,7 +566,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 					if(remoteState != null && remoteState.changed != null) {
 						Date localChange = downloadService.getLastStateChanged();
 						if(localChange == null || localChange.before(remoteState.changed)) {
-							playerQueue = remoteState;ma
+							playerQueue = remoteState;
 						}
 					}
 				} catch (Exception e) {
