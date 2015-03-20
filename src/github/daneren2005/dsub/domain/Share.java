@@ -97,6 +97,9 @@ public class Share implements Serializable {
     		this.created = null;
     	}
     }
+	public void setCreated(Date created) {
+		this.created = created;
+	}
     
     public Date getLastVisited() {
         return lastVisited;
@@ -113,6 +116,9 @@ public class Share implements Serializable {
     		this.lastVisited = null;
     	}
     }
+	public void setLastVisited(Date lastVisited) {
+		this.lastVisited = lastVisited;
+	}
     
     public Date getExpires() {
         return expires;
@@ -129,6 +135,9 @@ public class Share implements Serializable {
     		this.expires = null;
     	}
     }
+	public void setExpires(Date expires) {
+		this.expires = expires;
+	}
 
     public Long getVisitCount() {
     	return visitCount;

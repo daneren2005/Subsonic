@@ -22,11 +22,17 @@ import android.content.Context;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 import java.io.Reader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * @author Scott Jackson
@@ -42,8 +48,14 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
 		List<MusicDirectory.Entry> bookmarks = new ArrayList<MusicDirectory.Entry>();
         Bookmark bookmark = null;
         int eventType;
-        
-        do {
+
+		boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+		if(isDateNormalized) {
+			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		}
+
+		do {
             eventType = nextParseEvent();
             
             if (eventType == XmlPullParser.START_TAG) {
@@ -51,8 +63,19 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
                 
                 if ("bookmark".equals(name)) {
                 	bookmark = new Bookmark();
-                	bookmark.setChanged(get("changed"));
-                	bookmark.setCreated(get("created"));
+
+					try {
+						bookmark.setCreated(dateFormat.parse(get("created")));
+					} catch (Exception e) {
+						bookmark.setCreated((Date) null);
+					}
+
+					try {
+						bookmark.setChanged(dateFormat.parse(get("changed")));
+					} catch (Exception e) {
+						bookmark.setChanged((Date) null);
+					}
+
                 	bookmark.setComment(get("comment"));
                 	bookmark.setPosition(getInteger("position"));
                 	bookmark.setUsername(get("username"));

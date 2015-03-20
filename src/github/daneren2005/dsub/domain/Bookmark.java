@@ -80,6 +80,9 @@ public class Bookmark implements Serializable {
 			this.created = null;
 		}
 	}
+	public void setCreated(Date created) {
+		this.created = created;
+	}
 	
 	public Date getChanged() {
 		return changed;
@@ -95,5 +98,8 @@ public class Bookmark implements Serializable {
 		} else {
 			this.changed = null;
 		}
+	}
+	public void setChanged(Date changed) {
+		this.changed = changed;
 	}
 }

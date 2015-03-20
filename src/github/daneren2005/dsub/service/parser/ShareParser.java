@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -29,8 +30,13 @@ import github.daneren2005.dsub.util.Util;
 
 import org.xmlpull.v1.XmlPullParser;
 import java.io.Reader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * @author Joshua Bahnsen
@@ -56,6 +62,12 @@ public class ShareParser extends MusicDirectoryEntryParser {
 			serverUrl += '/';
 		}
 		serverUrl += "share/";
+
+		boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+		if(isDateNormalized) {
+			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		}
         
         do {
             eventType = nextParseEvent();
@@ -65,12 +77,28 @@ public class ShareParser extends MusicDirectoryEntryParser {
                 
                 if ("share".equals(name)) {
                 	share = new Share();
-                	share.setCreated(get("created"));
+
+					try {
+						share.setCreated(dateFormat.parse(get("created")));
+					} catch (Exception e) {
+						share.setCreated((Date) null);
+					}
 					share.setUrl(get("url").replaceFirst(".*/([^/?]+).*", serverUrl + "$1"));
                 	share.setDescription(get("description"));
-                	share.setExpires(get("expires"));
+
+					try {
+						share.setExpires(dateFormat.parse(get("expires")));
+					} catch (Exception e) {
+						share.setExpires((Date) null);
+					}
                 	share.setId(get("id"));
-                	share.setLastVisited(get("lastVisited"));
+
+					try {
+						share.setLastVisited(dateFormat.parse(get("lastVisited")));
+					} catch (Exception e) {
+						share.setLastVisited((Date) null);
+					}
+
                 	share.setUsername(get("username"));
                 	share.setVisitCount(getLong("visitCount"));
 					dir.add(share);
