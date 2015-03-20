@@ -427,6 +427,8 @@
 	<string name="settings.menu_options.rate_summary">Show Rating in menus</string>
 	<string name="settings.browse_by_tags">Browse By Tags</string>
 	<string name="settings.browse_by_tags_summary">Browse by tags instead of by folder structure.  Requires Subsonic 4.7+</string>
+	<string name="settings.disable_exit_prompt">Disable Exit Prompt</string>
+	<string name="settings.disable_exit_prompt_summary">Exit the app immediately upon pressing back from the home screen</string>
 	<string name="settings.override_system_language">Override System Language</string>
 	<string name="settings.override_system_language_summary">Display app in english even if the system language is something DSub has a translation for.  May need to clear the app from memory for changes to take affect.</string>
 	<string name="settings.drawer_items_title">Drawer Tabs</string>

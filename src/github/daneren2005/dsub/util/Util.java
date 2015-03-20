@@ -424,6 +424,11 @@ public final class Util {
 		return prefs.getString(Constants.PREFERENCES_KEY_OPEN_TO_TAB, null);
 	}
 
+	public static boolean disableExitPrompt(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_DISABLE_EXIT_PROMPT, false);
+	}
+
 	public static String getVideoPlayerType(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getString(Constants.PREFERENCES_KEY_VIDEO_PLAYER, "raw"); 

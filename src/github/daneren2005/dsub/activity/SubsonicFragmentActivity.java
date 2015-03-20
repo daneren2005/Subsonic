@@ -362,7 +362,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	@Override
 	public void onBackPressed() {
 		if(onBackPressedSupport()) {
-			if(lastBackPressTime < (System.currentTimeMillis() - 4000)) {
+			if(!Util.disableExitPrompt(this) && lastBackPressTime < (System.currentTimeMillis() - 4000)) {
 				lastBackPressTime = System.currentTimeMillis();
 				Util.toast(this, R.string.main_back_confirm);
 			} else {
