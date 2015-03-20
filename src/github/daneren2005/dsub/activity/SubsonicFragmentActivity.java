@@ -81,6 +81,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private static String TAG = SubsonicFragmentActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
 	private static boolean sessionInitialized = false;
+	private static long ALLOWED_SKEW = 30000L;
+
 	private ScheduledExecutorService executorService;
 	private View bottomBar;
 	private View coverArtView;
@@ -564,8 +566,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 					// If we had a remote state and it's changed is more recent than our existing state
 					if(remoteState != null && remoteState.changed != null) {
+						// Check if changed + 30 seconds since some servers have slight skew
+						Date remoteChange = new Date(remoteState.changed.getTime() - ALLOWED_SKEW);
 						Date localChange = downloadService.getLastStateChanged();
-						if(localChange == null || localChange.before(remoteState.changed)) {
+						if(localChange == null || localChange.before(remoteChange)) {
 							playerQueue = remoteState;
 						}
 					}
