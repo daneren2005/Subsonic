@@ -64,6 +64,12 @@
 				android:entries="@array/defaultDrawerItems"
 				android:defaultValue="Home"/>
 
+            <CheckBoxPreference
+				android:title="@string/settings.disable_exit_prompt"
+				android:summary="@string/settings.disable_exit_prompt_summary"
+				android:key="disableExitPrompt"
+				android:defaultValue="false"/>
+
 			<CheckBoxPreference
 				android:title="@string/settings.override_system_language"
 				android:summary="@string/settings.override_system_language_summary"
