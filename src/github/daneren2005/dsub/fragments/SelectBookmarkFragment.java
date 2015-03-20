@@ -127,7 +127,6 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 	
 	private void displayBookmarkInfo(final MusicDirectory.Entry entry) {
 		Bookmark bookmark = entry.getBookmark();
-		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String comment = bookmark.getComment();
 		if(comment == null) {
 			comment = "";
@@ -135,7 +134,7 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 
 		String msg = context.getResources().getString(R.string.bookmark_details,
 			entry.getTitle(), Util.formatDuration(bookmark.getPosition() / 1000),
-			formatter.format(bookmark.getCreated()), formatter.format(bookmark.getChanged()), comment);
+			Util.formatDate(bookmark.getCreated()), Util.formatDate(bookmark.getChanged()), comment);
 		
 		Util.info(context, R.string.bookmark_details_title, msg, false);
 	}

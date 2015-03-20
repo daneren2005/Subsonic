@@ -68,7 +68,9 @@ import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -86,6 +88,9 @@ public final class Util {
     private static DecimalFormat MEGA_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat KILO_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
+	private static SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
+	private static SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
+	private static int CURRENT_YEAR = new Date().getYear();
 
     public static final String EVENT_META_CHANGED = "github.daneren2005.dsub.EVENT_META_CHANGED";
     public static final String EVENT_PLAYSTATE_CHANGED = "github.daneren2005.dsub.EVENT_PLAYSTATE_CHANGED";
@@ -776,6 +781,18 @@ public final class Util {
         builder.append(secs);
         return builder.toString();
     }
+
+	public static String formatDate(Date date) {
+		if(date == null) {
+			return "Never";
+		} else {
+			if(date.getYear() != CURRENT_YEAR) {
+				return DATE_FORMAT_LONG.format(date);
+			} else {
+				return DATE_FORMAT_SHORT.format(date);
+			}
+		}
+	}
 
     public static boolean equals(Object object1, Object object2) {
         if (object1 == object2) {

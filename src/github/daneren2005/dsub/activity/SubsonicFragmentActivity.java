@@ -566,7 +566,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 					if(remoteState != null && remoteState.changed != null) {
 						Date localChange = downloadService.getLastStateChanged();
 						if(localChange == null || localChange.before(remoteState.changed)) {
-							playerQueue = remoteState;
+							playerQueue = remoteState;ma
 						}
 					}
 				} catch (Exception e) {
@@ -585,7 +585,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}.execute();
 	}
 	private void promptRestoreFromRemoteQueue(final PlayerQueue remoteState) {
-		Util.confirmDialog(this, R.string.download_restore_play_queue, new SimpleDateFormat("MMM dd hh:mm").format(remoteState.changed), new DialogInterface.OnClickListener() {
+		Util.confirmDialog(this, R.string.download_restore_play_queue, Util.formatDate(remoteState.changed), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {

@@ -55,7 +55,6 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 
 	@Override
 	public void onExecuteSync(Context context, int instance) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		ArrayList<SyncSet> podcastList = SyncUtil.getSyncedPodcasts(context, instance);
 
 		try {

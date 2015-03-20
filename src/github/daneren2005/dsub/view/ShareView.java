@@ -57,7 +57,7 @@ public class ShareView extends UpdateView {
 		Share share = (Share) obj;
 		titleView.setText(share.getName());
 		if(share.getExpires() != null) {
-			descriptionView.setText(context.getResources().getString(R.string.share_expires, new SimpleDateFormat("E MMM d yyyy", Locale.ENGLISH).format(share.getExpires())));
+			descriptionView.setText(context.getResources().getString(R.string.share_expires, new SimpleDateFormat("E MMM d, yyyy", Locale.ENGLISH).format(share.getExpires())));
 		} else {
 			descriptionView.setText(context.getResources().getString(R.string.share_expires_never));
 		}

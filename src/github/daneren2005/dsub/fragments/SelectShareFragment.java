@@ -104,7 +104,7 @@ public class SelectShareFragment extends SelectListFragment<Share> {
 	private void displayShareInfo(final Share share) {
 		String message = context.getResources().getString(R.string.share_info,
 			share.getUsername(), (share.getDescription() != null) ? share.getDescription() : "", share.getUrl(),
-			share.getCreated(), share.getLastVisited(), share.getExpires(), share.getVisitCount());
+			Util.formatDate(share.getCreated()), Util.formatDate(share.getLastVisited()), Util.formatDate(share.getExpires()), share.getVisitCount());
 		Util.info(context, share.getName(), message);
 	}
 
