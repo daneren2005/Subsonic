@@ -312,17 +312,21 @@ public class EqualizerFragment extends SubsonicFragment {
 		bassBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				bassTextView.setText(context.getResources().getString(R.string.equalizer_bass_size, progress));
-				if(fromUser) {
-					if(progress > 0) {
-						if(!bass.getEnabled()) {
-							bass.setEnabled(true);
+				try {
+					bassTextView.setText(context.getResources().getString(R.string.equalizer_bass_size, progress));
+					if (fromUser) {
+						if (progress > 0) {
+							if (!bass.getEnabled()) {
+								bass.setEnabled(true);
+							}
+							bass.setStrength((short) progress);
+						} else if (progress == 0 && bass.getEnabled()) {
+							bass.setStrength((short) progress);
+							bass.setEnabled(false);
 						}
-						bass.setStrength((short) progress);
-					} else if(progress == 0 && bass.getEnabled()) {
-						bass.setStrength((short) progress);
-						bass.setEnabled(false);
 					}
+				} catch(Exception e) {
+					Log.w(TAG, "Error on changing bass: ", e);
 				}
 			}
 
@@ -357,17 +361,21 @@ public class EqualizerFragment extends SubsonicFragment {
 			loudnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 				@Override
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-					loudnessTextView.setText(context.getResources().getString(R.string.equalizer_db_size, progress));
-					if(fromUser) {
-						if(progress > 0) {
-							if(!loudnessEnhancer.isEnabled()) {
-								loudnessEnhancer.enable();
+					try {
+						loudnessTextView.setText(context.getResources().getString(R.string.equalizer_db_size, progress));
+						if(fromUser) {
+							if(progress > 0) {
+								if(!loudnessEnhancer.isEnabled()) {
+									loudnessEnhancer.enable();
+								}
+								loudnessEnhancer.setGain(progress * 100);
+							} else if(progress == 0 && loudnessEnhancer.isEnabled()) {
+								loudnessEnhancer.setGain(progress * 100);
+								loudnessEnhancer.disable();
 							}
-							loudnessEnhancer.setGain(progress * 100);
-						} else if(progress == 0 && loudnessEnhancer.isEnabled()) {
-							loudnessEnhancer.setGain(progress * 100);
-							loudnessEnhancer.disable();
 						}
+					} catch(Exception e) {
+						Log.w(TAG, "Error on changing loudness: ", e);
 					}
 				}
 
