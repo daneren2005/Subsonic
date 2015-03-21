@@ -142,6 +142,7 @@
     <string name="select_album.searching">Searching...</string>
     <string name="select_album.no_sdcard">Error: No SD card available.</string>
     <string name="select_album.no_network">Warning: No network available.</string>
+	<string name="select_album.no_room">Warning: you only have %s left</string>
     <string name="select_album.not_licensed">Server not licensed. %d trial days left.</string>
     <string name="select_album.donate_dialog_message">Get unlimited downloads by donating to Subsonic.</string>
     <string name="select_album.donate_dialog_now">Now</string>

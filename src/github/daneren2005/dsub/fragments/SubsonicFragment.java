@@ -29,6 +29,7 @@ import android.content.pm.ResolveInfo;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -622,6 +623,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void warnIfStorageUnavailable() {
 		if (!Util.isExternalStoragePresent()) {
 			Util.toast(context, R.string.select_album_no_sdcard);
+		}
+
+		StatFs stat = new StatFs(FileUtil.getMusicDirectory(context).getPath());
+		long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+		if(bytesAvailableFs < 50000000L) {
+			Util.toast(context, context.getResources().getString(R.string.select_album_no_room, Util.formatBytes(bytesAvailableFs)));
 		}
 	}
 
