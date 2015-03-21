@@ -254,9 +254,16 @@ public class MainFragment extends SubsonicFragment {
 
 	private void setActiveServer(int instance) {
 		if (Util.getActiveServer(context) != instance) {
-			DownloadService service = getDownloadService();
+			final DownloadService service = getDownloadService();
 			if (service != null) {
-				service.clearIncomplete();
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						service.clearIncomplete();
+						return null;
+					}
+				}.execute();
+
 			}
 			Util.setActiveServer(context, instance);
 			context.invalidate();

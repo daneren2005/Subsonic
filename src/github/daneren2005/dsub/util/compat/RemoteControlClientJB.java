@@ -12,6 +12,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 
 @TargetApi(18)
 public class RemoteControlClientJB extends RemoteControlClientICS {
@@ -27,8 +28,14 @@ public class RemoteControlClientJB extends RemoteControlClientICS {
 		});
 		mRemoteControl.setPlaybackPositionUpdateListener(new RemoteControlClient.OnPlaybackPositionUpdateListener() {
 			@Override
-			public void onPlaybackPositionUpdate(long newPosition) {
-				downloadService.seekTo((int) newPosition);
+			public void onPlaybackPositionUpdate(final long newPosition) {
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						downloadService.seekTo((int) newPosition);
+						return null;
+					}
+				}.execute();
 				setPlaybackState(RemoteControlClient.PLAYSTATE_PLAYING);
 			}
 		});
