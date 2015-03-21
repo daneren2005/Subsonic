@@ -348,7 +348,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(drawerOpen) {
 			menuInflater.inflate(R.menu.drawer_menu, menu);
 		} else if(currentFragment != null) {
-			currentFragment.onCreateOptionsMenu(menu, menuInflater);
+			try {
+				currentFragment.onCreateOptionsMenu(menu, menuInflater);
+			} catch(Exception e) {
+				Log.w(TAG, "Error on creating options menu", e);
+			}
 		}
 		return true;
 	}

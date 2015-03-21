@@ -78,8 +78,12 @@ public class MainFragment extends SubsonicFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.main, menu);
 
-		if(!ServerInfo.isMadsonic(context) || !UserUtil.isCurrentAdmin()) {
-			menu.setGroupVisible(R.id.madsonic, false);
+		try {
+			if (!ServerInfo.isMadsonic(context) || !UserUtil.isCurrentAdmin()) {
+				menu.setGroupVisible(R.id.madsonic, false);
+			}
+		} catch(Exception e) {
+			Log.w(TAG, "Error on setting madsonic invisible", e);
 		}
 	}
 
