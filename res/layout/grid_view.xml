@@ -10,4 +10,5 @@
 	android:gravity="center"
 	android:stretchMode="columnWidth"
 	android:padding="20px"
-	android:fastScrollEnabled="true"/>
+	android:fastScrollEnabled="true"
+	android:scrollbarStyle="outsideOverlay"/>
