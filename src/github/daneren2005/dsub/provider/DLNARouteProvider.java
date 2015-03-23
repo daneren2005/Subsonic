@@ -165,9 +165,14 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		for(Map.Entry<String, DLNADevice> deviceEntry: devices.entrySet()) {
 			DLNADevice device = deviceEntry.getValue();
 
-			int increments = device.volumeMax / 10;
-			int volume = controller == null ? device.volume : (int) controller.getVolume();
-			volume = volume / increments;
+			int volume;
+			if(device.volumeMax == 0) {
+				volume = 5;
+			} else {
+				int increments = device.volumeMax / 10;
+				volume = controller == null ? device.volume : (int) controller.getVolume();
+				volume = volume / increments;
+			}
 
 			MediaRouteDescriptor.Builder routeBuilder = new MediaRouteDescriptor.Builder(device.id, device.name);
 			routeBuilder.addControlFilter(routeIntentFilter)
