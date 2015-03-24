@@ -19,9 +19,9 @@ package github.daneren2005.dsub.util.tags;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Enumeration;
-
+import java.util.Locale;
 
 
 public class ID3v2File extends Common {
@@ -79,14 +79,17 @@ public class ID3v2File extends Common {
 			
 			byte[] xpl = new byte[slen];
 			bread += s.read(xpl);
-			
+
 			if(framename.substring(0,1).equals("T")) {
 				String[] nmzInfo = normalizeTaginfo(framename, xpl);
-				String oggKey = nmzInfo[0];
-				String decPld = nmzInfo[1];
-				
-				if(oggKey.length() > 0 && !tags.containsKey(oggKey)) {
-					addTagEntry(tags, oggKey, decPld);
+
+				for(int i = 0; i < nmzInfo.length; i += 2) {
+					String oggKey = nmzInfo[i];
+					String decPld = nmzInfo[i + 1];
+
+					if (oggKey.length() > 0 && !tags.containsKey(oggKey)) {
+						addTagEntry(tags, oggKey, decPld);
+					}
 				}
 			}
 			else if(framename.equals("RVA2")) {
@@ -114,9 +117,34 @@ public class ID3v2File extends Common {
 			/* A freestyle field, ieks! */
 			String txData[] = getDecodedString(v).split(Character.toString('\0'), 2);
 			/* Check if we got replaygain info in key\0value style */
-			if(txData.length == 2 && txData[0].matches("^(?i)REPLAYGAIN_(ALBUM|TRACK)_GAIN$")) {
-				rv[0] = txData[0].toUpperCase(); /* some tagwriters use lowercase for this */
-				rv[1] = txData[1];
+			if(txData.length == 2) {
+				if(txData[0].matches("^(?i)REPLAYGAIN_(ALBUM|TRACK)_GAIN$")) {
+					rv[0] = txData[0].toUpperCase(); /* some tagwriters use lowercase for this */
+					rv[1] = txData[1];
+				} else {
+					// Check for replaygain tags just thrown randomly in field
+					int nextStartIndex = 1;
+					int startName = txData[1].toLowerCase(Locale.US).indexOf("replaygain_");
+					ArrayList<String> parts = new ArrayList<String>();
+					while(startName != -1) {
+						int endName = txData[1].indexOf((char) 0, startName);
+						if(endName != -1) {
+							parts.add(txData[1].substring(startName, endName).toUpperCase());
+							int endValue = txData[1].indexOf((char) 0, endName + 1);
+							if(endValue != -1) {
+								parts.add(txData[1].substring(endName + 1, endValue));
+								nextStartIndex = endValue + 1;
+							}
+						}
+
+						startName = txData[1].toLowerCase(Locale.US).indexOf("replaygain_", nextStartIndex);
+					}
+
+					if(parts.size() > 0) {
+						rv = new String[parts.size()];
+						rv = parts.toArray(rv);
+					}
+				}
 			}
 		}
 		
