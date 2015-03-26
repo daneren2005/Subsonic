@@ -310,7 +310,7 @@ public class HeaderGridView extends GridView {
 
 	public int getRowHeight() {
 		if (mRowHeight > 0) {
-			return mRowHeight;
+			// return mRowHeight;
 		}
 		ListAdapter adapter = getAdapter();
 		int numColumns = getNumColumnsCompatible();
