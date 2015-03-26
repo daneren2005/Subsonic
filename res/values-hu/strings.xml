@@ -72,6 +72,8 @@
     <string name="main.albums_random">Véletlenszerű kiválasztás</string>
 	<string name="main.albums_genres">Műfajok</string>
 	<string name="main.albums_year">Évtizedek</string>
+	<string name="main.albums_alphabetical">Betűrendben</string>
+	<string name="main.videos">Videók</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Nyomja meg még egyszer a kilépéshez!</string>
 	<string name="main.scan_complete">A médiatár frissítése befejeződött a kiszolgálón!</string>
@@ -107,6 +109,7 @@
 	<string name="menu.top_tracks">Last.fm legjobb dalok</string>
 	<string name="menu.similar_artists">Hasonló előadók</string>
 	<string name="menu.show_missing">Hiányzó megjelenítése</string>
+	<string name="menu.start_radio">Rádió indítása</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -139,6 +142,7 @@
     <string name="select_album.searching">Keresés...</string>
     <string name="select_album.no_sdcard">Hiba: SD kártya nem áll rendelkezésre!</string>
     <string name="select_album.no_network">Figyelem: Hálózat nem áll rendelkezésre!</string>
+	<string name="select_album.no_room">Figyelem: Már csak %s hely áll rendelkezésre!</string>
     <string name="select_album.not_licensed">A kiszolgálónak nincs licence! %d próbanap van hátra!</string>
     <string name="select_album.donate_dialog_message">Korlátlan letöltéshez juthat a Subsonic támogatásával!</string>
     <string name="select_album.donate_dialog_now">Most</string>
@@ -215,6 +219,7 @@
 	<string name="download.downloading_summary_expanded">Aktuális: %1$s
 		\nBecsült méret: %2$s</string>
 	<string name="download.failed_to_load">A beolvasás sikertelen!</string>
+	<string name="download.restore_play_queue">Folytatás onnan, ahol egy másik eszközön abbahagyta.</string>
 
 	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
 	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
@@ -302,6 +307,8 @@
 	<string name="settings.track_summary">Dalsorszám megjelenítése a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
 	<string name="settings.custom_sort_summary">A kiszolgáló alapértelmezett rendezésének felülbírálása, rendezés a lemez sorszáma és a kiadás éve alapján.</string>
+	<string name="settings.open_to_library">Médiatár megnyitása</string>
+	<string name="settings.open_to_library_summary">A Médiatár megnyitása a Főoldal helyett.</string>
     <string name="settings.network_title">Hálózat</string>
     <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
@@ -421,6 +428,8 @@
 	<string name="settings.menu_options.rate_summary">Értékelés opció megjelenítése a menüben.</string>
 	<string name="settings.browse_by_tags">Böngészés ID3 Tag használatával</string>
 	<string name="settings.browse_by_tags_summary">ID3 Tag módszer használata a fájlredszer alapú mód helyett. Subsonic 4.7+ verzió felett!</string>
+	<string name="settings.disable_exit_prompt">Kilépés megerősítésének tiltása</string>
+	<string name="settings.disable_exit_prompt_summary">A főoldalon a vissza gomb megnyomásakor azonnali kilépés az alkalmazásból.</string>
 	<string name="settings.override_system_language">A rendszer nyelvének felülbírálása</string>
 	<string name="settings.override_system_language_summary">A Dsub megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
 	<string name="settings.drawer_items_title">Oldalsáv elemei</string>
@@ -438,6 +447,9 @@
 	<string name="settings.replay_gain_type.track">Dal értékeiből</string>
 	<string name="settings.replay_gain_bump">Hangerő-kiegyenlítés előerősítése</string>
 	<string name="settings.replay_gain_untagged">Dalok hangerő-kiegyenlítés nélkül</string>
+	<string name="settings.casting">Casting (Tartalmak átküldése)</string>
+	<string name="settings.casting_proxy">Eszköz használata proxyként</string>
+	<string name="settings.casting_proxy_summary">Streamelés az eszközön keresztül, mint egy proxyn. Ez problémákat okozhat néhány esetben, pl. saját aláírású tanúsítvány használata esetén.</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
