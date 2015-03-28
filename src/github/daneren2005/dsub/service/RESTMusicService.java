@@ -517,7 +517,7 @@ public class RESTMusicService implements MusicService {
 		}
 
         Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getAlbumList2" : "getAlbumList",
-                                  null, names, values);
+                                  null, names, values, true);
         try {
             return new AlbumListParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
@@ -566,7 +566,7 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getAlbumList2" : "getAlbumList", null, names, values);
+		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getAlbumList2" : "getAlbumList", null, names, values, true);
 		try {
 			return new AlbumListParser(context, instance).parse(reader, progressListener);
 		} finally {
@@ -622,7 +622,7 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getStarred2" : "getStarred", null, names, values);
+        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getStarred2" : "getStarred", null, names, values, true);
         try {
             return new StarredListParser(context, instance).parse(reader, progressListener);
         } finally {
@@ -788,7 +788,7 @@ public class RESTMusicService implements MusicService {
 				parameterValues.add("raw");
 			}
 		}
-        HttpResponse response = getResponseForURL(context, url, params, parameterNames, parameterValues, headers, null, task);
+        HttpResponse response = getResponseForURL(context, url, params, parameterNames, parameterValues, headers, null, task, false);
 
         // If content type is XML, an error occurred.  Get it.
         String contentType = Util.getContentType(response.getEntity());
@@ -1141,7 +1141,7 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-		Reader reader = getReader(context, progressListener, "getSongsByGenre", params, parameterNames, parameterValues);
+		Reader reader = getReader(context, progressListener, "getSongsByGenre", params, parameterNames, parameterValues, true);
 		try {
 			return new RandomSongsParser(context, instance).parse(reader, progressListener);
 		} finally {
@@ -1541,7 +1541,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getVideos(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getVideos", null);
+		Reader reader = getReader(context, progressListener, "getVideos", null, true);
 		try {
 			return new VideosParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
@@ -1690,8 +1690,11 @@ public class RESTMusicService implements MusicService {
 		this.instance = instance;
 	}
 
-    private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
-        return getReader(context, progressListener, method, requestParams, Collections.<String>emptyList(), Collections.emptyList());
+	private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams) throws Exception {
+		return getReader(context, progressListener, method, requestParams, false);
+	}
+    private Reader getReader(Context context, ProgressListener progressListener, String method, HttpParams requestParams, boolean throwsError) throws Exception {
+        return getReader(context, progressListener, method, requestParams, Collections.<String>emptyList(), Collections.emptyList(), throwsError);
     }
 
     private Reader getReader(Context context, ProgressListener progressListener, String method,
@@ -1699,20 +1702,28 @@ public class RESTMusicService implements MusicService {
         return getReader(context, progressListener, method, requestParams, Arrays.asList(parameterName), Arrays.<Object>asList(parameterValue));
     }
 
+	private Reader getReader(Context context, ProgressListener progressListener, String method,
+							 HttpParams requestParams, List<String> parameterNames, List<Object> parameterValues) throws Exception {
+		return getReader(context, progressListener, method, requestParams, parameterNames, parameterValues, false);
+	}
     private Reader getReader(Context context, ProgressListener progressListener, String method,
-                             HttpParams requestParams, List<String> parameterNames, List<Object> parameterValues) throws Exception {
+                             HttpParams requestParams, List<String> parameterNames, List<Object> parameterValues, boolean throwErrors) throws Exception {
 
         if (progressListener != null) {
             progressListener.updateProgress(R.string.service_connecting);
         }
 
         String url = getRestUrl(context, method);
-        return getReaderForURL(context, url, requestParams, parameterNames, parameterValues, progressListener);
+        return getReaderForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, throwErrors);
     }
 
+	private Reader getReaderForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
+								   List<Object> parameterValues, ProgressListener progressListener) throws Exception {
+		return getReaderForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, true);
+	}
     private Reader getReaderForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-                                   List<Object> parameterValues, ProgressListener progressListener) throws Exception {
-        HttpEntity entity = getEntityForURL(context, url, requestParams, parameterNames, parameterValues, progressListener);
+                                   List<Object> parameterValues, ProgressListener progressListener, boolean throwErrors) throws Exception {
+        HttpEntity entity = getEntityForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, throwErrors);
         if (entity == null) {
             throw new RuntimeException("No entity received for URL " + url);
         }
@@ -1726,18 +1737,23 @@ public class RESTMusicService implements MusicService {
     }
 
 	private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-		List<Object> parameterValues, ProgressListener progressListener) throws Exception {
+		List<Object> parameterValues, ProgressListener progressListener, boolean throwErrors) throws Exception {
 
-		return getEntityForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, null);
+		return getEntityForURL(context, url, requestParams, parameterNames, parameterValues, progressListener, null, throwErrors);
+	}
+
+	private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
+									   List<Object> parameterValues, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+		return getResponseForURL(context, url, requestParams, parameterNames, parameterValues, null, progressListener, task, false).getEntity();
 	}
     private HttpEntity getEntityForURL(Context context, String url, HttpParams requestParams, List<String> parameterNames,
-                                       List<Object> parameterValues, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
-        return getResponseForURL(context, url, requestParams, parameterNames, parameterValues, null, progressListener, task).getEntity();
+                                       List<Object> parameterValues, ProgressListener progressListener, SilentBackgroundTask task, boolean throwsError) throws Exception {
+        return getResponseForURL(context, url, requestParams, parameterNames, parameterValues, null, progressListener, task, throwsError).getEntity();
     }
 
     private HttpResponse getResponseForURL(Context context, String url, HttpParams requestParams,
                                            List<String> parameterNames, List<Object> parameterValues,
-                                           List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+                                           List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task, boolean throwsErrors) throws Exception {
 	// If not too many parameters, extract them to the URL rather than relying on the HTTP POST request being
         // received intact. Remember, HTTP POST requests are converted to GET requests during HTTP redirects, thus
         // loosing its entity.
@@ -1755,12 +1771,12 @@ public class RESTMusicService implements MusicService {
         }
 
         String rewrittenUrl = rewriteUrlWithRedirect(context, url);
-        return executeWithRetry(context, rewrittenUrl, url, requestParams, parameterNames, parameterValues, headers, progressListener, task);
+        return executeWithRetry(context, rewrittenUrl, url, requestParams, parameterNames, parameterValues, headers, progressListener, task, throwsErrors);
     }
 
     private HttpResponse executeWithRetry(final Context context, String url, String originalUrl, HttpParams requestParams,
                                           List<String> parameterNames, List<Object> parameterValues,
-                                          List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+                                          List<Header> headers, ProgressListener progressListener, SilentBackgroundTask task, boolean throwErrors) throws Exception {
 		// Strip out sensitive information from log
 		if(url.indexOf("scanstatus") == -1) {
 			Log.i(TAG, stripUrlInfo(url));
@@ -1838,7 +1854,7 @@ public class RESTMusicService implements MusicService {
                 return response;
             } catch (IOException x) {
                 request.abort();
-                if (attempts >= HTTP_REQUEST_MAX_ATTEMPTS || isCancelled.get()) {
+                if (attempts >= HTTP_REQUEST_MAX_ATTEMPTS || isCancelled.get() || throwErrors) {
                     throw x;
                 }
                 if (progressListener != null) {

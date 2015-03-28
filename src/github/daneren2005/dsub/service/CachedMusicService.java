@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -358,112 +359,147 @@ public class CachedMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getAlbumList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-		MusicDirectory dir = musicService.getAlbumList(type, size, offset, context, progressListener);
+		try {
+			MusicDirectory dir = musicService.getAlbumList(type, size, offset, context, progressListener);
 
-		// Do some serialization updates for changes to recently added
-		if("newest".equals(type) && offset == 0) {
-			String recentlyAddedFile = getCacheName(context, type);
-			ArrayList<String> recents = FileUtil.deserialize(context, recentlyAddedFile, ArrayList.class);
-			if(recents == null) {
-				recents = new ArrayList<String>();
-			}
-			
-			// Add any new items
-			final int instance = musicService.getInstance(context);
-			isTagBrowsing = Util.isTagBrowsing(context, instance);
-			for(final Entry album: dir.getChildren()) {
-				if(!recents.contains(album.getId())) {
-					recents.add(album.getId());
-					
-					String cacheName, parent;
-					if(isTagBrowsing) {
-						cacheName = "artist";
-						parent = album.getArtistId();
-					} else {
-						cacheName = "directory";
-						parent = album.getParent();
-					}
-					
-					// Add album to artist
-					if(parent != null) {
-						new MusicDirectoryUpdater(context, cacheName, parent) {
-							private boolean changed = false;
-							
-							@Override
-							public boolean checkResult(Entry check) {
-								return true;
-							}
-							
-							@Override
-							public void updateResult(List<Entry> objects, Entry result) {
-								// Only add if it doesn't already exist in it!
-								if(!objects.contains(album)) {
-									objects.add(album);
-									changed = true;
+			// Do some serialization updates for changes to recently added
+			if ("newest".equals(type) && offset == 0) {
+				String recentlyAddedFile = getCacheName(context, type);
+				ArrayList<String> recents = FileUtil.deserialize(context, recentlyAddedFile, ArrayList.class);
+				if (recents == null) {
+					recents = new ArrayList<String>();
+				}
+
+				// Add any new items
+				final int instance = musicService.getInstance(context);
+				isTagBrowsing = Util.isTagBrowsing(context, instance);
+				for (final Entry album : dir.getChildren()) {
+					if (!recents.contains(album.getId())) {
+						recents.add(album.getId());
+
+						String cacheName, parent;
+						if (isTagBrowsing) {
+							cacheName = "artist";
+							parent = album.getArtistId();
+						} else {
+							cacheName = "directory";
+							parent = album.getParent();
+						}
+
+						// Add album to artist
+						if (parent != null) {
+							new MusicDirectoryUpdater(context, cacheName, parent) {
+								private boolean changed = false;
+
+								@Override
+								public boolean checkResult(Entry check) {
+									return true;
 								}
-							}
-							
-							@Override
-							public void save(ArrayList<Entry> objects) {
-								// Only save if actually added to artist
-								if(changed) {
-									musicDirectory.replaceChildren(objects);
-									// Reapply sort after addition
-									musicDirectory.sortChildren(context, instance);
-									FileUtil.serialize(context, musicDirectory, cacheName);
+
+								@Override
+								public void updateResult(List<Entry> objects, Entry result) {
+									// Only add if it doesn't already exist in it!
+									if (!objects.contains(album)) {
+										objects.add(album);
+										changed = true;
+									}
 								}
-							}
-						}.execute();
-					} else {
-						// If parent is null, then this is a root level album
-						final Artist artist = new Artist();
-						artist.setId(album.getId());
-						artist.setName(album.getTitle());
-						
-						new IndexesUpdater(context, isTagBrowsing ? "artists" : "indexes") {
-							private boolean changed = false;
-							
-							@Override
-							public boolean checkResult(Artist check) {
-								return true;
-							}
-							
-							@Override
-							public void updateResult(List<Artist> objects, Artist result) {
-								if(!objects.contains(artist)) {
-									objects.add(artist);
-									changed = true;
+
+								@Override
+								public void save(ArrayList<Entry> objects) {
+									// Only save if actually added to artist
+									if (changed) {
+										musicDirectory.replaceChildren(objects);
+										// Reapply sort after addition
+										musicDirectory.sortChildren(context, instance);
+										FileUtil.serialize(context, musicDirectory, cacheName);
+									}
 								}
-							}
-							
-							@Override
-							public void save(ArrayList<Artist> objects) {
-								if(changed) {
-									indexes.setArtists(objects);
-									// Reapply sort after addition
-									indexes.sortChildren(context);
-									FileUtil.serialize(context, indexes, cacheName);
-									cachedIndexes.set(indexes);
+							}.execute();
+						} else {
+							// If parent is null, then this is a root level album
+							final Artist artist = new Artist();
+							artist.setId(album.getId());
+							artist.setName(album.getTitle());
+
+							new IndexesUpdater(context, isTagBrowsing ? "artists" : "indexes") {
+								private boolean changed = false;
+
+								@Override
+								public boolean checkResult(Artist check) {
+									return true;
 								}
-							}
-						}.execute();
+
+								@Override
+								public void updateResult(List<Artist> objects, Artist result) {
+									if (!objects.contains(artist)) {
+										objects.add(artist);
+										changed = true;
+									}
+								}
+
+								@Override
+								public void save(ArrayList<Artist> objects) {
+									if (changed) {
+										indexes.setArtists(objects);
+										// Reapply sort after addition
+										indexes.sortChildren(context);
+										FileUtil.serialize(context, indexes, cacheName);
+										cachedIndexes.set(indexes);
+									}
+								}
+							}.execute();
+						}
 					}
 				}
-			}
-			
-			// Keep list from growing into infinity
-			while(recents.size() > 0) {
-				recents.remove(0);
-			}
-			FileUtil.serialize(context, recents, recentlyAddedFile);
-		}
 
-		return dir;
+				// Keep list from growing into infinity
+				while (recents.size() > 0) {
+					recents.remove(0);
+				}
+				FileUtil.serialize(context, recents, recentlyAddedFile);
+			}
+
+			FileUtil.serialize(context, dir, getCacheName(context, type, Integer.toString(offset)));
+			return dir;
+		} catch(IOException e) {
+			MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, type, Integer.toString(offset)), MusicDirectory.class);
+
+			if(dir == null) {
+				// If we are at start and no cache, throw error higher
+				if(offset == 0) {
+					throw e;
+				} else {
+					// Otherwise just pretend we are at the end of the list
+					return new MusicDirectory();
+				}
+			} else {
+				return dir;
+			}
+		}
 	}
 
 	@Override
 	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getAlbumList(type, extra, size, offset, context, progressListener);
+		try {
+			MusicDirectory dir = musicService.getAlbumList(type, extra, size, offset, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, type + extra, Integer.toString(offset)));
+			return dir;
+		} catch(IOException e) {
+			MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, type + extra, Integer.toString(offset)), MusicDirectory.class);
+
+			if(dir == null) {
+				// If we are at start and no cache, throw error higher
+				if(offset == 0) {
+					throw e;
+				} else {
+					// Otherwise just pretend we are at the end of the list
+					return new MusicDirectory();
+				}
+			} else {
+				return dir;
+			}
+		}
 	}
 
 	@Override
@@ -473,35 +509,44 @@ public class CachedMusicService implements MusicService {
 
 	@Override
     public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
-        MusicDirectory dir = musicService.getStarredList(context, progressListener);
+		try {
+			MusicDirectory dir = musicService.getStarredList(context, progressListener);
 
-		MusicDirectory oldDir = FileUtil.deserialize(context, "starred", MusicDirectory.class);
-		if(oldDir != null) {
-			final List<Entry> newList = new ArrayList<Entry>();
-			newList.addAll(dir.getChildren());
-			final List<Entry> oldList = oldDir.getChildren();
+			MusicDirectory oldDir = FileUtil.deserialize(context, "starred", MusicDirectory.class);
+			if (oldDir != null) {
+				final List<Entry> newList = new ArrayList<Entry>();
+				newList.addAll(dir.getChildren());
+				final List<Entry> oldList = oldDir.getChildren();
 
-			for(Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
-				Entry oldEntry = it.next();
+				for (Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
+					Entry oldEntry = it.next();
 
-				// Remove entries from newList
-				if(newList.remove(oldEntry)) {
-					// If it was removed, then remove it from old list as well
-					it.remove();
-				} else {
-					oldEntry.setStarred(false);
+					// Remove entries from newList
+					if (newList.remove(oldEntry)) {
+						// If it was removed, then remove it from old list as well
+						it.remove();
+					} else {
+						oldEntry.setStarred(false);
+					}
 				}
+
+				List<Entry> totalList = new ArrayList<Entry>();
+				totalList.addAll(oldList);
+				totalList.addAll(newList);
+
+				new StarUpdater(context, totalList).execute();
 			}
+			FileUtil.serialize(context, dir, "starred");
 
-			List<Entry> totalList = new ArrayList<Entry>();
-			totalList.addAll(oldList);
-			totalList.addAll(newList);
-
-			new StarUpdater(context, totalList).execute();
+			return dir;
+		} catch(IOException e) {
+			MusicDirectory dir = FileUtil.deserialize(context, "starred", MusicDirectory.class);
+			if(dir == null) {
+				throw e;
+			} else {
+				return dir;
+			}
 		}
-		FileUtil.serialize(context, dir, "starred");
-
-		return dir;
     }
 
     @Override
@@ -641,7 +686,26 @@ public class CachedMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getSongsByGenre(genre, count, offset, context, progressListener);
+		try {
+			MusicDirectory dir = musicService.getSongsByGenre(genre, count, offset, context, progressListener);
+			FileUtil.serialize(context, dir, getCacheName(context, "genreSongs", Integer.toString(offset)));
+
+			return dir;
+		} catch(IOException e) {
+			MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, "genreSongs", Integer.toString(offset)), MusicDirectory.class);
+
+			if(dir == null) {
+				// If we are at start and no cache, throw error higher
+				if(offset == 0) {
+					throw e;
+				} else {
+					// Otherwise just pretend we are at the end of the list
+					return new MusicDirectory();
+				}
+			} else {
+				return dir;
+			}
+		}
 	}
 
 	@Override
@@ -921,7 +985,19 @@ public class CachedMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getVideos(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getVideos(refresh, context, progressListener);
+		try {
+			MusicDirectory dir = musicService.getVideos(refresh, context, progressListener);
+			FileUtil.serialize(context, dir, "videos");
+
+			return dir;
+		} catch(IOException e) {
+			MusicDirectory dir = FileUtil.deserialize(context, "videos", MusicDirectory.class);
+			if(dir == null) {
+				throw e;
+			} else {
+				return dir;
+			}
+		}
 	}
 
 	@Override
