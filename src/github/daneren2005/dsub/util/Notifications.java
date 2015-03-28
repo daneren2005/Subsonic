@@ -59,9 +59,11 @@ public final class Notifications {
 	public static void showPlayingNotification(final Context context, final DownloadService downloadService, final Handler handler, MusicDirectory.Entry song) {
 		// Set the icon, scrolling text and timestamp
 		final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
-		notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 
-		boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
+		final boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
+		if(playing) {
+			notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+		}
 		boolean remote = downloadService.isRemoteEnabled();
 		if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
 			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
@@ -97,7 +99,14 @@ public final class Notifications {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+					if(playing) {
+						downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+					} else {
+						playShowing = false;
+						NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+						downloadService.stopForeground(true);
+						notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
+					}
 				}
 			});
 		}
