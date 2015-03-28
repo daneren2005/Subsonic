@@ -500,8 +500,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			String path = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 			File cacheLocation = new File(path);
 			if(!FileUtil.verifyCanWrite(cacheLocation)) {
-				resetCacheLocation(prefs);
-				Util.info(this, R.string.common_warning, R.string.settings_cache_location_reset);
+				// Only warn user if there is a difference saved
+				if(resetCacheLocation(prefs)) {
+					Util.info(this, R.string.common_warning, R.string.settings_cache_location_reset);
+				}
 			}
 		}
 
@@ -523,10 +525,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 	}
 
-	private void resetCacheLocation(SharedPreferences prefs) {
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, FileUtil.getDefaultMusicDirectory(this).getPath());
-		editor.commit();
+	private boolean resetCacheLocation(SharedPreferences prefs) {
+		String newDirectory = FileUtil.getDefaultMusicDirectory(this).getPath();
+		if(newDirectory == null || newDirectory.equals(prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, newDirectory))) {
+			return false;
+		} else {
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, newDirectory);
+			editor.commit();
+			return true;
+		}
 	}
 	
 	private void loadBookmarks() {
