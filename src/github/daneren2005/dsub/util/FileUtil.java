@@ -442,6 +442,24 @@ public class FileUtil {
 
 			if (!DEFAULT_MUSIC_DIR.exists() && !DEFAULT_MUSIC_DIR.mkdirs()) {
 				Log.e(TAG, "Failed to create default dir " + DEFAULT_MUSIC_DIR);
+
+				// Some devices seem to have screwed up the new media directory API.  Go figure.  Try again with standard locations
+				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+					dirs = ContextCompat.getExternalFilesDirs(context, null);
+
+					for(int i = dirs.length - 1; i >= 0; i--) {
+						DEFAULT_MUSIC_DIR = new File(dirs[i], "music");
+						if(dirs[i] != null) {
+							break;
+						}
+					}
+
+					if (!DEFAULT_MUSIC_DIR.exists() && !DEFAULT_MUSIC_DIR.mkdirs()) {
+						Log.e(TAG, "Failed to create default dir " + DEFAULT_MUSIC_DIR);
+					} else {
+						Log.w(TAG, "Stupid OEM's messed up media dir API added in 5.0");
+					}
+				}
 			}
 		}
 
