@@ -51,6 +51,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
         MusicDirectory dir = new MusicDirectory();
         int eventType;
 		boolean isArtist = false;
+		boolean checkForDuplicates = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_RENAME_DUPLICATES, true);
 		Map<String, Entry> titleMap = new HashMap<String, Entry>();
         do {
             eventType = nextParseEvent();
@@ -61,7 +62,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 					entry.setGrandParent(dir.getParent());
 
 					// Only check for songs
-					if(!entry.isDirectory()) {
+					if(checkForDuplicates && !entry.isDirectory()) {
 						// Check if duplicates
 						Entry duplicate = titleMap.get(entry.getTitle());
 						if (duplicate != null) {

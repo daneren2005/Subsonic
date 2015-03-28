@@ -56,6 +56,12 @@
 				android:key="customSortEnabled"
 				android:defaultValue="true"/>
 
+			<CheckBoxPreference
+				android:title="@string/settings.rename_duplicates"
+				android:summary="@string/settings.rename_duplicates_summary"
+				android:key="renameDuplicates"
+				android:defaultValue="true"/>
+
 			<ListPreference
 				android:title="@string/settings.open_to_tab"
 				android:summary="@string/settings.open_to_tab_summary"

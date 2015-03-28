@@ -450,6 +450,8 @@
 	<string name="settings.casting">Casting</string>
 	<string name="settings.casting_proxy">Use device proxy</string>
 	<string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates.</string>
+	<string name="settings.rename_duplicates">Rename duplicate tracks</string>
+	<string name="settings.rename_duplicates_summary">Rename duplicate tracks to the original filename so you can tell them apart.</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

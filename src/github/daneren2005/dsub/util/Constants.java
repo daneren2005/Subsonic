@@ -154,6 +154,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_ALBUMS_PER_FOLDER = "albumsPerFolder";
 	public static final String PREFERENCES_KEY_CAST_PROXY = "castProxy";
 	public static final String PREFERENCES_KEY_DISABLE_EXIT_PROMPT = "disableExitPrompt";
+	public static final String PREFERENCES_KEY_RENAME_DUPLICATES = "renameDuplicates";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
