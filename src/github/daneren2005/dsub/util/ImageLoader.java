@@ -300,7 +300,7 @@ public class ImageLoader {
 			textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 		} else if (view instanceof ImageView) {
 			final ImageView imageView = (ImageView) view;
-			if (crossfade) {
+			if (crossfade && drawable != null) {
 				Drawable existingDrawable = imageView.getDrawable();
 				if (existingDrawable == null) {
 					Bitmap emptyImage;
