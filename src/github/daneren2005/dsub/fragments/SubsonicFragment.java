@@ -625,10 +625,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			Util.toast(context, R.string.select_album_no_sdcard);
 		}
 
-		StatFs stat = new StatFs(FileUtil.getMusicDirectory(context).getPath());
-		long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
-		if(bytesAvailableFs < 50000000L) {
-			Util.toast(context, context.getResources().getString(R.string.select_album_no_room, Util.formatBytes(bytesAvailableFs)));
+		try {
+			StatFs stat = new StatFs(FileUtil.getMusicDirectory(context).getPath());
+			long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+			if (bytesAvailableFs < 50000000L) {
+				Util.toast(context, context.getResources().getString(R.string.select_album_no_room, Util.formatBytes(bytesAvailableFs)));
+			}
+		} catch(Exception e) {
+			Log.w(TAG, "Error while checking storage space for music directory", e);
 		}
 	}
 
