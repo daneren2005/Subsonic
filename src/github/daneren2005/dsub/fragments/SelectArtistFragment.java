@@ -1,8 +1,9 @@
 package github.daneren2005.dsub.fragments;
 
+import android.annotation.TargetApi;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -11,11 +12,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
@@ -23,11 +22,8 @@ import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistAdapter;
 
@@ -44,6 +40,12 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 	private TextView folderName;
 	private List<MusicFolder> musicFolders = null;
 	private List<MusicDirectory.Entry> entries;
+	private String groupId;
+	private String groupName;
+
+	public SelectArtistFragment() {
+		super();
+	}
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -61,8 +63,20 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 		outState.putSerializable(Constants.FRAGMENT_LIST2, (Serializable) musicFolders);
 	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+		Bundle args = getArguments();
+		if(args != null) {
+			groupId = args.getString(Constants.INTENT_EXTRA_NAME_ID);
+			groupName = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
+
+			if(groupName != null) {
+				setTitle(groupName);
+				context.invalidateOptionsMenu();
+			}
+		}
+
 		folderButton = null;
 		super.onCreateView(inflater, container, bundle);
 		
@@ -71,7 +85,7 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 		}
 
 		if(objects != null && currentTask == null) {
-			if (Util.isOffline(context) || Util.isTagBrowsing(context)) {
+			if (Util.isOffline(context) || Util.isTagBrowsing(context) || groupId != null) {
 				folderButton.setVisibility(View.GONE);
 			}
 			setMusicFolders();
@@ -140,15 +154,25 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 			selectFolder();
 		} else {
 			Artist artist = (Artist) parent.getItemAtPosition(position);
-			SubsonicFragment fragment = new SelectDirectoryFragment();
-			Bundle args = new Bundle();
-			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
-			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
-			if("root".equals(artist.getId())) {
-				args.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
+
+			SubsonicFragment fragment;
+			if(Util.isFirstLevelArtist(context) || "root".equals(artist.getId()) || groupId != null) {
+				fragment = new SelectDirectoryFragment();
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+				if ("root".equals(artist.getId())) {
+					args.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
+				}
+				args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+				fragment.setArguments(args);
+			} else {
+				fragment = new SelectArtistFragment();
+				Bundle args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+				fragment.setArguments(args);
 			}
-			args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
-			fragment.setArguments(args);
 
 			replaceFragment(fragment);
 		}
@@ -160,8 +184,36 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 	}
 
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		super.onCreateOptionsMenu(menu, menuInflater);
+
+		if(Util.isOffline(context) || Util.isTagBrowsing(context) || groupId != null) {
+			menu.removeItem(R.id.menu_first_level_artist);
+		} else {
+			if (Util.isFirstLevelArtist(context)) {
+				menu.findItem(R.id.menu_first_level_artist).setChecked(true);
+			}
+		}
+	}
+
+	@Override
 	public int getOptionsMenu() {
 		return R.menu.select_artist;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if(super.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		switch (item.getItemId()) {
+			case R.id.menu_first_level_artist:
+				toggleFirstLevelArtist();
+				break;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -172,29 +224,52 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	public List<Artist> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		if(!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
-			musicFolders = musicService.getMusicFolders(refresh, context, listener);
+		List<Artist> artists;
+		if(groupId == null) {
+			if (!Util.isOffline(context) && !Util.isTagBrowsing(context)) {
+				musicFolders = musicService.getMusicFolders(refresh, context, listener);
 
-			// Hide folders option if there is only one
-			if(musicFolders.size() == 1) {
-				musicFolders = null;
-				Util.setSelectedMusicFolderId(context, null);
+				// Hide folders option if there is only one
+				if (musicFolders.size() == 1) {
+					musicFolders = null;
+					Util.setSelectedMusicFolderId(context, null);
+				}
+			}
+			String musicFolderId = Util.getSelectedMusicFolderId(context);
+
+			Indexes indexes = musicService.getIndexes(musicFolderId, refresh, context, listener);
+			artists = new ArrayList<Artist>(indexes.getShortcuts().size() + indexes.getArtists().size());
+			artists.addAll(indexes.getShortcuts());
+			artists.addAll(indexes.getArtists());
+			entries = indexes.getEntries();
+		} else {
+			artists = new ArrayList<Artist>();
+			MusicDirectory dir = musicService.getMusicDirectory(groupId, groupName, refresh, context, listener);
+			for(MusicDirectory.Entry entry: dir.getChildren(true, false)) {
+				Artist artist = new Artist();
+				artist.setId(entry.getId());
+				artist.setName(entry.getTitle());
+				artist.setStarred(entry.isStarred());
+				artists.add(artist);
+			}
+
+			entries = new ArrayList<MusicDirectory.Entry>();
+			entries.addAll(dir.getChildren(false, true));
+			if(!entries.isEmpty()) {
+				Artist root = new Artist();
+				root.setId("root");
+				root.setName("Root");
+				root.setIndex("#");
+				artists.add(root);
 			}
 		}
-		String musicFolderId = Util.getSelectedMusicFolderId(context);
-		
-		Indexes indexes = musicService.getIndexes(musicFolderId, refresh, context, listener);
-		List<Artist> artists = new ArrayList<Artist>(indexes.getShortcuts().size() + indexes.getArtists().size());
-		artists.addAll(indexes.getShortcuts());
-		artists.addAll(indexes.getArtists());
-		entries = indexes.getEntries();
 		
 		return artists;
 	}
 
 	@Override
 	public int getTitleResource() {
-		return R.string.button_bar_browse;
+		return groupId == null ? R.string.button_bar_browse : 0;
 	}
 
 	private void createMusicFolderButton() {
@@ -251,5 +326,10 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 
 	private void selectFolder() {
 		folderButton.showContextMenu();
+	}
+
+	private void toggleFirstLevelArtist() {
+		Util.toggleFirstLevelArtist(context);
+		context.invalidateOptionsMenu();
 	}
 }

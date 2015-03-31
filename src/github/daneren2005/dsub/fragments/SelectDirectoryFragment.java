@@ -520,7 +520,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 					// Update the fragment pointers so other stuff works correctly
 					SelectDirectoryFragment.this.id = dir.getId();
 					SelectDirectoryFragment.this.name = dir.getName();
-				} else if(id != null && directory == null && dir.getParent() != null) {
+				} else if(id != null && directory == null && dir.getParent() != null && !artist) {
 					// View Album, try to lookup parent to get a complete entry to use for starring
 					MusicDirectory parentDir = getMusicDirectory(dir.getParent(), name, refresh, true, service, this);
 					for(Entry child: parentDir.getChildren()) {
@@ -1514,7 +1514,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		}
 
 		final ImageButton starButton = (ImageButton) header.findViewById(R.id.select_album_star);
-		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
+		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true) && artistInfo == null) {
 			starButton.setImageResource(directory.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
 			starButton.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -1533,7 +1533,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		View ratingBarWrapper = header.findViewById(R.id.select_album_rate_wrapper);
 		final RatingBar ratingBar = (RatingBar) header.findViewById(R.id.select_album_rate);
-		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true) && !Util.isOffline(context)) {
+		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true) && !Util.isOffline(context)  && artistInfo == null) {
 			ratingBar.setRating(directory.getRating());
 			ratingBarWrapper.setOnClickListener(new View.OnClickListener() {
 				@Override

@@ -55,6 +55,8 @@
 		<br/>When songs are downloaded by DSub, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
 		<p/><font color="red">ChromeCast fails</font>:
 		<br/>Try setting the option Settings -> Playback -> Use device proxy.  It is a work around for Chromecast not accepting self-signed certificates.
+		<p/><font color="red">First level in Library are actually groups of artists</font>:
+		<br/>In the option menu, deselect "First level artists".  This will make it so that the entire first level of directories shown will be treated like groups of artists instead of the artists themselves.
 	]]>
 	</string>
     <string name="main.select_server">Select server</string>
@@ -110,6 +112,7 @@
 	<string name="menu.similar_artists">Similar Artists</string>
 	<string name="menu.show_missing">Show missing</string>
 	<string name="menu.start_radio">Start Radio</string>
+	<string name="menu.first_level_artist">First level artists</string>
 
     <string name="playlist.label">Playlists</string>
 	<string name="playlist.update_info">Update Information</string>

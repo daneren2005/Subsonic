@@ -575,6 +575,23 @@ public final class Util {
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_CAST_PROXY, false);
 	}
 
+	public static boolean isFirstLevelArtist(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);
+	}
+	public static void toggleFirstLevelArtist(Context context) {
+		SharedPreferences prefs = Util.getPreferences(context);
+		SharedPreferences.Editor editor = prefs.edit();
+
+		if(prefs.getBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true)) {
+			editor.putBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), false);
+		} else {
+			editor.putBoolean(Constants.PREFERENCES_KEY_FIRST_LEVEL_ARTIST + getActiveServer(context), true);
+		}
+
+		editor.commit();
+	}
+
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * <p/>
