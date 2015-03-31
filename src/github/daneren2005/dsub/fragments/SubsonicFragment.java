@@ -164,6 +164,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		context = (SubsonicActivity)activity;
 	}
 
+	public void setContext(SubsonicActivity context) {
+		this.context = context;
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
