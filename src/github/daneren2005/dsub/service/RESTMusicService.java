@@ -249,7 +249,7 @@ public class RESTMusicService implements MusicService {
     public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(id.indexOf(cacheLocn) != -1) {
+		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
 			String search = Util.parseOfflineIDSearch(context, id, cacheLocn);
 			SearchCritera critera = new SearchCritera(search, 1, 1, 0);
 			SearchResult result = searchNew(critera, context, progressListener);
