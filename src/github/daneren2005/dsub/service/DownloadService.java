@@ -1015,6 +1015,8 @@ public class DownloadService extends Service {
 		if(size() == 1) {
 			seekTo(getPlayerPosition() + FAST_FORWARD);
 			return;
+		} else if(playerState == PREPARING || playerState == PREPARED) {
+			return;
 		}
 
 		// Delete podcast if fully listened to
@@ -1563,6 +1565,7 @@ public class DownloadService extends Service {
 			subtractPosition = 0;
 			mediaPlayer.setOnCompletionListener(null);
 			mediaPlayer.setOnPreparedListener(null);
+			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.reset();
 			setPlayerState(IDLE);
 			try {
