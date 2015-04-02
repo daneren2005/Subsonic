@@ -287,7 +287,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		} else {
 			setIntent(intent);
 		}
-		drawer.closeDrawers();
+		if(drawer != null) {
+			drawer.closeDrawers();
+		}
 	}
 
 	@Override
@@ -343,7 +345,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		if(backStack.size() > 0) {
+		if(drawerToggle != null && backStack.size() > 0) {
 			drawerToggle.setDrawerIndicatorEnabled(false);
 		}
 	}
@@ -351,7 +353,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	@Override
 	public void setContentView(int viewId) {
 		super.setContentView(viewId);
-		drawerToggle.setDrawerIndicatorEnabled(true);
+		if(drawerToggle != null){
+			drawerToggle.setDrawerIndicatorEnabled(true);
+		}
 	}
 
 	@Override
@@ -374,12 +378,14 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	@Override
 	public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
 		super.replaceFragment(fragment, tag, replaceCurrent);
-		drawerToggle.setDrawerIndicatorEnabled(false);
+		if(drawerToggle != null) {
+			drawerToggle.setDrawerIndicatorEnabled(false);
+		}
 	}
 	@Override
 	public void removeCurrent() {
 		super.removeCurrent();
-		if(backStack.isEmpty()) {
+		if(drawerToggle != null && backStack.isEmpty()) {
 			drawerToggle.setDrawerIndicatorEnabled(true);
 		}
 	}
@@ -405,12 +411,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		trans.commit();
 		supportInvalidateOptionsMenu();
 		recreateSpinner();
-		drawer.closeDrawers();
+		if(drawer != null) {
+			drawer.closeDrawers();
+		}
 
 		if(secondaryContainer != null) {
 			secondaryContainer.setVisibility(View.GONE);
 		}
-		drawerToggle.setDrawerIndicatorEnabled(true);
+		if(drawerToggle != null) {
+			drawerToggle.setDrawerIndicatorEnabled(true);
+		}
 	}
 	
 	private SubsonicFragment getNewFragment(String fragmentType) {

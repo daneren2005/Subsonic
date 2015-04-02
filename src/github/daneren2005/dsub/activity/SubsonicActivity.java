@@ -18,12 +18,14 @@
  */
 package github.daneren2005.dsub.activity;
 
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -86,6 +88,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected SubsonicFragment currentFragment;
 	protected View primaryContainer;
 	protected View secondaryContainer;
+	protected boolean tv = true;
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
 	ViewGroup rootView;
@@ -99,6 +102,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	@Override
 	protected void onCreate(Bundle bundle) {
+		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
+			tv = true;
+		}
+
 		setUncaughtExceptionHandler();
 		applyTheme();
 		applyFullscreen();
@@ -126,7 +134,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
-		drawerToggle.syncState();
+		if(drawerToggle != null) {
+			drawerToggle.syncState();
+		}
 	}
 
 	@Override
@@ -178,7 +188,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	@Override
 	public void setContentView(int viewId) {
-		super.setContentView(R.layout.abstract_activity);
+		if(isTv()) {
+			super.setContentView(R.layout.static_drawer_activity);
+		} else {
+			super.setContentView(R.layout.abstract_activity);
+		}
 		rootView = (ViewGroup) findViewById(R.id.content_frame);
 
 		if(viewId != 0) {
@@ -187,7 +201,6 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 		
 		drawerList = (ListView) findViewById(R.id.left_drawer);
-
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
@@ -208,61 +221,66 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 		});
 
-		drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.common_appname, R.string.common_appname) {
-			@Override
-			public void onDrawerClosed(View view) {
-				setTitle(currentFragment.getTitle());
-				
-				drawerIdle = true;
-				drawerOpen = false;
 
-				supportInvalidateOptionsMenu();
-			}
 
-			@Override
-			public void onDrawerOpened(View view) {
-				DownloadService downloadService = getDownloadService();
-				if(downloadService == null || downloadService.getBackgroundDownloads().isEmpty()) {
-					drawerAdapter.setDownloadVisible(false);
-				} else {
-					drawerAdapter.setDownloadVisible(true);
+		if(!isTv()) {
+			drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+			drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.common_appname, R.string.common_appname) {
+				@Override
+				public void onDrawerClosed(View view) {
+					setTitle(currentFragment.getTitle());
+
+					drawerIdle = true;
+					drawerOpen = false;
+
+					supportInvalidateOptionsMenu();
 				}
 
-				if(lastSelectedView == null && drawerList.getCount() > lastSelectedPosition) {
-					lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
-					if(lastSelectedView != null) {
-						lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
+				@Override
+				public void onDrawerOpened(View view) {
+					DownloadService downloadService = getDownloadService();
+					if (downloadService == null || downloadService.getBackgroundDownloads().isEmpty()) {
+						drawerAdapter.setDownloadVisible(false);
+					} else {
+						drawerAdapter.setDownloadVisible(true);
+					}
+
+					if (lastSelectedView == null && drawerList.getCount() > lastSelectedPosition) {
+						lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
+						if (lastSelectedView != null) {
+							lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
+						}
+					}
+
+					getSupportActionBar().setTitle(R.string.common_appname);
+					getSupportActionBar().setDisplayShowCustomEnabled(false);
+
+					drawerIdle = true;
+					drawerOpen = true;
+
+					supportInvalidateOptionsMenu();
+				}
+
+				@Override
+				public void onDrawerSlide(View drawerView, float slideOffset) {
+					super.onDrawerSlide(drawerView, slideOffset);
+					drawerIdle = false;
+				}
+			};
+			drawer.setDrawerListener(drawerToggle);
+			drawerToggle.setDrawerIndicatorEnabled(false);
+
+			drawer.setOnTouchListener(new View.OnTouchListener() {
+				public boolean onTouch(View v, MotionEvent event) {
+					if (drawerIdle && currentFragment != null && currentFragment.getGestureDetector() != null) {
+						return currentFragment.getGestureDetector().onTouchEvent(event);
+					} else {
+						return false;
 					}
 				}
-
-				getSupportActionBar().setTitle(R.string.common_appname);
-				getSupportActionBar().setDisplayShowCustomEnabled(false);
-				
-				drawerIdle = true;
-				drawerOpen = true;
-
-				supportInvalidateOptionsMenu();
-			}
-			
-			@Override
-			public void onDrawerSlide(View drawerView, float slideOffset) {
-				super.onDrawerSlide(drawerView, slideOffset);
-				drawerIdle = false;
-			}
-		};
-		drawer.setDrawerListener(drawerToggle);
-		drawerToggle.setDrawerIndicatorEnabled(false);
-		
-		drawer.setOnTouchListener(new View.OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event) {
-				if (drawerIdle && currentFragment != null && currentFragment.getGestureDetector() != null) {
-					return currentFragment.getGestureDetector().onTouchEvent(event);
-				} else {
-					return false;
-				}
-			}
-		});
+			});
+		}
 
 		// Check whether this is a tablet or not
 		secondaryContainer = findViewById(R.id.fragment_second_container);
@@ -359,7 +377,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(drawerToggle.onOptionsItemSelected(item)) {
+		if(drawerToggle != null && drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		} else if(item.getItemId() == android.R.id.home) {
 			onBackPressed();
@@ -690,8 +708,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 			spinnerAdapter.notifyDataSetChanged();
 			actionBarSpinner.setSelection(spinnerAdapter.getCount() - 1);
-			getSupportActionBar().setDisplayShowCustomEnabled(true);
-		} else {
+			if(!isTv()) {
+				getSupportActionBar().setDisplayShowCustomEnabled(true);
+			}
+		} else if(!isTv()) {
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
 		}
 	}
@@ -715,7 +735,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	private void applyFullscreen() {
 		fullScreen = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false);
-		if(fullScreen) {
+		if(fullScreen || isTv()) {
 			// Hide additional elements on higher Android versions
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 				int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
@@ -767,6 +787,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	
 	public static String getThemeName() {
 		return theme;
+	}
+
+	public boolean isTv() {
+		return tv;
 	}
 
 	private void setUncaughtExceptionHandler() {
