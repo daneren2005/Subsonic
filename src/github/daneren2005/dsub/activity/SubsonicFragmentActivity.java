@@ -494,7 +494,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private void loadSettings() {
 		PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 		SharedPreferences prefs = Util.getPreferences(this);
-		if (!prefs.contains(Constants.PREFERENCES_KEY_CACHE_LOCATION)) {
+		if (!prefs.contains(Constants.PREFERENCES_KEY_CACHE_LOCATION) || prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null) == null) {
 			resetCacheLocation(prefs);
 		} else {
 			String path = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
