@@ -104,7 +104,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected void onCreate(Bundle bundle) {
 		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
 		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
-			tv = true;
+			// tv = true;
 		}
 
 		setUncaughtExceptionHandler();
