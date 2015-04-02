@@ -88,7 +88,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected SubsonicFragment currentFragment;
 	protected View primaryContainer;
 	protected View secondaryContainer;
-	protected boolean tv = true;
+	protected boolean tv = false;
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
 	ViewGroup rootView;
@@ -369,6 +369,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			try {
 				currentFragment.setContext(this);
 				currentFragment.onCreateOptionsMenu(menu, menuInflater);
+
+				if(!isTv()) {
+					menu.setGroupVisible(R.id.tv, false);
+				}
 			} catch(Exception e) {
 				Log.w(TAG, "Error on creating options menu", e);
 			}

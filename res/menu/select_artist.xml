@@ -13,6 +13,14 @@
 		android:title="@string/menu.search"
 		compat:showAsAction="ifRoom|withText"/>
 
+	<group android:id="@+id/tv">
+		<item
+			android:id="@+id/menu_refresh"
+			android:icon="?attr/refresh"
+			android:title="@string/menu.refresh"
+			compat:showAsAction="ifRoom|withText"/>
+	</group>
+
 	<item
 		android:id="@+id/menu_first_level_artist"
 		android:title="@string/menu.first_level_artist"

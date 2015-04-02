@@ -13,6 +13,14 @@
 		android:title="@string/menu.shuffle"
 		compat:showAsAction="ifRoom|withText"/>
 
+	<group android:id="@+id/tv">
+		<item
+			android:id="@+id/menu_refresh"
+			android:icon="?attr/refresh"
+			android:title="@string/menu.refresh"
+			compat:showAsAction="ifRoom|withText"/>
+	</group>
+
 	<item
 		android:id="@+id/menu_exit"
 		android:title="@string/menu.exit"/>

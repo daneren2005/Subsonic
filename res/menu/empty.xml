@@ -2,6 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	  xmlns:compat="http://schemas.android.com/apk/res-auto">
 
+	<group android:id="@+id/tv">
+		<item
+			android:id="@+id/menu_refresh"
+			android:icon="?attr/refresh"
+			android:title="@string/menu.refresh"
+			compat:showAsAction="ifRoom|withText"/>
+	</group>
+
 	<item
 		android:id="@+id/menu_exit"
 		android:title="@string/menu.exit"/>

@@ -180,6 +180,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.menu_exit:
 				exit();
 				return true;
+			case R.id.menu_refresh:
+				refresh();
+				return true;
 		}
 
 		return false;
@@ -606,22 +609,27 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void setupScrollList(final AbsListView listView) {
-		listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {}
+		if(context.isTv()) {
+			refreshLayout.setEnabled(false);
+		} else {
+			listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+				@Override
+				public void onScrollStateChanged(AbsListView view, int scrollState) {
+				}
 
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-				int topRowVerticalPosition = (listView.getChildCount() == 0) ? 0 : listView.getChildAt(0).getTop();
-				refreshLayout.setEnabled(topRowVerticalPosition >= 0 && listView.getFirstVisiblePosition() == 0);
-			}
-		});
+				@Override
+				public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+					int topRowVerticalPosition = (listView.getChildCount() == 0) ? 0 : listView.getChildAt(0).getTop();
+					refreshLayout.setEnabled(topRowVerticalPosition >= 0 && listView.getFirstVisiblePosition() == 0);
+				}
+			});
 
-		refreshLayout.setColorScheme(
-			R.color.holo_blue_light,
-			R.color.holo_orange_light,
-			R.color.holo_green_light,
-			R.color.holo_red_light);
+			refreshLayout.setColorScheme(
+					R.color.holo_blue_light,
+					R.color.holo_orange_light,
+					R.color.holo_green_light,
+					R.color.holo_red_light);
+		}
 	}
 
 	protected void warnIfStorageUnavailable() {
@@ -1598,13 +1606,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			public void onClick(DialogInterface dialog, int which) {
 				final Bookmark oldBookmark = entry.getBookmark();
 				entry.setBookmark(null);
-				
+
 				new LoadingTask<Void>(context, false) {
 					@Override
 					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deleteBookmark(entry, context, null);
-						
+
 						new EntryInstanceUpdater(entry) {
 							@Override
 							public void update(Entry found) {
@@ -1627,7 +1635,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					@Override
 					protected void error(Throwable error) {
 						entry.setBookmark(oldBookmark);
-						
+
 						String msg;
 						if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 							msg = getErrorMessage(error);
