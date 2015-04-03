@@ -609,7 +609,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void setupScrollList(final AbsListView listView) {
-		if(context.isTv()) {
+		if(!context.isTouchscreen()) {
 			refreshLayout.setEnabled(false);
 		} else {
 			listView.setOnScrollListener(new AbsListView.OnScrollListener() {

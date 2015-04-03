@@ -324,7 +324,7 @@ public class ChangeLog {
     /**
      * Write current version code to the preferences.
      */
-    protected void updateVersionInPreferences() {
+    public void updateVersionInPreferences() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(VERSION_KEY, mCurrentVersionCode);
