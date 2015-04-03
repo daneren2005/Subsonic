@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -89,6 +90,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected View primaryContainer;
 	protected View secondaryContainer;
 	protected boolean tv = false;
+	protected boolean touchscreen = true;
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
 	ViewGroup rootView;
@@ -105,6 +107,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
 		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
 			tv = true;
+		}
+		PackageManager pm = getPackageManager();
+		if(!pm.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)) {
+			touchscreen = false;
 		}
 
 		setUncaughtExceptionHandler();
@@ -370,8 +376,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				currentFragment.setContext(this);
 				currentFragment.onCreateOptionsMenu(menu, menuInflater);
 
-				if(!isTv()) {
-					menu.setGroupVisible(R.id.tv, false);
+				if(isTouchscreen()) {
+					menu.setGroupVisible(R.id.not_touchscreen, false);
 				}
 			} catch(Exception e) {
 				Log.w(TAG, "Error on creating options menu", e);
@@ -795,6 +801,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	public boolean isTv() {
 		return tv;
+	}
+	public boolean isTouchscreen() {
+		return touchscreen;
 	}
 
 	private void setUncaughtExceptionHandler() {

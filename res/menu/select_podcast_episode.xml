@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 
-	<group android:id="@+id/tv">
+	<group android:id="@+id/not_touchscreen">
 		<item
 			android:id="@+id/menu_refresh"
 			android:icon="?attr/refresh"
