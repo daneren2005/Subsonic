@@ -252,9 +252,13 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 		ChangeLog changeLog = new ChangeLog(this, Util.getPreferences(this));
 		if(changeLog.isFirstRun()) {
-			Dialog log = changeLog.getLogDialog();
-			if(log != null) {
-				log.show();
+			if(changeLog.isFirstRunEver()) {
+				changeLog.updateVersionInPreferences();
+			} else {
+				Dialog log = changeLog.getLogDialog();
+				if (log != null) {
+					log.show();
+				}
 			}
 		}
 	}

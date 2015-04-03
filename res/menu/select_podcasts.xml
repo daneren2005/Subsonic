@@ -13,7 +13,7 @@
 		android:title="@string/menu.add_podcast"
 		compat:showAsAction="always|withText"/>
 
-	<group android:id="@+id/tv">
+	<group android:id="@+id/not_touchscreen">
 		<item
 			android:id="@+id/menu_refresh"
 			android:icon="?attr/refresh"
