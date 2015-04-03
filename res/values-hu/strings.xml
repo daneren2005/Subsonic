@@ -18,7 +18,7 @@
 	<string name="common.name">Név</string>
 	<string name="common.comment">Megjegyzés</string>
 	<string name="common.public">Nyilvános</string>
-	<string name="common.play_external">Videólejátszás</string>
+	<string name="common.play_external">Videó lejátszása</string>
 	<string name="common.stream_external">Videó streamelése</string>
 	<string name="common.confirm">Jóváhagyás</string>
 	<string name="common.confirm_message">Biztos benne? %1$s -> \"%2$s\"</string>
@@ -40,7 +40,7 @@
 
     <string name="main.welcome_title">Üdvözlet!</string>
     <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás még nincs beállítva. Miután konfigurálta saját kiszolgálóját 
-	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba, és adja meg a kapcsolódási adatokat!</string>
+	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba és adja meg a kapcsolódási adatokat!</string>
 	<string name="main.about_title">DSub információk</string>
 	<string name="main.about_text">Fejlesztő: Scott Jackson
 		\nEmail: dsub.android@gmail.com
@@ -48,13 +48,15 @@
 		\nGyorsítótárazott fájlok: %2$s
 		\nFelhasznált tároló: %3$s/%4$s
 		\nFelhasználható tároló: %5$s/%6$s</string>
-	<string name="main.faq_title">FAQ</string>
+	<string name="main.faq_title">GYIK</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Gyorsítótárazás vs Tárolás</font>:
 		<br/>Míg a normál módon gyorsítótárazott dalok törlődhetnek amikor újak kerülnek letöltésre, addig a \"Letöltés tárolásra (megőrzés)\" menüpont segítségével letöltött dalok soha nem törlődnek automatikusan.
 		<p/><font color="red">Ha a ChromeCast sikertelen</font>:
-		<br/>Győződjön meg róla, hogy nem használ saját aláírású tanúsítványt, mert azt a ChromeCast automatikusan visszautasítja!
+		<br/>Próbálja meg bejelölni: Beállítások -> Lejátszás -> Eszköz használata proxyként. Ez egy kerülő megoldás arra, ha a ChromeCast elutasítja a saját aláírású tanúsítványt.
+		<p/><font color="red">A Médiatár első szintje tulajdonképpen az előadók csoportja</font>:
+		<br/>A Beállítások menüben törölje az "Előadók első szintje" jelölést. Ez teszi lehetővé, hogy a mappák teljes első szintjének megjelenítése előadói csoportonként és ne előadónként legyen kezelve.
 	]]>
 	</string>
     <string name="main.select_server">Kiszolgáló kiválasztása</string>
@@ -110,6 +112,7 @@
 	<string name="menu.similar_artists">Hasonló előadók</string>
 	<string name="menu.show_missing">Hiányzó megjelenítése</string>
 	<string name="menu.start_radio">Rádió indítása</string>
+	<string name="menu.first_level_artist">Előadók első szintje</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -370,13 +373,13 @@
 	<string name="settings.sleep_timer_on">Be</string>
 	<string name="settings.sleep_timer_always_on">Mindig be</string>
 	<string name="settings.temp_loss_title">Külső esemény bekövetkeztekor</string>
-	<string name="settings.temp_loss_pause">Mindig megállít.</string>
-	<string name="settings.temp_loss_pause_lower">Megállít, kérésre alacsonyabb hangerő.</string>
-	<string name="settings.temp_loss_lower">Mindig alacsonyabb hangerő.</string>
-	<string name="settings.temp_loss_nothing">Ne csináljon semmit.</string>
+	<string name="settings.temp_loss_pause">Megállítás minden esetben</string>
+	<string name="settings.temp_loss_pause_lower">Megállítás, kérésre alacsonyabb hangerő</string>
+	<string name="settings.temp_loss_lower">Alacsonyabb hangerő</string>
+	<string name="settings.temp_loss_nothing">Ne csináljon semmit</string>
 	<string name="settings.disconnect_pause_title">Megállítás kapcsolatbontás esetén</string>
-	<string name="settings.disconnect_pause_both">Megállítás minden esetben.</string>
-	<string name="settings.disconnect_pause_neither">Ne csináljon semmit.</string>
+	<string name="settings.disconnect_pause_both">Megállítás minden esetben</string>
+	<string name="settings.disconnect_pause_neither">Ne csináljon semmit</string>
 	<string name="settings.persistent_title">Állandó kijelzés</string>
 	<string name="settings.persistent_summary">Kijelzés az értesítési sávon a lejátszás megállítása után is. Nyomja meg a bezárás gombot a törléséhez!</string>
 	<string name="settings.gapless_playback">Egybefüggő lejátszás (Gapless)</string>
@@ -385,7 +388,7 @@
 	<string name="settings.chat_enabled">Csevegés (Chat) engedélyezése</string>
 	<string name="settings.chat_enabled_summary">Csevegés (Chat) menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.video_title">Videó</string>
-	<string name="settings.video_player">Videólejátszó</string>
+	<string name="settings.video_player">Videó-lejátszó</string>
 	<string name="settings.video_raw">Nyers (Subsonic 4.8-tól)</string>
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (Subsonic 4.8-tól)</string>
 	<string name="settings.video_transcode">Közvetlen transzkódolás (video -> mp4, vagy hasonló beállítás szükséges a kiszolgálón!)</string>
@@ -440,7 +443,7 @@
 	<string name="settings.admin_enabled">Admin engedélyezése</string>
 	<string name="settings.admin_enabled_summary">Admin menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.replay_gain">Hangerő-kiegyenlítés (Replay Gain)</string>
-	<string name="settings.replay_gain_summary">Hangerő kiegyenlítése (normalizálása) a dal vagy az album hangerőszint értékei (tags) alapján.</string>
+	<string name="settings.replay_gain_summary">Hangerő kiegyenlítése (normalizálása) a dal, vagy az album hangerőszint értékei (tags) alapján.</string>
 	<string name="settings.replay_gain_type">Hangerőszint meghatározása</string>
 	<string name="settings.replay_gain_type.smart">Intelligens módon</string>
 	<string name="settings.replay_gain_type.album">Album értékeiből</string>
@@ -449,7 +452,9 @@
 	<string name="settings.replay_gain_untagged">Dalok hangerő-kiegyenlítés nélkül</string>
 	<string name="settings.casting">Casting (Tartalmak átküldése)</string>
 	<string name="settings.casting_proxy">Eszköz használata proxyként</string>
-	<string name="settings.casting_proxy_summary">Streamelés az eszközön keresztül, mint egy proxyn. Ez problémákat okozhat néhány esetben, pl. saját aláírású tanúsítvány használata esetén.</string>
+	<string name="settings.casting_proxy_summary">Streamelés az eszközön (mint egy proxyn) keresztül. Ez megoldást hozhat néhány esetben, pl. saját aláírású tanúsítvány használatakor.</string>
+	<string name="settings.rename_duplicates">Duplikált dalok átnevezése</string>
+	<string name="settings.rename_duplicates_summary">Duplikált dalok átnevezése az eredeti fájlnévre, így megkülönböztethetővé válnak.</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -520,7 +525,7 @@
     <string name="background_task.wait">Kérem várjon...</string>
     <string name="background_task.loading">Betöltés...</string>
     <string name="background_task.no_network">Az alkalmazás hálózati hozzáférést igényel. Kérjük, kapcsolja be a Wi-Fi-t vagy a mobilhálózatot!</string>
-    <string name="background_task.network_error">Hálózati hiba történt! Kérjük, ellenőrizze a kiszolgáló címét vagy próbálja később!</string>
+    <string name="background_task.network_error">Hálózati hiba történt! Kérjük, ellenőrizze a kiszolgáló címét, vagy próbálja később!</string>
     <string name="background_task.not_found">Az erőforrás nem található! Kérjük, ellenőrizze a kiszolgáló címét!</string>
     <string name="background_task.parse_error">Hiba történt a kiszolgálóval történő kommunikációban. Kérjük, ellenőrizze a kiszolgáló címét, és próbáljon meg web böngészővel kapcsolódni a kiszolgálóhoz!</string>
 
