@@ -20,6 +20,7 @@ package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -83,7 +84,13 @@ public class ShareParser extends MusicDirectoryEntryParser {
 					} catch (Exception e) {
 						share.setCreated((Date) null);
 					}
-					share.setUrl(get("url").replaceFirst(".*/([^/?]+).*", serverUrl + "$1"));
+
+					String url = get("url");
+					if(url != null && url.indexOf(".php") == -1) {
+						url = url.replaceFirst(".*/([^/?]+).*", serverUrl + "$1");
+					}
+					share.setUrl(url);
+
                 	share.setDescription(get("description"));
 
 					try {
