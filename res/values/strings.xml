@@ -455,6 +455,8 @@
 	<string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates.</string>
 	<string name="settings.rename_duplicates">Rename duplicate tracks</string>
 	<string name="settings.rename_duplicates_summary">Rename duplicate tracks to the original filename so you can tell them apart.</string>
+	<string name="settings.start_on_headphones">Start on headphones</string>
+	<string name="settings.start_on_headphones_summary">Start when headphones are plugged in.  This requires the use of a service which starts on boot up to check for the headphone plug event even when DSub is not running.</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

@@ -48,6 +48,7 @@ import java.util.Map;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.HeadphoneListenerService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
@@ -145,6 +146,15 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			DownloadService downloadService = DownloadService.getInstance();
 			if(downloadService != null) {
 				downloadService.reapplyVolume();
+			}
+		} else if(Constants.PREFERENCES_KEY_START_ON_HEADPHONES.equals(key)) {
+			Intent serviceIntent = new Intent();
+			serviceIntent.setClassName(context.getPackageName(), HeadphoneListenerService.class.getName());
+
+			if(sharedPreferences.getBoolean(key, false)) {
+				context.startService(serviceIntent);
+			} else {
+				context.stopService(serviceIntent);
 			}
 		}
 

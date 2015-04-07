@@ -592,6 +592,11 @@ public final class Util {
 		editor.commit();
 	}
 
+	public static boolean shouldStartOnHeadphones(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_START_ON_HEADPHONES, false);
+	}
+
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * <p/>

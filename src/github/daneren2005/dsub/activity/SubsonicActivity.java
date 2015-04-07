@@ -67,6 +67,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.HeadphoneListenerService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
@@ -142,6 +143,12 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		if(drawerToggle != null) {
 			drawerToggle.syncState();
+		}
+
+		if(Util.shouldStartOnHeadphones(this)) {
+			Intent serviceIntent = new Intent();
+			serviceIntent.setClassName(this.getPackageName(), HeadphoneListenerService.class.getName());
+			this.startService(serviceIntent);
 		}
 	}
 

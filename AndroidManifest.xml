@@ -24,6 +24,7 @@
 	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 	<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
@@ -86,7 +87,7 @@
 		</activity>
 
         <service android:name=".service.DownloadService"
-                 android:label="Subsonic Download Service"/>
+                 android:label="DSub Playback Service"/>
 		<service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
 		<service android:name="github.daneren2005.dsub.service.sync.AuthenticatorService">
 			<intent-filter>
@@ -136,6 +137,16 @@
 			<meta-data android:name="android.content.SyncAdapter"
 					   android:resource="@xml/mostrecent_syncadapter" />
 		</service>
+
+		<service android:name="github.daneren2005.dsub.service.HeadphoneListenerService"
+			android:label="DSub Headphone Listener"/>
+		<receiver
+			android:name="github.daneren2005.dsub.receiver.BootReceiver">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
 
         <receiver android:name="github.daneren2005.dsub.receiver.MediaButtonIntentReceiver">
         	<intent-filter>
