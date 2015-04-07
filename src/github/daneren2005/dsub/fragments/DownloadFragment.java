@@ -18,7 +18,6 @@ package github.daneren2005.dsub.fragments;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,9 +37,7 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.DownloadFileAdapter;
-
-import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
+import github.daneren2005.dsub.adapter.DownloadFileAdapter;
 
 public class DownloadFragment extends SelectListFragment<DownloadFile> {
 	private long currentRevision;

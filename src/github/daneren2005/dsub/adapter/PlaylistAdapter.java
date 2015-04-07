@@ -16,7 +16,7 @@
 
  Copyright 2010 (C) Sindre Mehus
  */
-package github.daneren2005.dsub.view;
+package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 import github.daneren2005.dsub.R;
@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.view.PlaylistView;
+
 import java.util.Collections;
 import java.util.Comparator;
 

@@ -15,17 +15,13 @@
 
 package github.daneren2005.dsub.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,16 +30,12 @@ import java.util.List;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.service.OfflineException;
-import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.UserAdapter;
+import github.daneren2005.dsub.adapter.UserAdapter;
 
 public class AdminFragment extends SelectListFragment<User> {
 	private static String TAG = AdminFragment.class.getSimpleName();

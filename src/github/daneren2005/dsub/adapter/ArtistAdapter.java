@@ -16,7 +16,7 @@
 
  Copyright 2010 (C) Sindre Mehus
  */
-package github.daneren2005.dsub.view;
+package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 import github.daneren2005.dsub.R;
@@ -26,6 +26,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.SectionIndexer;
 import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.view.ArtistView;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;

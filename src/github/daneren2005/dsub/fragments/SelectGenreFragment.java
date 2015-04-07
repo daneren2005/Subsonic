@@ -27,7 +27,7 @@ import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.view.GenreAdapter;
+import github.daneren2005.dsub.adapter.GenreAdapter;
 
 import java.util.List;
 

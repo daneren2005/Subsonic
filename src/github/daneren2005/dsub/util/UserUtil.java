@@ -20,16 +20,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.io.File;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
@@ -39,7 +35,7 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
-import github.daneren2005.dsub.view.SettingsAdapter;
+import github.daneren2005.dsub.adapter.SettingsAdapter;
 
 public final class UserUtil {
 	private static final String TAG = UserUtil.class.getSimpleName();

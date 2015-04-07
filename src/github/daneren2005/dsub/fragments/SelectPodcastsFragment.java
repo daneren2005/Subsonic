@@ -41,7 +41,7 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.PodcastChannelAdapter;
+import github.daneren2005.dsub.adapter.PodcastChannelAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

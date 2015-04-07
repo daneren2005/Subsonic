@@ -16,7 +16,7 @@
 
  Copyright 2010 (C) Sindre Mehus
  */
-package github.daneren2005.dsub.view;
+package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 
@@ -27,6 +27,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.view.AlbumView;
+import github.daneren2005.dsub.view.ArtistEntryView;
+import github.daneren2005.dsub.view.SongView;
 
 /**
  * @author Sindre Mehus

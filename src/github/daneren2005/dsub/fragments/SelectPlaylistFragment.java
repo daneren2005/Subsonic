@@ -29,7 +29,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.PlaylistAdapter;
+import github.daneren2005.dsub.adapter.PlaylistAdapter;
 
 import java.util.List;
 

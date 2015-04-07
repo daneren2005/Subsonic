@@ -16,8 +16,6 @@
 package github.daneren2005.dsub.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -34,16 +32,10 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.User;
-import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.service.OfflineException;
-import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
-import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.SettingsAdapter;
+import github.daneren2005.dsub.adapter.SettingsAdapter;
 
 public class UserFragment extends SubsonicFragment{
 	private ListView listView;

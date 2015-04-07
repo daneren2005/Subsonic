@@ -30,7 +30,7 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.UserUtil;
-import github.daneren2005.dsub.view.MergeAdapter;
+import github.daneren2005.dsub.adapter.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;

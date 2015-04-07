@@ -17,7 +17,7 @@
 	Copyright 2010 (C) Sindre Mehus
 */
 
-package github.daneren2005.dsub.view;
+package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 
@@ -31,6 +31,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.SongView;
 
 public class BookmarkAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 	private final static String TAG = BookmarkAdapter.class.getSimpleName();

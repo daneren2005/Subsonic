@@ -15,17 +15,12 @@
 
 package github.daneren2005.dsub.fragments;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.view.ContextMenu;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
@@ -37,7 +32,7 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.ArtistAdapter;
+import github.daneren2005.dsub.adapter.ArtistAdapter;
 
 import java.net.URLEncoder;
 import java.util.LinkedList;

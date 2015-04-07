@@ -19,10 +19,10 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import github.daneren2005.dsub.R;
+
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.view.PlaylistAdapter;
+import github.daneren2005.dsub.adapter.PlaylistAdapter;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;

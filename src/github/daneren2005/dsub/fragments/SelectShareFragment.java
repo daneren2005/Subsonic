@@ -26,7 +26,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.ShareAdapter;
+import github.daneren2005.dsub.adapter.ShareAdapter;
 
 /**
  * Created by Scott on 12/28/13.

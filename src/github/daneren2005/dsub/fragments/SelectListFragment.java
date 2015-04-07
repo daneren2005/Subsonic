@@ -27,11 +27,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.io.Serializable;
@@ -39,14 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TabBackgroundTask;
-import github.daneren2005.dsub.view.GenreAdapter;
 
 public abstract class SelectListFragment<T> extends SubsonicFragment implements AdapterView.OnItemClickListener {
 	private static final String TAG = SelectListFragment.class.getSimpleName();

@@ -26,7 +26,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,7 +60,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -71,7 +69,7 @@ import github.daneren2005.dsub.service.HeadphoneListenerService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.DrawerAdapter;
+import github.daneren2005.dsub.adapter.DrawerAdapter;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.UserUtil;
 

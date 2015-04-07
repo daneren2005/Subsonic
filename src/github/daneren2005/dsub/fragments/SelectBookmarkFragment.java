@@ -18,8 +18,6 @@
 */
 package github.daneren2005.dsub.fragments;
 
-import android.content.DialogInterface;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,21 +28,13 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.service.OfflineException;
-import github.daneren2005.dsub.service.ServerTooOldException;
-import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.BookmarkAdapter;
-import github.daneren2005.dsub.view.SongView;
+import github.daneren2005.dsub.adapter.BookmarkAdapter;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 

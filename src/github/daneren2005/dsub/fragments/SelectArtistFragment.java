@@ -1,10 +1,8 @@
 package github.daneren2005.dsub.fragments;
 
 import android.annotation.TargetApi;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +23,7 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.ArtistAdapter;
+import github.daneren2005.dsub.adapter.ArtistAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;

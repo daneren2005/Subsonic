@@ -27,7 +27,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.view.EntryAdapter;
+import github.daneren2005.dsub.adapter.EntryAdapter;
 
 public class SelectVideoFragment extends SelectListFragment<MusicDirectory.Entry> {
 	@Override
