@@ -23,17 +23,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.SectionIndexer;
+
 import com.commonsware.cwac.endless.EndlessAdapter;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.Util;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-public class AlbumListAdapter extends EndlessAdapter {
+public class AlbumListAdapter extends EndlessAdapter implements SectionIndexer {
 	Context context;
 	ArrayAdapter<MusicDirectory.Entry> adapter;
 	String type;
@@ -41,6 +45,10 @@ public class AlbumListAdapter extends EndlessAdapter {
 	int size;
 	int offset;
 	List<MusicDirectory.Entry> entries;
+
+	private boolean shouldIndex = false;
+	private Object[] sections;
+	private Integer[] positions;
 	
 	public AlbumListAdapter(Context context, ArrayAdapter<MusicDirectory.Entry> adapter, String type, String extra, int size) {
 		super(adapter);
@@ -50,6 +58,11 @@ public class AlbumListAdapter extends EndlessAdapter {
 		this.extra = extra;
 		this.size = size;
 		this.offset = size;
+
+		if("alphabeticalByName".equals(this.type)) {
+			shouldIndex = true;
+			recreateIndexes();
+		}
 	}
 	
 	@Override
@@ -73,6 +86,7 @@ public class AlbumListAdapter extends EndlessAdapter {
 			adapter.add(entry);
 		}
 		offset += entries.size();
+		recreateIndexes();
 	}
 	
 	@Override
@@ -80,5 +94,61 @@ public class AlbumListAdapter extends EndlessAdapter {
 		View progress = LayoutInflater.from(context).inflate(R.layout.tab_progress, null);
 		progress.setVisibility(View.VISIBLE);
 		return progress;
+	}
+
+	private void recreateIndexes() {
+		if(!shouldIndex) {
+			return;
+		}
+
+		Set<String> sectionSet = new LinkedHashSet<String>(30);
+		List<Integer> positionList = new ArrayList<Integer>(30);
+		for (int i = 0; i < adapter.getCount(); i++) {
+			MusicDirectory.Entry entry = adapter.getItem(i);
+			String index = entry.getAlbum().substring(0, 1);
+			if(!Character.isLetter(index.charAt(0))) {
+				index = "#";
+			}
+
+			if (!sectionSet.contains(index)) {
+				sectionSet.add(index);
+				positionList.add(i);
+			}
+		}
+		sections = sectionSet.toArray(new Object[sectionSet.size()]);
+		positions = positionList.toArray(new Integer[positionList.size()]);
+	}
+
+	@Override
+	public Object[] getSections() {
+		if(sections != null) {
+			return sections;
+		} else {
+			return new Object[0];
+		}
+	}
+
+	@Override
+	public int getPositionForSection(int section) {
+		if(sections != null) {
+			section = Math.min(section, positions.length - 1);
+			return positions[section];
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public int getSectionForPosition(int pos) {
+		if(sections != null) {
+			for (int i = 0; i < sections.length - 1; i++) {
+				if (pos < positions[i + 1]) {
+					return i;
+				}
+			}
+			return sections.length - 1;
+		} else {
+			return 0;
+		}
 	}
 }
