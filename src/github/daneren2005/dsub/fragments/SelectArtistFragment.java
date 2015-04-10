@@ -154,7 +154,7 @@ public class SelectArtistFragment extends SelectListFragment<Artist> {
 			Artist artist = (Artist) parent.getItemAtPosition(position);
 
 			SubsonicFragment fragment;
-			if(Util.isFirstLevelArtist(context) || "root".equals(artist.getId()) || groupId != null) {
+			if((Util.isFirstLevelArtist(context) || Util.isOffline(context) || Util.isTagBrowsing(context)) || "root".equals(artist.getId()) || groupId != null) {
 				fragment = new SelectDirectoryFragment();
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
