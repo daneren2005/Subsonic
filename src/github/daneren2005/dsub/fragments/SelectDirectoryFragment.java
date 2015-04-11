@@ -698,7 +698,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			// If artist, we want to load the artist info to use later
 			if(artist && ServerInfo.hasArtistInfo(context)  && !Util.isOffline(context)) {
 				try {
-					artistInfo = musicService.getArtistInfo(id, refresh, context, this);
+					String artistId;
+					if(id.indexOf(';') == -1) {
+						artistId = id;
+					} else {
+						artistId = id.substring(0, id.indexOf(';'));
+					}
+
+					artistInfo = musicService.getArtistInfo(artistId, refresh, context, this);
 				} catch(Exception e) {
 					Log.w(TAG, "Failed to get Artist Info even though it should be supported");
 				}

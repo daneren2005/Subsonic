@@ -19,8 +19,10 @@
 package github.daneren2005.dsub.service.parser;
 
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -57,6 +59,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
         String index = "#";
 		String ignoredArticles = null;
         boolean changed = false;
+		Map<String, Artist> artistList = new HashMap<String, Artist>();
 
         do {
             eventType = nextParseEvent();
@@ -75,7 +78,18 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                     artist.setName(get("name"));
                     artist.setIndex(index);
 					artist.setStarred(get("starred") != null);
-                    artists.add(artist);
+
+					// Combine the id's for the two artists
+					if(artistList.containsKey(artist.getName())) {
+						Artist originalArtist = artistList.get(artist.getName());
+						if(originalArtist.isStarred()) {
+							artist.setStarred(true);
+						}
+						originalArtist.setId(originalArtist.getId() + ";" + artist.getId());
+					} else {
+						artistList.put(artist.getName(), artist);
+						artists.add(artist);
+					}
 
                     if (artists.size() % 10 == 0) {
                         String msg = getContext().getResources().getString(R.string.parser_artist_count, artists.size());

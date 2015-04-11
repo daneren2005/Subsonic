@@ -260,13 +260,41 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-        Reader reader = getReader(context, progressListener, "getMusicDirectory", null, "id", id);
-        try {
-            return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
-        } finally {
-            Util.close(reader);
-        }
+		MusicDirectory dir = null;
+		int index, start = 0;
+		while((index = id.indexOf(';', start)) != -1) {
+			MusicDirectory extra = getMusicDirectoryImpl(id.substring(start, index), name, refresh, context, progressListener);
+			if(dir == null) {
+				dir = extra;
+			} else {
+				dir.addChildren(extra.getChildren());
+			}
+
+			start = index + 1;
+		}
+		MusicDirectory extra = getMusicDirectoryImpl(id.substring(start), name, refresh, context, progressListener);
+		if(dir == null) {
+			dir = extra;
+		} else {
+			dir.addChildren(extra.getChildren());
+		}
+
+		// Apply another sort if we are chaining several together
+		if(dir != extra) {
+			dir.sortChildren(context, getInstance(context));
+		}
+
+		return dir;
     }
+
+	private MusicDirectory getMusicDirectoryImpl(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		Reader reader = getReader(context, progressListener, "getMusicDirectory", null, "id", id);
+		try {
+			return new MusicDirectoryParser(context, getInstance(context)).parse(name, reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
 
 	@Override
 	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
