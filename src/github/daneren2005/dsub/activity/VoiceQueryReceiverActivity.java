@@ -38,6 +38,7 @@ import github.daneren2005.dsub.provider.DSubSearchProvider;
  * @author Sindre Mehus
  */
 public class VoiceQueryReceiverActivity extends Activity {
+	private static String GMS_SEARCH_ACTION = "com.google.android.gms.actions.SEARCH_ACTION";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,9 @@ public class VoiceQueryReceiverActivity extends Activity {
         if (query != null) {
             Intent intent = new Intent(VoiceQueryReceiverActivity.this, SubsonicFragmentActivity.class);
             intent.putExtra(Constants.INTENT_EXTRA_NAME_QUERY, query);
-            intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
+			if(!GMS_SEARCH_ACTION.equals(getIntent().getAction())) {
+				intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
+			}
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Util.startActivityWithoutTransition(VoiceQueryReceiverActivity.this, intent);
         }
