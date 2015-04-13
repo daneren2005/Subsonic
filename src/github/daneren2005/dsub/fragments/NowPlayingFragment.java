@@ -521,9 +521,16 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 		playlistView.setDropListener(new DragSortListView.DropListener() {
 			@Override
-			public void drop(int from, int to) {
-				getDownloadService().swap(true, from, to);
-				onDownloadListChanged();
+			public void drop(final int from, final int to) {
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().swap(true, from, to);
+						onDownloadListChanged();
+
+						return null;
+					}
+				}.execute();
 			}
 		});
 		playlistView.setRemoveListener(new DragSortListView.RemoveListener() {
