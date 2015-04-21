@@ -366,18 +366,7 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	private void handleKeyEvent(KeyEvent event) {
-		if(event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() > 0) {
-			switch (event.getKeyCode()) {
-				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
-				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-					downloadService.seekTo(downloadService.getPlayerPosition() - 10000);
-					break;
-				case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
-				case KeyEvent.KEYCODE_MEDIA_NEXT:
-					downloadService.seekTo(downloadService.getPlayerPosition() + 10000);
-					break;
-			}
-		} else if(event.getAction() == KeyEvent.ACTION_UP) {
+		if(event.getAction() == KeyEvent.ACTION_DOWN) {
 			switch (event.getKeyCode()) {
 				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
 				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
