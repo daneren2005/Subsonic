@@ -751,19 +751,19 @@ public class FileUtil {
 	}
 
     public static <T extends Serializable> boolean serialize(Context context, T obj, String fileName) {
-		synchronized (kryo) {
-			Output out = null;
-			try {
-				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
-				out = new Output(new FileOutputStream(file.getFD()));
+		Output out = null;
+		try {
+			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
+			out = new Output(new FileOutputStream(file.getFD()));
+			synchronized (kryo) {
 				kryo.writeObject(out, obj);
-				return true;
-			} catch (Throwable x) {
-				Log.w(TAG, "Failed to serialize object to " + fileName);
-				return false;
-			} finally {
-				Util.close(out);
 			}
+			return true;
+		} catch (Throwable x) {
+			Log.w(TAG, "Failed to serialize object to " + fileName);
+			return false;
+		} finally {
+			Util.close(out);
 		}
     }
 
@@ -772,78 +772,78 @@ public class FileUtil {
 	}
 
     public static <T extends Serializable> T deserialize(Context context, String fileName, Class<T> tClass, int hoursOld) {
-		synchronized (kryo) {
-			Input in = null;
-			try {
-				File file = new File(context.getCacheDir(), fileName);
-				if(!file.exists()) {
+		Input in = null;
+		try {
+			File file = new File(context.getCacheDir(), fileName);
+			if(!file.exists()) {
+				return null;
+			}
+
+			if(hoursOld != 0) {
+				Date fileDate = new Date(file.lastModified());
+				// Convert into hours
+				long age = (new Date().getTime() - fileDate.getTime()) / 1000 / 3600;
+				if(age > hoursOld) {
 					return null;
 				}
-
-				if(hoursOld != 0) {
-					Date fileDate = new Date(file.lastModified());
-					// Convert into hours
-					long age = (new Date().getTime() - fileDate.getTime()) / 1000 / 3600;
-					if(age > hoursOld) {
-						return null;
-					}
-				}
-
-				RandomAccessFile randomFile = new RandomAccessFile(file, "r");
-
-				in = new Input(new FileInputStream(randomFile.getFD()));
-				T result = (T) kryo.readObject(in, tClass);
-				return result;
-			} catch(FileNotFoundException e) {
-				// Different error message
-				Log.w(TAG, "No serialization for object from " + fileName);
-				return null;
-			} catch (Throwable x) {
-				Log.w(TAG, "Failed to deserialize object from " + fileName);
-				return null;
-			} finally {
-				Util.close(in);
 			}
+
+			RandomAccessFile randomFile = new RandomAccessFile(file, "r");
+
+			in = new Input(new FileInputStream(randomFile.getFD()));
+			synchronized (kryo) {
+				T result = kryo.readObject(in, tClass);
+				return result;
+			}
+		} catch(FileNotFoundException e) {
+			// Different error message
+			Log.w(TAG, "No serialization for object from " + fileName);
+			return null;
+		} catch (Throwable x) {
+			Log.w(TAG, "Failed to deserialize object from " + fileName);
+			return null;
+		} finally {
+			Util.close(in);
 		}
     }
 
 	public static <T extends Serializable> boolean serializeCompressed(Context context, T obj, String fileName) {
-		synchronized (kryo) {
-			Output out = null;
-			try {
-				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
-				out = new Output(new DeflaterOutputStream(new FileOutputStream(file.getFD())));
+		Output out = null;
+		try {
+			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
+			out = new Output(new DeflaterOutputStream(new FileOutputStream(file.getFD())));
+			synchronized (kryo) {
 				kryo.writeObject(out, obj);
-				return true;
-			} catch (Throwable x) {
-				Log.w(TAG, "Failed to serialize compressed object to " + fileName);
-				return false;
-			} finally {
-				Util.close(out);
 			}
+			return true;
+		} catch (Throwable x) {
+			Log.w(TAG, "Failed to serialize compressed object to " + fileName);
+			return false;
+		} finally {
+			Util.close(out);
 		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static <T extends Serializable> T deserializeCompressed(Context context, String fileName, Class<T> tClass) {
-		synchronized (kryo) {
-			Input in = null;
-			try {
-				RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "r");
+		Input in = null;
+		try {
+			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "r");
 
-				in = new Input(new InflaterInputStream(new FileInputStream(file.getFD())));
-				T result = (T) kryo.readObject(in, tClass);
+			in = new Input(new InflaterInputStream(new FileInputStream(file.getFD())));
+			synchronized (kryo) {
+				T result = kryo.readObject(in, tClass);
 				return result;
-			} catch(FileNotFoundException e) {
-				// Different error message
-				Log.w(TAG, "No serialization compressed for object from " + fileName);
-				return null;
-			} catch (Throwable x) {
-				Log.w(TAG, "Failed to deserialize compressed object from " + fileName);
-				return null;
-			} finally {
-				Util.close(in);
 			}
+		} catch(FileNotFoundException e) {
+			// Different error message
+			Log.w(TAG, "No serialization compressed for object from " + fileName);
+			return null;
+		} catch (Throwable x) {
+			Log.w(TAG, "Failed to deserialize compressed object from " + fileName);
+			return null;
+		} finally {
+			Util.close(in);
 		}
 	}
 }
