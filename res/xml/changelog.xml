@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9.6" versioncode="150" releasedate="4/20/2015">
+		<change>New setting: Automatic renaming of duplicate songs</change>
+		<change>New setting: auto play on headphone insert</change>
+		<change>New setting: make automatic renaming of duplicate songs optional</change>
+		<change>Persistent Notification: dismissible when not playing</change>
+		<change>Duplicate artists: combine them into a single listing when browsing all folders</change>
+		<change>No internet: display last loaded version of albums lists</change>
+		<change>Bug fixes for Ampache users</change>
+	</release>
 	<release version="4.9.5" versioncode="149" releasedate="3/25/2015">
 		<change>Handoff: move to another DSub client and pickup where you left off (Subsonic 5.2+)</change>
 		<change>DLNA: gapless playback on supported renders</change>
