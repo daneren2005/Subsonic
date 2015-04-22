@@ -1519,10 +1519,14 @@ public class DownloadService extends Service {
 	}
 
 	public void registerRoute(MediaRouter router) {
-		mRemoteControl.registerRoute(router);
+		if(mRemoteControl != null) {
+			mRemoteControl.registerRoute(router);
+		}
 	}
 	public void unregisterRoute(MediaRouter router) {
-		mRemoteControl.unregisterRoute(router);
+		if(mRemoteControl != null) {
+			mRemoteControl.unregisterRoute(router);
+		}
 	}
 
 	public void updateRemoteVolume(boolean up) {
