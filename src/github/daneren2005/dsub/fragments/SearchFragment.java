@@ -61,6 +61,7 @@ public class SearchFragment extends SubsonicFragment {
 	private ListAdapter moreSongsAdapter;
 	private EntryAdapter songAdapter;
 	private boolean skipSearch = false;
+	private String currentQuery;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -142,6 +143,12 @@ public class SearchFragment extends SubsonicFragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_search:
+				context.startSearch(currentQuery, false, null, false);
+				return true;
+		}
+
 		return super.onOptionsItemSelected(item);
 
 	}
@@ -191,6 +198,8 @@ public class SearchFragment extends SubsonicFragment {
 			skipSearch = false;
 			return;
 		}
+		currentQuery = query;
+
 		mergeAdapter = new MergeAdapter();
 		list.setAdapter(mergeAdapter);
 		
