@@ -206,4 +206,8 @@ public class ServerInfo implements Serializable {
 	public static boolean canSavePlayQueue(Context context) {
 		return ServerInfo.checkServerVersion(context, "1.12") && !ServerInfo.isMadsonic(context);
 	}
+
+	public static boolean canAlbumListPerFolder(Context context) {
+		return ServerInfo.checkServerVersion(context, "1.11") && !ServerInfo.isMadsonic(context);
+	}
 }

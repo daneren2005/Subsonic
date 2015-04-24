@@ -174,7 +174,7 @@ public class MainFragment extends SubsonicFragment {
 		final View dummyView = rootView.findViewById(R.id.main_dummy);
 
 		final CheckBox albumsPerFolderCheckbox = (CheckBox) buttons.findViewById(R.id.main_albums_per_folder);
-		if(!Util.isOffline(context) && ServerInfo.checkServerVersion(context, "1.11")) {
+		if(!Util.isOffline(context) && ServerInfo.canAlbumListPerFolder(context)) {
 			albumsPerFolderCheckbox.setChecked(Util.getAlbumListsPerFolder(context));
 			albumsPerFolderCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 				@Override
