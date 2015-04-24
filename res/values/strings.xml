@@ -133,6 +133,7 @@
     <string name="search.more">Show more</string>
 
     <string name="progress.wait">Please wait...</string>
+	<string name="progress.artist_info">Loading Artist Bio</string>
 
     <string name="music_library.label">Media library</string>
     <string name="music_library.label_offline">Offline media</string>

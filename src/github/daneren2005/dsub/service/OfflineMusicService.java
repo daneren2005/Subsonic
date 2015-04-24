@@ -790,7 +790,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public ArtistInfo getArtistInfo(String id, boolean refresh, boolean allowNetwork, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

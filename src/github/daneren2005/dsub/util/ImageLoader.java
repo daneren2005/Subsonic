@@ -25,7 +25,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -458,7 +457,7 @@ public class ImageLoader {
 		@Override
 		protected Void doInBackground() throws Throwable {
 			MusicService musicService = MusicServiceFactory.getMusicService(mContext);
-			ArtistInfo artistInfo = musicService.getArtistInfo(mEntry.getId(), false, mContext, null);
+			ArtistInfo artistInfo = musicService.getArtistInfo(mEntry.getId(), false, true, mContext, null);
 			String url = artistInfo.getImageUrl();
 
 			// Figure out whether we are going to get a artist image or the standard image

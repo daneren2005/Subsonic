@@ -963,15 +963,15 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public ArtistInfo getArtistInfo(String id, boolean refresh, boolean allowNetwork, Context context, ProgressListener progressListener) throws Exception {
 		String cacheName = getCacheName(context, "artistInfo", id);
 		ArtistInfo info = null;
 		if(!refresh) {
 			info = FileUtil.deserialize(context, cacheName, ArtistInfo.class);
 		}
 
-		if(info == null) {
-			info = musicService.getArtistInfo(id, refresh, context, progressListener);
+		if(info == null && allowNetwork) {
+			info = musicService.getArtistInfo(id, refresh, allowNetwork, context, progressListener);
 			FileUtil.serialize(context, info, cacheName);
 		}
 

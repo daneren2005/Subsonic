@@ -115,7 +115,7 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 
 	@Override
 	public List<Artist> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		info = musicService.getArtistInfo(artistId, refresh, context, listener);
+		info = musicService.getArtistInfo(artistId, refresh, true, context, listener);
 		return info.getSimilarArtists();
 	}
 

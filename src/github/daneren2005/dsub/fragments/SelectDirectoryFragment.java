@@ -55,6 +55,7 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
@@ -81,7 +82,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	private boolean albumContext = false;
 	private boolean addAlbumHeader = false;
 	private LoadTask currentTask;
-	ArtistInfo artistInfo;
+	private ArtistInfo artistInfo;
+	private String artistInfoDelayed;
 
 	String id;
 	String name;
@@ -705,7 +707,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 						artistId = id.substring(0, id.indexOf(';'));
 					}
 
-					artistInfo = musicService.getArtistInfo(artistId, refresh, context, this);
+					artistInfo = musicService.getArtistInfo(artistId, refresh, false, context, this);
+
+					if(artistInfo == null) {
+						artistInfoDelayed = artistId;
+					}
 				} catch(Exception e) {
 					Log.w(TAG, "Failed to get Artist Info even though it should be supported");
 				}
@@ -725,8 +731,43 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 		// Show header if not album list type and not root and not artist
 		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
 		View header = null;
-		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null)) {
+		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null || artistInfoDelayed != null)) {
 			header = createHeader();
+
+			if(header != null && artistInfoDelayed != null) {
+				final View finalHeader = header.findViewById(R.id.select_album_header);
+				final View headerProgress = header.findViewById(R.id.header_progress);
+
+				finalHeader.setVisibility(View.INVISIBLE);
+				headerProgress.setVisibility(View.VISIBLE);
+
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						artistInfo = musicService.getArtistInfo(artistInfoDelayed, false, true, context, this);
+
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						/*if(albumList instanceof HeaderGridView) {
+							HeaderGridView headerGridView = (HeaderGridView) albumList;
+							headerGridView.invalidateRowHeight();
+							((BaseAdapter) headerGridView.getAdapter()).notifyDataSetChanged();
+						}*/
+
+						setupCoverArt(finalHeader);
+						setupTextDisplay(finalHeader);
+						setupButtonEvents(finalHeader);
+
+						finalHeader.setVisibility(View.VISIBLE);
+						headerProgress.setVisibility(View.GONE);
+					}
+				}.execute();
+			}
+
 			// Only add header to entry list if we aren't going recreate album grid as root anyways
 			if(header != null && entryList != null && (!addAlbumHeader || entries.size() > 0)) {
 				entryList.addHeaderView(header, null, false);
@@ -1300,7 +1341,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 	}
 
 	private View createHeader() {
-		View header = entryList.findViewById(R.id.select_album_header);
+		View header = entryList.findViewById(R.id.select_album_header_wrapper);
 		boolean add = false;
 		if(header == null) {
 			header = LayoutInflater.from(context).inflate(R.layout.select_album_header, entryList, false);
@@ -1415,6 +1456,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
 		if(podcastDescription != null || artistInfo != null) {
+			artistView.setVisibility(View.VISIBLE);
 			String text = podcastDescription != null ? podcastDescription : artistInfo.getBiography();
 			Spanned spanned = null;
 			if(text != null) {

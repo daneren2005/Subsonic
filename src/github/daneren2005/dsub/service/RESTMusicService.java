@@ -92,7 +92,6 @@ import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
 import github.daneren2005.dsub.service.parser.ShareParser;
 import github.daneren2005.dsub.service.parser.StarredListParser;
-import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.service.parser.UserParser;
 import github.daneren2005.dsub.service.parser.VideosParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
@@ -1508,7 +1507,7 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public ArtistInfo getArtistInfo(String id, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public ArtistInfo getArtistInfo(String id, boolean refresh, boolean allowNetwork, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.11", "Getting artist info is not supported");
 
 		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtistInfo2" : "getArtistInfo", null, Arrays.asList("id", "includeNotPresent"), Arrays.<Object>asList(id, "true"));
