@@ -570,7 +570,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}.execute();
 	}
 	private void loadRemotePlayQueue() {
-		final Context context = this;
+		final SubsonicActivity context = this;
 		new SilentBackgroundTask<Void>(this) {
 			private PlayerQueue playerQueue;
 
@@ -605,7 +605,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 			@Override
 			protected void done(Void arg) {
-				if(playerQueue != null) {
+				if(!context.isDestroyedCompat() && playerQueue != null) {
 					promptRestoreFromRemoteQueue(playerQueue);
 				}
 			}
