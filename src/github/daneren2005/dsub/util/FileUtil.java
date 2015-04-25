@@ -42,6 +42,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import github.daneren2005.dsub.domain.Artist;
@@ -433,12 +434,8 @@ public class FileUtil {
 				dirs = ContextCompat.getExternalFilesDirs(context, null);
 			}
 
-			for(int i = dirs.length - 1; i >= 0; i--) {
-				DEFAULT_MUSIC_DIR = new File(dirs[i], "music");
-				if(dirs[i] != null) {
-					break;
-				}
-			}
+			DEFAULT_MUSIC_DIR = new File(getBestDir(dirs), "music");
+			Log.d(TAG, "Default: " + DEFAULT_MUSIC_DIR.getAbsolutePath());
 
 			if (!DEFAULT_MUSIC_DIR.exists() && !DEFAULT_MUSIC_DIR.mkdirs()) {
 				Log.e(TAG, "Failed to create default dir " + DEFAULT_MUSIC_DIR);
@@ -447,13 +444,7 @@ public class FileUtil {
 				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 					dirs = ContextCompat.getExternalFilesDirs(context, null);
 
-					for(int i = dirs.length - 1; i >= 0; i--) {
-						DEFAULT_MUSIC_DIR = new File(dirs[i], "music");
-						if(dirs[i] != null) {
-							break;
-						}
-					}
-
+					DEFAULT_MUSIC_DIR = new File(getBestDir(dirs), "music");
 					if (!DEFAULT_MUSIC_DIR.exists() && !DEFAULT_MUSIC_DIR.mkdirs()) {
 						Log.e(TAG, "Failed to create default dir " + DEFAULT_MUSIC_DIR);
 					} else {
@@ -465,6 +456,26 @@ public class FileUtil {
 
         return DEFAULT_MUSIC_DIR;
     }
+	private static File getBestDir(File[] dirs) {
+		// Past 5.0 we can query directly for SD Card
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			for(int i = 0; i < dirs.length; i++) {
+				if(dirs[i] != null && Environment.isExternalStorageRemovable(dirs[i])) {
+					return dirs[i];
+				}
+			}
+		}
+
+		// Before 5.0, we have to guess.  Most of the time the SD card is last
+		for(int i = dirs.length - 1; i >= 0; i--) {
+			if(dirs[i] != null) {
+				return dirs[i];
+			}
+		}
+
+		// Should be impossible to be reached
+		return dirs[0];
+	}
 
     public static File getMusicDirectory(Context context) {
         String path = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, getDefaultMusicDirectory(context).getPath());
