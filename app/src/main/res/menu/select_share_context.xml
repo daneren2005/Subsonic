@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:compat="http://schemas.android.com/apk/res-auto">
+
+	<item
+		android:id="@+id/share_menu_info"
+		android:title="@string/common.info"/>
+
+	<item
+		android:id="@+id/share_menu_share"
+		android:title="@string/menu.share"/>
+
+	<item
+		android:id="@+id/share_update_info"
+		android:title="@string/playlist.update_info"
+		/>
+
+	<item
+		android:id="@+id/share_menu_delete"
+		android:title="@string/share.delete"/>
+</menu>

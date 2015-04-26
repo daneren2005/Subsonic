@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:id="@id/drag_handle"
+			  android:orientation="horizontal"
+			  android:layout_width="fill_parent"
+			  android:layout_height="wrap_content">
+
+	<RelativeLayout
+		android:layout_width="@dimen/AlbumArt.Small"
+		android:layout_height="@dimen/AlbumArt.Small">
+
+		<github.daneren2005.dsub.view.RecyclingImageView
+			android:id="@+id/album_coverart"
+			android:layout_width="@dimen/AlbumArt.Small"
+			android:layout_height="@dimen/AlbumArt.Small"
+			android:layout_gravity="left|center_vertical"/>
+
+		<RatingBar
+			android:id="@+id/album_rating"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:isIndicator="true"
+			android:layout_centerHorizontal="true"
+			android:numStars="5"
+			style="@android:style/Widget.Holo.RatingBar.Small"
+			android:layout_alignParentBottom="true"
+			android:visibility="gone"/>
+	</RelativeLayout>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="0dip"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:layout_gravity="left|center_vertical"
+		android:paddingLeft="10dip"
+		android:paddingRight="3dip">
+
+		<TextView
+			android:id="@+id/album_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:singleLine="true"
+			android:ellipsize="marquee"
+			android:paddingBottom="6dip"/>
+
+		<TextView
+			android:id="@+id/album_artist"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:singleLine="true"/>
+
+	</LinearLayout>
+
+	<ImageButton
+		android:id="@+id/album_star"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="right|center_vertical"
+		android:src="@drawable/ic_stat_star"
+		android:background="@android:color/transparent"
+		android:focusable="false"
+		android:visibility="gone"/>
+
+	<ImageView
+		android:id="@+id/album_more"
+		android:src="?attr/download_none"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:layout_gravity="right|center_vertical"
+		style="@style/MoreButton"/>
+</LinearLayout>

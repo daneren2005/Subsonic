@@ -10,3 +10,5 @@ releases/
 proguard_logs/
 /gen/
 /out/
+.gradle/*
+/build/

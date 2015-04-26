@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:background="@android:color/transparent">
+
+	<TextView
+		android:id="@+id/genre_name"
+		android:layout_width="0dip"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:gravity="left|center_vertical"
+		android:paddingLeft="6dip"
+		android:paddingRight="6dip"
+		android:minHeight="50dip"
+		android:singleLine="true"
+		android:ellipsize="marquee"
+		android:background="@android:color/transparent"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:orientation="vertical"
+		android:gravity="right|center_vertical"
+		android:paddingRight="10dip"
+		android:background="@android:color/transparent">
+
+		<TextView
+			android:id="@+id/genre_songs"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+		<TextView
+			android:id="@+id/genre_albums"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceSmall"/>
+	</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/refresh_layout"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<LinearLayout
+		android:id="@+id/select_album_layout"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+		<View
+			android:layout_width="fill_parent"
+			android:layout_height="1px"
+			android:background="@color/dividerColor"/>
+
+		<include layout="@layout/tab_progress"/>
+
+		<ListView
+			android:id="@+id/select_album_entries"
+			android:textFilterEnabled="true"
+			android:layout_width="fill_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1.0"
+			android:fastScrollEnabled="true"/>
+	</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

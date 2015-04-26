@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:compat="http://schemas.android.com/apk/res-auto">
+	<item
+		android:id="@+id/menu_add_user"
+		android:title="@string/menu.add_user"
+		android:icon="?attr/add_person"
+		compat:showAsAction="always|withText"/>
+
+	<item
+		android:id="@+id/menu_exit"
+		android:title="@string/menu.exit"/>
+</menu>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<github.daneren2005.dsub.view.UnscrollableGridView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/gridview"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:numColumns="@integer/Grid.Columns"
+	android:horizontalSpacing="10dp"
+	android:verticalSpacing="10dp"
+	android:gravity="center"
+	android:padding="20px"
+	android:stretchMode="columnWidth"/>

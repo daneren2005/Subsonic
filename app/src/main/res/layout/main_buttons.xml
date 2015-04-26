@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:id="@+id/main_select_server"
+            android:orientation="horizontal"
+            android:paddingTop="2dip"
+            android:paddingBottom="2dip"
+            android:paddingLeft="6dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?android:attr/listPreferredItemHeight">
+
+        <ImageView
+                android:src="?attr/select_server"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <TextView android:id="@+id/main.select_server_1"
+                      android:text="@string/main.select_server"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="10dip"
+                      android:layout_marginTop="6dip"
+                      android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+            <TextView android:id="@+id/main.select_server_2"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginLeft="10dip"
+                      android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+        </LinearLayout>
+    </LinearLayout>
+	
+	<TextView
+		android:id="@+id/main_offline"
+		android:text="@string/main.offline"
+		android:drawablePadding="12dip"
+		android:drawableLeft="?attr/offline_icon"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:paddingLeft="6dp"
+		android:paddingBottom="4dp"
+		android:minHeight="50dip"/>
+
+	<LinearLayout
+		android:id="@+id/main_albums"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<TextView
+			android:text="@string/main.albums_title"
+			style="@style/MainAlbumButtonLabel"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_height="fill_parent"/>
+
+		<CheckBox
+			android:id="@+id/main_albums_per_folder"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/main.albums_per_folder"
+			android:layout_marginRight="6dp"
+			android:layout_gravity="right"/>
+	</LinearLayout>
+
+	<TextView
+		android:id="@+id/main_video_section"
+		android:text="@string/main.videos"
+		style="@style/MainAlbumButtonLabel"
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:layout_height="fill_parent"/>
+
+	<LinearLayout
+		android:id="@+id/main_albums_newest"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:minHeight="46dip">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:text="@string/main.albums_newest"
+			style="@style/MainAlbumButton"/>
+
+		<TextView
+			android:id="@+id/main_albums_recent_count"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_marginRight="12dp"
+			android:background="@drawable/ic_number_border"
+			android:focusable="false"
+			android:paddingRight="10dp"
+			android:layout_marginLeft="20px"
+			android:layout_marginBottom="4px"
+			android:text="99"
+			android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
+			android:textSize="11sp"
+			android:gravity="right|center_vertical"
+			android:layout_gravity="center_vertical"
+			android:visibility="gone"/>
+	</LinearLayout>
+
+	<TextView
+		android:id="@+id/main_albums_recent"
+		android:text="@string/main.albums_recent"
+		style="@style/MainAlbumButton"/>
+	<TextView
+		android:id="@+id/main_albums_frequent"
+		android:text="@string/main.albums_frequent"
+		style="@style/MainAlbumButton"/>
+	<TextView
+		android:id="@+id/main_albums_highest"
+		android:text="@string/main.albums_highest"
+		style="@style/MainAlbumButton"/>
+	<TextView
+		android:id="@+id/main_albums_starred"
+		android:text="@string/main.albums_starred"
+		style="@style/MainAlbumButton"/>
+	<TextView
+		android:id="@+id/main_albums_genres"
+		android:text="@string/main.albums_genres"
+		style="@style/MainAlbumButton"/>
+	<TextView
+		android:id="@+id/main_albums_year"
+		android:text="@string/main.albums_year"
+		style="@style/MainAlbumButton"/>
+	<TextView
+		android:id="@+id/main_albums_random"
+		android:text="@string/main.albums_random"
+		style="@style/MainAlbumButton"/>
+	<TextView
+		android:id="@+id/main_albums_alphabetical"
+		android:text="@string/main.albums_alphabetical"
+		style="@style/MainAlbumButton"/>
+
+	<TextView
+		android:id="@+id/main_videos"
+		android:text="@string/main.videos"
+		style="@style/MainAlbumButton"/>
+
+</LinearLayout>
+
