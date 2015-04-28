@@ -23,6 +23,12 @@
         <item name="android:layout_width">@dimen/Button.Small</item>
         <item name="android:layout_height">@dimen/Button.Small</item>
     </style>
+
+	<style name="PlaybackControl.Match" parent="@style/PlaybackControl">
+		<item name="android:padding">4dip</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:layout_width">wrap_content</item>
+	</style>
 	
 	<style name="MenuBarButton" parent="@style/BasicButton">
         <item name="android:layout_width">0dip</item>

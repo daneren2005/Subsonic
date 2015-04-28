@@ -31,14 +31,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -53,6 +55,7 @@ import github.daneren2005.dsub.fragments.AdminFragment;
 import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.DownloadFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
+import github.daneren2005.dsub.fragments.NowPlayingFragment;
 import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectBookmarkFragment;
@@ -66,7 +69,6 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.updates.Updater;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
@@ -82,6 +84,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private static boolean infoDialogDisplayed;
 	private static boolean sessionInitialized = false;
 	private static long ALLOWED_SKEW = 30000L;
+
+	private Handler handler = new Handler();
+	private SlidingUpPanelLayout slideUpPanel;
+	private NowPlayingFragment nowPlayingFragment;
+	private Toolbar mainToolbar;
+	private Toolbar nowPlayingToolbar;
 
 	private ScheduledExecutorService executorService;
 	private View bottomBar;
@@ -105,14 +113,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			if(drawerAdapter != null) {
 				drawerAdapter.setDownloadVisible(true);
 			}
-		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
-			DownloadService service = getDownloadService();
-			if((service != null && service.getCurrentPlaying() != null)) {
-				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
-				Intent intent = new Intent();
-				intent.setClass(this, DownloadActivity.class);
-				startActivity(intent);
-			}
 		}
 		setContentView(R.layout.abstract_fragment_activity);
 
@@ -128,48 +128,98 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				}
 			}
 			currentFragment = getNewFragment(fragmentType);
-			
+
 			if("".equals(fragmentType) || fragmentType == null || firstRun) {
 				// Initial startup stuff
 				if(!sessionInitialized) {
 					loadSession();
 				}
 			}
-			
+
 			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
-			
+
 			if(getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
 				SearchFragment fragment = new SearchFragment();
 				replaceFragment(fragment, fragment.getSupportTag());
 			}
-			
+
 			// If a album type is set, switch to that album type view
 			String albumType = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			if(albumType != null) {
 				SubsonicFragment fragment = new SelectDirectoryFragment();
-				
+
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, albumType);
 				args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
 				args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
-				
+
 				fragment.setArguments(args);
 				replaceFragment(fragment, fragment.getSupportTag());
 			}
 		}
 
-		bottomBar = findViewById(R.id.bottom_bar);
-		bottomBar.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(v.getContext(), DownloadActivity.class);
-				startActivity(intent);
+		slideUpPanel = (SlidingUpPanelLayout) findViewById(R.id.slide_up_panel);
+		slideUpPanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+			@Override
+			public void onPanelSlide(View panel, float slideOffset) {
+
+			}
+
+			@Override
+			public void onPanelCollapsed(View panel) {
+				bottomBar.setVisibility(View.VISIBLE);
+				nowPlayingToolbar.setVisibility(View.GONE);
+				nowPlayingFragment.setPrimaryFragment(false);
+				setSupportActionBar(mainToolbar);
+			}
+
+			@Override
+			public void onPanelExpanded(View panel) {
+				bottomBar.setVisibility(View.GONE);
+				nowPlayingToolbar.setVisibility(View.VISIBLE);
+				setSupportActionBar(nowPlayingToolbar);
+				nowPlayingFragment.setPrimaryFragment(true);
+
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+				getSupportActionBar().setHomeButtonEnabled(true);
+				drawerToggle.setDrawerIndicatorEnabled(true);
+			}
+
+			@Override
+			public void onPanelAnchored(View panel) {
+
+			}
+
+			@Override
+			public void onPanelHidden(View panel) {
+
 			}
 		});
+
+		if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
+			// Post this later so it actually runs
+			handler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					openNowPlaying();
+				}
+			}, 200);
+		}
+
+		bottomBar = findViewById(R.id.bottom_bar);
+		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
 		coverArtView = bottomBar.findViewById(R.id.album_art);
 		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
 		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
+
+		setSupportActionBar(mainToolbar);
+
+		nowPlayingFragment = new NowPlayingFragment();
+		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+		trans.add(R.id.now_playing_fragment_container, nowPlayingFragment, nowPlayingFragment.getTag() + "");
+		trans.commit();
 
 		ImageButton previousButton = (ImageButton) findViewById(R.id.download_previous);
 		previousButton.setOnClickListener(new View.OnClickListener() {
@@ -262,7 +312,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -300,7 +350,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	public void onResume() {
 		super.onResume();
 
-		final Handler handler = new Handler();
 		Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
@@ -369,13 +418,24 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	@Override
 	public void onBackPressed() {
-		if(onBackPressedSupport()) {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+		} else if(onBackPressedSupport()) {
 			if(!Util.disableExitPrompt(this) && lastBackPressTime < (System.currentTimeMillis() - 4000)) {
 				lastBackPressTime = System.currentTimeMillis();
 				Util.toast(this, R.string.main_back_confirm);
 			} else {
 				finish();
 			}
+		}
+	}
+
+	@Override
+	protected SubsonicFragment getCurrentFragment() {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			return nowPlayingFragment;
+		} else {
+			return super.getCurrentFragment();
 		}
 	}
 
@@ -393,24 +453,24 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			drawerToggle.setDrawerIndicatorEnabled(true);
 		}
 	}
-	
+
 	@Override
 	public void startFragmentActivity(String fragmentType) {
 		// Create a transaction that does all of this
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-		
+
 		// Clear existing stack
 		for(int i = backStack.size() - 1; i >= 0; i--) {
 			trans.remove(backStack.get(i));
 		}
 		trans.remove(currentFragment);
 		backStack.clear();
-		
+
 		// Create new stack
 		currentFragment = getNewFragment(fragmentType);
 		currentFragment.setPrimaryFragment(true);
 		trans.add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "");
-		
+
 		// Done, cleanup
 		trans.commit();
 		supportInvalidateOptionsMenu();
@@ -426,7 +486,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			drawerToggle.setDrawerIndicatorEnabled(true);
 		}
 	}
-	
+
+	@Override
+	public void openNowPlaying() {
+		slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+	}
+	@Override
+	public void closeNowPlaying() {
+		slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+	}
+
 	private SubsonicFragment getNewFragment(String fragmentType) {
 		if("Artist".equals(fragmentType)) {
 			return new SelectArtistFragment();
@@ -447,7 +516,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		} else {
 			return new MainFragment();
 		}
-	} 
+	}
 
 	private void update() {
 		DownloadService downloadService = getDownloadService();
@@ -502,7 +571,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		if(ServerInfo.canSavePlayQueue(this) && !Util.isOffline(this)) {
 			loadRemotePlayQueue();
 		}
-		
+
 		sessionInitialized = true;
 	}
 	private void loadSettings() {
@@ -551,7 +620,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			return true;
 		}
 	}
-	
+
 	private void loadBookmarks() {
 		final Context context = this;
 		new SilentBackgroundTask<Void>(context) {
@@ -562,7 +631,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 				return null;
 			}
-			
+
 			@Override
 			public void error(Throwable error) {
 				Log.e(TAG, "Failed to get bookmarks", error);

@@ -48,6 +48,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
@@ -256,14 +257,26 @@ public final class Util {
 	}
 
 	public static void applyTheme(Context context, String theme) {
-		if ("dark".equals(theme)) {
-			context.setTheme(R.style.Theme_DSub_Dark);
-		} else if ("black".equals(theme)) {
-			context.setTheme(R.style.Theme_DSub_Black);
-		} else if ("holo".equals(theme)) {
-			context.setTheme(R.style.Theme_DSub_Holo);
+		if(context instanceof SubsonicFragmentActivity) {
+			if ("dark".equals(theme)) {
+				context.setTheme(R.style.Theme_DSub_Dark_No_Actionbar);
+			} else if ("black".equals(theme)) {
+				context.setTheme(R.style.Theme_DSub_Black_No_Actionbar);
+			} else if ("holo".equals(theme)) {
+				context.setTheme(R.style.Theme_DSub_Holo_No_Actionbar);
+			} else {
+				context.setTheme(R.style.Theme_DSub_Light_No_Actionbar);
+			}
 		} else {
-			context.setTheme(R.style.Theme_DSub_Light);
+			if ("dark".equals(theme)) {
+				context.setTheme(R.style.Theme_DSub_Dark);
+			} else if ("black".equals(theme)) {
+				context.setTheme(R.style.Theme_DSub_Black);
+			} else if ("holo".equals(theme)) {
+				context.setTheme(R.style.Theme_DSub_Holo);
+			} else {
+				context.setTheme(R.style.Theme_DSub_Light);
+			}
 		}
 
 		SharedPreferences prefs = Util.getPreferences(context);

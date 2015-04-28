@@ -46,7 +46,6 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -993,7 +992,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 			@Override
 			protected void done(Void result) {
 				if (autoplay) {
-					Util.startActivityWithoutTransition(context, DownloadActivity.class);
+					context.openNowPlaying();
 				} else if (save) {
 					Util.toast(context,
 							context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
@@ -1335,7 +1334,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Adapter
 
 			@Override
 			protected void done(Void result) {
-				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				context.openNowPlaying();
 			}
 		}.execute();
 	}

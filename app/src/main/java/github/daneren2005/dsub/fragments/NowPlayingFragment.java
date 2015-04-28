@@ -20,6 +20,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -141,6 +142,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				startFlipped = true;
 			}
 		}
+		primaryFragment = false;
 	}
 
 	@Override
@@ -153,11 +155,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.download, container, false);
 		setTitle(R.string.button_bar_now_playing);
-		
+
 		mainLayout = rootView.findViewById(R.id.download_layout);
-		if(!primaryFragment) {
-			mainLayout.setVisibility(View.GONE);
-		}
 
 		WindowManager w = context.getWindowManager();
 		Display d = w.getDefaultDisplay();
@@ -397,7 +396,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				} else {
 					// Immediately skip to the next song
 					downloadService.next(true);
-					
+
 					// Otherwise set rating to 1
 					setRating(entry, 1);
 					rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_selected);
@@ -470,35 +469,35 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 
 		progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onStopTrackingTouch(final SeekBar seekBar) {
-                new SilentBackgroundTask<Void>(context) {
-                    @Override
-                    protected Void doInBackground() throws Throwable {
-                        getDownloadService().seekTo(progressBar.getProgress());
-                        return null;
-                    }
+			@Override
+			public void onStopTrackingTouch(final SeekBar seekBar) {
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().seekTo(progressBar.getProgress());
+						return null;
+					}
 
-                    @Override
-                    protected void done(Void result) {
-                    	seekInProgress = false;
-                        NowPlayingFragment.this.onProgressChanged();
-                    }
-                }.execute();
-            }
+					@Override
+					protected void done(Void result) {
+						seekInProgress = false;
+						NowPlayingFragment.this.onProgressChanged();
+					}
+				}.execute();
+			}
 
-            @Override
-            public void onStartTrackingTouch(final SeekBar seekBar) {
+			@Override
+			public void onStartTrackingTouch(final SeekBar seekBar) {
 				seekInProgress = true;
-            }
+			}
 
-            @Override
-            public void onProgressChanged(final SeekBar seekBar, final int position, final boolean fromUser) {
+			@Override
+			public void onProgressChanged(final SeekBar seekBar, final int position, final boolean fromUser) {
 				if (fromUser) {
 					Util.toast(context, Util.formatDuration(position / 1000), true);
 					setControlsVisible(true);
 				}
-            }
+			}
 		});
 		playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -542,13 +541,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 
 		registerForContextMenu(playlistView);
-
-		DownloadService downloadService = getDownloadService();
-		if (downloadService != null && context.getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
-			context.getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE);
-			warnIfStorageUnavailable();
-			downloadService.setShufflePlayEnabled(true);
-		}
 
 		if(Build.MODEL.equals("Nexus 4") || Build.MODEL.equals("GT-I9100")) {
 			View slider = rootView.findViewById(R.id.download_slider);
@@ -603,7 +595,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(menuItemSelected(menuItem.getItemId(), null)) {
 			return true;
 		}
-		
+
 		return super.onOptionsItemSelected(menuItem);
 	}
 
@@ -640,7 +632,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(!primaryFragment) {
 			return false;
 		}
-		
+
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
 		DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
 		return menuItemSelected(menuItem.getItemId(), downloadFile) || super.onContextItemSelected(menuItem);
@@ -840,7 +832,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public void onResume() {
 		super.onResume();
-
+		onResumeHandlers();
+	}
+	private void onResumeHandlers() {
 		final Handler handler = new Handler();
 		Runnable runnable = new Runnable() {
 			@Override
@@ -897,22 +891,40 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public void onPause() {
 		super.onPause();
+		onPauseHandlers();
+	}
+	private void onPauseHandlers() {
 		executorService.shutdown();
 		if(getDownloadService() != null) {
 			getDownloadService().stopRemoteScan();
 		}
+		playlistFlipper.setDisplayedChild(0);
 	}
-	
+
 	@Override
 	public void setPrimaryFragment(boolean primary) {
 		super.setPrimaryFragment(primary);
 		if(rootView != null) {
 			if(primary) {
-				mainLayout.setVisibility(View.VISIBLE);
-				updateButtons();
+				onResumeHandlers();
 			} else {
-				mainLayout.setVisibility(View.GONE);
+				onPauseHandlers();
 			}
+		}
+	}
+
+	@Override
+	public void setTitle(int title) {
+		this.title = context.getResources().getString(title);
+		if(this.primaryFragment) {
+			context.setTitle(this.title);
+		}
+	}
+	@Override
+	public void setSubtitle(CharSequence title) {
+		this.subtitle = title;
+		if(this.primaryFragment) {
+			context.setSubtitle(title);
 		}
 	}
 
@@ -953,7 +965,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(context == null) {
 			return;
 		}
-		
+
 		if(Util.isOffline(context)) {
 			bookmarkButton.setVisibility(View.GONE);
 			rateBadButton.setVisibility(View.GONE);
@@ -970,6 +982,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	// Scroll to current playing/downloading.
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	private void scrollToCurrent() {
 		if (getDownloadService() == null || songListAdapter == null) {
 			scrollWhenLoaded = true;
@@ -1042,26 +1055,26 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
-        lengthBar.setProgress(length - 1);
+		lengthBar.setProgress(length - 1);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_set_timer)
-			.setView(dialogView)
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					int length = getMinutes(lengthBar.getProgress());
+				.setView(dialogView)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						int length = getMinutes(lengthBar.getProgress());
 
-					SharedPreferences.Editor editor = prefs.edit();
-					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
-					editor.commit();
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
+						editor.commit();
 
-					getDownloadService().setSleepTimerDuration(length);
-					getDownloadService().startSleepTimer();
-					context.supportInvalidateOptionsMenu();
-				}
-			})
-			.setNegativeButton(R.string.common_cancel, null);
+						getDownloadService().setSleepTimerDuration(length);
+						getDownloadService().startSleepTimer();
+						context.supportInvalidateOptionsMenu();
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
@@ -1086,7 +1099,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			playlistFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_in));
 			playlistFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_out));
 			playlistFlipper.setDisplayedChild(1);
-			
+
 			UpdateView.triggerUpdate();
 		}
 	}
@@ -1124,7 +1137,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			protected Void doInBackground() throws Throwable {
 				currentPlayingIndex = downloadService.getCurrentPlayingIndex() + 1;
 				size = downloadService.size();
-				
+
 				return null;
 			}
 
@@ -1132,14 +1145,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			protected void done(Void result) {
 				List<DownloadFile> list;
 				list = downloadService.getSongs();
-				
+
 				if(downloadService.isShufflePlayEnabled()) {
 					emptyTextView.setText(R.string.download_shuffle_loading);
 				}
 				else {
 					emptyTextView.setText(R.string.download_empty);
 				}
-				
+
 				if(songListAdapter == null || refresh) {
 					songList = new ArrayList<DownloadFile>();
 					songList.addAll(list);
@@ -1149,7 +1162,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					songList.addAll(list);
 					songListAdapter.notifyDataSetChanged();
 				}
-				
+
 				emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
 				currentRevision = downloadService.getDownloadListUpdateRevision();
 
@@ -1170,7 +1183,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					default:
 						break;
 				}
-				
+
 				if(scrollWhenLoaded) {
 					scrollToCurrent();
 					scrollWhenLoaded = false;
@@ -1193,7 +1206,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if (downloadService == null  || onCurrentChangedTask != null) {
 			return;
 		}
-		
+
 		onCurrentChangedTask = new SilentBackgroundTask<Void>(context) {
 			int currentPlayingIndex;
 			int currentPlayingSize;
@@ -1254,7 +1267,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 			}
 		};
-		
+
 		if(onDownloadListChangedTask == null) {
 			onCurrentChangedTask.execute();
 		}
@@ -1390,33 +1403,33 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		}.execute();
 	}
-	
+
 	private void createBookmark() {
 		DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;
 		}
-		
+
 		final DownloadFile currentDownload = downloadService.getCurrentPlaying();
 		if(currentDownload == null) {
 			return;
 		}
-		
+
 		View dialogView = context.getLayoutInflater().inflate(R.layout.create_bookmark, null);
 		final EditText commentBox = (EditText)dialogView.findViewById(R.id.comment_text);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.download_save_bookmark_title)
-			.setView(dialogView)
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					String comment = commentBox.getText().toString();
+				.setView(dialogView)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						String comment = commentBox.getText().toString();
 
-					createBookmark(currentDownload, comment);
-				}
-			})
-			.setNegativeButton(R.string.common_cancel, null);
+						createBookmark(currentDownload, comment);
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
@@ -1425,13 +1438,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(downloadService == null) {
 			return;
 		}
-		
+
 		final Entry currentSong = currentDownload.getSong();
 		final int position = downloadService.getPlayerPosition();
 		final Bookmark oldBookmark = currentSong.getBookmark();
 		currentSong.setBookmark(new Bookmark(position));
 		bookmarkButton.setImageResource(R.drawable.ic_menu_bookmark_selected);
-		
+
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -1453,12 +1466,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				Util.toast(context, R.string.download_save_bookmark);
 				setControlsVisible(true);
 			}
-			
+
 			@Override
 			protected void error(Throwable error) {
 				Log.w(TAG, "Failed to create bookmark", error);
 				currentSong.setBookmark(oldBookmark);
-				
+
 				// If no bookmark at start, then return to no bookmark
 				if(oldBookmark == null) {
 					int bookmark;
@@ -1469,14 +1482,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					}
 					bookmarkButton.setImageResource(bookmark);
 				}
-				
+
 				String msg;
 				if(error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
 				} else {
 					msg = context.getResources().getString(R.string.download_save_bookmark_failed) + getErrorMessage(error);
 				}
-				
+
 				Util.toast(context, msg, false);
 			}
 		}.execute();

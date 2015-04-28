@@ -76,6 +76,23 @@
 	<style name="Theme.DSub.Holo" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@drawable/background</item>
 	</style>
+
+	<style name="Theme.DSub.Light.No_Actionbar" parent="Theme.DSub.Light">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
+	<style name="Theme.DSub.Black.No_Actionbar" parent="Theme.DSub.Black">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
+	<style name="Theme.DSub.Dark.No_Actionbar" parent="Theme.DSub.Dark">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
+	<style name="Theme.DSub.Holo.No_Actionbar" parent="Theme.DSub.Holo">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
 	
 	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.AppCompat.Light.ActionBar.Solid">
 		<item name="background">@android:color/transparent</item>
