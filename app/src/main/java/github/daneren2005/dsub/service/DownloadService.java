@@ -756,7 +756,7 @@ public class DownloadService extends Service {
 			currentPlayingIndex = downloadList.indexOf(currentPlaying);
 		}
 
-		if (currentPlaying != null) {
+		if (currentPlaying != null && currentPlaying.getSong() != null) {
 			Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
 			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
 		} else {
