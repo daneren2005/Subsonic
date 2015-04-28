@@ -31,6 +31,7 @@ import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.ArtistInfo;
@@ -50,6 +51,7 @@ import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TimeLimitedCache;
@@ -158,11 +160,35 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getMusicDirectory(final String id, final String name, final boolean refresh, final Context context, final ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
-		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
-		if(!refresh) {
+		final MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "directory", id), MusicDirectory.class);
+		if(!refresh && cached != null) {
 			dir = cached;
+
+			new SilentBackgroundTask<Void>(context) {
+				@Override
+				protected Void doInBackground() throws Throwable {
+					Util.sleepQuietly(2000L);
+					MusicDirectory refreshed = musicService.getMusicDirectory(id, name, true, context, null);
+					cached.updateDifferences(context, musicService.getInstance(context), refreshed);
+					FileUtil.serialize(context, refreshed, getCacheName(context, "directory", id));
+					return null;
+				}
+
+				// TODO: When upgrading to RecyclerView, this should be usable since won't have split entry/album lists
+				/*@Override
+				public void done(Void result) {
+					if(progressListener != null) {
+						progressListener.updateCache();
+					}
+				}*/
+
+				@Override
+				public void error(Throwable error) {
+					Log.e(TAG, "Failed to refresh music directory", error);
+				}
+			}.execute();
 		}
 
 		if(dir == null) {

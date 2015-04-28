@@ -172,6 +172,11 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         updateProgress(context.getResources().getString(messageId));
     }
 
+	@Override
+	public void updateCache() {
+
+	}
+
 	public void setOnCompletionListener(Runnable onCompletionListener) {
 		this.onCompletionListener = onCompletionListener;
 	}

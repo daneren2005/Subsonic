@@ -24,4 +24,5 @@ package github.daneren2005.dsub.util;
 public interface ProgressListener {
     void updateProgress(String message);
     void updateProgress(int messageId);
+	void updateCache();
 }

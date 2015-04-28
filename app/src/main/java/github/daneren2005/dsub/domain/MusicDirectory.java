@@ -18,10 +18,13 @@
  */
 package github.daneren2005.dsub.domain;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
+import android.os.Build;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.io.File;
 import java.io.Serializable;
@@ -121,6 +124,46 @@ public class MusicDirectory implements Serializable {
 		EntryComparator.sort(children, byYear);
 	}
 
+	public void updateDifferences(Context context, int instance, MusicDirectory refreshedDirectory) {
+		Iterator<Entry> it = children.iterator();
+		while(it.hasNext()) {
+			Entry entry = it.next();
+			int index = refreshedDirectory.children.indexOf(entry);
+			if(index != -1) {
+				Entry refreshed = refreshedDirectory.children.get(index);
+
+				entry.setTitle(refreshed.getTitle());
+				entry.setAlbum(refreshed.getAlbum());
+				entry.setArtist(refreshed.getArtist());
+				entry.setTrack(refreshed.getTrack());
+				entry.setYear(refreshed.getYear());
+				entry.setGenre(refreshed.getGenre());
+				entry.setTranscodedContentType(refreshed.getTranscodedContentType());
+				entry.setTranscodedSuffix(refreshed.getTranscodedSuffix());
+				entry.setDiscNumber(refreshed.getDiscNumber());
+				entry.setStarred(refreshed.isStarred());
+				entry.setRating(refreshed.getRating());
+				entry.setType(refreshed.getType());
+			} else {
+				// No longer exists in here
+				// it.remove();
+			}
+		}
+
+		// Make sure we contain all children from refreshed set
+		/*boolean resort = false;
+		for(Entry refreshed: refreshedDirectory.children) {
+			if(!this.children.contains(refreshed)) {
+				this.children.add(refreshed);
+				resort = true;
+			}
+		}
+
+		if(resort) {
+			this.sortChildren(context, instance);
+		}*/
+	}
+
     public static class Entry implements Serializable {
 		public static final int TYPE_SONG = 0;
 		public static final int TYPE_PODCAST = 1;
@@ -167,6 +210,7 @@ public class MusicDirectory implements Serializable {
 			this.directory = true;
 		}
 		
+		@TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
 		public void loadMetadata(File file) {
 			try {
 				MediaMetadataRetriever metadata = new MediaMetadataRetriever();
