@@ -11,13 +11,17 @@ android {
 	}
 	buildTypes {
 		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard.cfg')
+			minifyEnabled true
+			proguardFiles 'proguard.cfg'
 		}
 	}
 
 	packagingOptions {
 		exclude 'META-INF/beans.xml'
+	}
+
+	lintOptions {
+		checkReleaseBuilds false
 	}
 }
 
@@ -30,4 +34,9 @@ dependencies {
 	compile 'com.android.support:mediarouter-v7:22.1.1'
 	compile 'com.google.android.gms:play-services-cast:7.0.0'
 	compile 'com.sothree.slidinguppanel:library:3.0.0'
+	compile group: 'org.fourthline.cling', name: 'cling-core', version:'2.0.1'
+	compile group: 'org.fourthline.cling', name: 'cling-support', version:'2.0.1'
+	compile group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'
+	compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version:'8.1.16.v20140903'
+	compile group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.16.v20140903'
 }
