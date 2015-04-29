@@ -192,8 +192,11 @@ public class ImageLoader {
 	}
 
 	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
-		// TODO: If we know this a artist, try to load artist info instead
 		int size = large ? imageSizeLarge : imageSizeDefault;
+		return loadImage(view, entry, large, size, crossfade);
+	}
+	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade) {
+		// TODO: If we know this a artist, try to load artist info instead
 		if(entry != null && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
 			SilentBackgroundTask task = new ArtistImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
 			task.execute();

@@ -4,4 +4,6 @@
 	<dimen name="Button.Small">54dip</dimen>
 	<dimen name="AlbumArt.Small">96dip</dimen>
 	<dimen name="AlbumArt.Header">210dip</dimen>
+	<dimen name="BottomBar.Text.Major">18sp</dimen>
+	<dimen name="BottomBar.Text.Minor">16sp</dimen>
 </resources>

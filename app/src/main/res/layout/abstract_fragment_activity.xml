@@ -19,11 +19,7 @@
 			android:layout_height="?attr/actionBarSize"
 			android:layout_width="match_parent"/>
 
-		<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-					 android:id="@+id/fragment_container"
-					 android:layout_width="match_parent"
-					 android:layout_height="match_parent"
-					 android:layout_marginTop="?attr/actionBarSize"/>
+		<include layout="@layout/abstract_fragment_container"/>
 	</FrameLayout>
 
 	<LinearLayout
@@ -72,8 +68,18 @@
 						android:textColor="?android:textColorPrimary"
 						android:singleLine="true"
 						android:textAppearance="?android:attr/textAppearanceSmall"
-						android:textSize="13sp"
-						android:text="@string/search.artists"/>
+						android:textSize="@dimen/BottomBar.Text.Major"
+						android:text="@string/main.title"
+						android:ellipsize="marquee"
+						android:marqueeRepeatLimit="marquee_forever"
+						android:scrollHorizontally="true"
+						android:focusable="true"
+						android:focusableInTouchMode="true">
+
+						<requestFocus android:focusable="true"
+							android:focusableInTouchMode="true"
+							android:duplicateParentState="true" />
+					</TextView>
 
 					<TextView
 						android:id="@+id/artist_name"
@@ -82,8 +88,8 @@
 						android:textColor="?android:textColorSecondary"
 						android:singleLine="true"
 						android:textAppearance="?android:attr/textAppearanceSmall"
-						android:textSize="12sp"
-						android:text="@string/search.albums"/>
+						android:textSize="@dimen/BottomBar.Text.Minor"
+						android:text="@string/main.artist"/>
 				</LinearLayout>
 
 

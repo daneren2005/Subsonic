@@ -79,6 +79,8 @@
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Press back again to exit</string>
 	<string name="main.scan_complete">Completed scan of Server</string>
+	<string name="main.artist">Artist</string>
+	<string name="main.title">Title</string>
 
 	<string name="menu.search">Search</string>
 	<string name="menu.shuffle">Shuffle</string>

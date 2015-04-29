@@ -128,14 +128,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 
-		View actionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
-		actionBarSpinner = (Spinner)actionbar.findViewById(R.id.spinner);
-		spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
-		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		actionBarSpinner.setOnItemSelectedListener(this);
-		actionBarSpinner.setAdapter(spinnerAdapter);
-
-		getSupportActionBar().setCustomView(actionbar);
+		if(spinnerAdapter == null) {
+			createCustomActionBarView();
+		}
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -149,6 +144,17 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			serviceIntent.setClassName(this.getPackageName(), HeadphoneListenerService.class.getName());
 			this.startService(serviceIntent);
 		}
+	}
+
+	protected void createCustomActionBarView() {
+		View customActionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
+		actionBarSpinner = (Spinner)customActionbar.findViewById(R.id.spinner);
+		spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		actionBarSpinner.setOnItemSelectedListener(this);
+		actionBarSpinner.setAdapter(spinnerAdapter);
+
+		getSupportActionBar().setCustomView(customActionbar);
 	}
 
 	@Override
@@ -520,7 +526,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 	}
 
-	private void drawerItemSelected(int position, View view) {
+	protected void drawerItemSelected(int position, View view) {
 		startFragmentActivity(drawerItemsDescriptions[position]);
 
 		if(lastSelectedView != view) {
@@ -711,6 +717,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(currentFragment == null || currentFragment.getTitle() == null) {
 			return;
 		}
+		if(spinnerAdapter == null) {
+			createCustomActionBarView();
+		}
 
 		if(backStack.size() > 0) {
 			spinnerAdapter.clear();
@@ -733,6 +742,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				getSupportActionBar().setDisplayShowCustomEnabled(true);
 			}
 		} else if(!isTv()) {
+			getSupportActionBar().setTitle(currentFragment.getTitle());
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
 		}
 	}

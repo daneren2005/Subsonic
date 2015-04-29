@@ -36,6 +36,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -93,7 +94,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	private ScheduledExecutorService executorService;
 	private View bottomBar;
-	private View coverArtView;
+	private ImageView coverArtView;
 	private TextView trackView;
 	private TextView artistView;
 	private ImageButton startButton;
@@ -172,18 +173,31 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				nowPlayingToolbar.setVisibility(View.GONE);
 				nowPlayingFragment.setPrimaryFragment(false);
 				setSupportActionBar(mainToolbar);
+
+				if(getSupportActionBar().getCustomView() == null) {
+					createCustomActionBarView();
+				}
+				recreateSpinner();
+				if(drawerToggle != null && backStack.size() > 0) {
+					drawerToggle.setDrawerIndicatorEnabled(false);
+				} else {
+					drawerToggle.setDrawerIndicatorEnabled(true);
+				}
 			}
 
 			@Override
 			public void onPanelExpanded(View panel) {
+				// Disable custom view before switching
+				getSupportActionBar().setDisplayShowCustomEnabled(false);
+
 				bottomBar.setVisibility(View.GONE);
 				nowPlayingToolbar.setVisibility(View.VISIBLE);
 				setSupportActionBar(nowPlayingToolbar);
 				nowPlayingFragment.setPrimaryFragment(true);
 
+				drawerToggle.setDrawerIndicatorEnabled(false);
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-				getSupportActionBar().setHomeButtonEnabled(true);
-				drawerToggle.setDrawerIndicatorEnabled(true);
+				getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
 			}
 
 			@Override
@@ -210,7 +224,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		bottomBar = findViewById(R.id.bottom_bar);
 		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
-		coverArtView = bottomBar.findViewById(R.id.album_art);
+		coverArtView = (ImageView) bottomBar.findViewById(R.id.album_art);
 		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
 		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
 
@@ -455,6 +469,15 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	}
 
 	@Override
+	protected void drawerItemSelected(int position, View view) {
+		super.drawerItemSelected(position, view);
+
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+		}
+	}
+
+	@Override
 	public void startFragmentActivity(String fragmentType) {
 		// Create a transaction that does all of this
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
@@ -539,11 +562,23 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			trackView.setText(song.getTitle());
 			artistView.setText(song.getArtist());
 		} else {
-			trackView.setText("Title");
-			artistView.setText("Artist");
+			trackView.setText(R.string.main_title);
+			artistView.setText(R.string.main_artist);
 		}
 
-		getImageLoader().loadImage(coverArtView, song, false, false);
+		SilentBackgroundTask task = getImageLoader().loadImage(coverArtView, song, false, coverArtView.getHeight(), false);
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			if(task == null) {
+				getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
+			} else {
+				task.setOnCompletionListener(new Runnable() {
+					@Override
+					public void run() {
+						getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
+					}
+				});
+			}
+		}
 		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
 		TypedArray typedArray = this.obtainStyledAttributes(attrs);
 		startButton.setImageResource(typedArray.getResourceId(0, 0));
