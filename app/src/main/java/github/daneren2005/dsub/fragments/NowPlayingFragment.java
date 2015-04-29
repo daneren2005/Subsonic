@@ -832,7 +832,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public void onResume() {
 		super.onResume();
-		onResumeHandlers();
+		if(this.primaryFragment) {
+			onResumeHandlers();
+		} else {
+			update();
+		}
 	}
 	private void onResumeHandlers() {
 		final Handler handler = new Handler();
@@ -894,11 +898,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		onPauseHandlers();
 	}
 	private void onPauseHandlers() {
-		executorService.shutdown();
-		if(getDownloadService() != null) {
-			getDownloadService().stopRemoteScan();
+		if(executorService != null) {
+			executorService.shutdown();
+			if (getDownloadService() != null) {
+				getDownloadService().stopRemoteScan();
+			}
+			executorService = null;
+			playlistFlipper.setDisplayedChild(0);
 		}
-		playlistFlipper.setDisplayedChild(0);
 	}
 
 	@Override
