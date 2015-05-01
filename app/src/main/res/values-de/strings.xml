@@ -169,7 +169,7 @@
 	<string name="select_genre.albums">%d Alben</string>
 
 	<string name="select_podcasts.error">Ein Fehler beim herunterladen dieses Podcast durch den Server. Der Podcast muss zuerst vom Server heruntergeladen werden.</string>
-	<string name="select_podcasts.skipped">Der Podcast wurde noch nicht vom Server heruntergeladen. Der Podcast muss zuerst vom Server heruntergalden werden..</string>
+	<string name="select_podcasts.skipped">Der Podcast wurde noch nicht vom Server heruntergeladen. Der Podcast muss zuerst vom Server heruntergeladen werden..</string>
     <string name="select_podcasts.initializing">Der Podcastkanal wird vom Server initialisiert. Bitte nach kurzer Wartezeit erneut laden.</string>
 	<string name="select_podcasts.server_download">Auf den Server herunterladen</string>
 	<string name="select_podcasts.server_delete">Lösche vom Server</string>
@@ -185,6 +185,7 @@
     <string name="download.empty">Wiedergabeliste ist leer</string>
 	<string name="download.shuffle_loading">Wiedergabeliste wird gemischt...</string>
     <string name="download.playerstate_downloading">Downloade - %s</string>
+	 <string name="download.playerstate_mobile_disabled">Warte auf Wi-Fi für den Download</string>
     <string name="download.playerstate_buffering">Buffere</string>
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Zeige Album</string>
