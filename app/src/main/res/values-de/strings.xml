@@ -360,7 +360,7 @@
 	<string name="settings.temp_loss_pause_lower">Pausiere und Lautstärke bei Bedarf veringern</string>
 	<string name="settings.temp_loss_lower">Lautstärke veringern</string>
 	<string name="settings.temp_loss_nothing">Nichts machen</string>
-	<string name="settings.disconnect_pause_title">Verhalten bei Verbindungsverlust</string>
+	<string name="settings.disconnect_pause_title">Beim Kopfhörer abtrennen</string>
 	<string name="settings.disconnect_pause_both">Immer pausieren</string>
 	<string name="settings.disconnect_pause_neither">Nichts machen</string>
 	<string name="settings.persistent_title">Dauerhafte Benachrichtigung</string>
