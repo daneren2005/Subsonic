@@ -183,6 +183,7 @@
     <string name="download.empty">Playlist is empty</string>
 	<string name="download.shuffle_loading">Shuffle list is loading...</string>
     <string name="download.playerstate_downloading">Downloading - %s</string>
+	<string name="download.playerstate_mobile_disabled">Waiting for WiFi network to download</string>
     <string name="download.playerstate_buffering">Buffering</string>
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Show Album</string>

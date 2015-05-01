@@ -222,7 +222,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent me) {
-				if(me.getAction() == MotionEvent.ACTION_DOWN) {
+				if (me.getAction() == MotionEvent.ACTION_DOWN) {
 					lastY = (int) me.getRawY();
 				}
 				return gestureScanner.onTouchEvent(me);
@@ -268,7 +268,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 					@Override
 					protected void done(Boolean result) {
-						if(result) {
+						if (result) {
 							onCurrentChanged();
 							onProgressChanged();
 						}
@@ -462,7 +462,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		albumArtImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(overlayHeight == -1 || lastY < (view.getBottom() - overlayHeight)) {
+				if (overlayHeight == -1 || lastY < (view.getBottom() - overlayHeight)) {
 					toggleFullscreenAlbumArt();
 					setControlsVisible(true);
 				}
@@ -470,35 +470,35 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 
 		progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onStopTrackingTouch(final SeekBar seekBar) {
-                new SilentBackgroundTask<Void>(context) {
-                    @Override
-                    protected Void doInBackground() throws Throwable {
-                        getDownloadService().seekTo(progressBar.getProgress());
-                        return null;
-                    }
+			@Override
+			public void onStopTrackingTouch(final SeekBar seekBar) {
+				new SilentBackgroundTask<Void>(context) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						getDownloadService().seekTo(progressBar.getProgress());
+						return null;
+					}
 
-                    @Override
-                    protected void done(Void result) {
-                    	seekInProgress = false;
-                        NowPlayingFragment.this.onProgressChanged();
-                    }
-                }.execute();
-            }
+					@Override
+					protected void done(Void result) {
+						seekInProgress = false;
+						NowPlayingFragment.this.onProgressChanged();
+					}
+				}.execute();
+			}
 
-            @Override
-            public void onStartTrackingTouch(final SeekBar seekBar) {
+			@Override
+			public void onStartTrackingTouch(final SeekBar seekBar) {
 				seekInProgress = true;
-            }
+			}
 
-            @Override
-            public void onProgressChanged(final SeekBar seekBar, final int position, final boolean fromUser) {
+			@Override
+			public void onProgressChanged(final SeekBar seekBar, final int position, final boolean fromUser) {
 				if (fromUser) {
 					Util.toast(context, Util.formatDuration(position / 1000), true);
 					setControlsVisible(true);
 				}
-            }
+			}
 		});
 		playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -1309,8 +1309,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				switch (playerState) {
 					case DOWNLOADING:
 						if(currentPlaying != null) {
-							long bytes = currentPlaying.getPartialFile().length();
-							statusTextView.setText(context.getResources().getString(R.string.download_playerstate_downloading, Util.formatLocalizedBytes(bytes, context)));
+							if(Util.isWifiRequiredForDownload(context)) {
+								statusTextView.setText(context.getResources().getString(R.string.download_playerstate_mobile_disabled));
+							} else {
+								long bytes = currentPlaying.getPartialFile().length();
+								statusTextView.setText(context.getResources().getString(R.string.download_playerstate_downloading, Util.formatLocalizedBytes(bytes, context)));
+							}
 						}
 						break;
 					case PREPARING:

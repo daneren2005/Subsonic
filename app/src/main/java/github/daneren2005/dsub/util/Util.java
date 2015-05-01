@@ -1023,7 +1023,7 @@ public final class Util {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
-    private static boolean isWifiRequiredForDownload(Context context) {
+    public static boolean isWifiRequiredForDownload(Context context) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_WIFI_REQUIRED_FOR_DOWNLOAD, false);
     }
