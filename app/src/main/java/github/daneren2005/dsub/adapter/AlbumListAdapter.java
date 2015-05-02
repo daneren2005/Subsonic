@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Set;
 
 public class AlbumListAdapter extends EndlessAdapter implements SectionIndexer {
+	private static final String TAG = AlbumListAdapter.class.getSimpleName();
 	Context context;
 	ArrayAdapter<MusicDirectory.Entry> adapter;
 	String type;
@@ -97,26 +99,35 @@ public class AlbumListAdapter extends EndlessAdapter implements SectionIndexer {
 	}
 
 	private void recreateIndexes() {
-		if(!shouldIndex) {
-			return;
-		}
-
-		Set<String> sectionSet = new LinkedHashSet<String>(30);
-		List<Integer> positionList = new ArrayList<Integer>(30);
-		for (int i = 0; i < adapter.getCount(); i++) {
-			MusicDirectory.Entry entry = adapter.getItem(i);
-			String index = entry.getAlbum().substring(0, 1);
-			if(!Character.isLetter(index.charAt(0))) {
-				index = "#";
+		try {
+			if (!shouldIndex) {
+				return;
 			}
 
-			if (!sectionSet.contains(index)) {
-				sectionSet.add(index);
-				positionList.add(i);
+			Set<String> sectionSet = new LinkedHashSet<String>(30);
+			List<Integer> positionList = new ArrayList<Integer>(30);
+			for (int i = 0; i < adapter.getCount(); i++) {
+				MusicDirectory.Entry entry = adapter.getItem(i);
+				String index;
+				if (entry.getAlbum() != null) {
+					index = entry.getAlbum().substring(0, 1);
+					if (!Character.isLetter(index.charAt(0))) {
+						index = "#";
+					}
+				} else {
+					index = "*";
+				}
+
+				if (!sectionSet.contains(index)) {
+					sectionSet.add(index);
+					positionList.add(i);
+				}
 			}
+			sections = sectionSet.toArray(new Object[sectionSet.size()]);
+			positions = positionList.toArray(new Integer[positionList.size()]);
+		} catch(Exception e) {
+			Log.e(TAG, "Error while recreating indexes");
 		}
-		sections = sectionSet.toArray(new Object[sectionSet.size()]);
-		positions = positionList.toArray(new Integer[positionList.size()]);
 	}
 
 	@Override
