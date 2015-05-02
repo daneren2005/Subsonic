@@ -54,7 +54,9 @@
                 <font color="red">Cache vs Permanenter Cache</font>:
                 <br/>Von DSub heruntergelade Titel im Cache können automatisch gelöscht werden, um Platz für neue Titel zu schaffen. Titel im permanenten Cache werden dagegen nie automatisch gelöscht.
                 <p/><font color="red">ChromeCast funktioniert nicht</font>:
-                <br/>Bitte stellen Sie sicher, das keine selbstsignierten Zertifikate verwendet werden, da Chromecast diese nicht akzeptiert.
+		<br/>Versuchen Sie die Option Einstellungen -> Wiedergabe -> Nutze DSub als Proxy.  Dies ist eine provisorische Lösung, weil Chromecast keine selbstsignierten Zertifikate akzeptiert.
+		<p/><font color="red">Erste Ebene in der Bibliothek sind Künstlergruppen</font>:
+		<br/>Im Optionsmenü deselektiere "Erste Ebene sind Künstler".  Dann wird die erste Verzeichnisebene wie Künstlergruppen anstelle von Künstler behandelt.
         ]]>
         </string>
     <string name="main.select_server">Wähle Server</string>
@@ -63,6 +65,7 @@
 	<string name="main.online">Gehe Online</string>
     <string name="main.settings">Einstellungen</string>
     <string name="main.albums_title">Album Liste</string>
+	<string name="main.albums_per_folder">Pro Ordner</string>
     <string name="main.albums_newest">Neue Alben</string>
     <string name="main.albums_recent">Vor kurzem gespielt</string>
     <string name="main.albums_frequent">Am meisten gespielt</string>
@@ -71,9 +74,13 @@
     <string name="main.albums_random">Zufall</string>
 	<string name="main.albums_genres">Genres</string>
 	<string name="main.albums_year">Jahrzehnt</string>
+	<string name="main.albums_alphabetical">Alphabetisch</string>
+	<string name="main.videos">Videos</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Zum beenden nochmal zurück drücken</string>
 	<string name="main.scan_complete">Durchsuchen des Server abgeschlossen</string>
+	<string name="main.artist">Künstler</string>
+	<string name="main.title">Titel</string>
 
 	<string name="menu.search">Suche</string>
 	<string name="menu.shuffle">Zufall</string>
@@ -106,6 +113,8 @@
 	<string name="menu.top_tracks">Last.FM Top Medien</string>
 	<string name="menu.similar_artists">Ähnliche Künstler</string>
 	<string name="menu.show_missing">Zeige fehlende</string>
+	<string name="menu.start_radio">Starte Radio</string>
+	<string name="menu.first_level_artist">Erste Ebene sind Künstler</string>
 
     <string name="playlist.label">Wiedergabelisten</string>
 	<string name="playlist.update_info">Aktualisiere Informationen</string>
@@ -126,6 +135,7 @@
     <string name="search.more">Zeige mehr</string>
 
     <string name="progress.wait">Bitte warten...</string>
+    <string name="progress.artist_info">Lade Informationen zum Künstler</string>
 
     <string name="music_library.label">Medienbibliothek</string>
     <string name="music_library.label_offline">Offline Medien</string>
@@ -138,6 +148,7 @@
     <string name="select_album.searching">Suche...</string>
     <string name="select_album.no_sdcard">Fehler: Keine SD-Karte verfügbar.</string>
     <string name="select_album.no_network">Warnung: Kein Netzwerk verfügbar.</string>
+    <string name="select_album.no_room">Warnung: Es sind nur %s verfügbar</string>
     <string name="select_album.not_licensed">Server ist nicht lizensiert. Testzeitraum läuft ab in %d Tagen.</string>
     <string name="select_album.donate_dialog_message">Erhalte unbegrenzte Downloads durch eine Spende an Subsonic.</string>
     <string name="select_album.donate_dialog_now">Jetzt</string>
@@ -158,7 +169,7 @@
 	<string name="select_genre.albums">%d Alben</string>
 
 	<string name="select_podcasts.error">Ein Fehler beim herunterladen dieses Podcast durch den Server. Der Podcast muss zuerst vom Server heruntergeladen werden.</string>
-	<string name="select_podcasts.skipped">Der Podcast wurde noch nicht vom Server heruntergeladen. Der Podcast muss zuerst vom Server heruntergalden werden..</string>
+	<string name="select_podcasts.skipped">Der Podcast wurde noch nicht vom Server heruntergeladen. Der Podcast muss zuerst vom Server heruntergeladen werden..</string>
     <string name="select_podcasts.initializing">Der Podcastkanal wird vom Server initialisiert. Bitte nach kurzer Wartezeit erneut laden.</string>
 	<string name="select_podcasts.server_download">Auf den Server herunterladen</string>
 	<string name="select_podcasts.server_delete">Lösche vom Server</string>
@@ -174,6 +185,7 @@
     <string name="download.empty">Wiedergabeliste ist leer</string>
 	<string name="download.shuffle_loading">Wiedergabeliste wird gemischt...</string>
     <string name="download.playerstate_downloading">Downloade - %s</string>
+	 <string name="download.playerstate_mobile_disabled">Warte auf Wi-Fi für den Download</string>
     <string name="download.playerstate_buffering">Buffere</string>
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Zeige Album</string>
@@ -214,6 +226,7 @@
 	<string name="download.downloading_summary_expanded">Aktuell: %1$s
 		\nGeschätzte Größe: %2$s</string>
 	<string name="download.failed_to_load">Laden fehlgeschlagen</string>
+	<string name="download.restore_play_queue">Wiedergabe fortsetzen bei</string>
 
 	<string name="sync.new_podcasts">Neuer Podcast verfügbar</string>
 	<string name="sync.new_playlists">Neu in Wiedergabeliste</string>
@@ -301,6 +314,8 @@
 	<string name="settings.track_summary">Zeige Titelnummer vor dem Titel</string>
 	<string name="settings.custom_sort">Sortiere nach Jahr</string>
 	<string name="settings.custom_sort_summary">Sortiere Alben nach Jahr, oder alphabetisch.</string>
+	<string name="settings.open_to_tab">Startseite</string>
+	<string name="settings.open_to_tab_summary">Diese Seite direkt öffnen</string>
     <string name="settings.network_title">Netzwerk</string>
     <string name="settings.max_bitrate_wifi">Max Audio Bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio Bitrate - Mobil</string>
@@ -346,7 +361,7 @@
 	<string name="settings.temp_loss_pause_lower">Pausiere und Lautstärke bei Bedarf veringern</string>
 	<string name="settings.temp_loss_lower">Lautstärke veringern</string>
 	<string name="settings.temp_loss_nothing">Nichts machen</string>
-	<string name="settings.disconnect_pause_title">Verhalten bei Verbindungsverlust</string>
+	<string name="settings.disconnect_pause_title">Beim Kopfhörer abtrennen</string>
 	<string name="settings.disconnect_pause_both">Immer pausieren</string>
 	<string name="settings.disconnect_pause_neither">Nichts machen</string>
 	<string name="settings.persistent_title">Dauerhafte Benachrichtigung</string>
@@ -400,6 +415,8 @@
 	<string name="settings.menu_options.rate_summary">Zeige \"Bewerten\" im Menü</string>
 	<string name="settings.browse_by_tags">Tags nutzen</string>
 	<string name="settings.browse_by_tags_summary">Tags statt Ordner verwenden.  Benötigt Subsonic 4.7+</string>
+	<string name="settings.disable_exit_prompt">DSub direkt verlassen</string>
+	<string name="settings.disable_exit_prompt_summary">DSub mit Zurück-Taste ohne zusätzliche Nachfrage sofort verlassen</string>
 	<string name="settings.override_system_language">In Englisch anzeigen</string>
 	<string name="settings.override_system_language_summary">Verwende Englisch anstatt Deutsch für DSub. Benötigt einen Neustart der App.</string>
 	<string name="settings.drawer_items_title">Seitenmenü</string>
@@ -417,6 +434,13 @@
 	<string name="settings.replay_gain_type.track">Track Tag</string>
 	<string name="settings.replay_gain_bump">Wiedergabevorverstärkung</string>
 	<string name="settings.replay_gain_untagged">Lieder ohne Wiedergabeverstärkung</string>
+	<string name="settings.casting">Casting</string>
+	<string name="settings.casting_proxy">Nutze DSub als Proxy</string>
+	<string name="settings.casting_proxy_summary">Sende alles über dieses Gerät als Proxy.  Dies umgeht Probleme mit selbstsignierten Zertifikaten.</string>
+	<string name="settings.rename_duplicates">Doppelte Medien umbenennen</string>
+	<string name="settings.rename_duplicates_summary">Für doppelte Medien den originalen Dateinamen verwenden, um diese auseinanderhalten zu können.</string>
+	<string name="settings.start_on_headphones">Starte bei Kopfhörer</string>
+	<string name="settings.start_on_headphones_summary">Starte automatisch, wenn ein Kopfhörer angeschlossen wird.</string>
 
 	<string name="shuffle.title">Mischen von</string>
 	<string name="shuffle.startYear">Startjahr:</string>
