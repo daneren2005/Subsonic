@@ -69,6 +69,11 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.1.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaResources" />
@@ -108,8 +113,8 @@
     <orderEntry type="library" exported="" name="play-services-base-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="jetty-servlet-8.1.16.v20140903" level="project" />
     <orderEntry type="library" exported="" name="CWAC-AdapterWrapper" level="project" />
-    <orderEntry type="library" exported="" name="jetty-http-8.1.16.v20140903" level="project" />
     <orderEntry type="library" exported="" name="jetty-client-8.1.16.v20140903" level="project" />
+    <orderEntry type="library" exported="" name="jetty-http-8.1.16.v20140903" level="project" />
     <orderEntry type="module" module-name="DragSort ListView" exported="" />
     <orderEntry type="module" module-name="Server Proxy" exported="" />
   </component>
