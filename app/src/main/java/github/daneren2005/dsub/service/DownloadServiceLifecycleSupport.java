@@ -366,7 +366,7 @@ public class DownloadServiceLifecycleSupport {
 	}
 
 	private void handleKeyEvent(KeyEvent event) {
-		if(event.getAction() == KeyEvent.ACTION_DOWN) {
+		if(event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
 			switch (event.getKeyCode()) {
 				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
 				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
