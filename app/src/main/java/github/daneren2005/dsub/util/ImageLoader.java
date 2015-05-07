@@ -285,6 +285,7 @@ public class ImageLoader {
 			view.setImageDrawable(drawable);
 			return null;
 		}
+		view.setImageDrawable(null);
 
 		SilentBackgroundTask<Void> task = new AvatarTask(context, view, username);
 		task.execute();
@@ -587,7 +588,6 @@ public class ImageLoader {
 				}
 			} catch (Throwable x) {
 				Log.e(TAG, "Failed to download album art.", x);
-				cancelled.set(true);
 			}
 
 			return null;
@@ -597,6 +597,8 @@ public class ImageLoader {
 		protected void done(Void result) {
 			if(mDrawable != null) {
 				mView.setImageDrawable(mDrawable);
+			} else {
+				mView.setImageResource(R.drawable.ic_social_person);
 			}
 		}
 	}

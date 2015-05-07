@@ -140,7 +140,7 @@ public class MainFragment extends SubsonicFragment {
 		}
 		
 		int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
-		setActiveServer(activeServer);
+		context.setActiveServer(activeServer);
 		return true;
 	}
 
@@ -249,25 +249,6 @@ public class MainFragment extends SubsonicFragment {
 
 		if(!Util.isOffline(context)) {
 			getMostRecentCount();
-		}
-	}
-
-	private void setActiveServer(int instance) {
-		if (Util.getActiveServer(context) != instance) {
-			final DownloadService service = getDownloadService();
-			if (service != null) {
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						service.clearIncomplete();
-						return null;
-					}
-				}.execute();
-
-			}
-			Util.setActiveServer(context, instance);
-			context.invalidate();
-			UserUtil.refreshCurrentUser(context, false, true);
 		}
 	}
 

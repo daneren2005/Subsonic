@@ -20,7 +20,8 @@
 		android:id="@+id/drawer_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textSize="26sp"
 		android:singleLine="true"
-		android:textColor="?android:textColorPrimary"/>
+		android:textColor="?android:textColorPrimary"
+		android:textAppearance="?android:attr/textAppearanceLarge"
+		style="DSub.TextViewStyle"/>
 </LinearLayout>

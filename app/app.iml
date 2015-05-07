@@ -75,6 +75,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.sothree.slidinguppanel/library/3.0.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/de.hdodenhof/circleimageview/1.2.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaResources" />
@@ -113,6 +114,7 @@
     <orderEntry type="library" exported="" name="cling-support-2.0.1" level="project" />
     <orderEntry type="library" exported="" name="jetty-io-8.1.16.v20140903" level="project" />
     <orderEntry type="library" exported="" name="CWAC-EndlessAdapter" level="project" />
+    <orderEntry type="library" exported="" name="circleimageview-1.2.1" level="project" />
     <orderEntry type="library" exported="" name="jetty-security-8.1.16.v20140903" level="project" />
     <orderEntry type="library" exported="" name="jetty-servlet-8.1.16.v20140903" level="project" />
     <orderEntry type="library" exported="" name="CWAC-AdapterWrapper" level="project" />

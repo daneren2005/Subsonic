@@ -51,6 +51,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.HeadphoneListenerService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.DrawerAdapter;
 import github.daneren2005.dsub.view.UpdateView;
@@ -97,6 +99,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	ActionBarDrawerToggle drawerToggle;
 	DrawerAdapter drawerAdapter;
 	ListView drawerList;
+	View drawerHeader;
+	ImageView drawerUserAvatar;
+	TextView drawerServerName;
+	TextView drawerUserName;
 	TextView lastSelectedView = null;
 	int lastSelectedPosition = 0;
 	boolean drawerOpen = false;
@@ -222,7 +228,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
-				final int actualPosition = drawerAdapter.getActualPosition(position);
+				final int actualPosition = drawerAdapter.getActualPosition(position - 1);
 				if("Settings".equals(drawerItemsDescriptions[actualPosition])) {
 					startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
 					drawer.closeDrawers();
@@ -239,7 +245,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 		});
 
+		drawerHeader = getLayoutInflater().inflate(R.layout.drawer_header, drawerList, false);
+		drawerServerName = (TextView) drawerHeader.findViewById(R.id.header_server_name);
+		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
 
+		drawerUserAvatar = (ImageView) drawerHeader.findViewById(R.id.header_user_avatar);
+		updateDrawerHeader();
+		drawerList.addHeaderView(drawerHeader, null, false);
 
 		if(!isTv()) {
 			drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -265,7 +277,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					}
 
 					if (lastSelectedView == null && drawerList.getCount() > lastSelectedPosition) {
-						lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
+						lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition + 1).findViewById(R.id.drawer_name);
 						if (lastSelectedView != null) {
 							lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
 						}
@@ -514,11 +526,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				}
 			}
 
-			if(drawerList.getChildAt(lastSelectedPosition) == null) {
+			if(drawerList.getChildAt(lastSelectedPosition + 1) == null) {
 				lastSelectedView = null;
 				drawerAdapter.setSelectedPosition(lastSelectedPosition);
 			} else {
-				lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
+				lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition + 1).findViewById(R.id.drawer_name);
 				if(lastSelectedView != null) {
 					lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
 				}
@@ -832,6 +844,31 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	public void closeNowPlaying() {
 
+	}
+
+	public void setActiveServer(int instance) {
+		if (Util.getActiveServer(this) != instance) {
+			final DownloadService service = getDownloadService();
+			if (service != null) {
+				new SilentBackgroundTask<Void>(this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						service.clearIncomplete();
+						return null;
+					}
+				}.execute();
+
+			}
+			Util.setActiveServer(this, instance);
+			invalidate();
+			UserUtil.refreshCurrentUser(this, false, true);
+			updateDrawerHeader();
+		}
+	}
+	private void updateDrawerHeader() {
+		drawerServerName.setText(Util.getServerName(this));
+		drawerUserName.setText(UserUtil.getCurrentUsername(this));
+		getImageLoader().loadAvatar(this, drawerUserAvatar, UserUtil.getCurrentUsername(this));
 	}
 
 	private void setUncaughtExceptionHandler() {
