@@ -42,17 +42,27 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 	}
 	
 	public void unregister(final Context context) {
-		if (mRemoteControl != null) {
-			AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-			audioManager.unregisterRemoteControlClient(mRemoteControl);
+		if(mRemoteControl == null) {
+			return;
 		}
+
+		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		audioManager.unregisterRemoteControlClient(mRemoteControl);
 	}
 	
 	public void setPlaybackState(final int state) {
+		if(mRemoteControl == null) {
+			return;
+		}
+
 		mRemoteControl.setPlaybackState(state);
 	}
 	
 	public void updateMetadata(final Context context, final MusicDirectory.Entry currentSong) {
+		if(mRemoteControl == null) {
+			return;
+		}
+
 		if(imageLoader == null) {
 			imageLoader = SubsonicActivity.getStaticImageLoader(context);
 		}
@@ -72,11 +82,19 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 
 	@Override
 	public void registerRoute(MediaRouter router) {
+		if(mRemoteControl == null) {
+			return;
+		}
+
 		router.addRemoteControlClient(mRemoteControl);
 	}
 
 	@Override
 	public void unregisterRoute(MediaRouter router) {
+		if(mRemoteControl == null) {
+			return;
+		}
+
 		router.removeRemoteControlClient(mRemoteControl);
 	}
 
