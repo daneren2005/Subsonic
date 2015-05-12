@@ -71,6 +71,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.1.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.1.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.0.0/jars" />
@@ -96,6 +97,7 @@
     <orderEntry type="library" exported="" name="mediarouter-v7-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="seamless-util-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="cling-core-2.0.1" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-v7-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="jetty-continuation-8.1.16.v20140903" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-cast-7.0.0" level="project" />
