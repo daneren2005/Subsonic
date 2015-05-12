@@ -274,11 +274,15 @@ public class EqualizerFragment extends SubsonicFragment {
 			bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 				@Override
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-					short level = (short) (progress + minEQLevel);
-					if (fromUser) {
-						equalizer.setBandLevel(band, (short)(level + masterLevel));
+					try {
+						short level = (short) (progress + minEQLevel);
+						if (fromUser) {
+							equalizer.setBandLevel(band, (short) (level + masterLevel));
+						}
+						updateLevelText(levelTextView, level);
+					} catch(Exception e) {
+						Log.e(TAG, "Failed to change equalizer", e);
 					}
-					updateLevelText(levelTextView, level);
 				}
 
 				@Override
@@ -410,18 +414,22 @@ public class EqualizerFragment extends SubsonicFragment {
 		bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				masterLevel = (short) (progress + minEQLevel);
-				if (fromUser) {
-					SharedPreferences prefs = Util.getPreferences(context);
-					SharedPreferences.Editor editor = prefs.edit();
-					editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
-					editor.commit();
-					for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
-						short level = (short) ((bars.get(i).getProgress() + minEQLevel) + masterLevel);
-						equalizer.setBandLevel(i, level);
+				try {
+					masterLevel = (short) (progress + minEQLevel);
+					if (fromUser) {
+						SharedPreferences prefs = Util.getPreferences(context);
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
+						editor.commit();
+						for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
+							short level = (short) ((bars.get(i).getProgress() + minEQLevel) + masterLevel);
+							equalizer.setBandLevel(i, level);
+						}
 					}
+					updateLevelText(levelTextView, masterLevel);
+				} catch(Exception e) {
+					Log.e(TAG, "Failed to change equalizer", e);
 				}
-				updateLevelText(levelTextView, masterLevel);
 			}
 
 			@Override
