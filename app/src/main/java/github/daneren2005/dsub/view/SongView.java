@@ -83,18 +83,13 @@ public class SongView extends UpdateView implements Checkable {
         starButton.setFocusable(false);
 		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
 		bookmarkButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.artist_more);
-		moreButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				v.showContextMenu();
-			}
-		});
+		moreButton = (ImageView) findViewById(R.id.more_button);
 		bottomRowView = findViewById(R.id.song_bottom);
     }
 
     public void setObjectImpl(Object obj1, Object obj2) {
         this.song = (MusicDirectory.Entry) obj1;
-		boolean checkable = (Boolean) obj2;
+		checkable = (Boolean) obj2;
 		
         StringBuilder artist = new StringBuilder(40);
 

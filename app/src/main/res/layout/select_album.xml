@@ -17,12 +17,11 @@
 
 		<include layout="@layout/tab_progress"/>
 
-		<ListView
+		<android.support.v7.widget.RecyclerView
 			android:id="@+id/select_album_entries"
-			android:textFilterEnabled="true"
 			android:layout_width="fill_parent"
 			android:layout_height="0dip"
 			android:layout_weight="1.0"
-			android:fastScrollEnabled="true"/>
+			android:scrollbars="vertical"/>
 	</LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

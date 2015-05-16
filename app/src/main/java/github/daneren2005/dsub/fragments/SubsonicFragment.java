@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
@@ -76,7 +77,6 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.AlbumCell;
 import github.daneren2005.dsub.view.AlbumView;
 import github.daneren2005.dsub.view.ArtistEntryView;
 import github.daneren2005.dsub.view.ArtistView;
@@ -308,14 +308,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 			}
 			// Apply similar logic to album views
-			else if(info.targetView instanceof AlbumCell || info.targetView instanceof AlbumView
-					|| info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
+			else if(info.targetView instanceof AlbumView || info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
 				File folder = null;
 				int id = 0;
-				if(info.targetView instanceof AlbumCell) {
-					folder = ((AlbumCell) info.targetView).getFile();
-					id = R.id.album_menu_delete;
-				} else if(info.targetView instanceof AlbumView) {
+				if(info.targetView instanceof AlbumView) {
 					folder = ((AlbumView) info.targetView).getFile();
 					id = R.id.album_menu_delete;
 				} else if(info.targetView instanceof ArtistView) {
@@ -622,6 +618,29 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 					int topRowVerticalPosition = (listView.getChildCount() == 0) ? 0 : listView.getChildAt(0).getTop();
 					refreshLayout.setEnabled(topRowVerticalPosition >= 0 && listView.getFirstVisiblePosition() == 0);
+				}
+			});
+
+			refreshLayout.setColorScheme(
+					R.color.holo_blue_light,
+					R.color.holo_orange_light,
+					R.color.holo_green_light,
+					R.color.holo_red_light);
+		}
+	}
+	protected void setupScrollList(final RecyclerView recyclerView) {
+		if(!context.isTouchscreen()) {
+			refreshLayout.setEnabled(false);
+		} else {
+			recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+				@Override
+				public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+					super.onScrollStateChanged(recyclerView, newState);
+				}
+
+				@Override
+				public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+					refreshLayout.setEnabled(!recyclerView.canScrollVertically(-1));
 				}
 			});
 
@@ -1788,11 +1807,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				return;
 			}
 
-			for (Entry song : parent.getChildren(false, true)) {
-				if (!song.isVideo() && song.getRating() != 1) {
-					songs.add(song);
-				}
-			}
 			for (Entry dir : parent.getChildren(true, false)) {
 				if(dir.getRating() == 1) {
 					continue;
@@ -1805,6 +1819,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					musicDirectory = musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this);
 				}
 				getSongsRecursively(musicDirectory, songs);
+			}
+
+			for (Entry song : parent.getChildren(false, true)) {
+				if (!song.isVideo() && song.getRating() != 1) {
+					songs.add(song);
+				}
 			}
 		}
 

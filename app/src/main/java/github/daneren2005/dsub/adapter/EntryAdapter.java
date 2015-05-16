@@ -60,7 +60,7 @@ public class EntryAdapter extends ArrayAdapter<MusicDirectory.Entry> {
 		if (entry.isDirectory()) {
 			if(entry.isAlbum()) {
 				AlbumView view;
-				view = new AlbumView(activity);
+				view = new AlbumView(activity, false);
 				view.setObject(entry, imageLoader);
 				return view;
 			} else {
