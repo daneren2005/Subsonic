@@ -168,6 +168,7 @@ public final class Constants {
 	public static final String OFFLINE_STAR_SETTING = "starSetting";
 	
 	public static final String CACHE_KEY_IGNORE = "ignoreArticles";
+	public static final String CACHE_AUDIO_SESSION_ID = "audioSessionId";
 	
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";
