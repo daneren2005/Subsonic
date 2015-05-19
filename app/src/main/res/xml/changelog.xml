@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="4.9.7" versioncode="152" releasedate="5/8/2015">
+		<change>Lazy load artist bio information</change>
+		<change>Keep previous search in bar when searching again</change>
+		<change>Warning if trying to stream on mobile if set to stream only on Wifi</change>
+		<change>Fix crash on alphabetical list for some users</change>
+		<change>Hide per folder option for Browse By Tags (Subsonic does not support it)</change>
+		<change>Misc improvements/fixes</change>
+	</release>
 	<release version="4.9.6" versioncode="150" releasedate="4/20/2015">
 		<change>New setting: Automatic renaming of duplicate songs</change>
 		<change>New setting: auto play on headphone insert</change>

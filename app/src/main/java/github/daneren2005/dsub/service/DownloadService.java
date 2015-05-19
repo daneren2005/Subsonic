@@ -42,6 +42,7 @@ import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.ArtistRadioBuffer;
+import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
@@ -174,7 +175,27 @@ public class DownloadService extends Service {
 
 				mediaPlayer = new MediaPlayer();
 				mediaPlayer.setWakeMode(DownloadService.this, PowerManager.PARTIAL_WAKE_LOCK);
-				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+				audioSessionId = -1;
+				Integer id = prefs.getInt(Constants.CACHE_AUDIO_SESSION_ID, -1);
+				if(id != -1) {
+					try {
+						audioSessionId = id;
+						mediaPlayer.setAudioSessionId(audioSessionId);
+					} catch (Throwable e) {
+						audioSessionId = -1;
+					}
+				}
+
+				if(audioSessionId == -1) {
+					mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+					try {
+						audioSessionId = mediaPlayer.getAudioSessionId();
+						prefs.edit().putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId).commit();
+					} catch (Throwable t) {
+						// Froyo or lower
+					}
+				}
 
 				mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 					@Override
@@ -183,11 +204,6 @@ public class DownloadService extends Service {
 						return false;
 					}
 				});
-				try {
-					audioSessionId = mediaPlayer.getAudioSessionId();
-				} catch(Throwable e) {
-					// Froyo or lower
-				}
 
 				try {
 					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);

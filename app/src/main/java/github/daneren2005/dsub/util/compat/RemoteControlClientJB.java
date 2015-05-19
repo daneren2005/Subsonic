@@ -43,6 +43,10 @@ public class RemoteControlClientJB extends RemoteControlClientICS {
 	
 	@Override
 	public void setPlaybackState(final int state) {
+		if(mRemoteControl == null) {
+			return;
+		}
+
 		long position = -1;
 		if(state == RemoteControlClient.PLAYSTATE_PLAYING || state == RemoteControlClient.PLAYSTATE_PAUSED) {
 			position = downloadService.getPlayerPosition();
