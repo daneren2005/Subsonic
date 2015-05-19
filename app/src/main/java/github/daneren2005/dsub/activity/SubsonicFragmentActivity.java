@@ -30,6 +30,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -230,10 +231,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 		setSupportActionBar(mainToolbar);
 
-		nowPlayingFragment = new NowPlayingFragment();
-		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-		trans.add(R.id.now_playing_fragment_container, nowPlayingFragment, nowPlayingFragment.getTag() + "");
-		trans.commit();
+		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
+			nowPlayingFragment = new NowPlayingFragment();
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.add(R.id.now_playing_fragment_container, nowPlayingFragment, nowPlayingFragment.getTag() + "");
+			trans.commit();
+		}
 
 		ImageButton previousButton = (ImageButton) findViewById(R.id.download_previous);
 		previousButton.setOnClickListener(new View.OnClickListener() {
@@ -410,8 +413,17 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	}
 
 	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putString(Constants.MAIN_NOW_PLAYING, nowPlayingFragment.getTag());
+	}
+	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+
+		String id = savedInstanceState.getString(Constants.MAIN_NOW_PLAYING);
+		FragmentManager fm = getSupportFragmentManager();
+		nowPlayingFragment = (NowPlayingFragment) fm.findFragmentByTag(id);
 		if(drawerToggle != null && backStack.size() > 0) {
 			drawerToggle.setDrawerIndicatorEnabled(false);
 		}
