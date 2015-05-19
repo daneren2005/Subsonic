@@ -196,7 +196,6 @@ public class DownloadService extends Service {
 						// Froyo or lower
 					}
 				}
-				Log.d(TAG, "Audio session id: " + audioSessionId);
 
 				mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 					@Override
