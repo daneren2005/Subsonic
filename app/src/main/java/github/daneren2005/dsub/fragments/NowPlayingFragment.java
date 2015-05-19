@@ -581,9 +581,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(equalizerAvailable && !downloadService.isRemoteEnabled()) {
 			SharedPreferences prefs = Util.getPreferences(context);
 			boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
-			if (equalizerOn && getDownloadService() != null && getDownloadService().getEqualizerController() != null &&
-					getDownloadService().getEqualizerController().isEnabled()) {
-				menu.findItem(R.id.menu_equalizer).setChecked(true);
+			if (equalizerOn && downloadService != null) {
+				if(downloadService.getEqualizerController() != null && downloadService.getEqualizerController().isEnabled()) {
+					menu.findItem(R.id.menu_equalizer).setChecked(true);
+				}
 			}
 		} else {
 			menu.removeItem(R.id.menu_equalizer);
