@@ -422,7 +422,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements EntryGr
 			if ("newest".equals(albumListType)) {
 				args.putBoolean(Constants.INTENT_EXTRA_REFRESH_LISTINGS, true);
 			}
-			if(entry.getArtist() == null && entry.getParent() == null) {
+			if(!entry.isAlbum()) {
 				args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 			}
 			fragment.setArguments(args);
