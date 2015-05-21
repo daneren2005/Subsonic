@@ -1,11 +1,11 @@
 ##Basic Instructions
-Run these commands to grab dependent libraries:
+Grab dependent libraries
 ```
 git submodule init
 git submodule update
 ```
 
-Go to DragSortListView/library, and ServerProxy and build project files
+Go to DragSortListView/library and ServerProxy and build project files
 ```
 android update project --path ./
 ```
