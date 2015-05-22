@@ -16,9 +16,13 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -26,8 +30,11 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.view.UpdateView;
 
 public class EntryInfiniteGridAdapter extends EntryGridAdapter {
+	public static int VIEW_TYPE_LOADING = 4;
+
 	private String type;
 	private String extra;
 	private int size;
@@ -37,6 +44,44 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 
 	public EntryInfiniteGridAdapter(Context context, List<Entry> entries, ImageLoader imageLoader, boolean largeCell) {
 		super(context, entries, imageLoader, largeCell);
+	}
+
+	@Override
+	public UpdateView.UpdateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		if(viewType == VIEW_TYPE_LOADING) {
+			View progress = LayoutInflater.from(context).inflate(R.layout.tab_progress, null);
+			progress.setVisibility(View.VISIBLE);
+			return new UpdateView.UpdateViewHolder(progress, false);
+		}
+
+		return super.onCreateViewHolder(parent, viewType);
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		if(isLoadingView(position)) {
+			return VIEW_TYPE_LOADING;
+		}
+
+		return super.getItemViewType(position);
+	}
+
+	@Override
+	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, int position) {
+		if(!isLoadingView(position)) {
+			super.onBindViewHolder(holder, position);
+		}
+	}
+
+	@Override
+	public int getItemCount() {
+		int size = super.getItemCount();
+
+		if(!allLoaded) {
+			size++;
+		}
+
+		return size;
 	}
 
 	public void setData(String type, String extra, int size) {
@@ -57,9 +102,6 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				newData = cacheInBackground();
-				if(newData.isEmpty()) {
-					allLoaded = true;
-				}
 				return null;
 			}
 
@@ -67,6 +109,11 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 			protected void done(Void result) {
 				appendCachedData(newData);
 				loading = false;
+
+				if(newData.isEmpty()) {
+					allLoaded = true;
+					notifyDataSetChanged();
+				}
 			}
 		}.execute();
 	}
@@ -91,5 +138,9 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 			entries.addAll(newData);
 			this.notifyItemRangeInserted(start, newData.size());
 		}
+	}
+
+	protected boolean isLoadingView(int position) {
+		return !allLoaded && position >= entries.size();
 	}
 }

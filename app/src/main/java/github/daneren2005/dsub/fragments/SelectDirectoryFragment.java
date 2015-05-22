@@ -182,7 +182,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements EntryGr
 				@Override
 				public int getSpanSize(int position) {
 					int viewType = entryGridAdapter.getItemViewType(position);
-					if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER) {
+					if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == EntryInfiniteGridAdapter.VIEW_TYPE_LOADING) {
 						return columns;
 					} else {
 						return 1;
