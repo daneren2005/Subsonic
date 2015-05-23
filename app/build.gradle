@@ -23,6 +23,12 @@ android {
 	lintOptions {
 		checkReleaseBuilds false
 	}
+
+	signingConfigs {
+		debug {
+			storeFile file('../debug.keystore')
+		}
+	}
 }
 
 dependencies {
