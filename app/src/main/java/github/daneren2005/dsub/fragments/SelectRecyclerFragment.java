@@ -153,25 +153,34 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment {
 		currentTask.execute();
 	}
 
-	public void setupLayoutManager() {
+	private void setupLayoutManager() {
+		recyclerView.setLayoutManager(getLayoutManager());
+	}
+	public RecyclerView.LayoutManager getLayoutManager() {
 		if(largeCells) {
-			final int columns = context.getResources().getInteger(R.integer.Grid_Columns);
-			GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
-
-			GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
-			if(spanSizeLookup != null) {
-				gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
-			}
-			RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
-			if(itemDecoration != null) {
-				recyclerView.addItemDecoration(itemDecoration);
-			}
-			recyclerView.setLayoutManager(gridLayoutManager);
+			return getGridLayoutManager();
 		} else {
-			LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-			layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-			recyclerView.setLayoutManager(layoutManager);
+			return getLinearLayoutManager();
 		}
+	}
+	public GridLayoutManager getGridLayoutManager() {
+		final int columns = context.getResources().getInteger(R.integer.Grid_Columns);
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
+
+		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
+		if(spanSizeLookup != null) {
+			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
+		}
+		RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
+		if(itemDecoration != null) {
+			recyclerView.addItemDecoration(itemDecoration);
+		}
+		return gridLayoutManager;
+	}
+	public LinearLayoutManager getLinearLayoutManager() {
+		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		return layoutManager;
 	}
 	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
 		return null;
