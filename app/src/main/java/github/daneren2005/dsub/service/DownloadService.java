@@ -2104,7 +2104,8 @@ public class DownloadService extends Service {
 			return false;
 		}
 
-		int cutoffPoint = (int) (duration * DELETE_CUTOFF);
+		// Make cutoff a maximum of 10 minutes
+		int cutoffPoint = Math.min((int) (duration * DELETE_CUTOFF), 10 * 60 * 1000);
 		boolean isPastCutoff = duration > 0 && position > cutoffPoint;
 		
 		// Check to make sure song isn't within 10 seconds of where it was created
