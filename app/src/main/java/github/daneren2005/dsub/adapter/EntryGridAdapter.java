@@ -17,6 +17,7 @@ package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -87,13 +88,13 @@ public class EntryGridAdapter extends RecyclerView.Adapter<UpdateViewHolder> {
 
 		if(viewType != VIEW_TYPE_HEADER && updateView != null) {
 			final UpdateView view = updateView;
-			updateView.setOnClickListener(new View.OnClickListener() {
+			updateView.getChildAt(0).setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Entry entry = getEntryForView(view);
 
-					if (view.isCheckable() && v instanceof SongView) {
-						SongView songView = (SongView) v;
+					if (view.isCheckable() && view instanceof SongView) {
+						SongView songView = (SongView) view;
 
 						if (selected.contains(entry)) {
 							selected.remove(entry);
@@ -107,7 +108,7 @@ public class EntryGridAdapter extends RecyclerView.Adapter<UpdateViewHolder> {
 					}
 				}
 			});
-			updateView.setOnLongClickListener(new View.OnLongClickListener() {
+			updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
 					Entry entry = getEntryForView(view);

@@ -66,9 +66,6 @@ public class AlbumView extends UpdateView {
 		starButton = (ImageButton) findViewById(R.id.album_star);
 		starButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.more_button);
-
-		setClickable(true);
-		setLongClickable(true);
 	}
 
 	public void setShowArtist(boolean showArtist) {
