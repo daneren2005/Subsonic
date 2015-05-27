@@ -201,9 +201,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> imp
 
 					@Override
 					protected void done(Void result) {
-						// TODO: Redo
-						// adapter.remove(playlist);
-						adapter.notifyDataSetChanged();
+						adapter.removeItem(playlist);
 						Util.toast(context, context.getResources().getString(R.string.menu_deleted_playlist, playlist.getName()));
 					}
 
