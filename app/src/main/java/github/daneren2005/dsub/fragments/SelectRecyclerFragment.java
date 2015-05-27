@@ -41,7 +41,7 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.view.GridSpacingDecoration;
 
-public abstract class SelectRecyclerFragment<T> extends SubsonicFragment {
+public abstract class SelectRecyclerFragment<T> extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<T> {
 	private static final String TAG = SelectRecyclerFragment.class.getSimpleName();
 	protected RecyclerView recyclerView;
 	protected SectionAdapter<T> adapter;

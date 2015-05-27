@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> implements SectionAdapter.OnItemClickedListener<Playlist> {
+public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
 	@Override
