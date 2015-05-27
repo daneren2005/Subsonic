@@ -22,7 +22,6 @@ import android.content.Context;
 
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.adapter.PlaylistAdapter;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
@@ -64,7 +63,7 @@ public class PlaylistsParser extends AbstractParser {
 
         validate();
 
-        return PlaylistAdapter.PlaylistComparator.sort(result);
+        return Playlist.PlaylistComparator.sort(result);
     }
 
 }
