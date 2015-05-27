@@ -34,6 +34,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.adapter.EntryInfiniteGridAdapter;
 import github.daneren2005.dsub.adapter.EntryGridAdapter;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -68,7 +69,7 @@ import java.util.Set;
 
 import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
 
-public class SelectDirectoryFragment extends SubsonicFragment implements EntryGridAdapter.OnEntryClickedListener {
+public class SelectDirectoryFragment extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<Entry> {
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private RecyclerView recyclerView;
@@ -341,7 +342,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements EntryGr
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
-		Entry entry = entryGridAdapter.getContextEntry();
+		Entry entry = entryGridAdapter.getContextItem();
 		UpdateView targetView = entryGridAdapter.getContextView();
 		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
 
@@ -378,7 +379,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements EntryGr
 		if(menuItem.getGroupId() != getSupportTag()) {
 			return false;
 		}
-		Entry entry = entryGridAdapter.getContextEntry();
+		Entry entry = entryGridAdapter.getContextItem();
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false) && menuItem.getItemId() == R.id.song_menu_play_now) {
 			List<Entry> songs = new ArrayList<Entry>();
@@ -412,7 +413,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements EntryGr
 	}
 
 	@Override
-	public void onEntryClicked(Entry entry) {
+	public void onItemClicked(Entry entry) {
 		if (entry.isDirectory()) {
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
@@ -750,7 +751,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements EntryGr
 				}
 			});
 		}
-		entryGridAdapter.setOnEntryClickedListener(this);
+		entryGridAdapter.setOnItemClickedListener(this);
 		// Always show artist if this is not a artist we are viewing
 		if(!artist) {
 			entryGridAdapter.setShowArtist(true);
@@ -1054,7 +1055,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements EntryGr
 
 					@Override
 					protected void done(Void result) {
-						entryGridAdapter.removeEntry(episode);
+						entryGridAdapter.removeItem(episode);
 					}
 
 					@Override
@@ -1115,7 +1116,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements EntryGr
 				Util.toast(context, context.getResources().getString(R.string.starring_content_unstarred, Integer.toString(unstar.size())));
 
 				for(Entry entry: unstar) {
-					entryGridAdapter.removeEntry(entry);
+					entryGridAdapter.removeItem(entry);
 				}
 			}
 

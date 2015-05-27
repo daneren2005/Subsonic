@@ -66,7 +66,6 @@ public class UpdateView extends LinearLayout {
 	protected SilentBackgroundTask<Void> imageTask = null;
 	
 	protected final boolean autoUpdate;
-	protected int position;
 	protected boolean checkable;
 	
 	public UpdateView(Context context) {
@@ -78,8 +77,8 @@ public class UpdateView extends LinearLayout {
 		this.autoUpdate = autoUpdate;
 		
 		setLayoutParams(new AbsListView.LayoutParams(
-			ViewGroup.LayoutParams.FILL_PARENT,
-			ViewGroup.LayoutParams.WRAP_CONTENT));
+				ViewGroup.LayoutParams.FILL_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT));
 		
 		if(autoUpdate) {
 			INSTANCES.put(this, null);
@@ -285,19 +284,13 @@ public class UpdateView extends LinearLayout {
 		}
 	}
 
-	public void setPosition(int position) {
-		this.position = position;
-	}
-	public int getPosition() {
-		return position;
-	}
-
 	public boolean isCheckable() {
 		return checkable;
 	}
 
-	public static class UpdateViewHolder extends RecyclerView.ViewHolder {
+	public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
 		private UpdateView updateView;
+		private T item;
 
 		public UpdateViewHolder(UpdateView itemView) {
 			super(itemView);
@@ -312,6 +305,12 @@ public class UpdateView extends LinearLayout {
 
 		public UpdateView getUpdateView() {
 			return updateView;
+		}
+		public void setItem(T item) {
+			this.item = item;
+		}
+		public T getItem() {
+			return item;
 		}
 	}
 }

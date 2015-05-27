@@ -121,7 +121,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 	protected List<Entry> cacheInBackground() throws Exception {
 		MusicService service = MusicServiceFactory.getMusicService(context);
 		MusicDirectory result;
-		int offset = entries.size();
+		int offset = sections.get(0).size();
 		if(("genres".equals(type) && ServerInfo.checkServerVersion(context, "1.10.0")) || "years".equals(type)) {
 			result = service.getAlbumList(type, extra, size, offset, context, null);
 		} else if("genres".equals(type) || "genres-songs".equals(type)) {
@@ -134,13 +134,13 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 
 	protected void appendCachedData(List<Entry> newData) {
 		if(newData.size() > 0) {
-			int start = entries.size();
-			entries.addAll(newData);
+			int start = sections.get(0).size();
+			sections.get(0).addAll(newData);
 			this.notifyItemRangeInserted(start, newData.size());
 		}
 	}
 
 	protected boolean isLoadingView(int position) {
-		return !allLoaded && position >= entries.size();
+		return !allLoaded && position >= sections.get(0).size();
 	}
 }

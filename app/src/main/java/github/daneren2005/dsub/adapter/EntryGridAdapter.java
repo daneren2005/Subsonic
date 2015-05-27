@@ -16,7 +16,6 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.util.ImageLoader;
@@ -33,30 +31,21 @@ import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.view.UpdateView.UpdateViewHolder;
 
-public class EntryGridAdapter extends RecyclerView.Adapter<UpdateViewHolder> {
+public class EntryGridAdapter extends SectionAdapter<Entry> {
 	private static String TAG = EntryGridAdapter.class.getSimpleName();
 
-	public static int VIEW_TYPE_HEADER = 0;
 	public static int VIEW_TYPE_ALBUM_CELL = 1;
 	public static int VIEW_TYPE_ALBUM_LINE = 2;
 	public static int VIEW_TYPE_SONG = 3;
 
-	protected Context context;
-	protected List<Entry> entries;
 	private ImageLoader imageLoader;
 	private boolean largeAlbums;
 	private boolean showArtist = false;
 	private boolean checkable = true;
-	private OnEntryClickedListener onEntryClickedListener;
-
 	private View header;
-	private List<Entry> selected = new ArrayList<Entry>();
-	private UpdateView contextView;
-	private Entry contextEntry;
 
 	public EntryGridAdapter(Context context, List<Entry> entries, ImageLoader imageLoader, boolean largeCell) {
-		this.context = context;
-		this.entries = entries;
+		super(context, entries);
 		this.imageLoader = imageLoader;
 		this.largeAlbums = largeCell;
 
@@ -74,11 +63,7 @@ public class EntryGridAdapter extends RecyclerView.Adapter<UpdateViewHolder> {
 	}
 
 	@Override
-	public UpdateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		if(viewType == VIEW_TYPE_HEADER) {
-			return new UpdateViewHolder(header, false);
-		}
-
+	public UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
 		UpdateView updateView = null;
 		if(viewType == VIEW_TYPE_ALBUM_LINE || viewType == VIEW_TYPE_ALBUM_CELL) {
 			updateView = new AlbumView(context, viewType == VIEW_TYPE_ALBUM_CELL);
@@ -86,66 +71,12 @@ public class EntryGridAdapter extends RecyclerView.Adapter<UpdateViewHolder> {
 			updateView = new SongView(context);
 		}
 
-		if(viewType != VIEW_TYPE_HEADER && updateView != null) {
-			final UpdateView view = updateView;
-			updateView.getChildAt(0).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Entry entry = getEntryForView(view);
-
-					if (view.isCheckable() && view instanceof SongView) {
-						SongView songView = (SongView) view;
-
-						if (selected.contains(entry)) {
-							selected.remove(entry);
-							songView.setChecked(false);
-						} else {
-							selected.add(entry);
-							songView.setChecked(true);
-						}
-					} else if (onEntryClickedListener != null) {
-						onEntryClickedListener.onEntryClicked(entry);
-					}
-				}
-			});
-			updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					Entry entry = getEntryForView(view);
-
-					setContextEntry(view, entry);
-					v.showContextMenu();
-					return false;
-				}
-			});
-
-			View moreButton = updateView.findViewById(R.id.more_button);
-			if(moreButton != null) {
-				moreButton.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Entry entry = getEntryForView(view);
-						setContextEntry(view, entry);
-						v.showContextMenu();
-					}
-				});
-			}
-		}
-
 		return new UpdateViewHolder(updateView);
 	}
 
 	@Override
-	public void onBindViewHolder(UpdateViewHolder holder, int position) {
-		// Header already created
-		if(header != null && position == 0) {
-			return;
-		}
-
+	public void onBindViewHolder(UpdateViewHolder holder, Entry entry, int viewType) {
 		UpdateView view = holder.getUpdateView();
-
-		int viewType = getItemViewType(position);
-		Entry entry = getEntryForPosition(position);
 		if(viewType == VIEW_TYPE_ALBUM_CELL || viewType == VIEW_TYPE_ALBUM_LINE) {
 			AlbumView albumView = (AlbumView) view;
 			albumView.setShowArtist(showArtist);
@@ -153,29 +84,25 @@ public class EntryGridAdapter extends RecyclerView.Adapter<UpdateViewHolder> {
 		} else if(viewType == VIEW_TYPE_SONG) {
 			SongView songView = (SongView) view;
 			songView.setObject(entry, checkable);
-			songView.setChecked(selected.contains(entry));
 		}
-		view.setPosition(position);
 	}
 
 	@Override
-	public int getItemCount() {
-		int size = entries.size();
-
-		if(header != null) {
-			size++;
+	public void setChecked(UpdateView updateView, boolean checked) {
+		if(updateView instanceof SongView) {
+			((SongView) updateView).setChecked(checked);
 		}
+	}
 
-		return size;
+	public UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
+		return new UpdateViewHolder(header, false);
+	}
+	public void onBindHeaderHolder(UpdateViewHolder holder, String header) {
+
 	}
 
 	@Override
-	public int getItemViewType(int position) {
-		if(header != null && position == 0) {
-			return VIEW_TYPE_HEADER;
-		}
-
-		Entry entry = getEntryForPosition(position);
+	public int getItemViewType(Entry entry) {
 		if(entry.isDirectory()) {
 			if (largeAlbums) {
 				return VIEW_TYPE_ALBUM_CELL;
@@ -187,20 +114,9 @@ public class EntryGridAdapter extends RecyclerView.Adapter<UpdateViewHolder> {
 		}
 	}
 
-	public Entry getEntryForView(UpdateView view) {
-		int position = view.getPosition();
-		return getEntryForPosition(position);
-	}
-	public Entry getEntryForPosition(int position) {
-		if(header != null) {
-			position--;
-		}
-
-		return entries.get(position);
-	}
-
 	public void setHeader(View header) {
 		this.header = header;
+		this.singleSectionHeader = true;
 	}
 
 	public void setShowArtist(boolean showArtist) {
@@ -210,46 +126,8 @@ public class EntryGridAdapter extends RecyclerView.Adapter<UpdateViewHolder> {
 		this.checkable = checkable;
 	}
 
-	public void setOnEntryClickedListener(OnEntryClickedListener listener) {
-		this.onEntryClickedListener = listener;
-	}
-
-	public List<Entry> getSelected() {
-		List<Entry> selected = new ArrayList<>();
-		selected.addAll(this.selected);
-		return selected;
-	}
-	public void clearSelected() {
-		for(Entry entry: selected) {
-			int index = entries.indexOf(entry);
-			this.notifyItemChanged(index);
-		}
-		selected.clear();
-	}
-
-	public void removeEntry(Entry entry) {
-		int index = entries.indexOf(entry);
-		if(index != -1) {
-			removeAt(index);
-		}
-	}
 	public void removeAt(int index) {
-		entries.remove(index);
+		sections.get(0).remove(index);
 		notifyItemRemoved(index);
-	}
-
-	public void setContextEntry(UpdateView view, Entry entry) {
-		this.contextView = view;
-		this.contextEntry = entry;
-	}
-	public UpdateView getContextView() {
-		return contextView;
-	}
-	public Entry getContextEntry() {
-		return contextEntry;
-	}
-
-	public interface OnEntryClickedListener {
-		void onEntryClicked(Entry entry);
 	}
 }

@@ -26,32 +26,29 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TabBackgroundTask;
-import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.GridSpacingDecoration;
 
 public abstract class SelectRecyclerFragment<T> extends SubsonicFragment {
 	private static final String TAG = SelectRecyclerFragment.class.getSimpleName();
 	protected RecyclerView recyclerView;
-	protected RecyclerView.Adapter adapter;
+	protected SectionAdapter<T> adapter;
 	protected BackgroundTask<List<T>> currentTask;
 	protected List<T> objects;
 	protected boolean serialize = true;
-	protected boolean largeCells;
+	protected boolean largeCells = false;
 	protected int columns;
 
 	@Override
@@ -61,7 +58,6 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment {
 		if(bundle != null && serialize) {
 			objects = (List<T>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 		}
-		largeCells = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true);
 		columns = context.getResources().getInteger(R.integer.Grid_Columns);
 	}
 
@@ -89,6 +85,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment {
 		} else {
 			recyclerView.setAdapter(adapter = getAdapter(objects));
 		}
+		registerForContextMenu(recyclerView);
 
 		return rootView;
 	}
@@ -190,7 +187,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment {
 	}
 
 	public abstract int getOptionsMenu();
-	public abstract RecyclerView.Adapter getAdapter(List<T> objs);
+	public abstract SectionAdapter<T> getAdapter(List<T> objs);
 	public abstract List<T> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception;
 	public abstract int getTitleResource();
 	
