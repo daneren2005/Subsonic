@@ -745,7 +745,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 						return;
 					}
 
-					if(totalItemCount > 0 && lastVisibleItem >= totalItemCount - 1) {
+					if(totalItemCount > 0 && lastVisibleItem >= totalItemCount - 2) {
 						infiniteGridAdapter.loadMore();
 					}
 				}
