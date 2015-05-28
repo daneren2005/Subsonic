@@ -140,7 +140,7 @@ public class SongView extends UpdateView implements Checkable {
 
         titleTextView.setText(title);
 		artistTextView.setText(artist);
-        checkedTextView.setVisibility(checkable && !song.isVideo() ? View.VISIBLE : View.GONE);
+        checkedTextView.setVisibility(checkable ? View.VISIBLE : View.GONE);
 
 		this.setBackgroundColor(0x00000000);
 		ratingBar.setVisibility(View.GONE);

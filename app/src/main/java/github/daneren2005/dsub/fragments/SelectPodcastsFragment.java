@@ -1,21 +1,17 @@
 /*
- This file is part of Subsonic.
-
- Subsonic is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- Subsonic is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
-
- Copyright 2010 (C) Sindre Mehus
- */
+  This file is part of Subsonic.
+	Subsonic is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	Subsonic is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	You should have received a copy of the GNU General Public License
+	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
+	Copyright 2015 (C) Scott Jackson
+*/
 package github.daneren2005.dsub.fragments;
 
 import android.app.AlertDialog;
@@ -24,10 +20,9 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.service.MusicService;
@@ -46,11 +41,7 @@ import github.daneren2005.dsub.adapter.PodcastChannelAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Scott
- */
-public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
+public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChannel> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
 	
 	@Override
@@ -79,8 +70,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 		if(!Util.isOffline(context) && UserUtil.canPodcast()) {
 			inflater.inflate(R.menu.select_podcasts_context, menu);
 
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			PodcastChannel podcast = (PodcastChannel) listView.getItemAtPosition(info.position);
+			PodcastChannel podcast = adapter.getContextItem();
 			if(SyncUtil.isSyncedPodcast(context, podcast.getId())) {
 				menu.removeItem(R.id.podcast_menu_sync);
 			} else {
@@ -98,10 +88,8 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 		if(menuItem.getGroupId() != getSupportTag()) {
 			return false;
 		}
-		
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		PodcastChannel channel = (PodcastChannel) listView.getItemAtPosition(info.position);
 
+		PodcastChannel channel = adapter.getContextItem();
 		switch (menuItem.getItemId()) {
 			case R.id.podcast_menu_sync:
 				syncPodcast(channel);
@@ -126,8 +114,8 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<PodcastChannel> channels) {
-		return new PodcastChannelAdapter(context, channels);
+	public SectionAdapter getAdapter(List<PodcastChannel> channels) {
+		return new PodcastChannelAdapter(context, channels, this);
 	}
 
 	@Override
@@ -141,9 +129,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		PodcastChannel channel = (PodcastChannel) parent.getItemAtPosition(position);
-		
+	public void onItemClicked(PodcastChannel channel) {
 		if("error".equals(channel.getStatus())) {
 			Util.toast(context, context.getResources().getString(R.string.select_podcasts_invalid_podcast_channel, channel.getErrorMessage() == null ? "error" : channel.getErrorMessage()));
 		} else if("downloading".equals(channel.getStatus())) {
@@ -258,8 +244,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 
 					@Override
 					protected void done(Void result) {
-						adapter.remove(channel);
-						adapter.notifyDataSetChanged();
+						adapter.removeItem(channel);
 						Util.toast(context, context.getResources().getString(R.string.select_podcasts_deleted, channel.getName()));
 					}
 

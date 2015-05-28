@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
@@ -37,7 +38,7 @@ import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.UserAdapter;
 
-public class AdminFragment extends SelectListFragment<User> {
+public class AdminFragment extends SelectRecyclerFragment<User> {
 	private static String TAG = AdminFragment.class.getSimpleName();
 
 	@Override
@@ -69,8 +70,7 @@ public class AdminFragment extends SelectListFragment<User> {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		User user = objects.get(info.position);
+		User user = adapter.getContextItem();
 
 		switch(menuItem.getItemId()) {
 			case R.id.admin_change_email:
@@ -97,8 +97,8 @@ public class AdminFragment extends SelectListFragment<User> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<User> objs) {
-		return new UserAdapter(context, objs, getImageLoader());
+	public SectionAdapter getAdapter(List<User> objs) {
+		return new UserAdapter(context, objs, getImageLoader(), this);
 	}
 
 	@Override
@@ -134,9 +134,7 @@ public class AdminFragment extends SelectListFragment<User> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		User user = (User) parent.getItemAtPosition(position);
-
+	public void onItemClicked(User user) {
 		SubsonicFragment fragment = new UserFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(Constants.INTENT_EXTRA_NAME_ID, user);

@@ -76,7 +76,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					@Override
 					public void onClick(View v) {
 						T item = holder.getItem();
-						if(updateView.isCheckable()) {
+						if (updateView.isCheckable()) {
 							if (selected.contains(item)) {
 								selected.remove(item);
 								setChecked(updateView, false);
@@ -84,18 +84,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 								selected.add(item);
 								setChecked(updateView, true);
 							}
-						} else if(onItemClickedListener != null) {
+						} else if (onItemClickedListener != null) {
 							onItemClickedListener.onItemClicked(item);
 						}
-					}
-				});
-				updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
-					@Override
-					public boolean onLongClick(View v) {
-						T item = holder.getItem();
-						setContextItem(updateView, item);
-						v.showContextMenu();
-						return false;
 					}
 				});
 
@@ -110,6 +101,16 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 							T item = holder.getItem();
 							setContextItem(updateView, item);
 							v.showContextMenu();
+						}
+					});
+
+					updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
+						@Override
+						public boolean onLongClick(View v) {
+							T item = holder.getItem();
+							setContextItem(updateView, item);
+							v.showContextMenu();
+							return false;
 						}
 					});
 				}
@@ -246,6 +247,11 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		// TODO: This needs to work with multiple sections
 		for(T item: selected) {
 			int index = sections.get(0).indexOf(item);
+
+			if(singleSectionHeader) {
+				index++;
+			}
+
 			this.notifyItemChanged(index);
 		}
 		selected.clear();

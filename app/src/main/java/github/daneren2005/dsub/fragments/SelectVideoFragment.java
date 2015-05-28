@@ -24,20 +24,25 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.EntryGridAdapter;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.adapter.EntryAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
-public class SelectVideoFragment extends SelectListFragment<MusicDirectory.Entry> {
+public class SelectVideoFragment extends SelectRecyclerFragment<MusicDirectory.Entry> {
 	@Override
 	public int getOptionsMenu() {
 		return R.menu.empty;
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<MusicDirectory.Entry> objs) {
-		return new EntryAdapter(context, null, objs, false);
+	public SectionAdapter getAdapter(List<MusicDirectory.Entry> objs) {
+		SectionAdapter adapter = new EntryGridAdapter(context, objs, null, false);
+		adapter.setOnItemClickedListener(this);
+		return adapter;
 	}
 
 	@Override
@@ -52,18 +57,17 @@ public class SelectVideoFragment extends SelectListFragment<MusicDirectory.Entry
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
+	public void onItemClicked(MusicDirectory.Entry entry) {
 		playVideo(entry);
 	}
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		UpdateView targetView = adapter.getContextView();
+		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		Object entry = listView.getItemAtPosition(info.position);
-
+		MusicDirectory.Entry entry = adapter.getContextItem();
 		onCreateContextMenu(menu, view, menuInfo, entry);
 		recreateContextMenu(menu);
 	}
@@ -74,9 +78,7 @@ public class SelectVideoFragment extends SelectListFragment<MusicDirectory.Entry
 			return false;
 		}
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Object entry = listView.getItemAtPosition(info.position);
-
+		MusicDirectory.Entry entry = adapter.getContextItem();
 		return onContextItemSelected(menuItem, entry);
 	}
 }

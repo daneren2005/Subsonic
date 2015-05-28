@@ -12,6 +12,7 @@
 	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
 	Copyright 2015 (C) Scott Jackson
 */
+
 package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	protected boolean serialize = true;
 	protected boolean largeCells = false;
 	protected int columns;
+	protected boolean pullToRefresh = true;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -78,7 +80,12 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 
 		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
 		setupLayoutManager();
-		setupScrollList(recyclerView);
+
+		if(pullToRefresh) {
+			setupScrollList(recyclerView);
+		} else {
+			refreshLayout.setEnabled(false);
+		}
 
 		if(objects == null) {
 			refresh(false);

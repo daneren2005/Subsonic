@@ -3,7 +3,7 @@
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:background="@android:color/transparent">
+	android:background="@drawable/abc_item_background_holo_light">
 
 	<TextView
 		android:id="@+id/genre_name"

@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
@@ -33,16 +34,19 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.BookmarkAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.Entry> {
+public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirectory.Entry> {
 	private static final String TAG = SelectBookmarkFragment.class.getSimpleName();
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		UpdateView targetView = adapter.getContextView();
+		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
 
 		MenuInflater inflater = context.getMenuInflater();
 		inflater.inflate(R.menu.select_bookmark_context, menu);
@@ -52,8 +56,7 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		MusicDirectory.Entry bookmark = objects.get(info.position);
+		MusicDirectory.Entry bookmark = adapter.getContextItem();
 		
 		switch(menuItem.getItemId()) {
 			case R.id.bookmark_menu_info:
@@ -77,8 +80,8 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<MusicDirectory.Entry> bookmarks) {
-		return new BookmarkAdapter(context, bookmarks);
+	public SectionAdapter getAdapter(List<MusicDirectory.Entry> bookmarks) {
+		return new BookmarkAdapter(context, bookmarks, this);
 	}
 
 	@Override
@@ -92,13 +95,12 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	public void onItemClicked(final MusicDirectory.Entry bookmark) {
 		final DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;
 		}
 
-		final MusicDirectory.Entry bookmark = (MusicDirectory.Entry) parent.getItemAtPosition(position);
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {

@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
@@ -326,7 +327,7 @@ public final class UserUtil {
 		});
 	}
 
-	public static void deleteUser(final Context context, final User user, final ArrayAdapter adapter) {
+	public static void deleteUser(final Context context, final User user, final SectionAdapter adapter) {
 		Util.confirmDialog(context, R.string.common_delete, user.getUsername(), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -341,8 +342,7 @@ public final class UserUtil {
 					@Override
 					protected void done(Void v) {
 						if(adapter != null) {
-							adapter.remove(user);
-							adapter.notifyDataSetChanged();
+							adapter.removeItem(user);
 						}
 
 						Util.toast(context, context.getResources().getString(R.string.admin_delete_user_success, user.getUsername()));

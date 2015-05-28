@@ -54,6 +54,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.Genre;
@@ -1627,7 +1628,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	protected void deleteBookmark(final MusicDirectory.Entry entry, final ArrayAdapter adapter) {
+	protected void deleteBookmark(final MusicDirectory.Entry entry, final SectionAdapter adapter) {
 		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -1653,8 +1654,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					@Override
 					protected void done(Void result) {
 						if (adapter != null) {
-							adapter.remove(entry);
-							adapter.notifyDataSetChanged();
+							adapter.removeItem(entry);
 						}
 						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
 					}

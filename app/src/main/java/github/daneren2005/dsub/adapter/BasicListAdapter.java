@@ -20,30 +20,29 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import github.daneren2005.dsub.domain.Share;
-import github.daneren2005.dsub.view.ShareView;
+import github.daneren2005.dsub.view.BasicListView;
 import github.daneren2005.dsub.view.UpdateView;
 
-public class ShareAdapter extends SectionAdapter<Share>{
-	public static int VIEW_TYPE_SHARE = 1;
+public class BasicListAdapter extends SectionAdapter<String> {
+	public static int VIEW_TYPE_LINE = 1;
 
-	public ShareAdapter(Context context, List<Share> shares, OnItemClickedListener listener) {
-        super(context, shares);
+	public BasicListAdapter(Context context, List<String> strings, OnItemClickedListener listener) {
+		super(context, strings);
 		this.onItemClickedListener = listener;
-    }
-
-	@Override
-	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
-		return new UpdateView.UpdateViewHolder(new ShareView(context));
 	}
 
 	@Override
-	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Share item, int viewType) {
+	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+		return new UpdateView.UpdateViewHolder(new BasicListView(context));
+	}
+
+	@Override
+	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, String item, int viewType) {
 		holder.getUpdateView().setObject(item);
 	}
 
 	@Override
-	public int getItemViewType(Share item) {
-		return VIEW_TYPE_SHARE;
+	public int getItemViewType(String item) {
+		return VIEW_TYPE_LINE;
 	}
 }
