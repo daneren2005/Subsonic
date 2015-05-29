@@ -17,12 +17,15 @@ package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.ArtistAdapter2;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -32,13 +35,13 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.adapter.ArtistAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimilarArtistFragment extends SelectListFragment<Artist> {
+public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 	private static final String TAG = SimilarArtistFragment.class.getSimpleName();
 	private ArtistInfo info;
 	private String artistId;
@@ -49,6 +52,18 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 		artist = true;
 
 		artistId = getArguments().getString(Constants.INTENT_EXTRA_NAME_ARTIST);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		super.onCreateOptionsMenu(menu, menuInflater);
+		if(!primaryFragment) {
+			return;
+		}
+
+		if(info.getMissingArtists().isEmpty()) {
+			menu.removeItem(R.id.menu_show_missing);
+		}
 	}
 
 	@Override
@@ -71,10 +86,11 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		UpdateView targetView = adapter.getContextView();
+		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		Object entry = listView.getItemAtPosition(info.position);
-		onCreateContextMenu(menu, view, menuInfo, entry);
+		Artist artist = adapter.getContextItem();
+		onCreateContextMenu(menu, view, menuInfo, artist);
 
 		recreateContextMenu(menu);
 	}
@@ -85,14 +101,12 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 			return false;
 		}
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Artist artist = (Artist) listView.getItemAtPosition(info.position);
+		Artist artist = adapter.getContextItem();
 		return onContextItemSelected(menuItem, artist);
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Artist artist = (Artist) parent.getItemAtPosition(position);
+	public void onItemClicked(Artist artist) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
@@ -109,8 +123,8 @@ public class SimilarArtistFragment extends SelectListFragment<Artist> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<Artist> objects) {
-		return new ArtistAdapter(context, objects);
+	public SectionAdapter getAdapter(List<Artist> objects) {
+		return new ArtistAdapter2(context, objects, this);
 	}
 
 	@Override

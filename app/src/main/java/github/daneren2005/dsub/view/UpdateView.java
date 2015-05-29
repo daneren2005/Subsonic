@@ -290,21 +290,27 @@ public class UpdateView extends LinearLayout {
 
 	public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
 		private UpdateView updateView;
+		private View view;
 		private T item;
 
 		public UpdateViewHolder(UpdateView itemView) {
 			super(itemView);
 
 			this.updateView = itemView;
+			this.view = itemView;
 		}
 
 		// Different is so that call is not ambiguous
 		public UpdateViewHolder(View view, boolean different) {
 			super(view);
+			this.view = view;
 		}
 
 		public UpdateView getUpdateView() {
 			return updateView;
+		}
+		public View getView() {
+			return view;
 		}
 		public void setItem(T item) {
 			this.item = item;

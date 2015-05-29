@@ -198,7 +198,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	}
 	public void onBindHeaderHolder(UpdateViewHolder holder, String header) {
 		UpdateView view = holder.getUpdateView();
-		view.setObject(header);
+		if(view != null) {
+			view.setObject(header);
+		}
 	}
 
 	public T getItemForPosition(int position) {
