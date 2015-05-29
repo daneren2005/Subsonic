@@ -43,6 +43,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	protected T contextItem;
 	private List<T> selected = new ArrayList<>();
 
+	protected SectionAdapter() {}
 	public SectionAdapter(Context context, List<T> section) {
 		this(context, section, false);
 	}

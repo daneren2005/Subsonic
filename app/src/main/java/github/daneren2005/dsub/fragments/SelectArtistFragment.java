@@ -11,11 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.adapter.ArtistAdapter2;
+import github.daneren2005.dsub.adapter.ArtistAdapter;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
@@ -25,14 +24,13 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.adapter.ArtistAdapter;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectArtistFragment extends SelectRecyclerFragment<Artist> implements ArtistAdapter2.OnMusicFolderChanged {
+public class SelectArtistFragment extends SelectRecyclerFragment<Artist> implements ArtistAdapter.OnMusicFolderChanged {
 	private static final String TAG = SelectArtistFragment.class.getSimpleName();
 	private static final int MENU_GROUP_MUSIC_FOLDER = 10;
 
@@ -163,7 +161,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 
 	@Override
 	public SectionAdapter getAdapter(List<Artist> objects) {
-		return new ArtistAdapter2(context, objects, musicFolders, this, this);
+		return new ArtistAdapter(context, objects, musicFolders, this, this);
 	}
 
 	@Override
@@ -222,7 +220,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 
 		if(empty && !Util.isOffline(context)) {
 			objects.clear();
-			recyclerView.setAdapter(new ArtistAdapter2(context, objects, this));
+			recyclerView.setAdapter(new ArtistAdapter(context, objects, this));
 			recyclerView.setVisibility(View.VISIBLE);
 
 			View view = rootView.findViewById(R.id.tab_progress);

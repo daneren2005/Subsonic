@@ -340,7 +340,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				if (query != null) {
 					((SearchFragment)currentFragment).search(query, autoplay);
 				} else {
-					((SearchFragment)currentFragment).populateList();
 					if (requestsearch) {
 						onSearchRequested();
 					}

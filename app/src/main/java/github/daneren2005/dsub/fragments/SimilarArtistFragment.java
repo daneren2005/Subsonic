@@ -24,7 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.adapter.ArtistAdapter2;
+import github.daneren2005.dsub.adapter.ArtistAdapter;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.ArtistInfo;
@@ -124,7 +124,7 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 
 	@Override
 	public SectionAdapter getAdapter(List<Artist> objects) {
-		return new ArtistAdapter2(context, objects, this);
+		return new ArtistAdapter(context, objects, this);
 	}
 
 	@Override

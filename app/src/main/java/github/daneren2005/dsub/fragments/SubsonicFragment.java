@@ -34,6 +34,8 @@ import android.os.Bundle;
 import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -81,6 +83,7 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.AlbumView;
 import github.daneren2005.dsub.view.ArtistEntryView;
 import github.daneren2005.dsub.view.ArtistView;
+import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.PlaylistSongView;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
@@ -651,6 +654,45 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					R.color.holo_green_light,
 					R.color.holo_red_light);
 		}
+	}
+
+	public void setupLayoutManager(RecyclerView recyclerView, boolean largeAlbums) {
+		recyclerView.setLayoutManager(getLayoutManager(recyclerView, largeAlbums));
+	}
+	public RecyclerView.LayoutManager getLayoutManager(RecyclerView recyclerView, boolean largeCells) {
+		if(largeCells) {
+			return getGridLayoutManager(recyclerView);
+		} else {
+			return getLinearLayoutManager();
+		}
+	}
+	public GridLayoutManager getGridLayoutManager(RecyclerView recyclerView) {
+		final int columns = getRecyclerColumnCount();
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
+
+		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
+		if(spanSizeLookup != null) {
+			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
+		}
+		RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
+		if(itemDecoration != null) {
+			recyclerView.addItemDecoration(itemDecoration);
+		}
+		return gridLayoutManager;
+	}
+	public LinearLayoutManager getLinearLayoutManager() {
+		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		return layoutManager;
+	}
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
+		return null;
+	}
+	public RecyclerView.ItemDecoration getItemDecoration() {
+		return new GridSpacingDecoration();
+	}
+	public int getRecyclerColumnCount() {
+		return context.getResources().getInteger(R.integer.Grid_Columns);
 	}
 
 	protected void warnIfStorageUnavailable() {
