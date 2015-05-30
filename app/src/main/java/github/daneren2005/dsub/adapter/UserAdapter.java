@@ -25,28 +25,32 @@ import java.util.List;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.view.UserView;
 
-public class UserAdapter extends ArrayAdapter<User> {
-	private final Context activity;
+public class UserAdapter extends SectionAdapter<User> {
+	public static int VIEW_TYPE_USER = 1;
+
 	private final ImageLoader imageLoader;
 
-	public UserAdapter(Context activity, List<User> users, ImageLoader imageLoader) {
-		super(activity, R.layout.basic_list_item, users);
-		this.activity = activity;
+	public UserAdapter(Context context, List<User> users, ImageLoader imageLoader, OnItemClickedListener listener) {
+		super(context, users);
 		this.imageLoader = imageLoader;
+		this.onItemClickedListener = listener;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		User entry = getItem(position);
-		UserView view;
-		if (convertView != null && convertView instanceof UserView) {
-			view = (UserView) convertView;
-		} else {
-			view = new UserView(activity);
-		}
-		view.setObject(entry, imageLoader);
-		return view;
+	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+		return new UpdateView.UpdateViewHolder(new UserView(context));
+	}
+
+	@Override
+	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, User item, int viewType) {
+		holder.getUpdateView().setObject(item, imageLoader);
+	}
+
+	@Override
+	public int getItemViewType(User item) {
+		return VIEW_TYPE_USER;
 	}
 }

@@ -34,6 +34,9 @@ import android.os.Bundle;
 import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
@@ -53,6 +56,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.Genre;
@@ -76,10 +80,10 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.AlbumCell;
 import github.daneren2005.dsub.view.AlbumView;
 import github.daneren2005.dsub.view.ArtistEntryView;
 import github.daneren2005.dsub.view.ArtistView;
+import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.PlaylistSongView;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
@@ -308,14 +312,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 			}
 			// Apply similar logic to album views
-			else if(info.targetView instanceof AlbumCell || info.targetView instanceof AlbumView
-					|| info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
+			else if(info.targetView instanceof AlbumView || info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
 				File folder = null;
 				int id = 0;
-				if(info.targetView instanceof AlbumCell) {
-					folder = ((AlbumCell) info.targetView).getFile();
-					id = R.id.album_menu_delete;
-				} else if(info.targetView instanceof AlbumView) {
+				if(info.targetView instanceof AlbumView) {
 					folder = ((AlbumView) info.targetView).getFile();
 					id = R.id.album_menu_delete;
 				} else if(info.targetView instanceof ArtistView) {
@@ -631,6 +631,68 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					R.color.holo_green_light,
 					R.color.holo_red_light);
 		}
+	}
+	protected void setupScrollList(final RecyclerView recyclerView) {
+		if(!context.isTouchscreen()) {
+			refreshLayout.setEnabled(false);
+		} else {
+			recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+				@Override
+				public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+					super.onScrollStateChanged(recyclerView, newState);
+				}
+
+				@Override
+				public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+					refreshLayout.setEnabled(!recyclerView.canScrollVertically(-1));
+				}
+			});
+
+			refreshLayout.setColorScheme(
+					R.color.holo_blue_light,
+					R.color.holo_orange_light,
+					R.color.holo_green_light,
+					R.color.holo_red_light);
+		}
+	}
+
+	public void setupLayoutManager(RecyclerView recyclerView, boolean largeAlbums) {
+		recyclerView.setLayoutManager(getLayoutManager(recyclerView, largeAlbums));
+	}
+	public RecyclerView.LayoutManager getLayoutManager(RecyclerView recyclerView, boolean largeCells) {
+		if(largeCells) {
+			return getGridLayoutManager(recyclerView);
+		} else {
+			return getLinearLayoutManager();
+		}
+	}
+	public GridLayoutManager getGridLayoutManager(RecyclerView recyclerView) {
+		final int columns = getRecyclerColumnCount();
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
+
+		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
+		if(spanSizeLookup != null) {
+			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
+		}
+		RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
+		if(itemDecoration != null) {
+			recyclerView.addItemDecoration(itemDecoration);
+		}
+		return gridLayoutManager;
+	}
+	public LinearLayoutManager getLinearLayoutManager() {
+		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		return layoutManager;
+	}
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
+		return null;
+	}
+	public RecyclerView.ItemDecoration getItemDecoration() {
+		return new GridSpacingDecoration();
+	}
+	public int getRecyclerColumnCount() {
+		return context.getResources().getInteger(R.integer.Grid_Columns);
 	}
 
 	protected void warnIfStorageUnavailable() {
@@ -1608,7 +1670,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	protected void deleteBookmark(final MusicDirectory.Entry entry, final ArrayAdapter adapter) {
+	protected void deleteBookmark(final MusicDirectory.Entry entry, final SectionAdapter adapter) {
 		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -1634,8 +1696,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					@Override
 					protected void done(Void result) {
 						if (adapter != null) {
-							adapter.remove(entry);
-							adapter.notifyDataSetChanged();
+							adapter.removeItem(entry);
 						}
 						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
 					}
@@ -1788,11 +1849,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				return;
 			}
 
-			for (Entry song : parent.getChildren(false, true)) {
-				if (!song.isVideo() && song.getRating() != 1) {
-					songs.add(song);
-				}
-			}
 			for (Entry dir : parent.getChildren(true, false)) {
 				if(dir.getRating() == 1) {
 					continue;
@@ -1805,6 +1861,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					musicDirectory = musicService.getMusicDirectory(dir.getId(), dir.getTitle(), false, context, this);
 				}
 				getSongsRecursively(musicDirectory, songs);
+			}
+
+			for (Entry song : parent.getChildren(false, true)) {
+				if (!song.isVideo() && song.getRating() != 1) {
+					songs.add(song);
+				}
 			}
 		}
 

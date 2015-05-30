@@ -3,7 +3,8 @@
 		android:id="@id/drag_handle"
 		android:orientation="horizontal"
 		android:layout_width="fill_parent"
-		android:layout_height="?android:attr/listPreferredItemHeight">
+		android:layout_height="?android:attr/listPreferredItemHeight"
+		android:background="?attr/selectableItemBackground">
 
     <CheckedTextView
             android:id="@+id/song_check"
@@ -117,7 +118,7 @@
     </LinearLayout>
 	
 	<ImageView
-		android:id="@+id/artist_more"
+		android:id="@+id/more_button"
 		android:src="?attr/download_none"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"

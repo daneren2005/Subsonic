@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<style name="BasicButton">
-		<item name="android:background">@drawable/abc_item_background_holo_light</item>
+		<item name="android:background">?attr/selectableItemBackground</item>
 	</style>
 
 	<style name="MoreButton" parent="BasicButton">

@@ -19,6 +19,9 @@
 package github.daneren2005.dsub.domain;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Sindre Mehus
@@ -124,5 +127,17 @@ public class Playlist implements Serializable {
 		
 		Playlist playlist = (Playlist) o;
 		return playlist.id.equals(this.id);
+	}
+
+	public static class PlaylistComparator implements Comparator<Playlist> {
+		@Override
+		public int compare(Playlist playlist1, Playlist playlist2) {
+			return playlist1.getName().compareToIgnoreCase(playlist2.getName());
+		}
+
+		public static List<Playlist> sort(List<Playlist> playlists) {
+			Collections.sort(playlists, new PlaylistComparator());
+			return playlists;
+		}
 	}
 }

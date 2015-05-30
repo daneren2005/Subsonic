@@ -23,6 +23,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,7 @@ public class UpdateView extends LinearLayout {
 	protected SilentBackgroundTask<Void> imageTask = null;
 	
 	protected final boolean autoUpdate;
+	protected boolean checkable;
 	
 	public UpdateView(Context context) {
 		this(context, true);
@@ -75,8 +77,8 @@ public class UpdateView extends LinearLayout {
 		this.autoUpdate = autoUpdate;
 		
 		setLayoutParams(new AbsListView.LayoutParams(
-			ViewGroup.LayoutParams.FILL_PARENT,
-			ViewGroup.LayoutParams.WRAP_CONTENT));
+				ViewGroup.LayoutParams.FILL_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT));
 		
 		if(autoUpdate) {
 			INSTANCES.put(this, null);
@@ -224,8 +226,6 @@ public class UpdateView extends LinearLayout {
 			MusicDirectory.Entry check = null;
 			if(view instanceof SongView) {
 				check = ((SongView) view).getEntry();
-			} else if(view instanceof AlbumCell) {
-				check = ((AlbumCell) view).getEntry();
 			} else if(view instanceof AlbumView) {
 				check = ((AlbumView) view).getEntry();
 			}
@@ -281,6 +281,42 @@ public class UpdateView extends LinearLayout {
 
 			ratingBar.setRating(isRated);
 			rating = isRated;
+		}
+	}
+
+	public boolean isCheckable() {
+		return checkable;
+	}
+
+	public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
+		private UpdateView updateView;
+		private View view;
+		private T item;
+
+		public UpdateViewHolder(UpdateView itemView) {
+			super(itemView);
+
+			this.updateView = itemView;
+			this.view = itemView;
+		}
+
+		// Different is so that call is not ambiguous
+		public UpdateViewHolder(View view, boolean different) {
+			super(view);
+			this.view = view;
+		}
+
+		public UpdateView getUpdateView() {
+			return updateView;
+		}
+		public View getView() {
+			return view;
+		}
+		public void setItem(T item) {
+			this.item = item;
+		}
+		public T getItem() {
+			return item;
 		}
 	}
 }

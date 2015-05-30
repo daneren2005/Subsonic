@@ -3,7 +3,7 @@
 			  android:orientation="horizontal"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
-			  android:background="@android:color/transparent">
+			  android:background="?attr/selectableItemBackground">
 
 	<github.daneren2005.dsub.view.RecyclingImageView
 		android:id="@+id/item_avatar"

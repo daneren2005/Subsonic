@@ -5,23 +5,23 @@
 	android:layout_height="fill_parent">
 
 	<LinearLayout
-		android:id="@+id/select_album_layout"
-		android:orientation="vertical"
+		android:id="@+id/fragment_list_layout"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
+		android:layout_height="fill_parent"
+		android:orientation="vertical" >
 
 		<View
 			android:layout_width="fill_parent"
 			android:layout_height="1px"
 			android:background="@color/dividerColor"/>
 
-		<include layout="@layout/tab_progress"/>
-
 		<android.support.v7.widget.RecyclerView
-			android:id="@+id/select_album_entries"
+			android:id="@+id/fragment_recycler"
 			android:layout_width="fill_parent"
 			android:layout_height="0dip"
 			android:layout_weight="1.0"
 			android:scrollbars="vertical"/>
+
+		<include layout="@layout/tab_progress" />
 	</LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

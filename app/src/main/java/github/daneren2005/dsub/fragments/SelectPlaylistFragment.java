@@ -2,18 +2,19 @@ package github.daneren2005.dsub.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -31,9 +32,11 @@ import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.PlaylistAdapter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
+public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
 	@Override
@@ -47,8 +50,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 		else {
 			inflater.inflate(R.menu.select_playlist_context, menu);
 
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			Playlist playlist = (Playlist) listView.getItemAtPosition(info.position);
+			Playlist playlist = adapter.getContextItem();
 			if(SyncUtil.isSyncedPlaylist(context, playlist.getId())) {
 				menu.removeItem(R.id.playlist_menu_sync);
 			} else {
@@ -71,9 +73,8 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 		if(menuItem.getGroupId() != getSupportTag()) {
 			return false;
 		}
-		
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Playlist playlist = (Playlist) listView.getItemAtPosition(info.position);
+
+		Playlist playlist = adapter.getContextItem();
 
 		SubsonicFragment fragment;
 		Bundle args;
@@ -130,8 +131,31 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<Playlist> playlists) {
-		return new PlaylistAdapter(context, playlists);
+	public SectionAdapter<Playlist> getAdapter(List<Playlist> playlists) {
+		List<Playlist> mine = new ArrayList<>();
+		List<Playlist> shared = new ArrayList<>();
+
+		String currentUsername = UserUtil.getCurrentUsername(context);
+		for(Playlist playlist: playlists) {
+			if(playlist.getOwner() == null || playlist.getOwner().equals(currentUsername)) {
+				mine.add(playlist);
+			} else {
+				shared.add(playlist);
+			}
+		}
+
+		if(shared.isEmpty()) {
+			return new PlaylistAdapter(context, playlists, this);
+		} else {
+			Resources res = context.getResources();
+			List<String> headers = Arrays.asList(res.getString(R.string.playlist_mine), res.getString(R.string.playlist_shared));
+
+			List<List<Playlist>> sections = new ArrayList<>();
+			sections.add(mine);
+			sections.add(shared);
+
+			return new PlaylistAdapter(context, headers, sections, this);
+		}
 	}
 
 	@Override
@@ -149,9 +173,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Playlist playlist = (Playlist) parent.getItemAtPosition(position);
-
+	public void onItemClicked(Playlist playlist) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
@@ -179,8 +201,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 
 					@Override
 					protected void done(Void result) {
-						adapter.remove(playlist);
-						adapter.notifyDataSetChanged();
+						adapter.removeItem(playlist);
 						Util.toast(context, context.getResources().getString(R.string.menu_deleted_playlist, playlist.getName()));
 					}
 
