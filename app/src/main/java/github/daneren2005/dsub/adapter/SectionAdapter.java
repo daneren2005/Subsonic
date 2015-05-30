@@ -105,7 +105,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 						}
 					});
 
-					updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
+					/*updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
 						@Override
 						public boolean onLongClick(View v) {
 							T item = holder.getItem();
@@ -113,7 +113,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 							v.showContextMenu();
 							return false;
 						}
-					});
+					});*/
 				}
 			}
 
@@ -240,6 +240,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		this.onItemClickedListener = onItemClickedListener;
 	}
 
+	public void addSelected(T item) {
+		selected.add(item);
+	}
 	public List<T> getSelected() {
 		List<T> selected = new ArrayList<>();
 		selected.addAll(this.selected);

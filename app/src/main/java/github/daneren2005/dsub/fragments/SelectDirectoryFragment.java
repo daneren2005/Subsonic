@@ -77,7 +77,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	private Boolean licenseValid;
 	private List<Entry> albums;
 	private List<Entry> entries;
-	private boolean addAlbumHeader = false;
 	private LoadTask currentTask;
 	private ArtistInfo artistInfo;
 	private String artistInfoDelayed;
@@ -198,9 +197,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			recyclerView.setLayoutManager(layoutManager);
 		}
 
-		if(albumListType == null || "starred".equals(albumListType)) {
-			addAlbumHeader = true;
-		}
 		registerForContextMenu(recyclerView);
 
 		if(entries == null) {
@@ -763,6 +759,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		// Show header if not album list type and not root and not artist
 		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
+		boolean addedHeader = false;
 		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null || artistInfoDelayed != null)) {
 			View header = createHeader();
 
@@ -796,22 +793,28 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				}
 
 				entryGridAdapter.setHeader(header);
+				addedHeader = true;
+			}
+		}
+
+		int scrollToPosition = -1;
+		if(lookupEntry != null) {
+			for(int i = 0; i < entries.size(); i++) {
+				if(lookupEntry.equals(entries.get(i).getTitle())) {
+					scrollToPosition = i;
+					entryGridAdapter.addSelected(entries.get(i));
+					lookupEntry = null;
+					break;
+				}
 			}
 		}
 
 		recyclerView.setAdapter(entryGridAdapter);
 		context.supportInvalidateOptionsMenu();
 
-		/*if(lookupEntry != null) {
-			for(int i = 0; i < entries.size(); i++) {
-				if(lookupEntry.equals(entries.get(i).getTitle())) {
-					recyclerView.scrollToPosition();
-					entryList.setSelection(i + entryList.getHeaderViewsCount());
-					lookupEntry = null;
-					break;
-				}
-			}
-		}*/
+		if(scrollToPosition != -1) {
+			recyclerView.scrollToPosition(scrollToPosition + (addedHeader ? 1 : 0));
+		}
 
 		Bundle args = getArguments();
 		boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
