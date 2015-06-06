@@ -116,35 +116,6 @@ public class MainFragment extends SubsonicFragment {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		
-		int serverCount = Util.getServerCount(context);
-		int activeServer = Util.getActiveServer(context);
-		for(int i = 1; i <= serverCount; i++) {
-			android.view.MenuItem menuItem = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_BASE + i, MENU_ITEM_SERVER_BASE + i, Util.getServerName(context, i));
-			if(i == activeServer) {
-				menuItem.setChecked(true);
-			}
-		}
-		menu.setGroupCheckable(MENU_GROUP_SERVER, true, true);
-		menu.setHeaderTitle(R.string.main_select_server);
-
-		recreateContextMenu(menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-		
-		int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
-		context.setActiveServer(activeServer);
-		return true;
-	}
-
-	@Override
 	protected void refresh(boolean refresh) {
 		createLayout();
 	}
@@ -152,8 +123,6 @@ public class MainFragment extends SubsonicFragment {
 	private void createLayout() {
 		View buttons = inflater.inflate(R.layout.main_buttons, null);
 
-		final View serverButton = buttons.findViewById(R.id.main_select_server);
-		final TextView serverTextView = (TextView) serverButton.findViewById(R.id.main_select_server_2);
 		final TextView offlineButton = (TextView) buttons.findViewById(R.id.main_offline);
 		offlineButton.setText(Util.isOffline(context) ? R.string.main_online : R.string.main_offline);
 
@@ -171,8 +140,6 @@ public class MainFragment extends SubsonicFragment {
 		final View albumsAlphabeticalButton = buttons.findViewById(R.id.main_albums_alphabetical);
 		final View videosButton = buttons.findViewById(R.id.main_videos);
 
-		final View dummyView = rootView.findViewById(R.id.main_dummy);
-
 		final CheckBox albumsPerFolderCheckbox = (CheckBox) buttons.findViewById(R.id.main_albums_per_folder);
 		if(!Util.isOffline(context) && ServerInfo.canAlbumListPerFolder(context)) {
 			albumsPerFolderCheckbox.setChecked(Util.getAlbumListsPerFolder(context));
@@ -188,14 +155,10 @@ public class MainFragment extends SubsonicFragment {
 
 		int instance = Util.getActiveServer(context);
 		String name = Util.getServerName(context, instance);
-		serverTextView.setText(name);
 
 		ListView list = (ListView) rootView.findViewById(R.id.main_list);
 
 		MergeAdapter adapter = new MergeAdapter();
-		if (!Util.isOffline(context)) {
-			adapter.addViews(Arrays.asList(serverButton), true);
-		}
 		adapter.addView(offlineButton, true);
 		if (!Util.isOffline(context)) {
 			adapter.addView(albumsTitle, false);
@@ -213,14 +176,11 @@ public class MainFragment extends SubsonicFragment {
 			}
 		}
 		list.setAdapter(adapter);
-		registerForContextMenu(dummyView);
 
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (view == serverButton) {
-					dummyView.showContextMenu();
-				} else if (view == offlineButton) {
+				if (view == offlineButton) {
 					toggleOffline();
 				} else if (view == albumsNewestButton) {
 					showAlbumList("newest");

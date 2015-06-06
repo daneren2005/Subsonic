@@ -260,10 +260,9 @@ public final class Notifications {
 						cancelPI);
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
-		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		builder.setContentIntent(PendingIntent.getActivity(context, 1, notificationIntent, 0));
+		builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0));
 
 		final Notification notification = builder.build();
 		downloadShowing = true;

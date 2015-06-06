@@ -73,6 +73,7 @@ public class SettingsActivity extends SubsonicActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		lastSelectedPosition = R.id.drawer_settings;
 		setContentView(R.layout.download_activity);
 
 		if (savedInstanceState == null) {
