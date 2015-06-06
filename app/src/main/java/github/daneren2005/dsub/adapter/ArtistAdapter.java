@@ -59,7 +59,7 @@ public class ArtistAdapter extends SectionAdapter<Artist> {
 		header.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				PopupMenu popup = new PopupMenu(context, header);
+				PopupMenu popup = new PopupMenu(context, header.findViewById(R.id.select_artist_folder_2));
 
 				popup.getMenu().add(R.string.select_artist_all_folders);
 				for (MusicFolder musicFolder : musicFolders) {
