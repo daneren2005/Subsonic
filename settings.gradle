@@ -1,3 +1,2 @@
-include ':app', ':Server Proxy', ':DragSort ListView'
+include ':app', ':Server Proxy'
 project(':Server Proxy').projectDir = new File('ServerProxy')
-project(':DragSort ListView').projectDir = new File('DragSortListView/library')

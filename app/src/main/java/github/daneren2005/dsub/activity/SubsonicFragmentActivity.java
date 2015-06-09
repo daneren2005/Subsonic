@@ -565,19 +565,22 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			artistView.setText(R.string.main_artist);
 		}
 
-		SilentBackgroundTask task = getImageLoader().loadImage(coverArtView, song, false, coverArtView.getHeight(), false);
-		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-			if(task == null) {
-				getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
-			} else {
-				task.setOnCompletionListener(new Runnable() {
-					@Override
-					public void run() {
-						getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
-					}
-				});
+		if(coverArtView.getHeight() > 0 ) {
+			SilentBackgroundTask task = getImageLoader().loadImage(coverArtView, song, false, coverArtView.getHeight(), false);
+			if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+				if (task == null) {
+					getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
+				} else {
+					task.setOnCompletionListener(new Runnable() {
+						@Override
+						public void run() {
+							getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
+						}
+					});
+				}
 			}
 		}
+
 		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
 		TypedArray typedArray = this.obtainStyledAttributes(attrs);
 		startButton.setImageResource(typedArray.getResourceId(0, 0));

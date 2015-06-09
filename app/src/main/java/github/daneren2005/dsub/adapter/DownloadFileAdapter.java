@@ -24,26 +24,33 @@ import java.util.List;
 
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.view.SongView;
+import github.daneren2005.dsub.view.UpdateView;
 
-public class DownloadFileAdapter extends ArrayAdapter<DownloadFile> {
-	Context context;
+public class DownloadFileAdapter extends SectionAdapter<DownloadFile> {
+	public static int VIEW_TYPE_DOWNLOAD_FILE = 1;
 
 	public DownloadFileAdapter(Context context, List<DownloadFile> entries) {
-		super(context, android.R.layout.simple_list_item_1, entries);
-		this.context = context;
+		super(context, entries);
+	}
+	public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
+		super(context, entries);
+		this.onItemClickedListener = onItemClickedListener;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		SongView view;
-		if (convertView != null && convertView instanceof SongView) {
-			view = (SongView) convertView;
-		} else {
-			view = new SongView(context);
-		}
-		DownloadFile downloadFile = getItem(position);
-		view.setObject(downloadFile.getSong(), false);
-		view.setDownloadFile(downloadFile);
-		return view;
+	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+		return new UpdateView.UpdateViewHolder(new SongView(context));
+	}
+
+	@Override
+	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, DownloadFile item, int viewType) {
+		SongView songView = (SongView) holder.getUpdateView();
+		songView.setObject(item.getSong(), false);
+		songView.setDownloadFile(item);
+	}
+
+	@Override
+	public int getItemViewType(DownloadFile item) {
+		return VIEW_TYPE_DOWNLOAD_FILE;
 	}
 }

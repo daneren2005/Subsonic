@@ -26,13 +26,13 @@ android {
 }
 
 dependencies {
-	compile project(':DragSort ListView')
 	compile project(':Server Proxy')
 	compile fileTree(include: ['*.jar'], dir: 'libs')
-	compile 'com.android.support:support-v4:22.1.1'
-	compile 'com.android.support:appcompat-v7:22.1.1'
-	compile 'com.android.support:mediarouter-v7:22.1.1'
-	compile 'com.android.support:recyclerview-v7:22.1.1'
+	compile 'com.android.support:support-v4:22.2.+'
+	compile 'com.android.support:appcompat-v7:22.2.+'
+	compile 'com.android.support:mediarouter-v7:22.2.+'
+	compile 'com.android.support:recyclerview-v7:22.2.+'
+	compile 'com.android.support:design:22.2.+'
 	compile 'com.google.android.gms:play-services-cast:7.0.0'
 	compile 'com.sothree.slidinguppanel:library:3.0.0'
 	compile 'de.hdodenhof:circleimageview:1.2.1'

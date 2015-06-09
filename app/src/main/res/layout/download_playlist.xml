@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1">
 			
 	<View
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:background="@color/dividerColor"/>
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/dividerColor"/>
 
     <TextView
-            android:id="@+id/download_empty"
-            android:text="@string/download.empty"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dip"/>
+        android:id="@+id/download_empty"
+        android:text="@string/download.empty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dip"/>
 
-    <com.mobeta.android.dslv.DragSortListView
-		style="@style/DragDropListView"
+    <android.support.v7.widget.RecyclerView
 		android:id="@+id/download_list"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_weight="1"
-		android:cacheColorHint="#00000000"
-		android:fastScrollEnabled="true"/>
+        android:scrollbars="vertical"/>
 
 </LinearLayout>
