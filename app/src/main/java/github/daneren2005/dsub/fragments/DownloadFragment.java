@@ -30,6 +30,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
@@ -38,13 +39,15 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
-public class DownloadFragment extends SelectListFragment<DownloadFile> {
+public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> {
 	private long currentRevision;
 	private ScheduledExecutorService executorService;
 
 	public DownloadFragment() {
 		serialize = false;
+		pullToRefresh = false;
 	}
 
 	@Override
@@ -80,7 +83,7 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<DownloadFile> objs) {
+	public SectionAdapter getAdapter(List<DownloadFile> objs) {
 		return new DownloadFileAdapter(context, objs);
 	}
 
@@ -90,9 +93,6 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 		if(downloadService == null) {
 			return new ArrayList<DownloadFile>();
 		}
-
-		listView.setOnScrollListener(null);
-		refreshLayout.setEnabled(false);
 
 		List<DownloadFile> songList = new ArrayList<DownloadFile>();
 		songList.addAll(downloadService.getBackgroundDownloads());
@@ -106,7 +106,7 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	public void onItemClicked(DownloadFile item) {
 
 	}
 
@@ -144,11 +144,13 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 	@Override
 	public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, view, menuInfo);
+		UpdateView targetView = adapter.getContextView();
+		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		Object selectedItem = ((DownloadFile) listView.getItemAtPosition(info.position)).getSong();
+		DownloadFile downloadFile = adapter.getContextItem();
+		MusicDirectory.Entry selectedItem = downloadFile.getSong();
 		onCreateContextMenu(menu, view, menuInfo, selectedItem);
-		if(selectedItem instanceof MusicDirectory.Entry && !((MusicDirectory.Entry) selectedItem).isVideo() && !Util.isOffline(context)) {
+		if(!selectedItem.isVideo() && !Util.isOffline(context)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
 
@@ -161,9 +163,8 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 			return false;
 		}
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Object selectedItem = ((DownloadFile) listView.getItemAtPosition(info.position)).getSong();
-
+		DownloadFile downloadFile = adapter.getContextItem();
+		MusicDirectory.Entry selectedItem = downloadFile.getSong();
 		if(onContextItemSelected(menuItem, selectedItem)) {
 			return true;
 		}

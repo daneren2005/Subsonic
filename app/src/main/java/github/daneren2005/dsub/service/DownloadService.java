@@ -886,6 +886,9 @@ public class DownloadService extends Service {
 	public synchronized void play(int index) {
 		play(index, true);
 	}
+	public synchronized void play(DownloadFile downloadFile) {
+		play(downloadList.indexOf(downloadFile));
+	}
 	private synchronized void play(int index, boolean start) {
 		play(index, start, 0);
 	}
@@ -1818,6 +1821,10 @@ public class DownloadService extends Service {
 		applyReplayGain(mediaPlayer, currentPlaying);
 	}
 
+	public synchronized void swap(boolean mainList, DownloadFile from, DownloadFile to) {
+		List<DownloadFile> list = mainList ? downloadList : backgroundDownloadList;
+		swap(mainList, list.indexOf(from), list.indexOf(to));
+	}
 	public synchronized void swap(boolean mainList, int from, int to) {
 		List<DownloadFile> list = mainList ? downloadList : backgroundDownloadList;
 		int max = list.size();
