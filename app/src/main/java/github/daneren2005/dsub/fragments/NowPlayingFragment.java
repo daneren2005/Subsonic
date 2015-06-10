@@ -31,6 +31,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
@@ -55,6 +58,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -70,6 +74,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
 import github.daneren2005.dsub.view.FadeOutAnimation;
+import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.Util;
 
@@ -79,10 +84,9 @@ import github.daneren2005.dsub.util.*;
 import github.daneren2005.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
-import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
-public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener {
+public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile> {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();
 	private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 10;
 	private static final int INCREMENT_TIME = 5000;
@@ -97,7 +101,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private TextView emptyTextView;
 	private TextView songTitleTextView;
 	private ImageView albumArtImageView;
-	private DragSortListView playlistView;
+	private RecyclerView playlistView;
 	private TextView positionTextView;
 	private TextView durationTextView;
 	private TextView statusTextView;
@@ -172,7 +176,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		durationTextView = (TextView)rootView.findViewById(R.id.download_duration);
 		statusTextView = (TextView)rootView.findViewById(R.id.download_status);
 		progressBar = (SeekBar)rootView.findViewById(R.id.download_progress_bar);
-		playlistView = (DragSortListView)rootView.findViewById(R.id.download_list);
 		previousButton = (AutoRepeatButton)rootView.findViewById(R.id.download_previous);
 		nextButton = (AutoRepeatButton)rootView.findViewById(R.id.download_next);
 		pauseButton =rootView.findViewById(R.id.download_pause);
@@ -183,6 +186,45 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		rateBadButton = (ImageButton) rootView.findViewById(R.id.download_rating_bad);
 		rateGoodButton = (ImageButton) rootView.findViewById(R.id.download_rating_good);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
+
+		playlistView = (RecyclerView)rootView.findViewById(R.id.download_list);
+		setupLayoutManager(playlistView, false);
+		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+			@Override
+			public boolean onMove(RecyclerView recyclerView, final RecyclerView.ViewHolder fromHolder, final RecyclerView.ViewHolder toHolder) {
+				new SilentBackgroundTask<Void>(context) {
+					private int from;
+					private int to;
+
+					@Override
+					protected Void doInBackground() throws Throwable {
+						from = fromHolder.getAdapterPosition();
+						to = toHolder.getAdapterPosition();
+						getDownloadService().swap(true, from, to);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						songListAdapter.notifyItemMoved(from, to);
+					}
+				}.execute();
+
+				return true;
+			}
+
+			@Override
+			public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+				SongView songView = (SongView) ((UpdateView.UpdateViewHolder) viewHolder).getUpdateView();
+				DownloadFile downloadFile = songView.getDownloadFile();
+
+				DownloadService downloadService = getDownloadService();
+				downloadService.remove(downloadFile);
+				songListAdapter.removeItem(downloadFile);
+				currentRevision = downloadService.getDownloadListUpdateRevision();
+			}
+		});
+		touchHelper.attachToRecyclerView(playlistView);
 
 		starButton = (ImageButton)rootView.findViewById(R.id.download_star);
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
@@ -499,47 +541,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 			}
 		});
-		playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-				warnIfStorageUnavailable();
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						getDownloadService().play(position);
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						onCurrentChanged();
-						onProgressChanged();
-					}
-				}.execute();
-			}
-		});
-		playlistView.setDropListener(new DragSortListView.DropListener() {
-			@Override
-			public void drop(final int from, final int to) {
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						getDownloadService().swap(true, from, to);
-						onDownloadListChanged();
-
-						return null;
-					}
-				}.execute();
-			}
-		});
-		playlistView.setRemoveListener(new DragSortListView.RemoveListener() {
-			@Override
-			public void remove(int which) {
-				getDownloadService().remove(which);
-				onDownloadListChanged();
-			}
-		});
-
 		registerForContextMenu(playlistView);
 
 		if(Build.MODEL.equals("Nexus 4") || Build.MODEL.equals("GT-I9100")) {
@@ -606,10 +607,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(!primaryFragment) {
 			return;
 		}
+		UpdateView targetView = songListAdapter.getContextView();
+		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
 
 		if (view == playlistView) {
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
+			DownloadFile downloadFile = songListAdapter.getContextItem();
 
 			android.view.MenuInflater inflater = context.getMenuInflater();
 			if(Util.isOffline(context)) {
@@ -634,8 +636,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			return false;
 		}
 
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
+		DownloadFile downloadFile = songListAdapter.getContextItem();
 		return menuItemSelected(menuItem.getItemId(), downloadFile) || super.onContextItemSelected(menuItem);
 	}
 
@@ -997,18 +998,18 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			return;
 		}
 
-		for (int i = 0; i < songListAdapter.getCount(); i++) {
-			if (currentPlaying == playlistView.getItemAtPosition(i)) {
-				playlistView.setSelectionFromTop(i, 40);
-				return;
-			}
+		// Try to get position of current playing/downloading
+		int position = songListAdapter.getItemPosition(currentPlaying);
+		if(position == -1) {
+			DownloadFile currentDownloading = getDownloadService().getCurrentDownloading();
+			position = songListAdapter.getItemPosition(currentDownloading);
 		}
-		DownloadFile currentDownloading = getDownloadService().getCurrentDownloading();
-		for (int i = 0; i < songListAdapter.getCount(); i++) {
-			if (currentDownloading == playlistView.getItemAtPosition(i)) {
-				playlistView.setSelectionFromTop(i, 40);
-				return;
-			}
+
+		// If found, scroll to it
+		if(position != -1) {
+			// RecyclerView.scrollToPosition just puts it on the screen (ie: bottom if scrolled below it)
+			LinearLayoutManager layoutManager = (LinearLayoutManager) playlistView.getLayoutManager();
+			layoutManager.scrollToPositionWithOffset(position, 0);
 		}
 	}
 
@@ -1162,9 +1163,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 
 				if(songListAdapter == null || refresh) {
-					songList = new ArrayList<DownloadFile>();
+					songList = new ArrayList<>();
 					songList.addAll(list);
-					playlistView.setAdapter(songListAdapter = new DownloadFileAdapter(context, songList));
+					playlistView.setAdapter(songListAdapter = new DownloadFileAdapter(context, songList, NowPlayingFragment.this));
 				} else {
 					songList.clear();
 					songList.addAll(list);
@@ -1589,5 +1590,20 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
 		return false;
+	}
+
+	@Override
+	public void onItemClicked(final DownloadFile item) {
+		warnIfStorageUnavailable();
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				getDownloadService().play(item);
+
+				onCurrentChanged();
+				onProgressChanged();
+				return null;
+			}
+		}.execute();
 	}
 }

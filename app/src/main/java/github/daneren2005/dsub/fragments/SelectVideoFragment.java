@@ -19,7 +19,6 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import java.util.List;
 
@@ -29,7 +28,6 @@ import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.adapter.EntryAdapter;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class SelectVideoFragment extends SelectRecyclerFragment<MusicDirectory.Entry> {

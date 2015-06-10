@@ -17,8 +17,9 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.CheckedTextView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
@@ -26,16 +27,28 @@ import github.daneren2005.dsub.domain.User;
 import static github.daneren2005.dsub.domain.User.Setting;
 
 public class SettingView extends UpdateView {
-	Setting setting;
+	private final TextView titleView;
+	private final CheckBox checkBox;
 
-	CheckedTextView view;
+	private Setting setting;
+	private boolean enabled = false;
 
 	public SettingView(Context context) {
 		super(context, false);
 		this.context = context;
-		LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_multiple_choice, this, true);
+		LayoutInflater.from(context).inflate(R.layout.basic_choice_item, this, true);
 
-		view = (CheckedTextView) findViewById(android.R.id.text1);
+		titleView = (TextView) findViewById(R.id.item_name);
+		checkBox = (CheckBox) findViewById(R.id.item_checkbox);
+		checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(setting != null) {
+					setting.setValue(isChecked);
+				}
+			}
+		});
+		checkBox.setClickable(false);
 	}
 
 	protected void setObjectImpl(Object obj, Object editable) {
@@ -74,29 +87,29 @@ public class SettingView extends UpdateView {
 			res = R.string.admin_role_lastfm;
 		} else {
 			// Last resort to display the raw value
-			view.setText(name);
+			titleView.setText(name);
 		}
 		
 		if(res != -1) {
-			view.setText(res);
+			titleView.setText(res);
 		}
 
 		if(setting.getValue()) {
-			view.setChecked(setting.getValue());
+			checkBox.setChecked(setting.getValue());
 		} else {
-			view.setChecked(false);
+			checkBox.setChecked(false);
 		}
 
-		if((Boolean) editable) {
-			view.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					view.toggle();
-					setting.setValue(view.isChecked());
-				}
-			});
-		} else {
-			view.setOnClickListener(null);
-		}
+		enabled = (Boolean) editable;
+		checkBox.setEnabled(enabled);
+	}
+
+	@Override
+	public boolean isCheckable() {
+		return this.enabled;
+	}
+
+	public void setChecked(boolean checked) {
+		checkBox.setChecked(checked);
 	}
 }

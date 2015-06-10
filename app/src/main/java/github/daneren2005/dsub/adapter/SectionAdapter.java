@@ -224,6 +224,23 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
 		return null;
 	}
+	public int getItemPosition(T item) {
+		if(sections.size() == 1 && !singleSectionHeader) {
+			return sections.get(0).indexOf(item);
+		}
+
+		int subPosition = 0;
+		for(List<T> section: sections) {
+			subPosition += section.size() + 1;
+
+			int position = section.indexOf(item);
+			if(position != -1) {
+				return position + subPosition;
+			}
+		}
+
+		return -1;
+	}
 
 	public void setContextItem(UpdateView updateView, T item) {
 		contextView = updateView;

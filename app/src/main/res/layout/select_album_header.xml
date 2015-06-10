@@ -148,6 +148,12 @@
 				android:textAppearance="?android:attr/textAppearanceMedium"/>
 		</LinearLayout>
 	</FrameLayout>
+
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="1px"
+		android:background="@color/dividerColor"
+		android:layout_gravity="bottom"/>
 </FrameLayout>
 
 
