@@ -15,9 +15,10 @@
 
 		<android.support.v7.widget.Toolbar
 			android:id="@+id/main_toolbar"
-			style="?attr/actionBarStyle"
 			android:layout_height="?attr/actionBarSize"
-			android:layout_width="match_parent"/>
+			android:layout_width="match_parent"
+			android:background="?attr/colorPrimary"
+			android:elevation="4dp"/>
 
 		<include layout="@layout/abstract_fragment_container"/>
 	</FrameLayout>
@@ -30,13 +31,14 @@
 		<FrameLayout
 			android:id="@+id/slide_up_swipe_target"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content"
+			android:background="?attr/colorPrimary">
 
 			<android.support.v7.widget.Toolbar
 				android:id="@+id/now_playing_toolbar"
-				style="?attr/actionBarStyle"
 				android:layout_height="?attr/actionBarSize"
 				android:layout_width="match_parent"
+				android:elevation="4dp"
 				android:visibility="gone"/>
 
 			<LinearLayout
@@ -44,7 +46,8 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				style="@style/BasicButton"
-				android:orientation="horizontal">
+				android:orientation="horizontal"
+				android:elevation="4dp">
 
 				<github.daneren2005.dsub.view.RecyclingImageView
 					android:id="@+id/album_art"

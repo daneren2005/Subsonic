@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
+
+	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
+		<item name="android:windowTranslucentStatus">true</item>
+	</style>
+</resources>

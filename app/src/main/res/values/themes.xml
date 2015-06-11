@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="Theme.DSub.Light" parent="@style/Theme.AppCompat.Light">
-		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
-		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
+	<style name="Theme.DSub.Light.Base" parent="@style/Theme.AppCompat.Light">
 		<item name="offline_icon">@drawable/main_offline_light</item>
 		<item name="media_button_backward">@drawable/media_backward_light</item>
 		<item name="media_button_forward">@drawable/media_forward_light</item>
@@ -46,9 +44,7 @@
 		<item name="colorPrimaryDark">@color/cyan</item>
 		<item name="colorAccent">@color/cyan</item>
 	</style>
-	<style name="Theme.DSub.Dark" parent="@style/Theme.AppCompat">
-		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
-		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
+	<style name="Theme.DSub.Dark.Base" parent="@style/Theme.AppCompat">
 		<item name="offline_icon">@drawable/main_offline_dark</item>
 		<item name="media_button_backward">@drawable/media_backward_dark</item>
 		<item name="media_button_forward">@drawable/media_forward_dark</item>
@@ -92,6 +88,10 @@
 		<item name="colorPrimaryDark">@color/cyan</item>
 		<item name="colorAccent">@color/cyan</item>
 	</style>
+	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
+	</style>
+	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
+	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@android:color/black</item>
 	</style>
@@ -114,20 +114,6 @@
 	<style name="Theme.DSub.Holo.No_Actionbar" parent="Theme.DSub.Holo">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
-	</style>
-	
-	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.AppCompat.Light.ActionBar.Solid">
-		<item name="background">@android:color/transparent</item>
-		<item name="android:background">@android:color/transparent</item>
-		<item name="backgroundStacked">@android:color/transparent</item>
-		<item name="android:backgroundStacked">@android:color/transparent</item>
-	</style>
-
-	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.AppCompat.ActionBar.Solid">
-		<item name="background">@android:color/transparent</item>
-		<item name="android:background">@android:color/transparent</item>
-		<item name="backgroundStacked">@android:color/transparent</item>
-		<item name="android:backgroundStacked">@android:color/transparent</item>
 	</style>
 
 	<style name="DSub.TextViewStyle" parent="android:Widget.TextView">
