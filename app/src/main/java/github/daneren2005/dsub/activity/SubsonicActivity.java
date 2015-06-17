@@ -244,8 +244,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					// Settings are on a different selectable track
 					if (menuItem.getItemId() != R.id.drawer_settings) {
 						menuItem.setChecked(true);
+						lastSelectedPosition = menuItem.getItemId();
 					}
-					lastSelectedPosition = menuItem.getItemId();
 
 					switch (menuItem.getItemId()) {
 						case R.id.drawer_home:
