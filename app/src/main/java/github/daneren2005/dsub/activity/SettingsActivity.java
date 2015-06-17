@@ -19,62 +19,25 @@
 package github.daneren2005.dsub.activity;
 
 import android.annotation.TargetApi;
-import android.accounts.Account;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceScreen;
-import android.support.v7.app.ActionBarActivity;
-import android.text.InputType;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.support.v7.widget.Toolbar;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.PreferenceCompatFragment;
 import github.daneren2005.dsub.fragments.SettingsFragment;
-import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.LoadingTask;
-import github.daneren2005.dsub.util.SyncUtil;
-import github.daneren2005.dsub.view.ErrorDialog;
-import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.Util;
-
-import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class SettingsActivity extends SubsonicActivity {
-    private static final String TAG = SettingsActivity.class.getSimpleName();
+	private static final String TAG = SettingsActivity.class.getSimpleName();
 	private PreferenceCompatFragment fragment;
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		lastSelectedPosition = R.id.drawer_settings;
-		setContentView(R.layout.download_activity);
+		setContentView(R.layout.settings_activity);
 
 		if (savedInstanceState == null) {
 			fragment = new SettingsFragment();
@@ -88,5 +51,8 @@ public class SettingsActivity extends SubsonicActivity {
 			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 		}
-    }
+
+		Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		setSupportActionBar(mainToolbar);
+	}
 }

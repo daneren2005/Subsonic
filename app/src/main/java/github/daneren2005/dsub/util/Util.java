@@ -48,6 +48,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SettingsActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -257,7 +258,7 @@ public final class Util {
 	}
 
 	public static void applyTheme(Context context, String theme) {
-		if(context instanceof SubsonicFragmentActivity) {
+		if(context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
 			if ("dark".equals(theme)) {
 				context.setTheme(R.style.Theme_DSub_Dark_No_Actionbar);
 			} else if ("black".equals(theme)) {
