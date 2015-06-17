@@ -3,7 +3,8 @@
 			  android:id="@id/drag_handle"
 			  android:orientation="horizontal"
 			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content">
+			  android:layout_height="wrap_content"
+			  android:background="?attr/selectableItemBackground">
 
 	<RelativeLayout
 		android:layout_width="@dimen/AlbumArt.Small"

@@ -288,6 +288,10 @@ public class UpdateView extends LinearLayout {
 		return checkable;
 	}
 
+	public void onClick() {
+
+	}
+
 	public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
 		private UpdateView updateView;
 		private View view;

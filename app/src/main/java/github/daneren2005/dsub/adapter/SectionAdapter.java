@@ -77,6 +77,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					@Override
 					public void onClick(View v) {
 						T item = holder.getItem();
+						updateView.onClick();
 						if (updateView.isCheckable()) {
 							if (selected.contains(item)) {
 								selected.remove(item);
@@ -136,15 +137,17 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		}
 
 		int subPosition = 0;
+		int subHeader = 0;
 		for(List<T> section: sections) {
-			if(position == subPosition) {
-				int index = sections.indexOf(section);
-				onBindHeaderHolder(holder, headers.get(index));
+			boolean validHeader = headers.get(subHeader) != null;
+			if(position == subPosition && validHeader) {
+				onBindHeaderHolder(holder, headers.get(subHeader));
 				return;
 			}
 
-			if(position <= (subPosition + section.size())) {
-				T item = section.get(position - subPosition - 1);
+			int headerOffset = validHeader ? 1 : 0;
+			if(position < (subPosition + section.size() + headerOffset)) {
+				T item = section.get(position - subPosition - headerOffset);
 				onBindViewHolder(holder, item, getItemViewType(item));
 
 				if(updateView.isCheckable()) {
@@ -154,7 +157,11 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 				return;
 			}
 
-			subPosition += section.size() + 1;
+			subPosition += section.size();
+			if(validHeader) {
+				subPosition += 1;
+			}
+			subHeader++;
 		}
 	}
 
@@ -164,7 +171,12 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 			return sections.get(0).size();
 		}
 
-		int count = headers.size();
+		int count = 0;
+		for(String header: headers) {
+			if(header != null) {
+				count++;
+			}
+		}
 		for(List<T> section: sections) {
 			count += section.size();
 		}
@@ -179,16 +191,23 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		}
 
 		int subPosition = 0;
+		int subHeader = 0;
 		for(List<T> section: sections) {
-			if(position == subPosition) {
+			boolean validHeader = headers.get(subHeader) != null;
+			if(position == subPosition && validHeader) {
 				return VIEW_TYPE_HEADER;
 			}
 
-			if(position <= (subPosition + section.size())) {
-				return getItemViewType(section.get(position - subPosition - 1));
+			int headerOffset = validHeader ? 1 : 0;
+			if(position < (subPosition + section.size() + headerOffset)) {
+				return getItemViewType(section.get(position - subPosition - headerOffset));
 			}
 
-			subPosition += section.size() + 1;
+			subPosition += section.size();
+			if(validHeader) {
+				subPosition += 1;
+			}
+			subHeader++;
 		}
 
 		return -1;

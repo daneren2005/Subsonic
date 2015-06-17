@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:background="@android:color/transparent"
+	android:background="?attr/selectableItemBackground"
 	android:minHeight="50dip">
 
 	<TextView
