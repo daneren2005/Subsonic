@@ -9,28 +9,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.TextView;
+
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.adapter.MainAdapter;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.UserUtil;
-import github.daneren2005.dsub.adapter.MergeAdapter;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -41,37 +36,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainFragment extends SubsonicFragment {
+public class MainFragment extends SelectRecyclerFragment<Integer> {
 	private static final String TAG = MainFragment.class.getSimpleName();
-	private LayoutInflater inflater;
-	private TextView countView;
 
-	private static final int MENU_GROUP_SERVER = 10;
-	private static final int MENU_ITEM_SERVER_BASE = 100;
-
-	@Override
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		this.inflater = inflater;
-		rootView = inflater.inflate(R.layout.home, container, false);
-
-		createLayout();
-
-		return rootView;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
+	public MainFragment() {
+		super();
+		pullToRefresh = false;
+		serialize = false;
 	}
 
 	@Override
@@ -116,140 +87,56 @@ public class MainFragment extends SubsonicFragment {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		
-		int serverCount = Util.getServerCount(context);
-		int activeServer = Util.getActiveServer(context);
-		for(int i = 1; i <= serverCount; i++) {
-			android.view.MenuItem menuItem = menu.add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_BASE + i, MENU_ITEM_SERVER_BASE + i, Util.getServerName(context, i));
-			if(i == activeServer) {
-				menuItem.setChecked(true);
-			}
-		}
-		menu.setGroupCheckable(MENU_GROUP_SERVER, true, true);
-		menu.setHeaderTitle(R.string.main_select_server);
-
-		recreateContextMenu(menu);
+	public int getOptionsMenu() {
+		return 0;
 	}
 
 	@Override
-	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-		
-		int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
-		context.setActiveServer(activeServer);
-		return true;
-	}
+	public SectionAdapter getAdapter(List objs) {
+		List<List<Integer>> sections = new ArrayList<>();
+		List<String> headers = new ArrayList<>();
 
-	@Override
-	protected void refresh(boolean refresh) {
-		createLayout();
-	}
+		List<Integer> offline = Arrays.asList(R.string.main_offline);
+		sections.add(offline);
+		headers.add(null);
 
-	private void createLayout() {
-		View buttons = inflater.inflate(R.layout.main_buttons, null);
-
-		final View serverButton = buttons.findViewById(R.id.main_select_server);
-		final TextView serverTextView = (TextView) serverButton.findViewById(R.id.main_select_server_2);
-		final TextView offlineButton = (TextView) buttons.findViewById(R.id.main_offline);
-		offlineButton.setText(Util.isOffline(context) ? R.string.main_online : R.string.main_offline);
-
-		final View albumsTitle = buttons.findViewById(R.id.main_albums);
-		final View videoTitle = buttons.findViewById(R.id.main_video_section);
-		final View albumsNewestButton = buttons.findViewById(R.id.main_albums_newest);
-		countView = (TextView) buttons.findViewById(R.id.main_albums_recent_count);
-		final View albumsRandomButton = buttons.findViewById(R.id.main_albums_random);
-		final View albumsHighestButton = buttons.findViewById(R.id.main_albums_highest);
-		final View albumsRecentButton = buttons.findViewById(R.id.main_albums_recent);
-		final View albumsFrequentButton = buttons.findViewById(R.id.main_albums_frequent);
-		final View albumsStarredButton = buttons.findViewById(R.id.main_albums_starred);
-		final View albumsGenresButton = buttons.findViewById(R.id.main_albums_genres);
-		final View albumsYearButton = buttons.findViewById(R.id.main_albums_year);
-		final View albumsAlphabeticalButton = buttons.findViewById(R.id.main_albums_alphabetical);
-		final View videosButton = buttons.findViewById(R.id.main_videos);
-
-		final View dummyView = rootView.findViewById(R.id.main_dummy);
-
-		final CheckBox albumsPerFolderCheckbox = (CheckBox) buttons.findViewById(R.id.main_albums_per_folder);
-		if(!Util.isOffline(context) && ServerInfo.canAlbumListPerFolder(context)) {
-			albumsPerFolderCheckbox.setChecked(Util.getAlbumListsPerFolder(context));
-			albumsPerFolderCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					Util.setAlbumListsPerFolder(context, isChecked);
-				}
-			});
-		} else {
-			albumsPerFolderCheckbox.setVisibility(View.GONE);
-		}
-
-		int instance = Util.getActiveServer(context);
-		String name = Util.getServerName(context, instance);
-		serverTextView.setText(name);
-
-		ListView list = (ListView) rootView.findViewById(R.id.main_list);
-
-		MergeAdapter adapter = new MergeAdapter();
 		if (!Util.isOffline(context)) {
-			adapter.addViews(Arrays.asList(serverButton), true);
-		}
-		adapter.addView(offlineButton, true);
-		if (!Util.isOffline(context)) {
-			adapter.addView(albumsTitle, false);
-			adapter.addViews(Arrays.asList(albumsNewestButton, albumsRandomButton), true);
+			List<Integer> albums = new ArrayList<>();
+			albums.add(R.string.main_albums_newest);
+			albums.add(R.string.main_albums_random);
 			if(ServerInfo.checkServerVersion(context, "1.8")) {
-				adapter.addView(albumsAlphabeticalButton, true);
+				albums.add(R.string.main_albums_alphabetical);
 			}
 			if(!Util.isTagBrowsing(context)) {
-				adapter.addView(albumsHighestButton, true);
+				albums.add(R.string.main_albums_highest);
 			}
-			adapter.addViews(Arrays.asList(albumsStarredButton, albumsGenresButton, albumsYearButton, albumsRecentButton, albumsFrequentButton), true);
+			albums.add(R.string.main_albums_starred);
+			albums.add(R.string.main_albums_genres);
+			albums.add(R.string.main_albums_year);
+			albums.add(R.string.main_albums_recent);
+			albums.add(R.string.main_albums_highest);
+
+			sections.add(albums);
+			headers.add("albums");
+
 			if(ServerInfo.checkServerVersion(context, "1.8") && !Util.isTagBrowsing(context)) {
-				adapter.addView(videoTitle, false);
-				adapter.addView(videosButton, true);
+				List<Integer> videos = Arrays.asList(R.string.main_videos);
+				sections.add(videos);
+				headers.add("videos");
 			}
 		}
-		list.setAdapter(adapter);
-		registerForContextMenu(dummyView);
 
-		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (view == serverButton) {
-					dummyView.showContextMenu();
-				} else if (view == offlineButton) {
-					toggleOffline();
-				} else if (view == albumsNewestButton) {
-					showAlbumList("newest");
-				} else if (view == albumsRandomButton) {
-					showAlbumList("random");
-				} else if (view == albumsHighestButton) {
-					showAlbumList("highest");
-				} else if (view == albumsRecentButton) {
-					showAlbumList("recent");
-				} else if (view == albumsFrequentButton) {
-					showAlbumList("frequent");
-				} else if (view == albumsStarredButton) {
-					showAlbumList("starred");
-				} else if(view == albumsGenresButton) {
-					showAlbumList("genres");
-				} else if(view == albumsYearButton) {
-					showAlbumList("years");
-				} else if(view == albumsAlphabeticalButton) {
-					showAlbumList("alphabeticalByName");
-				} else if(view == videosButton) {
-					showVideos();
-				}
-			}
-		});
-		setTitle(R.string.common_appname);
+		return new MainAdapter(context, headers, sections, this);
+	}
 
-		if(!Util.isOffline(context)) {
-			getMostRecentCount();
-		}
+	@Override
+	public List<Integer> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+		return Arrays.asList(0);
+	}
+
+	@Override
+	public int getTitleResource() {
+		return R.string.common_appname;
 	}
 
 	private void toggleOffline() {
@@ -287,8 +174,8 @@ public class MainFragment extends SubsonicFragment {
 				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
 				editor.commit();
 				
-				// Clear immediately so doesn't still show when pressing back
-				setMostRecentCount(0);
+				// TODO: Clear immediately so doesn't still show when pressing back
+				// setMostRecentCount(0);
 			}
 			
 			SubsonicFragment fragment = new SelectDirectoryFragment();
@@ -487,81 +374,31 @@ public class MainFragment extends SubsonicFragment {
 			}.execute();
 		} catch(Exception e) {}
 	}
-	
-	private void getMostRecentCount() {
-		// Use stashed value until after refresh occurs
-		SharedPreferences prefs = Util.getPreferences(context);
-		final int startCount = prefs.getInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
-		setMostRecentCount(startCount);
-		
-		new SilentBackgroundTask<Integer>(context) {
-			@Override
-			public Integer doInBackground() throws Exception {
-				String recentAddedFile = Util.getCacheName(context, "recent_count");
-				ArrayList<String> recents = FileUtil.deserialize(context, recentAddedFile, ArrayList.class);
-				if(recents == null) {
-					recents = new ArrayList<String>();
-				}
-				
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				MusicDirectory recentlyAdded = musicService.getAlbumList("newest", 20, 0, context, null);
-				
-				// If first run, just put everything in it and return 0
-				boolean firstRun = recents.isEmpty();
-				
-				// Count how many new albums are in the list
-				int count = 0;
-				for(MusicDirectory.Entry album: recentlyAdded.getChildren()) {
-					if(!recents.contains(album.getId())) {
-						recents.add(album.getId());
-						count++;
-					}
-				}
-				
-				// Keep recents list from growing infinitely
-				while(recents.size() > 40) {
-					recents.remove(0);
-				}
-				FileUtil.serialize(context, recents, recentAddedFile);
-				
-				if(firstRun) {
-					return 0;
-				} else {
-					// Add the old count which will get cleared out after viewing recents
-					count += startCount;
-					SharedPreferences.Editor editor = Util.getPreferences(context).edit();
-					editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), count);
-					editor.commit();
-					
-					return count;
-				}
-			}
-			
-			@Override
-			public void done(Integer result) {
-				setMostRecentCount(result);
-			}
-			
-			@Override
-			public void error(Throwable x) {
-				Log.w(TAG, "Failed to refresh most recent count", x);
-			}
-		}.execute();
-	}
-	
-	private void setMostRecentCount(int count) {
-		if(count <= 0) {
-			countView.setVisibility(View.GONE);
-		} else {
-			String displayValue;
-			if(count < 10) {
-				displayValue = "0" + count;
-			} else {
-				displayValue = "" + count;
-			}
-			
-			countView.setText(displayValue);
-			countView.setVisibility(View.VISIBLE);
+
+	@Override
+	public void onItemClicked(Integer item) {
+		if(item == R.string.main_offline) {
+			toggleOffline();
+		} else if (item == R.string.main_albums_newest) {
+			showAlbumList("newest");
+		} else if (item == R.string.main_albums_random) {
+			showAlbumList("random");
+		} else if (item == R.string.main_albums_highest) {
+			showAlbumList("highest");
+		} else if (item == R.string.main_albums_recent) {
+			showAlbumList("recent");
+		} else if (item == R.string.main_albums_frequent) {
+			showAlbumList("frequent");
+		} else if (item == R.string.main_albums_starred) {
+			showAlbumList("starred");
+		} else if(item == R.string.main_albums_genres) {
+			showAlbumList("genres");
+		} else if(item == R.string.main_albums_year) {
+			showAlbumList("years");
+		} else if(item == R.string.main_albums_alphabetical) {
+			showAlbumList("alphabeticalByName");
+		} else if(item == R.string.main_videos) {
+			showVideos();
 		}
 	}
 }

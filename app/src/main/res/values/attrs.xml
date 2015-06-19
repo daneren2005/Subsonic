@@ -27,6 +27,16 @@
 	<attr name="rating_good" format="reference"/>
 	<attr name="radio" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
+	<attr name="drawerHome" format="reference"/>
+	<attr name="drawerLibrary" format="reference"/>
+	<attr name="drawerPlaylists" format="reference"/>
+	<attr name="drawerPodcasts" format="reference"/>
+	<attr name="drawerBookmarks" format="reference"/>
+	<attr name="drawerShares" format="reference"/>
+	<attr name="drawerChat" format="reference"/>
+	<attr name="drawerAdmin" format="reference"/>
+	<attr name="drawerDownloading" format="reference"/>
+	<attr name="drawerSettings" format="reference"/>
 
 	<declare-styleable name="SeekBarPreference">
 		<attr name="min" format="integer"/>

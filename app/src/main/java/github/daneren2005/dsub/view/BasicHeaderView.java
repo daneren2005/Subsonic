@@ -25,9 +25,12 @@ public class BasicHeaderView extends UpdateView {
 	TextView nameView;
 
 	public BasicHeaderView(Context context) {
+		this(context, R.layout.basic_header);
+	}
+	public BasicHeaderView(Context context, int layout) {
 		super(context, false);
 
-		LayoutInflater.from(context).inflate(R.layout.basic_header, this, true);
+		LayoutInflater.from(context).inflate(layout, this, true);
 		nameView = (TextView) findViewById(R.id.item_name);
 	}
 

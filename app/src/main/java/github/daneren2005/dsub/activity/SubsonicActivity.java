@@ -25,11 +25,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,14 +52,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -71,7 +69,6 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.adapter.DrawerAdapter;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.UserUtil;
 
@@ -80,10 +77,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
 	protected static boolean fullScreen;
-	private String[] drawerItemsDescriptions;
-	private String[] drawerItems;
+	private static final int MENU_GROUP_SERVER = 10;
+	private static final int MENU_ITEM_SERVER_BASE = 100;
+
 	private boolean drawerIdle = true;
-	private boolean[] enabledItems = {true, true, true, true, true};
 	private boolean destroyed = false;
 	private boolean finished = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
@@ -97,15 +94,15 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	ViewGroup rootView;
 	DrawerLayout drawer;
 	ActionBarDrawerToggle drawerToggle;
-	DrawerAdapter drawerAdapter;
-	ListView drawerList;
+	NavigationView drawerList;
 	View drawerHeader;
 	ImageView drawerUserAvatar;
 	TextView drawerServerName;
 	TextView drawerUserName;
-	TextView lastSelectedView = null;
 	int lastSelectedPosition = 0;
+	boolean showingTabs = true;
 	boolean drawerOpen = false;
+	SharedPreferences.OnSharedPreferenceChangeListener preferencesListener;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -127,6 +124,33 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 		if(getIntent().hasExtra(Constants.FRAGMENT_POSITION)) {
 			lastSelectedPosition = getIntent().getIntExtra(Constants.FRAGMENT_POSITION, 0);
+		}
+
+		if(preferencesListener == null) {
+			preferencesListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+				@Override
+				public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+					// When changing drawer settings change visibility
+					switch(key) {
+						case Constants.PREFERENCES_KEY_PODCASTS_ENABLED:
+							setDrawerItemVisible(R.id.drawer_podcasts, false);
+							break;
+						case Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED:
+							setDrawerItemVisible(R.id.drawer_bookmarks, false);
+							break;
+						case Constants.PREFERENCES_KEY_SHARED_ENABLED:
+							setDrawerItemVisible(R.id.drawer_shares, false);
+							break;
+						case Constants.PREFERENCES_KEY_CHAT_ENABLED:
+							setDrawerItemVisible(R.id.drawer_chat, false);
+							break;
+						case Constants.PREFERENCES_KEY_ADMIN_ENABLED:
+							setDrawerItemVisible(R.id.drawer_admin, false);
+							break;
+					}
+				}
+			};
+			Util.getPreferences(this).registerOnSharedPreferenceChangeListener(preferencesListener);
 		}
 	}
 
@@ -174,7 +198,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 		}
 
-		populateDrawer();
+		populateTabs();
 		UpdateView.addActiveActivity();
 	}
 
@@ -189,25 +213,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected void onDestroy() {
 		super.onDestroy();
 		destroyed = true;
+		Util.getPreferences(this).unregisterOnSharedPreferenceChangeListener(preferencesListener);
 	}
 
 	@Override
 	public void finish() {
 		super.finish();
 		Util.disablePendingTransition(this);
-	}
-
-	@Override
-	public void startActivity(Intent intent) {
-		if(intent.getComponent() != null) {
-			String name = intent.getComponent().getClassName();
-			if(name != null && name.indexOf("DownloadActivity") != -1) {
-				intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
-			} else if(name != null && name.indexOf("SettingsActivity") != -1) {
-				intent.putExtra(Constants.FRAGMENT_POSITION, drawerItems.length - 1);
-			}
-		}
-		super.startActivity(intent);
 	}
 
 	@Override
@@ -224,34 +236,88 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			layoutInflater.inflate(viewId, rootView);
 		}
 
-		drawerList = (ListView) findViewById(R.id.left_drawer);
-		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+		drawerList = (NavigationView) findViewById(R.id.left_drawer);
+		drawerList.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
-				final int actualPosition = drawerAdapter.getActualPosition(position - 1);
-				if("Settings".equals(drawerItemsDescriptions[actualPosition])) {
-					startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
-					drawer.closeDrawers();
-				} else if("Admin".equals(drawerItemsDescriptions[actualPosition]) && UserUtil.isCurrentAdmin()) {
-					UserUtil.confirmCredentials(SubsonicActivity.this, new Runnable() {
-						@Override
-						public void run() {
-							drawerItemSelected(actualPosition, view);
-						}
-					});
+			public boolean onNavigationItemSelected(MenuItem menuItem) {
+				if(showingTabs) {
+					// Settings are on a different selectable track
+					if (menuItem.getItemId() != R.id.drawer_settings) {
+						menuItem.setChecked(true);
+						lastSelectedPosition = menuItem.getItemId();
+					}
+
+					switch (menuItem.getItemId()) {
+						case R.id.drawer_home:
+							drawerItemSelected("Home");
+							return true;
+						case R.id.drawer_library:
+							drawerItemSelected("Artist");
+							return true;
+						case R.id.drawer_playlists:
+							drawerItemSelected("Playlist");
+							return true;
+						case R.id.drawer_podcasts:
+							drawerItemSelected("Podcast");
+							return true;
+						case R.id.drawer_bookmarks:
+							drawerItemSelected("Bookmark");
+							return true;
+						case R.id.drawer_shares:
+							drawerItemSelected("Share");
+							return true;
+						case R.id.drawer_chat:
+							drawerItemSelected("Chat");
+							return true;
+						case R.id.drawer_admin:
+							if (UserUtil.isCurrentAdmin()) {
+								UserUtil.confirmCredentials(SubsonicActivity.this, new Runnable() {
+									@Override
+									public void run() {
+										drawerItemSelected("Admin");
+									}
+								});
+							} else {
+								drawerItemSelected("Admin");
+							}
+							return true;
+						case R.id.drawer_downloading:
+							drawerItemSelected("Download");
+							return true;
+						case R.id.drawer_settings:
+							startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
+							drawer.closeDrawers();
+							return true;
+					}
 				} else {
-					drawerItemSelected(actualPosition, view);
+					int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
+					SubsonicActivity.this.setActiveServer(activeServer);
+					populateTabs();
+					return true;
+				}
+
+				return false;
+			}
+		});
+		populateTabs();
+
+		drawerHeader = drawerList.inflateHeaderView(R.layout.drawer_header);
+		drawerHeader.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(showingTabs) {
+					populateServers();
+				} else {
+					populateTabs();
 				}
 			}
 		});
 
-		drawerHeader = getLayoutInflater().inflate(R.layout.drawer_header, drawerList, false);
 		drawerServerName = (TextView) drawerHeader.findViewById(R.id.header_server_name);
 		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
 
 		drawerUserAvatar = (ImageView) drawerHeader.findViewById(R.id.header_user_avatar);
 		updateDrawerHeader();
-		drawerList.addHeaderView(drawerHeader, null, false);
 
 		if(!isTv()) {
 			drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -265,23 +331,19 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					drawerOpen = false;
 
 					supportInvalidateOptionsMenu();
+					if(!showingTabs) {
+						populateTabs();
+					}
 				}
 
 				@Override
 				public void onDrawerOpened(View view) {
 					DownloadService downloadService = getDownloadService();
-					if (downloadService == null || downloadService.getBackgroundDownloads().isEmpty()) {
-						drawerAdapter.setDownloadVisible(false);
-					} else {
-						drawerAdapter.setDownloadVisible(true);
+					boolean downloadingVisible = downloadService != null && !downloadService.getBackgroundDownloads().isEmpty();
+					if(lastSelectedPosition == R.id.drawer_downloading) {
+						downloadingVisible = true;
 					}
-
-					if (lastSelectedView == null && drawerList.getCount() > lastSelectedPosition) {
-						lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition + 1).findViewById(R.id.drawer_name);
-						if (lastSelectedView != null) {
-							lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
-						}
-					}
+					setDrawerItemVisible(R.id.drawer_downloading, downloadingVisible);
 
 					getSupportActionBar().setTitle(R.string.common_appname);
 					getSupportActionBar().setDisplayShowCustomEnabled(false);
@@ -382,6 +444,12 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 
 		lastSelectedPosition = savedInstanceState.getInt(Constants.FRAGMENT_POSITION);
+		if(lastSelectedPosition != 0) {
+			MenuItem item = drawerList.getMenu().findItem(lastSelectedPosition);
+			if(item != null) {
+				item.setChecked(true);
+			}
+		}
 		recreateSpinner();
 	}
 
@@ -462,7 +530,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	}
 
-	private void populateDrawer() {
+	private void populateTabs() {
+		drawerList.getMenu().clear();
+		drawerList.inflateMenu(R.menu.drawer_navigation);
+
 		SharedPreferences prefs = Util.getPreferences(this);
 		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
 		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this) && ServerInfo.canBookmark(this);
@@ -470,86 +541,54 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		boolean adminEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_ADMIN_ENABLED, true) && !Util.isOffline(this);
 
-		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == sharedEnabled || !enabledItems[3] == chatEnabled || !enabledItems[4] == adminEnabled) {
-			drawerItems = getResources().getStringArray(R.array.drawerItems);
-			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
+		if(!podcastsEnabled) {
+			setDrawerItemVisible(R.id.drawer_podcasts, false);
+		}
+		if(!bookmarksEnabled) {
+			setDrawerItemVisible(R.id.drawer_bookmarks, false);
+		}
+		if(!sharedEnabled) {
+			setDrawerItemVisible(R.id.drawer_shares, false);
+		}
+		if(!chatEnabled) {
+			setDrawerItemVisible(R.id.drawer_chat, false);
+		}
+		if(!adminEnabled) {
+			setDrawerItemVisible(R.id.drawer_admin, false);
+		}
 
-			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
-			List<Integer> drawerItemsIconsList = new ArrayList<Integer>();
-			List<Boolean> drawerItemsVisibleList = new ArrayList<Boolean>();
+		if(lastSelectedPosition != 0) {
+			MenuItem item = drawerList.getMenu().findItem(lastSelectedPosition);
+			if(item != null) {
+				item.setChecked(true);
+			}
+		}
+		showingTabs = true;
+	}
+	private void populateServers() {
+		drawerList.getMenu().clear();
 
-			int[] arrayAttr = {R.attr.drawerItemsIcons};
-			TypedArray arrayType = obtainStyledAttributes(arrayAttr);
-			int arrayId = arrayType.getResourceId(0, 0);
-			TypedArray iconType = getResources().obtainTypedArray(arrayId);
-			for(int i = 0; i < drawerItemsList.size(); i++) {
-				drawerItemsIconsList.add(iconType.getResourceId(i, 0));
-				drawerItemsVisibleList.add(true);
+		int serverCount = Util.getServerCount(this);
+		int activeServer = Util.getActiveServer(this);
+		for(int i = 1; i <= serverCount; i++) {
+			MenuItem item = drawerList.getMenu().add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_BASE + i, MENU_ITEM_SERVER_BASE + i, Util.getServerName(this, i));
+			if(activeServer == i) {
+				item.setChecked(true);
 			}
-			iconType.recycle();
-			arrayType.recycle();
+		}
+		drawerList.getMenu().setGroupCheckable(MENU_GROUP_SERVER, true, true);
 
-			// Hide listings user doesn't want to see
-			if(!podcastsEnabled) {
-				drawerItemsVisibleList.set(3, false);
-			}
-			if(!bookmarksEnabled) {
-				drawerItemsVisibleList.set(4, false);
-			}
-			if(!sharedEnabled) {
-				drawerItemsVisibleList.set(5, false);
-			}
-			if(!chatEnabled) {
-				drawerItemsVisibleList.set(6, false);
-			}
-			if(!adminEnabled) {
-				drawerItemsVisibleList.set(7, false);
-			}
-			if(!getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
-				drawerItemsVisibleList.set(8, false);
-			}
-
-			drawerList.setAdapter(drawerAdapter = new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList, drawerItemsVisibleList));
-			enabledItems[0] = podcastsEnabled;
-			enabledItems[1] = bookmarksEnabled;
-			enabledItems[2] = sharedEnabled;
-			enabledItems[3] = chatEnabled;
-			enabledItems[4] = adminEnabled;
-
-			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
-			if(fragmentType != null && lastSelectedPosition == 0) {
-				for(int i = 0; i < drawerItemsDescriptions.length; i++) {
-					if(fragmentType.equals(drawerItemsDescriptions[i])) {
-						lastSelectedPosition = drawerAdapter.getAdapterPosition(i);
-						break;
-					}
-				}
-			}
-
-			if(drawerList.getChildAt(lastSelectedPosition + 1) == null) {
-				lastSelectedView = null;
-				drawerAdapter.setSelectedPosition(lastSelectedPosition);
-			} else {
-				lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition + 1).findViewById(R.id.drawer_name);
-				if(lastSelectedView != null) {
-					lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
-				}
-			}
+		showingTabs = false;
+	}
+	private void setDrawerItemVisible(int id, boolean visible) {
+		MenuItem item = drawerList.getMenu().findItem(id);
+		if(item != null) {
+			item.setVisible(visible);
 		}
 	}
 
-	protected void drawerItemSelected(int position, View view) {
-		startFragmentActivity(drawerItemsDescriptions[position]);
-
-		if(lastSelectedView != view) {
-			if(lastSelectedView != null) {
-				lastSelectedView.setTextAppearance(this, R.style.DSub_TextViewStyle);
-			}
-
-			lastSelectedView = (TextView) view.findViewById(R.id.drawer_name);
-			lastSelectedView.setTextAppearance(this, R.style.DSub_TextViewStyle_Bold);
-			lastSelectedPosition = position;
-		}
+	protected void drawerItemSelected(String fragmentType) {
+		startFragmentActivity(fragmentType);
 	}
 
 	public void startFragmentActivity(String fragmentType) {
@@ -558,6 +597,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		if(!"".equals(fragmentType)) {
 			intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+		}
+		if(lastSelectedPosition != 0) {
+			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
 		}
 		startActivity(intent);
 		finish();
@@ -719,7 +761,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 
 			currentFragment.invalidate();
-			populateDrawer();
+			populateTabs();
 		}
 
 		supportInvalidateOptionsMenu();

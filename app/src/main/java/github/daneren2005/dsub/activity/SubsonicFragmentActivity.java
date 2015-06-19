@@ -112,9 +112,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			getImageLoader().clearCache();
 		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
 			getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, "Download");
-			if(drawerAdapter != null) {
-				drawerAdapter.setDownloadVisible(true);
-			}
+			lastSelectedPosition = R.id.drawer_downloading;
 		}
 		setContentView(R.layout.abstract_fragment_activity);
 
@@ -127,6 +125,37 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				if(fragmentType != null) {
 					getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
 					firstRun = true;
+
+					switch(fragmentType) {
+						case "Home":
+							lastSelectedPosition = R.id.drawer_home;
+							break;
+						case "Artist":
+							lastSelectedPosition = R.id.drawer_library;
+							break;
+						case "Playlist":
+							lastSelectedPosition = R.id.drawer_playlists;
+							break;
+						case "Podcast":
+							lastSelectedPosition = R.id.drawer_podcasts;
+							break;
+						case "Bookmark":
+							lastSelectedPosition = R.id.drawer_bookmarks;
+							break;
+						case "Share":
+							lastSelectedPosition = R.id.drawer_shares;
+							break;
+						case "Chat":
+							lastSelectedPosition = R.id.drawer_chat;
+							break;
+					}
+				} else {
+					lastSelectedPosition = R.id.drawer_home;
+				}
+
+				MenuItem item = drawerList.getMenu().findItem(lastSelectedPosition);
+				if(item != null) {
+					item.setChecked(true);
 				}
 			}
 			currentFragment = getNewFragment(fragmentType);
@@ -198,7 +227,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 				drawerToggle.setDrawerIndicatorEnabled(false);
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-				getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
 			}
 
 			@Override
@@ -394,9 +422,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 			replaceFragment(fragment, fragment.getSupportTag());
 			getIntent().removeExtra(Constants.INTENT_EXTRA_VIEW_ALBUM);
-			if("Artist".equals(getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE))) {
-				lastSelectedPosition = 1;
-			}
 		}
 
 		createAccount();
@@ -480,8 +505,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	}
 
 	@Override
-	protected void drawerItemSelected(int position, View view) {
-		super.drawerItemSelected(position, view);
+	protected void drawerItemSelected(String fragmentType) {
+		super.drawerItemSelected(fragmentType);
 
 		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
 			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
@@ -577,20 +602,15 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			artistView.setText(R.string.main_artist);
 		}
 
-		if(coverArtView.getHeight() > 0 ) {
-			SilentBackgroundTask task = getImageLoader().loadImage(coverArtView, song, false, coverArtView.getHeight(), false);
-			if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-				if (task == null) {
-					getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
-				} else {
-					task.setOnCompletionListener(new Runnable() {
-						@Override
-						public void run() {
-							getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
-						}
-					});
-				}
+		if(coverArtView != null) {
+			int height = coverArtView.getHeight();
+			if(height <= 0) {
+				int[] attrs = new int[] {R.attr.actionBarSize};
+				TypedArray typedArray = this.obtainStyledAttributes(attrs);
+				height = typedArray.getDimensionPixelSize(0, 0);
+				typedArray.recycle();
 			}
+			getImageLoader().loadImage(coverArtView, song, false, height, false);
 		}
 
 		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};

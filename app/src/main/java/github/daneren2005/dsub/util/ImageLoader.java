@@ -277,6 +277,11 @@ public class ImageLoader {
 	}
 
 	public SilentBackgroundTask<Void> loadAvatar(Context context, ImageView view, String username) {
+		if(username == null) {
+			view.setImageResource(R.drawable.ic_social_person);
+			return null;
+		}
+
 		Bitmap bitmap = cache.get(username);
 		if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);

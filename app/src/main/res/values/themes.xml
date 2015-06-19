@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="Theme.DSub.Light" parent="@style/Theme.AppCompat.Light">
-		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
-		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Light</item>
+	<style name="Theme.DSub.Light.Base" parent="@style/Theme.AppCompat.Light">
 		<item name="offline_icon">@drawable/main_offline_light</item>
 		<item name="media_button_backward">@drawable/media_backward_light</item>
 		<item name="media_button_forward">@drawable/media_forward_light</item>
@@ -29,15 +27,24 @@
 		<item name="rating_bad">@drawable/ic_action_rating_bad_light</item>
 		<item name="rating_good">@drawable/ic_action_rating_good_light</item>
 		<item name="radio">@drawable/ic_menu_radio_light</item>
-		<item name="drawerItemsIcons">@array/drawerItemIconsLight</item>
+		<item name="drawerHome">@drawable/main_offline_light</item>
+		<item name="drawerLibrary">@drawable/ic_menu_library_light</item>
+		<item name="drawerPlaylists">@drawable/ic_menu_playlist_light</item>
+		<item name="drawerPodcasts">@drawable/ic_menu_podcast_light</item>
+		<item name="drawerBookmarks">@drawable/ic_menu_bookmark_light</item>
+		<item name="drawerShares">@drawable/ic_menu_share_light</item>
+		<item name="drawerChat">@drawable/ic_menu_chat_light</item>
+		<item name="drawerAdmin">@drawable/ic_menu_admin_light</item>
+		<item name="drawerDownloading">@drawable/ic_menu_download_light</item>
+		<item name="drawerSettings">@drawable/ic_menu_settings_light</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Light</item>
 		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
+		<item name="colorPrimary">@color/cyan</item>
+		<item name="colorPrimaryDark">@color/cyan</item>
 		<item name="colorAccent">@color/cyan</item>
 	</style>
-	<style name="Theme.DSub.Dark" parent="@style/Theme.AppCompat">
-		<item name="actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
-		<item name="android:actionBarStyle">@style/Widget.DSub.ActionBarStyle.Dark</item>
+	<style name="Theme.DSub.Dark.Base" parent="@style/Theme.AppCompat">
 		<item name="offline_icon">@drawable/main_offline_dark</item>
 		<item name="media_button_backward">@drawable/media_backward_dark</item>
 		<item name="media_button_forward">@drawable/media_forward_dark</item>
@@ -64,11 +71,26 @@
 		<item name="rating_bad">@drawable/ic_action_rating_bad_dark</item>
 		<item name="rating_good">@drawable/ic_action_rating_good_dark</item>
 		<item name="radio">@drawable/ic_menu_radio_dark</item>
-		<item name="drawerItemsIcons">@array/drawerItemIconsDark</item>
+		<item name="drawerHome">@drawable/main_offline_dark</item>
+		<item name="drawerLibrary">@drawable/ic_menu_library_dark</item>
+		<item name="drawerPlaylists">@drawable/ic_menu_playlist_dark</item>
+		<item name="drawerPodcasts">@drawable/ic_menu_podcast_dark</item>
+		<item name="drawerBookmarks">@drawable/ic_menu_bookmark_dark</item>
+		<item name="drawerShares">@drawable/ic_menu_share_dark</item>
+		<item name="drawerChat">@drawable/ic_menu_chat_dark</item>
+		<item name="drawerAdmin">@drawable/ic_menu_admin_dark</item>
+		<item name="drawerDownloading">@drawable/ic_menu_download_dark</item>
+		<item name="drawerSettings">@drawable/ic_menu_settings_dark</item>
 		<item name="android:textViewStyle">@style/DSub.TextViewStyle</item>
 		<item name="android:buttonStyle">@style/DSub.ButtonStyle.Dark</item>
 		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
+		<item name="colorPrimary">@color/cyan</item>
+		<item name="colorPrimaryDark">@color/cyan</item>
 		<item name="colorAccent">@color/cyan</item>
+	</style>
+	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
+	</style>
+	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
 	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@android:color/black</item>
@@ -92,20 +114,6 @@
 	<style name="Theme.DSub.Holo.No_Actionbar" parent="Theme.DSub.Holo">
 		<item name="windowActionBar">false</item>
 		<item name="windowNoTitle">true</item>
-	</style>
-	
-	<style name="Widget.DSub.ActionBarStyle.Light" parent="Widget.AppCompat.Light.ActionBar.Solid">
-		<item name="background">@android:color/transparent</item>
-		<item name="android:background">@android:color/transparent</item>
-		<item name="backgroundStacked">@android:color/transparent</item>
-		<item name="android:backgroundStacked">@android:color/transparent</item>
-	</style>
-
-	<style name="Widget.DSub.ActionBarStyle.Dark" parent="Widget.AppCompat.ActionBar.Solid">
-		<item name="background">@android:color/transparent</item>
-		<item name="android:background">@android:color/transparent</item>
-		<item name="backgroundStacked">@android:color/transparent</item>
-		<item name="android:backgroundStacked">@android:color/transparent</item>
 	</style>
 
 	<style name="DSub.TextViewStyle" parent="android:Widget.TextView">
