@@ -227,7 +227,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 				drawerToggle.setDrawerIndicatorEnabled(false);
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-				getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
 			}
 
 			@Override
@@ -603,20 +602,15 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			artistView.setText(R.string.main_artist);
 		}
 
-		if(coverArtView != null && coverArtView.getHeight() != 0) {
-			SilentBackgroundTask task = getImageLoader().loadImage(coverArtView, song, false, coverArtView.getHeight(), false);
-			if (slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-				if (task == null) {
-					getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
-				} else {
-					task.setOnCompletionListener(new Runnable() {
-						@Override
-						public void run() {
-							getSupportActionBar().setHomeAsUpIndicator(coverArtView.getDrawable());
-						}
-					});
-				}
+		if(coverArtView != null) {
+			int height = coverArtView.getHeight();
+			if(height <= 0) {
+				int[] attrs = new int[] {R.attr.actionBarSize};
+				TypedArray typedArray = this.obtainStyledAttributes(attrs);
+				height = typedArray.getDimensionPixelSize(0, 0);
+				typedArray.recycle();
 			}
+			getImageLoader().loadImage(coverArtView, song, false, height, false);
 		}
 
 		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
