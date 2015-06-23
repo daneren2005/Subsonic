@@ -29,15 +29,6 @@
 		<item name="android:layout_height">match_parent</item>
 		<item name="android:layout_width">wrap_content</item>
 	</style>
-	
-	<style name="MenuBarButton" parent="@style/BasicButton">
-        <item name="android:layout_width">0dip</item>
-        <item name="android:layout_height">45dip</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-		<item name="android:textColor">?android:textColorPrimary</item>
-    </style>
 
 	<style name="DownloadActionButton" parent="@style/BasicButton">
 		<item name="android:layout_width">wrap_content</item>
@@ -57,28 +48,5 @@
 		<item name="android:paddingBottom">8dip</item>
 		<item name="android:paddingRight">16dip</item>
 		<item name="android:paddingLeft">16dip</item>
-	</style>
-
-	<style name="MainAlbumButton">
-		<item name="android:drawablePadding">6dip</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-		<item name="android:gravity">center_vertical</item>
-		<item name="android:paddingLeft">6dip</item>
-		<item name="android:paddingRight">6dip</item>
-		<item name="android:minHeight">46dip</item>
-	</style>
-
-	<style name="MainAlbumButtonLabel">
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-		<item name="android:textColor">@color/cyan</item>
-		<item name="android:gravity">center_vertical</item>
-		<item name="android:paddingLeft">6dp</item>
-		<item name="android:textAllCaps">true</item>
-		<item name="android:textStyle">bold</item>
-		<item name="android:textSize">16sp</item>
 	</style>
 </resources>

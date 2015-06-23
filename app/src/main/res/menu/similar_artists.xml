@@ -4,7 +4,7 @@
 
 	<item
 		android:id="@+id/menu_play_now"
-		android:icon="?media_button_start"
+		android:icon="?actionbar_start"
 		android:title="@string/menu.play"
 		compat:showAsAction="always|withText"/>
 

@@ -14,7 +14,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/common.name" />
+			android:text="@string/common.name"
+			android:textColor="?android:textColorPrimary"/>
 		<EditText
 			android:id="@+id/get_share_name"
 			android:inputType="text"
@@ -36,7 +37,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/share.expiration" />
+			android:text="@string/share.expiration"
+			android:textColor="?android:textColorPrimary"/>
 		<DatePicker
 			android:id="@+id/get_share_expire"
 			android:layout_width="fill_parent"
@@ -57,7 +59,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/share.no_expiration" />
+			android:text="@string/share.no_expiration"
+			android:textColor="?android:textColorPrimary"/>
 		<CheckBox
 			android:id="@+id/get_share_no_expire"
 			android:layout_width="fill_parent"

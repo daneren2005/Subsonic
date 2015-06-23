@@ -613,7 +613,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			getImageLoader().loadImage(coverArtView, song, false, height, false);
 		}
 
-		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
+		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.actionbar_pause : R.attr.actionbar_start};
 		TypedArray typedArray = this.obtainStyledAttributes(attrs);
 		startButton.setImageResource(typedArray.getResourceId(0, 0));
 		typedArray.recycle();

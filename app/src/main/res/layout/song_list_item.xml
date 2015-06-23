@@ -26,17 +26,18 @@
                       android:layout_gravity="center_vertical">
 
             <TextView
-                    android:id="@+id/song_title"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="left|center_vertical"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    android:drawablePadding="6dip"
-                    android:paddingLeft="6dip"
-                    android:paddingRight="6dip"/>
+				android:id="@+id/song_title"
+				android:layout_width="0dip"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:layout_gravity="left|center_vertical"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:singleLine="true"
+				android:ellipsize="marquee"
+				android:drawablePadding="6dip"
+				android:paddingLeft="6dip"
+				android:paddingRight="6dip"
+				android:textColor="?android:textColorPrimary"/>
 
 			<ImageButton
 				android:id="@+id/song_bookmark"
@@ -92,7 +93,8 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:singleLine="true"
                     android:ellipsize="middle"
-                    android:paddingLeft="6dip"/>
+                    android:paddingLeft="6dip"
+					android:textColor="?android:textColorSecondary"/>
 
 			<RatingBar
 				android:id="@+id/song_rating"
@@ -112,7 +114,8 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:singleLine="true"
                     android:paddingLeft="3dip"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="4dip"
+					android:textColor="?android:textColorSecondary"/>
 
         </LinearLayout>
     </LinearLayout>

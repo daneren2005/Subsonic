@@ -16,7 +16,8 @@
         android:text="@string/download.empty"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dip"/>
+        android:padding="10dip"
+        android:textColor="?android:textColorPrimary"/>
 
     <android.support.v7.widget.RecyclerView
 		android:id="@+id/download_list"

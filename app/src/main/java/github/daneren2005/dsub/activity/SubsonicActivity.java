@@ -35,7 +35,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -72,7 +73,7 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.UserUtil;
 
-public class SubsonicActivity extends ActionBarActivity implements OnItemSelectedListener {
+public class SubsonicActivity extends AppCompatActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
@@ -239,10 +240,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		drawerList = (NavigationView) findViewById(R.id.left_drawer);
 		drawerList.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
-			public boolean onNavigationItemSelected(MenuItem menuItem) {
+			public boolean onNavigationItemSelected(final MenuItem menuItem) {
 				if(showingTabs) {
 					// Settings are on a different selectable track
-					if (menuItem.getItemId() != R.id.drawer_settings) {
+					if (menuItem.getItemId() != R.id.drawer_settings && menuItem.getItemId() != R.id.drawer_admin) {
 						menuItem.setChecked(true);
 						lastSelectedPosition = menuItem.getItemId();
 					}
@@ -275,10 +276,14 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 									@Override
 									public void run() {
 										drawerItemSelected("Admin");
+										menuItem.setChecked(true);
+										lastSelectedPosition = menuItem.getItemId();
 									}
 								});
 							} else {
 								drawerItemSelected("Admin");
+								menuItem.setChecked(true);
+								lastSelectedPosition = menuItem.getItemId();
 							}
 							return true;
 						case R.id.drawer_downloading:
@@ -322,7 +327,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(!isTv()) {
 			drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-			drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.common_appname, R.string.common_appname) {
+			// Pass in toolbar if it exists
+			Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+			drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.common_appname, R.string.common_appname) {
 				@Override
 				public void onDrawerClosed(View view) {
 					setTitle(currentFragment.getTitle());
@@ -805,6 +812,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		Intent intent = new Intent(this, ((Object) this).getClass());
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtras(getIntent());
+		intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
 		Util.startActivityWithoutTransition(this, intent);
 	}
 

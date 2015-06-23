@@ -14,7 +14,8 @@
 		android:gravity="left|center_vertical"
 		android:paddingLeft="6dip"
 		android:paddingRight="6dip"
-		android:background="@android:color/transparent"/>
+		android:background="@android:color/transparent"
+		android:textColor="?android:textColorPrimary"/>
 
 	<CheckBox
 		android:id="@+id/item_checkbox"

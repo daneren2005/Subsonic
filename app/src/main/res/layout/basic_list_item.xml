@@ -15,7 +15,8 @@
 		android:paddingLeft="6dip"
 		android:paddingRight="6dip"
 		android:minHeight="50dip"
-		android:background="@android:color/transparent"/>
+		android:background="@android:color/transparent"
+		android:textColor="?android:textColorPrimary"/>
 
 	<ImageButton
 		android:id="@+id/item_star"

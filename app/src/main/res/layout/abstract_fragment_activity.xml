@@ -1,6 +1,7 @@
 <com.sothree.slidinguppanel.SlidingUpPanelLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:sothree="http://schemas.android.com/apk/res-auto"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/slide_up_panel"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -18,7 +19,9 @@
 			android:layout_height="?attr/actionBarSize"
 			android:layout_width="match_parent"
 			android:background="?attr/colorPrimary"
-			android:elevation="4dp"/>
+			android:elevation="4dp"
+			android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+			app:popupTheme="?attr/actionbarPopupStyle"/>
 
 		<include layout="@layout/abstract_fragment_container"/>
 	</FrameLayout>
@@ -39,7 +42,9 @@
 				android:layout_height="?attr/actionBarSize"
 				android:layout_width="match_parent"
 				android:elevation="4dp"
-				android:visibility="gone"/>
+				android:visibility="gone"
+				app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+				app:popupTheme="?attr/actionbarPopupStyle"/>
 
 			<LinearLayout
 				android:id="@+id/bottom_bar"
@@ -68,16 +73,14 @@
 						android:id="@+id/track_name"
 						android:layout_height="wrap_content"
 						android:layout_width="wrap_content"
-						android:textColor="?android:textColorPrimary"
 						android:singleLine="true"
-						android:textAppearance="?android:attr/textAppearanceSmall"
-						android:textSize="@dimen/BottomBar.Text.Major"
 						android:text="@string/main.title"
 						android:ellipsize="marquee"
 						android:marqueeRepeatLimit="marquee_forever"
 						android:scrollHorizontally="true"
 						android:focusable="true"
-						android:focusableInTouchMode="true">
+						android:focusableInTouchMode="true"
+						style="?attr/actionbarTitleStyle">
 
 						<requestFocus android:focusable="true"
 							android:focusableInTouchMode="true"
@@ -88,11 +91,9 @@
 						android:id="@+id/artist_name"
 						android:layout_height="wrap_content"
 						android:layout_width="wrap_content"
-						android:textColor="?android:textColorSecondary"
 						android:singleLine="true"
-						android:textAppearance="?android:attr/textAppearanceSmall"
-						android:textSize="@dimen/BottomBar.Text.Minor"
-						android:text="@string/main.artist"/>
+						android:text="@string/main.artist"
+						style="?attr/actionbarSubtitleStyle"/>
 				</LinearLayout>
 
 
@@ -104,21 +105,21 @@
 					<ImageButton
 						style="@style/PlaybackControl.Match"
 						android:id="@+id/download_previous"
-						android:src="?attr/media_button_backward"
+						android:src="?attr/actionbar_backward"
 						android:layout_width="0dp"
 						android:layout_weight="1"/>
 
 					<ImageButton
 						style="@style/PlaybackControl.Match"
 						android:id="@+id/download_start"
-						android:src="?attr/media_button_start"
+						android:src="?attr/actionbar_start"
 						android:layout_width="0dp"
 						android:layout_weight="1"/>
 
 					<ImageButton
 						style="@style/PlaybackControl.Match"
 						android:id="@+id/download_next"
-						android:src="?attr/media_button_forward"
+						android:src="?attr/actionbar_forward"
 						android:layout_width="0dp"
 						android:layout_weight="1"/>
 				</LinearLayout>

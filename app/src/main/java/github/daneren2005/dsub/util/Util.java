@@ -19,7 +19,7 @@ package github.daneren2005.dsub.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -251,6 +251,32 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_THEME, null);
     }
+	public static int getThemeRes(Context context) {
+		return getThemeRes(context, getTheme(context));
+	}
+	public static int getThemeRes(Context context, String theme) {
+		if(context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
+			if ("dark".equals(theme)) {
+				return R.style.Theme_DSub_Dark_No_Actionbar;
+			} else if ("black".equals(theme)) {
+				return R.style.Theme_DSub_Black_No_Actionbar;
+			} else if ("holo".equals(theme)) {
+				return R.style.Theme_DSub_Holo_No_Actionbar;
+			} else {
+				return R.style.Theme_DSub_Light_No_Actionbar;
+			}
+		} else {
+			if ("dark".equals(theme)) {
+				return R.style.Theme_DSub_Dark;
+			} else if ("black".equals(theme)) {
+				return R.style.Theme_DSub_Black;
+			} else if ("holo".equals(theme)) {
+				return R.style.Theme_DSub_Holo;
+			} else {
+				return R.style.Theme_DSub_Light;
+			}
+		}
+	}
 	public static void setTheme(Context context, String theme) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putString(Constants.PREFERENCES_KEY_THEME, theme);
@@ -258,27 +284,7 @@ public final class Util {
 	}
 
 	public static void applyTheme(Context context, String theme) {
-		if(context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
-			if ("dark".equals(theme)) {
-				context.setTheme(R.style.Theme_DSub_Dark_No_Actionbar);
-			} else if ("black".equals(theme)) {
-				context.setTheme(R.style.Theme_DSub_Black_No_Actionbar);
-			} else if ("holo".equals(theme)) {
-				context.setTheme(R.style.Theme_DSub_Holo_No_Actionbar);
-			} else {
-				context.setTheme(R.style.Theme_DSub_Light_No_Actionbar);
-			}
-		} else {
-			if ("dark".equals(theme)) {
-				context.setTheme(R.style.Theme_DSub_Dark);
-			} else if ("black".equals(theme)) {
-				context.setTheme(R.style.Theme_DSub_Black);
-			} else if ("holo".equals(theme)) {
-				context.setTheme(R.style.Theme_DSub_Holo);
-			} else {
-				context.setTheme(R.style.Theme_DSub_Light);
-			}
-		}
+		context.setTheme(getThemeRes(context, theme));
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {

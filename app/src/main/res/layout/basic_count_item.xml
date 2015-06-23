@@ -14,7 +14,8 @@
 		android:paddingLeft="6dip"
 		android:paddingRight="6dip"
 		android:background="@android:color/transparent"
-		android:text="Text"/>
+		android:text="Text"
+		android:textColor="?android:textColorPrimary"/>
 
 	<TextView
 		android:id="@+id/basic_count_count"
@@ -31,5 +32,6 @@
 		android:textSize="11sp"
 		android:gravity="right|center_vertical"
 		android:layout_gravity="center_vertical"
+		android:textColor="?android:textColorPrimary"
 		android:visibility="gone"/>
 </LinearLayout>

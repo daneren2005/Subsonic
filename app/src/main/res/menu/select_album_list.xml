@@ -3,7 +3,7 @@
 		xmlns:compat="http://schemas.android.com/apk/res-auto">
 	<item 
 		android:id="@+id/menu_play_now"
-		android:icon="?media_button_start"
+		android:icon="?actionbar_start"
 		android:title="@string/menu.play"
 		compat:showAsAction="always|withText"/>
 		

@@ -17,7 +17,8 @@
 		android:minHeight="50dip"
 		android:singleLine="true"
 		android:ellipsize="marquee"
-		android:background="@android:color/transparent"/>
+		android:background="@android:color/transparent"
+		android:textColor="?android:textColorPrimary"/>
 
 	<LinearLayout
 		android:layout_width="wrap_content"
@@ -31,12 +32,14 @@
 			android:id="@+id/genre_songs"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceSmall"/>
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="?android:textColorSecondary"/>
 
 		<TextView
 			android:id="@+id/genre_albums"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceSmall"/>
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="?android:textColorSecondary"/>
 	</LinearLayout>
 </LinearLayout>

@@ -44,14 +44,16 @@
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:singleLine="true"
 			android:ellipsize="marquee"
-			android:paddingBottom="6dip"/>
+			android:paddingBottom="6dip"
+			android:textColor="?android:textColorPrimary"/>
 
 		<TextView
 			android:id="@+id/album_artist"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:singleLine="true"/>
+			android:singleLine="true"
+			android:textColor="?android:textColorSecondary"/>
 
 	</LinearLayout>
 
