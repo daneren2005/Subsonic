@@ -9,7 +9,7 @@
 	<View
         android:layout_width="fill_parent"
         android:layout_height="1px"
-        android:background="@color/dividerColor"/>
+        android:background="?attr/colorPrimary"/>
 
     <TextView
         android:id="@+id/download_empty"
