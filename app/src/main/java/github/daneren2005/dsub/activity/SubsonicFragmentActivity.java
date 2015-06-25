@@ -597,6 +597,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		DownloadFile current = downloadService.getCurrentPlaying();
 		PlayerState state = downloadService.getPlayerState();
 		if(current == currentPlaying && state == currentState) {
+			if(current == null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+				slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+			}
 			return;
 		} else {
 			currentPlaying = current;
@@ -608,9 +611,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			song = current.getSong();
 			trackView.setText(song.getTitle());
 			artistView.setText(song.getArtist());
-		} else {
-			trackView.setText(R.string.main_title);
-			artistView.setText(R.string.main_artist);
+
+			if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
+				slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+			}
+		} else if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 		}
 
 		if (coverArtView != null) {
