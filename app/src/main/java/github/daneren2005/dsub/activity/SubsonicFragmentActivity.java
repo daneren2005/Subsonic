@@ -105,6 +105,24 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		if(savedInstanceState == null) {
+			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
+			boolean firstRun = false;
+			if (fragmentType == null) {
+				fragmentType = Util.openToTab(this);
+				if (fragmentType != null) {
+					firstRun = true;
+				}
+			}
+
+			if ("".equals(fragmentType) || fragmentType == null || firstRun) {
+				// Initial startup stuff
+				if (!sessionInitialized) {
+					loadSession();
+				}
+			}
+		}
+
 		super.onCreate(savedInstanceState);
 		if (getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
 			stopService(new Intent(this, DownloadService.class));
@@ -119,12 +137,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		UserUtil.seedCurrentUser(this);
 		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
-			boolean firstRun = false;
 			if(fragmentType == null) {
 				fragmentType = Util.openToTab(this);
 				if(fragmentType != null) {
 					getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
-					firstRun = true;
 
 					switch(fragmentType) {
 						case "Home":
@@ -159,14 +175,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				}
 			}
 			currentFragment = getNewFragment(fragmentType);
-
-			if("".equals(fragmentType) || fragmentType == null || firstRun) {
-				// Initial startup stuff
-				if(!sessionInitialized) {
-					loadSession();
-				}
-			}
-
 			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 
