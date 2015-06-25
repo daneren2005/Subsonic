@@ -10,11 +10,6 @@
 		android:layout_height="fill_parent"
 		android:orientation="vertical" >
 
-		<View
-			android:layout_width="fill_parent"
-			android:layout_height="1px"
-			android:background="?attr/colorPrimary"/>
-
 		<android.support.v7.widget.RecyclerView
 			android:id="@+id/fragment_recycler"
 			android:layout_width="fill_parent"
