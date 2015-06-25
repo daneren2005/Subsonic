@@ -738,7 +738,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 							@Override
 							protected void done(Void result) {
-								onDownloadListChanged();
+								context.closeNowPlaying();
 							}
 						}.execute();
 					}

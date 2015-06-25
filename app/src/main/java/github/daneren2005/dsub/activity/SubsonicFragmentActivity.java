@@ -36,6 +36,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -94,6 +95,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private Toolbar nowPlayingToolbar;
 
 	private ScheduledExecutorService executorService;
+	private View slideUpFrame;
 	private View bottomBar;
 	private ImageView coverArtView;
 	private TextView trackView;
@@ -258,6 +260,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			}, 200);
 		}
 
+		slideUpFrame = findViewById(R.id.slide_up_frame);
 		bottomBar = findViewById(R.id.bottom_bar);
 		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
@@ -601,30 +604,33 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 
 		MusicDirectory.Entry song = null;
-		if(current != null) {
-			song = current.getSong();
-			trackView.setText(song.getTitle());
-			artistView.setText(song.getArtist());
-		} else {
-			trackView.setText(R.string.main_title);
-			artistView.setText(R.string.main_artist);
-		}
-
-		if(coverArtView != null) {
-			int height = coverArtView.getHeight();
-			if(height <= 0) {
-				int[] attrs = new int[] {R.attr.actionBarSize};
-				TypedArray typedArray = this.obtainStyledAttributes(attrs);
-				height = typedArray.getDimensionPixelSize(0, 0);
-				typedArray.recycle();
+		if(current != null || slideUpFrame.getVisibility() != View.GONE) {
+			slideUpFrame.setVisibility(View.VISIBLE);
+			if (current != null) {
+				song = current.getSong();
+				trackView.setText(song.getTitle());
+				artistView.setText(song.getArtist());
+			} else {
+				trackView.setText(R.string.main_title);
+				artistView.setText(R.string.main_artist);
 			}
-			getImageLoader().loadImage(coverArtView, song, false, height, false);
-		}
 
-		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.actionbar_pause : R.attr.actionbar_start};
-		TypedArray typedArray = this.obtainStyledAttributes(attrs);
-		startButton.setImageResource(typedArray.getResourceId(0, 0));
-		typedArray.recycle();
+			if (coverArtView != null) {
+				int height = coverArtView.getHeight();
+				if (height <= 0) {
+					int[] attrs = new int[]{R.attr.actionBarSize};
+					TypedArray typedArray = this.obtainStyledAttributes(attrs);
+					height = typedArray.getDimensionPixelSize(0, 0);
+					typedArray.recycle();
+				}
+				getImageLoader().loadImage(coverArtView, song, false, height, false);
+			}
+
+			int[] attrs = new int[]{(state == PlayerState.STARTED) ? R.attr.actionbar_pause : R.attr.actionbar_start};
+			TypedArray typedArray = this.obtainStyledAttributes(attrs);
+			startButton.setImageResource(typedArray.getResourceId(0, 0));
+			typedArray.recycle();
+		}
 	}
 
 	public void checkUpdates() {
