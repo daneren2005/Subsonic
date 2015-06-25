@@ -20,7 +20,6 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
@@ -38,20 +37,20 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 
-public class UpdateView extends LinearLayout {
+public abstract class UpdateView<T> extends LinearLayout {
 	private static final String TAG = UpdateView.class.getSimpleName();
 	private static final WeakHashMap<UpdateView, ?> INSTANCES = new WeakHashMap<UpdateView, Object>();
 
-	private static Handler backgroundHandler;
-	private static Handler uiHandler;
+	protected static Handler backgroundHandler;
+	protected static Handler uiHandler;
 	private static Runnable updateRunnable;
 	private static int activeActivities = 0;
 
 	protected Context context;
+	protected T item;
 	protected RatingBar ratingBar;
 	protected ImageButton starButton;
 	protected ImageView moreButton;
@@ -91,37 +90,16 @@ public class UpdateView extends LinearLayout {
 		
 	}
 	
-	public void setObject(Object obj) {
+	public void setObject(T obj) {
+		item = obj;
 		setObjectImpl(obj);
 		updateBackground();
 		update();
 	}
-	public void setObject(Object obj1, Object obj2) {
-		if(imageTask != null) {
-			imageTask.cancel();
-			imageTask = null;
-		}
-		
-		setObjectImpl(obj1, obj2);
-		backgroundHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				updateBackground();
-				uiHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						update();
-					}
-				});
-			}
-		});
+	public void setObject(T obj1, Object obj2) {
+		setObject(obj1, null);
 	}
-	protected void setObjectImpl(Object obj) {
-		
-	}
-	protected void setObjectImpl(Object obj1, Object obj2) {
-
-	}
+	protected abstract void setObjectImpl(T obj);
 	
 	private static synchronized void startUpdater() {
 		if(uiHandler != null) {
@@ -310,7 +288,7 @@ public class UpdateView extends LinearLayout {
 			this.view = view;
 		}
 
-		public UpdateView getUpdateView() {
+		public UpdateView<T> getUpdateView() {
 			return updateView;
 		}
 		public View getView() {
@@ -324,3 +302,4 @@ public class UpdateView extends LinearLayout {
 		}
 	}
 }
+

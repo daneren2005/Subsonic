@@ -59,8 +59,7 @@ public class MainAdapter extends SectionAdapter<Integer> {
 		if(viewType == VIEW_TYPE_ALBUM_LIST) {
 			updateView.setObject(context.getResources().getString(item));
 		} else {
-			// Hacky method to make sure updateBackground is called in background thread
-			updateView.setObject(item, null);
+			updateView.setObject(item);
 		}
 	}
 

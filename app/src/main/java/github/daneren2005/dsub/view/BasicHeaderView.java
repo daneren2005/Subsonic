@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 
-public class BasicHeaderView extends UpdateView {
+public class BasicHeaderView extends UpdateView<String> {
 	TextView nameView;
 
 	public BasicHeaderView(Context context) {
@@ -34,7 +34,7 @@ public class BasicHeaderView extends UpdateView {
 		nameView = (TextView) findViewById(R.id.item_name);
 	}
 
-	protected void setObjectImpl(Object obj) {
-		nameView.setText((String) obj);
+	protected void setObjectImpl(String string) {
+		nameView.setText(string);
 	}
 }

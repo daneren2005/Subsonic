@@ -32,12 +32,11 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
-public class AlbumListCountView extends UpdateView {
+public class AlbumListCountView extends UpdateView2<Integer, Void> {
 	private final String TAG = AlbumListCountView.class.getSimpleName();
 
 	private TextView titleView;
 	private TextView countView;
-	private int albumListString;
 	private int startCount;
 	private int count = 0;
 
@@ -50,8 +49,7 @@ public class AlbumListCountView extends UpdateView {
 		countView = (TextView) findViewById(R.id.basic_count_count);
 	}
 
-	protected void setObjectImpl(Object obj1, Object obj2) {
-		this.albumListString = (Integer) obj1;
+	protected void setObjectImpl(Integer albumListString, Void dummy) {
 		titleView.setText(albumListString);
 
 		SharedPreferences prefs = Util.getPreferences(context);

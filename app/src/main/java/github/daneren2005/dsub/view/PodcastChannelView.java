@@ -30,18 +30,14 @@ import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.FileUtil;
 import java.io.File;
 
-public class PodcastChannelView extends UpdateView {
+public class PodcastChannelView extends UpdateView<PodcastChannel> {
 	private static final String TAG = PodcastChannelView.class.getSimpleName();
 
-	private Context context;
-	private PodcastChannel channel;
 	private File file;
-	
 	private TextView titleView;
 
 	public PodcastChannelView(Context context) {
 		super(context);
-		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.item_name);
@@ -55,8 +51,7 @@ public class PodcastChannelView extends UpdateView {
 		});
 	}
 
-	protected void setObjectImpl(Object obj) {
-		channel = (PodcastChannel) obj;
+	protected void setObjectImpl(PodcastChannel channel) {
 		if(channel.getName() != null) {
 			titleView.setText(channel.getName());
 		} else {
@@ -67,7 +62,7 @@ public class PodcastChannelView extends UpdateView {
 	
 	@Override
 	protected void updateBackground() {
-		if(SyncUtil.isSyncedPodcast(context, channel.getId())) {
+		if(SyncUtil.isSyncedPodcast(context, item.getId())) {
 			if(exists) {
 				shaded = false;
 				exists = false;

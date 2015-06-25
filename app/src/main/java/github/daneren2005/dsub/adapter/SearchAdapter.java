@@ -85,10 +85,10 @@ public class SearchAdapter extends SectionAdapter<Serializable> {
 		UpdateView view = holder.getUpdateView();
 		if(viewType == VIEW_TYPE_ALBUM_CELL || viewType == VIEW_TYPE_ALBUM_LINE) {
 			AlbumView albumView = (AlbumView) view;
-			albumView.setObject(item, imageLoader);
+			albumView.setObject((Entry) item, imageLoader);
 		} else if(viewType == VIEW_TYPE_SONG) {
 			SongView songView = (SongView) view;
-			songView.setObject(item, false);
+			songView.setObject((Entry) item, false);
 		} else if(viewType == VIEW_TYPE_ARTIST) {
 			view.setObject(item);
 		}

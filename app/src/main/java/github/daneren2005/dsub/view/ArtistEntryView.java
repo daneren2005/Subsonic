@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -28,26 +27,21 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.Util;
+
 import java.io.File;
 /**
  * Used to display albums in a {@code ListView}.
  *
  * @author Sindre Mehus
  */
-public class ArtistEntryView extends UpdateView {
+public class ArtistEntryView extends UpdateView<MusicDirectory.Entry> {
 	private static final String TAG = ArtistEntryView.class.getSimpleName();
 
-	private Context context;
-	private MusicDirectory.Entry artist;
 	private File file;
-
     private TextView titleView;
 
     public ArtistEntryView(Context context) {
         super(context);
-		this.context = context;
         LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
         titleView = (TextView) findViewById(R.id.item_name);
@@ -61,8 +55,7 @@ public class ArtistEntryView extends UpdateView {
 		});
     }
     
-    protected void setObjectImpl(Object obj) {
-    	this.artist = (MusicDirectory.Entry) obj;
+    protected void setObjectImpl(MusicDirectory.Entry artist) {
     	titleView.setText(artist.getTitle());
 		file = FileUtil.getArtistDirectory(context, artist);
     }
@@ -70,7 +63,7 @@ public class ArtistEntryView extends UpdateView {
 	@Override
 	protected void updateBackground() {
 		exists = file.exists();
-		isStarred = artist.isStarred();
+		isStarred = item.isStarred();
 	}
 
 	public File getFile() {

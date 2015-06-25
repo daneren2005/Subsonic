@@ -25,7 +25,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Genre;
 
-public class GenreView extends UpdateView {
+public class GenreView extends UpdateView<Genre> {
 	private static final String TAG = GenreView.class.getSimpleName();
 
 	private TextView titleView;
@@ -41,8 +41,7 @@ public class GenreView extends UpdateView {
 		albumsView = (TextView) findViewById(R.id.genre_albums);
 	}
 
-	public void setObjectImpl(Object obj) {
-		Genre genre = (Genre) obj;
+	public void setObjectImpl(Genre genre) {
 		titleView.setText(genre.getName());
 
 		if(genre.getAlbumCount() != null) {

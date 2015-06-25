@@ -33,17 +33,13 @@ import github.daneren2005.dsub.util.SyncUtil;
  *
  * @author Sindre Mehus
  */
-public class PlaylistView extends UpdateView {
+public class PlaylistView extends UpdateView<Playlist> {
 	private static final String TAG = PlaylistView.class.getSimpleName();
-
-	private Context context;
-	private Playlist playlist;
 
 	private TextView titleView;
 
 	public PlaylistView(Context context) {
 		super(context);
-		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.item_name);
@@ -52,13 +48,12 @@ public class PlaylistView extends UpdateView {
 		moreButton = (ImageView) findViewById(R.id.item_more);
 	}
 
-	protected void setObjectImpl(Object obj) {
-		this.playlist = (Playlist) obj;
+	protected void setObjectImpl(Playlist playlist) {
 		titleView.setText(playlist.getName());
 	}
 
 	@Override
 	protected void updateBackground() {
-		pinned = SyncUtil.isSyncedPlaylist(context, playlist.getId());
+		pinned = SyncUtil.isSyncedPlaylist(context, item.getId());
 	}
 }

@@ -20,7 +20,6 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -31,17 +30,13 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.Util;
-import java.io.File;
-import java.util.List;
 
-public class AlbumView extends UpdateView {
+import java.io.File;
+
+public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private static final String TAG = AlbumView.class.getSimpleName();
 
-	private Context context;
-	private MusicDirectory.Entry album;
 	private File file;
-
 	private View coverArtView;
 	private TextView titleView;
 	private TextView artistView;
@@ -49,7 +44,6 @@ public class AlbumView extends UpdateView {
 
 	public AlbumView(Context context, boolean cell) {
 		super(context);
-		this.context = context;
 
 		if(cell) {
 			LayoutInflater.from(context).inflate(R.layout.album_cell_item, this, true);
@@ -72,8 +66,7 @@ public class AlbumView extends UpdateView {
 		this.showArtist = showArtist;
 	}
 
-	protected void setObjectImpl(Object obj1, Object obj2) {
-		this.album = (MusicDirectory.Entry) obj1;
+	protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
 		titleView.setText(album.getAlbumDisplay());
 		String artist = "";
 		if(showArtist) {
@@ -88,23 +81,23 @@ public class AlbumView extends UpdateView {
 			artist += album.getYear();
 		}
 		artistView.setText(album.getArtist() == null ? "" : artist);
-		imageTask = ((ImageLoader)obj2).loadImage(coverArtView, album, false, true);
+		imageTask = imageLoader.loadImage(coverArtView, album, false, true);
 		file = null;
 	}
 
 	@Override
 	protected void updateBackground() {
 		if(file == null) {
-			file = FileUtil.getAlbumDirectory(context, album);
+			file = FileUtil.getAlbumDirectory(context, item);
 		}
 
 		exists = file.exists();
-		isStarred = album.isStarred();
-		isRated = album.getRating();
+		isStarred = item.isStarred();
+		isRated = item.getRating();
 	}
 
 	public MusicDirectory.Entry getEntry() {
-		return album;
+		return item;
 	}
 
 	public File getFile() {

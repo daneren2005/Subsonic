@@ -24,12 +24,11 @@ import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 
-public class BasicListView extends UpdateView {
+public class BasicListView extends UpdateView<String> {
 	private TextView titleView;
 
 	public BasicListView(Context context) {
 		super(context, false);
-		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
 		titleView = (TextView) findViewById(R.id.item_name);
@@ -39,7 +38,7 @@ public class BasicListView extends UpdateView {
 		moreButton.setVisibility(View.GONE);
 	}
 
-	protected void setObjectImpl(Object obj) {
-		titleView.setText((String) obj);
+	protected void setObjectImpl(String string) {
+		titleView.setText(string);
 	}
 }

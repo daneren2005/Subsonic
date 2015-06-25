@@ -25,15 +25,12 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.ImageLoader;
 
-public class UserView extends UpdateView {
-	private User user;
-
+public class UserView extends UpdateView2<User, ImageLoader> {
 	private TextView usernameView;
 	private ImageView avatarView;
 
 	public UserView(Context context) {
 		super(context, false);
-		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.user_list_item, this, true);
 
 		usernameView = (TextView) findViewById(R.id.item_name);
@@ -46,9 +43,8 @@ public class UserView extends UpdateView {
 		});
 	}
 
-	protected void setObjectImpl(Object obj, Object obj2) {
-		this.user = (User) obj;
+	protected void setObjectImpl(User user, ImageLoader imageLoader) {
 		usernameView.setText(user.getUsername());
-		imageTask = ((ImageLoader)obj2).loadAvatar(context, avatarView, user.getUsername());
+		imageTask = imageLoader.loadAvatar(context, avatarView, user.getUsername());
 	}
 }

@@ -31,7 +31,7 @@ import java.util.Locale;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Share;
 
-public class ShareView extends UpdateView {
+public class ShareView extends UpdateView<Share> {
 	private static final String TAG = ShareView.class.getSimpleName();
 
 	private TextView titleView;
@@ -53,8 +53,7 @@ public class ShareView extends UpdateView {
 		});
 	}
 
-	public void setObjectImpl(Object obj) {
-		Share share = (Share) obj;
+	public void setObjectImpl(Share share) {
 		titleView.setText(share.getName());
 		if(share.getExpires() != null) {
 			descriptionView.setText(context.getResources().getString(R.string.share_expires, new SimpleDateFormat("E MMM d, yyyy", Locale.ENGLISH).format(share.getExpires())));

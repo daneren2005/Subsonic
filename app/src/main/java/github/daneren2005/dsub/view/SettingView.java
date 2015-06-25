@@ -26,12 +26,9 @@ import github.daneren2005.dsub.domain.User;
 
 import static github.daneren2005.dsub.domain.User.Setting;
 
-public class SettingView extends UpdateView {
+public class SettingView extends UpdateView2<Setting, Boolean> {
 	private final TextView titleView;
 	private final CheckBox checkBox;
-
-	private Setting setting;
-	private boolean enabled = false;
 
 	public SettingView(Context context) {
 		super(context, false);
@@ -43,21 +40,19 @@ public class SettingView extends UpdateView {
 		checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if(setting != null) {
-					setting.setValue(isChecked);
+				if(item != null) {
+					item.setValue(isChecked);
 				}
 			}
 		});
 		checkBox.setClickable(false);
 	}
 
-	protected void setObjectImpl(Object obj, Object editable) {
-		this.setting = (Setting) obj;
-
+	protected void setObjectImpl(Setting setting, Boolean isEditable) {
 		// Can't edit non-role parts
 		String name = setting.getName();
 		if(name.indexOf("Role") == -1) {
-			editable = false;
+			item2 = false;
 		}
 		
 		int res = -1;
@@ -100,13 +95,12 @@ public class SettingView extends UpdateView {
 			checkBox.setChecked(false);
 		}
 
-		enabled = (Boolean) editable;
-		checkBox.setEnabled(enabled);
+		checkBox.setEnabled(item2);
 	}
 
 	@Override
 	public boolean isCheckable() {
-		return this.enabled;
+		return item2;
 	}
 
 	public void setChecked(boolean checked) {

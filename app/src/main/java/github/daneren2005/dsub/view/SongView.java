@@ -38,20 +38,18 @@ import java.io.File;
  *
  * @author Sindre Mehus
  */
-public class SongView extends UpdateView implements Checkable {
-    private static final String TAG = SongView.class.getSimpleName();
+public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> implements Checkable {
+	private static final String TAG = SongView.class.getSimpleName();
 
-    private MusicDirectory.Entry song;
-
-    private CheckedTextView checkedTextView;
-    private TextView titleTextView;
-    private TextView artistTextView;
-    private TextView durationTextView;
-    private TextView statusTextView;
+	private CheckedTextView checkedTextView;
+	private TextView titleTextView;
+	private TextView artistTextView;
+	private TextView durationTextView;
+	private TextView statusTextView;
 	private ImageView statusImageView;
 	private ImageView bookmarkButton;
 	private View bottomRowView;
-	
+
 	private DownloadService downloadService;
 	private long revision = -1;
 	private DownloadFile downloadFile;
@@ -68,30 +66,29 @@ public class SongView extends UpdateView implements Checkable {
 	private boolean isBookmarked = false;
 	private boolean bookmarked = false;
 
-    public SongView(Context context) {
-        super(context);
-        LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
+	public SongView(Context context) {
+		super(context);
+		LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
-        checkedTextView = (CheckedTextView) findViewById(R.id.song_check);
-        titleTextView = (TextView) findViewById(R.id.song_title);
-        artistTextView = (TextView) findViewById(R.id.song_artist);
-        durationTextView = (TextView) findViewById(R.id.song_duration);
-        statusTextView = (TextView) findViewById(R.id.song_status);
+		checkedTextView = (CheckedTextView) findViewById(R.id.song_check);
+		titleTextView = (TextView) findViewById(R.id.song_title);
+		artistTextView = (TextView) findViewById(R.id.song_artist);
+		durationTextView = (TextView) findViewById(R.id.song_duration);
+		statusTextView = (TextView) findViewById(R.id.song_status);
 		statusImageView = (ImageView) findViewById(R.id.song_status_icon);
 		ratingBar = (RatingBar) findViewById(R.id.song_rating);
-        starButton = (ImageButton) findViewById(R.id.song_star);
-        starButton.setFocusable(false);
+		starButton = (ImageButton) findViewById(R.id.song_star);
+		starButton.setFocusable(false);
 		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
 		bookmarkButton.setFocusable(false);
 		moreButton = (ImageView) findViewById(R.id.more_button);
 		bottomRowView = findViewById(R.id.song_bottom);
-    }
+	}
 
-    public void setObjectImpl(Object obj1, Object obj2) {
-        this.song = (MusicDirectory.Entry) obj1;
-		checkable = (Boolean) obj2;
-		
-        StringBuilder artist = new StringBuilder(40);
+	public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
+		this.checkable = checkable;
+
+		StringBuilder artist = new StringBuilder(40);
 
 		boolean isPodcast = song instanceof PodcastEpisode;
 		if(!song.isVideo() || isPodcast) {
@@ -105,11 +102,11 @@ public class SongView extends UpdateView implements Checkable {
 			else if(song.getArtist() != null) {
 				artist.append(song.getArtist());
 			}
-			
+
 			if(isPodcast) {
 				String status = ((PodcastEpisode) song).getStatus();
 				int statusRes = -1;
-				
+
 				if("error".equals(status)) {
 					statusRes = R.string.song_details_error;
 				} else if("skipped".equals(status)) {
@@ -117,7 +114,7 @@ public class SongView extends UpdateView implements Checkable {
 				} else if("downloading".equals(status)) {
 					statusRes = R.string.song_details_downloading;
 				}
-				
+
 				if(statusRes != -1) {
 					artist.append(" (");
 					artist.append(getContext().getString(statusRes));
@@ -131,16 +128,16 @@ public class SongView extends UpdateView implements Checkable {
 			bottomRowView.setVisibility(View.GONE);
 			statusTextView.setText(Util.formatDuration(song.getDuration()));
 		}
-		
+
 		String title = song.getTitle();
 		Integer track = song.getTrack();
 		if(track != null && Util.getDisplayTrack(context)) {
 			title = String.format("%02d", track) + " " + title;
 		}
 
-        titleTextView.setText(title);
+		titleTextView.setText(title);
 		artistTextView.setText(artist);
-        checkedTextView.setVisibility(checkable ? View.VISIBLE : View.GONE);
+		checkedTextView.setVisibility(checkable ? View.VISIBLE : View.GONE);
 
 		this.setBackgroundColor(0x00000000);
 		ratingBar.setVisibility(View.GONE);
@@ -150,28 +147,28 @@ public class SongView extends UpdateView implements Checkable {
 		loaded = false;
 		dontChangeDownloadFile = false;
 	}
-    
+
 	public void setDownloadFile(DownloadFile downloadFile) {
 		this.downloadFile = downloadFile;
 		dontChangeDownloadFile = true;
 	}
-	
+
 	public DownloadFile getDownloadFile() {
 		return downloadFile;
 	}
-	
+
 	@Override
 	protected void updateBackground() {
-        if (downloadService == null) {
+		if (downloadService == null) {
 			downloadService = DownloadService.getInstance();
 			if(downloadService == null) {
 				return;
 			}
-        }
+		}
 
 		long newRevision = downloadService.getDownloadListUpdateRevision();
 		if((revision != newRevision && dontChangeDownloadFile == false) || downloadFile == null) {
-			downloadFile = downloadService.forSong(song);
+			downloadFile = downloadService.forSong(item);
 			revision = newRevision;
 		}
 
@@ -179,27 +176,27 @@ public class SongView extends UpdateView implements Checkable {
 		isSaved = downloadFile.isSaved();
 		partialFile = downloadFile.getPartialFile();
 		partialFileExists = partialFile.exists();
-		isStarred = song.isStarred();
-		isBookmarked = song.getBookmark() != null;
-		isRated = song.getRating();
-		
+		isStarred = item.isStarred();
+		isBookmarked = item.getBookmark() != null;
+		isRated = item.getRating();
+
 		// Check if needs to load metadata: check against all fields that we know are null in offline mode
-		if(song.getBitRate() == null && song.getDuration() == null && song.getDiscNumber() == null && isWorkDone) {
-			song.loadMetadata(downloadFile.getCompleteFile());
+		if(item.getBitRate() == null && item.getDuration() == null && item.getDiscNumber() == null && isWorkDone) {
+			item.loadMetadata(downloadFile.getCompleteFile());
 			loaded = true;
 		}
 	}
 
 	@Override
-    protected void update() {
+	protected void update() {
 		if(loaded) {
-			setObjectImpl(song, checkedTextView.getVisibility() == View.VISIBLE);
+			setObjectImpl(item, checkedTextView.getVisibility() == View.VISIBLE);
 		}
-        if (downloadService == null || downloadFile == null) {
-            return;
-        }
+		if (downloadService == null || downloadFile == null) {
+			return;
+		}
 
-		if(song.isStarred()) {
+		if(item.isStarred()) {
 			if(!starred) {
 				starButton.setVisibility(View.VISIBLE);
 				starred = true;
@@ -211,13 +208,13 @@ public class SongView extends UpdateView implements Checkable {
 			}
 		}
 
-        if (isWorkDone) {
+		if (isWorkDone) {
 			int moreImage = isSaved ? R.drawable.download_pinned : R.drawable.download_cached;
 			if(moreImage != this.moreImage) {
 				moreButton.setImageResource(moreImage);
 				this.moreImage = moreImage;
 			}
-        } else if(this.moreImage != R.drawable.download_none_light) {
+		} else if(this.moreImage != R.drawable.download_none_light) {
 			int[] attrs = new int[] {R.attr.download_none};
 			TypedArray typedArray = context.obtainStyledAttributes(attrs);
 			moreButton.setImageResource(typedArray.getResourceId(0, 0));
@@ -225,7 +222,7 @@ public class SongView extends UpdateView implements Checkable {
 			this.moreImage = R.drawable.download_none_light;
 		}
 
-        if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {
+		if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {
 			double percentage = (partialFile.length() * 100.0) / downloadFile.getEstimatedSize();
 			percentage = Math.min(percentage, 100);
 			statusTextView.setText((int)percentage + " %");
@@ -233,24 +230,24 @@ public class SongView extends UpdateView implements Checkable {
 				statusImageView.setVisibility(View.VISIBLE);
 				rightImage = true;
 			}
-        } else if(rightImage) {
-            statusTextView.setText(null);
+		} else if(rightImage) {
+			statusTextView.setText(null);
 			statusImageView.setVisibility(View.GONE);
 			rightImage = false;
-        }
+		}
 
-        boolean playing = downloadService.getCurrentPlaying() == downloadFile;
-        if (playing) {
+		boolean playing = downloadService.getCurrentPlaying() == downloadFile;
+		if (playing) {
 			if(!this.playing) {
 				this.playing = playing;
 				int[] attrs = new int[] {R.attr.media_button_start};
 				TypedArray typedArray = context.obtainStyledAttributes(attrs);
-            	titleTextView.setCompoundDrawablesWithIntrinsicBounds(typedArray.getResourceId(0, 0), 0, 0, 0);
+				titleTextView.setCompoundDrawablesWithIntrinsicBounds(typedArray.getResourceId(0, 0), 0, 0, 0);
 			}
-        } else {
+		} else {
 			if(this.playing) {
 				this.playing = playing;
-            	titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				titleTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 			}
 		}
 
@@ -290,24 +287,24 @@ public class SongView extends UpdateView implements Checkable {
 
 			rating = isRated;
 		}
-    }
+	}
 
-    @Override
-    public void setChecked(boolean b) {
-        checkedTextView.setChecked(b);
-    }
+	@Override
+	public void setChecked(boolean b) {
+		checkedTextView.setChecked(b);
+	}
 
-    @Override
-    public boolean isChecked() {
-        return checkedTextView.isChecked();
-    }
+	@Override
+	public boolean isChecked() {
+		return checkedTextView.isChecked();
+	}
 
-    @Override
-    public void toggle() {
-        checkedTextView.toggle();
-    }
+	@Override
+	public void toggle() {
+		checkedTextView.toggle();
+	}
 
 	public MusicDirectory.Entry getEntry() {
-		return song;
+		return item;
 	}
 }
