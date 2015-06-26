@@ -163,6 +163,23 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> {
 	}
 
 	@Override
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		MusicDirectory.Entry selectedItem = downloadFile.getSong();
+		onCreateContextMenuSupport(menu, menuInflater, updateView, selectedItem);
+		if(!selectedItem.isVideo() && !Util.isOffline(context)) {
+			menu.removeItem(R.id.song_menu_remove_playlist);
+		}
+
+		recreateContextMenu(menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		MusicDirectory.Entry selectedItem = downloadFile.getSong();
+		return onContextItemSelected(menuItem, selectedItem);
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		if(super.onOptionsItemSelected(menuItem)) {
 			return true;
@@ -191,37 +208,6 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> {
 		}
 
 		return false;
-	}
-
-	@Override
-	public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		UpdateView targetView = adapter.getContextView();
-		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
-
-		DownloadFile downloadFile = adapter.getContextItem();
-		MusicDirectory.Entry selectedItem = downloadFile.getSong();
-		onCreateContextMenu(menu, view, menuInfo, selectedItem);
-		if(!selectedItem.isVideo() && !Util.isOffline(context)) {
-			menu.removeItem(R.id.song_menu_remove_playlist);
-		}
-
-		recreateContextMenu(menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		DownloadFile downloadFile = adapter.getContextItem();
-		MusicDirectory.Entry selectedItem = downloadFile.getSong();
-		if(onContextItemSelected(menuItem, selectedItem)) {
-			return true;
-		}
-
-		return true;
 	}
 
 	private void update() {
