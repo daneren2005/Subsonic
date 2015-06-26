@@ -12,3 +12,4 @@ proguard_logs/
 /out/
 .gradle/*
 /build/
+local.properties
