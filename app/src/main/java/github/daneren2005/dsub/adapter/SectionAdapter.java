@@ -16,8 +16,12 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,8 +43,6 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	protected List<List<T>> sections;
 	protected boolean singleSectionHeader;
 	protected OnItemClickedListener<T> onItemClickedListener;
-	protected UpdateView contextView;
-	protected T contextItem;
 	private List<T> selected = new ArrayList<>();
 
 	protected SectionAdapter() {}
@@ -100,9 +102,19 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					moreButton.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							T item = holder.getItem();
-							setContextItem(updateView, item);
-							v.showContextMenu();
+							final T item = holder.getItem();
+							if(onItemClickedListener != null) {
+								PopupMenu popup = new PopupMenu(context, v);
+								onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
+
+								popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+									@Override
+									public boolean onMenuItemClick(MenuItem menuItem) {
+										return onItemClickedListener.onContextItemSelected(menuItem, updateView, item);
+									}
+								});
+								popup.show();
+							}
 						}
 					});
 
@@ -261,17 +273,6 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		return -1;
 	}
 
-	public void setContextItem(UpdateView updateView, T item) {
-		contextView = updateView;
-		contextItem = item;
-	}
-	public UpdateView getContextView() {
-		return contextView;
-	}
-	public T getContextItem() {
-		return contextItem;
-	}
-
 	public void setOnItemClickedListener(OnItemClickedListener<T> onItemClickedListener) {
 		this.onItemClickedListener = onItemClickedListener;
 	}
@@ -324,5 +325,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
 	public interface OnItemClickedListener<T> {
 		void onItemClicked(T item);
+		void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<T> updateView, T item);
+		boolean onContextItemSelected(MenuItem menuItem, UpdateView<T> updateView, T item);
 	}
 }

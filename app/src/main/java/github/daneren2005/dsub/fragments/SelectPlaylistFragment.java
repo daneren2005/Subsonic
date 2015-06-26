@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +32,7 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.PlaylistAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,23 +42,19 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		MenuInflater inflater = context.getMenuInflater();		
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Playlist> updateView, Playlist playlist) {
 		if (Util.isOffline(context)) {
-			inflater.inflate(R.menu.select_playlist_context_offline, menu);
+			menuInflater.inflate(R.menu.select_playlist_context_offline, menu);
 		}
 		else {
-			inflater.inflate(R.menu.select_playlist_context, menu);
+			menuInflater.inflate(R.menu.select_playlist_context, menu);
 
-			Playlist playlist = adapter.getContextItem();
 			if(SyncUtil.isSyncedPlaylist(context, playlist.getId())) {
 				menu.removeItem(R.id.playlist_menu_sync);
 			} else {
 				menu.removeItem(R.id.playlist_menu_stop_sync);
 			}
-			
+
 			if(!ServerInfo.checkServerVersion(context, "1.8")) {
 				menu.removeItem(R.id.playlist_update_info);
 			} else if(playlist.getPublic() != null && playlist.getPublic() == true && playlist.getId().indexOf(".m3u") == -1 && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
@@ -69,13 +67,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		Playlist playlist = adapter.getContextItem();
-
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Playlist> updateView, Playlist playlist) {
 		SubsonicFragment fragment;
 		Bundle args;
 		FragmentTransaction trans;
@@ -119,10 +111,9 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 			case R.id.playlist_update_info:
 				updatePlaylistInfo(playlist);
 				break;
-			default:
-				return false;
 		}
-		return true;
+
+		return false;
 	}
 
 	@Override

@@ -190,8 +190,7 @@
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Show Album</string>
     <string name="download.menu_lyrics">Lyrics</string>
-    <string name="download.menu_remove">Remove from queue</string>
-    <string name="download.menu_remove_all">Remove all</string>
+	<string name="download.menu_remove_all">Remove all</string>
     <string name="download.menu_screen_on">Screen on</string>
     <string name="download.menu_shuffle">Shuffle</string>
 	<string name="download.menu_toggle">Toggle</string>

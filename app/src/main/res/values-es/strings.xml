@@ -176,8 +176,7 @@
     <string name="download.playerstate_playing_shuffle">Reproduciendo en aleatorio</string>
     <string name="download.menu_show_album">Mostrar disco</string>
     <string name="download.menu_lyrics">Letras</string>
-    <string name="download.menu_remove">Eliminar de la cola</string>
-    <string name="download.menu_remove_all">Borrar todo</string>
+	<string name="download.menu_remove_all">Borrar todo</string>
     <string name="download.menu_screen_on">Pantalla encendida</string>
     <string name="download.menu_shuffle">Aleatorio</string>
 	<string name="download.menu_toggle">Cambiar</string>

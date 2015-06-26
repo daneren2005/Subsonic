@@ -16,6 +16,9 @@
 package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +32,7 @@ import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.view.UpdateView;
 
 public class SelectYearFragment extends SelectRecyclerFragment<String> {
 
@@ -68,5 +72,13 @@ public class SelectYearFragment extends SelectRecyclerFragment<String> {
 		fragment.setArguments(args);
 
 		replaceFragment(fragment);
+	}
+
+	@Override
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<String> updateView, String item) {}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<String> updateView, String item) {
+		return false;
 	}
 }

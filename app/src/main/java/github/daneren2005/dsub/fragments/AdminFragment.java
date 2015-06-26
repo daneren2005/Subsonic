@@ -17,6 +17,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,7 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.UserAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 public class AdminFragment extends SelectRecyclerFragment<User> {
 	private static String TAG = AdminFragment.class.getSimpleName();
@@ -57,21 +59,16 @@ public class AdminFragment extends SelectRecyclerFragment<User> {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		MenuInflater inflater = context.getMenuInflater();
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<User> updateView, User item) {
 		if(UserUtil.isCurrentAdmin()) {
-			inflater.inflate(R.menu.admin_context, menu);
+			menuInflater.inflate(R.menu.admin_context, menu);
 		} else if(UserUtil.isCurrentRole(User.SETTINGS)) {
-			inflater.inflate(R.menu.admin_context_user, menu);
+			menuInflater.inflate(R.menu.admin_context_user, menu);
 		}
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		User user = adapter.getContextItem();
-
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<User> updateView, User user) {
 		switch(menuItem.getItemId()) {
 			case R.id.admin_change_email:
 				UserUtil.changeEmail(context, user);

@@ -16,6 +16,8 @@
 package github.daneren2005.dsub.fragments;
 
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,23 +62,13 @@ public class SelectVideoFragment extends SelectRecyclerFragment<MusicDirectory.E
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		UpdateView targetView = adapter.getContextView();
-		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
-
-		MusicDirectory.Entry entry = adapter.getContextItem();
-		onCreateContextMenu(menu, view, menuInfo, entry);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry item) {
+		onCreateContextMenuSupport(menu, menuInflater, updateView, item);
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if (menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		MusicDirectory.Entry entry = adapter.getContextItem();
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry entry) {
 		return onContextItemSelected(menuItem, entry);
 	}
 }

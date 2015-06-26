@@ -16,12 +16,9 @@
 package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.adapter.ArtistAdapter;
@@ -84,24 +81,13 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		UpdateView targetView = adapter.getContextView();
-		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
-
-		Artist artist = adapter.getContextItem();
-		onCreateContextMenu(menu, view, menuInfo, artist);
-
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Artist> updateView, Artist item) {
+		onCreateContextMenuSupport(menu, menuInflater, updateView, item);
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		Artist artist = adapter.getContextItem();
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Artist> updateView, Artist artist) {
 		return onContextItemSelected(menuItem, artist);
 	}
 

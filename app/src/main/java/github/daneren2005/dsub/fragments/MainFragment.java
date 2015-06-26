@@ -31,6 +31,8 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.ChangeLog;
+import github.daneren2005.dsub.view.UpdateView;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -400,5 +402,13 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		} else if(item == R.string.main_videos) {
 			showVideos();
 		}
+	}
+
+	@Override
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Integer> updateView, Integer item) {}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Integer> updateView, Integer item) {
+		return false;
 	}
 }

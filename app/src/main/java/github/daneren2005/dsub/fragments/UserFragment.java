@@ -16,6 +16,8 @@
 package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import java.util.List;
@@ -29,6 +31,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.adapter.SettingsAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 public class UserFragment extends SelectRecyclerFragment<User.Setting>{
 	private User user;
@@ -92,5 +95,13 @@ public class UserFragment extends SelectRecyclerFragment<User.Setting>{
 	@Override
 	public void onItemClicked(User.Setting item) {
 
+	}
+
+	@Override
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<User.Setting> updateView, User.Setting item) {}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<User.Setting> updateView, User.Setting item) {
+		return false;
 	}
 }

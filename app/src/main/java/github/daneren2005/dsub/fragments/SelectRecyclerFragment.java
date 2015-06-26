@@ -89,7 +89,6 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		} else {
 			recyclerView.setAdapter(adapter = getAdapter(objects));
 		}
-		registerForContextMenu(recyclerView);
 
 		return rootView;
 	}

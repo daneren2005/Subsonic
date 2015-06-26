@@ -186,8 +186,7 @@
     <string name="download.playerstate_playing_shuffle">Sorrend keverése</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszöveg</string>
-    <string name="download.menu_remove">Eltávolítás a várólistáról</string>
-    <string name="download.menu_remove_all">Összes eltávolítása</string>
+	<string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
     <string name="download.menu_shuffle">Sorrend keverése</string>
 	<string name="download.menu_toggle">Váltás</string>

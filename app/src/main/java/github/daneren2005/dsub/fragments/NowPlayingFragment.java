@@ -541,7 +541,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 			}
 		});
-		registerForContextMenu(playlistView);
 
 		if(Build.MODEL.equals("Nexus 4") || Build.MODEL.equals("GT-I9100")) {
 			View slider = rootView.findViewById(R.id.download_slider);
@@ -602,42 +601,25 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		if(!primaryFragment) {
-			return;
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		if(Util.isOffline(context)) {
+			menuInflater.inflate(R.menu.nowplaying_context_offline, menu);
+		} else {
+			menuInflater.inflate(R.menu.nowplaying_context, menu);
+			menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
 		}
-		UpdateView targetView = songListAdapter.getContextView();
-		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
 
-		if (view == playlistView) {
-			DownloadFile downloadFile = songListAdapter.getContextItem();
-
-			android.view.MenuInflater inflater = context.getMenuInflater();
-			if(Util.isOffline(context)) {
-				inflater.inflate(R.menu.nowplaying_context_offline, menu);
-			} else {
-				inflater.inflate(R.menu.nowplaying_context, menu);
-				menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
-			}
-
-			if (downloadFile.getSong().getParent() == null) {
-				menu.findItem(R.id.menu_show_album).setVisible(false);
-				menu.findItem(R.id.menu_show_artist).setVisible(false);
-			}
-
-			hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
+		if (downloadFile.getSong().getParent() == null) {
+			menu.findItem(R.id.menu_show_album).setVisible(false);
+			menu.findItem(R.id.menu_show_artist).setVisible(false);
 		}
+
+		hideMenuItems(menu, updateView);
 	}
 
 	@Override
-	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
-		if(!primaryFragment) {
-			return false;
-		}
-
-		DownloadFile downloadFile = songListAdapter.getContextItem();
-		return menuItemSelected(menuItem.getItemId(), downloadFile) || super.onContextItemSelected(menuItem);
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		return menuItemSelected(menuItem.getItemId(), downloadFile);
 	}
 
 	private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
@@ -705,20 +687,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 				replaceFragment(fragment);
 				return true;
-			} case R.id.menu_remove:
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						getDownloadService().remove(song);
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						onDownloadListChanged();
-					}
-				}.execute();
-				return true;
+			}
 			case R.id.menu_delete:
 				List<Entry> songs = new ArrayList<Entry>(1);
 				songs.add(song.getSong());

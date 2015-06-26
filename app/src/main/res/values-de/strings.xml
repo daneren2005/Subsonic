@@ -190,8 +190,7 @@
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Zeige Album</string>
     <string name="download.menu_lyrics">Liedtext</string>
-    <string name="download.menu_remove">Entferne aus Warteschlange</string>
-    <string name="download.menu_remove_all">Alle entfernen</string>
+	<string name="download.menu_remove_all">Alle entfernen</string>
     <string name="download.menu_screen_on">Bildschirm an</string>
     <string name="download.menu_shuffle">Mischen</string>
 	<string name="download.menu_toggle">Umschalten</string>

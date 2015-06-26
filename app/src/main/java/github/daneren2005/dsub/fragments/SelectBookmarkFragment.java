@@ -19,6 +19,7 @@
 package github.daneren2005.dsub.fragments;
 
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,21 +44,13 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 	private static final String TAG = SelectBookmarkFragment.class.getSimpleName();
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		UpdateView targetView = adapter.getContextView();
-		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
-
-		MenuInflater inflater = context.getMenuInflater();
-		inflater.inflate(R.menu.select_bookmark_context, menu);
-
-		hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry item) {
+		menuInflater.inflate(R.menu.select_bookmark_context, menu);
+		hideMenuItems(menu, updateView);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		MusicDirectory.Entry bookmark = adapter.getContextItem();
-		
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry bookmark) {
 		switch(menuItem.getItemId()) {
 			case R.id.bookmark_menu_info:
 				displayBookmarkInfo(bookmark);
@@ -66,12 +59,8 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 				deleteBookmark(bookmark, adapter);
 				return true;
 		}
-		
-		if(onContextItemSelected(menuItem, bookmark)) {
-			return true;
-		}
 
-		return true;
+		return onContextItemSelected(menuItem, bookmark);
 	}
 
 	@Override
@@ -115,7 +104,7 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 			}
 		}.execute();
 	}
-	
+
 	private void displayBookmarkInfo(final MusicDirectory.Entry entry) {
 		Bookmark bookmark = entry.getBookmark();
 		String comment = bookmark.getComment();

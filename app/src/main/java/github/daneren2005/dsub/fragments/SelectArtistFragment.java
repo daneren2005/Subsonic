@@ -79,27 +79,14 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		UpdateView targetView = adapter.getContextView();
-		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
-
-		Artist artist = adapter.getContextItem();
-
-		onCreateContextMenu(menu, view, menuInfo, artist);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Artist> updateView, Artist item) {
+		onCreateContextMenuSupport(menu, menuInflater, updateView, item);
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Artist artist = adapter.getContextItem();
-
-		return onContextItemSelected(menuItem, artist);
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Artist> updateView, Artist item) {
+		return onContextItemSelected(menuItem, item);
 	}
 
 	@Override

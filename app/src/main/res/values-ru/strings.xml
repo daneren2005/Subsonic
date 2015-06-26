@@ -108,7 +108,6 @@
     <string name="download.playerstate_playing_shuffle">Воспроизводится случайно</string>
     <string name="download.menu_show_album">Показать альбом</string>
     <string name="download.menu_lyrics">Текст</string>
-    <string name="download.menu_remove">Убрать из очереди</string>
     <string name="download.menu_remove_all">Очистить</string>
     <string name="download.menu_screen_on">Включить подсветку</string>
     <string name="download.menu_shuffle">Перемешать</string>

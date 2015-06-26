@@ -123,32 +123,17 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		UpdateView targetView = adapter.getContextView();
-		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
-
-		Serializable item = adapter.getContextItem();
-		onCreateContextMenu(menu, view, menuInfo, item);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Serializable> updateView, Serializable item) {
+		onCreateContextMenuSupport(menu, menuInflater, updateView, item);
 		if(item instanceof MusicDirectory.Entry && !((MusicDirectory.Entry) item).isVideo() && !Util.isOffline(context)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
-
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		Serializable item = adapter.getContextItem();
-		if(onContextItemSelected(menuItem, item)) {
-			return true;
-		}
-
-		return true;
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Serializable> updateView, Serializable item) {
+		return onContextItemSelected(menuItem, item);
 	}
 
 	@Override

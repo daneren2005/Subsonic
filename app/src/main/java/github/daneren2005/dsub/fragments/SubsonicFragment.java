@@ -34,21 +34,17 @@ import android.os.Bundle;
 import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.internal.view.ContextThemeWrapper;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.GestureDetector;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -195,17 +191,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		return false;
 	}
 
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo, Object selected) {
-		MenuInflater inflater = context.getMenuInflater();
-
+	public void onCreateContextMenuSupport(Menu menu, MenuInflater menuInflater, UpdateView updateView, Object selected) {
 		if(selected instanceof Entry) {
 			Entry entry = (Entry) selected;
 			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
 				if(Util.isOffline(context)) {
-					inflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
+					menuInflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
 				}
 				else {
-					inflater.inflate(R.menu.select_podcast_episode_context, menu);
+					menuInflater.inflate(R.menu.select_podcast_episode_context, menu);
 
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
@@ -214,10 +208,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 			else if (entry.isDirectory()) {
 				if(Util.isOffline(context)) {
-					inflater.inflate(R.menu.select_album_context_offline, menu);
+					menuInflater.inflate(R.menu.select_album_context_offline, menu);
 				}
 				else {
-					inflater.inflate(R.menu.select_album_context, menu);
+					menuInflater.inflate(R.menu.select_album_context, menu);
 
 					if(Util.isTagBrowsing(context)) {
 						menu.removeItem(R.id.menu_rate);
@@ -226,10 +220,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else if(!entry.isVideo()) {
 				if(Util.isOffline(context)) {
-					inflater.inflate(R.menu.select_song_context_offline, menu);
+					menuInflater.inflate(R.menu.select_song_context_offline, menu);
 				}
 				else {
-					inflater.inflate(R.menu.select_song_context, menu);
+					menuInflater.inflate(R.menu.select_song_context, menu);
 
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
@@ -238,28 +232,28 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else {
 				if(Util.isOffline(context)) {
-					inflater.inflate(R.menu.select_video_context_offline, menu);
+					menuInflater.inflate(R.menu.select_video_context_offline, menu);
 				}
 				else {
-					inflater.inflate(R.menu.select_video_context, menu);
+					menuInflater.inflate(R.menu.select_video_context, menu);
 				}
 			}
 		} else if(selected instanceof Artist) {
 			Artist artist = (Artist) selected;
 			if(Util.isOffline(context)) {
-				inflater.inflate(R.menu.select_artist_context_offline, menu);
+				menuInflater.inflate(R.menu.select_artist_context_offline, menu);
 			}
 			else {
-				inflater.inflate(R.menu.select_artist_context, menu);
+				menuInflater.inflate(R.menu.select_artist_context, menu);
 
 				menu.findItem(R.id.artist_menu_star).setTitle(artist.isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
 		}
 
-		hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
+		hideMenuItems(menu, updateView);
 	}
 
-	protected void hideMenuItems(ContextMenu menu, AdapterView.AdapterContextMenuInfo info) {
+	protected void hideMenuItems(Menu menu, UpdateView updateView) {
 		if(!ServerInfo.checkServerVersion(context, "1.8")) {
 			menu.setGroupVisible(R.id.server_1_8, false);
 			menu.setGroupVisible(R.id.hide_star, false);
@@ -290,8 +284,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		if(!Util.isOffline(context)) {
 			// If we are looking at a standard song view, get downloadFile to cache what options to show
-			if(info.targetView instanceof SongView) {
-				SongView songView = (SongView) info.targetView;
+			if(updateView instanceof SongView) {
+				SongView songView = (SongView) updateView;
 				DownloadFile downloadFile = songView.getDownloadFile();
 
 				try {
@@ -314,17 +308,17 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 			}
 			// Apply similar logic to album views
-			else if(info.targetView instanceof AlbumView || info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
+			else if(updateView instanceof AlbumView || updateView instanceof ArtistView || updateView instanceof ArtistEntryView) {
 				File folder = null;
 				int id = 0;
-				if(info.targetView instanceof AlbumView) {
-					folder = ((AlbumView) info.targetView).getFile();
+				if(updateView instanceof AlbumView) {
+					folder = ((AlbumView) updateView).getFile();
 					id = R.id.album_menu_delete;
-				} else if(info.targetView instanceof ArtistView) {
-					folder = ((ArtistView) info.targetView).getFile();
+				} else if(updateView instanceof ArtistView) {
+					folder = ((ArtistView) updateView).getFile();
 					id = R.id.artist_menu_delete;
-				} else if(info.targetView instanceof ArtistEntryView) {
-					folder = ((ArtistEntryView) info.targetView).getFile();
+				} else if(updateView instanceof ArtistEntryView) {
+					folder = ((ArtistEntryView) updateView).getFile();
 					id = R.id.artist_menu_delete;
 				}
 
@@ -339,7 +333,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 
-	protected void recreateContextMenu(ContextMenu menu) {
+	protected void recreateContextMenu(Menu menu) {
 		List<MenuItem> menuItems = new ArrayList<MenuItem>();
 		for(int i = 0; i < menu.size(); i++) {
 			MenuItem item = menu.getItem(i);

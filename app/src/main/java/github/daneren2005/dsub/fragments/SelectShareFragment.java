@@ -19,6 +19,8 @@ import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -41,25 +43,19 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.ShareAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 	private static final String TAG = SelectShareFragment.class.getSimpleName();
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		android.view.MenuInflater inflater = context.getMenuInflater();
-		inflater.inflate(R.menu.select_share_context, menu);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Share> updateView, Share item) {
+		menuInflater.inflate(R.menu.select_share_context, menu);
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		Share share = adapter.getContextItem();
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Share> updateView, Share share) {
 		switch (menuItem.getItemId()) {
 			case R.id.share_menu_share:
 				shareExternal(share);

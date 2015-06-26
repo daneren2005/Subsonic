@@ -18,6 +18,8 @@ import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.PodcastChannelAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,35 +64,26 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 
 		return false;
 	}
-	
+
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		android.view.MenuInflater inflater = context.getMenuInflater();
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<PodcastChannel> updateView, PodcastChannel podcast) {
 		if(!Util.isOffline(context) && UserUtil.canPodcast()) {
-			inflater.inflate(R.menu.select_podcasts_context, menu);
+			menuInflater.inflate(R.menu.select_podcasts_context, menu);
 
-			PodcastChannel podcast = adapter.getContextItem();
 			if(SyncUtil.isSyncedPodcast(context, podcast.getId())) {
 				menu.removeItem(R.id.podcast_menu_sync);
 			} else {
 				menu.removeItem(R.id.podcast_menu_stop_sync);
 			}
 		} else {
-			inflater.inflate(R.menu.select_podcasts_context_offline, menu);
+			menuInflater.inflate(R.menu.select_podcasts_context_offline, menu);
 		}
 
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		PodcastChannel channel = adapter.getContextItem();
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<PodcastChannel> updateView, PodcastChannel channel) {
 		switch (menuItem.getItemId()) {
 			case R.id.podcast_menu_sync:
 				syncPodcast(channel);
@@ -104,7 +98,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 				deletePodcast(channel);
 				break;
 		}
-		
+
 		return true;
 	}
 
@@ -145,7 +139,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 			replaceFragment(fragment);
 		}
 	}
-	
+
 	public void refreshPodcasts() {
 		new SilentBackgroundTask<Void>(context) {
 			@Override

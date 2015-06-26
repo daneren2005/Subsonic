@@ -175,8 +175,7 @@
     <string name="download.playerstate_playing_shuffle">Lecture au hasard</string>
     <string name="download.menu_show_album">Afficher l\'album</string>
     <string name="download.menu_lyrics">Paroles</string>
-    <string name="download.menu_remove">Enlever de la queue</string>
-    <string name="download.menu_remove_all">Enlever tout</string>
+	<string name="download.menu_remove_all">Enlever tout</string>
     <string name="download.menu_screen_on">Ecran actif</string>
     <string name="download.menu_shuffle">Hasard</string>
 	<string name="download.menu_toggle">Basculer</string>

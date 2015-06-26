@@ -197,8 +197,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			recyclerView.setLayoutManager(layoutManager);
 		}
 
-		registerForContextMenu(recyclerView);
-
 		if(entries == null) {
 			if(primaryFragment || secondaryFragment) {
 				load(false);
@@ -336,18 +334,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		Entry entry = entryGridAdapter.getContextItem();
-		UpdateView targetView = entryGridAdapter.getContextView();
-		menuInfo = new AdapterView.AdapterContextMenuInfo(targetView, 0, 0);
-
-		// Don't try to display a context menu if error here
-		if(entry == null) {
-			return;
-		}
-
-		onCreateContextMenu(menu, view, menuInfo, entry);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView updateView, Entry entry) {
+		onCreateContextMenuSupport(menu, menuInflater, updateView, entry);
 		if(!entry.isVideo() && !Util.isOffline(context) && (playlistId == null || !playlistOwner) && (podcastId == null  || Util.isOffline(context) && podcastId != null)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
@@ -369,14 +357,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		recreateContextMenu(menu);
 	}
-
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-		Entry entry = entryGridAdapter.getContextItem();
-
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Entry> updateView, Entry entry) {
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false) && menuItem.getItemId() == R.id.song_menu_play_now) {
 			List<Entry> songs = new ArrayList<Entry>();
 			songs.add(entry);
@@ -388,7 +370,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			playNow(songs);
 			return true;
 		}
-		
+
 		if(onContextItemSelected(menuItem, entry)) {
 			return true;
 		}
@@ -404,7 +386,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				deletePodcastEpisode((PodcastEpisode) entry);
 				break;
 		}
-		
+
 		return true;
 	}
 
