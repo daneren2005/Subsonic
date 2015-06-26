@@ -16,10 +16,17 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
@@ -39,6 +46,7 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
+import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> {
@@ -48,6 +56,50 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> {
 	public DownloadFragment() {
 		serialize = false;
 		pullToRefresh = false;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+		super.onCreateView(inflater, container, bundle);
+
+		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+			@Override
+			public boolean onMove(RecyclerView recyclerView, final RecyclerView.ViewHolder fromHolder, final RecyclerView.ViewHolder toHolder) {
+				new SilentBackgroundTask<Void>(context) {
+					private int from;
+					private int to;
+
+					@Override
+					protected Void doInBackground() throws Throwable {
+						from = fromHolder.getAdapterPosition();
+						to = toHolder.getAdapterPosition();
+						getDownloadService().swap(false, from, to);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						adapter.notifyItemMoved(from, to);
+					}
+				}.execute();
+
+				return true;
+			}
+
+			@Override
+			public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+				SongView songView = (SongView) ((UpdateView.UpdateViewHolder) viewHolder).getUpdateView();
+				DownloadFile downloadFile = songView.getDownloadFile();
+
+				DownloadService downloadService = getDownloadService();
+				downloadService.removeBackground(downloadFile);
+				adapter.removeItem(downloadFile);
+				currentRevision = downloadService.getDownloadListUpdateRevision();
+			}
+		});
+		touchHelper.attachToRecyclerView(recyclerView);
+
+		return rootView;
 	}
 
 	@Override

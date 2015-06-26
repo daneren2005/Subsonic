@@ -739,6 +739,16 @@ public class DownloadService extends Service {
 			setNextPlaying();
 		}
 	}
+	public synchronized void removeBackground(DownloadFile downloadFile) {
+		if (downloadFile == currentDownloading && downloadFile != currentPlaying && downloadFile != nextPlaying) {
+			currentDownloading.cancelDownload();
+			currentDownloading = null;
+		}
+
+		backgroundDownloadList.remove(downloadFile);
+		revision++;
+		checkDownloads();
+	}
 
 	public synchronized void delete(List<MusicDirectory.Entry> songs) {
 		for (MusicDirectory.Entry song : songs) {
