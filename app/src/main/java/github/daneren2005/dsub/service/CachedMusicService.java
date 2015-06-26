@@ -489,6 +489,7 @@ public class CachedMusicService implements MusicService {
 			FileUtil.serialize(context, dir, getCacheName(context, type, Integer.toString(offset)));
 			return dir;
 		} catch(IOException e) {
+			Log.w(TAG, "Failed to refresh album list: ", e);
 			MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, type, Integer.toString(offset)), MusicDirectory.class);
 
 			if(dir == null) {
