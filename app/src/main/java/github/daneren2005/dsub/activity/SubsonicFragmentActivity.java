@@ -604,33 +604,30 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 
 		MusicDirectory.Entry song = null;
-		if(current != null || slideUpFrame.getVisibility() != View.GONE) {
-			slideUpFrame.setVisibility(View.VISIBLE);
-			if (current != null) {
-				song = current.getSong();
-				trackView.setText(song.getTitle());
-				artistView.setText(song.getArtist());
-			} else {
-				trackView.setText(R.string.main_title);
-				artistView.setText(R.string.main_artist);
-			}
-
-			if (coverArtView != null) {
-				int height = coverArtView.getHeight();
-				if (height <= 0) {
-					int[] attrs = new int[]{R.attr.actionBarSize};
-					TypedArray typedArray = this.obtainStyledAttributes(attrs);
-					height = typedArray.getDimensionPixelSize(0, 0);
-					typedArray.recycle();
-				}
-				getImageLoader().loadImage(coverArtView, song, false, height, false);
-			}
-
-			int[] attrs = new int[]{(state == PlayerState.STARTED) ? R.attr.actionbar_pause : R.attr.actionbar_start};
-			TypedArray typedArray = this.obtainStyledAttributes(attrs);
-			startButton.setImageResource(typedArray.getResourceId(0, 0));
-			typedArray.recycle();
+		if (current != null) {
+			song = current.getSong();
+			trackView.setText(song.getTitle());
+			artistView.setText(song.getArtist());
+		} else {
+			trackView.setText(R.string.main_title);
+			artistView.setText(R.string.main_artist);
 		}
+
+		if (coverArtView != null) {
+			int height = coverArtView.getHeight();
+			if (height <= 0) {
+				int[] attrs = new int[]{R.attr.actionBarSize};
+				TypedArray typedArray = this.obtainStyledAttributes(attrs);
+				height = typedArray.getDimensionPixelSize(0, 0);
+				typedArray.recycle();
+			}
+			getImageLoader().loadImage(coverArtView, song, false, height, false);
+		}
+
+		int[] attrs = new int[]{(state == PlayerState.STARTED) ? R.attr.actionbar_pause : R.attr.actionbar_start};
+		TypedArray typedArray = this.obtainStyledAttributes(attrs);
+		startButton.setImageResource(typedArray.getResourceId(0, 0));
+		typedArray.recycle();
 	}
 
 	public void checkUpdates() {
