@@ -53,6 +53,7 @@ import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.service.DownloadService;
 
@@ -70,10 +71,12 @@ import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * @author Sindre Mehus
@@ -829,6 +832,19 @@ public final class Util {
         return builder.toString();
     }
 
+	public static String formatDate(Context context, String dateString) {
+		try {
+			boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+			if (isDateNormalized) {
+				dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			}
+
+			return formatDate(dateFormat.parse(dateString));
+		} catch(ParseException e) {
+			return dateString;
+		}
+	}
 	public static String formatDate(Date date) {
 		if(date == null) {
 			return "Never";

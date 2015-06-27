@@ -217,7 +217,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 			((playlist.getComment() == null) ? "" : playlist.getComment()) +
 			"\nSong Count: " + playlist.getSongCount() +
 			((playlist.getPublic() == null) ? "" : ("\nPublic: " + playlist.getPublic())) +
-			"\nCreation Date: " + playlist.getCreated().replace('T', ' ');
+			"\nCreated: " + Util.formatDate(context, playlist.getCreated());
 		Util.info(context, playlist.getName(), message);
 	}
 
