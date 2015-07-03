@@ -129,8 +129,7 @@
 
     <string name="select_album.select">Tout sélectionner</string>
     <string name="select_album.n_selected">%d pistes sélectionnées.</string>
-    <string name="select_album.n_unselected">%d pistes désélectionnées.</string>
-    <string name="select_album.more">Plus</string>
+	<string name="select_album.more">Plus</string>
     <string name="select_album.offline">Déconnecté</string>
     <string name="select_album.searching">Recherche en cours...</string>
     <string name="select_album.no_sdcard">Erreur : Aucune carte SD card disponible.</string>

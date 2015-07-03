@@ -18,7 +18,9 @@ package github.daneren2005.dsub.adapter;
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.view.BasicHeaderView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.view.UpdateView.UpdateViewHolder;
@@ -43,7 +46,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	protected List<List<T>> sections;
 	protected boolean singleSectionHeader;
 	protected OnItemClickedListener<T> onItemClickedListener;
-	private List<T> selected = new ArrayList<>();
+	protected List<T> selected = new ArrayList<>();
+	protected ActionMode currentActionMode;
+	protected boolean checkable = true;
 
 	protected SectionAdapter() {}
 	public SectionAdapter(Context context, List<T> section) {
@@ -80,13 +85,19 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					public void onClick(View v) {
 						T item = holder.getItem();
 						updateView.onClick();
-						if (updateView.isCheckable()) {
+						if (updateView.isCheckable() && currentActionMode != null) {
 							if (selected.contains(item)) {
 								selected.remove(item);
 								setChecked(updateView, false);
 							} else {
 								selected.add(item);
 								setChecked(updateView, true);
+							}
+
+							if(selected.isEmpty()) {
+								currentActionMode.finish();
+							} else {
+								currentActionMode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
 							}
 						} else if (onItemClickedListener != null) {
 							onItemClickedListener.onItemClicked(item);
@@ -118,15 +129,15 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 						}
 					});
 
-					/*updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
-						@Override
-						public boolean onLongClick(View v) {
-							T item = holder.getItem();
-							setContextItem(updateView, item);
-							v.showContextMenu();
-							return false;
-						}
-					});*/
+					if(checkable) {
+						updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
+							@Override
+							public boolean onLongClick(View v) {
+								startActionMode(holder);
+								return true;
+							}
+						});
+					}
 				}
 			}
 
@@ -321,7 +332,58 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	public abstract UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType);
 	public abstract void onBindViewHolder(UpdateViewHolder holder, T item, int viewType);
 	public abstract int getItemViewType(T item);
-	public void setChecked(UpdateView updateView, boolean checked) {}
+	public void setCheckable(boolean checkable) {
+		this.checkable = checkable;
+	}
+	public void setChecked(UpdateView updateView, boolean checked) {
+		updateView.setChecked(checked);
+	}
+
+	private void startActionMode(final UpdateView.UpdateViewHolder<T> holder) {
+		final UpdateView<T> updateView = holder.getUpdateView();
+		if (context instanceof SubsonicFragmentActivity && currentActionMode == null) {
+			final SubsonicFragmentActivity fragmentActivity = (SubsonicFragmentActivity) context;
+			Toolbar toolbar = fragmentActivity.getActiveToolbar();
+
+			toolbar.startActionMode(new ActionMode.Callback() {
+				@Override
+				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+					currentActionMode = mode;
+					fragmentActivity.onCreateOptionsMenu(menu);
+
+					T item = holder.getItem();
+					selected.add(item);
+					setChecked(updateView, true);
+
+					notifyDataSetChanged();
+					mode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
+					return true;
+				}
+
+				@Override
+				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+					return false;
+				}
+
+				@Override
+				public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+					if (fragmentActivity.onOptionsItemSelected(item)) {
+						currentActionMode.finish();
+						return true;
+					} else {
+						return false;
+					}
+				}
+
+				@Override
+				public void onDestroyActionMode(ActionMode mode) {
+					currentActionMode = null;
+					selected.clear();
+					notifyDataSetChanged();
+				}
+			});
+		}
+	}
 
 	public interface OnItemClickedListener<T> {
 		void onItemClicked(T item);

@@ -420,6 +420,19 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 
 			playNow(Arrays.asList(entry));
+		} else {
+			List<Entry> songs = new ArrayList<Entry>();
+
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false)) {
+				Iterator it = entries.listIterator(entries.indexOf(entry));
+				while(it.hasNext()) {
+					songs.add((Entry) it.next());
+				}
+			} else {
+				songs.add(entry);
+			}
+
+			playNow(songs);
 		}
 	}
 

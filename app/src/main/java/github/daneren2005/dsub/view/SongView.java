@@ -38,7 +38,7 @@ import java.io.File;
  *
  * @author Sindre Mehus
  */
-public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> implements Checkable {
+public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private static final String TAG = SongView.class.getSimpleName();
 
 	private CheckedTextView checkedTextView;
@@ -290,18 +290,8 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> impleme
 	}
 
 	@Override
-	public void setChecked(boolean b) {
-		checkedTextView.setChecked(b);
-	}
-
-	@Override
-	public boolean isChecked() {
-		return checkedTextView.isChecked();
-	}
-
-	@Override
-	public void toggle() {
-		checkedTextView.toggle();
+	public void setChecked(boolean checked) {
+		checkedTextView.setChecked(checked);
 	}
 
 	public MusicDirectory.Entry getEntry() {

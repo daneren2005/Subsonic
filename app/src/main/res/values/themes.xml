@@ -51,6 +51,7 @@
 		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
 		<item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Light</item>
 		<item name="android:spinnerItemStyle">@style/DarkSpinnerItem</item>
+		<item name="windowActionModeOverlay">true</item>
 	</style>
 	<style name="Theme.DSub.Dark.Base" parent="@style/Theme.AppCompat">
 		<item name="offline_icon">@drawable/main_offline_dark</item>
@@ -102,6 +103,8 @@
 		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
 		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
 		<item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Dark</item>
+		<item name="windowActionModeOverlay">true</item>
+		<item name="actionModeBackground">?attr/colorPrimary</item>
 	</style>
 	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
 	</style>

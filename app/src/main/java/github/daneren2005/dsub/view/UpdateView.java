@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Checkable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -264,6 +265,9 @@ public abstract class UpdateView<T> extends LinearLayout {
 
 	public boolean isCheckable() {
 		return checkable;
+	}
+	public void setChecked(boolean checked) {
+
 	}
 
 	public void onClick() {

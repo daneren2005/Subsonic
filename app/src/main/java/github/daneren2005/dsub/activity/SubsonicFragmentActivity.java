@@ -838,4 +838,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			}
 		}
 	}
+
+	public Toolbar getActiveToolbar() {
+		return slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED ? nowPlayingToolbar : mainToolbar;
+	}
 }

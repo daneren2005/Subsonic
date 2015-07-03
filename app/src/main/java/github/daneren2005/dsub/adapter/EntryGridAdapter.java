@@ -41,7 +41,6 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	private ImageLoader imageLoader;
 	private boolean largeAlbums;
 	private boolean showArtist = false;
-	private boolean checkable = true;
 	private View header;
 
 	public EntryGridAdapter(Context context, List<Entry> entries, ImageLoader imageLoader, boolean largeCell) {
@@ -83,14 +82,7 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 			albumView.setObject(entry, imageLoader);
 		} else if(viewType == VIEW_TYPE_SONG) {
 			SongView songView = (SongView) view;
-			songView.setObject(entry, checkable && !entry.isVideo());
-		}
-	}
-
-	@Override
-	public void setChecked(UpdateView updateView, boolean checked) {
-		if(updateView instanceof SongView) {
-			((SongView) updateView).setChecked(checked);
+			songView.setObject(entry, checkable && !entry.isVideo() && currentActionMode != null);
 		}
 	}
 
@@ -121,9 +113,6 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 
 	public void setShowArtist(boolean showArtist) {
 		this.showArtist = showArtist;
-	}
-	public void setCheckable(boolean checkable) {
-		this.checkable = checkable;
 	}
 
 	public void removeAt(int index) {
