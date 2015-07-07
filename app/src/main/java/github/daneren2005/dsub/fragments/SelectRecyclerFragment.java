@@ -15,6 +15,7 @@
 
 package github.daneren2005.dsub.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -43,12 +44,13 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	private static final String TAG = SelectRecyclerFragment.class.getSimpleName();
 	protected RecyclerView recyclerView;
 	protected SectionAdapter<T> adapter;
-	protected BackgroundTask<List<T>> currentTask;
+	protected UpdateTask currentTask;
 	protected List<T> objects;
 	protected boolean serialize = true;
 	protected boolean largeAlbums = false;
 	protected int columns;
 	protected boolean pullToRefresh = true;
+	protected boolean backgroundUpdate = true;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -113,44 +115,30 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		if(titleRes != 0) {
 			setTitle(getTitleResource());
 		}
-		recyclerView.setVisibility(View.GONE);
+		if(backgroundUpdate) {
+			recyclerView.setVisibility(View.GONE);
+		}
 		
 		// Cancel current running task before starting another one
 		if(currentTask != null) {
 			currentTask.cancel();
 		}
 
-		currentTask = new TabBackgroundTask<List<T>>(this) {
-			@Override
-			protected List<T> doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
+		currentTask = new UpdateTask(this, refresh);
 
-				objects = new ArrayList<T>();
+		if(backgroundUpdate) {
+			currentTask.execute();
+		} else {
+			objects = new ArrayList<T>();
 
-				try {
-					objects = getObjects(musicService, refresh, this);
-				} catch (Exception x) {
-					Log.e(TAG, "Failed to load", x);
-				}
-
-				return objects;
+			try {
+				objects = getObjects(null, refresh, null);
+			} catch (Exception x) {
+				Log.e(TAG, "Failed to load", x);
 			}
 
-			@Override
-			protected void done(List<T> result) {
-				if (result != null && !result.isEmpty()) {
-					recyclerView.setAdapter(adapter = getAdapter(result));
-					
-					onFinishRefresh();
-					recyclerView.setVisibility(View.VISIBLE);
-				} else {
-					setEmpty(true);
-				}
-				
-				currentTask = null;
-			}
-		};
-		currentTask.execute();
+			currentTask.done(objects);
+		}
 	}
 
 	private void setupLayoutManager() {
@@ -164,5 +152,43 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	
 	public void onFinishRefresh() {
 		
+	}
+
+	private class UpdateTask extends TabBackgroundTask<List<T>> {
+		private boolean refresh;
+
+		public UpdateTask(SubsonicFragment fragment, boolean refresh) {
+			super(fragment);
+			this.refresh = refresh;
+		}
+
+		@Override
+		public List<T> doInBackground() throws Exception {
+			MusicService musicService = MusicServiceFactory.getMusicService(context);
+
+			objects = new ArrayList<T>();
+
+			try {
+				objects = getObjects(musicService, refresh, this);
+			} catch (Exception x) {
+				Log.e(TAG, "Failed to load", x);
+			}
+
+			return objects;
+		}
+
+		@Override
+		public void done(List<T> result) {
+			if (result != null && !result.isEmpty()) {
+				recyclerView.setAdapter(adapter = getAdapter(result));
+
+				onFinishRefresh();
+				recyclerView.setVisibility(View.VISIBLE);
+			} else {
+				setEmpty(true);
+			}
+
+			currentTask = null;
+		}
 	}
 }

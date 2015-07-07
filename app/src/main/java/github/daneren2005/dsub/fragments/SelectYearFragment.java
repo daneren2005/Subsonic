@@ -36,6 +36,13 @@ import github.daneren2005.dsub.view.UpdateView;
 
 public class SelectYearFragment extends SelectRecyclerFragment<String> {
 
+	public SelectYearFragment() {
+		super();
+		pullToRefresh = false;
+		serialize = false;
+		backgroundUpdate = false;
+	}
+
 	@Override
 	public int getOptionsMenu() {
 		return R.menu.empty;

@@ -45,6 +45,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		super();
 		pullToRefresh = false;
 		serialize = false;
+		backgroundUpdate = false;
 	}
 
 	@Override
