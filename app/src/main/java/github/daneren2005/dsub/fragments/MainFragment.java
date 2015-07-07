@@ -98,11 +98,11 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		List<List<Integer>> sections = new ArrayList<>();
 		List<String> headers = new ArrayList<>();
 
-		List<Integer> offline = Arrays.asList(R.string.main_offline);
-		sections.add(offline);
-		headers.add(null);
-
 		if (!Util.isOffline(context)) {
+			List<Integer> offline = Arrays.asList(R.string.main_offline);
+			sections.add(offline);
+			headers.add(null);
+
 			List<Integer> albums = new ArrayList<>();
 			albums.add(R.string.main_albums_newest);
 			albums.add(R.string.main_albums_random);
@@ -126,6 +126,10 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				sections.add(videos);
 				headers.add("videos");
 			}
+		} else {
+			List<Integer> online = Arrays.asList(R.string.main_online);
+			sections.add(online);
+			headers.add(null);
 		}
 
 		return new MainAdapter(context, headers, sections, this);
@@ -175,9 +179,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				SharedPreferences.Editor editor = Util.getPreferences(context).edit();
 				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
 				editor.commit();
-				
-				// TODO: Clear immediately so doesn't still show when pressing back
-				// setMostRecentCount(0);
 			}
 			
 			SubsonicFragment fragment = new SelectDirectoryFragment();
@@ -379,7 +380,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 	@Override
 	public void onItemClicked(Integer item) {
-		if(item == R.string.main_offline) {
+		if(item == R.string.main_offline || item == R.string.main_online) {
 			toggleOffline();
 		} else if (item == R.string.main_albums_newest) {
 			showAlbumList("newest");
