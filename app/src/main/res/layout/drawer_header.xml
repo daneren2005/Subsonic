@@ -4,7 +4,7 @@
 	android:layout_height="178dp"
 	android:orientation="vertical"
 	android:weightSum="1"
-	android:background="?attr/selectableItemBackground">
+	android:background="@drawable/drawer_header">
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -12,7 +12,8 @@
 		android:orientation="horizontal"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentLeft="true"
-		android:layout_alignParentStart="true">
+		android:layout_alignParentStart="true"
+		android:background="?attr/selectableItemBackground">
 
 		<LinearLayout
 			android:orientation="vertical"
@@ -24,19 +25,14 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="16dp"
-				android:textColor="?android:textColorPrimary"
-				android:textSize="14sp"
-				android:textStyle="bold"/>
+				style="?attr/actionbarTitleStyle"/>
 
 			<TextView
 				android:id="@+id/header_user_name"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="16dp"
-				android:layout_marginTop="5dp"
-				android:textColor="?android:textColorSecondary"
-				android:textSize="14sp"
-				android:textStyle="normal"/>
+				style="?attr/actionbarSubtitleStyle"/>
 		</LinearLayout>
 
 		<View
@@ -46,7 +42,7 @@
 
 		<ImageView
 			android:id="@+id/header_select_image"
-			android:src="?attr/select_server"
+			android:src="@drawable/main_select_server_dark"
 			android:layout_gravity="center_vertical"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
