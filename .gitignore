@@ -13,3 +13,4 @@ proguard_logs/
 .gradle/*
 /build/
 local.properties
+*Thumbs.db
