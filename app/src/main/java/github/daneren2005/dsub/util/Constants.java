@@ -173,6 +173,7 @@ public final class Constants {
 	public static final String MAIN_BACK_STACK = "backStackIds";
 	public static final String MAIN_BACK_STACK_SIZE = "backStackIdsSize";
 	public static final String MAIN_NOW_PLAYING = "nowPlayingId";
+	public static final String MAIN_SLIDE_PANEL_STATE = "slidePanelState";
 	public static final String FRAGMENT_LIST = "fragmentList";
 	public static final String FRAGMENT_LIST2 = "fragmentList2";
 	public static final String FRAGMENT_EXTRA = "fragmentExtra";

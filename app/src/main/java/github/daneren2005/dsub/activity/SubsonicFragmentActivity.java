@@ -90,12 +90,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	private Handler handler = new Handler();
 	private SlidingUpPanelLayout slideUpPanel;
+	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
 	private NowPlayingFragment nowPlayingFragment;
 	private Toolbar mainToolbar;
 	private Toolbar nowPlayingToolbar;
 
 	private ScheduledExecutorService executorService;
-	private View slideUpFrame;
 	private View bottomBar;
 	private ImageView coverArtView;
 	private TextView trackView;
@@ -201,7 +201,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 
 		slideUpPanel = (SlidingUpPanelLayout) findViewById(R.id.slide_up_panel);
-		slideUpPanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+		panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
 			@Override
 			public void onPanelSlide(View panel, float slideOffset) {
 
@@ -248,7 +248,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			public void onPanelHidden(View panel) {
 
 			}
-		});
+		};
+		slideUpPanel.setPanelSlideListener(panelSlideListener);
 
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
 			// Post this later so it actually runs
@@ -260,7 +261,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			}, 200);
 		}
 
-		slideUpFrame = findViewById(R.id.slide_up_frame);
 		bottomBar = findViewById(R.id.bottom_bar);
 		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
@@ -451,6 +451,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 		savedInstanceState.putString(Constants.MAIN_NOW_PLAYING, nowPlayingFragment.getTag());
+		savedInstanceState.putInt(Constants.MAIN_SLIDE_PANEL_STATE, slideUpPanel.getPanelState().hashCode());
 	}
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -461,6 +462,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		nowPlayingFragment = (NowPlayingFragment) fm.findFragmentByTag(id);
 		if(drawerToggle != null && backStack.size() > 0) {
 			drawerToggle.setDrawerIndicatorEnabled(false);
+		}
+
+		if(savedInstanceState.getInt(Constants.MAIN_SLIDE_PANEL_STATE, -1) == SlidingUpPanelLayout.PanelState.EXPANDED.hashCode()) {
+			panelSlideListener.onPanelExpanded(null);
 		}
 	}
 
