@@ -92,6 +92,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private SlidingUpPanelLayout slideUpPanel;
 	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
 	private NowPlayingFragment nowPlayingFragment;
+	private SubsonicFragment secondaryFragment;
 	private Toolbar mainToolbar;
 	private Toolbar nowPlayingToolbar;
 
@@ -484,7 +485,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	@Override
 	public void onBackPressed() {
-		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && secondaryFragment == null) {
 			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 		} else if(onBackPressedSupport()) {
 			if(!Util.disableExitPrompt(this) && lastBackPressTime < (System.currentTimeMillis() - 4000)) {
@@ -493,6 +494,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			} else {
 				finish();
 			}
+		}
+	}
+
+	@Override
+	public boolean onBackPressedSupport() {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			removeCurrent();
+			return false;
+		} else {
+			return super.onBackPressedSupport();
 		}
 	}
 
@@ -507,16 +518,50 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	@Override
 	public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
-		super.replaceFragment(fragment, tag, replaceCurrent);
-		if(drawerToggle != null) {
-			drawerToggle.setDrawerIndicatorEnabled(false);
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			secondaryFragment = fragment;
+			nowPlayingFragment.setPrimaryFragment(false);
+			secondaryFragment.setPrimaryFragment(true);
+			supportInvalidateOptionsMenu();
+
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+			trans.hide(nowPlayingFragment);
+			trans.add(R.id.now_playing_fragment_container, secondaryFragment, tag + "");
+			trans.commit();
+		} else {
+			super.replaceFragment(fragment, tag, replaceCurrent);
+			if (drawerToggle != null) {
+				drawerToggle.setDrawerIndicatorEnabled(false);
+			}
 		}
 	}
 	@Override
 	public void removeCurrent() {
-		super.removeCurrent();
-		if(drawerToggle != null && backStack.isEmpty()) {
-			drawerToggle.setDrawerIndicatorEnabled(true);
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && secondaryFragment != null) {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
+			trans.remove(secondaryFragment);
+			trans.show(nowPlayingFragment);
+			trans.commit();
+
+			secondaryFragment = null;
+			nowPlayingFragment.setPrimaryFragment(true);
+			supportInvalidateOptionsMenu();
+		} else {
+			super.removeCurrent();
+			if (drawerToggle != null && backStack.isEmpty()) {
+				drawerToggle.setDrawerIndicatorEnabled(true);
+			}
+		}
+	}
+
+	@Override
+	public void setTitle(CharSequence title) {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			getSupportActionBar().setTitle(title);
+		} else {
+			super.setTitle(title);
 		}
 	}
 

@@ -104,6 +104,7 @@ public class EqualizerFragment extends SubsonicFragment {
 		});
 
 		setTitle(R.string.equalizer_label);
+		setSubtitle(null);
 
 		return rootView;
 	}
