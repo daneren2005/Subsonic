@@ -16,16 +16,21 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -368,6 +373,17 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
 					notifyDataSetChanged();
 					mode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+						TypedValue typedValue = new TypedValue();
+						Resources.Theme theme = context.getTheme();
+						theme.resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+						int colorPrimaryDark = typedValue.data;
+
+						Window window = ((SubsonicFragmentActivity) context).getWindow();
+						window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+						window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+						window.setStatusBarColor(colorPrimaryDark);
+					}
 					return true;
 				}
 
