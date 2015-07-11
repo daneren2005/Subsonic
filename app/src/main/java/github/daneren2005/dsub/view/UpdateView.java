@@ -27,7 +27,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Checkable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +38,7 @@ import java.util.WeakHashMap;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 
 public abstract class UpdateView<T> extends LinearLayout {
@@ -240,6 +240,9 @@ public abstract class UpdateView<T> extends LinearLayout {
 		if(starButton != null) {
 			if(isStarred) {
 				if(!starred) {
+					if(starButton.getDrawable() == null) {
+						starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star, R.attr.colorPrimary));
+					}
 					starButton.setVisibility(View.VISIBLE);
 					starred = true;
 				}

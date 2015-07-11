@@ -67,10 +67,10 @@
 
 				<ImageButton
 					android:id="@+id/album_star"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_width="@dimen/Star.Small"
+					android:layout_height="@dimen/Star.Small"
+					android:scaleType="fitCenter"
 					android:layout_gravity="right|center_vertical"
-					android:src="@drawable/ic_stat_star"
 					android:background="@android:color/transparent"
 					android:focusable="false"
 					android:visibility="gone"/>

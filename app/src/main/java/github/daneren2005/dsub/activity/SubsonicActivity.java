@@ -67,6 +67,7 @@ import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.HeadphoneListenerService;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
@@ -197,6 +198,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		if (theme != null && !theme.equals(Util.getTheme(this)) || fullScreen != Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false)) {
 			restart();
 			overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+			DrawableTint.wipeTintCache();
 		}
 
 		populateTabs();

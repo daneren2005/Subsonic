@@ -29,6 +29,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
@@ -198,6 +199,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		if(item.isStarred()) {
 			if(!starred) {
+				if(starButton.getDrawable() == null) {
+					starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star, R.attr.colorPrimary));
+				}
 				starButton.setVisibility(View.VISIBLE);
 				starred = true;
 			}

@@ -6,4 +6,5 @@
 	<dimen name="AlbumArt.Header">120dip</dimen>
 	<dimen name="BottomBar.Text.Major">13sp</dimen>
 	<dimen name="BottomBar.Text.Minor">12sp</dimen>
+	<dimen name="Star.Small">20dp</dimen>
 </resources>
