@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="appwidget_text">#FFFFFF</color>
-    <color name="notificationArtist">#434343</color>
-    <color name="notificationTitle">#000000</color>
+	<color name="notificationArtist">#bababa</color>
+	<color name="notificationTitle">#dddddd</color>
 	<color name="overlayColor">#80000000</color>
 
 	<color name="holo_blue_light">#ff33b5e5</color>
