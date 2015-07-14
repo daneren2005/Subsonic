@@ -29,6 +29,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -82,6 +83,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private static final int MENU_GROUP_SERVER = 10;
 	private static final int MENU_ITEM_SERVER_BASE = 100;
 
+	private final List<Runnable> afterServiceAvailable = new ArrayList<>();
 	private boolean drawerIdle = true;
 	private boolean destroyed = false;
 	private boolean finished = false;
@@ -91,6 +93,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	protected View secondaryContainer;
 	protected boolean tv = false;
 	protected boolean touchscreen = true;
+	protected Handler handler = new Handler();
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
 	ViewGroup rootView;
@@ -871,13 +874,28 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		for (int i = 0; i < 5; i++) {
 			DownloadService downloadService = DownloadService.getInstance();
 			if (downloadService != null) {
-				return downloadService;
+				break;
 			}
 			Log.w(TAG, "DownloadService not running. Attempting to start it.");
 			startService(new Intent(this, DownloadService.class));
 			Util.sleepQuietly(50L);
 		}
-		return DownloadService.getInstance();
+
+		final DownloadService downloadService = DownloadService.getInstance();
+		if(downloadService != null && afterServiceAvailable.size() > 0) {
+			for(Runnable runnable: afterServiceAvailable) {
+				handler.post(runnable);
+			}
+			afterServiceAvailable.clear();
+		}
+		return downloadService;
+	}
+	public void runWhenServiceAvailable(Runnable runnable) {
+		if(getDownloadService() != null) {
+			runnable.run();
+		} else {
+			afterServiceAvailable.add(runnable);
+		}
 	}
 
 	public static String getThemeName() {

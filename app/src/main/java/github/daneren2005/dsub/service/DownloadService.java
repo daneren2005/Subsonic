@@ -139,6 +139,7 @@ public class DownloadService extends Service {
 	private boolean removePlayed;
 	private boolean shufflePlay;
 	private boolean artistRadio;
+	private final List<OnSongChangedListener> onSongChangedListeners = new ArrayList<>();
 	private long revision;
 	private static DownloadService instance;
 	private String suggestedPlaylistName;
@@ -362,7 +363,6 @@ public class DownloadService extends Service {
 				}
 			}
 			setNextPlaying();
-			revision++;
 		} else {
 			int size = size();
 			int index = getCurrentPlayingIndex();
@@ -378,8 +378,9 @@ public class DownloadService extends Service {
 			if(!autoplay && (size - 1) == index) {
 				setNextPlaying();
 			}
-			revision++;
 		}
+		revision++;
+		onSongsChanged();
 		updateRemotePlaylist();
 
 		if(shuffle) {
@@ -543,6 +544,7 @@ public class DownloadService extends Service {
 			currentPlayingIndex = 0;
 		}
 		revision++;
+		onSongsChanged();
 		lifecycleSupport.serializeDownloadQueue();
 		updateRemotePlaylist();
 		setNextPlaying();
@@ -694,7 +696,7 @@ public class DownloadService extends Service {
 
 		reset();
 		downloadList.clear();
-		revision++;
+		onSongsChanged();
 		if (currentDownloading != null && !backgroundDownloadList.contains(currentDownloading)) {
 			currentDownloading.cancelDownload();
 			currentDownloading = null;
@@ -733,6 +735,7 @@ public class DownloadService extends Service {
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 		backgroundDownloadList.remove(downloadFile);
 		revision++;
+		onSongsChanged();
 		lifecycleSupport.serializeDownloadQueue();
 		updateRemotePlaylist();
 		if(downloadFile == nextPlaying) {
@@ -789,6 +792,7 @@ public class DownloadService extends Service {
 			Util.broadcastNewTrackInfo(this, null);
 			Notifications.hidePlayingNotification(this, this, handler);
 		}
+		onSongChanged();
 	}
 
 	synchronized void setNextPlaying() {
@@ -1284,6 +1288,7 @@ public class DownloadService extends Service {
 			positionCache.stop();
 			positionCache = null;
 		}
+		onStateUpdate();
 	}
 
 	private class PositionCache implements Runnable {
@@ -1318,6 +1323,7 @@ public class DownloadService extends Service {
 							subtractNextPosition = 0;
 						}
 					}
+					onSongProgress();
 					Thread.sleep(1000L);
 				}
 				catch(Exception e) {
@@ -1989,10 +1995,16 @@ public class DownloadService extends Service {
 	}
 
 	private synchronized void checkRemovePlayed() {
+		boolean changed = false;
 		while(currentPlayingIndex > 0) {
 			downloadList.remove(0);
 			currentPlayingIndex = downloadList.indexOf(currentPlaying);
+			changed = true;
+		}
+
+		if(changed) {
 			revision++;
+			onSongsChanged();
 		}
 	}
 
@@ -2030,6 +2042,7 @@ public class DownloadService extends Service {
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 
 		if (revisionBefore != revision) {
+			onSongsChanged();
 			updateRemotePlaylist();
 		}
 
@@ -2071,6 +2084,7 @@ public class DownloadService extends Service {
 		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 
 		if (revisionBefore != revision) {
+			onSongsChanged();
 			updateRemotePlaylist();
 		}
 
@@ -2338,6 +2352,71 @@ public class DownloadService extends Service {
 		}
 	}
 
+	public void addOnSongChangedListener(OnSongChangedListener listener) {
+		addOnSongChangedListener(listener, false);
+	}
+	public void addOnSongChangedListener(OnSongChangedListener listener, boolean run) {
+		int index = onSongChangedListeners.indexOf(listener);
+		if(index == -1) {
+			onSongChangedListeners.add(listener);
+		}
+
+		if(run) {
+			onSongsChanged();
+			onSongProgress();
+			onStateUpdate();
+		}
+	}
+	public void removeOnSongChangeListener(OnSongChangedListener listener) {
+		int index = onSongChangedListeners.indexOf(listener);
+		if(index != -1) {
+			onSongChangedListeners.remove(index);
+		}
+	}
+
+	private void onSongChanged() {
+		for(final OnSongChangedListener listener: onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					listener.onSongChanged(currentPlaying, currentPlayingIndex);
+				}
+			});
+		}
+	}
+	private void onSongsChanged() {
+		for(final OnSongChangedListener listener: onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex);
+				}
+			});
+		}
+	}
+	private void onSongProgress() {
+		final Integer duration = getPlayerDuration();
+		final boolean isSeekable = isSeekable();
+		for(final OnSongChangedListener listener: onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					listener.onSongProgress(currentPlaying, cachedPosition, duration, isSeekable);
+				}
+			});
+		}
+	}
+	private void onStateUpdate() {
+		for(final OnSongChangedListener listener: onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					listener.onStateUpdate(currentPlaying, playerState);
+				}
+			});
+		}
+	}
+
 	private class BufferTask extends SilentBackgroundTask<Void> {
 		private final DownloadFile downloadFile;
 		private final int position;
@@ -2440,5 +2519,12 @@ public class DownloadService extends Service {
 		public String toString() {
 			return "CheckCompletionTask (" + downloadFile + ")";
 		}
+	}
+
+	public interface OnSongChangedListener {
+		void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex);
+		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex);
+		void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable);
+		void onStateUpdate(DownloadFile downloadFile, PlayerState playerState);
 	}
 }

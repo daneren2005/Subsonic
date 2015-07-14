@@ -45,6 +45,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -82,13 +83,12 @@ import github.daneren2005.dsub.view.ChangeLog;
 /**
  * Created by Scott on 10/14/13.
  */
-public class SubsonicFragmentActivity extends SubsonicActivity {
+public class SubsonicFragmentActivity extends SubsonicActivity implements DownloadService.OnSongChangedListener {
 	private static String TAG = SubsonicFragmentActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
 	private static boolean sessionInitialized = false;
 	private static long ALLOWED_SKEW = 30000L;
 
-	private Handler handler = new Handler();
 	private SlidingUpPanelLayout slideUpPanel;
 	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
 	private NowPlayingFragment nowPlayingFragment;
@@ -96,7 +96,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	private Toolbar mainToolbar;
 	private Toolbar nowPlayingToolbar;
 
-	private ScheduledExecutorService executorService;
 	private View bottomBar;
 	private ImageView coverArtView;
 	private TextView trackView;
@@ -292,11 +291,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 						getDownloadService().previous();
 						return null;
 					}
-
-					@Override
-					protected void done(Void result) {
-						update();
-					}
 				}.execute();
 			}
 		});
@@ -317,11 +311,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 						return null;
 					}
-
-					@Override
-					protected void done(Void result) {
-						update();
-					}
 				}.execute();
 			}
 		});
@@ -339,11 +328,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 						getDownloadService().next();
 						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						update();
 					}
 				}.execute();
 			}
@@ -406,18 +390,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	public void onResume() {
 		super.onResume();
 
-		Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						update();
-					}
-				});
-			}
-		};
-
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
@@ -437,15 +409,21 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		}
 
 		createAccount();
-
-		executorService = Executors.newSingleThreadScheduledExecutor();
-		executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
+		runWhenServiceAvailable(new Runnable() {
+			@Override
+			public void run() {
+				getDownloadService().addOnSongChangedListener(SubsonicFragmentActivity.this, true);
+			}
+		});
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		executorService.shutdown();
+		DownloadService downloadService = getDownloadService();
+		if(downloadService != null) {
+			downloadService.removeOnSongChangeListener(this);
+		}
 	}
 
 	@Override
@@ -636,54 +614,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		} else {
 			return new MainFragment();
 		}
-	}
-
-	private void update() {
-		DownloadService downloadService = getDownloadService();
-		if (downloadService == null) {
-			return;
-		}
-
-		DownloadFile current = downloadService.getCurrentPlaying();
-		PlayerState state = downloadService.getPlayerState();
-		if(current == currentPlaying && state == currentState) {
-			if(current == null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-				slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-			}
-			return;
-		} else {
-			currentPlaying = current;
-			currentState = state;
-		}
-
-		MusicDirectory.Entry song = null;
-		if (current != null) {
-			song = current.getSong();
-			trackView.setText(song.getTitle());
-			artistView.setText(song.getArtist());
-
-			if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
-				slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-			}
-		} else if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-		}
-
-		if (coverArtView != null) {
-			int height = coverArtView.getHeight();
-			if (height <= 0) {
-				int[] attrs = new int[]{R.attr.actionBarSize};
-				TypedArray typedArray = this.obtainStyledAttributes(attrs);
-				height = typedArray.getDimensionPixelSize(0, 0);
-				typedArray.recycle();
-			}
-			getImageLoader().loadImage(coverArtView, song, false, height, false);
-		}
-
-		int[] attrs = new int[]{(state == PlayerState.STARTED) ? R.attr.actionbar_pause : R.attr.actionbar_start};
-		TypedArray typedArray = this.obtainStyledAttributes(attrs);
-		startButton.setImageResource(typedArray.getResourceId(0, 0));
-		typedArray.recycle();
 	}
 
 	public void checkUpdates() {
@@ -891,5 +821,63 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	public Toolbar getActiveToolbar() {
 		return slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED ? nowPlayingToolbar : mainToolbar;
+	}
+
+	@Override
+	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
+		DownloadService downloadService = getDownloadService();
+		PlayerState state = downloadService.getPlayerState();
+		if(currentPlaying == this.currentPlaying && state == currentState) {
+			if(currentPlaying == null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+				slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+			}
+			return;
+		} else {
+			this.currentPlaying = currentPlaying;
+		}
+
+		MusicDirectory.Entry song = null;
+		if (currentPlaying != null) {
+			song = currentPlaying.getSong();
+			trackView.setText(song.getTitle());
+			artistView.setText(song.getArtist());
+
+			if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
+				slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+			}
+		} else if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+		}
+
+		if (coverArtView != null) {
+			int height = coverArtView.getHeight();
+			if (height <= 0) {
+				int[] attrs = new int[]{R.attr.actionBarSize};
+				TypedArray typedArray = this.obtainStyledAttributes(attrs);
+				height = typedArray.getDimensionPixelSize(0, 0);
+				typedArray.recycle();
+			}
+			getImageLoader().loadImage(coverArtView, song, false, height, false);
+		}
+	}
+
+	@Override
+	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
+		if(this.currentPlaying != currentPlaying) {
+			onSongChanged(currentPlaying, currentPlayingIndex);
+		}
+	}
+
+	@Override
+	public void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable) {
+
+	}
+
+	@Override
+	public void onStateUpdate(DownloadFile downloadFile, PlayerState playerState) {
+		int[] attrs = new int[]{(playerState == PlayerState.STARTED) ? R.attr.actionbar_pause : R.attr.actionbar_start};
+		TypedArray typedArray = this.obtainStyledAttributes(attrs);
+		startButton.setImageResource(typedArray.getResourceId(0, 0));
+		typedArray.recycle();
 	}
 }
