@@ -34,6 +34,9 @@ public class DrawableTint {
 	private static final Map<Integer, Integer> attrMap = new HashMap<>();
 	private static final WeakHashMap<Integer, Drawable> tintedDrawables = new WeakHashMap<>();
 
+	public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableRes) {
+		return getTintedDrawable(context, drawableRes, R.attr.colorAccent);
+	}
 	public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableRes, @AttrRes int colorAttr) {
 		if(tintedDrawables.containsKey(drawableRes)) {
 			return tintedDrawables.get(drawableRes);

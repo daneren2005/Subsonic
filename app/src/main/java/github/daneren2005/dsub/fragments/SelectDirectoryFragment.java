@@ -40,6 +40,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 
 import java.io.Serializable;
@@ -1435,14 +1436,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		final ImageButton starButton = (ImageButton) header.findViewById(R.id.select_album_star);
 		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true) && artistInfo == null) {
-			starButton.setImageResource(directory.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+			if(directory.isStarred()) {
+				starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
+			} else {
+				starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
+			}
 			starButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					toggleStarred(directory, new OnStarChange() {
 						@Override
 						void starChange(boolean starred) {
-							starButton.setImageResource(directory.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+							if(directory.isStarred()) {
+								starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
+								starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
+							} else {
+								starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
+							}
 						}
 					});
 				}

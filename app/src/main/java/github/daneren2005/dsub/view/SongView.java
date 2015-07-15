@@ -200,7 +200,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		if(item.isStarred()) {
 			if(!starred) {
 				if(starButton.getDrawable() == null) {
-					starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star, R.attr.colorPrimary));
+					starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
 				}
 				starButton.setVisibility(View.VISIBLE);
 				starred = true;
@@ -257,6 +257,10 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		if(isBookmarked) {
 			if(!bookmarked) {
+				if(bookmarkButton.getDrawable() == null) {
+					bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
+				}
+
 				bookmarkButton.setVisibility(View.VISIBLE);
 				bookmarked = true;
 			}

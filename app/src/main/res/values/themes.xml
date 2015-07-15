@@ -33,6 +33,7 @@
 		<item name="rating_bad">@drawable/ic_action_rating_bad_light</item>
 		<item name="rating_good">@drawable/ic_action_rating_good_light</item>
 		<item name="radio">@drawable/ic_menu_radio_dark</item>
+		<item name="star_outline">@drawable/ic_toggle_star_outline_light</item>
 		<item name="drawerHome">@drawable/main_offline_light</item>
 		<item name="drawerLibrary">@drawable/ic_menu_library_light</item>
 		<item name="drawerPlaylists">@drawable/ic_menu_playlist_light</item>
@@ -87,6 +88,7 @@
 		<item name="rating_bad">@drawable/ic_action_rating_bad_dark</item>
 		<item name="rating_good">@drawable/ic_action_rating_good_dark</item>
 		<item name="radio">@drawable/ic_menu_radio_dark</item>
+		<item name="star_outline">@drawable/ic_toggle_star_outline_dark</item>
 		<item name="drawerHome">@drawable/main_offline_dark</item>
 		<item name="drawerLibrary">@drawable/ic_menu_library_dark</item>
 		<item name="drawerPlaylists">@drawable/ic_menu_playlist_dark</item>

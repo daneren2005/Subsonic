@@ -32,6 +32,7 @@
 	<attr name="rating_bad" format="reference"/>
 	<attr name="rating_good" format="reference"/>
 	<attr name="radio" format="reference"/>
+	<attr name="star_outline" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
 	<attr name="drawerHome" format="reference"/>
 	<attr name="drawerLibrary" format="reference"/>

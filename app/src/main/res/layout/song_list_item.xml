@@ -44,7 +44,6 @@
 				android:layout_width="24dp"
 				android:layout_height="24dp"
 				android:layout_gravity="right|center_vertical"
-				android:src="@drawable/ic_menu_bookmark_selected"
 				android:background="@null"
 				android:focusable="false"
 				android:scaleType="fitCenter"

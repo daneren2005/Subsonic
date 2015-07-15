@@ -1177,15 +1177,6 @@ public final class Util {
         }
     }
 
-	public static int getAttribute(Context context, int attr) {
-		int res;
-		int[] attrs = new int[] {attr};
-		TypedArray typedArray = context.obtainStyledAttributes(attrs);
-		res = typedArray.getResourceId(0, 0);
-		typedArray.recycle();
-		return res;
-	}
-
     public static void registerMediaButtonEventReceiver(Context context) {
 
         // Only do it if enabled in the settings.
