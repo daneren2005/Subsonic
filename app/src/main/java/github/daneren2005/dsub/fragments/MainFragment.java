@@ -165,6 +165,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		}
 		
 		UserUtil.seedCurrentUser(context);
+		context.updateDrawerHeader();
 	}
 
 	private void showAlbumList(String type) {

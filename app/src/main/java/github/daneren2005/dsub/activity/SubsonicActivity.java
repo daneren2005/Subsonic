@@ -102,6 +102,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	NavigationView drawerList;
 	View drawerHeader;
 	ImageView drawerUserAvatar;
+	ImageView drawerHeaderToggle;
 	TextView drawerServerName;
 	TextView drawerUserName;
 	int lastSelectedPosition = 0;
@@ -323,6 +324,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 		});
 
+		drawerHeaderToggle = (ImageView) drawerHeader.findViewById(R.id.header_select_image);
 		drawerServerName = (TextView) drawerHeader.findViewById(R.id.header_server_name);
 		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
 
@@ -935,10 +937,21 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			updateDrawerHeader();
 		}
 	}
-	private void updateDrawerHeader() {
-		drawerServerName.setText(Util.getServerName(this));
-		drawerUserName.setText(UserUtil.getCurrentUsername(this));
-		getImageLoader().loadAvatar(this, drawerUserAvatar, UserUtil.getCurrentUsername(this));
+	public void updateDrawerHeader() {
+		if(Util.isOffline(this)) {
+			drawerServerName.setText(R.string.select_album_offline);
+			drawerUserName.setText("");
+			drawerUserAvatar.setVisibility(View.GONE);
+			drawerHeader.setClickable(false);
+			drawerHeaderToggle.setVisibility(View.GONE);
+		} else {
+			drawerServerName.setText(Util.getServerName(this));
+			drawerUserName.setText(UserUtil.getCurrentUsername(this));
+			drawerUserAvatar.setVisibility(View.VISIBLE);
+			getImageLoader().loadAvatar(this, drawerUserAvatar, UserUtil.getCurrentUsername(this));
+			drawerHeader.setClickable(true);
+			drawerHeaderToggle.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void setUncaughtExceptionHandler() {
