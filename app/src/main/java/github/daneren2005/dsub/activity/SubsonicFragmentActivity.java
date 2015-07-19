@@ -825,13 +825,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	@Override
 	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
-		DownloadService downloadService = getDownloadService();
-		PlayerState state = downloadService.getPlayerState();
-		if(currentPlaying == this.currentPlaying && state == currentState) {
-			return;
-		} else {
-			this.currentPlaying = currentPlaying;
-		}
+		this.currentPlaying = currentPlaying;
 
 		MusicDirectory.Entry song = null;
 		if (currentPlaying != null) {
@@ -857,7 +851,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	@Override
 	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
-		if(this.currentPlaying != currentPlaying) {
+		if(this.currentPlaying != currentPlaying || currentPlaying == null) {
 			onSongChanged(currentPlaying, currentPlayingIndex);
 		}
 	}
