@@ -603,10 +603,6 @@ public class DownloadService extends Service {
 		return downloadFile;
 	}
 
-	public synchronized void clear() {
-		clear(true);
-	}
-
 	public synchronized void clearBackground() {
 		if(currentDownloading != null && backgroundDownloadList.contains(currentDownloading)) {
 			currentDownloading.cancelDownload();
@@ -668,6 +664,9 @@ public class DownloadService extends Service {
 		return downloadList.size();
 	}
 
+	public synchronized void clear() {
+		clear(true);
+	}
 	public synchronized void clear(boolean serialize) {
 		// Delete podcast if fully listened to
 		int position = getPlayerPosition();
@@ -2375,43 +2374,55 @@ public class DownloadService extends Service {
 	}
 
 	private void onSongChanged() {
+		final long atRevision = revision;
 		for(final OnSongChangedListener listener: onSongChangedListeners) {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					listener.onSongChanged(currentPlaying, currentPlayingIndex);
+					if(revision == atRevision) {
+						listener.onSongChanged(currentPlaying, currentPlayingIndex);
+					}
 				}
 			});
 		}
 	}
 	private void onSongsChanged() {
+		final long atRevision = revision;
 		for(final OnSongChangedListener listener: onSongChangedListeners) {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex);
+					if(revision == atRevision) {
+						listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex);
+					}
 				}
 			});
 		}
 	}
 	private void onSongProgress() {
+		final long atRevision = revision;
 		final Integer duration = getPlayerDuration();
 		final boolean isSeekable = isSeekable();
 		for(final OnSongChangedListener listener: onSongChangedListeners) {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					listener.onSongProgress(currentPlaying, cachedPosition, duration, isSeekable);
+					if(revision == atRevision) {
+						listener.onSongProgress(currentPlaying, cachedPosition, duration, isSeekable);
+					}
 				}
 			});
 		}
 	}
 	private void onStateUpdate() {
+		final long atRevision = revision;
 		for(final OnSongChangedListener listener: onSongChangedListeners) {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					listener.onStateUpdate(currentPlaying, playerState);
+					if(revision == atRevision) {
+						listener.onStateUpdate(currentPlaying, playerState);
+					}
 				}
 			});
 		}
