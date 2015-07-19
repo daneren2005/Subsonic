@@ -1253,7 +1253,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			songTitleTextView.setText(song.getTitle());
 			getImageLoader().loadImage(albumArtImageView, song, true, true);
 			starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, currentPlayingSize));
+			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
 
 			int badRating, goodRating, bookmark;
 			if(song.getRating() == 1) {
