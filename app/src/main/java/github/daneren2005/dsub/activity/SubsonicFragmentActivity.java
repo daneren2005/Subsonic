@@ -828,9 +828,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		DownloadService downloadService = getDownloadService();
 		PlayerState state = downloadService.getPlayerState();
 		if(currentPlaying == this.currentPlaying && state == currentState) {
-			if(currentPlaying == null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-				slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-			}
 			return;
 		} else {
 			this.currentPlaying = currentPlaying;
@@ -841,12 +838,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			song = currentPlaying.getSong();
 			trackView.setText(song.getTitle());
 			artistView.setText(song.getArtist());
-
-			if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.HIDDEN) {
-				slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-			}
-		} else if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+		} else {
+			trackView.setText(R.string.main_title);
+			artistView.setText(R.string.main_artist);
 		}
 
 		if (coverArtView != null) {
