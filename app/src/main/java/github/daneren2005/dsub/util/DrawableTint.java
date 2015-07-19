@@ -42,6 +42,13 @@ public class DrawableTint {
 			return tintedDrawables.get(drawableRes);
 		}
 
+		int color = getColorRes(context, colorAttr);
+		Drawable background = context.getResources().getDrawable(drawableRes);
+		background.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+		tintedDrawables.put(drawableRes, background);
+		return background;
+	}
+	public static int getColorRes(Context context, @AttrRes int colorAttr) {
 		int color;
 		if(attrMap.containsKey(colorAttr)) {
 			color = attrMap.get(colorAttr);
@@ -53,10 +60,7 @@ public class DrawableTint {
 			attrMap.put(colorAttr, color);
 		}
 
-		Drawable background = context.getResources().getDrawable(drawableRes);
-		background.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-		tintedDrawables.put(drawableRes, background);
-		return background;
+		return color;
 	}
 	public static int getDrawableRes(Context context, @AttrRes int drawableAttr) {
 		if(attrMap.containsKey(drawableAttr)) {
