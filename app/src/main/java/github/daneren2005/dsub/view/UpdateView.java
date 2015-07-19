@@ -20,6 +20,7 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
@@ -64,6 +65,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 	protected int isRated = 0;
 	protected int rating = 0;
 	protected SilentBackgroundTask<Void> imageTask = null;
+	protected Drawable startBackgroundDrawable;
 	
 	protected final boolean autoUpdate;
 	protected boolean checkable;
@@ -270,7 +272,14 @@ public abstract class UpdateView<T> extends LinearLayout {
 		return checkable;
 	}
 	public void setChecked(boolean checked) {
-
+		View child = getChildAt(0);
+		if (checked && startBackgroundDrawable == null) {
+			startBackgroundDrawable = child.getBackground();
+			child.setBackgroundColor(DrawableTint.getColorRes(context, R.attr.colorPrimary));
+		} else if (!checked && startBackgroundDrawable != null) {
+			child.setBackgroundDrawable(startBackgroundDrawable);
+			startBackgroundDrawable = null;
+		}
 	}
 
 	public void onClick() {

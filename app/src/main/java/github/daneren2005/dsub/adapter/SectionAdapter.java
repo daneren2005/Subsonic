@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,8 +53,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	protected boolean singleSectionHeader;
 	protected OnItemClickedListener<T> onItemClickedListener;
 	protected List<T> selected = new ArrayList<>();
+	protected List<UpdateView> selectedViews = new ArrayList<>();
 	protected ActionMode currentActionMode;
-	protected boolean checkable = true;
+	protected boolean checkable = false;
 
 	protected SectionAdapter() {}
 	public SectionAdapter(Context context, List<T> section) {
@@ -101,19 +103,23 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					public void onClick(View v) {
 						T item = holder.getItem();
 						updateView.onClick();
-						if (updateView.isCheckable() && currentActionMode != null) {
-							if (selected.contains(item)) {
-								selected.remove(item);
-								setChecked(updateView, false);
-							} else {
-								selected.add(item);
-								setChecked(updateView, true);
-							}
+						if (currentActionMode != null) {
+							if(updateView.isCheckable()) {
+								if (selected.contains(item)) {
+									selected.remove(item);
+									selectedViews.remove(updateView);
+									setChecked(updateView, false);
+								} else {
+									selected.add(item);
+									selectedViews.add(updateView);
+									setChecked(updateView, true);
+								}
 
-							if(selected.isEmpty()) {
-								currentActionMode.finish();
-							} else {
-								currentActionMode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
+								if (selected.isEmpty()) {
+									currentActionMode.finish();
+								} else {
+									currentActionMode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
+								}
 							}
 						} else if (onItemClickedListener != null) {
 							onItemClickedListener.onItemClicked(item);
@@ -149,7 +155,11 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 						updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
 							@Override
 							public boolean onLongClick(View v) {
-								startActionMode(holder);
+								if(currentActionMode == null) {
+									startActionMode(holder);
+								} else {
+									updateView.getChildAt(0).performClick();
+								}
 								return true;
 							}
 						});
@@ -321,10 +331,12 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 			if(singleSectionHeader) {
 				index++;
 			}
-
-			this.notifyItemChanged(index);
 		}
 		selected.clear();
+
+		for(UpdateView updateView: selectedViews) {
+			updateView.setChecked(false);
+		}
 	}
 
 	public void removeItem(T item) {
@@ -369,9 +381,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
 					T item = holder.getItem();
 					selected.add(item);
+					selectedViews.add(updateView);
 					setChecked(updateView, true);
 
-					notifyDataSetChanged();
 					mode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
 					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 						TypedValue typedValue = new TypedValue();
@@ -406,7 +418,10 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 				public void onDestroyActionMode(ActionMode mode) {
 					currentActionMode = null;
 					selected.clear();
-					notifyDataSetChanged();
+					for(UpdateView<T> updateView: selectedViews) {
+						updateView.setChecked(false);
+					}
+					selectedViews.clear();
 
 					Window window = ((SubsonicFragmentActivity) context).getWindow();
 					window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

@@ -42,7 +42,6 @@ import java.io.File;
 public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private static final String TAG = SongView.class.getSimpleName();
 
-	private CheckedTextView checkedTextView;
 	private TextView titleTextView;
 	private TextView artistTextView;
 	private TextView durationTextView;
@@ -71,7 +70,6 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
-		checkedTextView = (CheckedTextView) findViewById(R.id.song_check);
 		titleTextView = (TextView) findViewById(R.id.song_title);
 		artistTextView = (TextView) findViewById(R.id.song_artist);
 		durationTextView = (TextView) findViewById(R.id.song_duration);
@@ -138,7 +136,6 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		titleTextView.setText(title);
 		artistTextView.setText(artist);
-		checkedTextView.setVisibility(checkable ? View.VISIBLE : View.GONE);
 
 		this.setBackgroundColor(0x00000000);
 		ratingBar.setVisibility(View.GONE);
@@ -191,7 +188,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	@Override
 	protected void update() {
 		if(loaded) {
-			setObjectImpl(item, checkedTextView.getVisibility() == View.VISIBLE);
+			setObjectImpl(item, item2);
 		}
 		if (downloadService == null || downloadFile == null) {
 			return;
@@ -295,11 +292,6 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 			rating = isRated;
 		}
-	}
-
-	@Override
-	public void setChecked(boolean checked) {
-		checkedTextView.setChecked(checked);
 	}
 
 	public MusicDirectory.Entry getEntry() {

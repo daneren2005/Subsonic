@@ -6,14 +6,6 @@
 		android:layout_height="?android:attr/listPreferredItemHeight"
 		android:background="?attr/selectableItemBackground">
 
-    <CheckedTextView
-            android:id="@+id/song_check"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center_vertical"
-            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-            android:paddingLeft="3dip"/>
-
     <LinearLayout android:orientation="vertical"
                   android:layout_width="0dip"
                   android:layout_height="wrap_content"

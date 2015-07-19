@@ -59,6 +59,7 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 				showArtist = true;
 			}
 		}
+		checkable = true;
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 			albumView.setObject(entry, imageLoader);
 		} else if(viewType == VIEW_TYPE_SONG) {
 			SongView songView = (SongView) view;
-			songView.setObject(entry, checkable && !entry.isVideo() && currentActionMode != null);
+			songView.setObject(entry, checkable && !entry.isVideo());
 		}
 	}
 

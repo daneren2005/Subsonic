@@ -301,7 +301,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				entryGridAdapter.clearSelected();
 				return true;
 			case R.id.menu_add_playlist:
-				List<Entry> songs = getSelectedSongs();
+				List<Entry> songs = getSelectedEntries();
 				if(songs.isEmpty()) {
 					songs = entries;
 				}
@@ -823,7 +823,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		playNow(shuffle, append, false);
 	}
 	private void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
-		List<Entry> songs = getSelectedSongs();
+		List<Entry> songs = getSelectedEntries();
 		if(!songs.isEmpty()) {
 			download(songs, append, false, !append, playNext, shuffle);
 			entryGridAdapter.clearSelected();
@@ -844,7 +844,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 	}
 
-	private List<Entry> getSelectedSongs() {
+	private List<Entry> getSelectedEntries() {
 		return entryGridAdapter.getSelected();
 	}
 
@@ -859,7 +859,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		return indexes;
 	}
 
-	private void download(final List<Entry> songs, final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle) {
+	private void download(final List<Entry> entries, final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle) {
 		if (getDownloadService() == null) {
 			return;
 		}
@@ -869,28 +869,30 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		// Conditions for using play now button
 		if(!append && !save && autoplay && !playNext && !shuffle) {
 			// Call playNow which goes through and tries to use bookmark information
-			playNow(songs, playlistName, playlistId);
+			playNow(entries, playlistName, playlistId);
 			return;
 		}
 		
-		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
+		RecursiveLoader onValid = new RecursiveLoader(context) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Boolean doInBackground() throws Throwable {
 				if (!append) {
 					getDownloadService().clear();
 				}
+				getSongsRecursively(entries, songs);
 
-				getDownloadService().download(songs, save, autoplay, playNext, shuffle);
+				DownloadService downloadService = getDownloadService();
+				downloadService.download(songs, save, autoplay, playNext, shuffle);
 				if (playlistName != null) {
-					getDownloadService().setSuggestedPlaylistName(playlistName, playlistId);
+					downloadService.setSuggestedPlaylistName(playlistName, playlistId);
 				} else {
-					getDownloadService().setSuggestedPlaylistName(null, null);
+					downloadService.setSuggestedPlaylistName(null, null);
 				}
 				return null;
 			}
 
 			@Override
-			protected void done(Void result) {
+			protected void done(Boolean result) {
 				if (autoplay) {
 					context.openNowPlaying();
 				} else if (save) {
@@ -906,7 +908,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		checkLicenseAndTrialPeriod(onValid);
 	}
 	private void downloadBackground(final boolean save) {
-		List<Entry> songs = getSelectedSongs();
+		List<Entry> songs = getSelectedEntries();
 		if(playlistId != null) {
 			songs = entries;
 		}
@@ -918,21 +920,22 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			downloadBackground(save, songs);
 		}
 	}
-	private void downloadBackground(final boolean save, final List<Entry> songs) {
+	private void downloadBackground(final boolean save, final List<Entry> entries) {
 		if (getDownloadService() == null) {
 			return;
 		}
 
 		warnIfStorageUnavailable();
-		LoadingTask<Void> onValid = new LoadingTask<Void>(context) {
+		RecursiveLoader onValid = new RecursiveLoader(context) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Boolean doInBackground() throws Throwable {
+				getSongsRecursively(entries, songs);
 				getDownloadService().downloadBackground(songs, save);
 				return null;
 			}
 
 			@Override
-			protected void done(Void result) {
+			protected void done(Boolean result) {
 				Util.toast(context, context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
 			}
 		};
@@ -941,7 +944,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	private void delete() {
-		List<Entry> songs = getSelectedSongs();
+		List<Entry> songs = getSelectedEntries();
 		if(songs.isEmpty()) {
 			for(Entry entry: entries) {
 				if(entry.isDirectory()) {
@@ -1068,7 +1071,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	public void unstarSelected() {
-		List<Entry> selected = getSelectedSongs();
+		List<Entry> selected = getSelectedEntries();
 		if(selected.size() == 0) {
 			selected = entries;
 		}

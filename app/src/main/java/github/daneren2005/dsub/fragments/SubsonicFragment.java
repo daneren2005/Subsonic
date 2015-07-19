@@ -1616,22 +1616,33 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void playNow(List<Entry> entries) {
 		playNow(entries, null, null);
 	}
-	protected void playNow(List<Entry> entries, String playlistName, String playlistId) {
-		Entry bookmark = null;
-		for(Entry entry: entries) {
-			if(entry.getBookmark() != null) {
-				bookmark = entry;
-				break;
+	protected void playNow(final List<Entry> entries, final String playlistName, final String playlistId) {
+		new RecursiveLoader(context) {
+			@Override
+			protected Boolean doInBackground() throws Throwable {
+				getSongsRecursively(entries, songs);
+				return null;
 			}
-		}
 
-		// If no bookmark found, just play from start
-		if(bookmark == null) {
-			playNow(entries, 0, playlistName, playlistId);
-		} else {
-			// If bookmark found, then give user choice to start from there or to start over
-			playBookmark(entries, bookmark, playlistName, playlistId);
-		}
+			@Override
+			protected void done(Boolean result) {
+				Entry bookmark = null;
+				for(Entry entry: songs) {
+					if(entry.getBookmark() != null) {
+						bookmark = entry;
+						break;
+					}
+				}
+
+				// If no bookmark found, just play from start
+				if(bookmark == null) {
+					playNow(songs, 0, playlistName, playlistId);
+				} else {
+					// If bookmark found, then give user choice to start from there or to start over
+					playBookmark(songs, bookmark, playlistName, playlistId);
+				}
+			}
+		}.execute();
 	}
 	protected void playNow(List<Entry> entries, int position) {
 		playNow(entries, position, null, null);
@@ -1834,12 +1845,21 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		protected MusicService musicService;
 		protected static final int MAX_SONGS = 500;
 		protected boolean playNowOverride = false;
-		protected List<Entry> songs;
+		protected List<Entry> songs = new ArrayList<>();
 
 		public RecursiveLoader(Activity context) {
 			super(context);
+			musicService = MusicServiceFactory.getMusicService(context);
 		}
 
+		protected void getSongsRecursively(List<Entry> entry) throws Exception {
+			getSongsRecursively(entry, songs);
+		}
+		protected void getSongsRecursively(List<Entry> entry, List<Entry> songs) throws Exception {
+			MusicDirectory dir = new MusicDirectory();
+			dir.addChildren(entry);
+			getSongsRecursively(dir, songs);
+		}
 		protected void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
 			if (songs.size() > MAX_SONGS) {
 				return;
