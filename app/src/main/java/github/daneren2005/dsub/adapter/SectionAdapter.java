@@ -407,6 +407,9 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					currentActionMode = null;
 					selected.clear();
 					notifyDataSetChanged();
+
+					Window window = ((SubsonicFragmentActivity) context).getWindow();
+					window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 				}
 			});
 		}
