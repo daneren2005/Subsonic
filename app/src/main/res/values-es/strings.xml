@@ -191,7 +191,6 @@
     <string name="download.jukebox_not_authorized">Control remoto no permitido. Por favor, active el modo jukebox en <b>Users &gt; Settings</b> en su servidor Subsonic.</string>
 	<string name="download.timer_length">Temporizador</string>
 	<string name="download.start_timer">Iniciar temporizador</string>
-	<string name="download.stop_timer">Detener temporizador</string>
 	<string name="download.need_download">El vídeo ha de ser descargado antes</string>
 	<string name="download.no_streaming_player">Ningún reproductor puede reproducir este stream</string>
 	<string name="download.playing_out_of">%1$d/%2$d</string>

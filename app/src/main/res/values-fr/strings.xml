@@ -191,7 +191,6 @@
     <string name="download.jukebox_not_authorized">Mode télécommande non autorisée. Activer le mode jukebox.<b>Users &gt; Settings</b> on your Subsonic server.</string>
 	<string name="download.timer_length">Minuteur :</string>
 	<string name="download.start_timer">Démarrer le minuteur</string>
-	<string name="download.stop_timer">Arrêter le minuteur</string>
 	<string name="download.need_download">La vidéo doit d\'abord être téléchargée</string>
 	<string name="download.no_streaming_player">Aucun lecteur ne peut afficher ce flux</string>
 	<string name="download.playing_out_of">Lecture : %1$d/%2$d</string>

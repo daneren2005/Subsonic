@@ -157,6 +157,7 @@ public class DownloadService extends Service {
 
 	private Timer sleepTimer;
 	private int timerDuration;
+	private long timerStart;
 	private boolean autoPlayStart = false;
 
 	private MediaRouteManager mediaRouter;
@@ -1808,6 +1809,11 @@ public class DownloadService extends Service {
 			}
 
 		}, timerDuration * 60 * 1000);
+		timerStart = System.currentTimeMillis();
+	}
+
+	public int getSleepTimeRemaining() {
+		return (int) (timerStart + (timerDuration * 60 * 1000) - System.currentTimeMillis()) / 1000;
 	}
 
 	public void stopSleepTimer() {

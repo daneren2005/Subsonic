@@ -206,7 +206,6 @@
     <string name="download.jukebox_not_authorized">Fernbedienung ist nicht erlaubt. Bitte aktivieren Sie den Jukebox-Modus unter <b>Nutzer &gt; Einstellungen</b> auf Ihrem Subsonic-Server.</string>
 	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Starte Timer</string>
-	<string name="download.stop_timer">Stoppe Timer</string>
 	<string name="download.need_download">Video muss zuerst heruntergeladen werden</string>
 	<string name="download.no_streaming_player">Stream kann nicht wiedergegeben werden.</string>
 	<string name="download.playing_out_of">Wiedergabe: %1$d/%2$d</string>

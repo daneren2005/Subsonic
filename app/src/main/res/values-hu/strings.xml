@@ -202,7 +202,6 @@
     <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Engedélyezze a Jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
 	<string name="download.timer_length">Időhossz:</string>
 	<string name="download.start_timer">Időzítő indítása</string>
-	<string name="download.stop_timer">Időzítő megállítása</string>
 	<string name="download.need_download">A videót először le kell tölteni!</string>
 	<string name="download.no_streaming_player">Nincs megfelelő lejátszó a stream megjelenítéséhez!</string>
 	<string name="download.playing_out_of">Lejátszás: %1$d/%2$d</string>

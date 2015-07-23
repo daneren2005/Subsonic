@@ -131,6 +131,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private boolean scrollWhenLoaded = false;
 	private int lastY = 0;
 	private int currentPlayingSize = 0;
+	private MenuItem timerMenu;
 
 	/**
 	 * Called when the activity is first created.
@@ -525,10 +526,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			menuInflater.inflate(R.menu.nowplaying_offline, menu);
 		} else {
 			menuInflater.inflate(R.menu.nowplaying, menu);
-
-			if(downloadService != null && downloadService.getSleepTimer()) {
-				menu.findItem(R.id.menu_toggle_timer).setTitle(R.string.download_stop_timer);
-			}
+		}
+		if(downloadService != null && downloadService.getSleepTimer()) {
+			int timeRemaining = downloadService.getSleepTimeRemaining();
+			timerMenu = menu.findItem(R.id.menu_toggle_timer);
+			timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
 		}
 		if(downloadService != null && downloadService.getKeepScreenOn()) {
 			menu.findItem(R.id.menu_screen_on_off).setChecked(true);
@@ -1379,6 +1381,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			durationTextView.setText("-:--");
 			progressBar.setProgress(0);
 			progressBar.setEnabled(false);
+		}
+
+		DownloadService downloadService = getDownloadService();
+		if(downloadService.getSleepTimer() && timerMenu != null) {
+			int timeRemaining = downloadService.getSleepTimeRemaining();
+			timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
 		}
 	}
 

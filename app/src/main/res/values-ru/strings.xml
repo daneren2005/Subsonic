@@ -123,8 +123,7 @@
     <string name="download.jukebox_not_authorized">Удаленное управление запрещено. Пожалуйста, активируйте режим jukebox в разделе <b>Настройки &gt; Проигрыватели</b> на вашем сервере Subsonic.</string>
 	<string name="download.timer_length">Длительность</string>
 	<string name="download.start_timer">Запустить таймер</string>
-	<string name="download.stop_timer">Остановить таймер</string>
-	<string name="download.need_download">Необходимо сначала скачать видео</string>
+    <string name="download.need_download">Необходимо сначала скачать видео</string>
 	<string name="download.no_streaming_player">Нет плеера для воспроизведения потока</string>
     
 	<string name="starring_content_starred">\"%s\" добавлено в закладки</string>
