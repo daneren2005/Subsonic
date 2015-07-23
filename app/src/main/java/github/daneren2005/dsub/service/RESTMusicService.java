@@ -1204,7 +1204,7 @@ public class RESTMusicService implements MusicService {
 
 			String content = "";
 			for(PodcastChannel channel: channels) {
-				content += channel.getName() + "\n";
+				content += channel.getName() + "\t" + channel.getUrl() + "\n";
 			}
 
 			File file = FileUtil.getPodcastFile(context, Util.getServerName(context, getInstance(context)));

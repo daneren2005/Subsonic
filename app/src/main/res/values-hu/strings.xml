@@ -42,12 +42,6 @@
     <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás még nincs beállítva. Miután konfigurálta saját kiszolgálóját 
 	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba és adja meg a kapcsolódási adatokat!</string>
 	<string name="main.about_title">DSub információk</string>
-	<string name="main.about_text">Fejlesztő: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nVerzió: %1$s
-		\nGyorsítótárazott fájlok: %2$s
-		\nFelhasznált tároló: %3$s/%4$s
-		\nFelhasználható tároló: %5$s/%6$s</string>
 	<string name="main.faq_title">GYIK</string>
 	<string name="main.faq_text">
 	<![CDATA[

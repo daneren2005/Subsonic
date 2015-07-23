@@ -214,13 +214,29 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	}
 	
 	private void displayPodcastInfo(final PodcastChannel channel) {
-		String message = ((channel.getName()) == null ? "" : "Title: " + channel.getName()) +
-			"\nURL: " + channel.getUrl() +
-			"\nStatus: " + channel.getStatus() +
-			((channel.getErrorMessage()) == null ? "" : "\nError Message: " + channel.getErrorMessage()) +
-			((channel.getDescription()) == null ? "" : "\n\nDescription: " + channel.getDescription());
-		
-		Util.info(context, channel.getName(), message);
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
+
+		if(channel.getName() != null) {
+			headers.add(R.string.details_title);
+			details.add(channel.getName());
+		}
+
+		headers.add(R.string.details_url);
+		details.add(channel.getUrl());
+		headers.add(R.string.details_status);
+		details.add(channel.getStatus());
+
+		if(channel.getErrorMessage() != null) {
+			headers.add(R.string.details_error);
+			details.add(channel.getErrorMessage());
+		}
+		if(channel.getDescription() != null) {
+			headers.add(R.string.details_description);
+			details.add(channel.getDescription());
+		}
+
+		Util.showDetailsDialog(context, R.string.details_title_podcast, headers, details);
 	}
 	
 	private void deletePodcast(final PodcastChannel channel) {

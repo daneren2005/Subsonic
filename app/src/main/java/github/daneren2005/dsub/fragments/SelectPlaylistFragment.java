@@ -68,39 +68,12 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Playlist> updateView, Playlist playlist) {
-		SubsonicFragment fragment;
-		Bundle args;
-		FragmentTransaction trans;
 		switch (menuItem.getItemId()) {
-			case R.id.playlist_menu_download:
-				downloadPlaylist(playlist.getId(), playlist.getName(), false, true, false, false, true);
-				break;
 			case R.id.playlist_menu_sync:
 				syncPlaylist(playlist);
 				break;
 			case R.id.playlist_menu_stop_sync:
 				stopSyncPlaylist(playlist);
-				break;
-			case R.id.playlist_menu_play_now:
-				fragment = new SelectDirectoryFragment();
-				args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
-				fragment.setArguments(args);
-
-				replaceFragment(fragment);
-				break;
-			case R.id.playlist_menu_play_shuffled:
-				fragment = new SelectDirectoryFragment();
-				args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
-				fragment.setArguments(args);
-
-				replaceFragment(fragment);
 				break;
 			case R.id.playlist_menu_delete:
 				deletePlaylist(playlist);
@@ -213,12 +186,33 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	}
 
 	private void displayPlaylistInfo(final Playlist playlist) {
-		String message = "Owner: " + playlist.getOwner() + "\nComments: " +
-			((playlist.getComment() == null) ? "" : playlist.getComment()) +
-			"\nSong Count: " + playlist.getSongCount() +
-			((playlist.getPublic() == null) ? "" : ("\nPublic: " + playlist.getPublic())) +
-			"\nCreated: " + Util.formatDate(context, playlist.getCreated());
-		Util.info(context, playlist.getName(), message);
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
+
+		if(playlist.getOwner() != null) {
+			headers.add(R.string.details_owner);
+			details.add(playlist.getOwner());
+		}
+
+		if(playlist.getComment() != null) {
+			headers.add(R.string.details_comments);
+			details.add(playlist.getComment());
+		}
+
+		headers.add(R.string.details_song_count);
+		details.add(playlist.getSongCount());
+
+		if(playlist.getPublic() != null) {
+			headers.add(R.string.details_public);
+			details.add(Boolean.toString(playlist.getPublic()));
+		}
+
+		if(playlist.getCreated() != null) {
+			headers.add(R.string.details_created);
+			details.add(Util.formatDate(context, playlist.getCreated()));
+		}
+
+		Util.showDetailsDialog(context, R.string.details_title_playlist, headers, details);
 	}
 
 	private void updatePlaylistInfo(final Playlist playlist) {

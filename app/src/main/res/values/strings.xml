@@ -25,6 +25,7 @@
 	<string name="common.confirm_message_cache">cache</string>
 	<string name="common.empty">No data</string>
 	<string name="common.warning">Warning</string>
+	<string name="common.close">Close</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -42,12 +43,6 @@
     <string name="main.welcome_text">Welcome to DSub! The app is currently configured to use the Subsonic demo server. After you\'ve
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
 	<string name="main.about_title">About DSub</string>
-	<string name="main.about_text">Author: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nVersion: %1$s
-		\nFiles Cached: %2$s
-		\nUsed Space: %3$s of %4$s
-		\nAvailable Space: %5$s of %6$s</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
@@ -588,6 +583,43 @@
 	<string name="tasker.edit_shuffle_genre">Shuffle from genre:</string>
 	<string name="tasker.edit_server_offline">Toggle offline: </string>
 	<string name="tasker.edit_do_nothing">Do Nothing</string>
+
+	<string name="details.title.song">Song Details</string>
+	<string name="details.title.album">Album Details</string>
+	<string name="details.title.podcast">Podcast Details</string>
+	<string name="details.title.playlist">Playlist Details</string>
+	<string name="details.podcast">Podcast</string>
+	<string name="details.status">Status</string>
+	<string name="details.artist">Artist</string>
+	<string name="details.album">Album</string>
+	<string name="details.track">Track</string>
+	<string name="details.genre">Genre</string>
+	<string name="details.year">Year</string>
+	<string name="details.server_format">Server Format</string>
+	<string name="details.server_bitrate">Server Bitrate</string>
+	<string name="details.cached_format">Cached Format</string>
+	<string name="details.cached_bitrate">Cached Bitrate</string>
+	<string name="details.size">Size</string>
+	<string name="details.length">Length</string>
+	<string name="details.bookmark_position">Bookmark Position</string>
+	<string name="details.rating">Rating</string>
+	<string name="details.description">Description</string>
+	<string name="details.owner">Owner</string>
+	<string name="details.comments">Comments</string>
+	<string name="details.song_count">Song Count</string>
+	<string name="details.public">Public</string>
+	<string name="details.created">Created</string>
+	<string name="details.title">Title</string>
+	<string name="details.url">URL</string>
+	<string name="details.error">Error Message</string>
+	<string name="details.author">Author</string>
+	<string name="details.email">Email</string>
+	<string name="details.version">Version</string>
+	<string name="details.files_cached">Files Cached</string>
+	<string name="details.files_permanent">Permanent Cached</string>
+	<string name="details.used_space">Used Space</string>
+	<string name="details.available_space">Available Space</string>
+	<string name="details.of">%1$s of %2$s</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>

@@ -7,21 +7,6 @@
         android:title="@string/common.info"
         />
 
-    <item 
-        android:id="@+id/playlist_menu_play_now"
-        android:title="@string/common.play_now"
-        />
-		
-	<item 
-        android:id="@+id/playlist_menu_play_shuffled"
-        android:title="@string/common.play_shuffled"
-        />
-		
-	<item 
-        android:id="@+id/playlist_menu_download"
-        android:title="@string/common.download"
-        />
-
 	<item
 		android:id="@+id/playlist_menu_sync"
 		android:title="@string/menu.keep_synced"/>

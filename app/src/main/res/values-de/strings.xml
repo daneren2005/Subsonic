@@ -42,13 +42,7 @@
     <string name="main.welcome_text">Willkommen zu DSub! Die App ist aktuell für den Subsonic-Demo-Server konfiguriert. Nachdem Sie Ihren eigenen Server
         aufgesetzt haben (verfügbar unter <b>subsonic.org</b>) könne Sie diesen unter <b>Einstellungen</b> konfigurieren.</string>
 	<string name="main.about_title">Über DSub</string>
-	<string name="main.about_text">Autor: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nVersion: %1$s
-		\nLokal gespeicherte Titel: %2$s
-		\nGenutzter Speicher: %3$s von %4$s
-		\nVerfügbarer Speicher: %5$s von %6$s</string>
-        <string name="main.faq_title">FAQ</string>
+	<string name="main.faq_title">FAQ</string>
         <string name="main.faq_text">
         <![CDATA[
                 <font color="red">Cache vs Permanenter Cache</font>:

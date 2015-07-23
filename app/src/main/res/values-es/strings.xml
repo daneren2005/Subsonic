@@ -41,13 +41,7 @@
     <string name="main.welcome_title">Bienvenido!</string>
     <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
 	<string name="main.about_title">Acerca de DSub</string>
-	<string name="main.about_text">Autor: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nVersión: %1$s
-		\nArchivos en caché: %2$s
-		\nEspacio usado: %3$s of %4$s
-		\nEspacio disponible: %5$s of %6$s</string>
-    <string name="main.select_server">Seleccionar servidor</string>
+	<string name="main.select_server">Seleccionar servidor</string>
     <string name="main.shuffle">Reproducción aleatoria</string>
     <string name="main.offline">Modo Offline</string>
 	<string name="main.online">Modo Online</string>

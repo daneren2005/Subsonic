@@ -382,6 +382,42 @@ public class OfflineMusicService implements MusicService {
 						String id = file.getName();
 						String filename = server + ": " + FileUtil.getBaseName(id);
 						Playlist playlist = new Playlist(server, filename);
+
+						Reader reader = null;
+						BufferedReader buffer = null;
+						try {
+							int songCount = 0;
+							reader = new FileReader(file);
+							buffer = new BufferedReader(reader);
+
+							String line = buffer.readLine();
+							while( (line = buffer.readLine()) != null ){
+								// No matter what, end file can't have .complete in it
+								line = line.replace(".complete", "");
+								File entryFile = new File(line);
+
+								// Don't add file to playlist if it doesn't exist as cached or pinned!
+								File checkFile = entryFile;
+								if(!checkFile.exists()) {
+									// If normal file doens't exist, check if .complete version does
+									checkFile = new File(entryFile.getParent(), FileUtil.getBaseName(entryFile.getName())
+											+ ".complete." + FileUtil.getExtension(entryFile.getName()));
+								}
+
+								String entryName = getName(entryFile);
+								if(checkFile.exists() && entryName != null){
+									songCount++;
+								}
+							}
+
+							playlist.setSongCount(Integer.toString(songCount));
+						} catch(Exception e) {
+							Log.w(TAG, "Failed to count songs in playlist", e);
+						} finally {
+							Util.close(buffer);
+							Util.close(reader);
+						}
+
 						playlists.add(playlist);
 					}
 				}
@@ -684,10 +720,16 @@ public class OfflineMusicService implements MusicService {
 		for(File file: dir.listFiles()) {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			while ((line = br.readLine()) != null && !"".equals(line)) {
+				String[] parts = line.split("\t");
+
 				PodcastChannel channel = new PodcastChannel();
-				channel.setId(line);
-				channel.setName(line);
+				channel.setId(parts[0]);
+				channel.setName(parts[0]);
 				channel.setStatus("completed");
+
+				if(parts.length > 1) {
+					channel.setUrl(parts[1]);
+				}
 				
 				if(FileUtil.getPodcastDirectory(context, channel).exists() && !channels.contains(channel)) {
 					channels.add(channel);

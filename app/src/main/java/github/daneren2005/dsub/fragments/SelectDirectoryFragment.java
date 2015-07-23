@@ -360,18 +360,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Entry> updateView, Entry entry) {
-		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false) && menuItem.getItemId() == R.id.song_menu_play_now) {
-			List<Entry> songs = new ArrayList<Entry>();
-			songs.add(entry);
-			Iterator it = entries.listIterator(entries.indexOf(entry));
-			while(it.hasNext()) {
-				songs.add((Entry) it.next());
-			}
-
-			playNow(songs);
-			return true;
-		}
-
 		if(onContextItemSelected(menuItem, entry)) {
 			return true;
 		}

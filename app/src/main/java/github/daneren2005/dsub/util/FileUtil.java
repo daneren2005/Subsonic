@@ -741,23 +741,28 @@ public class FileUtil {
         return index == -1 ? name : name.substring(0, index);
     }
 	
-	public static Pair<Long, Long> getUsedSize(Context context, File file) {
+	public static Long[] getUsedSize(Context context, File file) {
 		long number = 0L;
+		long permanent = 0L;
 		long size = 0L;
 		
 		if(file.isFile()) {
 			if(isMediaFile(file)) {
-				return new Pair<Long, Long>(1L, file.length());
+				if(file.getAbsolutePath().indexOf(".complete") == -1) {
+					permanent++;
+				}
+				return new Long[] {1L, permanent, file.length()};
 			} else {
-				return new Pair<Long, Long>(0L, 0L);
+				return new Long[] {0L, 0L, 0L};
 			}
 		} else {
 			for (File child : FileUtil.listFiles(file)) {
-				Pair<Long, Long> pair = getUsedSize(context, child);
-				number += pair.getFirst();
-				size += pair.getSecond();
+				Long[] pair = getUsedSize(context, child);
+				number += pair[0];
+				permanent += pair[1];
+				size += pair[2];
 			}
-			return new Pair<Long, Long>(number, size);
+			return new Long[] {number, permanent, size};
 		}
 	}
 

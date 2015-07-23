@@ -1,5 +1,6 @@
 package github.daneren2005.dsub.fragments;
 
+import android.content.res.Resources;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -277,32 +278,54 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	}
 
 	private void showAboutDialog() {
-		new LoadingTask<String>(context) {
+		new LoadingTask<Void>(context) {
+			Long[] used;
+			long bytesTotalFs;
+			long bytesAvailableFs;
+
 			@Override
-			protected String doInBackground() throws Throwable {
+			protected Void doInBackground() throws Throwable {
 				File rootFolder = FileUtil.getMusicDirectory(context);
 				StatFs stat = new StatFs(rootFolder.getPath());
-				long bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
-				long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+				bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
+				bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
 
-				Pair<Long, Long> used = FileUtil.getUsedSize(context, rootFolder);
-
-				return getResources().getString(R.string.main_about_text,
-					context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName,
-					used.getFirst(),
-					Util.formatLocalizedBytes(used.getSecond(), context),
-					Util.formatLocalizedBytes(Util.getCacheSizeMB(context) * 1024L * 1024L, context),
-					Util.formatLocalizedBytes(bytesAvailableFs, context),
-					Util.formatLocalizedBytes(bytesTotalFs, context));
+				used = FileUtil.getUsedSize(context, rootFolder);
+				return null;
 			}
 
 			@Override
-			protected void done(String msg) {
+			protected void done(Void result) {
+				List<Integer> headers = new ArrayList<>();
+				List<String> details = new ArrayList<>();
+
+				headers.add(R.string.details_author);
+				details.add("Scott Jackson");
+
+				headers.add(R.string.details_email);
+				details.add("dsub.android@gmail.com");
+
 				try {
-					Util.info(context, R.string.main_about_title, msg);
+					headers.add(R.string.details_version);
+					details.add(context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName);
 				} catch(Exception e) {
-					Util.toast(context, "Failed to open dialog");
+					details.add("");
 				}
+
+				Resources res = context.getResources();
+				headers.add(R.string.details_files_cached);
+				details.add(Long.toString(used[0]));
+
+				headers.add(R.string.details_files_permanent);
+				details.add(Long.toString(used[1]));
+
+				headers.add(R.string.details_used_space);
+				details.add(res.getString(R.string.details_of, Util.formatLocalizedBytes(used[2], context), Util.formatLocalizedBytes(Util.getCacheSizeMB(context) * 1024L * 1024L, context)));
+
+				headers.add(R.string.details_available_space);
+				details.add(res.getString(R.string.details_of, Util.formatLocalizedBytes(bytesAvailableFs, context), Util.formatLocalizedBytes(bytesTotalFs, context)));
+
+				Util.showDetailsDialog(context, R.string.main_about_title, headers, details);
 			}
 		}.execute();
 	}

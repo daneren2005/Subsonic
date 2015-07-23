@@ -241,9 +241,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		} else if(selected instanceof Artist) {
 			Artist artist = (Artist) selected;
 			if(Util.isOffline(context)) {
-				menuInflater.inflate(R.menu.select_artist_context_offline, menu);
-			}
-			else {
+				// menuInflater.inflate(R.menu.select_artist_context_offline, menu);
+			} else {
 				menuInflater.inflate(R.menu.select_artist_context, menu);
 
 				menu.findItem(R.id.artist_menu_star).setTitle(artist.isStarred() ? R.string.common_unstar : R.string.common_star);
@@ -281,56 +280,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
 			menu.setGroupVisible(R.id.hide_rating, false);
 		}
-
-		if(!Util.isOffline(context)) {
-			// If we are looking at a standard song view, get downloadFile to cache what options to show
-			if(updateView instanceof SongView) {
-				SongView songView = (SongView) updateView;
-				DownloadFile downloadFile = songView.getDownloadFile();
-
-				try {
-					if(downloadFile != null) {
-						if(downloadFile.isWorkDone()) {
-							// Remove permanent cache menu if already perma cached
-							if(downloadFile.isSaved()) {
-								menu.removeItem(R.id.song_menu_pin);
-							}
-
-							// Remove cache option no matter what if already downloaded
-							menu.removeItem(R.id.song_menu_download);
-						} else {
-							// Remove delete option if nothing to delete
-							menu.removeItem(R.id.song_menu_delete);
-						}
-					}
-				} catch(Exception e) {
-					Log.w(TAG, "Failed to lookup downloadFile info", e);
-				}
-			}
-			// Apply similar logic to album views
-			else if(updateView instanceof AlbumView || updateView instanceof ArtistView || updateView instanceof ArtistEntryView) {
-				File folder = null;
-				int id = 0;
-				if(updateView instanceof AlbumView) {
-					folder = ((AlbumView) updateView).getFile();
-					id = R.id.album_menu_delete;
-				} else if(updateView instanceof ArtistView) {
-					folder = ((ArtistView) updateView).getFile();
-					id = R.id.artist_menu_delete;
-				} else if(updateView instanceof ArtistEntryView) {
-					folder = ((ArtistEntryView) updateView).getFile();
-					id = R.id.artist_menu_delete;
-				}
-
-				try {
-					if(folder != null && !folder.exists()) {
-						menu.removeItem(id);
-					}
-				} catch(Exception e) {
-					Log.w(TAG, "Failed to lookup album directory info", e);
-				}
-			}
-		}
 	}
 
 	protected void recreateContextMenu(Menu menu) {
@@ -355,59 +304,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		songs.add(entry);
 
 		switch (menuItem.getItemId()) {
-			case R.id.artist_menu_play_now:
-				downloadRecursively(artist.getId(), false, false, true, false, false);
-				break;
-			case R.id.artist_menu_play_shuffled:
-				downloadRecursively(artist.getId(), false, false, true, true, false);
-				break;
-			case R.id.artist_menu_play_next:
-				downloadRecursively(artist.getId(), false, true, false, false, false, true);
-				break;
-			case R.id.artist_menu_play_last:
-				downloadRecursively(artist.getId(), false, true, false, false, false);
-				break;
-			case R.id.artist_menu_download:
-				downloadRecursively(artist.getId(), false, true, false, false, true);
-				break;
-			case R.id.artist_menu_pin:
-				downloadRecursively(artist.getId(), true, true, false, false, true);
-				break;
-			case R.id.artist_menu_delete:
-				deleteRecursively(artist);
-				break;
 			case R.id.artist_menu_star:
 				toggleStarred(artist);
 				break;
-			case R.id.album_menu_play_now:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, false, true, false, false);
-				break;
-			case R.id.album_menu_play_shuffled:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, false, true, true, false);
-				break;
-			case R.id.album_menu_play_next:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, true, false, false, false, true);
-				break;
-			case R.id.album_menu_play_last:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, true, false, false, false);
-				break;
-			case R.id.album_menu_download:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, true, false, false, true);
-				break;
-			case R.id.album_menu_pin:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), true, true, false, false, true);
-				break;
 			case R.id.album_menu_star:
 				toggleStarred(entry);
-				break;
-			case R.id.album_menu_delete:
-				deleteRecursively(entry);
 				break;
 			case R.id.album_menu_info:
 				displaySongInfo(entry);
@@ -418,20 +319,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.album_menu_share:
 				createShare(songs);
 				break;
-			case R.id.song_menu_play_now:
-				playNow(songs);
-				break;
-			case R.id.song_menu_play_next:
-				getDownloadService().download(songs, false, false, true, false);
-				break;
-			case R.id.song_menu_play_last:
-				getDownloadService().download(songs, false, false, false, false);
-				break;
 			case R.id.song_menu_download:
 				getDownloadService().downloadBackground(songs, false);
-				break;
-			case R.id.song_menu_pin:
-				getDownloadService().downloadBackground(songs, true);
 				break;
 			case R.id.song_menu_delete:
 				getDownloadService().delete(songs);
@@ -1262,7 +1151,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	@TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
 	public void displaySongInfo(final Entry song) {
 		Integer duration = null;
 		Integer bitrate = null;
@@ -1302,55 +1190,83 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
-		String msg = "";
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
 		if(song instanceof PodcastEpisode) {
-			msg += "Podcast: " + song.getArtist() + "\nStatus: " + ((PodcastEpisode)song).getStatus();
+			headers.add(R.string.details_podcast);
+			details.add(song.getArtist());
+
+			headers.add(R.string.details_status);
+			details.add(((PodcastEpisode)song).getStatus());
 		} else if(!song.isVideo()) {
 			if(song.getArtist() != null && !"".equals(song.getArtist())) {
-				msg += "Artist: " + song.getArtist();
+				headers.add(R.string.details_artist);
+				details.add(song.getArtist());
 			}
 			if(song.getAlbum() != null && !"".equals(song.getAlbum())) {
-				msg += "\nAlbum: " + song.getAlbum();
+				headers.add(R.string.details_album);
+				details.add(song.getAlbum());
 			}
 		}
 		if(song.getTrack() != null && song.getTrack() != 0) {
-			msg += "\nTrack: " + song.getTrack();
+			headers.add(R.string.details_track);
+			details.add(Integer.toString(song.getTrack()));
 		}
 		if(song.getGenre() != null && !"".equals(song.getGenre())) {
-			msg += "\nGenre: " + song.getGenre();
+			headers.add(R.string.details_genre);
+			details.add(song.getGenre());
 		}
 		if(song.getYear() != null && song.getYear() != 0) {
-			msg += "\nYear: " + song.getYear();
+			headers.add(R.string.details_year);
+			details.add(Integer.toString(song.getYear()));
 		}
 		if(!Util.isOffline(context) && song.getSuffix() != null) {
-			msg += "\nServer Format: " + song.getSuffix();
+			headers.add(R.string.details_server_format);
+			details.add(song.getSuffix());
+
 			if(song.getBitRate() != null && song.getBitRate() != 0) {
-				msg += "\nServer Bitrate: " + song.getBitRate() + " kbps";
+				headers.add(R.string.details_server_bitrate);
+				details.add(song.getBitRate() + " kbps");
 			}
 		}
 		if(format != null && !"".equals(format)) {
-			msg += "\nCached Format: " + format;
+			headers.add(R.string.details_cached_format);
+			details.add(format);
 		}
 		if(bitrate != null && bitrate != 0) {
-			msg += "\nCached Bitrate: " + bitrate + " kbps";
+			headers.add(R.string.details_cached_bitrate);
+			details.add(bitrate + " kbps");
 		}
 		if(size != 0) {
-			msg += "\nSize: " + Util.formatLocalizedBytes(size, context);
+			headers.add(R.string.details_size);
+			details.add(Util.formatLocalizedBytes(size, context));
 		}
 		if(song.getDuration() != null && song.getDuration() != 0) {
-			msg += "\nLength: " + Util.formatDuration(song.getDuration());
+			headers.add(R.string.details_length);
+			details.add(Util.formatDuration(song.getDuration()));
 		}
 		if(song.getBookmark() != null) {
-			msg += "\nBookmark Position: " + Util.formatDuration(song.getBookmark().getPosition() / 1000);
+			headers.add(R.string.details_bookmark_position);
+			details.add(Util.formatDuration(song.getBookmark().getPosition() / 1000));
 		}
 		if(song.getRating() != 0) {
-			msg += "\nRating: " + song.getRating() + " stars";
+			headers.add(R.string.details_rating);
+			details.add(song.getRating() + " stars");
 		}
 		if(song instanceof PodcastEpisode) {
-			msg += "\n\nDescription: " + song.getAlbum();
+			headers.add(R.string.details_description);
+			details.add(song.getAlbum());
 		}
 
-		Util.info(context, song.getTitle(), msg);
+		int title;
+		if(song.isDirectory()) {
+			title = R.string.details_title_album;
+		} else if(song instanceof PodcastEpisode) {
+			title = R.string.details_title_podcast;
+		} else {
+			title = R.string.details_title_song;
+		}
+		Util.showDetailsDialog(context, title, headers, details);
 	}
 
 	protected void playVideo(Entry entry) {

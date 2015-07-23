@@ -178,9 +178,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		if(sections.size() == 1 && !singleSectionHeader) {
 			T item = sections.get(0).get(position);
 			onBindViewHolder(holder, item, getItemViewType(position));
-			if(updateView.isCheckable()) {
-				setChecked(updateView, selected.contains(item));
-			}
+			postBindView(updateView, item);
 			holder.setItem(item);
 			return;
 		}
@@ -199,9 +197,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 				T item = section.get(position - subPosition - headerOffset);
 				onBindViewHolder(holder, item, getItemViewType(item));
 
-				if(updateView.isCheckable()) {
-					setChecked(updateView, selected.contains(item));
-				}
+				postBindView(updateView, item);
 				holder.setItem(item);
 				return;
 			}
@@ -211,6 +207,27 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 				subPosition += 1;
 			}
 			subHeader++;
+		}
+	}
+
+	private void postBindView(UpdateView updateView, T item) {
+		if(updateView.isCheckable()) {
+			setChecked(updateView, selected.contains(item));
+		}
+
+		View moreButton = updateView.findViewById(R.id.more_button);
+		if(moreButton == null) {
+			moreButton = updateView.findViewById(R.id.item_more);
+		}
+		if(moreButton != null) {
+			PopupMenu popup = new PopupMenu(context, moreButton);
+			Menu menu = popup.getMenu();
+			onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
+			if(menu.size() == 0) {
+				moreButton.setVisibility(View.GONE);
+			} else {
+				moreButton.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 

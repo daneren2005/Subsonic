@@ -41,12 +41,6 @@
     <string name="main.welcome_title">Bienvenue !</string>
     <string name="main.welcome_text">Bienvenue dans DSub ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
     	<string name="main.about_title">A propos de DSub</string>
-	<string name="main.about_text">Auteur : Scott Jackson
-		\nEmail : dsub.android@gmail.com
-		\nVersion : %1$s
-		\nFichiers en cache : %2$s
-		\nEspace utilisé : %3$s de %4$s
-		\nEspace dispo. : %5$s de %6$s</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[

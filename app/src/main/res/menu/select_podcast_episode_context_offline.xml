@@ -6,8 +6,8 @@
 		android:id="@+id/song_menu_info"
 		android:title="@string/common.info"
 		/>
-	
-    <item 
+
+    <item
         android:id="@+id/song_menu_play_now"
         android:title="@string/common.play_now"
         />
@@ -23,8 +23,8 @@
 			android:id="@+id/song_menu_play_last"
 			android:title="@string/common.play_last"/>
 	</group>
-		
-	<item 
+
+	<item
 		android:id="@+id/song_menu_delete"
 		android:title="@string/menu.delete_cache"/>
 </menu>
