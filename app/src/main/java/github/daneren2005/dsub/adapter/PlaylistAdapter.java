@@ -16,29 +16,36 @@ package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
 import android.view.ViewGroup;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.PlaylistView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class PlaylistAdapter extends SectionAdapter<Playlist> {
 	public static int VIEW_TYPE_PLAYLIST = 1;
 
-	public PlaylistAdapter(Context context, List<Playlist> playlists, OnItemClickedListener listener) {
+	private ImageLoader imageLoader;
+	private boolean largeCell;
+
+	public PlaylistAdapter(Context context, List<Playlist> playlists, ImageLoader imageLoader, boolean largeCell, OnItemClickedListener listener) {
 		super(context, playlists);
+		this.imageLoader = imageLoader;
+		this.largeCell = largeCell;
 		this.onItemClickedListener = listener;
 	}
-	public PlaylistAdapter(Context context, List<String> headers, List<List<Playlist>> sections, OnItemClickedListener listener) {
+	public PlaylistAdapter(Context context, List<String> headers, List<List<Playlist>> sections, ImageLoader imageLoader, boolean largeCell, OnItemClickedListener listener) {
 		super(context, headers, sections);
+		this.imageLoader = imageLoader;
+		this.largeCell = largeCell;
 		this.onItemClickedListener = listener;
 	}
 
 	@Override
 	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
-		return new UpdateView.UpdateViewHolder(new PlaylistView(context));
+		return new UpdateView.UpdateViewHolder(new PlaylistView(context, imageLoader, largeCell));
 	}
 
 	@Override

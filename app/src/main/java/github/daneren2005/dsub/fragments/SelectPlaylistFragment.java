@@ -42,6 +42,14 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
 	@Override
+	public void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true)) {
+			largeAlbums = true;
+		}
+	}
+
+	@Override
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Playlist> updateView, Playlist playlist) {
 		if (Util.isOffline(context)) {
 			menuInflater.inflate(R.menu.select_playlist_context_offline, menu);
@@ -109,7 +117,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 		}
 
 		if(shared.isEmpty()) {
-			return new PlaylistAdapter(context, playlists, this);
+			return new PlaylistAdapter(context, playlists, getImageLoader(), largeAlbums, this);
 		} else {
 			Resources res = context.getResources();
 			List<String> headers = Arrays.asList(res.getString(R.string.playlist_mine), res.getString(R.string.playlist_shared));
@@ -118,7 +126,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 			sections.add(mine);
 			sections.add(shared);
 
-			return new PlaylistAdapter(context, headers, sections, this);
+			return new PlaylistAdapter(context, headers, sections, getImageLoader(), largeAlbums, this);
 		}
 	}
 

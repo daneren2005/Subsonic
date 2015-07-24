@@ -1300,7 +1300,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		} else {
 			songTitleTextView.setText(null);
-			getImageLoader().loadImage(albumArtImageView, null, true, false);
+			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
 			starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
 			setSubtitle(null);
 		}

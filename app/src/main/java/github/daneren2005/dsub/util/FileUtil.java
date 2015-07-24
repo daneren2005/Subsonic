@@ -182,19 +182,25 @@ public class FileUtil {
 	}
 
     public static File getAlbumArtFile(Context context, MusicDirectory.Entry entry) {
-        File albumDir = getAlbumDirectory(context, entry);
-		File artFile;
-		File albumFile = getAlbumArtFile(albumDir);
-		File hexFile = getHexAlbumArtFile(context, albumDir);
-		if(albumDir.exists()) {
-			if(hexFile.exists()) {
-				hexFile.renameTo(albumFile);
+		if(entry.getId().indexOf("pl-") == -1) {
+			File albumDir = getAlbumDirectory(context, entry);
+			File artFile;
+			File albumFile = getAlbumArtFile(albumDir);
+			File hexFile = getHexAlbumArtFile(context, albumDir);
+			if (albumDir.exists()) {
+				if (hexFile.exists()) {
+					hexFile.renameTo(albumFile);
+				}
+				artFile = albumFile;
+			} else {
+				artFile = hexFile;
 			}
-			artFile = albumFile;
+			return artFile;
 		} else {
-			artFile = hexFile;
+			File playlistDir = getAlbumArtDirectory(context);
+			Log.d(TAG, entry.getTitle() + " => " + Util.md5Hex("pl-" + entry.getTitle()));
+			return  new File(playlistDir, Util.md5Hex("pl-" + entry.getTitle()) + ".jpeg");
 		}
-        return artFile;
     }
 
     public static File getAlbumArtFile(File albumDir) {

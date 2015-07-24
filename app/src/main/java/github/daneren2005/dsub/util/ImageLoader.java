@@ -42,6 +42,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -295,6 +296,24 @@ public class ImageLoader {
 		return task;
 	}
 
+	public SilentBackgroundTask loadImage(View view, Playlist playlist, boolean large, boolean crossfade) {
+		MusicDirectory.Entry entry = new MusicDirectory.Entry();
+		String id;
+		if(Util.isOffline(context)) {
+			id = "pl-" + playlist.getName();
+			entry.setTitle(playlist.getComment());
+		} else {
+			id = "pl-" + playlist.getId();
+			entry.setTitle(playlist.getName());
+		}
+		entry.setId(id);
+		entry.setCoverArt(id);
+		// So this isn't treated as a artist
+		entry.setParent("");
+
+		return loadImage(view, entry, large, crossfade);
+	}
+
 	private String getKey(String coverArtId, int size) {
 		return coverArtId + size;
 	}
@@ -388,12 +407,16 @@ public class ImageLoader {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
 				Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, null, this);
-				String key = getKey(mEntry.getCoverArt(), mSize);
-				cache.put(key, bitmap);
-				// Make sure key is the most recently "used"
-				cache.get(key);
-				if(mIsNowPlaying) {
-					nowPlaying = bitmap;
+				if(bitmap != null) {
+					String key = getKey(mEntry.getCoverArt(), mSize);
+					cache.put(key, bitmap);
+					// Make sure key is the most recently "used"
+					cache.get(key);
+					if (mIsNowPlaying) {
+						nowPlaying = bitmap;
+					}
+				} else {
+					bitmap = getUnknownImage(mEntry, mSize);
 				}
 
 				mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);

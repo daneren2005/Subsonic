@@ -21,11 +21,11 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.SyncUtil;
 
 /**
@@ -36,20 +36,24 @@ import github.daneren2005.dsub.util.SyncUtil;
 public class PlaylistView extends UpdateView<Playlist> {
 	private static final String TAG = PlaylistView.class.getSimpleName();
 
+	private View coverArtView;
 	private TextView titleView;
+	private ImageLoader imageLoader;
 
-	public PlaylistView(Context context) {
+	public PlaylistView(Context context, ImageLoader imageLoader, boolean largeCell) {
 		super(context);
-		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
+		LayoutInflater.from(context).inflate(largeCell ? R.layout.playlist_cell_item : R.layout.playlist_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		starButton = (ImageButton) findViewById(R.id.item_star);
-		starButton.setFocusable(false);
+		coverArtView = findViewById(R.id.playlist_coverart);
+		titleView = (TextView) findViewById(R.id.playlist_title);
 		moreButton = (ImageView) findViewById(R.id.item_more);
+
+		this.imageLoader = imageLoader;
 	}
 
 	protected void setObjectImpl(Playlist playlist) {
 		titleView.setText(playlist.getName());
+		imageTask = imageLoader.loadImage(coverArtView, playlist, false, true);
 	}
 
 	@Override

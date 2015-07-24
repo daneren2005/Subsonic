@@ -380,8 +380,10 @@ public class OfflineMusicService implements MusicService {
 				for(File file: fileList) {
 					if(FileUtil.isPlaylistFile(file)) {
 						String id = file.getName();
-						String filename = server + ": " + FileUtil.getBaseName(id);
-						Playlist playlist = new Playlist(server, filename);
+						String filename = FileUtil.getBaseName(id);
+						String name = server + ": " + filename;
+						Playlist playlist = new Playlist(server, name);
+						playlist.setComment(filename);
 
 						Reader reader = null;
 						BufferedReader buffer = null;
