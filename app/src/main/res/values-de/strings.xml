@@ -577,5 +577,10 @@
         <item quantity="one">Noch ein Tag bis zum Ablauf des Testzeitraums.</item>
         <item quantity="other">%d Tage bis zum Ablauf des Testzeitraums.</item>
     </plurals>
+	<string name="settings.keep_played_count_none">Alle abgespielten Lieder entfernen</string>
+	<string name="settings.keep_played_count_one">Das letzte abgespielte Lied behalten</string>
+	<string name="settings.keep_played_count_three">3 abgespielte Lieder behalten</string>
+	<string name="settings.keep_played_count_two">2 abgespielte Lieder behalten</string>
+	<string name="settings.keep_played_count_title">Abgespielte Lieder behalten</string>
 
 </resources>

@@ -71,6 +71,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private EditTextPreference cacheLocation;
 	private ListPreference preloadCountWifi;
 	private ListPreference preloadCountMobile;
+	private ListPreference keepPlayedCount;
 	private ListPreference tempLoss;
 	private ListPreference pauseDisconnect;
 	private Preference addServerPreference;
@@ -177,6 +178,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		cacheLocation = (EditTextPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
 		preloadCountWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
 		preloadCountMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE);
+		keepPlayedCount = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_KEEP_PLAYED_CNT);
 		tempLoss = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		pauseDisconnect = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		serversCategory = (PreferenceCategory) this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
@@ -316,6 +318,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		cacheLocation.setSummary(cacheLocation.getText());
 		preloadCountWifi.setSummary(preloadCountWifi.getEntry());
 		preloadCountMobile.setSummary(preloadCountMobile.getEntry());
+		keepPlayedCount.setSummary(keepPlayedCount.getEntry());
 		tempLoss.setSummary(tempLoss.getEntry());
 		pauseDisconnect.setSummary(pauseDisconnect.getEntry());
 		videoPlayer.setSummary(videoPlayer.getEntry());
