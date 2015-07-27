@@ -1972,7 +1972,9 @@ public class DownloadService extends Service {
 	}
 
 	private synchronized void checkRemovePlayed() {
-		while(currentPlayingIndex > 0) {
+		SharedPreferences prefs = Util.getPreferences(this);
+		int keepCount = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_KEEP_PLAYED_CNT, "0"));
+		while(currentPlayingIndex > keepCount) {
 			downloadList.remove(0);
 			currentPlayingIndex = downloadList.indexOf(currentPlaying);
 			revision++;
