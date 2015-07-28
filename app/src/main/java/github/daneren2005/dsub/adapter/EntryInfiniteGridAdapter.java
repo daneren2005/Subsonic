@@ -123,11 +123,11 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 		MusicDirectory result;
 		int offset = sections.get(0).size();
 		if(("genres".equals(type) && ServerInfo.checkServerVersion(context, "1.10.0")) || "years".equals(type)) {
-			result = service.getAlbumList(type, extra, size, offset, context, null);
+			result = service.getAlbumList(type, extra, size, offset, false, context, null);
 		} else if("genres".equals(type) || "genres-songs".equals(type)) {
 			result = service.getSongsByGenre(extra, size, offset, context, null);
 		} else {
-			result = service.getAlbumList(type, size, offset, context, null);
+			result = service.getAlbumList(type, size, offset, false, context, null);
 		}
 		return result.getChildren();
 	}

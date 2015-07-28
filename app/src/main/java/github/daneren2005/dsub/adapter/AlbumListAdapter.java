@@ -72,11 +72,11 @@ public class AlbumListAdapter extends EndlessAdapter implements SectionIndexer {
 		MusicService service = MusicServiceFactory.getMusicService(context);
 		MusicDirectory result;
 		if(("genres".equals(type) && ServerInfo.checkServerVersion(context, "1.10.0")) || "years".equals(type)) {
-			result = service.getAlbumList(type, extra, size, offset, context, null);
+			result = service.getAlbumList(type, extra, size, offset, false, context, null);
 		} else if("genres".equals(type) || "genres-songs".equals(type)) {
 			result = service.getSongsByGenre(extra, size, offset, context, null);
 		} else {
-			result = service.getAlbumList(type, size, offset, context, null);
+			result = service.getAlbumList(type, size, offset, shouldIndex, context, null);
 		}
 		entries = result.getChildren();
 		return entries.size() > 0;

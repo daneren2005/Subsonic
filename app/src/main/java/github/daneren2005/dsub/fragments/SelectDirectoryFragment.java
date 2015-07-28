@@ -17,7 +17,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +24,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -453,7 +451,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				getShare(share, refresh);
 			}
 		} else if (albumListType != null) {
-			getAlbumList(albumListType, albumListSize);
+			getAlbumList(albumListType, albumListSize, refresh);
 		} else {
 			if(showAll) {
 				getRecursiveMusicDirectory(id, name, refresh);
@@ -588,7 +586,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}.execute();
 	}
 
-	private void getAlbumList(final String albumListType, final int size) {
+	private void getAlbumList(final String albumListType, final int size, final boolean refresh) {
 		if ("newest".equals(albumListType)) {
 			setTitle(R.string.main_albums_newest);
 		} else if ("random".equals(albumListType)) {
@@ -614,7 +612,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				if ("starred".equals(albumListType)) {
 					result = service.getStarredList(context, this);
 				} else if(("genres".equals(albumListType) && ServerInfo.checkServerVersion(context, "1.10.0")) || "years".equals(albumListType)) {
-					result = service.getAlbumList(albumListType, albumListExtra, size, 0, context, this);
+					result = service.getAlbumList(albumListType, albumListExtra, size, 0, refresh, context, this);
 					if(result.getChildrenSize() == 0 && "genres".equals(albumListType)) {
 						SelectDirectoryFragment.this.albumListType = "genres-songs";
 						result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
@@ -622,7 +620,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				} else if("genres".equals(albumListType) || "genres-songs".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
 				} else {
-					result = service.getAlbumList(albumListType, size, 0, context, this);
+					result = service.getAlbumList(albumListType, size, 0, refresh, context, this);
 				}
 				return result;
 			}

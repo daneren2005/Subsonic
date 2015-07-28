@@ -68,7 +68,7 @@ public class AlbumListCountView extends UpdateView2<Integer, Void> {
 			}
 
 			MusicService musicService = MusicServiceFactory.getMusicService(context);
-			MusicDirectory recentlyAdded = musicService.getAlbumList("newest", 20, 0, context, null);
+			MusicDirectory recentlyAdded = musicService.getAlbumList("newest", 20, 0, false, context, null);
 
 			// If first run, just put everything in it and return 0
 			boolean firstRun = recents.isEmpty();
