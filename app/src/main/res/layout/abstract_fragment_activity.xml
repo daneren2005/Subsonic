@@ -128,9 +128,10 @@
 		</FrameLayout>
 
 		<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-					 android:id="@+id/now_playing_fragment_container"
-					 android:layout_width="match_parent"
-					 android:layout_height="0dp"
-					 android:layout_weight="1"/>
+					android:id="@+id/now_playing_fragment_container"
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1"
+					android:clickable="true"/>
 	</LinearLayout>
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
