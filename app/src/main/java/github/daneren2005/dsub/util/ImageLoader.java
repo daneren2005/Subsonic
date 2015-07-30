@@ -226,7 +226,7 @@ public class ImageLoader {
 		}
 
 		if (!large) {
-			setImage(view, Util.createDrawableFromBitmap(context, null), false);
+			setImage(view, null, false);
 		}
 		ImageTask task = new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
 		task.execute();
@@ -250,6 +250,7 @@ public class ImageLoader {
 			setImage(view, drawable, true);
 			return null;
 		}
+		setImage(view, null, false);
 
 		SilentBackgroundTask<Void> task = new ViewUrlTask(view.getContext(), view, url, size);
 		task.execute();
