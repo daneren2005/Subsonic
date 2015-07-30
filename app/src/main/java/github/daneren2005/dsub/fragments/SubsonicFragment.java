@@ -73,6 +73,7 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.MenuUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
@@ -174,10 +175,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_shuffle:
+			case R.id.menu_global_shuffle:
 				onShuffleRequested();
 				return true;
-			case R.id.menu_search:
+			case R.id.menu_global_search:
 				context.onSearchRequested();
 				return true;
 			case R.id.menu_exit:
@@ -185,6 +186,35 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				return true;
 			case R.id.menu_refresh:
 				refresh();
+				return true;
+			case R.id.menu_play_now:
+				playNow(false, false);
+				return true;
+			case R.id.menu_play_last:
+				playNow(false, true);
+				return true;
+			case R.id.menu_play_next:
+				playNow(false, true, true);
+				return true;
+			case R.id.menu_shuffle:
+				playNow(true, false);
+				return true;
+			case R.id.menu_download:
+				downloadBackground(false);
+				clearSelected();
+				return true;
+			case R.id.menu_cache:
+				downloadBackground(true);
+				clearSelected();
+				return true;
+			case R.id.menu_delete:
+				delete();
+				clearSelected();
+				return true;
+			case R.id.menu_add_playlist:
+				List<Entry> songs = getSelectedEntries();
+				addToPlaylist(songs);
+				clearSelected();
 				return true;
 		}
 
@@ -249,37 +279,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
-		hideMenuItems(menu, updateView);
-	}
-
-	protected void hideMenuItems(Menu menu, UpdateView updateView) {
-		if(!ServerInfo.checkServerVersion(context, "1.8")) {
-			menu.setGroupVisible(R.id.server_1_8, false);
-			menu.setGroupVisible(R.id.hide_star, false);
-		}
-		if(!ServerInfo.checkServerVersion(context, "1.9")) {
-			menu.setGroupVisible(R.id.server_1_9, false);
-		}
-		if(!ServerInfo.checkServerVersion(context, "1.10.1")) {
-			menu.setGroupVisible(R.id.server_1_10, false);
-		}
-
-		SharedPreferences prefs = Util.getPreferences(context);
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_NEXT, true)) {
-			menu.setGroupVisible(R.id.hide_play_next, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_LAST, true)) {
-			menu.setGroupVisible(R.id.hide_play_last, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
-			menu.setGroupVisible(R.id.hide_star, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || !UserUtil.canShare()) {
-			menu.setGroupVisible(R.id.hide_share, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
-			menu.setGroupVisible(R.id.hide_rating, false);
-		}
+		MenuUtil.hideMenuItems(context, menu);
 	}
 
 	protected void recreateContextMenu(Menu menu) {
@@ -717,6 +717,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void toggleStarred(Entry entry) {
 		toggleStarred(entry, null);
 	}
+
 	public void toggleStarred(final Entry entry, final OnStarChange onStarChange) {
 		final boolean starred = !entry.isStarred();
 		entry.setStarred(starred);
@@ -822,9 +823,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void downloadPlaylist(final String id, final String name, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, name, false, save, append, autoplay, shuffle, background);
 	}
+
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, name, isDirectory, save, append, autoplay, shuffle, background, false);
 	}
+
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
 		new RecursiveLoader(context) {
 			@Override
@@ -1360,6 +1363,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		deleteRecursively(FileUtil.getAlbumDirectory(context, album));
 
 	}
+
 	public void deleteRecursively(final File dir) {
 		if(dir == null) {
 			return;
@@ -1416,6 +1420,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		replaceFragment(fragment, true);
 	}
+
 	public void showAlbum(Entry entry) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
@@ -1480,6 +1485,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void playBookmark(List<Entry> songs, Entry song) {
 		playBookmark(songs, song, null, null);
 	}
+
 	protected void playBookmark(final List<Entry> songs, final Entry song, final String playlistName, final String playlistId) {
 		final Integer position = song.getBookmark().getPosition();
 
@@ -1567,9 +1573,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		Entry selected = entries.isEmpty() ? null : entries.get(0);
 		playNow(entries, selected, position, playlistName, playlistId);
 	}
+
 	protected void playNow(List<Entry> entries, Entry song, int position) {
 		playNow(entries, song, position, null, null);
 	}
+
 	protected void playNow(final List<Entry> entries, final Entry song, final int position, final String playlistName, final String playlistId) {
 		new LoadingTask<Void>(context) {
 			@Override
@@ -1714,6 +1722,118 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				Util.toast(context, msg, false);
 			}
 		}.execute();
+	}
+
+	protected SectionAdapter<Entry> getCurrentAdapter() { return null; }
+	protected void clearSelected() {
+		if(getCurrentAdapter() != null) {
+			getCurrentAdapter().clearSelected();
+		}
+	}
+	protected List<Entry> getSelectedEntries() {
+		return getCurrentAdapter().getSelected();
+	}
+
+	protected void playNow(final boolean shuffle, final boolean append) {
+		playNow(shuffle, append, false);
+	}
+	protected void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
+		List<Entry> songs = getSelectedEntries();
+		if(!songs.isEmpty()) {
+			download(songs, append, false, !append, playNext, shuffle);
+			clearSelected();
+		}
+	}
+
+	protected void download(List<Entry> entries, boolean append, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
+		download(entries, append, save, autoplay, playNext, shuffle, null, null);
+	}
+	protected void download(final List<Entry> entries, final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle, final String playlistName, final String playlistId) {
+		final DownloadService downloadService = getDownloadService();
+		if (downloadService == null) {
+			return;
+		}
+		warnIfStorageUnavailable();
+
+		// Conditions for using play now button
+		if(!append && !save && autoplay && !playNext && !shuffle) {
+			// Call playNow which goes through and tries to use bookmark information
+			playNow(entries, playlistName, playlistId);
+			return;
+		}
+
+		RecursiveLoader onValid = new RecursiveLoader(context) {
+			@Override
+			protected Boolean doInBackground() throws Throwable {
+				if (!append) {
+					getDownloadService().clear();
+				}
+				getSongsRecursively(entries, songs);
+
+				downloadService.download(songs, save, autoplay, playNext, shuffle);
+				if (playlistName != null) {
+					downloadService.setSuggestedPlaylistName(playlistName, playlistId);
+				} else {
+					downloadService.setSuggestedPlaylistName(null, null);
+				}
+				return null;
+			}
+
+			@Override
+			protected void done(Boolean result) {
+				if (autoplay) {
+					context.openNowPlaying();
+				} else if (save) {
+					Util.toast(context,
+							context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+				} else if (append) {
+					Util.toast(context,
+							context.getResources().getQuantityString(R.plurals.select_album_n_songs_added, songs.size(), songs.size()));
+				}
+			}
+		};
+
+		executeOnValid(onValid);
+	}
+	protected void executeOnValid(RecursiveLoader onValid) {
+		onValid.execute();
+	}
+	protected void downloadBackground(final boolean save) {
+		List<Entry> songs = getSelectedEntries();
+		if(!songs.isEmpty()) {
+			downloadBackground(save, songs);
+		}
+	}
+
+	protected void downloadBackground(final boolean save, final List<Entry> entries) {
+		if (getDownloadService() == null) {
+			return;
+		}
+
+		warnIfStorageUnavailable();
+		new RecursiveLoader(context) {
+			@Override
+			protected Boolean doInBackground() throws Throwable {
+				getSongsRecursively(entries, songs);
+				getDownloadService().downloadBackground(songs, save);
+				return null;
+			}
+
+			@Override
+			protected void done(Boolean result) {
+				Util.toast(context, context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+			}
+		}.execute();
+	}
+
+	protected void delete() {
+		List<Entry> songs = getSelectedEntries();
+		if(!songs.isEmpty()) {
+			DownloadService downloadService = getDownloadService();
+			if(downloadService != null) {
+				downloadService.delete(songs);
+			}
+		}
 	}
 
 	protected abstract class EntryInstanceUpdater {

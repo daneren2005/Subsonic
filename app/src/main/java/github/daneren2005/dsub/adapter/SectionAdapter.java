@@ -39,6 +39,7 @@ import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.util.MenuUtil;
 import github.daneren2005.dsub.view.BasicHeaderView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.view.UpdateView.UpdateViewHolder;
@@ -383,6 +384,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	public void setChecked(UpdateView updateView, boolean checked) {
 		updateView.setChecked(checked);
 	}
+	public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {}
 
 	private void startActionMode(final UpdateView.UpdateViewHolder<T> holder) {
 		final UpdateView<T> updateView = holder.getUpdateView();
@@ -394,7 +396,8 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 				@Override
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 					currentActionMode = mode;
-					fragmentActivity.onCreateOptionsMenu(menu);
+					onCreateActionModeMenu(menu, mode.getMenuInflater());
+					MenuUtil.hideMenuItems(context, menu);
 
 					T item = holder.getItem();
 					selected.add(item);

@@ -31,6 +31,7 @@ import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.util.MenuUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
@@ -46,7 +47,7 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 	@Override
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry item) {
 		menuInflater.inflate(R.menu.select_bookmark_context, menu);
-		hideMenuItems(menu, updateView);
+		MenuUtil.hideMenuItems(context, menu);
 	}
 
 	@Override

@@ -274,37 +274,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_play_now:
-				playNow(false, false);
-				return true;
-			case R.id.menu_play_last:
-				playNow(false, true);
-				return true;
-			case R.id.menu_play_next:
-				playNow(false, true, true);
-				return true;
-			case R.id.menu_shuffle:
-				playNow(true, false);
-				return true;
-			case R.id.menu_download:
-				downloadBackground(false);
-				entryGridAdapter.clearSelected();
-				return true;
-			case R.id.menu_cache:
-				downloadBackground(true);
-				entryGridAdapter.clearSelected();
-				return true;
-			case R.id.menu_delete:
-				delete();
-				entryGridAdapter.clearSelected();
-				return true;
-			case R.id.menu_add_playlist:
-				List<Entry> songs = getSelectedEntries();
-				if(songs.isEmpty()) {
-					songs = entries;
-				}
-				addToPlaylist(songs);
-				return true;
 			case R.id.menu_remove_playlist:
 				removeFromPlaylist(playlistId, playlistName, getSelectedIndexes());
 				return true;
@@ -683,6 +652,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 	}
 
+	@Override
+	protected SectionAdapter<Entry> getCurrentAdapter() {
+		return entryGridAdapter;
+	}
+
     private void finishLoading() {
 		boolean validData = !entries.isEmpty() || !albums.isEmpty();
 		if(!validData) {
@@ -695,6 +669,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		if(albumListType == null || "starred".equals(albumListType)) {
 			entryGridAdapter = new EntryGridAdapter(context, entries, getImageLoader(), largeAlbums);
+			entryGridAdapter.setRemoveFromPlaylist(playlistId != null);
 		} else {
 			entryGridAdapter = new EntryInfiniteGridAdapter(context, entries, getImageLoader(), largeAlbums);
 
@@ -805,10 +780,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 	}
 
-	private void playNow(final boolean shuffle, final boolean append) {
-		playNow(shuffle, append, false);
-	}
-	private void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
+	@Override
+	protected void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
 		List<Entry> songs = getSelectedEntries();
 		if(!songs.isEmpty()) {
 			download(songs, append, false, !append, playNext, shuffle);
@@ -830,10 +803,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 	}
 
-	private List<Entry> getSelectedEntries() {
-		return entryGridAdapter.getSelected();
-	}
-
 	private List<Integer> getSelectedIndexes() {
 		List<Entry> selected = entryGridAdapter.getSelected();
 		List<Integer> indexes = new ArrayList<Integer>();
@@ -845,55 +814,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		return indexes;
 	}
 
-	private void download(final List<Entry> entries, final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle) {
-		if (getDownloadService() == null) {
-			return;
-		}
-
-		warnIfStorageUnavailable();
-		
-		// Conditions for using play now button
-		if(!append && !save && autoplay && !playNext && !shuffle) {
-			// Call playNow which goes through and tries to use bookmark information
-			playNow(entries, playlistName, playlistId);
-			return;
-		}
-		
-		RecursiveLoader onValid = new RecursiveLoader(context) {
-			@Override
-			protected Boolean doInBackground() throws Throwable {
-				if (!append) {
-					getDownloadService().clear();
-				}
-				getSongsRecursively(entries, songs);
-
-				DownloadService downloadService = getDownloadService();
-				downloadService.download(songs, save, autoplay, playNext, shuffle);
-				if (playlistName != null) {
-					downloadService.setSuggestedPlaylistName(playlistName, playlistId);
-				} else {
-					downloadService.setSuggestedPlaylistName(null, null);
-				}
-				return null;
-			}
-
-			@Override
-			protected void done(Boolean result) {
-				if (autoplay) {
-					context.openNowPlaying();
-				} else if (save) {
-					Util.toast(context,
-							context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
-				} else if (append) {
-					Util.toast(context,
-							context.getResources().getQuantityString(R.plurals.select_album_n_songs_added, songs.size(), songs.size()));
-				}
-			}
-		};
-
+	@Override
+	protected void executeOnValid(RecursiveLoader onValid) {
 		checkLicenseAndTrialPeriod(onValid);
 	}
-	private void downloadBackground(final boolean save) {
+
+	@Override
+	protected void downloadBackground(final boolean save) {
 		List<Entry> songs = getSelectedEntries();
 		if(playlistId != null) {
 			songs = entries;
@@ -906,7 +833,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			downloadBackground(save, songs);
 		}
 	}
-	private void downloadBackground(final boolean save, final List<Entry> entries) {
+	@Override
+	protected void downloadBackground(final boolean save, final List<Entry> entries) {
 		if (getDownloadService() == null) {
 			return;
 		}
@@ -929,7 +857,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		checkLicenseAndTrialPeriod(onValid);
 	}
 
-	private void delete() {
+	@Override
+	protected void delete() {
 		List<Entry> songs = getSelectedEntries();
 		if(songs.isEmpty()) {
 			for(Entry entry: entries) {
@@ -1030,7 +959,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			public void onClick(DialogInterface dialog, int which) {
 				new LoadingTask<Void>(context, true) {
 					@Override
-					protected Void doInBackground() throws Throwable {				
+					protected Void doInBackground() throws Throwable {
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
 						if (getDownloadService() != null) {

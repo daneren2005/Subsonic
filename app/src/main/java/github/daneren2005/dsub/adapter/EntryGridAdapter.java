@@ -17,15 +17,19 @@ package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.AlbumView;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
@@ -41,6 +45,7 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	private ImageLoader imageLoader;
 	private boolean largeAlbums;
 	private boolean showArtist = false;
+	private boolean removeFromPlaylist = false;
 	private View header;
 
 	public EntryGridAdapter(Context context, List<Entry> entries, ImageLoader imageLoader, boolean largeCell) {
@@ -119,5 +124,22 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	public void removeAt(int index) {
 		sections.get(0).remove(index);
 		notifyItemRemoved(index);
+	}
+
+	public void setRemoveFromPlaylist(boolean removeFromPlaylist) {
+		this.removeFromPlaylist = removeFromPlaylist;
+	}
+
+	@Override
+	public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
+		if(Util.isOffline(context)) {
+			menuInflater.inflate(R.menu.multiselect_media_offline, menu);
+		} else {
+			menuInflater.inflate(R.menu.multiselect_media, menu);
+		}
+
+		if(!removeFromPlaylist) {
+			menu.removeItem(R.id.menu_remove_playlist);
+		}
 	}
 }
