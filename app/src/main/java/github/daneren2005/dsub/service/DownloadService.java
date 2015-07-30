@@ -908,6 +908,7 @@ public class DownloadService extends Service {
 	}
 	private synchronized void play(int index, boolean start, int position) {
 		int size = this.size();
+		cachedPosition = 0;
 		if (index < 0 || index >= size) {
 			reset();
 			if(index >= size && size != 0) {
@@ -2390,6 +2391,10 @@ public class DownloadService extends Service {
 					}
 				}
 			});
+		}
+
+		if(playerState != STARTED) {
+			onSongProgress();
 		}
 	}
 	private void onSongsChanged() {
