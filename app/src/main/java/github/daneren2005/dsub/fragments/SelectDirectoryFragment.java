@@ -858,6 +858,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	@Override
+	protected void download(List<Entry> entries, boolean append, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
+		download(entries, append, save, autoplay, playNext, shuffle, playlistName, playlistId);
+	}
+
+	@Override
 	protected void delete() {
 		List<Entry> songs = getSelectedEntries();
 		if(songs.isEmpty()) {
