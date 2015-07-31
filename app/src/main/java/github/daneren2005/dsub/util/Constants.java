@@ -113,6 +113,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";
 	public static final String PREFERENCES_KEY_GAPLESS_PLAYBACK = "gaplessPlayback";
 	public static final String PREFERENCES_KEY_REMOVE_PLAYED = "removePlayed";
+	public static final String PREFERENCES_KEY_KEEP_PLAYED_CNT = "keepPlayedCount";
 	public static final String PREFERENCES_KEY_SHUFFLE_MODE = "shuffleMode2";
 	public static final String PREFERENCES_KEY_SHUFFLE_MODE_EXTRA = "shuffleModeExtra";
 	public static final String PREFERENCES_KEY_CHAT_REFRESH = "chatRefreshRate";

@@ -371,6 +371,11 @@
 	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
 	<string name="settings.temp_loss_lower">Always lower volume</string>
 	<string name="settings.temp_loss_nothing">Do Nothing</string>
+	<string name="settings.keep_played_count_title">Keep played songs</string>
+	<string name="settings.keep_played_count_none">Remove all played songs</string>
+	<string name="settings.keep_played_count_one">Keep last played songs</string>
+	<string name="settings.keep_played_count_two">Keep 2 played songs</string>
+	<string name="settings.keep_played_count_three">Keep 3 played songs</string>
 	<string name="settings.disconnect_pause_title">Pause on Disconnect</string>
 	<string name="settings.disconnect_pause_both">Pause</string>
 	<string name="settings.disconnect_pause_neither">Do Nothing</string>

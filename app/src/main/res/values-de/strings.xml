@@ -636,5 +636,10 @@
 	<string name="details.year">Jahr</string>
 	<string name="details.version">Version</string>
 	<string name="playlist.mine">Meine Wiedergabelisten</string>
+	<string name="settings.keep_played_count_none">Alle abgespielten Lieder entfernen</string>
+	<string name="settings.keep_played_count_one">Das letzte abgespielte Lied behalten</string>
+	<string name="settings.keep_played_count_three">3 abgespielte Lieder behalten</string>
+	<string name="settings.keep_played_count_two">2 abgespielte Lieder behalten</string>
+	<string name="settings.keep_played_count_title">Abgespielte Lieder behalten</string>
 
 </resources>

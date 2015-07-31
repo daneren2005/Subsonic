@@ -335,6 +335,13 @@
 					myns:max="100"/>
 
 				<ListPreference
+					android:title="@string/settings.keep_played_count_title"
+					android:key="keepPlayedCount"
+					android:defaultValue="0"
+					android:entryValues="@array/keepPlayedCountValues"
+					android:entries="@array/keepPlayedCountNames"/>
+
+				<ListPreference
 					android:title="@string/settings.temp_loss_title"
 					android:key="tempLoss"
 					android:defaultValue="1"

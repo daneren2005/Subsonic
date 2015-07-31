@@ -163,6 +163,19 @@
 		<item>@string/settings.temp_loss_nothing</item>
 	</string-array>
 
+	<string-array name="keepPlayedCountValues">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+	<string-array name="keepPlayedCountNames">
+		<item>@string/settings.keep_played_count_none</item>
+		<item>@string/settings.keep_played_count_one</item>
+		<item>@string/settings.keep_played_count_two</item>
+		<item>@string/settings.keep_played_count_three</item>
+	</string-array>
+
 	<string-array name="disconnectPauseValues">
 		<item>0</item>
 		<item>3</item>
