@@ -35,7 +35,6 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TabBackgroundTask;
@@ -139,6 +138,10 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 
 			currentTask.done(objects);
 		}
+	}
+
+	protected SectionAdapter getCurrentAdapter() {
+		return adapter;
 	}
 
 	private void setupLayoutManager() {

@@ -1,7 +1,9 @@
 package github.daneren2005.dsub.fragments;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -156,6 +158,19 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 				onSongSelected(entry, false, true, true, false);
 			}
 		}
+	}
+
+	@Override
+	protected List<MusicDirectory.Entry> getSelectedEntries() {
+		List<Serializable> selected = adapter.getSelected();
+		List<MusicDirectory.Entry> selectedMedia = new ArrayList<>();
+		for(Serializable ser: selected) {
+			if(ser instanceof MusicDirectory.Entry) {
+				selectedMedia.add((MusicDirectory.Entry) ser);
+			}
+		}
+
+		return selectedMedia;
 	}
 
 	public void search(final String query, final boolean autoplay) {

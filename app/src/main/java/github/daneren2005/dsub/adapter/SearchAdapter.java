@@ -17,6 +17,8 @@ package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.ViewGroup;
 
 import java.io.Serializable;
@@ -27,6 +29,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.AlbumView;
 import github.daneren2005.dsub.view.ArtistView;
 import github.daneren2005.dsub.view.SongView;
@@ -64,6 +67,7 @@ public class SearchAdapter extends SectionAdapter<Serializable> {
 			this.headers.add(res.getString(R.string.search_songs));
 		}
 		this.onItemClickedListener = listener;
+		checkable = true;
 	}
 
 	@Override
@@ -88,7 +92,7 @@ public class SearchAdapter extends SectionAdapter<Serializable> {
 			albumView.setObject((Entry) item, imageLoader);
 		} else if(viewType == VIEW_TYPE_SONG) {
 			SongView songView = (SongView) view;
-			songView.setObject((Entry) item, false);
+			songView.setObject((Entry) item, true);
 		} else if(viewType == VIEW_TYPE_ARTIST) {
 			view.setObject(item);
 		}
@@ -110,5 +114,16 @@ public class SearchAdapter extends SectionAdapter<Serializable> {
 		} else {
 			return VIEW_TYPE_ARTIST;
 		}
+	}
+
+	@Override
+	public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
+		if(Util.isOffline(context)) {
+			menuInflater.inflate(R.menu.multiselect_media_offline, menu);
+		} else {
+			menuInflater.inflate(R.menu.multiselect_media, menu);
+		}
+
+		menu.removeItem(R.id.menu_remove_playlist);
 	}
 }
