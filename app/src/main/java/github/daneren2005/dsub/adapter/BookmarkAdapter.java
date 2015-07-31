@@ -18,6 +18,9 @@ package github.daneren2005.dsub.adapter;
 import android.content.Context;
 
 import java.util.List;
+
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -34,6 +37,7 @@ public class BookmarkAdapter extends SectionAdapter<MusicDirectory.Entry> {
 	public BookmarkAdapter(Context activity, List<MusicDirectory.Entry> bookmarks, OnItemClickedListener listener) {
 		super(activity, bookmarks);
 		this.onItemClickedListener = listener;
+		checkable = true;
 	}
 
 	@Override
@@ -46,7 +50,7 @@ public class BookmarkAdapter extends SectionAdapter<MusicDirectory.Entry> {
 		SongView songView = (SongView) holder.getUpdateView();
 		Bookmark bookmark = item.getBookmark();
 
-		songView.setObject(item, false);
+		songView.setObject(item, true);
 
 		// Add current position to duration
 		TextView durationTextView = (TextView) songView.findViewById(R.id.song_duration);
@@ -57,5 +61,16 @@ public class BookmarkAdapter extends SectionAdapter<MusicDirectory.Entry> {
 	@Override
 	public int getItemViewType(MusicDirectory.Entry item) {
 		return EntryGridAdapter.VIEW_TYPE_SONG;
+	}
+
+	@Override
+	public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
+		if(Util.isOffline(context)) {
+			menuInflater.inflate(R.menu.multiselect_media_offline, menu);
+		} else {
+			menuInflater.inflate(R.menu.multiselect_media, menu);
+		}
+
+		menu.removeItem(R.id.menu_remove_playlist);
 	}
 }

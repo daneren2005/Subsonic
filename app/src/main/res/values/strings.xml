@@ -242,11 +242,6 @@
 	<string name="bookmark.deleted">Deleted the bookmark for \"%s\"</string>
 	<string name="bookmark.deleted_error">Failed to delete the bookmark for \"%s\"</string>
 	<string name="bookmark.details_title">Bookmark Details</string>
-	<string name="bookmark.details">Song: %1$s
-		\nPosition: %2$s
-		\nCreated: %3$s
-		\nLast Updated: %4$s
-		\nComment: %5$s</string>
 	<string name="bookmark.resume_title">Resume playing?</string>
 	<string name="bookmark.resume">Resume playing \'%1$s\' from %2$s</string>
 	<string name="bookmark.action_resume">Resume</string>
@@ -620,6 +615,9 @@
 	<string name="details.used_space">Used Space</string>
 	<string name="details.available_space">Available Space</string>
 	<string name="details.of">%1$s of %2$s</string>
+	<string name="details.song">Song</string>
+	<string name="details.position">Position</string>
+	<string name="details.updated">Updated</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>
