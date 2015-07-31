@@ -38,6 +38,7 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.BookmarkAdapter;
 import github.daneren2005.dsub.view.UpdateView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -108,15 +109,35 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 
 	private void displayBookmarkInfo(final MusicDirectory.Entry entry) {
 		Bookmark bookmark = entry.getBookmark();
-		String comment = bookmark.getComment();
-		if(comment == null) {
-			comment = "";
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
+
+		headers.add(R.string.details_song);
+		details.add(entry.getTitle());
+
+		if(entry.getArtist() != null) {
+			headers.add(R.string.details_artist);
+			details.add(entry.getArtist());
+		}
+		if(entry.getAlbum() != null) {
+			headers.add(R.string.details_album);
+			details.add(entry.getAlbum());
 		}
 
-		String msg = context.getResources().getString(R.string.bookmark_details,
-			entry.getTitle(), Util.formatDuration(bookmark.getPosition() / 1000),
-			Util.formatDate(bookmark.getCreated()), Util.formatDate(bookmark.getChanged()), comment);
-		
-		Util.info(context, R.string.bookmark_details_title, msg, false);
+		headers.add(R.string.details_position);
+		details.add(Util.formatDuration(bookmark.getPosition() / 1000));
+
+		headers.add(R.string.details_created);
+		details.add(Util.formatDate(bookmark.getCreated()));
+
+		headers.add(R.string.details_updated);
+		details.add(Util.formatDate(bookmark.getChanged()));
+
+		if(bookmark.getComment() != null) {
+			headers.add(R.string.details_comments);
+			details.add(bookmark.getComment());
+		}
+
+		Util.showDetailsDialog(context, R.string.bookmark_details_title, headers, details);
 	}
 }
