@@ -1263,7 +1263,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			} else {
 				starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
 			}
-			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, currentPlayingSize));
+			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
 
 			int badRating, goodRating, bookmark;
 			if(song.getRating() == 1) {
