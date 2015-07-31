@@ -449,6 +449,11 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 			});
 		}
 	}
+	public void stopActionMode() {
+		if(currentActionMode != null) {
+			currentActionMode.finish();
+		}
+	}
 
 	public interface OnItemClickedListener<T> {
 		void onItemClicked(T item);

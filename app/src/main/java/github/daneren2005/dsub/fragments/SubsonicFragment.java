@@ -1724,7 +1724,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	protected SectionAdapter<Entry> getCurrentAdapter() { return null; }
+	protected SectionAdapter getCurrentAdapter() { return null; }
+	public void stopActionMode() {
+		SectionAdapter adapter = getCurrentAdapter();
+		if(adapter != null) {
+			adapter.stopActionMode();
+		}
+	}
 	protected void clearSelected() {
 		if(getCurrentAdapter() != null) {
 			getCurrentAdapter().clearSelected();

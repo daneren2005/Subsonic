@@ -227,6 +227,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 			@Override
 			public void onPanelExpanded(View panel) {
+				currentFragment.stopActionMode();
+
 				// Disable custom view before switching
 				getSupportActionBar().setDisplayShowCustomEnabled(false);
 

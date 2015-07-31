@@ -602,6 +602,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	protected void drawerItemSelected(String fragmentType) {
+		if(currentFragment != null) {
+			currentFragment.stopActionMode();
+		}
 		startFragmentActivity(fragmentType);
 	}
 
