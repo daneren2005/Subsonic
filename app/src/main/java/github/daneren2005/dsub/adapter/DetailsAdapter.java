@@ -55,7 +55,7 @@ public class DetailsAdapter extends ArrayAdapter<String> {
 		nameView.setText(headers.get(position));
 
 		detailsView.setText(details.get(position));
-		Linkify.addLinks(detailsView, Linkify.ALL);
+		Linkify.addLinks(detailsView, Linkify.WEB_URLS | Linkify.EMAIL_ADDRESSES);
 
 		return view;
 	}
