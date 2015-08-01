@@ -717,7 +717,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		// Show header if not album list type and not root and not artist
 		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
 		boolean addedHeader = false;
-		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null || artistInfoDelayed != null)) {
+		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null || artistInfoDelayed != null) && (share == null || entries.size() != albums.size())) {
 			View header = createHeader();
 
 			if(header != null) {
