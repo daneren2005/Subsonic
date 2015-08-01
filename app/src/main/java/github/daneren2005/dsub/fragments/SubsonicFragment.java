@@ -555,7 +555,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		final int columns = getRecyclerColumnCount();
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
 
-		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
+		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup(columns);
 		if(spanSizeLookup != null) {
 			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
 		}
@@ -570,8 +570,23 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		return layoutManager;
 	}
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
-		return null;
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+		return new GridLayoutManager.SpanSizeLookup() {
+			@Override
+			public int getSpanSize(int position) {
+				SectionAdapter adapter = getCurrentAdapter();
+				if(adapter != null) {
+					int viewType = getCurrentAdapter().getItemViewType(position);
+					if (viewType == SectionAdapter.VIEW_TYPE_HEADER) {
+						return columns;
+					} else {
+						return 1;
+					}
+				} else {
+					return 1;
+				}
+			}
+		};
 	}
 	public RecyclerView.ItemDecoration getItemDecoration() {
 		return new GridSpacingDecoration();

@@ -92,8 +92,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	@Override
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
-		final int columns = getRecyclerColumnCount();
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
