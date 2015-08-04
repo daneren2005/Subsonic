@@ -29,9 +29,6 @@ import github.daneren2005.dsub.view.UpdateView;
 public class DownloadFileAdapter extends SectionAdapter<DownloadFile> {
 	public static int VIEW_TYPE_DOWNLOAD_FILE = 1;
 
-	public DownloadFileAdapter(Context context, List<DownloadFile> entries) {
-		super(context, entries);
-	}
 	public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
 		super(context, entries);
 		this.onItemClickedListener = onItemClickedListener;

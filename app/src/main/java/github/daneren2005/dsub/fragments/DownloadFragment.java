@@ -49,7 +49,7 @@ import github.daneren2005.dsub.adapter.DownloadFileAdapter;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
-public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> {
+public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> implements SectionAdapter.OnItemClickedListener<DownloadFile> {
 	private long currentRevision;
 	private ScheduledExecutorService executorService;
 
@@ -136,7 +136,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> {
 
 	@Override
 	public SectionAdapter getAdapter(List<DownloadFile> objs) {
-		return new DownloadFileAdapter(context, objs);
+		return new DownloadFileAdapter(context, objs, this);
 	}
 
 	@Override
