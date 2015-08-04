@@ -709,10 +709,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(!artist) {
 			entryGridAdapter.setShowArtist(true);
 		}
-		// Podcasts are not checkable
-		if(podcastId != null) {
-			entryGridAdapter.setCheckable(false);
-		}
 
 		// Show header if not album list type and not root and not artist
 		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
