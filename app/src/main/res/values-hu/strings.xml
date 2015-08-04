@@ -373,7 +373,7 @@
 	<string name="settings.temp_loss_nothing">Ne csináljon semmit</string>
 	<string name="settings.keep_played_count_title">Lejátszottak megtartása</string>
 	<string name="settings.keep_played_count_none">Összes lejátszott eltávolítása</string>
-	<string name="settings.keep_played_count_one">Utoljára lejátszott megtartása/string>
+	<string name="settings.keep_played_count_one">Utoljára lejátszott megtartása</string>
 	<string name="settings.keep_played_count_two">2 lejátszott megtartása</string>
 	<string name="settings.keep_played_count_three">3 lejátszott megtartása</string>
 	<string name="settings.disconnect_pause_title">Megállítás kapcsolatbontás esetén</string>
