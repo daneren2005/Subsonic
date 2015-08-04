@@ -221,11 +221,15 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 			moreButton = updateView.findViewById(R.id.item_more);
 		}
 		if(moreButton != null) {
-			PopupMenu popup = new PopupMenu(context, moreButton);
-			Menu menu = popup.getMenu();
-			onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
-			if(menu.size() == 0) {
-				moreButton.setVisibility(View.GONE);
+			if(onItemClickedListener != null) {
+				PopupMenu popup = new PopupMenu(context, moreButton);
+				Menu menu = popup.getMenu();
+				onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
+				if (menu.size() == 0) {
+					moreButton.setVisibility(View.GONE);
+				} else {
+					moreButton.setVisibility(View.VISIBLE);
+				}
 			} else {
 				moreButton.setVisibility(View.VISIBLE);
 			}
