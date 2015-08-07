@@ -271,7 +271,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		} else if(selected instanceof Artist) {
 			Artist artist = (Artist) selected;
 			if(Util.isOffline(context)) {
-				// menuInflater.inflate(R.menu.select_artist_context_offline, menu);
+				menuInflater.inflate(R.menu.select_artist_context_offline, menu);
 			} else {
 				menuInflater.inflate(R.menu.select_artist_context, menu);
 
@@ -304,6 +304,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		songs.add(entry);
 
 		switch (menuItem.getItemId()) {
+			case R.id.artist_menu_play_now:
+				downloadRecursively(artist.getId(), false, false, true, false, false);
+				break;
+			case R.id.artist_menu_play_shuffled:
+				downloadRecursively(artist.getId(), false, false, true, true, false);
+				break;
+			case R.id.artist_menu_play_last:
+				downloadRecursively(artist.getId(), false, true, false, false, false);
+				break;
 			case R.id.artist_menu_star:
 				toggleStarred(artist);
 				break;
@@ -318,6 +327,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.album_menu_share:
 				createShare(songs);
+				break;
+			case R.id.song_menu_play_last:
+				getDownloadService().download(songs, false, false, false, false);
 				break;
 			case R.id.song_menu_download:
 				getDownloadService().downloadBackground(songs, false);

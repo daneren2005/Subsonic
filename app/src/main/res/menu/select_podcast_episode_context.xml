@@ -7,6 +7,12 @@
 		android:title="@string/common.info"
 		/>
 
+	<group android:id="@+id/hide_play_last">
+		<item
+			android:id="@+id/song_menu_play_last"
+			android:title="@string/common.play_last"/>
+	</group>
+
 	<group android:id="@+id/server_1.9">
 		<item
 			android:id="@+id/bookmark_menu_delete"

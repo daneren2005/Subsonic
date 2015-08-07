@@ -6,6 +6,12 @@
 		android:id="@+id/bookmark_menu_info"
 		android:title="@string/common.info"/>
 
+	<group android:id="@+id/hide_play_last">
+		<item
+			android:id="@+id/song_menu_play_last"
+			android:title="@string/common.play_last"/>
+	</group>
+
 	<item
 		android:id="@+id/song_menu_show_album"
 		android:title="@string/download.menu_show_album"/>
