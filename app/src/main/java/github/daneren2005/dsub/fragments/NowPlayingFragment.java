@@ -117,10 +117,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private ImageButton bookmarkButton;
 	private ImageButton rateBadButton;
 	private ImageButton rateGoodButton;
-	private View mainLayout;
+
 	private ScheduledExecutorService executorService;
 	private DownloadFile currentPlaying;
-	private long currentRevision;
 	private int swipeDistance;
 	private int swipeVelocity;
 	private ScheduledFuture<?> hideControlsFuture;
@@ -158,8 +157,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.download, container, false);
 		setTitle(R.string.button_bar_now_playing);
-
-		mainLayout = rootView.findViewById(R.id.download_layout);
 
 		WindowManager w = context.getWindowManager();
 		Display d = w.getDefaultDisplay();
@@ -220,7 +217,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				DownloadService downloadService = getDownloadService();
 				downloadService.remove(downloadFile);
 				songListAdapter.removeItem(downloadFile);
-				currentRevision = downloadService.getDownloadListUpdateRevision();
 			}
 		});
 		touchHelper.attachToRecyclerView(playlistView);
@@ -371,6 +367,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					default:
 						break;
 				}
+				updateRepeatButton();
 				setControlsVisible(true);
 			}
 		});
@@ -808,6 +805,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					downloadService.startRemoteScan();
 					downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
 				}
+				updateRepeatButton();
 			}
 		});
 	}
@@ -1329,21 +1327,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		emptyTextView.setVisibility(songs.isEmpty() ? View.VISIBLE : View.GONE);
-		currentRevision = downloadService.getDownloadListUpdateRevision();
-
-		switch (downloadService.getRepeatMode()) {
-			case OFF:
-				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_off));
-				break;
-			case ALL:
-				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_all));
-				break;
-			case SINGLE:
-				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_single));
-				break;
-			default:
-				break;
-		}
 
 		if(scrollWhenLoaded) {
 			scrollToCurrent();
@@ -1431,6 +1414,23 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				pauseButton.setVisibility(View.INVISIBLE);
 				stopButton.setVisibility(View.INVISIBLE);
 				startButton.setVisibility(View.VISIBLE);
+				break;
+		}
+	}
+
+	public void updateRepeatButton() {
+		DownloadService downloadService = getDownloadService();
+		switch (downloadService.getRepeatMode()) {
+			case OFF:
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_off));
+				break;
+			case ALL:
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_all));
+				break;
+			case SINGLE:
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_single));
+				break;
+			default:
 				break;
 		}
 	}
