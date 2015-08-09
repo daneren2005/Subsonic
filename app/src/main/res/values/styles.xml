@@ -5,6 +5,21 @@
 	</style>
 	<style name="NotificationButton">
 		<item name="android:background">?android:selectableItemBackground</item>
+		<item name="android:layout_width">46dip</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_gravity">center</item>
+		<item name="android:scaleType">fitCenter</item>
+		<item name="android:padding">2dip</item>
+	</style>
+
+	<style name="NotificationButton.Expanded">
+		<item name="android:background">?android:selectableItemBackground</item>
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:layout_gravity">center</item>
+		<item name="android:scaleType">fitCenter</item>
+		<item name="android:padding">10dip</item>
 	</style>
 
 	<style name="MoreButton" parent="BasicButton">
@@ -13,7 +28,6 @@
 
     <style name="PlaybackControl" parent="@style/BasicButton">
         <item name="android:scaleType">fitCenter</item>
-        <item name="android:padding">6dip</item>
         <item name="android:layout_marginLeft">4dip</item>
         <item name="android:layout_marginRight">4dip</item>
         <item name="android:layout_width">@dimen/Button</item>
@@ -22,15 +36,24 @@
     </style>
 	
 	<style name="PlaybackControl.Small" parent="@style/PlaybackControl">
-		<item name="android:padding">4dip</item>
         <item name="android:layout_width">@dimen/Button.Small</item>
         <item name="android:layout_height">@dimen/Button.Small</item>
     </style>
 
+	<style name="PlaybackControl.Large" parent="@style/PlaybackControl">
+		<item name="android:layout_width">@dimen/Button.Large</item>
+		<item name="android:layout_height">@dimen/Button.Large</item>
+	</style>
+
 	<style name="PlaybackControl.Match" parent="@style/PlaybackControl">
-		<item name="android:padding">4dip</item>
 		<item name="android:layout_height">match_parent</item>
 		<item name="android:layout_width">wrap_content</item>
+		<item name="android:scaleType">fitCenter</item>
+	</style>
+
+	<style name="PlaybackControl.BottomBar" parent="@style/PlaybackControl.Match">
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_weight">1</item>
 	</style>
 
 	<style name="DownloadActionButton" parent="@style/BasicButton">

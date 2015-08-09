@@ -86,36 +86,18 @@
 
 	        <ImageButton
 	            android:id="@+id/control_previous"
-				android:layout_width="0dip"
-				android:layout_height="fill_parent"
-	            android:layout_gravity="center"
-	            android:layout_weight="1"
-				android:padding="10dip"
-	            style="@style/NotificationButton"
-	            android:scaleType="fitCenter"
-	            android:src="@drawable/notification_previous" />
+	            style="@style/NotificationButton.Expanded"
+	            android:src="@drawable/media_backward_dark" />
 
 	        <ImageButton
 	            android:id="@+id/control_pause"
-				android:layout_width="0dip"
-				android:layout_height="fill_parent"
-				android:layout_gravity="center"
-				android:layout_weight="1"
-				android:padding="10dip"
-	            style="@style/NotificationButton"
-	            android:scaleType="fitCenter"
-	            android:src="@drawable/notification_pause" />
+				style="@style/NotificationButton.Expanded"
+	            android:src="@drawable/media_pause_dark" />
 
 	        <ImageButton
 	            android:id="@+id/control_next"
-				android:layout_width="0dip"
-				android:layout_height="fill_parent"
-				android:layout_gravity="center"
-				android:layout_weight="1"
-				android:padding="10dip"
-	            style="@style/NotificationButton"
-	            android:scaleType="fitCenter"
-	            android:src="@drawable/notification_next" />
+				style="@style/NotificationButton.Expanded"
+	            android:src="@drawable/media_forward_dark" />
 	    </LinearLayout>
 
 	</LinearLayout>

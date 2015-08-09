@@ -82,7 +82,7 @@
                 android:layout_weight="1"
 				android:scaleType="center"
                 style="@style/NotificationButton"
-                android:src="@drawable/ic_appwidget_music_previous" />
+                android:src="@drawable/media_backward_dark" />
 
             <ImageButton
                 android:id="@+id/control_play"
@@ -90,7 +90,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:scaleType="center"              
-                android:src="@drawable/ic_appwidget_music_play"
+                android:src="@drawable/media_start_dark"
 				style="@style/NotificationButton" />
 
             <ImageButton
@@ -99,7 +99,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:scaleType="center"
-                android:src="@drawable/ic_appwidget_music_next"
+                android:src="@drawable/media_forward_dark"
 				style="@style/NotificationButton" />
         </LinearLayout>
     </LinearLayout>

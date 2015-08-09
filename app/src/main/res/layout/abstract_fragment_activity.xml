@@ -104,25 +104,21 @@
 					android:layout_weight="1">
 
 					<ImageButton
-						style="@style/PlaybackControl.Match"
+						style="@style/PlaybackControl.BottomBar"
 						android:id="@+id/download_previous"
 						android:src="?attr/actionbar_backward"
-						android:layout_width="0dp"
-						android:layout_weight="1"/>
+						android:padding="2dp"/>
 
 					<ImageButton
-						style="@style/PlaybackControl.Match"
+						style="@style/PlaybackControl.BottomBar"
 						android:id="@+id/download_start"
-						android:src="?attr/actionbar_start"
-						android:layout_width="0dp"
-						android:layout_weight="1"/>
+						android:src="?attr/actionbar_start"/>
 
 					<ImageButton
-						style="@style/PlaybackControl.Match"
+						style="@style/PlaybackControl.BottomBar"
 						android:id="@+id/download_next"
 						android:src="?attr/actionbar_forward"
-						android:layout_width="0dp"
-						android:layout_weight="1"/>
+						android:padding="2dp"/>
 				</LinearLayout>
 			</LinearLayout>
 		</FrameLayout>

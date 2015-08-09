@@ -50,34 +50,18 @@
 
 	<ImageButton
 		android:id="@+id/control_previous"
-		android:src="@drawable/notification_previous"
-		style="@style/NotificationButton"
-		android:layout_width="46dip"
-		android:layout_height="fill_parent"
-		android:layout_gravity="center|right"
-		android:padding="8.0dip"
-		android:layout_weight="0.0"
-		android:scaleType="fitCenter"/>
+		android:src="@drawable/media_backward_dark"
+		style="@style/NotificationButton"/>
 
 	<ImageButton
 		android:id="@+id/control_pause"
-		android:src="@drawable/notification_pause"
+		android:src="@drawable/media_pause_dark"
 		style="@style/NotificationButton"
-		android:layout_width="46dip"
-		android:layout_height="fill_parent"
-		android:layout_gravity="center|right"
-		android:padding="8.0dip"
-		android:layout_weight="0.0"
-		android:scaleType="fitCenter"/>
+		android:layout_width="54dip"
+		android:padding="0dip"/>
 
 	<ImageButton
 		android:id="@+id/control_next"
-		android:src="@drawable/notification_next"
-		style="@style/NotificationButton"
-		android:layout_width="46dip"
-		android:layout_height="fill_parent"
-		android:layout_gravity="center|right"
-		android:padding="8.0dip"
-		android:layout_weight="0.0"
-		android:scaleType="fitCenter"/>
+		android:src="@drawable/media_forward_dark"
+		style="@style/NotificationButton"/>
 </LinearLayout>

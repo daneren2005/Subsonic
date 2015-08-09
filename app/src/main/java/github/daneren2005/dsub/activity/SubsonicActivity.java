@@ -247,7 +247,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		drawerList.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(final MenuItem menuItem) {
-				if(showingTabs) {
+				if (showingTabs) {
 					// Settings are on a different selectable track
 					if (menuItem.getItemId() != R.id.drawer_settings && menuItem.getItemId() != R.id.drawer_admin) {
 						menuItem.setChecked(true);
@@ -310,7 +310,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				return false;
 			}
 		});
-		populateTabs();
 
 		drawerHeader = drawerList.inflateHeaderView(R.layout.drawer_header);
 		drawerHeader.setOnClickListener(new View.OnClickListener() {
@@ -329,6 +328,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
 
 		drawerUserAvatar = (ImageView) drawerHeader.findViewById(R.id.header_user_avatar);
+		populateTabs();
 		updateDrawerHeader();
 
 		if(!isTv()) {
@@ -577,6 +577,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				item.setChecked(true);
 			}
 		}
+		drawerHeaderToggle.setImageResource(R.drawable.main_select_server_dark);
+
 		showingTabs = true;
 	}
 	private void populateServers() {
@@ -591,6 +593,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 		}
 		drawerList.getMenu().setGroupCheckable(MENU_GROUP_SERVER, true, true);
+		drawerHeaderToggle.setImageResource(R.drawable.main_select_tabs_dark);
 
 		showingTabs = false;
 	}

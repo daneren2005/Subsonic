@@ -1333,17 +1333,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 		switch (downloadService.getRepeatMode()) {
 			case OFF:
-				if("light".equals(SubsonicActivity.getThemeName()) | "light_fullscreen".equals(SubsonicActivity.getThemeName())) {
-					repeatButton.setImageResource(R.drawable.media_repeat_off_light);
-				} else {
-					repeatButton.setImageResource(R.drawable.media_repeat_off);
-				}
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_off));
 				break;
 			case ALL:
-				repeatButton.setImageResource(R.drawable.media_repeat_all);
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_all));
 				break;
 			case SINGLE:
-				repeatButton.setImageResource(R.drawable.media_repeat_single);
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_single));
 				break;
 			default:
 				break;
