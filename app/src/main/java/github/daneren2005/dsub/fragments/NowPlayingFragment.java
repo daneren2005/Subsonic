@@ -235,7 +235,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 								if(currentSong.isStarred()) {
 									starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
 								} else {
-									starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
+									if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+										starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
+									} else {
+										starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
+									}
 								}
 							}
 						});
@@ -1259,7 +1263,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			if(song.isStarred()) {
 				starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
 			} else {
-				starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
+				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+					starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
+				} else {
+					starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
+				}
 			}
 			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
 
