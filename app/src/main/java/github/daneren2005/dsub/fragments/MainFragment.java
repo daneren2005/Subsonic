@@ -100,38 +100,28 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		List<List<Integer>> sections = new ArrayList<>();
 		List<String> headers = new ArrayList<>();
 
-		if (!Util.isOffline(context)) {
-			List<Integer> offline = Arrays.asList(R.string.main_offline);
-			sections.add(offline);
-			headers.add(null);
-
-			List<Integer> albums = new ArrayList<>();
-			albums.add(R.string.main_albums_newest);
-			albums.add(R.string.main_albums_random);
-			if(ServerInfo.checkServerVersion(context, "1.8")) {
-				albums.add(R.string.main_albums_alphabetical);
-			}
-			if(!Util.isTagBrowsing(context)) {
-				albums.add(R.string.main_albums_highest);
-			}
-			albums.add(R.string.main_albums_starred);
-			albums.add(R.string.main_albums_genres);
-			albums.add(R.string.main_albums_year);
-			albums.add(R.string.main_albums_recent);
+		List<Integer> albums = new ArrayList<>();
+		albums.add(R.string.main_albums_newest);
+		albums.add(R.string.main_albums_random);
+		if(ServerInfo.checkServerVersion(context, "1.8")) {
+			albums.add(R.string.main_albums_alphabetical);
+		}
+		if(!Util.isTagBrowsing(context)) {
 			albums.add(R.string.main_albums_highest);
+		}
+		albums.add(R.string.main_albums_starred);
+		albums.add(R.string.main_albums_genres);
+		albums.add(R.string.main_albums_year);
+		albums.add(R.string.main_albums_recent);
+		albums.add(R.string.main_albums_highest);
 
-			sections.add(albums);
-			headers.add("albums");
+		sections.add(albums);
+		headers.add("albums");
 
-			if(ServerInfo.checkServerVersion(context, "1.8") && !Util.isTagBrowsing(context)) {
-				List<Integer> videos = Arrays.asList(R.string.main_videos);
-				sections.add(videos);
-				headers.add("videos");
-			}
-		} else {
-			List<Integer> online = Arrays.asList(R.string.main_online);
-			sections.add(online);
-			headers.add(null);
+		if(ServerInfo.checkServerVersion(context, "1.8") && !Util.isTagBrowsing(context)) {
+			List<Integer> videos = Arrays.asList(R.string.main_videos);
+			sections.add(videos);
+			headers.add("videos");
 		}
 
 		return new MainAdapter(context, headers, sections, this);
@@ -145,28 +135,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	@Override
 	public int getTitleResource() {
 		return R.string.common_appname;
-	}
-
-	private void toggleOffline() {
-		boolean isOffline = Util.isOffline(context);
-		Util.setOffline(context, !isOffline);
-		context.invalidate();
-		DownloadService service = getDownloadService();
-		if (service != null) {
-			service.setOnline(isOffline);
-		}
-
-		// Coming back online
-		if(isOffline) {
-			int scrobblesCount = Util.offlineScrobblesCount(context);
-			int starsCount = Util.offlineStarsCount(context);
-			if(scrobblesCount > 0 || starsCount > 0){
-				showOfflineSyncDialog(scrobblesCount, starsCount);
-			}
-		}
-		
-		UserUtil.seedCurrentUser(context);
-		context.updateDrawerHeader();
 	}
 
 	private void showAlbumList(String type) {
@@ -197,84 +165,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	private void showVideos() {
 		SubsonicFragment fragment = new SelectVideoFragment();
 		replaceFragment(fragment);
-	}
-	
-	private void showOfflineSyncDialog(final int scrobbleCount, final int starsCount) {
-		String syncDefault = Util.getSyncDefault(context);
-		if(syncDefault != null) {
-			if("sync".equals(syncDefault)) {
-				syncOffline(scrobbleCount, starsCount);
-				return;
-			} else if("delete".equals(syncDefault)) {
-				deleteOffline();
-				return;
-			}
-		}
-		
-		View checkBoxView = context.getLayoutInflater().inflate(R.layout.sync_dialog, null);
-		final CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.sync_default);
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setIcon(android.R.drawable.ic_dialog_info)
-			.setTitle(R.string.offline_sync_dialog_title)
-			.setMessage(context.getResources().getString(R.string.offline_sync_dialog_message, scrobbleCount, starsCount))
-			.setView(checkBoxView)
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i) {
-					if(checkBox.isChecked()) {
-						Util.setSyncDefault(context, "sync");
-					}
-					syncOffline(scrobbleCount, starsCount);
-				}
-			}).setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i) {
-					dialogInterface.dismiss();
-				}
-			}).setNegativeButton(R.string.common_delete, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialogInterface, int i) {
-					if(checkBox.isChecked()) {
-						Util.setSyncDefault(context, "delete");
-					}
-					deleteOffline();
-				}
-			});
-
-		builder.create().show();
-	}
-	
-	private void syncOffline(final int scrobbleCount, final int starsCount) {
-		new SilentBackgroundTask<Integer>(context) {
-			@Override
-			protected Integer doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				return musicService.processOfflineSyncs(context, null);
-			}
-
-			@Override
-			protected void done(Integer result) {
-				if(result == scrobbleCount) {
-					Util.toast(context, context.getResources().getString(R.string.offline_sync_success, result));
-				} else {
-					Util.toast(context, context.getResources().getString(R.string.offline_sync_partial, result, scrobbleCount + starsCount));
-				}
-			}
-
-			@Override
-			protected void error(Throwable error) {
-				Log.w(TAG, "Failed to sync offline stats", error);
-				String msg = context.getResources().getString(R.string.offline_sync_error) + " " + getErrorMessage(error);
-				Util.toast(context, msg);
-			}
-		}.execute();
-	}
-	private void deleteOffline() {
-		SharedPreferences.Editor offline = Util.getOfflineSync(context).edit();
-		offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
-		offline.putInt(Constants.OFFLINE_STAR_COUNT, 0);
-		offline.commit();
 	}
 
 	private void showAboutDialog() {
@@ -405,9 +295,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 	@Override
 	public void onItemClicked(Integer item) {
-		if(item == R.string.main_offline || item == R.string.main_online) {
-			toggleOffline();
-		} else if (item == R.string.main_albums_newest) {
+		if (item == R.string.main_albums_newest) {
 			showAlbumList("newest");
 		} else if (item == R.string.main_albums_random) {
 			showAlbumList("random");

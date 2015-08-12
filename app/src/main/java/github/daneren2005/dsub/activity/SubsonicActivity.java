@@ -20,6 +20,7 @@ package github.daneren2005.dsub.activity;
 
 import android.app.UiModeManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -36,6 +37,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -53,6 +55,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -67,6 +70,8 @@ import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.HeadphoneListenerService;
+import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
@@ -247,9 +252,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		drawerList.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(final MenuItem menuItem) {
-				if (showingTabs) {
+				if(showingTabs) {
 					// Settings are on a different selectable track
-					if (menuItem.getItemId() != R.id.drawer_settings && menuItem.getItemId() != R.id.drawer_admin) {
+					if (menuItem.getItemId() != R.id.drawer_settings && menuItem.getItemId() != R.id.drawer_admin && menuItem.getItemId() != R.id.drawer_offline) {
 						menuItem.setChecked(true);
 						lastSelectedPosition = menuItem.getItemId();
 					}
@@ -295,6 +300,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 						case R.id.drawer_downloading:
 							drawerItemSelected("Download");
 							return true;
+						case R.id.drawer_offline:
+							toggleOffline();
+							return true;
 						case R.id.drawer_settings:
 							startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
 							drawer.closeDrawers();
@@ -328,7 +336,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
 
 		drawerUserAvatar = (ImageView) drawerHeader.findViewById(R.id.header_user_avatar);
-		populateTabs();
+
 		updateDrawerHeader();
 
 		if(!isTv()) {
@@ -554,6 +562,25 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		boolean sharedEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SHARED_ENABLED, true) && !Util.isOffline(this);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		boolean adminEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_ADMIN_ENABLED, true) && !Util.isOffline(this);
+
+		MenuItem offlineMenuItem = drawerList.getMenu().findItem(R.id.drawer_offline);
+		if(Util.isOffline(this)) {
+			setDrawerItemVisible(R.id.drawer_home, false);
+
+			if(lastSelectedPosition == 0 || lastSelectedPosition == R.id.drawer_home) {
+				String newFragment = Util.openToTab(this);
+				if(newFragment == null || "Home".equals(newFragment)) {
+					newFragment = "Artist";
+				}
+
+				lastSelectedPosition = getDrawerItemId(newFragment);
+				drawerItemSelected(newFragment);
+			}
+
+			offlineMenuItem.setTitle(R.string.main_online);
+		} else {
+			offlineMenuItem.setTitle(R.string.main_offline);
+		}
 
 		if(!podcastsEnabled) {
 			setDrawerItemVisible(R.id.drawer_podcasts, false);
@@ -957,6 +984,127 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			getImageLoader().loadAvatar(this, drawerUserAvatar, UserUtil.getCurrentUsername(this));
 			drawerHeader.setClickable(true);
 			drawerHeaderToggle.setVisibility(View.VISIBLE);
+		}
+	}
+
+	public void toggleOffline() {
+		boolean isOffline = Util.isOffline(this);
+		Util.setOffline(this, !isOffline);
+		invalidate();
+		DownloadService service = getDownloadService();
+		if (service != null) {
+			service.setOnline(isOffline);
+		}
+
+		// Coming back online
+		if(isOffline) {
+			int scrobblesCount = Util.offlineScrobblesCount(this);
+			int starsCount = Util.offlineStarsCount(this);
+			if(scrobblesCount > 0 || starsCount > 0){
+				showOfflineSyncDialog(scrobblesCount, starsCount);
+			}
+		}
+
+		UserUtil.seedCurrentUser(this);
+		this.updateDrawerHeader();
+	}
+
+	private void showOfflineSyncDialog(final int scrobbleCount, final int starsCount) {
+		String syncDefault = Util.getSyncDefault(this);
+		if(syncDefault != null) {
+			if("sync".equals(syncDefault)) {
+				syncOffline(scrobbleCount, starsCount);
+				return;
+			} else if("delete".equals(syncDefault)) {
+				deleteOffline();
+				return;
+			}
+		}
+
+		View checkBoxView = this.getLayoutInflater().inflate(R.layout.sync_dialog, null);
+		final CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.sync_default);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setIcon(android.R.drawable.ic_dialog_info)
+				.setTitle(R.string.offline_sync_dialog_title)
+				.setMessage(this.getResources().getString(R.string.offline_sync_dialog_message, scrobbleCount, starsCount))
+				.setView(checkBoxView)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						if(checkBox.isChecked()) {
+							Util.setSyncDefault(SubsonicActivity.this, "sync");
+						}
+						syncOffline(scrobbleCount, starsCount);
+					}
+				}).setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				dialogInterface.dismiss();
+			}
+		}).setNegativeButton(R.string.common_delete, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				if (checkBox.isChecked()) {
+					Util.setSyncDefault(SubsonicActivity.this, "delete");
+				}
+				deleteOffline();
+			}
+		});
+
+		builder.create().show();
+	}
+
+	private void syncOffline(final int scrobbleCount, final int starsCount) {
+		new SilentBackgroundTask<Integer>(this) {
+			@Override
+			protected Integer doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(SubsonicActivity.this);
+				return musicService.processOfflineSyncs(SubsonicActivity.this, null);
+			}
+
+			@Override
+			protected void done(Integer result) {
+				if(result == scrobbleCount) {
+					Util.toast(SubsonicActivity.this, getResources().getString(R.string.offline_sync_success, result));
+				} else {
+					Util.toast(SubsonicActivity.this, getResources().getString(R.string.offline_sync_partial, result, scrobbleCount + starsCount));
+				}
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				Log.w(TAG, "Failed to sync offline stats", error);
+				String msg = getResources().getString(R.string.offline_sync_error) + " " + getErrorMessage(error);
+				Util.toast(SubsonicActivity.this, msg);
+			}
+		}.execute();
+	}
+	private void deleteOffline() {
+		SharedPreferences.Editor offline = Util.getOfflineSync(this).edit();
+		offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		offline.putInt(Constants.OFFLINE_STAR_COUNT, 0);
+		offline.commit();
+	}
+	
+	public int getDrawerItemId(String fragmentType) {
+		switch(fragmentType) {
+			case "Home":
+				return R.id.drawer_home;
+			case "Artist":
+				return R.id.drawer_library;
+			case "Playlist":
+				return R.id.drawer_playlists;
+			case "Podcast":
+				return R.id.drawer_podcasts;
+			case "Bookmark":
+				return R.id.drawer_bookmarks;
+			case "Share":
+				return R.id.drawer_shares;
+			case "Chat":
+				return R.id.drawer_chat;
+			default:
+				return R.id.drawer_home;
 		}
 	}
 

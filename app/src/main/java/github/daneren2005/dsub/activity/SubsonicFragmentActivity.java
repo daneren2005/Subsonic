@@ -143,30 +143,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				fragmentType = Util.openToTab(this);
 				if(fragmentType != null) {
 					getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
-
-					switch(fragmentType) {
-						case "Home":
-							lastSelectedPosition = R.id.drawer_home;
-							break;
-						case "Artist":
-							lastSelectedPosition = R.id.drawer_library;
-							break;
-						case "Playlist":
-							lastSelectedPosition = R.id.drawer_playlists;
-							break;
-						case "Podcast":
-							lastSelectedPosition = R.id.drawer_podcasts;
-							break;
-						case "Bookmark":
-							lastSelectedPosition = R.id.drawer_bookmarks;
-							break;
-						case "Share":
-							lastSelectedPosition = R.id.drawer_shares;
-							break;
-						case "Chat":
-							lastSelectedPosition = R.id.drawer_chat;
-							break;
-					}
+					lastSelectedPosition = getDrawerItemId(fragmentType);
 				} else {
 					lastSelectedPosition = R.id.drawer_home;
 				}
