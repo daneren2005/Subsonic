@@ -447,8 +447,10 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					}
 					selectedViews.clear();
 
-					Window window = ((SubsonicFragmentActivity) context).getWindow();
-					window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+						Window window = ((SubsonicFragmentActivity) context).getWindow();
+						window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+					}
 				}
 			});
 		}
