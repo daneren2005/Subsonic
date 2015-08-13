@@ -46,7 +46,7 @@ public class PlaylistView extends UpdateView<Playlist> {
 
 		coverArtView = findViewById(R.id.playlist_coverart);
 		titleView = (TextView) findViewById(R.id.playlist_title);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = (ImageView) findViewById(R.id.more_button);
 
 		this.imageLoader = imageLoader;
 	}
