@@ -23,7 +23,7 @@
 			
 		<TextView
 			android:id="@+id/notification_title"
-			style="@android:style/TextAppearance.StatusBar.EventContent.Title"
+			style="@style/NotificationText.Title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="left"
@@ -33,7 +33,7 @@
 
 		<TextView
 			android:id="@+id/notification_artist"
-			style="@android:style/TextAppearance.StatusBar.EventContent"
+			style="@style/NotificationText.Content"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="left"
@@ -50,18 +50,18 @@
 
 	<ImageButton
 		android:id="@+id/control_previous"
-		android:src="@drawable/media_backward_dark"
+		android:src="@drawable/notification_backward"
 		style="@style/NotificationButton"/>
 
 	<ImageButton
 		android:id="@+id/control_pause"
-		android:src="@drawable/media_pause_dark"
+		android:src="@drawable/notification_pause"
 		style="@style/NotificationButton"
 		android:layout_width="54dip"
 		android:padding="0dip"/>
 
 	<ImageButton
 		android:id="@+id/control_next"
-		android:src="@drawable/media_forward_dark"
+		android:src="@drawable/notification_forward"
 		style="@style/NotificationButton"/>
 </LinearLayout>

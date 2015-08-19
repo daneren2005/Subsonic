@@ -12,14 +12,27 @@
 		<item name="android:padding">2dip</item>
 	</style>
 
-	<style name="NotificationButton.Expanded">
+	<style name="NotificationButton.ExpandedBase">
 		<item name="android:background">?android:selectableItemBackground</item>
 		<item name="android:layout_width">0dp</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_weight">1</item>
 		<item name="android:layout_gravity">center</item>
 		<item name="android:scaleType">fitCenter</item>
+	</style>
+
+	<style name="NotificationButton.Expanded" parent="@style/NotificationButton.ExpandedBase">
 		<item name="android:padding">10dip</item>
+	</style>
+
+	<style name="NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title"></style>
+	<style name="NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent"></style>
+
+	<style name="NotificationLayoutDivider">
+		<item name="android:divider">?android:listDivider</item>
+	</style>
+	<style name="NotificationDivider">
+		<item name="android:background">?android:dividerHorizontal</item>
 	</style>
 
 	<style name="MoreButton" parent="BasicButton">
