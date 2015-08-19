@@ -104,9 +104,9 @@
 		<item name="drawerDownloading">@drawable/ic_menu_download_dark</item>
 		<item name="drawerSettings">@drawable/ic_menu_settings_dark</item>
 		<item name="drawerArrowStyle">@style/DSub.DrawerArrow</item>
-		<item name="colorPrimary">@color/darkPrimary</item>
-		<item name="colorPrimaryDark">@color/darkPrimaryDark</item>
-		<item name="colorAccent">@color/darkAccent</item>
+		<item name="colorPrimary">@color/lightPrimary</item>
+		<item name="colorPrimaryDark">@color/lightPrimaryDark</item>
+		<item name="colorAccent">@color/lightAccent</item>
 		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
 		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
 		<item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Dark</item>
