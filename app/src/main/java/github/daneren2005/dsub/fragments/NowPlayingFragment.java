@@ -185,7 +185,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 		playlistView = (RecyclerView)rootView.findViewById(R.id.download_list);
 		setupLayoutManager(playlistView, false);
-		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 			@Override
 			public boolean onMove(RecyclerView recyclerView, final RecyclerView.ViewHolder fromHolder, final RecyclerView.ViewHolder toHolder) {
 				new SilentBackgroundTask<Void>(context) {
