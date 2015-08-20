@@ -17,12 +17,13 @@ package github.daneren2005.dsub.adapter;
 import android.content.Context;
 import android.view.ViewGroup;
 import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.PodcastChannelView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.List;
 
-public class PodcastChannelAdapter extends SectionAdapter<PodcastChannel>{
+public class PodcastChannelAdapter extends SectionAdapter<PodcastChannel> implements FastScroller.BubbleTextGetter {
     public static int VIEW_TYPE_PODCAST = 1;
 
 	public PodcastChannelAdapter(Context context, List<PodcastChannel> podcasts, OnItemClickedListener listener) {
@@ -43,5 +44,16 @@ public class PodcastChannelAdapter extends SectionAdapter<PodcastChannel>{
     @Override
     public int getItemViewType(PodcastChannel item) {
         return VIEW_TYPE_PODCAST;
+    }
+
+    @Override
+    public String getTextToShowInBubble(int position) {
+        PodcastChannel podcast = getItemForPosition(position);
+
+        if(podcast == null) {
+            return "";
+        } else {
+            return podcast.getName().substring(0, 1);
+        }
     }
 }

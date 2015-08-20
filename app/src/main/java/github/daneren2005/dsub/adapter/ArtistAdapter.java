@@ -30,9 +30,10 @@ import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.ArtistView;
+import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.UpdateView;
 
-public class ArtistAdapter extends SectionAdapter<Artist> {
+public class ArtistAdapter extends SectionAdapter<Artist> implements FastScroller.BubbleTextGetter {
 	public static int VIEW_TYPE_ARTIST = 4;
 
 	private List<MusicFolder> musicFolders;
@@ -120,6 +121,17 @@ public class ArtistAdapter extends SectionAdapter<Artist> {
 	@Override
 	public int getItemViewType(Artist item) {
 		return VIEW_TYPE_ARTIST;
+	}
+
+	@Override
+	public String getTextToShowInBubble(int position) {
+		Artist artist = getItemForPosition(position);
+
+		if(artist == null) {
+			return "";
+		} else {
+			return artist.getName().substring(0, 1);
+		}
 	}
 
 	public interface OnMusicFolderChanged {

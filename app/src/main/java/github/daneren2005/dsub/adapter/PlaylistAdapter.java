@@ -21,10 +21,11 @@ import java.util.List;
 import android.view.ViewGroup;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.PlaylistView;
 import github.daneren2005.dsub.view.UpdateView;
 
-public class PlaylistAdapter extends SectionAdapter<Playlist> {
+public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScroller.BubbleTextGetter {
 	public static int VIEW_TYPE_PLAYLIST = 1;
 
 	private ImageLoader imageLoader;
@@ -57,5 +58,16 @@ public class PlaylistAdapter extends SectionAdapter<Playlist> {
 	@Override
 	public int getItemViewType(Playlist playlist) {
 		return VIEW_TYPE_PLAYLIST;
+	}
+
+	@Override
+	public String getTextToShowInBubble(int position) {
+		Playlist playlist = getItemForPosition(position);
+
+		if(playlist == null) {
+			return "";
+		} else {
+			return playlist.getName().substring(0, 1);
+		}
 	}
 }

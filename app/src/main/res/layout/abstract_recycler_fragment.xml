@@ -10,12 +10,23 @@
 		android:layout_height="fill_parent"
 		android:orientation="vertical" >
 
-		<android.support.v7.widget.RecyclerView
-			android:id="@+id/fragment_recycler"
+		<RelativeLayout
 			android:layout_width="fill_parent"
 			android:layout_height="0dip"
-			android:layout_weight="1.0"
-			android:scrollbars="vertical"/>
+			android:layout_weight="1.0">
+
+			<android.support.v7.widget.RecyclerView
+				android:id="@+id/fragment_recycler"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:scrollbars="vertical"/>
+
+			<github.daneren2005.dsub.view.FastScroller
+				android:id="@+id/fragment_fast_scroller"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_alignParentRight="true"/>
+		</RelativeLayout>
 
 		<include layout="@layout/tab_progress" />
 	</LinearLayout>

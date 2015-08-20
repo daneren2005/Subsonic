@@ -15,7 +15,6 @@
 
 package github.daneren2005.dsub.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -38,10 +37,12 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TabBackgroundTask;
+import github.daneren2005.dsub.view.FastScroller;
 
 public abstract class SelectRecyclerFragment<T> extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<T> {
 	private static final String TAG = SelectRecyclerFragment.class.getSimpleName();
 	protected RecyclerView recyclerView;
+	protected FastScroller fastScroller;
 	protected SectionAdapter<T> adapter;
 	protected UpdateTask currentTask;
 	protected List<T> objects;
@@ -77,6 +78,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		refreshLayout.setOnRefreshListener(this);
 
 		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
+		fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
 		setupLayoutManager();
 
 		if(pullToRefresh) {
@@ -184,6 +186,13 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		public void done(List<T> result) {
 			if (result != null && !result.isEmpty()) {
 				recyclerView.setAdapter(adapter = getAdapter(result));
+				if(adapter instanceof FastScroller.BubbleTextGetter) {
+					if(!fastScroller.isAttached()) {
+						fastScroller.attachRecyclerView(recyclerView);
+					}
+				} else if(fastScroller.isAttached()) {
+					fastScroller.detachRecyclerView();
+				}
 
 				onFinishRefresh();
 				recyclerView.setVisibility(View.VISIBLE);
