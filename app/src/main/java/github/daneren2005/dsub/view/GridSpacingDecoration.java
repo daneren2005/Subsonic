@@ -32,6 +32,10 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 
 		int childCount = parent.getChildCount();
 		int childIndex = parent.getChildPosition(view);
+		// Not an actual child (ie: during delete event)
+		if(childIndex == -1) {
+			return;
+		}
 		int spanCount = getTotalSpan(view, parent);
 		int spanIndex = childIndex % spanCount;
 		int spanSize = getSpanSize(parent, childIndex);
