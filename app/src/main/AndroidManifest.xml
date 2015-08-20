@@ -52,10 +52,6 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name="github.daneren2005.dsub.activity.DownloadActivity"
-                  android:configChanges="keyboardHidden"
-                  android:launchMode="singleTask"/>
-
         <activity android:name="github.daneren2005.dsub.activity.SettingsActivity"
                   android:configChanges="orientation|keyboardHidden"
                   android:launchMode="singleTask"/>
