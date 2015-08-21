@@ -305,7 +305,7 @@ public final class Util {
 	
 	public static boolean getDisplayTrack(Context context) {
 		SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_TRACK, false);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_TRACK, true);
 	}
 
     public static int getMaxBitrate(Context context) {

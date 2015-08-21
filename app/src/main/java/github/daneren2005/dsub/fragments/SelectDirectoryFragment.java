@@ -379,7 +379,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		} else {
 			List<Entry> songs = new ArrayList<Entry>();
 
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, false)) {
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true)) {
 				Iterator it = entries.listIterator(entries.indexOf(entry));
 				while(it.hasNext()) {
 					songs.add((Entry) it.next());
