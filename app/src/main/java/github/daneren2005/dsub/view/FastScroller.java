@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +36,7 @@ import github.daneren2005.dsub.R;
 import static android.support.v7.widget.RecyclerView.OnScrollListener;
 
 public class FastScroller extends LinearLayout {
+	private static final String TAG = FastScroller.class.getSimpleName();
 	private static final int BUBBLE_ANIMATION_DURATION = 100;
 	private static final int TRACK_SNAP_RANGE = 5;
 
@@ -57,7 +59,7 @@ public class FastScroller extends LinearLayout {
 	}
 
 	public FastScroller(final Context context,final AttributeSet attrs) {
-		super(context,attrs);
+		super(context, attrs);
 		initialise(context);
 	}
 
@@ -134,8 +136,14 @@ public class FastScroller extends LinearLayout {
 				proportion = y/(float)height;
 			int targetPos = getValueInRange(0,itemCount-1,(int)(proportion*(float)itemCount));
 			((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(targetPos,0);
-			String bubbleText = ((BubbleTextGetter)recyclerView.getAdapter()).getTextToShowInBubble(targetPos);
-			bubble.setText(bubbleText);
+
+			try {
+				String bubbleText = ((BubbleTextGetter) recyclerView.getAdapter()).getTextToShowInBubble(targetPos);
+				bubble.setText(bubbleText);
+			} catch(Exception e) {
+				Log.e(TAG, "Item count: " + itemCount);
+				Log.e(TAG, "Error getting text for bubble", e);
+			}
 		}
 	}
 

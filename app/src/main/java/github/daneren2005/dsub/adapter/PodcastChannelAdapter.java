@@ -48,12 +48,6 @@ public class PodcastChannelAdapter extends SectionAdapter<PodcastChannel> implem
 
     @Override
     public String getTextToShowInBubble(int position) {
-        PodcastChannel podcast = getItemForPosition(position);
-
-        if(podcast == null) {
-            return "";
-        } else {
-            return podcast.getName().substring(0, 1);
-        }
+        return getNameIndex(getItemForPosition(position).getName());
     }
 }

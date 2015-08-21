@@ -16,6 +16,7 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.support.v7.widget.PopupMenu;
@@ -39,7 +40,9 @@ import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MenuUtil;
+import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BasicHeaderView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.view.UpdateView.UpdateViewHolder;
@@ -47,6 +50,7 @@ import github.daneren2005.dsub.view.UpdateView.UpdateViewHolder;
 public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewHolder<T>> {
 	private static String TAG = SectionAdapter.class.getSimpleName();
 	public static int VIEW_TYPE_HEADER = 0;
+	public static String[] ignoredArticles;
 
 	protected Context context;
 	protected List<String> headers;
@@ -459,6 +463,38 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		if(currentActionMode != null) {
 			currentActionMode.finish();
 		}
+	}
+
+	public String getNameIndex(String name) {
+		return getNameIndex(name, false);
+	}
+	public String getNameIndex(String name, boolean removeIgnoredArticles) {
+		if(name == null) {
+			return "*";
+		}
+
+		if(removeIgnoredArticles) {
+			if (ignoredArticles == null) {
+				SharedPreferences prefs = Util.getPreferences(context);
+				String ignoredArticlesString = prefs.getString(Constants.CACHE_KEY_IGNORE, "The El La Los Las Le Les");
+				ignoredArticles = ignoredArticlesString.split(" ");
+			}
+
+			name = name.toLowerCase();
+			for (String article : ignoredArticles) {
+				int index = name.indexOf(article.toLowerCase() + " ");
+				if (index == 0) {
+					name = name.substring(article.length() + 1);
+				}
+			}
+		}
+
+		String index = name.substring(0, 1).toUpperCase();
+		if (!Character.isLetter(index.charAt(0))) {
+			index = "#";
+		}
+
+		return index;
 	}
 
 	public interface OnItemClickedListener<T> {

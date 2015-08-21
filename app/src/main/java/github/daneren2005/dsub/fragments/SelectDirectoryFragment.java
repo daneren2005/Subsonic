@@ -30,9 +30,11 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.AlphabeticalAlbumAdapter;
 import github.daneren2005.dsub.adapter.EntryInfiniteGridAdapter;
 import github.daneren2005.dsub.adapter.EntryGridAdapter;
 import github.daneren2005.dsub.adapter.SectionAdapter;
+import github.daneren2005.dsub.adapter.TopRatedAlbumAdapter;
 import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -57,6 +59,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.MyLeadingMarginSpan2;
 import github.daneren2005.dsub.view.UpdateView;
@@ -72,6 +75,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	private static final String TAG = SelectDirectoryFragment.class.getSimpleName();
 
 	private RecyclerView recyclerView;
+	private FastScroller fastScroller;
 	private EntryGridAdapter entryGridAdapter;
 	private Boolean licenseValid;
 	private List<Entry> albums;
@@ -113,7 +117,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			restoredInstance = true;
 		}
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -161,7 +165,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}
 
-		rootView = inflater.inflate(R.layout.select_album, container, false);
+		rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 
 		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
@@ -170,8 +174,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			largeAlbums = true;
 		}
 
-		recyclerView = (RecyclerView) rootView.findViewById(R.id.select_album_entries);
+		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
 		recyclerView.setHasFixedSize(true);
+		fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
 		setupScrollList(recyclerView);
 
 		if(largeAlbums) {
@@ -258,7 +263,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				}
 				else {
 					menuInflater.inflate(R.menu.select_podcast_episode, menu);
-					
+
 					if(!UserUtil.canPodcast()) {
 						menu.removeItem(R.id.menu_download_all);
 					}
@@ -403,7 +408,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(refreshListing) {
 			refresh = true;
 		}
-		
+
 		if(currentTask != null) {
 			currentTask.cancel();
 		}
@@ -459,7 +464,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 				return dir;
 			}
-			
+
 			@Override
 			protected void done(Pair<MusicDirectory, Boolean> result) {
 				SelectDirectoryFragment.this.name = result.getFirst().getName();
@@ -468,7 +473,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}.execute();
 	}
-	
+
 	private void getRecursiveMusicDirectory(final String id, final String name, final boolean refresh) {
 		setTitle(name);
 
@@ -486,7 +491,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				root.replaceChildren(songs);
 				return root;
 			}
-			
+
 			private void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
 				songs.addAll(parent.getChildren(false, true));
 				for (Entry dir : parent.getChildren(true, false)) {
@@ -501,7 +506,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					getSongsRecursively(musicDirectory, songs);
 				}
 			}
-			
+
 			@Override
 			protected void done(Pair<MusicDirectory, Boolean> result) {
 				SelectDirectoryFragment.this.name = result.getFirst().getName();
@@ -521,7 +526,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}.execute();
 	}
-	
+
 	private void getPodcast(final String podcastId, final String podcastName, final boolean refresh) {
 		setTitle(podcastName);
 
@@ -602,7 +607,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		public LoadTask(boolean refresh) {
 			super(SelectDirectoryFragment.this);
 			this.refresh = refresh;
-			
+
 			currentTask = this;
 		}
 
@@ -613,7 +618,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		  MusicService musicService = MusicServiceFactory.getMusicService(context);
 			MusicDirectory dir = load(musicService);
 			licenseValid = musicService.isLicenseValid(context, this);
-			
+
 			albums = dir.getChildren(true, false);
 			entries = dir.getChildren();
 
@@ -641,7 +646,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					Log.w(TAG, "Failed to get Artist Info even though it should be supported");
 				}
 			}
-			
+
 			return new Pair<MusicDirectory, Boolean>(dir, licenseValid);
 		}
 
@@ -671,7 +676,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			entryGridAdapter = new EntryGridAdapter(context, entries, getImageLoader(), largeAlbums);
 			entryGridAdapter.setRemoveFromPlaylist(playlistId != null);
 		} else {
-			entryGridAdapter = new EntryInfiniteGridAdapter(context, entries, getImageLoader(), largeAlbums);
+			if("alphabeticalByName".equals(albumListType)) {
+				entryGridAdapter = new AlphabeticalAlbumAdapter(context, entries, getImageLoader(), largeAlbums);
+			} else if("highest".equals(albumListType)) {
+				entryGridAdapter = new TopRatedAlbumAdapter(context, entries, getImageLoader(), largeAlbums);
+			} else {
+				entryGridAdapter = new EntryInfiniteGridAdapter(context, entries, getImageLoader(), largeAlbums);
+			}
 
 			// Setup infinite loading based on scrolling
 			final EntryInfiniteGridAdapter infiniteGridAdapter = (EntryInfiniteGridAdapter) entryGridAdapter;
@@ -763,6 +774,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 
 		recyclerView.setAdapter(entryGridAdapter);
+		if(entryGridAdapter instanceof FastScroller.BubbleTextGetter) {
+			fastScroller.attachRecyclerView(recyclerView);
+		}
 		context.supportInvalidateOptionsMenu();
 
 		if(scrollToPosition != -1) {

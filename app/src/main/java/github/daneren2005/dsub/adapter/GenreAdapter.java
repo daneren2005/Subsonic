@@ -18,12 +18,13 @@ package github.daneren2005.dsub.adapter;
 import android.content.Context;
 import android.view.ViewGroup;
 import github.daneren2005.dsub.domain.Genre;
+import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.GenreView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.List;
 
-public class GenreAdapter extends SectionAdapter<Genre>{
+public class GenreAdapter extends SectionAdapter<Genre> implements FastScroller.BubbleTextGetter{
 	public static int VIEW_TYPE_GENRE = 1;
 
 	public GenreAdapter(Context context, List<Genre> genres, OnItemClickedListener listener) {
@@ -44,5 +45,10 @@ public class GenreAdapter extends SectionAdapter<Genre>{
 	@Override
 	public int getItemViewType(Genre item) {
 		return VIEW_TYPE_GENRE;
+	}
+
+	@Override
+	public String getTextToShowInBubble(int position) {
+		return getNameIndex(getItemForPosition(position).getName());
 	}
 }
