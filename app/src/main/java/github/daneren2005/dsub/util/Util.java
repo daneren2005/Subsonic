@@ -1267,7 +1267,8 @@ public final class Util {
 						if(pauseFocus) {
 							pauseFocus = false;
 							downloadService.start();
-						} else if(lowerFocus) {
+						}
+						if(lowerFocus) {
 							lowerFocus = false;
 							downloadService.setVolume(1.0f);
 						}
