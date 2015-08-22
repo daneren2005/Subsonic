@@ -19,43 +19,40 @@
 package github.daneren2005.dsub.fragments;
 
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.DownloadActivity;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.util.MenuUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.BookmarkAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.Entry> {
+public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirectory.Entry> {
 	private static final String TAG = SelectBookmarkFragment.class.getSimpleName();
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		MenuInflater inflater = context.getMenuInflater();
-		inflater.inflate(R.menu.select_bookmark_context, menu);
-
-		hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry item) {
+		menuInflater.inflate(R.menu.select_bookmark_context, menu);
+		MenuUtil.hideMenuItems(context, menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		MusicDirectory.Entry bookmark = objects.get(info.position);
-		
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry bookmark) {
 		switch(menuItem.getItemId()) {
 			case R.id.bookmark_menu_info:
 				displayBookmarkInfo(bookmark);
@@ -64,12 +61,8 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 				deleteBookmark(bookmark, adapter);
 				return true;
 		}
-		
-		if(onContextItemSelected(menuItem, bookmark)) {
-			return true;
-		}
 
-		return true;
+		return onContextItemSelected(menuItem, bookmark);
 	}
 
 	@Override
@@ -78,8 +71,8 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<MusicDirectory.Entry> bookmarks) {
-		return new BookmarkAdapter(context, bookmarks);
+	public SectionAdapter getAdapter(List<MusicDirectory.Entry> bookmarks) {
+		return new BookmarkAdapter(context, bookmarks, this);
 	}
 
 	@Override
@@ -93,13 +86,12 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	public void onItemClicked(final MusicDirectory.Entry bookmark) {
 		final DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;
 		}
 
-		final MusicDirectory.Entry bookmark = (MusicDirectory.Entry) parent.getItemAtPosition(position);
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -110,22 +102,42 @@ public class SelectBookmarkFragment extends SelectListFragment<MusicDirectory.En
 			
 			@Override
 			protected void done(Void result) {
-				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				context.openNowPlaying();
 			}
 		}.execute();
 	}
-	
+
 	private void displayBookmarkInfo(final MusicDirectory.Entry entry) {
 		Bookmark bookmark = entry.getBookmark();
-		String comment = bookmark.getComment();
-		if(comment == null) {
-			comment = "";
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
+
+		headers.add(R.string.details_song);
+		details.add(entry.getTitle());
+
+		if(entry.getArtist() != null) {
+			headers.add(R.string.details_artist);
+			details.add(entry.getArtist());
+		}
+		if(entry.getAlbum() != null) {
+			headers.add(R.string.details_album);
+			details.add(entry.getAlbum());
 		}
 
-		String msg = context.getResources().getString(R.string.bookmark_details,
-			entry.getTitle(), Util.formatDuration(bookmark.getPosition() / 1000),
-			Util.formatDate(bookmark.getCreated()), Util.formatDate(bookmark.getChanged()), comment);
-		
-		Util.info(context, R.string.bookmark_details_title, msg, false);
+		headers.add(R.string.details_position);
+		details.add(Util.formatDuration(bookmark.getPosition() / 1000));
+
+		headers.add(R.string.details_created);
+		details.add(Util.formatDate(bookmark.getCreated()));
+
+		headers.add(R.string.details_updated);
+		details.add(Util.formatDate(bookmark.getChanged()));
+
+		if(bookmark.getComment() != null) {
+			headers.add(R.string.details_comments);
+			details.add(bookmark.getComment());
+		}
+
+		Util.showDetailsDialog(context, R.string.bookmark_details_title, headers, details);
 	}
 }

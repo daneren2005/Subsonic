@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
-	android:layout_height="wrap_content">
+	android:layout_height="wrap_content"
+	android:background="?attr/selectableItemBackground">
+
 	<LinearLayout
 			android:id="@+id/select_artist_folder"
 			android:orientation="horizontal"
@@ -30,14 +32,21 @@
 					  android:layout_height="wrap_content"
 					  android:layout_marginLeft="10dip"
 					  android:layout_marginTop="6dip"
-					  android:textAppearance="?android:attr/textAppearanceLarge"/>
+					  android:textAppearance="?android:attr/textAppearanceLarge"
+					  android:textColor="?attr/colorAccent"/>
 
 			<TextView android:id="@+id/select_artist_folder_2"
 					  android:layout_width="fill_parent"
 					  android:layout_height="wrap_content"
 					  android:layout_marginLeft="10dip"
-					  android:textAppearance="?android:attr/textAppearanceSmall"/>
+					  android:textAppearance="?android:attr/textAppearanceSmall"
+					  android:textColor="?android:textColorSecondary"/>
 
 		</LinearLayout>
 	</LinearLayout>
+
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="1px"
+		android:background="?attr/colorPrimary"/>
 </LinearLayout>

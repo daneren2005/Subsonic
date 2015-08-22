@@ -22,7 +22,8 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp" />
+			android:layout_marginLeft="4dp"
+			android:textColor="?android:textColorPrimary"/>
 	</LinearLayout>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -43,7 +44,8 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp" />
+			android:layout_marginLeft="4dp"
+			android:textColor="?android:textColorPrimary"/>
 	</LinearLayout>
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -64,14 +66,14 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp" />
+			android:layout_marginLeft="4dp"
+			android:textColor="?android:textColorPrimary"/>
 	</LinearLayout>
 
-	<ListView
+	<android.support.v7.widget.RecyclerView
 		android:id="@+id/settings_list"
 		android:layout_width="fill_parent"
 		android:layout_height="0dip"
 		android:layout_weight="1.0"
-		android:fastScrollEnabled="true"/>
-
+		android:scrollbars="vertical"/>
 </LinearLayout>

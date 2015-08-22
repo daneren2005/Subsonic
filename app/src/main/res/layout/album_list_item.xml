@@ -3,7 +3,8 @@
 			  android:id="@id/drag_handle"
 			  android:orientation="horizontal"
 			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content">
+			  android:layout_height="wrap_content"
+			  android:background="?attr/selectableItemBackground">
 
 	<RelativeLayout
 		android:layout_width="@dimen/AlbumArt.Small"
@@ -43,29 +44,31 @@
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:singleLine="true"
 			android:ellipsize="marquee"
-			android:paddingBottom="6dip"/>
+			android:paddingBottom="6dip"
+			android:textColor="?android:textColorPrimary"/>
 
 		<TextView
 			android:id="@+id/album_artist"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:singleLine="true"/>
+			android:singleLine="true"
+			android:textColor="?android:textColorSecondary"/>
 
 	</LinearLayout>
 
 	<ImageButton
 		android:id="@+id/album_star"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_width="@dimen/Star.Small"
+		android:layout_height="@dimen/Star.Small"
+		android:scaleType="fitCenter"
 		android:layout_gravity="right|center_vertical"
-		android:src="@drawable/ic_stat_star"
 		android:background="@android:color/transparent"
 		android:focusable="false"
 		android:visibility="gone"/>
 
 	<ImageView
-		android:id="@+id/album_more"
+		android:id="@+id/more_button"
 		android:src="?attr/download_none"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"

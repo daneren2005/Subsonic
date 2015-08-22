@@ -148,10 +148,10 @@ public final class Notifications {
 		boolean persistent = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false);
 		if(persistent) {
 			if(expanded) {
-				rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_pause : R.drawable.notification_play);
+				rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_pause : R.drawable.notification_start);
 			} else {
-				rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_play);
-				rv.setImageViewResource(R.id.control_pause, R.drawable.notification_next);
+				rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_start);
+				rv.setImageViewResource(R.id.control_pause, R.drawable.notification_forward);
 				rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
 			}
 		}
@@ -260,10 +260,9 @@ public final class Notifications {
 						cancelPI);
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
-		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		builder.setContentIntent(PendingIntent.getActivity(context, 1, notificationIntent, 0));
+		builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0));
 
 		final Notification notification = builder.build();
 		downloadShowing = true;

@@ -8,5 +8,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
 		android:checked="false"
-		android:text="@string/offline.sync_dialog_default"/>
+		android:text="@string/offline.sync_dialog_default"
+        android:textColor="?android:textColorPrimary"/>
 </FrameLayout>

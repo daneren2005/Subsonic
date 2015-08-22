@@ -51,7 +51,6 @@ import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
-import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.TimeLimitedCache;
@@ -384,9 +383,9 @@ public class CachedMusicService implements MusicService {
     }
 
 	@Override
-	public MusicDirectory getAlbumList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getAlbumList(String type, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		try {
-			MusicDirectory dir = musicService.getAlbumList(type, size, offset, context, progressListener);
+			MusicDirectory dir = musicService.getAlbumList(type, size, offset, refresh, context, progressListener);
 
 			// Do some serialization updates for changes to recently added
 			if ("newest".equals(type) && offset == 0) {
@@ -490,6 +489,10 @@ public class CachedMusicService implements MusicService {
 			return dir;
 		} catch(IOException e) {
 			Log.w(TAG, "Failed to refresh album list: ", e);
+			if(refresh) {
+				throw e;
+			}
+
 			MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, type, Integer.toString(offset)), MusicDirectory.class);
 
 			if(dir == null) {
@@ -507,12 +510,17 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		try {
-			MusicDirectory dir = musicService.getAlbumList(type, extra, size, offset, context, progressListener);
+			MusicDirectory dir = musicService.getAlbumList(type, extra, size, offset, refresh, context, progressListener);
 			FileUtil.serialize(context, dir, getCacheName(context, type + extra, Integer.toString(offset)));
 			return dir;
 		} catch(IOException e) {
+			Log.w(TAG, "Failed to refresh album list: ", e);
+			if(refresh) {
+				throw e;
+			}
+
 			MusicDirectory dir = FileUtil.deserialize(context, getCacheName(context, type + extra, Integer.toString(offset)), MusicDirectory.class);
 
 			if(dir == null) {

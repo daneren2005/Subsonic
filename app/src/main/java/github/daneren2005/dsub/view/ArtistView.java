@@ -35,18 +35,14 @@ import java.io.File;
  *
  * @author Sindre Mehus
  */
-public class ArtistView extends UpdateView {
+public class ArtistView extends UpdateView<Artist> {
 	private static final String TAG = ArtistView.class.getSimpleName();
-	
-	private Context context;
-	private Artist artist;
-	private File file;
 
+	private File file;
     private TextView titleView;
 
     public ArtistView(Context context) {
         super(context);
-		this.context = context;
         LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
         titleView = (TextView) findViewById(R.id.item_name);
@@ -60,8 +56,7 @@ public class ArtistView extends UpdateView {
 		});
     }
     
-    protected void setObjectImpl(Object obj) {
-    	this.artist = (Artist) obj;
+    protected void setObjectImpl(Artist artist) {
     	titleView.setText(artist.getName());
 		file = FileUtil.getArtistDirectory(context, artist);
     }
@@ -69,7 +64,7 @@ public class ArtistView extends UpdateView {
     @Override
 	protected void updateBackground() {
 		exists = file.exists();
-		isStarred = artist.isStarred();
+		isStarred = item.isStarred();
 	}
 
 	public File getFile() {

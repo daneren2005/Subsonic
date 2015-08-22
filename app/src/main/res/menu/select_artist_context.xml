@@ -1,44 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:compat="http://schemas.android.com/apk/res-auto">
-
-    <item 
-        android:id="@+id/artist_menu_play_now"
-        android:title="@string/common.play_now"
-        />
-		
-	<item 
-        android:id="@+id/artist_menu_play_shuffled"
-        android:title="@string/common.play_shuffled"
-        />
-
-	<group android:id="@+id/hide_play_next">
-		<item
-			android:id="@+id/artist_menu_play_next"
-			android:title="@string/common.play_next"/>
-	</group>
-
-	<group android:id="@+id/hide_play_last">
-		<item
-			android:id="@+id/artist_menu_play_last"
-			android:title="@string/common.play_last"/>
-	</group>
-		
-	<item 
-        android:id="@+id/artist_menu_download"
-        android:title="@string/common.download"
-        />
-
-    <item 
-        android:id="@+id/artist_menu_pin"
-        android:title="@string/common.pin"
-        />
-
-	<item 
-		android:id="@+id/artist_menu_delete"
-		android:title="@string/menu.delete_cache"/>
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<group android:id="@+id/server_1_10">
+		<item
+			android:id="@+id/artist_menu_play_now"
+			android:title="@string/common.play_now"/>
+
+		<item
+			android:id="@+id/artist_menu_play_shuffled"
+			android:title="@string/common.play_shuffled"/>
+
+		<group android:id="@+id/hide_play_last">
+			<item
+				android:id="@+id/artist_menu_play_last"
+				android:title="@string/common.play_last"/>
+		</group>
+
 		<group android:id="@+id/hide_star">
 			<item
 				android:id="@+id/artist_menu_star"

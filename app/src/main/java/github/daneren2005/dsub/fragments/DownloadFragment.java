@@ -16,10 +16,17 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
@@ -30,6 +37,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
@@ -38,13 +46,60 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
+import github.daneren2005.dsub.view.SongView;
+import github.daneren2005.dsub.view.UpdateView;
 
-public class DownloadFragment extends SelectListFragment<DownloadFile> {
+public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> implements SectionAdapter.OnItemClickedListener<DownloadFile> {
 	private long currentRevision;
 	private ScheduledExecutorService executorService;
 
 	public DownloadFragment() {
 		serialize = false;
+		pullToRefresh = false;
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+		super.onCreateView(inflater, container, bundle);
+
+		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+			@Override
+			public boolean onMove(RecyclerView recyclerView, final RecyclerView.ViewHolder fromHolder, final RecyclerView.ViewHolder toHolder) {
+				new SilentBackgroundTask<Void>(context) {
+					private int from;
+					private int to;
+
+					@Override
+					protected Void doInBackground() throws Throwable {
+						from = fromHolder.getAdapterPosition();
+						to = toHolder.getAdapterPosition();
+						getDownloadService().swap(false, from, to);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						adapter.notifyItemMoved(from, to);
+					}
+				}.execute();
+
+				return true;
+			}
+
+			@Override
+			public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+				SongView songView = (SongView) ((UpdateView.UpdateViewHolder) viewHolder).getUpdateView();
+				DownloadFile downloadFile = songView.getDownloadFile();
+
+				DownloadService downloadService = getDownloadService();
+				downloadService.removeBackground(downloadFile);
+				adapter.removeItem(downloadFile);
+				currentRevision = downloadService.getDownloadListUpdateRevision();
+			}
+		});
+		touchHelper.attachToRecyclerView(recyclerView);
+
+		return rootView;
 	}
 
 	@Override
@@ -80,8 +135,8 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<DownloadFile> objs) {
-		return new DownloadFileAdapter(context, objs);
+	public SectionAdapter getAdapter(List<DownloadFile> objs) {
+		return new DownloadFileAdapter(context, objs, this);
 	}
 
 	@Override
@@ -90,9 +145,6 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 		if(downloadService == null) {
 			return new ArrayList<DownloadFile>();
 		}
-
-		listView.setOnScrollListener(null);
-		refreshLayout.setEnabled(false);
 
 		List<DownloadFile> songList = new ArrayList<DownloadFile>();
 		songList.addAll(downloadService.getBackgroundDownloads());
@@ -106,8 +158,25 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	public void onItemClicked(DownloadFile item) {
 
+	}
+
+	@Override
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		MusicDirectory.Entry selectedItem = downloadFile.getSong();
+		onCreateContextMenuSupport(menu, menuInflater, updateView, selectedItem);
+		if(!selectedItem.isVideo() && !Util.isOffline(context)) {
+			menu.removeItem(R.id.song_menu_remove_playlist);
+		}
+
+		recreateContextMenu(menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		MusicDirectory.Entry selectedItem = downloadFile.getSong();
+		return onContextItemSelected(menuItem, selectedItem);
 	}
 
 	@Override
@@ -139,36 +208,6 @@ public class DownloadFragment extends SelectListFragment<DownloadFile> {
 		}
 
 		return false;
-	}
-
-	@Override
-	public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		Object selectedItem = ((DownloadFile) listView.getItemAtPosition(info.position)).getSong();
-		onCreateContextMenu(menu, view, menuInfo, selectedItem);
-		if(selectedItem instanceof MusicDirectory.Entry && !((MusicDirectory.Entry) selectedItem).isVideo() && !Util.isOffline(context)) {
-			menu.removeItem(R.id.song_menu_remove_playlist);
-		}
-
-		recreateContextMenu(menu);
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Object selectedItem = ((DownloadFile) listView.getItemAtPosition(info.position)).getSong();
-
-		if(onContextItemSelected(menuItem, selectedItem)) {
-			return true;
-		}
-
-		return true;
 	}
 
 	private void update() {

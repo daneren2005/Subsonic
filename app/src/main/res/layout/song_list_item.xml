@@ -3,15 +3,8 @@
 		android:id="@id/drag_handle"
 		android:orientation="horizontal"
 		android:layout_width="fill_parent"
-		android:layout_height="?android:attr/listPreferredItemHeight">
-
-    <CheckedTextView
-            android:id="@+id/song_check"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center_vertical"
-            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-            android:paddingLeft="3dip"/>
+		android:layout_height="?android:attr/listPreferredItemHeight"
+		android:background="?attr/selectableItemBackground">
 
     <LinearLayout android:orientation="vertical"
                   android:layout_width="0dip"
@@ -25,24 +18,24 @@
                       android:layout_gravity="center_vertical">
 
             <TextView
-                    android:id="@+id/song_title"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="left|center_vertical"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:singleLine="true"
-                    android:ellipsize="marquee"
-                    android:drawablePadding="6dip"
-                    android:paddingLeft="6dip"
-                    android:paddingRight="6dip"/>
+				android:id="@+id/song_title"
+				android:layout_width="0dip"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:layout_gravity="left|center_vertical"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:singleLine="true"
+				android:ellipsize="marquee"
+				android:drawablePadding="6dip"
+				android:paddingLeft="6dip"
+				android:paddingRight="6dip"
+				android:textColor="?android:textColorPrimary"/>
 
 			<ImageButton
 				android:id="@+id/song_bookmark"
 				android:layout_width="24dp"
 				android:layout_height="24dp"
 				android:layout_gravity="right|center_vertical"
-				android:src="@drawable/ic_menu_bookmark_selected"
 				android:background="@null"
 				android:focusable="false"
 				android:scaleType="fitCenter"
@@ -50,10 +43,10 @@
 					
 			<ImageButton
 				android:id="@+id/song_star"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_width="@dimen/Star.Small"
+				android:layout_height="@dimen/Star.Small"
+				android:scaleType="fitCenter"
 				android:layout_gravity="right|center_vertical"
-				android:src="@drawable/ic_stat_star"
 				android:background="@null"
 				android:focusable="false"
 				android:visibility="gone"/>
@@ -91,7 +84,8 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:singleLine="true"
                     android:ellipsize="middle"
-                    android:paddingLeft="6dip"/>
+                    android:paddingLeft="6dip"
+					android:textColor="?android:textColorSecondary"/>
 
 			<RatingBar
 				android:id="@+id/song_rating"
@@ -111,13 +105,14 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:singleLine="true"
                     android:paddingLeft="3dip"
-                    android:paddingRight="4dip"/>
+                    android:paddingRight="4dip"
+					android:textColor="?android:textColorSecondary"/>
 
         </LinearLayout>
     </LinearLayout>
 	
 	<ImageView
-		android:id="@+id/artist_more"
+		android:id="@+id/more_button"
 		android:src="?attr/download_none"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"

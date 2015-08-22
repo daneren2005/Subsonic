@@ -34,7 +34,8 @@
 			android:marqueeRepeatLimit="marquee_forever"
 			android:scrollHorizontally="true"
 			android:focusable="true"
-			android:focusableInTouchMode="true">
+			android:focusableInTouchMode="true"
+			android:textColor="?android:textColorPrimary">
 
 			<requestFocus android:focusable="true"
 				android:focusableInTouchMode="true"
@@ -49,9 +50,16 @@
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:singleLine="true"
 			android:ellipsize="end"
-			android:autoLink="email"/>
+			android:autoLink="email"
+			android:textColor="?android:textColorSecondary"/>
 
 	</LinearLayout>
+
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="1px"
+		android:background="?attr/colorPrimary"
+		android:layout_alignParentBottom="true"/>
 </RelativeLayout>
 
 

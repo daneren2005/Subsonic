@@ -14,7 +14,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/tasker.edit_shuffle_mode" />
+			android:text="@string/tasker.edit_shuffle_mode"
+			android:textColor="?android:textColorPrimary"/>
 		<CheckBox
 			android:id="@+id/edit_shuffle_checkbox"
 			android:layout_width="wrap_content"
@@ -33,7 +34,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/tasker.edit_shuffle_start_year" />
+			android:text="@string/tasker.edit_shuffle_start_year"
+			android:textColor="?android:textColorPrimary"/>
 
 		<CheckBox
 			android:id="@+id/edit_start_year_checkbox"
@@ -61,7 +63,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/tasker.edit_shuffle_end_year" />
+			android:text="@string/tasker.edit_shuffle_end_year"
+			android:textColor="?android:textColorPrimary"/>
 
 		<CheckBox
 			android:id="@+id/edit_end_year_checkbox"
@@ -89,7 +92,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/tasker.edit_shuffle_genre"/>
+			android:text="@string/tasker.edit_shuffle_genre"
+			android:textColor="?android:textColorPrimary"/>
 
 		<Button
 			android:id="@+id/edit_genre_spinner"
@@ -109,7 +113,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/tasker.edit_server_offline"/>
+			android:text="@string/tasker.edit_server_offline"
+			android:textColor="?android:textColorPrimary"/>
 
 		<Spinner
 			android:id="@+id/edit_offline_spinner"

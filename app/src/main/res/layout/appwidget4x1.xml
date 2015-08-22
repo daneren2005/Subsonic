@@ -30,7 +30,7 @@
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical"
-			style="@style/BasicButton">
+			style="@style/NotificationButton">
 
             <TextView
                 android:id="@+id/title"
@@ -81,8 +81,8 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
 				android:scaleType="center"
-                style="@style/BasicButton"
-                android:src="@drawable/ic_appwidget_music_previous" />
+                style="@style/NotificationButton"
+                android:src="@drawable/media_backward_dark" />
 
             <ImageButton
                 android:id="@+id/control_play"
@@ -90,8 +90,8 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:scaleType="center"              
-                android:src="@drawable/ic_appwidget_music_play"
-				style="@style/BasicButton" />
+                android:src="@drawable/media_start_dark"
+				style="@style/NotificationButton" />
 
             <ImageButton
                 android:id="@+id/control_next"
@@ -99,8 +99,8 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:scaleType="center"
-                android:src="@drawable/ic_appwidget_music_next"
-				style="@style/BasicButton" />
+                android:src="@drawable/media_forward_dark"
+				style="@style/NotificationButton" />
         </LinearLayout>
     </LinearLayout>
 

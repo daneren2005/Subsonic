@@ -39,7 +39,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -209,9 +208,9 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 
         // Set correct drawable for pause state
         if (playing) {
-            views.setImageViewResource(R.id.control_play, R.drawable.ic_appwidget_music_pause);
+            views.setImageViewResource(R.id.control_play, R.drawable.media_pause_dark);
         } else {
-            views.setImageViewResource(R.id.control_play, R.drawable.ic_appwidget_music_play);
+            views.setImageViewResource(R.id.control_play, R.drawable.media_start_dark);
         }
 
         // Set the cover art
@@ -270,9 +269,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     /**
      * Link up various button actions using {@link PendingIntent}.
      *
-     * @param playerActive True if player is active in background, which means
-     *                     widget click will launch {@link DownloadActivity},
-     *                     otherwise we launch {@link github.daneren2005.dsub.activity.SubsonicFragmentActivity}.
+     * @param playerActive @param playerActive True if player is active in background.  Launch {@link github.daneren2005.dsub.activity.SubsonicFragmentActivity}.
      */
     private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
 		Intent intent = new Intent(context, SubsonicFragmentActivity.class);

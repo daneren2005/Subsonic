@@ -41,12 +41,6 @@
     <string name="main.welcome_title">Bienvenue !</string>
     <string name="main.welcome_text">Bienvenue dans DSub ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
     	<string name="main.about_title">A propos de DSub</string>
-	<string name="main.about_text">Auteur : Scott Jackson
-		\nEmail : dsub.android@gmail.com
-		\nVersion : %1$s
-		\nFichiers en cache : %2$s
-		\nEspace utilisé : %3$s de %4$s
-		\nEspace dispo. : %5$s de %6$s</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
@@ -129,8 +123,7 @@
 
     <string name="select_album.select">Tout sélectionner</string>
     <string name="select_album.n_selected">%d pistes sélectionnées.</string>
-    <string name="select_album.n_unselected">%d pistes désélectionnées.</string>
-    <string name="select_album.more">Plus</string>
+	<string name="select_album.more">Plus</string>
     <string name="select_album.offline">Déconnecté</string>
     <string name="select_album.searching">Recherche en cours...</string>
     <string name="select_album.no_sdcard">Erreur : Aucune carte SD card disponible.</string>
@@ -175,8 +168,7 @@
     <string name="download.playerstate_playing_shuffle">Lecture au hasard</string>
     <string name="download.menu_show_album">Afficher l\'album</string>
     <string name="download.menu_lyrics">Paroles</string>
-    <string name="download.menu_remove">Enlever de la queue</string>
-    <string name="download.menu_remove_all">Enlever tout</string>
+	<string name="download.menu_remove_all">Enlever tout</string>
     <string name="download.menu_screen_on">Ecran actif</string>
     <string name="download.menu_shuffle">Hasard</string>
 	<string name="download.menu_toggle">Basculer</string>
@@ -199,7 +191,6 @@
     <string name="download.jukebox_not_authorized">Mode télécommande non autorisée. Activer le mode jukebox.<b>Users &gt; Settings</b> on your Subsonic server.</string>
 	<string name="download.timer_length">Minuteur :</string>
 	<string name="download.start_timer">Démarrer le minuteur</string>
-	<string name="download.stop_timer">Arrêter le minuteur</string>
 	<string name="download.need_download">La vidéo doit d\'abord être téléchargée</string>
 	<string name="download.no_streaming_player">Aucun lecteur ne peut afficher ce flux</string>
 	<string name="download.playing_out_of">Lecture : %1$d/%2$d</string>

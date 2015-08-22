@@ -16,18 +16,22 @@
 package github.daneren2005.dsub.util;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
@@ -182,6 +186,7 @@ public final class UserUtil {
 				.setCancelable(true);
 			
 			AlertDialog dialog = builder.create();
+			dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 			dialog.show();
 		}
 	}
@@ -247,7 +252,6 @@ public final class UserUtil {
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				musicService.updateUser(user, context, null);
-				user.setSettings(user.getSettings());
 				return null;
 			}
 
@@ -326,7 +330,7 @@ public final class UserUtil {
 		});
 	}
 
-	public static void deleteUser(final Context context, final User user, final ArrayAdapter adapter) {
+	public static void deleteUser(final Context context, final User user, final SectionAdapter adapter) {
 		Util.confirmDialog(context, R.string.common_delete, user.getUsername(), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -341,8 +345,7 @@ public final class UserUtil {
 					@Override
 					protected void done(Void v) {
 						if(adapter != null) {
-							adapter.remove(user);
-							adapter.notifyDataSetChanged();
+							adapter.removeItem(user);
 						}
 
 						Util.toast(context, context.getResources().getString(R.string.admin_delete_user_success, user.getUsername()));
@@ -378,8 +381,11 @@ public final class UserUtil {
 		final TextView usernameView = (TextView) layout.findViewById(R.id.username);
 		final TextView emailView = (TextView) layout.findViewById(R.id.email);
 		final TextView passwordView = (TextView) layout.findViewById(R.id.password);
-		final ListView listView = (ListView) layout.findViewById(R.id.settings_list);
-		listView.setAdapter(new SettingsAdapter(context, user, true));
+		final RecyclerView recyclerView = (RecyclerView) layout.findViewById(R.id.settings_list);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setAdapter(new SettingsAdapter(context, user, null, true));
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_add_user)

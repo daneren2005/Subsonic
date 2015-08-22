@@ -19,7 +19,8 @@ package github.daneren2005.dsub.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,12 +46,18 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SettingsActivity;
+import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.adapter.DetailsAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.service.DownloadService;
 
@@ -68,10 +75,14 @@ import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * @author Sindre Mehus
@@ -249,6 +260,32 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getString(Constants.PREFERENCES_KEY_THEME, null);
     }
+	public static int getThemeRes(Context context) {
+		return getThemeRes(context, getTheme(context));
+	}
+	public static int getThemeRes(Context context, String theme) {
+		if(context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
+			if ("dark".equals(theme)) {
+				return R.style.Theme_DSub_Dark_No_Actionbar;
+			} else if ("black".equals(theme)) {
+				return R.style.Theme_DSub_Black_No_Actionbar;
+			} else if ("holo".equals(theme)) {
+				return R.style.Theme_DSub_Holo_No_Actionbar;
+			} else {
+				return R.style.Theme_DSub_Light_No_Actionbar;
+			}
+		} else {
+			if ("dark".equals(theme)) {
+				return R.style.Theme_DSub_Dark;
+			} else if ("black".equals(theme)) {
+				return R.style.Theme_DSub_Black;
+			} else if ("holo".equals(theme)) {
+				return R.style.Theme_DSub_Holo;
+			} else {
+				return R.style.Theme_DSub_Light;
+			}
+		}
+	}
 	public static void setTheme(Context context, String theme) {
 		SharedPreferences.Editor editor = getPreferences(context).edit();
 		editor.putString(Constants.PREFERENCES_KEY_THEME, theme);
@@ -256,15 +293,7 @@ public final class Util {
 	}
 
 	public static void applyTheme(Context context, String theme) {
-		if ("dark".equals(theme)) {
-			context.setTheme(R.style.Theme_DSub_Dark);
-		} else if ("black".equals(theme)) {
-			context.setTheme(R.style.Theme_DSub_Black);
-		} else if ("holo".equals(theme)) {
-			context.setTheme(R.style.Theme_DSub_Holo);
-		} else {
-			context.setTheme(R.style.Theme_DSub_Light);
-		}
+		context.setTheme(getThemeRes(context, theme));
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
@@ -276,7 +305,7 @@ public final class Util {
 	
 	public static boolean getDisplayTrack(Context context) {
 		SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_TRACK, false);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_TRACK, true);
 	}
 
     public static int getMaxBitrate(Context context) {
@@ -809,6 +838,19 @@ public final class Util {
         return builder.toString();
     }
 
+	public static String formatDate(Context context, String dateString) {
+		try {
+			boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+			if (isDateNormalized) {
+				dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			}
+
+			return formatDate(dateFormat.parse(dateString));
+		} catch(ParseException e) {
+			return dateString;
+		}
+	}
 	public static String formatDate(Date date) {
 		if(date == null) {
 			return "Never";
@@ -1101,6 +1143,32 @@ public final class Util {
 		((TextView)dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
+	public static void showDetailsDialog(Context context, @StringRes int title, List<Integer> headers, List<String> details) {
+		List<String> headerStrings = new ArrayList<>();
+		for(@StringRes Integer res: headers) {
+			headerStrings.add(context.getResources().getString(res));
+		}
+		showDetailsDialog(context, context.getResources().getString(title), headerStrings, details);
+	}
+	public static void showDetailsDialog(Context context, String title, List<String> headers, List<String> details) {
+		ListView listView = new ListView(context);
+		listView.setAdapter(new DetailsAdapter(context, R.layout.details_item, headers, details));
+		listView.setDivider(null);
+		listView.setScrollbarFadingEnabled(false);
+
+		new AlertDialog.Builder(context)
+				// .setIcon(android.R.drawable.ic_dialog_info)
+				.setTitle(title)
+				.setView(listView)
+				.setPositiveButton(R.string.common_close, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int i) {
+						dialog.dismiss();
+					}
+				})
+				.show();
+	}
+
     public static void sleepQuietly(long millis) {
         try {
             Thread.sleep(millis);
@@ -1140,15 +1208,6 @@ public final class Util {
             return new BitmapDrawable(bitmap);
         }
     }
-
-	public static int getAttribute(Context context, int attr) {
-		int res;
-		int[] attrs = new int[] {attr};
-		TypedArray typedArray = context.obtainStyledAttributes(attrs);
-		res = typedArray.getResourceId(0, 0);
-		typedArray.recycle();
-		return res;
-	}
 
     public static void registerMediaButtonEventReceiver(Context context) {
 

@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<style name="BasicButton">
-		<item name="android:background">@drawable/abc_item_background_holo_light</item>
+		<item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+	</style>
+	<style name="NotificationButton">
+		<item name="android:background">?android:selectableItemBackground</item>
+		<item name="android:layout_width">46dip</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_gravity">center</item>
+		<item name="android:scaleType">fitCenter</item>
+		<item name="android:padding">2dip</item>
+	</style>
+
+	<style name="NotificationButton.ExpandedBase">
+		<item name="android:background">?android:selectableItemBackground</item>
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:layout_gravity">center</item>
+		<item name="android:scaleType">fitCenter</item>
+	</style>
+
+	<style name="NotificationButton.Expanded" parent="@style/NotificationButton.ExpandedBase">
+		<item name="android:padding">10dip</item>
+	</style>
+
+	<style name="NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title"></style>
+	<style name="NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent"></style>
+
+	<style name="NotificationLayoutDivider">
+		<item name="android:divider">?android:listDivider</item>
+	</style>
+	<style name="NotificationDivider">
+		<item name="android:background">?android:dividerHorizontal</item>
 	</style>
 
 	<style name="MoreButton" parent="BasicButton">
@@ -10,7 +41,6 @@
 
     <style name="PlaybackControl" parent="@style/BasicButton">
         <item name="android:scaleType">fitCenter</item>
-        <item name="android:padding">6dip</item>
         <item name="android:layout_marginLeft">4dip</item>
         <item name="android:layout_marginRight">4dip</item>
         <item name="android:layout_width">@dimen/Button</item>
@@ -19,19 +49,25 @@
     </style>
 	
 	<style name="PlaybackControl.Small" parent="@style/PlaybackControl">
-		<item name="android:padding">4dip</item>
         <item name="android:layout_width">@dimen/Button.Small</item>
         <item name="android:layout_height">@dimen/Button.Small</item>
     </style>
-	
-	<style name="MenuBarButton" parent="@style/BasicButton">
-        <item name="android:layout_width">0dip</item>
-        <item name="android:layout_height">45dip</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
-		<item name="android:textColor">?android:textColorPrimary</item>
-    </style>
+
+	<style name="PlaybackControl.Large" parent="@style/PlaybackControl">
+		<item name="android:layout_width">@dimen/Button.Large</item>
+		<item name="android:layout_height">@dimen/Button.Large</item>
+	</style>
+
+	<style name="PlaybackControl.Match" parent="@style/PlaybackControl">
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:scaleType">fitCenter</item>
+	</style>
+
+	<style name="PlaybackControl.BottomBar" parent="@style/PlaybackControl.Match">
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_weight">1</item>
+	</style>
 
 	<style name="DownloadActionButton" parent="@style/BasicButton">
 		<item name="android:layout_width">wrap_content</item>
@@ -51,45 +87,5 @@
 		<item name="android:paddingBottom">8dip</item>
 		<item name="android:paddingRight">16dip</item>
 		<item name="android:paddingLeft">16dip</item>
-	</style>
-
-	<style name="DragDropListView">
-		<item name="drag_enabled">true</item>
-		<item name="collapsed_height">1dp</item>
-		<item name="drag_scroll_start">1.0</item>
-		<item name="max_drag_scroll_speed">2.0</item>
-		<item name="float_alpha">0.6</item>
-		<item name="slide_shuffle_speed">0.3</item>
-		<item name="track_drag_sort">false</item>
-		<item name="use_default_controller">true</item>
-		<item name="drag_handle_id">@id/drag_handle</item>
-		<item name="sort_enabled">true</item>
-		<item name="remove_enabled">false</item>
-		<item name="remove_mode">flingRemove</item>
-		<item name="drag_start_mode">onLongPress</item>
-		<item name="float_background_color">@android:color/transparent</item>
-	</style>
-
-	<style name="MainAlbumButton">
-		<item name="android:drawablePadding">6dip</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-		<item name="android:gravity">center_vertical</item>
-		<item name="android:paddingLeft">6dip</item>
-		<item name="android:paddingRight">6dip</item>
-		<item name="android:minHeight">46dip</item>
-	</style>
-
-	<style name="MainAlbumButtonLabel">
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-		<item name="android:textColor">@color/cyan</item>
-		<item name="android:gravity">center_vertical</item>
-		<item name="android:paddingLeft">6dp</item>
-		<item name="android:textAllCaps">true</item>
-		<item name="android:textStyle">bold</item>
-		<item name="android:textSize">16sp</item>
 	</style>
 </resources>

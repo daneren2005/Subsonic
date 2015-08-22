@@ -34,16 +34,12 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 
-public class PlaylistSongView extends UpdateView {
+public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {
 	private static final String TAG = PlaylistSongView.class.getSimpleName();
-
-	private Context context;
-	private Playlist playlist;
 
 	private TextView titleView;
 	private TextView countView;
 	private int count = 0;
-	private List<MusicDirectory.Entry> songs;
 
 	public PlaylistSongView(Context context) {
 		super(context, false);
@@ -54,9 +50,7 @@ public class PlaylistSongView extends UpdateView {
 		countView = (TextView) findViewById(R.id.basic_count_count);
 	}
 
-	protected void setObjectImpl(Object obj1, Object obj2) {
-		this.playlist = (Playlist) obj1;
-		this.songs = (List<MusicDirectory.Entry>) obj2;
+	protected void setObjectImpl(Playlist playlist, List<MusicDirectory.Entry> songs) {
 		count = 0;
 		titleView.setText(playlist.getName());
 		// Make sure to hide initially so it's not present briefly before update
@@ -69,11 +63,11 @@ public class PlaylistSongView extends UpdateView {
 		count = 0;
 		
 		// Don't try to lookup playlist for Create New
-		if(!"-1".equals(playlist.getId())) {
-			MusicDirectory cache = FileUtil.deserialize(context, Util.getCacheName(context, "playlist", playlist.getId()), MusicDirectory.class);
+		if(!"-1".equals(item.getId())) {
+			MusicDirectory cache = FileUtil.deserialize(context, Util.getCacheName(context, "playlist", item.getId()), MusicDirectory.class);
 			if(cache != null) {
 				// Try to find song instances in the given playlists
-				for(MusicDirectory.Entry song: songs) {
+				for(MusicDirectory.Entry song: item2) {
 					if(cache.getChildren().contains(song)) {
 						count++;
 					}

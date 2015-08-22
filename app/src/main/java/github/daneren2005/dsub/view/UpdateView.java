@@ -20,9 +20,10 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,20 +38,21 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 
-public class UpdateView extends LinearLayout {
+public abstract class UpdateView<T> extends LinearLayout {
 	private static final String TAG = UpdateView.class.getSimpleName();
 	private static final WeakHashMap<UpdateView, ?> INSTANCES = new WeakHashMap<UpdateView, Object>();
 
-	private static Handler backgroundHandler;
-	private static Handler uiHandler;
+	protected static Handler backgroundHandler;
+	protected static Handler uiHandler;
 	private static Runnable updateRunnable;
 	private static int activeActivities = 0;
 
 	protected Context context;
+	protected T item;
 	protected RatingBar ratingBar;
 	protected ImageButton starButton;
 	protected ImageView moreButton;
@@ -63,8 +65,10 @@ public class UpdateView extends LinearLayout {
 	protected int isRated = 0;
 	protected int rating = 0;
 	protected SilentBackgroundTask<Void> imageTask = null;
+	protected Drawable startBackgroundDrawable;
 	
 	protected final boolean autoUpdate;
+	protected boolean checkable;
 	
 	public UpdateView(Context context) {
 		this(context, true);
@@ -75,8 +79,8 @@ public class UpdateView extends LinearLayout {
 		this.autoUpdate = autoUpdate;
 		
 		setLayoutParams(new AbsListView.LayoutParams(
-			ViewGroup.LayoutParams.FILL_PARENT,
-			ViewGroup.LayoutParams.WRAP_CONTENT));
+				ViewGroup.LayoutParams.FILL_PARENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT));
 		
 		if(autoUpdate) {
 			INSTANCES.put(this, null);
@@ -89,37 +93,16 @@ public class UpdateView extends LinearLayout {
 		
 	}
 	
-	public void setObject(Object obj) {
+	public void setObject(T obj) {
+		item = obj;
 		setObjectImpl(obj);
 		updateBackground();
 		update();
 	}
-	public void setObject(Object obj1, Object obj2) {
-		if(imageTask != null) {
-			imageTask.cancel();
-			imageTask = null;
-		}
-		
-		setObjectImpl(obj1, obj2);
-		backgroundHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				updateBackground();
-				uiHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						update();
-					}
-				});
-			}
-		});
+	public void setObject(T obj1, Object obj2) {
+		setObject(obj1, null);
 	}
-	protected void setObjectImpl(Object obj) {
-		
-	}
-	protected void setObjectImpl(Object obj1, Object obj2) {
-
-	}
+	protected abstract void setObjectImpl(T obj);
 	
 	private static synchronized void startUpdater() {
 		if(uiHandler != null) {
@@ -224,8 +207,6 @@ public class UpdateView extends LinearLayout {
 			MusicDirectory.Entry check = null;
 			if(view instanceof SongView) {
 				check = ((SongView) view).getEntry();
-			} else if(view instanceof AlbumCell) {
-				check = ((AlbumCell) view).getEntry();
 			} else if(view instanceof AlbumView) {
 				check = ((AlbumView) view).getEntry();
 			}
@@ -261,6 +242,9 @@ public class UpdateView extends LinearLayout {
 		if(starButton != null) {
 			if(isStarred) {
 				if(!starred) {
+					if(starButton.getDrawable() == null) {
+						starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
+					}
 					starButton.setVisibility(View.VISIBLE);
 					starred = true;
 				}
@@ -283,4 +267,55 @@ public class UpdateView extends LinearLayout {
 			rating = isRated;
 		}
 	}
+
+	public boolean isCheckable() {
+		return checkable;
+	}
+	public void setChecked(boolean checked) {
+		View child = getChildAt(0);
+		if (checked && startBackgroundDrawable == null) {
+			startBackgroundDrawable = child.getBackground();
+			child.setBackgroundColor(DrawableTint.getColorRes(context, R.attr.colorPrimary));
+		} else if (!checked && startBackgroundDrawable != null) {
+			child.setBackgroundDrawable(startBackgroundDrawable);
+			startBackgroundDrawable = null;
+		}
+	}
+
+	public void onClick() {
+
+	}
+
+	public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
+		private UpdateView updateView;
+		private View view;
+		private T item;
+
+		public UpdateViewHolder(UpdateView itemView) {
+			super(itemView);
+
+			this.updateView = itemView;
+			this.view = itemView;
+		}
+
+		// Different is so that call is not ambiguous
+		public UpdateViewHolder(View view, boolean different) {
+			super(view);
+			this.view = view;
+		}
+
+		public UpdateView<T> getUpdateView() {
+			return updateView;
+		}
+		public View getView() {
+			return view;
+		}
+		public void setItem(T item) {
+			this.item = item;
+		}
+		public T getItem() {
+			return item;
+		}
+	}
 }
+

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
-	android:layout_height="wrap_content">
+	android:layout_height="wrap_content"
+	android:background="?attr/selectableItemBackground">
 
 	<github.daneren2005.dsub.view.RecyclingImageView
 		android:id="@+id/chat_avatar"
@@ -34,7 +35,7 @@
 				android:singleLine="true"
 				android:text="User"
 				android:textAppearance="?android:attr/textAppearanceLarge"
-				android:textColor="?android:textColorSecondary"/>
+				android:textColor="?android:textColorPrimary"/>
 
 			<TextView
 				android:id="@+id/chat_time"
@@ -43,7 +44,8 @@
 				android:layout_marginLeft="6dip"
 				android:singleLine="true"
 				android:text="00:00"
-				android:textAppearance="?android:attr/textAppearanceSmall" />
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textColor="?android:textColorSecondary"/>
 		</LinearLayout>
 
 		<TextView
@@ -56,6 +58,7 @@
 			android:linksClickable="true"
 			android:singleLine="false"
 			android:text="Message Text Goes Here"
-			android:textAppearance="?android:attr/textAppearanceMedium" />
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="?android:textColorSecondary"/>
 	</LinearLayout>
 </LinearLayout>

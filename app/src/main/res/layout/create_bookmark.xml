@@ -14,7 +14,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/common.comment" />
+			android:text="@string/common.comment"
+			android:textColor="?android:textColorPrimary"/>
 		<EditText
 			android:id="@+id/comment_text"
 			android:inputType="text"

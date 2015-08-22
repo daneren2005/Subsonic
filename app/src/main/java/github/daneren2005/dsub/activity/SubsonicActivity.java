@@ -20,22 +20,26 @@ package github.daneren2005.dsub.activity;
 
 import android.app.UiModeManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -51,14 +55,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -66,22 +70,26 @@ import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.HeadphoneListenerService;
+import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.adapter.DrawerAdapter;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.UserUtil;
 
-public class SubsonicActivity extends ActionBarActivity implements OnItemSelectedListener {
+public class SubsonicActivity extends AppCompatActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
 	protected static boolean fullScreen;
-	private String[] drawerItemsDescriptions;
-	private String[] drawerItems;
+	private static final int MENU_GROUP_SERVER = 10;
+	private static final int MENU_ITEM_SERVER_BASE = 100;
+
+	private final List<Runnable> afterServiceAvailable = new ArrayList<>();
 	private boolean drawerIdle = true;
-	private boolean[] enabledItems = {true, true, true, true, true};
 	private boolean destroyed = false;
 	private boolean finished = false;
 	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
@@ -90,16 +98,22 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected View secondaryContainer;
 	protected boolean tv = false;
 	protected boolean touchscreen = true;
+	protected Handler handler = new Handler();
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
 	ViewGroup rootView;
 	DrawerLayout drawer;
 	ActionBarDrawerToggle drawerToggle;
-	DrawerAdapter drawerAdapter;
-	ListView drawerList;
-	TextView lastSelectedView = null;
+	NavigationView drawerList;
+	View drawerHeader;
+	ImageView drawerUserAvatar;
+	ImageView drawerHeaderToggle;
+	TextView drawerServerName;
+	TextView drawerUserName;
 	int lastSelectedPosition = 0;
+	boolean showingTabs = true;
 	boolean drawerOpen = false;
+	SharedPreferences.OnSharedPreferenceChangeListener preferencesListener;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -118,26 +132,49 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		super.onCreate(bundle);
 		startService(new Intent(this, DownloadService.class));
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		
-		View actionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
-		actionBarSpinner = (Spinner)actionbar.findViewById(R.id.spinner);
-		spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
-		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		actionBarSpinner.setOnItemSelectedListener(this);
-		actionBarSpinner.setAdapter(spinnerAdapter);
-
-		getSupportActionBar().setCustomView(actionbar);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
 
 		if(getIntent().hasExtra(Constants.FRAGMENT_POSITION)) {
 			lastSelectedPosition = getIntent().getIntExtra(Constants.FRAGMENT_POSITION, 0);
+		}
+
+		if(preferencesListener == null) {
+			preferencesListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+				@Override
+				public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+					// When changing drawer settings change visibility
+					switch(key) {
+						case Constants.PREFERENCES_KEY_PODCASTS_ENABLED:
+							setDrawerItemVisible(R.id.drawer_podcasts, false);
+							break;
+						case Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED:
+							setDrawerItemVisible(R.id.drawer_bookmarks, false);
+							break;
+						case Constants.PREFERENCES_KEY_SHARED_ENABLED:
+							setDrawerItemVisible(R.id.drawer_shares, false);
+							break;
+						case Constants.PREFERENCES_KEY_CHAT_ENABLED:
+							setDrawerItemVisible(R.id.drawer_chat, false);
+							break;
+						case Constants.PREFERENCES_KEY_ADMIN_ENABLED:
+							setDrawerItemVisible(R.id.drawer_admin, false);
+							break;
+					}
+				}
+			};
+			Util.getPreferences(this).registerOnSharedPreferenceChangeListener(preferencesListener);
 		}
 	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
+
+		if(spinnerAdapter == null) {
+			createCustomActionBarView();
+		}
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		if(drawerToggle != null) {
 			drawerToggle.syncState();
@@ -150,6 +187,17 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 	}
 
+	protected void createCustomActionBarView() {
+		View customActionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
+		actionBarSpinner = (Spinner)customActionbar.findViewById(R.id.spinner);
+		spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		actionBarSpinner.setOnItemSelectedListener(this);
+		actionBarSpinner.setAdapter(spinnerAdapter);
+
+		getSupportActionBar().setCustomView(customActionbar);
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -159,9 +207,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if (theme != null && !theme.equals(Util.getTheme(this)) || fullScreen != Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false)) {
 			restart();
 			overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+			DrawableTint.wipeTintCache();
 		}
-		
-		populateDrawer();
+
+		populateTabs();
 		UpdateView.addActiveActivity();
 	}
 
@@ -176,25 +225,13 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	protected void onDestroy() {
 		super.onDestroy();
 		destroyed = true;
+		Util.getPreferences(this).unregisterOnSharedPreferenceChangeListener(preferencesListener);
 	}
 
 	@Override
 	public void finish() {
 		super.finish();
 		Util.disablePendingTransition(this);
-	}
-
-	@Override
-	public void startActivity(Intent intent) {
-		if(intent.getComponent() != null) {
-			String name = intent.getComponent().getClassName();
-			if(name != null && name.indexOf("DownloadActivity") != -1) {
-				intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
-			} else if(name != null && name.indexOf("SettingsActivity") != -1) {
-				intent.putExtra(Constants.FRAGMENT_POSITION, drawerItems.length - 1);
-			}
-		}
-		super.startActivity(intent);
 	}
 
 	@Override
@@ -210,34 +247,104 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			LayoutInflater layoutInflater = getLayoutInflater();
 			layoutInflater.inflate(viewId, rootView);
 		}
-		
-		drawerList = (ListView) findViewById(R.id.left_drawer);
-		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+
+		drawerList = (NavigationView) findViewById(R.id.left_drawer);
+		drawerList.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
-				final int actualPosition = drawerAdapter.getActualPosition(position);
-				if("Settings".equals(drawerItemsDescriptions[actualPosition])) {
-					startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
-					drawer.closeDrawers();
-				} else if("Admin".equals(drawerItemsDescriptions[actualPosition]) && UserUtil.isCurrentAdmin()) {
-					UserUtil.confirmCredentials(SubsonicActivity.this, new Runnable() {
-						@Override
-						public void run() {
-							drawerItemSelected(actualPosition, view);
-						}
-					});
+			public boolean onNavigationItemSelected(final MenuItem menuItem) {
+				if(showingTabs) {
+					// Settings are on a different selectable track
+					if (menuItem.getItemId() != R.id.drawer_settings && menuItem.getItemId() != R.id.drawer_admin && menuItem.getItemId() != R.id.drawer_offline) {
+						menuItem.setChecked(true);
+						lastSelectedPosition = menuItem.getItemId();
+					}
+
+					switch (menuItem.getItemId()) {
+						case R.id.drawer_home:
+							drawerItemSelected("Home");
+							return true;
+						case R.id.drawer_library:
+							drawerItemSelected("Artist");
+							return true;
+						case R.id.drawer_playlists:
+							drawerItemSelected("Playlist");
+							return true;
+						case R.id.drawer_podcasts:
+							drawerItemSelected("Podcast");
+							return true;
+						case R.id.drawer_bookmarks:
+							drawerItemSelected("Bookmark");
+							return true;
+						case R.id.drawer_shares:
+							drawerItemSelected("Share");
+							return true;
+						case R.id.drawer_chat:
+							drawerItemSelected("Chat");
+							return true;
+						case R.id.drawer_admin:
+							if (UserUtil.isCurrentAdmin()) {
+								UserUtil.confirmCredentials(SubsonicActivity.this, new Runnable() {
+									@Override
+									public void run() {
+										drawerItemSelected("Admin");
+										menuItem.setChecked(true);
+										lastSelectedPosition = menuItem.getItemId();
+									}
+								});
+							} else {
+								drawerItemSelected("Admin");
+								menuItem.setChecked(true);
+								lastSelectedPosition = menuItem.getItemId();
+							}
+							return true;
+						case R.id.drawer_downloading:
+							drawerItemSelected("Download");
+							return true;
+						case R.id.drawer_offline:
+							toggleOffline();
+							return true;
+						case R.id.drawer_settings:
+							startActivity(new Intent(SubsonicActivity.this, SettingsActivity.class));
+							drawer.closeDrawers();
+							return true;
+					}
 				} else {
-					drawerItemSelected(actualPosition, view);
+					int activeServer = menuItem.getItemId() - MENU_ITEM_SERVER_BASE;
+					SubsonicActivity.this.setActiveServer(activeServer);
+					populateTabs();
+					return true;
+				}
+
+				return false;
+			}
+		});
+
+		drawerHeader = drawerList.inflateHeaderView(R.layout.drawer_header);
+		drawerHeader.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(showingTabs) {
+					populateServers();
+				} else {
+					populateTabs();
 				}
 			}
 		});
 
+		drawerHeaderToggle = (ImageView) drawerHeader.findViewById(R.id.header_select_image);
+		drawerServerName = (TextView) drawerHeader.findViewById(R.id.header_server_name);
+		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
 
+		drawerUserAvatar = (ImageView) drawerHeader.findViewById(R.id.header_user_avatar);
+
+		updateDrawerHeader();
 
 		if(!isTv()) {
 			drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-			drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.common_appname, R.string.common_appname) {
+			// Pass in toolbar if it exists
+			Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+			drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.common_appname, R.string.common_appname) {
 				@Override
 				public void onDrawerClosed(View view) {
 					setTitle(currentFragment.getTitle());
@@ -246,23 +353,19 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					drawerOpen = false;
 
 					supportInvalidateOptionsMenu();
+					if(!showingTabs) {
+						populateTabs();
+					}
 				}
 
 				@Override
 				public void onDrawerOpened(View view) {
 					DownloadService downloadService = getDownloadService();
-					if (downloadService == null || downloadService.getBackgroundDownloads().isEmpty()) {
-						drawerAdapter.setDownloadVisible(false);
-					} else {
-						drawerAdapter.setDownloadVisible(true);
+					boolean downloadingVisible = downloadService != null && !downloadService.getBackgroundDownloads().isEmpty();
+					if(lastSelectedPosition == R.id.drawer_downloading) {
+						downloadingVisible = true;
 					}
-
-					if (lastSelectedView == null && drawerList.getCount() > lastSelectedPosition) {
-						lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
-						if (lastSelectedView != null) {
-							lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
-						}
-					}
+					setDrawerItemVisible(R.id.drawer_downloading, downloadingVisible);
 
 					getSupportActionBar().setTitle(R.string.common_appname);
 					getSupportActionBar().setDisplayShowCustomEnabled(false);
@@ -299,7 +402,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			primaryContainer = findViewById(R.id.fragment_container);
 		}
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
@@ -363,6 +466,12 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 
 		lastSelectedPosition = savedInstanceState.getInt(Constants.FRAGMENT_POSITION);
+		if(lastSelectedPosition != 0) {
+			MenuItem item = drawerList.getMenu().findItem(lastSelectedPosition);
+			if(item != null) {
+				item.setChecked(true);
+			}
+		}
 		recreateSpinner();
 	}
 
@@ -370,10 +479,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getMenuInflater();
+		SubsonicFragment currentFragment = getCurrentFragment();
 		if(drawerOpen) {
 			menuInflater.inflate(R.menu.drawer_menu, menu);
 		} else if(currentFragment != null) {
@@ -399,7 +509,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			return true;
 		}
 
-		return currentFragment.onOptionsItemSelected(item);
+		return getCurrentFragment().onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -415,7 +525,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	@Override
 	public void setTitle(CharSequence title) {
 		if(title != null && !title.equals(getSupportActionBar().getTitle())) {
@@ -426,7 +536,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	public void setSubtitle(CharSequence title) {
 		getSupportActionBar().setSubtitle(title);
 	}
-	
+
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		int top = spinnerAdapter.getCount() - 1;
@@ -439,97 +549,93 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		
+
 	}
-	
-	private void populateDrawer() {
+
+	private void populateTabs() {
+		drawerList.getMenu().clear();
+		drawerList.inflateMenu(R.menu.drawer_navigation);
+
 		SharedPreferences prefs = Util.getPreferences(this);
 		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
 		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this) && ServerInfo.canBookmark(this);
 		boolean sharedEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SHARED_ENABLED, true) && !Util.isOffline(this);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		boolean adminEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_ADMIN_ENABLED, true) && !Util.isOffline(this);
-		
-		if(drawerItems == null || !enabledItems[0] == podcastsEnabled || !enabledItems[1] == bookmarksEnabled || !enabledItems[2] == sharedEnabled || !enabledItems[3] == chatEnabled || !enabledItems[4] == adminEnabled) {
-			drawerItems = getResources().getStringArray(R.array.drawerItems);
-			drawerItemsDescriptions = getResources().getStringArray(R.array.drawerItemsDescriptions);
 
-			List<String> drawerItemsList = new ArrayList<String>(Arrays.asList(drawerItems));
-			List<Integer> drawerItemsIconsList = new ArrayList<Integer>();
-			List<Boolean> drawerItemsVisibleList = new ArrayList<Boolean>();
+		MenuItem offlineMenuItem = drawerList.getMenu().findItem(R.id.drawer_offline);
+		if(Util.isOffline(this)) {
+			setDrawerItemVisible(R.id.drawer_home, false);
 
-			int[] arrayAttr = {R.attr.drawerItemsIcons};
-			TypedArray arrayType = obtainStyledAttributes(arrayAttr);
-			int arrayId = arrayType.getResourceId(0, 0);
-			TypedArray iconType = getResources().obtainTypedArray(arrayId);
-			for(int i = 0; i < drawerItemsList.size(); i++) {
-				drawerItemsIconsList.add(iconType.getResourceId(i, 0));
-				drawerItemsVisibleList.add(true);
-			}
-			iconType.recycle();
-			arrayType.recycle();
-
-			// Hide listings user doesn't want to see
-			if(!podcastsEnabled) {
-				drawerItemsVisibleList.set(3, false);
-			}
-			if(!bookmarksEnabled) {
-				drawerItemsVisibleList.set(4, false);
-			}
-			if(!sharedEnabled) {
-				drawerItemsVisibleList.set(5, false);
-			}
-			if(!chatEnabled) {
-				drawerItemsVisibleList.set(6, false);
-			}
-			if(!adminEnabled) {
-				drawerItemsVisibleList.set(7, false);
-			}
-			if(!getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
-				drawerItemsVisibleList.set(8, false);
-			}
-			
-			drawerList.setAdapter(drawerAdapter = new DrawerAdapter(this, drawerItemsList, drawerItemsIconsList, drawerItemsVisibleList));
-			enabledItems[0] = podcastsEnabled;
-			enabledItems[1] = bookmarksEnabled;
-			enabledItems[2] = sharedEnabled;
-			enabledItems[3] = chatEnabled;
-			enabledItems[4] = adminEnabled;
-
-			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
-			if(fragmentType != null && lastSelectedPosition == 0) {
-				for(int i = 0; i < drawerItemsDescriptions.length; i++) {
-					if(fragmentType.equals(drawerItemsDescriptions[i])) {
-						lastSelectedPosition = drawerAdapter.getAdapterPosition(i);
-						break;
-					}
+			if(lastSelectedPosition == 0 || lastSelectedPosition == R.id.drawer_home) {
+				String newFragment = Util.openToTab(this);
+				if(newFragment == null || "Home".equals(newFragment)) {
+					newFragment = "Artist";
 				}
+
+				lastSelectedPosition = getDrawerItemId(newFragment);
+				drawerItemSelected(newFragment);
 			}
 
-			if(drawerList.getChildAt(lastSelectedPosition) == null) {
-				lastSelectedView = null;
-				drawerAdapter.setSelectedPosition(lastSelectedPosition);
-			} else {
-				lastSelectedView = (TextView) drawerList.getChildAt(lastSelectedPosition).findViewById(R.id.drawer_name);
-				if(lastSelectedView != null) {
-					lastSelectedView.setTextAppearance(SubsonicActivity.this, R.style.DSub_TextViewStyle_Bold);
-				}
+			offlineMenuItem.setTitle(R.string.main_online);
+		} else {
+			offlineMenuItem.setTitle(R.string.main_offline);
+		}
+
+		if(!podcastsEnabled) {
+			setDrawerItemVisible(R.id.drawer_podcasts, false);
+		}
+		if(!bookmarksEnabled) {
+			setDrawerItemVisible(R.id.drawer_bookmarks, false);
+		}
+		if(!sharedEnabled) {
+			setDrawerItemVisible(R.id.drawer_shares, false);
+		}
+		if(!chatEnabled) {
+			setDrawerItemVisible(R.id.drawer_chat, false);
+		}
+		if(!adminEnabled) {
+			setDrawerItemVisible(R.id.drawer_admin, false);
+		}
+
+		if(lastSelectedPosition != 0) {
+			MenuItem item = drawerList.getMenu().findItem(lastSelectedPosition);
+			if(item != null) {
+				item.setChecked(true);
 			}
+		}
+		drawerHeaderToggle.setImageResource(R.drawable.main_select_server_dark);
+
+		showingTabs = true;
+	}
+	private void populateServers() {
+		drawerList.getMenu().clear();
+
+		int serverCount = Util.getServerCount(this);
+		int activeServer = Util.getActiveServer(this);
+		for(int i = 1; i <= serverCount; i++) {
+			MenuItem item = drawerList.getMenu().add(MENU_GROUP_SERVER, MENU_ITEM_SERVER_BASE + i, MENU_ITEM_SERVER_BASE + i, Util.getServerName(this, i));
+			if(activeServer == i) {
+				item.setChecked(true);
+			}
+		}
+		drawerList.getMenu().setGroupCheckable(MENU_GROUP_SERVER, true, true);
+		drawerHeaderToggle.setImageResource(R.drawable.main_select_tabs_dark);
+
+		showingTabs = false;
+	}
+	private void setDrawerItemVisible(int id, boolean visible) {
+		MenuItem item = drawerList.getMenu().findItem(id);
+		if(item != null) {
+			item.setVisible(visible);
 		}
 	}
-	
-	private void drawerItemSelected(int position, View view) {
-		startFragmentActivity(drawerItemsDescriptions[position]);
-		
-		if(lastSelectedView != view) {
-			if(lastSelectedView != null) {
-				lastSelectedView.setTextAppearance(this, R.style.DSub_TextViewStyle);
-			}
-			
-			lastSelectedView = (TextView) view.findViewById(R.id.drawer_name);
-			lastSelectedView.setTextAppearance(this, R.style.DSub_TextViewStyle_Bold);
-			lastSelectedPosition = position;
+
+	protected void drawerItemSelected(String fragmentType) {
+		if(currentFragment != null) {
+			currentFragment.stopActionMode();
 		}
+		startFragmentActivity(fragmentType);
 	}
 
 	public void startFragmentActivity(String fragmentType) {
@@ -538,6 +644,9 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		if(!"".equals(fragmentType)) {
 			intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+		}
+		if(lastSelectedPosition != 0) {
+			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
 		}
 		startActivity(intent);
 		finish();
@@ -573,6 +682,10 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(onBackPressedSupport()) {
 			super.onBackPressed();
 		}
+	}
+
+	protected SubsonicFragment getCurrentFragment() {
+		return this.currentFragment;
 	}
 
 	public void replaceFragment(SubsonicFragment fragment, int tag) {
@@ -628,11 +741,11 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 					backStack.remove(backStack.size() - 1);
 				}
 			}
-			
+
 			// Add fragment to the right container
 			trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
 			trans.add(R.id.fragment_second_container, fragment, tag + "");
-			
+
 			// Commit it all
 			trans.commit();
 		}
@@ -656,7 +769,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			trans.commit();
 		} else {
 			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-			
+
 			// Remove old right fragment
 			trans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
 			trans.remove(oldFrag);
@@ -682,7 +795,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				secondaryContainer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.exit_to_right));
 				secondaryContainer.setVisibility(View.GONE);
 			}
-			
+
 			trans.commit();
 		}
 		recreateSpinner();
@@ -695,15 +808,18 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			}
 
 			currentFragment.invalidate();
-			populateDrawer();
+			populateTabs();
 		}
-		
+
 		supportInvalidateOptionsMenu();
 	}
-	
+
 	protected void recreateSpinner() {
 		if(currentFragment == null || currentFragment.getTitle() == null) {
 			return;
+		}
+		if(spinnerAdapter == null) {
+			createCustomActionBarView();
 		}
 
 		if(backStack.size() > 0) {
@@ -727,6 +843,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 				getSupportActionBar().setDisplayShowCustomEnabled(true);
 			}
 		} else if(!isTv()) {
+			getSupportActionBar().setTitle(currentFragment.getTitle());
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
 		}
 	}
@@ -735,6 +852,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		Intent intent = new Intent(this, ((Object) this).getClass());
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtras(getIntent());
+		intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
 		Util.startActivityWithoutTransition(this, intent);
 	}
 
@@ -745,7 +863,7 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			theme = theme.substring(0, theme.indexOf("_fullscreen"));
 			Util.setTheme(this, theme);
 		}
-		
+
 		Util.applyTheme(this, theme);
 	}
 	private void applyFullscreen() {
@@ -754,8 +872,8 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 			// Hide additional elements on higher Android versions
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 				int flags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-					View.SYSTEM_UI_FLAG_FULLSCREEN |
-					View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+						View.SYSTEM_UI_FLAG_FULLSCREEN |
+						View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
 				getWindow().getDecorView().setSystemUiVisibility(flags);
 			} else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -786,20 +904,35 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 		if(finished) {
 			return null;
 		}
-		
+
 		// If service is not available, request it to start and wait for it.
 		for (int i = 0; i < 5; i++) {
 			DownloadService downloadService = DownloadService.getInstance();
 			if (downloadService != null) {
-				return downloadService;
+				break;
 			}
 			Log.w(TAG, "DownloadService not running. Attempting to start it.");
 			startService(new Intent(this, DownloadService.class));
 			Util.sleepQuietly(50L);
 		}
-		return DownloadService.getInstance();
+
+		final DownloadService downloadService = DownloadService.getInstance();
+		if(downloadService != null && afterServiceAvailable.size() > 0) {
+			for(Runnable runnable: afterServiceAvailable) {
+				handler.post(runnable);
+			}
+			afterServiceAvailable.clear();
+		}
+		return downloadService;
 	}
-	
+	public void runWhenServiceAvailable(Runnable runnable) {
+		if(getDownloadService() != null) {
+			runnable.run();
+		} else {
+			afterServiceAvailable.add(runnable);
+		}
+	}
+
 	public static String getThemeName() {
 		return theme;
 	}
@@ -809,6 +942,170 @@ public class SubsonicActivity extends ActionBarActivity implements OnItemSelecte
 	}
 	public boolean isTouchscreen() {
 		return touchscreen;
+	}
+
+	public void openNowPlaying() {
+
+	}
+	public void closeNowPlaying() {
+
+	}
+
+	public void setActiveServer(int instance) {
+		if (Util.getActiveServer(this) != instance) {
+			final DownloadService service = getDownloadService();
+			if (service != null) {
+				new SilentBackgroundTask<Void>(this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						service.clearIncomplete();
+						return null;
+					}
+				}.execute();
+
+			}
+			Util.setActiveServer(this, instance);
+			invalidate();
+			UserUtil.refreshCurrentUser(this, false, true);
+			updateDrawerHeader();
+		}
+	}
+	public void updateDrawerHeader() {
+		if(Util.isOffline(this)) {
+			drawerServerName.setText(R.string.select_album_offline);
+			drawerUserName.setText("");
+			drawerUserAvatar.setVisibility(View.GONE);
+			drawerHeader.setClickable(false);
+			drawerHeaderToggle.setVisibility(View.GONE);
+		} else {
+			drawerServerName.setText(Util.getServerName(this));
+			drawerUserName.setText(UserUtil.getCurrentUsername(this));
+			drawerUserAvatar.setVisibility(View.VISIBLE);
+			getImageLoader().loadAvatar(this, drawerUserAvatar, UserUtil.getCurrentUsername(this));
+			drawerHeader.setClickable(true);
+			drawerHeaderToggle.setVisibility(View.VISIBLE);
+		}
+	}
+
+	public void toggleOffline() {
+		boolean isOffline = Util.isOffline(this);
+		Util.setOffline(this, !isOffline);
+		invalidate();
+		DownloadService service = getDownloadService();
+		if (service != null) {
+			service.setOnline(isOffline);
+		}
+
+		// Coming back online
+		if(isOffline) {
+			int scrobblesCount = Util.offlineScrobblesCount(this);
+			int starsCount = Util.offlineStarsCount(this);
+			if(scrobblesCount > 0 || starsCount > 0){
+				showOfflineSyncDialog(scrobblesCount, starsCount);
+			}
+		}
+
+		UserUtil.seedCurrentUser(this);
+		this.updateDrawerHeader();
+	}
+
+	private void showOfflineSyncDialog(final int scrobbleCount, final int starsCount) {
+		String syncDefault = Util.getSyncDefault(this);
+		if(syncDefault != null) {
+			if("sync".equals(syncDefault)) {
+				syncOffline(scrobbleCount, starsCount);
+				return;
+			} else if("delete".equals(syncDefault)) {
+				deleteOffline();
+				return;
+			}
+		}
+
+		View checkBoxView = this.getLayoutInflater().inflate(R.layout.sync_dialog, null);
+		final CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.sync_default);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setIcon(android.R.drawable.ic_dialog_info)
+				.setTitle(R.string.offline_sync_dialog_title)
+				.setMessage(this.getResources().getString(R.string.offline_sync_dialog_message, scrobbleCount, starsCount))
+				.setView(checkBoxView)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						if(checkBox.isChecked()) {
+							Util.setSyncDefault(SubsonicActivity.this, "sync");
+						}
+						syncOffline(scrobbleCount, starsCount);
+					}
+				}).setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				dialogInterface.dismiss();
+			}
+		}).setNegativeButton(R.string.common_delete, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				if (checkBox.isChecked()) {
+					Util.setSyncDefault(SubsonicActivity.this, "delete");
+				}
+				deleteOffline();
+			}
+		});
+
+		builder.create().show();
+	}
+
+	private void syncOffline(final int scrobbleCount, final int starsCount) {
+		new SilentBackgroundTask<Integer>(this) {
+			@Override
+			protected Integer doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(SubsonicActivity.this);
+				return musicService.processOfflineSyncs(SubsonicActivity.this, null);
+			}
+
+			@Override
+			protected void done(Integer result) {
+				if(result == scrobbleCount) {
+					Util.toast(SubsonicActivity.this, getResources().getString(R.string.offline_sync_success, result));
+				} else {
+					Util.toast(SubsonicActivity.this, getResources().getString(R.string.offline_sync_partial, result, scrobbleCount + starsCount));
+				}
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				Log.w(TAG, "Failed to sync offline stats", error);
+				String msg = getResources().getString(R.string.offline_sync_error) + " " + getErrorMessage(error);
+				Util.toast(SubsonicActivity.this, msg);
+			}
+		}.execute();
+	}
+	private void deleteOffline() {
+		SharedPreferences.Editor offline = Util.getOfflineSync(this).edit();
+		offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
+		offline.putInt(Constants.OFFLINE_STAR_COUNT, 0);
+		offline.commit();
+	}
+	
+	public int getDrawerItemId(String fragmentType) {
+		switch(fragmentType) {
+			case "Home":
+				return R.id.drawer_home;
+			case "Artist":
+				return R.id.drawer_library;
+			case "Playlist":
+				return R.id.drawer_playlists;
+			case "Podcast":
+				return R.id.drawer_podcasts;
+			case "Bookmark":
+				return R.id.drawer_bookmarks;
+			case "Share":
+				return R.id.drawer_shares;
+			case "Chat":
+				return R.id.drawer_chat;
+			default:
+				return R.id.drawer_home;
+		}
 	}
 
 	private void setUncaughtExceptionHandler() {

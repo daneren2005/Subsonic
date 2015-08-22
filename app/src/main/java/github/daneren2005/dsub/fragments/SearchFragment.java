@@ -1,12 +1,16 @@
 package github.daneren2005.dsub.fragments;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,11 +18,13 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.net.Uri;
 import android.view.ViewGroup;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.ArtistAdapter;
+import github.daneren2005.dsub.adapter.EntryGridAdapter;
+import github.daneren2005.dsub.adapter.SearchAdapter;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.SearchCritera;
@@ -26,40 +32,24 @@ import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.adapter.ArtistAdapter;
 import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.adapter.EntryAdapter;
-import github.daneren2005.dsub.adapter.MergeAdapter;
 import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.UpdateView;
 
-public class SearchFragment extends SubsonicFragment {
+public class SearchFragment extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<Serializable> {
 	private static final String TAG = SearchFragment.class.getSimpleName();
 
-	private static final int DEFAULT_ARTISTS = 3;
-	private static final int DEFAULT_ALBUMS = 5;
-	private static final int DEFAULT_SONGS = 10;
-
 	private static final int MAX_ARTISTS = 10;
-	private static final int MAX_ALBUMS = 20;
+	private static final int MAX_ALBUMS = 10;
 	private static final int MAX_SONGS = 25;
-	private ListView list;
 
-	private View artistsHeading;
-	private View albumsHeading;
-	private View songsHeading;
-	private View moreArtistsButton;
-	private View moreAlbumsButton;
-	private View moreSongsButton;
+	protected RecyclerView recyclerView;
+	protected SearchAdapter adapter;
+	protected boolean largeAlbums = false;
+
 	private SearchResult searchResult;
-	private MergeAdapter mergeAdapter;
-	private ArtistAdapter artistAdapter;
-	private ListAdapter moreArtistsAdapter;
-	private EntryAdapter albumAdapter;
-	private ListAdapter moreAlbumsAdapter;
-	private ListAdapter moreSongsAdapter;
-	private EntryAdapter songAdapter;
 	private boolean skipSearch = false;
 	private String currentQuery;
 
@@ -70,6 +60,7 @@ public class SearchFragment extends SubsonicFragment {
 		if(savedInstanceState != null) {
 			searchResult = (SearchResult) savedInstanceState.getSerializable(Constants.FRAGMENT_LIST);
 		}
+		largeAlbums = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true);
 	}
 
 	@Override
@@ -80,60 +71,39 @@ public class SearchFragment extends SubsonicFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
+		rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 		setTitle(R.string.search_title);
-
-		View buttons = inflater.inflate(R.layout.search_buttons, null);
-
-		artistsHeading = buttons.findViewById(R.id.search_artists);
-		albumsHeading = buttons.findViewById(R.id.search_albums);
-		songsHeading = buttons.findViewById(R.id.search_songs);
-
-		moreArtistsButton = buttons.findViewById(R.id.search_more_artists);
-		moreAlbumsButton = buttons.findViewById(R.id.search_more_albums);
-		moreSongsButton = buttons.findViewById(R.id.search_more_songs);
 
 		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setEnabled(false);
 
-		list = (ListView) rootView.findViewById(R.id.fragment_list);
+		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
+		setupLayoutManager(recyclerView, largeAlbums);
 
-		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (view == moreArtistsButton) {
-					expandArtists();
-				} else if (view == moreAlbumsButton) {
-					expandAlbums();
-				} else if (view == moreSongsButton) {
-					expandSongs();
-				} else {
-					Object item = parent.getItemAtPosition(position);
-					if (item instanceof Artist) {
-						onArtistSelected((Artist) item, false);
-					} else if (item instanceof MusicDirectory.Entry) {
-						MusicDirectory.Entry entry = (MusicDirectory.Entry) item;
-						if (entry.isDirectory()) {
-							onAlbumSelected(entry, false);
-						} else if (entry.isVideo()) {
-							onVideoSelected(entry);
-						} else {
-							onSongSelected(entry, false, true, true, false);
-						}
-
-					}
-				}
-			}
-		});
-		registerForContextMenu(list);
+		registerForContextMenu(recyclerView);
 		context.onNewIntent(context.getIntent());
 
 		if(searchResult != null) {
 			skipSearch = true;
-            populateList();
+			recyclerView.setAdapter(adapter = new SearchAdapter(context, searchResult, getImageLoader(), largeAlbums, this));
 		}
 
 		return rootView;
+	}
+
+	@Override
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+		return new GridLayoutManager.SpanSizeLookup() {
+			@Override
+			public int getSpanSize(int position) {
+				int viewType = adapter.getItemViewType(position);
+				if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == ArtistAdapter.VIEW_TYPE_ARTIST) {
+					return columns;
+				} else {
+					return 1;
+				}
+			}
+		};
 	}
 
 	@Override
@@ -154,43 +124,52 @@ public class SearchFragment extends SubsonicFragment {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		Object selectedItem = list.getItemAtPosition(info.position);
-		onCreateContextMenu(menu, view, menuInfo, selectedItem);
-		if(selectedItem instanceof MusicDirectory.Entry && !((MusicDirectory.Entry) selectedItem).isVideo() && !Util.isOffline(context)) {
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Serializable> updateView, Serializable item) {
+		onCreateContextMenuSupport(menu, menuInflater, updateView, item);
+		if(item instanceof MusicDirectory.Entry && !((MusicDirectory.Entry) item).isVideo() && !Util.isOffline(context)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
-
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-		
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Object selectedItem = list.getItemAtPosition(info.position);
-		
-		if(onContextItemSelected(menuItem, selectedItem)) {
-			return true;
-		}
-
-		return true;
-	}
-	
-	@Override
-	public void setPrimaryFragment(boolean primary) {
-		super.setPrimaryFragment(primary);
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Serializable> updateView, Serializable item) {
+		return onContextItemSelected(menuItem, item);
 	}
 
 	@Override
 	public void refresh(boolean refresh) {
 		context.onNewIntent(context.getIntent());
+	}
+
+	@Override
+	public void onItemClicked(Serializable item) {
+		Log.d(TAG, item.getClass().getSimpleName());
+		if (item instanceof Artist) {
+			onArtistSelected((Artist) item, false);
+		} else if (item instanceof MusicDirectory.Entry) {
+			MusicDirectory.Entry entry = (MusicDirectory.Entry) item;
+			if (entry.isDirectory()) {
+				onAlbumSelected(entry, false);
+			} else if (entry.isVideo()) {
+				onVideoSelected(entry);
+			} else {
+				onSongSelected(entry, false, true, true, false);
+			}
+		}
+	}
+
+	@Override
+	protected List<MusicDirectory.Entry> getSelectedEntries() {
+		List<Serializable> selected = adapter.getSelected();
+		List<MusicDirectory.Entry> selectedMedia = new ArrayList<>();
+		for(Serializable ser: selected) {
+			if(ser instanceof MusicDirectory.Entry) {
+				selectedMedia.add((MusicDirectory.Entry) ser);
+			}
+		}
+
+		return selectedMedia;
 	}
 
 	public void search(final String query, final boolean autoplay) {
@@ -200,9 +179,6 @@ public class SearchFragment extends SubsonicFragment {
 		}
 		currentQuery = query;
 
-		mergeAdapter = new MergeAdapter();
-		list.setAdapter(mergeAdapter);
-		
 		BackgroundTask<SearchResult> task = new TabBackgroundTask<SearchResult>(this) {
 			@Override
 			protected SearchResult doInBackground() throws Throwable {
@@ -214,7 +190,7 @@ public class SearchFragment extends SubsonicFragment {
 			@Override
 			protected void done(SearchResult result) {
 				searchResult = result;
-				populateList();
+				recyclerView.setAdapter(adapter = new SearchAdapter(context, searchResult, getImageLoader(), largeAlbums, SearchFragment.this));
 				if (autoplay) {
 					autoplay(query);
 				}
@@ -222,82 +198,6 @@ public class SearchFragment extends SubsonicFragment {
 			}
 		};
 		task.execute();
-	}
-
-	public void populateList() {
-		mergeAdapter = new MergeAdapter();
-
-		if (searchResult != null) {
-			List<Artist> artists = searchResult.getArtists();
-			if (!artists.isEmpty()) {
-				mergeAdapter.addView(artistsHeading);
-				List<Artist> displayedArtists = new ArrayList<Artist>(artists.subList(0, Math.min(DEFAULT_ARTISTS, artists.size())));
-				artistAdapter = new ArtistAdapter(context, displayedArtists);
-				mergeAdapter.addAdapter(artistAdapter);
-				if (artists.size() > DEFAULT_ARTISTS) {
-					moreArtistsAdapter = mergeAdapter.addView(moreArtistsButton, true);
-				}
-			}
-
-			List<MusicDirectory.Entry> albums = searchResult.getAlbums();
-			if (!albums.isEmpty()) {
-				mergeAdapter.addView(albumsHeading);
-				List<MusicDirectory.Entry> displayedAlbums = new ArrayList<MusicDirectory.Entry>(albums.subList(0, Math.min(DEFAULT_ALBUMS, albums.size())));
-				albumAdapter = new EntryAdapter(context, getImageLoader(), displayedAlbums, false);
-				mergeAdapter.addAdapter(albumAdapter);
-				if (albums.size() > DEFAULT_ALBUMS) {
-					moreAlbumsAdapter = mergeAdapter.addView(moreAlbumsButton, true);
-				}
-			}
-
-			List<MusicDirectory.Entry> songs = searchResult.getSongs();
-			if (!songs.isEmpty()) {
-				mergeAdapter.addView(songsHeading);
-				List<MusicDirectory.Entry> displayedSongs = new ArrayList<MusicDirectory.Entry>(songs.subList(0, Math.min(DEFAULT_SONGS, songs.size())));
-				songAdapter = new EntryAdapter(context, getImageLoader(), displayedSongs, false);
-				mergeAdapter.addAdapter(songAdapter);
-				if (songs.size() > DEFAULT_SONGS) {
-					moreSongsAdapter = mergeAdapter.addView(moreSongsButton, true);
-				}
-			}
-
-			boolean empty = searchResult.getArtists().isEmpty() && searchResult.getAlbums().isEmpty() && searchResult.getSongs().isEmpty();
-			if(empty) {
-				setEmpty(true);
-			}
-		}
-
-		list.setAdapter(mergeAdapter);
-	}
-
-	private void expandArtists() {
-		artistAdapter.clear();
-		for (Artist artist : searchResult.getArtists()) {
-			artistAdapter.add(artist);
-		}
-		artistAdapter.notifyDataSetChanged();
-		mergeAdapter.removeAdapter(moreArtistsAdapter);
-		mergeAdapter.notifyDataSetChanged();
-	}
-
-	private void expandAlbums() {
-		albumAdapter.clear();
-		for (MusicDirectory.Entry album : searchResult.getAlbums()) {
-			albumAdapter.add(album);
-		}
-		albumAdapter.notifyDataSetChanged();
-		mergeAdapter.removeAdapter(moreAlbumsAdapter);
-		mergeAdapter.notifyDataSetChanged();
-	}
-
-	private void expandSongs() {
-		songAdapter.clear();
-		for (MusicDirectory.Entry song : searchResult.getSongs()) {
-			songAdapter.add(song);
-		}
-		songAdapter.notifyDataSetChanged();
-		mergeAdapter.removeAdapter(moreSongsAdapter);
-		mergeAdapter.notifyDataSetChanged();
 	}
 
 	private void onArtistSelected(Artist artist, boolean autoplay) {

@@ -11,7 +11,8 @@
 		android:layout_marginLeft="8dp"
 		android:textSize="20dp"
 		android:paddingRight="10px"
-		android:layout_gravity="center"/>
+		android:layout_gravity="center"
+		android:textColor="?android:textColorPrimary"/>
 
 	<SeekBar
 		android:id="@+id/timer_length_bar"

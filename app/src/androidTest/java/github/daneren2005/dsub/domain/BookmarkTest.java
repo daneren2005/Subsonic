@@ -15,7 +15,7 @@ public class BookmarkTest extends TestCase {
 	 */
 	public void testSetCreated() throws ParseException {
 		Bookmark bookmark = new Bookmark();
-		bookmark.setCreated(null);
+		bookmark.setCreated((String) null);
 		assertEquals(null, bookmark.getCreated());
 		
 		bookmark.setCreated("");

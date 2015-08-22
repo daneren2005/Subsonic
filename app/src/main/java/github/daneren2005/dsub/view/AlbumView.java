@@ -16,10 +16,10 @@
 
  Copyright 2009 (C) Sindre Mehus
  */
+
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -30,75 +30,76 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.Util;
-import java.io.File;
-import java.util.List;
 
-/**
- * Used to display albums in a {@code ListView}.
- *
- * @author Sindre Mehus
- */
-public class AlbumView extends UpdateView {
+import java.io.File;
+
+public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private static final String TAG = AlbumView.class.getSimpleName();
 
-	private Context context;
-	private MusicDirectory.Entry album;
 	private File file;
-
+	private View coverArtView;
 	private TextView titleView;
 	private TextView artistView;
-	private View coverArtView;
+	private boolean showArtist = true;
 
-	public AlbumView(Context context) {
+	public AlbumView(Context context, boolean cell) {
 		super(context);
-		this.context = context;
-		LayoutInflater.from(context).inflate(R.layout.album_list_item, this, true);
 
+		if(cell) {
+			LayoutInflater.from(context).inflate(R.layout.album_cell_item, this, true);
+		} else {
+			LayoutInflater.from(context).inflate(R.layout.album_list_item, this, true);
+		}
+
+		coverArtView = findViewById(R.id.album_coverart);
 		titleView = (TextView) findViewById(R.id.album_title);
 		artistView = (TextView) findViewById(R.id.album_artist);
-		coverArtView = findViewById(R.id.album_coverart);
+
 		ratingBar = (RatingBar) findViewById(R.id.album_rating);
+		ratingBar.setFocusable(false);
 		starButton = (ImageButton) findViewById(R.id.album_star);
 		starButton.setFocusable(false);
+		moreButton = (ImageView) findViewById(R.id.more_button);
 
-		moreButton = (ImageView) findViewById(R.id.album_more);
-		moreButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				v.showContextMenu();
-			}
-		});
+		checkable = true;
 	}
 
-	protected void setObjectImpl(Object obj1, Object obj2) {
-		this.album = (MusicDirectory.Entry) obj1;
+	public void setShowArtist(boolean showArtist) {
+		this.showArtist = showArtist;
+	}
+
+	protected void setObjectImpl(MusicDirectory.Entry album, ImageLoader imageLoader) {
 		titleView.setText(album.getAlbumDisplay());
-		String artist = album.getArtist();
-		if(artist == null) {
-			artist = "";
+		String artist = "";
+		if(showArtist) {
+			artist = album.getArtist();
+			if (artist == null) {
+				artist = "";
+			}
+			if (album.getYear() != null) {
+				artist += " - " + album.getYear();
+			}
+		} else if(album.getYear() != null) {
+			artist += album.getYear();
 		}
-		if(album.getYear() != null) {
-			artist += " - " + album.getYear();
-		}
-		artistView.setText(artist);
-		artistView.setVisibility(album.getArtist() == null ? View.GONE : View.VISIBLE);
-		imageTask = ((ImageLoader)obj2).loadImage(coverArtView, album, false, true);
+		artistView.setText(album.getArtist() == null ? "" : artist);
+		imageTask = imageLoader.loadImage(coverArtView, album, false, true);
 		file = null;
 	}
 
 	@Override
 	protected void updateBackground() {
 		if(file == null) {
-			file = FileUtil.getAlbumDirectory(context, album);
+			file = FileUtil.getAlbumDirectory(context, item);
 		}
 
 		exists = file.exists();
-		isStarred = album.isStarred();
-		isRated = album.getRating();
+		isStarred = item.isStarred();
+		isRated = item.getRating();
 	}
 
 	public MusicDirectory.Entry getEntry() {
-		return album;
+		return item;
 	}
 
 	public File getFile() {

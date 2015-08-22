@@ -20,7 +20,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.app.AlertDialog;
+import android.annotation.TargetApi;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +31,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.MediaRouteButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
@@ -54,6 +58,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -61,6 +66,7 @@ import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.DownloadService.OnSongChangedListener;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
@@ -69,6 +75,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
 import github.daneren2005.dsub.view.FadeOutAnimation;
+import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.Util;
 
@@ -78,14 +85,12 @@ import github.daneren2005.dsub.util.*;
 import github.daneren2005.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
-import com.mobeta.android.dslv.*;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
-public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener {
+public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile>, OnSongChangedListener {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();
 	private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 10;
 	private static final int INCREMENT_TIME = 5000;
-	private static final int SERVICE_BACKOFF = 200;
 
 	private static final int ACTION_PREVIOUS = 1;
 	private static final int ACTION_NEXT = 2;
@@ -96,7 +101,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private TextView emptyTextView;
 	private TextView songTitleTextView;
 	private ImageView albumArtImageView;
-	private DragSortListView playlistView;
+	private RecyclerView playlistView;
 	private TextView positionTextView;
 	private TextView durationTextView;
 	private TextView statusTextView;
@@ -112,22 +117,20 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private ImageButton bookmarkButton;
 	private ImageButton rateBadButton;
 	private ImageButton rateGoodButton;
-	private View mainLayout;
+
 	private ScheduledExecutorService executorService;
 	private DownloadFile currentPlaying;
-	private long currentRevision;
 	private int swipeDistance;
 	private int swipeVelocity;
 	private ScheduledFuture<?> hideControlsFuture;
 	private List<DownloadFile> songList;
 	private DownloadFileAdapter songListAdapter;
-	private SilentBackgroundTask<Void> onProgressChangedTask;
-	private SilentBackgroundTask<Void> onCurrentChangedTask;
-	private SilentBackgroundTask<Void> onDownloadListChangedTask;
 	private boolean seekInProgress = false;
 	private boolean startFlipped = false;
 	private boolean scrollWhenLoaded = false;
 	private int lastY = 0;
+	private int currentPlayingSize = 0;
+	private MenuItem timerMenu;
 
 	/**
 	 * Called when the activity is first created.
@@ -141,6 +144,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				startFlipped = true;
 			}
 		}
+		primaryFragment = false;
 	}
 
 	@Override
@@ -153,11 +157,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.download, container, false);
 		setTitle(R.string.button_bar_now_playing);
-		
-		mainLayout = rootView.findViewById(R.id.download_layout);
-		if(!primaryFragment) {
-			mainLayout.setVisibility(View.GONE);
-		}
 
 		WindowManager w = context.getWindowManager();
 		Display d = w.getDefaultDisplay();
@@ -173,7 +172,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		durationTextView = (TextView)rootView.findViewById(R.id.download_duration);
 		statusTextView = (TextView)rootView.findViewById(R.id.download_status);
 		progressBar = (SeekBar)rootView.findViewById(R.id.download_progress_bar);
-		playlistView = (DragSortListView)rootView.findViewById(R.id.download_list);
 		previousButton = (AutoRepeatButton)rootView.findViewById(R.id.download_previous);
 		nextButton = (AutoRepeatButton)rootView.findViewById(R.id.download_next);
 		pauseButton =rootView.findViewById(R.id.download_pause);
@@ -184,6 +182,44 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		rateBadButton = (ImageButton) rootView.findViewById(R.id.download_rating_bad);
 		rateGoodButton = (ImageButton) rootView.findViewById(R.id.download_rating_good);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
+
+		playlistView = (RecyclerView)rootView.findViewById(R.id.download_list);
+		setupLayoutManager(playlistView, false);
+		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+			@Override
+			public boolean onMove(RecyclerView recyclerView, final RecyclerView.ViewHolder fromHolder, final RecyclerView.ViewHolder toHolder) {
+				new SilentBackgroundTask<Void>(context) {
+					private int from;
+					private int to;
+
+					@Override
+					protected Void doInBackground() throws Throwable {
+						from = fromHolder.getAdapterPosition();
+						to = toHolder.getAdapterPosition();
+						getDownloadService().swap(true, from, to);
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						songListAdapter.notifyItemMoved(from, to);
+					}
+				}.execute();
+
+				return true;
+			}
+
+			@Override
+			public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+				SongView songView = (SongView) ((UpdateView.UpdateViewHolder) viewHolder).getUpdateView();
+				DownloadFile downloadFile = songView.getDownloadFile();
+
+				DownloadService downloadService = getDownloadService();
+				downloadService.remove(downloadFile);
+				songListAdapter.removeItem(downloadFile);
+			}
+		});
+		touchHelper.attachToRecyclerView(playlistView);
 
 		starButton = (ImageButton)rootView.findViewById(R.id.download_star);
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
@@ -196,7 +232,15 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 						toggleStarred(currentSong, new OnStarChange() {
 							@Override
 							void starChange(boolean starred) {
-								starButton.setImageResource(currentSong.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
+								if(currentSong.isStarred()) {
+									starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
+								} else {
+									if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+										starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
+									} else {
+										starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
+									}
+								}
 							}
 						});
 					}
@@ -239,12 +283,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 						getDownloadService().previous();
 						return null;
 					}
-
-					@Override
-					protected void done(Void result) {
-						onCurrentChanged();
-						onProgressChanged();
-					}
 				}.execute();
 				setControlsVisible(true);
 			}
@@ -265,14 +303,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 						getDownloadService().next();
 						return true;
 					}
-
-					@Override
-					protected void done(Boolean result) {
-						if (result) {
-							onCurrentChanged();
-							onProgressChanged();
-						}
-					}
 				}.execute();
 				setControlsVisible(true);
 			}
@@ -292,12 +322,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 						getDownloadService().pause();
 						return null;
 					}
-
-					@Override
-					protected void done(Void result) {
-						onCurrentChanged();
-						onProgressChanged();
-					}
 				}.execute();
 			}
 		});
@@ -310,12 +334,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					protected Void doInBackground() throws Throwable {
 						getDownloadService().reset();
 						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						onCurrentChanged();
-						onProgressChanged();
 					}
 				}.execute();
 			}
@@ -331,12 +349,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 						start();
 						return null;
 					}
-
-					@Override
-					protected void done(Void result) {
-						onCurrentChanged();
-						onProgressChanged();
-					}
 				}.execute();
 			}
 		});
@@ -346,7 +358,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onClick(View view) {
 				RepeatMode repeatMode = getDownloadService().getRepeatMode().next();
 				getDownloadService().setRepeatMode(repeatMode);
-				onDownloadListChanged();
 				switch (repeatMode) {
 					case OFF:
 						Util.toast(context, R.string.download_repeat_off);
@@ -360,6 +371,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					default:
 						break;
 				}
+				updateRepeatButton();
 				setControlsVisible(true);
 			}
 		});
@@ -392,21 +404,21 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
 					} else {
-						rateBadButton.setImageResource(Util.getAttribute(context, R.attr.rating_bad));
+						rateBadButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.rating_bad));
 					}
 				} else {
 					// Immediately skip to the next song
 					downloadService.next(true);
-					
+
 					// Otherwise set rating to 1
 					setRating(entry, 1);
-					rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_selected);
+					rateBadButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_bad_selected));
 
 					// Make sure good rating is blank
 					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
 					} else {
-						rateGoodButton.setImageResource(Util.getAttribute(context, R.attr.rating_good));
+						rateGoodButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.rating_good));
 					}
 				}
 			}
@@ -432,18 +444,18 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_dark);
 					} else {
-						rateGoodButton.setImageResource(Util.getAttribute(context, R.attr.rating_good));
+						rateGoodButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.rating_good));
 					}
 				} else {
 					// Otherwise set rating to maximum
 					setRating(entry, 5);
-					rateGoodButton.setImageResource(R.drawable.ic_action_rating_good_selected);
+					rateGoodButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_good_selected));
 
 					// Make sure bad rating is blank
 					if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						rateBadButton.setImageResource(R.drawable.ic_action_rating_bad_dark);
 					} else {
-						rateBadButton.setImageResource(Util.getAttribute(context, R.attr.rating_bad));
+						rateBadButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.rating_bad));
 					}
 				}
 			}
@@ -482,7 +494,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					@Override
 					protected void done(Void result) {
 						seekInProgress = false;
-						NowPlayingFragment.this.onProgressChanged();
 					}
 				}.execute();
 			}
@@ -500,55 +511,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 			}
 		});
-		playlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-				warnIfStorageUnavailable();
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						getDownloadService().play(position);
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						onCurrentChanged();
-						onProgressChanged();
-					}
-				}.execute();
-			}
-		});
-		playlistView.setDropListener(new DragSortListView.DropListener() {
-			@Override
-			public void drop(final int from, final int to) {
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						getDownloadService().swap(true, from, to);
-						onDownloadListChanged();
-
-						return null;
-					}
-				}.execute();
-			}
-		});
-		playlistView.setRemoveListener(new DragSortListView.RemoveListener() {
-			@Override
-			public void remove(int which) {
-				getDownloadService().remove(which);
-				onDownloadListChanged();
-			}
-		});
-
-		registerForContextMenu(playlistView);
-
-		DownloadService downloadService = getDownloadService();
-		if (downloadService != null && context.getIntent().getBooleanExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, false)) {
-			context.getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE);
-			warnIfStorageUnavailable();
-			downloadService.setShufflePlayEnabled(true);
-		}
 
 		if(Build.MODEL.equals("Nexus 4") || Build.MODEL.equals("GT-I9100")) {
 			View slider = rootView.findViewById(R.id.download_slider);
@@ -565,10 +527,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			menuInflater.inflate(R.menu.nowplaying_offline, menu);
 		} else {
 			menuInflater.inflate(R.menu.nowplaying, menu);
-
-			if(downloadService != null && downloadService.getSleepTimer()) {
-				menu.findItem(R.id.menu_toggle_timer).setTitle(R.string.download_stop_timer);
-			}
+		}
+		if(downloadService != null && downloadService.getSleepTimer()) {
+			int timeRemaining = downloadService.getSleepTimeRemaining();
+			timerMenu = menu.findItem(R.id.menu_toggle_timer);
+			timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
 		}
 		if(downloadService != null && downloadService.getKeepScreenOn()) {
 			menu.findItem(R.id.menu_screen_on_off).setChecked(true);
@@ -604,47 +567,30 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(menuItemSelected(menuItem.getItemId(), null)) {
 			return true;
 		}
-		
+
 		return super.onOptionsItemSelected(menuItem);
 	}
 
 	@Override
-	public void onCreateContextMenu(android.view.ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		if(!primaryFragment) {
-			return;
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		if(Util.isOffline(context)) {
+			menuInflater.inflate(R.menu.nowplaying_context_offline, menu);
+		} else {
+			menuInflater.inflate(R.menu.nowplaying_context, menu);
+			menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
 		}
 
-		if (view == playlistView) {
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
-
-			android.view.MenuInflater inflater = context.getMenuInflater();
-			if(Util.isOffline(context)) {
-				inflater.inflate(R.menu.nowplaying_context_offline, menu);
-			} else {
-				inflater.inflate(R.menu.nowplaying_context, menu);
-				menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
-			}
-
-			if (downloadFile.getSong().getParent() == null) {
-				menu.findItem(R.id.menu_show_album).setVisible(false);
-				menu.findItem(R.id.menu_show_artist).setVisible(false);
-			}
-
-			hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
+		if (downloadFile.getSong().getParent() == null) {
+			menu.findItem(R.id.menu_show_album).setVisible(false);
+			menu.findItem(R.id.menu_show_artist).setVisible(false);
 		}
+
+		MenuUtil.hideMenuItems(context, menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(android.view.MenuItem menuItem) {
-		if(!primaryFragment) {
-			return false;
-		}
-		
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		DownloadFile downloadFile = (DownloadFile) playlistView.getItemAtPosition(info.position);
-		return menuItemSelected(menuItem.getItemId(), downloadFile) || super.onContextItemSelected(menuItem);
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		return menuItemSelected(menuItem.getItemId(), downloadFile);
 	}
 
 	private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
@@ -712,20 +658,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 				replaceFragment(fragment);
 				return true;
-			} case R.id.menu_remove:
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						getDownloadService().remove(song);
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						onDownloadListChanged();
-					}
-				}.execute();
-				return true;
+			}
 			case R.id.menu_delete:
 				List<Entry> songs = new ArrayList<Entry>(1);
 				songs.add(song.getSong());
@@ -745,7 +678,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 							@Override
 							protected void done(Void result) {
-								onDownloadListChanged();
+								context.closeNowPlaying();
 							}
 						}.execute();
 					}
@@ -841,26 +774,18 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public void onResume() {
 		super.onResume();
-
+		if(this.primaryFragment) {
+			onResumeHandlers();
+		} else {
+			update();
+		}
+	}
+	private void onResumeHandlers() {
 		final Handler handler = new Handler();
-		Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						update();
-					}
-				});
-			}
-		};
-
 		executorService = Executors.newSingleThreadScheduledExecutor();
-		executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
-
 		setControlsVisible(true);
 
-		DownloadService downloadService = getDownloadService();
+		final DownloadService downloadService = getDownloadService();
 		if (downloadService == null || downloadService.getCurrentPlaying() == null || startFlipped) {
 			playlistFlipper.setDisplayedChild(1);
 		}
@@ -875,45 +800,60 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
 			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
 		}
-		if(downloadService != null) {
-			downloadService.startRemoteScan();
-		} else {
-			// Make sure to call remote scan once the service is ready
-			final Runnable waitForService = new Runnable() {
-				@Override
-				public void run() {
-					DownloadService service = getDownloadService();
-					if(service != null) {
-						service.startRemoteScan();
-					} else {
-						handler.postDelayed(this, SERVICE_BACKOFF);
-					}
-				}
-			};
 
-			handler.postDelayed(waitForService, SERVICE_BACKOFF);
-		}
+		context.runWhenServiceAvailable(new Runnable() {
+			@Override
+			public void run() {
+				if(primaryFragment) {
+					DownloadService downloadService = getDownloadService();
+					downloadService.startRemoteScan();
+					downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
+				}
+				updateRepeatButton();
+			}
+		});
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		executorService.shutdown();
-		if(getDownloadService() != null) {
-			getDownloadService().stopRemoteScan();
+		onPauseHandlers();
+	}
+	private void onPauseHandlers() {
+		if(executorService != null) {
+			DownloadService downloadService = getDownloadService();
+			if (downloadService != null) {
+				downloadService.stopRemoteScan();
+				downloadService.removeOnSongChangeListener(this);
+			}
+			playlistFlipper.setDisplayedChild(0);
 		}
 	}
-	
+
 	@Override
 	public void setPrimaryFragment(boolean primary) {
 		super.setPrimaryFragment(primary);
 		if(rootView != null) {
 			if(primary) {
-				mainLayout.setVisibility(View.VISIBLE);
-				updateButtons();
+				onResumeHandlers();
 			} else {
-				mainLayout.setVisibility(View.GONE);
+				onPauseHandlers();
 			}
+		}
+	}
+
+	@Override
+	public void setTitle(int title) {
+		this.title = context.getResources().getString(title);
+		if(this.primaryFragment) {
+			context.setTitle(this.title);
+		}
+	}
+	@Override
+	public void setSubtitle(CharSequence title) {
+		this.subtitle = title;
+		if(this.primaryFragment) {
+			context.setSubtitle(title);
 		}
 	}
 
@@ -954,7 +894,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(context == null) {
 			return;
 		}
-		
+
 		if(Util.isOffline(context)) {
 			bookmarkButton.setVisibility(View.GONE);
 			rateBadButton.setVisibility(View.GONE);
@@ -971,46 +911,33 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	// Scroll to current playing/downloading.
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	private void scrollToCurrent() {
 		if (getDownloadService() == null || songListAdapter == null) {
 			scrollWhenLoaded = true;
 			return;
 		}
 
-		for (int i = 0; i < songListAdapter.getCount(); i++) {
-			if (currentPlaying == playlistView.getItemAtPosition(i)) {
-				playlistView.setSelectionFromTop(i, 40);
-				return;
-			}
+		// Try to get position of current playing/downloading
+		int position = songListAdapter.getItemPosition(currentPlaying);
+		if(position == -1) {
+			DownloadFile currentDownloading = getDownloadService().getCurrentDownloading();
+			position = songListAdapter.getItemPosition(currentDownloading);
 		}
-		DownloadFile currentDownloading = getDownloadService().getCurrentDownloading();
-		for (int i = 0; i < songListAdapter.getCount(); i++) {
-			if (currentDownloading == playlistView.getItemAtPosition(i)) {
-				playlistView.setSelectionFromTop(i, 40);
-				return;
-			}
+
+		// If found, scroll to it
+		if(position != -1) {
+			// RecyclerView.scrollToPosition just puts it on the screen (ie: bottom if scrolled below it)
+			LinearLayoutManager layoutManager = (LinearLayoutManager) playlistView.getLayoutManager();
+			layoutManager.scrollToPositionWithOffset(position, 0);
 		}
 	}
 
 	private void update() {
-		if (getDownloadService() == null) {
-			return;
-		}
-
-		if (currentRevision != getDownloadService().getDownloadListUpdateRevision()) {
-			onDownloadListChanged();
-		}
-
-		if (currentPlaying != getDownloadService().getCurrentPlaying()) {
-			onCurrentChanged();
-		}
-
 		if(startFlipped) {
 			startFlipped = false;
 			scrollToCurrent();
 		}
-
-		onProgressChanged();
 	}
 
 	protected void startTimer() {
@@ -1043,26 +970,26 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onStopTrackingTouch(SeekBar seekBar) {
 			}
 		});
-        lengthBar.setProgress(length - 1);
+		lengthBar.setProgress(length - 1);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_set_timer)
-			.setView(dialogView)
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					int length = getMinutes(lengthBar.getProgress());
+				.setView(dialogView)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						int length = getMinutes(lengthBar.getProgress());
 
-					SharedPreferences.Editor editor = prefs.edit();
-					editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
-					editor.commit();
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
+						editor.commit();
 
-					getDownloadService().setSleepTimerDuration(length);
-					getDownloadService().startSleepTimer();
-					context.supportInvalidateOptionsMenu();
-				}
-			})
-			.setNegativeButton(R.string.common_cancel, null);
+						getDownloadService().setSleepTimerDuration(length);
+						getDownloadService().startSleepTimer();
+						context.supportInvalidateOptionsMenu();
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
@@ -1087,7 +1014,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			playlistFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_in));
 			playlistFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_out));
 			playlistFlipper.setDisplayedChild(1);
-			
+
 			UpdateView.triggerUpdate();
 		}
 	}
@@ -1106,258 +1033,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			} else {
 				service.play(current);
 			}
-		}
-	}
-	private void onDownloadListChanged() {
-		onDownloadListChanged(false);
-	}
-	private void onDownloadListChanged(final boolean refresh) {
-		final DownloadService downloadService = getDownloadService();
-		if (downloadService == null || onDownloadListChangedTask != null) {
-			return;
-		}
-
-		onDownloadListChangedTask = new SilentBackgroundTask<Void>(context) {
-			int currentPlayingIndex;
-			int size;
-
-			@Override
-			protected Void doInBackground() throws Throwable {
-				currentPlayingIndex = downloadService.getCurrentPlayingIndex() + 1;
-				size = downloadService.size();
-				
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				List<DownloadFile> list;
-				list = downloadService.getSongs();
-				
-				if(downloadService.isShufflePlayEnabled()) {
-					emptyTextView.setText(R.string.download_shuffle_loading);
-				}
-				else {
-					emptyTextView.setText(R.string.download_empty);
-				}
-				
-				if(songListAdapter == null || refresh) {
-					songList = new ArrayList<DownloadFile>();
-					songList.addAll(list);
-					playlistView.setAdapter(songListAdapter = new DownloadFileAdapter(context, songList));
-				} else {
-					songList.clear();
-					songList.addAll(list);
-					songListAdapter.notifyDataSetChanged();
-				}
-				
-				emptyTextView.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
-				currentRevision = downloadService.getDownloadListUpdateRevision();
-
-				switch (downloadService.getRepeatMode()) {
-					case OFF:
-						if("light".equals(SubsonicActivity.getThemeName()) | "light_fullscreen".equals(SubsonicActivity.getThemeName())) {
-							repeatButton.setImageResource(R.drawable.media_repeat_off_light);
-						} else {
-							repeatButton.setImageResource(R.drawable.media_repeat_off);
-						}
-						break;
-					case ALL:
-						repeatButton.setImageResource(R.drawable.media_repeat_all);
-						break;
-					case SINGLE:
-						repeatButton.setImageResource(R.drawable.media_repeat_single);
-						break;
-					default:
-						break;
-				}
-				
-				if(scrollWhenLoaded) {
-					scrollToCurrent();
-					scrollWhenLoaded = false;
-				}
-
-				setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, size));
-				onDownloadListChangedTask = null;
-				if(onCurrentChangedTask != null) {
-					onCurrentChangedTask.execute();
-				} else if(onProgressChangedTask != null) {
-					onProgressChangedTask.execute();
-				}
-			}
-		};
-		onDownloadListChangedTask.execute();
-	}
-
-	private void onCurrentChanged() {
-		final DownloadService downloadService = getDownloadService();
-		if (downloadService == null  || onCurrentChangedTask != null) {
-			return;
-		}
-		
-		onCurrentChangedTask = new SilentBackgroundTask<Void>(context) {
-			int currentPlayingIndex;
-			int currentPlayingSize;
-
-			@Override
-			protected Void doInBackground() throws Throwable {
-				currentPlaying = downloadService.getCurrentPlaying();
-				currentPlayingIndex = downloadService.getCurrentPlayingIndex() + 1;
-				currentPlayingSize = downloadService.size();
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				if (currentPlaying != null) {
-					Entry song = currentPlaying.getSong();
-					songTitleTextView.setText(song.getTitle());
-					getImageLoader().loadImage(albumArtImageView, song, true, true);
-					starButton.setImageResource(song.isStarred() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
-					setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex, currentPlayingSize));
-
-					int badRating, goodRating, bookmark;
-					if(song.getRating() == 1) {
-						badRating = R.drawable.ic_action_rating_bad_selected;
-					} else if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						badRating = R.drawable.ic_action_rating_bad_dark;
-					} else {
-						badRating = Util.getAttribute(context, R.attr.rating_bad);
-					}
-					rateBadButton.setImageResource(badRating);
-
-					if(song.getRating() == 5) {
-						goodRating = R.drawable.ic_action_rating_good_selected;
-					} else if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						goodRating = R.drawable.ic_action_rating_good_dark;
-					} else {
-						goodRating = Util.getAttribute(context, R.attr.rating_good);
-					}
-					rateGoodButton.setImageResource(goodRating);
-
-					if(song.getBookmark() != null) {
-						bookmark = R.drawable.ic_menu_bookmark_selected;
-					} else if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						bookmark = R.drawable.ic_menu_bookmark_dark;
-					} else {
-						bookmark = Util.getAttribute(context, R.attr.bookmark);
-					}
-					bookmarkButton.setImageResource(bookmark);
-				} else {
-					songTitleTextView.setText(null);
-					getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
-					starButton.setImageResource(android.R.drawable.btn_star_big_off);
-					setSubtitle(null);
-				}
-				onCurrentChangedTask = null;
-				if(onProgressChangedTask != null) {
-					onProgressChangedTask.execute();
-				}
-			}
-		};
-		
-		if(onDownloadListChangedTask == null) {
-			onCurrentChangedTask.execute();
-		}
-	}
-
-	private void onProgressChanged() {
-		// Make sure to only be trying to run one of these at a time
-		if (getDownloadService() == null || onProgressChangedTask != null) {
-			return;
-		}
-
-		onProgressChangedTask = new SilentBackgroundTask<Void>(context) {
-			DownloadService downloadService;
-			int millisPlayed;
-			Integer duration;
-			PlayerState playerState;
-			boolean isSeekable;
-
-			@Override
-			protected Void doInBackground() throws Throwable {
-				downloadService = getDownloadService();
-				millisPlayed = Math.max(0, downloadService.getPlayerPosition());
-				duration = downloadService.getPlayerDuration();
-				playerState = getDownloadService().getPlayerState();
-				isSeekable = downloadService.isSeekable();
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				if (currentPlaying != null) {
-					int millisTotal = duration == null ? 0 : duration;
-
-					positionTextView.setText(Util.formatDuration(millisPlayed / 1000));
-					if(millisTotal > 0) {
-						durationTextView.setText(Util.formatDuration(millisTotal / 1000));
-					} else {
-						durationTextView.setText("-:--");
-					}
-					progressBar.setMax(millisTotal == 0 ? 100 : millisTotal); // Work-around for apparent bug.
-					if(!seekInProgress) {
-						progressBar.setProgress(millisPlayed);
-					}
-					progressBar.setEnabled(isSeekable);
-				} else {
-					positionTextView.setText("0:00");
-					durationTextView.setText("-:--");
-					progressBar.setProgress(0);
-					progressBar.setEnabled(false);
-				}
-
-				switch (playerState) {
-					case DOWNLOADING:
-						if(currentPlaying != null) {
-							if(Util.isWifiRequiredForDownload(context)) {
-								statusTextView.setText(context.getResources().getString(R.string.download_playerstate_mobile_disabled));
-							} else {
-								long bytes = currentPlaying.getPartialFile().length();
-								statusTextView.setText(context.getResources().getString(R.string.download_playerstate_downloading, Util.formatLocalizedBytes(bytes, context)));
-							}
-						}
-						break;
-					case PREPARING:
-						statusTextView.setText(R.string.download_playerstate_buffering);
-						break;
-					default:
-						if(currentPlaying != null) {
-							String artist = "";
-							if(currentPlaying.getSong().getArtist() != null) {
-								artist = currentPlaying.getSong().getArtist() + " - ";
-							}
-							statusTextView.setText(artist + currentPlaying.getSong().getAlbum());
-						} else {
-							statusTextView.setText(null);
-						}
-						break;
-				}
-
-				switch (playerState) {
-					case STARTED:
-						pauseButton.setVisibility(View.VISIBLE);
-						stopButton.setVisibility(View.INVISIBLE);
-						startButton.setVisibility(View.INVISIBLE);
-						break;
-					case DOWNLOADING:
-					case PREPARING:
-						pauseButton.setVisibility(View.INVISIBLE);
-						stopButton.setVisibility(View.VISIBLE);
-						startButton.setVisibility(View.INVISIBLE);
-						break;
-					default:
-						pauseButton.setVisibility(View.INVISIBLE);
-						stopButton.setVisibility(View.INVISIBLE);
-						startButton.setVisibility(View.VISIBLE);
-						break;
-				}
-
-				onProgressChangedTask = null;
-			}
-		};
-		if(onDownloadListChangedTask == null && onCurrentChangedTask == null) {
-			onProgressChangedTask.execute();
 		}
 	}
 
@@ -1395,33 +1070,33 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		}.execute();
 	}
-	
+
 	private void createBookmark() {
 		DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;
 		}
-		
+
 		final DownloadFile currentDownload = downloadService.getCurrentPlaying();
 		if(currentDownload == null) {
 			return;
 		}
-		
+
 		View dialogView = context.getLayoutInflater().inflate(R.layout.create_bookmark, null);
 		final EditText commentBox = (EditText)dialogView.findViewById(R.id.comment_text);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.download_save_bookmark_title)
-			.setView(dialogView)
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					String comment = commentBox.getText().toString();
+				.setView(dialogView)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						String comment = commentBox.getText().toString();
 
-					createBookmark(currentDownload, comment);
-				}
-			})
-			.setNegativeButton(R.string.common_cancel, null);
+						createBookmark(currentDownload, comment);
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
@@ -1430,13 +1105,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(downloadService == null) {
 			return;
 		}
-		
+
 		final Entry currentSong = currentDownload.getSong();
 		final int position = downloadService.getPlayerPosition();
 		final Bookmark oldBookmark = currentSong.getBookmark();
 		currentSong.setBookmark(new Bookmark(position));
-		bookmarkButton.setImageResource(R.drawable.ic_menu_bookmark_selected);
-		
+		bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
+
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -1458,30 +1133,30 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				Util.toast(context, R.string.download_save_bookmark);
 				setControlsVisible(true);
 			}
-			
+
 			@Override
 			protected void error(Throwable error) {
 				Log.w(TAG, "Failed to create bookmark", error);
 				currentSong.setBookmark(oldBookmark);
-				
+
 				// If no bookmark at start, then return to no bookmark
 				if(oldBookmark == null) {
 					int bookmark;
 					if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 						bookmark = R.drawable.ic_menu_bookmark_dark;
 					} else {
-						bookmark = Util.getAttribute(context, R.attr.bookmark);
+						bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 					}
 					bookmarkButton.setImageResource(bookmark);
 				}
-				
+
 				String msg;
 				if(error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
 				} else {
 					msg = context.getResources().getString(R.string.download_save_bookmark_failed) + getErrorMessage(error);
 				}
-				
+
 				Util.toast(context, msg, false);
 			}
 		}.execute();
@@ -1538,11 +1213,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 							downloadService.seekTo(downloadService.getPlayerPosition() - DownloadService.REWIND);
 							break;
 					}
-
-					onProgressChanged();
-					if(performAction == ACTION_NEXT || performAction == ACTION_PREVIOUS) {
-						onCurrentChanged();
-					}
 					return null;
 				}
 			}.execute();
@@ -1569,5 +1239,207 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
 		return false;
+	}
+
+	@Override
+	public void onItemClicked(final DownloadFile item) {
+		warnIfStorageUnavailable();
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				getDownloadService().play(item);
+				return null;
+			}
+		}.execute();
+	}
+
+	@Override
+	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
+		this.currentPlaying = currentPlaying;
+		if (currentPlaying != null) {
+			Entry song = currentPlaying.getSong();
+			songTitleTextView.setText(song.getTitle());
+			getImageLoader().loadImage(albumArtImageView, song, true, true);
+			if(song.isStarred()) {
+				starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
+			} else {
+				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+					starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
+				} else {
+					starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
+				}
+			}
+			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
+
+			int badRating, goodRating, bookmark;
+			if(song.getRating() == 1) {
+				rateBadButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_bad_selected));
+			} else {
+				if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					badRating = R.drawable.ic_action_rating_bad_dark;
+				} else {
+					badRating = DrawableTint.getDrawableRes(context, R.attr.rating_bad);
+				}
+				rateBadButton.setImageResource(badRating);
+			}
+
+			if(song.getRating() == 5) {
+				rateGoodButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_good_selected));
+			} else {
+				if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					goodRating = R.drawable.ic_action_rating_good_dark;
+				} else {
+					goodRating = DrawableTint.getDrawableRes(context, R.attr.rating_good);
+				}
+				rateGoodButton.setImageResource(goodRating);
+			}
+
+			if(song.getBookmark() != null) {
+				bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
+			} else {
+				if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+					bookmark = R.drawable.ic_menu_bookmark_dark;
+				} else {
+					bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
+				}
+				bookmarkButton.setImageResource(bookmark);
+			}
+		} else {
+			songTitleTextView.setText(null);
+			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
+			starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
+			setSubtitle(null);
+		}
+	}
+
+	@Override
+	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
+		currentPlayingSize = songs.size();
+
+		DownloadService downloadService = getDownloadService();
+		if(downloadService.isShufflePlayEnabled()) {
+			emptyTextView.setText(R.string.download_shuffle_loading);
+		}
+		else {
+			emptyTextView.setText(R.string.download_empty);
+		}
+
+		if(songListAdapter == null) {
+			songList = new ArrayList<>();
+			songList.addAll(songs);
+			playlistView.setAdapter(songListAdapter = new DownloadFileAdapter(context, songList, NowPlayingFragment.this));
+		} else {
+			songList.clear();
+			songList.addAll(songs);
+			songListAdapter.notifyDataSetChanged();
+		}
+
+		emptyTextView.setVisibility(songs.isEmpty() ? View.VISIBLE : View.GONE);
+
+		if(scrollWhenLoaded) {
+			scrollToCurrent();
+			scrollWhenLoaded = false;
+		}
+
+		setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
+		if(this.currentPlaying != currentPlaying) {
+			onSongChanged(currentPlaying, currentPlayingIndex);
+		}
+	}
+
+	@Override
+	public void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable) {
+		if (currentPlaying != null) {
+			int millisTotal = duration == null ? 0 : duration;
+
+			positionTextView.setText(Util.formatDuration(millisPlayed / 1000));
+			if(millisTotal > 0) {
+				durationTextView.setText(Util.formatDuration(millisTotal / 1000));
+			} else {
+				durationTextView.setText("-:--");
+			}
+			progressBar.setMax(millisTotal == 0 ? 100 : millisTotal); // Work-around for apparent bug.
+			if(!seekInProgress) {
+				progressBar.setProgress(millisPlayed);
+			}
+			progressBar.setEnabled(isSeekable);
+		} else {
+			positionTextView.setText("0:00");
+			durationTextView.setText("-:--");
+			progressBar.setProgress(0);
+			progressBar.setEnabled(false);
+		}
+
+		DownloadService downloadService = getDownloadService();
+		if(downloadService.getSleepTimer() && timerMenu != null) {
+			int timeRemaining = downloadService.getSleepTimeRemaining();
+			timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+		}
+	}
+
+	@Override
+	public void onStateUpdate(DownloadFile downloadFile, PlayerState playerState) {
+		switch (playerState) {
+			case DOWNLOADING:
+				if(currentPlaying != null) {
+					if(Util.isWifiRequiredForDownload(context)) {
+						statusTextView.setText(context.getResources().getString(R.string.download_playerstate_mobile_disabled));
+					} else {
+						long bytes = currentPlaying.getPartialFile().length();
+						statusTextView.setText(context.getResources().getString(R.string.download_playerstate_downloading, Util.formatLocalizedBytes(bytes, context)));
+					}
+				}
+				break;
+			case PREPARING:
+				statusTextView.setText(R.string.download_playerstate_buffering);
+				break;
+			default:
+				if(currentPlaying != null) {
+					String artist = "";
+					if(currentPlaying.getSong().getArtist() != null) {
+						artist = currentPlaying.getSong().getArtist() + " - ";
+					}
+					statusTextView.setText(artist + currentPlaying.getSong().getAlbum());
+				} else {
+					statusTextView.setText(null);
+				}
+				break;
+		}
+
+		switch (playerState) {
+			case STARTED:
+				pauseButton.setVisibility(View.VISIBLE);
+				stopButton.setVisibility(View.INVISIBLE);
+				startButton.setVisibility(View.INVISIBLE);
+				break;
+			case DOWNLOADING:
+			case PREPARING:
+				pauseButton.setVisibility(View.INVISIBLE);
+				stopButton.setVisibility(View.VISIBLE);
+				startButton.setVisibility(View.INVISIBLE);
+				break;
+			default:
+				pauseButton.setVisibility(View.INVISIBLE);
+				stopButton.setVisibility(View.INVISIBLE);
+				startButton.setVisibility(View.VISIBLE);
+				break;
+		}
+	}
+
+	public void updateRepeatButton() {
+		DownloadService downloadService = getDownloadService();
+		switch (downloadService.getRepeatMode()) {
+			case OFF:
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_off));
+				break;
+			case ALL:
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_all));
+				break;
+			case SINGLE:
+				repeatButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.media_button_repeat_single));
+				break;
+			default:
+				break;
+		}
 	}
 }

@@ -62,6 +62,7 @@ public final class LyricsFragment extends SubsonicFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		setTitle(R.string.download_menu_lyrics);
+		setSubtitle(null);
 		rootView = inflater.inflate(R.layout.lyrics, container, false);
 		artistView = (TextView) rootView.findViewById(R.id.lyrics_artist);
 		titleView = (TextView) rootView.findViewById(R.id.lyrics_title);

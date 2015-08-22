@@ -30,7 +30,8 @@
 				android:marqueeRepeatLimit="marquee_forever"
 				android:scrollHorizontally="true"
 				android:focusable="true"
-				android:focusableInTouchMode="true">
+				android:focusableInTouchMode="true"
+				android:textColor="?android:textColorPrimary">
 
 				<requestFocus android:focusable="true"
 					android:focusableInTouchMode="true"
@@ -44,7 +45,8 @@
 				android:layout_height="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:singleLine="true"
-				android:ellipsize="end"/>
+				android:ellipsize="end"
+				android:textColor="?android:textColorPrimary"/>
 
 			<TextView
 				android:text="XX SONGS"
@@ -54,7 +56,8 @@
 				android:paddingTop="14dip"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:singleLine="true"
-				android:ellipsize="none"/>
+				android:ellipsize="none"
+				android:textColor="?android:textColorSecondary"/>
 
 			<TextView
 				android:text="0:00"
@@ -63,7 +66,8 @@
 				android:layout_height="wrap_content"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:singleLine="true"
-				android:ellipsize="none"/>
+				android:ellipsize="none"
+				android:textColor="?android:textColorSecondary"/>
 
 		</LinearLayout>
 
@@ -145,9 +149,16 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_horizontal"
-				android:textAppearance="?android:attr/textAppearanceMedium"/>
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textColor="?android:textColorPrimary"/>
 		</LinearLayout>
 	</FrameLayout>
+
+	<View
+		android:layout_width="fill_parent"
+		android:layout_height="1px"
+		android:background="?attr/colorPrimary"
+		android:layout_gravity="bottom"/>
 </FrameLayout>
 
 

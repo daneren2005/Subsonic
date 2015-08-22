@@ -5,12 +5,20 @@
     <attr name="media_button_forward" format="reference"/>
     <attr name="media_button_pause" format="reference"/>
     <attr name="media_button_repeat_off" format="reference"/>
+	<attr name="media_button_repeat_single" format="reference"/>
+	<attr name="media_button_repeat_all" format="reference"/>
     <attr name="media_button_start" format="reference"/>
     <attr name="media_button_stop" format="reference"/>
+	<attr name="actionbar_backward" format="reference"/>
+	<attr name="actionbar_forward" format="reference"/>
+	<attr name="actionbar_pause" format="reference"/>
+	<attr name="actionbar_start" format="reference"/>
+	<attr name="actionbar_stop" format="reference"/>
 	<attr name="chat_send" format="reference"/>
 	<attr name="add" format="reference"/>
 	<attr name="download_none" format="reference"/>
 	<attr name="shuffle" format="reference"/>
+	<attr name="shuffle_button" format="reference"/>
 	<attr name="refresh" format="reference"/>
 	<attr name="search" format="reference"/>
 	<attr name="remove" format="reference"/>
@@ -26,7 +34,21 @@
 	<attr name="rating_bad" format="reference"/>
 	<attr name="rating_good" format="reference"/>
 	<attr name="radio" format="reference"/>
+	<attr name="star_outline" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
+	<attr name="drawerHome" format="reference"/>
+	<attr name="drawerLibrary" format="reference"/>
+	<attr name="drawerPlaylists" format="reference"/>
+	<attr name="drawerPodcasts" format="reference"/>
+	<attr name="drawerBookmarks" format="reference"/>
+	<attr name="drawerShares" format="reference"/>
+	<attr name="drawerChat" format="reference"/>
+	<attr name="drawerAdmin" format="reference"/>
+	<attr name="drawerDownloading" format="reference"/>
+	<attr name="drawerSettings" format="reference"/>
+	<attr name="actionbarTitleStyle" format="reference"/>
+	<attr name="actionbarSubtitleStyle" format="reference"/>
+	<attr name="actionbarPopupStyle" format="reference"/>
 
 	<declare-styleable name="SeekBarPreference">
 		<attr name="min" format="integer"/>

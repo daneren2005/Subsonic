@@ -23,7 +23,7 @@
 			
 		<TextView
 			android:id="@+id/notification_title"
-			style="@android:style/TextAppearance.StatusBar.EventContent.Title"
+			style="@style/NotificationText.Title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="left"
@@ -33,7 +33,7 @@
 
 		<TextView
 			android:id="@+id/notification_artist"
-			style="@android:style/TextAppearance.StatusBar.EventContent"
+			style="@style/NotificationText.Content"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="left"
@@ -50,34 +50,18 @@
 
 	<ImageButton
 		android:id="@+id/control_previous"
-		android:src="@drawable/notification_previous"
-		style="@style/BasicButton"
-		android:layout_width="46dip"
-		android:layout_height="fill_parent"
-		android:layout_gravity="center|right"
-		android:padding="8.0dip"
-		android:layout_weight="0.0"
-		android:scaleType="fitCenter"/>
+		android:src="@drawable/notification_backward"
+		style="@style/NotificationButton"/>
 
 	<ImageButton
 		android:id="@+id/control_pause"
 		android:src="@drawable/notification_pause"
-		style="@style/BasicButton"
-		android:layout_width="46dip"
-		android:layout_height="fill_parent"
-		android:layout_gravity="center|right"
-		android:padding="8.0dip"
-		android:layout_weight="0.0"
-		android:scaleType="fitCenter"/>
+		style="@style/NotificationButton"
+		android:layout_width="54dip"
+		android:padding="0dip"/>
 
 	<ImageButton
 		android:id="@+id/control_next"
-		android:src="@drawable/notification_next"
-		style="@style/BasicButton"
-		android:layout_width="46dip"
-		android:layout_height="fill_parent"
-		android:layout_gravity="center|right"
-		android:padding="8.0dip"
-		android:layout_weight="0.0"
-		android:scaleType="fitCenter"/>
+		android:src="@drawable/notification_forward"
+		style="@style/NotificationButton"/>
 </LinearLayout>

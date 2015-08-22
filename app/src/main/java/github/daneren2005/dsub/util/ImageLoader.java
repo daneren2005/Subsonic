@@ -42,6 +42,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -190,8 +191,11 @@ public class ImageLoader {
 	}
 
 	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, boolean crossfade) {
-		// TODO: If we know this a artist, try to load artist info instead
 		int size = large ? imageSizeLarge : imageSizeDefault;
+		return loadImage(view, entry, large, size, crossfade);
+	}
+	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade) {
+		// TODO: If we know this a artist, try to load artist info instead
 		if(entry != null && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
 			SilentBackgroundTask task = new ArtistImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
 			task.execute();
@@ -222,7 +226,7 @@ public class ImageLoader {
 		}
 
 		if (!large) {
-			setImage(view, Util.createDrawableFromBitmap(context, null), false);
+			setImage(view, null, false);
 		}
 		ImageTask task = new ViewImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
 		task.execute();
@@ -246,6 +250,7 @@ public class ImageLoader {
 			setImage(view, drawable, true);
 			return null;
 		}
+		setImage(view, null, false);
 
 		SilentBackgroundTask<Void> task = new ViewUrlTask(view.getContext(), view, url, size);
 		task.execute();
@@ -274,16 +279,40 @@ public class ImageLoader {
 	}
 
 	public SilentBackgroundTask<Void> loadAvatar(Context context, ImageView view, String username) {
+		if(username == null) {
+			view.setImageResource(R.drawable.ic_social_person);
+			return null;
+		}
+
 		Bitmap bitmap = cache.get(username);
 		if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
 			view.setImageDrawable(drawable);
 			return null;
 		}
+		view.setImageDrawable(null);
 
 		SilentBackgroundTask<Void> task = new AvatarTask(context, view, username);
 		task.execute();
 		return task;
+	}
+
+	public SilentBackgroundTask loadImage(View view, Playlist playlist, boolean large, boolean crossfade) {
+		MusicDirectory.Entry entry = new MusicDirectory.Entry();
+		String id;
+		if(Util.isOffline(context)) {
+			id = "pl-" + playlist.getName();
+			entry.setTitle(playlist.getComment());
+		} else {
+			id = "pl-" + playlist.getId();
+			entry.setTitle(playlist.getName());
+		}
+		entry.setId(id);
+		entry.setCoverArt(id);
+		// So this isn't treated as a artist
+		entry.setParent("");
+
+		return loadImage(view, entry, large, crossfade);
 	}
 
 	private String getKey(String coverArtId, int size) {
@@ -379,12 +408,16 @@ public class ImageLoader {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
 				Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, null, this);
-				String key = getKey(mEntry.getCoverArt(), mSize);
-				cache.put(key, bitmap);
-				// Make sure key is the most recently "used"
-				cache.get(key);
-				if(mIsNowPlaying) {
-					nowPlaying = bitmap;
+				if(bitmap != null) {
+					String key = getKey(mEntry.getCoverArt(), mSize);
+					cache.put(key, bitmap);
+					// Make sure key is the most recently "used"
+					cache.get(key);
+					if (mIsNowPlaying) {
+						nowPlaying = bitmap;
+					}
+				} else {
+					bitmap = getUnknownImage(mEntry, mSize);
 				}
 
 				mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
@@ -582,7 +615,6 @@ public class ImageLoader {
 				}
 			} catch (Throwable x) {
 				Log.e(TAG, "Failed to download album art.", x);
-				cancelled.set(true);
 			}
 
 			return null;
@@ -592,6 +624,8 @@ public class ImageLoader {
 		protected void done(Void result) {
 			if(mDrawable != null) {
 				mView.setImageDrawable(mDrawable);
+			} else {
+				mView.setImageResource(R.drawable.ic_social_person);
 			}
 		}
 	}

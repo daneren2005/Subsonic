@@ -16,28 +16,33 @@
 package github.daneren2005.dsub.fragments;
 
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.EntryGridAdapter;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.adapter.EntryAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
-public class SelectVideoFragment extends SelectListFragment<MusicDirectory.Entry> {
+public class SelectVideoFragment extends SelectRecyclerFragment<MusicDirectory.Entry> {
 	@Override
 	public int getOptionsMenu() {
 		return R.menu.empty;
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<MusicDirectory.Entry> objs) {
-		return new EntryAdapter(context, null, objs, false);
+	public SectionAdapter getAdapter(List<MusicDirectory.Entry> objs) {
+		SectionAdapter adapter = new EntryGridAdapter(context, objs, null, false);
+		adapter.setOnItemClickedListener(this);
+		return adapter;
 	}
 
 	@Override
@@ -52,31 +57,18 @@ public class SelectVideoFragment extends SelectListFragment<MusicDirectory.Entry
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		MusicDirectory.Entry entry = (MusicDirectory.Entry) parent.getItemAtPosition(position);
+	public void onItemClicked(MusicDirectory.Entry entry) {
 		playVideo(entry);
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		Object entry = listView.getItemAtPosition(info.position);
-
-		onCreateContextMenu(menu, view, menuInfo, entry);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry item) {
+		onCreateContextMenuSupport(menu, menuInflater, updateView, item);
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if (menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Object entry = listView.getItemAtPosition(info.position);
-
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry entry) {
 		return onContextItemSelected(menuItem, entry);
 	}
 }

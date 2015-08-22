@@ -6,8 +6,8 @@ android {
 
 	defaultConfig {
 		applicationId "github.daneren2005.dsub"
-		minSdkVersion 9
-		targetSdkVersion 19
+		minSdkVersion 14
+		targetSdkVersion 22
 	}
 	buildTypes {
 		release {
@@ -32,13 +32,16 @@ android {
 }
 
 dependencies {
-	compile project(':DragSort ListView')
 	compile project(':Server Proxy')
 	compile fileTree(include: ['*.jar'], dir: 'libs')
-	compile 'com.android.support:support-v4:22.1.1'
-	compile 'com.android.support:appcompat-v7:22.1.1'
-	compile 'com.android.support:mediarouter-v7:22.1.1'
+	compile 'com.android.support:support-v4:22.2.+'
+	compile 'com.android.support:appcompat-v7:22.2.+'
+	compile 'com.android.support:mediarouter-v7:22.2.+'
+	compile 'com.android.support:recyclerview-v7:22.2.+'
+	compile 'com.android.support:design:22.2.+'
 	compile 'com.google.android.gms:play-services-cast:7.0.0'
+	compile 'com.sothree.slidinguppanel:library:3.0.0'
+	compile 'de.hdodenhof:circleimageview:1.2.1'
 	compile group: 'org.fourthline.cling', name: 'cling-core', version:'2.0.1'
 	compile group: 'org.fourthline.cling', name: 'cling-support', version:'2.0.1'
 	compile group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'

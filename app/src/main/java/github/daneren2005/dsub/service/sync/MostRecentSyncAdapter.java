@@ -23,18 +23,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.PodcastEpisode;
-import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SyncUtil;
-import github.daneren2005.dsub.util.SyncUtil.SyncSet;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -56,7 +52,7 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 	public void onExecuteSync(Context context, int instance) {
 		try {
 			ArrayList<String> syncedList = SyncUtil.getSyncedMostRecent(context, instance);
-			MusicDirectory albumList = musicService.getAlbumList("newest", 20, 0, context, null);
+			MusicDirectory albumList = musicService.getAlbumList("newest", 20, 0, tagBrowsing, context, null);
 			List<String> updated = new ArrayList<String>();
 			boolean firstRun = false;
 			if(syncedList.size() == 0) {

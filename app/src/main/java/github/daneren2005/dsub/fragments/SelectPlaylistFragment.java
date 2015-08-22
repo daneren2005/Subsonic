@@ -1,19 +1,21 @@
 package github.daneren2005.dsub.fragments;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -30,31 +32,37 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.PlaylistAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
+public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
+	public void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true)) {
+			largeAlbums = true;
+		}
+	}
 
-		MenuInflater inflater = context.getMenuInflater();		
+	@Override
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Playlist> updateView, Playlist playlist) {
 		if (Util.isOffline(context)) {
-			inflater.inflate(R.menu.select_playlist_context_offline, menu);
+			menuInflater.inflate(R.menu.select_playlist_context_offline, menu);
 		}
 		else {
-			inflater.inflate(R.menu.select_playlist_context, menu);
+			menuInflater.inflate(R.menu.select_playlist_context, menu);
 
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			Playlist playlist = (Playlist) listView.getItemAtPosition(info.position);
 			if(SyncUtil.isSyncedPlaylist(context, playlist.getId())) {
 				menu.removeItem(R.id.playlist_menu_sync);
 			} else {
 				menu.removeItem(R.id.playlist_menu_stop_sync);
 			}
-			
+
 			if(!ServerInfo.checkServerVersion(context, "1.8")) {
 				menu.removeItem(R.id.playlist_update_info);
 			} else if(playlist.getPublic() != null && playlist.getPublic() == true && playlist.getId().indexOf(".m3u") == -1 && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
@@ -67,47 +75,13 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-		
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Playlist playlist = (Playlist) listView.getItemAtPosition(info.position);
-
-		SubsonicFragment fragment;
-		Bundle args;
-		FragmentTransaction trans;
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Playlist> updateView, Playlist playlist) {
 		switch (menuItem.getItemId()) {
-			case R.id.playlist_menu_download:
-				downloadPlaylist(playlist.getId(), playlist.getName(), false, true, false, false, true);
-				break;
 			case R.id.playlist_menu_sync:
 				syncPlaylist(playlist);
 				break;
 			case R.id.playlist_menu_stop_sync:
 				stopSyncPlaylist(playlist);
-				break;
-			case R.id.playlist_menu_play_now:
-				fragment = new SelectDirectoryFragment();
-				args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
-				fragment.setArguments(args);
-
-				replaceFragment(fragment);
-				break;
-			case R.id.playlist_menu_play_shuffled:
-				fragment = new SelectDirectoryFragment();
-				args = new Bundle();
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
-				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
-				fragment.setArguments(args);
-
-				replaceFragment(fragment);
 				break;
 			case R.id.playlist_menu_delete:
 				deletePlaylist(playlist);
@@ -118,10 +92,9 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 			case R.id.playlist_update_info:
 				updatePlaylistInfo(playlist);
 				break;
-			default:
-				return false;
 		}
-		return true;
+
+		return false;
 	}
 
 	@Override
@@ -130,8 +103,31 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<Playlist> playlists) {
-		return new PlaylistAdapter(context, playlists);
+	public SectionAdapter<Playlist> getAdapter(List<Playlist> playlists) {
+		List<Playlist> mine = new ArrayList<>();
+		List<Playlist> shared = new ArrayList<>();
+
+		String currentUsername = UserUtil.getCurrentUsername(context);
+		for(Playlist playlist: playlists) {
+			if(playlist.getOwner() == null || playlist.getOwner().equals(currentUsername)) {
+				mine.add(playlist);
+			} else {
+				shared.add(playlist);
+			}
+		}
+
+		if(shared.isEmpty()) {
+			return new PlaylistAdapter(context, playlists, getImageLoader(), largeAlbums, this);
+		} else {
+			Resources res = context.getResources();
+			List<String> headers = Arrays.asList(res.getString(R.string.playlist_mine), res.getString(R.string.playlist_shared));
+
+			List<List<Playlist>> sections = new ArrayList<>();
+			sections.add(mine);
+			sections.add(shared);
+
+			return new PlaylistAdapter(context, headers, sections, getImageLoader(), largeAlbums, this);
+		}
 	}
 
 	@Override
@@ -149,9 +145,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Playlist playlist = (Playlist) parent.getItemAtPosition(position);
-
+	public void onItemClicked(Playlist playlist) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
@@ -179,8 +173,7 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 
 					@Override
 					protected void done(Void result) {
-						adapter.remove(playlist);
-						adapter.notifyDataSetChanged();
+						adapter.removeItem(playlist);
 						Util.toast(context, context.getResources().getString(R.string.menu_deleted_playlist, playlist.getName()));
 					}
 
@@ -201,12 +194,33 @@ public class SelectPlaylistFragment extends SelectListFragment<Playlist> {
 	}
 
 	private void displayPlaylistInfo(final Playlist playlist) {
-		String message = "Owner: " + playlist.getOwner() + "\nComments: " +
-			((playlist.getComment() == null) ? "" : playlist.getComment()) +
-			"\nSong Count: " + playlist.getSongCount() +
-			((playlist.getPublic() == null) ? "" : ("\nPublic: " + playlist.getPublic())) +
-			"\nCreation Date: " + playlist.getCreated().replace('T', ' ');
-		Util.info(context, playlist.getName(), message);
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
+
+		if(playlist.getOwner() != null) {
+			headers.add(R.string.details_owner);
+			details.add(playlist.getOwner());
+		}
+
+		if(playlist.getComment() != null) {
+			headers.add(R.string.details_comments);
+			details.add(playlist.getComment());
+		}
+
+		headers.add(R.string.details_song_count);
+		details.add(playlist.getSongCount());
+
+		if(playlist.getPublic() != null) {
+			headers.add(R.string.details_public);
+			details.add(Boolean.toString(playlist.getPublic()));
+		}
+
+		if(playlist.getCreated() != null) {
+			headers.add(R.string.details_created);
+			details.add(Util.formatDate(context, playlist.getCreated()));
+		}
+
+		Util.showDetailsDialog(context, R.string.details_title_playlist, headers, details);
 	}
 
 	private void updatePlaylistInfo(final Playlist playlist) {

@@ -42,7 +42,7 @@
 				android:title="@string/settings.track_title"
 				android:summary="@string/settings.track_summary"
 				android:key="displayTrack"
-				android:defaultValue="false"/>
+				android:defaultValue="true"/>
 
 			<CheckBoxPreference
 				android:title="@string/settings.hide_widget_title"
@@ -365,7 +365,7 @@
 					android:title="@string/settings.play_now_after"
 					android:summary="@string/settings.play_now_after_summary"
 					android:key="playNowAfter"
-					android:defaultValue="false"/>
+					android:defaultValue="true"/>
 		</PreferenceCategory>
 
 		<PreferenceCategory
@@ -374,7 +374,7 @@
 			<ListPreference
 				android:title="@string/settings.video_player"
 				android:key="videoPlayer"
-				android:defaultValue="raw"
+				android:defaultValue="hls"
 				android:entryValues="@array/videoPlayerValues"
 				android:entries="@array/videoPlayerNames"/>
 		</PreferenceCategory>

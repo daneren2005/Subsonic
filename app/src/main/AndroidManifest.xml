@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.daneren2005.dsub"
           android:installLocation="internalOnly"
-          android:versionCode="152"
-          android:versionName="4.9.7">
+          android:versionCode="154"
+          android:versionName="5.0 Beta 2">
           
     <instrumentation android:name="android.test.InstrumentationTestRunner"
 		android:targetPackage="github.daneren2005.dsub"
@@ -31,7 +31,7 @@
 	<uses-feature android:name="android.hardware.microphone" android:required="false" />
 	<uses-feature android:name="android.hardware.wifi" android:required="false" />
 
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="19"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22"/>
 
     <supports-screens android:anyDensity="true" android:xlargeScreens="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
@@ -51,10 +51,6 @@
 				<category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
 			</intent-filter>
 		</activity>
-
-		<activity android:name="github.daneren2005.dsub.activity.DownloadActivity"
-                  android:configChanges="keyboardHidden"
-                  android:launchMode="singleTask"/>
 
         <activity android:name="github.daneren2005.dsub.activity.SettingsActivity"
                   android:configChanges="orientation|keyboardHidden"

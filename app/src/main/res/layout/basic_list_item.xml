@@ -3,7 +3,7 @@
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:background="@android:color/transparent">
+			  android:background="?attr/selectableItemBackground">
 
 	<TextView
 		android:id="@+id/item_name"
@@ -15,14 +15,15 @@
 		android:paddingLeft="6dip"
 		android:paddingRight="6dip"
 		android:minHeight="50dip"
-		android:background="@android:color/transparent"/>
+		android:background="@android:color/transparent"
+		android:textColor="?android:textColorPrimary"/>
 
 	<ImageButton
 		android:id="@+id/item_star"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_width="@dimen/Star.Small"
+		android:layout_height="@dimen/Star.Small"
+		android:scaleType="fitCenter"
 		android:layout_gravity="right|center_vertical"
-		android:src="@drawable/ic_stat_star"
 		android:background="@android:color/transparent"
 		android:focusable="false"
 		android:visibility="gone"/>

@@ -1,33 +1,30 @@
 /*
- This file is part of Subsonic.
-
- Subsonic is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- Subsonic is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with Subsonic.  If not, see <http://www.gnu.org/licenses/>.
-
- Copyright 2010 (C) Sindre Mehus
- */
+  This file is part of Subsonic.
+	Subsonic is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	Subsonic is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	You should have received a copy of the GNU General Public License
+	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
+	Copyright 2015 (C) Scott Jackson
+*/
 package github.daneren2005.dsub.fragments;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.service.MusicService;
@@ -42,15 +39,12 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.PodcastChannelAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Scott
- */
-public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
+public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChannel> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
 	
 	@Override
@@ -70,38 +64,26 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 
 		return false;
 	}
-	
+
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		android.view.MenuInflater inflater = context.getMenuInflater();
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<PodcastChannel> updateView, PodcastChannel podcast) {
 		if(!Util.isOffline(context) && UserUtil.canPodcast()) {
-			inflater.inflate(R.menu.select_podcasts_context, menu);
+			menuInflater.inflate(R.menu.select_podcasts_context, menu);
 
-			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-			PodcastChannel podcast = (PodcastChannel) listView.getItemAtPosition(info.position);
 			if(SyncUtil.isSyncedPodcast(context, podcast.getId())) {
 				menu.removeItem(R.id.podcast_menu_sync);
 			} else {
 				menu.removeItem(R.id.podcast_menu_stop_sync);
 			}
 		} else {
-			inflater.inflate(R.menu.select_podcasts_context_offline, menu);
+			menuInflater.inflate(R.menu.select_podcasts_context_offline, menu);
 		}
 
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-		
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		PodcastChannel channel = (PodcastChannel) listView.getItemAtPosition(info.position);
-
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<PodcastChannel> updateView, PodcastChannel channel) {
 		switch (menuItem.getItemId()) {
 			case R.id.podcast_menu_sync:
 				syncPodcast(channel);
@@ -116,7 +98,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 				deletePodcast(channel);
 				break;
 		}
-		
+
 		return true;
 	}
 
@@ -126,8 +108,8 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<PodcastChannel> channels) {
-		return new PodcastChannelAdapter(context, channels);
+	public SectionAdapter getAdapter(List<PodcastChannel> channels) {
+		return new PodcastChannelAdapter(context, channels, this);
 	}
 
 	@Override
@@ -141,9 +123,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		PodcastChannel channel = (PodcastChannel) parent.getItemAtPosition(position);
-		
+	public void onItemClicked(PodcastChannel channel) {
 		if("error".equals(channel.getStatus())) {
 			Util.toast(context, context.getResources().getString(R.string.select_podcasts_invalid_podcast_channel, channel.getErrorMessage() == null ? "error" : channel.getErrorMessage()));
 		} else if("downloading".equals(channel.getStatus())) {
@@ -159,7 +139,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 			replaceFragment(fragment);
 		}
 	}
-	
+
 	public void refreshPodcasts() {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
@@ -234,13 +214,29 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 	}
 	
 	private void displayPodcastInfo(final PodcastChannel channel) {
-		String message = ((channel.getName()) == null ? "" : "Title: " + channel.getName()) +
-			"\nURL: " + channel.getUrl() +
-			"\nStatus: " + channel.getStatus() +
-			((channel.getErrorMessage()) == null ? "" : "\nError Message: " + channel.getErrorMessage()) +
-			((channel.getDescription()) == null ? "" : "\n\nDescription: " + channel.getDescription());
-		
-		Util.info(context, channel.getName(), message);
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
+
+		if(channel.getName() != null) {
+			headers.add(R.string.details_title);
+			details.add(channel.getName());
+		}
+
+		headers.add(R.string.details_url);
+		details.add(channel.getUrl());
+		headers.add(R.string.details_status);
+		details.add(channel.getStatus());
+
+		if(channel.getErrorMessage() != null) {
+			headers.add(R.string.details_error);
+			details.add(channel.getErrorMessage());
+		}
+		if(channel.getDescription() != null) {
+			headers.add(R.string.details_description);
+			details.add(channel.getDescription());
+		}
+
+		Util.showDetailsDialog(context, R.string.details_title_podcast, headers, details);
 	}
 	
 	private void deletePodcast(final PodcastChannel channel) {
@@ -258,8 +254,7 @@ public class SelectPodcastsFragment extends SelectListFragment<PodcastChannel> {
 
 					@Override
 					protected void done(Void result) {
-						adapter.remove(channel);
-						adapter.notifyDataSetChanged();
+						adapter.removeItem(channel);
 						Util.toast(context, context.getResources().getString(R.string.select_podcasts_deleted, channel.getName()));
 					}
 

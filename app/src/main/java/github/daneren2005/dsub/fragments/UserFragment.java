@@ -15,71 +15,33 @@
 
 package github.daneren2005.dsub.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+
+import java.util.List;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SubsonicActivity;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.adapter.SettingsAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
-public class UserFragment extends SubsonicFragment{
-	private ListView listView;
+public class UserFragment extends SelectRecyclerFragment<User.Setting>{
 	private User user;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		rootView = inflater.inflate(R.layout.abstract_list_fragment, container, false);
-
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-		refreshLayout.setEnabled(false);
-
+	public void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
 		Bundle args = getArguments();
 		user = (User) args.getSerializable(Constants.INTENT_EXTRA_NAME_ID);
-
-		listView = (ListView)rootView.findViewById(R.id.fragment_list);
-		createHeader();
-		listView.setAdapter(new SettingsAdapter(context, user.getSettings(), UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10")));
-
-		setTitle(user.getUsername());
-
-		return rootView;
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		((SubsonicActivity) activity).supportInvalidateOptionsMenu();
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		// For some reason this is called before onAttach
-		if(!primaryFragment || context == null) {
-			return;
-		}
-
-		if(UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10")) {
-			menuInflater.inflate(R.menu.user, menu);
-		} else if(UserUtil.isCurrentRole(User.SETTINGS)) {
-			menuInflater.inflate(R.menu.user_user, menu);
-		} else {
-			menuInflater.inflate(R.menu.empty, menu);
-		}
+		pullToRefresh = false;
 	}
 
 	@Override
@@ -103,23 +65,43 @@ public class UserFragment extends SubsonicFragment{
 		return false;
 	}
 
-	private void createHeader() {
-		View header = LayoutInflater.from(context).inflate(R.layout.user_header, listView, false);
-
-		final ImageLoader imageLoader = getImageLoader();
-		ImageView coverArtView = (ImageView) header.findViewById(R.id.user_avatar);
-		imageLoader.loadAvatar(context, coverArtView, user.getUsername());
-
-		TextView usernameView = (TextView) header.findViewById(R.id.user_username);
-		usernameView.setText(user.getUsername());
-
-		final TextView emailView = (TextView) header.findViewById(R.id.user_email);
-		if(user.getEmail() != null) {
-			emailView.setText(user.getEmail());
+	@Override
+	public int getOptionsMenu() {
+		if(UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10")) {
+			return R.menu.user;
+		} else if(UserUtil.isCurrentRole(User.SETTINGS)) {
+			return R.menu.user_user;
 		} else {
-			emailView.setVisibility(View.GONE);
+			return R.menu.empty;
 		}
+	}
 
-		listView.addHeaderView(header);
+	@Override
+	public SectionAdapter<User.Setting> getAdapter(List<User.Setting> objs) {
+		return new SettingsAdapter(context, user, getImageLoader(), UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10"));
+	}
+
+	@Override
+	public List<User.Setting> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+		return user.getSettings();
+	}
+
+	@Override
+	public int getTitleResource() {
+		setTitle(user.getUsername());
+		return 0;
+	}
+
+	@Override
+	public void onItemClicked(User.Setting item) {
+
+	}
+
+	@Override
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<User.Setting> updateView, User.Setting item) {}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<User.Setting> updateView, User.Setting item) {
+		return false;
 	}
 }

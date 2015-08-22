@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="NotificationText.Title" parent="@android:style/TextAppearance.Material.Notification.Title"></style>
+	<style name="NotificationText.Content" parent="@android:style/TextAppearance.Material.Notification"></style>
+
+	<style name="NotificationButton.Expanded" parent="@style/NotificationButton.ExpandedBase">
+		<item name="android:padding">2dip</item>
+	</style>
+
+	<style name="NotificationLayoutDivider">
+		<item name="android:divider">@drawable/notification_divider</item>
+	</style>
+	<style name="NotificationDivider">
+		<item name="android:background">@drawable/notification_divider</item>
+	</style>
+</resources>

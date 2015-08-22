@@ -18,8 +18,9 @@
  */
 package github.daneren2005.dsub.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,12 +29,15 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +45,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -49,9 +52,9 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.DownloadActivity;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.Genre;
@@ -70,15 +73,16 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.MenuUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.AlbumCell;
 import github.daneren2005.dsub.view.AlbumView;
 import github.daneren2005.dsub.view.ArtistEntryView;
 import github.daneren2005.dsub.view.ArtistView;
+import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.PlaylistSongView;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
@@ -101,7 +105,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	private static final String TAG = SubsonicFragment.class.getSimpleName();
 	private static int TAG_INC = 10;
 	private int tag;
-	
+
 	protected SubsonicActivity context;
 	protected CharSequence title = null;
 	protected CharSequence subtitle = null;
@@ -116,7 +120,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean artistOverride = false;
 	protected SwipeRefreshLayout refreshLayout;
 	protected boolean firstRun;
-	
+
 	public SubsonicFragment() {
 		super();
 		tag = TAG_INC++;
@@ -171,10 +175,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_shuffle:
+			case R.id.menu_global_shuffle:
 				onShuffleRequested();
 				return true;
-			case R.id.menu_search:
+			case R.id.menu_global_search:
 				context.onSearchRequested();
 				return true;
 			case R.id.menu_exit:
@@ -183,23 +187,50 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.menu_refresh:
 				refresh();
 				return true;
+			case R.id.menu_play_now:
+				playNow(false, false);
+				return true;
+			case R.id.menu_play_last:
+				playNow(false, true);
+				return true;
+			case R.id.menu_play_next:
+				playNow(false, true, true);
+				return true;
+			case R.id.menu_shuffle:
+				playNow(true, false);
+				return true;
+			case R.id.menu_download:
+				downloadBackground(false);
+				clearSelected();
+				return true;
+			case R.id.menu_cache:
+				downloadBackground(true);
+				clearSelected();
+				return true;
+			case R.id.menu_delete:
+				delete();
+				clearSelected();
+				return true;
+			case R.id.menu_add_playlist:
+				List<Entry> songs = getSelectedEntries();
+				addToPlaylist(songs);
+				clearSelected();
+				return true;
 		}
 
 		return false;
 	}
-	
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo, Object selected) {
-		MenuInflater inflater = context.getMenuInflater();
 
+	public void onCreateContextMenuSupport(Menu menu, MenuInflater menuInflater, UpdateView updateView, Object selected) {
 		if(selected instanceof Entry) {
 			Entry entry = (Entry) selected;
 			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
 				if(Util.isOffline(context)) {
-					inflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
+					menuInflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
 				}
 				else {
-					inflater.inflate(R.menu.select_podcast_episode_context, menu);
-					
+					menuInflater.inflate(R.menu.select_podcast_episode_context, menu);
+
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
 					}
@@ -207,10 +238,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 			else if (entry.isDirectory()) {
 				if(Util.isOffline(context)) {
-					inflater.inflate(R.menu.select_album_context_offline, menu);
+					menuInflater.inflate(R.menu.select_album_context_offline, menu);
 				}
 				else {
-					inflater.inflate(R.menu.select_album_context, menu);
+					menuInflater.inflate(R.menu.select_album_context, menu);
 
 					if(Util.isTagBrowsing(context)) {
 						menu.removeItem(R.id.menu_rate);
@@ -219,11 +250,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else if(!entry.isVideo()) {
 				if(Util.isOffline(context)) {
-					inflater.inflate(R.menu.select_song_context_offline, menu);
+					menuInflater.inflate(R.menu.select_song_context_offline, menu);
 				}
 				else {
-					inflater.inflate(R.menu.select_song_context, menu);
-					
+					menuInflater.inflate(R.menu.select_song_context, menu);
+
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
 					}
@@ -231,112 +262,27 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else {
 				if(Util.isOffline(context)) {
-					inflater.inflate(R.menu.select_video_context_offline, menu);
+					menuInflater.inflate(R.menu.select_video_context_offline, menu);
 				}
 				else {
-					inflater.inflate(R.menu.select_video_context, menu);
+					menuInflater.inflate(R.menu.select_video_context, menu);
 				}
 			}
 		} else if(selected instanceof Artist) {
 			Artist artist = (Artist) selected;
 			if(Util.isOffline(context)) {
-				inflater.inflate(R.menu.select_artist_context_offline, menu);
-			}
-			else {
-				inflater.inflate(R.menu.select_artist_context, menu);
+				menuInflater.inflate(R.menu.select_artist_context_offline, menu);
+			} else {
+				menuInflater.inflate(R.menu.select_artist_context, menu);
 
 				menu.findItem(R.id.artist_menu_star).setTitle(artist.isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
 		}
 
-		hideMenuItems(menu, (AdapterView.AdapterContextMenuInfo) menuInfo);
+		MenuUtil.hideMenuItems(context, menu);
 	}
 
-	protected void hideMenuItems(ContextMenu menu, AdapterView.AdapterContextMenuInfo info) {
-		if(!ServerInfo.checkServerVersion(context, "1.8")) {
-			menu.setGroupVisible(R.id.server_1_8, false);
-			menu.setGroupVisible(R.id.hide_star, false);
-		}
-		if(!ServerInfo.checkServerVersion(context, "1.9")) {
-			menu.setGroupVisible(R.id.server_1_9, false);
-		}
-		if(!ServerInfo.checkServerVersion(context, "1.10.1")) {
-			menu.setGroupVisible(R.id.server_1_10, false);
-		}
-
-		SharedPreferences prefs = Util.getPreferences(context);
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_NEXT, true)) {
-			menu.setGroupVisible(R.id.hide_play_next, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_PLAY_LAST, true)) {
-			menu.setGroupVisible(R.id.hide_play_last, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
-			menu.setGroupVisible(R.id.hide_star, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || !UserUtil.canShare()) {
-			menu.setGroupVisible(R.id.hide_share, false);
-		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {
-			menu.setGroupVisible(R.id.hide_rating, false);
-		}
-
-		if(!Util.isOffline(context)) {
-			// If we are looking at a standard song view, get downloadFile to cache what options to show
-			if(info.targetView instanceof SongView) {
-				SongView songView = (SongView) info.targetView;
-				DownloadFile downloadFile = songView.getDownloadFile();
-	
-				try {
-					if(downloadFile != null) {
-						if(downloadFile.isWorkDone()) {
-							// Remove permanent cache menu if already perma cached
-							if(downloadFile.isSaved()) {
-								menu.removeItem(R.id.song_menu_pin);
-							}
-	
-							// Remove cache option no matter what if already downloaded
-							menu.removeItem(R.id.song_menu_download);
-						} else {
-							// Remove delete option if nothing to delete
-							menu.removeItem(R.id.song_menu_delete);
-						}
-					}
-				} catch(Exception e) {
-					Log.w(TAG, "Failed to lookup downloadFile info", e);
-				}
-			}
-			// Apply similar logic to album views
-			else if(info.targetView instanceof AlbumCell || info.targetView instanceof AlbumView
-					|| info.targetView instanceof ArtistView || info.targetView instanceof ArtistEntryView) {
-				File folder = null;
-				int id = 0;
-				if(info.targetView instanceof AlbumCell) {
-					folder = ((AlbumCell) info.targetView).getFile();
-					id = R.id.album_menu_delete;
-				} else if(info.targetView instanceof AlbumView) {
-					folder = ((AlbumView) info.targetView).getFile();
-					id = R.id.album_menu_delete;
-				} else if(info.targetView instanceof ArtistView) {
-					folder = ((ArtistView) info.targetView).getFile();
-					id = R.id.artist_menu_delete;
-				} else if(info.targetView instanceof ArtistEntryView) {
-					folder = ((ArtistEntryView) info.targetView).getFile();
-					id = R.id.artist_menu_delete;
-				}
-				
-				try {
-					if(folder != null && !folder.exists()) {
-						menu.removeItem(id);
-					}
-				} catch(Exception e) {
-					Log.w(TAG, "Failed to lookup album directory info", e);
-				}
-			}
-		}
-	}
-
-	protected void recreateContextMenu(ContextMenu menu) {
+	protected void recreateContextMenu(Menu menu) {
 		List<MenuItem> menuItems = new ArrayList<MenuItem>();
 		for(int i = 0; i < menu.size(); i++) {
 			MenuItem item = menu.getItem(i);
@@ -364,53 +310,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.artist_menu_play_shuffled:
 				downloadRecursively(artist.getId(), false, false, true, true, false);
 				break;
-			case R.id.artist_menu_play_next:
-				downloadRecursively(artist.getId(), false, true, false, false, false, true);
-				break;
 			case R.id.artist_menu_play_last:
 				downloadRecursively(artist.getId(), false, true, false, false, false);
-				break;
-			case R.id.artist_menu_download:
-				downloadRecursively(artist.getId(), false, true, false, false, true);
-				break;
-			case R.id.artist_menu_pin:
-				downloadRecursively(artist.getId(), true, true, false, false, true);
-				break;
-			case R.id.artist_menu_delete:
-				deleteRecursively(artist);
 				break;
 			case R.id.artist_menu_star:
 				toggleStarred(artist);
 				break;
-			case R.id.album_menu_play_now:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, false, true, false, false);
-				break;
-			case R.id.album_menu_play_shuffled:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, false, true, true, false);
-				break;
-			case R.id.album_menu_play_next:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, true, false, false, false, true);
-				break;
-			case R.id.album_menu_play_last:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, true, false, false, false);
-				break;
-			case R.id.album_menu_download:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), false, true, false, false, true);
-				break;
-			case R.id.album_menu_pin:
-				artistOverride = true;
-				downloadRecursively(entry.getId(), true, true, false, false, true);
-				break;
 			case R.id.album_menu_star:
 				toggleStarred(entry);
-				break;
-			case R.id.album_menu_delete:
-				deleteRecursively(entry);
 				break;
 			case R.id.album_menu_info:
 				displaySongInfo(entry);
@@ -421,20 +328,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.album_menu_share:
 				createShare(songs);
 				break;
-			case R.id.song_menu_play_now:
-				playNow(songs);
-				break;
-			case R.id.song_menu_play_next:
-				getDownloadService().download(songs, false, false, true, false);
-				break;
 			case R.id.song_menu_play_last:
 				getDownloadService().download(songs, false, false, false, false);
 				break;
 			case R.id.song_menu_download:
 				getDownloadService().downloadBackground(songs, false);
-				break;
-			case R.id.song_menu_pin:
-				getDownloadService().downloadBackground(songs, true);
 				break;
 			case R.id.song_menu_delete:
 				getDownloadService().delete(songs);
@@ -475,7 +373,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		return true;
 	}
-	
+
 	public void replaceFragment(SubsonicFragment fragment) {
 		replaceFragment(fragment, true);
 	}
@@ -492,7 +390,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public int getSupportTag() {
 		return tag;
 	}
-	
+
 	public void setPrimaryFragment(boolean primary) {
 		primaryFragment = primary;
 		if(primary) {
@@ -631,6 +529,83 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					R.color.holo_red_light);
 		}
 	}
+	protected void setupScrollList(final RecyclerView recyclerView) {
+		if(!context.isTouchscreen()) {
+			refreshLayout.setEnabled(false);
+		} else {
+			recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+				@Override
+				public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+					super.onScrollStateChanged(recyclerView, newState);
+				}
+
+				@Override
+				public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+					refreshLayout.setEnabled(!recyclerView.canScrollVertically(-1));
+				}
+			});
+
+			refreshLayout.setColorScheme(
+					R.color.holo_blue_light,
+					R.color.holo_orange_light,
+					R.color.holo_green_light,
+					R.color.holo_red_light);
+		}
+	}
+
+	public void setupLayoutManager(RecyclerView recyclerView, boolean largeAlbums) {
+		recyclerView.setLayoutManager(getLayoutManager(recyclerView, largeAlbums));
+	}
+	public RecyclerView.LayoutManager getLayoutManager(RecyclerView recyclerView, boolean largeCells) {
+		if(largeCells) {
+			return getGridLayoutManager(recyclerView);
+		} else {
+			return getLinearLayoutManager();
+		}
+	}
+	public GridLayoutManager getGridLayoutManager(RecyclerView recyclerView) {
+		final int columns = getRecyclerColumnCount();
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
+
+		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup(columns);
+		if(spanSizeLookup != null) {
+			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
+		}
+		RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
+		if(itemDecoration != null) {
+			recyclerView.addItemDecoration(itemDecoration);
+		}
+		return gridLayoutManager;
+	}
+	public LinearLayoutManager getLinearLayoutManager() {
+		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		return layoutManager;
+	}
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+		return new GridLayoutManager.SpanSizeLookup() {
+			@Override
+			public int getSpanSize(int position) {
+				SectionAdapter adapter = getCurrentAdapter();
+				if(adapter != null) {
+					int viewType = getCurrentAdapter().getItemViewType(position);
+					if (viewType == SectionAdapter.VIEW_TYPE_HEADER) {
+						return columns;
+					} else {
+						return 1;
+					}
+				} else {
+					return 1;
+				}
+			}
+		};
+	}
+	public RecyclerView.ItemDecoration getItemDecoration() {
+		return new GridSpacingDecoration();
+	}
+	public int getRecyclerColumnCount() {
+		return context.getResources().getInteger(R.integer.Grid_Columns);
+	}
 
 	protected void warnIfStorageUnavailable() {
 		if (!Util.isExternalStoragePresent()) {
@@ -650,9 +625,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	protected void onShuffleRequested() {
 		if(Util.isOffline(context)) {
-			Intent intent = new Intent(context, DownloadActivity.class);
-			intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-			Util.startActivityWithoutTransition(context, intent);
+			DownloadService downloadService = getDownloadService();
+			if(downloadService == null) {
+				return;
+			}
+			downloadService.setShufflePlayEnabled(true);
+			context.openNowPlaying();
 			return;
 		}
 
@@ -691,21 +669,21 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 							AlertDialog.Builder builder = new AlertDialog.Builder(context);
 							builder.setTitle(R.string.shuffle_pick_genre)
-								.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int which) {
-									if(which == 0) {
-										genreCombo.setText("");
-									} else {
-										genreCombo.setText(finalNames.get(which));
-									}
-								}
-							});
+									.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog, int which) {
+											if(which == 0) {
+												genreCombo.setText("");
+											} else {
+												genreCombo.setText(finalNames.get(which));
+											}
+										}
+									});
 							AlertDialog dialog = builder.create();
 							dialog.show();
 						}
 
 						@Override
-						protected void error(Throwable error) {            	
+						protected void error(Throwable error) {
 							String msg;
 							if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 								msg = getErrorMessage(error);
@@ -731,31 +709,34 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.shuffle_title)
-			.setView(dialogView)
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					Intent intent = new Intent(context, DownloadActivity.class);
-					intent.putExtra(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
-					String genre;
-					if(useCombo) {
-						genre = genreCombo.getText().toString();
-					} else {
-						genre = genreBox.getText().toString();
+				.setView(dialogView)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						String genre;
+						if (useCombo) {
+							genre = genreCombo.getText().toString();
+						} else {
+							genre = genreBox.getText().toString();
+						}
+						String startYear = startYearBox.getText().toString();
+						String endYear = endYearBox.getText().toString();
+
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
+						editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYear);
+						editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
+						editor.commit();
+
+						DownloadService downloadService = getDownloadService();
+						if (downloadService == null) {
+							return;
+						}
+						downloadService.setShufflePlayEnabled(true);
+						context.openNowPlaying();
 					}
-					String startYear = startYearBox.getText().toString();
-					String endYear = endYearBox.getText().toString();
-
-					SharedPreferences.Editor editor = prefs.edit();
-					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
-					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYear);
-					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
-					editor.commit();
-
-					Util.startActivityWithoutTransition(context, intent);
-				}
-			})
-			.setNegativeButton(R.string.common_cancel, null);
+				})
+				.setNegativeButton(R.string.common_cancel, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
@@ -763,6 +744,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void toggleStarred(Entry entry) {
 		toggleStarred(entry, null);
 	}
+
 	public void toggleStarred(final Entry entry, final OnStarChange onStarChange) {
 		final boolean starred = !entry.isStarred();
 		entry.setStarred(starred);
@@ -868,9 +850,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void downloadPlaylist(final String id, final String name, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, name, false, save, append, autoplay, shuffle, background);
 	}
+
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, name, isDirectory, save, append, autoplay, shuffle, background, false);
 	}
+
 	protected void downloadRecursively(final String id, final String name, final boolean isDirectory, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
 		new RecursiveLoader(context) {
 			@Override
@@ -906,7 +890,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						playNowOverride = true;
 						return false;
 					}
-					
+
 					if (!append && !background) {
 						downloadService.clear();
 					}
@@ -994,7 +978,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				List<Playlist> playlists = new ArrayList<Playlist>();
 				playlists.addAll(musicService.getPlaylists(false, context, this));
-				
+
 				// Iterate through and remove all non owned public playlists
 				Iterator<Playlist> it = playlists.iterator();
 				while(it.hasNext()) {
@@ -1003,7 +987,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						it.remove();
 					}
 				}
-				
+
 				return playlists;
 			}
 
@@ -1016,7 +1000,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					@Override
 					public View getView(int position, View convertView, ViewGroup parent) {
 						Playlist playlist = getItem(position);
-						
+
 						// Create new if not getting a convert view to use
 						PlaylistSongView view;
 						if(convertView instanceof PlaylistSongView) {
@@ -1033,21 +1017,21 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(context);
 				builder.setTitle(R.string.playlist_add_to)
-					.setAdapter(playlistAdapter, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							if (which > 0) {
-								addToPlaylist(playlists.get(which), songs);
-							} else {
-								createNewPlaylist(songs, false);
+						.setAdapter(playlistAdapter, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								if (which > 0) {
+									addToPlaylist(playlists.get(which), songs);
+								} else {
+									createNewPlaylist(songs, false);
+								}
 							}
-						}
-					});
+						});
 				AlertDialog dialog = builder.create();
 				dialog.show();
 			}
 
 			@Override
-			protected void error(Throwable error) {            	
+			protected void error(Throwable error) {
 				String msg;
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
@@ -1075,7 +1059,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 
 			@Override
-			protected void error(Throwable error) {            	
+			protected void error(Throwable error) {
 				String msg;
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
@@ -1087,7 +1071,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}.execute();
 	}
-	
+
 	protected void createNewPlaylist(final List<Entry> songs, final boolean getSuggestion) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
@@ -1115,34 +1099,34 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.download_playlist_title)
-			.setMessage(R.string.download_playlist_name)
-			.setView(layout)
-			.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					String playlistName = String.valueOf(playlistNameView.getText());
-					if(overwriteCheckBox.isChecked()) {
-						overwritePlaylist(songs, playlistName, getDownloadService().getSuggestedPlaylistId());
-					} else {
-						createNewPlaylist(songs, playlistName);
-						
-						if(getSuggestion) {
-							DownloadService downloadService = getDownloadService();
-							if(downloadService != null) {
-								downloadService.setSuggestedPlaylistName(playlistName, null);
+				.setMessage(R.string.download_playlist_name)
+				.setView(layout)
+				.setPositiveButton(R.string.common_save, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						String playlistName = String.valueOf(playlistNameView.getText());
+						if(overwriteCheckBox.isChecked()) {
+							overwritePlaylist(songs, playlistName, getDownloadService().getSuggestedPlaylistId());
+						} else {
+							createNewPlaylist(songs, playlistName);
+
+							if(getSuggestion) {
+								DownloadService downloadService = getDownloadService();
+								if(downloadService != null) {
+									downloadService.setSuggestedPlaylistName(playlistName, null);
+								}
 							}
 						}
 					}
-				}
-			})
-			.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-			})
-			.setCancelable(true);
-		
+				})
+				.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				})
+				.setCancelable(true);
+
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
@@ -1184,7 +1168,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 
 			@Override
-			protected void error(Throwable error) {            	
+			protected void error(Throwable error) {
 				String msg;
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
@@ -1209,12 +1193,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if(file.exists()) {
 					MediaMetadataRetriever metadata = new MediaMetadataRetriever();
 					metadata.setDataSource(file.getAbsolutePath());
-					
+
 					String tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
 					duration = Integer.parseInt((tmp != null) ? tmp : "0") / 1000;
 					format = FileUtil.getExtension(file.getName());
 					size = file.length();
-					
+
 					// If no duration try to read bitrate tag
 					if(duration == null) {
 						tmp = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE);
@@ -1224,7 +1208,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						// Divide by 1000 so in kbps
 						bitrate = (int) (size / duration) / 1000 * 8;
 					}
-	
+
 					if(Util.isOffline(context)) {
 						song.setGenre(metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE));
 						String year = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR);
@@ -1236,57 +1220,85 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
-		String msg = "";
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
 		if(song instanceof PodcastEpisode) {
-			msg += "Podcast: " + song.getArtist() + "\nStatus: " + ((PodcastEpisode)song).getStatus();
+			headers.add(R.string.details_podcast);
+			details.add(song.getArtist());
+
+			headers.add(R.string.details_status);
+			details.add(((PodcastEpisode)song).getStatus());
 		} else if(!song.isVideo()) {
 			if(song.getArtist() != null && !"".equals(song.getArtist())) {
-				msg += "Artist: " + song.getArtist();
+				headers.add(R.string.details_artist);
+				details.add(song.getArtist());
 			}
 			if(song.getAlbum() != null && !"".equals(song.getAlbum())) {
-				msg += "\nAlbum: " + song.getAlbum();
+				headers.add(R.string.details_album);
+				details.add(song.getAlbum());
 			}
 		}
 		if(song.getTrack() != null && song.getTrack() != 0) {
-			msg += "\nTrack: " + song.getTrack();
+			headers.add(R.string.details_track);
+			details.add(Integer.toString(song.getTrack()));
 		}
 		if(song.getGenre() != null && !"".equals(song.getGenre())) {
-			msg += "\nGenre: " + song.getGenre();
+			headers.add(R.string.details_genre);
+			details.add(song.getGenre());
 		}
 		if(song.getYear() != null && song.getYear() != 0) {
-			msg += "\nYear: " + song.getYear();
+			headers.add(R.string.details_year);
+			details.add(Integer.toString(song.getYear()));
 		}
 		if(!Util.isOffline(context) && song.getSuffix() != null) {
-			msg += "\nServer Format: " + song.getSuffix();
+			headers.add(R.string.details_server_format);
+			details.add(song.getSuffix());
+
 			if(song.getBitRate() != null && song.getBitRate() != 0) {
-				msg += "\nServer Bitrate: " + song.getBitRate() + " kbps";
+				headers.add(R.string.details_server_bitrate);
+				details.add(song.getBitRate() + " kbps");
 			}
 		}
 		if(format != null && !"".equals(format)) {
-			msg += "\nCached Format: " + format;
+			headers.add(R.string.details_cached_format);
+			details.add(format);
 		}
 		if(bitrate != null && bitrate != 0) {
-			msg += "\nCached Bitrate: " + bitrate + " kbps";
+			headers.add(R.string.details_cached_bitrate);
+			details.add(bitrate + " kbps");
 		}
 		if(size != 0) {
-			msg += "\nSize: " + Util.formatLocalizedBytes(size, context);
+			headers.add(R.string.details_size);
+			details.add(Util.formatLocalizedBytes(size, context));
 		}
 		if(song.getDuration() != null && song.getDuration() != 0) {
-			msg += "\nLength: " + Util.formatDuration(song.getDuration());
+			headers.add(R.string.details_length);
+			details.add(Util.formatDuration(song.getDuration()));
 		}
 		if(song.getBookmark() != null) {
-			msg += "\nBookmark Position: " + Util.formatDuration(song.getBookmark().getPosition() / 1000);
+			headers.add(R.string.details_bookmark_position);
+			details.add(Util.formatDuration(song.getBookmark().getPosition() / 1000));
 		}
 		if(song.getRating() != 0) {
-			msg += "\nRating: " + song.getRating() + " stars";
+			headers.add(R.string.details_rating);
+			details.add(song.getRating() + " stars");
 		}
 		if(song instanceof PodcastEpisode) {
-			msg += "\n\nDescription: " + song.getAlbum();
+			headers.add(R.string.details_description);
+			details.add(song.getAlbum());
 		}
 
-		Util.info(context, song.getTitle(), msg);
+		int title;
+		if(song.isDirectory()) {
+			title = R.string.details_title_album;
+		} else if(song instanceof PodcastEpisode) {
+			title = R.string.details_title_podcast;
+		} else {
+			title = R.string.details_title_song;
+		}
+		Util.showDetailsDialog(context, title, headers, details);
 	}
-	
+
 	protected void playVideo(Entry entry) {
 		if(entryExists(entry)) {
 			playExternalPlayer(entry);
@@ -1315,7 +1327,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			intent.putExtra(Intent.EXTRA_TITLE, entry.getTitle());
 
 			List<ResolveInfo> intents = context.getPackageManager()
-				.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+					.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 			if(intents != null && intents.size() > 0) {
 				startActivity(intent);
 			}else {
@@ -1373,11 +1385,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void deleteRecursively(Artist artist) {
 		deleteRecursively(FileUtil.getArtistDirectory(context, artist));
 	}
-	
+
 	public void deleteRecursively(Entry album) {
 		deleteRecursively(FileUtil.getAlbumDirectory(context, album));
 
 	}
+
 	public void deleteRecursively(final File dir) {
 		if(dir == null) {
 			return;
@@ -1434,6 +1447,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		replaceFragment(fragment, true);
 	}
+
 	public void showAlbum(Entry entry) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
@@ -1490,7 +1504,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		intent.putExtra(Intent.EXTRA_TEXT, share.getUrl());
 		context.startActivity(Intent.createChooser(intent, context.getResources().getString(R.string.share_via)));
 	}
-	
+
 	public GestureDetector getGestureDetector() {
 		return gestureScanner;
 	}
@@ -1498,6 +1512,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void playBookmark(List<Entry> songs, Entry song) {
 		playBookmark(songs, song, null, null);
 	}
+
 	protected void playBookmark(final List<Entry> songs, final Entry song, final String playlistName, final String playlistId) {
 		final Integer position = song.getBookmark().getPosition();
 
@@ -1515,7 +1530,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					public void onClick(DialogInterface dialog, int id) {
 						final Bookmark oldBookmark = song.getBookmark();
 						song.setBookmark(null);
-						
+
 						new SilentBackgroundTask<Void>(context) {
 							@Override
 							protected Void doInBackground() throws Throwable {
@@ -1528,7 +1543,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 							@Override
 							protected void error(Throwable error) {
 								song.setBookmark(oldBookmark);
-								
+
 								String msg;
 								if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 									msg = getErrorMessage(error);
@@ -1546,26 +1561,37 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
-	
+
 	protected void playNow(List<Entry> entries) {
 		playNow(entries, null, null);
 	}
-	protected void playNow(List<Entry> entries, String playlistName, String playlistId) {
-		Entry bookmark = null;
-		for(Entry entry: entries) {
-			if(entry.getBookmark() != null) {
-				bookmark = entry;
-				break;
+	protected void playNow(final List<Entry> entries, final String playlistName, final String playlistId) {
+		new RecursiveLoader(context) {
+			@Override
+			protected Boolean doInBackground() throws Throwable {
+				getSongsRecursively(entries, songs);
+				return null;
 			}
-		}
-		
-		// If no bookmark found, just play from start
-		if(bookmark == null) {
-			playNow(entries, 0, playlistName, playlistId);
-		} else {
-			// If bookmark found, then give user choice to start from there or to start over
-			playBookmark(entries, bookmark, playlistName, playlistId);
-		}
+
+			@Override
+			protected void done(Boolean result) {
+				Entry bookmark = null;
+				for(Entry entry: songs) {
+					if(entry.getBookmark() != null) {
+						bookmark = entry;
+						break;
+					}
+				}
+
+				// If no bookmark found, just play from start
+				if(bookmark == null) {
+					playNow(songs, 0, playlistName, playlistId);
+				} else {
+					// If bookmark found, then give user choice to start from there or to start over
+					playBookmark(songs, bookmark, playlistName, playlistId);
+				}
+			}
+		}.execute();
 	}
 	protected void playNow(List<Entry> entries, int position) {
 		playNow(entries, position, null, null);
@@ -1574,9 +1600,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		Entry selected = entries.isEmpty() ? null : entries.get(0);
 		playNow(entries, selected, position, playlistName, playlistId);
 	}
+
 	protected void playNow(List<Entry> entries, Entry song, int position) {
 		playNow(entries, song, position, null, null);
 	}
+
 	protected void playNow(final List<Entry> entries, final Entry song, final int position, final String playlistName, final String playlistId) {
 		new LoadingTask<Void>(context) {
 			@Override
@@ -1585,22 +1613,22 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if(downloadService == null) {
 					return null;
 				}
-				
+
 				downloadService.clear();
 				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
 				downloadService.setSuggestedPlaylistName(playlistName, playlistId);
 
 				return null;
 			}
-			
+
 			@Override
 			protected void done(Void result) {
-				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				context.openNowPlaying();
 			}
 		}.execute();
 	}
 
-	protected void deleteBookmark(final MusicDirectory.Entry entry, final ArrayAdapter adapter) {
+	protected void deleteBookmark(final MusicDirectory.Entry entry, final SectionAdapter adapter) {
 		Util.confirmDialog(context, R.string.bookmark_delete_title, entry.getTitle(), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -1626,8 +1654,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					@Override
 					protected void done(Void result) {
 						if (adapter != null) {
-							adapter.remove(entry);
-							adapter.notifyDataSetChanged();
+							adapter.removeItem(entry);
 						}
 						Util.toast(context, context.getResources().getString(R.string.bookmark_deleted, entry.getTitle()));
 					}
@@ -1657,19 +1684,19 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		View layout = context.getLayoutInflater().inflate(R.layout.rating, null);
 		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
 		ratingBar.setRating((float) entry.getRating());
-		
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(context.getResources().getString(R.string.rating_title, entry.getTitle()))
-			.setView(layout)
-			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int id) {
-					int rating = (int) ratingBar.getRating();
-					setRating(entry, rating, onRatingChange);
-				}
-			})
-			.setNegativeButton(R.string.common_cancel, null);
-		
+				.setView(layout)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						int rating = (int) ratingBar.getRating();
+						setRating(entry, rating, onRatingChange);
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null);
+
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
@@ -1684,7 +1711,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(onRatingChange != null) {
 			onRatingChange.ratingChange(rating);
 		}
-		
+
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -1711,7 +1738,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if(onRatingChange != null) {
 					onRatingChange.ratingChange(oldRating);
 				}
-				
+
 				String msg;
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
@@ -1723,16 +1750,134 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}.execute();
 	}
-	
+
+	protected SectionAdapter getCurrentAdapter() { return null; }
+	public void stopActionMode() {
+		SectionAdapter adapter = getCurrentAdapter();
+		if(adapter != null) {
+			adapter.stopActionMode();
+		}
+	}
+	protected void clearSelected() {
+		if(getCurrentAdapter() != null) {
+			getCurrentAdapter().clearSelected();
+		}
+	}
+	protected List<Entry> getSelectedEntries() {
+		return getCurrentAdapter().getSelected();
+	}
+
+	protected void playNow(final boolean shuffle, final boolean append) {
+		playNow(shuffle, append, false);
+	}
+	protected void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
+		List<Entry> songs = getSelectedEntries();
+		if(!songs.isEmpty()) {
+			download(songs, append, false, !append, playNext, shuffle);
+			clearSelected();
+		}
+	}
+
+	protected void download(List<Entry> entries, boolean append, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
+		download(entries, append, save, autoplay, playNext, shuffle, null, null);
+	}
+	protected void download(final List<Entry> entries, final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle, final String playlistName, final String playlistId) {
+		final DownloadService downloadService = getDownloadService();
+		if (downloadService == null) {
+			return;
+		}
+		warnIfStorageUnavailable();
+
+		// Conditions for using play now button
+		if(!append && !save && autoplay && !playNext && !shuffle) {
+			// Call playNow which goes through and tries to use bookmark information
+			playNow(entries, playlistName, playlistId);
+			return;
+		}
+
+		RecursiveLoader onValid = new RecursiveLoader(context) {
+			@Override
+			protected Boolean doInBackground() throws Throwable {
+				if (!append) {
+					getDownloadService().clear();
+				}
+				getSongsRecursively(entries, songs);
+
+				downloadService.download(songs, save, autoplay, playNext, shuffle);
+				if (playlistName != null) {
+					downloadService.setSuggestedPlaylistName(playlistName, playlistId);
+				} else {
+					downloadService.setSuggestedPlaylistName(null, null);
+				}
+				return null;
+			}
+
+			@Override
+			protected void done(Boolean result) {
+				if (autoplay) {
+					context.openNowPlaying();
+				} else if (save) {
+					Util.toast(context,
+							context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+				} else if (append) {
+					Util.toast(context,
+							context.getResources().getQuantityString(R.plurals.select_album_n_songs_added, songs.size(), songs.size()));
+				}
+			}
+		};
+
+		executeOnValid(onValid);
+	}
+	protected void executeOnValid(RecursiveLoader onValid) {
+		onValid.execute();
+	}
+	protected void downloadBackground(final boolean save) {
+		List<Entry> songs = getSelectedEntries();
+		if(!songs.isEmpty()) {
+			downloadBackground(save, songs);
+		}
+	}
+
+	protected void downloadBackground(final boolean save, final List<Entry> entries) {
+		if (getDownloadService() == null) {
+			return;
+		}
+
+		warnIfStorageUnavailable();
+		new RecursiveLoader(context) {
+			@Override
+			protected Boolean doInBackground() throws Throwable {
+				getSongsRecursively(entries, songs);
+				getDownloadService().downloadBackground(songs, save);
+				return null;
+			}
+
+			@Override
+			protected void done(Boolean result) {
+				Util.toast(context, context.getResources().getQuantityString(R.plurals.select_album_n_songs_downloading, songs.size(), songs.size()));
+			}
+		}.execute();
+	}
+
+	protected void delete() {
+		List<Entry> songs = getSelectedEntries();
+		if(!songs.isEmpty()) {
+			DownloadService downloadService = getDownloadService();
+			if(downloadService != null) {
+				downloadService.delete(songs);
+			}
+		}
+	}
+
 	protected abstract class EntryInstanceUpdater {
 		private Entry entry;
-		
+
 		public EntryInstanceUpdater(Entry entry) {
 			this.entry = entry;
 		}
-		
+
 		public abstract void update(Entry found);
-		
+
 		public void execute() {
 			DownloadService downloadService = getDownloadService();
 			if(downloadService != null && !entry.isDirectory()) {
@@ -1745,12 +1890,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						serializeChanges = true;
 					}
 				}
-				
+
 				if(serializeChanges) {
 					downloadService.serializeQueue();
 				}
 			}
-			
+
 			Entry find = UpdateView.findEntry(entry);
 			if(find != null) {
 				update(find);
@@ -1769,22 +1914,26 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		protected MusicService musicService;
 		protected static final int MAX_SONGS = 500;
 		protected boolean playNowOverride = false;
-		protected List<Entry> songs;
+		protected List<Entry> songs = new ArrayList<>();
 
 		public RecursiveLoader(Activity context) {
 			super(context);
+			musicService = MusicServiceFactory.getMusicService(context);
 		}
 
+		protected void getSongsRecursively(List<Entry> entry) throws Exception {
+			getSongsRecursively(entry, songs);
+		}
+		protected void getSongsRecursively(List<Entry> entry, List<Entry> songs) throws Exception {
+			MusicDirectory dir = new MusicDirectory();
+			dir.addChildren(entry);
+			getSongsRecursively(dir, songs);
+		}
 		protected void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
 			if (songs.size() > MAX_SONGS) {
 				return;
 			}
 
-			for (Entry song : parent.getChildren(false, true)) {
-				if (!song.isVideo() && song.getRating() != 1) {
-					songs.add(song);
-				}
-			}
 			for (Entry dir : parent.getChildren(true, false)) {
 				if(dir.getRating() == 1) {
 					continue;
@@ -1798,6 +1947,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 				getSongsRecursively(musicDirectory, songs);
 			}
+
+			for (Entry song : parent.getChildren(false, true)) {
+				if (!song.isVideo() && song.getRating() != 1) {
+					songs.add(song);
+				}
+			}
 		}
 
 		@Override
@@ -1810,7 +1965,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 
 			if(result) {
-				Util.startActivityWithoutTransition(context, DownloadActivity.class);
+				context.openNowPlaying();
 			}
 		}
 	}

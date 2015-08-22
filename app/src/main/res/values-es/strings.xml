@@ -41,13 +41,7 @@
     <string name="main.welcome_title">Bienvenido!</string>
     <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
 	<string name="main.about_title">Acerca de DSub</string>
-	<string name="main.about_text">Autor: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nVersión: %1$s
-		\nArchivos en caché: %2$s
-		\nEspacio usado: %3$s of %4$s
-		\nEspacio disponible: %5$s of %6$s</string>
-    <string name="main.select_server">Seleccionar servidor</string>
+	<string name="main.select_server">Seleccionar servidor</string>
     <string name="main.shuffle">Reproducción aleatoria</string>
     <string name="main.offline">Modo Offline</string>
 	<string name="main.online">Modo Online</string>
@@ -130,8 +124,7 @@
 
     <string name="select_album.select">Seleccionar todo</string>
     <string name="select_album.n_selected">Seleccionadas %d canciones</string>
-    <string name="select_album.n_unselected">%d canciones deseleccionadas</string>
-    <string name="select_album.more">Más</string>
+	<string name="select_album.more">Más</string>
     <string name="select_album.offline">Offline</string>
     <string name="select_album.searching">Buscando...</string>
     <string name="select_album.no_sdcard">Error: No hay tarjeta SD disponible</string>
@@ -176,8 +169,7 @@
     <string name="download.playerstate_playing_shuffle">Reproduciendo en aleatorio</string>
     <string name="download.menu_show_album">Mostrar disco</string>
     <string name="download.menu_lyrics">Letras</string>
-    <string name="download.menu_remove">Eliminar de la cola</string>
-    <string name="download.menu_remove_all">Borrar todo</string>
+	<string name="download.menu_remove_all">Borrar todo</string>
     <string name="download.menu_screen_on">Pantalla encendida</string>
     <string name="download.menu_shuffle">Aleatorio</string>
 	<string name="download.menu_toggle">Cambiar</string>
@@ -199,7 +191,6 @@
     <string name="download.jukebox_not_authorized">Control remoto no permitido. Por favor, active el modo jukebox en <b>Users &gt; Settings</b> en su servidor Subsonic.</string>
 	<string name="download.timer_length">Temporizador</string>
 	<string name="download.start_timer">Iniciar temporizador</string>
-	<string name="download.stop_timer">Detener temporizador</string>
 	<string name="download.need_download">El vídeo ha de ser descargado antes</string>
 	<string name="download.no_streaming_player">Ningún reproductor puede reproducir este stream</string>
 	<string name="download.playing_out_of">%1$d/%2$d</string>

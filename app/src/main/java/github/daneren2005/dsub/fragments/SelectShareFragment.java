@@ -1,13 +1,28 @@
+/*
+  This file is part of Subsonic.
+	Subsonic is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	Subsonic is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	You should have received a copy of the GNU General Public License
+	along with Subsonic. If not, see <http://www.gnu.org/licenses/>.
+	Copyright 2015 (C) Scott Jackson
+*/
+
 package github.daneren2005.dsub.fragments;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -17,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
@@ -27,30 +43,19 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.ShareAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
-/**
- * Created by Scott on 12/28/13.
- */
-public class SelectShareFragment extends SelectListFragment<Share> {
+public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 	private static final String TAG = SelectShareFragment.class.getSimpleName();
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-		android.view.MenuInflater inflater = context.getMenuInflater();
-		inflater.inflate(R.menu.select_share_context, menu);
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Share> updateView, Share item) {
+		menuInflater.inflate(R.menu.select_share_context, menu);
 		recreateContextMenu(menu);
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		if(menuItem.getGroupId() != getSupportTag()) {
-			return false;
-		}
-
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		Share share = (Share) listView.getItemAtPosition(info.position);
-
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Share> updateView, Share share) {
 		switch (menuItem.getItemId()) {
 			case R.id.share_menu_share:
 				shareExternal(share);
@@ -75,8 +80,8 @@ public class SelectShareFragment extends SelectListFragment<Share> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<Share> objs) {
-		return new ShareAdapter(context, objs);
+	public SectionAdapter getAdapter(List<Share> objs) {
+		return new ShareAdapter(context, objs, this);
 	}
 
 	@Override
@@ -90,9 +95,7 @@ public class SelectShareFragment extends SelectListFragment<Share> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Share share = (Share) parent.getItemAtPosition(position);
-
+	public void onItemClicked(Share share) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(Constants.INTENT_EXTRA_NAME_SHARE, share);
@@ -193,8 +196,7 @@ public class SelectShareFragment extends SelectListFragment<Share> {
 
 					@Override
 					protected void done(Void result) {
-						adapter.remove(share);
-						adapter.notifyDataSetChanged();
+						adapter.removeItem(share);
 						Util.toast(context, context.getResources().getString(R.string.share_deleted, share.getName()));
 					}
 

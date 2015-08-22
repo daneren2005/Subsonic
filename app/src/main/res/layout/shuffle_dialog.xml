@@ -14,7 +14,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/shuffle.startYear" />
+			android:text="@string/shuffle.startYear"
+			android:textColor="?android:textColorPrimary"/>
 		<EditText
 			android:id="@+id/start_year"
 			android:inputType="number"
@@ -36,7 +37,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/shuffle.endYear" />
+			android:text="@string/shuffle.endYear"
+			android:textColor="?android:textColorPrimary"/>
 		<EditText
 			android:id="@+id/end_year"
 			android:inputType="number"
@@ -66,7 +68,8 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"
-			android:hint="@string/shuffle.genre"/>
+			android:hint="@string/shuffle.genre"
+			android:textColor="?android:textColorPrimary"/>
 
 		<Button
 			android:id="@+id/genre_combo"

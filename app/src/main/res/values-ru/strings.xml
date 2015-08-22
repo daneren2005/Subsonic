@@ -32,12 +32,6 @@
     <string name="main.welcome_text">Добро пожаловать в DSub! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
 	
 	<string name="main.about_title">О программе DSub</string>
-	<string name="main.about_text">Автор: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nВерсия: %1$s
-		\nFiles Cached: %2$s
-		\nИспользовано места: %3$s из %4$s
-		\nДоступно места: %5$s из %6$s</string>
     <string name="main.select_server">Выбрать сервер</string>
     <string name="main.shuffle">Случайное воспроизведение</string>
     <string name="main.offline">Отключиться</string>
@@ -89,7 +83,6 @@
 
     <string name="select_album.select">Выбрать все</string>
     <string name="select_album.n_selected">%d композиций выбрано.</string>
-    <string name="select_album.n_unselected">Выбор снят с %d композиций.</string>
     <string name="select_album.more">Еще</string>
     <string name="select_album.offline">Оффлайн</string>
     <string name="select_album.searching">Выполняется поиск...</string>
@@ -108,7 +101,6 @@
     <string name="download.playerstate_playing_shuffle">Воспроизводится случайно</string>
     <string name="download.menu_show_album">Показать альбом</string>
     <string name="download.menu_lyrics">Текст</string>
-    <string name="download.menu_remove">Убрать из очереди</string>
     <string name="download.menu_remove_all">Очистить</string>
     <string name="download.menu_screen_on">Включить подсветку</string>
     <string name="download.menu_shuffle">Перемешать</string>
@@ -131,8 +123,7 @@
     <string name="download.jukebox_not_authorized">Удаленное управление запрещено. Пожалуйста, активируйте режим jukebox в разделе <b>Настройки &gt; Проигрыватели</b> на вашем сервере Subsonic.</string>
 	<string name="download.timer_length">Длительность</string>
 	<string name="download.start_timer">Запустить таймер</string>
-	<string name="download.stop_timer">Остановить таймер</string>
-	<string name="download.need_download">Необходимо сначала скачать видео</string>
+    <string name="download.need_download">Необходимо сначала скачать видео</string>
 	<string name="download.no_streaming_player">Нет плеера для воспроизведения потока</string>
     
 	<string name="starring_content_starred">\"%s\" добавлено в закладки</string>

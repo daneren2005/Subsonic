@@ -14,7 +14,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/select_podcasts.add_url"/>
+			android:text="@string/select_podcasts.add_url"
+			android:textColor="?android:textColorPrimary"/>
 		<EditText
 			android:id="@+id/create_podcast_url"
 			android:inputType="textUri"

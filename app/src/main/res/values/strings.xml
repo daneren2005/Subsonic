@@ -25,6 +25,7 @@
 	<string name="common.confirm_message_cache">cache</string>
 	<string name="common.empty">No data</string>
 	<string name="common.warning">Warning</string>
+	<string name="common.close">Close</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -37,17 +38,12 @@
 	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Downloading</string>
+	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Welcome!</string>
     <string name="main.welcome_text">Welcome to DSub! The app is currently configured to use the Subsonic demo server. After you\'ve
         set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
 	<string name="main.about_title">About DSub</string>
-	<string name="main.about_text">Author: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nVersion: %1$s
-		\nFiles Cached: %2$s
-		\nUsed Space: %3$s of %4$s
-		\nAvailable Space: %5$s of %6$s</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
@@ -79,6 +75,8 @@
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Press back again to exit</string>
 	<string name="main.scan_complete">Completed scan of Server</string>
+	<string name="main.artist">Artist</string>
+	<string name="main.title">Title</string>
 
 	<string name="menu.search">Search</string>
 	<string name="menu.shuffle">Shuffle</string>
@@ -139,9 +137,8 @@
     <string name="music_library.label_offline">Offline media</string>
 
     <string name="select_album.select">Select all</string>
-    <string name="select_album.n_selected">%d tracks selected.</string>
-    <string name="select_album.n_unselected">%d tracks unselected.</string>
-    <string name="select_album.more">More</string>
+    <string name="select_album.n_selected">%d selected.</string>
+	<string name="select_album.more">More</string>
     <string name="select_album.offline">Offline</string>
     <string name="select_album.searching">Searching...</string>
     <string name="select_album.no_sdcard">Error: No SD card available.</string>
@@ -188,8 +185,7 @@
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Show Album</string>
     <string name="download.menu_lyrics">Lyrics</string>
-    <string name="download.menu_remove">Remove from queue</string>
-    <string name="download.menu_remove_all">Remove all</string>
+	<string name="download.menu_remove_all">Remove all</string>
     <string name="download.menu_screen_on">Screen on</string>
     <string name="download.menu_shuffle">Shuffle</string>
 	<string name="download.menu_toggle">Toggle</string>
@@ -212,7 +208,7 @@
     <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your Subsonic server.</string>
 	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Start Timer</string>
-	<string name="download.stop_timer">Stop Timer</string>
+	<string name="download.stop_time_remaining">Stop in %1$s</string>
 	<string name="download.need_download">Video needs to be downloaded first</string>
 	<string name="download.no_streaming_player">No player can play this stream</string>
 	<string name="download.playing_out_of">Playing: %1$d/%2$d</string>
@@ -234,7 +230,9 @@
 	<string name="starring_content_starred">Starred \"%s\"</string>
 	<string name="starring_content_unstarred">Unstarred \"%s\"</string>
     <string name="starring_content_error">Failed to update \"%s\", please try later.</string>
-	
+
+	<string name="playlist.mine">My Playlists</string>
+	<string name="playlist.shared">Shared Playlists</string>
 	<string name="playlist_error">Failed to grab list of playlists</string>
 	<string name="updated_playlist">Added %1$s songs to \"%2$s\"</string>
     <string name="updated_playlist_error">Failed to update \"%s\", please try later.</string>
@@ -245,11 +243,6 @@
 	<string name="bookmark.deleted">Deleted the bookmark for \"%s\"</string>
 	<string name="bookmark.deleted_error">Failed to delete the bookmark for \"%s\"</string>
 	<string name="bookmark.details_title">Bookmark Details</string>
-	<string name="bookmark.details">Song: %1$s
-		\nPosition: %2$s
-		\nCreated: %3$s
-		\nLast Updated: %4$s
-		\nComment: %5$s</string>
 	<string name="bookmark.resume_title">Resume playing?</string>
 	<string name="bookmark.resume">Resume playing \'%1$s\' from %2$s</string>
 	<string name="bookmark.action_resume">Resume</string>
@@ -591,6 +584,46 @@
 	<string name="tasker.edit_shuffle_genre">Shuffle from genre:</string>
 	<string name="tasker.edit_server_offline">Toggle offline: </string>
 	<string name="tasker.edit_do_nothing">Do Nothing</string>
+
+	<string name="details.title.song">Song Details</string>
+	<string name="details.title.album">Album Details</string>
+	<string name="details.title.podcast">Podcast Details</string>
+	<string name="details.title.playlist">Playlist Details</string>
+	<string name="details.podcast">Podcast</string>
+	<string name="details.status">Status</string>
+	<string name="details.artist">Artist</string>
+	<string name="details.album">Album</string>
+	<string name="details.track">Track</string>
+	<string name="details.genre">Genre</string>
+	<string name="details.year">Year</string>
+	<string name="details.server_format">Server Format</string>
+	<string name="details.server_bitrate">Server Bitrate</string>
+	<string name="details.cached_format">Cached Format</string>
+	<string name="details.cached_bitrate">Cached Bitrate</string>
+	<string name="details.size">Size</string>
+	<string name="details.length">Length</string>
+	<string name="details.bookmark_position">Bookmark Position</string>
+	<string name="details.rating">Rating</string>
+	<string name="details.description">Description</string>
+	<string name="details.owner">Owner</string>
+	<string name="details.comments">Comments</string>
+	<string name="details.song_count">Song Count</string>
+	<string name="details.public">Public</string>
+	<string name="details.created">Created</string>
+	<string name="details.title">Title</string>
+	<string name="details.url">URL</string>
+	<string name="details.error">Error Message</string>
+	<string name="details.author">Author</string>
+	<string name="details.email">Email</string>
+	<string name="details.version">Version</string>
+	<string name="details.files_cached">Files Cached</string>
+	<string name="details.files_permanent">Permanent Cached</string>
+	<string name="details.used_space">Used Space</string>
+	<string name="details.available_space">Available Space</string>
+	<string name="details.of">%1$s of %2$s</string>
+	<string name="details.song">Song</string>
+	<string name="details.position">Position</string>
+	<string name="details.updated">Updated</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>

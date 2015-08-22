@@ -30,16 +30,22 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +59,7 @@ import github.daneren2005.dsub.fragments.AdminFragment;
 import github.daneren2005.dsub.fragments.ChatFragment;
 import github.daneren2005.dsub.fragments.DownloadFragment;
 import github.daneren2005.dsub.fragments.MainFragment;
+import github.daneren2005.dsub.fragments.NowPlayingFragment;
 import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectBookmarkFragment;
@@ -66,7 +73,6 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.updates.Updater;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
@@ -77,15 +83,21 @@ import github.daneren2005.dsub.view.ChangeLog;
 /**
  * Created by Scott on 10/14/13.
  */
-public class SubsonicFragmentActivity extends SubsonicActivity {
+public class SubsonicFragmentActivity extends SubsonicActivity implements DownloadService.OnSongChangedListener {
 	private static String TAG = SubsonicFragmentActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
 	private static boolean sessionInitialized = false;
 	private static long ALLOWED_SKEW = 30000L;
 
-	private ScheduledExecutorService executorService;
+	private SlidingUpPanelLayout slideUpPanel;
+	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
+	private NowPlayingFragment nowPlayingFragment;
+	private SubsonicFragment secondaryFragment;
+	private Toolbar mainToolbar;
+	private Toolbar nowPlayingToolbar;
+
 	private View bottomBar;
-	private View coverArtView;
+	private ImageView coverArtView;
 	private TextView trackView;
 	private TextView artistView;
 	private ImageButton startButton;
@@ -95,6 +107,24 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		if(savedInstanceState == null) {
+			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
+			boolean firstRun = false;
+			if (fragmentType == null) {
+				fragmentType = Util.openToTab(this);
+				if (fragmentType != null) {
+					firstRun = true;
+				}
+			}
+
+			if ("".equals(fragmentType) || fragmentType == null || firstRun) {
+				// Initial startup stuff
+				if (!sessionInitialized) {
+					loadSession();
+				}
+			}
+		}
+
 		super.onCreate(savedInstanceState);
 		if (getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_EXIT)) {
 			stopService(new Intent(this, DownloadService.class));
@@ -102,74 +132,129 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			getImageLoader().clearCache();
 		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW)) {
 			getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, "Download");
-			if(drawerAdapter != null) {
-				drawerAdapter.setDownloadVisible(true);
-			}
-		} else if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
-			DownloadService service = getDownloadService();
-			if((service != null && service.getCurrentPlaying() != null)) {
-				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
-				Intent intent = new Intent();
-				intent.setClass(this, DownloadActivity.class);
-				startActivity(intent);
-			}
+			lastSelectedPosition = R.id.drawer_downloading;
 		}
 		setContentView(R.layout.abstract_fragment_activity);
 
 		UserUtil.seedCurrentUser(this);
 		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
-			boolean firstRun = false;
 			if(fragmentType == null) {
 				fragmentType = Util.openToTab(this);
 				if(fragmentType != null) {
 					getIntent().putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
-					firstRun = true;
+					lastSelectedPosition = getDrawerItemId(fragmentType);
+				} else {
+					lastSelectedPosition = R.id.drawer_home;
+				}
+
+				MenuItem item = drawerList.getMenu().findItem(lastSelectedPosition);
+				if(item != null) {
+					item.setChecked(true);
 				}
 			}
 			currentFragment = getNewFragment(fragmentType);
-			
-			if("".equals(fragmentType) || fragmentType == null || firstRun) {
-				// Initial startup stuff
-				if(!sessionInitialized) {
-					loadSession();
-				}
-			}
-			
 			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
-			
+
 			if(getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
 				SearchFragment fragment = new SearchFragment();
 				replaceFragment(fragment, fragment.getSupportTag());
 			}
-			
+
 			// If a album type is set, switch to that album type view
 			String albumType = getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE);
 			if(albumType != null) {
 				SubsonicFragment fragment = new SelectDirectoryFragment();
-				
+
 				Bundle args = new Bundle();
 				args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, albumType);
 				args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_SIZE, 20);
 				args.putInt(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_OFFSET, 0);
-				
+
 				fragment.setArguments(args);
 				replaceFragment(fragment, fragment.getSupportTag());
 			}
 		}
 
-		bottomBar = findViewById(R.id.bottom_bar);
-		bottomBar.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(v.getContext(), DownloadActivity.class);
-				startActivity(intent);
+		slideUpPanel = (SlidingUpPanelLayout) findViewById(R.id.slide_up_panel);
+		panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
+			@Override
+			public void onPanelSlide(View panel, float slideOffset) {
+
 			}
-		});
-		coverArtView = bottomBar.findViewById(R.id.album_art);
+
+			@Override
+			public void onPanelCollapsed(View panel) {
+				bottomBar.setVisibility(View.VISIBLE);
+				nowPlayingToolbar.setVisibility(View.GONE);
+				nowPlayingFragment.setPrimaryFragment(false);
+				setSupportActionBar(mainToolbar);
+
+				if(getSupportActionBar().getCustomView() == null) {
+					createCustomActionBarView();
+				}
+				recreateSpinner();
+				if(drawerToggle != null && backStack.size() > 0) {
+					drawerToggle.setDrawerIndicatorEnabled(false);
+				} else {
+					drawerToggle.setDrawerIndicatorEnabled(true);
+				}
+			}
+
+			@Override
+			public void onPanelExpanded(View panel) {
+				currentFragment.stopActionMode();
+
+				// Disable custom view before switching
+				getSupportActionBar().setDisplayShowCustomEnabled(false);
+
+				bottomBar.setVisibility(View.GONE);
+				nowPlayingToolbar.setVisibility(View.VISIBLE);
+				setSupportActionBar(nowPlayingToolbar);
+				nowPlayingFragment.setPrimaryFragment(true);
+
+				drawerToggle.setDrawerIndicatorEnabled(false);
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			}
+
+			@Override
+			public void onPanelAnchored(View panel) {
+
+			}
+
+			@Override
+			public void onPanelHidden(View panel) {
+
+			}
+		};
+		slideUpPanel.setPanelSlideListener(panelSlideListener);
+
+		if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD)) {
+			// Post this later so it actually runs
+			handler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					openNowPlaying();
+				}
+			}, 200);
+		}
+
+		bottomBar = findViewById(R.id.bottom_bar);
+		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
+		coverArtView = (ImageView) bottomBar.findViewById(R.id.album_art);
 		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
 		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
+
+		setSupportActionBar(mainToolbar);
+
+		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
+			nowPlayingFragment = new NowPlayingFragment();
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.add(R.id.now_playing_fragment_container, nowPlayingFragment, nowPlayingFragment.getTag() + "");
+			trans.commit();
+		}
 
 		ImageButton previousButton = (ImageButton) findViewById(R.id.download_previous);
 		previousButton.setOnClickListener(new View.OnClickListener() {
@@ -184,11 +269,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 						getDownloadService().previous();
 						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						update();
 					}
 				}.execute();
 			}
@@ -210,11 +290,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 						return null;
 					}
-
-					@Override
-					protected void done(Void result) {
-						update();
-					}
 				}.execute();
 			}
 		});
@@ -232,11 +307,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 						getDownloadService().next();
 						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						update();
 					}
 				}.execute();
 			}
@@ -262,7 +332,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			}
 		}
 	}
-	
+
 	@Override
 	public void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -276,7 +346,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				if (query != null) {
 					((SearchFragment)currentFragment).search(query, autoplay);
 				} else {
-					((SearchFragment)currentFragment).populateList();
 					if (requestsearch) {
 						onSearchRequested();
 					}
@@ -300,19 +369,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	public void onResume() {
 		super.onResume();
 
-		final Handler handler = new Handler();
-		Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						update();
-					}
-				});
-			}
-		};
-
 		if(getIntent().hasExtra(Constants.INTENT_EXTRA_VIEW_ALBUM)) {
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();
@@ -329,28 +385,45 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 			replaceFragment(fragment, fragment.getSupportTag());
 			getIntent().removeExtra(Constants.INTENT_EXTRA_VIEW_ALBUM);
-			if("Artist".equals(getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE))) {
-				lastSelectedPosition = 1;
-			}
 		}
 
 		createAccount();
-
-		executorService = Executors.newSingleThreadScheduledExecutor();
-		executorService.scheduleWithFixedDelay(runnable, 0L, 1000L, TimeUnit.MILLISECONDS);
+		runWhenServiceAvailable(new Runnable() {
+			@Override
+			public void run() {
+				getDownloadService().addOnSongChangedListener(SubsonicFragmentActivity.this, true);
+			}
+		});
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		executorService.shutdown();
+		DownloadService downloadService = getDownloadService();
+		if(downloadService != null) {
+			downloadService.removeOnSongChangeListener(this);
+		}
 	}
 
 	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putString(Constants.MAIN_NOW_PLAYING, nowPlayingFragment.getTag());
+		savedInstanceState.putInt(Constants.MAIN_SLIDE_PANEL_STATE, slideUpPanel.getPanelState().hashCode());
+	}
+	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+
+		String id = savedInstanceState.getString(Constants.MAIN_NOW_PLAYING);
+		FragmentManager fm = getSupportFragmentManager();
+		nowPlayingFragment = (NowPlayingFragment) fm.findFragmentByTag(id);
 		if(drawerToggle != null && backStack.size() > 0) {
 			drawerToggle.setDrawerIndicatorEnabled(false);
+		}
+
+		if(savedInstanceState.getInt(Constants.MAIN_SLIDE_PANEL_STATE, -1) == SlidingUpPanelLayout.PanelState.EXPANDED.hashCode()) {
+			panelSlideListener.onPanelExpanded(null);
 		}
 	}
 
@@ -369,7 +442,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 	@Override
 	public void onBackPressed() {
-		if(onBackPressedSupport()) {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && secondaryFragment == null) {
+			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+		} else if(onBackPressedSupport()) {
 			if(!Util.disableExitPrompt(this) && lastBackPressTime < (System.currentTimeMillis() - 4000)) {
 				lastBackPressTime = System.currentTimeMillis();
 				Util.toast(this, R.string.main_back_confirm);
@@ -380,37 +455,99 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 	}
 
 	@Override
+	public boolean onBackPressedSupport() {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			removeCurrent();
+			return false;
+		} else {
+			return super.onBackPressedSupport();
+		}
+	}
+
+	@Override
+	protected SubsonicFragment getCurrentFragment() {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			return nowPlayingFragment;
+		} else {
+			return super.getCurrentFragment();
+		}
+	}
+
+	@Override
 	public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
-		super.replaceFragment(fragment, tag, replaceCurrent);
-		if(drawerToggle != null) {
-			drawerToggle.setDrawerIndicatorEnabled(false);
+		if(slideUpPanel != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			secondaryFragment = fragment;
+			nowPlayingFragment.setPrimaryFragment(false);
+			secondaryFragment.setPrimaryFragment(true);
+			supportInvalidateOptionsMenu();
+
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+			trans.hide(nowPlayingFragment);
+			trans.add(R.id.now_playing_fragment_container, secondaryFragment, tag + "");
+			trans.commit();
+		} else {
+			super.replaceFragment(fragment, tag, replaceCurrent);
+			if (drawerToggle != null) {
+				drawerToggle.setDrawerIndicatorEnabled(false);
+			}
 		}
 	}
 	@Override
 	public void removeCurrent() {
-		super.removeCurrent();
-		if(drawerToggle != null && backStack.isEmpty()) {
-			drawerToggle.setDrawerIndicatorEnabled(true);
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && secondaryFragment != null) {
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
+			trans.remove(secondaryFragment);
+			trans.show(nowPlayingFragment);
+			trans.commit();
+
+			secondaryFragment = null;
+			nowPlayingFragment.setPrimaryFragment(true);
+			supportInvalidateOptionsMenu();
+		} else {
+			super.removeCurrent();
+			if (drawerToggle != null && backStack.isEmpty()) {
+				drawerToggle.setDrawerIndicatorEnabled(true);
+			}
 		}
 	}
-	
+
+	@Override
+	public void setTitle(CharSequence title) {
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			getSupportActionBar().setTitle(title);
+		} else {
+			super.setTitle(title);
+		}
+	}
+
+	@Override
+	protected void drawerItemSelected(String fragmentType) {
+		super.drawerItemSelected(fragmentType);
+
+		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+			slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+		}
+	}
+
 	@Override
 	public void startFragmentActivity(String fragmentType) {
 		// Create a transaction that does all of this
 		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-		
+
 		// Clear existing stack
 		for(int i = backStack.size() - 1; i >= 0; i--) {
 			trans.remove(backStack.get(i));
 		}
 		trans.remove(currentFragment);
 		backStack.clear();
-		
+
 		// Create new stack
 		currentFragment = getNewFragment(fragmentType);
 		currentFragment.setPrimaryFragment(true);
 		trans.add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "");
-		
+
 		// Done, cleanup
 		trans.commit();
 		supportInvalidateOptionsMenu();
@@ -426,7 +563,16 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			drawerToggle.setDrawerIndicatorEnabled(true);
 		}
 	}
-	
+
+	@Override
+	public void openNowPlaying() {
+		slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+	}
+	@Override
+	public void closeNowPlaying() {
+		slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+	}
+
 	private SubsonicFragment getNewFragment(String fragmentType) {
 		if("Artist".equals(fragmentType)) {
 			return new SelectArtistFragment();
@@ -447,38 +593,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		} else {
 			return new MainFragment();
 		}
-	} 
-
-	private void update() {
-		DownloadService downloadService = getDownloadService();
-		if (downloadService == null) {
-			return;
-		}
-
-		DownloadFile current = downloadService.getCurrentPlaying();
-		PlayerState state = downloadService.getPlayerState();
-		if(current == currentPlaying && state == currentState) {
-			return;
-		} else {
-			currentPlaying = current;
-			currentState = state;
-		}
-
-		MusicDirectory.Entry song = null;
-		if(current != null) {
-			song = current.getSong();
-			trackView.setText(song.getTitle());
-			artistView.setText(song.getArtist());
-		} else {
-			trackView.setText("Title");
-			artistView.setText("Artist");
-		}
-
-		getImageLoader().loadImage(coverArtView, song, false, false);
-		int[] attrs = new int[] {(state == PlayerState.STARTED) ?  R.attr.media_button_pause : R.attr.media_button_start};
-		TypedArray typedArray = this.obtainStyledAttributes(attrs);
-		startButton.setImageResource(typedArray.getResourceId(0, 0));
-		typedArray.recycle();
 	}
 
 	public void checkUpdates() {
@@ -502,7 +616,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 		if(ServerInfo.canSavePlayQueue(this) && !Util.isOffline(this)) {
 			loadRemotePlayQueue();
 		}
-		
+
 		sessionInitialized = true;
 	}
 	private void loadSettings() {
@@ -551,7 +665,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 			return true;
 		}
 	}
-	
+
 	private void loadBookmarks() {
 		final Context context = this;
 		new SilentBackgroundTask<Void>(context) {
@@ -562,7 +676,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 
 				return null;
 			}
-			
+
 			@Override
 			public void error(Throwable error) {
 				Log.e(TAG, "Failed to get bookmarks", error);
@@ -682,5 +796,55 @@ public class SubsonicFragmentActivity extends SubsonicActivity {
 				Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
 			}
 		}
+	}
+
+	public Toolbar getActiveToolbar() {
+		return slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED ? nowPlayingToolbar : mainToolbar;
+	}
+
+	@Override
+	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
+		this.currentPlaying = currentPlaying;
+
+		MusicDirectory.Entry song = null;
+		if (currentPlaying != null) {
+			song = currentPlaying.getSong();
+			trackView.setText(song.getTitle());
+			artistView.setText(song.getArtist());
+		} else {
+			trackView.setText(R.string.main_title);
+			artistView.setText(R.string.main_artist);
+		}
+
+		if (coverArtView != null) {
+			int height = coverArtView.getHeight();
+			if (height <= 0) {
+				int[] attrs = new int[]{R.attr.actionBarSize};
+				TypedArray typedArray = this.obtainStyledAttributes(attrs);
+				height = typedArray.getDimensionPixelSize(0, 0);
+				typedArray.recycle();
+			}
+			getImageLoader().loadImage(coverArtView, song, false, height, false);
+		}
+	}
+
+	@Override
+	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
+		if(this.currentPlaying != currentPlaying || currentPlaying == null) {
+			onSongChanged(currentPlaying, currentPlayingIndex);
+		}
+	}
+
+	@Override
+	public void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable) {
+
+	}
+
+	@Override
+	public void onStateUpdate(DownloadFile downloadFile, PlayerState playerState) {
+		int[] attrs = new int[]{(playerState == PlayerState.STARTED) ? R.attr.actionbar_pause : R.attr.actionbar_start};
+		TypedArray typedArray = this.obtainStyledAttributes(attrs);
+		startButton.setImageResource(typedArray.getResourceId(0, 0));
+		typedArray.recycle();
 	}
 }

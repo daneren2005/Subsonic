@@ -16,44 +16,83 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.SettingView;
+import github.daneren2005.dsub.view.UpdateView;
 
 import static github.daneren2005.dsub.domain.User.Setting;
 
-public class SettingsAdapter extends ArrayAdapter<Setting> {
-	private final Context context;
-	private final boolean editable;
+public class SettingsAdapter extends SectionAdapter<Setting> {
+	public final int VIEW_TYPE_SETTING = 1;
 
-	public SettingsAdapter(Context context, User user, boolean editable) {
-		super(context, R.layout.basic_list_item, user.getSettings());
-		this.context = context;
+	private final User user;
+	private final boolean editable;
+	private final ImageLoader imageLoader;
+
+	public SettingsAdapter(Context context, User user, ImageLoader imageLoader, boolean editable) {
+		super(context, user.getSettings(), imageLoader != null);
+		this.user = user;
+		this.imageLoader = imageLoader;
 		this.editable = editable;
+
+		List<Setting> settings = sections.get(0);
+		for(Setting setting: settings) {
+			if(setting.getValue()) {
+				addSelected(setting);
+			}
+		}
 	}
 
-	public SettingsAdapter(Context context, List<Setting> settings, boolean editable) {
-		super(context, R.layout.basic_list_item, settings);
-		this.context = context;
-		this.editable = editable;
+	public UpdateView.UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
+		View header = LayoutInflater.from(context).inflate(R.layout.user_header, parent, false);
+		return new UpdateView.UpdateViewHolder(header, false);
+	}
+	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String description) {
+		View header = holder.getView();
+
+		ImageView coverArtView = (ImageView) header.findViewById(R.id.user_avatar);
+		imageLoader.loadAvatar(context, coverArtView, user.getUsername());
+
+		TextView usernameView = (TextView) header.findViewById(R.id.user_username);
+		usernameView.setText(user.getUsername());
+
+		final TextView emailView = (TextView) header.findViewById(R.id.user_email);
+		if(user.getEmail() != null) {
+			emailView.setText(user.getEmail());
+		} else {
+			emailView.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		Setting entry = getItem(position);
-		SettingView view;
-		if (convertView != null && convertView instanceof SettingView) {
-			view = (SettingView) convertView;
-		} else {
-			view = new SettingView(context);
+	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
+		return new UpdateView.UpdateViewHolder(new SettingView(context));
+	}
+
+	@Override
+	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Setting item, int viewType) {
+		holder.getUpdateView().setObject(item, editable);
+	}
+
+	@Override
+	public int getItemViewType(Setting item) {
+		return VIEW_TYPE_SETTING;
+	}
+
+	@Override
+	public void setChecked(UpdateView updateView, boolean checked) {
+		if(updateView instanceof SettingView) {
+			((SettingView) updateView).setChecked(checked);
 		}
-		view.setObject(entry, editable);
-		return view;
 	}
 }

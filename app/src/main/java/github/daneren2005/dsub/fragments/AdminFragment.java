@@ -17,6 +17,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
@@ -36,8 +38,9 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.UserAdapter;
+import github.daneren2005.dsub.view.UpdateView;
 
-public class AdminFragment extends SelectListFragment<User> {
+public class AdminFragment extends SelectRecyclerFragment<User> {
 	private static String TAG = AdminFragment.class.getSimpleName();
 
 	@Override
@@ -56,22 +59,16 @@ public class AdminFragment extends SelectListFragment<User> {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, view, menuInfo);
-
-		MenuInflater inflater = context.getMenuInflater();
+	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<User> updateView, User item) {
 		if(UserUtil.isCurrentAdmin()) {
-			inflater.inflate(R.menu.admin_context, menu);
+			menuInflater.inflate(R.menu.admin_context, menu);
 		} else if(UserUtil.isCurrentRole(User.SETTINGS)) {
-			inflater.inflate(R.menu.admin_context_user, menu);
+			menuInflater.inflate(R.menu.admin_context_user, menu);
 		}
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem menuItem) {
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-		User user = objects.get(info.position);
-
+	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<User> updateView, User user) {
 		switch(menuItem.getItemId()) {
 			case R.id.admin_change_email:
 				UserUtil.changeEmail(context, user);
@@ -97,8 +94,8 @@ public class AdminFragment extends SelectListFragment<User> {
 	}
 
 	@Override
-	public ArrayAdapter getAdapter(List<User> objs) {
-		return new UserAdapter(context, objs, getImageLoader());
+	public SectionAdapter getAdapter(List<User> objs) {
+		return new UserAdapter(context, objs, getImageLoader(), this);
 	}
 
 	@Override
@@ -134,9 +131,7 @@ public class AdminFragment extends SelectListFragment<User> {
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		User user = (User) parent.getItemAtPosition(position);
-
+	public void onItemClicked(User user) {
 		SubsonicFragment fragment = new UserFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(Constants.INTENT_EXTRA_NAME_ID, user);

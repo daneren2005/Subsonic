@@ -7,14 +7,14 @@
     <string name="common.cancel">Mégse</string>
     <string name="common.play_now">Lejátszás</string>
 	<string name="common.play_shuffled">Lejátszás kevert sorrendben</string>
-    <string name="common.play_next">Sorbaállítás következőnek</string>
-    <string name="common.play_last">Sorbaállítás utolsónak</string>
+    <string name="common.play_next">Sorba állítás következőnek</string>
+    <string name="common.play_last">Sorba állítás utolsónak</string>
 	<string name="common.download">Letöltés gyorsítótárba</string>
     <string name="common.pin">Letöltés tárolásra (megőrzés)</string>
     <string name="common.delete">Törlés</string>
 	<string name="common.star">Csillagozás</string>
 	<string name="common.unstar">Csillagozás ki</string>
-	<string name="common.info">Részletek</string>
+	<string name="common.info">Részletezés</string>
 	<string name="common.name">Név</string>
 	<string name="common.comment">Megjegyzés</string>
 	<string name="common.public">Nyilvános</string>
@@ -25,6 +25,7 @@
 	<string name="common.confirm_message_cache">cache</string>
 	<string name="common.empty">Nem található!</string>
 	<string name="common.warning">Figyelem!</string>
+	<string name="common.close">Bezár</string>
 
     <string name="button_bar.home">Főoldal</string>
     <string name="button_bar.browse">Médiatár</string>
@@ -39,15 +40,9 @@
 	<string name="button_bar.downloading">Letöltések</string>
 
     <string name="main.welcome_title">Üdvözlet!</string>
-    <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás még nincs beállítva. Miután konfigurálta saját kiszolgálóját 
+    <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás jelenleg egy Subsonic demo kiszolgálóhoz van beállítva. Miután konfigurálta saját kiszolgálóját 
 	(elérhető: <b>subsonic.org</b>), húzza balról jobbra az oldalsávot, lépjen be a <b>Beállítások</b> menüpontba és adja meg a kapcsolódási adatokat!</string>
 	<string name="main.about_title">DSub információk</string>
-	<string name="main.about_text">Fejlesztő: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nVerzió: %1$s
-		\nGyorsítótárazott fájlok: %2$s
-		\nFelhasznált tároló: %3$s/%4$s
-		\nFelhasználható tároló: %5$s/%6$s</string>
 	<string name="main.faq_title">GYIK</string>
 	<string name="main.faq_text">
 	<![CDATA[
@@ -66,11 +61,11 @@
     <string name="main.settings">Beállítások</string>
     <string name="main.albums_title">Albumok</string>
 	<string name="main.albums_per_folder">Mappánként</string>
-    <string name="main.albums_newest">Utoljára hozzáadottak</string>
-    <string name="main.albums_recent">Utoljára lejátszottak</string>
-    <string name="main.albums_frequent">Legtöbbször lejátszottak</string>
-    <string name="main.albums_highest">Legjobbra értékeltek</string>
-    <string name="main.albums_starred">Csillagozottak</string>
+    <string name="main.albums_newest">Utoljára hozzáadott</string>
+    <string name="main.albums_recent">Utoljára lejátszott</string>
+    <string name="main.albums_frequent">Legtöbbször lejátszott</string>
+    <string name="main.albums_highest">Legjobbra értékelt</string>
+    <string name="main.albums_starred">Csillagozott</string>
     <string name="main.albums_random">Véletlenszerű kiválasztás</string>
 	<string name="main.albums_genres">Műfajok</string>
 	<string name="main.albums_year">Évtizedek</string>
@@ -79,12 +74,14 @@
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Nyomja meg még egyszer a kilépéshez!</string>
 	<string name="main.scan_complete">A médiatár frissítése befejeződött a kiszolgálón!</string>
+	<string name="main.artist">Előadó</string>
+	<string name="main.title">Cím</string>
 
 	<string name="menu.search">Keresés</string>
 	<string name="menu.shuffle">Lejátszás kevert sorrendben</string>
 	<string name="menu.refresh">Frissítés</string>
 	<string name="menu.play">Lejátszás</string>
-	<string name="menu.play_last">Sorbaállítás utolsónak</string>
+	<string name="menu.play_last">Sorba állítás utolsónak</string>
     <string name="menu.exit">Kilépés</string>
     <string name="menu.settings">Beállítások</string>
     <string name="menu.help">Súgó</string>
@@ -102,9 +99,9 @@
 	<string name="menu.show_all">Összes média megjelenítése</string>
 	<string name="menu.show_artist">Ugrás az előadóhoz</string>
 	<string name="menu.share">Megosztás</string>
-	<string name="menu.delete_cache">Gyorsítótár törlése</string>
+	<string name="menu.delete_cache">Törlés a gyorsítótárból</string>
 	<string name="menu.cast">Továbbítás eszközhöz</string>
-	<string name="menu.faq">FAQ</string>
+	<string name="menu.faq">GYIK</string>
 	<string name="menu.add_user">Felhasználó hozzáadása</string>
 	<string name="menu.rescan">Médiatár frissítése a kiszolgálón</string>
 	<string name="menu.rate">Értékelés</string>
@@ -133,14 +130,14 @@
     <string name="search.more">Továbbiak</string>
 
     <string name="progress.wait">Kérem várjon...</string>
+	<string name="progress.artist_info">Az előadó életrajzának betöltése</string>
 
     <string name="music_library.label">Médiatár</string>
     <string name="music_library.label_offline">Kapcsolat nélküli médiák</string>
 
     <string name="select_album.select">Összes jelölése be/ki</string>
     <string name="select_album.n_selected">%d dal kijelölve.</string>
-    <string name="select_album.n_unselected">%d dal visszavonva.</string>
-    <string name="select_album.more">Továbbiak</string>
+	<string name="select_album.more">Továbbiak</string>
     <string name="select_album.offline">Offline</string>
     <string name="select_album.searching">Keresés...</string>
     <string name="select_album.no_sdcard">Hiba: SD kártya nem áll rendelkezésre!</string>
@@ -182,12 +179,12 @@
     <string name="download.empty">A várólista üres!</string>
 	<string name="download.shuffle_loading">Kevert sorrendű lista betöltése...</string>
     <string name="download.playerstate_downloading">Letöltés - \"%s\"</string>
+	<string name="download.playerstate_mobile_disabled">Várakozás a Wi-Fi hálózatra a letöltéshez</string>
     <string name="download.playerstate_buffering">Pufferelés</string>
     <string name="download.playerstate_playing_shuffle">Sorrend keverése</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszöveg</string>
-    <string name="download.menu_remove">Eltávolítás a várólistáról</string>
-    <string name="download.menu_remove_all">Összes eltávolítása</string>
+	<string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
     <string name="download.menu_shuffle">Sorrend keverése</string>
 	<string name="download.menu_toggle">Váltás</string>
@@ -232,7 +229,9 @@
 	<string name="starring_content_starred">\"%s\" csillagozás be</string>
 	<string name="starring_content_unstarred">\"%s\" csillagozás ki</string>
     <string name="starring_content_error">Nem sikerült frissíteni \"%s\", próbálja később!</string>
-	
+
+	<string name="playlist.mine">Saját lejátszási listák</string>
+	<string name="playlist.shared">Megosztott lejátszási listák</string>
 	<string name="playlist_error">Nem sikerült elérni a lejátszási lista adatait!</string>
 	<string name="updated_playlist">%1$s dal hozzáadva: \"%2$s\"</string>
     <string name="updated_playlist_error">Nem sikerült frissíteni \"%s\", próbálja később!</string>
@@ -242,12 +241,7 @@
 	<string name="bookmark.delete_title">Könyvjelző törlése</string>
 	<string name="bookmark.deleted">\"%s\" könyvjelző törölve</string>
 	<string name="bookmark.deleted_error">\"%s\" könyvjelző törlése sikertelen!</string>
-	<string name="bookmark.details_title">Könyvjelző részletei</string>
-	<string name="bookmark.details">Dal: %1$s
-		\nPozíció: %2$s
-		\nLétrehozva: %3$s
-		\nUtolsó módosítás: %4$s
-		\nMegjegyzés: %5$s</string>
+	<string name="bookmark.details_title">Könyvjelző részletezése</string>
 	<string name="bookmark.resume_title">Folytatja a lejátszást?</string>
 	<string name="bookmark.resume">\"%1$s\" folytatása innen: \"%2$s\"</string>
 	<string name="bookmark.action_resume">Folytatás</string>
@@ -310,6 +304,8 @@
 	<string name="settings.track_summary">Dalsorszám megjelenítése a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
 	<string name="settings.custom_sort_summary">A kiszolgáló alapértelmezett rendezésének felülbírálása, rendezés a lemez sorszáma és a kiadás éve alapján.</string>
+	<string name="settings.open_to_library">Médiatár megnyitása</string>
+	<string name="settings.open_to_library_summary">A Médiatár megnyitása a Főoldal helyett.</string>
     <string name="settings.network_title">Hálózat</string>
     <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
@@ -375,6 +371,11 @@
 	<string name="settings.temp_loss_pause_lower">Megállítás, kérésre alacsonyabb hangerő</string>
 	<string name="settings.temp_loss_lower">Alacsonyabb hangerő</string>
 	<string name="settings.temp_loss_nothing">Ne csináljon semmit</string>
+	<string name="settings.keep_played_count_title">Lejátszottak megtartása</string>
+	<string name="settings.keep_played_count_none">Összes lejátszott eltávolítása</string>
+	<string name="settings.keep_played_count_one">Utoljára lejátszott megtartása</string>
+	<string name="settings.keep_played_count_two">2 lejátszott megtartása</string>
+	<string name="settings.keep_played_count_three">3 lejátszott megtartása</string>
 	<string name="settings.disconnect_pause_title">Megállítás kapcsolatbontás esetén</string>
 	<string name="settings.disconnect_pause_both">Megállítás minden esetben</string>
 	<string name="settings.disconnect_pause_neither">Ne csináljon semmit</string>
@@ -422,8 +423,8 @@
 	<string name="settings.sync_notification">Szinkronizálási értesítések</string>
 	<string name="settings.sync_notification_summary">Értesítés megjelenítése, ha új média került szinkronizálásra.</string>
 	<string name="settings.menu_options.title">Opcionális menübeállítások</string>
-	<string name="settings.menu_options.play_next_summary">Sorbaállítás következőnek opció megjelenítése a menüben.</string>
-	<string name="settings.menu_options.play_last_summary">Sorbaállítás utolsónak opció megjelenítése a menüben.</string>
+	<string name="settings.menu_options.play_next_summary">Sorba állítás következőnek opció megjelenítése a menüben.</string>
+	<string name="settings.menu_options.play_last_summary">Sorba állítás utolsónak opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.star_summary">Csillagozás opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.shared_summary">Megosztás opció megjelenítése a menüben.</string>
 	<string name="settings.menu_options.rate_summary">Értékelés opció megjelenítése a menüben.</string>
@@ -453,6 +454,8 @@
 	<string name="settings.casting_proxy_summary">Streamelés az eszközön (mint egy proxyn) keresztül. Ez megoldást hozhat néhány esetben, pl. saját aláírású tanúsítvány használatakor.</string>
 	<string name="settings.rename_duplicates">Duplikált dalok átnevezése</string>
 	<string name="settings.rename_duplicates_summary">Duplikált dalok átnevezése az eredeti fájlnévre, így megkülönböztethetővé válnak.</string>
+	<string name="settings.start_on_headphones">Lejátszó elindítása</string>
+	<string name="settings.start_on_headphones_summary">Lejátszó elindítása fülhallgató csatlakoztatásakor. Ez a funkció olyan szolgáltatás használatát igényli, ami a Dsub elindítása nélkül tudja kontrollálni a fülhallgató csatlakoztatási eseményeket.</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -580,6 +583,46 @@
 	<string name="tasker.edit_shuffle_genre">Kevert sorrend műfaja:</string>
 	<string name="tasker.edit_server_offline">Offline kapcsoló: </string>
 	<string name="tasker.edit_do_nothing">Ne csináljon semmit</string>
+
+	<string name="details.title.song">Dal információi</string>
+	<string name="details.title.album">Album információi</string>
+	<string name="details.title.podcast">Podcast információi</string>
+	<string name="details.title.playlist">Lejátszási lista információi</string>
+	<string name="details.podcast">Podcast</string>
+	<string name="details.status">Státusz</string>
+	<string name="details.artist">Előadó</string>
+	<string name="details.album">Album</string>
+	<string name="details.track">Dal</string>
+	<string name="details.genre">Műfaj</string>
+	<string name="details.year">Év</string>
+	<string name="details.server_format">Kiszolgáló formátuma</string>
+	<string name="details.server_bitrate">Kiszolgáló bitrátája</string>
+	<string name="details.cached_format">Gyorsítótárazott formátuma</string>
+	<string name="details.cached_bitrate">Gyorsítótárazott bitrátája</string>
+	<string name="details.size">Méret</string>
+	<string name="details.length">Hossz</string>
+	<string name="details.bookmark_position">Könyvjelző pozíciója</string>
+	<string name="details.rating">Értékelés</string>
+	<string name="details.description">Leírás</string>
+	<string name="details.owner">Tulajdonos</string>
+	<string name="details.comments">Megjegyzések</string>
+	<string name="details.song_count">Dalsorszám</string>
+	<string name="details.public">Nyilvános</string>
+	<string name="details.created">Létrehozva</string>
+	<string name="details.title">Cím</string>
+	<string name="details.url">URL</string>
+	<string name="details.error">Hibaüzenet</string>
+	<string name="details.author">Szerző</string>
+	<string name="details.email">Email</string>
+	<string name="details.version">Verzió</string>
+	<string name="details.files_cached">Gyorsítótárazott fájlok</string>
+	<string name="details.files_permanent">Megőrzött fájlok</string>
+	<string name="details.used_space">Felhasznált tároló</string>
+	<string name="details.available_space">Rendelkezésre álló hely</string>
+	<string name="details.of">%1$s/%2$s</string>
+	<string name="details.song">Dal</string>
+	<string name="details.position">Pozíció</string>
+	<string name="details.updated">Frissítve</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Nincsenek dalok</item>

@@ -15,7 +15,8 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="4dp"
 			android:textSize="20dp"
-			android:text="@string/admin.change_email_label" />
+			android:text="@string/admin.change_email_label"
+			android:textColor="?android:textColorPrimary"/>
 		<EditText
 			android:id="@+id/new_email"
 			android:inputType="textEmailAddress"

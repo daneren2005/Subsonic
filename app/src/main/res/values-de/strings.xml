@@ -42,13 +42,7 @@
     <string name="main.welcome_text">Willkommen zu DSub! Die App ist aktuell für den Subsonic-Demo-Server konfiguriert. Nachdem Sie Ihren eigenen Server
         aufgesetzt haben (verfügbar unter <b>subsonic.org</b>) könne Sie diesen unter <b>Einstellungen</b> konfigurieren.</string>
 	<string name="main.about_title">Über DSub</string>
-	<string name="main.about_text">Autor: Scott Jackson
-		\nEmail: dsub.android@gmail.com
-		\nVersion: %1$s
-		\nLokal gespeicherte Titel: %2$s
-		\nGenutzter Speicher: %3$s von %4$s
-		\nVerfügbarer Speicher: %5$s von %6$s</string>
-        <string name="main.faq_title">FAQ</string>
+	<string name="main.faq_title">FAQ</string>
         <string name="main.faq_text">
         <![CDATA[
                 <font color="red">Cache vs Permanenter Cache</font>:
@@ -142,8 +136,7 @@
 
     <string name="select_album.select">Alle auswählen</string>
     <string name="select_album.n_selected">%d Lieder ausgewählt.</string>
-    <string name="select_album.n_unselected">%d Lieder deselektiert.</string>
-    <string name="select_album.more">Mehr</string>
+	<string name="select_album.more">Mehr</string>
     <string name="select_album.offline">Offline</string>
     <string name="select_album.searching">Suche...</string>
     <string name="select_album.no_sdcard">Fehler: Keine SD-Karte verfügbar.</string>
@@ -190,8 +183,7 @@
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Zeige Album</string>
     <string name="download.menu_lyrics">Liedtext</string>
-    <string name="download.menu_remove">Entferne aus Warteschlange</string>
-    <string name="download.menu_remove_all">Alle entfernen</string>
+	<string name="download.menu_remove_all">Alle entfernen</string>
     <string name="download.menu_screen_on">Bildschirm an</string>
     <string name="download.menu_shuffle">Mischen</string>
 	<string name="download.menu_toggle">Umschalten</string>
@@ -214,7 +206,6 @@
     <string name="download.jukebox_not_authorized">Fernbedienung ist nicht erlaubt. Bitte aktivieren Sie den Jukebox-Modus unter <b>Nutzer &gt; Einstellungen</b> auf Ihrem Subsonic-Server.</string>
 	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Starte Timer</string>
-	<string name="download.stop_timer">Stoppe Timer</string>
 	<string name="download.need_download">Video muss zuerst heruntergeladen werden</string>
 	<string name="download.no_streaming_player">Stream kann nicht wiedergegeben werden.</string>
 	<string name="download.playing_out_of">Wiedergabe: %1$d/%2$d</string>
@@ -577,6 +568,74 @@
         <item quantity="one">Noch ein Tag bis zum Ablauf des Testzeitraums.</item>
         <item quantity="other">%d Tage bis zum Ablauf des Testzeitraums.</item>
     </plurals>
+	<string name="details.album">Album</string>
+	<string name="details.artist">Künstler</string>
+	<string name="details.author">Autor</string>
+	<string name="details.available_space">Verfügbarer Platz</string>
+	<string name="details.bookmark_position">Lesezeichenposition</string>
+	<string name="details.comments">Kommentar</string>
+	<string name="details.created">Erstellt</string>
+	<string name="details.description">Beschreibung</string>
+	<string name="details.email">Email</string>
+	<string name="details.error">Fehlermeldung</string>
+	<string name="details.length">Länge</string>
+	<string name="details.of">%1$s von %2$s</string>
+	<string name="details.owner">Besitzer</string>
+	<string name="details.public">Öffentlich</string>
+	<string name="details.podcast">Podcast</string>
+	<string name="details.size">Größe</string>
+	<string name="details.status">Status</string>
+	<string name="details.title">Titel</string>
+	<string name="download.stop_time_remaining">Stoppe in %1$s</string>
+	<string name="playlist.shared">Geteilte Wiedergabelisten</string>
+	<string name="settings.max_bitrate_112">112 Kbps</string>
+	<string name="settings.max_bitrate_128">128 Kbps</string>
+	<string name="settings.max_bitrate_160">160 Kbps</string>
+	<string name="settings.max_bitrate_192">192 Kbps</string>
+	<string name="settings.max_bitrate_256">256 Kbps</string>
+	<string name="settings.max_bitrate_32">32 Kbps</string>
+	<string name="settings.max_bitrate_320">320 Kbps</string>
+	<string name="settings.max_bitrate_64">64 Kbps</string>
+	<string name="settings.max_bitrate_80">80 Kbps</string>
+	<string name="settings.max_bitrate_96">96 Kbps</string>
+	<string name="settings.max_video_bitrate_1000">1000 Kbps</string>
+	<string name="settings.max_video_bitrate_1500">1500 Kbps</string>
+	<string name="settings.max_video_bitrate_200">200 Kbps</string>
+	<string name="settings.max_video_bitrate_2000">2000 Kbps</string>
+	<string name="settings.max_video_bitrate_300">300 Kbps</string>
+	<string name="settings.max_video_bitrate_3000">3000 Kbps</string>
+	<string name="settings.max_video_bitrate_400">400 Kbps</string>
+	<string name="settings.max_video_bitrate_500">500 Kbps</string>
+	<string name="settings.max_video_bitrate_5000">5000 Kbps</string>
+	<string name="settings.max_video_bitrate_700">700 Kbps</string>
+	<string name="widget.4x1">DSub (4x1)</string>
+	<string name="widget.4x2">DSub (4x2)</string>
+	<string name="widget.4x3">DSub (4x3)</string>
+	<string name="widget.4x4">DSub (4x4)</string>
+	<string name="util.bytes_format.megabyte">0.00 MB</string>
+	<string name="util.bytes_format.kilobyte">0 KB</string>
+	<string name="util.bytes_format.gigabyte">0.00 GB</string>
+	<string name="util.bytes_format.byte">0 B</string>
+	<string name="common.close">Schliessen</string>
+	<string name="details.cached_format">Format im Cache</string>
+	<string name="details.genre">Genre</string>
+	<string name="details.cached_bitrate">Bitrate im Cache</string>
+	<string name="details.files_cached">Dateien im Cache</string>
+	<string name="details.files_permanent">Dateien im permanenten Cache</string>
+	<string name="details.rating">Bewertung</string>
+	<string name="details.server_bitrate">Originale Bitrate</string>
+	<string name="details.server_format">Originales Format</string>
+	<string name="details.song_count">Titelanzahl</string>
+	<string name="details.title.playlist">Details der Wiedergabeliste</string>
+	<string name="details.title.album">Albumdetails</string>
+	<string name="details.title.podcast">Podcastdetails</string>
+	<string name="details.title.song">Mediumdetails</string>
+	<string name="details.used_space">Genutzter Platz</string>
+	<string name="details.url">URL</string>
+	<string name="details.track">Medium</string>
+	<string name="details.year">Jahr</string>
+	<string name="details.version">Version</string>
+	<string name="playlist.mine">Meine Wiedergabelisten</string>
 	<string name="settings.keep_played_count_none">Alle abgespielten Lieder entfernen</string>
 	<string name="settings.keep_played_count_one">Das letzte abgespielte Lied behalten</string>
 	<string name="settings.keep_played_count_three">3 abgespielte Lieder behalten</string>
