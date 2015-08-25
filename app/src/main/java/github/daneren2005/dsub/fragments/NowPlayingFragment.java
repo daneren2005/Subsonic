@@ -506,7 +506,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onProgressChanged(final SeekBar seekBar, final int position, final boolean fromUser) {
 				if (fromUser) {
-					Util.toast(context, Util.formatDuration(position / 1000), true);
+					positionTextView.setText(Util.formatDuration(position / 1000));
 					setControlsVisible(true);
 				}
 			}
