@@ -1008,6 +1008,8 @@ public class DownloadService extends Service {
 				cachedPosition = position;
 				subtractPosition = 0;
 			}
+
+			onSongProgress();
 		} catch (Exception x) {
 			handleError(x);
 		}
