@@ -75,6 +75,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
 import github.daneren2005.dsub.view.FadeOutAnimation;
+import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.Util;
@@ -184,6 +185,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
 
 		playlistView = (RecyclerView)rootView.findViewById(R.id.download_list);
+		FastScroller fastScroller = (FastScroller) rootView.findViewById(R.id.download_fast_scroller);
+		fastScroller.attachRecyclerView(playlistView);
 		setupLayoutManager(playlistView, false);
 		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 			@Override

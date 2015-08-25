@@ -23,10 +23,11 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
-public class DownloadFileAdapter extends SectionAdapter<DownloadFile> {
+public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements FastScroller.BubbleTextGetter {
 	public static int VIEW_TYPE_DOWNLOAD_FILE = 1;
 
 	public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
@@ -49,5 +50,10 @@ public class DownloadFileAdapter extends SectionAdapter<DownloadFile> {
 	@Override
 	public int getItemViewType(DownloadFile item) {
 		return VIEW_TYPE_DOWNLOAD_FILE;
+	}
+
+	@Override
+	public String getTextToShowInBubble(int position) {
+		return null;
 	}
 }

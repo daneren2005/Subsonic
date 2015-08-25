@@ -45,6 +45,7 @@ public class FastScroller extends LinearLayout {
 	private RecyclerView recyclerView;
 	private final ScrollListener scrollListener = new ScrollListener();
 	private int height;
+	private boolean visibleBubble = true;
 
 	private ObjectAnimator currentAnimator = null;
 
@@ -90,8 +91,13 @@ public class FastScroller extends LinearLayout {
 					return false;
 				if(currentAnimator != null)
 					currentAnimator.cancel();
-				if(bubble.getVisibility() == INVISIBLE)
-					showBubble();
+				if(bubble.getVisibility() == INVISIBLE) {
+					if(visibleBubble) {
+						showBubble();
+					}
+				} else if(!visibleBubble) {
+					hideBubble();
+				}
 				handle.setSelected(true);
 			case MotionEvent.ACTION_MOVE:
 				final float y = event.getY();
@@ -139,9 +145,14 @@ public class FastScroller extends LinearLayout {
 
 			try {
 				String bubbleText = ((BubbleTextGetter) recyclerView.getAdapter()).getTextToShowInBubble(targetPos);
-				bubble.setText(bubbleText);
+				if(bubbleText == null) {
+					visibleBubble = false;
+					bubble.setVisibility(View.INVISIBLE);
+				} else {
+					bubble.setText(bubbleText);
+					visibleBubble = true;
+				}
 			} catch(Exception e) {
-				Log.e(TAG, "Item count: " + itemCount);
 				Log.e(TAG, "Error getting text for bubble", e);
 			}
 		}
@@ -160,7 +171,6 @@ public class FastScroller extends LinearLayout {
 	}
 
 	private void showBubble() {
-		AnimatorSet animatorSet = new AnimatorSet();
 		bubble.setVisibility(VISIBLE);
 		if(currentAnimator != null)
 			currentAnimator.cancel();

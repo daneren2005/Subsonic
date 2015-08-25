@@ -19,11 +19,22 @@
         android:padding="10dip"
         android:textColor="?android:textColorPrimary"/>
 
-    <android.support.v7.widget.RecyclerView
-		android:id="@+id/download_list"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_weight="1"
-        android:scrollbars="vertical"/>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1.0">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/download_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scrollbars="vertical"/>
+
+        <github.daneren2005.dsub.view.FastScroller
+            android:id="@+id/download_fast_scroller"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 
 </LinearLayout>
