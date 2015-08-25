@@ -46,6 +46,7 @@ public class FastScroller extends LinearLayout {
 	private final ScrollListener scrollListener = new ScrollListener();
 	private int height;
 	private boolean visibleBubble = true;
+	private boolean hasScrolled = false;
 
 	private ObjectAnimator currentAnimator = null;
 
@@ -117,7 +118,6 @@ public class FastScroller extends LinearLayout {
 		this.recyclerView = recyclerView;
 		recyclerView.addOnScrollListener(scrollListener);
 		recyclerView.setVerticalScrollBarEnabled(false);
-		setVisibility(View.VISIBLE);
 	}
 	public void detachRecyclerView() {
 		recyclerView.removeOnScrollListener(scrollListener);
@@ -217,6 +217,11 @@ public class FastScroller extends LinearLayout {
 				position = (int)(((float)firstVisiblePosition/(((float)itemCount-(float)visibleRange)))*(float)itemCount);
 			float proportion = (float)position/(float)itemCount;
 			setBubbleAndHandlePosition(height*proportion);
+
+			if(!hasScrolled && (dx > 0 || dy > 0)) {
+				setVisibility(View.VISIBLE);
+				hasScrolled = true;
+			}
 		}
 	}
 
