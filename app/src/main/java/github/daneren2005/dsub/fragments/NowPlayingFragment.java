@@ -238,7 +238,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 								if(currentSong.isStarred()) {
 									starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
 								} else {
-									if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+									if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 										starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
 									} else {
 										starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
@@ -1266,7 +1266,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			if(song.isStarred()) {
 				starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
 			} else {
-				if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 					starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
 				} else {
 					starButton.setImageResource(R.drawable.ic_toggle_star_outline_dark);
