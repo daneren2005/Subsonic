@@ -100,10 +100,6 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		List<List<Integer>> sections = new ArrayList<>();
 		List<String> headers = new ArrayList<>();
 
-		headers.add(null);
-		List<Integer> stars = Arrays.asList(R.string.main_albums_starred);
-		sections.add(stars);
-
 		List<Integer> albums = new ArrayList<>();
 		albums.add(R.string.main_albums_newest);
 		albums.add(R.string.main_albums_random);
@@ -113,6 +109,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		if(!Util.isTagBrowsing(context)) {
 			albums.add(R.string.main_albums_highest);
 		}
+		albums.add(R.string.main_albums_starred);
 		albums.add(R.string.main_albums_genres);
 		albums.add(R.string.main_albums_year);
 		albums.add(R.string.main_albums_recent);
