@@ -33,6 +33,10 @@
 		android:id="@+id/menu_remove_playlist"
 		android:title="@string/menu.remove_playlist"/>
 
+	<item
+		android:id="@+id/menu_unstar"
+		android:title="@string/common.unstar"/>
+
 	<group android:id="@+id/hide_play_next">
 		<item
 			android:id="@+id/menu_play_next"

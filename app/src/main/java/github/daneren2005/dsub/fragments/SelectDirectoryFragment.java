@@ -675,6 +675,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(albumListType == null || "starred".equals(albumListType)) {
 			entryGridAdapter = new EntryGridAdapter(context, entries, getImageLoader(), largeAlbums);
 			entryGridAdapter.setRemoveFromPlaylist(playlistId != null);
+			entryGridAdapter.setRemoveStarred(albumListType == null);
 		} else {
 			if("alphabeticalByName".equals(albumListType)) {
 				entryGridAdapter = new AlphabeticalAlbumAdapter(context, entries, getImageLoader(), largeAlbums);
@@ -1019,7 +1020,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				List<Entry> artists = new ArrayList<Entry>();
 				List<Entry> albums = new ArrayList<Entry>();
 				for(Entry entry: unstar) {
-					if(entry.isDirectory()) {
+					if(entry.isDirectory() && Util.isTagBrowsing(context)) {
 						if(entry.isAlbum()) {
 							albums.add(entry);
 						} else {
