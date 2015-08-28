@@ -190,16 +190,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				nowPlayingToolbar.setVisibility(View.GONE);
 				nowPlayingFragment.setPrimaryFragment(false);
 				setSupportActionBar(mainToolbar);
-
-				if(getSupportActionBar().getCustomView() == null) {
-					createCustomActionBarView();
-				}
 				recreateSpinner();
-				if(drawerToggle != null && backStack.size() > 0) {
-					drawerToggle.setDrawerIndicatorEnabled(false);
-				} else {
-					drawerToggle.setDrawerIndicatorEnabled(true);
-				}
 			}
 
 			@Override
@@ -488,9 +479,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			trans.commit();
 		} else {
 			super.replaceFragment(fragment, tag, replaceCurrent);
-			if (drawerToggle != null) {
-				drawerToggle.setDrawerIndicatorEnabled(false);
-			}
 		}
 	}
 	@Override
@@ -507,9 +495,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			supportInvalidateOptionsMenu();
 		} else {
 			super.removeCurrent();
-			if (drawerToggle != null && backStack.isEmpty()) {
-				drawerToggle.setDrawerIndicatorEnabled(true);
-			}
 		}
 	}
 

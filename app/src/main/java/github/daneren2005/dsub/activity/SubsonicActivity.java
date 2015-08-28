@@ -818,11 +818,12 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		if(currentFragment == null || currentFragment.getTitle() == null) {
 			return;
 		}
-		if(spinnerAdapter == null) {
+		if(spinnerAdapter == null || getSupportActionBar().getCustomView() == null) {
 			createCustomActionBarView();
 		}
 
 		if(backStack.size() > 0) {
+			createCustomActionBarView();
 			spinnerAdapter.clear();
 			for(int i = 0; i < backStack.size(); i++) {
 				CharSequence title = backStack.get(i).getTitle();
@@ -842,9 +843,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			if(!isTv()) {
 				getSupportActionBar().setDisplayShowCustomEnabled(true);
 			}
+
+			drawerToggle.setDrawerIndicatorEnabled(false);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		} else if(!isTv()) {
 			getSupportActionBar().setTitle(currentFragment.getTitle());
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
+			drawerToggle.setDrawerIndicatorEnabled(true);
 		}
 	}
 
