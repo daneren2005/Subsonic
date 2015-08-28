@@ -27,6 +27,7 @@
 
 package github.daneren2005.dsub.service.ssl;
 
+import android.os.Build;
 import android.util.Log;
 
 import org.apache.http.conn.ConnectTimeoutException;
@@ -540,8 +541,11 @@ public class SSLSocketFactory implements LayeredSocketFactory {
 
 		List<String> enabledCiphers = new ArrayList(Arrays.asList(ciphers));
 		// On Android 5.0 release, Jetty doesn't seem to play nice with these ciphers
-		enabledCiphers.remove("TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA");
-		enabledCiphers.remove("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA");
+		// Issue seems to have been fixed in M, and now won't work without them.  Because Google
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1) {
+			enabledCiphers.remove("TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA");
+			enabledCiphers.remove("TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA");
+		}
 
 		ciphers = enabledCiphers.toArray(new String[enabledCiphers.size()]);
 		return ciphers;
