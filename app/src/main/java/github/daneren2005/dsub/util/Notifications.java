@@ -53,6 +53,7 @@ public final class Notifications {
 	private static boolean playShowing = false;
 	private static boolean downloadShowing = false;
 	private static boolean downloadForeground = false;
+	private static boolean persistentPlayingShowing = false;
 
 	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
 
@@ -103,8 +104,9 @@ public final class Notifications {
 						downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
 					} else {
 						playShowing = false;
+						persistentPlayingShowing = true;
 						NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-						downloadService.stopForeground(true);
+						downloadService.stopForeground(false);
 						notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
 					}
 				}
@@ -220,6 +222,12 @@ public final class Notifications {
 			@Override
 			public void run() {
 				downloadService.stopForeground(true);
+
+				if(persistentPlayingShowing) {
+					NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+					notificationManager.cancel(NOTIFICATION_ID_PLAYING);
+					persistentPlayingShowing = false;
+				}
 			}
 		});
 
