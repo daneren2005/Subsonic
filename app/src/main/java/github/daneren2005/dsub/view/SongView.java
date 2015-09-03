@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -216,10 +215,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 				this.moreImage = moreImage;
 			}
 		} else if(this.moreImage != R.drawable.download_none_light) {
-			int[] attrs = new int[] {R.attr.download_none};
-			TypedArray typedArray = context.obtainStyledAttributes(attrs);
-			moreButton.setImageResource(typedArray.getResourceId(0, 0));
-			typedArray.recycle();
+			moreButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.download_none));
 			this.moreImage = R.drawable.download_none_light;
 		}
 
@@ -241,9 +237,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		if (playing) {
 			if(!this.playing) {
 				this.playing = playing;
-				int[] attrs = new int[] {R.attr.media_button_start};
-				TypedArray typedArray = context.obtainStyledAttributes(attrs);
-				titleTextView.setCompoundDrawablesWithIntrinsicBounds(typedArray.getResourceId(0, 0), 0, 0, 0);
+				titleTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
 			}
 		} else {
 			if(this.playing) {

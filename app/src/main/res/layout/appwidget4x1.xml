@@ -58,7 +58,6 @@
                 android:fadingEdge="horizontal"
                 android:fadingEdgeLength="10dip"
                 android:minHeight="12sp"
-                android:paddingBottom="4dip"
                 android:paddingLeft="4dip"
                 android:paddingRight="4dip"
                 android:singleLine="true"
@@ -71,16 +70,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="4dip"
-            android:paddingTop="4dip"  >
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/control_previous"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-				android:scaleType="center"
                 style="@style/NotificationButton"
                 android:src="@drawable/media_backward_dark" />
 
@@ -89,7 +85,6 @@
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:scaleType="center"              
                 android:src="@drawable/media_start_dark"
 				style="@style/NotificationButton" />
 
@@ -98,7 +93,6 @@
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:scaleType="center"
                 android:src="@drawable/media_forward_dark"
 				style="@style/NotificationButton" />
         </LinearLayout>

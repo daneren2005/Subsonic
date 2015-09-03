@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.view;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -231,9 +230,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 				}
 			} else {
 				if(shaded) {
-					int[] attrs = new int[] {R.attr.download_none};
-					TypedArray typedArray = context.obtainStyledAttributes(attrs);
-					moreButton.setImageResource(typedArray.getResourceId(0, 0));
+					moreButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.download_none));
 					shaded = false;
 				}
 			}

@@ -85,7 +85,6 @@
                 android:layout_width="0dip"
                 android:layout_height="56dip"
                 android:layout_weight="1"
-                android:scaleType="center"
                 style="@style/NotificationButton"
                 android:src="@drawable/media_backward_dark" />
 
@@ -94,7 +93,6 @@
                 android:layout_width="0dip"
                 android:layout_height="56dip"
                 android:layout_weight="1"
-                android:scaleType="center"              
                 android:src="@drawable/media_start_dark"
 				style="@style/NotificationButton" />
 
@@ -103,7 +101,6 @@
                 android:layout_width="0dip"
                 android:layout_height="56dip"
                 android:layout_weight="1"
-                android:scaleType="center"
                 android:src="@drawable/media_forward_dark"
 				style="@style/NotificationButton" />
         </LinearLayout>
