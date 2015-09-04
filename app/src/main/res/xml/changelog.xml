@@ -1,34 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="5.0 Beta 2" versioncode="154" releasedate="8/21/2015">
-		<change>Toggle offline from Drawer</change>
-		<change>Put some context items back</change>
-		<change>Fast scrollings returns</change>
-		<change>Updated more icons</change>
-		<change>Updated notification on Lolipop</change>
-		<change>Fix podcast multiselect</change>
-		<change>Misc bug fixes</change>
-	</release>
-	<release version="5.0 Beta 1" versioncode="153" releasedate="7/31/2015">
-		<change>Moderate Material Update</change>
-		<change>Rewrote everything to use RecyclerView</change>
+	<release version="5.0" versioncode="155" releasedate="9/4/2015">
+		<change>Moderate Material rewrite</change>
+		<change>Long select to multiselect songs/albums</change>
+		<change>Colored status bar</change>
 		<change>Swiped up playing bar</change>
 		<change>Swiped to remove from current playing list</change>
-		<change>Colored status bar</change>
-		<change>Updated drawer</change>
+		<change>Updated pull out Drawer</change>
+		<change>Toggle offline from Drawer</change>
 		<change>Select server from drawer</change>
 		<change>Playlists with album art</change>
 		<change>Separate sections for mine vs shared playlists</change>
-		<change>Paired down context menus</change>
-		<change>Long select to multiselect songs/albums</change>
-		<change>Updated search to look like the rest of the app</change>
-		<change>Some stuff colored based on theme (more to follow)</change>
+		<change>Updated search display</change>
 		<change>Better looking detail dialogs</change>
-		<change>Performance enhancements from changing to event driven instead of polling</change>
 		<change>Sleep time remaining</change>
-		<change>Add Permanent Cached song count to About dialog</change>
 		<change>Option to keep 0, 1, 2, or 3 past songs in list</change>
+		<change>Add Permanent Cached song count to About dialog</change>
 		<change>Updated icon</change>
+		<change>Updated notification on Lolipop</change>
+		<change>Performance enhancements</change>
 		<change>Removed support for Android 2.3</change>
 	</release>
 	<release version="4.9.7" versioncode="152" releasedate="5/8/2015">
