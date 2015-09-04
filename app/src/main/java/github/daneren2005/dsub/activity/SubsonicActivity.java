@@ -383,7 +383,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				}
 			};
 			drawer.setDrawerListener(drawerToggle);
-			drawerToggle.setDrawerIndicatorEnabled(false);
+			drawerToggle.setDrawerIndicatorEnabled(true);
 
 			drawer.setOnTouchListener(new View.OnTouchListener() {
 				public boolean onTouch(View v, MotionEvent event) {
@@ -844,8 +844,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				getSupportActionBar().setDisplayShowCustomEnabled(true);
 			}
 
-			drawerToggle.setDrawerIndicatorEnabled(false);
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			if(drawerToggle.isDrawerIndicatorEnabled()) {
+				getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+				drawerToggle.setDrawerIndicatorEnabled(false);
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			}
 		} else if(!isTv()) {
 			getSupportActionBar().setTitle(currentFragment.getTitle());
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
