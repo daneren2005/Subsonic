@@ -579,8 +579,14 @@ public class RESTMusicService implements MusicService {
 			names.add("toYear");
 
 			int decade = Integer.parseInt(extra);
-			values.add(decade);
-			values.add(decade + 10);
+			// Reverse chronological order only supported in 5.3+
+			if(ServerInfo.checkServerVersion(context, "1.13", getInstance(context))) {
+				values.add(decade + 10);
+				values.add(decade);
+			} else {
+				values.add(decade);
+				values.add(decade + 10);
+			}
 		}
 
 		// Add folder if it was set and is non null
