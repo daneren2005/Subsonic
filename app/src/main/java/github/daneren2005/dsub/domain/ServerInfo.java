@@ -210,4 +210,7 @@ public class ServerInfo implements Serializable {
 	public static boolean canAlbumListPerFolder(Context context) {
 		return ServerInfo.checkServerVersion(context, "1.11") && !ServerInfo.isMadsonic(context) && !Util.isTagBrowsing(context);
 	}
+	public static boolean hasTopSongs(Context context) {
+		return ServerInfo.isMadsonic(context) || ServerInfo.checkServerVersion(context, "1.13");
+	}
 }

@@ -1192,7 +1192,8 @@ public class RESTMusicService implements MusicService {
 		parameterNames.add("size");
 		parameterValues.add(size);
 
-		Reader reader = getReader(context, progressListener, "getTopTrackSongs", null, parameterNames, parameterValues);
+		String method = ServerInfo.isMadsonic(context, getInstance(context)) ? "getTopTrackSongs" : "getTopSongs";
+		Reader reader = getReader(context, progressListener, method, null, parameterNames, parameterValues);
 		try {
 			return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
