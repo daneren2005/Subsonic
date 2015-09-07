@@ -228,7 +228,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		} else if(artist && !showAll) {
 			menuInflater.inflate(R.menu.select_album, menu);
 
-			if(!ServerInfo.isMadsonic(context)) {
+			if(!ServerInfo.hasTopSongs(context)) {
 				menu.removeItem(R.id.menu_top_tracks);
 			}
 			if(!ServerInfo.checkServerVersion(context, "1.11") || (id != null && "root".equals(id))) {
@@ -555,7 +555,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		new LoadTask(refresh) {
 			@Override
 			protected MusicDirectory load(MusicService service) throws Exception {
-				return service.getTopTrackSongs(name, 20, context, this);
+				return service.getTopTrackSongs(name, 50, context, this);
 			}
 		}.execute();
 	}

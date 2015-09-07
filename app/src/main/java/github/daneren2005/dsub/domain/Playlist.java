@@ -19,9 +19,13 @@
 package github.daneren2005.dsub.domain;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Sindre Mehus
@@ -33,8 +37,10 @@ public class Playlist implements Serializable {
 	private String owner;
 	private String comment;
 	private String songCount;
-	private String created;
 	private Boolean pub;
+	private Date created;
+	private Date changed;
+	private Integer duration;
 
 	public Playlist() {
 
@@ -43,14 +49,16 @@ public class Playlist implements Serializable {
         this.id = id;
         this.name = name;
     }
-	public Playlist(String id, String name, String owner, String comment, String songCount, String created, String pub) {
+	public Playlist(String id, String name, String owner, String comment, String songCount, String pub, String created, String changed, Integer duration) {
         this.id = id;
         this.name = name;
 		this.owner = (owner == null) ? "" : owner;
 		this.comment = (comment == null) ? "" : comment;
 		this.songCount = (songCount == null) ? "" : songCount;
-		this.created = (created == null) ? "" : created;
 		this.pub = (pub == null) ? null : (pub.equals("true"));
+		setCreated(created);
+		setChanged(changed);
+		this.duration = duration;
     }
 
     public String getId() {
@@ -93,19 +101,55 @@ public class Playlist implements Serializable {
 		this.songCount = songCount;
 	}
 	
-	public String getCreated() {
-		return this.created;
-	}
-	
-	public void setCreated(String created) {
-		this.created = created;
-	}
-	
 	public Boolean getPublic() {
 		return this.pub;
 	}
 	public void setPublic(Boolean pub) {
 		this.pub = pub;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(String created) {
+		if (created != null) {
+			try {
+				this.created = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(created);
+			} catch (ParseException e) {
+				this.created = null;
+			}
+		} else {
+			this.created = null;
+		}
+	}
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public Date getChanged() {
+		return changed;
+	}
+	public void setChanged(String changed) {
+		if (changed != null) {
+			try {
+				this.changed = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(changed);
+			} catch (ParseException e) {
+				this.changed = null;
+			}
+		} else {
+			this.changed = null;
+		}
+	}
+	public void setChanged(Date changed) {
+		this.changed = changed;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 
 	@Override

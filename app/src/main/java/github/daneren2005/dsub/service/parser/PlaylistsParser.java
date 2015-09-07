@@ -52,9 +52,11 @@ public class PlaylistsParser extends AbstractParser {
 					String owner = get("owner");
 					String comment = get("comment");
 					String songCount = get("songCount");
-					String created = get("created");
 					String pub = get("public");
-                    result.add(new Playlist(id, name, owner, comment, songCount, created, pub));
+					String created = get("created");
+					String changed = get("changed");
+					Integer duration = getInteger("duration");
+                    result.add(new Playlist(id, name, owner, comment, songCount, pub, created, changed, duration));
                 } else if ("error".equals(tag)) {
                     handleError();
                 }

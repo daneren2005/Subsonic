@@ -210,6 +210,11 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 		headers.add(R.string.details_song_count);
 		details.add(playlist.getSongCount());
 
+		if(playlist.getDuration() != null) {
+			headers.add(R.string.details_length);
+			details.add(Util.formatDuration(playlist.getDuration()));
+		}
+
 		if(playlist.getPublic() != null) {
 			headers.add(R.string.details_public);
 			details.add(Boolean.toString(playlist.getPublic()));
@@ -217,7 +222,11 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 		if(playlist.getCreated() != null) {
 			headers.add(R.string.details_created);
-			details.add(Util.formatDate(context, playlist.getCreated()));
+			details.add(Util.formatDate(playlist.getCreated()));
+		}
+		if(playlist.getChanged() != null) {
+			headers.add(R.string.details_updated);
+			details.add(Util.formatDate(playlist.getChanged()));
 		}
 
 		Util.showDetailsDialog(context, R.string.details_title_playlist, headers, details);

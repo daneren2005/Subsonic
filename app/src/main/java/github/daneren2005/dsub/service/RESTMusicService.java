@@ -579,8 +579,14 @@ public class RESTMusicService implements MusicService {
 			names.add("toYear");
 
 			int decade = Integer.parseInt(extra);
-			values.add(decade);
-			values.add(decade + 10);
+			// Reverse chronological order only supported in 5.3+
+			if(ServerInfo.checkServerVersion(context, "1.13", getInstance(context))) {
+				values.add(decade + 10);
+				values.add(decade);
+			} else {
+				values.add(decade);
+				values.add(decade + 10);
+			}
 		}
 
 		// Add folder if it was set and is non null
@@ -1186,7 +1192,8 @@ public class RESTMusicService implements MusicService {
 		parameterNames.add("size");
 		parameterValues.add(size);
 
-		Reader reader = getReader(context, progressListener, "getTopTrackSongs", null, parameterNames, parameterValues);
+		String method = ServerInfo.isMadsonic(context, getInstance(context)) ? "getTopTrackSongs" : "getTopSongs";
+		Reader reader = getReader(context, progressListener, method, null, parameterNames, parameterValues);
 		try {
 			return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
@@ -1867,6 +1874,7 @@ public class RESTMusicService implements MusicService {
 			if(url.indexOf("getCoverArt") == -1 && url.indexOf("stream") == -1 && url.indexOf("getAvatar") == -1) {
 				request.addHeader("Accept-Encoding", "gzip");
 			}
+			request.addHeader("User-Agent", Constants.REST_CLIENT_ID);
 
             // Set credentials to get through apache proxies that require authentication.
             int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
