@@ -218,7 +218,7 @@ public class ServerInfo implements Serializable {
 		return canUseToken(context, Util.getActiveServer(context));
 	}
 	public static boolean canUseToken(Context context, int instance) {
-		return isStockSubsonic(context, instance) && checkServerVersion(context, "1.13", instance) ||
-				isMadsonic(context, instance) && checkServerVersion(context, "2.0", instance);
+		return isStockSubsonic(context, instance) && checkServerVersion(context, "1.13", instance)/* ||
+				isMadsonic(context, instance) && checkServerVersion(context, "2.0", instance)*/;
 	}
 }

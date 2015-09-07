@@ -126,14 +126,14 @@ public abstract class AbstractParser {
 
     protected String getElementName() {
         String name = parser.getName();
-        if ("subsonic-response".equals(name)) {
+        if ("subsonic-response".equals(name) || "madsonic-response".equals(name)) {
             rootElementFound = true;
             String version = get("version");
             if (version != null) {
             	ServerInfo server = new ServerInfo();
             	server.setRestVersion(new Version(version));
             	
-            	if("madsonic".equals(get("type"))) {
+            	if("madsonic".equals(get("type")) || "madsonic-response".equals(name)) {
 					server.setRestType(ServerInfo.TYPE_MADSONIC);
             	}
             	server.saveServerInfo(context, instance);

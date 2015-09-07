@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -47,7 +46,6 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,10 +82,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -422,7 +418,12 @@ public final class Util {
 
 			builder.append("&p=").append(password);
 		}
-		builder.append("&v=").append(Constants.REST_PROTOCOL_VERSION);
+
+		if(method != null && ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+			builder.append("&v=").append(Constants.REST_PROTOCOL_VERSION_MADSONIC);
+		} else {
+			builder.append("&v=").append(Constants.REST_PROTOCOL_VERSION_SUBSONIC);
+		}
 		builder.append("&c=").append(Constants.REST_CLIENT_ID);
 
 		return builder.toString();
