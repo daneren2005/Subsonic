@@ -45,6 +45,7 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -72,7 +73,10 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -80,8 +84,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 
 /**
@@ -117,6 +124,9 @@ public final class Util {
     private static final char[] HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     private static Toast toast;
+	// private static Map<Integer, Pair<String, String>> tokens = new HashMap<>();
+	private static SparseArray<Pair<String, String>> tokens = new SparseArray<>();
+	private static Random random;
 
     private Util() {
     }
@@ -389,16 +399,29 @@ public final class Util {
 		String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
 		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
 
-		// Slightly obfuscate password
-		password = "enc:" + Util.utf8HexEncode(password);
-
 		builder.append(serverUrl);
 		if (builder.charAt(builder.length() - 1) != '/') {
 			builder.append("/");
 		}
 		builder.append("rest/").append(method).append(".view");
 		builder.append("?u=").append(username);
-		builder.append("&p=").append(password);
+		if(method != null && ServerInfo.canUseToken(context, instance)) {
+			Pair<String, String> values = tokens.get(instance);
+			if(values == null) {
+				String salt = new BigInteger(130, getRandom()).toString(32);
+				String token = md5(password + salt);
+				values = new Pair<>(salt, token);
+				tokens.put(instance, values);
+			}
+
+			builder.append("&s=").append(values.getFirst());
+			builder.append("&t=").append(values.getSecond());
+		} else {
+			// Slightly obfuscate password
+			password = "enc:" + Util.utf8HexEncode(password);
+
+			builder.append("&p=").append(password);
+		}
 		builder.append("&v=").append(Constants.REST_PROTOCOL_VERSION);
 		builder.append("&c=").append(Constants.REST_CLIENT_ID);
 
@@ -912,6 +935,30 @@ public final class Util {
         return new String(out);
     }
 
+	public static final String md5(final String s) {
+		final String MD5 = "MD5";
+		try {
+			// Create MD5 Hash
+			MessageDigest digest = java.security.MessageDigest.getInstance(MD5);
+			digest.update(s.getBytes());
+			byte messageDigest[] = digest.digest();
+
+			// Create Hex String
+			StringBuilder hexString = new StringBuilder();
+			for (byte aMessageDigest : messageDigest) {
+				String h = Integer.toHexString(0xFF & aMessageDigest);
+				while (h.length() < 2)
+					h = "0" + h;
+				hexString.append(h);
+			}
+
+			return hexString.toString();
+		} catch (NoSuchAlgorithmException e) {
+			Log.e(TAG, "Can't execute md5", e);
+			return "";
+		}
+	}
+
     /**
      * Calculates the MD5 digest and returns the value as a 32 character hex string.
      *
@@ -1395,5 +1442,13 @@ public final class Util {
 			lockType = 3;
 		}
 		return wm.createWifiLock(lockType, tag);
+	}
+
+	public static Random getRandom() {
+		if(random == null) {
+			random = new SecureRandom();
+		}
+
+		return random;
 	}
 }
