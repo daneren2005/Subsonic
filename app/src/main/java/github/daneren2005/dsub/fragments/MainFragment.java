@@ -117,7 +117,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		sections.add(albums);
 		headers.add("albums");
 
-		if(ServerInfo.checkServerVersion(context, "1.8") && !Util.isTagBrowsing(context)) {
+		if(ServerInfo.checkServerVersion(context, "1.8")) {
 			List<Integer> videos = Arrays.asList(R.string.main_videos);
 			sections.add(videos);
 			headers.add("videos");
