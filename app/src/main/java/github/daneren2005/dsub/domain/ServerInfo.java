@@ -192,8 +192,7 @@ public class ServerInfo implements Serializable {
 		if(isStockSubsonic(context) && ServerInfo.checkServerVersion(context, "1.11")) {
 			return true;
 		} else if(isMadsonic(context)) {
-			// TODO: When madsonic adds support, figure out what REST version it is added on
-			return false;
+			return checkServerVersion(context, "2.0");
 		} else {
 			return false;
 		}
@@ -204,11 +203,11 @@ public class ServerInfo implements Serializable {
 	}
 
 	public static boolean canSavePlayQueue(Context context) {
-		return ServerInfo.checkServerVersion(context, "1.12") && !ServerInfo.isMadsonic(context);
+		return ServerInfo.checkServerVersion(context, "1.12") && (!ServerInfo.isMadsonic(context) || checkServerVersion(context, "2.0"));
 	}
 
 	public static boolean canAlbumListPerFolder(Context context) {
-		return ServerInfo.checkServerVersion(context, "1.11") && !ServerInfo.isMadsonic(context) && !Util.isTagBrowsing(context);
+		return ServerInfo.checkServerVersion(context, "1.11") && (!ServerInfo.isMadsonic(context) || checkServerVersion(context, "2.0")) && !Util.isTagBrowsing(context);
 	}
 	public static boolean hasTopSongs(Context context) {
 		return ServerInfo.isMadsonic(context) || ServerInfo.checkServerVersion(context, "1.13");
