@@ -346,9 +346,24 @@ public class RESTMusicService implements MusicService {
         checkServerVersion(context, "1.4", null);
 
         List<String> parameterNames = Arrays.asList("query", "artistCount", "albumCount", "songCount");
-        List<Object> parameterValues = Arrays.<Object>asList(critera.getQuery(), critera.getArtistCount(),
-                                                             critera.getAlbumCount(), critera.getSongCount());
-        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "search3" : "search2", null, parameterNames, parameterValues);
+        List<Object> parameterValues = Arrays.<Object>asList(critera.getQuery(), critera.getArtistCount(), critera.getAlbumCount(), critera.getSongCount());
+
+		int instance = getInstance(context);
+		String method;
+		if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+			if(Util.isTagBrowsing(context, instance)) {
+				method = "searchID3";
+			} else {
+				method = "search";
+			}
+		} else {
+			if(Util.isTagBrowsing(context, instance)) {
+				method = "search3";
+			} else {
+				method = "search2";
+			}
+		}
+        Reader reader = getReader(context, progressListener, method, null, parameterNames, parameterValues);
         try {
             return new SearchResult2Parser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
@@ -543,8 +558,18 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getAlbumList2" : "getAlbumList",
-                                  null, names, values, true);
+		String method;
+		if(Util.isTagBrowsing(context, instance)) {
+			if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+				method = "getAlbumListID3";
+			} else {
+				method = "getAlbumList2";
+			}
+		} else {
+			method = "getAlbumList";
+		}
+
+        Reader reader = getReader(context, progressListener, method, null, names, values, true);
         try {
             return new AlbumListParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
@@ -565,6 +590,7 @@ public class RESTMusicService implements MusicService {
 		values.add(size);
 		values.add(offset);
 
+		int instance = getInstance(context);
 		if("genres".equals(type)) {
 			names.add("type");
 			values.add("byGenre");
@@ -580,7 +606,7 @@ public class RESTMusicService implements MusicService {
 
 			int decade = Integer.parseInt(extra);
 			// Reverse chronological order only supported in 5.3+
-			if(ServerInfo.checkServerVersion(context, "1.13", getInstance(context))) {
+			if(ServerInfo.checkServerVersion(context, "1.13", instance) && ServerInfo.isStockSubsonic(context, instance)) {
 				values.add(decade + 10);
 				values.add(decade);
 			} else {
@@ -590,7 +616,6 @@ public class RESTMusicService implements MusicService {
 		}
 
 		// Add folder if it was set and is non null
-		int instance = getInstance(context);
 		if(Util.getAlbumListsPerFolder(context, instance)) {
 			String folderId = Util.getSelectedMusicFolderId(context, instance);
 			if(folderId != null) {
@@ -599,7 +624,18 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getAlbumList2" : "getAlbumList", null, names, values, true);
+		String method;
+		if(Util.isTagBrowsing(context, instance)) {
+			if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+				method = "getAlbumListID3";
+			} else {
+				method = "getAlbumList2";
+			}
+		} else {
+			method = "getAlbumList";
+		}
+
+		Reader reader = getReader(context, progressListener, method, null, names, values, true);
 		try {
 			return new AlbumListParser(context, instance).parse(reader, progressListener);
 		} finally {
@@ -655,7 +691,18 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-        Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, instance) ? "getStarred2" : "getStarred", null, names, values, true);
+		String method;
+		if(Util.isTagBrowsing(context, instance)) {
+			if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+				method = "getStarredID3";
+			} else {
+				method = "getStarred2";
+			}
+		} else {
+			method = "getStarred";
+		}
+
+        Reader reader = getReader(context, progressListener, method, null, names, values, true);
         try {
             return new StarredListParser(context, instance).parse(reader, progressListener);
         } finally {
@@ -1517,7 +1564,19 @@ public class RESTMusicService implements MusicService {
 	public ArtistInfo getArtistInfo(String id, boolean refresh, boolean allowNetwork, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.11", "Getting artist info is not supported");
 
-		Reader reader = getReader(context, progressListener, Util.isTagBrowsing(context, getInstance(context)) ? "getArtistInfo2" : "getArtistInfo", null, Arrays.asList("id", "includeNotPresent"), Arrays.<Object>asList(id, "true"));
+		int instance = getInstance(context);
+		String method;
+		if(Util.isTagBrowsing(context, instance)) {
+			if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+				method = "getArtistInfoID3";
+			} else {
+				method = "getArtistInfo2";
+			}
+		} else {
+			method = "getArtistInfo";
+		}
+
+		Reader reader = getReader(context, progressListener, method, null, Arrays.asList("id", "includeNotPresent"), Arrays.<Object>asList(id, "true"));
 		try {
 			return new ArtistInfoParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {

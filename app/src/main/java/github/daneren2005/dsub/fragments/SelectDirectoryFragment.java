@@ -234,7 +234,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			if(!ServerInfo.checkServerVersion(context, "1.11") || (id != null && "root".equals(id))) {
 				menu.removeItem(R.id.menu_radio);
 				menu.removeItem(R.id.menu_similar_artists);
-			} else if(ServerInfo.isMadsonic(context)) {
+			} else if(!ServerInfo.hasSimilarArtists(context)) {
 				menu.removeItem(R.id.menu_similar_artists);
 			}
 		} else {
