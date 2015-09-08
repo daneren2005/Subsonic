@@ -405,7 +405,7 @@ public final class Util {
 			Pair<String, String> values = tokens.get(instance);
 			if(values == null) {
 				String salt = new BigInteger(130, getRandom()).toString(32);
-				String token = md5(password + salt);
+				String token = md5Hex(password + salt);
 				values = new Pair<>(salt, token);
 				tokens.put(instance, values);
 			}
@@ -935,30 +935,6 @@ public final class Util {
         }
         return new String(out);
     }
-
-	public static final String md5(final String s) {
-		final String MD5 = "MD5";
-		try {
-			// Create MD5 Hash
-			MessageDigest digest = java.security.MessageDigest.getInstance(MD5);
-			digest.update(s.getBytes());
-			byte messageDigest[] = digest.digest();
-
-			// Create Hex String
-			StringBuilder hexString = new StringBuilder();
-			for (byte aMessageDigest : messageDigest) {
-				String h = Integer.toHexString(0xFF & aMessageDigest);
-				while (h.length() < 2)
-					h = "0" + h;
-				hexString.append(h);
-			}
-
-			return hexString.toString();
-		} catch (NoSuchAlgorithmException e) {
-			Log.e(TAG, "Can't execute md5", e);
-			return "";
-		}
-	}
 
     /**
      * Calculates the MD5 digest and returns the value as a 32 character hex string.
