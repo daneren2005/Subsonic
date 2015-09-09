@@ -113,6 +113,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		super.onCreate(bundle);
 		if(bundle != null) {
 			entries = (List<Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST);
+			albums = (List<Entry>) bundle.getSerializable(Constants.FRAGMENT_LIST2);
+			if(albums == null) {
+				albums = new ArrayList<>();
+			}
 			artistInfo = (ArtistInfo) bundle.getSerializable(Constants.FRAGMENT_EXTRA);
 			restoredInstance = true;
 		}
@@ -803,7 +807,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 	}
 	private void playAll(final boolean shuffle, final boolean append) {
-		boolean hasSubFolders = !albums.isEmpty();
+		boolean hasSubFolders = albums != null && !albums.isEmpty();
 
 		if (hasSubFolders && (id != null || share != null || "starred".equals(albumListType))) {
 			downloadRecursively(id, false, append, !append, shuffle, false);
