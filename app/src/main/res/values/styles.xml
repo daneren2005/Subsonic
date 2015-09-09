@@ -56,6 +56,8 @@
 	<style name="PlaybackControl.Large" parent="@style/PlaybackControl">
 		<item name="android:layout_width">@dimen/Button.Large</item>
 		<item name="android:layout_height">@dimen/Button.Large</item>
+		<item name="android:paddingLeft">3dp</item>
+		<item name="android:paddingRight">3dp</item>
 	</style>
 
 	<style name="PlaybackControl.Match" parent="@style/PlaybackControl">
