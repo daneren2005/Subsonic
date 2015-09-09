@@ -156,7 +156,21 @@ public class DSubSearchProvider extends ContentProvider {
 					} else {
 						id = entry.getParent();
 					}
-					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), entry.getArtist(), "so-" + id, entry.getTitle(), icon});
+
+					String artistDisplay;
+					if(entry.getArtist() == null) {
+						if(entry.getAlbum() != null) {
+							artistDisplay = entry.getAlbumDisplay();
+						} else {
+							artistDisplay = "";
+						}
+					} else if(entry.getAlbum() != null) {
+						artistDisplay = entry.getArtist() + " - " + entry.getAlbumDisplay();
+					} else {
+						artistDisplay = entry.getArtist();
+					}
+
+					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), artistDisplay, "so-" + id, entry.getTitle(), icon});
 				}
 			}
 		}
