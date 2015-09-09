@@ -25,14 +25,14 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="16dp"
-				style="?attr/actionbarTitleStyle"/>
+				style="?attr/drawerTitleStyle"/>
 
 			<TextView
 				android:id="@+id/header_user_name"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="16dp"
-				style="?attr/actionbarSubtitleStyle"/>
+				style="?attr/drawerSubtitleStyle"/>
 		</LinearLayout>
 
 		<View

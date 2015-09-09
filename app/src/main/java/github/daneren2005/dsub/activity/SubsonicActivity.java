@@ -85,6 +85,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private static ImageLoader IMAGE_LOADER;
 	protected static String theme;
 	protected static boolean fullScreen;
+	protected static boolean actionbarColored;
 	private static final int MENU_GROUP_SERVER = 10;
 	private static final int MENU_ITEM_SERVER_BASE = 100;
 
@@ -204,7 +205,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		Util.registerMediaButtonEventReceiver(this);
 
 		// Make sure to update theme
-		if (theme != null && !theme.equals(Util.getTheme(this)) || fullScreen != Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false)) {
+		SharedPreferences prefs = Util.getPreferences(this);
+		if (theme != null && !theme.equals(Util.getTheme(this)) || fullScreen != prefs.getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false) || actionbarColored != prefs.getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
 			restart();
 			overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 			DrawableTint.wipeTintCache();
@@ -873,6 +875,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 		Util.applyTheme(this, theme);
+		actionbarColored = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true);
 	}
 	private void applyFullscreen() {
 		fullScreen = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false);

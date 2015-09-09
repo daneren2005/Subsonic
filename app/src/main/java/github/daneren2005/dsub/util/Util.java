@@ -19,6 +19,7 @@ package github.daneren2005.dsub.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.content.ComponentName;
@@ -46,6 +47,8 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -271,14 +274,26 @@ public final class Util {
 	}
 	public static int getThemeRes(Context context, String theme) {
 		if(context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
-			if ("dark".equals(theme)) {
-				return R.style.Theme_DSub_Dark_No_Actionbar;
-			} else if ("black".equals(theme)) {
-				return R.style.Theme_DSub_Black_No_Actionbar;
-			} else if ("holo".equals(theme)) {
-				return R.style.Theme_DSub_Holo_No_Actionbar;
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
+				if ("dark".equals(theme)) {
+					return R.style.Theme_DSub_Dark_No_Actionbar;
+				} else if ("black".equals(theme)) {
+					return R.style.Theme_DSub_Black_No_Actionbar;
+				} else if ("holo".equals(theme)) {
+					return R.style.Theme_DSub_Holo_No_Actionbar;
+				} else {
+					return R.style.Theme_DSub_Light_No_Actionbar;
+				}
 			} else {
-				return R.style.Theme_DSub_Light_No_Actionbar;
+				if ("dark".equals(theme)) {
+					return R.style.Theme_DSub_Dark_No_Color;
+				} else if ("black".equals(theme)) {
+					return R.style.Theme_DSub_Black_No_Color;
+				} else if ("holo".equals(theme)) {
+					return R.style.Theme_DSub_Holo_No_Color;
+				} else {
+					return R.style.Theme_DSub_Light_No_Color;
+				}
 			}
 		} else {
 			if ("dark".equals(theme)) {

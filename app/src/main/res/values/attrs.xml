@@ -47,9 +47,13 @@
 	<attr name="drawerAdmin" format="reference"/>
 	<attr name="drawerDownloading" format="reference"/>
 	<attr name="drawerSettings" format="reference"/>
+	<attr name="actionbarThemeStyle" format="reference"/>
 	<attr name="actionbarTitleStyle" format="reference"/>
 	<attr name="actionbarSubtitleStyle" format="reference"/>
 	<attr name="actionbarPopupStyle" format="reference"/>
+	<attr name="actionbarBackgroundColor" format="reference"/>
+	<attr name="drawerTitleStyle" format="reference"/>
+	<attr name="drawerSubtitleStyle" format="reference"/>
 
 	<declare-styleable name="SeekBarPreference">
 		<attr name="min" format="integer"/>

@@ -39,6 +39,12 @@
 				android:defaultValue="false"/>
 
 			<CheckBoxPreference
+				android:title="@string/settings.color_action_bar"
+				android:summary="@string/settings.color_action_bar.summary"
+				android:key="colorActionBar"
+				android:defaultValue="true"/>
+
+			<CheckBoxPreference
 				android:title="@string/settings.track_title"
 				android:summary="@string/settings.track_summary"
 				android:key="displayTrack"
