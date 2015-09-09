@@ -124,6 +124,9 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 
 	public void removeAt(int index) {
 		sections.get(0).remove(index);
+		if(header != null) {
+			index++;
+		}
 		notifyItemRemoved(index);
 	}
 
