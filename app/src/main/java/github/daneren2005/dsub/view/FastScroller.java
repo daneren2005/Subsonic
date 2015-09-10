@@ -88,8 +88,10 @@ public class FastScroller extends LinearLayout {
 		switch(action)
 		{
 			case MotionEvent.ACTION_DOWN:
-				if(event.getX()<handle.getX())
+				if(event.getX() < (handle.getX() - 20)) {
 					return false;
+				}
+
 				if(currentAnimator != null)
 					currentAnimator.cancel();
 				if(bubble.getVisibility() == INVISIBLE) {
