@@ -8,6 +8,11 @@
 		android:id="@+id/artist_menu_play_shuffled"
 		android:title="@string/common.play_shuffled"/>
 
+	<item
+		android:id="@+id/artist_menu_download"
+		android:title="@string/common.download"
+		/>
+
 	<group android:id="@+id/hide_play_last">
 		<item
 			android:id="@+id/artist_menu_play_last"

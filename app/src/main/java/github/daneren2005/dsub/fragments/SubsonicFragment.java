@@ -297,6 +297,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 	}
 
+	// For reverting specific removals: https://github.com/daneren2005/Subsonic/commit/fbd1a68042dfc3601eaa0a9e37b3957bbdd51420
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
 		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
 		Entry entry = selectedItem instanceof Entry ? (Entry) selectedItem : null;
@@ -313,8 +314,23 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.artist_menu_play_last:
 				downloadRecursively(artist.getId(), false, true, false, false, false);
 				break;
+			case R.id.artist_menu_download:
+				downloadRecursively(artist.getId(), false, true, false, false, true);
+				break;
 			case R.id.artist_menu_star:
 				toggleStarred(artist);
+				break;
+			case R.id.album_menu_play_now:
+				artistOverride = true;
+				downloadRecursively(entry.getId(), false, false, true, false, false);
+				break;
+			case R.id.album_menu_play_last:
+				artistOverride = true;
+				downloadRecursively(entry.getId(), false, true, false, false, false);
+				break;
+			case R.id.album_menu_download:
+				artistOverride = true;
+				downloadRecursively(entry.getId(), false, true, false, false, true);
 				break;
 			case R.id.album_menu_star:
 				toggleStarred(entry);
@@ -327,6 +343,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.album_menu_share:
 				createShare(songs);
+				break;
+			case R.id.song_menu_play_next:
+				getDownloadService().download(songs, false, false, true, false);
 				break;
 			case R.id.song_menu_play_last:
 				getDownloadService().download(songs, false, false, false, false);

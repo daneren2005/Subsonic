@@ -15,6 +15,11 @@
 				android:title="@string/common.play_last"/>
 		</group>
 
+		<item
+			android:id="@+id/artist_menu_download"
+			android:title="@string/common.download"
+			/>
+
 		<group android:id="@+id/hide_star">
 			<item
 				android:id="@+id/artist_menu_star"
