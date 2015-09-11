@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.0.1" versioncode="156" releasedate="9/11/2015">
+		<change>Make colored bars optional</change>
+		<change>Minor tweaks based on feedback</change>
+		<change>Add back some context menu options</change>
+		<change>Reverse By Decade order (5.3+)</change>
+		<change>Top Tracks option (5.3+)</change>
+		<change>Use tokens for more secure unencrypted traffic</change>
+		<change>Madsonic 6.0 support (first check will fail until new Server beta)</change>
+		<change>Add videos list for Browse By Tags</change>
+		<change>Add title to details dialog</change>
+		<change>Add changed date to Playlist details (5.3+)</change>
+		<change>Fix crash on removing first song in playlist</change>
+		<change>Nerd Stuff: Custom User Agent</change>
+	</release>
 	<release version="5.0" versioncode="155" releasedate="9/4/2015">
 		<change>Moderate Material rewrite</change>
 		<change>Long select to multiselect songs/albums</change>
