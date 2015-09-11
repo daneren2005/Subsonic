@@ -19,12 +19,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +32,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -398,9 +396,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		final UpdateView<T> updateView = holder.getUpdateView();
 		if (context instanceof SubsonicFragmentActivity && currentActionMode == null) {
 			final SubsonicFragmentActivity fragmentActivity = (SubsonicFragmentActivity) context;
-			Toolbar toolbar = fragmentActivity.getActiveToolbar();
-
-			toolbar.startActionMode(new ActionMode.Callback() {
+			fragmentActivity.startSupportActionMode(new ActionMode.Callback() {
 				@Override
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 					currentActionMode = mode;
@@ -413,7 +409,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					setChecked(updateView, true);
 
 					mode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
-					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
 						TypedValue typedValue = new TypedValue();
 						Resources.Theme theme = context.getTheme();
 						theme.resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
@@ -446,12 +442,12 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 				public void onDestroyActionMode(ActionMode mode) {
 					currentActionMode = null;
 					selected.clear();
-					for(UpdateView<T> updateView: selectedViews) {
+					for (UpdateView<T> updateView : selectedViews) {
 						updateView.setChecked(false);
 					}
 					selectedViews.clear();
 
-					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
 						Window window = ((SubsonicFragmentActivity) context).getWindow();
 						window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 					}

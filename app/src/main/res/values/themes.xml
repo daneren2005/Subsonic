@@ -177,15 +177,21 @@
 		<item name="add_person">@drawable/ic_menu_add_person_light</item>
 		<item name="password">@drawable/ic_menu_password_light</item>
 		<item name="radio">@drawable/ic_menu_radio_light</item>
+		<item name="actionModeBackground">@color/background_material_light</item>
+		<item name="actionModeStyle">@style/LightActionMode</item>
+		<item name="actionModeCloseButtonStyle">@style/DarkCloseButton</item>
 	</style>
 	<style name="Theme.DSub.Black.No_Color.Base" parent="Theme.DSub.Black.No_Actionbar">
 		<item name="actionbarBackgroundColor">@android:color/transparent</item>
+		<item name="actionModeBackground">@android:color/black</item>
 	</style>
 	<style name="Theme.DSub.Dark.No_Color.Base" parent="Theme.DSub.Dark.No_Actionbar">
 		<item name="actionbarBackgroundColor">@android:color/transparent</item>
+		<item name="actionModeBackground">@color/background_material_dark</item>
 	</style>
 	<style name="Theme.DSub.Holo.No_Color.Base" parent="Theme.DSub.Holo.No_Actionbar">
 		<item name="actionbarBackgroundColor">@android:color/transparent</item>
+		<item name="actionModeBackground">@drawable/background</item>
 	</style>
 
 	<style name="Theme.DSub.Light.No_Color" parent="Theme.DSub.Light.No_Color.Base">
@@ -206,5 +212,12 @@
 	</style>
 	<style name="DarkSpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
 		<item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+	</style>
+	<style name="LightActionMode" parent="@style/Widget.AppCompat.ActionMode">
+		<item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
+		<item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+	</style>
+	<style name="DarkCloseButton" parent="@style/Widget.AppCompat.ActionButton.CloseMode">
+		<item name="colorControlNormal">@android:color/black</item>
 	</style>
 </resources>

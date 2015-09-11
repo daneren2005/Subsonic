@@ -191,6 +191,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	protected void createCustomActionBarView() {
 		View customActionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
 		actionBarSpinner = (Spinner)customActionbar.findViewById(R.id.spinner);
+		if(Util.getThemeRes(this) == R.style.Theme_DSub_Light_No_Actionbar) {
+			actionBarSpinner.setBackgroundResource(R.drawable.abc_spinner_mtrl_am_alpha);
+		}
 		spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
 		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		actionBarSpinner.setOnItemSelectedListener(this);

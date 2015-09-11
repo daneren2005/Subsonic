@@ -1222,6 +1222,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		List<Integer> headers = new ArrayList<>();
 		List<String> details = new ArrayList<>();
+
+		if(!song.isDirectory()) {
+			headers.add(R.string.details_title);
+			details.add(song.getTitle());
+		}
+
 		if(song instanceof PodcastEpisode) {
 			headers.add(R.string.details_podcast);
 			details.add(song.getArtist());
