@@ -316,8 +316,15 @@ public class DownloadServiceLifecycleSupport {
 				@Override
 				protected Void doInBackground() throws Throwable {
 					try {
+						int index = state.currentPlayingIndex;
+						int position = state.currentPlayingPosition;
+						if(index == -1) {
+							index = 0;
+							position = 0;
+						}
+
 						MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-						musicService.savePlayQueue(state.songs, state.songs.get(state.currentPlayingIndex), state.currentPlayingPosition, downloadService, null);
+						musicService.savePlayQueue(state.songs, state.songs.get(index), position, downloadService, null);
 						currentSavePlayQueueTask = null;
 					} catch (Exception e) {
 						Log.e(TAG, "Failed to save playing queue to server", e);
