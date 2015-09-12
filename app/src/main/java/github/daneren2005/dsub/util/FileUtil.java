@@ -70,6 +70,7 @@ public class FileUtil {
     private static final List<String> MUSIC_FILE_EXTENSIONS = Arrays.asList("mp3", "ogg", "aac", "flac", "m4a", "wav", "wma");
 	private static final List<String> VIDEO_FILE_EXTENSIONS = Arrays.asList("flv", "mp4", "m4v", "wmv", "avi", "mov", "mpg", "mkv");
 	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Arrays.asList("m3u");
+	private static final int MAX_FILENAME_LENGTH = 254 - ".complete.mp3".length();
     private static File DEFAULT_MUSIC_DIR;
 	private static final Kryo kryo = new Kryo();
 	private static HashMap<String, MusicDirectory.Entry> entryLookup;
@@ -123,8 +124,12 @@ public class FileUtil {
             fileName.append(track).append("-");
         }
 
-        fileName.append(fileSystemSafe(song.getTitle())).append(".");
+        fileName.append(fileSystemSafe(song.getTitle()));
+		if(fileName.length() >= MAX_FILENAME_LENGTH) {
+			fileName.setLength(MAX_FILENAME_LENGTH);
+		}
 
+		fileName.append(".");
 		if(song.isVideo()) {
 			String videoPlayerType = Util.getVideoPlayerType(context);
 			if("hls".equals(videoPlayerType)) {
