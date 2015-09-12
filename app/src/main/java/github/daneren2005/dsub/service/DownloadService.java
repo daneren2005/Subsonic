@@ -860,6 +860,7 @@ public class DownloadService extends Service {
 		return index;
 	}
 	private int checkNextIndexValid(int index, RepeatMode repeatMode) {
+		int startIndex = index;
 		int size = size();
 		if(index < size && index != -1) {
 			if(!Util.isAllowedToDownload(this)){
@@ -873,6 +874,14 @@ public class DownloadService extends Service {
 						} else {
 							return -1;
 						}
+					} else if(index == startIndex) {
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								Util.toast(DownloadService.this, R.string.download_playerstate_mobile_disabled);
+							}
+						});
+						return -1;
 					}
 
 					next = downloadList.get(index);
