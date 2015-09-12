@@ -841,7 +841,8 @@ public class DownloadService extends Service {
 	private int getNextPlayingIndex() {
 		int index = getCurrentPlayingIndex();
 		if (index != -1) {
-			switch (getRepeatMode()) {
+			RepeatMode repeatMode = getRepeatMode();
+			switch (repeatMode) {
 				case OFF:
 					index = index + 1;
 					break;
@@ -853,7 +854,32 @@ public class DownloadService extends Service {
 				default:
 					break;
 			}
+
+			index = checkNextIndexValid(index, repeatMode);
 		}
+		return index;
+	}
+	private int checkNextIndexValid(int index, RepeatMode repeatMode) {
+		int size = size();
+		if(index < size && index != -1) {
+			if(!Util.isAllowedToDownload(this)){
+				DownloadFile next = downloadList.get(index);
+				while(!next.isCompleteFileAvailable()) {
+					index++;
+
+					if (index >= size) {
+						if(repeatMode == RepeatMode.ALL) {
+							index = 0;
+						} else {
+							return -1;
+						}
+					}
+
+					next = downloadList.get(index);
+				}
+			}
+		}
+
 		return index;
 	}
 
@@ -1588,10 +1614,14 @@ public class DownloadService extends Service {
 	}
 	private synchronized void bufferAndPlay(int position, boolean start) {
 		if(!currentPlaying.isCompleteFileAvailable()) {
-			reset();
+			if(Util.isAllowedToDownload(this)) {
+				reset();
 
-			bufferTask = new BufferTask(currentPlaying, position, start);
-			bufferTask.execute();
+				bufferTask = new BufferTask(currentPlaying, position, start);
+				bufferTask.execute();
+			} else {
+				next(false, start);
+			}
 		} else {
 			doPlay(currentPlaying, position, start);
 		}
