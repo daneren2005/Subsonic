@@ -417,12 +417,13 @@ public final class Util {
 		builder.append("rest/").append(method).append(".view");
 		builder.append("?u=").append(username);
 		if(method != null && ServerInfo.canUseToken(context, instance)) {
-			Pair<String, String> values = tokens.get(instance);
+			int hash = (username + password).hashCode();
+			Pair<String, String> values = tokens.get(hash);
 			if(values == null) {
 				String salt = new BigInteger(130, getRandom()).toString(32);
 				String token = md5Hex(password + salt);
 				values = new Pair<>(salt, token);
-				tokens.put(instance, values);
+				tokens.put(hash, values);
 			}
 
 			builder.append("&s=").append(values.getFirst());
