@@ -108,6 +108,12 @@ public class Artist implements Serializable {
 		}
 
 		public int compare(Artist lhsArtist, Artist rhsArtist) {
+			if("root".equals(lhsArtist.getId())) {
+				return 1;
+			} else if("root".equals(rhsArtist.getId())) {
+				return -1;
+			}
+
 			String lhs = lhsArtist.getName().toLowerCase();
 			String rhs = rhsArtist.getName().toLowerCase();
 
