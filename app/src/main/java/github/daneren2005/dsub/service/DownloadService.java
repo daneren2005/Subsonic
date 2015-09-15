@@ -42,7 +42,6 @@ import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.ArtistRadioBuffer;
-import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Notifications;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
@@ -1284,7 +1283,20 @@ public class DownloadService extends Service {
 		}
 
 		if(playerState == STARTED && positionCache == null && remoteState == LOCAL) {
-			positionCache = new PositionCache();
+			positionCache = new LocalPositionCache();
+			Thread thread = new Thread(positionCache, "PositionCache");
+			thread.start();
+		} else if(playerState != STARTED && positionCache != null) {
+			positionCache.stop();
+			positionCache = null;
+		}
+
+		if(playerState == STARTED && positionCache == null) {
+			if(remoteState == LOCAL) {
+				positionCache = new LocalPositionCache();
+			} else {
+				positionCache = new PositionCache();
+			}
 			Thread thread = new Thread(positionCache, "PositionCache");
 			thread.start();
 		} else if(playerState != STARTED && positionCache != null) {
@@ -1295,6 +1307,28 @@ public class DownloadService extends Service {
 	}
 
 	private class PositionCache implements Runnable {
+		boolean isRunning = true;
+
+		public void stop() {
+			isRunning = false;
+		}
+
+		@Override
+		public void run() {
+			// Stop checking position before the song reaches completion
+			while(isRunning) {
+				try {
+					onSongProgress();
+					Thread.sleep(1000L);
+				}
+				catch(Exception e) {
+					isRunning = false;
+					positionCache = null;
+				}
+			}
+		}
+	}
+	private class LocalPositionCache extends PositionCache {
 		boolean isRunning = true;
 
 		public void stop() {
@@ -2372,9 +2406,14 @@ public class DownloadService extends Service {
 		}
 
 		if(run) {
-			onSongsChanged();
-			onSongProgress();
-			onStateUpdate();
+			mediaPlayerHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					onSongsChanged();
+					onSongProgress();
+					onStateUpdate();
+				}
+			});
 		}
 	}
 	public void removeOnSongChangeListener(OnSongChangedListener listener) {
@@ -2418,12 +2457,13 @@ public class DownloadService extends Service {
 		final long atRevision = revision;
 		final Integer duration = getPlayerDuration();
 		final boolean isSeekable = isSeekable();
+		final int position = getPlayerPosition();
 		for(final OnSongChangedListener listener: onSongChangedListeners) {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
 					if(revision == atRevision) {
-						listener.onSongProgress(currentPlaying, cachedPosition, duration, isSeekable);
+						listener.onSongProgress(currentPlaying, position, duration, isSeekable);
 					}
 				}
 			});
