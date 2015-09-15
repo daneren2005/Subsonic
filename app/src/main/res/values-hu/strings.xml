@@ -38,6 +38,7 @@
 	<string name="button_bar.chat">Csevegés (Chat)</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Letöltések</string>
+	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Üdvözlet!</string>
     <string name="main.welcome_text">Üdvözli a DSub! Az alkalmazás jelenleg egy Subsonic demo kiszolgálóhoz van beállítva. Miután konfigurálta saját kiszolgálóját 
@@ -304,8 +305,8 @@
 	<string name="settings.track_summary">Dalsorszám megjelenítése a dal címe előtt, ha létezik.</string>
 	<string name="settings.custom_sort">Egyéni rendezés</string>
 	<string name="settings.custom_sort_summary">A kiszolgáló alapértelmezett rendezésének felülbírálása, rendezés a lemez sorszáma és a kiadás éve alapján.</string>
-	<string name="settings.open_to_library">Médiatár megnyitása</string>
-	<string name="settings.open_to_library_summary">A Médiatár megnyitása a Főoldal helyett.</string>
+	<string name="settings.open_to_tab">Főlap</string>
+	<string name="settings.open_to_tab_summary">A beállított lap megnyitása alapértelmezettként.</string>
     <string name="settings.network_title">Hálózat</string>
     <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
@@ -456,6 +457,8 @@
 	<string name="settings.rename_duplicates_summary">Duplikált dalok átnevezése az eredeti fájlnévre, így megkülönböztethetővé válnak.</string>
 	<string name="settings.start_on_headphones">Lejátszó elindítása</string>
 	<string name="settings.start_on_headphones_summary">Lejátszó elindítása fülhallgató csatlakoztatásakor. Ez a funkció olyan szolgáltatás használatát igényli, ami a Dsub elindítása nélkül tudja kontrollálni a fülhallgató csatlakoztatási eseményeket.</string>
+	<string name="settings.color_action_bar">Színes műveletsáv</string>
+	<string name="settings.color_action_bar.summary">Színes műveletsáv és értesítési sáv használata.</string>
 
 	<string name="shuffle.title">Sorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
