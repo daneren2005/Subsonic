@@ -805,6 +805,15 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 		recreateSpinner();
 	}
+	public void replaceExistingFragment(SubsonicFragment fragment, int tag) {
+		FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+		trans.remove(currentFragment);
+		trans.add(R.id.fragment_container, fragment, tag + "");
+		trans.commit();
+
+		currentFragment = fragment;
+		currentFragment.setPrimaryFragment(true);
+	}
 
 	public void invalidate() {
 		if(currentFragment != null) {

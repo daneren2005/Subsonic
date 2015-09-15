@@ -117,7 +117,12 @@ public class AdminFragment extends SelectRecyclerFragment<User> {
 			List<User> users = new ArrayList<User>();
 			User user = musicService.getUser(refresh, UserUtil.getCurrentUsername(context), context, listener);
 			if(user != null) {
-				users.add(user);
+				SubsonicFragment fragment = new UserFragment();
+				Bundle args = new Bundle();
+				args.putSerializable(Constants.INTENT_EXTRA_NAME_ID, user);
+				fragment.setArguments(args);
+
+				replaceExistingFragment(fragment);
 			}
 
 			UserUtil.refreshCurrentUser(context, false);
