@@ -42,6 +42,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
+import github.daneren2005.dsub.util.DownloadFileItemHelperCallback;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
@@ -62,41 +63,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		super.onCreateView(inflater, container, bundle);
 
-		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-			@Override
-			public boolean onMove(RecyclerView recyclerView, final RecyclerView.ViewHolder fromHolder, final RecyclerView.ViewHolder toHolder) {
-				new SilentBackgroundTask<Void>(context) {
-					private int from;
-					private int to;
-
-					@Override
-					protected Void doInBackground() throws Throwable {
-						from = fromHolder.getAdapterPosition();
-						to = toHolder.getAdapterPosition();
-						getDownloadService().swap(false, from, to);
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						adapter.notifyItemMoved(from, to);
-					}
-				}.execute();
-
-				return true;
-			}
-
-			@Override
-			public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-				SongView songView = (SongView) ((UpdateView.UpdateViewHolder) viewHolder).getUpdateView();
-				DownloadFile downloadFile = songView.getDownloadFile();
-
-				DownloadService downloadService = getDownloadService();
-				downloadService.removeBackground(downloadFile);
-				adapter.removeItem(downloadFile);
-				currentRevision = downloadService.getDownloadListUpdateRevision();
-			}
-		});
+		ItemTouchHelper touchHelper = new ItemTouchHelper(new DownloadFileItemHelperCallback(this, false));
 		touchHelper.attachToRecyclerView(recyclerView);
 
 		return rootView;

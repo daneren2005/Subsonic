@@ -662,7 +662,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	@Override
-	protected SectionAdapter<Entry> getCurrentAdapter() {
+	public SectionAdapter<Entry> getCurrentAdapter() {
 		return entryGridAdapter;
 	}
 

@@ -188,40 +188,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		FastScroller fastScroller = (FastScroller) rootView.findViewById(R.id.download_fast_scroller);
 		fastScroller.attachRecyclerView(playlistView);
 		setupLayoutManager(playlistView, false);
-		ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-			@Override
-			public boolean onMove(RecyclerView recyclerView, final RecyclerView.ViewHolder fromHolder, final RecyclerView.ViewHolder toHolder) {
-				new SilentBackgroundTask<Void>(context) {
-					private int from;
-					private int to;
-
-					@Override
-					protected Void doInBackground() throws Throwable {
-						from = fromHolder.getAdapterPosition();
-						to = toHolder.getAdapterPosition();
-						getDownloadService().swap(true, from, to);
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						songListAdapter.notifyItemMoved(from, to);
-					}
-				}.execute();
-
-				return true;
-			}
-
-			@Override
-			public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-				SongView songView = (SongView) ((UpdateView.UpdateViewHolder) viewHolder).getUpdateView();
-				DownloadFile downloadFile = songView.getDownloadFile();
-
-				DownloadService downloadService = getDownloadService();
-				downloadService.remove(downloadFile);
-				songListAdapter.removeItem(downloadFile);
-			}
-		});
+		ItemTouchHelper touchHelper = new ItemTouchHelper(new DownloadFileItemHelperCallback(this, true));
 		touchHelper.attachToRecyclerView(playlistView);
 
 		starButton = (ImageButton)rootView.findViewById(R.id.download_star);
@@ -858,6 +825,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		if(this.primaryFragment) {
 			context.setSubtitle(title);
 		}
+	}
+
+	@Override
+	public SectionAdapter getCurrentAdapter() {
+		return songListAdapter;
 	}
 
 	private void scheduleHideControls() {

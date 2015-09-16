@@ -142,7 +142,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		}
 	}
 
-	protected SectionAdapter getCurrentAdapter() {
+	public SectionAdapter getCurrentAdapter() {
 		return adapter;
 	}
 
