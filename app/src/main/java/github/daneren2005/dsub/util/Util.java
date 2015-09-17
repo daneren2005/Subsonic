@@ -440,7 +440,7 @@ public final class Util {
 			builder.append("&p=").append(password);
 		}
 
-		if(method != null && ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+		if(method != null && ServerInfo.isMadsonic6(context, instance)) {
 			builder.append("&v=").append(Constants.REST_PROTOCOL_VERSION_MADSONIC);
 		} else {
 			builder.append("&v=").append(Constants.REST_PROTOCOL_VERSION_SUBSONIC);

@@ -560,7 +560,7 @@ public class RESTMusicService implements MusicService {
 
 		String method;
 		if(Util.isTagBrowsing(context, instance)) {
-			if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+			if(ServerInfo.isMadsonic6(context, instance)) {
 				method = "getAlbumListID3";
 			} else {
 				method = "getAlbumList2";
@@ -626,7 +626,7 @@ public class RESTMusicService implements MusicService {
 
 		String method;
 		if(Util.isTagBrowsing(context, instance)) {
-			if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+			if(ServerInfo.isMadsonic6(context, instance)) {
 				method = "getAlbumListID3";
 			} else {
 				method = "getAlbumList2";
@@ -693,7 +693,7 @@ public class RESTMusicService implements MusicService {
 
 		String method;
 		if(Util.isTagBrowsing(context, instance)) {
-			if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+			if(ServerInfo.isMadsonic6(context, instance)) {
 				method = "getStarredID3";
 			} else {
 				method = "getStarred2";
@@ -1567,7 +1567,7 @@ public class RESTMusicService implements MusicService {
 		int instance = getInstance(context);
 		String method;
 		if(Util.isTagBrowsing(context, instance)) {
-			if(ServerInfo.isMadsonic(context, instance) && ServerInfo.checkServerVersion(context, "2.0", instance)) {
+			if(ServerInfo.isMadsonic6(context, instance)) {
 				method = "getArtistInfoID3";
 			} else {
 				method = "getArtistInfo2";
