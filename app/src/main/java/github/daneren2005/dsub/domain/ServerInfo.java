@@ -183,6 +183,12 @@ public class ServerInfo implements Serializable {
 	public static boolean isMadsonic(Context context, int instance) {
 		return getServerType(context, instance) == TYPE_MADSONIC;
 	}
+	public static boolean isMadsonic6(Context context) {
+		return isMadsonic6(context, Util.getActiveServer(context));
+	}
+	public static boolean isMadsonic6(Context context, int instance) {
+		return getServerType(context, instance) == TYPE_MADSONIC && checkServerVersion(context, "2.0", instance);
+	}
 	
 	private static String getCacheName(Context context, int instance) {
 		return "server-" + Util.getRestUrl(context, null, instance, false).hashCode() + ".ser";

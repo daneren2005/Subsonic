@@ -414,7 +414,12 @@ public final class Util {
 		if (builder.charAt(builder.length() - 1) != '/') {
 			builder.append("/");
 		}
-		builder.append("rest/").append(method).append(".view");
+		if(method != null && ServerInfo.isMadsonic6(context, instance)) {
+			builder.append("rest2/");
+		} else {
+			builder.append("rest/");
+		}
+		builder.append(method).append(".view");
 		builder.append("?u=").append(username);
 		if(method != null && ServerInfo.canUseToken(context, instance)) {
 			int hash = (username + password).hashCode();
