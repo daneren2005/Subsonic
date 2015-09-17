@@ -1241,6 +1241,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				Log.i(TAG, "Device doesn't properly support MediaMetadataRetreiver");
 			}
 		}
+		if(duration == null) {
+			duration = song.getDuration();
+		}
 
 		List<Integer> headers = new ArrayList<>();
 		List<String> details = new ArrayList<>();
@@ -1299,9 +1302,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			headers.add(R.string.details_size);
 			details.add(Util.formatLocalizedBytes(size, context));
 		}
-		if(song.getDuration() != null && song.getDuration() != 0) {
+		if(duration != null && duration != 0) {
 			headers.add(R.string.details_length);
-			details.add(Util.formatDuration(song.getDuration()));
+			details.add(Util.formatDuration(duration));
 		}
 		if(song.getBookmark() != null) {
 			headers.add(R.string.details_bookmark_position);
