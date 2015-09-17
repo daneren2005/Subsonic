@@ -41,6 +41,7 @@ import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteStatus;
@@ -83,6 +84,7 @@ public class OfflineMusicService implements MusicService {
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
         List<Artist> artists = new ArrayList<Artist>();
+		List<Entry> entries = new ArrayList<>();
         File root = FileUtil.getMusicDirectory(context);
         for (File file : FileUtil.listFiles(root)) {
             if (file.isDirectory()) {
@@ -91,10 +93,12 @@ public class OfflineMusicService implements MusicService {
                 artist.setIndex(file.getName().substring(0, 1));
                 artist.setName(file.getName());
                 artists.add(artist);
-            }
+            } else {
+				entries.add(createEntry(context, file));
+			}
         }
 		
-        Indexes indexes = new Indexes(0L, Collections.<Artist>emptyList(), artists);
+        Indexes indexes = new Indexes(0L, Collections.<Artist>emptyList(), artists, entries);
 		indexes.sortChildren(context);
 		return indexes;
     }
@@ -145,20 +149,23 @@ public class OfflineMusicService implements MusicService {
         return FileUtil.getBaseName(name);
     }
 
-	private MusicDirectory.Entry createEntry(Context context, File file, String name) {
+	private Entry createEntry(Context context, File file) {
+		return createEntry(context, file, getName(file));
+	}
+	private Entry createEntry(Context context, File file, String name) {
 		return createEntry(context, file, name, true);
 	}
-    private MusicDirectory.Entry createEntry(Context context, File file, String name, boolean load) {
+    private Entry createEntry(Context context, File file, String name, boolean load) {
         return createEntry(context, file, name, load, false);
     }
-	private MusicDirectory.Entry createEntry(Context context, File file, String name, boolean load, boolean isPodcast) {
-		MusicDirectory.Entry entry;
+	private Entry createEntry(Context context, File file, String name, boolean load, boolean isPodcast) {
+		Entry entry;
 		if(isPodcast) {
 			PodcastEpisode episode = new PodcastEpisode();
 			episode.setStatus("completed");
 			entry = episode;
 		} else {
-			entry = new MusicDirectory.Entry();
+			entry = new Entry();
 		}
 		entry.setDirectory(file.isDirectory());
 		entry.setId(file.getPath());
@@ -209,7 +216,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
     @Override
-    public Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+    public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		try {
 			return FileUtil.getAlbumArtBitmap(context, entry, size);
 		} catch(Exception e) {
@@ -218,12 +225,12 @@ public class OfflineMusicService implements MusicService {
     }
 
 	@Override
-	public HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+	public HttpResponse getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
-	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
+	public String getMusicUrl(Context context, Entry song, int maxBitrate) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
@@ -240,8 +247,8 @@ public class OfflineMusicService implements MusicService {
 	@Override
     public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
 		List<Artist> artists = new ArrayList<Artist>();
-		List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
-		List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+		List<Entry> albums = new ArrayList<Entry>();
+		List<Entry> songs = new ArrayList<Entry>();
         File root = FileUtil.getMusicDirectory(context);
 		int closeness = 0;
         for (File artistFile : FileUtil.listFiles(root)) {
@@ -273,8 +280,8 @@ public class OfflineMusicService implements MusicService {
 				}
 			}
 		});
-		Collections.sort(albums, new Comparator<MusicDirectory.Entry>() {
-			public int compare(MusicDirectory.Entry lhs, MusicDirectory.Entry rhs) {
+		Collections.sort(albums, new Comparator<Entry>() {
+			public int compare(Entry lhs, Entry rhs) {
 				if(lhs.getCloseness() == rhs.getCloseness()) {
 					return 0;
 				}
@@ -286,8 +293,8 @@ public class OfflineMusicService implements MusicService {
 				}
 			}
 		});
-		Collections.sort(songs, new Comparator<MusicDirectory.Entry>() {
-			public int compare(MusicDirectory.Entry lhs, MusicDirectory.Entry rhs) {
+		Collections.sort(songs, new Comparator<Entry>() {
+			public int compare(Entry lhs, Entry rhs) {
 				if(lhs.getCloseness() == rhs.getCloseness()) {
 					return 0;
 				}
@@ -308,13 +315,13 @@ public class OfflineMusicService implements MusicService {
 		throw new OfflineException(ERRORMSG);
 	}
 
-	private void recursiveAlbumSearch(String artistName, File file, SearchCritera criteria, Context context, List<MusicDirectory.Entry> albums, List<MusicDirectory.Entry> songs) {
+	private void recursiveAlbumSearch(String artistName, File file, SearchCritera criteria, Context context, List<Entry> albums, List<Entry> songs) {
 		int closeness;
 		for(File albumFile : FileUtil.listMediaFiles(file)) {
 			if(albumFile.isDirectory()) {
 				String albumName = getName(albumFile);
 				if((closeness = matchCriteria(criteria, albumName)) > 0) {
-					MusicDirectory.Entry album = createEntry(context, albumFile, albumName);
+					Entry album = createEntry(context, albumFile, albumName);
 					album.setArtist(artistName);
 					album.setCloseness(closeness);
 					albums.add(album);
@@ -330,7 +337,7 @@ public class OfflineMusicService implements MusicService {
 						recursiveAlbumSearch(artistName, songFile, criteria, context, albums, songs);
 					}
 					else if((closeness = matchCriteria(criteria, songName)) > 0){
-						MusicDirectory.Entry song = createEntry(context, albumFile, songName);
+						Entry song = createEntry(context, albumFile, songName);
 						song.setArtist(artistName);
 						song.setAlbum(albumName);
 						song.setCloseness(closeness);
@@ -341,7 +348,7 @@ public class OfflineMusicService implements MusicService {
 			else {
 				String songName = getName(albumFile);
 				if((closeness = matchCriteria(criteria, songName)) > 0) {
-					MusicDirectory.Entry song = createEntry(context, albumFile, songName);
+					Entry song = createEntry(context, albumFile, songName);
 					song.setArtist(artistName);
 					song.setAlbum(songName);
 					song.setCloseness(closeness);
@@ -498,7 +505,7 @@ public class OfflineMusicService implements MusicService {
     }
 
     @Override
-    public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
+    public void createPlaylist(String id, String name, List<Entry> entries, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
     }
 	
@@ -508,7 +515,7 @@ public class OfflineMusicService implements MusicService {
 	}
 	
 	@Override
-	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+	public void addToPlaylist(String id, List<Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 	
@@ -518,7 +525,7 @@ public class OfflineMusicService implements MusicService {
 	}
 	
 	@Override
-	public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
+	public void overwritePlaylist(String id, String name, int toRemove, List<Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 	
@@ -621,7 +628,7 @@ public class OfflineMusicService implements MusicService {
     }
 	
 	@Override
-	public void setStarred(List<MusicDirectory.Entry> entries, List<MusicDirectory.Entry> artists, List<MusicDirectory.Entry> albums, boolean starred, ProgressListener progressListener, Context context) throws Exception {
+	public void setStarred(List<Entry> entries, List<Entry> artists, List<Entry> albums, boolean starred, ProgressListener progressListener, Context context) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 
@@ -709,7 +716,7 @@ public class OfflineMusicService implements MusicService {
     }
 
 	@Override
-	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
+	public String getCoverArtUrl(Context context, Entry entry) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
@@ -774,7 +781,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public void setRating(MusicDirectory.Entry entry, int rating, Context context, ProgressListener progressListener) throws Exception {
+	public void setRating(Entry entry, int rating, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
@@ -784,12 +791,12 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public void createBookmark(MusicDirectory.Entry entry, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
+	public void createBookmark(Entry entry, int position, String comment, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
-	public void deleteBookmark(MusicDirectory.Entry entry, Context context, ProgressListener progressListener) throws Exception {
+	public void deleteBookmark(Entry entry, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
@@ -849,7 +856,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
+	public void savePlayQueue(List<Entry> songs, Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

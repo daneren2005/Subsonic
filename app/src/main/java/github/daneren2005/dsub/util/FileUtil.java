@@ -203,7 +203,6 @@ public class FileUtil {
 			return artFile;
 		} else {
 			File playlistDir = getAlbumArtDirectory(context);
-			Log.d(TAG, entry.getTitle() + " => " + Util.md5Hex("pl-" + entry.getTitle()));
 			return  new File(playlistDir, Util.md5Hex("pl-" + entry.getTitle()) + ".jpeg");
 		}
     }
@@ -335,7 +334,13 @@ public class FileUtil {
         File dir = null;
         if (entry.getPath() != null) {
             File f = new File(fileSystemSafeDir(entry.getPath()));
-            dir = new File(getMusicDirectory(context).getPath() + "/" + (entry.isDirectory() ? f.getPath() : f.getParent()));
+			String folder = getMusicDirectory(context).getPath();
+			if(entry.isDirectory()) {
+				folder += "/" + f.getPath();
+			} else if(f.getParent() != null) {
+				folder += "/" + f.getParent();
+			}
+            dir = new File(folder);
         } else {
 			MusicDirectory.Entry firstSong;
 			if(!Util.isOffline(context)) {
@@ -446,7 +451,6 @@ public class FileUtil {
 			}
 
 			DEFAULT_MUSIC_DIR = new File(getBestDir(dirs), "music");
-			Log.d(TAG, "Default: " + DEFAULT_MUSIC_DIR.getAbsolutePath());
 
 			if (!DEFAULT_MUSIC_DIR.exists() && !DEFAULT_MUSIC_DIR.mkdirs()) {
 				Log.e(TAG, "Failed to create default dir " + DEFAULT_MUSIC_DIR);
