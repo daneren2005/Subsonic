@@ -132,10 +132,14 @@ public abstract class AbstractParser {
             if (version != null) {
             	ServerInfo server = new ServerInfo();
             	server.setRestVersion(new Version(version));
-            	
+
             	if("madsonic".equals(get("type")) || "madsonic-response".equals(name)) {
 					server.setRestType(ServerInfo.TYPE_MADSONIC);
-            	}
+            	} else if("subsonic".equals(get("type")) && server.checkServerVersion(context, "1.13")) {
+                    // Oh am I going to regret this
+                    server.setRestType(ServerInfo.TYPE_MADSONIC);
+                    server.setRestVersion(new Version("2.0.0"));
+                }
             	server.saveServerInfo(context, instance);
             }
         }
