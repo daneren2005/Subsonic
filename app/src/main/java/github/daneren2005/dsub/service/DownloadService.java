@@ -1249,23 +1249,30 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized int getPlayerDuration() {
+		if (playerState != IDLE && playerState != DOWNLOADING && playerState != PlayerState.PREPARING) {
+			int duration = 0;
+			if(remoteState == LOCAL) {
+				try {
+					duration = mediaPlayer.getDuration();
+				} catch (Exception x) {
+					duration = 0;
+				}
+			} else {
+				duration = remoteController.getRemoteDuration() * 1000;
+			}
+
+			if(duration != 0) {
+				return duration;
+			}
+		}
+
 		if (currentPlaying != null) {
 			Integer duration = currentPlaying.getSong().getDuration();
 			if (duration != null) {
 				return duration * 1000;
 			}
 		}
-		if (playerState != IDLE && playerState != DOWNLOADING && playerState != PlayerState.PREPARING) {
-			if(remoteState == LOCAL) {
-				try {
-					return mediaPlayer.getDuration();
-				} catch (Exception x) {
-					handleError(x);
-				}
-			} else {
-				return remoteController.getRemoteDuration() * 1000;
-			}
-		}
+
 		return 0;
 	}
 
@@ -2475,9 +2482,12 @@ public class DownloadService extends Service {
 			});
 		}
 
-		if(playerState != STARTED) {
-			onSongProgress();
-		}
+		mediaPlayerHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				onSongProgress();
+			}
+		});
 	}
 	private void onSongsChanged() {
 		final long atRevision = revision;
