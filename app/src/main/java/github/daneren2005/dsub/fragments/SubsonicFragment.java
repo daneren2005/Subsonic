@@ -897,12 +897,17 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					root = musicService.getPlaylist(true, id, name, context, this);
 				}
 
-				if(shuffle) {
+				boolean shuffleByAlbum = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SHUFFLE_BY_ALBUM, true);
+				if(shuffle && shuffleByAlbum) {
 					Collections.shuffle(root.getChildren());
 				}
 
 				songs = new LinkedList<Entry>();
 				getSongsRecursively(root, songs);
+
+				if(shuffle && !shuffleByAlbum) {
+					Collections.shuffle(songs);
+				}
 
 				DownloadService downloadService = getDownloadService();
 				boolean transition = false;
