@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.0.2" versioncode="157" releasedate="9/18/2015">
+		<change>Remove new auth since servers using LDAP break</change>
+		<change>Auto skip non-downloaded songs with Wifi required setting</change>
+		<change>Admin tab: directly display user if non-admin</change>
+		<change>Support latest Madsonic 6 Beta changes</change>
+		<change>Fix position not updating while casting</change>
+		<change>Minor bug fixes</change>
+	</release>
 	<release version="5.0.1" versioncode="156" releasedate="9/11/2015">
 		<change>Make colored bars optional</change>
 		<change>Minor tweaks based on feedback</change>
@@ -7,7 +15,7 @@
 		<change>Reverse By Decade order (5.3+)</change>
 		<change>Top Tracks option (5.3+)</change>
 		<change>Use tokens for more secure unencrypted traffic</change>
-		<change>Madsonic 6.0 support (first check will fail until new Server beta)</change>
+		<change>Madsonic 6.0 Beta support</change>
 		<change>Add videos list for Browse By Tags</change>
 		<change>Add title to details dialog</change>
 		<change>Add changed date to Playlist details (5.3+)</change>
