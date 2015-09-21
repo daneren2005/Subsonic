@@ -436,6 +436,13 @@
 			android:title="@string/settings.other_title">
 
 			<CheckBoxPreference
+				android:title="@string/settings.shuffle_by_album"
+				android:key="shuffleByAlbum"
+				android:defaultValue="true"
+				android:summaryOn="@string/settings.shuffle_by_album.true"
+				android:summaryOff="@string/settings.shuffle_by_album.false"/>
+
+			<CheckBoxPreference
 				android:title="@string/settings.scrobble_title"
 				android:summary="@string/settings.scrobble_summary"
 				android:key="scrobble"

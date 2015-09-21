@@ -113,6 +113,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		albums.add(R.string.main_albums_genres);
 		albums.add(R.string.main_albums_year);
 		albums.add(R.string.main_albums_recent);
+		albums.add(R.string.main_albums_frequent);
 
 		sections.add(albums);
 		headers.add("albums");
