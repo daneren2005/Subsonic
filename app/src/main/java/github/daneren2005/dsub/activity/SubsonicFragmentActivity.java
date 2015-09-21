@@ -458,7 +458,11 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	@Override
 	protected SubsonicFragment getCurrentFragment() {
 		if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-			return nowPlayingFragment;
+			if(secondaryFragment == null) {
+				return nowPlayingFragment;
+			} else {
+				return secondaryFragment;
+			}
 		} else {
 			return super.getCurrentFragment();
 		}

@@ -493,8 +493,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			menuInflater.inflate(R.menu.drawer_menu, menu);
 		} else if(currentFragment != null) {
 			try {
-				currentFragment.setContext(this);
-				currentFragment.onCreateOptionsMenu(menu, menuInflater);
+				SubsonicFragment fragment = getCurrentFragment();
+				fragment.setContext(this);
+				fragment.onCreateOptionsMenu(menu, menuInflater);
 
 				if(isTouchscreen()) {
 					menu.setGroupVisible(R.id.not_touchscreen, false);
