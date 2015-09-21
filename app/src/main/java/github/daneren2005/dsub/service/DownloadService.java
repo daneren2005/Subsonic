@@ -630,6 +630,7 @@ public class DownloadService extends Service {
 		}
 		lifecycleSupport.serializeDownloadQueue();
 		updateRemotePlaylist();
+		onSongsChanged();
 	}
 
 	public void setOnline(final boolean online) {
