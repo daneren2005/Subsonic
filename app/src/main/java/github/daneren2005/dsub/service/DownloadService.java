@@ -2470,7 +2470,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private void onSongChanged() {
+	private synchronized void onSongChanged() {
 		final long atRevision = revision;
 		for(final OnSongChangedListener listener: onSongChangedListeners) {
 			handler.post(new Runnable() {
@@ -2483,14 +2483,16 @@ public class DownloadService extends Service {
 			});
 		}
 
-		mediaPlayerHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				onSongProgress();
-			}
-		});
+		if(mediaPlayerHandler != null && !onSongChangedListeners.isEmpty()) {
+			mediaPlayerHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					onSongProgress();
+				}
+			});
+		}
 	}
-	private void onSongsChanged() {
+	private synchronized void onSongsChanged() {
 		final long atRevision = revision;
 		for(final OnSongChangedListener listener: onSongChangedListeners) {
 			handler.post(new Runnable() {
@@ -2503,7 +2505,7 @@ public class DownloadService extends Service {
 			});
 		}
 	}
-	private void onSongProgress() {
+	private synchronized void onSongProgress() {
 		final long atRevision = revision;
 		final Integer duration = getPlayerDuration();
 		final boolean isSeekable = isSeekable();
