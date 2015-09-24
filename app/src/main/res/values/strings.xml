@@ -424,8 +424,13 @@
 	<string name="settings.sync_notification">Show Sync Notification</string>
 	<string name="settings.sync_notification_summary">Show a notification after new media has been synced</string>
 	<string name="settings.menu_options.title">Optional Menu Options</string>
-	<string name="settings.menu_options.play_next_summary">Show Play next in menus</string>
-	<string name="settings.menu_options.play_last_summary">Show Play last in menus</string>
+	<string name="settings.menu_options.play_now_summary">Show Now in menus</string>
+	<string name="settings.menu_options.play_shuffled_summary">Show Shuffled in menus</string>
+	<string name="settings.menu_options.play_next_summary">Show Play Next in menus</string>
+	<string name="settings.menu_options.play_last_summary">Show Play Last in menus</string>
+	<string name="settings.menu_options.download_summary">Show Download in menus</string>
+	<string name="settings.menu_options.pin_summary">Show Permanent Cache in menus</string>
+	<string name="settings.menu_options.delete_summary">Show Delete in menus</string>
 	<string name="settings.menu_options.star_summary">Show Star in menus</string>
 	<string name="settings.menu_options.shared_summary">Show Share in menus</string>
 	<string name="settings.menu_options.rate_summary">Show Rating in menus</string>

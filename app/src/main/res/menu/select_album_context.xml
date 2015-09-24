@@ -5,9 +5,23 @@
 		android:id="@+id/album_menu_info"
 		android:title="@string/common.info"/>
 
-	<item
-		android:id="@+id/album_menu_play_now"
-		android:title="@string/common.play_now"/>
+	<group android:id="@+id/hide_play_now">
+		<item
+			android:id="@+id/album_menu_play_now"
+			android:title="@string/common.play_now"/>
+	</group>
+
+	<group android:id="@+id/hide_play_shuffled">
+		<item
+			android:id="@+id/album_menu_play_shuffled"
+			android:title="@string/common.play_shuffled"/>
+	</group>
+
+	<group android:id="@+id/hide_play_next">
+		<item
+			android:id="@+id/album_menu_play_next"
+			android:title="@string/common.play_next"/>
+	</group>
 
 	<group android:id="@+id/hide_play_last">
 		<item
@@ -15,9 +29,23 @@
 			android:title="@string/common.play_last"/>
 	</group>
 
-	<item
-		android:id="@+id/album_menu_download"
-		android:title="@string/common.download"/>
+	<group android:id="@+id/hide_download">
+		<item
+			android:id="@+id/album_menu_download"
+			android:title="@string/common.download"/>
+	</group>
+
+	<group android:id="@+id/hide_pin">
+		<item
+			android:id="@+id/album_menu_pin"
+			android:title="@string/common.pin"/>
+	</group>
+
+	<group android:id="@+id/hide_delete">
+		<item
+			android:id="@+id/album_menu_delete"
+			android:title="@string/menu.delete_cache"/>
+	</group>
 
 	<item
 		android:id="@+id/album_menu_show_artist"

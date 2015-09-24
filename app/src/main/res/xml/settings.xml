@@ -99,16 +99,46 @@
 			android:title="@string/settings.menu_options.title">
 
 			<CheckBoxPreference
+				android:title="@string/common.play_now"
+				android:summary="@string/settings.menu_options.play_now_summary"
+				android:key="showPlayNow"
+				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/common.play_shuffled"
+				android:summary="@string/settings.menu_options.play_shuffled_summary"
+				android:key="showPlayShuffled"
+				android:defaultValue="true"/>
+
+			<CheckBoxPreference
 				android:title="@string/common.play_next"
 				android:summary="@string/settings.menu_options.play_next_summary"
 				android:key="showPlayNext"
-				android:defaultValue="true"/>
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/common.play_last"
 				android:summary="@string/settings.menu_options.play_last_summary"
 				android:key="showPlayLast"
 				android:defaultValue="true"/>
+
+			<CheckBoxPreference
+				android:title="@string/common.download"
+				android:summary="@string/settings.menu_options.download_summary"
+				android:key="showDownload"
+				android:defaultValue="false"/>
+
+			<CheckBoxPreference
+				android:title="@string/common.pin"
+				android:summary="@string/settings.menu_options.pin_summary"
+				android:key="showPin"
+				android:defaultValue="false"/>
+
+			<CheckBoxPreference
+				android:title="@string/common.delete"
+				android:summary="@string/settings.menu_options.delete_summary"
+				android:key="showDelete"
+				android:defaultValue="false"/>
 
 			<CheckBoxPreference
 				android:title="@string/common.star"
@@ -127,7 +157,6 @@
 				android:summary="@string/settings.menu_options.rate_summary"
 				android:key="showRating"
 				android:defaultValue="true"/>
-
 		</PreferenceCategory>
 	</PreferenceScreen>
 

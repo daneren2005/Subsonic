@@ -18,9 +18,11 @@
 		android:id="@+id/menu_lyrics"
 		android:title="@string/download.menu_lyrics"/>
 
-	<item 
-		android:id="@+id/menu_delete"
-		android:title="@string/menu.delete_cache"/>
+	<group android:id="@+id/hide_delete">
+		<item
+			android:id="@+id/song_menu_delete"
+			android:title="@string/menu.delete_cache"/>
+	</group>
 
 	<group android:id="@+id/hide_star">
 		<item

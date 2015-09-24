@@ -279,7 +279,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 		}
 
-		MenuUtil.hideMenuItems(context, menu);
+		MenuUtil.hideMenuItems(context, menu, updateView);
 	}
 
 	protected void recreateContextMenu(Menu menu) {
@@ -311,18 +311,32 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.artist_menu_play_shuffled:
 				downloadRecursively(artist.getId(), false, false, true, true, false);
 				break;
+			case R.id.artist_menu_play_next:
+				downloadRecursively(artist.getId(), false, true, false, false, false, true);
+				break;
 			case R.id.artist_menu_play_last:
 				downloadRecursively(artist.getId(), false, true, false, false, false);
 				break;
 			case R.id.artist_menu_download:
 				downloadRecursively(artist.getId(), false, true, false, false, true);
 				break;
-			case R.id.artist_menu_star:
-				toggleStarred(artist);
+			case R.id.artist_menu_pin:
+				downloadRecursively(artist.getId(), true, true, false, false, true);
+				break;
+			case R.id.artist_menu_delete:
+				deleteRecursively(artist);
 				break;
 			case R.id.album_menu_play_now:
 				artistOverride = true;
 				downloadRecursively(entry.getId(), false, false, true, false, false);
+				break;
+			case R.id.album_menu_play_shuffled:
+				artistOverride = true;
+				downloadRecursively(entry.getId(), false, false, true, true, false);
+				break;
+			case R.id.album_menu_play_next:
+				artistOverride = true;
+				downloadRecursively(entry.getId(), false, true, false, false, false, true);
 				break;
 			case R.id.album_menu_play_last:
 				artistOverride = true;
@@ -332,8 +346,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				artistOverride = true;
 				downloadRecursively(entry.getId(), false, true, false, false, true);
 				break;
+			case R.id.album_menu_pin:
+				artistOverride = true;
+				downloadRecursively(entry.getId(), true, true, false, false, true);
+				break;
 			case R.id.album_menu_star:
 				toggleStarred(entry);
+				break;
+			case R.id.album_menu_delete:
+				deleteRecursively(entry);
 				break;
 			case R.id.album_menu_info:
 				displaySongInfo(entry);
@@ -353,8 +374,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.song_menu_download:
 				getDownloadService().downloadBackground(songs, false);
 				break;
+			case R.id.song_menu_pin:
+				getDownloadService().downloadBackground(songs, true);
+				break;
 			case R.id.song_menu_delete:
-				getDownloadService().delete(songs);
+				deleteSongs(songs);
 				break;
 			case R.id.song_menu_add_playlist:
 				addToPlaylist(songs);
@@ -1419,15 +1443,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	public void deleteRecursively(Artist artist) {
-		deleteRecursively(FileUtil.getArtistDirectory(context, artist));
+		deleteRecursively(artist, FileUtil.getArtistDirectory(context, artist));
 	}
 
 	public void deleteRecursively(Entry album) {
-		deleteRecursively(FileUtil.getAlbumDirectory(context, album));
-
+		deleteRecursively(album, FileUtil.getAlbumDirectory(context, album));
 	}
 
-	public void deleteRecursively(final File dir) {
+	public void deleteRecursively(final Object remove, final File dir) {
 		if(dir == null) {
 			return;
 		}
@@ -1443,7 +1466,37 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			@Override
 			protected void done(Void result) {
 				if(Util.isOffline(context)) {
-					refresh();
+					SectionAdapter adapter = getCurrentAdapter();
+					if(adapter != null) {
+						adapter.removeItem(remove);
+					} else {
+						refresh();
+					}
+				} else {
+					UpdateView.triggerUpdate();
+				}
+			}
+		}.execute();
+	}
+	public void deleteSongs(final List<Entry> songs) {
+		new LoadingTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				getDownloadService().delete(songs);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				if(Util.isOffline(context)) {
+					SectionAdapter adapter = getCurrentAdapter();
+					if(adapter != null) {
+						for(Entry song: songs) {
+							adapter.removeItem(song);
+						}
+					} else {
+						refresh();
+					}
 				} else {
 					UpdateView.triggerUpdate();
 				}

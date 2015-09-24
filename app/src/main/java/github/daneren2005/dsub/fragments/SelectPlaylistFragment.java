@@ -76,12 +76,40 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Playlist> updateView, Playlist playlist) {
+		SubsonicFragment fragment;
+		Bundle args;
+		FragmentTransaction trans;
+
 		switch (menuItem.getItemId()) {
+			case R.id.playlist_menu_download:
+				downloadPlaylist(playlist.getId(), playlist.getName(), false, true, false, false, true);
+				break;
 			case R.id.playlist_menu_sync:
 				syncPlaylist(playlist);
 				break;
 			case R.id.playlist_menu_stop_sync:
 				stopSyncPlaylist(playlist);
+				break;
+			case R.id.playlist_menu_play_now:
+				fragment = new SelectDirectoryFragment();
+				args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
+				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
+				fragment.setArguments(args);
+
+				replaceFragment(fragment);
+				break;
+			case R.id.playlist_menu_play_shuffled:
+				fragment = new SelectDirectoryFragment();
+				args = new Bundle();
+				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
+				args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
+				args.putBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, true);
+				args.putBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
+				fragment.setArguments(args);
+
+				replaceFragment(fragment);
 				break;
 			case R.id.playlist_menu_delete:
 				deletePlaylist(playlist);

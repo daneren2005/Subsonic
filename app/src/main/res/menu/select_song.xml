@@ -33,15 +33,11 @@
 		android:id="@+id/menu_delete"
 		android:title="@string/menu.delete_cache"/>
 
-	<group android:id="@+id/hide_play_next">
-		<item
-			android:id="@+id/menu_play_next"
-			android:title="@string/common.play_next"/>
-	</group>
+	<item
+		android:id="@+id/menu_play_next"
+		android:title="@string/common.play_next"/>
 
-	<group android:id="@+id/hide_play_last">
-		<item
-			android:id="@+id/menu_play_last"
-			android:title="@string/menu.play_last"/>
-	</group>
+	<item
+		android:id="@+id/menu_play_last"
+		android:title="@string/menu.play_last"/>
 </menu>

@@ -48,7 +48,7 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 	@Override
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry item) {
 		menuInflater.inflate(R.menu.select_bookmark_context, menu);
-		MenuUtil.hideMenuItems(context, menu);
+		MenuUtil.hideMenuItems(context, menu, updateView);
 	}
 
 	@Override

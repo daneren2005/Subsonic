@@ -133,8 +133,13 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_PODCASTS_ENABLED = "podcastsEnabled";
 	public static final String PREFERENCES_KEY_BOOKMARKS_ENABLED = "bookmarksEnabled";
 	public static final String PREFERENCES_KEY_CUSTOM_SORT_ENABLED = "customSortEnabled";
+	public static final String PREFERENCES_KEY_MENU_PLAY_NOW = "showPlayNow";
+	public static final String PREFERENCES_KEY_MENU_PLAY_SHUFFLED = "showPlayShuffled";
 	public static final String PREFERENCES_KEY_MENU_PLAY_NEXT = "showPlayNext";
 	public static final String PREFERENCES_KEY_MENU_PLAY_LAST = "showPlayLast";
+	public static final String PREFERENCES_KEY_MENU_DOWNLOAD = "showDownload";
+	public static final String PREFERENCES_KEY_MENU_PIN = "showPin";
+	public static final String PREFERENCES_KEY_MENU_DELETE = "showDelete";
 	public static final String PREFERENCES_KEY_MENU_STAR = "showStar";
 	public static final String PREFERENCES_KEY_MENU_SHARED = "showShared";
 	public static final String PREFERENCES_KEY_SHARED_ENABLED = "sharedEnabled";

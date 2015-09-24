@@ -401,7 +401,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 					currentActionMode = mode;
 					onCreateActionModeMenu(menu, mode.getMenuInflater());
-					MenuUtil.hideMenuItems(context, menu);
+					MenuUtil.hideMenuItems(context, menu, updateView);
 
 					T item = holder.getItem();
 					selected.add(item);

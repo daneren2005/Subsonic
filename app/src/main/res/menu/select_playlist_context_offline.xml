@@ -2,6 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/playlist_info"
-        android:title="@string/common.info"
-        />
+        android:title="@string/common.info"/>
+
+	<group android:id="@+id/hide_play_now">
+		<item
+			android:id="@+id/playlist_menu_play_now"
+			android:title="@string/common.play_now"/>
+	</group>
+
+    <group android:id="@+id/hide_play_shuffled">
+        <item
+            android:id="@+id/playlist_menu_play_shuffled"
+            android:title="@string/common.play_shuffled"/>
+    </group>
 </menu>

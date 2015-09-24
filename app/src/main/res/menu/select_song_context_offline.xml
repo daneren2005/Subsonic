@@ -18,7 +18,15 @@
 			android:title="@string/common.play_last"/>
 	</group>
 
-	<item 
-		android:id="@+id/song_menu_star"
-		android:title="@string/common.star"/>
+	<group android:id="@+id/hide_delete">
+		<item
+			android:id="@+id/song_menu_delete"
+			android:title="@string/menu.delete_cache"/>
+	</group>
+
+	<group android:id="@+id/hide_star">
+		<item
+			android:id="@+id/song_menu_star"
+			android:title="@string/common.star"/>
+	</group>
 </menu>

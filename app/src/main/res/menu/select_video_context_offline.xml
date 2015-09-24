@@ -8,8 +8,10 @@
 	<item 
 		android:id="@+id/song_menu_play_external"
 		android:title="@string/common.play_external"/>
-		
-	<item 
-		android:id="@+id/song_menu_delete"
-		android:title="@string/menu.delete_cache"/>
+
+	<group android:id="@+id/hide_delete">
+		<item
+			android:id="@+id/song_menu_delete"
+			android:title="@string/menu.delete_cache"/>
+	</group>
 </menu>

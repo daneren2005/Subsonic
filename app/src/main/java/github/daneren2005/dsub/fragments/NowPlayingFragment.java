@@ -555,15 +555,20 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			menu.findItem(R.id.menu_show_artist).setVisible(false);
 		}
 
-		MenuUtil.hideMenuItems(context, menu);
+		MenuUtil.hideMenuItems(context, menu, updateView);
 	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
+		if(onContextItemSelected(menuItem, downloadFile)) {
+			return true;
+		}
+
 		return menuItemSelected(menuItem.getItemId(), downloadFile);
 	}
 
 	private boolean menuItemSelected(int menuItemId, final DownloadFile song) {
+		List<Entry> songs;
 		switch (menuItemId) {
 			case R.id.menu_show_album: case R.id.menu_show_artist:
 				Entry entry = song.getSong();
@@ -629,11 +634,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				replaceFragment(fragment);
 				return true;
 			}
-			case R.id.menu_delete:
-				List<Entry> songs = new ArrayList<Entry>(1);
-				songs.add(song.getSong());
-				getDownloadService().delete(songs);
-				return true;
 			case R.id.menu_remove_all:
 				Util.confirmDialog(context, R.string.download_menu_remove_all, "", new DialogInterface.OnClickListener() {
 					@Override

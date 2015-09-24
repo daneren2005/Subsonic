@@ -14,9 +14,11 @@
 		android:id="@+id/menu_show_album"
 		android:title="@string/download.menu_show_album"/>
 
-	<item 
-		android:id="@+id/menu_delete"
-		android:title="@string/menu.delete_cache"/>
+	<group android:id="@+id/hide_delete">
+		<item
+			android:id="@+id/song_menu_delete"
+			android:title="@string/menu.delete_cache"/>
+	</group>
 
 	<group android:id="@+id/hide_star">
 		<item
