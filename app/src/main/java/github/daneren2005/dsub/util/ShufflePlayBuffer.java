@@ -73,7 +73,7 @@ public class ShufflePlayBuffer {
 		executorService.scheduleWithFixedDelay(runnable, 1, 10, TimeUnit.SECONDS);
 		
 		// Calculate out the capacity and refill threshold based on the user's random size preference
-		int shuffleListSize = Integer.parseInt(Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20"));
+		int shuffleListSize = Math.max(1, Integer.parseInt(Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20")));
 		// ex: default 20 -> 50
 		capacity = shuffleListSize * 5 / 2;
 		capacity = Math.min(500, capacity);

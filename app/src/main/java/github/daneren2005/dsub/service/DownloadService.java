@@ -2103,7 +2103,7 @@ public class DownloadService extends Service {
 
 		// Get users desired random playlist size
 		SharedPreferences prefs = Util.getPreferences(this);
-		int listSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20"));
+		int listSize = Math.max(1, Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20")));
 		boolean wasEmpty = downloadList.isEmpty();
 
 		long revisionBefore = revision;
@@ -2145,7 +2145,7 @@ public class DownloadService extends Service {
 	private synchronized void checkArtistRadio() {
 		// Get users desired random playlist size
 		SharedPreferences prefs = Util.getPreferences(this);
-		int listSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20"));
+		int listSize = Math.max(1, Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_RANDOM_SIZE, "20")));
 		boolean wasEmpty = downloadList.isEmpty();
 
 		long revisionBefore = revision;
