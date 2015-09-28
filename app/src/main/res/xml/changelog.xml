@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.0.3" versioncode="158" releasedate="9/28/2015">
+		<change>Add context menu items back as optional</change>
+		<change>Add setting to shuffle by albums or by songs</change>
+		<change>Fix missing Most Played albums</change>
+	</release>
 	<release version="5.0.2" versioncode="157" releasedate="9/18/2015">
 		<change>Remove new auth since servers using LDAP break</change>
 		<change>Auto skip non-downloaded songs with Wifi required setting</change>
