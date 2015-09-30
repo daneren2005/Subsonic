@@ -158,6 +158,7 @@ public class DownloadService extends Service {
 	private int timerDuration;
 	private long timerStart;
 	private boolean autoPlayStart = false;
+	private boolean runListenersOnInit = false;
 
 	private MediaRouteManager mediaRouter;
 	
@@ -222,6 +223,13 @@ public class DownloadService extends Service {
 
 				mediaPlayerLooper = Looper.myLooper();
 				mediaPlayerHandler = new Handler(mediaPlayerLooper);
+
+				if(runListenersOnInit) {
+					onSongsChanged();
+					onSongProgress();
+					onStateUpdate();
+				}
+
 				Looper.loop();
 			}
 		}, "DownloadService").start();
@@ -1634,7 +1642,7 @@ public class DownloadService extends Service {
 	}
 
 	public void registerRoute(MediaRouter router) {
-		if(mRemoteControl != null) {
+		if (mRemoteControl != null) {
 			mRemoteControl.registerRoute(router);
 		}
 	}
@@ -1922,6 +1930,7 @@ public class DownloadService extends Service {
 			}
 		}
 	}
+
 	public void reapplyVolume() {
 		applyReplayGain(mediaPlayer, currentPlaying);
 	}
@@ -2291,7 +2300,7 @@ public class DownloadService extends Service {
 					}
 					return null;
 				}
-				
+
 				@Override
 				public void error(Throwable error) {
 					Log.e(TAG, "Failed to delete bookmark", error);
@@ -2453,14 +2462,18 @@ public class DownloadService extends Service {
 		}
 
 		if(run) {
-			mediaPlayerHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					onSongsChanged();
-					onSongProgress();
-					onStateUpdate();
-				}
-			});
+			if(mediaPlayerHandler != null) {
+				mediaPlayerHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						onSongsChanged();
+						onSongProgress();
+						onStateUpdate();
+					}
+				});
+			} else {
+				runListenersOnInit = true;
+			}
 		}
 	}
 	public void removeOnSongChangeListener(OnSongChangedListener listener) {
