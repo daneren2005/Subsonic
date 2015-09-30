@@ -326,6 +326,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.artist_menu_delete:
 				deleteRecursively(artist);
 				break;
+			case R.id.artist_menu_star:
+				toggleStarred(artist);
+				break;
 			case R.id.album_menu_play_now:
 				artistOverride = true;
 				downloadRecursively(entry.getId(), false, false, true, false, false);
