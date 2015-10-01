@@ -225,6 +225,9 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 		List<Integer> headers = new ArrayList<>();
 		List<String> details = new ArrayList<>();
 
+		headers.add(R.string.details_title);
+		details.add(playlist.getName());
+
 		if(playlist.getOwner() != null) {
 			headers.add(R.string.details_owner);
 			details.add(playlist.getOwner());
@@ -245,7 +248,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 		if(playlist.getPublic() != null) {
 			headers.add(R.string.details_public);
-			details.add(Boolean.toString(playlist.getPublic()));
+			details.add(Util.formatBoolean(context, playlist.getPublic()));
 		}
 
 		if(playlist.getCreated() != null) {

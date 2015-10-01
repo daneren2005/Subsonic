@@ -908,6 +908,10 @@ public final class Util {
 		}
 	}
 
+	public static String formatBoolean(Context context, boolean value) {
+		return context.getResources().getString(value ? R.string.common_true : R.string.common_false);
+	}
+
     public static boolean equals(Object object1, Object object2) {
         if (object1 == object2) {
             return true;
