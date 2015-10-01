@@ -1346,6 +1346,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			headers.add(R.string.details_rating);
 			details.add(song.getRating() + " stars");
 		}
+
+		headers.add(R.string.details_starred);
+		details.add(Util.formatBoolean(context, song.isStarred()));
+
 		if(song instanceof PodcastEpisode) {
 			headers.add(R.string.details_description);
 			details.add(song.getAlbum());
