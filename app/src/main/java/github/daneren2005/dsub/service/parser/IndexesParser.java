@@ -78,6 +78,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
                     artist.setName(get("name"));
                     artist.setIndex(index);
 					artist.setStarred(get("starred") != null);
+                    artist.setRating(getInteger("userRating"));
 
 					// Combine the id's for the two artists
 					if(artistList.containsKey(artist.getName())) {

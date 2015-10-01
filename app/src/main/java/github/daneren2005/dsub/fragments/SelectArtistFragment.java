@@ -3,6 +3,7 @@ package github.daneren2005.dsub.fragments;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicFolder;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
@@ -97,16 +99,25 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+
 			if ("root".equals(artist.getId())) {
 				args.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
 			}
+			if(ServerInfo.checkServerVersion(context, "1.13") && !Util.isOffline(context)) {
+				args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, new MusicDirectory.Entry(artist));
+			}
 			args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+
 			fragment.setArguments(args);
 		} else {
 			fragment = new SelectArtistFragment();
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+			if(ServerInfo.checkServerVersion(context, "1.13") && !Util.isOffline(context)) {
+				args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, new MusicDirectory.Entry(artist));
+			}
+
 			fragment.setArguments(args);
 		}
 

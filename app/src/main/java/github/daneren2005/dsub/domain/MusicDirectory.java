@@ -197,6 +197,7 @@ public class MusicDirectory implements Serializable {
 		private Bookmark bookmark;
 		private int type = 0;
 		private int closeness;
+		private transient Artist linkedArtist;
 
 		public Entry() {
 
@@ -208,6 +209,9 @@ public class MusicDirectory implements Serializable {
 			this.id = artist.getId();
 			this.title = artist.getName();
 			this.directory = true;
+			this.starred = artist.isStarred();
+			this.rating = artist.getRating();
+			this.linkedArtist = artist;
 		}
 		
 		@TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
@@ -469,6 +473,10 @@ public class MusicDirectory implements Serializable {
         
         public void setStarred(boolean starred) {
             this.starred = starred;
+
+			if(linkedArtist != null) {
+				linkedArtist.setStarred(starred);
+			}
         }
         
 		public int getRating() {
@@ -479,6 +487,10 @@ public class MusicDirectory implements Serializable {
 				this.rating = null;
 			} else {
 				this.rating = rating;
+			}
+
+			if(linkedArtist != null) {
+				linkedArtist.setRating(rating);
 			}
 		}
 		

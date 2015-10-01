@@ -837,11 +837,21 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public void setRating(final Entry entry, final int rating, Context context, ProgressListener progressListener) throws Exception {
 		musicService.setRating(entry, rating, context, progressListener);
-		
+
 		new GenericEntryUpdater(context, entry) {
 			@Override
+			public boolean checkResult(Entry entry, Entry check) {
+				if (entry.getId().equals(check.getId())) {
+					check.setRating(entry.getRating());
+					return true;
+				}
+
+				return false;
+			}
+
+			@Override
 			public void updateResult(Entry result) {
-				result.setRating(rating);
+
 			}
 		}.execute();
 	}

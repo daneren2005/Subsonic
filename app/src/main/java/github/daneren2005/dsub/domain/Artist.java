@@ -35,12 +35,12 @@ public class Artist implements Serializable {
     private String name;
     private String index;
 	private boolean starred;
+	private Integer rating;
 	private int closeness;
 
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -48,7 +48,6 @@ public class Artist implements Serializable {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -56,7 +55,6 @@ public class Artist implements Serializable {
     public String getIndex() {
         return index;
     }
-
     public void setIndex(String index) {
         this.index = index;
     }
@@ -64,15 +62,24 @@ public class Artist implements Serializable {
 	public boolean isStarred() {
 		return starred;
 	}
-
 	public void setStarred(boolean starred) {
 		this.starred = starred;
+	}
+
+	public int getRating() {
+		return rating == null ? 0 : rating;
+	}
+	public void setRating(Integer rating) {
+		if(rating == null || rating == 0) {
+			this.rating = null;
+		} else {
+			this.rating = rating;
+		}
 	}
 	
 	public int getCloseness() {
 		return closeness;
 	}
-	
 	public void setCloseness(int closeness) {
 		this.closeness = closeness;
 	}

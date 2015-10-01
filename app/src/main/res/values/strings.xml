@@ -26,6 +26,8 @@
 	<string name="common.empty">No data</string>
 	<string name="common.warning">Warning</string>
 	<string name="common.close">Close</string>
+	<string name="common.false">No</string>
+	<string name="common.true">Yes</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
@@ -599,6 +601,7 @@
 	<string name="details.title.album">Album Details</string>
 	<string name="details.title.podcast">Podcast Details</string>
 	<string name="details.title.playlist">Playlist Details</string>
+	<string name="details.title.artist">Artist Details</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Status</string>
 	<string name="details.artist">Artist</string>
@@ -634,6 +637,7 @@
 	<string name="details.song">Song</string>
 	<string name="details.position">Position</string>
 	<string name="details.updated">Updated</string>
+	<string name="details.starred">Starred</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>
