@@ -819,11 +819,12 @@ public class DownloadService extends Service {
 
 		int index = getNextPlayingIndex();
 
-		nextSetup = false;
 		if(nextPlayingTask != null) {
 			nextPlayingTask.cancel();
 			nextPlayingTask = null;
 		}
+		resetNext();
+
 		if(index < size() && index != -1 && index != currentPlayingIndex) {
 			nextPlaying = downloadList.get(index);
 
@@ -835,7 +836,7 @@ public class DownloadService extends Service {
 			}
 		} else {
 			if(remoteState == LOCAL) {
-				resetNext();
+				// resetNext();
 			} else if(remoteController != null) {
 				remoteController.changeNextTrack(nextPlaying);
 			}
@@ -1227,14 +1228,16 @@ public class DownloadService extends Service {
 			if (nextMediaPlayer != null) {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
 					mediaPlayer.setNextMediaPlayer(null);
-					nextSetup = false;
 				}
+				nextSetup = false;
 
 				nextMediaPlayer.setOnCompletionListener(null);
 				nextMediaPlayer.setOnErrorListener(null);
 				nextMediaPlayer.reset();
 				nextMediaPlayer.release();
 				nextMediaPlayer = null;
+			} else if(nextSetup) {
+				nextSetup = false;
 			}
 		} catch (Exception e) {
 			Log.w(TAG, "Failed to reset next media player");
@@ -1795,6 +1798,11 @@ public class DownloadService extends Service {
 
 			nextMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 				public void onPrepared(MediaPlayer mp) {
+					// Changed to different while preparing so ignore
+					if(nextMediaPlayer != mp) {
+						return;
+					}
+
 					try {
 						setNextPlayerState(PREPARED);
 
@@ -2634,7 +2642,9 @@ public class DownloadService extends Service {
 			// Start the setup of the next media player
 			mediaPlayerHandler.post(new Runnable() {
 				public void run() {
-					setupNext(downloadFile);
+					if(!CheckCompletionTask.this.isCancelled()) {
+						setupNext(downloadFile);
+					}
 				}
 			});
 			return null;
