@@ -294,7 +294,7 @@
     <string name="settings.invalid_url">Bitte geben Sie eine gültige URL an.</string>
     <string name="settings.invalid_username">Bitte gültigen Nutzernamen angeben (keine führenden Leerzeichen).</string>
     <string name="settings.appearance_title">Erscheinung</string>
-    <string name="settings.theme_title">Theme</string>
+    <string name="settings.theme_title">Aussehen</string>
     <string name="settings.theme_light">Hell</string>
     <string name="settings.theme_dark">Dunkel</string>
 	<string name="settings.theme_black">Schwarz</string>
@@ -382,8 +382,8 @@
 	<string name="settings.sync_enabled">Synchronisierung aktiv</string>
 	<string name="settings.sync_enabled_summary">Podcast regelmäßig auf Änderungen prüfen</string>
 	<string name="settings.sync_interval">Synchronisierungsintervall</string>
-	<string name="settings.sync_interval_15">15 Minutes</string>
-	<string name="settings.sync_interval_30">30 Minutes</string>
+	<string name="settings.sync_interval_15">15 Minuten</string>
+	<string name="settings.sync_interval_30">30 Minuten</string>
 	<string name="settings.sync_interval_60">1 Stunde</string>
 	<string name="settings.sync_interval_120">2 Stunden</string>
 	<string name="settings.sync_interval_240">4 Stunden</string>
@@ -641,5 +641,20 @@
 	<string name="settings.keep_played_count_three">3 abgespielte Lieder behalten</string>
 	<string name="settings.keep_played_count_two">2 abgespielte Lieder behalten</string>
 	<string name="settings.keep_played_count_title">Abgespielte Lieder behalten</string>
+	<string name="details.updated">Aktualisiert</string>
+	<string name="details.position">Position</string>
+	<string name="details.song">Lied</string>
+	<string name="button_bar.offline">Offline</string>
+	<string name="settings.menu_options.delete_summary">Zeige \"Löschen\" im Menü</string>
+	<string name="settings.menu_options.download_summary">Zeige \"Downloads\" im Menü</string>
+	<string name="settings.menu_options.pin_summary">Zeige \"Permanent Cachen\" im Menü</string>
+	<string name="details.title.artist">Künstlerdetails</string>
+	<string name="common.true">Ja</string>
+	<string name="common.false">Nein</string>
+	<string name="settings.menu_options.play_now_summary">Zeige \"Jetzt wiedergeben\" im Menü</string>
+	<string name="settings.menu_options.play_shuffled_summary">Zeige \"Mischen\" im Menü</string>
+	<string name="settings.shuffle_by_album.false">Alle Titel mischen</string>
+	<string name="settings.shuffle_by_album.true">Albenreihenfolge mischen</string>
+	<string name="settings.shuffle_by_album">Alben mischen</string>
 
 </resources>
