@@ -23,6 +23,7 @@ import java.io.Reader;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Xml;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -34,7 +35,7 @@ import github.daneren2005.dsub.util.Util;
  * @author Sindre Mehus
  */
 public abstract class AbstractParser {
-
+    private static final String TAG = AbstractParser.class.getSimpleName();
     protected final Context context;
 	protected final int instance;
     private XmlPullParser parser;
@@ -101,7 +102,12 @@ public abstract class AbstractParser {
 
     protected Integer getInteger(String name) {
         String s = get(name);
-        return s == null ? null : Integer.valueOf(s);
+        try {
+            return (s == null || "".equals(s)) ? null : Integer.valueOf(s);
+        } catch(Exception e) {
+            Log.w(TAG, "Failed to parse " + s + " into integer");
+            return null;
+        }
     }
 
     protected Long getLong(String name) {
