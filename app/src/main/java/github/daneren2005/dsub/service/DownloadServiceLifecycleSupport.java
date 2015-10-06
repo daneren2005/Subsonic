@@ -18,7 +18,6 @@
  */
 package github.daneren2005.dsub.service;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +40,6 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.ServerInfo;
-import github.daneren2005.dsub.util.BackgroundTask;
 import github.daneren2005.dsub.util.CacheCleaner;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
@@ -288,7 +286,10 @@ public class DownloadServiceLifecycleSupport {
 	public void serializeDownloadQueueNow(List<DownloadFile> songs, boolean serializeRemote) {
 		final PlayerQueue state = new PlayerQueue();
 		for (DownloadFile downloadFile : songs) {
-			state.songs.add(downloadFile.getSong());
+			MusicDirectory.Entry song = downloadFile.getSong();
+			if(song.isOnlineId(downloadService)) {
+				state.songs.add(downloadFile.getSong());
+			}
 		}
 		for (DownloadFile downloadFile : downloadService.getToDelete()) {
 			state.toDelete.add(downloadFile.getSong());

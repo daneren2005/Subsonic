@@ -20,6 +20,7 @@ package github.daneren2005.dsub.domain;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.util.Log;
@@ -523,6 +524,18 @@ public class MusicDirectory implements Serializable {
 
 		public void setCloseness(int closeness) {
 			this.closeness = closeness;
+		}
+
+		public boolean isOnlineId(Context context) {
+			try {
+				String cacheLocation = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+				return cacheLocation == null || id == null || id.indexOf(cacheLocation) == -1;
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to check online id validity");
+
+				// Err on the side of default functionality
+				return true;
+			}
 		}
 
         @Override
