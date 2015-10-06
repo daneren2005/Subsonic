@@ -560,7 +560,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 	@Override
 	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<DownloadFile> updateView, DownloadFile downloadFile) {
-		if(onContextItemSelected(menuItem, downloadFile)) {
+		if(onContextItemSelected(menuItem, downloadFile.getSong())) {
 			return true;
 		}
 
