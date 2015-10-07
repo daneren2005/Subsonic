@@ -427,9 +427,7 @@ public class OfflineMusicService implements MusicService {
 							Util.close(reader);
 						}
 
-						if(songCount > 0) {
-							playlists.add(playlist);
-						}
+						playlists.add(playlist);
 					}
 				}
 				
