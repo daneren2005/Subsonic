@@ -1943,7 +1943,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		new RecursiveLoader(context) {
 			@Override
 			protected Boolean doInBackground() throws Throwable {
-				getSongsRecursively(entries, songs);
+				getSongsRecursively(entries, true);
 				getDownloadService().downloadBackground(songs, save);
 				return null;
 			}
@@ -2018,14 +2018,24 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 
 		protected void getSongsRecursively(List<Entry> entry) throws Exception {
-			getSongsRecursively(entry, songs);
+			getSongsRecursively(entry, false);
+		}
+		protected void getSongsRecursively(List<Entry> entry, boolean allowVideo) throws Exception {
+			getSongsRecursively(entry, songs, allowVideo);
 		}
 		protected void getSongsRecursively(List<Entry> entry, List<Entry> songs) throws Exception {
+			getSongsRecursively(entry, songs, false);
+		}
+		protected void getSongsRecursively(List<Entry> entry, List<Entry> songs, boolean allowVideo) throws Exception {
 			MusicDirectory dir = new MusicDirectory();
 			dir.addChildren(entry);
-			getSongsRecursively(dir, songs);
+			getSongsRecursively(dir, songs, allowVideo);
 		}
+
 		protected void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
+			getSongsRecursively(parent, songs, false);
+		}
+		protected void getSongsRecursively(MusicDirectory parent, List<Entry> songs, boolean allowVideo) throws Exception {
 			if (songs.size() > MAX_SONGS) {
 				return;
 			}
@@ -2045,7 +2055,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 
 			for (Entry song : parent.getChildren(false, true)) {
-				if (!song.isVideo() && song.getRating() != 1) {
+				if ((!song.isVideo() || allowVideo) && song.getRating() != 1) {
 					songs.add(song);
 				}
 			}

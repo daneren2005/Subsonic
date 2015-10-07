@@ -858,7 +858,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		RecursiveLoader onValid = new RecursiveLoader(context) {
 			@Override
 			protected Boolean doInBackground() throws Throwable {
-				getSongsRecursively(entries, songs);
+				getSongsRecursively(entries, true);
 				getDownloadService().downloadBackground(songs, save);
 				return null;
 			}
