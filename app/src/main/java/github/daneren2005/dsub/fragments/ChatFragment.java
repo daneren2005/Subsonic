@@ -81,6 +81,7 @@ public class ChatFragment extends SubsonicFragment {
 		});
 
 		chatListView = (ListView) rootView.findViewById(R.id.chat_entries);
+		chatListView.setStackFromBottom(true);
 
 		messageEditText.setImeActionLabel("Send", KeyEvent.KEYCODE_ENTER);
 		messageEditText.addTextChangedListener(new TextWatcher() {
