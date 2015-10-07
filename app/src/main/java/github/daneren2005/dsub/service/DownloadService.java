@@ -1754,6 +1754,7 @@ public class DownloadService extends Service {
 								autoPlayStart = false;
 							} else {
 								setPlayerState(PAUSED);
+								onSongProgress();
 							}
 						}
 
