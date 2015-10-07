@@ -730,6 +730,22 @@ public class RESTMusicService implements MusicService {
 			values.add(genre);
 		}
 		if(startYear != null && !"".equals(startYear)) {
+			// Check to make sure user isn't doing 2015 -> 2010 since Subsonic will return no results
+			if(endYear != null && !"".equals(endYear)) {
+				try {
+					int startYearInt = Integer.parseInt(startYear);
+					int endYearInt = Integer.parseInt(endYear);
+
+					if(startYearInt > endYearInt) {
+						String tmp = startYear;
+						startYear = endYear;
+						endYear = tmp;
+					}
+				} catch(Exception e) {
+					Log.w(TAG, "Failed to convert start/end year into ints", e);
+				}
+			}
+
 			names.add("fromYear");
 			values.add(startYear);
 		}
