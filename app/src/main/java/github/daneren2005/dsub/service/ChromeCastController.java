@@ -319,21 +319,22 @@ public class ChromeCastController extends RemoteController {
 				meta.putString(MediaMetadata.KEY_ALBUM_ARTIST, song.getArtist());
 				meta.putString(MediaMetadata.KEY_ALBUM_TITLE, song.getAlbum());
 
-				String coverArt = "";
-				if(proxy == null || proxy instanceof WebProxy) {
-					coverArt = musicService.getCoverArtUrl(downloadService, song);
+				if(castDevice.hasCapability(CastDevice.CAPABILITY_VIDEO_IN)) {
+					if (proxy == null || proxy instanceof WebProxy) {
+						String coverArt = musicService.getCoverArtUrl(downloadService, song);
 
-					// If proxy is going, it is a web proxy
-					if(proxy != null) {
-						coverArt = proxy.getPublicAddress(coverArt);
-					}
+						// If proxy is going, it is a web proxy
+						if (proxy != null) {
+							coverArt = proxy.getPublicAddress(coverArt);
+						}
 
-					meta.addImage(new WebImage(Uri.parse(coverArt)));
-				} else {
-					File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
-					if(coverArtFile != null && coverArtFile.exists()) {
-						coverArt = proxy.getPublicAddress(coverArtFile.getPath());
 						meta.addImage(new WebImage(Uri.parse(coverArt)));
+					} else {
+						File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
+						if (coverArtFile != null && coverArtFile.exists()) {
+							String coverArt = proxy.getPublicAddress(coverArtFile.getPath());
+							meta.addImage(new WebImage(Uri.parse(coverArt)));
+						}
 					}
 				}
 			}

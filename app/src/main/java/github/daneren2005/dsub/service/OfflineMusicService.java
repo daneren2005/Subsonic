@@ -394,8 +394,8 @@ public class OfflineMusicService implements MusicService {
 
 						Reader reader = null;
 						BufferedReader buffer = null;
+						int songCount = 0;
 						try {
-							int songCount = 0;
 							reader = new FileReader(file);
 							buffer = new BufferedReader(reader);
 
@@ -427,7 +427,9 @@ public class OfflineMusicService implements MusicService {
 							Util.close(reader);
 						}
 
-						playlists.add(playlist);
+						if(songCount > 0) {
+							playlists.add(playlist);
+						}
 					}
 				}
 				
