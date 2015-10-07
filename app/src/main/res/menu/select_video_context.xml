@@ -19,6 +19,12 @@
 			android:title="@string/common.download"/>
 	</group>
 
+	<group android:id="@+id/hide_pin">
+		<item
+			android:id="@+id/song_menu_pin"
+			android:title="@string/common.pin"/>
+	</group>
+
 	<group android:id="@+id/hide_delete">
 		<item
 			android:id="@+id/song_menu_delete"
