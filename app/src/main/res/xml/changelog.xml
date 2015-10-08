@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.0.4" versioncode="159" releasedate="10/8/2015">
+		<change>Add ability to star/rate albums in root folder</change>
+		<change>Chat Tab: default to bottom/newest messages</change>
+		<change>Offline Mode: do not show playlists with no cached songs</change>
+		<change>Fix broken starring artist</change>
+		<change>Fix not being able to cache videos</change>
+		<change>Various bug fixes</change>
+	</release>
 	<release version="5.0.3" versioncode="158" releasedate="9/28/2015">
 		<change>Add context menu items back as optional</change>
 		<change>Add setting to shuffle by albums or by songs</change>
