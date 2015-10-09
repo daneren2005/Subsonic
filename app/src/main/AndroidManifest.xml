@@ -90,6 +90,15 @@
 
         <service android:name=".service.DownloadService"
                  android:label="DSub Playback Service"/>
+
+		<service android:name=".service.AutoMediaBrowserService"
+				 android:exported="true">
+
+			<intent-filter>
+				<action android:name="android.media.browse.MediaBrowserService"/>
+			</intent-filter>
+		</service>
+
 		<service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
 		<service android:name="github.daneren2005.dsub.service.sync.AuthenticatorService">
 			<intent-filter>
@@ -241,6 +250,11 @@
 		<meta-data
 			android:name="com.google.android.gms.version"
 			android:value="@integer/google_play_services_version" />
-    </application>
+
+		<meta-data android:name="com.google.android.gms.car.application"
+				   android:resource="@xml/auto_app_description"/>
+		<meta-data android:name="com.google.android.gms.car.notification.SmallIcon"
+				   android:resource="@drawable/stat_notify_playing" />
+	</application>
 
 </manifest>

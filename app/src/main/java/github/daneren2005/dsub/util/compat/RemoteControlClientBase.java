@@ -1,43 +1,32 @@
 package github.daneren2005.dsub.util.compat;
 
-import github.daneren2005.dsub.domain.MusicDirectory.Entry;
+import github.daneren2005.dsub.domain.MusicDirectory;
 import android.content.ComponentName;
 import android.content.Context;
 import android.support.v7.media.MediaRouter;
-import android.util.Log;
+import android.os.Build;
 
-public class RemoteControlClientBase extends RemoteControlClientHelper {
-
-    private static final String TAG = RemoteControlClientBase.class.getSimpleName();
-
-	@Override
-	public void register(Context context, ComponentName mediaButtonReceiverComponent) {
-
+public abstract class RemoteControlClientBase {
+	
+	public static RemoteControlClientBase createInstance() {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			return new RemoteControlClientLP();
+		} else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+			return new RemoteControlClientJB();
+		} else {
+			return new RemoteControlClientICS();
+		}
 	}
-
-	@Override
-	public void unregister(Context context) {
-
+	
+	protected RemoteControlClientBase() {
+		// Avoid instantiation
 	}
-
-	@Override
-	public void setPlaybackState(int state) {
-
-	}
-
-	@Override
-	public void updateMetadata(Context context, Entry currentSong) {
-
-	}
-
-	@Override
-	public void registerRoute(MediaRouter router) {
-
-	}
-
-	@Override
-	public void unregisterRoute(MediaRouter router) {
-
-	}
-
+	
+	public abstract void register(final Context context, final ComponentName mediaButtonReceiverComponent);
+	public abstract void unregister(final Context context);
+	public abstract void setPlaybackState(final int state);
+	public abstract void updateMetadata(final Context context, final MusicDirectory.Entry currentSong);
+	public abstract void registerRoute(MediaRouter router);
+	public abstract void unregisterRoute(MediaRouter router);
+	
 }

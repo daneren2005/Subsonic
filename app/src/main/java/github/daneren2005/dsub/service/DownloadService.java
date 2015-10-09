@@ -49,7 +49,7 @@ import github.daneren2005.dsub.util.MediaRouteManager;
 import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
+import github.daneren2005.dsub.util.compat.RemoteControlClientBase;
 import github.daneren2005.dsub.util.tags.BastpUtil;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
@@ -106,7 +106,7 @@ public class DownloadService extends Service {
 	private static final int SHUFFLE_MODE_ALL = 1;
 	private static final int SHUFFLE_MODE_ARTIST = 2;
 
-	private RemoteControlClientHelper mRemoteControl;
+	private RemoteControlClientBase mRemoteControl;
 
 	private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
 	private Looper mediaPlayerLooper;
@@ -238,7 +238,7 @@ public class DownloadService extends Service {
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
-			mRemoteControl = RemoteControlClientHelper.createInstance();
+			mRemoteControl = RemoteControlClientBase.createInstance();
 			ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 			mRemoteControl.register(this, mediaButtonReceiverComponent);
 		}
@@ -2231,6 +2231,10 @@ public class DownloadService extends Service {
 			toDelete.add(downloadFile);
 		}
 		clearCurrentBookmark(downloadFile.getSong(), true);
+	}
+
+	public RemoteControlClientBase getRemoteControlClient() {
+		return mRemoteControl;
 	}
 	
 	private boolean isPastCutoff() {

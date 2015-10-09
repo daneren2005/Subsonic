@@ -16,7 +16,7 @@ import android.support.v7.media.MediaRouter;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
 @TargetApi(14)
-public class RemoteControlClientICS extends RemoteControlClientHelper {
+public class RemoteControlClientICS extends RemoteControlClientBase {
 	private static String TAG = RemoteControlClientICS.class.getSimpleName();
 
 	protected RemoteControlClient mRemoteControl;
