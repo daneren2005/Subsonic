@@ -165,10 +165,14 @@ public class DSubWidgetProvider extends AppWidgetProvider {
         MusicDirectory.Entry currentPlaying = null;
         if(service == null) {
         	// Deserialize from playling list to setup
-			PlayerQueue state = FileUtil.deserialize(context, DownloadServiceLifecycleSupport.FILENAME_DOWNLOADS_SER, PlayerQueue.class);
-        	if(state != null && state.currentPlayingIndex != -1) {
-        		currentPlaying = state.songs.get(state.currentPlayingIndex);
-        	}
+            try {
+                PlayerQueue state = FileUtil.deserialize(context, DownloadServiceLifecycleSupport.FILENAME_DOWNLOADS_SER, PlayerQueue.class);
+                if (state != null && state.currentPlayingIndex != -1) {
+                    currentPlaying = state.songs.get(state.currentPlayingIndex);
+                }
+            } catch(Exception e) {
+                Log.e(TAG, "Failed to grab current playing", e);
+            }
         } else {
 			currentPlaying = service.getCurrentPlaying() == null ? null : service.getCurrentPlaying().getSong();
         }
