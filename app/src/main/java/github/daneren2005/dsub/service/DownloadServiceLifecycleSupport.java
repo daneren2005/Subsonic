@@ -286,10 +286,7 @@ public class DownloadServiceLifecycleSupport {
 	public void serializeDownloadQueueNow(List<DownloadFile> songs, boolean serializeRemote) {
 		final PlayerQueue state = new PlayerQueue();
 		for (DownloadFile downloadFile : songs) {
-			MusicDirectory.Entry song = downloadFile.getSong();
-			if(song.isOnlineId(downloadService)) {
-				state.songs.add(downloadFile.getSong());
-			}
+			state.songs.add(downloadFile.getSong());
 		}
 		for (DownloadFile downloadFile : downloadService.getToDelete()) {
 			state.toDelete.add(downloadFile.getSong());
@@ -324,11 +321,19 @@ public class DownloadServiceLifecycleSupport {
 							position = 0;
 						}
 
+						MusicDirectory.Entry currentPlaying = state.songs.get(index);
+						List<MusicDirectory.Entry> songs = new ArrayList<>();
+						for(MusicDirectory.Entry song: state.songs) {
+							if(song.isOnlineId(downloadService)) {
+								songs.add(song);
+							}
+						}
+
 						MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-						musicService.savePlayQueue(state.songs, state.songs.get(index), position, downloadService, null);
-						currentSavePlayQueueTask = null;
+						musicService.savePlayQueue(songs, currentPlaying, position, downloadService, null);
 					} catch (Exception e) {
 						Log.e(TAG, "Failed to save playing queue to server", e);
+					} finally {
 						currentSavePlayQueueTask = null;
 					}
 
