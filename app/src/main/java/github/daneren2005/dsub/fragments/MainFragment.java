@@ -1,6 +1,7 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.res.Resources;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -247,7 +248,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				@Override
 				protected File doInBackground() throws Throwable {
 					updateProgress("Gathering Logs");
-					File logcat = new File(FileUtil.getSubsonicDirectory(context), "logcat.txt");
+					File logcat = new File(Environment.getExternalStorageDirectory(), "dsub-logcat.txt");
 					Util.delete(logcat);
 					Process logcatProc = null;
 
