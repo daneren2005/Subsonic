@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
@@ -72,12 +73,17 @@ public class RemoteControlClientICS extends RemoteControlClientBase {
 		updateMetadata(currentSong, editor);
 		editor.apply();
     	if (currentSong == null || imageLoader == null) {
-    		mRemoteControl.editMetadata(true)
-        	.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
-        	.apply();
+    		updateAlbumArt(currentSong, null);
     	} else {
-    		imageLoader.loadImage(context, mRemoteControl, currentSong);
+    		imageLoader.loadImage(context, this, currentSong);
     	}
+	}
+
+	@Override
+	public void updateAlbumArt(MusicDirectory.Entry currentSong, Bitmap bitmap) {
+		mRemoteControl.editMetadata(true)
+				.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap).
+				apply();
 	}
 
 	@Override

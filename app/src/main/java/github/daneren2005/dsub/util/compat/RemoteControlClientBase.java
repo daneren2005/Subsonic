@@ -3,6 +3,7 @@ package github.daneren2005.dsub.util.compat;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.media.MediaRouter;
 import android.os.Build;
 
@@ -26,6 +27,7 @@ public abstract class RemoteControlClientBase {
 	public abstract void unregister(final Context context);
 	public abstract void setPlaybackState(final int state);
 	public abstract void updateMetadata(final Context context, final MusicDirectory.Entry currentSong);
+	public abstract void updateAlbumArt(MusicDirectory.Entry currentSong, Bitmap bitmap);
 	public abstract void registerRoute(MediaRouter router);
 	public abstract void unregisterRoute(MediaRouter router);
 	

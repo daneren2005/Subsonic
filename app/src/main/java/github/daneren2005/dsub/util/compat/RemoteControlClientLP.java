@@ -23,6 +23,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.MediaMetadata;
 import android.media.Rating;
@@ -31,16 +32,22 @@ import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Build;
 import android.support.v7.media.MediaRouter;
+import android.util.Log;
 
+import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.ImageLoader;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class RemoteControlClientLP extends RemoteControlClientBase {
-	private MediaSession mediaSession;
-	private DownloadService downloadService;
+	private static final String TAG = RemoteControlClientLP.class.getSimpleName();
+
+	protected MediaSession mediaSession;
+	protected DownloadService downloadService;
+	protected ImageLoader imageLoader;
 
 	private PlaybackState previousState;
 
@@ -72,6 +79,8 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC);
 		mediaSession.setPlaybackToLocal(audioAttributesBuilder.build());
 		mediaSession.setActive(true);
+
+		imageLoader = SubsonicActivity.getStaticImageLoader(context);
 	}
 
 	@Override
@@ -118,6 +127,14 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 	@Override
 	public void updateMetadata(Context context, MusicDirectory.Entry currentSong) {
+		setMetadata(currentSong, null);
+
+		if(currentSong != null && imageLoader != null) {
+			imageLoader.loadImage(context, this, currentSong);
+		}
+	}
+
+	public void setMetadata(MusicDirectory.Entry currentSong, Bitmap bitmap) {
 		MediaMetadata.Builder builder = new MediaMetadata.Builder();
 		builder.putString(MediaMetadata.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
 				.putString(MediaMetadata.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
@@ -140,7 +157,16 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		}
 		builder.putRating(MediaMetadata.METADATA_KEY_USER_RATING, rating);
 
+		if(bitmap != null) {
+			builder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, bitmap);
+		}
+
 		mediaSession.setMetadata(builder.build());
+	}
+
+	@Override
+	public void updateAlbumArt(MusicDirectory.Entry currentSong, Bitmap bitmap) {
+		setMetadata(currentSong, bitmap);
 	}
 
 	@Override
@@ -161,6 +187,8 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		return PlaybackState.ACTION_PLAY |
 				PlaybackState.ACTION_PAUSE |
 				PlaybackState.ACTION_SEEK_TO |
+				PlaybackState.ACTION_SKIP_TO_NEXT |
+				PlaybackState.ACTION_SKIP_TO_PREVIOUS |
 				PlaybackState.ACTION_SET_RATING;
 	}
 
@@ -183,6 +211,15 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		@Override
 		public void onSeekTo(long position) {
 			downloadService.seekTo((int) position);
+		}
+
+		@Override
+		public void onSkipToNext() {
+			downloadService.next();
+		}
+		@Override
+		public void onSkipToPrevious() {
+			downloadService.previous();
 		}
 
 		@Override
