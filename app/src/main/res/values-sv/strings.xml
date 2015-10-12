@@ -13,7 +13,7 @@
     <string name="common.pin">Permanent cache</string>
     <string name="common.delete">Ta Bort</string>
 	<string name="common.star">Favorit</string>
-	<string name="common.unstar">Ofavorit</string>
+	<string name="common.unstar">Inte favorit</string>
 	<string name="common.info">Detaljer</string>
 	<string name="common.name">Namn</string>
 	<string name="common.comment">Kommentar</string>
@@ -58,7 +58,7 @@
 	]]>
 	</string>
     <string name="main.select_server">Välj server</string>
-    <string name="main.shuffle">Blandad uppspelning</string>
+    <string name="main.shuffle">Slumpad uppspelning</string>
     <string name="main.offline">Gå Offline</string>
 	<string name="main.online">Gå Online</string>
     <string name="main.settings">Inställningar</string>
@@ -103,7 +103,7 @@
 	<string name="menu.show_artist">Visa Artist</string>
 	<string name="menu.share">Dela</string>
 	<string name="menu.delete_cache">Rensa cache</string>
-	<string name="menu.cast">"Casta" till enhet</string>
+	<string name="menu.cast">Casta till enhet</string>
 	<string name="menu.faq">FAQ</string>
 	<string name="menu.add_user">Lägg till användare</string>
 	<string name="menu.rescan">Skanna servern igen</string>
@@ -146,11 +146,11 @@
     <string name="select_album.no_sdcard">Error: Inget SD-kort tillgängligt.</string>
     <string name="select_album.no_network">Varning: Inget nätverk tillgängligt.</string>
 	<string name="select_album.no_room">Varning: Du har bara %s kvar</string>
-    <string name="select_album.not_licensed">Servern är inte licenserad. %d försöksdagar kvar.</string>
+    <string name="select_album.not_licensed">Servern är inte licenserad. %d testdagar kvar.</string>
     <string name="select_album.donate_dialog_message">Få oändliga nedladdningar genom att donera till Subsonic.</string>
     <string name="select_album.donate_dialog_now">Nu</string>
     <string name="select_album.donate_dialog_later">Senare</string>
-    <string name="select_album.donate_dialog_0_trial_days_left">Försöksperioden är slut. Donera till Subsonic för att fortsätta</string>
+    <string name="select_album.donate_dialog_0_trial_days_left">Testperioden är slut. Donera till Subsonic för att fortsätta</string>
 
     <string name="offline.sync_dialog_title">Offline spår väntar på att bli synkroniserade</string>
     <string name="offline.sync_dialog_message">Processar %1$d offline scrobbles?
@@ -180,7 +180,7 @@
 	<string name="select_podcasts.delete">Radera podcast</string>
 
     <string name="download.empty">Spellistan är tom</string>
-	<string name="download.shuffle_loading">Plandad lista laddas...</string>
+	<string name="download.shuffle_loading">Slumpad lista laddas...</string>
     <string name="download.playerstate_downloading">Laddar ner - %s</string>
 	<string name="download.playerstate_mobile_disabled">Väntar på WiFi nätverk för att ladda ner</string>
     <string name="download.playerstate_buffering">Buffrar</string>
@@ -229,8 +229,8 @@
 	<string name="sync.new_albums">Nya album tillgängliga</string>
 	<string name="sync.new_starred">Nya favoritspår tillgängliga</string>
     
-	<string name="starring_content_starred">Favoriter \"%s\"</string>
-	<string name="starring_content_unstarred">Ofavoriter \"%s\"</string>
+	<string name="starring_content_starred">\"%s\" är nu en favorit</string>
+	<string name="starring_content_unstarred">\"%s\" är inte längre en favorit</string>
     <string name="starring_content_error">Misslyckades med att uppdatera \"%s\", försök igen senare.</string>
 
 	<string name="playlist.mine">Mina spellistor</string>
@@ -279,14 +279,14 @@
     <string name="settings.server_password">Lösenord</string>
 	<string name="settings.server_open_browser">Öppna i webbläsare</string>
 	<string name="settings.server_sync_summary">Om synkronisering ska vara aktiverat på den här servern</string>
-	<string name="settings.server_sync">Synk aktiverat</string>
+	<string name="settings.server_sync">Synkronisering aktiverad</string>
     <string name="settings.cache_title">Musik cache</string>
     <string name="settings.preload_wifi">Spår att ladda in i förväg (Wifi)</string>
 	<string name="settings.preload_mobile">Spår att ladda in i förväg (Mobil data)</string>
     <string name="settings.cache_size">Cache storlek</string>
     <string name="settings.cache_location">Cache plats</string>
-    <string name="settings.cache_location_error">Ogiltig cache placering. Anväder standard.</string>
-    <string name="settings.cache_location_reset">Din cache placering är inte skrivbar. Om du nyligen uppdaterade Android till KitKat 4.4 så har sättet appar skriver till SD-kortet ändrats så de bara kan skriva till en specifik plats. Platsen som DSub använder har automatiskt ändrats till den korrekta platsen. För att radera gammal data måste du sätta i SD-kortet i din dator och radera mappen manuellt</string>
+    <string name="settings.cache_location_error">Ogiltig cache placering. Använder standard.</string>
+    <string name="settings.cache_location_reset">Din cache placering är inte skrivbar. Om du nyligen uppdaterade Android till KitKat 4.4 så har sättet appar skriver till SD-kortet ändrats så de bara kan skriva till en specifik plats. Platsen som DSub använder har automatiskt ändrats till den korrekta platsen. För att radera gammal data måste du sätta in SD-kortet i din dator och radera mappen manuellt</string>
 	<string name="settings.cache_clear">Rensa cachen</string>
 	<string name="settings.cache_clear_complete">Cachen har rensats</string>
     <string name="settings.testing_connection">Testar anslutning...</string>
@@ -336,7 +336,7 @@
     <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
     <string name="settings.max_bitrate_unlimited">Oändlig</string>
     <string name="settings.wifi_required_title">Bara Wi-Fi streaming</string>
-    <string name="settings.wifi_required_summary">Streama vara media om jag är ansluten till Wi-Fi</string>
+    <string name="settings.wifi_required_summary">Streama bara media om jag är ansluten till Wi-Fi</string>
 	<string name="settings.network_timeout_title">Nätverks Timeout</string>
 	<string name="settings.network_timeout_10000">10 sekunder</string>
 	<string name="settings.network_timeout_15000">15 sekunder</string>
@@ -385,7 +385,7 @@
 	<string name="settings.persistent_title">Ihållande notifikation</string>
 	<string name="settings.persistent_summary">Visa notifikationen även när jag har pausat.  Tryck stop för att ta bort den.</string>
 	<string name="settings.gapless_playback">Spela upp utan mellanrum</string>
-	<string name="settings.gapless_playback_summary">Om du märker några konstiga buggar när du löyssnar kan det hjälpa att slå av den här.</string>
+	<string name="settings.gapless_playback_summary">Om du märker några konstiga buggar när du lyssnar kan det hjälpa att slå av den här.</string>
 	<string name="settings.chat_refresh">Hur ofta ska chat uppdateras (sekunder)</string>
 	<string name="settings.chat_enabled">Chat aktiverad</string>
 	<string name="settings.chat_enabled_summary">Om chatten ska visas i menyn till vänster</string>
@@ -422,8 +422,8 @@
 	<string name="settings.sync_most_recent">Synkronisera nyligen tillagda</string>
 	<string name="settings.sync_most_recent_summary">Lägg automatiskt till nya album i cachen</string>
 	<string name="settings.sync_starred">Synkronisera favoriter</string>
-	<string name="settings.sync_starred_summary">Lägg automatiskt till spår, album och artiester som är favoriter i cachen</string>
-	<string name="settings.sync_notification">Visa synkronisering notifikation</string>
+	<string name="settings.sync_starred_summary">Lägg automatiskt till spår, album och artister som är favoriter i cachen</string>
+	<string name="settings.sync_notification">Visa synkroniserings notifikation</string>
 	<string name="settings.sync_notification_summary">Visa notifikation efter att ny media har blivit synkroniserad</string>
 	<string name="settings.menu_options.title">Valfria menyalternativ</string>
 	<string name="settings.menu_options.play_now_summary">Visa nu i menyer</string>
@@ -436,7 +436,7 @@
 	<string name="settings.menu_options.star_summary">Visa favorit i menyer</string>
 	<string name="settings.menu_options.shared_summary">Visa dela i menyer</string>
 	<string name="settings.menu_options.rate_summary">Visa omdömme i menyer</string>
-	<string name="settings.browse_by_tags">Navigera mvia taggar</string>
+	<string name="settings.browse_by_tags">Navigera via taggar</string>
 	<string name="settings.browse_by_tags_summary">Navigera via taggar istället för mappstruktur.  Kräver Subsonic 4.7+</string>
 	<string name="settings.disable_exit_prompt">Avaktivera stäng ner rutan</string>
 	<string name="settings.disable_exit_prompt_summary">Stäng appen direkt när jag trycker bakåt på hemskärmen</string>
@@ -444,11 +444,11 @@
 	<string name="settings.override_system_language_summary">Visa appen på engelska även om systemet är på ett språk Subsonic har stöd för. Du kan eventuellt behöva rensa appen från minnet för att det ska ta effekt.</string>
 	<string name="settings.drawer_items_title">Sidoflikar</string>
 	<string name="settings.play_now_after">Spela nu - Efter</string>
-	<string name="settings.play_now_after_summary">Såela nu i context menyn spelar allt efter spåret (som i Subsonic webb GUI)</string>
+	<string name="settings.play_now_after_summary">Spela nu i context menyn spelar allt efter spåret (som i Subsonic webb GUI)</string>
 	<string name="settings.large_album_art">Stora album bilder</string>
 	<string name="settings.large_album_art_summary">Visa album med stora bilder istället för en lista</string>
 	<string name="settings.admin_enabled">Admin aktiverad</string>
-	<string name="settings.admin_enabled_summary">Om admin ska visas eller inte i menyn till vänsteer</string>
+	<string name="settings.admin_enabled_summary">Om admin ska visas eller inte i menyn till vänster</string>
 	<string name="settings.replay_gain">Replay Gain</string>
 	<string name="settings.replay_gain_summary">Om volymen ska skalas efter albumet eller spårets replay gain tagg</string>
 	<string name="settings.replay_gain_type">Läs från taggar</string>
@@ -492,7 +492,7 @@
 	<string name="share.no_expiration">Går aldrig ut</string>
 	<string name="share.expiration">Går ut:</string>
 	<string name="share.updated_info">Uppdaterad delnings information för %s</string>
-	<string name="share.updated_info_error">Misslyckades med att updatera delnins information för %s</string>
+	<string name="share.updated_info_error">Misslyckades med att uppdatera delnings information för %s</string>
 	<string name="share.via">Dela via</string>
 	<string name="share.delete">Ta bort delning</string>
 
@@ -500,7 +500,7 @@
 	<string name="admin.add_user_email">Email:</string>
 	<string name="admin.add_user_password">Lösenord:</string>
 	<string name="admin.create_user_success">Skapade en ny användare</string>
-	<string name="admin.create_user_error">Misslyckades med at skapa en ny användare</string>
+	<string name="admin.create_user_error">Misslyckades med att skapa en ny användare</string>
 	<string name="admin.change_username_invalid">Skriv ett giltigt användarnamn</string>
 	<string name="admin.update_permissions">Uppdatera tillstång</string>
 	<string name="admin.update_permissions_success">Uppdaterade tillstång för %1$s</string>
@@ -545,10 +545,10 @@
 
     <string name="service.connecting">Ansluter till servern, vänta.</string>
 
-    <string name="parser.upgrade_client">Okompatibel version. UppgraderaDSub.</string>
+    <string name="parser.upgrade_client">Okompatibel version. Uppgradera DSub.</string>
     <string name="parser.upgrade_server">Okompatibel version. Uppgradera din Subsonic server.</string>
     <string name="parser.not_authenticated">Ogiltigt användarnamn eller lösenord.</string>
-    <string name="parser.not_authorized">Inte auktoriserad. Kontrollera tillstång på din Subsonic server.</string>
+    <string name="parser.not_authorized">Inte auktoriserad. Kontrollera tillstånd på din Subsonic server.</string>
     <string name="parser.artist_count">Har %d artister.</string>
 	<string name="parser.server_error">Server fel: %s</string>
 	<string name="parser.scan_count">Scannade %d rader</string>
@@ -578,7 +578,7 @@
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
 
-	<string name="changelog_full_title">Ändrings logg</string>
+	<string name="changelog_full_title">Uppdateringslogg</string>
     <string name="changelog_title">Vad är nytt</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mer…</string>
@@ -626,7 +626,7 @@
 	<string name="details.title">Titel</string>
 	<string name="details.url">URL</string>
 	<string name="details.error">Felmeddelande</string>
-	<string name="details.author">Författare</string>
+	<string name="details.author">Utvecklare</string>
 	<string name="details.email">Email</string>
 	<string name="details.fork">Forked från</string>
 	<string name="details.version">Version</string>
@@ -637,7 +637,7 @@
 	<string name="details.of">%1$s av %2$s</string>
 	<string name="details.song">Spår</string>
 	<string name="details.position">Position</string>
-	<string name="details.updated">Updaterad</string>
+	<string name="details.updated">Uppdaterad</string>
 	<string name="details.starred">Favorit</string>
 
     <plurals name="select_album_n_songs">
@@ -654,8 +654,8 @@
         <item quantity="other">%d spår i kö för att spelas upp.</item>
     </plurals>
     <plurals name="select_album_donate_dialog_n_trial_days_left">
-        <item quantity="one">En dag kvar av provperioden</item>
-        <item quantity="other">%d dagar kvar av provperioden</item>
+        <item quantity="one">En dag kvar av testperioden</item>
+        <item quantity="other">%d dagar kvar av testperioden</item>
     </plurals>
 
 </resources>
