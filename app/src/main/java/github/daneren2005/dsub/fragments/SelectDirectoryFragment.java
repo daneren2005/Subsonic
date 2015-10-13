@@ -57,6 +57,7 @@ import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.TabBackgroundTask;
+import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.FastScroller;
@@ -1037,7 +1038,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				musicService.setStarred(entries, artists, albums, false, this, context);
 
 				for(Entry entry: unstar) {
-					new EntryInstanceUpdater(entry) {
+					new UpdateHelper.EntryInstanceUpdater(entry) {
 						@Override
 						public void update(Entry found) {
 							found.setStarred(false);
@@ -1382,10 +1383,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			starButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					toggleStarred(directory, new OnStarChange() {
+					UpdateHelper.toggleStarred(context, directory, new UpdateHelper.OnStarChange() {
 						@Override
-						void starChange(boolean starred) {
-							if(directory.isStarred()) {
+						public void starChange(boolean starred) {
+							if (directory.isStarred()) {
 								starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
 								starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
 							} else {
@@ -1406,9 +1407,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			ratingBarWrapper.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					setRating(directory, new OnRatingChange() {
+					UpdateHelper.setRating(context, directory, new UpdateHelper.OnRatingChange() {
 						@Override
-						void ratingChange(int rating) {
+						public void ratingChange(int rating) {
 							ratingBar.setRating(directory.getRating());
 						}
 					});

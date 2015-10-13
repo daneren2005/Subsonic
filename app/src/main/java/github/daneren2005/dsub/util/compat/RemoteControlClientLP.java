@@ -31,25 +31,30 @@ import android.media.RemoteControlClient;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.UpdateHelper;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class RemoteControlClientLP extends RemoteControlClientBase {
 	private static final String TAG = RemoteControlClientLP.class.getSimpleName();
+	private static final String CUSTOM_ACTION_THUMBS_UP = "github.daneren2005.dsub.THUMBS_UP";
+	private static final String CUSTOM_ACTION_THUMBS_DOWN = "github.daneren2005.dsub.THUMBS_DOWN";
+	private static final String CUSTOM_ACTION_STAR = "github.daneren2005.dsub.STAR";
 
 	protected MediaSession mediaSession;
 	protected DownloadService downloadService;
 	protected ImageLoader imageLoader;
-
-	private PlaybackState previousState;
 
 	@Override
 	public void register(Context context, ComponentName mediaButtonReceiverComponent) {
@@ -90,12 +95,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 	@Override
 	public void setPlaybackState(int state) {
-		PlaybackState.Builder builder;
-		if(previousState == null) {
-			builder = new PlaybackState.Builder();
-		} else {
-			builder = new PlaybackState.Builder(previousState);
-		}
+		PlaybackState.Builder builder = new PlaybackState.Builder();
 
 		int newState = PlaybackState.STATE_NONE;
 		switch(state) {
@@ -120,9 +120,13 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		builder.setState(newState, position, 1.0f);
 		builder.setActions(getPlaybackActions());
 
+		DownloadFile downloadFile = downloadService.getCurrentPlaying();
+		if(downloadFile != null) {
+			addCustomActions(downloadFile.getSong(), builder);
+		}
+
 		PlaybackState playbackState = builder.build();
 		mediaSession.setPlaybackState(playbackState);
-		previousState = playbackState;
 	}
 
 	@Override
@@ -188,8 +192,22 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				PlaybackState.ACTION_PAUSE |
 				PlaybackState.ACTION_SEEK_TO |
 				PlaybackState.ACTION_SKIP_TO_NEXT |
-				PlaybackState.ACTION_SKIP_TO_PREVIOUS |
-				PlaybackState.ACTION_SET_RATING;
+				PlaybackState.ACTION_SKIP_TO_PREVIOUS;
+	}
+	protected void addCustomActions(MusicDirectory.Entry currentSong, PlaybackState.Builder builder) {
+		PlaybackState.CustomAction thumbsUp = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_THUMBS_UP,
+				downloadService.getString(R.string.download_thumbs_up),
+				R.drawable.ic_action_rating_good_selected).build();
+
+		PlaybackState.CustomAction thumbsDown = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_THUMBS_DOWN,
+				downloadService.getString(R.string.download_thumbs_down),
+				R.drawable.ic_action_rating_bad_selected).build();
+
+		PlaybackState.CustomAction star = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_STAR,
+				downloadService.getString(R.string.common_star),
+				R.drawable.ic_toggle_star).build();
+
+		builder.addCustomAction(star).addCustomAction(thumbsDown).addCustomAction(thumbsUp);
 	}
 
 	private class EventCallback extends MediaSession.Callback {
@@ -223,19 +241,13 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		}
 
 		@Override
-		public void onSetRating(Rating rating) {
-			if(rating.getRatingStyle() != Rating.RATING_THUMB_UP_DOWN) {
-				return;
-			}
-
-			if(rating.isRated()) {
-				if(rating.isThumbUp()) {
-
-				} else {
-
-				}
-			} else {
-
+		public void onCustomAction(String action, Bundle extras) {
+			if(CUSTOM_ACTION_THUMBS_UP.equals(action)) {
+				downloadService.toggleRating(5);
+			} else if(CUSTOM_ACTION_THUMBS_DOWN.equals(action)) {
+				downloadService.toggleRating(1);
+			} else if(CUSTOM_ACTION_STAR.equals(action)) {
+				downloadService.toggleStarred();
 			}
 		}
 	}

@@ -819,8 +819,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	@Override
 	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
-		if(this.currentPlaying != currentPlaying || currentPlaying == null) {
+		if(this.currentPlaying != currentPlaying || this.currentPlaying == null) {
 			onSongChanged(currentPlaying, currentPlayingIndex);
+			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
 		}
 	}
 
@@ -835,5 +836,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		TypedArray typedArray = this.obtainStyledAttributes(attrs);
 		startButton.setImageResource(typedArray.getResourceId(0, 0));
 		typedArray.recycle();
+	}
+
+	@Override
+	public void onMetadataUpdate(MusicDirectory.Entry entry, int fieldChange) {
+
 	}
 }

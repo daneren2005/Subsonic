@@ -48,6 +48,7 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MediaRouteManager;
 import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
+import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.RemoteControlClientBase;
 import github.daneren2005.dsub.util.tags.BastpUtil;
@@ -105,6 +106,11 @@ public class DownloadService extends Service {
 	private static final int SHUFFLE_MODE_NONE = 0;
 	private static final int SHUFFLE_MODE_ALL = 1;
 	private static final int SHUFFLE_MODE_ARTIST = 2;
+
+	public static final int METADATA_UPDATED_ALL = 0;
+	public static final int METADATA_UPDATED_STAR = 1;
+	public static final int METADATA_UPDATED_RATING = 2;
+	public static final int METADATA_UPDATED_BOOKMARK = 4;
 
 	private RemoteControlClientBase mRemoteControl;
 
@@ -2465,6 +2471,55 @@ public class DownloadService extends Service {
 		}
 	}
 
+	public void toggleStarred() {
+		final DownloadFile currentPlaying = this.currentPlaying;
+		if(currentPlaying == null) {
+			return;
+		}
+
+		UpdateHelper.toggleStarred(this, currentPlaying.getSong(), new UpdateHelper.OnStarChange() {
+			@Override
+			public void starChange(boolean starred) {
+				if(currentPlaying == DownloadService.this.currentPlaying) {
+					onMetadataUpdate(METADATA_UPDATED_STAR);
+				}
+			}
+		});
+	}
+	public void toggleRating(int rating) {
+		if(currentPlaying == null) {
+			return;
+		}
+
+		MusicDirectory.Entry entry = currentPlaying.getSong();
+		if(entry.getRating() == rating) {
+			setRating(0);
+		} else {
+			setRating(rating);
+		}
+	}
+	public void setRating(int rating) {
+		final DownloadFile currentPlaying = this.currentPlaying;
+		if(currentPlaying == null) {
+			return;
+		}
+		MusicDirectory.Entry entry = currentPlaying.getSong();
+
+		// Immediately skip to the next song if down thumbed
+		if(rating == 1) {
+			next(true);
+		}
+
+		UpdateHelper.setRating(this, entry, rating, new UpdateHelper.OnRatingChange() {
+			@Override
+			public void ratingChange(int rating) {
+				if(currentPlaying == DownloadService.this.currentPlaying) {
+					onMetadataUpdate(METADATA_UPDATED_RATING);
+				}
+			}
+		});
+	}
+
 	public void addOnSongChangedListener(OnSongChangedListener listener) {
 		addOnSongChangedListener(listener, false);
 	}
@@ -2504,6 +2559,9 @@ public class DownloadService extends Service {
 				public void run() {
 					if(revision == atRevision) {
 						listener.onSongChanged(currentPlaying, currentPlayingIndex);
+
+						MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+						listener.onMetadataUpdate(entry, METADATA_UPDATED_ALL);
 					}
 				}
 			});
@@ -2556,6 +2614,20 @@ public class DownloadService extends Service {
 					if(revision == atRevision) {
 						listener.onStateUpdate(currentPlaying, playerState);
 					}
+				}
+			});
+		}
+	}
+	private synchronized void onMetadataUpdate() {
+		onMetadataUpdate(METADATA_UPDATED_ALL);
+	}
+	private synchronized void onMetadataUpdate(final int updateType) {
+		for(final OnSongChangedListener listener: onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+					listener.onMetadataUpdate(entry, updateType);
 				}
 			});
 		}
@@ -2672,5 +2744,6 @@ public class DownloadService extends Service {
 		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex);
 		void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable);
 		void onStateUpdate(DownloadFile downloadFile, PlayerState playerState);
+		void onMetadataUpdate(MusicDirectory.Entry entry, int fieldChange);
 	}
 }
