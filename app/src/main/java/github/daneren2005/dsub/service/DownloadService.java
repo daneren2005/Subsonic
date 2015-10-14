@@ -103,6 +103,7 @@ public class DownloadService extends Service {
 	public static final int REWIND = 10000;
 	private static final double DELETE_CUTOFF = 0.84;
 	private static final int REQUIRED_ALBUM_MATCHES = 4;
+	private static final int REMOTE_PLAYLIST_TOTAL = 3;
 	private static final int SHUFFLE_MODE_NONE = 0;
 	private static final int SHUFFLE_MODE_ALL = 1;
 	private static final int SHUFFLE_MODE_ARTIST = 2;
@@ -448,10 +449,21 @@ public class DownloadService extends Service {
 		lifecycleSupport.serializeDownloadQueue();
 	}
 
-	private void updateRemotePlaylist() {
+	private synchronized void updateRemotePlaylist() {
+		List<DownloadFile> playlist = new ArrayList<>();
+		if(currentPlaying != null) {
+			int index = downloadList.indexOf(currentPlaying);
+			int size = size();
+			int end = index + REMOTE_PLAYLIST_TOTAL;
+			for(int i = index; i < size && i < end; i++) {
+				playlist.add(downloadList.get(i));
+			}
+		}
+
 		if (remoteState != LOCAL && remoteController != null) {
 			remoteController.updatePlaylist();
 		}
+		mRemoteControl.updatePlaylist(playlist);
 	}
 
 	public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
@@ -1026,6 +1038,7 @@ public class DownloadService extends Service {
 			proxy = null;
 		}
 		checkDownloads();
+		updateRemotePlaylist();
 	}
 
 	/** Plays or resumes the playback, depending on the current player state. */
@@ -1762,6 +1775,8 @@ public class DownloadService extends Service {
 								setPlayerState(PAUSED);
 								onSongProgress();
 							}
+
+							updateRemotePlaylist();
 						}
 
 						// Only call when starting, setPlayerState(PAUSED) already calls this
@@ -2604,6 +2619,13 @@ public class DownloadService extends Service {
 				}
 			});
 		}
+
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+			}
+		});
 	}
 	private void onStateUpdate() {
 		final long atRevision = revision;
@@ -2631,6 +2653,13 @@ public class DownloadService extends Service {
 				}
 			});
 		}
+
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				mRemoteControl.metadataChanged(currentPlaying.getSong());
+			}
+		});
 	}
 
 	private class BufferTask extends SilentBackgroundTask<Void> {
