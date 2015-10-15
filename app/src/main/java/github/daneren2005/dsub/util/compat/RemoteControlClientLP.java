@@ -57,6 +57,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	private static final String SHOW_ON_WEAR = "android.support.wearable.media.extra.CUSTOM_ACTION_SHOW_ON_WEAR";
 	private static final String WEAR_RESERVE_SKIP_TO_NEXT = "android.support.wearable.media.extra.RESERVE_SLOT_SKIP_TO_NEXT";
 	private static final String WEAR_RESERVE_SKIP_TO_PREVIOUS = "android.support.wearable.media.extra.RESERVE_SLOT_SKIP_TO_PREVIOUS";
+	private static final String WEAR_BACKGROUND_THEME = "android.support.wearable.media.extra.BACKGROUND_COLOR_FROM_THEME";
 	// These constants don't seem to exist anywhere in the SDK.  Grabbed from Google's sample media player app
 	private static final String AUTO_RESERVE_SKIP_TO_NEXT = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_NEXT";
 	private static final String AUTO_RESERVE_SKIP_TO_PREVIOUS = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_PREVIOUS";
@@ -93,6 +94,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		mediaSession.setActive(true);
 
 		Bundle sessionExtras = new Bundle();
+		sessionExtras.putBoolean(WEAR_BACKGROUND_THEME, true);
 		sessionExtras.putBoolean(WEAR_RESERVE_SKIP_TO_PREVIOUS, true);
 		sessionExtras.putBoolean(WEAR_RESERVE_SKIP_TO_NEXT, true);
 		sessionExtras.putBoolean(AUTO_RESERVE_SKIP_TO_PREVIOUS, true);
