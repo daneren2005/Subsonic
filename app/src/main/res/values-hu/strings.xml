@@ -26,6 +26,8 @@
 	<string name="common.empty">Nem található!</string>
 	<string name="common.warning">Figyelem!</string>
 	<string name="common.close">Bezár</string>
+	<string name="common.false">Nem</string>
+	<string name="common.true">Igen</string>
 
     <string name="button_bar.home">Főoldal</string>
     <string name="button_bar.browse">Médiatár</string>
@@ -437,7 +439,7 @@
 	<string name="settings.browse_by_tags">Böngészés ID3 Tag alapján</string>
 	<string name="settings.browse_by_tags_summary">ID3 Tag alapú böngészés a mappastruktúra helyett. Subsonic 4.7+ verzió felett!</string>
 	<string name="settings.disable_exit_prompt">Kilépés megerősítésének tiltása</string>
-	<string name="settings.disable_exit_prompt_summary">A Főoldalon állva a vissza gomb megnyomásakor azonnali kilépés az alkalmazásból.</string>
+	<string name="settings.disable_exit_prompt_summary">Főoldalon a vissza gomb megnyomásakor azonnali kilépés az alkalmazásból.</string>
 	<string name="settings.override_system_language">A rendszer nyelvének felülbírálása</string>
 	<string name="settings.override_system_language_summary">A Dsub megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
 	<string name="settings.drawer_items_title">Oldalsáv elemei</string>
@@ -599,11 +601,12 @@
 	<string name="details.title.album">Album információi</string>
 	<string name="details.title.podcast">Podcast információi</string>
 	<string name="details.title.playlist">Lejátszási lista információi</string>
+	<string name="details.title.artist">Előadó információi</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Státusz</string>
 	<string name="details.artist">Előadó</string>
 	<string name="details.album">Album</string>
-	<string name="details.track">Dal</string>
+	<string name="details.track">Dalsorszám</string>
 	<string name="details.genre">Műfaj</string>
 	<string name="details.year">Év</string>
 	<string name="details.server_format">Kiszolgáló formátuma</string>
