@@ -954,6 +954,22 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			runnable.run();
 		} else {
 			afterServiceAvailable.add(runnable);
+			checkIfServiceAvailable();
+		}
+	}
+	private void checkIfServiceAvailable() {
+		if(getDownloadService() == null) {
+			handler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					checkIfServiceAvailable();
+				}
+			}, 50);
+		} else if(afterServiceAvailable.size() > 0) {
+			for(Runnable runnable: afterServiceAvailable) {
+				handler.post(runnable);
+			}
+			afterServiceAvailable.clear();
 		}
 	}
 
