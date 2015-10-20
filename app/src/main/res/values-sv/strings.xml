@@ -13,7 +13,7 @@
     <string name="common.pin">Permanent cache</string>
     <string name="common.delete">Ta Bort</string>
 	<string name="common.star">Favorit</string>
-	<string name="common.unstar">Inte favorit</string>
+	<string name="common.unstar">Inte längre favorit</string>
 	<string name="common.info">Detaljer</string>
 	<string name="common.name">Namn</string>
 	<string name="common.comment">Kommentar</string>
@@ -28,6 +28,7 @@
 	<string name="common.close">Stäng</string>
 	<string name="common.false">Ja</string>
 	<string name="common.true">Nej</string>
+	<string name="common.never">Aldrig</string>
 
     <string name="button_bar.home">Hem</string>
     <string name="button_bar.browse">Bibliotek</string>
@@ -54,7 +55,7 @@
 		<p/><font color="red">ChromeCast misslyckande</font>:
 		<br/>Prova att använda alternativet Inställningar -> Uppspelning -> Använd enhets proxy.  Det är ett "hack" för att Chromecast inte godtar självsignerade certifikat.
 		<p/><font color="red">Första steget i biblioteket är grupper med artister</font>:
-		<br/>Avmarkera "Första steget artister" i inställningsmenyn.  Det kommer göra så att hela första steget kommer att hanteras som grupper istället för artisterna själva.
+		<br/>Avmarkera "Första steget artister" i inställningsmenyn.  Det kommer göra så att hela första steget kommer att hanteras som grupper istället för som enstaka artister.
 	]]>
 	</string>
     <string name="main.select_server">Välj server</string>
@@ -62,7 +63,7 @@
     <string name="main.offline">Gå Offline</string>
 	<string name="main.online">Gå Online</string>
     <string name="main.settings">Inställningar</string>
-    <string name="main.albums_title">Listor</string>
+    <string name="main.albums_title">Album Listor</string>
 	<string name="main.albums_per_folder">Per album</string>
     <string name="main.albums_newest">Nyligen tillagt</string>
     <string name="main.albums_recent">Nyligen spelat</string>
@@ -262,7 +263,7 @@
 
     <string name="lyrics.nomatch">Inga texter hittades</string>
 
-    <string name="error.label">Error</string>
+    <string name="error.label">Fel</string>
 
     <string name="settings.title">Inställningar</string>
     <string name="settings.test_connection_title">Testa anslutningen</string>
