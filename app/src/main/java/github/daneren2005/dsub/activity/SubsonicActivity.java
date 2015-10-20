@@ -352,12 +352,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.common_appname, R.string.common_appname) {
 				@Override
 				public void onDrawerClosed(View view) {
-					setTitle(currentFragment.getTitle());
-
 					drawerIdle = true;
 					drawerOpen = false;
 
-					supportInvalidateOptionsMenu();
 					if(!showingTabs) {
 						populateTabs();
 					}
@@ -372,13 +369,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 					}
 					setDrawerItemVisible(R.id.drawer_downloading, downloadingVisible);
 
-					getSupportActionBar().setTitle(R.string.common_appname);
-					getSupportActionBar().setDisplayShowCustomEnabled(false);
-
 					drawerIdle = true;
 					drawerOpen = true;
-
-					supportInvalidateOptionsMenu();
 				}
 
 				@Override
