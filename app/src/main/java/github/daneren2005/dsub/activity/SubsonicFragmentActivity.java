@@ -32,11 +32,13 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -673,6 +675,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}.execute();
 	}
 	private void loadRemotePlayQueue() {
+		if(Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_RESUME_PLAY_QUEUE_NEVER, false)) {
+			return;
+		}
+
 		final SubsonicActivity context = this;
 		new SilentBackgroundTask<Void>(this) {
 			private PlayerQueue playerQueue;
@@ -715,32 +721,57 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}.execute();
 	}
 	private void promptRestoreFromRemoteQueue(final PlayerQueue remoteState) {
-		Util.confirmDialog(this, R.string.download_restore_play_queue, Util.formatDate(remoteState.changed), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		String message = getResources().getString(R.string.common_confirm_message, getResources().getString(R.string.download_restore_play_queue).toLowerCase(), Util.formatDate(remoteState.changed));
+		builder.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(R.string.common_confirm)
+				.setMessage(message)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 					@Override
-					protected Void doInBackground() throws Throwable {
-						DownloadService downloadService = getDownloadService();
-						downloadService.clear();
-						downloadService.download(remoteState.songs, false, false, false, false, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
-						return null;
+					public void onClick(DialogInterface dialogInterface, int i) {
+						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								DownloadService downloadService = getDownloadService();
+								downloadService.clear();
+								downloadService.download(remoteState.songs, false, false, false, false, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
+								return null;
+							}
+						}.execute();
 					}
-				}.execute();
-			}
-		}, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+				})
+				.setNeutralButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
 					@Override
-					protected Void doInBackground() throws Throwable {
-						DownloadService downloadService = getDownloadService();
-						downloadService.serializeQueue(false);
-						return null;
+					public void onClick(DialogInterface dialogInterface, int i) {
+						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								DownloadService downloadService = getDownloadService();
+								downloadService.serializeQueue(false);
+								return null;
+							}
+						}.execute();
 					}
-				}.execute();
-			}
-		});
+				})
+				.setNegativeButton(R.string.common_never, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+							@Override
+							protected Void doInBackground() throws Throwable {
+								DownloadService downloadService = getDownloadService();
+								downloadService.serializeQueue(false);
+
+								SharedPreferences.Editor editor = Util.getPreferences(SubsonicFragmentActivity.this).edit();
+								editor.putBoolean(Constants.PREFERENCES_KEY_RESUME_PLAY_QUEUE_NEVER, true);
+								editor.commit();
+								return null;
+							}
+						}.execute();
+					}
+				});
+
+		builder.create().show();
 	}
 
 	private void createAccount() {

@@ -28,6 +28,7 @@
 	<string name="common.close">Close</string>
 	<string name="common.false">No</string>
 	<string name="common.true">Yes</string>
+	<string name="common.never">Never</string>
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>

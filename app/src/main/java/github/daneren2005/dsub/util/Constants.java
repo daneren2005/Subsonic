@@ -166,6 +166,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_START_ON_HEADPHONES = "startOnHeadphones";
 	public static final String PREFERENCES_KEY_COLOR_ACTION_BAR = "colorActionBar";
 	public static final String PREFERENCES_KEY_SHUFFLE_BY_ALBUM = "shuffleByAlbum";
+	public static final String PREFERENCES_KEY_RESUME_PLAY_QUEUE_NEVER = "neverResumePlayQueue";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
