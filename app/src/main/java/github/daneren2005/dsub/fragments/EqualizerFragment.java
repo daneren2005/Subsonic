@@ -112,10 +112,15 @@ public class EqualizerFragment extends SubsonicFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		equalizerController.saveSettings();
 
-		if(!equalizer.getEnabled()) {
-			equalizerController.release();
+		try {
+			equalizerController.saveSettings();
+
+			if (!equalizer.getEnabled()) {
+				equalizerController.release();
+			}
+		} catch(Exception e) {
+			Log.w(TAG, "Failed to release controller", e);
 		}
 	}
 
