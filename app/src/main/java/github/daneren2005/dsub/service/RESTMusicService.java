@@ -41,7 +41,9 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.params.ConnPerRouteBean;
@@ -1902,7 +1904,7 @@ public class RESTMusicService implements MusicService {
         while (true) {
             attempts++;
             HttpContext httpContext = new BasicHttpContext();
-            final HttpPost request = new HttpPost(url);
+            final HttpRequestBase request = (url.indexOf("rest") == -1) ? new HttpGet(url) : new HttpPost(url);
 
             if (task != null) {
                 // Attempt to abort the HTTP request if the task is cancelled.
@@ -1929,12 +1931,12 @@ public class RESTMusicService implements MusicService {
                 });
             }
 
-            if (parameterNames != null) {
+            if (parameterNames != null && request instanceof HttpPost) {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 for (int i = 0; i < parameterNames.size(); i++) {
                     params.add(new BasicNameValuePair(parameterNames.get(i), String.valueOf(parameterValues.get(i))));
                 }
-                request.setEntity(new UrlEncodedFormEntity(params, Constants.UTF_8));
+                ((HttpPost) request).setEntity(new UrlEncodedFormEntity(params, Constants.UTF_8));
             }
 
             if (requestParams != null) {
