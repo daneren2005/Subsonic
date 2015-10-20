@@ -23,16 +23,17 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.MediaDescription;
 import android.media.MediaMetadata;
-import android.media.Rating;
 import android.media.RemoteControlClient;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.media.MediaRouter;
 
 import java.util.ArrayList;
@@ -42,10 +43,16 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.SearchCritera;
+import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.SilentServiceTask;
+import github.daneren2005.dsub.util.Util;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class RemoteControlClientLP extends RemoteControlClientBase {
@@ -260,6 +267,91 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		builder.addCustomAction(thumbsDown).addCustomAction(star).addCustomAction(thumbsUp);
 	}
 
+	private void searchPlaylist(final String name) {
+		new SilentServiceTask<Void>(downloadService) {
+			@Override
+			protected Void doInBackground(MusicService musicService) throws Throwable {
+				List<Playlist> playlists = musicService.getPlaylists(false, downloadService, null);
+				for(Playlist playlist: playlists) {
+					if(playlist.getName().equals(name)) {
+						getPlaylist(playlist);
+						return null;
+					}
+				}
+
+				noResults();
+				return null;
+			}
+
+			private void getPlaylist(Playlist playlist) throws Exception {
+				MusicDirectory musicDirectory = musicService.getPlaylist(false, playlist.getId(), playlist.getName(), downloadService, null);
+				playSongs(musicDirectory.getChildren());
+			}
+		}.execute();
+	}
+	private void searchCriteria(final SearchCritera searchCritera) {
+		new SilentServiceTask<Void>(downloadService) {
+			@Override
+			protected Void doInBackground(MusicService musicService) throws Throwable {
+				SearchResult results = musicService.search(searchCritera, downloadService, null);
+
+				if(results.hasArtists()) {
+					playFromParent(new MusicDirectory.Entry(results.getArtists().get(0)));
+				} else if(results.hasAlbums()) {
+					playFromParent(results.getAlbums().get(0));
+				} else if(results.hasSongs()) {
+					playSong(results.getSongs().get(0));
+				} else {
+					noResults();
+				}
+
+				return null;
+			}
+			
+			private void playFromParent(MusicDirectory.Entry parent) throws Exception {
+				List<MusicDirectory.Entry> songs = new ArrayList<>();
+				getSongsRecursively(parent, songs);
+				playSongs(songs);
+			}
+			private void getSongsRecursively(MusicDirectory.Entry parent, List<MusicDirectory.Entry> songs) throws Exception {
+				MusicDirectory musicDirectory;
+				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
+					musicDirectory = musicService.getAlbum(parent.getId(), parent.getTitle(), false, downloadService, this);
+				} else {
+					musicDirectory = musicService.getMusicDirectory(parent.getId(), parent.getTitle(), false, downloadService, this);
+				}
+
+				for (MusicDirectory.Entry dir : musicDirectory.getChildren(true, false)) {
+					if (dir.getRating() == 1) {
+						continue;
+					}
+
+					getSongsRecursively(dir, songs);
+				}
+
+				for (MusicDirectory.Entry song : musicDirectory.getChildren(false, true)) {
+					if (!song.isVideo() && song.getRating() != 1) {
+						songs.add(song);
+					}
+				}
+			}
+		}.execute();
+	}
+
+	private void playSong(MusicDirectory.Entry entry) {
+		List<MusicDirectory.Entry> entries = new ArrayList<>();
+		entries.add(entry);
+		playSongs(entries);
+	}
+	private void playSongs(List<MusicDirectory.Entry> entries) {
+		downloadService.clear();
+		downloadService.download(entries, false, true, false, false);
+	}
+
+	private void noResults() {
+
+	}
+
 	private class EventCallback extends MediaSession.Callback {
 		@Override
 		public void onPlay() {
@@ -298,6 +390,62 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 						downloadService.play(file);
 						return;
 					}
+				}
+			}
+		}
+
+		@Override
+		public void onPlayFromSearch (String query, Bundle extras) {
+			// User just asked to playing something
+			if("".equals(query)) {
+				downloadService.setShufflePlayEnabled(true);
+			} else {
+				String mediaFocus = extras.getString(MediaStore.EXTRA_MEDIA_FOCUS);
+
+
+				// Play a specific playlist
+				if (MediaStore.Audio.Playlists.ENTRY_CONTENT_TYPE.equals(mediaFocus)) {
+					String playlist = extras.getString(MediaStore.EXTRA_MEDIA_PLAYLIST);
+					searchPlaylist(playlist);
+				}
+				// Play a specific genre
+				else if (MediaStore.Audio.Genres.ENTRY_CONTENT_TYPE.equals(mediaFocus)) {
+					String genre = extras.getString(MediaStore.EXTRA_MEDIA_GENRE);
+
+					SharedPreferences.Editor editor = Util.getPreferences(downloadService).edit();
+					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, null);
+					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, null);
+					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
+					editor.commit();
+
+					downloadService.setShufflePlayEnabled(true);
+				}
+				else {
+					int artists = 10;
+					int albums = 10;
+					int songs = 10;
+
+					// Play a specific artist
+					if (MediaStore.Audio.Artists.ENTRY_CONTENT_TYPE.equals(mediaFocus)) {
+						query = extras.getString(MediaStore.EXTRA_MEDIA_ARTIST);
+						albums = 0;
+						songs = 0;
+					}
+					// Play a specific album
+					else if (MediaStore.Audio.Albums.ENTRY_CONTENT_TYPE.equals(mediaFocus)) {
+						query = extras.getString(MediaStore.EXTRA_MEDIA_ALBUM);
+						artists = 0;
+						songs = 0 ;
+					}
+					// Play a specific song
+					else if (MediaStore.Audio.Media.ENTRY_CONTENT_TYPE.equals(mediaFocus)) {
+						query = extras.getString(MediaStore.EXTRA_MEDIA_TITLE);
+						artists = 0;
+						albums = 0;
+					}
+
+					SearchCritera criteria = new SearchCritera(query, artists, albums, songs);
+					searchCriteria(criteria);
 				}
 			}
 		}
