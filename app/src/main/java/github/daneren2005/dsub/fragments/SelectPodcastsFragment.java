@@ -46,18 +46,18 @@ import java.util.List;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChannel> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
-	
+
 	public void onCreate(Bundle bundle){
 		super.onCreate(bundle);
 		setHasOptionsMenu(true);
-    }
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(super.onOptionsItemSelected(item)) {
 			return true;
 		}
-		
+
 		switch (item.getItemId()) {
 			case R.id.menu_check:
 				refreshPodcasts();
@@ -74,7 +74,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menu.clear();
 		menuInflater.inflate(R.menu.select_podcasts, menu);
-		if((!Util.isOffline(context) && UserUtil.canPodcast()) == false) {
+		if(Util.isOffline(context) || !UserUtil.canPodcast()){
 			menu.removeItem(R.id.menu_add_podcast);
 			menu.removeItem(R.id.menu_check);
 		}
