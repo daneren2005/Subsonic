@@ -74,8 +74,9 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menu.clear();
 		menuInflater.inflate(R.menu.select_podcasts, menu);
-		if(!Util.isOffline(context) && UserUtil.canPodcast() == false) {
+		if((!Util.isOffline(context) && UserUtil.canPodcast()) == false) {
 			menu.removeItem(R.id.menu_add_podcast);
+			menu.removeItem(R.id.menu_check);
 		}
 	}
 
