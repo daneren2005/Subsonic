@@ -2,8 +2,6 @@ package github.daneren2005.dsub.fragments;
 
 import android.content.res.Resources;
 import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -14,24 +12,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CheckBox;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.adapter.MainAdapter;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.ServerInfo;
-import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LoadingTask;
-import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.ChangeLog;
 import github.daneren2005.dsub.view.UpdateView;
 
@@ -295,7 +288,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	}
 
 	@Override
-	public void onItemClicked(Integer item) {
+	public void onItemClicked(UpdateView<Integer> updateView, Integer item) {
 		if (item == R.string.main_albums_newest) {
 			showAlbumList("newest");
 		} else if (item == R.string.main_albums_random) {

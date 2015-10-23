@@ -35,7 +35,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
@@ -49,7 +48,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -76,7 +74,6 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
 import github.daneren2005.dsub.view.FadeOutAnimation;
 import github.daneren2005.dsub.view.FastScroller;
-import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.util.Util;
 
@@ -86,7 +83,6 @@ import github.daneren2005.dsub.util.*;
 import github.daneren2005.dsub.view.AutoRepeatButton;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledFuture;
-import github.daneren2005.dsub.activity.SubsonicActivity;
 
 public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile>, OnSongChangedListener {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();
@@ -1217,7 +1213,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onItemClicked(final DownloadFile item) {
+	public void onItemClicked(UpdateView<DownloadFile> updateView, final DownloadFile item) {
 		warnIfStorageUnavailable();
 		new SilentBackgroundTask<Void>(context) {
 			@Override

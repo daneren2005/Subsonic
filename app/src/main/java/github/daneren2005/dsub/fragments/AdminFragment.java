@@ -16,13 +16,9 @@
 package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -136,7 +132,7 @@ public class AdminFragment extends SelectRecyclerFragment<User> {
 	}
 
 	@Override
-	public void onItemClicked(User user) {
+	public void onItemClicked(UpdateView<User> updateView, User user) {
 		SubsonicFragment fragment = new UserFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(Constants.INTENT_EXTRA_NAME_ID, user);

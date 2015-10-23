@@ -16,6 +16,7 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,17 +34,19 @@ import github.daneren2005.dsub.view.UpdateView;
 import static github.daneren2005.dsub.domain.User.Setting;
 
 public class SettingsAdapter extends SectionAdapter<Setting> {
+	private static final String TAG = SettingsAdapter.class.getSimpleName();
 	public final int VIEW_TYPE_SETTING = 1;
 
 	private final User user;
 	private final boolean editable;
 	private final ImageLoader imageLoader;
 
-	public SettingsAdapter(Context context, User user, ImageLoader imageLoader, boolean editable) {
+	public SettingsAdapter(Context context, User user, ImageLoader imageLoader, boolean editable, OnItemClickedListener<Setting> onItemClickedListener) {
 		super(context, user.getSettings(), imageLoader != null);
 		this.user = user;
 		this.imageLoader = imageLoader;
 		this.editable = editable;
+		this.onItemClickedListener = onItemClickedListener;
 
 		List<Setting> settings = sections.get(0);
 		for(Setting setting: settings) {
@@ -92,7 +95,7 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 	@Override
 	public void setChecked(UpdateView updateView, boolean checked) {
 		if(updateView instanceof SettingView) {
-			((SettingView) updateView).setChecked(checked);
+			updateView.setChecked(checked);
 		}
 	}
 }

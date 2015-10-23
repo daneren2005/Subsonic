@@ -18,17 +18,13 @@ package github.daneren2005.dsub.fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +43,6 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
-import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> implements SectionAdapter.OnItemClickedListener<DownloadFile> {
@@ -125,7 +120,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 	}
 
 	@Override
-	public void onItemClicked(DownloadFile item) {
+	public void onItemClicked(UpdateView<DownloadFile> updateView, DownloadFile item) {
 
 	}
 

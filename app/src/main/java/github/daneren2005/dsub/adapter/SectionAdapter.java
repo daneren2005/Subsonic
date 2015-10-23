@@ -125,7 +125,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 								}
 							}
 						} else if (onItemClickedListener != null) {
-							onItemClickedListener.onItemClicked(item);
+							onItemClickedListener.onItemClicked(updateView, item);
 						}
 					}
 				});
@@ -138,18 +138,22 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					moreButton.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
-							final T item = holder.getItem();
-							if(onItemClickedListener != null) {
-								PopupMenu popup = new PopupMenu(context, v);
-								onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
+							try {
+								final T item = holder.getItem();
+								if (onItemClickedListener != null) {
+									PopupMenu popup = new PopupMenu(context, v);
+									onItemClickedListener.onCreateContextMenu(popup.getMenu(), popup.getMenuInflater(), updateView, item);
 
-								popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-									@Override
-									public boolean onMenuItemClick(MenuItem menuItem) {
-										return onItemClickedListener.onContextItemSelected(menuItem, updateView, item);
-									}
-								});
-								popup.show();
+									popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+										@Override
+										public boolean onMenuItemClick(MenuItem menuItem) {
+											return onItemClickedListener.onContextItemSelected(menuItem, updateView, item);
+										}
+									});
+									popup.show();
+								}
+							} catch(Exception e) {
+								Log.w(TAG, "Failed to show popup", e);
 							}
 						}
 					});
@@ -494,7 +498,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	}
 
 	public interface OnItemClickedListener<T> {
-		void onItemClicked(T item);
+		void onItemClicked(UpdateView<T> updateView, T item);
 		void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<T> updateView, T item);
 		boolean onContextItemSelected(MenuItem menuItem, UpdateView<T> updateView, T item);
 	}
