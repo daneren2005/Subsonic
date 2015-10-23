@@ -1230,7 +1230,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		DownloadService downloadService = getDownloadService();
-		if(downloadService.getSleepTimer() && timerMenu != null) {
+		if(downloadService != null && downloadService.getSleepTimer() && timerMenu != null) {
 			int timeRemaining = downloadService.getSleepTimeRemaining();
 			if(timeRemaining > 1){
 				timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
