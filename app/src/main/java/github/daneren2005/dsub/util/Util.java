@@ -173,7 +173,8 @@ public final class Util {
 
     public static int getActiveServer(Context context) {
         SharedPreferences prefs = getPreferences(context);
-        return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+		// Don't allow the SERVER_INSTANCE to ever be 0
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
     }
 	
 	public static int getServerCount(Context context) {
