@@ -209,17 +209,12 @@ public class FastScroller extends LinearLayout {
 			View firstVisibleView = recyclerView.getChildAt(0);
 			int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
 			int visibleRange = recyclerView.getChildCount();
-			int lastVisiblePosition = firstVisiblePosition+visibleRange;
 			int itemCount = recyclerView.getAdapter().getItemCount();
-			int position;
-			if(firstVisiblePosition == 0)
-				position = 0;
-			else if(lastVisiblePosition == itemCount)
-				position = itemCount;
-			else
-				position = (int)(((float)firstVisiblePosition/(((float)itemCount-(float)visibleRange)))*(float)itemCount);
-			float proportion = (float)position/(float)itemCount;
-			setBubbleAndHandlePosition(height*proportion);
+
+			// Add the percentage of the item the user has scrolled past already
+			float position = firstVisiblePosition + (-firstVisibleView.getY() / firstVisibleView.getHeight());
+			float proportion = position / itemCount;
+			setBubbleAndHandlePosition(height * proportion);
 
 			if((visibleRange * 2) < itemCount) {
 				if (!hasScrolled && (dx > 0 || dy > 0)) {
