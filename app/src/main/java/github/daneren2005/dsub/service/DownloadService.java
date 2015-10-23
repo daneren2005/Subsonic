@@ -2572,7 +2572,7 @@ public class DownloadService extends Service {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					if(revision == atRevision) {
+					if(revision == atRevision && instance != null) {
 						listener.onSongChanged(currentPlaying, currentPlayingIndex);
 
 						MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
@@ -2597,7 +2597,7 @@ public class DownloadService extends Service {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					if(revision == atRevision) {
+					if(revision == atRevision && instance != null) {
 						listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex);
 					}
 				}
@@ -2613,7 +2613,7 @@ public class DownloadService extends Service {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					if(revision == atRevision) {
+					if(revision == atRevision && instance != null) {
 						listener.onSongProgress(currentPlaying, position, duration, isSeekable);
 					}
 				}
@@ -2633,7 +2633,7 @@ public class DownloadService extends Service {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					if(revision == atRevision) {
+					if(revision == atRevision && instance != null) {
 						listener.onStateUpdate(currentPlaying, playerState);
 					}
 				}
@@ -2648,8 +2648,10 @@ public class DownloadService extends Service {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
-					listener.onMetadataUpdate(entry, updateType);
+					if(instance != null) {
+						MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+						listener.onMetadataUpdate(entry, updateType);
+					}
 				}
 			});
 		}
