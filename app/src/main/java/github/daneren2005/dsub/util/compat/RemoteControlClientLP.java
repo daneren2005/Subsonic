@@ -338,14 +338,31 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		}.execute();
 	}
 
+	private void playPlaylist(final Playlist playlist, final boolean shuffle, final boolean append) {
+		new SilentServiceTask<Void>(downloadService) {
+			@Override
+			protected Void doInBackground(MusicService musicService) throws Throwable {
+				MusicDirectory musicDirectory = musicService.getPlaylist(false, playlist.getId(), playlist.getName(), downloadService, null);
+				playSongs(musicDirectory.getChildren(), shuffle, append);
+
+				return null;
+			}
+		}.execute();
+	}
+
 	private void playSong(MusicDirectory.Entry entry) {
 		List<MusicDirectory.Entry> entries = new ArrayList<>();
 		entries.add(entry);
 		playSongs(entries);
 	}
 	private void playSongs(List<MusicDirectory.Entry> entries) {
-		downloadService.clear();
-		downloadService.download(entries, false, true, false, false);
+		playSongs(entries, false, false);
+	}
+	private void playSongs(List<MusicDirectory.Entry> entries, boolean shuffle, boolean append) {
+		if(!append) {
+			downloadService.clear();
+		}
+		downloadService.download(entries, false, true, false, shuffle);
 	}
 
 	private void noResults() {
@@ -447,6 +464,20 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					SearchCritera criteria = new SearchCritera(query, artists, albums, songs);
 					searchCriteria(criteria);
 				}
+			}
+		}
+
+		public void onPlayFromMediaId (String mediaId, Bundle extras) {
+			if(extras == null) {
+				return;
+			}
+
+			boolean shuffle = extras.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false);
+			boolean playLast = extras.getBoolean(Constants.INTENT_EXTRA_PLAY_LAST, false);
+			String playlistId = extras.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, null);
+			if(playlistId != null) {
+				Playlist playlist = new Playlist(playlistId, null);
+				playPlaylist(playlist, shuffle, playLast);
 			}
 		}
 
