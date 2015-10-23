@@ -93,6 +93,9 @@ public abstract class BackgroundTask<T> implements ProgressListener {
         return (context instanceof Activity) ? ((Activity) context) : null;
     }
 
+	protected Context getContext() {
+		return context;
+	}
     protected Handler getHandler() {
         return handler;
     }

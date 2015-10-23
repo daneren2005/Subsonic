@@ -29,5 +29,5 @@ Media Icons are double standard size.  On https://romannurik.github.io/AndroidAs
 ```
 PARAM_RESOURCES.iconSize = {w: 64, h: 64}
 PARAM_RESOURCES['targetRect-clipart'] = { x: 12, y: 12, w: 40, h: 40 }
-form.fields[0].params.maxFinalSize = {w: 512, h: 512}
+form.fields_[0].params_.maxFinalSize = {w: 512, h: 512}
 ```

@@ -48,8 +48,9 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MediaRouteManager;
 import github.daneren2005.dsub.util.ShufflePlayBuffer;
 import github.daneren2005.dsub.util.SimpleServiceBinder;
+import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.util.compat.RemoteControlClientHelper;
+import github.daneren2005.dsub.util.compat.RemoteControlClientBase;
 import github.daneren2005.dsub.util.tags.BastpUtil;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.serverproxy.BufferProxy;
@@ -102,11 +103,17 @@ public class DownloadService extends Service {
 	public static final int REWIND = 10000;
 	private static final double DELETE_CUTOFF = 0.84;
 	private static final int REQUIRED_ALBUM_MATCHES = 4;
+	private static final int REMOTE_PLAYLIST_TOTAL = 3;
 	private static final int SHUFFLE_MODE_NONE = 0;
 	private static final int SHUFFLE_MODE_ALL = 1;
 	private static final int SHUFFLE_MODE_ARTIST = 2;
 
-	private RemoteControlClientHelper mRemoteControl;
+	public static final int METADATA_UPDATED_ALL = 0;
+	public static final int METADATA_UPDATED_STAR = 1;
+	public static final int METADATA_UPDATED_RATING = 2;
+	public static final int METADATA_UPDATED_BOOKMARK = 4;
+
+	private RemoteControlClientBase mRemoteControl;
 
 	private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
 	private Looper mediaPlayerLooper;
@@ -238,7 +245,7 @@ public class DownloadService extends Service {
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
-			mRemoteControl = RemoteControlClientHelper.createInstance();
+			mRemoteControl = RemoteControlClientBase.createInstance();
 			ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 			mRemoteControl.register(this, mediaButtonReceiverComponent);
 		}
@@ -442,10 +449,21 @@ public class DownloadService extends Service {
 		lifecycleSupport.serializeDownloadQueue();
 	}
 
-	private void updateRemotePlaylist() {
+	private synchronized void updateRemotePlaylist() {
+		List<DownloadFile> playlist = new ArrayList<>();
+		if(currentPlaying != null) {
+			int index = downloadList.indexOf(currentPlaying);
+			int size = size();
+			int end = index + REMOTE_PLAYLIST_TOTAL;
+			for(int i = index; i < size && i < end; i++) {
+				playlist.add(downloadList.get(i));
+			}
+		}
+
 		if (remoteState != LOCAL && remoteController != null) {
 			remoteController.updatePlaylist();
 		}
+		mRemoteControl.updatePlaylist(playlist);
 	}
 
 	public synchronized void restore(List<MusicDirectory.Entry> songs, List<MusicDirectory.Entry> toDelete, int currentPlayingIndex, int currentPlayingPosition) {
@@ -1020,6 +1038,7 @@ public class DownloadService extends Service {
 			proxy = null;
 		}
 		checkDownloads();
+		updateRemotePlaylist();
 	}
 
 	/** Plays or resumes the playback, depending on the current player state. */
@@ -1756,6 +1775,8 @@ public class DownloadService extends Service {
 								setPlayerState(PAUSED);
 								onSongProgress();
 							}
+
+							updateRemotePlaylist();
 						}
 
 						// Only call when starting, setPlayerState(PAUSED) already calls this
@@ -2232,6 +2253,10 @@ public class DownloadService extends Service {
 		}
 		clearCurrentBookmark(downloadFile.getSong(), true);
 	}
+
+	public RemoteControlClientBase getRemoteControlClient() {
+		return mRemoteControl;
+	}
 	
 	private boolean isPastCutoff() {
 		return isPastCutoff(getPlayerPosition(), getPlayerDuration());
@@ -2461,6 +2486,55 @@ public class DownloadService extends Service {
 		}
 	}
 
+	public void toggleStarred() {
+		final DownloadFile currentPlaying = this.currentPlaying;
+		if(currentPlaying == null) {
+			return;
+		}
+
+		UpdateHelper.toggleStarred(this, currentPlaying.getSong(), new UpdateHelper.OnStarChange() {
+			@Override
+			public void starChange(boolean starred) {
+				if(currentPlaying == DownloadService.this.currentPlaying) {
+					onMetadataUpdate(METADATA_UPDATED_STAR);
+				}
+			}
+		});
+	}
+	public void toggleRating(int rating) {
+		if(currentPlaying == null) {
+			return;
+		}
+
+		MusicDirectory.Entry entry = currentPlaying.getSong();
+		if(entry.getRating() == rating) {
+			setRating(0);
+		} else {
+			setRating(rating);
+		}
+	}
+	public void setRating(int rating) {
+		final DownloadFile currentPlaying = this.currentPlaying;
+		if(currentPlaying == null) {
+			return;
+		}
+		MusicDirectory.Entry entry = currentPlaying.getSong();
+
+		// Immediately skip to the next song if down thumbed
+		if(rating == 1) {
+			next(true);
+		}
+
+		UpdateHelper.setRating(this, entry, rating, new UpdateHelper.OnRatingChange() {
+			@Override
+			public void ratingChange(int rating) {
+				if(currentPlaying == DownloadService.this.currentPlaying) {
+					onMetadataUpdate(METADATA_UPDATED_RATING);
+				}
+			}
+		});
+	}
+
 	public void addOnSongChangedListener(OnSongChangedListener listener) {
 		addOnSongChangedListener(listener, false);
 	}
@@ -2500,6 +2574,9 @@ public class DownloadService extends Service {
 				public void run() {
 					if(revision == atRevision) {
 						listener.onSongChanged(currentPlaying, currentPlayingIndex);
+
+						MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+						listener.onMetadataUpdate(entry, METADATA_UPDATED_ALL);
 					}
 				}
 			});
@@ -2542,6 +2619,13 @@ public class DownloadService extends Service {
 				}
 			});
 		}
+
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+			}
+		});
 	}
 	private void onStateUpdate() {
 		final long atRevision = revision;
@@ -2555,6 +2639,27 @@ public class DownloadService extends Service {
 				}
 			});
 		}
+	}
+	private synchronized void onMetadataUpdate() {
+		onMetadataUpdate(METADATA_UPDATED_ALL);
+	}
+	private synchronized void onMetadataUpdate(final int updateType) {
+		for(final OnSongChangedListener listener: onSongChangedListeners) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
+					listener.onMetadataUpdate(entry, updateType);
+				}
+			});
+		}
+
+		handler.post(new Runnable() {
+			@Override
+			public void run() {
+				mRemoteControl.metadataChanged(currentPlaying.getSong());
+			}
+		});
 	}
 
 	private class BufferTask extends SilentBackgroundTask<Void> {
@@ -2668,5 +2773,6 @@ public class DownloadService extends Service {
 		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex);
 		void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable);
 		void onStateUpdate(DownloadFile downloadFile, PlayerState playerState);
+		void onMetadataUpdate(MusicDirectory.Entry entry, int fieldChange);
 	}
 }

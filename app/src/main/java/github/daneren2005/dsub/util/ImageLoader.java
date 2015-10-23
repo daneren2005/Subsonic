@@ -29,7 +29,6 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.media.RemoteControlClient;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -46,6 +45,7 @@ import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
+import github.daneren2005.dsub.util.compat.RemoteControlClientBase;
 
 /**
  * Asynchronous loading of images, with caching.
@@ -257,22 +257,22 @@ public class ImageLoader {
 		return task;
 	}
 
-	public SilentBackgroundTask<Void> loadImage(Context context, RemoteControlClient remoteControl, MusicDirectory.Entry entry) {
+	public SilentBackgroundTask<Void> loadImage(Context context, RemoteControlClientBase remoteControl, MusicDirectory.Entry entry) {
 		Bitmap bitmap;
 		if (entry == null || entry.getCoverArt() == null) {
 			bitmap = getUnknownImage(entry, imageSizeLarge);
-			setImage(remoteControl, Util.createDrawableFromBitmap(context, bitmap));
+			setImage(entry, remoteControl, Util.createDrawableFromBitmap(context, bitmap));
 			return null;
 		}
 
 		bitmap = cache.get(getKey(entry.getCoverArt(), imageSizeLarge));
 		if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
-			setImage(remoteControl, drawable);
+			setImage(entry, remoteControl, drawable);
 			return null;
 		}
 
-		setImage(remoteControl, Util.createDrawableFromBitmap(context, null));
+		setImage(entry, remoteControl, Util.createDrawableFromBitmap(context, null));
 		ImageTask task = new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl);
 		task.execute();
 		return task;
@@ -367,28 +367,27 @@ public class ImageLoader {
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	private void setImage(RemoteControlClient remoteControl, Drawable drawable) {
+	private void setImage(MusicDirectory.Entry entry, RemoteControlClientBase remoteControl, Drawable drawable) {
 		if(remoteControl != null && drawable != null) {
 			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && origBitmap != null) {
 				origBitmap = origBitmap.copy(origBitmap.getConfig(), false);
 			}
 			if ( origBitmap != null && !origBitmap.isRecycled()) {
-				remoteControl.editMetadata(false).putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, origBitmap).apply();
+				remoteControl.updateAlbumArt(entry, origBitmap);
 			} else  {
 				if(origBitmap != null) {
 					Log.e(TAG, "Tried to load a recycled bitmap.");
 				}
-				remoteControl.editMetadata(false)
-					.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
-					.apply();
+
+				remoteControl.updateAlbumArt(entry, null);
 			}
 		}
 	}
 
 	public abstract class ImageTask extends SilentBackgroundTask<Void> {
 		private final Context mContext;
-		private final MusicDirectory.Entry mEntry;
+		protected final MusicDirectory.Entry mEntry;
 		private final int mSize;
 		private final int mSaveSize;
 		private final boolean mIsNowPlaying;
@@ -448,9 +447,9 @@ public class ImageLoader {
 	}
 
 	private class RemoteControlClientImageTask extends ImageTask {
-		private RemoteControlClient mRemoteControl;
+		private RemoteControlClientBase mRemoteControl;
 
-		public RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClient remoteControl) {
+		public RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClientBase remoteControl) {
 			super(context, entry, size, saveSize, isNowPlaying);
 
 			mRemoteControl = remoteControl;
@@ -458,7 +457,7 @@ public class ImageLoader {
 
 		@Override
 		protected void done(Void result) {
-			setImage(mRemoteControl, mDrawable);
+			setImage(mEntry, mRemoteControl, mDrawable);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package github.daneren2005.dsub.util.compat;
 
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.ImageLoader;
 import android.annotation.TargetApi;
@@ -8,15 +9,18 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
 import android.support.v7.media.MediaRouter;
 
+import java.util.List;
+
 import github.daneren2005.dsub.activity.SubsonicActivity;
 
 @TargetApi(14)
-public class RemoteControlClientICS extends RemoteControlClientHelper {
+public class RemoteControlClientICS extends RemoteControlClientBase {
 	private static String TAG = RemoteControlClientICS.class.getSimpleName();
 
 	protected RemoteControlClient mRemoteControl;
@@ -72,12 +76,22 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 		updateMetadata(currentSong, editor);
 		editor.apply();
     	if (currentSong == null || imageLoader == null) {
-    		mRemoteControl.editMetadata(true)
-        	.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, null)
-        	.apply();
+    		updateAlbumArt(currentSong, null);
     	} else {
-    		imageLoader.loadImage(context, mRemoteControl, currentSong);
+    		imageLoader.loadImage(context, this, currentSong);
     	}
+	}
+
+	@Override
+	public void metadataChanged(MusicDirectory.Entry currentSong) {
+
+	}
+
+	@Override
+	public void updateAlbumArt(MusicDirectory.Entry currentSong, Bitmap bitmap) {
+		mRemoteControl.editMetadata(true)
+				.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap).
+				apply();
 	}
 
 	@Override
@@ -96,6 +110,11 @@ public class RemoteControlClientICS extends RemoteControlClientHelper {
 		}
 
 		router.removeRemoteControlClient(mRemoteControl);
+	}
+
+	@Override
+	public void updatePlaylist(List<DownloadFile> playlist) {
+
 	}
 
 	protected void updateMetadata(final MusicDirectory.Entry currentSong, final RemoteControlClient.MetadataEditor editor) {
