@@ -104,7 +104,9 @@ public class FastScroller extends LinearLayout {
 				handle.setSelected(true);
 			case MotionEvent.ACTION_MOVE:
 				final float y = event.getY();
-				// setBubbleAndHandlePosition(y);
+				if(handle.getY() <= 0 || (handle.getY() + handle.getHeight()) >= height - TRACK_SNAP_RANGE) {
+					setBubbleAndHandlePosition(y);
+				}
 				setRecyclerViewPosition(y);
 				return true;
 			case MotionEvent.ACTION_UP:
