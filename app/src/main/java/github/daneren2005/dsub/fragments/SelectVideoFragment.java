@@ -15,12 +15,9 @@
 
 package github.daneren2005.dsub.fragments;
 
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 
 import java.util.List;
 
@@ -57,7 +54,7 @@ public class SelectVideoFragment extends SelectRecyclerFragment<MusicDirectory.E
 	}
 
 	@Override
-	public void onItemClicked(MusicDirectory.Entry entry) {
+	public void onItemClicked(UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry entry) {
 		playVideo(entry);
 	}
 

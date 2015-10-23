@@ -92,7 +92,7 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 	}
 
 	@Override
-	public void onItemClicked(Artist artist) {
+	public void onItemClicked(UpdateView<Artist> updateView, Artist artist) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());

@@ -18,13 +18,10 @@
 */
 package github.daneren2005.dsub.fragments;
 
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Bookmark;
@@ -86,7 +83,7 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 	}
 
 	@Override
-	public void onItemClicked(final MusicDirectory.Entry bookmark) {
+	public void onItemClicked(UpdateView<MusicDirectory.Entry> updateView, final MusicDirectory.Entry bookmark) {
 		final DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;

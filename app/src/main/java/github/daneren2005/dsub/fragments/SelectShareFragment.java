@@ -18,7 +18,6 @@ package github.daneren2005.dsub.fragments;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -95,7 +94,7 @@ public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 	}
 
 	@Override
-	public void onItemClicked(Share share) {
+	public void onItemClicked(UpdateView<Share> updateView, Share share) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(Constants.INTENT_EXTRA_NAME_SHARE, share);

@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -173,7 +171,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	}
 
 	@Override
-	public void onItemClicked(Playlist playlist) {
+	public void onItemClicked(UpdateView<Playlist> updateView, Playlist playlist) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());

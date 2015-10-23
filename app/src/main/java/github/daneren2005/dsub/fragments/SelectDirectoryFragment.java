@@ -356,7 +356,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	@Override
-	public void onItemClicked(Entry entry) {
+	public void onItemClicked(UpdateView<Entry> updateView, Entry entry) {
 		if (entry.isDirectory()) {
 			SubsonicFragment fragment = new SelectDirectoryFragment();
 			Bundle args = new Bundle();

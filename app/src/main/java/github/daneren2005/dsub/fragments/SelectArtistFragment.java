@@ -3,15 +3,12 @@ package github.daneren2005.dsub.fragments;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import github.daneren2005.dsub.R;
@@ -92,7 +89,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 	}
 
 	@Override
-	public void onItemClicked(Artist artist) {
+	public void onItemClicked(UpdateView<Artist> updateView, Artist artist) {
 		SubsonicFragment fragment;
 		if((Util.isFirstLevelArtist(context) || Util.isOffline(context) || Util.isTagBrowsing(context)) || "root".equals(artist.getId()) || groupId != null) {
 			fragment = new SelectDirectoryFragment();

@@ -78,7 +78,7 @@ public class UserFragment extends SelectRecyclerFragment<User.Setting>{
 
 	@Override
 	public SectionAdapter<User.Setting> getAdapter(List<User.Setting> objs) {
-		return new SettingsAdapter(context, user, getImageLoader(), UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10"));
+		return new SettingsAdapter(context, user, getImageLoader(), UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10"), this);
 	}
 
 	@Override
@@ -93,8 +93,12 @@ public class UserFragment extends SelectRecyclerFragment<User.Setting>{
 	}
 
 	@Override
-	public void onItemClicked(User.Setting item) {
-
+	public void onItemClicked(UpdateView<User.Setting> updateView, User.Setting item) {
+		if(updateView.isCheckable()) {
+			boolean newValue = !item.getValue();
+			item.setValue(newValue);
+			updateView.setChecked(newValue);
+		}
 	}
 
 	@Override

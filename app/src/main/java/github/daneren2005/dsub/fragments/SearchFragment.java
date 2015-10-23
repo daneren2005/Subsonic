@@ -11,13 +11,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.net.Uri;
 import android.view.ViewGroup;
 import github.daneren2005.dsub.R;
@@ -143,7 +141,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	@Override
-	public void onItemClicked(Serializable item) {
+	public void onItemClicked(UpdateView<Serializable> updateView, Serializable item) {
 		Log.d(TAG, item.getClass().getSimpleName());
 		if (item instanceof Artist) {
 			onArtistSelected((Artist) item, false);

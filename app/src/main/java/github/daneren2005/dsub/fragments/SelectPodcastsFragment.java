@@ -17,7 +17,6 @@ package github.daneren2005.dsub.fragments;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -123,7 +122,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	}
 
 	@Override
-	public void onItemClicked(PodcastChannel channel) {
+	public void onItemClicked(UpdateView<PodcastChannel> updateView, PodcastChannel channel) {
 		if("error".equals(channel.getStatus())) {
 			Util.toast(context, context.getResources().getString(R.string.select_podcasts_invalid_podcast_channel, channel.getErrorMessage() == null ? "error" : channel.getErrorMessage()));
 		} else if("downloading".equals(channel.getStatus())) {

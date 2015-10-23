@@ -19,9 +19,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +66,7 @@ public class SelectYearFragment extends SelectRecyclerFragment<String> {
 	}
 
 	@Override
-	public void onItemClicked(String decade) {
+	public void onItemClicked(UpdateView<String> updateView, String decade) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_ALBUM_LIST_TYPE, "years");
