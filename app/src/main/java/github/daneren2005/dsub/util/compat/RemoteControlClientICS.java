@@ -89,7 +89,7 @@ public class RemoteControlClientICS extends RemoteControlClientBase {
 
 	@Override
 	public void updateAlbumArt(MusicDirectory.Entry currentSong, Bitmap bitmap) {
-		mRemoteControl.editMetadata(true)
+		mRemoteControl.editMetadata(false)
 				.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, bitmap).
 				apply();
 	}
