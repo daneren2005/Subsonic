@@ -57,7 +57,6 @@ public class ShareParser extends MusicDirectoryEntryParser {
         int eventType;
 
 		SharedPreferences prefs = Util.getPreferences(context);
-		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 		if(serverUrl.charAt(serverUrl.length() - 1) != '/') {
 			serverUrl += '/';

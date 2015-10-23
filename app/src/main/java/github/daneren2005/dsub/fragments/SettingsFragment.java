@@ -480,7 +480,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						serverUsernamePreference.setText(null);
 						serverPasswordPreference.setText(null);
 
-						int activeServer = Util.getActiveServer(context);
+						// Don't use Util.getActiveServer since it is 0 if offline
+						int activeServer = Util.getPreferences(context).getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 						for (int i = instance; i <= serverCount; i++) {
 							Util.removeInstanceName(context, i, activeServer);
 						}

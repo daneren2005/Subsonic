@@ -1954,7 +1954,7 @@ public class RESTMusicService implements MusicService {
 			request.addHeader("User-Agent", Constants.REST_CLIENT_ID);
 
             // Set credentials to get through apache proxies that require authentication.
-            int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
+            int instance = getInstance(context);
             String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
             String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
             httpClient.getCredentialsProvider().setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
