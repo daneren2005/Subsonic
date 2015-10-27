@@ -45,13 +45,18 @@ import java.util.List;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChannel> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
-	
+
+	public void onCreate(Bundle bundle){
+		super.onCreate(bundle);
+		setHasOptionsMenu(true);
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(super.onOptionsItemSelected(item)) {
 			return true;
 		}
-		
+
 		switch (item.getItemId()) {
 			case R.id.menu_check:
 				refreshPodcasts();
@@ -65,19 +70,27 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 	}
 
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+		menu.clear();
+		menuInflater.inflate(R.menu.select_podcasts, menu);
+		if(Util.isOffline(context) || !UserUtil.canPodcast()){
+			menu.removeItem(R.id.menu_add_podcast);
+			menu.removeItem(R.id.menu_check);
+		}
+	}
+
+	@Override
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<PodcastChannel> updateView, PodcastChannel podcast) {
 		if(!Util.isOffline(context) && UserUtil.canPodcast()) {
 			menuInflater.inflate(R.menu.select_podcasts_context, menu);
-
-			if(SyncUtil.isSyncedPodcast(context, podcast.getId())) {
+			if (SyncUtil.isSyncedPodcast(context, podcast.getId())) {
 				menu.removeItem(R.id.podcast_menu_sync);
 			} else {
 				menu.removeItem(R.id.podcast_menu_stop_sync);
 			}
-		} else {
+		}else{
 			menuInflater.inflate(R.menu.select_podcasts_context_offline, menu);
 		}
-
 		recreateContextMenu(menu);
 	}
 
