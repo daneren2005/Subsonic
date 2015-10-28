@@ -26,6 +26,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
@@ -45,6 +46,14 @@ import java.util.List;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChannel> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
+
+	@Override
+	public void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true) && ServerInfo.checkServerVersion(context, "1.13")) {
+			largeAlbums = true;
+		}
+	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -108,7 +117,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<PodcastChanne
 
 	@Override
 	public SectionAdapter getAdapter(List<PodcastChannel> channels) {
-		return new PodcastChannelAdapter(context, channels, this);
+		return new PodcastChannelAdapter(context, channels, ServerInfo.checkServerVersion(context, "1.13") ? getImageLoader() : null, this, largeAlbums);
 	}
 
 	@Override

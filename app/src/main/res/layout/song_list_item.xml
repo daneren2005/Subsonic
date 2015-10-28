@@ -112,7 +112,7 @@
     </LinearLayout>
 	
 	<ImageView
-		android:id="@+id/more_button"
+		android:id="@+id/item_more"
 		android:src="?attr/download_none"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"

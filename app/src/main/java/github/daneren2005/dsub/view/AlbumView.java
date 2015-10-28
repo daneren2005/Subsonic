@@ -37,7 +37,6 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private static final String TAG = AlbumView.class.getSimpleName();
 
 	private File file;
-	private View coverArtView;
 	private TextView titleView;
 	private TextView artistView;
 	private boolean showArtist = true;
@@ -59,7 +58,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		ratingBar.setFocusable(false);
 		starButton = (ImageButton) findViewById(R.id.album_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.more_button);
+		moreButton = (ImageView) findViewById(R.id.item_more);
 
 		checkable = true;
 	}

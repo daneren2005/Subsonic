@@ -55,6 +55,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 	protected RatingBar ratingBar;
 	protected ImageButton starButton;
 	protected ImageView moreButton;
+	protected View coverArtView;
 	
 	protected boolean exists = false;
 	protected boolean pinned = false;
@@ -93,7 +94,18 @@ public abstract class UpdateView<T> extends LinearLayout {
 	}
 	
 	public void setObject(T obj) {
+		if(item == obj) {
+			return;
+		}
+
 		item = obj;
+		if(imageTask != null) {
+			imageTask.cancel();
+			imageTask = null;
+		}
+		if(coverArtView != null && coverArtView instanceof ImageView) {
+			((ImageView) coverArtView).setImageDrawable(null);
+		}
 		setObjectImpl(obj);
 		updateBackground();
 		update();

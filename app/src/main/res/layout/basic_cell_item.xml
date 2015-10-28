@@ -6,7 +6,7 @@
 	android:background="?attr/selectableItemBackground">
 
 	<github.daneren2005.dsub.view.SquareImageView
-		android:id="@+id/playlist_coverart"
+		android:id="@+id/item_art"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 
@@ -18,7 +18,7 @@
 		android:paddingLeft="2dp">
 
 		<TextView
-			android:id="@+id/playlist_title"
+			android:id="@+id/item_name"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
@@ -28,7 +28,7 @@
 			android:textColor="?android:textColorPrimary"/>
 
 		<ImageView
-			android:id="@+id/more_button"
+			android:id="@+id/item_more"
 			android:src="?attr/download_none"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

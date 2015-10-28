@@ -23,7 +23,6 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -131,10 +130,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					}
 				});
 
-				View moreButton = updateView.findViewById(R.id.more_button);
-				if(moreButton == null) {
-					moreButton = updateView.findViewById(R.id.item_more);
-				}
+				View moreButton = updateView.findViewById(R.id.item_more);
 				if (moreButton != null) {
 					moreButton.setOnClickListener(new View.OnClickListener() {
 						@Override
@@ -223,10 +219,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 			setChecked(updateView, selected.contains(item));
 		}
 
-		View moreButton = updateView.findViewById(R.id.more_button);
-		if(moreButton == null) {
-			moreButton = updateView.findViewById(R.id.item_more);
-		}
+		View moreButton = updateView.findViewById(R.id.item_more);
 		if(moreButton != null) {
 			if(onItemClickedListener != null) {
 				PopupMenu popup = new PopupMenu(context, moreButton);

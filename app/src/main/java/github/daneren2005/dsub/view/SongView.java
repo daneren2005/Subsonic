@@ -79,7 +79,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		starButton.setFocusable(false);
 		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
 		bookmarkButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.more_button);
+		moreButton = (ImageView) findViewById(R.id.item_more);
 		bottomRowView = findViewById(R.id.song_bottom);
 	}
 

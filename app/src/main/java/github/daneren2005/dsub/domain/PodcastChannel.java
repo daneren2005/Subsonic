@@ -40,6 +40,7 @@ public class PodcastChannel implements Serializable {
 	private String description;
 	private String status;
 	private String errorMessage;
+	private String coverArt;
 	
 	public PodcastChannel() {
 		
@@ -85,6 +86,13 @@ public class PodcastChannel implements Serializable {
 	}
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+
+	public String getCoverArt() {
+		return coverArt;
+	}
+	public void setCoverArt(String coverArt) {
+		this.coverArt = coverArt;
 	}
 
 	@Override

@@ -36,17 +36,16 @@ import github.daneren2005.dsub.util.SyncUtil;
 public class PlaylistView extends UpdateView<Playlist> {
 	private static final String TAG = PlaylistView.class.getSimpleName();
 
-	private View coverArtView;
 	private TextView titleView;
 	private ImageLoader imageLoader;
 
 	public PlaylistView(Context context, ImageLoader imageLoader, boolean largeCell) {
 		super(context);
-		LayoutInflater.from(context).inflate(largeCell ? R.layout.playlist_cell_item : R.layout.playlist_list_item, this, true);
+		LayoutInflater.from(context).inflate(largeCell ? R.layout.basic_cell_item : R.layout.basic_art_item, this, true);
 
-		coverArtView = findViewById(R.id.playlist_coverart);
-		titleView = (TextView) findViewById(R.id.playlist_title);
-		moreButton = (ImageView) findViewById(R.id.more_button);
+		coverArtView = findViewById(R.id.item_art);
+		titleView = (TextView) findViewById(R.id.item_name);
+		moreButton = (ImageView) findViewById(R.id.item_more);
 
 		this.imageLoader = imageLoader;
 	}

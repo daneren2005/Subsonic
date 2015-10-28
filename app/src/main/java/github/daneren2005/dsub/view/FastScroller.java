@@ -264,9 +264,15 @@ public class FastScroller extends LinearLayout {
 	private class ScrollListener extends OnScrollListener {
 		@Override
 		public void onScrolled(RecyclerView rv,int dx,int dy) {
+			if(recyclerView.getWidth() == 0) {
+				return;
+			}
 			registerAdapter();
 
 			View firstVisibleView = recyclerView.getChildAt(0);
+			if(firstVisibleView == null) {
+				return;
+			}
 			int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
 			if(visibleRange == -1) {
 				visibleRange = recyclerView.getChildCount();
