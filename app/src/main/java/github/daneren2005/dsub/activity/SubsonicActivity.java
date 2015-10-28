@@ -481,9 +481,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getMenuInflater();
 		SubsonicFragment currentFragment = getCurrentFragment();
-		if(drawerOpen) {
-			menuInflater.inflate(R.menu.drawer_menu, menu);
-		} else if(currentFragment != null) {
+		if(currentFragment != null) {
 			try {
 				SubsonicFragment fragment = getCurrentFragment();
 				fragment.setContext(this);
@@ -806,6 +804,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 		currentFragment = fragment;
 		currentFragment.setPrimaryFragment(true);
+		supportInvalidateOptionsMenu();
 	}
 
 	public void invalidate() {
