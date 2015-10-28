@@ -20,7 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -98,8 +98,8 @@ public final class UserUtil {
 
 			@Override
 			protected void done(Void result) {
-				if(context instanceof ActionBarActivity) {
-					((ActionBarActivity) context).supportInvalidateOptionsMenu();
+				if(context instanceof AppCompatActivity) {
+					((AppCompatActivity) context).supportInvalidateOptionsMenu();
 				}
 			}
 
