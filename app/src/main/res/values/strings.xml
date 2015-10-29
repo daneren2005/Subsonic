@@ -179,6 +179,7 @@
 	<string name="select_podcasts.created_error">Failed to add podcast</string>
 	<string name="select_podcasts.invalid_podcast_channel">Invalid podcast channel: %s</string>
 	<string name="select_podcasts.delete">Delete podcast</string>
+	<string name="select_podcasts.channels">Podcast Channels</string>
 
     <string name="download.empty">Playlist is empty</string>
 	<string name="download.shuffle_loading">Shuffle list is loading...</string>

@@ -784,7 +784,12 @@ public class CachedMusicService implements MusicService {
 
 		return result;
 	}
-	
+
+	@Override
+	public MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getNewestPodcastEpisodes(count, context, progressListener);
+	}
+
 	@Override
 	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
 		musicService.refreshPodcasts(context, progressListener);

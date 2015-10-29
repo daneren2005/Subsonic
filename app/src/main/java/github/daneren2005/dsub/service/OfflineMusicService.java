@@ -756,7 +756,12 @@ public class OfflineMusicService implements MusicService {
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
 		return getMusicDirectory(FileUtil.getPodcastDirectory(context, id).getPath(), null, false, context, progressListener, true);
 	}
-	
+
+	@Override
+	public MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
 	@Override
 	public void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);

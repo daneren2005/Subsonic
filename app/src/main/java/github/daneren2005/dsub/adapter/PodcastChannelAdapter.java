@@ -16,57 +16,88 @@ package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
 import android.view.ViewGroup;
+
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.PodcastChannelView;
+import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PodcastChannelAdapter extends SectionAdapter<PodcastChannel> implements FastScroller.BubbleTextGetter {
-	public static int VIEW_TYPE_PODCAST = 1;
+public class PodcastChannelAdapter extends SectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
+	public static int VIEW_TYPE_PODCAST_LEGACY = 1;
 	public static int VIEW_TYPE_PODCAST_LINE = 2;
 	public static int VIEW_TYPE_PODCAST_CELL = 3;
+	public static int VIEW_TYPE_PODCAST_EPISODE = 4;
 
 	private ImageLoader imageLoader;
 	private boolean largeCell;
 
-	public PodcastChannelAdapter(Context context, List<PodcastChannel> podcasts, ImageLoader imageLoader, OnItemClickedListener listener, boolean largeCell) {
+	public PodcastChannelAdapter(Context context, List<Serializable> podcasts, ImageLoader imageLoader, OnItemClickedListener listener, boolean largeCell) {
 		super(context, podcasts);
-		this.onItemClickedListener = listener;
 		this.imageLoader = imageLoader;
+		this.onItemClickedListener = listener;
+		this.largeCell = largeCell;
+	}
+	public PodcastChannelAdapter(Context context, List<String> headers, List<List<Serializable>> sections, ImageLoader imageLoader, OnItemClickedListener listener, boolean largeCell) {
+		super(context, headers, sections);
+		this.imageLoader = imageLoader;
+		this.onItemClickedListener = listener;
 		this.largeCell = largeCell;
 	}
 
 	@Override
 	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
-		PodcastChannelView view;
-		if(viewType == VIEW_TYPE_PODCAST) {
-			view = new PodcastChannelView(context);
+		UpdateView updateView;
+		if(viewType == VIEW_TYPE_PODCAST_EPISODE) {
+			updateView = new SongView(context);
+		} else if(viewType == VIEW_TYPE_PODCAST_LEGACY) {
+			updateView = new PodcastChannelView(context);
 		} else {
-			view = new PodcastChannelView(context, imageLoader, viewType == VIEW_TYPE_PODCAST_CELL);
+			updateView = new PodcastChannelView(context, imageLoader, viewType == VIEW_TYPE_PODCAST_CELL);
 		}
 
-		return new UpdateView.UpdateViewHolder(view);
+		return new UpdateView.UpdateViewHolder(updateView);
 	}
 
 	@Override
-	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, PodcastChannel item, int viewType) {
-		holder.getUpdateView().setObject(item);
-	}
-
-	@Override
-	public int getItemViewType(PodcastChannel item) {
-		if(imageLoader != null && item.getCoverArt() != null) {
-			return largeCell ? VIEW_TYPE_PODCAST_CELL : VIEW_TYPE_PODCAST_LINE;
+	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Serializable item, int viewType) {
+		if(viewType == VIEW_TYPE_PODCAST_EPISODE) {
+			PodcastEpisode episode = (PodcastEpisode) item;
+			holder.getUpdateView().setObject(item, !episode.isVideo());
 		} else {
-			return VIEW_TYPE_PODCAST;
+			holder.getUpdateView().setObject(item);
+		}
+	}
+
+	@Override
+	public int getItemViewType(Serializable item) {
+		if(item instanceof PodcastChannel) {
+			PodcastChannel channel = (PodcastChannel) item;
+
+			if (imageLoader != null && channel.getCoverArt() != null) {
+				return largeCell ? VIEW_TYPE_PODCAST_CELL : VIEW_TYPE_PODCAST_LINE;
+			} else {
+				return VIEW_TYPE_PODCAST_LEGACY;
+			}
+		} else {
+			return VIEW_TYPE_PODCAST_EPISODE;
 		}
 	}
 
 	@Override
 	public String getTextToShowInBubble(int position) {
-		return getNameIndex(getItemForPosition(position).getName(), true);
+		Serializable item = getItemForPosition(position);
+		if(item instanceof PodcastChannel) {
+			PodcastChannel channel = (PodcastChannel) item;
+			return getNameIndex(channel.getName(), true);
+		} else {
+			return null;
+		}
 	}
 }

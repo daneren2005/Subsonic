@@ -321,17 +321,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if((albumListType == null || (entry.getParent() == null && entry.getArtistId() == null)) && !Util.isOffline(context)) {
 			menu.removeItem(R.id.album_menu_show_artist);
 		}
-		if(podcastId != null && !Util.isOffline(context)) {
-			if(UserUtil.canPodcast()) {
-				String status = ((PodcastEpisode)entry).getStatus();
-				if("completed".equals(status)) {
-					menu.removeItem(R.id.song_menu_server_download);
-				}
-			} else {
-				menu.removeItem(R.id.song_menu_server_download);
-				menu.removeItem(R.id.song_menu_server_delete);
-			}
-		}
 
 		recreateContextMenu(menu);
 	}
@@ -344,12 +333,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		switch (menuItem.getItemId()) {
 			case R.id.song_menu_remove_playlist:
 				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(entries.indexOf(entry)));
-				break;
-			case R.id.song_menu_server_download:
-				downloadPodcastEpisode((PodcastEpisode) entry);
-				break;
-			case R.id.song_menu_server_delete:
-				deletePodcastEpisode((PodcastEpisode) entry);
 				break;
 		}
 
@@ -951,59 +934,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				Util.toast(context, getErrorMessage(error), false);
 			}
 		}.execute();
-	}
-	
-	public void downloadPodcastEpisode(final PodcastEpisode episode) {
-		new LoadingTask<Void>(context, true) {
-			@Override
-			protected Void doInBackground() throws Throwable {				
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				musicService.downloadPodcastEpisode(episode.getEpisodeId(), context, null);
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				Util.toast(context, context.getResources().getString(R.string.select_podcasts_downloading, episode.getTitle()));
-			}
-
-			@Override
-			protected void error(Throwable error) {
-				Util.toast(context, getErrorMessage(error), false);
-			}
-		}.execute();
-	}
-	
-	public void deletePodcastEpisode(final PodcastEpisode episode) {
-		Util.confirmDialog(context, R.string.common_delete, episode.getTitle(), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				new LoadingTask<Void>(context, true) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						MusicService musicService = MusicServiceFactory.getMusicService(context);
-						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
-						if (getDownloadService() != null) {
-							List<Entry> episodeList = new ArrayList<Entry>(1);
-							episodeList.add(episode);
-							getDownloadService().delete(episodeList);
-						}
-						return null;
-					}
-
-					@Override
-					protected void done(Void result) {
-						entryGridAdapter.removeItem(episode);
-					}
-
-					@Override
-					protected void error(Throwable error) {
-						Log.w(TAG, "Failed to delete podcast episode", error);
-						Util.toast(context, getErrorMessage(error), false);
-					}
-				}.execute();
-			}
-		});
 	}
 
 	public void unstarSelected() {

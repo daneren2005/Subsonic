@@ -58,8 +58,9 @@ public class PodcastEntryParser extends AbstractParser {
 					} else {
 						valid = false;
 					}
-				}
-				else if ("episode".equals(name) && valid) {
+				} else if("newestPodcasts".equals(name)) {
+					valid = true;
+				} else if ("episode".equals(name) && valid) {
 					PodcastEpisode episode = new PodcastEpisode();
 					episode.setEpisodeId(get("id"));
 					episode.setId(get("streamId"));

@@ -235,6 +235,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
 					}
+					if(UserUtil.canPodcast()) {
+						String status = ((PodcastEpisode)entry).getStatus();
+						if("completed".equals(status)) {
+							menu.removeItem(R.id.song_menu_server_download);
+						}
+					} else {
+						menu.removeItem(R.id.song_menu_server_download);
+						menu.removeItem(R.id.song_menu_server_delete);
+					}
 				}
 			}
 			else if (entry.isDirectory()) {
@@ -407,6 +416,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.song_menu_show_artist:
 				showArtist((Entry) selectedItem);
+				break;
+			case R.id.song_menu_server_download:
+				downloadPodcastEpisode((PodcastEpisode) entry);
+				break;
+			case R.id.song_menu_server_delete:
+				deletePodcastEpisode((PodcastEpisode) entry);
 				break;
 			case R.id.bookmark_menu_delete:
 				deleteBookmark(entry, null);
@@ -1668,6 +1683,59 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						}
 
 						Util.toast(context, msg, false);
+					}
+				}.execute();
+			}
+		});
+	}
+
+	public void downloadPodcastEpisode(final PodcastEpisode episode) {
+		new LoadingTask<Void>(context, true) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				MusicService musicService = MusicServiceFactory.getMusicService(context);
+				musicService.downloadPodcastEpisode(episode.getEpisodeId(), context, null);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				Util.toast(context, context.getResources().getString(R.string.select_podcasts_downloading, episode.getTitle()));
+			}
+
+			@Override
+			protected void error(Throwable error) {
+				Util.toast(context, getErrorMessage(error), false);
+			}
+		}.execute();
+	}
+
+	public void deletePodcastEpisode(final PodcastEpisode episode) {
+		Util.confirmDialog(context, R.string.common_delete, episode.getTitle(), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				new LoadingTask<Void>(context, true) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						MusicService musicService = MusicServiceFactory.getMusicService(context);
+						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
+						if (getDownloadService() != null) {
+							List<Entry> episodeList = new ArrayList<Entry>(1);
+							episodeList.add(episode);
+							getDownloadService().delete(episodeList);
+						}
+						return null;
+					}
+
+					@Override
+					protected void done(Void result) {
+						getCurrentAdapter().removeItem(episode);
+					}
+
+					@Override
+					protected void error(Throwable error) {
+						Log.w(TAG, "Failed to delete podcast episode", error);
+						Util.toast(context, getErrorMessage(error), false);
 					}
 				}.execute();
 			}
