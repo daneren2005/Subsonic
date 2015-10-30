@@ -57,8 +57,8 @@ import github.daneren2005.dsub.util.compat.RemoteControlClientBase;
  */
 public class ImageLoader {
 	private static final String TAG = ImageLoader.class.getSimpleName();
-	private static final String PLAYLIST_PREFIX = "pl-";
-	private static final String PODCAST_PREFIX = "pc-";
+	public static final String PLAYLIST_PREFIX = "pl-";
+	public static final String PODCAST_PREFIX = "pc-";
 
 	private Context context;
 	private LruCache<String, Bitmap> cache;

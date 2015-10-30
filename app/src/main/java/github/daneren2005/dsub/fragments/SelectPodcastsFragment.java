@@ -53,12 +53,14 @@ import java.util.List;
 public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable> {
 	private static final String TAG = SelectPodcastsFragment.class.getSimpleName();
 
+	private boolean hasCoverArt;
 	private MusicDirectory newestEpisodes;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true) && ServerInfo.checkServerVersion(context, "1.13")) {
+		hasCoverArt = ServerInfo.checkServerVersion(context, "1.13") || Util.isOffline(context);
+		if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true) && hasCoverArt) {
 			largeAlbums = true;
 		}
 	}
@@ -137,7 +139,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 	@Override
 	public SectionAdapter getAdapter(List<Serializable> channels) {
 		if(newestEpisodes == null || newestEpisodes.getChildrenSize() == 0) {
-			return new PodcastChannelAdapter(context, channels, ServerInfo.checkServerVersion(context, "1.13") ? getImageLoader() : null, this, largeAlbums);
+			return new PodcastChannelAdapter(context, channels, hasCoverArt ? getImageLoader() : null, this, largeAlbums);
 		} else {
 			Resources res = context.getResources();
 			List<String> headers = Arrays.asList(res.getString(R.string.main_albums_newest), res.getString(R.string.select_podcasts_channels));
@@ -221,7 +223,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 				SectionAdapter adapter = getCurrentAdapter();
 				if(adapter != null) {
 					int viewType = getCurrentAdapter().getItemViewType(position);
-					if (viewType == SectionAdapter.VIEW_TYPE_HEADER || viewType == PodcastChannelAdapter.VIEW_TYPE_PODCAST_EPISODE) {
+					if (viewType == SectionAdapter.VIEW_TYPE_HEADER || viewType == PodcastChannelAdapter.VIEW_TYPE_PODCAST_EPISODE || viewType == PodcastChannelAdapter.VIEW_TYPE_PODCAST_LEGACY) {
 						return columns;
 					} else {
 						return 1;

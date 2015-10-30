@@ -186,8 +186,21 @@ public class FileUtil {
 		return playlistDir;
 	}
 
+	public static File getAlbumArtFile(Context context, PodcastChannel channel) {
+		MusicDirectory.Entry entry = new MusicDirectory.Entry();
+		entry.setId(channel.getId());
+		entry.setTitle(channel.getName());
+		return getAlbumArtFile(context, entry);
+	}
     public static File getAlbumArtFile(Context context, MusicDirectory.Entry entry) {
-		if(entry.getId().indexOf("pl-") == -1) {
+		if(entry.getId().indexOf(ImageLoader.PLAYLIST_PREFIX) != -1) {
+			File dir = getAlbumArtDirectory(context);
+			return  new File(dir, Util.md5Hex(ImageLoader.PLAYLIST_PREFIX + entry.getTitle()) + ".jpeg");
+		} else if(entry.getId().indexOf(ImageLoader.PODCAST_PREFIX) != -1) {
+			File dir = getAlbumArtDirectory(context);
+			Log.d(TAG, ImageLoader.PODCAST_PREFIX + entry.getTitle());
+			return  new File(dir, Util.md5Hex(ImageLoader.PODCAST_PREFIX + entry.getTitle()) + ".jpeg");
+		} else {
 			File albumDir = getAlbumDirectory(context, entry);
 			File artFile;
 			File albumFile = getAlbumArtFile(albumDir);
@@ -201,9 +214,6 @@ public class FileUtil {
 				artFile = hexFile;
 			}
 			return artFile;
-		} else {
-			File playlistDir = getAlbumArtDirectory(context);
-			return  new File(playlistDir, Util.md5Hex("pl-" + entry.getTitle()) + ".jpeg");
 		}
     }
 

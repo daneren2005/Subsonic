@@ -737,6 +737,10 @@ public class OfflineMusicService implements MusicService {
 				channel.setId(parts[0]);
 				channel.setName(parts[0]);
 				channel.setStatus("completed");
+				File albumArt = FileUtil.getAlbumArtFile(context, channel);
+				if (albumArt.exists()) {
+					channel.setCoverArt(albumArt.getPath());
+				}
 
 				if(parts.length > 1) {
 					channel.setUrl(parts[1]);
