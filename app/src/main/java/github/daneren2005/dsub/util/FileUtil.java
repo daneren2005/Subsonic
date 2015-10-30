@@ -198,7 +198,6 @@ public class FileUtil {
 			return  new File(dir, Util.md5Hex(ImageLoader.PLAYLIST_PREFIX + entry.getTitle()) + ".jpeg");
 		} else if(entry.getId().indexOf(ImageLoader.PODCAST_PREFIX) != -1) {
 			File dir = getAlbumArtDirectory(context);
-			Log.d(TAG, ImageLoader.PODCAST_PREFIX + entry.getTitle());
 			return  new File(dir, Util.md5Hex(ImageLoader.PODCAST_PREFIX + entry.getTitle()) + ".jpeg");
 		} else {
 			File albumDir = getAlbumDirectory(context, entry);

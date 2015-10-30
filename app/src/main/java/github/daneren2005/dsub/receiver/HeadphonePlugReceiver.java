@@ -30,9 +30,7 @@ public class HeadphonePlugReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		if(Intent.ACTION_HEADSET_PLUG.equals(intent.getAction())) {
 			int headphoneState = intent.getIntExtra("state", -1);
-			Log.d(TAG, "State: " + headphoneState);
 			if(headphoneState == 1 && Util.shouldStartOnHeadphones(context)) {
-				Log.d(TAG, "Fired play event");
 				Intent start = new Intent(context, DownloadService.class);
 				start.setAction(DownloadService.START_PLAY);
 				context.startService(start);

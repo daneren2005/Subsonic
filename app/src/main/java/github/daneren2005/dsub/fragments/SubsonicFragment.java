@@ -1056,7 +1056,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						overwriteCheckBox.setVisibility(View.VISIBLE);
 					}
 				} catch(Exception e) {
-					Log.d(TAG, "Playlist id isn't a integer, probably MusicCabinet");
+					Log.i(TAG, "Playlist id isn't a integer, probably MusicCabinet");
 				}
 			} else {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
