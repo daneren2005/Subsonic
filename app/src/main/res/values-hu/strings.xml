@@ -28,6 +28,7 @@
 	<string name="common.close">Bezár</string>
 	<string name="common.false">Nem</string>
 	<string name="common.true">Igen</string>
+	<string name="common.never">Soha</string>
 
     <string name="button_bar.home">Főoldal</string>
     <string name="button_bar.browse">Médiatár</string>
@@ -152,11 +153,11 @@
     <string name="select_album.donate_dialog_later">Később</string>
     <string name="select_album.donate_dialog_0_trial_days_left">A próbaidőszak lejárt!</string>
 
-    <string name="offline.sync_dialog_title">Offline dalok várnak a szinkronizálás befejezésére</string>
-    <string name="offline.sync_dialog_message">%1$d scrobble folyamat offline módban?
-		\n%2$d csillagozás folyamat offline módban?
+    <string name="offline.sync_dialog_title">Offline események várnak szinkronizálásra</string>
+    <string name="offline.sync_dialog_message">Az offline módban történt %1$d scrobbling folyamat,
+		\nés a(z) %2$d csillagozás fel legyen követve?
 	</string>
-	<string name="offline.sync_dialog_default">A művelet használata alapértelmezettként</string>
+	<string name="offline.sync_dialog_default">A válaztás használata alapértelmezettként</string>
 	<string name="offline.sync_success">%1$d dal sikeresen szinkronizálva</string>
 	<string name="offline.sync_partial">%1$d/%2$d dal sikeresen szinkronizálva</string>
 	<string name="offline.sync_error">A dalok szinkronizálása sikertelen!</string>
@@ -223,6 +224,8 @@
 		\nBecsült méret: %2$s</string>
 	<string name="download.failed_to_load">A beolvasás sikertelen!</string>
 	<string name="download.restore_play_queue">Folytatás onnan, ahol egy másik eszközön abbahagyta.</string>
+	<string name="download.thumbs_up">Jó</string>
+	<string name="download.thumbs_down">Nem jó</string>
 
 	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
 	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
@@ -637,6 +640,7 @@
 	<string name="details.song">Dal</string>
 	<string name="details.position">Pozíció</string>
 	<string name="details.updated">Frissítve</string>
+	<string name="details.starred">Csillagozott</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Nincsenek dalok</item>
