@@ -159,10 +159,12 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 						updateView.getChildAt(0).setOnLongClickListener(new View.OnLongClickListener() {
 							@Override
 							public boolean onLongClick(View v) {
-								if(currentActionMode == null) {
-									startActionMode(holder);
-								} else {
-									updateView.getChildAt(0).performClick();
+								if(updateView.isCheckable()) {
+									if (currentActionMode == null) {
+										startActionMode(holder);
+									} else {
+										updateView.getChildAt(0).performClick();
+									}
 								}
 								return true;
 							}

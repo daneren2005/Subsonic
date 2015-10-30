@@ -15,12 +15,17 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.ViewGroup;
 
+import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.BasicHeaderView;
 import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.PodcastChannelView;
 import github.daneren2005.dsub.view.SongView;
@@ -49,6 +54,7 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 		this.imageLoader = imageLoader;
 		this.onItemClickedListener = listener;
 		this.largeCell = largeCell;
+		checkable = true;
 	}
 
 	@Override
@@ -99,5 +105,17 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
+		if(Util.isOffline(context)) {
+			menuInflater.inflate(R.menu.multiselect_media_offline, menu);
+		} else {
+			menuInflater.inflate(R.menu.multiselect_media, menu);
+		}
+
+		menu.removeItem(R.id.menu_remove_playlist);
+		menu.removeItem(R.id.menu_unstar);
 	}
 }
