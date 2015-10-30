@@ -186,12 +186,8 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		public void done(List<T> result) {
 			if (result != null && !result.isEmpty()) {
 				recyclerView.setAdapter(adapter = getAdapter(result));
-				if(adapter instanceof FastScroller.BubbleTextGetter) {
-					if(!fastScroller.isAttached()) {
-						fastScroller.attachRecyclerView(recyclerView);
-					}
-				} else if(fastScroller.isAttached()) {
-					fastScroller.detachRecyclerView();
+				if(!fastScroller.isAttached()) {
+					fastScroller.attachRecyclerView(recyclerView);
 				}
 
 				onFinishRefresh();
