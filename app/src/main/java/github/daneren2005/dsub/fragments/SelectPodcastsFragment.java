@@ -141,17 +141,25 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		if(newestEpisodes == null || newestEpisodes.getChildrenSize() == 0) {
 			return new PodcastChannelAdapter(context, channels, hasCoverArt ? getImageLoader() : null, this, largeAlbums);
 		} else {
-			Resources res = context.getResources();
-			List<String> headers = Arrays.asList(res.getString(R.string.main_albums_newest), res.getString(R.string.select_podcasts_channels));
+			List<String> headers = Arrays.asList(PodcastChannelAdapter.EPISODE_HEADER, PodcastChannelAdapter.CHANNEL_HEADER);
 
+			List<MusicDirectory.Entry> episodes = newestEpisodes.getChildren();
 			List<Serializable> serializableEpisodes = new ArrayList<>();
-			serializableEpisodes.addAll(newestEpisodes.getChildren());
+
+			// Put 3 in current list
+			while(serializableEpisodes.size() < 3) {
+				serializableEpisodes.add(episodes.remove(0));
+			}
+
+			// Put rest in extra set
+			List<Serializable> extraEpisodes = new ArrayList<>();
+			extraEpisodes.addAll(episodes);
 
 			List<List<Serializable>> sections = new ArrayList<>();
 			sections.add(serializableEpisodes);
 			sections.add(channels);
 
-			return new PodcastChannelAdapter(context, headers, sections, ServerInfo.checkServerVersion(context, "1.13") ? getImageLoader() : null, this, largeAlbums);
+			return new PodcastChannelAdapter(context, headers, sections, extraEpisodes, ServerInfo.checkServerVersion(context, "1.13") ? getImageLoader() : null, this, largeAlbums);
 		}
 	}
 
@@ -161,7 +169,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 
 		if(!Util.isOffline(context) && ServerInfo.hasNewestPodcastEpisodes(context)) {
 			try {
-				newestEpisodes = musicService.getNewestPodcastEpisodes(3, context, listener);
+				newestEpisodes = musicService.getNewestPodcastEpisodes(10, context, listener);
 			} catch (Exception e) {
 				Log.e(TAG, "Failed to download newest episodes", e);
 				newestEpisodes = null;

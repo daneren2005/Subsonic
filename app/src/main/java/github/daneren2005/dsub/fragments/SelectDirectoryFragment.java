@@ -763,9 +763,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 
 		recyclerView.setAdapter(entryGridAdapter);
-		if(entryGridAdapter instanceof FastScroller.BubbleTextGetter) {
-			fastScroller.attachRecyclerView(recyclerView);
-		}
+		fastScroller.attachRecyclerView(recyclerView);
 		context.supportInvalidateOptionsMenu();
 
 		if(scrollToPosition != -1) {

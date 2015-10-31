@@ -17,12 +17,14 @@ package github.daneren2005.dsub.adapter;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.PodcastEpisode;
+import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.BasicHeaderView;
@@ -35,13 +37,18 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PodcastChannelAdapter extends SectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
-	public static int VIEW_TYPE_PODCAST_LEGACY = 1;
-	public static int VIEW_TYPE_PODCAST_LINE = 2;
-	public static int VIEW_TYPE_PODCAST_CELL = 3;
-	public static int VIEW_TYPE_PODCAST_EPISODE = 4;
+	public static final int VIEW_TYPE_PODCAST_LEGACY = 1;
+	public static final int VIEW_TYPE_PODCAST_LINE = 2;
+	public static final int VIEW_TYPE_PODCAST_CELL = 3;
+	public static final int VIEW_TYPE_PODCAST_EPISODE = 4;
+
+	public static final String EPISODE_HEADER = "episodes";
+	public static final String CHANNEL_HEADER = "channels";
 
 	private ImageLoader imageLoader;
 	private boolean largeCell;
+	private int selectToggleAttr = R.attr.select_server;
+	private List<Serializable> extraEpisodes;
 
 	public PodcastChannelAdapter(Context context, List<Serializable> podcasts, ImageLoader imageLoader, OnItemClickedListener listener, boolean largeCell) {
 		super(context, podcasts);
@@ -49,8 +56,9 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 		this.onItemClickedListener = listener;
 		this.largeCell = largeCell;
 	}
-	public PodcastChannelAdapter(Context context, List<String> headers, List<List<Serializable>> sections, ImageLoader imageLoader, OnItemClickedListener listener, boolean largeCell) {
+	public PodcastChannelAdapter(Context context, List<String> headers, List<List<Serializable>> sections, List<Serializable> extraEpisodes, ImageLoader imageLoader, OnItemClickedListener listener, boolean largeCell) {
 		super(context, headers, sections);
+		this.extraEpisodes = extraEpisodes;
 		this.imageLoader = imageLoader;
 		this.onItemClickedListener = listener;
 		this.largeCell = largeCell;
@@ -117,5 +125,55 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 
 		menu.removeItem(R.id.menu_remove_playlist);
 		menu.removeItem(R.id.menu_unstar);
+	}
+
+	@Override
+	public UpdateView.UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
+		return new UpdateView.UpdateViewHolder(new BasicHeaderView(context, R.layout.newest_episode_header));
+	}
+
+	@Override
+	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header) {
+		UpdateView view = holder.getUpdateView();
+		ImageView toggleSelectionView = (ImageView) view.findViewById(R.id.item_select);
+
+		String display;
+		if(EPISODE_HEADER.equals(header)) {
+			display = context.getResources().getString(R.string.main_albums_newest);
+
+			if(extraEpisodes != null && !extraEpisodes.isEmpty()) {
+				toggleSelectionView.setVisibility(View.VISIBLE);
+				toggleSelectionView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// Update icon
+						if (selectToggleAttr == R.attr.select_server) {
+							selectToggleAttr = R.attr.select_tabs;
+
+							// Update how many are displayed
+							sections.get(0).addAll(extraEpisodes);
+							notifyItemRangeInserted(4, extraEpisodes.size());
+						} else {
+							selectToggleAttr = R.attr.select_server;
+
+							// Update how many are displayed
+							sections.get(0).removeAll(extraEpisodes);
+							notifyItemRangeRemoved(4, extraEpisodes.size());
+						}
+
+						((ImageView) v).setImageResource(DrawableTint.getDrawableRes(context, selectToggleAttr));
+
+					}
+				});
+				toggleSelectionView.setImageResource(DrawableTint.getDrawableRes(context, selectToggleAttr));
+			}
+		} else {
+			display = context.getResources().getString(R.string.select_podcasts_channels);
+			toggleSelectionView.setVisibility(View.GONE);
+		}
+
+		if(view != null) {
+			view.setObject(display);
+		}
 	}
 }

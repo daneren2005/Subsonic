@@ -27,6 +27,7 @@
 		<item name="volume">@drawable/ic_action_volume_light</item>
 		<item name="toggle_list">@drawable/action_toggle_list_light</item>
 		<item name="select_server">@drawable/main_select_server_light</item>
+		<item name="select_tabs">@drawable/main_select_tabs_light</item>
 		<item name="playing">@drawable/playing_light</item>
 		<item name="downloading">@drawable/downloading_light</item>
 		<item name="bookmark">@drawable/ic_menu_bookmark_light</item>
@@ -89,6 +90,7 @@
 		<item name="volume">@drawable/ic_action_volume_dark</item>
 		<item name="toggle_list">@drawable/action_toggle_list_dark</item>
 		<item name="select_server">@drawable/main_select_server_dark</item>
+		<item name="select_tabs">@drawable/main_select_tabs_dark</item>
 		<item name="playing">@drawable/playing_dark</item>
 		<item name="downloading">@drawable/downloading_dark</item>
 		<item name="bookmark">@drawable/ic_menu_bookmark_dark</item>
