@@ -138,7 +138,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}
 		setContentView(R.layout.abstract_fragment_activity);
 
-		UserUtil.seedCurrentUser(this);
 		if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
 			String fragmentType = getIntent().getStringExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE);
 			if(fragmentType == null) {
@@ -380,6 +379,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			getIntent().removeExtra(Constants.INTENT_EXTRA_VIEW_ALBUM);
 		}
 
+		UserUtil.seedCurrentUser(this);
 		createAccount();
 		runWhenServiceAvailable(new Runnable() {
 			@Override

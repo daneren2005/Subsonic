@@ -50,9 +50,9 @@ public final class UserUtil {
 	private static final long MIN_VERIFY_DURATION = 1000L * 60L * 60L;
 	
 	private static int instance = -1;
+	private static int instanceHash = -1;
 	private static User currentUser;
 	private static long lastVerifiedTime = 0;
-
 
 	public static void refreshCurrentUser(Context context, boolean forceRefresh) {
 		refreshCurrentUser(context, forceRefresh, false);
@@ -76,10 +76,12 @@ public final class UserUtil {
 		}
 		
 		final int instance = Util.getActiveServer(context);
-		if(UserUtil.instance == instance && currentUser != null) {
+		final int instanceHash = (instance == 0) ? 0 : Util.getRestUrl(context, null).hashCode();
+		if(UserUtil.instance == instance && UserUtil.instanceHash == instanceHash && currentUser != null) {
 			return;
 		} else {
 			UserUtil.instance = instance;
+			UserUtil.instanceHash = instanceHash;
 		}
 
 		new SilentBackgroundTask<Void>(context) {
