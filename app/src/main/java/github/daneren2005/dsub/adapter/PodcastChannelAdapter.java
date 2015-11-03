@@ -166,6 +166,8 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 					}
 				});
 				toggleSelectionView.setImageResource(DrawableTint.getDrawableRes(context, selectToggleAttr));
+			} else {
+				toggleSelectionView.setVisibility(View.GONE);
 			}
 		} else {
 			display = context.getResources().getString(R.string.select_podcasts_channels);

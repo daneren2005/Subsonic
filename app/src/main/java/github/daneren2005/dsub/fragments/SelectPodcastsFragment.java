@@ -147,7 +147,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 			List<Serializable> serializableEpisodes = new ArrayList<>();
 
 			// Put 3 in current list
-			while(serializableEpisodes.size() < 3) {
+			while(serializableEpisodes.size() < 3 && !episodes.isEmpty()) {
 				serializableEpisodes.add(episodes.remove(0));
 			}
 
