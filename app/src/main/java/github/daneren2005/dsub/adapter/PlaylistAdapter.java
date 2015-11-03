@@ -62,6 +62,11 @@ public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScr
 
 	@Override
 	public String getTextToShowInBubble(int position) {
-		return getNameIndex(getItemForPosition(position).getName());
+		Object item = getItemForPosition(position);
+		if(item instanceof Playlist) {
+			return getNameIndex(((Playlist) item).getName());
+		} else {
+			return null;
+		}
 	}
 }

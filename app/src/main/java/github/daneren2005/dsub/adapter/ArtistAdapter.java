@@ -125,7 +125,12 @@ public class ArtistAdapter extends SectionAdapter<Artist> implements FastScrolle
 
 	@Override
 	public String getTextToShowInBubble(int position) {
-		return getNameIndex(getItemForPosition(position).getName(), true);
+		Object item = getItemForPosition(position);
+		if(item instanceof Artist) {
+			return getNameIndex(((Artist) item).getName(), true);
+		} else {
+			return null;
+		}
 	}
 
 	public interface OnMusicFolderChanged {
