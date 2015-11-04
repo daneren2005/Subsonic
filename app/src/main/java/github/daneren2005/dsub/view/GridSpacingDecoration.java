@@ -22,12 +22,13 @@ import android.util.TypedValue;
 import android.view.View;
 
 public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
+	public static final int SPACING = 10;
 
 	@Override
 	public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
 		super.getItemOffsets(outRect, view, parent, state);
 
-		int spacing = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, view.getResources().getDisplayMetrics());
+		int spacing = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SPACING, view.getResources().getDisplayMetrics());
 		int halfSpacing = spacing / 2;
 
 		int childCount = parent.getChildCount();

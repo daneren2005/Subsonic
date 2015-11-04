@@ -21,11 +21,13 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -108,11 +110,7 @@ public class FastScroller extends LinearLayout {
 				}
 				handle.setSelected(true);
 			case MotionEvent.ACTION_MOVE:
-				final float y = event.getY();
-				if(handle.getY() <= 0 || (handle.getY() + handle.getHeight()) >= height - TRACK_SNAP_RANGE) {
-					setBubbleAndHandlePosition(y);
-				}
-				setRecyclerViewPosition(y);
+				setRecyclerViewPosition(event.getY());
 				return true;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
@@ -141,18 +139,38 @@ public class FastScroller extends LinearLayout {
 	}
 
 	private void setRecyclerViewPosition(float y) {
-		if(recyclerView != null)
-		{
+		if(recyclerView != null) {
+			if(recyclerView.getChildCount() == 0) {
+				return;
+			}
+
 			int itemCount = recyclerView.getAdapter().getItemCount();
-			float proportion;
-			if(handle.getY() == 0)
-				proportion = 0f;
-			else if(handle.getY()+handle.getHeight()>=height-TRACK_SNAP_RANGE)
-				proportion = 1f;
-			else
-				proportion = y/(float)height;
-			int targetPos = getValueInRange(0,itemCount-1,(int)(proportion*(float)itemCount));
-			((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(targetPos,0);
+			float proportion = getValueInRange(0, 1f, y / (float) height);
+
+			float targetPosFloat = getValueInRange(0, itemCount - 1, proportion * (float)itemCount);
+			int targetPos = (int) targetPosFloat;
+
+			// Immediately make sure that the target is visible
+			LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+			// layoutManager.scrollToPositionWithOffset(targetPos, 0);
+			View firstVisibleView = recyclerView.getChildAt(0);
+
+			// Calculate how far through this position we are
+			int columns = Math.round(recyclerView.getWidth() / firstVisibleView.getWidth());
+			int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
+			int remainder = (targetPos - firstVisiblePosition) % columns;
+			float offsetPercentage = (targetPosFloat - targetPos + remainder) / columns;
+			if(offsetPercentage < 0) {
+				offsetPercentage = 1 + offsetPercentage;
+			}
+			int firstVisibleHeight = firstVisibleView.getHeight();
+			if(columns > 1) {
+				firstVisibleHeight += (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, GridSpacingDecoration.SPACING, firstVisibleView.getResources().getDisplayMetrics());
+			}
+			int offset = (int) (offsetPercentage * firstVisibleHeight);
+
+			layoutManager.scrollToPositionWithOffset(targetPos, -offset);
+			onUpdateScroll(1, 1);
 
 			try {
 				String bubbleText = null;
@@ -166,6 +184,7 @@ public class FastScroller extends LinearLayout {
 					bubble.setVisibility(View.INVISIBLE);
 				} else {
 					bubble.setText(bubbleText);
+					bubble.setVisibility(View.VISIBLE);
 					visibleBubble = true;
 				}
 			} catch(Exception e) {
@@ -174,8 +193,8 @@ public class FastScroller extends LinearLayout {
 		}
 	}
 
-	private int getValueInRange(int min,int max,int value) {
-		int minimum = Math.max(min,value);
+	private float getValueInRange(float min, float max, float value) {
+		float minimum = Math.max(min, value);
 		return Math.min(minimum,max);
 	}
 
@@ -183,7 +202,7 @@ public class FastScroller extends LinearLayout {
 		int bubbleHeight = bubble.getHeight();
 		int handleHeight = handle.getHeight();
 		handle.setY(getValueInRange(0,height-handleHeight,(int)(y-handleHeight/2)));
-		bubble.setY(getValueInRange(0,height-bubbleHeight-handleHeight/2,(int)(y-bubbleHeight)));
+		bubble.setY(getValueInRange(0, height - bubbleHeight - handleHeight / 2, (int) (y - bubbleHeight)));
 	}
 
 	private void showBubble() {
@@ -264,44 +283,49 @@ public class FastScroller extends LinearLayout {
 	private class ScrollListener extends OnScrollListener {
 		@Override
 		public void onScrolled(RecyclerView rv,int dx,int dy) {
-			if(recyclerView.getWidth() == 0) {
-				return;
+			onUpdateScroll(dx, dy);
+		}
+	}
+
+	private void onUpdateScroll(int dx, int dy) {
+		if(recyclerView.getWidth() == 0) {
+			return;
+		}
+		registerAdapter();
+
+		View firstVisibleView = recyclerView.getChildAt(0);
+		if(firstVisibleView == null) {
+			return;
+		}
+		int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
+
+		int itemCount = recyclerView.getAdapter().getItemCount();
+		int columns = Math.round(recyclerView.getWidth() / firstVisibleView.getWidth());
+		if(visibleRange == -1) {
+			visibleRange = recyclerView.getChildCount();
+		}
+
+		// Add the percentage of the item the user has scrolled past already
+		float pastFirst = -firstVisibleView.getY() / firstVisibleView.getHeight() * columns;
+		float position = firstVisiblePosition + pastFirst;
+
+		// Scale this so as we move down the visible range gets added to position from 0 -> visible range
+		float scaledVisibleRange = position / (float) (itemCount - visibleRange) * visibleRange;
+		position += scaledVisibleRange;
+
+		float proportion = position / itemCount;
+		setBubbleAndHandlePosition(height * proportion);
+
+		if((visibleRange * 2) < itemCount) {
+			if (!hasScrolled && (dx > 0 || dy > 0)) {
+				setVisibility(View.VISIBLE);
+				hasScrolled = true;
+				recyclerView.setVerticalScrollBarEnabled(false);
 			}
-			registerAdapter();
-
-			View firstVisibleView = recyclerView.getChildAt(0);
-			if(firstVisibleView == null) {
-				return;
-			}
-			int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
-			if(visibleRange == -1) {
-				visibleRange = recyclerView.getChildCount();
-			}
-			int itemCount = recyclerView.getAdapter().getItemCount();
-			int columns = Math.round(recyclerView.getWidth() / firstVisibleView.getWidth());
-
-			// Add the percentage of the item the user has scrolled past already
-			float pastFirst = -firstVisibleView.getY() / firstVisibleView.getHeight() * columns;
-			float position = firstVisiblePosition + pastFirst;
-
-			// Scale this so as we move down the visible range gets added to position from 0 -> visible range
-			float scaledVisibleRange = position / (float) (itemCount - visibleRange) * visibleRange;
-			position += scaledVisibleRange;
-
-			float proportion = position / itemCount;
-			setBubbleAndHandlePosition(height * proportion);
-
-			if((visibleRange * 2) < itemCount) {
-				if (!hasScrolled && (dx > 0 || dy > 0)) {
-					setVisibility(View.VISIBLE);
-					hasScrolled = true;
-					recyclerView.setVerticalScrollBarEnabled(false);
-				}
-			} else if(hasScrolled) {
-				setVisibility(View.GONE);
-				hasScrolled = false;
-				recyclerView.setVerticalScrollBarEnabled(true);
-			}
+		} else if(hasScrolled) {
+			setVisibility(View.GONE);
+			hasScrolled = false;
+			recyclerView.setVerticalScrollBarEnabled(true);
 		}
 	}
 
