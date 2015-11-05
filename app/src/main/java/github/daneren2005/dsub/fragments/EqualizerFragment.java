@@ -193,56 +193,60 @@ public class EqualizerFragment extends SubsonicFragment {
 	}
 
 	private void updateBars(boolean changedEnabled) {
-		boolean isEnabled = equalizer.getEnabled();
-		short minEQLevel = equalizer.getBandLevelRange()[0];
-		short maxEQLevel = equalizer.getBandLevelRange()[1];
-		for (Map.Entry<Short, SeekBar> entry : bars.entrySet()) {
-			short band = entry.getKey();
-			SeekBar bar = entry.getValue();
-			bar.setEnabled(isEnabled);
-			if(band >= (short)0) {
-				short setLevel;
-				if(changedEnabled) {
-					setLevel = (short)(equalizer.getBandLevel(band) - masterLevel);
-					if(isEnabled) {
-						bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+		try {
+			boolean isEnabled = equalizer.getEnabled();
+			short minEQLevel = equalizer.getBandLevelRange()[0];
+			short maxEQLevel = equalizer.getBandLevelRange()[1];
+			for (Map.Entry<Short, SeekBar> entry : bars.entrySet()) {
+				short band = entry.getKey();
+				SeekBar bar = entry.getValue();
+				bar.setEnabled(isEnabled);
+				if (band >= (short) 0) {
+					short setLevel;
+					if (changedEnabled) {
+						setLevel = (short) (equalizer.getBandLevel(band) - masterLevel);
+						if (isEnabled) {
+							bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+						} else {
+							bar.setProgress(-minEQLevel);
+						}
 					} else {
-						bar.setProgress(-minEQLevel);
+						bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
+						setLevel = (short) (equalizer.getBandLevel(band) + masterLevel);
 					}
-				} else {
-					bar.setProgress(equalizer.getBandLevel(band) - minEQLevel);
-					setLevel = (short)(equalizer.getBandLevel(band) + masterLevel);
+					if (setLevel < minEQLevel) {
+						setLevel = minEQLevel;
+					} else if (setLevel > maxEQLevel) {
+						setLevel = maxEQLevel;
+					}
+					equalizer.setBandLevel(band, setLevel);
+				} else if (!isEnabled) {
+					bar.setProgress(-minEQLevel);
 				}
-				if(setLevel < minEQLevel) {
-					setLevel = minEQLevel;
-				} else if(setLevel > maxEQLevel) {
-					setLevel = maxEQLevel;
+			}
+
+			bassBar.setEnabled(isEnabled);
+			if (loudnessBar != null) {
+				loudnessBar.setEnabled(isEnabled);
+			}
+			if (changedEnabled && !isEnabled) {
+				bass.setStrength((short) 0);
+				bassBar.setProgress(0);
+				if (loudnessBar != null) {
+					loudnessEnhancer.setGain(0);
+					loudnessBar.setProgress(0);
 				}
-				equalizer.setBandLevel(band, setLevel);
-			} else if(!isEnabled) {
-				bar.setProgress(-minEQLevel);
 			}
-		}
 
-		bassBar.setEnabled(isEnabled);
-		if(loudnessBar != null) {
-			loudnessBar.setEnabled(isEnabled);
-		}
-		if(changedEnabled && !isEnabled) {
-			bass.setStrength((short) 0);
-			bassBar.setProgress(0);
-			if(loudnessBar != null) {
-				loudnessEnhancer.setGain(0);
-				loudnessBar.setProgress(0);
+			if (!isEnabled) {
+				masterLevel = 0;
+				SharedPreferences prefs = Util.getPreferences(context);
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
+				editor.commit();
 			}
-		}
-
-		if(!isEnabled) {
-			masterLevel = 0;
-			SharedPreferences prefs = Util.getPreferences(context);
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
-			editor.commit();
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to update bars");
 		}
 	}
 
