@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.1" versioncode="163" releasedate="11/5/2015">
+		<change>Android Auto support</change>
+		<change>Thumb/Star on Android Wear</change>
+		<change>Podcast Channel Artwork (Subsonic 5.3+)</change>
+		<change>Podcast: Most recent episodes</change>
+		<change>Device Handoff: option to never ask again</change>
+		<change>Added Swedish translation (thanks popeen)</change>
+		<change>Improved fast scrolling</change>
+		<change>List decades down to 1800 for old composers</change>
+		<change>Fix artist artwork after Last.FM change</change>
+		<change>Fix bug with sleep timer display</change>
+		<change>Fix bug with user permissions not refreshing</change>
+		<change>Fix bug changing user's permissions on Admin tab</change>
+	</release>
 	<release version="5.0.4" versioncode="159" releasedate="10/8/2015">
 		<change>Add ability to star/rate albums in root folder</change>
 		<change>Chat Tab: default to bottom/newest messages</change>
