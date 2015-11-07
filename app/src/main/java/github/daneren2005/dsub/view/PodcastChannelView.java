@@ -78,6 +78,12 @@ public class PodcastChannelView extends UpdateView<PodcastChannel> {
 			imageTask = imageLoader.loadImage(coverArtView, channel, false, true);
 		}
 	}
+
+	public void onUpdateImageView() {
+		if(imageLoader != null) {
+			imageTask = imageLoader.loadImage(coverArtView, item, false, true);
+		}
+	}
 	
 	@Override
 	protected void updateBackground() {

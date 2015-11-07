@@ -47,4 +47,8 @@ public class UserView extends UpdateView2<User, ImageLoader> {
 		usernameView.setText(user.getUsername());
 		imageTask = imageLoader.loadAvatar(context, avatarView, user.getUsername());
 	}
+
+	public void onUpdateImageView() {
+		imageTask = item2.loadAvatar(context, avatarView, item.getUsername());
+	}
 }

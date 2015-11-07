@@ -68,6 +68,7 @@ public class ImageLoader {
 	private final int imageSizeLarge;
 	private final int avatarSizeDefault;
 	private boolean clearingCache = false;
+	private final int cacheSize;
 
 	private final static int[] COLORS = {0xFF33B5E5, 0xFFAA66CC, 0xFF99CC00, 0xFFFFBB33, 0xFFFF4444};
 
@@ -75,7 +76,7 @@ public class ImageLoader {
 		this.context = context;
 		handler = new Handler(Looper.getMainLooper());
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-		final int cacheSize = maxMemory / 4;
+		cacheSize = maxMemory / 4;
 
 		// Determine the density-dependent image sizes.
 		imageSizeDefault = context.getResources().getDrawable(R.drawable.unknown_album).getIntrinsicHeight();
@@ -113,6 +114,9 @@ public class ImageLoader {
 				return null;
 			}
 		}.execute();
+	}
+	public void onLowMemory(float percent) {
+		cache.trimToSize(Math.round(cacheSize * percent));
 	}
 
 	private Bitmap getUnknownImage(MusicDirectory.Entry entry, int size) {

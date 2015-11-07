@@ -55,6 +55,10 @@ public class PlaylistView extends UpdateView<Playlist> {
 		imageTask = imageLoader.loadImage(coverArtView, playlist, false, true);
 	}
 
+	public void onUpdateImageView() {
+		imageTask = imageLoader.loadImage(coverArtView, item, false, true);
+	}
+
 	@Override
 	protected void updateBackground() {
 		pinned = SyncUtil.isSyncedPlaylist(context, item.getId());

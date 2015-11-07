@@ -275,6 +275,13 @@ public abstract class UpdateView<T> extends LinearLayout {
 			ratingBar.setRating(isRated);
 			rating = isRated;
 		}
+
+		if(coverArtView != null && coverArtView instanceof RecyclingImageView) {
+			RecyclingImageView recyclingImageView = (RecyclingImageView) coverArtView;
+			if(recyclingImageView.isInvalidated()) {
+				onUpdateImageView();
+			}
+		}
 	}
 
 	public boolean isCheckable() {
@@ -292,6 +299,10 @@ public abstract class UpdateView<T> extends LinearLayout {
 	}
 
 	public void onClick() {
+
+	}
+
+	public void onUpdateImageView() {
 
 	}
 

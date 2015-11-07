@@ -86,6 +86,10 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		file = null;
 	}
 
+	public void onUpdateImageView() {
+		imageTask = item2.loadImage(coverArtView, item, false, true);
+	}
+
 	@Override
 	protected void updateBackground() {
 		if(file == null) {
