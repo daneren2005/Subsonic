@@ -63,6 +63,18 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true) && hasCoverArt) {
 			largeAlbums = true;
 		}
+
+		if(bundle != null && serialize) {
+			newestEpisodes = (MusicDirectory) bundle.getSerializable(Constants.FRAGMENT_LIST2);
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if(serialize) {
+			outState.putSerializable(Constants.FRAGMENT_LIST2, newestEpisodes);
+		}
 	}
 	
 	@Override
@@ -143,7 +155,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		} else {
 			List<String> headers = Arrays.asList(PodcastChannelAdapter.EPISODE_HEADER, PodcastChannelAdapter.CHANNEL_HEADER);
 
-			List<MusicDirectory.Entry> episodes = newestEpisodes.getChildren();
+			List<MusicDirectory.Entry> episodes = newestEpisodes.getChildren(false, true);
 			List<Serializable> serializableEpisodes = new ArrayList<>();
 
 			// Put 3 in current list
