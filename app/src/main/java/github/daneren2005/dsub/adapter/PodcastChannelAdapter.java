@@ -82,8 +82,10 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 	@Override
 	public void onBindViewHolder(UpdateView.UpdateViewHolder holder, Serializable item, int viewType) {
 		if(viewType == VIEW_TYPE_PODCAST_EPISODE) {
+			SongView songView = (SongView) holder.getUpdateView();
 			PodcastEpisode episode = (PodcastEpisode) item;
-			holder.getUpdateView().setObject(item, !episode.isVideo());
+			songView.setShowPodcast(true);
+			songView.setObject(episode, !episode.isVideo());
 		} else {
 			holder.getUpdateView().setObject(item);
 		}

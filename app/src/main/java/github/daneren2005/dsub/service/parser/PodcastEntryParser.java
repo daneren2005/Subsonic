@@ -65,8 +65,27 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setEpisodeId(get("id"));
 					episode.setId(get("streamId"));
 					episode.setTitle(get("title"));
-					episode.setParent(episodes.getId());
-					episode.setArtist(episodes.getName());
+					if(episodes.getName() != null) {
+						episode.setArtist(episodes.getName());
+						episode.setParent(episodes.getId());
+					} else {
+						String artist = get("artist");
+						String album = get("album");
+
+						String podcast;
+						if ("Podcasts".equals(artist)) {
+							podcast = album;
+						} else if("Podcast".equals(album)) {
+							podcast = artist;
+						} else if(album != null) {
+							podcast = album;
+						} else {
+							podcast = artist;
+						}
+
+						episode.setArtist(podcast);
+						episode.setParent(get("channelId"));
+					}
 					episode.setAlbum(get("description"));
 					episode.setDate(get("publishDate"));
 					if(episode.getDate() == null) {

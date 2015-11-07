@@ -64,6 +64,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private boolean loaded = false;
 	private boolean isBookmarked = false;
 	private boolean bookmarked = false;
+	private boolean showPodcast = false;
 
 	public SongView(Context context) {
 		super(context);
@@ -91,8 +92,16 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		boolean isPodcast = song instanceof PodcastEpisode;
 		if(!song.isVideo() || isPodcast) {
 			if(isPodcast) {
-				String date = ((PodcastEpisode)song).getDate();
+				PodcastEpisode episode = (PodcastEpisode) song;
+				if(showPodcast && episode.getArtist() != null) {
+					artist.append(episode.getArtist());
+				}
+
+				String date = episode.getDate();
 				if(date != null) {
+					if(artist.length() != 0) {
+						artist.append(" - ");
+					}
 					int index = date.indexOf(" ");
 					artist.append(date.substring(0, index != -1 ? index : date.length()));
 				}
@@ -290,5 +299,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 	public MusicDirectory.Entry getEntry() {
 		return item;
+	}
+
+	public void setShowPodcast(boolean showPodcast) {
+		this.showPodcast = showPodcast;
 	}
 }
