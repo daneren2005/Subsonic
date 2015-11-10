@@ -283,9 +283,9 @@ public class DownloadService extends Service {
 
 	@Override
 	public void onTrimMemory(int level) {
-		Log.w(TAG, "Level: " + level);
 		ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(this);
 		if(imageLoader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			Log.i(TAG, "Memory Trim Level: " + level);
 			if (level < ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
 				if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
 					imageLoader.onLowMemory(0.75f);
@@ -294,8 +294,10 @@ public class DownloadService extends Service {
 				} else if(level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE) {
 					imageLoader.onLowMemory(0.25f);
 				}
-			} else if (level >= TRIM_MEMORY_MODERATE) {
+			} else if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
 				imageLoader.onLowMemory(0.25f);
+			} else if(level >= ComponentCallbacks2.TRIM_MEMORY_COMPLETE) {
+				imageLoader.onLowMemory(0.75f);
 			}
 		}
 	}

@@ -28,6 +28,7 @@ import android.widget.ImageView;
 
 public class RecyclingImageView extends ImageView {
 	private boolean invalidated = false;
+	private OnInvalidated onInvalidated;
 
 	public RecyclingImageView(Context context) {
 		super(context);
@@ -53,7 +54,7 @@ public class RecyclingImageView extends ImageView {
 			if(drawable instanceof BitmapDrawable) {
 				if (isBitmapRecycled(drawable)) {
 					this.setImageDrawable(null);
-					invalidated = true;
+					setInvalidated(true);
 				}
 			} else if(drawable instanceof TransitionDrawable) {
 				TransitionDrawable transitionDrawable = (TransitionDrawable) drawable;
@@ -62,7 +63,7 @@ public class RecyclingImageView extends ImageView {
 				Drawable lastDrawable = transitionDrawable.getDrawable(transitionDrawable.getNumberOfLayers() - 1);
 				if(isBitmapRecycled(lastDrawable)) {
 					this.setImageDrawable(null);
-					invalidated = true;
+					setInvalidated(true);
 				} else {
 					// Go through earlier bitmaps and make sure that they are not recycled
 					for (int i = 0; i < transitionDrawable.getNumberOfLayers(); i++) {
@@ -83,7 +84,7 @@ public class RecyclingImageView extends ImageView {
 	@Override
 	public void setImageDrawable(Drawable drawable) {
 		super.setImageDrawable(drawable);
-		invalidated = false;
+		setInvalidated(false);
 	}
 
 	private boolean isBitmapRecycled(Drawable drawable) {
@@ -99,7 +100,22 @@ public class RecyclingImageView extends ImageView {
 		}
 	}
 
+	public void setInvalidated(boolean invalidated) {
+		this.invalidated = invalidated;
+
+		if(invalidated && onInvalidated != null) {
+			onInvalidated.onInvalidated(this);
+		}
+	}
 	public boolean isInvalidated() {
 		return invalidated;
+	}
+
+	public void setOnInvalidated(OnInvalidated onInvalidated) {
+		this.onInvalidated = onInvalidated;
+	}
+
+	public interface OnInvalidated {
+		void onInvalidated(RecyclingImageView imageView);
 	}
 }

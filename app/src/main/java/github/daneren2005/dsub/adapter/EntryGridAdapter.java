@@ -117,6 +117,9 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 		this.header = header;
 		this.singleSectionHeader = true;
 	}
+	public View getHeader() {
+		return header;
+	}
 
 	public void setShowArtist(boolean showArtist) {
 		this.showArtist = showArtist;

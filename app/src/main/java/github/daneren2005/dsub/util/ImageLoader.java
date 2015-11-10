@@ -116,7 +116,14 @@ public class ImageLoader {
 		}.execute();
 	}
 	public void onLowMemory(float percent) {
-		cache.trimToSize(Math.round(cacheSize * percent));
+		Log.i(TAG, "Cache size: " + cache.size() + " => " + Math.round(cacheSize * (1 - percent)) + " out of " + cache.maxSize());
+		cache.resize(Math.round(cacheSize * (1 - percent)));
+	}
+	public void onUIVisible() {
+		if(cache.maxSize() != cacheSize) {
+			Log.i(TAG, "Returned to full cache size");
+			cache.resize(cacheSize);
+		}
 	}
 
 	private Bitmap getUnknownImage(MusicDirectory.Entry entry, int size) {
@@ -388,10 +395,11 @@ public class ImageLoader {
 	private void setImage(MusicDirectory.Entry entry, RemoteControlClientBase remoteControl, Drawable drawable) {
 		if(remoteControl != null && drawable != null) {
 			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && origBitmap != null) {
-				origBitmap = origBitmap.copy(origBitmap.getConfig(), false);
-			}
 			if ( origBitmap != null && !origBitmap.isRecycled()) {
+				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && origBitmap != null) {
+					origBitmap = origBitmap.copy(origBitmap.getConfig(), false);
+				}
+
 				remoteControl.updateAlbumArt(entry, origBitmap);
 			} else  {
 				if(origBitmap != null) {

@@ -63,6 +63,7 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.MyLeadingMarginSpan2;
+import github.daneren2005.dsub.view.RecyclingImageView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.ArrayList;
@@ -1112,8 +1113,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	private void setupCoverArt(View header) {
+		setupCoverArtImpl((RecyclingImageView) header.findViewById(R.id.select_album_art));
+	}
+	private void setupCoverArtImpl(RecyclingImageView coverArtView) {
 		final ImageLoader imageLoader = getImageLoader();
-		View coverArtView = header.findViewById(R.id.select_album_art);
 
 		// Try a few times to get a random cover art
 		if(artistInfo != null) {
@@ -1164,6 +1167,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			});
 			imageLoader.loadImage(coverArtView, albumRep, false, true);
 		}
+
+		coverArtView.setOnInvalidated(new RecyclingImageView.OnInvalidated() {
+			@Override
+			public void onInvalidated(RecyclingImageView imageView) {
+				setupCoverArtImpl(imageView);
+			}
+		});
 	}
 	private void setupTextDisplay(final View header) {
 		final TextView titleView = (TextView) header.findViewById(R.id.select_album_title);

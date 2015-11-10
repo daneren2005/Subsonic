@@ -216,6 +216,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 		populateTabs();
+		getImageLoader().onUIVisible();
 		UpdateView.addActiveActivity();
 	}
 
