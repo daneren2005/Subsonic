@@ -3,8 +3,12 @@
 	<style name="NotificationText.Title" parent="@android:style/TextAppearance.Material.Notification.Title"></style>
 	<style name="NotificationText.Content" parent="@android:style/TextAppearance.Material.Notification"></style>
 
+	<style name="NotificationButton" parent="NotificationButtonBase">
+		<item name="android:background">?android:selectableItemBackgroundBorderless</item>
+	</style>
 	<style name="NotificationButton.Expanded" parent="@style/NotificationButton.ExpandedBase">
 		<item name="android:padding">2dip</item>
+		<item name="android:background">?android:selectableItemBackgroundBorderless</item>
 	</style>
 
 	<style name="NotificationLayoutDivider">

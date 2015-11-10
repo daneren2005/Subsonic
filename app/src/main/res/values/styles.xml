@@ -3,13 +3,15 @@
 	<style name="BasicButton">
 		<item name="android:background">?attr/selectableItemBackgroundBorderless</item>
 	</style>
-	<style name="NotificationButton">
+	<style name="NotificationButtonBase">
 		<item name="android:background">?android:selectableItemBackground</item>
 		<item name="android:layout_width">46dip</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_gravity">center</item>
 		<item name="android:scaleType">fitCenter</item>
 		<item name="android:padding">2dip</item>
+	</style>
+	<style name="NotificationButton" parent="NotificationButtonBase">
 	</style>
 
 	<style name="NotificationButton.ExpandedBase">
