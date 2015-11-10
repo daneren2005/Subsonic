@@ -48,7 +48,16 @@
                 android:text="Title"
                 android:textColor="@color/appwidget_text"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+				android:focusable="true"
+				android:focusableInTouchMode="true"
+				android:scrollHorizontally="true"
+				android:marqueeRepeatLimit="marquee_forever">
+
+				<requestFocus android:focusable="true"
+					android:focusableInTouchMode="true"
+					android:duplicateParentState="true" />
+			</TextView>
 
             <TextView
                 android:id="@+id/artist"
