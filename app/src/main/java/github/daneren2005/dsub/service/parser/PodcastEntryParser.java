@@ -19,6 +19,8 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
+import android.util.Log;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -43,6 +45,7 @@ public class PodcastEntryParser extends AbstractParser {
 		init(reader);
 
 		MusicDirectory episodes = new MusicDirectory();
+		String coverArt = null;
 		int eventType;
 		boolean valid = false;
 		do {
@@ -54,6 +57,7 @@ public class PodcastEntryParser extends AbstractParser {
 					if(id.equals(channel)) {
 						episodes.setId(id);
 						episodes.setName(get("title"));
+						coverArt = get("coverArt");
 						valid = true;
 					} else {
 						valid = false;
@@ -65,25 +69,10 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setEpisodeId(get("id"));
 					episode.setId(get("streamId"));
 					episode.setTitle(get("title"));
-					if(episodes.getName() != null) {
+					if(episodes.getId() != null) {
 						episode.setArtist(episodes.getName());
 						episode.setParent(episodes.getId());
 					} else {
-						String artist = get("artist");
-						String album = get("album");
-
-						String podcast;
-						if ("Podcasts".equals(artist)) {
-							podcast = album;
-						} else if("Podcast".equals(album)) {
-							podcast = artist;
-						} else if(album != null) {
-							podcast = album;
-						} else {
-							podcast = artist;
-						}
-
-						episode.setArtist(podcast);
 						episode.setParent(get("channelId"));
 					}
 					episode.setAlbum(get("description"));
@@ -95,7 +84,11 @@ public class PodcastEntryParser extends AbstractParser {
 						episode.setDate(episode.getDate().replace("T", " "));
 					}
 					episode.setStatus(get("status"));
-					episode.setCoverArt(get("coverArt"));
+					if(coverArt == null) {
+						episode.setCoverArt(get("coverArt"));
+					} else {
+						episode.setCoverArt(coverArt);
+					}
 					episode.setSize(getLong("size"));
 					episode.setContentType(get("contentType"));
 					episode.setSuffix(get("suffix"));
