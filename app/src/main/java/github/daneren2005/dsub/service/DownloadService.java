@@ -477,6 +477,10 @@ public class DownloadService extends Service {
 		List<DownloadFile> playlist = new ArrayList<>();
 		if(currentPlaying != null) {
 			int index = downloadList.indexOf(currentPlaying);
+			if(index == -1) {
+				index = 0;
+			}
+
 			int size = size();
 			int end = index + REMOTE_PLAYLIST_TOTAL;
 			for(int i = index; i < size && i < end; i++) {
