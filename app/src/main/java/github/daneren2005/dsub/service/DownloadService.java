@@ -1461,7 +1461,7 @@ public class DownloadService extends Service {
 							subtractNextPosition = 0;
 						}
 					}
-					onSongProgress();
+					onSongProgress(cachedPosition < 2000 ? true: false);
 					Thread.sleep(1000L);
 				}
 				catch(Exception e) {
@@ -2632,7 +2632,11 @@ public class DownloadService extends Service {
 			});
 		}
 	}
+
 	private synchronized void onSongProgress() {
+		onSongProgress(true);
+	}
+	private synchronized void onSongProgress(boolean manual) {
 		final long atRevision = revision;
 		final Integer duration = getPlayerDuration();
 		final boolean isSeekable = isSeekable();
@@ -2648,12 +2652,15 @@ public class DownloadService extends Service {
 			});
 		}
 
-		handler.post(new Runnable() {
-			@Override
-			public void run() {
-				mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
-			}
-		});
+		if(manual) {
+			Log.d(TAG, "Manual update");
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+				}
+			});
+		}
 	}
 	private void onStateUpdate() {
 		final long atRevision = revision;
