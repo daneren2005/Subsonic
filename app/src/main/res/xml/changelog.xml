@@ -9,6 +9,8 @@
 		<change>Added Swedish translation (thanks popeen)</change>
 		<change>Improved fast scrolling</change>
 		<change>List decades down to 1800 for old composers</change>
+		<change>Improved low memory handling</change>
+		<change>Add scrolling to widget titles</change>
 		<change>Fix artist artwork after Last.FM change</change>
 		<change>Fix bug with sleep timer display</change>
 		<change>Fix bug with user permissions not refreshing</change>
