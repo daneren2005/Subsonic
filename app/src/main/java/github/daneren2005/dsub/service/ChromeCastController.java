@@ -362,7 +362,7 @@ public class ChromeCastController extends RemoteController {
 				ignoreNextPaused = true;
 			}
 
-			mediaPlayer.load(apiClient, mediaInfo, autoStart, position * 1000L).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
+			ResultCallback callback = new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
 				@Override
 				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
 					if (result.getStatus().isSuccess()) {
@@ -372,7 +372,13 @@ public class ChromeCastController extends RemoteController {
 						failedLoad();
 					}
 				}
-			});
+			};
+
+			if(position > 0) {
+				mediaPlayer.load(apiClient, mediaInfo, autoStart, position * 1000L).setResultCallback(callback);
+			} else {
+				mediaPlayer.load(apiClient, mediaInfo, autoStart).setResultCallback(callback);
+			}
 		} catch (IllegalStateException e) {
 			Log.e(TAG, "Problem occurred with media during loading", e);
 			failedLoad();
