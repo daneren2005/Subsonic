@@ -2657,7 +2657,6 @@ public class DownloadService extends Service {
 		}
 
 		if(manual) {
-			Log.d(TAG, "Manual update");
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
