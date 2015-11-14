@@ -406,6 +406,10 @@ public class DownloadService extends Service {
 			int size = size();
 			int index = getCurrentPlayingIndex();
 			for (MusicDirectory.Entry song : songs) {
+				if(song == null) {
+					continue;
+				}
+
 				DownloadFile downloadFile = new DownloadFile(this, song, save);
 				addToDownloadList(downloadFile, -1);
 				if(noNetwork && !warnNetwork) {

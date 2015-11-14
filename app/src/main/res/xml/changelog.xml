@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="5.1" versioncode="163" releasedate="11/5/2015">
+	<release version="5.1" versioncode="163" releasedate="11/13/2015">
 		<change>Android Auto support</change>
 		<change>Thumb/Star on Android Wear</change>
 		<change>Podcast Channel Artwork (Subsonic 5.3+)</change>
