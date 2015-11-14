@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:compat="http://schemas.android.com/apk/res-auto">
+
+	<item
+		android:id="@+id/song_menu_info"
+		android:title="@string/common.info"/>
+
+	<item
+		android:id="@+id/song_menu_stream_external"
+		android:title="@string/common.stream_external"/>
+
+	<item
+		android:id="@+id/song_menu_play_external"
+		android:title="@string/common.play_external"/>
+
+	<group android:id="@+id/hide_download">
+		<item
+			android:id="@+id/song_menu_download"
+			android:title="@string/common.download"/>
+	</group>
+
+	<group android:id="@+id/hide_pin">
+		<item
+			android:id="@+id/song_menu_pin"
+			android:title="@string/common.pin"/>
+	</group>
+
+	<group android:id="@+id/hide_delete">
+		<item
+			android:id="@+id/song_menu_delete"
+			android:title="@string/menu.delete_cache"/>
+	</group>
+
+	<group android:id="@+id/server_1.9">
+		<item
+			android:id="@+id/bookmark_menu_delete"
+			android:title="@string/bookmark.delete"/>
+	</group>
+
+	<item
+		android:id="@+id/song_menu_server_download"
+		android:title="@string/select_podcasts.server_download"/>
+
+	<item
+		android:id="@+id/song_menu_server_delete"
+		android:title="@string/select_podcasts.server_delete"/>
+</menu>

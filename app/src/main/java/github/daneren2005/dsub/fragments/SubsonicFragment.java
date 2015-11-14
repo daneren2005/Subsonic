@@ -228,12 +228,20 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void onCreateContextMenuSupport(Menu menu, MenuInflater menuInflater, UpdateView updateView, Object selected) {
 		if(selected instanceof Entry) {
 			Entry entry = (Entry) selected;
-			if(entry instanceof PodcastEpisode && !entry.isVideo()) {
+			if(entry instanceof PodcastEpisode) {
 				if(Util.isOffline(context)) {
-					menuInflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
+					if(entry.isVideo()) {
+						menuInflater.inflate(R.menu.select_video_context_offline, menu);
+					} else {
+						menuInflater.inflate(R.menu.select_podcast_episode_context_offline, menu);
+					}
 				}
 				else {
-					menuInflater.inflate(R.menu.select_podcast_episode_context, menu);
+					if(entry.isVideo()) {
+						menuInflater.inflate(R.menu.select_podcast_episode_video_context, menu);
+					} else {
+						menuInflater.inflate(R.menu.select_podcast_episode_context, menu);
+					}
 
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
