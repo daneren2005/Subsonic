@@ -51,6 +51,11 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	private boolean skipSearch = false;
 	private String currentQuery;
 
+	public SearchFragment() {
+		super();
+		alwaysStartFullscreen = true;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
