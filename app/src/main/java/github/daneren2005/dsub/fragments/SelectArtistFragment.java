@@ -171,6 +171,8 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 					musicFolders = null;
 					Util.setSelectedMusicFolderId(context, null);
 				}
+			} else {
+				musicFolders = null;
 			}
 			String musicFolderId = Util.getSelectedMusicFolderId(context);
 
