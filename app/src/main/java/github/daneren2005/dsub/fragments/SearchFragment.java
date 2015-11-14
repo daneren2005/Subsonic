@@ -90,13 +90,13 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	@Override
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
 				int viewType = adapter.getItemViewType(position);
 				if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == ArtistAdapter.VIEW_TYPE_ARTIST) {
-					return columns;
+					return getRecyclerColumnCount();
 				} else {
 					return 1;
 				}

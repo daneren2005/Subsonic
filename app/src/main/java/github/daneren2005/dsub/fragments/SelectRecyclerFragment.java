@@ -17,6 +17,7 @@ package github.daneren2005.dsub.fragments;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +49,6 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	protected List<T> objects;
 	protected boolean serialize = true;
 	protected boolean largeAlbums = false;
-	protected int columns;
 	protected boolean pullToRefresh = true;
 	protected boolean backgroundUpdate = true;
 
@@ -59,7 +59,6 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		if(bundle != null && serialize) {
 			objects = (List<T>) bundle.getSerializable(Constants.FRAGMENT_LIST);
 		}
-		columns = context.getResources().getInteger(R.integer.Grid_Columns);
 	}
 
 	@Override
@@ -108,6 +107,18 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void setIsOnlyVisible(boolean isOnlyVisible) {
+		boolean update = this.isOnlyVisible != isOnlyVisible;
+		super.setIsOnlyVisible(isOnlyVisible);
+		if(update && adapter != null) {
+			RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+			if(layoutManager instanceof GridLayoutManager) {
+				((GridLayoutManager) layoutManager).setSpanCount(getRecyclerColumnCount());
+			}
+		}
 	}
 
 	@Override

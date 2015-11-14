@@ -113,6 +113,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected View rootView;
 	protected boolean primaryFragment = false;
 	protected boolean secondaryFragment = false;
+	protected boolean isOnlyVisible = true;
 	protected boolean invalidated = false;
 	protected static Random random = new Random();
 	protected GestureDetector gestureScanner;
@@ -476,6 +477,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void setSecondaryFragment(boolean secondary) {
 		secondaryFragment = secondary;
 	}
+	public void setIsOnlyVisible(boolean isOnlyVisible) {
+		this.isOnlyVisible = isOnlyVisible;
+	}
 
 	public void invalidate() {
 		if(primaryFragment) {
@@ -632,7 +636,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		final int columns = getRecyclerColumnCount();
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
 
-		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup(columns);
+		GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
 		if(spanSizeLookup != null) {
 			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
 		}
@@ -647,7 +651,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		return layoutManager;
 	}
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
@@ -655,7 +659,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				if(adapter != null) {
 					int viewType = getCurrentAdapter().getItemViewType(position);
 					if (viewType == SectionAdapter.VIEW_TYPE_HEADER) {
-						return columns;
+						return getRecyclerColumnCount();
 					} else {
 						return 1;
 					}
@@ -669,7 +673,11 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		return new GridSpacingDecoration();
 	}
 	public int getRecyclerColumnCount() {
-		return context.getResources().getInteger(R.integer.Grid_Columns);
+		if(isOnlyVisible) {
+			return context.getResources().getInteger(R.integer.Grid_FullScreen_Columns);
+		} else {
+			return context.getResources().getInteger(R.integer.Grid_Columns);
+		}
 	}
 
 	protected void warnIfStorageUnavailable() {

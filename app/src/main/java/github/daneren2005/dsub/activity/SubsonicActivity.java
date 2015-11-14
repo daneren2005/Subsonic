@@ -745,6 +745,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 			// Commit it all
 			trans.commit();
+
+			oldFragment.setIsOnlyVisible(false);
+			currentFragment.setIsOnlyVisible(false);
 		}
 		recreateSpinner();
 	}
@@ -791,6 +794,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			} else {
 				secondaryContainer.startAnimation(AnimationUtils.loadAnimation(this, R.anim.exit_to_right));
 				secondaryContainer.setVisibility(View.GONE);
+
+				currentFragment.setIsOnlyVisible(true);
 			}
 
 			trans.commit();

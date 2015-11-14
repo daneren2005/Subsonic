@@ -251,7 +251,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 	}
 
 	@Override
-	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final int columns) {
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
@@ -259,7 +259,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 				if(adapter != null) {
 					int viewType = getCurrentAdapter().getItemViewType(position);
 					if (viewType == SectionAdapter.VIEW_TYPE_HEADER || viewType == PodcastChannelAdapter.VIEW_TYPE_PODCAST_EPISODE || viewType == PodcastChannelAdapter.VIEW_TYPE_PODCAST_LEGACY) {
-						return columns;
+						return getRecyclerColumnCount();
 					} else {
 						return 1;
 					}
