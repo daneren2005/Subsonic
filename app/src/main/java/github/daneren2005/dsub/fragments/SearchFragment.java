@@ -90,6 +90,18 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	@Override
+	public void setIsOnlyVisible(boolean isOnlyVisible) {
+		boolean update = this.isOnlyVisible != isOnlyVisible;
+		super.setIsOnlyVisible(isOnlyVisible);
+		if(update && adapter != null) {
+			RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+			if(layoutManager instanceof GridLayoutManager) {
+				((GridLayoutManager) layoutManager).setSpanCount(getRecyclerColumnCount());
+			}
+		}
+	}
+
+	@Override
 	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup() {
 		return new GridLayoutManager.SpanSizeLookup() {
 			@Override

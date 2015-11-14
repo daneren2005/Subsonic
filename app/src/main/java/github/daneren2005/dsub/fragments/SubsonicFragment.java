@@ -114,6 +114,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean primaryFragment = false;
 	protected boolean secondaryFragment = false;
 	protected boolean isOnlyVisible = true;
+	protected boolean alwaysFullscreen = false;
 	protected boolean invalidated = false;
 	protected static Random random = new Random();
 	protected GestureDetector gestureScanner;
@@ -479,6 +480,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 	public void setIsOnlyVisible(boolean isOnlyVisible) {
 		this.isOnlyVisible = isOnlyVisible;
+	}
+	public boolean isAlwaysFullscreen() {
+		return alwaysFullscreen;
 	}
 
 	public void invalidate() {

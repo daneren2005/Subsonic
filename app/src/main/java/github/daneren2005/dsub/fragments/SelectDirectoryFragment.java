@@ -186,14 +186,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		setupScrollList(recyclerView);
 
 		if(largeAlbums) {
-			final int columns = context.getResources().getInteger(R.integer.Grid_Columns);
-			GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
+			GridLayoutManager gridLayoutManager = new GridLayoutManager(context, getRecyclerColumnCount());
 			gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 				@Override
 				public int getSpanSize(int position) {
 					int viewType = entryGridAdapter.getItemViewType(position);
 					if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == EntryInfiniteGridAdapter.VIEW_TYPE_LOADING) {
-						return columns;
+						return getRecyclerColumnCount();
 					} else {
 						return 1;
 					}
@@ -223,6 +222,18 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 
 		return rootView;
+	}
+
+	@Override
+	public void setIsOnlyVisible(boolean isOnlyVisible) {
+		boolean update = this.isOnlyVisible != isOnlyVisible;
+		super.setIsOnlyVisible(isOnlyVisible);
+		if(update && entryGridAdapter != null) {
+			RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+			if(layoutManager instanceof GridLayoutManager) {
+				((GridLayoutManager) layoutManager).setSpanCount(getRecyclerColumnCount());
+			}
+		}
 	}
 
 	@Override
