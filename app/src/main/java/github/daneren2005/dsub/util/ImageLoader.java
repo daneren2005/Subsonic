@@ -201,6 +201,9 @@ public class ImageLoader {
 			cache.get(key);
 		}
 
+		if(bitmap != null && bitmap.isRecycled()) {
+			bitmap = null;
+		}
 		return bitmap;
 	}
 
