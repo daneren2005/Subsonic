@@ -135,6 +135,7 @@ public final class Notifications {
 				// set default album art
 				rv.setImageViewResource(R.id.notification_image, R.drawable.unknown_album);
 			} else {
+				imageLoader.setNowPlayingSmall(bitmap);
 				rv.setImageViewBitmap(R.id.notification_image, bitmap);
 			}
 		} catch (Exception x) {

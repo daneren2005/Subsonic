@@ -64,6 +64,7 @@ public class ImageLoader {
 	private LruCache<String, Bitmap> cache;
 	private Handler handler;
 	private Bitmap nowPlaying;
+	private Bitmap nowPlayingSmall;
 	private final int imageSizeDefault;
 	private final int imageSizeLarge;
 	private final int avatarSizeDefault;
@@ -93,7 +94,7 @@ public class ImageLoader {
 			@Override
 			protected void entryRemoved(boolean evicted, String key, Bitmap oldBitmap, Bitmap newBitmap) {
 				if(evicted) {
-					if(oldBitmap != nowPlaying || clearingCache) {
+					if((oldBitmap != nowPlaying && oldBitmap != nowPlayingSmall) || clearingCache) {
 						oldBitmap.recycle();
 					} else {
 						cache.put(key, oldBitmap);
@@ -105,6 +106,7 @@ public class ImageLoader {
 
 	public void clearCache() {
 		nowPlaying = null;
+		nowPlayingSmall = null;
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
@@ -124,6 +126,10 @@ public class ImageLoader {
 			Log.i(TAG, "Returned to full cache size");
 			cache.resize(cacheSize);
 		}
+	}
+
+	public void setNowPlayingSmall(Bitmap bitmap) {
+		nowPlayingSmall = bitmap;
 	}
 
 	private Bitmap getUnknownImage(MusicDirectory.Entry entry, int size) {
