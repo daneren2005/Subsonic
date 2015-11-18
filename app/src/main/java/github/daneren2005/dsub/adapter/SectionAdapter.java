@@ -363,6 +363,20 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		}
 	}
 
+	public void moveItem(int from, int to) {
+		List<T> section = sections.get(0);
+		int max = section.size();
+		if(to >= max) {
+			to = max - 1;
+		} else if(to < 0) {
+			to = 0;
+		}
+
+		T moved = section.remove(from);
+		section.add(to, moved);
+
+		notifyItemMoved(from, to);
+	}
 	public void removeItem(T item) {
 		int subPosition = 0;
 		for(List<T> section: sections) {

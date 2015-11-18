@@ -2,6 +2,7 @@ package github.daneren2005.dsub.util;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 import org.eclipse.jetty.util.ArrayQueue;
 
@@ -15,6 +16,8 @@ import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallback {
+	private static final String TAG = DownloadFileItemHelperCallback.class.getSimpleName();
+
 	private SubsonicFragment fragment;
 	private boolean mainList;
 
@@ -31,7 +34,7 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
 	public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder fromHolder, RecyclerView.ViewHolder toHolder) {
 		int from = fromHolder.getAdapterPosition();
 		int to = toHolder.getAdapterPosition();
-		getSectionAdapter().notifyItemMoved(from, to);
+		getSectionAdapter().moveItem(from, to);
 
 		synchronized (pendingOperations) {
 			pendingOperations.add(new Pair<>(from, to));
