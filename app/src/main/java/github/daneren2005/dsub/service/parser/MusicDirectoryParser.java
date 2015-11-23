@@ -64,7 +64,11 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 					// Only check for songs
 					if(checkForDuplicates && !entry.isDirectory()) {
 						// Check if duplicates
-						Entry duplicate = titleMap.get(entry.getTitle());
+						String disc = (entry.getDiscNumber() != null) ? Integer.toString(entry.getDiscNumber()) : "";
+						String track = (entry.getTrack() != null) ? Integer.toString(entry.getTrack()) : "";
+						String duplicateId = disc + "-" + track + "-" + entry.getTitle();
+
+						Entry duplicate = titleMap.get(duplicateId);
 						if (duplicate != null) {
 							// Check if the first already has been rebased or not
 							if (duplicate.getTitle().equals(entry.getTitle())) {
@@ -74,7 +78,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 							// Rebase if this is the second instance of this title found
 							entry.rebaseTitleOffPath();
 						} else {
-							titleMap.put(entry.getTitle(), entry);
+							titleMap.put(duplicateId, entry);
 						}
 					}
 
