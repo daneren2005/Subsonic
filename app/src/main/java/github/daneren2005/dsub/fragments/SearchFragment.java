@@ -42,6 +42,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	private static final int MAX_ARTISTS = 10;
 	private static final int MAX_ALBUMS = 10;
 	private static final int MAX_SONGS = 25;
+	private static final int MIN_CLOSENESS = 1;
 
 	protected RecyclerView recyclerView;
 	protected SearchAdapter adapter;
@@ -265,13 +266,27 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	}
 
 	private void autoplay(String query) {
-		Artist artist = searchResult.getArtists().isEmpty() ? null : searchResult.getArtists().get(0);
-		MusicDirectory.Entry album = searchResult.getAlbums().isEmpty() ? null : searchResult.getAlbums().get(0); 
-		MusicDirectory.Entry song = searchResult.getSongs().isEmpty() ? null : searchResult.getSongs().get(0);
-		
-		if(artist != null && query.equals(artist.getName())) {
+		query = query.toLowerCase();
+
+		Artist artist = null;
+		if(!searchResult.getArtists().isEmpty()) {
+			artist = searchResult.getArtists().get(0);
+			artist.setCloseness(Util.getStringDistance(artist.getName().toLowerCase(), query));
+		}
+		MusicDirectory.Entry album = null;
+		if(!searchResult.getAlbums().isEmpty()) {
+			album = searchResult.getAlbums().get(0);
+			album.setCloseness(Util.getStringDistance(album.getTitle().toLowerCase(), query));
+		}
+		MusicDirectory.Entry song = null;
+		if(!searchResult.getSongs().isEmpty()) {
+			song = searchResult.getSongs().get(0);
+			song.setCloseness(Util.getStringDistance(song.getTitle().toLowerCase(), query));
+		}
+
+		if(artist != null && artist.getCloseness() <= MIN_CLOSENESS) {
 			onArtistSelected(artist, true);
-		} else if(album != null && query.equals(album.getTitle())) {
+		} else if(album != null && album.getCloseness() <= MIN_CLOSENESS) {
 			onAlbumSelected(album, true);
 		} else if(song != null) {
 			onSongSelected(song, false, false, true, false);
