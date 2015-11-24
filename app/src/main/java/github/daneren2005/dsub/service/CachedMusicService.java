@@ -310,7 +310,7 @@ public class CachedMusicService implements MusicService {
     }
 	
 	@Override
-	public void deletePlaylist(String id, Context context, ProgressListener progressListener) throws Exception {
+	public void deletePlaylist(final String id, Context context, ProgressListener progressListener) throws Exception {
 		musicService.deletePlaylist(id, context, progressListener);
 
 		new PlaylistUpdater(context, id) {
@@ -318,6 +318,20 @@ public class CachedMusicService implements MusicService {
 			public void updateResult(List<Playlist> objects, Playlist result) {
 				objects.remove(result);
 				cachedPlaylists.set(objects);
+
+				ArrayList<SyncUtil.SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, musicService.getInstance(context));
+				for(int i = 0; i < playlistList.size(); i++) {
+					SyncUtil.SyncSet syncPlaylist = playlistList.get(i);
+					if(syncPlaylist.id != null && syncPlaylist.id.equals(id)) {
+						MusicDirectory musicDirectory = FileUtil.deserialize(context, getCacheName(context, "playlist", id), MusicDirectory.class);
+						for(Entry entry: musicDirectory.getChildren()) {
+							DownloadFile file = new DownloadFile(context, entry, true);
+							file.unpin();
+						}
+
+						break;
+					}
+				}
 			}
 		}.execute();
 	}
