@@ -284,14 +284,15 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 			song.setCloseness(Util.getStringDistance(song.getTitle().toLowerCase(), query));
 		}
 
-		if(artist != null && artist.getCloseness() <= MIN_CLOSENESS) {
+		if(artist != null && (artist.getCloseness() <= MIN_CLOSENESS ||
+				(album == null || artist.getCloseness() <= album.getCloseness()) &&
+				(song == null || artist.getCloseness() <= song.getCloseness()))) {
 			onArtistSelected(artist, true);
-		} else if(album != null && album.getCloseness() <= MIN_CLOSENESS) {
+		} else if(album != null && (album.getCloseness() <= MIN_CLOSENESS ||
+			song == null || album.getCloseness() <= song.getCloseness())) {
 			onAlbumSelected(album, true);
 		} else if(song != null) {
 			onSongSelected(song, false, false, true, false);
-		} else if(album != null) {
-			onAlbumSelected(album, true);
 		}
 	}
 }
