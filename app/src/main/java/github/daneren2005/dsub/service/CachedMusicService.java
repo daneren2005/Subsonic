@@ -340,7 +340,7 @@ public class CachedMusicService implements MusicService {
 	}
 	
 	@Override
-	public void removeFromPlaylist(String id, final List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
+	public void removeFromPlaylist(final String id, final List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
 		musicService.removeFromPlaylist(id, toRemove, context, progressListener);
 
 		new MusicDirectoryUpdater(context, "playlist", id) {
@@ -351,9 +351,27 @@ public class CachedMusicService implements MusicService {
 
 			@Override
 			public void updateResult(List<Entry> objects, Entry result) {
+				// Make sure this playlist is supposed to be synced
+				boolean supposedToUnpin = false;
+				ArrayList<SyncUtil.SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, musicService.getInstance(context));
+				for(int i = 0; i < playlistList.size(); i++) {
+					SyncUtil.SyncSet syncPlaylist = playlistList.get(i);
+					if(syncPlaylist.id != null && syncPlaylist.id.equals(id)) {
+						supposedToUnpin = true;
+						break;
+					}
+				}
+
 				// Remove in reverse order so indexes are still correct as we iterate through
 				for(ListIterator<Integer> iterator = toRemove.listIterator(toRemove.size()); iterator.hasPrevious(); ) {
-					objects.remove((int) iterator.previous());
+					int index = iterator.previous();
+					if(supposedToUnpin) {
+						Entry entry = objects.get(index);
+						DownloadFile file = new DownloadFile(context, entry, true);
+						file.unpin();
+					}
+
+					objects.remove(index);
 				}
 			}
 		}.execute();
@@ -1217,7 +1235,7 @@ public class CachedMusicService implements MusicService {
 		public ArrayList<Entry> getArrayList() {
 			musicDirectory = FileUtil.deserialize(context, cacheName, MusicDirectory.class);
 			if(musicDirectory != null) {
-				return new ArrayList<Entry>(musicDirectory.getChildren());
+				return new ArrayList<>(musicDirectory.getChildren());
 			} else {
 				return null;
 			}
