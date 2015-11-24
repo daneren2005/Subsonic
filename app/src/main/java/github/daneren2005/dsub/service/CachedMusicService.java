@@ -53,6 +53,7 @@ import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.TimeLimitedCache;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
@@ -258,6 +259,26 @@ public class CachedMusicService implements MusicService {
 			File playlistFile = FileUtil.getPlaylistFile(context, Util.getServerName(context, musicService.getInstance(context)), dir.getName());
 			if(cachedPlaylist == null || !playlistFile.exists() || !cachedPlaylist.getChildren().equals(dir.getChildren())) {
 				FileUtil.writePlaylistFile(context, playlistFile, dir);
+			}
+
+			if(cachedPlaylist != null) {
+				// Make sure this playlist is supposed to be synced
+				ArrayList<SyncUtil.SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, musicService.getInstance(context));
+				for(int i = 0; i < playlistList.size(); i++) {
+					SyncUtil.SyncSet syncPlaylist = playlistList.get(i);
+					if(syncPlaylist.id != null && syncPlaylist.id.equals(id)) {
+						List<Entry> toDelete = cachedPlaylist.getChildren();
+						for (Entry entry : dir.getChildren()) {
+							toDelete.remove(entry);
+						}
+
+						for (Entry entry : toDelete) {
+							DownloadFile file = new DownloadFile(context, entry, true);
+							file.unpin();
+						}
+						break;
+					}
+				}
 			}
 		}
         return dir;
