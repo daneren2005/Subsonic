@@ -60,6 +60,7 @@ import github.daneren2005.dsub.view.ErrorDialog;
 
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();
+
 	private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<String, ServerSettings>();
 	private boolean testingConnection;
 	private ListPreference theme;
@@ -99,6 +100,15 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		int instance = this.getArguments().getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, -1);
+		if (instance != -1) {
+			PreferenceScreen preferenceScreen = expandServer(instance);
+			setPreferenceScreen(preferenceScreen);
+
+			serverSettings.put(Integer.toString(instance), new ServerSettings(instance));
+			onInitPreferences(preferenceScreen);
+		}
 	}
 
 	@Override
@@ -286,16 +296,20 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
 					serverCount++;
-					String instance = String.valueOf(serverCount);
+					int instance = serverCount;
 					serversCategory.addPreference(addServer(serverCount));
 
 					SharedPreferences.Editor editor = settings.edit();
 					editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
 					// Reset set folder ID
 					editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
+					editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + instance, "http://yourhost");
+					editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, getResources().getString(R.string.settings_server_unused));
 					editor.commit();
 
-					serverSettings.put(instance, new ServerSettings(instance));
+					ServerSettings ss = new ServerSettings(instance);
+					serverSettings.put(String.valueOf(instance), ss);
+					ss.update();
 
 					return true;
 				}
@@ -303,9 +317,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 			serversCategory.setOrderingAsAdded(false);
 			for (int i = 1; i <= serverCount; i++) {
-				String instance = String.valueOf(i);
 				serversCategory.addPreference(addServer(i));
-				serverSettings.put(instance, new ServerSettings(instance));
+				serverSettings.put(String.valueOf(i), new ServerSettings(i));
 			}
 		}
 
@@ -402,14 +415,38 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			}
 		}
 
-		if(serversCategory != null) {
-			for (ServerSettings ss : serverSettings.values()) {
-				ss.update();
+		for (ServerSettings ss : serverSettings.values()) {
+			if(!ss.update()) {
+				if(serversCategory != null) {
+					serversCategory.removePreference(ss.getScreen());
+				}
 			}
 		}
 	}
 
 	private PreferenceScreen addServer(final int instance) {
+		final PreferenceScreen screen = this.getPreferenceManager().createPreferenceScreen(context);
+		screen.setKey(Constants.PREFERENCES_KEY_SERVER_KEY + instance);
+		screen.setOrder(instance);
+
+		screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				SettingsFragment newFragment = new SettingsFragment();
+
+				Bundle args = new Bundle();
+				args.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, instance);
+				newFragment.setArguments(args);
+
+				replaceFragment(newFragment);
+				return false;
+			}
+		});
+
+		return screen;
+	}
+
+	private PreferenceScreen expandServer(final int instance) {
 		final PreferenceScreen screen = this.getPreferenceManager().createPreferenceScreen(context);
 		screen.setTitle(R.string.settings_server_unused);
 		screen.setKey(Constants.PREFERENCES_KEY_SERVER_KEY + instance);
@@ -533,8 +570,13 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
 						editor.commit();
 
-						serversCategory.removePreference(screen);
-						screen.getDialog().dismiss();
+						removeCurrent();
+
+						SubsonicFragment parentFragment = context.getCurrentFragment();
+						if(parentFragment instanceof SettingsFragment) {
+							SettingsFragment serverSelectionFragment = (SettingsFragment) parentFragment;
+							serverSelectionFragment.update();
+						}
 					}
 				});
 
@@ -565,8 +607,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
 		screen.addPreference(serverRemoveServerPreference);
-
-		screen.setOrder(instance);
 
 		return screen;
 	}
@@ -691,6 +731,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	}
 
 	private class ServerSettings {
+		private int instance;
 		private EditTextPreference serverName;
 		private EditTextPreference serverUrl;
 		private EditTextPreference serverLocalNetworkSSID;
@@ -698,73 +739,101 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		private EditTextPreference username;
 		private PreferenceScreen screen;
 
-		private ServerSettings(String instance) {
-			screen = (PreferenceScreen) SettingsFragment.this.findPreference("server" + instance);
+		private ServerSettings(int instance) {
+			this.instance = instance;
+			screen = (PreferenceScreen) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY + instance);
 			serverName = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_NAME + instance);
 			serverUrl = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_URL + instance);
 			serverLocalNetworkSSID = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance);
 			serverInternalUrl = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance);
 			username = (EditTextPreference) SettingsFragment.this.findPreference(Constants.PREFERENCES_KEY_USERNAME + instance);
 
-			serverUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object value) {
-					try {
-						String url = (String) value;
-						new URL(url);
-						if (url.contains(" ") || url.contains("@") || url.contains("_")) {
-							throw new Exception();
+			if(serverName != null) {
+				serverUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object value) {
+						try {
+							String url = (String) value;
+							new URL(url);
+							if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+								throw new Exception();
+							}
+						} catch (Exception x) {
+							new ErrorDialog(context, R.string.settings_invalid_url, false);
+							return false;
 						}
-					} catch (Exception x) {
-						new ErrorDialog(context, R.string.settings_invalid_url, false);
-						return false;
+						return true;
 					}
-					return true;
-				}
-			});
-			serverInternalUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object value) {
-					try {
-						String url = (String) value;
-						// Allow blank internal IP address
-						if("".equals(url) || url == null) {
-							return true;
-						}
+				});
+				serverInternalUrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object value) {
+						try {
+							String url = (String) value;
+							// Allow blank internal IP address
+							if ("".equals(url) || url == null) {
+								return true;
+							}
 
-						new URL(url);
-						if (url.contains(" ") || url.contains("@") || url.contains("_")) {
-							throw new Exception();
+							new URL(url);
+							if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+								throw new Exception();
+							}
+						} catch (Exception x) {
+							new ErrorDialog(context, R.string.settings_invalid_url, false);
+							return false;
 						}
-					} catch (Exception x) {
-						new ErrorDialog(context, R.string.settings_invalid_url, false);
-						return false;
+						return true;
 					}
-					return true;
-				}
-			});
+				});
 
-			username.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object value) {
-					String username = (String) value;
-					if (username == null || !username.equals(username.trim())) {
-						new ErrorDialog(context, R.string.settings_invalid_username, false);
-						return false;
+				username.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+					@Override
+					public boolean onPreferenceChange(Preference preference, Object value) {
+						String username = (String) value;
+						if (username == null || !username.equals(username.trim())) {
+							new ErrorDialog(context, R.string.settings_invalid_username, false);
+							return false;
+						}
+						return true;
 					}
-					return true;
-				}
-			});
+				});
+			}
 		}
 
-		public void update() {
-			serverName.setSummary(serverName.getText());
-			serverUrl.setSummary(serverUrl.getText());
-			serverLocalNetworkSSID.setSummary(serverLocalNetworkSSID.getText());
-			serverInternalUrl.setSummary(serverInternalUrl.getText());
-			username.setSummary(username.getText());
-			screen.setSummary(serverUrl.getText());
-			screen.setTitle(serverName.getText());
+		public PreferenceScreen getScreen() {
+			return screen;
+		}
+
+		public boolean update() {
+			SharedPreferences prefs = Util.getPreferences(context);
+
+			if(prefs.contains(Constants.PREFERENCES_KEY_SERVER_NAME + instance)) {
+				if (serverName != null) {
+					serverName.setSummary(serverName.getText());
+					serverUrl.setSummary(serverUrl.getText());
+					serverLocalNetworkSSID.setSummary(serverLocalNetworkSSID.getText());
+					serverInternalUrl.setSummary(serverInternalUrl.getText());
+					username.setSummary(username.getText());
+				}
+
+
+				String title = prefs.getString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, null);
+				String summary = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
+
+				if (title != null) {
+					screen.setTitle(title);
+				} else {
+					screen.setTitle(R.string.settings_server_unused);
+				}
+				if (summary != null) {
+					screen.setSummary(summary);
+				}
+
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 }

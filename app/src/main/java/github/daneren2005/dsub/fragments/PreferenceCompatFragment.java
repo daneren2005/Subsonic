@@ -248,7 +248,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 		}
 	}
 
-	private void setPreferenceScreen(PreferenceScreen preferenceScreen) {
+	protected void setPreferenceScreen(PreferenceScreen preferenceScreen) {
 		try {
 			Method m = PreferenceManager.class.getDeclaredMethod("setPreferences", PreferenceScreen.class);
 			m.setAccessible(true);

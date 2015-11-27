@@ -456,6 +456,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public void replaceExistingFragment(SubsonicFragment fragment) {
 		context.replaceExistingFragment(fragment, fragment.getSupportTag());
 	}
+	public void removeCurrent() {
+		context.removeCurrent();
+	}
 
 	public int getRootId() {
 		return rootView.getId();
