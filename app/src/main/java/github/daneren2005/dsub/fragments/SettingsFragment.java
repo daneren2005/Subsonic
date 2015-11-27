@@ -102,21 +102,38 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-		View root = super.onCreateView(inflater, container, bundle);
-
-		this.setTitle(getResources().getString(R.string.settings_title));
-		initSettings();
-
-		return root;
-	}
-
-	@Override
 	public void onDestroy() {
 		super.onDestroy();
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		prefs.unregisterOnSharedPreferenceChangeListener(this);
+	}
+
+	@Override
+	protected void onStartNewFragment(String name) {
+		SettingsFragment newFragment = new SettingsFragment();
+		Bundle args = new Bundle();
+
+		int xml = 0;
+		if("appearance".equals(name)) {
+			xml = R.xml.settings_appearance;
+		} else if("drawer".equals(name)) {
+			xml = R.xml.settings_drawer;
+		} else if("cache".equals(name)) {
+			xml = R.xml.settings_cache;
+		} else if("sync".equals(name)) {
+			xml = R.xml.settings_sync;
+		} else if("playback".equals(name)) {
+			xml = R.xml.settings_playback;
+		} else if("servers".equals(name)) {
+			xml = R.xml.settings_servers;
+		}
+
+		if(xml != 0) {
+			args.putInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, xml);
+			newFragment.setArguments(args);
+			replaceFragment(newFragment);
+		}
 	}
 
 	@Override
@@ -162,9 +179,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		scheduleBackup();
 	}
 
-	private void initSettings() {
+	@Override
+	protected void onInitPreferences(PreferenceScreen preferenceScreen) {
+		this.setTitle(preferenceScreen.getTitle());
+
 		internalSSID = Util.getSSID(context);
-		if(internalSSID == null) {
+		if (internalSSID == null) {
 			internalSSID = "";
 		}
 		internalSSIDDisplay = context.getResources().getString(R.string.settings_server_local_network_ssid_hint, internalSSID);
@@ -200,87 +220,93 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		settings = Util.getPreferences(context);
 		serverCount = settings.getInt(Constants.PREFERENCES_KEY_SERVER_COUNT, 1);
 
-		this.findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				Util.confirmDialog(context, R.string.common_delete, R.string.common_confirm_message_cache, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						new LoadingTask<Void>(context, false) {
-							@Override
-							protected Void doInBackground() throws Throwable {
-								FileUtil.deleteMusicDirectory(context);
-								FileUtil.deleteSerializedCache(context);
-								FileUtil.deleteArtworkCache(context);
-								FileUtil.deleteAvatarCache(context);
-								return null;
-							}
+		if(cacheSize != null) {
+			this.findPreference("clearCache").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Util.confirmDialog(context, R.string.common_delete, R.string.common_confirm_message_cache, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new LoadingTask<Void>(context, false) {
+								@Override
+								protected Void doInBackground() throws Throwable {
+									FileUtil.deleteMusicDirectory(context);
+									FileUtil.deleteSerializedCache(context);
+									FileUtil.deleteArtworkCache(context);
+									FileUtil.deleteAvatarCache(context);
+									return null;
+								}
 
-							@Override
-							protected void done(Void result) {
-								Util.toast(context, R.string.settings_cache_clear_complete);
-							}
+								@Override
+								protected void done(Void result) {
+									Util.toast(context, R.string.settings_cache_clear_complete);
+								}
 
-							@Override
-							protected void error(Throwable error) {
-								Util.toast(context, getErrorMessage(error), false);
-							}
-						}.execute();
-					}
-				});
-				return false;
-			}
-		});
+								@Override
+								protected void error(Throwable error) {
+									Util.toast(context, getErrorMessage(error), false);
+								}
+							}.execute();
+						}
+					});
+					return false;
+				}
+			});
+		}
 
-		addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				serverCount++;
-				String instance = String.valueOf(serverCount);
-				serversCategory.addPreference(addServer(serverCount));
+		if(syncEnabled != null) {
+			this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					Boolean syncEnabled = (Boolean) newValue;
 
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
-				// Reset set folder ID
-				editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
-				editor.commit();
+					Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+					ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
+					ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, syncEnabled);
 
+					return true;
+				}
+			});
+			syncInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					Integer syncInterval = Integer.parseInt(((String) newValue));
+
+					Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
+					ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * syncInterval);
+					ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, new Bundle(), 60L * syncInterval);
+
+					return true;
+				}
+			});
+		}
+
+		if(serversCategory != null) {
+			addServerPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					serverCount++;
+					String instance = String.valueOf(serverCount);
+					serversCategory.addPreference(addServer(serverCount));
+
+					SharedPreferences.Editor editor = settings.edit();
+					editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
+					// Reset set folder ID
+					editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
+					editor.commit();
+
+					serverSettings.put(instance, new ServerSettings(instance));
+
+					return true;
+				}
+			});
+
+			serversCategory.setOrderingAsAdded(false);
+			for (int i = 1; i <= serverCount; i++) {
+				String instance = String.valueOf(i);
+				serversCategory.addPreference(addServer(i));
 				serverSettings.put(instance, new ServerSettings(instance));
-
-				return true;
 			}
-		});
-
-		this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Boolean syncEnabled = (Boolean) newValue;
-
-				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
-				ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, syncEnabled);
-				ContentResolver.setSyncAutomatically(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, syncEnabled);
-
-				return true;
-			}
-		});
-		syncInterval.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Integer syncInterval = Integer.parseInt(((String) newValue));
-
-				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
-				ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PLAYLIST_AUTHORITY, new Bundle(), 60L * syncInterval);
-				ContentResolver.addPeriodicSync(account, Constants.SYNC_ACCOUNT_PODCAST_AUTHORITY, new Bundle(), 60L * syncInterval);
-
-				return true;
-			}
-		});
-
-		serversCategory.setOrderingAsAdded(false);
-		for (int i = 1; i <= serverCount; i++) {
-			String instance = String.valueOf(i);
-			serversCategory.addPreference(addServer(i));
-			serverSettings.put(instance, new ServerSettings(instance));
 		}
 
 		SharedPreferences prefs = Util.getPreferences(context);
@@ -309,61 +335,77 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			return;
 		}
 
-		theme.setSummary(theme.getEntry());
-		maxBitrateWifi.setSummary(maxBitrateWifi.getEntry());
-		maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
-		maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
-		maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
-		networkTimeout.setSummary(networkTimeout.getEntry());
-		cacheLocation.setSummary(cacheLocation.getText());
-		preloadCountWifi.setSummary(preloadCountWifi.getEntry());
-		preloadCountMobile.setSummary(preloadCountMobile.getEntry());
-		keepPlayedCount.setSummary(keepPlayedCount.getEntry());
-		tempLoss.setSummary(tempLoss.getEntry());
-		pauseDisconnect.setSummary(pauseDisconnect.getEntry());
-		videoPlayer.setSummary(videoPlayer.getEntry());
-		syncInterval.setSummary(syncInterval.getEntry());
-		openToTab.setSummary(openToTab.getEntry());
-		try {
-			if(megabyteFromat == null) {
-				megabyteFromat = new DecimalFormat(getResources().getString(R.string.util_bytes_format_megabyte));
-			}
+		if(theme != null) {
+			theme.setSummary(theme.getEntry());
+			openToTab.setSummary(openToTab.getEntry());
+		}
 
-			cacheSize.setSummary(megabyteFromat.format((double) Integer.parseInt(cacheSize.getText())).replace(".00", ""));
-		} catch(Exception e) {
-			Log.e(TAG, "Failed to format cache size", e);
-			cacheSize.setSummary(cacheSize.getText());
-		}
-		if(syncEnabled.isChecked()) {
-			if(!syncInterval.isEnabled()) {
-				syncInterval.setEnabled(true);
-				syncWifi.setEnabled(true);
-				syncNotification.setEnabled(true);
-				syncStarred.setEnabled(true);
-				syncMostRecent.setEnabled(true);
-			}
-		} else {
-			if(syncInterval.isEnabled()) {
-				syncInterval.setEnabled(false);
-				syncWifi.setEnabled(false);
-				syncNotification.setEnabled(false);
-				syncStarred.setEnabled(false);
-				syncMostRecent.setEnabled(false);
-			}
-		}
-		if(replayGain.isChecked()) {
-			replayGainType.setEnabled(true);
-			replayGainBump.setEnabled(true);
-			replayGainUntagged.setEnabled(true);
-		} else {
-			replayGainType.setEnabled(false);
-			replayGainBump.setEnabled(false);
-			replayGainUntagged.setEnabled(false);
-		}
-		replayGainType.setSummary(replayGainType.getEntry());
+		if(cacheSize != null) {
+			maxBitrateWifi.setSummary(maxBitrateWifi.getEntry());
+			maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
+			maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
+			maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
+			networkTimeout.setSummary(networkTimeout.getEntry());
+			cacheLocation.setSummary(cacheLocation.getText());
+			preloadCountWifi.setSummary(preloadCountWifi.getEntry());
+			preloadCountMobile.setSummary(preloadCountMobile.getEntry());
 
-		for (ServerSettings ss : serverSettings.values()) {
-			ss.update();
+			try {
+				if(megabyteFromat == null) {
+					megabyteFromat = new DecimalFormat(getResources().getString(R.string.util_bytes_format_megabyte));
+				}
+
+				cacheSize.setSummary(megabyteFromat.format((double) Integer.parseInt(cacheSize.getText())).replace(".00", ""));
+			} catch(Exception e) {
+				Log.e(TAG, "Failed to format cache size", e);
+				cacheSize.setSummary(cacheSize.getText());
+			}
+		}
+
+		if(keepPlayedCount != null) {
+			keepPlayedCount.setSummary(keepPlayedCount.getEntry());
+			tempLoss.setSummary(tempLoss.getEntry());
+			pauseDisconnect.setSummary(pauseDisconnect.getEntry());
+			videoPlayer.setSummary(videoPlayer.getEntry());
+
+			if(replayGain.isChecked()) {
+				replayGainType.setEnabled(true);
+				replayGainBump.setEnabled(true);
+				replayGainUntagged.setEnabled(true);
+			} else {
+				replayGainType.setEnabled(false);
+				replayGainBump.setEnabled(false);
+				replayGainUntagged.setEnabled(false);
+			}
+			replayGainType.setSummary(replayGainType.getEntry());
+		}
+
+		if(syncEnabled != null) {
+			syncInterval.setSummary(syncInterval.getEntry());
+
+			if(syncEnabled.isChecked()) {
+				if(!syncInterval.isEnabled()) {
+					syncInterval.setEnabled(true);
+					syncWifi.setEnabled(true);
+					syncNotification.setEnabled(true);
+					syncStarred.setEnabled(true);
+					syncMostRecent.setEnabled(true);
+				}
+			} else {
+				if(syncInterval.isEnabled()) {
+					syncInterval.setEnabled(false);
+					syncWifi.setEnabled(false);
+					syncNotification.setEnabled(false);
+					syncStarred.setEnabled(false);
+					syncMostRecent.setEnabled(false);
+				}
+			}
+		}
+
+		if(serversCategory != null) {
+			for (ServerSettings ss : serverSettings.values()) {
+				ss.update();
+			}
 		}
 	}
 

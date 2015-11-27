@@ -29,6 +29,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,8 @@ import java.lang.reflect.Method;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.util.Constants;
 
-public class PreferenceCompatFragment extends SubsonicFragment {
+public abstract class PreferenceCompatFragment extends SubsonicFragment {
+	private static final String TAG = PreferenceCompatFragment.class.getSimpleName();
 	private static final int FIRST_REQUEST_CODE = 100;
 	private static final int MSG_BIND_PREFERENCES = 1;
 	private static final String PREFERENCES_TAG = "android:preferences";
@@ -114,10 +116,25 @@ public class PreferenceCompatFragment extends SubsonicFragment {
 		setPreferenceScreen(screen);
 	}
 
-	public void addPreferencesFromResource(int resId) {
+	public PreferenceScreen addPreferencesFromResource(int resId) {
 		requirePreferenceManager();
 		PreferenceScreen screen = inflateFromResource(getActivity(), resId, getPreferenceScreen());
 		setPreferenceScreen(screen);
+
+		for(int i = 0; i < screen.getPreferenceCount(); i++) {
+			Preference preference = screen.getPreference(i);
+			if(preference instanceof PreferenceScreen && preference.getKey() != null) {
+				preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						onStartNewFragment(preference.getKey());
+						return false;
+					}
+				});
+			}
+		}
+
+		return screen;
 	}
 
 	public Preference findPreference(CharSequence key) {
@@ -139,7 +156,7 @@ public class PreferenceCompatFragment extends SubsonicFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		getListView().setScrollBarStyle(0);
+		getListView().setScrollBarStyle(View.SCROLLBAR_POSITION_DEFAULT);
 		if (mHavePrefs) {
 			bindPreferences();
 		}
@@ -168,7 +185,8 @@ public class PreferenceCompatFragment extends SubsonicFragment {
 
 		int res = this.getArguments().getInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, 0);
 		if(res != 0) {
-			addPreferencesFromResource(res);
+			PreferenceScreen preferenceScreen = addPreferencesFromResource(res);
+			onInitPreferences(preferenceScreen);
 		}
 	}
 
@@ -310,4 +328,7 @@ public class PreferenceCompatFragment extends SubsonicFragment {
 		}
 		return preferenceScreen;
 	}
+
+	protected abstract void onInitPreferences(PreferenceScreen preferenceScreen);
+	protected abstract void onStartNewFragment(String name);
 }

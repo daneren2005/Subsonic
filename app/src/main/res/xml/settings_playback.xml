@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myns="http://schemas.android.com/apk/res/github.daneren2005.dsub"
+	android:title="@string/settings.playback_title">
+
+	<PreferenceCategory
+		android:title="@string/settings.playback_title">
+
+		<github.daneren2005.dsub.view.SeekBarPreference
+			android:title="@string/settings.playlist_random_size_title"
+			android:key="randomSize"
+			android:defaultValue="20"
+			android:dialogLayout="@layout/seekbar_preference"
+			myns:max="100"/>
+
+		<ListPreference
+			android:title="@string/settings.keep_played_count_title"
+			android:key="keepPlayedCount"
+			android:defaultValue="0"
+			android:entryValues="@array/keepPlayedCountValues"
+			android:entries="@array/keepPlayedCountNames"/>
+
+		<ListPreference
+			android:title="@string/settings.temp_loss_title"
+			android:key="tempLoss"
+			android:defaultValue="1"
+			android:entryValues="@array/tempLossValues"
+			android:entries="@array/tempLossNames"/>
+
+		<ListPreference
+			android:title="@string/settings.disconnect_pause_title"
+			android:key="pauseOnDisconnect"
+			android:defaultValue="0"
+			android:entryValues="@array/disconnectPauseValues"
+			android:entries="@array/disconnectPauseNames"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.persistent_title"
+			android:summary="@string/settings.persistent_summary"
+			android:key="persistentNotification"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.play_now_after"
+			android:summary="@string/settings.play_now_after_summary"
+			android:key="playNowAfter"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.video_title">
+
+		<ListPreference
+			android:title="@string/settings.video_player"
+			android:key="videoPlayer"
+			android:defaultValue="hls"
+			android:entryValues="@array/videoPlayerValues"
+			android:entries="@array/videoPlayerNames"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.casting">
+
+		<CheckBoxPreference
+			android:title="@string/settings.casting_proxy"
+			android:summary="@string/settings.casting_proxy_summary"
+			android:key="castProxy"
+			android:defaultValue="false"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.replay_gain">
+
+		<CheckBoxPreference
+			android:title="@string/settings.replay_gain"
+			android:summary="@string/settings.replay_gain_summary"
+			android:key="replayGain"
+			android:defaultValue="false"/>
+
+		<ListPreference
+			android:title="@string/settings.replay_gain_type"
+			android:key="replayGainType"
+			android:defaultValue="1"
+			android:entryValues="@array/replayGainTypeValues"
+			android:entries="@array/replayGainTypeNames"/>
+
+		<github.daneren2005.dsub.view.SeekBarPreference
+			android:key="replayGainBump2"
+			android:dialogLayout="@layout/seekbar_preference"
+			android:title="@string/settings.replay_gain_bump"
+			android:defaultValue="150"
+			myns:max="150"
+			myns:min="-150"
+			myns:stepSize="10"
+			myns:display="%+.1f dB"/>
+
+		<github.daneren2005.dsub.view.SeekBarPreference
+			android:key="replayGainUntagged2"
+			android:dialogLayout="@layout/seekbar_preference"
+			android:title="@string/settings.replay_gain_untagged"
+			android:defaultValue="150"
+			myns:max="0"
+			myns:min="-150"
+			myns:stepSize="10"
+			myns:display="%+.1f dB"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.other_title">
+
+		<CheckBoxPreference
+			android:title="@string/settings.shuffle_by_album"
+			android:key="shuffleByAlbum"
+			android:defaultValue="true"
+			android:summaryOn="@string/settings.shuffle_by_album.true"
+			android:summaryOff="@string/settings.shuffle_by_album.false"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.scrobble_title"
+			android:summary="@string/settings.scrobble_summary"
+			android:key="scrobble"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.media_button_title"
+			android:summary="@string/settings.media_button_summary"
+			android:key="mediaButtons"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.gapless_playback"
+			android:summary="@string/settings.gapless_playback_summary"
+			android:key="gaplessPlayback"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.start_on_headphones"
+			android:summary="@string/settings.start_on_headphones_summary"
+			android:key="startOnHeadphones"
+			android:defaultValue="false"/>
+	</PreferenceCategory>
+</PreferenceScreen>

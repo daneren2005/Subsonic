@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myns="http://schemas.android.com/apk/res/github.daneren2005.dsub"
+	android:title="@string/settings.sync_title">
+
+	<PreferenceCategory
+		android:title="@string/settings.sync_title">
+
+		<CheckBoxPreference
+			android:title="@string/settings.sync_enabled"
+			android:summary="@string/settings.sync_enabled_summary"
+			android:key="syncEnabled"
+			android:defaultValue="true"/>
+
+		<ListPreference
+			android:title="@string/settings.sync_interval"
+			android:key="syncInterval"
+			android:defaultValue="60"
+			android:entryValues="@array/syncIntervalValues"
+			android:entries="@array/syncIntervalNames"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.sync_wifi"
+			android:summary="@string/settings.sync_wifi_summary"
+			android:key="syncWifi"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.sync_notification"
+			android:summary="@string/settings.sync_notification_summary"
+			android:key="syncNotification"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.other_title">
+
+		<CheckBoxPreference
+			android:title="@string/settings.sync_starred"
+			android:summary="@string/settings.sync_starred_summary"
+			android:key="syncStarred"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.sync_most_recent"
+			android:summary="@string/settings.sync_most_recent_summary"
+			android:key="syncMostRecent"
+			android:defaultValue="false"/>
+	</PreferenceCategory>
+</PreferenceScreen>

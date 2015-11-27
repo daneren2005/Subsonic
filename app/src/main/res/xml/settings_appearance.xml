@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myns="http://schemas.android.com/apk/res/github.daneren2005.dsub"
+	android:title="@string/settings.appearance_title">
+
+	<PreferenceCategory
+		android:title="@string/settings.theme_title">
+
+		<ListPreference
+			android:title="@string/settings.theme_title"
+			android:key="theme"
+			android:defaultValue="light"
+			android:entryValues="@array/themeValues"
+			android:entries="@array/themeNames"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.theme_fullscreen"
+			android:summary="@string/settings.theme_fullscreen_summary"
+			android:key="fullScreen"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.color_action_bar"
+			android:summary="@string/settings.color_action_bar.summary"
+			android:key="colorActionBar"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.appearance_title">
+
+		<CheckBoxPreference
+			android:title="@string/settings.track_title"
+			android:summary="@string/settings.track_summary"
+			android:key="displayTrack"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.hide_widget_title"
+			android:summary="@string/settings.hide_widget_summary"
+			android:key="hideWidget"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.custom_sort"
+			android:summary="@string/settings.custom_sort_summary"
+			android:key="customSortEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.rename_duplicates"
+			android:summary="@string/settings.rename_duplicates_summary"
+			android:key="renameDuplicates"
+			android:defaultValue="true"/>
+
+		<ListPreference
+			android:title="@string/settings.open_to_tab"
+			android:summary="@string/settings.open_to_tab_summary"
+			android:key="openToTab"
+			android:entryValues="@array/defaultDrawerItemsDescriptions"
+			android:entries="@array/defaultDrawerItems"
+			android:defaultValue="Home"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.disable_exit_prompt"
+			android:summary="@string/settings.disable_exit_prompt_summary"
+			android:key="disableExitPrompt"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.override_system_language"
+			android:summary="@string/settings.override_system_language_summary"
+			android:key="overrideSystemLanguage"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.large_album_art"
+			android:summary="@string/settings.large_album_art_summary"
+			android:key="largeAlbumArt"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.menu_options.title">
+
+		<CheckBoxPreference
+			android:title="@string/common.play_now"
+			android:summary="@string/settings.menu_options.play_now_summary"
+			android:key="showPlayNow"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/common.play_shuffled"
+			android:summary="@string/settings.menu_options.play_shuffled_summary"
+			android:key="showPlayShuffled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/common.play_next"
+			android:summary="@string/settings.menu_options.play_next_summary"
+			android:key="showPlayNext"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/common.play_last"
+			android:summary="@string/settings.menu_options.play_last_summary"
+			android:key="showPlayLast"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/common.download"
+			android:summary="@string/settings.menu_options.download_summary"
+			android:key="showDownload"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/common.pin"
+			android:summary="@string/settings.menu_options.pin_summary"
+			android:key="showPin"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/common.delete"
+			android:summary="@string/settings.menu_options.delete_summary"
+			android:key="showDelete"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/common.star"
+			android:summary="@string/settings.menu_options.star_summary"
+			android:key="showStar"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/menu.share"
+			android:summary="@string/settings.menu_options.shared_summary"
+			android:key="showShared"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/menu.rate"
+			android:summary="@string/settings.menu_options.rate_summary"
+			android:key="showRating"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+</PreferenceScreen>

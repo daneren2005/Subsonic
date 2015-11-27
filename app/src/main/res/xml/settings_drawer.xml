@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myns="http://schemas.android.com/apk/res/github.daneren2005.dsub"
+	android:title="@string/settings.drawer_items_title">
+
+	<PreferenceCategory
+		android:title="@string/settings.drawer_items_title">
+
+		<CheckBoxPreference
+			android:title="@string/settings.podcasts_enabled"
+			android:summary="@string/settings.podcasts_enabled_summary"
+			android:key="podcastsEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.bookmarks_enabled"
+			android:summary="@string/settings.bookmarks_enabled_summary"
+			android:key="bookmarksEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.shares_enabled"
+			android:summary="@string/settings.shares_enabled_summary"
+			android:key="sharedEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.chat_enabled"
+			android:summary="@string/settings.chat_enabled_summary"
+			android:key="chatEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.admin_enabled"
+			android:summary="@string/settings.admin_enabled_summary"
+			android:key="adminEnabled"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/button_bar.chat">
+
+		<github.daneren2005.dsub.view.SeekBarPreference
+			android:title="@string/settings.chat_refresh"
+			android:key="chatRefreshRate"
+			android:defaultValue="30"
+			android:dialogLayout="@layout/seekbar_preference"
+			myns:max="120"
+			myns:display="%.0f seconds"/>
+	</PreferenceCategory>
+</PreferenceScreen>

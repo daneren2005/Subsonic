@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	android:title="@string/settings.servers_title">
+
+	<PreferenceCategory
+		android:key="server"
+		android:title="@string/settings.servers_title">
+
+		<Preference
+			android:key="serverAdd"
+			android:order="1000000"
+			android:title="@string/settings.servers_add"/>
+	</PreferenceCategory>
+</PreferenceScreen>
