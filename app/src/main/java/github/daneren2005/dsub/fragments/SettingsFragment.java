@@ -416,10 +416,13 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		}
 
 		for (ServerSettings ss : serverSettings.values()) {
+			ss.update();
+		}
+	}
+	public void checkForRemoved() {
+		for (ServerSettings ss : serverSettings.values()) {
 			if(!ss.update()) {
-				if(serversCategory != null) {
-					serversCategory.removePreference(ss.getScreen());
-				}
+				serversCategory.removePreference(ss.getScreen());
 			}
 		}
 	}
@@ -575,7 +578,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						SubsonicFragment parentFragment = context.getCurrentFragment();
 						if(parentFragment instanceof SettingsFragment) {
 							SettingsFragment serverSelectionFragment = (SettingsFragment) parentFragment;
-							serverSelectionFragment.update();
+							serverSelectionFragment.checkForRemoved();
 						}
 					}
 				});
