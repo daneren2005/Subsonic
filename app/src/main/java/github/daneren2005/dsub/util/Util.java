@@ -908,6 +908,9 @@ public final class Util {
 			}
 		}
 	}
+	public static String formatDate(long millis) {
+		return formatDate(new Date(millis));
+	}
 
 	public static String formatBoolean(Context context, boolean value) {
 		return context.getResources().getString(value ? R.string.common_true : R.string.common_false);

@@ -206,6 +206,9 @@ public class DownloadFile implements BufferFile {
 
         return saveFile;
     }
+	public File getSaveFile() {
+		return saveFile;
+	}
 
     public File getPartialFile() {
         return partialFile;

@@ -642,6 +642,7 @@
 	<string name="details.position">Position</string>
 	<string name="details.updated">Updated</string>
 	<string name="details.starred">Starred</string>
+	<string name="details.last_played">Last Played</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>
