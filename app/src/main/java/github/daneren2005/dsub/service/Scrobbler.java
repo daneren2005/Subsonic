@@ -55,10 +55,7 @@ public class Scrobbler {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() {
-				// TODO: Need to move to register plays of offline songs as well
-				if(!Util.isOffline(context)) {
-					SongDBHandler.getHandler(context).setSongPlayed(song, submission);
-				}
+				SongDBHandler.getHandler(context).setSongPlayed(song, submission);
 
 				// Scrobbling disabled
 				if (!Util.isScrobblingEnabled(context)) {
