@@ -171,11 +171,6 @@ public class DLNAController extends RemoteController {
 					switch (lastChange.getEventedValue(0, AVTransportVariable.TransportState.class).getValue()) {
 						case PLAYING:
 							downloadService.setPlayerState(PlayerState.STARTED);
-
-							// Try to setup next playing after playback start has been registered
-							if(supportsSetupNext && downloadService.getNextPlayerState() == PlayerState.IDLE) {
-								downloadService.setNextPlaying();
-							}
 							break;
 						case PAUSED_PLAYBACK:
 							downloadService.setPlayerState(PlayerState.PAUSED);
@@ -408,7 +403,6 @@ public class DLNAController extends RemoteController {
 			Pair<String, String> songInfo = getSongInfo(currentPlaying);
 
 			currentPlayingURI = songInfo.getFirst();
-			downloadService.setNextPlayerState(PlayerState.IDLE);
 			controlPoint.execute(new SetAVTransportURI(getTransportService(), songInfo.getFirst(), songInfo.getSecond()) {
 				@Override
 				public void success(ActionInvocation invocation) {

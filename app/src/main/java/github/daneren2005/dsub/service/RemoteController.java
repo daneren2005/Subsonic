@@ -19,18 +19,11 @@
 
 package github.daneren2005.dsub.service;
 
-import android.content.Context;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.util.Iterator;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.serverproxy.WebProxy;
 
@@ -48,9 +41,7 @@ public abstract class RemoteController {
 	public abstract void changePosition(int seconds);
 	public abstract void changeTrack(int index, DownloadFile song);
 	// Really is abstract, just don't want to require RemoteController's support it
-	public void changeNextTrack(DownloadFile song) {
-
-	};
+	public void changeNextTrack(DownloadFile song) {}
 	public boolean isNextSupported() {
 		return this.nextSupported;
 	}
