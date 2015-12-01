@@ -1198,6 +1198,7 @@ public class DownloadService extends Service {
 		postPlayCleanup();
 		setCurrentPlaying(nextPlaying, true);
 		setPlayerState(STARTED);
+		setNextPlayerState(IDLE);
 	}
 
 	public synchronized void pause() {

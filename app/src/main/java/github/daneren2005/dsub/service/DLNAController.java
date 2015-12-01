@@ -630,6 +630,7 @@ public class DLNAController extends RemoteController {
 
 				if(positionInfo.getTrackURI() != null && positionInfo.getTrackURI().equals(nextPlayingURI) && downloadService.getNextPlayerState() == PlayerState.PREPARED) {
 					downloadService.onNextStarted(nextPlaying);
+					nextPlayingURI = null;
 				}
 
 				downloadService.postDelayed(new Runnable() {
