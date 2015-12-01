@@ -1193,11 +1193,22 @@ public class DownloadService extends Service {
 		postPlayCleanup();
 		play(getNextPlayingIndex());
 	}
+	public void onNextStarted() {
+		onNextStarted(true);
+	}
+	public void onNextStarted(boolean alreadyStarted) {
+		onNextStarted(nextPlaying, alreadyStarted);
+	}
 	public void onNextStarted(DownloadFile nextPlaying) {
+		onNextStarted(nextPlaying, true);
+	}
+	public void onNextStarted(DownloadFile nextPlaying, boolean alreadyStarted) {
 		setPlayerState(COMPLETED);
 		postPlayCleanup();
 		setCurrentPlaying(nextPlaying, true);
-		setPlayerState(STARTED);
+		if(alreadyStarted) {
+			setPlayerState(STARTED);
+		}
 		setNextPlayerState(IDLE);
 	}
 

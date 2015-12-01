@@ -25,6 +25,7 @@ import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
+import com.google.android.gms.cast.MediaQueueItem;
 import com.google.android.gms.cast.MediaStatus;
 import com.google.android.gms.cast.RemoteMediaPlayer;
 import com.google.android.gms.common.ConnectionResult;
@@ -48,9 +49,6 @@ import github.daneren2005.serverproxy.FileProxy;
 import github.daneren2005.serverproxy.ServerProxy;
 import github.daneren2005.serverproxy.WebProxy;
 
-/**
- * Created by owner on 2/9/14.
- */
 public class ChromeCastController extends RemoteController {
 	private static final String TAG = ChromeCastController.class.getSimpleName();
 
@@ -66,6 +64,7 @@ public class ChromeCastController extends RemoteController {
 	private ServerProxy proxy;
 	private String rootLocation;
 	private RemoteMediaPlayer mediaPlayer;
+	private MediaQueueItem nextQueueItem = null;
 	private double gain = 0.5;
 
 	public ChromeCastController(DownloadService downloadService, CastDevice castDevice) {
@@ -74,6 +73,7 @@ public class ChromeCastController extends RemoteController {
 
 		SharedPreferences prefs = Util.getPreferences(downloadService);
 		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+		nextSupported = true;
 	}
 
 	@Override
@@ -202,6 +202,35 @@ public class ChromeCastController extends RemoteController {
 	}
 
 	@Override
+	public void changeNextTrack(DownloadFile song) {
+		try {
+			downloadService.setNextPlayerState(PlayerState.PREPARING);
+			MediaQueueItem nextQueueItem = getMediaQueueItem(song, true);
+
+			mediaPlayer.queueAppendItem(apiClient, nextQueueItem, null).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
+				@Override
+				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
+					if (result.getStatus().isSuccess()) {
+						downloadService.setNextPlayerState(PlayerState.PREPARED);
+
+						MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
+						ChromeCastController.this.nextQueueItem = mediaStatus.getQueueItemById(mediaStatus.getPreloadedItemId());
+					} else {
+						Log.e(TAG, "Failed to load next: " + result.getStatus().toString());
+						downloadService.setNextPlayerState(PlayerState.IDLE);
+					}
+				}
+			});
+		} catch (IllegalStateException e) {
+			Log.e(TAG, "Problem occurred with loading next song", e);
+			downloadService.setNextPlayerState(PlayerState.IDLE);
+		} catch (Exception e) {
+			Log.e(TAG, "Problem opening next song", e);
+			downloadService.setNextPlayerState(PlayerState.IDLE);
+		}
+	}
+
+	@Override
 	public void setVolume(int volume) {
 		gain = volume / 10.0;
 
@@ -260,104 +289,8 @@ public class ChromeCastController extends RemoteController {
 			return;
 		}
 		downloadService.setPlayerState(PlayerState.PREPARING);
-		MusicDirectory.Entry song = currentPlaying.getSong();
 
 		try {
-			MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-			String url;
-			// Offline, use file proxy
-			if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
-				if(proxy == null) {
-					proxy = new FileProxy(downloadService);
-					proxy.start();
-				}
-
-				// Offline song
-				if(song.getId().indexOf(rootLocation) != -1) {
-					url = proxy.getPublicAddress(song.getId());
-				} else {
-					// Playing online song in offline mode
-					url = proxy.getPublicAddress(currentPlaying.getCompleteFile().getPath());
-				}
-			} else {
-				// Check if we want a proxy going still
-				if(Util.isCastProxy(downloadService)) {
-					if(proxy instanceof FileProxy) {
-						proxy.stop();
-						proxy = null;
-					}
-
-					if(proxy == null) {
-						proxy = createWebProxy();
-						proxy.start();
-					}
-				} else if(proxy != null) {
-					proxy.stop();
-					proxy = null;
-				}
-
-				if(song.isVideo()) {
-					url = musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService);
-				} else {
-					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
-				}
-
-				// If proxy is going, it is a WebProxy
-				if(proxy != null) {
-					url = proxy.getPublicAddress(url);
-				}
-			}
-
-			// Setup song/video information
-			MediaMetadata meta = new MediaMetadata(song.isVideo() ? MediaMetadata.MEDIA_TYPE_MOVIE : MediaMetadata.MEDIA_TYPE_MUSIC_TRACK);
-			meta.putString(MediaMetadata.KEY_TITLE, song.getTitle());
-			if(song.getTrack() != null) {
-				meta.putInt(MediaMetadata.KEY_TRACK_NUMBER, song.getTrack());
-			}
-			if(!song.isVideo()) {
-				meta.putString(MediaMetadata.KEY_ARTIST, song.getArtist());
-				meta.putString(MediaMetadata.KEY_ALBUM_ARTIST, song.getArtist());
-				meta.putString(MediaMetadata.KEY_ALBUM_TITLE, song.getAlbum());
-
-				if(castDevice.hasCapability(CastDevice.CAPABILITY_VIDEO_OUT)) {
-					if (proxy == null || proxy instanceof WebProxy) {
-						String coverArt = musicService.getCoverArtUrl(downloadService, song);
-
-						// If proxy is going, it is a web proxy
-						if (proxy != null) {
-							coverArt = proxy.getPublicAddress(coverArt);
-						}
-
-						meta.addImage(new WebImage(Uri.parse(coverArt)));
-					} else {
-						File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
-						if (coverArtFile != null && coverArtFile.exists()) {
-							String coverArt = proxy.getPublicAddress(coverArtFile.getPath());
-							meta.addImage(new WebImage(Uri.parse(coverArt)));
-						}
-					}
-				}
-			}
-
-			String contentType;
-			if(song.isVideo()) {
-				contentType = "application/x-mpegURL";
-			}
-			else if(song.getTranscodedContentType() != null) {
-				contentType = song.getTranscodedContentType();
-			} else if(song.getContentType() != null) {
-				contentType = song.getContentType();
-			} else {
-				contentType = "audio/mpeg";
-			}
-
-			// Load it into a MediaInfo wrapper
-			MediaInfo mediaInfo = new MediaInfo.Builder(url)
-				.setContentType(contentType)
-				.setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-				.setMetadata(meta)
-				.build();
-
 			if(autoStart) {
 				ignoreNextPaused = true;
 			}
@@ -374,6 +307,8 @@ public class ChromeCastController extends RemoteController {
 				}
 			};
 
+			MediaInfo mediaInfo = getMediaInfo(currentPlaying);
+			nextQueueItem = null;
 			if(position > 0) {
 				mediaPlayer.load(apiClient, mediaInfo, autoStart, position * 1000L).setResultCallback(callback);
 			} else {
@@ -386,6 +321,119 @@ public class ChromeCastController extends RemoteController {
 			Log.e(TAG, "Problem opening media during loading", e);
 			failedLoad();
 		}
+	}
+	private MediaQueueItem getMediaQueueItem(DownloadFile downloadFile, boolean autoPlay) throws Exception {
+		MediaQueueItem.Builder builder = new MediaQueueItem.Builder(getMediaInfo(downloadFile))
+				.setAutoplay(autoPlay)
+				.setPreloadTime(20);
+
+		if(downloadFile.getSong().getDuration() != null) {
+			builder.setPlaybackDuration(downloadFile.getSong().getDuration());
+		}
+
+		return builder.build();
+	}
+	private MediaInfo getMediaInfo(DownloadFile downloadFile) throws Exception{
+		MusicDirectory.Entry song = downloadFile.getSong();
+		MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
+		String url;
+		// Offline, use file proxy
+		if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
+			if(proxy == null) {
+				proxy = new FileProxy(downloadService);
+				proxy.start();
+			}
+
+			// Offline song
+			if(song.getId().indexOf(rootLocation) != -1) {
+				url = proxy.getPublicAddress(song.getId());
+			} else {
+				// Playing online song in offline mode
+				url = proxy.getPublicAddress(downloadFile.getCompleteFile().getPath());
+			}
+		} else {
+			// Check if we want a proxy going still
+			if(Util.isCastProxy(downloadService)) {
+				if(proxy instanceof FileProxy) {
+					proxy.stop();
+					proxy = null;
+				}
+
+				if(proxy == null) {
+					proxy = createWebProxy();
+					proxy.start();
+				}
+			} else if(proxy != null) {
+				proxy.stop();
+				proxy = null;
+			}
+
+			if(song.isVideo()) {
+				url = musicService.getHlsUrl(song.getId(), downloadFile.getBitRate(), downloadService);
+			} else {
+				url = musicService.getMusicUrl(downloadService, song, downloadFile.getBitRate());
+			}
+
+			// If proxy is going, it is a WebProxy
+			if(proxy != null) {
+				url = proxy.getPublicAddress(url);
+			}
+		}
+
+		// Setup song/video information
+		MediaMetadata meta = new MediaMetadata(song.isVideo() ? MediaMetadata.MEDIA_TYPE_MOVIE : MediaMetadata.MEDIA_TYPE_MUSIC_TRACK);
+		meta.putString(MediaMetadata.KEY_TITLE, song.getTitle());
+		if(song.getTrack() != null) {
+			meta.putInt(MediaMetadata.KEY_TRACK_NUMBER, song.getTrack());
+		}
+		if(!song.isVideo()) {
+			meta.putString(MediaMetadata.KEY_ARTIST, song.getArtist());
+			meta.putString(MediaMetadata.KEY_ALBUM_ARTIST, song.getArtist());
+			meta.putString(MediaMetadata.KEY_ALBUM_TITLE, song.getAlbum());
+
+			if(castDevice.hasCapability(CastDevice.CAPABILITY_VIDEO_OUT)) {
+				if (proxy == null || proxy instanceof WebProxy) {
+					String coverArt = musicService.getCoverArtUrl(downloadService, song);
+
+					// If proxy is going, it is a web proxy
+					if (proxy != null) {
+						coverArt = proxy.getPublicAddress(coverArt);
+					}
+
+					meta.addImage(new WebImage(Uri.parse(coverArt)));
+				} else {
+					File coverArtFile = FileUtil.getAlbumArtFile(downloadService, song);
+					if (coverArtFile != null && coverArtFile.exists()) {
+						String coverArt = proxy.getPublicAddress(coverArtFile.getPath());
+						meta.addImage(new WebImage(Uri.parse(coverArt)));
+					}
+				}
+			}
+		}
+
+		String contentType;
+		if(song.isVideo()) {
+			contentType = "application/x-mpegURL";
+		}
+		else if(song.getTranscodedContentType() != null) {
+			contentType = song.getTranscodedContentType();
+		} else if(song.getContentType() != null) {
+			contentType = song.getContentType();
+		} else {
+			contentType = "audio/mpeg";
+		}
+
+		// Load it into a MediaInfo wrapper
+		MediaInfo.Builder builder = new MediaInfo.Builder(url)
+				.setContentType(contentType)
+				.setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+				.setMetadata(meta);
+
+		if(song.getDuration() != null) {
+			builder.setStreamDuration(song.getDuration() * 1000);
+		}
+
+		return builder.build();
 	}
 
 	private void failedLoad() {
@@ -482,7 +530,9 @@ public class ChromeCastController extends RemoteController {
 								downloadService.setPlayerState(PlayerState.PREPARING);
 								break;
 							case MediaStatus.PLAYER_STATE_IDLE:
-								if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
+								if (mediaStatus.getPreloadedItemId() > 0) {
+									downloadService.onNextStarted(false);
+								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
 									downloadService.onSongCompleted();
 								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
 									if (downloadService.getPlayerState() != PlayerState.PREPARING) {
