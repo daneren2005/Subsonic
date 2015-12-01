@@ -188,8 +188,6 @@ public class DLNAController extends RemoteController {
 								failedLoad();
 							} else if(downloadService.getPlayerState() == PlayerState.STARTED) {
 								// Played until the end
-								downloadService.setPlayerState(PlayerState.COMPLETED);
-								downloadService.postPlayCleanup();
 								downloadService.onSongCompleted();
 							} else {
 								downloadService.setPlayerState(PlayerState.STOPPED);
@@ -631,9 +629,7 @@ public class DLNAController extends RemoteController {
 				currentPosition = (int) positionInfo.getTrackElapsedSeconds();
 
 				if(positionInfo.getTrackURI() != null && positionInfo.getTrackURI().equals(nextPlayingURI) && downloadService.getNextPlayerState() == PlayerState.PREPARED) {
-					downloadService.setCurrentPlaying(nextPlaying, true);
-					downloadService.setPlayerState(PlayerState.STARTED);
-					downloadService.setNextPlayerState(PlayerState.IDLE);
+					downloadService.onNextStarted(nextPlaying);
 				}
 
 				downloadService.postDelayed(new Runnable() {

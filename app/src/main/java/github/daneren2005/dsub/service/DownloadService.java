@@ -1189,7 +1189,15 @@ public class DownloadService extends Service {
 	}
 
 	public void onSongCompleted() {
+		setPlayerState(PlayerState.COMPLETED);
+		postPlayCleanup();
 		play(getNextPlayingIndex());
+	}
+	public void onNextStarted(DownloadFile nextPlaying) {
+		setPlayerState(COMPLETED);
+		postPlayCleanup();
+		setCurrentPlaying(nextPlaying, true);
+		setPlayerState(STARTED);
 	}
 
 	public synchronized void pause() {
