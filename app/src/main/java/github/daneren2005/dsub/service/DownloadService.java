@@ -1416,9 +1416,7 @@ public class DownloadService extends Service {
 		}
 
 		if(remoteController != null && remoteController.isNextSupported()) {
-			if(playerState == STARTED && nextPlayerState == IDLE) {
-				setNextPlaying();
-			} else if(playerState == PREPARING || playerState == IDLE) {
+			if(playerState == PREPARING || playerState == IDLE) {
 				nextPlayerState = IDLE;
 			}
 		}
@@ -2678,6 +2676,13 @@ public class DownloadService extends Service {
 					mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
 				}
 			});
+		}
+
+		// Setup next playing at least a couple of seconds into the song since both Chromecast and some DLNA clients report PLAYING when still PREPARING
+		if(position > 2000 && remoteController != null && remoteController.isNextSupported()) {
+			if(playerState == STARTED && nextPlayerState == IDLE) {
+				setNextPlaying();
+			}
 		}
 	}
 	private void onStateUpdate() {
