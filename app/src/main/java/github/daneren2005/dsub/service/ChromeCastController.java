@@ -36,6 +36,7 @@ import com.google.android.gms.common.images.WebImage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -202,25 +203,56 @@ public class ChromeCastController extends RemoteController {
 	}
 
 	@Override
-	public void changeNextTrack(DownloadFile song) {
+	public void changeNextTrack(final DownloadFile nextSong) {
 		try {
-			downloadService.setNextPlayerState(PlayerState.PREPARING);
-			MediaQueueItem nextQueueItem = getMediaQueueItem(song, true);
+			MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
+			if(mediaStatus.getCurrentItemId() == 0) {
+				return;
+			}
+			MediaQueueItem currentQueueItem = mediaStatus.getQueueItemById(mediaStatus.getCurrentItemId());
+			if(currentQueueItem == null) {
+				return;
+			}
+			List<MediaQueueItem> queue = mediaStatus.getQueueItems();
+			int currentQueueIndex = queue.indexOf(currentQueueItem);
+			if(currentQueueIndex < (queue.size() - 1)) {
+				int[] toRemoveIds = new int[queue.size() - currentQueueIndex - 1];
 
-			mediaPlayer.queueAppendItem(apiClient, nextQueueItem, null).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
-				@Override
-				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
-					if (result.getStatus().isSuccess()) {
-						downloadService.setNextPlayerState(PlayerState.PREPARED);
-
-						MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
-						ChromeCastController.this.nextQueueItem = mediaStatus.getQueueItemById(mediaStatus.getPreloadedItemId());
-					} else {
-						Log.e(TAG, "Failed to load next: " + result.getStatus().toString());
-						downloadService.setNextPlayerState(PlayerState.IDLE);
-					}
+				int j = 0;
+				for(int i = currentQueueIndex + 1; i < queue.size() ;i++) {
+					toRemoveIds[j] = queue.get(i).getItemId();
+					j++;
 				}
-			});
+
+				mediaPlayer.queueRemoveItems(apiClient, toRemoveIds, null).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
+					@Override
+					public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
+						if (result.getStatus().isSuccess()) {
+							changeNextTrack(nextSong);
+						} else {
+							Log.e(TAG, "Failed to remove next: " + result.getStatus().toString());
+						}
+					}
+				});
+			} else {
+				downloadService.setNextPlayerState(PlayerState.PREPARING);
+				MediaQueueItem nextQueueItem = getMediaQueueItem(nextSong, true);
+
+				mediaPlayer.queueAppendItem(apiClient, nextQueueItem, null).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
+					@Override
+					public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
+						if (result.getStatus().isSuccess()) {
+							downloadService.setNextPlayerState(PlayerState.PREPARED);
+
+							MediaStatus mediaStatus = mediaPlayer.getMediaStatus();
+							ChromeCastController.this.nextQueueItem = mediaStatus.getQueueItemById(mediaStatus.getPreloadedItemId());
+						} else {
+							Log.e(TAG, "Failed to load next: " + result.getStatus().toString());
+							downloadService.setNextPlayerState(PlayerState.IDLE);
+						}
+					}
+				});
+			}
 		} catch (IllegalStateException e) {
 			Log.e(TAG, "Problem occurred with loading next song", e);
 			downloadService.setNextPlayerState(PlayerState.IDLE);
