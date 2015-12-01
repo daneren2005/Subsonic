@@ -1425,7 +1425,7 @@ public class DownloadService extends Service {
 		}
 
 		if(remoteController != null && remoteController.isNextSupported()) {
-			if(playerState == PREPARING || playerState == IDLE) {
+			if(playerState == IDLE) {
 				nextPlayerState = IDLE;
 			}
 		}
@@ -1675,6 +1675,10 @@ public class DownloadService extends Service {
 			if(nextPlayingTask != null && nextPlayingTask.isRunning()) {
 				nextPlayingTask.cancel();
 				nextPlayingTask = null;
+			}
+
+			if(nextPlayerState != IDLE) {
+				setNextPlayerState(IDLE);
 			}
 		}
 
