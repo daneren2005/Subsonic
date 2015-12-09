@@ -204,7 +204,6 @@ public class DLNAController extends RemoteController {
 				}
 				catch (Exception e) {
 					Log.w(TAG, "Failed to parse UPNP event", e);
-					failedLoad();
 				}
 			}
 
