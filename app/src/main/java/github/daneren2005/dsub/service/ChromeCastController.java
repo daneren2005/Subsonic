@@ -490,8 +490,7 @@ public class ChromeCastController extends RemoteController {
 									}
 								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_ERROR) {
 									Log.e(TAG, "Idle due to unknown error");
-									downloadService.setPlayerState(PlayerState.COMPLETED);
-									downloadService.next();
+									downloadService.onSongCompleted();
 								} else {
 									Log.w(TAG, "Idle reason: " + mediaStatus.getIdleReason());
 									downloadService.setPlayerState(PlayerState.IDLE);
