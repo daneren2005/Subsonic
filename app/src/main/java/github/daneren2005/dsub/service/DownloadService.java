@@ -77,6 +77,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -154,6 +155,7 @@ public class DownloadService extends Service {
 	private String suggestedPlaylistName;
 	private String suggestedPlaylistId;
 	private PowerManager.WakeLock wakeLock;
+	private WifiManager.WifiLock wifiLock;
 	private boolean keepScreenOn;
 	private int cachedPosition = 0;
 	private boolean downloadOngoing = false;
@@ -256,6 +258,9 @@ public class DownloadService extends Service {
 		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
 		wakeLock.setReferenceCounted(false);
+
+		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "downloadServiceLock");
 
 		try {
 			timerDuration = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5"));
@@ -401,7 +406,10 @@ public class DownloadService extends Service {
 					offset++;
 				}
 			}
-			setNextPlaying();
+
+			if(remoteState == LOCAL || (remoteController != null && remoteController.isNextSupported())) {
+				setNextPlaying();
+			}
 		} else {
 			int size = size();
 			int index = getCurrentPlayingIndex();
@@ -881,13 +889,13 @@ public class DownloadService extends Service {
 			if(remoteState == LOCAL) {
 				nextPlayingTask = new CheckCompletionTask(nextPlaying);
 				nextPlayingTask.execute();
-			} else if(remoteController != null) {
+			} else if(remoteController != null && remoteController.isNextSupported()) {
 				remoteController.changeNextTrack(nextPlaying);
 			}
 		} else {
 			if(remoteState == LOCAL) {
 				// resetNext();
-			} else if(remoteController != null) {
+			} else if(remoteController != null && remoteController.isNextSupported()) {
 				remoteController.changeNextTrack(nextPlaying);
 			}
 			nextPlaying = null;
@@ -1100,11 +1108,14 @@ public class DownloadService extends Service {
 				}
 
 				mediaPlayer.seekTo(position);
-				cachedPosition = position;
 				subtractPosition = 0;
 			}
+			cachedPosition = position;
 
 			onSongProgress();
+			if(playerState == PAUSED) {
+				lifecycleSupport.serializeDownloadQueue();
+			}
 		} catch (Exception x) {
 			handleError(x);
 		}
@@ -1183,7 +1194,16 @@ public class DownloadService extends Service {
 	}
 
 	public void onSongCompleted() {
+		setPlayerStateCompleted();
+		postPlayCleanup();
 		play(getNextPlayingIndex());
+	}
+	public void onNextStarted(DownloadFile nextPlaying) {
+		setPlayerStateCompleted();
+		postPlayCleanup();
+		setCurrentPlaying(nextPlaying, true);
+		setPlayerState(STARTED);
+		setNextPlayerState(IDLE);
 	}
 
 	public synchronized void pause() {
@@ -1387,15 +1407,6 @@ public class DownloadService extends Service {
 			scrobbler.scrobble(this, currentPlaying, true);
 		}
 
-		if(playerState == STARTED && positionCache == null && remoteState == LOCAL) {
-			positionCache = new LocalPositionCache();
-			Thread thread = new Thread(positionCache, "PositionCache");
-			thread.start();
-		} else if(playerState != STARTED && positionCache != null) {
-			positionCache.stop();
-			positionCache = null;
-		}
-
 		if(playerState == STARTED && positionCache == null) {
 			if(remoteState == LOCAL) {
 				positionCache = new LocalPositionCache();
@@ -1408,6 +1419,39 @@ public class DownloadService extends Service {
 			positionCache.stop();
 			positionCache = null;
 		}
+
+
+		if(remoteState != LOCAL) {
+			if(playerState == STARTED) {
+				if (!wifiLock.isHeld()) {
+					wifiLock.acquire();
+				}
+			} else if(playerState == PAUSED && wifiLock.isHeld()) {
+				wifiLock.release();
+			}
+		}
+
+		if(remoteController != null && remoteController.isNextSupported()) {
+			if(playerState == PREPARING || playerState == IDLE) {
+				nextPlayerState = IDLE;
+			}
+		}
+
+		onStateUpdate();
+	}
+
+	public void setPlayerStateCompleted() {
+		// Acquire a temporary wakelock
+		acquireWakelock();
+
+		Log.i(TAG, this.playerState.name() + " -> " + PlayerState.COMPLETED + " (" + currentPlaying + ")");
+		this.playerState = PlayerState.COMPLETED;
+		if(positionCache != null) {
+			positionCache.stop();
+			positionCache = null;
+		}
+		scrobbler.scrobble(this, currentPlaying, true);
+
 		onStateUpdate();
 	}
 
@@ -1475,16 +1519,6 @@ public class DownloadService extends Service {
 				}
 			}
 		}
-	}
-
-	private void setPlayerStateCompleted() {
-		Log.i(TAG, this.playerState.name() + " -> " + PlayerState.COMPLETED + " (" + currentPlaying + ")");
-		this.playerState = PlayerState.COMPLETED;
-		if(positionCache != null) {
-			positionCache.stop();
-			positionCache = null;
-		}
-		scrobbler.scrobble(this, currentPlaying, true);
 	}
 
 	public synchronized void setNextPlayerState(PlayerState playerState) {
@@ -1628,7 +1662,18 @@ public class DownloadService extends Service {
 				remoteController = (RemoteController) ref;
 				break;
 			case LOCAL: default:
+				if(wifiLock.isHeld()) {
+					wifiLock.release();
+				}
 				break;
+		}
+
+		if(remoteState != LOCAL) {
+			if(!wifiLock.isHeld()) {
+				wifiLock.acquire();
+			}
+		} else if(wifiLock.isHeld()) {
+			wifiLock.release();
 		}
 
 		if(remoteController != null) {
@@ -1906,11 +1951,6 @@ public class DownloadService extends Service {
 		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mediaPlayer) {
-				// Acquire a temporary wakelock, since when we return from
-				// this callback the MediaPlayer will release its wakelock
-				// and allow the device to go to sleep.
-				wakeLock.acquire(30000);
-
 				setPlayerStateCompleted();
 
 				int pos = getPlayerPosition();
@@ -2566,6 +2606,12 @@ public class DownloadService extends Service {
 			}
 		});
 	}
+	public void acquireWakelock() {
+		acquireWakelock(30000);
+	}
+	public void acquireWakelock(int ms) {
+		wakeLock.acquire(ms);
+	}
 
 	public void addOnSongChangedListener(OnSongChangedListener listener) {
 		addOnSongChangedListener(listener, false);
@@ -2663,6 +2709,13 @@ public class DownloadService extends Service {
 					mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
 				}
 			});
+		}
+
+		// Setup next playing at least a couple of seconds into the song since both Chromecast and some DLNA clients report PLAYING when still PREPARING
+		if(position > 2000 && remoteController != null && remoteController.isNextSupported()) {
+			if(playerState == STARTED && nextPlayerState == IDLE) {
+				setNextPlaying();
+			}
 		}
 	}
 	private void onStateUpdate() {

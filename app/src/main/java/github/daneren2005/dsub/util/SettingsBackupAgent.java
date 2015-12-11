@@ -19,13 +19,26 @@
 package github.daneren2005.dsub.util;
 
 import android.app.backup.BackupAgentHelper;
+import android.app.backup.BackupDataInput;
 import android.app.backup.SharedPreferencesBackupHelper;
+import android.os.ParcelFileDescriptor;
+
+import java.io.IOError;
+import java.io.IOException;
+
 import github.daneren2005.dsub.util.Constants;
 
 public class SettingsBackupAgent extends BackupAgentHelper {
+	@Override
 	public void onCreate() {
 		super.onCreate();
 		SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, Constants.PREFERENCES_FILE_NAME);
 		addHelper("mypreferences", helper);
+	}
+
+	@Override
+	public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException{
+		super.onRestore(data, appVersionCode, newState);
+		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_CACHE_LOCATION).apply();
 	}
  }

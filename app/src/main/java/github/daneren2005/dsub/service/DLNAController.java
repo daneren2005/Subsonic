@@ -171,11 +171,6 @@ public class DLNAController extends RemoteController {
 					switch (lastChange.getEventedValue(0, AVTransportVariable.TransportState.class).getValue()) {
 						case PLAYING:
 							downloadService.setPlayerState(PlayerState.STARTED);
-
-							// Try to setup next playing after playback start has been registered
-							if(supportsSetupNext && downloadService.getNextPlayerState() == PlayerState.IDLE) {
-								downloadService.setNextPlaying();
-							}
 							break;
 						case PAUSED_PLAYBACK:
 							downloadService.setPlayerState(PlayerState.PAUSED);
@@ -193,8 +188,6 @@ public class DLNAController extends RemoteController {
 								failedLoad();
 							} else if(downloadService.getPlayerState() == PlayerState.STARTED) {
 								// Played until the end
-								downloadService.setPlayerState(PlayerState.COMPLETED);
-								downloadService.postPlayCleanup();
 								downloadService.onSongCompleted();
 							} else {
 								downloadService.setPlayerState(PlayerState.STOPPED);
@@ -211,7 +204,6 @@ public class DLNAController extends RemoteController {
 				}
 				catch (Exception e) {
 					Log.w(TAG, "Failed to parse UPNP event", e);
-					failedLoad();
 				}
 			}
 
@@ -408,7 +400,6 @@ public class DLNAController extends RemoteController {
 			Pair<String, String> songInfo = getSongInfo(currentPlaying);
 
 			currentPlayingURI = songInfo.getFirst();
-			downloadService.setNextPlayerState(PlayerState.IDLE);
 			controlPoint.execute(new SetAVTransportURI(getTransportService(), songInfo.getFirst(), songInfo.getSecond()) {
 				@Override
 				public void success(ActionInvocation invocation) {
@@ -637,9 +628,8 @@ public class DLNAController extends RemoteController {
 				currentPosition = (int) positionInfo.getTrackElapsedSeconds();
 
 				if(positionInfo.getTrackURI() != null && positionInfo.getTrackURI().equals(nextPlayingURI) && downloadService.getNextPlayerState() == PlayerState.PREPARED) {
-					downloadService.setCurrentPlaying(nextPlaying, true);
-					downloadService.setPlayerState(PlayerState.STARTED);
-					downloadService.setNextPlaying();
+					downloadService.onNextStarted(nextPlaying);
+					nextPlayingURI = null;
 				}
 
 				downloadService.postDelayed(new Runnable() {
