@@ -1296,7 +1296,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		try {
 			Long[] dates = SongDBHandler.getHandler(context).getLastPlayed(song);
-			if(dates != null) {
+			if(dates != null && dates[0] != null && dates[0] > 0) {
 				headers.add(R.string.details_last_played);
 				details.add(Util.formatDate(dates[0]));
 			}
