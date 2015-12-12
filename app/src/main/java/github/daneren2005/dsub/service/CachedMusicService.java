@@ -53,6 +53,7 @@ import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.TimeLimitedCache;
 import github.daneren2005.dsub.util.FileUtil;
@@ -171,6 +172,7 @@ public class CachedMusicService implements MusicService {
 				protected Void doInBackground() throws Throwable {
 					Util.sleepQuietly(2000L);
 					MusicDirectory refreshed = musicService.getMusicDirectory(id, name, true, context, null);
+					updateAllSongs(context, refreshed);
 					cached.updateDifferences(context, musicService.getInstance(context), refreshed);
 					FileUtil.serialize(context, refreshed, getCacheName(context, "directory", id));
 					return null;
@@ -193,6 +195,7 @@ public class CachedMusicService implements MusicService {
 
 		if(dir == null) {
 			dir = musicService.getMusicDirectory(id, name, refresh, context, progressListener);
+			updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "directory", id));
 			
 			// If a cached copy exists to check against, look for removes
@@ -231,6 +234,7 @@ public class CachedMusicService implements MusicService {
 
 		if(dir == null) {
 			dir = musicService.getAlbum(id, name, refresh, context, progressListener);
+			updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "album", id));
 
 			// If a cached copy exists to check against, look for removes
@@ -254,6 +258,8 @@ public class CachedMusicService implements MusicService {
 		}
 		if(dir == null) {
 			dir = musicService.getPlaylist(refresh, id, name, context, progressListener);
+			// With large playlists this takes too long
+			// updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "playlist", id));
 
 			File playlistFile = FileUtil.getPlaylistFile(context, Util.getServerName(context, musicService.getInstance(context)), dir.getName());
@@ -1497,6 +1503,13 @@ public class CachedMusicService implements MusicService {
 			indexes.setArtists(objects);
 			FileUtil.serialize(context, indexes, cacheName);
 			cachedIndexes.set(indexes);
+		}
+	}
+
+	protected void updateAllSongs(Context context, MusicDirectory dir) {
+		List<Entry> songs = dir.getSongs();
+		if(!songs.isEmpty()) {
+			SongDBHandler.getHandler(context).addSongs(musicService.getInstance(context), songs);
 		}
 	}
 

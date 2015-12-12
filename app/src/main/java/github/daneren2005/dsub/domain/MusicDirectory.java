@@ -107,6 +107,15 @@ public class MusicDirectory implements Serializable {
         }
         return result;
     }
+	public List<Entry> getSongs() {
+		List<Entry> result = new ArrayList<Entry>();
+		for (Entry child : children) {
+			if (child != null && !child.isDirectory() && !child.isVideo()) {
+				result.add(child);
+			}
+		}
+		return result;
+	}
 	
 	public int getChildrenSize() {
 		return children.size();

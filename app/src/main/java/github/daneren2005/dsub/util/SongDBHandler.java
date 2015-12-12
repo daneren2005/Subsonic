@@ -22,6 +22,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadFile;
 
@@ -95,6 +98,31 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		db.insertWithOnConflict(TABLE_SONGS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 	}
 
+	public synchronized void addSongs(int instance, List<MusicDirectory.Entry> entries) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		List<Pair<String, String>> pairs = new ArrayList<>();
+		for(MusicDirectory.Entry entry: entries) {
+			pairs.add(new Pair<>(entry.getId(), FileUtil.getSongFile(context, entry).getAbsolutePath()));
+		}
+		addSongs(db, instance, pairs);
+
+		db.close();
+	}
+	public synchronized void addSongs(SQLiteDatabase db, int instance, List<Pair<String, String>> entries) {
+		addSongsImpl(db, Util.getRestUrlHash(context, instance), entries);
+	}
+	protected synchronized void addSongsImpl(SQLiteDatabase db, int serverKey, List<Pair<String, String>> entries) {
+		for(Pair<String, String> entry: entries) {
+			ContentValues values = new ContentValues();
+			values.put(SONGS_SERVER_KEY, serverKey);
+			values.put(SONGS_SERVER_ID, entry.getFirst());
+			values.put(SONGS_COMPLETE_PATH, entry.getSecond());
+
+			db.insertWithOnConflict(TABLE_SONGS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+		}
+	}
+
 	public synchronized void setSongPlayed(DownloadFile downloadFile, boolean submission) {
 		// TODO: In case of offline want to update all matches
 		Pair<Integer, String> pair = getOnlineSongId(downloadFile);
@@ -115,13 +143,13 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		db.close();
 	}
 
-	public Long[] getLastPlayed(MusicDirectory.Entry entry) {
+	public synchronized Long[] getLastPlayed(MusicDirectory.Entry entry) {
 		return getLastPlayed(getOnlineSongId(entry));
 	}
-	protected Long[] getLastPlayed(Pair<Integer, String> pair) {
+	protected synchronized Long[] getLastPlayed(Pair<Integer, String> pair) {
 		return getLastPlayed(pair.getFirst(), pair.getSecond());
 	}
-	public Long[] getLastPlayed(int serverKey, String id) {
+	public synchronized Long[] getLastPlayed(int serverKey, String id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String[] columns = {SONGS_LAST_PLAYED, SONGS_LAST_COMPLETED};
@@ -139,20 +167,20 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		return null;
 	}
 
-	public Pair<Integer, String> getOnlineSongId(MusicDirectory.Entry entry) {
+	public synchronized Pair<Integer, String> getOnlineSongId(MusicDirectory.Entry entry) {
 		return getOnlineSongId(new DownloadFile(context, entry, true));
 	}
-	public Pair<Integer, String> getOnlineSongId(DownloadFile downloadFile) {
+	public synchronized Pair<Integer, String> getOnlineSongId(DownloadFile downloadFile) {
 		return getOnlineSongId(Util.getRestUrlHash(context), downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), Util.isOffline(context) ? false : true);
 	}
 
-	public Pair<Integer, String> getOnlineSongId(int serverKey, MusicDirectory.Entry entry) {
+	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, MusicDirectory.Entry entry) {
 		return getOnlineSongId(serverKey, new DownloadFile(context, entry, true));
 	}
-	public Pair<Integer, String> getOnlineSongId(int serverKey, DownloadFile downloadFile) {
+	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, DownloadFile downloadFile) {
 		return getOnlineSongId(serverKey, downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), true);
 	}
-	public Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
+	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
@@ -166,7 +194,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		}
 	}
 
-	public Pair<Integer, String> getIdFromPath(String path) {
+	public synchronized Pair<Integer, String> getIdFromPath(String path) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String[] columns = {SONGS_SERVER_KEY, SONGS_SERVER_ID};
@@ -179,7 +207,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 
 		return null;
 	}
-	public Pair<Integer, String> getIdFromPath(int serverKey, String path) {
+	public synchronized Pair<Integer, String> getIdFromPath(int serverKey, String path) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String[] columns = {SONGS_SERVER_KEY, SONGS_SERVER_ID};
