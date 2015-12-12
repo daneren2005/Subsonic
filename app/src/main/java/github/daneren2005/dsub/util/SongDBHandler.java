@@ -152,7 +152,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public Pair<Integer, String> getOnlineSongId(int serverKey, DownloadFile downloadFile) {
 		return getOnlineSongId(serverKey, downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), true);
 	}
-	protected Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
+	public Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {

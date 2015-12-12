@@ -69,6 +69,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Looper;
 import android.util.Log;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
 import github.daneren2005.dsub.service.parser.AlbumListParser;
@@ -99,10 +100,12 @@ import github.daneren2005.dsub.service.parser.VideosParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
 import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
 import github.daneren2005.dsub.util.BackgroundTask;
+import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.Util;
 import java.io.*;
 import java.util.zip.GZIPInputStream;
@@ -1796,11 +1799,16 @@ public class RESTMusicService implements MusicService {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
-			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
-			SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
-			SearchResult result = searchNew(critera, context, progressListener);
-			if(result.getSongs().size() == 1){
-				id = result.getSongs().get(0).getId();
+			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(Util.getRestUrlHash(context, getInstance(context)), id);
+			if(cachedSongId != null) {
+				id = cachedSongId.getSecond();
+			} else {
+				String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+				SearchCritera critera = new SearchCritera(searchCriteria, 0, 0, 1);
+				SearchResult result = searchNew(critera, context, progressListener);
+				if (result.getSongs().size() == 1) {
+					id = result.getSongs().get(0).getId();
+				}
 			}
 		}
 

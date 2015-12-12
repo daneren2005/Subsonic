@@ -56,8 +56,10 @@ import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.Util;
 import java.io.*;
 import java.util.Comparator;
@@ -556,9 +558,15 @@ public class OfflineMusicService implements MusicService {
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		
 		if(id.indexOf(cacheLocn) != -1) {
-			String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
-			offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles, scrobbleSearchCriteria);
-			offlineEditor.remove(Constants.OFFLINE_SCROBBLE_ID + scrobbles);
+			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(id);
+			if(cachedSongId != null) {
+				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, cachedSongId.getSecond());
+				offlineEditor.remove(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles);
+			} else {
+				String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles, scrobbleSearchCriteria);
+				offlineEditor.remove(Constants.OFFLINE_SCROBBLE_ID + scrobbles);
+			}
 		} else {
 			offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, id);
 			offlineEditor.remove(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles);
