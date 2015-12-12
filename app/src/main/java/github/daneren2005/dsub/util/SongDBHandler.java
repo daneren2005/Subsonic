@@ -116,7 +116,6 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	}
 
 	public Long[] getLastPlayed(MusicDirectory.Entry entry) {
-		// TODO: In case of offline want to get most recent played match
 		return getLastPlayed(getOnlineSongId(entry));
 	}
 	protected Long[] getLastPlayed(Pair<Integer, String> pair) {
@@ -171,7 +170,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String[] columns = {SONGS_SERVER_KEY, SONGS_SERVER_ID};
-		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_COMPLETE_PATH + " = ?", new String[] { path }, null, null, null, null);
+		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_COMPLETE_PATH + " = ?", new String[] { path }, null, null, SONGS_LAST_PLAYED + " DESC", null);
 
 		try {
 			cursor.moveToFirst();
