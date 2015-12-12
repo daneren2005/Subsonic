@@ -113,14 +113,21 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		addSongsImpl(db, Util.getRestUrlHash(context, instance), entries);
 	}
 	protected synchronized void addSongsImpl(SQLiteDatabase db, int serverKey, List<Pair<String, String>> entries) {
-		for(Pair<String, String> entry: entries) {
-			ContentValues values = new ContentValues();
-			values.put(SONGS_SERVER_KEY, serverKey);
-			values.put(SONGS_SERVER_ID, entry.getFirst());
-			values.put(SONGS_COMPLETE_PATH, entry.getSecond());
+		db.beginTransaction();
+		try {
+			for (Pair<String, String> entry : entries) {
+				ContentValues values = new ContentValues();
+				values.put(SONGS_SERVER_KEY, serverKey);
+				values.put(SONGS_SERVER_ID, entry.getFirst());
+				values.put(SONGS_COMPLETE_PATH, entry.getSecond());
 
-			db.insertWithOnConflict(TABLE_SONGS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-		}
+				db.insertWithOnConflict(TABLE_SONGS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+			}
+
+			db.setTransactionSuccessful();
+		} catch(Exception e) {}
+
+		db.endTransaction();
 	}
 
 	public synchronized void setSongPlayed(DownloadFile downloadFile, boolean submission) {

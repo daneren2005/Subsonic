@@ -258,8 +258,7 @@ public class CachedMusicService implements MusicService {
 		}
 		if(dir == null) {
 			dir = musicService.getPlaylist(refresh, id, name, context, progressListener);
-			// With large playlists this takes too long
-			// updateAllSongs(context, dir);
+			updateAllSongs(context, dir);
 			FileUtil.serialize(context, dir, getCacheName(context, "playlist", id));
 
 			File playlistFile = FileUtil.getPlaylistFile(context, Util.getServerName(context, musicService.getInstance(context)), dir.getName());
