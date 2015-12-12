@@ -5,6 +5,7 @@ import android.util.Log;
 
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.Util;
 
 /**
@@ -32,28 +33,11 @@ public class Scrobbler {
 	}
 
 	public void scrobble(final Context context, final DownloadFile song, final boolean submission) {
-		if (song == null || !Util.isScrobblingEnabled(context)) {
-			return;
-		}
-
-		// Ignore if online with no network access
-		if(!Util.isOffline(context) && !Util.isNetworkConnected(context)) {
-			return;
-		}
-
-		// Ignore podcasts
-		if(song.getSong() instanceof PodcastEpisode) {
-			return;
-		}
-
-		// Ignore songs which are under 30 seconds per Last.FM guidelines
-		Integer duration = song.getSong().getDuration();
-		if(duration != null && duration > 0 && duration < 30) {
+		if(song == null) {
 			return;
 		}
 
 		final String id = song.getSong().getId();
-
 		// Avoid duplicate registrations.
 		if (submission && id.equals(lastSubmission)) {
 			return;
@@ -71,6 +55,27 @@ public class Scrobbler {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() {
+				SongDBHandler.getHandler(context).setSongPlayed(song, submission);
+
+				// Scrobbling disabled
+				if (!Util.isScrobblingEnabled(context)) {
+					return null;
+				}
+				// Ignore if online with no network access
+				else if(!Util.isOffline(context) && !Util.isNetworkConnected(context)) {
+					return null;
+				}
+				// Ignore podcasts
+				else if(song.getSong() instanceof PodcastEpisode) {
+					return null;
+				}
+
+				// Ignore songs which are under 30 seconds per Last.FM guidelines
+				Integer duration = song.getSong().getDuration();
+				if(duration != null && duration > 0 && duration < 30) {
+					return null;
+				}
+
 				MusicService service = MusicServiceFactory.getMusicService(context);
 				try {
 					service.scrobble(id, submission, context, null);

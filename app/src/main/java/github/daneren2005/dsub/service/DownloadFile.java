@@ -85,6 +85,10 @@ public class DownloadFile implements BufferFile {
         return song;
     }
 
+	public Context getContext() {
+		return context;
+	}
+
     /**
      * Returns the effective bit rate.
      */
@@ -206,6 +210,9 @@ public class DownloadFile implements BufferFile {
 
         return saveFile;
     }
+	public File getSaveFile() {
+		return saveFile;
+	}
 
     public File getPartialFile() {
         return partialFile;

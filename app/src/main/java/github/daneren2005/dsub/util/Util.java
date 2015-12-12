@@ -176,6 +176,10 @@ public final class Util {
 		// Don't allow the SERVER_INSTANCE to ever be 0
         return prefs.getBoolean(Constants.PREFERENCES_KEY_OFFLINE, false) ? 0 : Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
     }
+	public static int getMostRecentActiveServer(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return Math.max(1, prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1));
+	}
 	
 	public static int getServerCount(Context context) {
 		SharedPreferences prefs = getPreferences(context);
@@ -449,6 +453,18 @@ public final class Util {
 		builder.append("&c=").append(Constants.REST_CLIENT_ID);
 
 		return builder.toString();
+	}
+	public static int getRestUrlHash(Context context) {
+		return getRestUrlHash(context, Util.getMostRecentActiveServer(context));
+	}
+	public static int getRestUrlHash(Context context, int instance) {
+		StringBuilder builder = new StringBuilder();
+
+		SharedPreferences prefs = Util.getPreferences(context);
+		builder.append(prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null));
+		builder.append(prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null));
+
+		return builder.toString().hashCode();
 	}
 
 	public static String replaceInternalUrl(Context context, String url) {
@@ -907,6 +923,9 @@ public final class Util {
 				return DATE_FORMAT_SHORT.format(date);
 			}
 		}
+	}
+	public static String formatDate(long millis) {
+		return formatDate(new Date(millis));
 	}
 
 	public static String formatBoolean(Context context, boolean value) {

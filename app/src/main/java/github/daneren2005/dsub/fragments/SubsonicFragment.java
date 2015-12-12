@@ -77,6 +77,7 @@ import github.daneren2005.dsub.util.MenuUtil;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.LoadingTask;
+import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
@@ -1292,6 +1293,16 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		headers.add(R.string.details_starred);
 		details.add(Util.formatBoolean(context, song.isStarred()));
+
+		try {
+			Long[] dates = SongDBHandler.getHandler(context).getLastPlayed(song);
+			if(dates != null && dates[0] != null && dates[0] > 0) {
+				headers.add(R.string.details_last_played);
+				details.add(Util.formatDate(dates[0]));
+			}
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to get last played", e);
+		}
 
 		if(song instanceof PodcastEpisode) {
 			headers.add(R.string.details_description);
