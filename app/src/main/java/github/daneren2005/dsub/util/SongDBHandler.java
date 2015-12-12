@@ -29,24 +29,34 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	private static final String TAG = SongDBHandler.class.getSimpleName();
 	private static SongDBHandler dbHandler;
 
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	public static final String DATABASE_NAME = "SongsDB";
 
 	public static final String TABLE_SONGS = "RegisteredSongs";
 	public static final String SONGS_ID = "id";
+	public static final String SONGS_SERVER_KEY = "serverKey";
 	public static final String SONGS_SERVER_ID = "serverId";
 	public static final String SONGS_COMPLETE_PATH = "completePath";
 	public static final String SONGS_LAST_PLAYED = "lastPlayed";
 	public static final String SONGS_LAST_COMPLETED = "lastCompleted";
 
+	private Context context;
+
 	private SongDBHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.context = context;
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO: Need to handle multiple servers
-		db.execSQL("CREATE TABLE " + TABLE_SONGS + " ( " + SONGS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SONGS_SERVER_ID + " TEXT NOT NULL UNIQUE, " + SONGS_COMPLETE_PATH + " TEXT NOT NULL, " + SONGS_LAST_PLAYED + " INTEGER, " + SONGS_LAST_COMPLETED + " INTEGER )");
+		db.execSQL("CREATE TABLE " + TABLE_SONGS + " ( " +
+				SONGS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				SONGS_SERVER_KEY + " INTEGER NOT NULL, " +
+				SONGS_SERVER_ID + " TEXT NOT NULL, " +
+				SONGS_COMPLETE_PATH + " TEXT NOT NULL, " +
+				SONGS_LAST_PLAYED + " INTEGER, " +
+				SONGS_LAST_COMPLETED + " INTEGER, " +
+				"UNIQUE(" + SONGS_SERVER_KEY + ", " + SONGS_SERVER_ID + "))");
 	}
 
 	@Override
@@ -56,15 +66,29 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	}
 
 	public synchronized void addSong(DownloadFile downloadFile) {
+		addSong(Util.getMostRecentActiveServer(context), downloadFile);
+	}
+	public synchronized void addSong(int instance, DownloadFile downloadFile) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		addSong(db, downloadFile);
+		addSong(db, instance, downloadFile);
 		db.close();
 	}
 	protected synchronized void addSong(SQLiteDatabase db, DownloadFile downloadFile) {
-		addSong(db, downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath());
+		addSong(db, Util.getMostRecentActiveServer(context), downloadFile);
 	}
+	protected synchronized void addSong(SQLiteDatabase db, int instance, DownloadFile downloadFile) {
+		addSong(db, instance, downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath());
+	}
+
 	protected synchronized void addSong(SQLiteDatabase db, String id, String absolutePath) {
+		addSong(db, Util.getMostRecentActiveServer(context), id, absolutePath);
+	}
+	protected synchronized void addSong(SQLiteDatabase db, int instance, String id, String absolutePath) {
+		addSongImpl(db, Util.getRestUrlHash(context, instance), id, absolutePath);
+	}
+	protected synchronized void addSongImpl(SQLiteDatabase db, int serverKey, String id, String absolutePath) {
 		ContentValues values = new ContentValues();
+		values.put(SONGS_SERVER_KEY, serverKey);
 		values.put(SONGS_SERVER_ID, id);
 		values.put(SONGS_COMPLETE_PATH, absolutePath);
 
@@ -72,30 +96,37 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	}
 
 	public synchronized void setSongPlayed(DownloadFile downloadFile, boolean submission) {
-		String id = getOnlineSongId(downloadFile);
-		if(id == null) {
+		// TODO: In case of offline want to update all matches
+		Pair<Integer, String> pair = getOnlineSongId(downloadFile);
+		if(pair == null) {
 			return;
 		}
+		int serverKey = pair.getFirst();
+		String id = pair.getSecond();
 
 		// Open and make sure song is in db
 		SQLiteDatabase db = this.getWritableDatabase();
-		addSong(db, id, downloadFile.getSaveFile().getAbsolutePath());
+		addSongImpl(db, serverKey, id, downloadFile.getSaveFile().getAbsolutePath());
 
 		// Update song's last played
 		ContentValues values = new ContentValues();
 		values.put(submission ? SONGS_LAST_COMPLETED : SONGS_LAST_PLAYED, System.currentTimeMillis());
-		db.update(TABLE_SONGS, values, SONGS_SERVER_ID + " = ?", new String[]{id});
+		db.update(TABLE_SONGS, values, SONGS_SERVER_KEY + " = ? AND " + SONGS_SERVER_ID + " = ?", new String[]{Integer.toString(serverKey), id});
 		db.close();
 	}
 
-	public Long[] getLastPlayed(Context context, MusicDirectory.Entry entry) {
-		return getLastPlayed(getOnlineSongId(context, entry));
+	public Long[] getLastPlayed(MusicDirectory.Entry entry) {
+		// TODO: In case of offline want to get most recent played match
+		return getLastPlayed(getOnlineSongId(entry));
 	}
-	public Long[] getLastPlayed(String id) {
+	protected Long[] getLastPlayed(Pair<Integer, String> pair) {
+		return getLastPlayed(pair.getFirst(), pair.getSecond());
+	}
+	public Long[] getLastPlayed(int serverKey, String id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String[] columns = {SONGS_LAST_PLAYED, SONGS_LAST_COMPLETED};
-		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_SERVER_ID + " = ?", new String[]{id}, null, null, null, null);
+		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_SERVER_KEY + " = ? AND " + SONGS_SERVER_ID + " = ?", new String[]{Integer.toString(serverKey), id}, null, null, null, null);
 
 		try {
 			cursor.moveToFirst();
@@ -109,31 +140,55 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		return null;
 	}
 
-	public String getOnlineSongId(Context context, MusicDirectory.Entry entry) {
+	public Pair<Integer, String> getOnlineSongId(MusicDirectory.Entry entry) {
 		return getOnlineSongId(new DownloadFile(context, entry, true));
 	}
-	public String getOnlineSongId(DownloadFile downloadFile) {
-		return getOnlineSongId(downloadFile.getContext(), downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath());
+	public Pair<Integer, String> getOnlineSongId(DownloadFile downloadFile) {
+		return getOnlineSongId(Util.getRestUrlHash(context), downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), Util.isOffline(context) ? false : true);
 	}
-	protected String getOnlineSongId(Context context, String id, String savePath) {
+
+	public Pair<Integer, String> getOnlineSongId(int serverKey, MusicDirectory.Entry entry) {
+		return getOnlineSongId(serverKey, new DownloadFile(context, entry, true));
+	}
+	public Pair<Integer, String> getOnlineSongId(int serverKey, DownloadFile downloadFile) {
+		return getOnlineSongId(serverKey, downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), true);
+	}
+	protected Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
-			id = getIdFromPath(savePath);
+			if(requireServerKey) {
+				return getIdFromPath(serverKey, savePath);
+			} else {
+				return getIdFromPath(savePath);
+			}
+		} else {
+			return new Pair<>(serverKey, id);
 		}
-
-		return id;
 	}
 
-	public String getIdFromPath(String path) {
+	public Pair<Integer, String> getIdFromPath(String path) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String[] columns = {SONGS_SERVER_ID};
+		String[] columns = {SONGS_SERVER_KEY, SONGS_SERVER_ID};
 		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_COMPLETE_PATH + " = ?", new String[] { path }, null, null, null, null);
 
 		try {
 			cursor.moveToFirst();
-			return cursor.getString(0);
+			return new Pair(cursor.getInt(0), cursor.getString(1));
+		} catch(Exception e) {}
+
+		return null;
+	}
+	public Pair<Integer, String> getIdFromPath(int serverKey, String path) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String[] columns = {SONGS_SERVER_KEY, SONGS_SERVER_ID};
+		Cursor cursor = db.query(TABLE_SONGS, columns, SONGS_SERVER_KEY + " = ? AND " + SONGS_COMPLETE_PATH + " = ?", new String[] {Integer.toString(serverKey), path }, null, null, null, null);
+
+		try {
+			cursor.moveToFirst();
+			return new Pair(cursor.getInt(0), cursor.getString(1));
 		} catch(Exception e) {}
 
 		return null;
