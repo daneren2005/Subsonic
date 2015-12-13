@@ -837,6 +837,7 @@ public class CachedMusicService implements MusicService {
 
 		if(result == null) {
 			result = musicService.getPodcastEpisodes(refresh, id, context, progressListener);
+			updateAllSongs(context, result);
 			FileUtil.serialize(context, result, getCacheName(context, "directory", altId));
 		}
 
