@@ -642,6 +642,7 @@
 	<string name="settings.keep_played_count_two">2 abgespielte Lieder behalten</string>
 	<string name="settings.keep_played_count_title">Abgespielte Lieder behalten</string>
 	<string name="details.updated">Aktualisiert</string>
+	<string name="details.last_played">Zuletzt gespielt</string>
 	<string name="details.position">Position</string>
 	<string name="details.song">Lied</string>
 	<string name="button_bar.offline">Offline</string>
@@ -656,5 +657,12 @@
 	<string name="settings.shuffle_by_album.false">Alle Titel mischen</string>
 	<string name="settings.shuffle_by_album.true">Albenreihenfolge mischen</string>
 	<string name="settings.shuffle_by_album">Alben mischen</string>
+	<string name="common.never">Nie</string>
+	<string name="details.starred">Favorit</string>
+	<string name="download.thumbs_up">Gefällt mir</string>
+	<string name="download.thumbs_down">Gefällt mir nicht</string>
+	<string name="select_podcasts.channels">Podcastkanäle</string>
+	<string name="settings.cache_location_external">Externer Speicher</string>
+	<string name="settings.cache_location_internal">Interner Speicher</string>
 
 </resources>
