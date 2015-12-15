@@ -43,7 +43,9 @@ import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.util.CacheCleaner;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.Util;
 
 import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
@@ -323,8 +325,12 @@ public class DownloadServiceLifecycleSupport {
 
 						MusicDirectory.Entry currentPlaying = state.songs.get(index);
 						List<MusicDirectory.Entry> songs = new ArrayList<>();
+
+						SongDBHandler dbHandler = SongDBHandler.getHandler(downloadService);
 						for(MusicDirectory.Entry song: state.songs) {
-							if(song.isOnlineId(downloadService)) {
+							Pair<Integer, String> onlineSongIds = dbHandler.getOnlineSongId(song);
+							if(onlineSongIds != null && onlineSongIds.getSecond() != null) {
+								song.setId(onlineSongIds.getSecond());
 								songs.add(song);
 							}
 						}
