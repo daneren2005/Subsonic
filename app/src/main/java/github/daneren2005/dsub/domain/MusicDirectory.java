@@ -126,6 +126,7 @@ public class MusicDirectory implements Serializable {
 	}
 	
 	public void sortChildren(Context context, int instance) {
+		// Only apply sorting on server version 4.7 and greater, where disc is supported
 		if(ServerInfo.checkServerVersion(context, "1.8", instance)) {
 			sortChildren(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CUSTOM_SORT_ENABLED, true));
 		}

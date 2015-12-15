@@ -201,6 +201,7 @@ public class CachedMusicService implements MusicService {
 			// If a cached copy exists to check against, look for removes
 			deleteRemovedEntries(context, dir, cached);
 		}
+		dir.sortChildren(context, musicService.getInstance(context));
 
 		return dir;
     }
@@ -220,6 +221,7 @@ public class CachedMusicService implements MusicService {
 			// If a cached copy exists to check against, look for removes
 			deleteRemovedEntries(context, dir, cached);
 		}
+		dir.sortChildren(context, musicService.getInstance(context));
 
 		return dir;
 	}
@@ -240,6 +242,7 @@ public class CachedMusicService implements MusicService {
 			// If a cached copy exists to check against, look for removes
 			deleteRemovedEntries(context, dir, cached);
 		}
+		dir.sortChildren(context, musicService.getInstance(context));
 
 		return dir;
 	}
@@ -493,8 +496,6 @@ public class CachedMusicService implements MusicService {
 									// Only save if actually added to artist
 									if (changed) {
 										musicDirectory.replaceChildren(objects);
-										// Reapply sort after addition
-										musicDirectory.sortChildren(context, instance);
 										FileUtil.serialize(context, musicDirectory, cacheName);
 									}
 								}

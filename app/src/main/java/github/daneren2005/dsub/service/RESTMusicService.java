@@ -283,11 +283,6 @@ public class RESTMusicService implements MusicService {
 			dir.addChildren(extra.getChildren());
 		}
 
-		// Apply another sort if we are chaining several together
-		if(dir != extra) {
-			dir.sortChildren(context, getInstance(context));
-		}
-
 		return dir;
     }
 
