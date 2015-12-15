@@ -526,8 +526,6 @@ public class CachedMusicService implements MusicService {
 								public void save(ArrayList<Artist> objects) {
 									if (changed) {
 										indexes.setArtists(objects);
-										// Reapply sort after addition
-										indexes.sortChildren(context);
 										FileUtil.serialize(context, indexes, cacheName);
 										cachedIndexes.set(indexes);
 									}

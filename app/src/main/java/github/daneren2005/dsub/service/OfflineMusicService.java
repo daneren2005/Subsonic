@@ -101,7 +101,6 @@ public class OfflineMusicService implements MusicService {
         }
 		
         Indexes indexes = new Indexes(0L, Collections.<Artist>emptyList(), artists, entries);
-		indexes.sortChildren(context);
 		return indexes;
     }
 

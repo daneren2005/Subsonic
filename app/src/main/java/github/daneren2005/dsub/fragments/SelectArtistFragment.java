@@ -177,6 +177,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 			String musicFolderId = Util.getSelectedMusicFolderId(context);
 
 			Indexes indexes = musicService.getIndexes(musicFolderId, refresh, context, listener);
+			indexes.sortChildren(context);
 			artists = new ArrayList<>(indexes.getShortcuts().size() + indexes.getArtists().size());
 			artists.addAll(indexes.getShortcuts());
 			artists.addAll(indexes.getArtists());
@@ -201,6 +202,9 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 				root.setIndex("#");
 				artists.add(root);
 			}
+
+			Indexes indexes = new Indexes(0, artists, new ArrayList<Artist>());
+			indexes.sortChildren(context);
 		}
 		
 		return artists;
