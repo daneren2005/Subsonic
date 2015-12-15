@@ -175,7 +175,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	}
 
 	public synchronized Pair<Integer, String> getOnlineSongId(MusicDirectory.Entry entry) {
-		return getOnlineSongId(new DownloadFile(context, entry, true));
+		return getOnlineSongId(Util.getRestUrlHash(context), entry.getId(), FileUtil.getSongFile(context, entry).getAbsolutePath(), Util.isOffline(context) ? false : true);
 	}
 	public synchronized Pair<Integer, String> getOnlineSongId(DownloadFile downloadFile) {
 		return getOnlineSongId(Util.getRestUrlHash(context), downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), Util.isOffline(context) ? false : true);
