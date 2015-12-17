@@ -2616,7 +2616,7 @@ public class DownloadService extends Service {
 	public void addOnSongChangedListener(OnSongChangedListener listener) {
 		addOnSongChangedListener(listener, false);
 	}
-	public void addOnSongChangedListener(OnSongChangedListener listener, boolean run) {
+	public synchronized void addOnSongChangedListener(OnSongChangedListener listener, boolean run) {
 		int index = onSongChangedListeners.indexOf(listener);
 		if(index == -1) {
 			onSongChangedListeners.add(listener);
@@ -2637,7 +2637,7 @@ public class DownloadService extends Service {
 			}
 		}
 	}
-	public void removeOnSongChangeListener(OnSongChangedListener listener) {
+	public synchronized void removeOnSongChangeListener(OnSongChangedListener listener) {
 		int index = onSongChangedListeners.indexOf(listener);
 		if(index != -1) {
 			onSongChangedListeners.remove(index);
@@ -2718,7 +2718,7 @@ public class DownloadService extends Service {
 			}
 		}
 	}
-	private void onStateUpdate() {
+	private synchronized void onStateUpdate() {
 		final long atRevision = revision;
 		for(final OnSongChangedListener listener: onSongChangedListeners) {
 			handler.post(new Runnable() {
