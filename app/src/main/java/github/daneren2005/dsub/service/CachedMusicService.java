@@ -168,23 +168,26 @@ public class CachedMusicService implements MusicService {
 			dir = cached;
 
 			new SilentBackgroundTask<Void>(context) {
+				MusicDirectory refreshed;
+
 				@Override
 				protected Void doInBackground() throws Throwable {
-					Util.sleepQuietly(2000L);
-					MusicDirectory refreshed = musicService.getMusicDirectory(id, name, true, context, null);
+					refreshed = musicService.getMusicDirectory(id, name, true, context, null);
 					updateAllSongs(context, refreshed);
-					cached.updateDifferences(context, musicService.getInstance(context), refreshed);
+					cached.updateMetadata(refreshed);
 					FileUtil.serialize(context, refreshed, getCacheName(context, "directory", id));
 					return null;
 				}
 
-				// TODO: When upgrading to RecyclerView, this should be usable since won't have split entry/album lists
-				/*@Override
+				// Update which entries exist
+				@Override
 				public void done(Void result) {
 					if(progressListener != null) {
-						progressListener.updateCache();
+						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+							progressListener.updateCache();
+						}
 					}
-				}*/
+				}
 
 				@Override
 				public void error(Throwable error) {

@@ -90,11 +90,11 @@ public class MusicDirectory implements Serializable {
 		this.children = children;
 	}
 
-    public List<Entry> getChildren() {
+    public synchronized List<Entry> getChildren() {
         return getChildren(true, true);
     }
 
-    public List<Entry> getChildren(boolean includeDirs, boolean includeFiles) {
+    public synchronized List<Entry> getChildren(boolean includeDirs, boolean includeFiles) {
         if (includeDirs && includeFiles) {
             return children;
         }
@@ -107,7 +107,7 @@ public class MusicDirectory implements Serializable {
         }
         return result;
     }
-	public List<Entry> getSongs() {
+	public synchronized List<Entry> getSongs() {
 		List<Entry> result = new ArrayList<Entry>();
 		for (Entry child : children) {
 			if (child != null && !child.isDirectory() && !child.isVideo()) {
@@ -117,7 +117,7 @@ public class MusicDirectory implements Serializable {
 		return result;
 	}
 	
-	public int getChildrenSize() {
+	public synchronized int getChildrenSize() {
 		return children.size();
 	}
 
@@ -135,7 +135,7 @@ public class MusicDirectory implements Serializable {
 		EntryComparator.sort(children, byYear);
 	}
 
-	public void updateDifferences(Context context, int instance, MusicDirectory refreshedDirectory) {
+	public synchronized void updateMetadata(MusicDirectory refreshedDirectory) {
 		Iterator<Entry> it = children.iterator();
 		while(it.hasNext()) {
 			Entry entry = it.next();
@@ -155,24 +155,36 @@ public class MusicDirectory implements Serializable {
 				entry.setStarred(refreshed.isStarred());
 				entry.setRating(refreshed.getRating());
 				entry.setType(refreshed.getType());
-			} else {
-				// No longer exists in here
-				// it.remove();
+			}
+		}
+	}
+	public synchronized boolean updateEntriesList(Context context, int instance, MusicDirectory refreshedDirectory) {
+		boolean changed = false;
+		Iterator<Entry> it = children.iterator();
+		while(it.hasNext()) {
+			Entry entry = it.next();
+			// No longer exists in here
+			if(refreshedDirectory.children.indexOf(entry) == -1) {
+				it.remove();
+				changed = true;
 			}
 		}
 
 		// Make sure we contain all children from refreshed set
-		/*boolean resort = false;
+		boolean resort = false;
 		for(Entry refreshed: refreshedDirectory.children) {
 			if(!this.children.contains(refreshed)) {
 				this.children.add(refreshed);
 				resort = true;
+				changed = true;
 			}
 		}
 
 		if(resort) {
 			this.sortChildren(context, instance);
-		}*/
+		}
+
+		return changed;
 	}
 
     public static class Entry implements Serializable {

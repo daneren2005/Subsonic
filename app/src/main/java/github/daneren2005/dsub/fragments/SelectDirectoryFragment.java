@@ -647,13 +647,20 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				}
 			}
 
-			return new Pair<MusicDirectory, Boolean>(dir, licenseValid);
+			return new Pair<>(dir, licenseValid);
 		}
 
 		@Override
 		protected void done(Pair<MusicDirectory, Boolean> result) {
 			finishLoading();
 			currentTask = null;
+		}
+
+		@Override
+		public void updateCache() {
+			if(entryGridAdapter != null) {
+				entryGridAdapter.notifyDataSetChanged();
+			}
 		}
 	}
 
