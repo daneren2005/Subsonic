@@ -625,7 +625,7 @@ public class MusicDirectory implements Serializable {
 			
 			Integer lhsTrack = lhs.getTrack();
 			Integer rhsTrack = rhs.getTrack();
-			if(lhsTrack != null && rhsTrack != null) {
+			if(lhsTrack != null && rhsTrack != null && lhsTrack != rhsTrack) {
 				return lhsTrack.compareTo(rhsTrack);
 			} else if(lhsTrack != null) {
 				return -1;
