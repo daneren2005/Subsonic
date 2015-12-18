@@ -38,6 +38,9 @@ import android.support.v4.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.lang.ref.WeakReference;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -96,7 +99,7 @@ public class ImageLoader {
 				if(evicted) {
 					if((oldBitmap != nowPlaying && oldBitmap != nowPlayingSmall) || clearingCache) {
 						oldBitmap.recycle();
-					} else {
+					} else if(oldBitmap != newBitmap) {
 						cache.put(key, oldBitmap);
 					}
 				}
