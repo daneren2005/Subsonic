@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.1.2" versioncode="167" releasedate="12/17/2015">
+		<change>Keep track of played songs locally</change>
+		<change>Improved DLNA/Chromecast casting</change>
+		<change>Improved search Play x matching</change>
+		<change>Improvement to background playlist updates</change>
+		<change>Improvements to background refresh of songs/albums</change>
+		<change>Improved offline song scrobbling reliability</change>
+		<change>Fix Decades list including first year of next decade</change>
+		<change>Fix settings sub-menu header overlap</change>
+		<change>Misc bug fixes</change>
+	</release>
 	<release version="5.1.1" versioncode="166" releasedate="11/19/2015">
 		<change>Improved tablet layouts</change>
 		<change>Fix moving songs on Now Playing list showing incorrectly</change>
