@@ -175,6 +175,7 @@ public class CachedMusicService implements MusicService {
 					refreshed = musicService.getMusicDirectory(id, name, true, context, null);
 					updateAllSongs(context, refreshed);
 					cached.updateMetadata(refreshed);
+					deleteRemovedEntries(context, refreshed, cached);
 					FileUtil.serialize(context, refreshed, getCacheName(context, "directory", id));
 					return null;
 				}
@@ -210,11 +211,39 @@ public class CachedMusicService implements MusicService {
     }
 
 	@Override
-	public MusicDirectory getArtist(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getArtist(final String id, final String name, final boolean refresh, final Context context, final ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
-		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
-		if(!refresh) {
+		final MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "artist", id), MusicDirectory.class);
+		if(!refresh && cached != null) {
 			dir = cached;
+
+			new SilentBackgroundTask<Void>(context) {
+				MusicDirectory refreshed;
+
+				@Override
+				protected Void doInBackground() throws Throwable {
+					refreshed = musicService.getArtist(id, name, refresh, context, null);
+					cached.updateMetadata(refreshed);
+					deleteRemovedEntries(context, refreshed, cached);
+					FileUtil.serialize(context, refreshed, getCacheName(context, "artist", id));
+					return null;
+				}
+
+				// Update which entries exist
+				@Override
+				public void done(Void result) {
+					if(progressListener != null) {
+						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+							progressListener.updateCache();
+						}
+					}
+				}
+
+				@Override
+				public void error(Throwable error) {
+					Log.e(TAG, "Failed to refresh getArtist", error);
+				}
+			}.execute();
 		}
 
 		if(dir == null) {
@@ -230,11 +259,40 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getAlbum(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getAlbum(final String id, final String name, final boolean refresh, final Context context, final ProgressListener progressListener) throws Exception {
 		MusicDirectory dir = null;
-		MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
-		if(!refresh) {
+		final MusicDirectory cached = FileUtil.deserialize(context, getCacheName(context, "album", id), MusicDirectory.class);
+		if(!refresh && cached != null) {
 			dir = cached;
+
+			new SilentBackgroundTask<Void>(context) {
+				MusicDirectory refreshed;
+
+				@Override
+				protected Void doInBackground() throws Throwable {
+					refreshed = musicService.getAlbum(id, name, refresh, context, null);
+					updateAllSongs(context, refreshed);
+					cached.updateMetadata(refreshed);
+					deleteRemovedEntries(context, refreshed, cached);
+					FileUtil.serialize(context, refreshed, getCacheName(context, "album", id));
+					return null;
+				}
+
+				// Update which entries exist
+				@Override
+				public void done(Void result) {
+					if(progressListener != null) {
+						if(cached.updateEntriesList(context, musicService.getInstance(context), refreshed)) {
+							progressListener.updateCache();
+						}
+					}
+				}
+
+				@Override
+				public void error(Throwable error) {
+					Log.e(TAG, "Failed to refresh getAlbum", error);
+				}
+			}.execute();
 		}
 
 		if(dir == null) {
