@@ -609,7 +609,7 @@ public class MusicDirectory implements Serializable {
 					}
 				}
 				
-				return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
+				return lhs.getAlbumDisplay().compareToIgnoreCase(rhs.getAlbumDisplay());
 			}
 			
 			Integer lhsDisc = lhs.getDiscNumber();
@@ -632,7 +632,7 @@ public class MusicDirectory implements Serializable {
 			} else if(rhsTrack != null) {
 				return 1;
 			}
-			
+
 			return lhs.getTitle().compareToIgnoreCase(rhs.getTitle());
 		}
 		
