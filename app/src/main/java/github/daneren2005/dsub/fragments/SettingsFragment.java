@@ -818,6 +818,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 					serverLocalNetworkSSID.setSummary(serverLocalNetworkSSID.getText());
 					serverInternalUrl.setSummary(serverInternalUrl.getText());
 					username.setSummary(username.getText());
+
+					setTitle(serverName.getText());
 				}
 
 
