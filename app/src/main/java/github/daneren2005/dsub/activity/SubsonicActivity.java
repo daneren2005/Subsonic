@@ -525,7 +525,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 	@Override
 	public void setTitle(CharSequence title) {
-		if(title != null && !title.equals(getSupportActionBar().getTitle())) {
+		if(title != null && getSupportActionBar() != null && !title.equals(getSupportActionBar().getTitle())) {
 			getSupportActionBar().setTitle(title);
 			recreateSpinner();
 		}
