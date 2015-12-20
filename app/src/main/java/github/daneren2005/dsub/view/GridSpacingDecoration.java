@@ -18,10 +18,17 @@ package github.daneren2005.dsub.view;
 import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+
+import static android.widget.LinearLayout.*;
 
 public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
+	private static final String TAG = GridSpacingDecoration.class.getSimpleName();
 	public static final int SPACING = 10;
 
 	@Override
@@ -39,30 +46,52 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		}
 		int spanCount = getTotalSpan(view, parent);
 		int spanIndex = childIndex % spanCount;
+
+		// If we can, use the SpanSizeLookup since headers screw up the index calculation
+		RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+		if(layoutManager instanceof GridLayoutManager) {
+			GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+			GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
+			if(spanSizeLookup != null) {
+				spanIndex = spanSizeLookup.getSpanIndex(childIndex, spanCount);
+			}
+		}
 		int spanSize = getSpanSize(parent, childIndex);
 
         /* INVALID SPAN */
 		if (spanCount < 1 || spanSize > 1) return;
 
-		outRect.top = halfSpacing;
-		outRect.bottom = halfSpacing;
-		outRect.left = halfSpacing;
-		outRect.right = halfSpacing;
+		int margins = 0;
+		if(view instanceof UpdateView) {
+			View firstChild = ((ViewGroup) view).getChildAt(0);
+			ViewGroup.LayoutParams layoutParams = firstChild.getLayoutParams();
+			if (layoutParams instanceof LinearLayout.LayoutParams) {
+				margins = ((LinearLayout.LayoutParams) layoutParams).bottomMargin;
+			} else if (layoutParams instanceof FrameLayout.LayoutParams) {
+				margins = ((FrameLayout.LayoutParams) layoutParams).bottomMargin;
+			}
+		}
+		int doubleMargins = margins * 2;
+
+		outRect.top = halfSpacing - margins;
+		outRect.bottom = halfSpacing - margins;
+		outRect.left = halfSpacing - margins;
+		outRect.right = halfSpacing - margins;
 
 		if (isTopEdge(childIndex, spanCount)) {
-			outRect.top = spacing;
+			outRect.top = spacing - doubleMargins;
 		}
 
 		if (isLeftEdge(spanIndex, spanCount)) {
-			outRect.left = spacing;
+			outRect.left = spacing - doubleMargins;
 		}
 
 		if (isRightEdge(spanIndex, spanCount)) {
-			outRect.right = spacing;
+			outRect.right = spacing - doubleMargins;
 		}
 
 		if (isBottomEdge(childIndex, childCount, spanCount)) {
-			outRect.bottom = spacing;
+			outRect.bottom = spacing - doubleMargins;
 		}
 	}
 

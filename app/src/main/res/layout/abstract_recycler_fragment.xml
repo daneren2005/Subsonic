@@ -19,7 +19,8 @@
 				android:id="@+id/fragment_recycler"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
-				android:scrollbars="vertical"/>
+				android:scrollbars="vertical"
+				android:paddingRight="6dp"/>
 
 			<github.daneren2005.dsub.view.FastScroller
 				android:id="@+id/fragment_fast_scroller"
