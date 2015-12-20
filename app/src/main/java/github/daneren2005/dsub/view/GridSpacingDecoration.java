@@ -18,10 +18,12 @@ package github.daneren2005.dsub.view;
 import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
 public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
+	private static final String TAG = GridSpacingDecoration.class.getSimpleName();
 	public static final int SPACING = 10;
 
 	@Override
@@ -39,6 +41,16 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		}
 		int spanCount = getTotalSpan(view, parent);
 		int spanIndex = childIndex % spanCount;
+
+		// If we can, use the SpanSizeLookup since headers screw up the index calculation
+		RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+		if(layoutManager instanceof GridLayoutManager) {
+			GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+			GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
+			if(spanSizeLookup != null) {
+				spanIndex = spanSizeLookup.getSpanIndex(childIndex, spanCount);
+			}
+		}
 		int spanSize = getSpanSize(parent, childIndex);
 
         /* INVALID SPAN */
