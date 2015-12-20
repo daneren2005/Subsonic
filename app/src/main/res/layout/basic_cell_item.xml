@@ -29,7 +29,8 @@
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:singleLine="true"
 				android:ellipsize="marquee"
-				android:textColor="?android:textColorPrimary"/>
+				android:textColor="?android:textColorPrimary"
+				android:paddingLeft="@dimen/Card.TextLeftPadding"/>
 
 			<ImageView
 				android:id="@+id/item_more"
