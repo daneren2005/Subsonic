@@ -54,8 +54,8 @@
 		<br/>Míg a normál módon gyorsítótárazott dalok törlődhetnek amikor újak kerülnek letöltésre, addig a \"Letöltés tárolásra (megőrzés)\" menüpont segítségével letöltött dalok soha nem törlődnek automatikusan.
 		<p/><font color="red">Ha a ChromeCast sikertelen</font>:
 		<br/>Próbálja meg bejelölni: Beállítások -> Lejátszás -> Eszköz használata proxyként. Ez egy kerülő megoldás arra, ha a ChromeCast elutasítja a saját aláírású tanúsítványt.
-		<p/><font color="red">A Médiatár első szintje tulajdonképpen az előadók csoportja</font>:
-		<br/>A Beállítások menüben törölje az "Előadók első szintje" jelölést. Ez teszi lehetővé, hogy a mappák teljes első szintjének megjelenítése előadói csoportonként és ne előadónként legyen kezelve.
+		<p/><font color="red">A Médiatár első szintje ugyanolyan, mint az előadók listája</font>:
+		<br/>Ha a Beállítások menüben kikapcsolja az "Részletes megjelenítés" opciót, akkor a mappák teljes első szintje ugyanúgy lesz megjelenítve, mint az előadók listája.
 	]]>
 	</string>
     <string name="main.select_server">Kiszolgáló kiválasztása</string>
@@ -113,7 +113,7 @@
 	<string name="menu.similar_artists">Hasonló előadók</string>
 	<string name="menu.show_missing">Hiányzó megjelenítése</string>
 	<string name="menu.start_radio">Rádió indítása</string>
-	<string name="menu.first_level_artist">Előadók első szintje</string>
+	<string name="menu.first_level_artist">Részletes megjelenítés</string>
 
     <string name="playlist.label">Lejátszási listák</string>
 	<string name="playlist.update_info">Szerkesztés</string>
@@ -642,6 +642,7 @@
 	<string name="details.position">Pozíció</string>
 	<string name="details.updated">Frissítve</string>
 	<string name="details.starred">Csillagozott</string>
+	<string name="details.last_played">Utoljára lejátszott</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Nincsenek dalok</item>
