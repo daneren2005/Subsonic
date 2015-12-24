@@ -38,7 +38,7 @@
 	</style>
 
 	<style name="MoreButton" parent="BasicButton">
-		<item name="android:paddingRight">8dip</item>
+
 	</style>
 
     <style name="PlaybackControl" parent="@style/BasicButton">

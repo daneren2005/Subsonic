@@ -5,4 +5,6 @@
 	<dimen name="Button.Small">54dip</dimen>
 	<dimen name="AlbumArt.Small">96dip</dimen>
 	<dimen name="AlbumArt.Header">210dip</dimen>
+	<dimen name="FastScroller.LeftAlignedMargin">16dp</dimen>
+	<dimen name="FastScroller.RightMargin">8dp</dimen>
 </resources>

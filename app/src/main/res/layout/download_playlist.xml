@@ -28,7 +28,8 @@
             android:id="@+id/download_list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical"
+            android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"/>
 
         <github.daneren2005.dsub.view.FastScroller
             android:id="@+id/download_fast_scroller"
