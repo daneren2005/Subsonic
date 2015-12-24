@@ -200,6 +200,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 				// Disable custom view before switching
 				getSupportActionBar().setDisplayShowCustomEnabled(false);
+				getSupportActionBar().setDisplayShowTitleEnabled(true);
 
 				bottomBar.setVisibility(View.GONE);
 				nowPlayingToolbar.setVisibility(View.VISIBLE);

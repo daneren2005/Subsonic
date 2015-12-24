@@ -853,6 +853,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			spinnerAdapter.notifyDataSetChanged();
 			actionBarSpinner.setSelection(spinnerAdapter.getCount() - 1);
 			if(!isTv()) {
+				getSupportActionBar().setDisplayShowTitleEnabled(false);
 				getSupportActionBar().setDisplayShowCustomEnabled(true);
 			}
 
@@ -862,6 +863,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			}
 		} else if(!isTv()) {
+			getSupportActionBar().setDisplayShowTitleEnabled(true);
 			getSupportActionBar().setTitle(currentFragment.getTitle());
 			getSupportActionBar().setDisplayShowCustomEnabled(false);
 			drawerToggle.setDrawerIndicatorEnabled(true);
