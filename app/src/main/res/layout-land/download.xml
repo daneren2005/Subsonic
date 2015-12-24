@@ -27,7 +27,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="fill_parent"
 					android:layout_weight="1"
-					android:scaleType="fitStart"/>
+					android:scaleType="fitCenter"/>
 
 				<include layout="@layout/download_playlist"/>
 

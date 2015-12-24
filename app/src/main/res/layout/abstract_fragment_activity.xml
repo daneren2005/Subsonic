@@ -60,7 +60,7 @@
 					android:layout_width="?attr/actionBarSize"
 					android:layout_height="?attr/actionBarSize"
 					android:layout_gravity="left|center"
-					android:scaleType="fitStart"/>
+					android:scaleType="fitCenter"/>
 
 				<LinearLayout
 					android:layout_width="0dp"
