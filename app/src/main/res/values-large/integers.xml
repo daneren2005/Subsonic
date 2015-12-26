@@ -2,4 +2,5 @@
 <resources>
 	<integer name="Grid.Columns">3</integer>
 	<integer name="TextDescriptionLength">10</integer>
+	<integer name="Card.Elevation">4</integer>
 </resources>

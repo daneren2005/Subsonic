@@ -48,7 +48,7 @@ public class CardView extends FrameLayout{
 		setClipChildren(true);
 		setBackgroundResource(R.drawable.card_rounded_corners);
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			setElevation(10.0f);
+			setElevation(getResources().getInteger(R.integer.Card_Elevation));
 		}
 	}
 }
