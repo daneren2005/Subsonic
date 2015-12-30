@@ -189,8 +189,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	protected void createCustomActionBarView() {
-		View customActionbar = getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
-		actionBarSpinner = (Spinner)customActionbar.findViewById(R.id.spinner);
+		actionBarSpinner = (Spinner) getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
 		if(Util.getThemeRes(this) == R.style.Theme_DSub_Light_No_Actionbar) {
 			actionBarSpinner.setBackgroundResource(R.drawable.abc_spinner_mtrl_am_alpha);
 		}
@@ -199,7 +198,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		actionBarSpinner.setOnItemSelectedListener(this);
 		actionBarSpinner.setAdapter(spinnerAdapter);
 
-		getSupportActionBar().setCustomView(customActionbar);
+		getSupportActionBar().setCustomView(actionBarSpinner);
 	}
 
 	@Override
