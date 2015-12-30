@@ -221,6 +221,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				addToPlaylist(songs);
 				clearSelected();
 				return true;
+			case R.id.menu_star:case R.id.menu_unstar:
+				toggleSelectedStarred();
+				return true;
 		}
 
 		return false;
@@ -1896,6 +1899,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				downloadService.delete(songs);
 			}
 		}
+	}
+
+	protected void toggleSelectedStarred() {
+		UpdateHelper.toggleStarred(context, getSelectedEntries());
 	}
 
 	public abstract class RecursiveLoader extends LoadingTask<Boolean> {

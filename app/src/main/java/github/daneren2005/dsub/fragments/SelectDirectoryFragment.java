@@ -305,9 +305,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			case R.id.menu_show_all:
 				setShowAll();
 				return true;
-			case R.id.menu_unstar:
-				unstarSelected();
-				return true;
 			case R.id.menu_top_tracks:
 				showTopTracks();
 				return true;
@@ -682,7 +679,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(albumListType == null || "starred".equals(albumListType)) {
 			entryGridAdapter = new EntryGridAdapter(context, entries, getImageLoader(), largeAlbums);
 			entryGridAdapter.setRemoveFromPlaylist(playlistId != null);
-			entryGridAdapter.setRemoveStarred(albumListType == null);
 		} else {
 			if("alphabeticalByName".equals(albumListType)) {
 				entryGridAdapter = new AlphabeticalAlbumAdapter(context, entries, getImageLoader(), largeAlbums);
@@ -953,70 +949,28 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}.execute();
 	}
 
-	public void unstarSelected() {
-		List<Entry> selected = getSelectedEntries();
-		if(selected.size() == 0) {
-			selected = entries;
-		}
-		if(selected.size() == 0) {
-			return;
-		}
-		final List<Entry> unstar = new ArrayList<Entry>();
-		unstar.addAll(selected);
+	@Override
+	protected void toggleSelectedStarred() {
+		UpdateHelper.OnStarChange onStarChange = null;
+		if(albumListType != null && "starred".equals(albumListType)) {
+			onStarChange = new UpdateHelper.OnStarChange() {
+				@Override
+				public void starChange(boolean starred) {
 
-		new LoadingTask<Void>(context, true) {
-			@Override
-			protected Void doInBackground() throws Throwable {
-				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<Entry> entries = new ArrayList<Entry>();
-				List<Entry> artists = new ArrayList<Entry>();
-				List<Entry> albums = new ArrayList<Entry>();
-				for(Entry entry: unstar) {
-					if(entry.isDirectory() && Util.isTagBrowsing(context)) {
-						if(entry.isAlbum()) {
-							albums.add(entry);
-						} else {
-							artists.add(entry);
+				}
+
+				@Override
+				public void starCommited(boolean starred) {
+					if(!starred) {
+						for (Entry entry : entries) {
+							entryGridAdapter.removeItem(entry);
 						}
-					} else {
-						entries.add(entry);
 					}
 				}
-				musicService.setStarred(entries, artists, albums, false, this, context);
+			};
+		}
 
-				for(Entry entry: unstar) {
-					new UpdateHelper.EntryInstanceUpdater(entry) {
-						@Override
-						public void update(Entry found) {
-							found.setStarred(false);
-						}
-					}.execute();
-				}
-
-				return null;
-			}
-
-			@Override
-			protected void done(Void result) {
-				Util.toast(context, context.getResources().getString(R.string.starring_content_unstarred, Integer.toString(unstar.size())));
-
-				for(Entry entry: unstar) {
-					entryGridAdapter.removeItem(entry);
-				}
-			}
-
-			@Override
-			protected void error(Throwable error) {
-				String msg;
-				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
-					msg = getErrorMessage(error);
-				} else {
-					msg = context.getResources().getString(R.string.starring_content_error, Integer.toString(unstar.size())) + " " + getErrorMessage(error);
-				}
-
-				Util.toast(context, msg, false);
-			}
-		}.execute();
+		UpdateHelper.toggleStarred(context, getSelectedEntries(), onStarChange);
 	}
 
 	private void checkLicenseAndTrialPeriod(LoadingTask onValid) {
@@ -1348,6 +1302,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 							} else {
 								starButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.star_outline));
 							}
+						}
+
+						@Override
+						public void starCommited(boolean starred) {
+
 						}
 					});
 				}

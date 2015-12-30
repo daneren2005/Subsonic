@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,9 +52,24 @@ public final class UpdateHelper {
 	}
 
 	public static void toggleStarred(final Context context, final Entry entry, final OnStarChange onStarChange) {
-		final boolean starred = !entry.isStarred();
-		entry.setStarred(starred);
+		toggleStarred(context, Arrays.asList(entry), onStarChange);
+	}
+
+	public static void toggleStarred(Context context, List<Entry> entries) {
+		toggleStarred(context, entries, null);
+	}
+	public static void toggleStarred(final Context context, final List<Entry> entries, final OnStarChange onStarChange) {
+		if(entries.isEmpty()) {
+			return;
+		}
+
+		final Entry firstEntry = entries.get(0);
+		final boolean starred = !firstEntry.isStarred();
+		for(Entry entry: entries) {
+			entry.setStarred(starred);
+		}
 		if(onStarChange != null) {
+			onStarChange.entries = entries;
 			onStarChange.starChange(starred);
 		}
 
@@ -61,22 +77,30 @@ public final class UpdateHelper {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				if(entry.isDirectory() && Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					if(entry.isAlbum()) {
-						musicService.setStarred(null, null, Arrays.asList(entry), starred, null, context);
+				List<Entry> songs = new ArrayList<Entry>();
+				List<Entry> artists = new ArrayList<Entry>();
+				List<Entry> albums = new ArrayList<Entry>();
+				for(Entry entry: entries) {
+					if(entry.isDirectory() && Util.isTagBrowsing(context)) {
+						if(entry.isAlbum()) {
+							albums.add(entry);
+						} else {
+							artists.add(entry);
+						}
 					} else {
-						musicService.setStarred(null, Arrays.asList(entry), null, starred, null, context);
+						songs.add(entry);
 					}
-				} else {
-					musicService.setStarred(Arrays.asList(entry), null, null, starred, null, context);
 				}
+				musicService.setStarred(songs, artists, albums, starred, this, context);
 
-				new EntryInstanceUpdater(entry) {
-					@Override
-					public void update(Entry found) {
-						found.setStarred(starred);
-					}
-				}.execute();
+				for(Entry entry: entries) {
+					new UpdateHelper.EntryInstanceUpdater(entry) {
+						@Override
+						public void update(Entry found) {
+							found.setStarred(starred);
+						}
+					}.execute();
+				}
 
 				return null;
 			}
@@ -84,13 +108,21 @@ public final class UpdateHelper {
 			@Override
 			protected void done(Void result) {
 				// UpdateView
-				Util.toast(context, context.getResources().getString(starred ? R.string.starring_content_starred : R.string.starring_content_unstarred, entry.getTitle()));
+				int starMsgId = starred ? R.string.starring_content_starred : R.string.starring_content_unstarred;
+				String starMsgBody = (entries.size() > 1) ? Integer.toString(entries.size()) : firstEntry.getTitle();
+				Util.toast(context, context.getResources().getString(starMsgId, starMsgBody));
+
+				if(onStarChange != null) {
+					onStarChange.starCommited(starred);
+				}
 			}
 
 			@Override
 			protected void error(Throwable error) {
 				Log.w(TAG, "Failed to star", error);
-				entry.setStarred(!starred);
+				for(Entry entry: entries) {
+					entry.setStarred(!starred);
+				}
 				if(onStarChange != null) {
 					onStarChange.starChange(!starred);
 				}
@@ -99,7 +131,8 @@ public final class UpdateHelper {
 				if (error instanceof OfflineException || error instanceof ServerTooOldException) {
 					msg = getErrorMessage(error);
 				} else {
-					msg = context.getResources().getString(R.string.starring_content_error, entry.getTitle()) + " " + getErrorMessage(error);
+					String errorBody = (entries.size() > 1) ? Integer.toString(entries.size()) : firstEntry.getTitle();
+					msg = context.getResources().getString(R.string.starring_content_error, errorBody) + " " + getErrorMessage(error);
 				}
 
 				Util.toast(context, msg, false);
@@ -255,7 +288,10 @@ public final class UpdateHelper {
 	}
 
 	public static abstract class OnStarChange {
+		protected List<Entry> entries;
+
 		public abstract void starChange(boolean starred);
+		public abstract void starCommited(boolean starred);
 	}
 	public static abstract class OnRatingChange {
 		public abstract void ratingChange(int rating);

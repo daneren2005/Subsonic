@@ -46,7 +46,6 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	private boolean largeAlbums;
 	private boolean showArtist = false;
 	private boolean removeFromPlaylist = false;
-	private boolean removeStarred = true;
 	private View header;
 
 	public EntryGridAdapter(Context context, List<Entry> entries, ImageLoader imageLoader, boolean largeCell) {
@@ -136,9 +135,6 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	public void setRemoveFromPlaylist(boolean removeFromPlaylist) {
 		this.removeFromPlaylist = removeFromPlaylist;
 	}
-	public void setRemoveStarred(boolean removeStarred) {
-		this.removeStarred = removeStarred;
-	}
 
 	@Override
 	public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {
@@ -151,8 +147,10 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 		if(!removeFromPlaylist) {
 			menu.removeItem(R.id.menu_remove_playlist);
 		}
-		if(removeStarred) {
-			menu.removeItem(R.id.menu_unstar);
+
+		if(!selected.isEmpty()) {
+			boolean isStarred = selected.get(0).isStarred();
+			menu.findItem(R.id.menu_star).setTitle(isStarred ? R.string.common_unstar : R.string.common_star);
 		}
 	}
 }

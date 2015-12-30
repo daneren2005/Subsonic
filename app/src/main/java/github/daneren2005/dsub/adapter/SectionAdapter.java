@@ -414,13 +414,14 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 				@Override
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 					currentActionMode = mode;
-					onCreateActionModeMenu(menu, mode.getMenuInflater());
-					MenuUtil.hideMenuItems(context, menu, updateView);
 
 					T item = holder.getItem();
 					selected.add(item);
 					selectedViews.add(updateView);
 					setChecked(updateView, true);
+
+					onCreateActionModeMenu(menu, mode.getMenuInflater());
+					MenuUtil.hideMenuItems(context, menu, updateView);
 
 					mode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {

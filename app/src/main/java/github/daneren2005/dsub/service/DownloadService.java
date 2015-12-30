@@ -2571,6 +2571,11 @@ public class DownloadService extends Service {
 					onMetadataUpdate(METADATA_UPDATED_STAR);
 				}
 			}
+
+			@Override
+			public void starCommited(boolean starred) {
+
+			}
 		});
 	}
 	public void toggleRating(int rating) {
