@@ -3,4 +3,5 @@
 	<integer name="Grid.Columns">2</integer>
 	<integer name="Grid.FullScreen.Columns">@integer/Grid.Columns</integer>
 	<integer name="TextDescriptionLength">5</integer>
+	<integer name="Card.Elevation">10</integer>
 </resources>

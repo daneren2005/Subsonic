@@ -62,6 +62,7 @@
 		<item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/colorPrimary</item>
+		<item name="cardBackgroundColor">@android:color/white</item>
 	</style>
 	<style name="Theme.DSub.Dark.Base" parent="@style/Theme.AppCompat">
 		<item name="offline_icon">@drawable/main_offline_dark</item>
@@ -124,10 +125,12 @@
 		<item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/colorPrimary</item>
+		<item name="cardBackgroundColor">@color/background_material_dark</item>
 	</style>
 	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
+		<item name="cardBackgroundColor">@android:color/black</item>
 	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark">
 		<item name="android:windowBackground">@android:color/black</item>
