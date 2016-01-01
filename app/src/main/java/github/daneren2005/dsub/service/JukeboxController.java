@@ -22,6 +22,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RemoteControlState;
+import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.service.parser.SubsonicRESTException;
 import github.daneren2005.dsub.util.Util;
 
@@ -200,11 +201,15 @@ public class JukeboxController extends RemoteController {
 		
 		// Track change?
 		Integer index = jukeboxStatus.getCurrentPlayingIndex();
+		int currentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		if (index != null && index != -1 && index != downloadService.getCurrentPlayingIndex()) {
 			downloadService.setPlayerState(PlayerState.COMPLETED);
 			downloadService.setCurrentPlaying(index, true);
 			if(jukeboxStatus.isPlaying()) {
 				downloadService.setPlayerState(PlayerState.STARTED);
+			} else if(index == 0 && currentPlayingIndex == downloadService.size() - 1 && downloadService.getRepeatMode() == RepeatMode.ALL) {
+				// Jukebox does not support any form of auto repeat
+				start();
 			}
 		}
 	}
