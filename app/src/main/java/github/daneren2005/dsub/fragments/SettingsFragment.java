@@ -56,6 +56,7 @@ import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LoadingTask;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.view.CacheLocationPreference;
 import github.daneren2005.dsub.view.ErrorDialog;
 
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -69,7 +70,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference maxVideoBitrateWifi;
 	private ListPreference maxVideoBitrateMobile;
 	private ListPreference networkTimeout;
-	private EditTextPreference cacheLocation;
+	private CacheLocationPreference cacheLocation;
 	private ListPreference preloadCountWifi;
 	private ListPreference preloadCountMobile;
 	private ListPreference keepPlayedCount;
@@ -205,7 +206,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		maxVideoBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
 		maxVideoBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
 		networkTimeout = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
-		cacheLocation = (EditTextPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
+		cacheLocation = (CacheLocationPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
 		preloadCountWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
 		preloadCountMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_MOBILE);
 		keepPlayedCount = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_KEEP_PLAYED_CNT);
