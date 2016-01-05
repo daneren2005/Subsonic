@@ -68,6 +68,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 			}
 
 			List<String> updated = new ArrayList<String>();
+			String updatedId = null;
 			for(int i = 0; i < podcastList.size(); i++) {
 				SyncSet set = podcastList.get(i);
 				String id = set.id;
@@ -87,6 +88,9 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 								existingEpisodes.add(entry.getId());
 								if(!updated.contains(podcasts.getName())) {
 									updated.add(podcasts.getName());
+									if(updatedId == null) {
+										updatedId = podcasts.getId();
+									}
 								}
 							}
 						}
@@ -104,7 +108,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 			// Make sure there are is at least one change before re-syncing
 			if(updated.size() > 0) {
 				FileUtil.serialize(context, podcastList, SyncUtil.getPodcastSyncFile(context, instance));
-				Notifications.showSyncNotification(context, R.string.sync_new_podcasts, SyncUtil.joinNames(updated));
+				Notifications.showSyncNotification(context, R.string.sync_new_podcasts, SyncUtil.joinNames(updated), updatedId);
 			}
 		} catch(Exception e) {
 			Log.w(TAG, "Failed to get podcasts for " + Util.getServerName(context, instance));

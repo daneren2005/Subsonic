@@ -69,6 +69,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 
 		ArrayList<SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, instance);
 		List<String> updated = new ArrayList<String>();
+		String updatedId = null;
 		boolean removed = false;
 		for(int i = 0; i < playlistList.size(); i++) {
 			SyncSet cachedPlaylist = playlistList.get(i);
@@ -97,6 +98,9 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 						file.downloadNow(musicService);
 						if(file.isSaved() && !updated.contains(playlist.getName())) {
 							updated.add(playlist.getName());
+							if(updatedId == null) {
+								updatedId = playlist.getId();
+							}
 						}
 					}
 
@@ -147,7 +151,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 		}
 
 		if(updated.size() > 0) {
-			Notifications.showSyncNotification(context, R.string.sync_new_playlists, SyncUtil.joinNames(updated));
+			Notifications.showSyncNotification(context, R.string.sync_new_playlists, SyncUtil.joinNames(updated), updatedId);
 		}
 	}
 }

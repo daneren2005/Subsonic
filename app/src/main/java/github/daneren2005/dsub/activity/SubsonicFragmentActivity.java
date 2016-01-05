@@ -155,6 +155,14 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				}
 			}
 			currentFragment = getNewFragment(fragmentType);
+			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_ID)) {
+				Bundle currentArguments = currentFragment.getArguments();
+				if(currentArguments == null) {
+					currentArguments = new Bundle();
+				}
+				currentArguments.putString(Constants.INTENT_EXTRA_NAME_ID, getIntent().getStringExtra(Constants.INTENT_EXTRA_NAME_ID));
+				currentFragment.setArguments(currentArguments);
+			}
 			currentFragment.setPrimaryFragment(true);
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 

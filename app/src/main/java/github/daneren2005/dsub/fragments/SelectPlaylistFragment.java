@@ -184,6 +184,22 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 		replaceFragment(fragment);
 	}
 
+	@Override
+	public void onFinishRefresh() {
+		Bundle args = getArguments();
+		if(args != null) {
+			String playlistId = args.getString(Constants.INTENT_EXTRA_NAME_ID, null);
+			if (playlistId != null && objects != null) {
+				for (Playlist playlist : objects) {
+					if (playlistId.equals(playlist.getId())) {
+						onItemClicked(null, playlist);
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	private void deletePlaylist(final Playlist playlist) {
 		Util.confirmDialog(context, R.string.common_delete, playlist.getName(), new DialogInterface.OnClickListener() {
 			@Override

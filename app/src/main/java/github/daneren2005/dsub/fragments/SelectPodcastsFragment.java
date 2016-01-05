@@ -270,6 +270,25 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		};
 	}
 
+	@Override
+	public void onFinishRefresh() {
+		Bundle args = getArguments();
+		if(args != null) {
+			String podcastId = args.getString(Constants.INTENT_EXTRA_NAME_ID, null);
+			if (podcastId != null && objects != null) {
+				for (Serializable ser : objects) {
+					if (ser instanceof PodcastChannel) {
+						PodcastChannel podcast = (PodcastChannel) ser;
+						if (podcastId.equals(podcast.getId())) {
+							onItemClicked(null, podcast);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	public void refreshPodcasts() {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
