@@ -664,8 +664,11 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, defaultPath);
 				editor.commit();
-				cacheLocation.setSummary(defaultPath);
-				cacheLocation.setText(defaultPath);
+
+				if(cacheLocation != null) {
+					cacheLocation.setSummary(defaultPath);
+					cacheLocation.setText(defaultPath);
+				}
 			}
 
 			// Clear download queue.
