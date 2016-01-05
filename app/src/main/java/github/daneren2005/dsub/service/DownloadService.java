@@ -2778,7 +2778,9 @@ public class DownloadService extends Service {
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				mRemoteControl.metadataChanged(currentPlaying.getSong());
+				if(currentPlaying != null) {
+					mRemoteControl.metadataChanged(currentPlaying.getSong());
+				}
 			}
 		});
 	}
