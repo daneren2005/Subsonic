@@ -1694,7 +1694,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deleteBookmark(entry, context, null);
 
-						new UpdateHelper.EntryInstanceUpdater(entry) {
+						new UpdateHelper.EntryInstanceUpdater(entry, DownloadService.METADATA_UPDATED_BOOKMARK) {
 							@Override
 							public void update(Entry found) {
 								found.setBookmark(null);

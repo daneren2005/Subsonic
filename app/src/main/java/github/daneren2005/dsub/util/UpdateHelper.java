@@ -255,9 +255,14 @@ public final class UpdateHelper {
 
 	public static abstract class EntryInstanceUpdater {
 		private Entry entry;
+		private int metadataUpdate = DownloadService.METADATA_UPDATED_ALL;
 
 		public EntryInstanceUpdater(Entry entry) {
 			this.entry = entry;
+		}
+		public EntryInstanceUpdater(Entry entry, int metadataUpdate) {
+			this.entry = entry;
+			this.metadataUpdate = metadataUpdate;
 		}
 
 		public abstract void update(Entry found);
@@ -267,11 +272,17 @@ public final class UpdateHelper {
 			if(downloadService != null && !entry.isDirectory()) {
 				boolean serializeChanges = false;
 				List<DownloadFile> downloadFiles = downloadService.getDownloads();
+				DownloadFile currentPlaying = downloadService.getCurrentPlaying();
+
 				for(DownloadFile file: downloadFiles) {
 					Entry check = file.getSong();
 					if(entry.getId().equals(check.getId())) {
-						update(entry);
+						update(check);
 						serializeChanges = true;
+
+						if(currentPlaying != null && currentPlaying.getSong() != null && currentPlaying.getSong().getId().equals(entry.getId())) {
+							downloadService.onMetadataUpdate(metadataUpdate);
+						}
 					}
 				}
 

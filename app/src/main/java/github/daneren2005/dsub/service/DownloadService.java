@@ -1372,6 +1372,7 @@ public class DownloadService extends Service {
 
 		if (playerState == PAUSED) {
 			lifecycleSupport.serializeDownloadQueue();
+			checkAddBookmark(true);
 		}
 
 		boolean show = playerState == PlayerState.STARTED;
@@ -2423,8 +2424,11 @@ public class DownloadService extends Service {
 			}.execute();
 		}
 	}
-	
+
 	private void checkAddBookmark() {
+		checkAddBookmark(false);
+	}
+	private void checkAddBookmark(final boolean updateMetadata) {
 		// Don't do anything if no current playing
 		if(currentPlaying == null || !ServerInfo.canBookmark(this)) {
 			return;
@@ -2453,6 +2457,9 @@ public class DownloadService extends Service {
 					MusicDirectory.Entry found = UpdateView.findEntry(entry);
 					if(found != null) {
 						found.setBookmark(new Bookmark(position));
+					}
+					if(updateMetadata) {
+						onMetadataUpdate(METADATA_UPDATED_BOOKMARK);
 					}
 					
 					return null;
@@ -2637,6 +2644,7 @@ public class DownloadService extends Service {
 						onSongsChanged();
 						onSongProgress();
 						onStateUpdate();
+						onMetadataUpdate(METADATA_UPDATED_ALL);
 					}
 				});
 			} else {
@@ -2749,10 +2757,10 @@ public class DownloadService extends Service {
 			}
 		}
 	}
-	private void onMetadataUpdate() {
+	public void onMetadataUpdate() {
 		onMetadataUpdate(METADATA_UPDATED_ALL);
 	}
-	private void onMetadataUpdate(final int updateType) {
+	public void onMetadataUpdate(final int updateType) {
 		synchronized(onSongChangedListeners) {
 			for (final OnSongChangedListener listener : onSongChangedListeners) {
 				handler.post(new Runnable() {
