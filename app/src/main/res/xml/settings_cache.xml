@@ -57,7 +57,7 @@
 			android:defaultValue="2000"
 			android:digits="0123456789"/>
 
-		<EditTextPreference
+		<github.daneren2005.dsub.view.CacheLocationPreference
 			android:title="@string/settings.cache_location"
 			android:key="cacheLocation"/>
 
