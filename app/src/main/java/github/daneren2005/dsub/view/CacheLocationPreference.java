@@ -117,11 +117,13 @@ public class CacheLocationPreference extends EditTextPreference {
 			final File finalInternalDir = new File(internalDir, "music");
 			final File finalExternalDir = new File(externalDir, "music");
 
+			final EditText editTextBox = (EditText)view.findViewById(android.R.id.edit);
 			if(finalInternalDir != null && (finalInternalDir.exists() || finalInternalDir.mkdirs())) {
 				internalLocation.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						setText(finalInternalDir.getPath());
+						String path = finalInternalDir.getPath();
+						editTextBox.setText(path);
 					}
 				});
 			} else {
@@ -132,7 +134,8 @@ public class CacheLocationPreference extends EditTextPreference {
 				externalLocation.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						setText(finalExternalDir.getPath());
+						String path = finalExternalDir.getPath();
+						editTextBox.setText(path);
 					}
 				});
 			} else {
