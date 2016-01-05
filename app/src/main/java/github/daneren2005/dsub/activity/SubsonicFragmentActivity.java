@@ -239,6 +239,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 					openNowPlaying();
 				}
 			}, 200);
+
+			getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD);
 		}
 
 		bottomBar = findViewById(R.id.bottom_bar);
