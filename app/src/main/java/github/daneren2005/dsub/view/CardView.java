@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.util.DrawableTint;
 
 public class CardView extends FrameLayout{
 	public CardView(Context context) {
@@ -46,7 +47,7 @@ public class CardView extends FrameLayout{
 
 	private void init(Context context) {
 		setClipChildren(true);
-		setBackgroundResource(R.drawable.card_rounded_corners);
+		setBackgroundResource(DrawableTint.getDrawableRes(context, R.attr.cardBackgroundDrawable));
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			setElevation(getResources().getInteger(R.integer.Card_Elevation));
 		}

@@ -55,7 +55,7 @@
 	<attr name="actionbarBackgroundColor" format="reference"/>
 	<attr name="drawerTitleStyle" format="reference"/>
 	<attr name="drawerSubtitleStyle" format="reference"/>
-	<attr name="cardBackgroundColor" format="reference"/>
+	<attr name="cardBackgroundDrawable" format="reference"/>
 
 	<declare-styleable name="SeekBarPreference">
 		<attr name="min" format="integer"/>
