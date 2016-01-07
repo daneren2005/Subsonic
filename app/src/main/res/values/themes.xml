@@ -63,6 +63,7 @@
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/colorPrimary</item>
 		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_light</item>
+		<item name="drawerHeaderBackground">@drawable/drawer_header_light</item>
 	</style>
 	<style name="Theme.DSub.Dark.Base" parent="@style/Theme.AppCompat">
 		<item name="offline_icon">@drawable/main_offline_dark</item>
@@ -126,6 +127,7 @@
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/colorPrimary</item>
 		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_black</item>
+		<item name="drawerHeaderBackground">@drawable/drawer_header_dark</item>
 	</style>
 	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
 	</style>
@@ -141,6 +143,7 @@
 		<item name="colorPrimaryDark">@color/holoPrimaryDark</item>
 		<item name="colorAccent">@color/holoAccent</item>
 		<item name="actionbarBackgroundColor">@color/holoPrimary</item>
+		<item name="drawerHeaderBackground">@drawable/drawer_header_holo</item>
 	</style>
 
 	<style name="Theme.DSub.Light.No_Actionbar" parent="Theme.DSub.Light">

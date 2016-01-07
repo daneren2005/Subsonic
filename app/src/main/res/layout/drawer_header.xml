@@ -4,7 +4,7 @@
 	android:layout_height="178dp"
 	android:orientation="vertical"
 	android:weightSum="1"
-	android:background="@drawable/drawer_header">
+	android:background="?attr/drawerHeaderBackground">
 
 	<LinearLayout
 		android:layout_width="match_parent"
