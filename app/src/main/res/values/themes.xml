@@ -134,16 +134,20 @@
 	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
 		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_dark</item>
 	</style>
-	<style name="Theme.DSub.Black" parent="Theme.DSub.Dark.Base">
+	<style name="Theme.DSub.Black.Base" parent="Theme.DSub.Dark.Base">
 		<item name="android:windowBackground">@android:color/black</item>
 	</style>
-	<style name="Theme.DSub.Holo" parent="Theme.DSub.Dark.Base">
+	<style name="Theme.DSub.Black" parent="Theme.DSub.Black.Base">
+	</style>
+	<style name="Theme.DSub.Holo.Base" parent="Theme.DSub.Dark.Base">
 		<item name="android:windowBackground">@drawable/background</item>
 		<item name="colorPrimary">@color/holoPrimary</item>
 		<item name="colorPrimaryDark">@color/holoPrimaryDark</item>
 		<item name="colorAccent">@color/holoAccent</item>
 		<item name="actionbarBackgroundColor">@color/holoPrimary</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_holo</item>
+	</style>
+	<style name="Theme.DSub.Holo" parent="Theme.DSub.Holo.Base">
 	</style>
 
 	<style name="Theme.DSub.Light.No_Actionbar" parent="Theme.DSub.Light">
