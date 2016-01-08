@@ -176,7 +176,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     }
 
 	@Override
-	public void updateCache() {
+	public void updateCache(int changeCode) {
 
 	}
 

@@ -39,6 +39,7 @@ import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Share;
+import github.daneren2005.dsub.service.CachedMusicService;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
@@ -85,6 +86,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	private LoadTask currentTask;
 	private ArtistInfo artistInfo;
 	private String artistInfoDelayed;
+
+	private SilentBackgroundTask updateCoverArtTask;
+	private ImageView coverArtView;
+	private Entry coverArtRep;
+	private String coverArtId;
 
 	String id;
 	String name;
@@ -654,9 +660,19 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 
 		@Override
-		public void updateCache() {
-			if(entryGridAdapter != null) {
+		public void updateCache(int changeCode) {
+			if(entryGridAdapter != null && changeCode == CachedMusicService.CACHE_UPDATE_LIST) {
 				entryGridAdapter.notifyDataSetChanged();
+			} else if(changeCode == CachedMusicService.CACHE_UPDATE_METADATA) {
+				if(coverArtView != null && coverArtRep != null && !Util.equals(coverArtRep.getCoverArt(), coverArtId)) {
+					synchronized (coverArtRep) {
+						if (updateCoverArtTask != null && updateCoverArtTask.isRunning()) {
+							updateCoverArtTask.cancel();
+						}
+						updateCoverArtTask = getImageLoader().loadImage(coverArtView, coverArtRep, false, true);
+						coverArtId = coverArtRep.getCoverArt();
+					}
+				}
 			}
 		}
 	}
@@ -1113,22 +1129,22 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			});
 			imageLoader.loadImage(coverArtView, url, false);
 		} else if(entries.size() > 0) {
-			Entry coverArt = null;
-			for (int i = 0; (i < 3) && (coverArt == null || coverArt.getCoverArt() == null); i++) {
-				coverArt = entries.get(random.nextInt(entries.size()));
+			coverArtRep = null;
+			this.coverArtView = coverArtView;
+			for (int i = 0; (i < 3) && (coverArtRep == null || coverArtRep.getCoverArt() == null); i++) {
+				coverArtRep = entries.get(random.nextInt(entries.size()));
 			}
 
-			final Entry albumRep = coverArt;
 			coverArtView.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (albumRep.getCoverArt() == null) {
+					if (coverArtRep == null || coverArtRep.getCoverArt() == null) {
 						return;
 					}
 
 					AlertDialog.Builder builder = new AlertDialog.Builder(context);
 					ImageView fullScreenView = new ImageView(context);
-					imageLoader.loadImage(fullScreenView, albumRep, true, true);
+					imageLoader.loadImage(fullScreenView, coverArtRep, true, true);
 					builder.setCancelable(true);
 
 					AlertDialog imageDialog = builder.create();
@@ -1137,7 +1153,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					imageDialog.show();
 				}
 			});
-			imageLoader.loadImage(coverArtView, albumRep, false, true);
+			synchronized (coverArtRep) {
+				coverArtId = coverArtRep.getCoverArt();
+				updateCoverArtTask = imageLoader.loadImage(coverArtView, coverArtRep, false, true);
+			}
 		}
 
 		coverArtView.setOnInvalidated(new RecyclingImageView.OnInvalidated() {

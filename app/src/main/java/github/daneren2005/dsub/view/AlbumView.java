@@ -30,6 +30,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
 
@@ -40,6 +41,7 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private TextView titleView;
 	private TextView artistView;
 	private boolean showArtist = true;
+	private String coverArtId;
 
 	public AlbumView(Context context, boolean cell) {
 		super(context);
@@ -82,12 +84,13 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 			artist += album.getYear();
 		}
 		artistView.setText(album.getArtist() == null ? "" : artist);
-		imageTask = imageLoader.loadImage(coverArtView, album, false, true);
+		onUpdateImageView();
 		file = null;
 	}
 
 	public void onUpdateImageView() {
 		imageTask = item2.loadImage(coverArtView, item, false, true);
+		coverArtId = item.getCoverArt();
 	}
 
 	@Override
@@ -99,6 +102,15 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		exists = file.exists();
 		isStarred = item.isStarred();
 		isRated = item.getRating();
+	}
+
+	@Override
+	public void update() {
+		super.update();
+
+		if(!Util.equals(item.getCoverArt(), coverArtId)) {
+			onUpdateImageView();
+		}
 	}
 
 	public MusicDirectory.Entry getEntry() {

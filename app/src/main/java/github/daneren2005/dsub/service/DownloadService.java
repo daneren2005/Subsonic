@@ -116,6 +116,7 @@ public class DownloadService extends Service {
 	public static final int METADATA_UPDATED_STAR = 1;
 	public static final int METADATA_UPDATED_RATING = 2;
 	public static final int METADATA_UPDATED_BOOKMARK = 4;
+	public static final int METADATA_UPDATED_COVER_ART = 8;
 
 	private RemoteControlClientBase mRemoteControl;
 

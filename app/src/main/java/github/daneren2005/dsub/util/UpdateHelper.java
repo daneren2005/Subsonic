@@ -255,7 +255,7 @@ public final class UpdateHelper {
 
 	public static abstract class EntryInstanceUpdater {
 		private Entry entry;
-		private int metadataUpdate = DownloadService.METADATA_UPDATED_ALL;
+		protected int metadataUpdate = DownloadService.METADATA_UPDATED_ALL;
 
 		public EntryInstanceUpdater(Entry entry) {
 			this.entry = entry;

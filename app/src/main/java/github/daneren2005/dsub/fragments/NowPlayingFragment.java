@@ -678,13 +678,13 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 	}
 	private void onResumeHandlers() {
-		final Handler handler = new Handler();
 		executorService = Executors.newSingleThreadScheduledExecutor();
 		setControlsVisible(true);
 
 		final DownloadService downloadService = getDownloadService();
 		if (downloadService == null || downloadService.getCurrentPlaying() == null || startFlipped) {
 			playlistFlipper.setDisplayedChild(1);
+			startFlipped = false;
 		}
 		if (downloadService != null && downloadService.getKeepScreenOn()) {
 			context.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -701,7 +701,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		context.runWhenServiceAvailable(new Runnable() {
 			@Override
 			public void run() {
-				if(primaryFragment) {
+				if (primaryFragment) {
 					DownloadService downloadService = getDownloadService();
 					downloadService.startRemoteScan();
 					downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
@@ -1333,6 +1333,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 			}
 			bookmarkButton.setImageResource(bookmark);
+		}
+
+		if(song != null && albumArtImageView != null && fieldChange == DownloadService.METADATA_UPDATED_COVER_ART) {
+			getImageLoader().loadImage(albumArtImageView, song, true, true);
 		}
 	}
 
