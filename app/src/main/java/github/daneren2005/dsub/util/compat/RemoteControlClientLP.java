@@ -43,6 +43,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
@@ -145,7 +146,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		DownloadFile downloadFile = downloadService.getCurrentPlaying();
 		if(downloadFile != null) {
-			MusicDirectory.Entry entry = downloadFile.getSong();
+			Entry entry = downloadFile.getSong();
 			addCustomActions(entry, builder);
 			builder.setActiveQueueItemId(entry.getId().hashCode());
 		}
@@ -156,7 +157,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	@Override
-	public void updateMetadata(Context context, MusicDirectory.Entry currentSong) {
+	public void updateMetadata(Context context, Entry currentSong) {
 		setMetadata(currentSong, null);
 
 		if(currentSong != null && imageLoader != null) {
@@ -165,11 +166,11 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	@Override
-	public void metadataChanged(MusicDirectory.Entry currentSong) {
+	public void metadataChanged(Entry currentSong) {
 		setPlaybackState(previousState);
 	}
 
-	public void setMetadata(MusicDirectory.Entry currentSong, Bitmap bitmap) {
+	public void setMetadata(Entry currentSong, Bitmap bitmap) {
 		MediaMetadata.Builder builder = new MediaMetadata.Builder();
 		builder.putString(MediaMetadata.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
 				.putString(MediaMetadata.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
@@ -189,7 +190,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	@Override
-	public void updateAlbumArt(MusicDirectory.Entry currentSong, Bitmap bitmap) {
+	public void updateAlbumArt(Entry currentSong, Bitmap bitmap) {
 		setMetadata(currentSong, bitmap);
 	}
 
@@ -208,7 +209,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		List<MediaSession.QueueItem> queue = new ArrayList<>();
 
 		for(DownloadFile file: playlist) {
-			MusicDirectory.Entry entry = file.getSong();
+			Entry entry = file.getSong();
 
 			MediaDescription description = new MediaDescription.Builder()
 					.setMediaId(entry.getId())
@@ -244,7 +245,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		return actions;
 	}
-	protected void addCustomActions(MusicDirectory.Entry currentSong, PlaybackState.Builder builder) {
+	protected void addCustomActions(Entry currentSong, PlaybackState.Builder builder) {
 		Bundle showOnWearExtras = new Bundle();
 		showOnWearExtras.putBoolean(SHOW_ON_WEAR, true);
 
@@ -296,7 +297,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				SearchResult results = musicService.search(searchCritera, downloadService, null);
 
 				if(results.hasArtists()) {
-					playFromParent(new MusicDirectory.Entry(results.getArtists().get(0)));
+					playFromParent(new Entry(results.getArtists().get(0)));
 				} else if(results.hasAlbums()) {
 					playFromParent(results.getAlbums().get(0));
 				} else if(results.hasSongs()) {
@@ -308,12 +309,12 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				return null;
 			}
 			
-			private void playFromParent(MusicDirectory.Entry parent) throws Exception {
-				List<MusicDirectory.Entry> songs = new ArrayList<>();
+			private void playFromParent(Entry parent) throws Exception {
+				List<Entry> songs = new ArrayList<>();
 				getSongsRecursively(parent, songs);
 				playSongs(songs);
 			}
-			private void getSongsRecursively(MusicDirectory.Entry parent, List<MusicDirectory.Entry> songs) throws Exception {
+			private void getSongsRecursively(Entry parent, List<Entry> songs) throws Exception {
 				MusicDirectory musicDirectory;
 				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
 					musicDirectory = musicService.getAlbum(parent.getId(), parent.getTitle(), false, downloadService, this);
@@ -321,7 +322,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					musicDirectory = musicService.getMusicDirectory(parent.getId(), parent.getTitle(), false, downloadService, this);
 				}
 
-				for (MusicDirectory.Entry dir : musicDirectory.getChildren(true, false)) {
+				for (Entry dir : musicDirectory.getChildren(true, false)) {
 					if (dir.getRating() == 1) {
 						continue;
 					}
@@ -329,7 +330,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					getSongsRecursively(dir, songs);
 				}
 
-				for (MusicDirectory.Entry song : musicDirectory.getChildren(false, true)) {
+				for (Entry song : musicDirectory.getChildren(false, true)) {
 					if (!song.isVideo() && song.getRating() != 1) {
 						songs.add(song);
 					}
@@ -349,16 +350,32 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}.execute();
 	}
+	private void playMusicDirectory(final Entry dir, final boolean shuffle, final boolean append) {
+		new SilentServiceTask<Void>(downloadService) {
+			@Override
+			protected Void doInBackground(MusicService musicService) throws Throwable {
+				MusicDirectory musicDirectory;
+				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
+					musicDirectory = musicService.getAlbum(dir.getId(), "dir", false, downloadService, null);
+				} else {
+					musicDirectory = musicService.getMusicDirectory(dir.getId(), "dir", false, downloadService, null);
+				}
+				playSongs(musicDirectory.getChildren(false, true), shuffle, append);
 
-	private void playSong(MusicDirectory.Entry entry) {
-		List<MusicDirectory.Entry> entries = new ArrayList<>();
+				return null;
+			}
+		}.execute();
+	}
+
+	private void playSong(Entry entry) {
+		List<Entry> entries = new ArrayList<>();
 		entries.add(entry);
 		playSongs(entries);
 	}
-	private void playSongs(List<MusicDirectory.Entry> entries) {
+	private void playSongs(List<Entry> entries) {
 		playSongs(entries, false, false);
 	}
-	private void playSongs(List<MusicDirectory.Entry> entries, boolean shuffle, boolean append) {
+	private void playSongs(List<Entry> entries, boolean shuffle, boolean append) {
 		if(!append) {
 			downloadService.clear();
 		}
@@ -467,6 +484,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}
 
+		@Override
 		public void onPlayFromMediaId (String mediaId, Bundle extras) {
 			if(extras == null) {
 				return;
@@ -478,6 +496,11 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			if(playlistId != null) {
 				Playlist playlist = new Playlist(playlistId, null);
 				playPlaylist(playlist, shuffle, playLast);
+			}
+			String musicDirectoryId = extras.getString(Constants.INTENT_EXTRA_NAME_ID);
+			if(musicDirectoryId != null) {
+				Entry dir = new Entry(musicDirectoryId);
+				playMusicDirectory(dir, shuffle, playLast);
 			}
 		}
 
