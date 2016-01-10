@@ -20,6 +20,7 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -247,7 +248,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			rightImage = false;
 		}
 
-		boolean playing = downloadService.getCurrentPlaying() == downloadFile;
+		boolean playing = Util.equals(downloadService.getCurrentPlaying(), downloadFile);
 		if (playing) {
 			if(!this.playing) {
 				this.playing = playing;

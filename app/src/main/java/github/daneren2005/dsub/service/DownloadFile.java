@@ -379,6 +379,19 @@ public class DownloadFile implements BufferFile {
         return "DownloadFile (" + song + ")";
     }
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		DownloadFile downloadFile = (DownloadFile) o;
+		return Util.equals(this.getSong(), downloadFile.getSong());
+	}
+
     private class DownloadTask extends SilentBackgroundTask<Void> {
 		private MusicService musicService;
 
