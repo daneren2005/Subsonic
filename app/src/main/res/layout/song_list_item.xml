@@ -23,8 +23,9 @@
 				android:layout_height="wrap_content"
 				android:layout_gravity="left|center_vertical"
 				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textColor="?android:textColorSecondary"
+				android:textColor="?android:textColorPrimary"
 				android:paddingLeft="6dip"
+				android:paddingRight="6dip"
 				android:drawablePadding="6dip"/>
 
             <TextView
@@ -38,6 +39,7 @@
 				android:ellipsize="marquee"
 				android:paddingLeft="6dip"
 				android:paddingRight="6dip"
+				android:drawablePadding="6dip"
 				android:textColor="?android:textColorPrimary"/>
 
 			<ImageButton

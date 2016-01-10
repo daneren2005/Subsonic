@@ -44,6 +44,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 	private TextView trackTextView;
 	private TextView titleTextView;
+	private TextView playingTextView;
 	private TextView artistTextView;
 	private TextView durationTextView;
 	private TextView statusTextView;
@@ -141,11 +142,23 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		String title = song.getTitle();
 		Integer track = song.getTrack();
+		TextView newPlayingTextView;
 		if(track != null && Util.getDisplayTrack(context)) {
 			trackTextView.setText(String.format("%02d", track));
 			trackTextView.setVisibility(View.VISIBLE);
+			newPlayingTextView = trackTextView;
 		} else {
 			trackTextView.setVisibility(View.GONE);
+			newPlayingTextView = titleTextView;
+		}
+
+		if(newPlayingTextView != playingTextView || playingTextView == null) {
+			if(playing) {
+				playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				playing = false;
+			}
+
+			playingTextView = newPlayingTextView;
 		}
 
 		titleTextView.setText(title);
@@ -252,12 +265,12 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		if (playing) {
 			if(!this.playing) {
 				this.playing = playing;
-				trackTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
+				playingTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
 			}
 		} else {
 			if(this.playing) {
 				this.playing = playing;
-				trackTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+				playingTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 			}
 		}
 
