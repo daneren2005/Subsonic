@@ -36,6 +36,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.media.MediaRouter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.service.DownloadFile;
@@ -492,6 +494,8 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 			boolean shuffle = extras.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false);
 			boolean playLast = extras.getBoolean(Constants.INTENT_EXTRA_PLAY_LAST, false);
+			Serializable entry = extras.getSerializable(Constants.INTENT_EXTRA_ENTRY);
+
 			String playlistId = extras.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, null);
 			if(playlistId != null) {
 				Playlist playlist = new Playlist(playlistId, null);
@@ -501,6 +505,11 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			if(musicDirectoryId != null) {
 				Entry dir = new Entry(musicDirectoryId);
 				playMusicDirectory(dir, shuffle, playLast);
+			}
+
+			String podcastId = extras.getString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, null);
+			if(podcastId != null) {
+				playSong((PodcastEpisode) entry);
 			}
 		}
 

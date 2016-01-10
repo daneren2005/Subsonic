@@ -36,6 +36,8 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
@@ -50,7 +52,9 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 	private static final String BROWSER_ALBUM_LISTS = "albumLists";
 	private static final String BROWSER_LIBRARY = "library";
 	private static final String BROWSER_PLAYLISTS = "playlists";
+	private static final String BROWSER_PODCASTS = "podcasts";
 	private static final String PLAYLIST_PREFIX = "pl-";
+	private static final String PODCAST_PREFIX = "po-";
 	private static final String ALBUM_TYPE_PREFIX = "ty-";
 	private static final String MUSIC_DIRECTORY_PREFIX = "md-";
 
@@ -89,6 +93,11 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		} else if(parentId.startsWith(PLAYLIST_PREFIX)) {
 			String id = parentId.substring(PLAYLIST_PREFIX.length());
 			getPlayOptions(result, id, Constants.INTENT_EXTRA_NAME_PLAYLIST_ID);
+		} else if(BROWSER_PODCASTS.equals(parentId)) {
+			getPodcasts(result);
+		} else if(parentId.startsWith(PODCAST_PREFIX)) {
+			String id = parentId.substring(PODCAST_PREFIX.length());
+			getPodcastEpisodes(result, id);
 		} else {
 			// No idea what it is, send empty result
 			result.sendResult(new ArrayList<MediaBrowser.MediaItem>());
@@ -112,6 +121,11 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		playlists.setTitle(downloadService.getString(R.string.button_bar_playlists))
 				.setMediaId(BROWSER_PLAYLISTS);
 		mediaItems.add(new MediaBrowser.MediaItem(playlists.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
+
+		MediaDescription.Builder podcasts = new MediaDescription.Builder();
+		podcasts.setTitle(downloadService.getString(R.string.button_bar_podcasts))
+				.setMediaId(BROWSER_PODCASTS);
+		mediaItems.add(new MediaBrowser.MediaItem(podcasts.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
 
 		result.sendResult(mediaItems);
 	}
@@ -222,6 +236,67 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 		result.detach();
 	}
+
+	private void getPodcasts(final Result<List<MediaBrowser.MediaItem>> result) {
+		new SilentServiceTask<List<PodcastChannel>>(downloadService) {
+			@Override
+			protected List<PodcastChannel> doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getPodcastChannels(false, downloadService, null);
+			}
+
+			@Override
+			protected void done(List<PodcastChannel> podcasts) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				for(PodcastChannel podcast: podcasts) {
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(podcast.getName())
+							.setMediaId(PODCAST_PREFIX + podcast.getId())
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+	private void getPodcastEpisodes(final Result<List<MediaBrowser.MediaItem>> result, final String podcastId) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getPodcastEpisodes(false, podcastId, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory podcasts) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				for(Entry entry: podcasts.getChildren(false, true)) {
+					PodcastEpisode podcast = (PodcastEpisode) entry;
+					Bundle podcastExtras = new Bundle();
+					podcastExtras.putSerializable(Constants.INTENT_EXTRA_ENTRY, podcast);
+					podcastExtras.putString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, podcast.getId());
+
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(podcast.getTitle())
+							.setSubtitle(Util.formatDate(downloadService, podcast.getDate()))
+							.setMediaId(PODCAST_PREFIX + podcast.getId())
+							.setExtras(podcastExtras)
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+	
 	private void getPlayOptions(Result<List<MediaBrowser.MediaItem>> result, String id, String idConstant) {
 		List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
 
