@@ -43,6 +43,7 @@ import java.util.List;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
+import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.Playlist;
@@ -352,7 +353,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}.execute();
 	}
-	private void playMusicDirectory(final Entry dir, final boolean shuffle, final boolean append) {
+	private void playMusicDirectory(final Entry dir, final boolean shuffle, final boolean append, final boolean playFromBookmark) {
 		new SilentServiceTask<Void>(downloadService) {
 			@Override
 			protected Void doInBackground(MusicService musicService) throws Throwable {
@@ -362,7 +363,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				} else {
 					musicDirectory = musicService.getMusicDirectory(dir.getId(), "dir", false, downloadService, null);
 				}
-				playSongs(musicDirectory.getChildren(false, true), shuffle, append);
+				playSongs(musicDirectory.getChildren(false, true), shuffle, append, playFromBookmark);
 
 				return null;
 			}
@@ -370,18 +371,40 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	private void playSong(Entry entry) {
+
+	}
+	private void playSong(Entry entry, boolean resumeFromBookmark) {
 		List<Entry> entries = new ArrayList<>();
 		entries.add(entry);
-		playSongs(entries);
+		playSongs(entries, false, false, resumeFromBookmark);
 	}
 	private void playSongs(List<Entry> entries) {
 		playSongs(entries, false, false);
 	}
 	private void playSongs(List<Entry> entries, boolean shuffle, boolean append) {
+		playSongs(entries, shuffle, append, false);
+	}
+	private void playSongs(List<Entry> entries, boolean shuffle, boolean append, boolean resumeFromBookmark) {
 		if(!append) {
 			downloadService.clear();
 		}
-		downloadService.download(entries, false, true, false, shuffle);
+
+		int startIndex = 0;
+		int startPosition = 0;
+		if(resumeFromBookmark) {
+			int bookmarkIndex = 0;
+			for(Entry entry: entries) {
+				if(entry.getBookmark() != null) {
+					Bookmark bookmark = entry.getBookmark();
+					startIndex = bookmarkIndex;
+					startPosition = bookmark.getPosition();
+					break;
+				}
+				bookmarkIndex++;
+			}
+		}
+
+		downloadService.download(entries, false, true, false, shuffle, startIndex, startPosition);
 	}
 
 	private void noResults() {
@@ -504,12 +527,12 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			String musicDirectoryId = extras.getString(Constants.INTENT_EXTRA_NAME_ID);
 			if(musicDirectoryId != null) {
 				Entry dir = new Entry(musicDirectoryId);
-				playMusicDirectory(dir, shuffle, playLast);
+				playMusicDirectory(dir, shuffle, playLast, true);
 			}
 
 			String podcastId = extras.getString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, null);
 			if(podcastId != null) {
-				playSong((PodcastEpisode) entry);
+				playSong((PodcastEpisode) entry, true);
 			}
 		}
 
