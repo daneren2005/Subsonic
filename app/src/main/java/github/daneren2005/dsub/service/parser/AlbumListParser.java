@@ -46,7 +46,9 @@ public class AlbumListParser extends MusicDirectoryEntryParser {
                 String name = getElementName();
                 if ("album".equals(name)) {
 					MusicDirectory.Entry entry = parseEntry("");
-					entry.setDirectory(true);
+					if(get("isDir") == null) {
+						entry.setDirectory(true);
+					}
                     dir.addChild(entry);
                 } else if ("error".equals(name)) {
                     handleError();
