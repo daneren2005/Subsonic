@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="common.appname">DSub</string>
+    <string name="common.ok">OK</string>
+    <string name="common.save">Opslaan</string>
+    <string name="common.cancel">Annuleer</string>
+    <string name="common.play_now">Afspelen</string>
+	<string name="common.play_shuffled">Willekeurig afspelen</string>
+    <string name="common.play_next">Volgend afspelen</string>
+    <string name="common.play_last">Laatst afspelen</string>
+	<string name="common.download">Cache</string>
+    <string name="common.pin">Permanent Cache</string>
+    <string name="common.delete">Verwijder</string>
+	<string name="common.star">Ster</string>
+	<string name="common.unstar">Verwijder ster</string>
+	<string name="common.info">Details</string>
+	<string name="common.name">Naam</string>
+	<string name="common.comment">Opmerking</string>
+	<string name="common.public">Publiek</string>
+	<string name="common.play_external">Speel video</string>
+	<string name="common.stream_external">Stream video</string>
+	<string name="common.confirm">Bevestig</string>
+	<string name="common.confirm_message">Wil je %1$s %2$s?</string>
+	<string name="common.confirm_message_cache">cache</string>
+	<string name="common.empty">Geen data</string>
+	<string name="common.warning">Waarschuwing</string>
+	<string name="common.close">Sluiten</string>
+	<string name="common.false">Nee</string>
+	<string name="common.true">Ja</string>
+	<string name="common.never">Nooit</string>
+
+    <string name="button_bar.home">Home</string>
+    <string name="button_bar.browse">Bibliotheek</string>
+    <string name="button_bar.search">Zoek</string>
+    <string name="button_bar.playlists">Playlists</string>
+    <string name="button_bar.now_playing">Speelt nu</string>
+	<string name="button_bar.podcasts">Podcasts</string>
+	<string name="button_bar.bookmarks">Bladwijzers</string>
+	<string name="button_bar.shares">Shares</string>
+	<string name="button_bar.chat">Babbelen</string>
+	<string name="button_bar.admin">Admin</string>
+	<string name="button_bar.downloading">Downloaden</string>
+	<string name="button_bar.offline">Offline</string>
+
+    <string name="main.welcome_title">Welkom!</string>
+    <string name="main.welcome_text">Welkom bij DSub! De app is momenteel alleen geconfigureerd om de demo server te gebruiken. Nadat je eigen server geïnstalleerd hebt  (beschikbaar bij <b>subsonic.org</b>), ga dan naar <b>Instellingen</b> en verander de configuratie zodat je ermee kunt verbinden.</string>
+	<string name="main.about_title">Over DSub</string>
+	<string name="main.faq_title">FAQ</string>
+	<string name="main.faq_text">
+	<![CDATA[
+		<font color="red">Cache versus Permanente Cache</font>:
+		<br/>Wanneer nummers zijn gedownload door DSub (cache), kunnen ze verwijderd worden om ruimte te maken voor nieuwe downloads. Permanente cache, daarentegen, wordt nooit automatisch verwijderd. 
+		<p/><font color="red">ChromeCast faalt</font>:
+		<br/>Probeer de optie Instellingen -> Afspelen -> Gebruik apparaat proxy. Hiermee wordt het probleem van niet geaccepteerde \'self signed\' certificaten omzeild.
+		<p/><font color="red">Het eerste niveau in de bibliotheek zijn eigenlijk groepen artiesten.</font>:
+		<br/>In het optiemenu deselecteer "Eerste niveau artiesten". Dit zorgt ervoor dat het gehele eerste niveau directories wordt behandeld als een groep artisten ipv individuele artiesten.
+	]]>
+	</string>
+    <string name="main.select_server">Selecteer server</string>
+    <string name="main.shuffle">Willekeurig afspelen</string>
+    <string name="main.offline">Ga offline</string>
+	<string name="main.online">Ga online</string>
+    <string name="main.settings">Instellingen</string>
+    <string name="main.albums_title">Album lijsten</string>
+	<string name="main.albums_per_folder">Per folder</string>
+    <string name="main.albums_newest">Recent toegevoegd</string>
+    <string name="main.albums_recent">Recent afgespeeld</string>
+    <string name="main.albums_frequent">Meest afgespeeld</string>
+    <string name="main.albums_highest">Hoogst beoordeeld</string>
+    <string name="main.albums_starred">Met ster</string>
+    <string name="main.albums_random">Willekeurig</string>
+	<string name="main.albums_genres">Genres</string>
+	<string name="main.albums_year">Decennia</string>
+	<string name="main.albums_alphabetical">Alfabetisch</string>
+	<string name="main.videos">Video\'s</string>
+	<string name="main.songs_genres">@string/main.albums_genres</string>
+	<string name="main.back_confirm">Druk nogmaals terug om te stoppen</string>
+	<string name="main.scan_complete">Server scan afgerond</string>
+	<string name="main.artist">Artiest</string>
+	<string name="main.title">Titel</string>
+
+	<string name="menu.search">Zoek</string>
+	<string name="menu.shuffle">Willekeurig</string>
+	<string name="menu.refresh">Ververs</string>
+	<string name="menu.play">Speel af</string>
+	<string name="menu.play_last">Speel laatst</string>
+    <string name="menu.exit">Be\ëindigen</string>
+    <string name="menu.settings">Instellingen</string>
+    <string name="menu.help">Help</string>
+	<string name="menu.about">Over</string>
+	<string name="menu.add_playlist">Voeg toe aan playlist</string>
+	<string name="menu.remove_playlist">Verwijder van playlist</string>
+	<string name="menu.deleted_playlist">Verwijderde playlist %s</string>
+	<string name="menu.deleted_playlist_error">Playlist %s kon niet verwijderd worden</string>
+	<string name="menu.log">Stuur log</string>
+	<string name="menu.set_timer">Stel timer in</string>
+	<string name="menu.check_podcasts">Controleer op nieuwe afleveringen</string>
+	<string name="menu.add_podcast">Voeg kanaal toe</string>
+	<string name="menu.keep_synced">Gesynchroniseerd houden</string>
+	<string name="menu.stop_sync">Stop synchroniseren</string>
+	<string name="menu.show_all">Toon alle media</string>
+	<string name="menu.show_artist">Toon artist</string>
+	<string name="menu.share">Deel</string>
+	<string name="menu.delete_cache">Verwijder cache</string>
+	<string name="menu.cast">Cast naar apparaat</string>
+	<string name="menu.faq">FAQ</string>
+	<string name="menu.add_user">Gebruiker toevoegen</string>
+	<string name="menu.rescan">Server scannen</string>
+	<string name="menu.rate">Bepaal rating</string>
+	<string name="menu.top_tracks">Laatste .FM Top Nummers</string>
+	<string name="menu.similar_artists">Gelijke artiesten</string>
+	<string name="menu.show_missing">Toon missende</string>
+	<string name="menu.start_radio">Start radio</string>
+	<string name="menu.first_level_artist">Eerste niveau artiesten</string>
+
+    <string name="playlist.label">Speellijsten</string>
+	<string name="playlist.update_info">Update informatie</string>
+	<string name="playlist.updated_info">Update speellijst informatie voor %s</string>
+	<string name="playlist.updated_info_error">Niet gelust speellijst information for %s te updaten</string>
+	<string name="playlist.overwrite">Overschrijf bestaande playlist</string>
+	<string name="playlist.add_to">Voeg toe aan playlist</string>
+	<string name="playlist.create_new">Cre\ëer nieuw</string>
+	<string name="playlist.delete">Verwijder playlist</string>
+
+    <string name="search.label">Zoek</string>
+    <string name="search.title">Zoek</string>
+    <string name="search.search">Klik om te zoeken</string>
+    <string name="search.no_match">Geen overeenkomst, zoek nogmaals</string>
+    <string name="search.artists">Artiesten</string>
+    <string name="search.albums">Albums</string>
+    <string name="search.songs">Nummers</string>
+    <string name="search.more">Laat meer zien</string>
+
+    <string name="progress.wait">Moment aub...</string>
+	<string name="progress.artist_info">Laadt artiesten bio</string>
+
+    <string name="music_library.label">Media bibliotheek</string>
+    <string name="music_library.label_offline">Offline media</string>
+
+    <string name="select_album.select">Selecteer alles</string>
+    <string name="select_album.n_selected">%d geselecteerd.</string>
+	<string name="select_album.more">Meer</string>
+    <string name="select_album.offline">Offline</string>
+    <string name="select_album.searching">Zoeken...</string>
+    <string name="select_album.no_sdcard">Fout: Geen SD kaart beschikbaar.</string>
+    <string name="select_album.no_network">Waarschuwing: Netwerk onbeschikbaar.</string>
+	<string name="select_album.no_room">Waarschuwing: je hebt nog maar %s over</string>
+    <string name="select_album.not_licensed">Server niet gelicenseerd. %d proefdagen over.</string>
+    <string name="select_album.donate_dialog_message">Verkrijg ongelimeteerde downloads door te doneren aan Subsonic.</string>
+    <string name="select_album.donate_dialog_now">Nu</string>
+    <string name="select_album.donate_dialog_later">Later</string>
+    <string name="select_album.donate_dialog_0_trial_days_left">Proeftijd is voorbij</string>
+
+    <string name="offline.sync_dialog_title">Offline nummers om gesynchroniseerd te worden</string>
+    <string name="offline.sync_dialog_message">Verwerk %1$d offline scrobbles?
+		\nVerwerk %2$d offline sterren?
+	</string>
+	<string name="offline.sync_dialog_default">Gebruik actie als standaard</string>
+	<string name="offline.sync_success">Succesvol %1$d nummers gesynchroniseerd</string>
+	<string name="offline.sync_partial">Succesvol %1$d van %2$d nummers gesynchroniseerd</string>
+	<string name="offline.sync_error">Mislukt om nummers te synchroniseren</string>
+
+	<string name="select_genre.blank">Leeg</string>
+	<string name="select_genre.songs">%d nummers</string>
+	<string name="select_genre.albums">%d albums</string>
+
+	<string name="select_podcasts.error">Deze podcast had een foutmelding tijdens het downloaden naar de server. De server moet het eerst downloaden.</string>
+	<string name="select_podcasts.skipped">Deze podcast is niet op de server gedownload. De server moet het eerst downloaden.</string>
+    <string name="select_podcasts.initializing">Dit podcast kanaal wordt ge\ïnitieerd door de server. Over een enkel moment herladen.</string>
+	<string name="select_podcasts.server_download">Download op de server</string>
+	<string name="select_podcasts.server_delete">Verwijder van server</string>
+	<string name="select_podcasts.downloading">Wordt nu gedownload %s op de server</string>
+	<string name="select_podcasts.refreshing">De server controleert nu op nieuwe podcasts</string>
+	<string name="select_podcasts.deleted">Verwijderde podcast %s</string>
+	<string name="select_podcasts.deleted_error">Kon podcast %s niet verwijderen</string>
+	<string name="select_podcasts.add_url">URL:</string>
+	<string name="select_podcasts.created_error">Niet gelukt podcast toe te voegen</string>
+	<string name="select_podcasts.invalid_podcast_channel">Ongeldig podcast kanaal: %s</string>
+	<string name="select_podcasts.delete">Verwijder podcast</string>
+	<string name="select_podcasts.channels">Podcast kanalen</string>
+
+    <string name="download.empty">Playlist is leeg</string>
+	<string name="download.shuffle_loading">Shuffle lijst wordt geladen...</string>
+    <string name="download.playerstate_downloading">Downloaden - %s</string>
+	<string name="download.playerstate_mobile_disabled">Wachten op WiFi network om te kunnen downloaden</string>
+    <string name="download.playerstate_buffering">Bufferen</string>
+    <string name="download.playerstate_playing_shuffle">Afspelen shuffle</string>
+    <string name="download.menu_show_album">Toon album</string>
+    <string name="download.menu_lyrics">Songteksten</string>
+	<string name="download.menu_remove_all">Verwijder alles</string>
+    <string name="download.menu_screen_on">Scherm aan</string>
+    <string name="download.menu_shuffle">Shuffle</string>
+	<string name="download.menu_toggle">Aan\/Uit</string>
+    <string name="download.menu_save">Bewaar speellijst</string>
+    <string name="download.menu_shuffle_notification">Speellijst was geshufffeld</string>
+	<string name="download.menu_remove_played_songs">Verwijder afgespeelde nummers</string>
+    <string name="download.playlist_title">Bewaar playlist</string>
+    <string name="download.playlist_name">Voer de naam in van de playlist:</string>
+    <string name="download.playlist_saving">Playlist \"%s\ wordt opgeslagen"...</string>
+    <string name="download.playlist_done">Playlist was succesvol opgeslagen.</string>
+    <string name="download.playlist_error">Niet gelukt playlist op te slaan, probeer het later nog eens.</string>
+    <string name="download.repeat_off">Herhalen uit</string>
+    <string name="download.repeat_all">Herhaal alles</string>
+    <string name="download.repeat_single">Herhaal nummer</string>
+    <string name="download.jukebox_on">Afstandbediening aangezet. Muziek wordt op de computer afgespeeld.</string>
+    <string name="download.jukebox_off">Afstandbediening uitgezet. Muziek wordt afgespeeld op de telefoon.</string>
+    <string name="download.jukebox_volume">Volume op afstand</string>
+    <string name="download.jukebox_server_too_old">Afstandbediending wordt niet ondersteund. Upgrade de Subsonic server.</string>
+    <string name="download.jukebox_offline">Afstandbediending is in offline mode niet beschikbaar.</string>
+    <string name="download.jukebox_not_authorized">Afstandbediening is niet toegestaan. Zet de jukebox mode aan in <b>Users &gt; Instellingen</b> op je Subsonic server.</string>
+	<string name="download.timer_length">Timer:</string>
+	<string name="download.start_timer">Start Timer</string>
+	<string name="download.stop_time_remaining">Stop in %1$s</string>
+	<string name="download.need_download">Video moet eerst gedownload worden</string>
+	<string name="download.no_streaming_player">Deze stream kan niet afgespeeld worden</string>
+	<string name="download.playing_out_of">Speelt: %1$d/%2$d</string>
+	<string name="download.save_bookmark_title">Cre\ëer bladwijzer</string>
+	<string name="download.save_bookmark">Bladwijzer aangemaakt</string>
+	<string name="download.save_bookmark_failed">Niet gelukt om bladwijzer te maken</string>
+	<string name="download.downloading_title">Downloaden %1$d nummers</string>
+	<string name="download.downloading_summary">Huidig: %1$s</string>
+	<string name="download.downloading_summary_expanded">Huidig: %1$s
+		\nGeschatte grootte: %2$s</string>
+	<string name="download.failed_to_load">Niet gelukt te laden</string>
+	<string name="download.restore_play_queue">Ga verder waar je op een ander apparaat gestopt bent bij</string>
+	<string name="download.thumbs_up">Duim omhoog</string>
+	<string name="download.thumbs_down">Duim omlaag</string>
+
+	<string name="sync.new_podcasts">Nieuwe podcasts beschikbaar</string>
+	<string name="sync.new_playlists">Nieuwe nummers in playlists</string>
+	<string name="sync.new_albums">Nieuwe albums beschikbaar</string>
+	<string name="sync.new_starred">Nieuwe nummers met sterren beschikbaar</string>
+    
+	<string name="starring_content_starred">Met sterren \"%s\"</string>
+	<string name="starring_content_unstarred">Zoner sterren \"%s\"</string>
+    <string name="starring_content_error">Kon \"%s\" niet updaten, probeer het later nog eens.</string>
+
+	<string name="playlist.mine">Mijn playlists</string>
+	<string name="playlist.shared">Gedeelde playlists</string>
+	<string name="playlist_error">Niet gelukt de lijst playlists op te halen</string>
+	<string name="updated_playlist">Toegevoegd %1$s nummer aan \"%2$s\"</string>
+    <string name="updated_playlist_error">Niet gelukt te updaten \"%s\", probeer later nog eens.</string>
+	<string name="removed_playlist">Verwijderd %1$s nummers van \"%2$s\"</string>
+	
+	<string name="bookmark.delete">Verwijder bladwijzer</string>
+	<string name="bookmark.delete_title">Verwijder de bladwijzer voor</string>
+	<string name="bookmark.deleted">Bladwijzer verwijderd voor \"%s\"</string>
+	<string name="bookmark.deleted_error">Niet gelukt om bladwijzer te verwijderen voor \"%s\"</string>
+	<string name="bookmark.details_title">Bladwijzer details</string>
+	<string name="bookmark.resume_title">Hervat afspelen?</string>
+	<string name="bookmark.resume">Hervat afspelen \'%1$s\' van %2$s</string>
+	<string name="bookmark.action_resume">Hervat</string>
+	<string name="bookmark.action_start_over">Start opnieuw</string>
+
+	<string name="rating.title">Beoordeling \"%s\"</string>
+	<string name="rating.set_rating">Beoordeling ingesteld voor \"%s\"</string>
+	<string name="rating.set_rating_failed">Niet gelukt beoordeling in te stellen voor \"%s\"</string>
+	<string name="rating.remove_rating">Beoordeling verwijderd voor \"%s\"</string>
+	<string name="rating.remove_rating_failed">Niet gelukt beoordeling te verwijderen voor \"%s\"</string>
+
+	<string name="song_details.error">Fout</string>
+	<string name="song_details.skipped">Overgeslagen</string>
+	<string name="song_details.downloading">Downloaden</string>
+
+    <string name="lyrics.nomatch">Geen songteksten gevonden</string>
+
+    <string name="error.label">Fout</string>
+
+    <string name="settings.title">Instellingen</string>
+    <string name="settings.test_connection_title">Test verbinding</string>
+	<string name="settings.servers_add">Voeg server toe</string>
+	<string name="settings.servers_remove">Verwijder server</string>
+    <string name="settings.servers_title">Servers</string>
+    <string name="settings.server_unused">Ongebruikt</string>
+    <string name="settings.server_name">Naam</string>
+    <string name="settings.server_address">Server addres</string>
+	<string name="settings.server_local_network_ssid" >Lokaal network SSID</string>
+	<string name="settings.server_local_network_ssid_hint">Huidig SSID: %s</string>
+	<string name="settings.server_internal_address">Lokaal network addres</string>
+    <string name="settings.server_username">Gebruikersnaam</string>
+    <string name="settings.server_password">Wachtwoord</string>
+	<string name="settings.server_open_browser">Open in browser</string>
+	<string name="settings.server_sync_summary">Of synchronisatie ingesteld is voor deze server</string>
+	<string name="settings.server_sync">Synchronisatie ingesteld</string>
+    <string name="settings.cache_title">Muziek cache</string>
+    <string name="settings.preload_wifi">Nummers vooraf laden (Wifi)</string>
+	<string name="settings.preload_mobile">Nummers vooraf laden (Mobiel)</string>
+    <string name="settings.cache_size">Cache grootte</string>
+    <string name="settings.cache_location">Cache locatie</string>
+    <string name="settings.cache_location_error">Onjuiste cache locatie. Standaard wordt gebruikt.</string>
+    <string name="settings.cache_location_reset">De locatie van de cache die u hebt ingesteld is niet meer beschrijfbaar. Als onlangs uw Android telefoon geüpgraded is naar KitKat 4.4 en hoger, dan is de manier waarop apps naar de SD-kaart schrijven veranderd zodat er alleen naar een specifieke locatie geschreven kan worden. De locatie die DSub gebruikt is al automatisch veranderd naar de juiste locatie. Om de oude app-data te verwijderen, moet de SD-kaart gekoppeld worden aan een computer om de oude folder handmatig te verwijderen.</string>
+	<string name="settings.cache_clear">Cache legen</string>
+	<string name="settings.cache_clear_complete">Klaar met cache legen</string>
+    <string name="settings.testing_connection">Verbinding testen...</string>
+    <string name="settings.testing_ok">De verbinding is OK</string>
+    <string name="settings.testing_unlicensed">Verbinding is OK. Server niet gelicenseerd.</string>
+    <string name="settings.connection_failure">Verbinding mislukt.</string>
+    <string name="settings.invalid_url">Geef een valide URL op.</string>
+    <string name="settings.invalid_username">Geef een valide gebruikersnaam op (geen volgspaties).</string>
+    <string name="settings.appearance_title">Uiterlijk</string>
+    <string name="settings.theme_title">Thema</string>
+    <string name="settings.theme_light">Licht</string>
+    <string name="settings.theme_dark">Donker</string>
+	<string name="settings.theme_black">Zwart</string>
+	<string name="settings.theme_holo">Holo</string>
+	<string name="settings.theme_fullscreen">Schermvullend</string>
+	<string name="settings.theme_fullscreen_summary">Verberg zoveel mogelijk schermelementen als Android zal toestaan</string>
+	<string name="settings.track_title">Toon track #</string>
+	<string name="settings.track_summary">Toon track # voor een nummer indien er een bestaat</string>
+	<string name="settings.custom_sort">Sorteer op jaartal</string>
+	<string name="settings.custom_sort_summary">Sorteer albums op jaartal, of alfabetisch</string>
+	<string name="settings.open_to_tab">Open naar tabblad</string>
+	<string name="settings.open_to_tab_summary">Open direct naar dit tabblad</string>
+    <string name="settings.network_title">Netwerk</string>
+    <string name="settings.max_bitrate_wifi">Max audio bitrate - wifi</string>
+    <string name="settings.max_bitrate_mobile">Max audio bitrate - mobiel</string>
+    <string name="settings.max_bitrate_32">32 Kbps</string>
+    <string name="settings.max_bitrate_64">64 Kbps</string>
+    <string name="settings.max_bitrate_80">80 Kbps</string>
+    <string name="settings.max_bitrate_96">96 Kbps</string>
+    <string name="settings.max_bitrate_112">112 Kbps</string>
+    <string name="settings.max_bitrate_128">128 Kbps</string>
+    <string name="settings.max_bitrate_160">160 Kbps</string>
+    <string name="settings.max_bitrate_192">192 Kbps</string>
+    <string name="settings.max_bitrate_256">256 Kbps</string>
+    <string name="settings.max_bitrate_320">320 Kbps</string>
+	<string name="settings.max_video_bitrate_wifi">Max video bitrate - wifi</string>
+    <string name="settings.max_video_bitrate_mobile">Max video bitrate - mobiel</string>
+	<string name="settings.max_video_bitrate_200">200 Kbps</string>
+    <string name="settings.max_video_bitrate_300">300 Kbps</string>
+    <string name="settings.max_video_bitrate_400">400 Kbps</string>
+    <string name="settings.max_video_bitrate_500">500 Kbps</string>
+    <string name="settings.max_video_bitrate_700">700 Kbps</string>
+    <string name="settings.max_video_bitrate_1000">1000 Kbps</string>
+    <string name="settings.max_video_bitrate_1500">1500 Kbps</string>
+    <string name="settings.max_video_bitrate_2000">2000 Kbps</string>
+    <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
+    <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
+    <string name="settings.max_bitrate_unlimited">Unlimited</string>
+    <string name="settings.wifi_required_title">Alleen wifi streaming</string>
+    <string name="settings.wifi_required_summary">Alleen media streamen wanneer verbonden met wifi.</string>
+	<string name="settings.network_timeout_title">Netwerk timeout</string>
+	<string name="settings.network_timeout_10000">10 seconds</string>
+	<string name="settings.network_timeout_15000">15 seconds</string>
+	<string name="settings.network_timeout_30000">30 seconds</string>
+	<string name="settings.network_timeout_45000">45 seconds</string>
+	<string name="settings.network_timeout_60000">60 seconds</string>
+    <string name="settings.preload_0">0 nummer</string>
+    <string name="settings.preload_1">1 nummer</string>
+    <string name="settings.preload_2">2 nummers</string>
+    <string name="settings.preload_3">3 nummers</string>
+    <string name="settings.preload_5">5 nummers</string>
+    <string name="settings.preload_10">10 nummers</string>
+	<string name="settings.preload_unlimited">Onbeperkt</string>
+    <string name="settings.clear_search_history">Verwijder zoekgeschiedenis</string>
+    <string name="settings.search_history_cleared">Zoekgeschiedenis verwijderd</string>
+    <string name="settings.other_title">Andere instellingen</string>
+    <string name="settings.scrobble_title">Scrobble naar Last.fm</string>
+    <string name="settings.scrobble_summary">Vergeet niet om je last.fm account in te stellen op de Subsonic server.</string>
+    <string name="settings.hide_media_title">Verberg voor andere</string>
+    <string name="settings.hide_media_summary">Verberg muziek voor andere apps.</string>
+    <string name="settings.hide_media_toast">Is actief wanneer Android de volgende keer je telefoon scant voor nieuwe muziek.</string>
+    <string name="settings.media_button_title">Mediaknoppen</string>
+    <string name="settings.media_button_summary">Reageer op telefoon, koptelefoon en bluetooth mediaknoppen</string>
+    <string name="settings.screen_lit_title">Houd scherm aan</string>
+    <string name="settings.screen_lit_summary">Houdt scherm aan tijdens het downloaden verbetert de download snelheid.</string>
+	<string name="settings.playlist_title">Afspelen</string>
+	<string name="settings.playlist_random_size_title">Shuffle playlist grootte</string>
+	<string name="settings.sleep_timer_title">Sleeptimer</string>
+	<string name="settings.sleep_timer_duration_title">Sleeptimer duur</string>
+	<string name="settings.sleep_timer_off">Uit</string>
+	<string name="settings.sleep_timer_on">Aan</string>
+	<string name="settings.sleep_timer_always_on">Altijd aan</string>
+	<string name="settings.temp_loss_title">Tijdelijk focus verlies</string>
+	<string name="settings.temp_loss_pause">Altijd pauzeren</string>
+	<string name="settings.temp_loss_pause_lower">Pauze, lagere volume desgevraagd</string>
+	<string name="settings.temp_loss_lower">Altijd lagere volume</string>
+	<string name="settings.temp_loss_nothing">Doe niets</string>
+	<string name="settings.keep_played_count_title">Behoud afgespeelde nummers</string>
+	<string name="settings.keep_played_count_none">Verwijder alle afspeelde nummers</string>
+	<string name="settings.keep_played_count_one">Behoud laatste afgespeelde nummers</string>
+	<string name="settings.keep_played_count_two">Behoud laatste 2 afgespeelde nummers</string>
+	<string name="settings.keep_played_count_three">Behoud laatste 3 afgespeelde nummers</string>
+	<string name="settings.disconnect_pause_title">Pauzeren bij verbroken verbinding</string>
+	<string name="settings.disconnect_pause_both">Pauzeren</string>
+	<string name="settings.disconnect_pause_neither">Doe niets</string>
+	<string name="settings.persistent_title">Permanente vermelding</string>
+	<string name="settings.persistent_summary">Toon de vermelding zelfs na pauzeren. Druk op de stopknop om de vermelding te verwijderen.</string>
+	<string name="settings.gapless_playback">Ononderbroken afspelen</string>
+	<string name="settings.gapless_playback_summary">Indien je vreemde storingen ondervindt tijdens het afspelen, kan het uitzetten van deze functie misschien helpen.</string>
+	<string name="settings.chat_refresh">Chat vernieuwingsfrequentie (sec.)</string>
+	<string name="settings.chat_enabled">Chat aanzetten</string>
+	<string name="settings.chat_enabled_summary">Al dan niet weergeven van de chatlijst in de lade</string>
+	<string name="settings.video_title">Video</string>
+	<string name="settings.video_player">Videospeler</string>
+	<string name="settings.video_raw">Raw (Vereist Subsonic 4.8+)</string>
+	<string name="settings.video_hls">HTTP Live Stream (HLS) (Vereist Subsonic 4.8+)</string>
+	<string name="settings.video_transcode">Direct Transcode (Vereist video -> mp4 or similar setup on Server)</string>
+	<string name="settings.video_flash">Flash (Vereist plugin)</string>
+	<string name="settings.cache_screen_title">Cache/Netwerk</string>
+	<string name="settings.playback_title">Playback</string>
+	<string name="settings.hide_widget_title">Widget verbergen</string>
+	<string name="settings.hide_widget_summary">Verberg widget na verlaten app</string>
+	<string name="settings.podcasts_enabled">Podcasts ingeschakeld</string>
+	<string name="settings.podcasts_enabled_summary">Al dan niet weergeven van de podcastlijst in de lade</string>
+	<string name="settings.bookmarks_enabled">Bladwijzers ingeschakelPlayback</string>
+	<string name="settings.bookmarks_enabled_summary">Al dan niet weergeven van de bladwijzerlijst in de lade</string>
+	<string name="settings.shares_enabled">Shares ingeschakeld</string>
+	<string name="settings.shares_enabled_summary">Al dan niet weergeven van de shareslijst in de lade</string>
+	<string name="settings.sync_title">Sync</string>
+	<string name="settings.sync_enabled">Sync ingeschakeld</string>
+	<string name="settings.sync_enabled_summary">Al dan of niet playlists of padcasts periodiek gecontroleerd worden op wijzigingen</string>
+	<string name="settings.sync_interval">Sync interval</string>
+	<string name="settings.sync_interval_15">15 minuten</string>
+	<string name="settings.sync_interval_30">30 minute</string>
+	<string name="settings.sync_interval_60">1 uur</string>
+	<string name="settings.sync_interval_120">2 uren</string>
+	<string name="settings.sync_interval_240">4 uren</string>
+	<string name="settings.sync_interval_360">6 uren</string>
+	<string name="settings.sync_interval_720">12 uren</string>
+	<string name="settings.sync_interval_1440">Dagelijks</string>
+	<string name="settings.sync_wifi">Sync alleen met wifi</string>
+	<string name="settings.sync_wifi_summary">Alleen synchroniseren met een wifi-verbinding</string>
+	<string name="settings.sync_most_recent">Sync recentelijk toegevoegd</string>
+	<string name="settings.sync_most_recent_summary">Automatisch cache nieuw toegevoegde albums</string>
+	<string name="settings.sync_starred">Sync met sterren</string>
+	<string name="settings.sync_starred_summary">Cache automatisch nummers, album en artiesten met sterren</string>
+	<string name="settings.sync_notification">Toon sync notificatie</string>
+	<string name="settings.sync_notification_summary">Toon een notificatie nadat er nieuwe media is gesynct</string>
+	<string name="settings.menu_options.title">Optionele menu opties</string>
+	<string name="settings.menu_options.play_now_summary">Toon nu in menus</string>
+	<string name="settings.menu_options.play_shuffled_summary">Toon Shuffled in menu\'s</string>
+	<string name="settings.menu_options.play_next_summary">Toon Speel Volgend in menu\'s</string>
+	<string name="settings.menu_options.play_last_summary">Toon Speel Laatst in menu\'s</string>
+	<string name="settings.menu_options.download_summary">Toon Download in menu\'s</string>
+	<string name="settings.menu_options.pin_summary">Toon Permanente Cache in menu\'s</string>
+	<string name="settings.menu_options.delete_summary">Toon Verwijder in menu\'s</string>
+	<string name="settings.menu_options.star_summary">Toon Ster in menu\'s</string>
+	<string name="settings.menu_options.shared_summary">Toon Share in menu\'s</string>
+	<string name="settings.menu_options.rate_summary">Toon Waarderingen in menu\'s</string>
+	<string name="settings.browse_by_tags">Bladeren door tags</string>
+	<string name="settings.browse_by_tags_summary">Bladeren door tags in plaats van folder structuur. Vereist Subsonic 4.7+</string>
+	<string name="settings.disable_exit_prompt">Exit Prompt uitschakelen</string>
+	<string name="settings.disable_exit_prompt_summary">Verlaat meteen de app bij het op back drukken vanuit het Home scherm</string>
+	<string name="settings.override_system_language">Systeemtaal overschrijven</string>
+	<string name="settings.override_system_language_summary">Toon de app in Engels, ook als de systeemtaal voor Dsub beschikbaar is. Het is misschien nodig om de app uit cache geheugen te wissen voordat het effectief is.</string>
+	<string name="settings.drawer_items_title">Lade tabs</string>
+	<string name="settings.play_now_after">Speel af - na</string>
+	<string name="settings.play_now_after_summary">Nu afspelen contextmenu speelt alles af na het geselecteerde item (net zoals de Subsonic website)</string>
+	<string name="settings.large_album_art">Grote albumhoezen</string>
+	<string name="settings.large_album_art_summary">Toon albums met grote hoes in plaats van een lijst</string>
+	<string name="settings.admin_enabled">Beheer ingeschakeld</string>
+	<string name="settings.admin_enabled_summary">Al dan niet weergeven van de adminlijst in de lade</string>
+	<string name="settings.replay_gain">Normaliseren</string>
+	<string name="settings.replay_gain_summary">Aldan of niet de afspeelvolume per nummer of album normaliseren adhv (replay gain) tags</string>
+	<string name="settings.replay_gain_type">Lees van tags</string>
+	<string name="settings.replay_gain_type.smart">Slimme detectie</string>
+	<string name="settings.replay_gain_type.album">Album tags</string>
+	<string name="settings.replay_gain_type.track">Nummer tags</string>
+	<string name="settings.replay_gain_bump">Normaliseren Pre-amp</string>
+	<string name="settings.replay_gain_untagged">Nummers zonder normalisatie</string>
+	<string name="settings.casting">Casten</string>
+	<string name="settings.casting_proxy">Gebruik apparaat proxy</string>
+	<string name="settings.casting_proxy_summary">Stream alles via het apparaat als een proxy. Dit omzeilt problemen zoals zelf toegekende certificaten.</string>
+	<string name="settings.rename_duplicates">Hernoem dubbele nummers</string>
+	<string name="settings.rename_duplicates_summary">Hernoem dubbele nummers naar de originele bestandsnaam om ze te kunnen onderscheiden.</string>
+	<string name="settings.start_on_headphones">Start met koptelefoon</string>
+	<string name="settings.start_on_headphones_summary">Start als een koptelefoon gekoppeld wordt. Dit vereist het gebruik van een service bij het opstarten van de telefoon om de de koptelefoonplugin te monitoren, zelfs als Dsub niet gebruikt wordt.</string>
+	<string name="settings.color_action_bar">Kleur actiebalk</string>
+	<string name="settings.color_action_bar.summary">Kleur de actiebalk en statusbalk, of laat ze ongemoeid.</string>
+	<string name="settings.shuffle_by_album">Shuffle op basis van albums</string>
+	<string name="settings.shuffle_by_album.true">Shuffle de volgorde van albums</string>
+	<string name="settings.shuffle_by_album.false">Shuffle alle nummers</string>
+
+	<string name="shuffle.title">Shuffle op basis van</string>
+	<string name="shuffle.startYear">Start jaar:</string>
+	<string name="shuffle.endYear">Einde jaar:</string>
+	<string name="shuffle.genre">Genre:</string>
+	<string name="shuffle.pick_genre">Kies een genre</string>
+
+	<string name="share.info">Eigenaar: %1$s
+		\nBeschrijving: %2$s
+		\nURL: %3$s
+		\nAangemaakt: %4$s
+		\nLaatst bezocht: %5$s
+		\nVervaldatum: %6$s
+		\nAantal bezoeken: %7$s
+
+	</string>
+	<string name="share.expires">Vervaldatum: %s</string>
+	<string name="share.expires_never">Verloopt nooit</string>
+	<string name="share.deleted">Verwijderde share %s</string>
+	<string name="share.deleted_error">Mislukt om de share %s te verwijderen</string>
+	<string name="share.no_expiration">Verloopt nooit</string>
+	<string name="share.expiration">Verloopt:</string>
+	<string name="share.updated_info">Share informatie geüpdatet voor %s</string>
+	<string name="share.updated_info_error">Mislukt om share informatie te updaten voor %s</string>
+	<string name="share.via">Share via</string>
+	<string name="share.delete">Verwijder share</string>
+
+	<string name="admin.add_user_username">Gebruikersnaam:</string>
+	<string name="admin.add_user_email">E-mail:</string>
+	<string name="admin.add_user_password">Wachtwoord:</string>
+	<string name="admin.create_user_success">Succesvol niet gebruiker aangemaakt</string>
+	<string name="admin.create_user_error">Mislukt nieuwe gebruiker aan te maken</string>
+	<string name="admin.change_username_invalid">Voer valide gebruikersnaam in</string>
+	<string name="admin.update_permissions">Update machtigingen</string>
+	<string name="admin.update_permissions_success">Succesvol machtigingen geüpdatet voor %1$s</string>
+	<string name="admin.update_permissions_error">Mislukt om machtigingen te updaten voor %1$s</string>
+	<string name="admin.change_email">Wijzig e-mail</string>
+	<string name="admin.change_email_success">Succesvol e-mail gewijzigd voor %1$s</string>
+	<string name="admin.change_email_error">Mislukt om e-mail te wijzigen voor %1$s</string>
+	<string name="admin.change_email_label">Nieuwe e-mail:</string>
+	<string name="admin.change_email_invalid">Voor een valide e-mail in</string>
+	<string name="admin.change_password">Wijzig wachtwoord</string>
+	<string name="admin.change_password_success">Succesvol wachtwoord gewijzigd voor %1$s</string>
+	<string name="admin.change_password_error">Mislukt om wachtwoord te wijzigen voor %1$s</string>
+	<string name="admin.change_password_label">Nieuw wachtwoord:</string>
+	<string name="admin.change_password_invalid">Voerin een valide wachtwoord</string>
+	<string name="admin.delete_user">Verwijder gebruiker</string>
+	<string name="admin.delete_user_success">Succesvol %1$s verwijderd</string>
+	<string name="admin.delete_user_error">Mislukt om %1$s te verwijderen</string>
+	<string name="admin.confirm_password">Bevestig wachtwoord</string>
+	<string name="admin.confirm_password_bad">Ingevoerde wachtwoord is onjuist</string>
+	
+	<string name="admin.scrobblingEnabled">Scrobbelen toegestaan</string>
+	<string name="admin.role.admin">Beheerder</string>
+	<string name="admin.role.settings">Verander instellingen</string>
+	<string name="admin.role.download">Download originele bestanden</string>
+	<string name="admin.role.upload">Upload naar server</string>
+	<string name="admin.role.coverArt">Wijzig hoes</string>
+	<string name="admin.role.comment">Voeg commentaar toe</string>
+	<string name="admin.role.podcast">Beheer podcasts</string>
+	<string name="admin.role.stream">Muziek streamen</string>
+	<string name="admin.role.jukebox">Beheer jukebox</string>
+	<string name="admin.role.share">Beheer shares</string>
+	<string name="admin.role.lastfm">Gebruik Last.FM functie</string>
+
+    <string name="music_service.retry">Er is een netwerkfout opgetreden. Probeer opnieuw %1$d van %2$d.</string>
+
+    <string name="background_task.wait">Moment geduld aub...</string>
+    <string name="background_task.loading">Laden.</string>
+    <string name="background_task.no_network">Dit programma het netwerktoegang nodig. Zet wifi of mobiel netwerk aan.</string>
+    <string name="background_task.network_error">Er is een netwerkfout opgetreden. Controleer het serveradres of probeer het later nog eens.</string>
+    <string name="background_task.not_found">De bron is niet gevonden. Controleer het serveradres.</string>
+    <string name="background_task.parse_error">Er is een communicatieprobleem ontstaan met de server. Controleer het serveradres en verifieer dat je met een webbrowser vanaf je apparaat een verbinding kan maken met het serveradres.</string>
+
+    <string name="service.connecting">Serververbinding wordt opgezet, moment geduld a.u.b.</string>
+
+    <string name="parser.upgrade_client">Onverenigbare versies. DSub upgraden a.u.b.</string>
+    <string name="parser.upgrade_server">Onverenigbare versies. Subsonic server upgraden a.u.b.</string>
+    <string name="parser.not_authenticated">Verkeerde gebruikersnaam of wachtwoord.</string>
+    <string name="parser.not_authorized">Niet geautoriseerd. Controleer de gebruikerspermissies op Subsonic server.</string>
+    <string name="parser.artist_count">Heb %d artiesten.</string>
+	<string name="parser.server_error">Server fout: %s</string>
+	<string name="parser.scan_count">%d Items gescand</string>
+
+    <string name="select_artist.refresh">Ververs</string>
+    <string name="select_artist.folder">Selecteer map</string>
+    <string name="select_artist.all_folders">Alle mappen</string>
+
+    <string name="equalizer.label">Equalizer</string>
+    <string name="equalizer.enabled">Ingeschakeld</string>
+    <string name="equalizer.preset">Selecteer voorinstelling</string>
+	<string name="equalizer.bass_booster">Bass booster</string>
+	<string name="equalizer.voice_booster">Stem booster</string>
+	<string name="equalizer.db_size">%d dB</string>
+	<string name="equalizer.bass_size">%d mille</string>
+
+	<string name="widget.4x1">DSub (4x1)</string>
+	<string name="widget.4x2">DSub (4x2)</string>
+	<string name="widget.4x3">DSub (4x3)</string>
+	<string name="widget.4x4">DSub (4x4)</string>
+    <string name="widget.initial_text">Aanraken om muziek te selecteren</string>
+    <string name="widget.sdcard_busy">SD-kaart onbeschikbaar</string>
+    <string name="widget.sdcard_missing">Geen SD-kaart</string>
+
+    <string name="util.bytes_format.gigabyte">0.00 GB</string>
+    <string name="util.bytes_format.megabyte">0.00 MB</string>
+    <string name="util.bytes_format.kilobyte">0 KB</string>
+    <string name="util.bytes_format.byte">0 B</string>
+
+	<string name="changelog_full_title">Verander Log</string>
+    <string name="changelog_title">Wat is er nieuw</string>
+    <string name="changelog_ok_button">OK</string>
+    <string name="changelog_show_full">Meer…</string>
+
+	<string name="chat.send_a_message">Stuur een bericht</string>
+
+    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Versie <xliff:g id="version_name">%s</xliff:g></string>
+
+	<string name="tasker.start_playing">Begin met spelen</string>
+	<string name="tasker.start_playing_shuffled">Begin met spelen in shuffle-modus</string>
+	<string name="tasker.start_playing_title">Tasker -> Start DSub</string>
+	<string name="tasker.edit_shuffle_mode">Start in shuffle-modus: </string>
+	<string name="tasker.edit_shuffle_start_year">Shuffle start jaar:</string>
+	<string name="tasker.edit_shuffle_end_year">Shuffle einde jaar:</string>
+	<string name="tasker.edit_shuffle_genre">Shuffle genre:</string>
+	<string name="tasker.edit_server_offline">Schakel offline: </string>
+	<string name="tasker.edit_do_nothing">Doe niets</string>
+
+	<string name="details.title.song">Nummer details</string>
+	<string name="details.title.album">Album details</string>
+	<string name="details.title.podcast">Podcast details</string>
+	<string name="details.title.playlist">Playlist details</string>
+	<string name="details.title.artist">Artiest details</string>
+	<string name="details.podcast">Podcast</string>
+	<string name="details.status">Status</string>
+	<string name="details.artist">Artiest</string>
+	<string name="details.album">Album</string>
+	<string name="details.track">Nummer</string>
+	<string name="details.genre">Genre</string>
+	<string name="details.year">Year</string>
+	<string name="details.server_format">Server format</string>
+	<string name="details.server_bitrate">Server bitrate</string>
+	<string name="details.cached_format">Cached format</string>
+	<string name="details.cached_bitrate">Gecacht bitrate</string>
+	<string name="details.size">Grootte</string>
+	<string name="details.length">Lengte</string>
+	<string name="details.bookmark_position">Bookmark positie</string>
+	<string name="details.rating">Beoordeling</string>
+	<string name="details.description">Beschrijving</string>
+	<string name="details.owner">Eigenaar</string>
+	<string name="details.comments">Opmerkingen</string>
+	<string name="details.song_count">Nummer telling</string>
+	<string name="details.public">Publiek</string>
+	<string name="details.created">Gecreëerd</string>
+	<string name="details.title">Titel</string>
+	<string name="details.url">URL</string>
+	<string name="details.error">Foutmelding</string>
+	<string name="details.author">Auteur</string>
+	<string name="details.email">E-mail</string>
+	<string name="details.version">Versie</string>
+	<string name="details.files_cached">Bestanden gecached</string>
+	<string name="details.files_permanent">Permanent gecached</string>
+	<string name="details.used_space">Gebruikte ruimte</string>
+	<string name="details.available_space">Beschikbare ruimte</string>
+	<string name="details.of">%1$s van %2$s</string>
+	<string name="details.song">Nummer</string>
+	<string name="details.position">Positie</string>
+	<string name="details.updated">Geüpdatet</string>
+	<string name="details.starred">Met ster</string>
+	<string name="details.last_played">Laatst afgespeeld</string>
+
+    <plurals name="select_album_n_songs">
+        <item quantity="zero">Geen nummer</item>
+        <item quantity="one">Een nummer</item>
+        <item quantity="other">%d nummers</item>
+    </plurals>
+    <plurals name="select_album_n_songs_downloading">
+        <item quantity="one">Een nummer geplanned om te downloaden</item>
+        <item quantity="other">%d nummers geplanned om te downloaden.</item>
+    </plurals>
+    <plurals name="select_album_n_songs_added">
+        <item quantity="one">Een nummer toegevoegd aan de speellijst</item>
+        <item quantity="other">%d nummers toegevoegd aan de speellijst.</item>
+    </plurals>
+    <plurals name="select_album_donate_dialog_n_trial_days_left">
+        <item quantity="one">Eén dag over van proefperiode</item>
+        <item quantity="other">%d dagen over van proefperiode</item>
+    </plurals>
+
+</resources>
+
