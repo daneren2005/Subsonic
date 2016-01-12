@@ -53,6 +53,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 	private static final String BROWSER_LIBRARY = "library";
 	private static final String BROWSER_PLAYLISTS = "playlists";
 	private static final String BROWSER_PODCASTS = "podcasts";
+	private static final String BROWSER_BOOKMARKS = "bookmarks";
 	private static final String PLAYLIST_PREFIX = "pl-";
 	private static final String PODCAST_PREFIX = "po-";
 	private static final String ALBUM_TYPE_PREFIX = "ty-";
@@ -98,6 +99,8 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		} else if(parentId.startsWith(PODCAST_PREFIX)) {
 			String id = parentId.substring(PODCAST_PREFIX.length());
 			getPodcastEpisodes(result, id);
+		} else if(BROWSER_BOOKMARKS.equals(parentId)) {
+			getBookmarks(result);
 		} else {
 			// No idea what it is, send empty result
 			result.sendResult(new ArrayList<MediaBrowser.MediaItem>());
@@ -122,10 +125,19 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				.setMediaId(BROWSER_PLAYLISTS);
 		mediaItems.add(new MediaBrowser.MediaItem(playlists.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
 
-		MediaDescription.Builder podcasts = new MediaDescription.Builder();
-		podcasts.setTitle(downloadService.getString(R.string.button_bar_podcasts))
-				.setMediaId(BROWSER_PODCASTS);
-		mediaItems.add(new MediaBrowser.MediaItem(podcasts.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
+		if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true)) {
+			MediaDescription.Builder podcasts = new MediaDescription.Builder();
+			podcasts.setTitle(downloadService.getString(R.string.button_bar_podcasts))
+					.setMediaId(BROWSER_PODCASTS);
+			mediaItems.add(new MediaBrowser.MediaItem(podcasts.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
+		}
+
+		if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true)) {
+			MediaDescription.Builder podcasts = new MediaDescription.Builder();
+			podcasts.setTitle(downloadService.getString(R.string.button_bar_bookmarks))
+					.setMediaId(BROWSER_BOOKMARKS);
+			mediaItems.add(new MediaBrowser.MediaItem(podcasts.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
+		}
 
 		result.sendResult(mediaItems);
 	}
@@ -285,6 +297,39 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 							.setSubtitle(Util.formatDate(downloadService, podcast.getDate()))
 							.setMediaId(PODCAST_PREFIX + podcast.getId())
 							.setExtras(podcastExtras)
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getBookmarks(final Result<List<MediaBrowser.MediaItem>> result) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getBookmarks(false, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory bookmarkList) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				for(Entry entry: bookmarkList.getChildren(false, true)) {
+					Bundle extras = new Bundle();
+					extras.putSerializable(Constants.INTENT_EXTRA_ENTRY, entry);
+					extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(entry.getTitle())
+							.setSubtitle(Util.formatDuration(entry.getBookmark().getPosition() / 1000))
+							.setMediaId(entry.getId())
+							.setExtras(extras)
 							.build();
 
 					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));

@@ -353,15 +353,18 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}.execute();
 	}
-	private void playMusicDirectory(final Entry dir, final boolean shuffle, final boolean append, final boolean playFromBookmark) {
+	private void playMusicDirectory(Entry dir, boolean shuffle, boolean append, boolean playFromBookmark) {
+		playMusicDirectory(dir.getId(), shuffle, append, playFromBookmark);
+	}
+	private void playMusicDirectory(final String dirId, final boolean shuffle, final boolean append, final boolean playFromBookmark) {
 		new SilentServiceTask<Void>(downloadService) {
 			@Override
 			protected Void doInBackground(MusicService musicService) throws Throwable {
 				MusicDirectory musicDirectory;
 				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
-					musicDirectory = musicService.getAlbum(dir.getId(), "dir", false, downloadService, null);
+					musicDirectory = musicService.getAlbum(dirId, "dir", false, downloadService, null);
 				} else {
-					musicDirectory = musicService.getMusicDirectory(dir.getId(), "dir", false, downloadService, null);
+					musicDirectory = musicService.getMusicDirectory(dirId, "dir", false, downloadService, null);
 				}
 				playSongs(musicDirectory.getChildren(false, true), shuffle, append, playFromBookmark);
 
@@ -517,7 +520,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 			boolean shuffle = extras.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false);
 			boolean playLast = extras.getBoolean(Constants.INTENT_EXTRA_PLAY_LAST, false);
-			Serializable entry = extras.getSerializable(Constants.INTENT_EXTRA_ENTRY);
+			Entry entry = (Entry) extras.getSerializable(Constants.INTENT_EXTRA_ENTRY);
 
 			String playlistId = extras.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, null);
 			if(playlistId != null) {
@@ -532,7 +535,17 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 			String podcastId = extras.getString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, null);
 			if(podcastId != null) {
-				playSong((PodcastEpisode) entry, true);
+				playSong(entry, true);
+			}
+
+			// Currently only happens when playing bookmarks so we should be looking up parent
+			String childId = extras.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID, null);
+			if(childId != null) {
+				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
+					playMusicDirectory(entry.getAlbumId(), shuffle, playLast, true);
+				} else {
+					playMusicDirectory(entry.getParent(), shuffle, playLast, true);
+				}
 			}
 		}
 
