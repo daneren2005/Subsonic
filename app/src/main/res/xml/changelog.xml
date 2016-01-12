@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.1.3" versioncode="169" releasedate="1/11/2016">
+		<change>Display albums in cards</change>
+		<change>Improve ActionBar dropdown</change>
+		<change>Add Portuguese and Dutch translations</change>
+		<change>Add batch Star/Unstar</change>
+		<change>Add quick Internal/External buttons when changing Cache Location</change>
+		<change>Auto add bookmarks on pause for Podcasts/Audio Books</change>
+		<change>Android Auto: Add Podcasts, Album Lists, and Bookmarks tabs</change>
+		<change>Add more spacing between Track # and Title</change>
+		<change>Go directly to synced Playlist/Podcast on Sync notification</change>
+		<change>Themed drawer header images</change>
+		<change>Update Cover Art in background refresh</change>
+		<change>Fix Repeat All in Jukebox mode</change>
+		<change>Fix rotating re-opening Now Playing from widget</change>
+		<change>Fix some DLNA issues</change>
+		<change>Fix Black/Holo themes not having drawer behind notification panel</change>
+		<change>Fix songs in Album Lists for Madsonic</change>
+	</release>
 	<release version="5.1.2" versioncode="167" releasedate="12/17/2015">
 		<change>Keep track of played songs locally</change>
 		<change>Improved DLNA/Chromecast casting</change>
