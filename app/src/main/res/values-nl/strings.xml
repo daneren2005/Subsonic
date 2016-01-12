@@ -9,7 +9,7 @@
     <string name="common.play_next">Volgend afspelen</string>
     <string name="common.play_last">Laatst afspelen</string>
 	<string name="common.download">Cache</string>
-    <string name="common.pin">Permanent Cache</string>
+    <string name="common.pin">Permanente Cache</string>
     <string name="common.delete">Verwijder</string>
 	<string name="common.star">Ster</string>
 	<string name="common.unstar">Verwijder ster</string>
@@ -37,7 +37,7 @@
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bladwijzers</string>
 	<string name="button_bar.shares">Shares</string>
-	<string name="button_bar.chat">Babbelen</string>
+	<string name="button_bar.chat">Chatten</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Downloaden</string>
 	<string name="button_bar.offline">Offline</string>
@@ -119,7 +119,7 @@
 	<string name="playlist.updated_info_error">Niet gelust speellijst information for %s te updaten</string>
 	<string name="playlist.overwrite">Overschrijf bestaande playlist</string>
 	<string name="playlist.add_to">Voeg toe aan playlist</string>
-	<string name="playlist.create_new">Cre\ëer nieuw</string>
+	<string name="playlist.create_new">Creëer nieuw</string>
 	<string name="playlist.delete">Verwijder playlist</string>
 
     <string name="search.label">Zoek</string>
@@ -274,9 +274,9 @@
     <string name="settings.server_unused">Ongebruikt</string>
     <string name="settings.server_name">Naam</string>
     <string name="settings.server_address">Server addres</string>
-	<string name="settings.server_local_network_ssid" >Lokaal network SSID</string>
+	<string name="settings.server_local_network_ssid" >Lokaal netwerk SSID</string>
 	<string name="settings.server_local_network_ssid_hint">Huidig SSID: %s</string>
-	<string name="settings.server_internal_address">Lokaal network addres</string>
+	<string name="settings.server_internal_address">Lokaal netwerk adres</string>
     <string name="settings.server_username">Gebruikersnaam</string>
     <string name="settings.server_password">Wachtwoord</string>
 	<string name="settings.server_open_browser">Open in browser</string>
@@ -304,7 +304,7 @@
 	<string name="settings.theme_black">Zwart</string>
 	<string name="settings.theme_holo">Holo</string>
 	<string name="settings.theme_fullscreen">Schermvullend</string>
-	<string name="settings.theme_fullscreen_summary">Verberg zoveel mogelijk schermelementen als Android zal toestaan</string>
+	<string name="settings.theme_fullscreen_summary">Verberg zoveel mogelijk schermelementen als Android toestaat</string>
 	<string name="settings.track_title">Toon track #</string>
 	<string name="settings.track_summary">Toon track # voor een nummer indien er een bestaat</string>
 	<string name="settings.custom_sort">Sorteer op jaartal</string>
@@ -444,7 +444,7 @@
 	<string name="settings.disable_exit_prompt_summary">Verlaat meteen de app bij het op back drukken vanuit het Home scherm</string>
 	<string name="settings.override_system_language">Systeemtaal overschrijven</string>
 	<string name="settings.override_system_language_summary">Toon de app in Engels, ook als de systeemtaal voor Dsub beschikbaar is. Het is misschien nodig om de app uit cache geheugen te wissen voordat het effectief is.</string>
-	<string name="settings.drawer_items_title">Lade tabs</string>
+	<string name="settings.drawer_items_title">Server tabs</string>
 	<string name="settings.play_now_after">Speel af - na</string>
 	<string name="settings.play_now_after_summary">Nu afspelen contextmenu speelt alles af na het geselecteerde item (net zoals de Subsonic website)</string>
 	<string name="settings.large_album_art">Grote albumhoezen</string>
@@ -610,7 +610,7 @@
 	<string name="details.album">Album</string>
 	<string name="details.track">Nummer</string>
 	<string name="details.genre">Genre</string>
-	<string name="details.year">Year</string>
+	<string name="details.year">Jaar</string>
 	<string name="details.server_format">Server format</string>
 	<string name="details.server_bitrate">Server bitrate</string>
 	<string name="details.cached_format">Cached format</string>
