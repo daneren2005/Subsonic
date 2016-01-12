@@ -366,7 +366,15 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				} else {
 					musicDirectory = musicService.getMusicDirectory(dirId, "dir", false, downloadService, null);
 				}
-				playSongs(musicDirectory.getChildren(false, true), shuffle, append, playFromBookmark);
+
+				List<Entry> playEntries = new ArrayList<>();
+				List<Entry> allEntries = musicDirectory.getChildren(false, true);
+				for(Entry song: allEntries) {
+					if (!song.isVideo() && song.getRating() != 1) {
+						playEntries.add(song);
+					}
+				}
+				playSongs(playEntries, shuffle, append, playFromBookmark);
 
 				return null;
 			}
