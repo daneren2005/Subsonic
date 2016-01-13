@@ -20,7 +20,9 @@
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:scrollbars="vertical"
-				android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"/>
+				android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"
+				android:layout_marginRight="@dimen/FastScroller.NormalBarMargin"
+				android:scrollbarStyle="outsideOverlay"/>
 
 			<github.daneren2005.dsub.view.FastScroller
 				android:id="@+id/fragment_fast_scroller"

@@ -37,8 +37,8 @@
 		<item name="android:background">?android:dividerHorizontal</item>
 	</style>
 
-	<style name="MoreButton" parent="BasicButton">
-
+	<style name="MoreButton" parent="@style/BasicButton">
+		<item name="android:paddingRight">2dp</item>
 	</style>
 
     <style name="PlaybackControl" parent="@style/BasicButton">
