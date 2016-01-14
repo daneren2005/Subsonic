@@ -21,7 +21,7 @@
 				android:id="@+id/song_track"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_gravity="left|center_vertical"
+				android:layout_gravity="left|top"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:textColor="?android:textColorPrimary"
 				android:paddingLeft="6dip"
@@ -31,9 +31,9 @@
             <TextView
 				android:id="@+id/song_title"
 				android:layout_width="0dip"
-				android:layout_height="match_parent"
+				android:layout_height="wrap_content"
 				android:layout_weight="1"
-				android:layout_gravity="left|center_vertical"
+				android:layout_gravity="left|top"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:singleLine="true"
 				android:ellipsize="marquee"
@@ -46,7 +46,7 @@
 				android:id="@+id/song_bookmark"
 				android:layout_width="24dp"
 				android:layout_height="24dp"
-				android:layout_gravity="right|center_vertical"
+				android:layout_gravity="right|top"
 				android:background="@null"
 				android:focusable="false"
 				android:scaleType="fitCenter"
@@ -57,7 +57,7 @@
 				android:layout_width="@dimen/Star.Small"
 				android:layout_height="@dimen/Star.Small"
 				android:scaleType="fitCenter"
-				android:layout_gravity="right|center_vertical"
+				android:layout_gravity="right|top"
 				android:background="@null"
 				android:focusable="false"
 				android:visibility="gone"/>
@@ -66,7 +66,7 @@
 				android:id="@+id/song_status"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_gravity="right|center_vertical"
+				android:layout_gravity="right|top"
 				android:drawablePadding="1dip"
 				android:paddingRight="2dip"/>
 
@@ -74,7 +74,7 @@
 				android:id="@+id/song_status_icon"
 				android:layout_width="24dip"
 				android:layout_height="24dip"
-				android:layout_gravity="center_vertical"
+				android:layout_gravity="top"
 				android:src="?attr/downloading"
 				android:visibility="gone"/>
         </LinearLayout>
