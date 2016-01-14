@@ -19,6 +19,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -149,8 +150,11 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 		}
 
 		if(!selected.isEmpty()) {
-			boolean isStarred = selected.get(0).isStarred();
-			menu.findItem(R.id.menu_star).setTitle(isStarred ? R.string.common_unstar : R.string.common_star);
+			MenuItem starItem = menu.findItem(R.id.menu_star);
+			if(starItem != null) {
+				boolean isStarred = selected.get(0).isStarred();
+				starItem.setTitle(isStarred ? R.string.common_unstar : R.string.common_star);
+			}
 		}
 	}
 }

@@ -537,7 +537,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		int top = spinnerAdapter.getCount() - 1;
 		if(position < top) {
-			for(int i = top; i > position; i--) {
+			for(int i = top; i > position && i >= 0; i--) {
 				removeCurrent();
 			}
 		}
@@ -751,6 +751,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		recreateSpinner();
 	}
 	public void removeCurrent() {
+		// Don't try to remove current if there is no backstack to remove from
+		if(backStack.isEmpty()) {
+			return;
+		}
+
 		if(currentFragment != null) {
 			currentFragment.setPrimaryFragment(false);
 		}
