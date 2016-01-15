@@ -134,7 +134,11 @@ public class ID3v2File extends Common {
 							if(endValue != -1) {
 								parts.add(txData[1].substring(endName + 1, endValue));
 								nextStartIndex = endValue + 1;
+							} else {
+								break;
 							}
+						} else {
+							break;
 						}
 
 						startName = txData[1].toLowerCase(Locale.US).indexOf("replaygain_", nextStartIndex);
