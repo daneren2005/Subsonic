@@ -2490,9 +2490,9 @@ public class DownloadService extends Service {
 
 		SharedPreferences prefs = Util.getPreferences(this);
 		try {
-			float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 			float adjust = 0f;
 			if (prefs.getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
+				float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 				boolean singleAlbum = false;
 				
 				String replayGainType = prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE, "1");
