@@ -126,15 +126,15 @@
 		<item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/colorPrimary</item>
-		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_black</item>
+		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_dark</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_dark</item>
 	</style>
 	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
 	</style>
 	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
-		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_dark</item>
 	</style>
 	<style name="Theme.DSub.Black.Base" parent="Theme.DSub.Dark.Base">
+		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_black</item>
 		<item name="android:windowBackground">@android:color/black</item>
 	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Black.Base">
@@ -146,6 +146,7 @@
 		<item name="colorAccent">@color/holoAccent</item>
 		<item name="actionbarBackgroundColor">@color/holoPrimary</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_holo</item>
+		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners_black</item>
 	</style>
 	<style name="Theme.DSub.Holo" parent="Theme.DSub.Holo.Base">
 	</style>
