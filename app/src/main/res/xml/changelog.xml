@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.1.4" versioncode="172" releasedate="1/17/2016">
+		<change>Minor theme improvements</change>
+	</release>
 	<release version="5.1.3" versioncode="169" releasedate="1/11/2016">
 		<change>Display albums in cards</change>
 		<change>Improve ActionBar dropdown</change>
