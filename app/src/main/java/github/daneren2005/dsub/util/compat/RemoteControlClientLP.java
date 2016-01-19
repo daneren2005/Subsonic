@@ -415,7 +415,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}
 
-		downloadService.download(entries, false, true, false, shuffle, startIndex, startPosition);
+		downloadService.download(entries, false, !append, false, shuffle, startIndex, startPosition);
 	}
 
 	private void noResults() {

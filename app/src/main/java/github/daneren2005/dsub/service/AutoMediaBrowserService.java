@@ -370,7 +370,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				.setExtras(shuffleExtras);
 		mediaItems.add(new MediaBrowser.MediaItem(shuffle.build(), MediaBrowser.MediaItem.FLAG_PLAYABLE));
 
-		/*Bundle playLastExtras = new Bundle();
+		Bundle playLastExtras = new Bundle();
 		playLastExtras.putString(idConstant, id);
 		playLastExtras.putBoolean(Constants.INTENT_EXTRA_PLAY_LAST, true);
 
@@ -378,7 +378,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		playLast.setTitle(downloadService.getString(R.string.menu_play_last))
 				.setMediaId("playLast-" + id)
 				.setExtras(playLastExtras);
-		mediaItems.add(new MediaBrowser.MediaItem(playLast.build(), MediaBrowser.MediaItem.FLAG_PLAYABLE));*/
+		mediaItems.add(new MediaBrowser.MediaItem(playLast.build(), MediaBrowser.MediaItem.FLAG_PLAYABLE));
 
 		result.sendResult(mediaItems);
 	}
