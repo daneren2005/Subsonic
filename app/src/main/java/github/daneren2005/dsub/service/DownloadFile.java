@@ -379,7 +379,8 @@ public class DownloadFile implements BufferFile {
         return "DownloadFile (" + song + ")";
     }
 
-	@Override
+	// Don't do this.  Causes infinite loop if two instances of same song
+	/*@Override
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -390,7 +391,7 @@ public class DownloadFile implements BufferFile {
 
 		DownloadFile downloadFile = (DownloadFile) o;
 		return Util.equals(this.getSong(), downloadFile.getSong());
-	}
+	}*/
 
     private class DownloadTask extends SilentBackgroundTask<Void> {
 		private MusicService musicService;
