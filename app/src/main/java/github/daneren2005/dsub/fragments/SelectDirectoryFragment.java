@@ -387,10 +387,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		} else {
 			List<Entry> songs = new ArrayList<Entry>();
 
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true)) {
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true) && albumListType == null) {
 				Iterator it = entries.listIterator(entries.indexOf(entry));
 				while(it.hasNext()) {
-					songs.add((Entry) it.next());
+					Entry song = (Entry) it.next();
+					if(!song.isDirectory()) {
+						songs.add(song);
+					}
 				}
 			} else {
 				songs.add(entry);
