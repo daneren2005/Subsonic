@@ -296,7 +296,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 					MediaDescription description = new MediaDescription.Builder()
 							.setTitle(podcast.getTitle())
-							.setSubtitle(Util.formatDate(downloadService, podcast.getDate()))
+							.setSubtitle(Util.formatDate(downloadService, podcast.getDate(), false))
 							.setMediaId(PODCAST_PREFIX + podcast.getId())
 							.setExtras(podcastExtras)
 							.build();

@@ -107,6 +107,7 @@ public final class Util {
     private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
 	private static SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
 	private static SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
+	private static SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
 	private static int CURRENT_YEAR = new Date().getYear();
 
     public static final String EVENT_META_CHANGED = "github.daneren2005.dsub.EVENT_META_CHANGED";
@@ -901,26 +902,38 @@ public final class Util {
     }
 
 	public static String formatDate(Context context, String dateString) {
+		return formatDate(context, dateString, true);
+	}
+	public static String formatDate(Context context, String dateString, boolean includeTime) {
 		try {
+			dateString = dateString.replace(' ', 'T');
 			boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
 			if (isDateNormalized) {
 				dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 			}
 
-			return formatDate(dateFormat.parse(dateString));
+			return formatDate(dateFormat.parse(dateString), includeTime);
 		} catch(ParseException e) {
+			Log.e(TAG, "Failed to parse date string", e);
 			return dateString;
 		}
 	}
 	public static String formatDate(Date date) {
+		return formatDate(date, true);
+	}
+	public static String formatDate(Date date, boolean includeTime) {
 		if(date == null) {
 			return "Never";
 		} else {
-			if(date.getYear() != CURRENT_YEAR) {
-				return DATE_FORMAT_LONG.format(date);
+			if(includeTime) {
+				if (date.getYear() != CURRENT_YEAR) {
+					return DATE_FORMAT_LONG.format(date);
+				} else {
+					return DATE_FORMAT_SHORT.format(date);
+				}
 			} else {
-				return DATE_FORMAT_SHORT.format(date);
+				return DATE_FORMAT_NO_TIME.format(date);
 			}
 		}
 	}

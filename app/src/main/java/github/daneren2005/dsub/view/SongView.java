@@ -106,8 +106,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 					if(artist.length() != 0) {
 						artist.append(" - ");
 					}
-					int index = date.indexOf(" ");
-					artist.append(date.substring(0, index != -1 ? index : date.length()));
+					artist.append(Util.formatDate(context, date, false));
 				}
 			}
 			else if(song.getArtist() != null) {
