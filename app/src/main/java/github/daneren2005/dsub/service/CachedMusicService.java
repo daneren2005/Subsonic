@@ -72,6 +72,7 @@ public class CachedMusicService implements MusicService {
     private static final int TTL_MUSIC_DIR = 5 * 60; // Five minutes
 	public static final int CACHE_UPDATE_LIST = 1;
 	public static final int CACHE_UPDATE_METADATA = 2;
+	private static final int CACHED_LAST_FM = 24 * 60;
 
 	private final RESTMusicService musicService;
     private final TimeLimitedCache<Boolean> cachedLicenseValid = new TimeLimitedCache<Boolean>(120, TimeUnit.SECONDS);
@@ -1152,12 +1153,22 @@ public class CachedMusicService implements MusicService {
 		String cacheName = getCacheName(context, "artistInfo", id);
 		ArtistInfo info = null;
 		if(!refresh) {
-			info = FileUtil.deserialize(context, cacheName, ArtistInfo.class);
+			info = FileUtil.deserialize(context, cacheName, ArtistInfo.class, CACHED_LAST_FM);
 		}
 
 		if(info == null && allowNetwork) {
-			info = musicService.getArtistInfo(id, refresh, allowNetwork, context, progressListener);
-			FileUtil.serialize(context, info, cacheName);
+			try {
+				info = musicService.getArtistInfo(id, refresh, allowNetwork, context, progressListener);
+				FileUtil.serialize(context, info, cacheName);
+			} catch(Exception e) {
+				Log.w(TAG, "Failed to refresh Artist Info");
+				info = FileUtil.deserialize(context, cacheName, ArtistInfo.class);
+
+				// Nothing ever cached, throw error further upstream
+				if(info == null) {
+					throw e;
+				}
+			}
 		}
 
 		return info;
