@@ -388,18 +388,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			List<Entry> songs = new ArrayList<Entry>();
 
 			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true) && albumListType == null) {
-				Iterator it = entries.listIterator(entries.indexOf(entry));
-				while(it.hasNext()) {
-					Entry song = (Entry) it.next();
-					if(!song.isDirectory()) {
+				for(Entry song: entries) {
+					if(!song.isDirectory() && !song.isVideo()) {
 						songs.add(song);
 					}
 				}
+				playNow(songs, entry, 0);
 			} else {
 				songs.add(entry);
+				playNow(songs);
 			}
-
-			playNow(songs);
 		}
 	}
 
