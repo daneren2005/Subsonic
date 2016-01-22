@@ -96,7 +96,6 @@
 	<string name="menu.rate">Establecer valoración</string>
 	<string name="menu.top_tracks">Tp Tracks de Last.FM</string>
 	<string name="menu.similar_artists">Artistas similares</string>
-	<string name="menu.show_missing">Mostrar los que faltan</string>
 	<string name="menu.start_radio">Iniciar radio</string>
 
     <string name="playlist.label">Listas de reproducción</string>

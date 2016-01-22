@@ -111,7 +111,6 @@
 	<string name="menu.rate">Sätt betyg </string>
 	<string name="menu.top_tracks">Last.FM topp spår</string>
 	<string name="menu.similar_artists">Liknande artister</string>
-	<string name="menu.show_missing">Visa saknade</string>
 	<string name="menu.start_radio">Starta radio</string>
 	<string name="menu.first_level_artist">Första steget artister</string>
 

@@ -30,6 +30,8 @@ import java.util.List;
  */
 public class Artist implements Serializable {
 	private static final String TAG = Artist.class.getSimpleName();
+	public static final String ROOT_ID = "-1";
+	public static final String MISSING_ID = "-2";
 
     private String id;
     private String name;
@@ -37,6 +39,14 @@ public class Artist implements Serializable {
 	private boolean starred;
 	private Integer rating;
 	private int closeness;
+
+	public Artist() {
+
+	}
+	public Artist(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
     public String getId() {
         return id;

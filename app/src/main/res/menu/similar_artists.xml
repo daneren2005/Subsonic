@@ -13,8 +13,4 @@
 		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
 		compat:showAsAction="ifRoom|withText"/>
-
-	<item
-		android:id="@+id/menu_show_missing"
-		android:title="@string/menu.show_missing"/>
 </menu>

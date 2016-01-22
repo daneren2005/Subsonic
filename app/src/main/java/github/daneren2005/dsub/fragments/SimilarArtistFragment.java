@@ -15,14 +15,16 @@
 
 package github.daneren2005.dsub.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.adapter.ArtistAdapter;
 import github.daneren2005.dsub.adapter.SectionAdapter;
+import github.daneren2005.dsub.adapter.SimilarArtistAdapter;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -35,6 +37,8 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,18 +56,6 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-		super.onCreateOptionsMenu(menu, menuInflater);
-		if(!primaryFragment) {
-			return;
-		}
-
-		if(info.getMissingArtists().isEmpty()) {
-			menu.removeItem(R.id.menu_show_missing);
-		}
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_play_now:
@@ -72,9 +64,6 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 			case R.id.menu_shuffle:
 				playAll(true);
 				return true;
-			case R.id.menu_show_missing:
-				showMissingArtists();
-				break;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -82,8 +71,10 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 
 	@Override
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Artist> updateView, Artist item) {
-		onCreateContextMenuSupport(menu, menuInflater, updateView, item);
-		recreateContextMenu(menu);
+		if(!Artist.MISSING_ID.equals(item.getId())) {
+			onCreateContextMenuSupport(menu, menuInflater, updateView, item);
+			recreateContextMenu(menu);
+		}
 	}
 
 	@Override
@@ -93,14 +84,21 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 
 	@Override
 	public void onItemClicked(UpdateView<Artist> updateView, Artist artist) {
-		SubsonicFragment fragment = new SelectDirectoryFragment();
-		Bundle args = new Bundle();
-		args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
-		args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
-		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
-		fragment.setArguments(args);
+		if(Artist.MISSING_ID.equals(artist.getId())) {
+			String url = "http://www.last.fm/music/" + URLEncoder.encode(artist.getName());
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setData(Uri.parse(url));
+			startActivity(intent);
+		} else {
+			SubsonicFragment fragment = new SelectDirectoryFragment();
+			Bundle args = new Bundle();
+			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
+			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+			args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
+			fragment.setArguments(args);
 
-		replaceFragment(fragment);
+			replaceFragment(fragment);
+		}
 	}
 
 	@Override
@@ -109,8 +107,22 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 	}
 
 	@Override
-	public SectionAdapter getAdapter(List<Artist> objects) {
-		return new ArtistAdapter(context, objects, this);
+	public SectionAdapter getAdapter(List<Artist> artists) {
+		if(info.getMissingArtists().isEmpty()) {
+			return new SimilarArtistAdapter(context, artists, this);
+		} else {
+			List<String> headers = new ArrayList<>();
+			headers.add(null);
+			headers.add(context.getResources().getString(R.string.menu_similar_artists_missing));
+
+			List<Artist> missingArtists = new ArrayList<>();
+			for(String artistName: info.getMissingArtists()) {
+				Artist artist = new Artist(Artist.MISSING_ID, artistName);
+				missingArtists.add(artist);
+			}
+
+			return new SimilarArtistAdapter(context, headers, Arrays.asList(artists, missingArtists), this);
+		}
 	}
 
 	@Override
@@ -122,16 +134,6 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 	@Override
 	public int getTitleResource() {
 		return R.string.menu_similar_artists;
-	}
-
-	private void showMissingArtists() {
-		StringBuilder b = new StringBuilder();
-
-		for(String name: info.getMissingArtists()) {
-			b.append("<h3><a href=\"https://www.google.com/#q=" + URLEncoder.encode(name) + "\">" + name + "</a></h3> ");
-		}
-
-		Util.showHTMLDialog(context, R.string.menu_similar_artists, b.toString());
 	}
 
 	private void playAll(final boolean shuffle) {

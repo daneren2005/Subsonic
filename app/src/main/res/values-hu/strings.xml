@@ -111,7 +111,6 @@
 	<string name="menu.rate">Értékelés</string>
 	<string name="menu.top_tracks">Last.fm legjobb dalok</string>
 	<string name="menu.similar_artists">Hasonló előadók</string>
-	<string name="menu.show_missing">Hiányzó megjelenítése</string>
 	<string name="menu.start_radio">Rádió indítása</string>
 	<string name="menu.first_level_artist">Részletes megjelenítés</string>
 

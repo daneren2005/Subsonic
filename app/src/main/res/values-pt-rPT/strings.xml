@@ -110,7 +110,6 @@
 	<string name="menu.rate">Classificar</string>
 	<string name="menu.top_tracks">Top faixas do Last.FM</string>
 	<string name="menu.similar_artists">Artistas semelhantes</string>
-	<string name="menu.show_missing">Mostrar os que faltam</string>
 	<string name="menu.start_radio">Iniciar rádio</string>
 	<string name="menu.first_level_artist">Artistas no primeiro nível</string>
 
