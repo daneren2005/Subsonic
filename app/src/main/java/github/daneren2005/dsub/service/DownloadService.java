@@ -601,6 +601,9 @@ public class DownloadService extends Service {
 		}
 		editor.commit();
 	}
+	public boolean isArtistRadio() {
+		return artistRadio;
+	}
 
 	public synchronized void shuffle() {
 		Collections.shuffle(downloadList);

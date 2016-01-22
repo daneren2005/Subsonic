@@ -190,7 +190,8 @@
     <string name="download.playerstate_downloading">Downloading - %s</string>
 	<string name="download.playerstate_mobile_disabled">Waiting for WiFi network to download</string>
     <string name="download.playerstate_buffering">Buffering</string>
-    <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
+    <string name="download.playerstate_playing_shuffle">Shuffle mode</string>
+	<string name="download.playerstate_playing_artist_radio">Artist radio</string>
     <string name="download.menu_show_album">Show Album</string>
     <string name="download.menu_lyrics">Lyrics</string>
 	<string name="download.menu_remove_all">Remove all</string>

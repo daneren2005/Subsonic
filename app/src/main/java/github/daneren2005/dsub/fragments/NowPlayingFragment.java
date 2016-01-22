@@ -1158,11 +1158,23 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
 		this.currentPlaying = currentPlaying;
+		setupSubtitle(currentPlayingIndex);
+	}
+
+	private void setupSubtitle(int currentPlayingIndex) {
 		if (currentPlaying != null) {
 			Entry song = currentPlaying.getSong();
 			songTitleTextView.setText(song.getTitle());
 			getImageLoader().loadImage(albumArtImageView, song, true, true);
-			setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
+
+			DownloadService downloadService = getDownloadService();
+			if(downloadService.isShufflePlayEnabled()) {
+				setSubtitle(context.getResources().getString(R.string.download_playerstate_playing_shuffle));
+			} else if(downloadService.isArtistRadio()) {
+				setSubtitle(context.getResources().getString(R.string.download_playerstate_playing_artist_radio));
+			} else {
+				setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
+			}
 		} else {
 			songTitleTextView.setText(null);
 			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
@@ -1199,10 +1211,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			scrollWhenLoaded = false;
 		}
 
-		setSubtitle(context.getResources().getString(R.string.download_playing_out_of, currentPlayingIndex + 1, currentPlayingSize));
 		if(this.currentPlaying != currentPlaying) {
 			onSongChanged(currentPlaying, currentPlayingIndex);
 			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
+		} else {
+			setupSubtitle(currentPlayingIndex);
 		}
 	}
 
