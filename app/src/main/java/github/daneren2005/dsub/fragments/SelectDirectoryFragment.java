@@ -387,7 +387,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		} else {
 			List<Entry> songs = new ArrayList<Entry>();
 
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true) && albumListType == null) {
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true) && (albumListType == null || "starred".equals(albumListType))) {
 				for(Entry song: entries) {
 					if(!song.isDirectory() && !song.isVideo()) {
 						songs.add(song);
