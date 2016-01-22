@@ -667,6 +667,11 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
+	public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+		return musicService.getSongList(type, size, offset, context, progressListener);
+	}
+
+	@Override
 	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getRandomSongs(size, artistId, context, progressListener);
 	}

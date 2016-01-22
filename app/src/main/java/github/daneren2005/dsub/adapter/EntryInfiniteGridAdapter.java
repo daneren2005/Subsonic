@@ -26,6 +26,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.ServerInfo;
+import github.daneren2005.dsub.fragments.MainFragment;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.ImageLoader;
@@ -126,6 +127,8 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 			result = service.getAlbumList(type, extra, size, offset, false, context, null);
 		} else if("genres".equals(type) || "genres-songs".equals(type)) {
 			result = service.getSongsByGenre(extra, size, offset, context, null);
+		}else if(type.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+			result = service.getSongList(type, size, offset, context, null);
 		} else {
 			result = service.getAlbumList(type, size, offset, false, context, null);
 		}

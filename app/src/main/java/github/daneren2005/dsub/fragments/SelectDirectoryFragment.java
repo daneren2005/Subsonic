@@ -583,6 +583,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			setTitle(albumListExtra);
 		} else if("alphabeticalByName".equals(albumListType)) {
 			setTitle(R.string.main_albums_alphabetical);
+		} if (MainFragment.SONGS_NEWEST.equals(albumListType)) {
+			setTitle(R.string.main_songs_newest);
+		} else if (MainFragment.SONGS_TOP_PLAYED.equals(albumListType)) {
+			setTitle(R.string.main_songs_top_played);
+		} else if (MainFragment.SONGS_RECENT.equals(albumListType)) {
+			setTitle(R.string.main_songs_recent);
+		} else if (MainFragment.SONGS_FREQUENT.equals(albumListType)) {
+			setTitle(R.string.main_songs_frequent);
 		}
 
 		new LoadTask(true) {
@@ -599,6 +607,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					}
 				} else if("genres".equals(albumListType) || "genres-songs".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
+				} else if(albumListType.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+					result = service.getSongList(albumListType, size, 0, context, this);
 				} else {
 					result = service.getAlbumList(albumListType, size, 0, refresh, context, this);
 				}

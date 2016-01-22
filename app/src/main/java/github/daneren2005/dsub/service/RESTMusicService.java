@@ -72,7 +72,8 @@ import android.util.Log;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
-import github.daneren2005.dsub.service.parser.AlbumListParser;
+import github.daneren2005.dsub.fragments.MainFragment;
+import github.daneren2005.dsub.service.parser.EntryListParser;
 import github.daneren2005.dsub.service.parser.ArtistInfoParser;
 import github.daneren2005.dsub.service.parser.BookmarkParser;
 import github.daneren2005.dsub.service.parser.ChatMessageParser;
@@ -571,7 +572,7 @@ public class RESTMusicService implements MusicService {
 
         Reader reader = getReader(context, progressListener, method, null, names, values, true);
         try {
-            return new AlbumListParser(context, getInstance(context)).parse(reader, progressListener);
+            return new EntryListParser(context, getInstance(context)).parse(reader, progressListener);
         } finally {
             Util.close(reader);
         }
@@ -637,13 +638,49 @@ public class RESTMusicService implements MusicService {
 
 		Reader reader = getReader(context, progressListener, method, null, names, values, true);
 		try {
-			return new AlbumListParser(context, instance).parse(reader, progressListener);
+			return new EntryListParser(context, instance).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
 	}
 
-	@Override
+    @Override
+    public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+        List<String> names = new ArrayList<String>();
+        List<Object> values = new ArrayList<Object>();
+
+        names.add("size");
+        values.add(size);
+        names.add("offset");
+        values.add(offset);
+
+        String method;
+        switch(type) {
+			case MainFragment.SONGS_NEWEST:
+				method = "getNewaddedSongs";
+				break;
+			case MainFragment.SONGS_TOP_PLAYED:
+				method = "getTopplayedSongs";
+				break;
+			case MainFragment.SONGS_RECENT:
+				method = "getLastplayedSongs";
+				break;
+			case MainFragment.SONGS_FREQUENT:
+				method = "getMostplayedSongs";
+				break;
+			default:
+				method = "getNewaddedSongs";
+		}
+
+        Reader reader = getReader(context, progressListener, method, null, names, values, true);
+        try {
+            return new EntryListParser(context, getInstance(context)).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
+        }
+    }
+
+    @Override
 	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.11", "Artist radio is not supported");
 

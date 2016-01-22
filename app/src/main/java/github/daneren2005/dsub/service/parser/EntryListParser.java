@@ -29,9 +29,9 @@ import java.io.Reader;
 /**
  * @author Sindre Mehus
  */
-public class AlbumListParser extends MusicDirectoryEntryParser {
+public class EntryListParser extends MusicDirectoryEntryParser {
 
-    public AlbumListParser(Context context, int instance) {
+    public EntryListParser(Context context, int instance) {
         super(context, instance);
     }
 
@@ -49,6 +49,9 @@ public class AlbumListParser extends MusicDirectoryEntryParser {
 					if(get("isDir") == null) {
 						entry.setDirectory(true);
 					}
+                    dir.addChild(entry);
+                } else if ("song".equals(name)) {
+                    MusicDirectory.Entry entry = parseEntry("");
                     dir.addChild(entry);
                 } else if ("error".equals(name)) {
                     handleError();

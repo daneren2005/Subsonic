@@ -587,6 +587,11 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
+	public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
 	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}

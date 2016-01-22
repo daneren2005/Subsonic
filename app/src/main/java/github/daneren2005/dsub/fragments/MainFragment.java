@@ -46,6 +46,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class MainFragment extends SelectRecyclerFragment<Integer> {
 	private static final String TAG = MainFragment.class.getSimpleName();
+	public static final String SONGS_LIST_PREFIX = "songs-";
+	public static final String SONGS_NEWEST = SONGS_LIST_PREFIX + "newest";
+	public static final String SONGS_TOP_PLAYED = SONGS_LIST_PREFIX + "topPlayed";
+	public static final String SONGS_RECENT = SONGS_LIST_PREFIX + "recent";
+	public static final String SONGS_FREQUENT = SONGS_LIST_PREFIX + "frequent";
 
 	public MainFragment() {
 		super();
@@ -123,6 +128,22 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 		sections.add(albums);
 		headers.add("albums");
+
+		if(ServerInfo.isMadsonic6(context)) {
+			List<Integer> songs = new ArrayList<>();
+
+			songs.add(R.string.main_songs_newest);
+			if(ServerInfo.checkServerVersion(context, "2.0.1")) {
+				songs.add(R.string.main_songs_top_played);
+			}
+			songs.add(R.string.main_songs_recent);
+			if(ServerInfo.checkServerVersion(context, "2.0.1")) {
+				songs.add(R.string.main_songs_frequent);
+			}
+
+			sections.add(songs);
+			headers.add("songs");
+		}
 
 		if(ServerInfo.checkServerVersion(context, "1.8")) {
 			List<Integer> videos = Arrays.asList(R.string.main_videos);
@@ -383,6 +404,14 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			showAlbumList("alphabeticalByName");
 		} else if(item == R.string.main_videos) {
 			showVideos();
+		} else if (item == R.string.main_songs_newest) {
+			showAlbumList(SONGS_NEWEST);
+		} else if (item == R.string.main_songs_top_played) {
+			showAlbumList(SONGS_TOP_PLAYED);
+		} else if (item == R.string.main_songs_recent) {
+			showAlbumList(SONGS_RECENT);
+		} else if (item == R.string.main_songs_frequent) {
+			showAlbumList(SONGS_FREQUENT);
 		}
 	}
 

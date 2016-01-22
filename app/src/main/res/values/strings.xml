@@ -76,6 +76,10 @@
 	<string name="main.albums_alphabetical">Alphabetically</string>
 	<string name="main.videos">Videos</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
+	<string name="main.songs_newest">@string/main.albums_newest</string>
+	<string name="main.songs_top_played">Top Played</string>
+	<string name="main.songs_recent">@string/main.albums_recent</string>
+	<string name="main.songs_frequent">@string/main.albums_frequent</string>
 	<string name="main.back_confirm">Press back again to exit</string>
 	<string name="main.scan_complete">Completed scan of Server</string>
 	<string name="main.artist">Artist</string>
