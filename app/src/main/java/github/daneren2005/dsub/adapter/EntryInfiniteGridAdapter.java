@@ -89,6 +89,10 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 		this.type = type;
 		this.extra = extra;
 		this.size = size;
+
+		if(super.getItemCount() < size) {
+			allLoaded = true;
+		}
 	}
 
 	public void loadMore() {
@@ -111,7 +115,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 				appendCachedData(newData);
 				loading = false;
 
-				if(newData.isEmpty()) {
+				if(newData.size() < size) {
 					allLoaded = true;
 					notifyDataSetChanged();
 				}
