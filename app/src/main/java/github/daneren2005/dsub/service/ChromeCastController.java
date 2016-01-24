@@ -503,7 +503,7 @@ public class ChromeCastController extends RemoteController {
 
 			try {
 				Cast.CastApi.setMessageReceivedCallbacks(apiClient, mediaPlayer.getNamespace(), mediaPlayer);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				Log.e(TAG, "Exception while creating channel", e);
 			}
 
