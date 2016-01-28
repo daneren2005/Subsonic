@@ -130,7 +130,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_search:
+			case R.id.menu_global_search:
 				context.startSearch(currentQuery, false, null, false);
 				return true;
 		}

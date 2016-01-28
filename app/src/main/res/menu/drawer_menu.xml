@@ -3,7 +3,7 @@
 	  xmlns:compat="http://schemas.android.com/apk/res-auto">
 
 	<item
-		android:id="@+id/menu_search"
+		android:id="@+id/menu_global_search"
 		android:icon="?attr/search"
 		android:title="@string/menu.search"
 		compat:showAsAction="always|withText"/>
