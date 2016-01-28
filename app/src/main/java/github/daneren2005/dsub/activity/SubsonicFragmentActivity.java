@@ -93,6 +93,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	private SlidingUpPanelLayout slideUpPanel;
 	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
+	private boolean isPanelClosing = false;
 	private NowPlayingFragment nowPlayingFragment;
 	private SubsonicFragment secondaryFragment;
 	private Toolbar mainToolbar;
@@ -195,6 +196,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 			@Override
 			public void onPanelCollapsed(View panel) {
+				isPanelClosing = false;
 				bottomBar.setVisibility(View.VISIBLE);
 				nowPlayingToolbar.setVisibility(View.GONE);
 				nowPlayingFragment.setPrimaryFragment(false);
@@ -204,6 +206,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 			@Override
 			public void onPanelExpanded(View panel) {
+				isPanelClosing = false;
 				currentFragment.stopActionMode();
 
 				// Disable custom view before switching
@@ -341,6 +344,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		super.onNewIntent(intent);
 
 		if(currentFragment != null && intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY) != null) {
+			if(slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+				closeNowPlaying();
+			}
+
 			if(currentFragment instanceof SearchFragment) {
 				String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 				boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
@@ -483,7 +490,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	@Override
 	public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
-		if(slideUpPanel != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+		if(slideUpPanel != null && slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED && !isPanelClosing) {
 			secondaryFragment = fragment;
 			nowPlayingFragment.setPrimaryFragment(false);
 			secondaryFragment.setPrimaryFragment(true);
@@ -573,6 +580,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	@Override
 	public void closeNowPlaying() {
 		slideUpPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+		isPanelClosing = true;
 	}
 
 	private SubsonicFragment getNewFragment(String fragmentType) {
