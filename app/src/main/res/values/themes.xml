@@ -38,6 +38,7 @@
 		<item name="rating_good">@drawable/ic_action_rating_good_light</item>
 		<item name="radio">@drawable/ic_menu_radio_dark</item>
 		<item name="star_outline">@drawable/ic_toggle_star_outline_light</item>
+		<item name="download">@drawable/ic_menu_download_dark</item>
 		<item name="drawerHome">@drawable/main_offline_light</item>
 		<item name="drawerLibrary">@drawable/ic_menu_library_light</item>
 		<item name="drawerPlaylists">@drawable/ic_menu_playlist_light</item>
@@ -103,6 +104,7 @@
 		<item name="rating_good">@drawable/ic_action_rating_good_dark</item>
 		<item name="radio">@drawable/ic_menu_radio_dark</item>
 		<item name="star_outline">@drawable/ic_toggle_star_outline_dark</item>
+		<item name="download">@drawable/ic_menu_download_dark</item>
 		<item name="drawerHome">@drawable/main_offline_dark</item>
 		<item name="drawerLibrary">@drawable/ic_menu_library_dark</item>
 		<item name="drawerPlaylists">@drawable/ic_menu_playlist_dark</item>
@@ -190,6 +192,7 @@
 		<item name="add_person">@drawable/ic_menu_add_person_light</item>
 		<item name="password">@drawable/ic_menu_password_light</item>
 		<item name="radio">@drawable/ic_menu_radio_light</item>
+		<item name="download">@drawable/ic_menu_download_light</item>
 		<item name="actionModeBackground">@color/background_material_light</item>
 		<item name="actionModeStyle">@style/LightActionMode</item>
 		<item name="actionModeCloseButtonStyle">@style/DarkCloseButton</item>

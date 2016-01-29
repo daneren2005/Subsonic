@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:compat="http://schemas.android.com/apk/res-auto">
+	<item
+		android:id="@+id/menu_download"
+		android:title="@string/common.download"
+		android:icon="?attr/download"
+		compat:showAsAction="ifRoom|withText"/>
+
+	<item
+		android:id="@+id/menu_delete"
+		android:title="@string/menu.delete_cache"
+		android:icon="?attr/remove"
+		compat:showAsAction="ifRoom|withText"/>
+
+	<item
+		android:id="@+id/menu_cache"
+		android:title="@string/common.pin"/>
+
+	<item
+		android:id="@+id/menu_add_playlist"
+		android:title="@string/menu.add_playlist"/>
+
+	<item
+		android:id="@+id/menu_star"
+		android:title="@string/common.star"/>
+</menu>

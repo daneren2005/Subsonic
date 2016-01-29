@@ -377,6 +377,12 @@ public final class Util {
         int cacheSize = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_CACHE_SIZE, "-1"));
         return cacheSize == -1 ? Integer.MAX_VALUE : cacheSize;
     }
+	public static boolean isBatchMode(Context context) {
+		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false);
+	}
+	public static void setBatchMode(Context context, boolean batchMode) {
+		Util.getPreferences(context).edit().putBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, batchMode).commit();
+	}
 
     public static String getRestUrl(Context context, String method) {
         return getRestUrl(context, method, true);

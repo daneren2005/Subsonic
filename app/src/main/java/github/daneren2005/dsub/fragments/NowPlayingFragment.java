@@ -457,6 +457,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 			}
 		}
+
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false)) {
+			menu.findItem(R.id.menu_batch_mode).setChecked(true);
+		}
 	}
 
 	@Override
@@ -474,7 +478,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			menuInflater.inflate(R.menu.nowplaying_context_offline, menu);
 		} else {
 			menuInflater.inflate(R.menu.nowplaying_context, menu);
-			menu.findItem(R.id.menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
+			menu.findItem(R.id.song_menu_star).setTitle(downloadFile.getSong().isStarred() ? R.string.common_unstar : R.string.common_star);
 		}
 
 		if (downloadFile.getSong().getParent() == null) {
@@ -620,9 +624,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}
 				createNewPlaylist(entries, true);
 				return true;
-			case R.id.menu_star:
-				UpdateHelper.toggleStarred(context, song.getSong());
-				return true;
 			case R.id.menu_rate:
 				UpdateHelper.setRating(context, song.getSong());
 				return true;
@@ -633,11 +634,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				} else {
 					startTimer();
 				}
-				return true;
-			case R.id.menu_add_playlist:
-				songs = new ArrayList<Entry>(1);
-				songs.add(song.getSong());
-				addToPlaylist(songs);
 				return true;
 			case R.id.menu_info:
 				displaySongInfo(song.getSong());
@@ -663,7 +659,18 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				// Any failed condition will get here
 				Util.toast(context, "Failed to start equalizer.  Try restarting.");
 				return true;
-			} default:
+			}case R.id.menu_batch_mode:
+				if(Util.isBatchMode(context)) {
+					Util.setBatchMode(context, false);
+					songListAdapter.notifyDataSetChanged();
+				} else {
+					Util.setBatchMode(context, true);
+					songListAdapter.notifyDataSetChanged();
+				}
+				context.supportInvalidateOptionsMenu();
+
+				return true;
+			default:
 				return false;
 		}
 	}
@@ -1368,5 +1375,19 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			default:
 				break;
 		}
+	}
+
+	@Override
+	protected List<Entry> getSelectedEntries() {
+		List<DownloadFile> selected = getCurrentAdapter().getSelected();
+		List<Entry> entries = new ArrayList<>();
+
+		for(DownloadFile downloadFile: selected) {
+			if(downloadFile.getSong() != null) {
+				entries.add(downloadFile.getSong());
+			}
+		}
+
+		return entries;
 	}
 }

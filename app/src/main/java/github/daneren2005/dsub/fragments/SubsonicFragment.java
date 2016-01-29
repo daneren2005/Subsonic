@@ -326,6 +326,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	public boolean onContextItemSelected(MenuItem menuItem, Object selectedItem) {
 		Artist artist = selectedItem instanceof Artist ? (Artist) selectedItem : null;
 		Entry entry = selectedItem instanceof Entry ? (Entry) selectedItem : null;
+		if(selectedItem instanceof DownloadFile) {
+			entry = ((DownloadFile) selectedItem).getSong();
+		}
 		List<Entry> songs = new ArrayList<Entry>(1);
 		songs.add(entry);
 
