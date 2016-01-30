@@ -22,6 +22,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
+import android.content.ClipboardManager;
+import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,9 +48,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -1246,6 +1250,27 @@ public final class Util {
 		listView.setAdapter(new DetailsAdapter(context, R.layout.details_item, headers, details));
 		listView.setDivider(null);
 		listView.setScrollbarFadingEnabled(false);
+
+    // Let the user long-click on a row to copy its value to the clipboard
+    final Context contextRef = context;
+    listView.setOnItemLongClickListener(new ListView.OnItemLongClickListener() {
+      @Override
+      public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
+
+        TextView nameView = (TextView) view.findViewById(R.id.detail_name);
+        TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+        CharSequence name = nameView.getText();
+        CharSequence value = detailsView.getText();
+
+        ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(name, value);
+        clipboard.setPrimaryClip(clip);
+
+        toast(contextRef, "Copied " + name + " to clipboard");
+
+        return true;
+      }
+    });
 
 		new AlertDialog.Builder(context)
 				// .setIcon(android.R.drawable.ic_dialog_info)
