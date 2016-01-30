@@ -30,6 +30,7 @@ public class MusicFolder implements Serializable {
 
     private String id;
     private String name;
+	private boolean enabled;
 
 	public MusicFolder() {
 
@@ -46,4 +47,11 @@ public class MusicFolder implements Serializable {
     public String getName() {
         return name;
     }
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	public boolean getEnabled() {
+		return enabled;
+	}
 }

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.domain.User.MusicFolderSetting;
 
 import static github.daneren2005.dsub.domain.User.Setting;
 
@@ -56,7 +57,9 @@ public class SettingView extends UpdateView2<Setting, Boolean> {
 		}
 		
 		int res = -1;
-		if(User.SCROBBLING.equals(name)) {
+		if(setting instanceof MusicFolderSetting) {
+			titleView.setText(((MusicFolderSetting) setting).getLabel());
+		} else if(User.SCROBBLING.equals(name)) {
 			res = R.string.admin_scrobblingEnabled;
 		} else if(User.ADMIN.equals(name)) {
 			res = R.string.admin_role_admin;

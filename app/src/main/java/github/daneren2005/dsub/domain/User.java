@@ -15,6 +15,8 @@
 
 package github.daneren2005.dsub.domain;
 
+import android.util.Pair;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,7 @@ public class User implements Serializable {
 	private String email;
 
 	private List<Setting> settings = new ArrayList<Setting>();
+	private List<Setting> musicFolders;
 
 	public User() {
 
@@ -92,9 +95,20 @@ public class User implements Serializable {
 		settings.add(new Setting(name, value));
 	}
 
+	public void addMusicFolder(MusicFolder musicFolder) {
+		if(musicFolders == null) {
+			musicFolders = new ArrayList<>();
+		}
+
+		musicFolders.add(new MusicFolderSetting(musicFolder.getId(), musicFolder.getName(), false));
+	}
+	public List<Setting> getMusicFolderSettings() {
+		return musicFolders;
+	}
+
 	public static class Setting implements Serializable {
-		String name;
-		Boolean value;
+		private String name;
+		private Boolean value;
 
 		public Setting() {
 			
@@ -112,6 +126,22 @@ public class User implements Serializable {
 		}
 		public void setValue(Boolean value) {
 			this.value = value;
+		}
+	}
+
+	public static class MusicFolderSetting extends Setting {
+		private String label;
+
+		public MusicFolderSetting() {
+
+		}
+		public MusicFolderSetting(String name, String label, Boolean value) {
+			super(name, value);
+			this.label = label;
+		}
+
+		public String getLabel() {
+			return label;
 		}
 	}
 }

@@ -532,6 +532,8 @@
 	<string name="admin.delete_user_error">Failed to delete %1$s</string>
 	<string name="admin.confirm_password">Confirm Password</string>
 	<string name="admin.confirm_password_bad">Entered password is wrong</string>
+	<string name="admin.permissions">Permissions</string>
+	<string name="admin.musicFolders">Music Folders</string>
 	
 	<string name="admin.scrobblingEnabled">Scrobbling allowed</string>
 	<string name="admin.role.admin">Administrator</string>
