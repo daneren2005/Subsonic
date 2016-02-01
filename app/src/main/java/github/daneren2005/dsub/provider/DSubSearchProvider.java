@@ -58,6 +58,10 @@ public class DSubSearchProvider extends ContentProvider {
 
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+		if(selectionArgs[0].isEmpty()) {
+			return null;
+		}
+
 		String query = selectionArgs[0] + "*";
 		SearchResult searchResult = search(query);
 		return createCursor(selectionArgs[0], searchResult);
