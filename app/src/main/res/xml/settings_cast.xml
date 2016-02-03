@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+				  android:title="@string/settings.casting">
+	<PreferenceCategory
+		android:title="@string/settings.casting">
+
+		<CheckBoxPreference
+			android:title="@string/settings.casting_proxy"
+			android:summary="@string/settings.casting_proxy_summary"
+			android:key="castProxy"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.gapless_playback"
+			android:summary="@string/settings.gapless_playback_summary"
+			android:key="castingGaplessPlayback"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+</PreferenceScreen>

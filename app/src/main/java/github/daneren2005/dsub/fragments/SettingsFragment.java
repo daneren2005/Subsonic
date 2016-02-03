@@ -138,6 +138,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			xml = R.xml.settings_playback;
 		} else if("servers".equals(name)) {
 			xml = R.xml.settings_servers;
+		} else if ("cast".equals(name)) {
+			xml = R.xml.settings_cast;
 		}
 
 		if(xml != 0) {
