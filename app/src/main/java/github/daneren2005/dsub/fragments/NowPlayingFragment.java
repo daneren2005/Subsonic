@@ -906,10 +906,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private int getMinutes(int progress) {
 		if(progress < 30) {
 			return progress + 1;
-		} else if(progress < 61) {
+		} else if(progress < 49) {
 			return (progress - 30) * 5 + getMinutes(29);
+		} else if(progress < 57) {
+			return (progress - 48) * 30 + getMinutes(48);
+		} else if(progress < 81) {
+			return (progress - 56) * 60 + getMinutes(56);
 		} else {
-			return (progress - 61) * 15 + getMinutes(60);
+			return (progress - 80) * 150 + getMinutes(80);
 		}
 	}
 
