@@ -386,7 +386,7 @@ public final class UserUtil {
 		if(sampleUser.getMusicFolderSettings() != null) {
 			for(User.Setting setting: sampleUser.getMusicFolderSettings()) {
 				User.MusicFolderSetting musicFolderSetting = (User.MusicFolderSetting) setting;
-				user.addMusicFolder(musicFolderSetting, false);
+				user.addMusicFolder(musicFolderSetting, true);
 			}
 		}
 

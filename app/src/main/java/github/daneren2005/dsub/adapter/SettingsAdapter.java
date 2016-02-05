@@ -55,10 +55,11 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 		this.editable = editable;
 		this.onItemClickedListener = onItemClickedListener;
 
-		List<Setting> settings = sections.get(0);
-		for(Setting setting: settings) {
-			if(setting.getValue()) {
-				addSelected(setting);
+		for(List<Setting> settings: sections) {
+			for (Setting setting : settings) {
+				if (setting.getValue()) {
+					addSelected(setting);
+				}
 			}
 		}
 	}

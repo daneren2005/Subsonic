@@ -1533,6 +1533,15 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
+		if(user.getMusicFolderSettings() != null) {
+			for(User.Setting setting: user.getMusicFolderSettings()) {
+				if(setting.getValue()) {
+					names.add("musicFolderId");
+					values.add(setting.getName());
+				}
+			}
+		}
+
 		Reader reader = getReader(context, progressListener, "updateUser", null, names, values);
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
