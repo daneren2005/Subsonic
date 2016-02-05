@@ -96,6 +96,7 @@ import github.daneren2005.dsub.service.parser.SearchResult2Parser;
 import github.daneren2005.dsub.service.parser.SearchResultParser;
 import github.daneren2005.dsub.service.parser.ShareParser;
 import github.daneren2005.dsub.service.parser.StarredListParser;
+import github.daneren2005.dsub.service.parser.TopSongsParser;
 import github.daneren2005.dsub.service.parser.UserParser;
 import github.daneren2005.dsub.service.parser.VideosParser;
 import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
@@ -1295,7 +1296,7 @@ public class RESTMusicService implements MusicService {
 		String method = ServerInfo.isMadsonic(context, getInstance(context)) ? "getTopTrackSongs" : "getTopSongs";
 		Reader reader = getReader(context, progressListener, method, null, parameterNames, parameterValues);
 		try {
-			return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
+			return new TopSongsParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}
