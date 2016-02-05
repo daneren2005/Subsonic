@@ -32,6 +32,7 @@ import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.UserUtil;
+import github.daneren2005.dsub.view.BasicHeaderView;
 import github.daneren2005.dsub.view.RecyclingImageView;
 import github.daneren2005.dsub.view.SettingView;
 import github.daneren2005.dsub.view.UpdateView;
@@ -41,6 +42,7 @@ import static github.daneren2005.dsub.domain.User.Setting;
 public class SettingsAdapter extends SectionAdapter<Setting> {
 	private static final String TAG = SettingsAdapter.class.getSimpleName();
 	public final int VIEW_TYPE_SETTING = 1;
+	public final int VIEW_TYPE_SETTING_HEADER = 2;
 
 	private final User user;
 	private final boolean editable;
@@ -61,15 +63,29 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 		}
 	}
 
+	@Override
+	public int getItemViewType(int position) {
+		int viewType = super.getItemViewType(position);
+		if(viewType == SectionAdapter.VIEW_TYPE_HEADER) {
+			if(position == 0) {
+				return VIEW_TYPE_HEADER;
+			} else {
+				return VIEW_TYPE_SETTING_HEADER;
+			}
+		} else {
+			return viewType;
+		}
+	}
+
 	public UpdateView.UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
 		View header = LayoutInflater.from(context).inflate(R.layout.user_header, parent, false);
 		return new UpdateView.UpdateViewHolder(header, false);
 	}
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String description) {
-		if(description == null) {
-			View header = holder.getView();
+		View header = holder.getView();
 
-			RecyclingImageView coverArtView = (RecyclingImageView) header.findViewById(R.id.user_avatar);
+		RecyclingImageView coverArtView = (RecyclingImageView) header.findViewById(R.id.user_avatar);
+		if(coverArtView != null) {
 			imageLoader.loadAvatar(context, coverArtView, user.getUsername());
 			coverArtView.setOnInvalidated(new RecyclingImageView.OnInvalidated() {
 				@Override
@@ -88,13 +104,18 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 				emailView.setVisibility(View.GONE);
 			}
 		} else {
-
+			TextView nameView = (TextView) header.findViewById(R.id.item_name);
+			nameView.setText(description);
 		}
 	}
 
 	@Override
 	public UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType) {
-		return new UpdateView.UpdateViewHolder(new SettingView(context));
+		if(viewType == VIEW_TYPE_SETTING_HEADER) {
+			return new UpdateView.UpdateViewHolder(new BasicHeaderView(context));
+		} else {
+			return new UpdateView.UpdateViewHolder(new SettingView(context));
+		}
 	}
 
 	@Override
@@ -115,6 +136,9 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 	}
 
 	public static SettingsAdapter getSettingsAdapter(Context context, User user, ImageLoader imageLoader, OnItemClickedListener<Setting> onItemClickedListener) {
+		return getSettingsAdapter(context, user, imageLoader, UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10"), onItemClickedListener);
+	}
+	public static SettingsAdapter getSettingsAdapter(Context context, User user, ImageLoader imageLoader, boolean isEditable, OnItemClickedListener<Setting> onItemClickedListener) {
 		List<String> headers = new ArrayList<>();
 		List<List<User.Setting>> settingsSections = new ArrayList<>();
 		settingsSections.add(user.getSettings());
@@ -124,6 +148,7 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 			headers.add(context.getResources().getString(R.string.admin_musicFolders));
 			settingsSections.add(user.getMusicFolderSettings());
 		}
-		return new SettingsAdapter(context, user, headers, settingsSections, imageLoader, UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10"), onItemClickedListener);
+
+		return new SettingsAdapter(context, user, headers, settingsSections, imageLoader, isEditable, onItemClickedListener);
 	}
 }
