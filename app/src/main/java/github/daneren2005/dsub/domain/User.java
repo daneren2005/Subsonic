@@ -102,6 +102,13 @@ public class User implements Serializable {
 
 		musicFolders.add(new MusicFolderSetting(musicFolder.getId(), musicFolder.getName(), false));
 	}
+	public void addMusicFolder(MusicFolderSetting musicFolderSetting, boolean defaultValue) {
+		if(musicFolders == null) {
+			musicFolders = new ArrayList<>();
+		}
+
+		musicFolders.add(new MusicFolderSetting(musicFolderSetting.getName(), musicFolderSetting.getLabel(), defaultValue));
+	}
 	public List<Setting> getMusicFolderSettings() {
 		return musicFolders;
 	}

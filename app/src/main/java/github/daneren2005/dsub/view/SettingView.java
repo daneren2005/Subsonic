@@ -52,7 +52,7 @@ public class SettingView extends UpdateView2<Setting, Boolean> {
 	protected void setObjectImpl(Setting setting, Boolean isEditable) {
 		// Can't edit non-role parts
 		String name = setting.getName();
-		if(name.indexOf("Role") == -1) {
+		if(name.indexOf("Role") == -1 && !(setting instanceof MusicFolderSetting)) {
 			item2 = false;
 		}
 		

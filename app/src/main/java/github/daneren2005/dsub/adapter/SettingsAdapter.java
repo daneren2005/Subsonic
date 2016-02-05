@@ -67,7 +67,7 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 	public int getItemViewType(int position) {
 		int viewType = super.getItemViewType(position);
 		if(viewType == SectionAdapter.VIEW_TYPE_HEADER) {
-			if(position == 0) {
+			if(position == 0 && imageLoader != null) {
 				return VIEW_TYPE_HEADER;
 			} else {
 				return VIEW_TYPE_SETTING_HEADER;

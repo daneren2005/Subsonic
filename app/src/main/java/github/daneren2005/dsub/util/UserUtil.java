@@ -373,13 +373,20 @@ public final class UserUtil {
 		});
 	}
 
-	public static void addNewUser(final Activity context, final SubsonicFragment fragment) {
+	public static void addNewUser(final Activity context, final SubsonicFragment fragment, User sampleUser) {
 		final User user = new User();
 		for(String role: User.ROLES) {
 			if(role.equals(User.SETTINGS) || role.equals(User.STREAM)) {
 				user.addSetting(role, true);
 			} else {
 				user.addSetting(role, false);
+			}
+		}
+
+		if(sampleUser.getMusicFolderSettings() != null) {
+			for(User.Setting setting: sampleUser.getMusicFolderSettings()) {
+				User.MusicFolderSetting musicFolderSetting = (User.MusicFolderSetting) setting;
+				user.addMusicFolder(musicFolderSetting, false);
 			}
 		}
 
@@ -391,7 +398,7 @@ public final class UserUtil {
 		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.setAdapter(new SettingsAdapter(context, user, null, true, new SectionAdapter.OnItemClickedListener<User.Setting>() {
+		recyclerView.setAdapter(SettingsAdapter.getSettingsAdapter(context, user, null, true, new SectionAdapter.OnItemClickedListener<User.Setting>() {
 			@Override
 			public void onItemClicked(UpdateView<User.Setting> updateView, User.Setting item) {
 				if(updateView.isCheckable()) {

@@ -1499,6 +1499,15 @@ public class RESTMusicService implements MusicService {
 			values.add(setting.getValue());
 		}
 
+		if(user.getMusicFolderSettings() != null) {
+			for(User.Setting setting: user.getMusicFolderSettings()) {
+				if(setting.getValue()) {
+					names.add("musicFolderId");
+					values.add(setting.getName());
+				}
+			}
+		}
+
 		Reader reader = getReader(context, progressListener, "createUser", null, names, values);
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
