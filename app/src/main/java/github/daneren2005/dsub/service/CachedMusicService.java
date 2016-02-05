@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -130,6 +132,8 @@ public class CachedMusicService implements MusicService {
             	result = musicService.getMusicFolders(refresh, context, progressListener);
             	FileUtil.serialize(context, new ArrayList<MusicFolder>(result), getCacheName(context, "musicFolders"));
         	}
+
+			MusicFolder.sort(result);
             cachedMusicFolders.set(result);
         }
         return result;

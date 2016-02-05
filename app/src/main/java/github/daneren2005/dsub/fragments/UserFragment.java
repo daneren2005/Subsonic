@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -78,7 +80,7 @@ public class UserFragment extends SelectRecyclerFragment<User.Setting>{
 
 	@Override
 	public SectionAdapter<User.Setting> getAdapter(List<User.Setting> objs) {
-		return new SettingsAdapter(context, user, getImageLoader(), UserUtil.isCurrentAdmin() && ServerInfo.checkServerVersion(context, "1.10"), this);
+		return SettingsAdapter.getSettingsAdapter(context, user, getImageLoader(), this);
 	}
 
 	@Override
