@@ -69,7 +69,6 @@ public class UserParser extends AbstractParser {
 			} else if(eventType == XmlPullParser.TEXT) {
 				if("folder".equals(tagName)) {
 					String id = getText();
-					Log.d(TAG, "id: " + id);
 					if(musicFolders == null) {
 						musicFolders = getMusicFolders();
 					}
