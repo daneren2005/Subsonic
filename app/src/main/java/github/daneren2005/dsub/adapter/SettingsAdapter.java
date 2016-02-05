@@ -142,10 +142,10 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 	public static SettingsAdapter getSettingsAdapter(Context context, User user, ImageLoader imageLoader, boolean isEditable, OnItemClickedListener<Setting> onItemClickedListener) {
 		List<String> headers = new ArrayList<>();
 		List<List<User.Setting>> settingsSections = new ArrayList<>();
+		headers.add(context.getResources().getString(R.string.admin_permissions));
 		settingsSections.add(user.getSettings());
 
 		if(user.getMusicFolderSettings() != null) {
-			headers.add(context.getResources().getString(R.string.admin_permissions));
 			headers.add(context.getResources().getString(R.string.admin_musicFolders));
 			settingsSections.add(user.getMusicFolderSettings());
 		}
