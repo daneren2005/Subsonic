@@ -27,6 +27,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -104,10 +105,34 @@ public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 	}
 
 	private void displayShareInfo(final Share share) {
-		String message = context.getResources().getString(R.string.share_info,
-			share.getUsername(), (share.getDescription() != null) ? share.getDescription() : "", share.getUrl(),
-			Util.formatDate(share.getCreated()), Util.formatDate(share.getLastVisited()), Util.formatDate(share.getExpires()), share.getVisitCount());
-		Util.info(context, share.getName(), message);
+		List<Integer> headers = new ArrayList<>();
+		List<String> details = new ArrayList<>();
+
+		headers.add(R.string.details_title);
+		details.add(share.getName());
+
+		headers.add(R.string.details_owner);
+		details.add(share.getUsername());
+
+		headers.add(R.string.details_description);
+		details.add(share.getDescription());
+
+		headers.add(R.string.details_url);
+		details.add(share.getUrl());
+
+		headers.add(R.string.details_created);
+		details.add(Util.formatDate(share.getCreated()));
+
+		headers.add(R.string.details_last_played);
+		details.add(Util.formatDate(share.getLastVisited()));
+
+		headers.add(R.string.details_expiration);
+		details.add(Util.formatDate(share.getExpires(), false));
+
+		headers.add(R.string.details_played_count);
+		details.add(Long.toString(share.getVisitCount()));
+
+		Util.showDetailsDialog(context, R.string.details_title_playlist, headers, details);
 	}
 
 	private void updateShareInfo(final Share share) {
