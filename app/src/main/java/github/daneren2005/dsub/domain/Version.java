@@ -94,7 +94,7 @@ public class Version implements Comparable<Version>, Serializable {
 						return "5.2";
 					case 13:
 						return "5.3";
-					case 15:
+					case 14:
 						return "6.0";
 				}
 		}

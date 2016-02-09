@@ -163,7 +163,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 	public List<Artist> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
 		List<Artist> artists;
 		if(groupId == null) {
-			if (!Util.isOffline(context) && (!Util.isTagBrowsing(context) || ServerInfo.checkServerVersion(context, "1.15"))) {
+			if (!Util.isOffline(context) && (!Util.isTagBrowsing(context) || ServerInfo.checkServerVersion(context, "1.14"))) {
 				musicFolders = musicService.getMusicFolders(refresh, context, listener);
 
 				// Hide folders option if there is only one
