@@ -29,8 +29,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
@@ -175,12 +173,7 @@ public final class UserUtil {
 				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						String password = passwordView.getText().toString();
-						
-						SharedPreferences prefs = Util.getPreferences(context);
-						String correctPassword = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null);
-						
-						if(password != null && password.equals(correctPassword)) {
+						if(isPasswordCorrect(context, passwordView)) {
 							lastVerifiedTime = currentTime;
 							onSuccess.run();
 						} else {
@@ -199,7 +192,13 @@ public final class UserUtil {
 
 	public static void changePassword(final Activity context, final User user) {
 		View layout = context.getLayoutInflater().inflate(R.layout.change_password, null);
+		View currentPasswordLayout = layout.findViewById(R.id.current_password_layout);
+		final TextView currentPasswordView = (TextView) layout.findViewById(R.id.current_password);
 		final TextView passwordView = (TextView) layout.findViewById(R.id.new_password);
+
+		if(isCurrentAdmin()) {
+			currentPasswordLayout.setVisibility(View.GONE);
+		}
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.admin_change_password)
@@ -215,8 +214,12 @@ public final class UserUtil {
 			@Override
 			public void onClick(View v) {
 				final String password = passwordView.getText().toString();
+				if(!isCurrentAdmin() && !isPasswordCorrect(context, currentPasswordView)) {
+					Util.toast(context, R.string.admin_confirm_password_bad);
+					return;
+				}
 				// Don't allow blank passwords
-				if ("".equals(password)) {
+				else if ("".equals(password)) {
 					Util.toast(context, R.string.admin_change_password_invalid);
 					return;
 				}
@@ -250,6 +253,16 @@ public final class UserUtil {
 				dialog.dismiss();
 			}
 		});
+	}
+
+	private static boolean isPasswordCorrect(Context context, TextView passwordView) {
+		return isPasswordCorrect(context, passwordView.getText().toString());
+	}
+	private static boolean isPasswordCorrect(Context context, String password) {
+		SharedPreferences prefs = Util.getPreferences(context);
+		String correctPassword = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null);
+
+		return password != null && password.equals(correctPassword);
 	}
 
 	public static void updateSettings(final Context context, final User user) {
