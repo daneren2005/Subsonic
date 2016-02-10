@@ -298,6 +298,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 					URL url = new URL("https://pastebin.com/api/api_post.php");
 					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+					StringBuffer responseBuffer = new StringBuffer();
 					try {
 						urlConnection.setReadTimeout(10000);
 						urlConnection.setConnectTimeout(15000);
@@ -339,17 +340,16 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 						writer.flush();
 						writer.close();
 						os.close();
+
+						BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+						String inputLine;
+						while ((inputLine = in.readLine()) != null) {
+							responseBuffer.append(inputLine);
+						}
+						in.close();
 					} finally {
 						urlConnection.disconnect();
 					}
-
-					BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-					String inputLine;
-					StringBuffer responseBuffer = new StringBuffer();
-					while ((inputLine = in.readLine()) != null) {
-						responseBuffer.append(inputLine);
-					}
-					in.close();
 
 					String response = responseBuffer.toString();
 					if(response.indexOf("http") == 0) {
@@ -361,6 +361,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 				@Override
 				protected void error(Throwable error) {
+					Log.e(TAG, "Failed to gather logs", error);
 					Util.toast(context, "Failed to gather logs");
 				}
 
