@@ -157,8 +157,11 @@ public final class UserUtil {
 
 		return defaultValue;
 	}
-	
-	public static void confirmCredentials(final Activity context, final Runnable onSuccess) {
+
+	public static void confirmCredentials(Activity context, Runnable onSuccess) {
+		confirmCredentials(context, onSuccess, null);
+	}
+	public static void confirmCredentials(final Activity context, final Runnable onSuccess, final Runnable onCancel) {
 		final long currentTime = System.currentTimeMillis();
 		// If already ran this check within last x time, just go ahead and auth
 		if((currentTime - lastVerifiedTime) < MIN_VERIFY_DURATION) {
@@ -181,7 +184,14 @@ public final class UserUtil {
 						}
 					}
 				})
-				.setNegativeButton(R.string.common_cancel, null)
+				.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if(onCancel != null) {
+							onCancel.run();
+						}
+					}
+				})
 				.setCancelable(true);
 			
 			AlertDialog dialog = builder.create();

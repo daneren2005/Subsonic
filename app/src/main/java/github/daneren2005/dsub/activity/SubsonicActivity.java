@@ -33,7 +33,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -67,7 +66,9 @@ import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ServerInfo;
+import github.daneren2005.dsub.fragments.AdminFragment;
 import github.daneren2005.dsub.fragments.SubsonicFragment;
+import github.daneren2005.dsub.fragments.UserFragment;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.HeadphoneListenerService;
 import github.daneren2005.dsub.service.MusicService;
@@ -823,7 +824,11 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				removeCurrent();
 			}
 
-			currentFragment.invalidate();
+			if(currentFragment instanceof UserFragment || currentFragment instanceof AdminFragment) {
+				restart(false);
+			} else {
+				currentFragment.invalidate();
+			}
 			populateTabs();
 		}
 
@@ -875,10 +880,19 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	protected void restart() {
+		restart(true);
+	}
+	protected void restart(boolean resumePosition) {
 		Intent intent = new Intent(this, ((Object) this).getClass());
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtras(getIntent());
-		intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+		if(resumePosition) {
+			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
+		} else {
+			String fragmentType = Util.openToTab(this);
+			intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
+			intent.putExtra(Constants.FRAGMENT_POSITION, getDrawerItemId(fragmentType));
+		}
 		Util.startActivityWithoutTransition(this, intent);
 	}
 
