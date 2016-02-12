@@ -1245,32 +1245,35 @@ public final class Util {
 		}
 		showDetailsDialog(context, context.getResources().getString(title), headerStrings, details);
 	}
-	public static void showDetailsDialog(Context context, String title, List<String> headers, List<String> details) {
+	public static void showDetailsDialog(Context context, String title, List<String> headers, final List<String> details) {
 		ListView listView = new ListView(context);
 		listView.setAdapter(new DetailsAdapter(context, R.layout.details_item, headers, details));
 		listView.setDivider(null);
 		listView.setScrollbarFadingEnabled(false);
 
-    // Let the user long-click on a row to copy its value to the clipboard
-    final Context contextRef = context;
-    listView.setOnItemLongClickListener(new ListView.OnItemLongClickListener() {
-      @Override
-      public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
+		// Let the user long-click on a row to copy its value to the clipboard
+		final Context contextRef = context;
+		listView.setOnItemLongClickListener(new ListView.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
+				TextView nameView = (TextView) view.findViewById(R.id.detail_name);
+				TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+				if(nameView == null || detailsView == null) {
+					return false;
+				}
 
-        TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-        TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
-        CharSequence name = nameView.getText();
-        CharSequence value = detailsView.getText();
+				CharSequence name = nameView.getText();
+				CharSequence value = detailsView.getText();
 
-        ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(name, value);
-        clipboard.setPrimaryClip(clip);
+				ClipboardManager clipboard = (ClipboardManager) contextRef.getSystemService(Context.CLIPBOARD_SERVICE);
+				ClipData clip = ClipData.newPlainText(name, value);
+				clipboard.setPrimaryClip(clip);
 
-        toast(contextRef, "Copied " + name + " to clipboard");
+				toast(contextRef, "Copied " + name + " to clipboard");
 
-        return true;
-      }
-    });
+				return true;
+			}
+		});
 
 		new AlertDialog.Builder(context)
 				// .setIcon(android.R.drawable.ic_dialog_info)
