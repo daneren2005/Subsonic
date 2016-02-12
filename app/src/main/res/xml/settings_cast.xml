@@ -15,5 +15,11 @@
 			android:summary="@string/settings.gapless_playback_summary"
 			android:key="castingGaplessPlayback"
 			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.casting_stream_original"
+			android:summary="@string/settings.casting_stream_original_summary"
+			android:key="castStreamOriginal"
+			android:defaultValue="true"/>
 	</PreferenceCategory>
 </PreferenceScreen>
