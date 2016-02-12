@@ -154,7 +154,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				if(item != null) {
 					item.setChecked(true);
 				}
+			} else {
+				lastSelectedPosition = getDrawerItemId(fragmentType);
 			}
+
 			currentFragment = getNewFragment(fragmentType);
 			if(getIntent().hasExtra(Constants.INTENT_EXTRA_NAME_ID)) {
 				Bundle currentArguments = currentFragment.getArguments();

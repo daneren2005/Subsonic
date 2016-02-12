@@ -63,12 +63,14 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		Bundle args = getArguments();
 		if(args != null) {
-			groupId = args.getString(Constants.INTENT_EXTRA_NAME_ID);
-			groupName = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
+			if(args.getBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, false)) {
+				groupId = args.getString(Constants.INTENT_EXTRA_NAME_ID);
+				groupName = args.getString(Constants.INTENT_EXTRA_NAME_NAME);
 
-			if(groupName != null) {
-				setTitle(groupName);
-				context.invalidateOptionsMenu();
+				if (groupName != null) {
+					setTitle(groupName);
+					context.invalidateOptionsMenu();
+				}
 			}
 		}
 
@@ -111,6 +113,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Artist> impleme
 			Bundle args = new Bundle();
 			args.putString(Constants.INTENT_EXTRA_NAME_ID, artist.getId());
 			args.putString(Constants.INTENT_EXTRA_NAME_NAME, artist.getName());
+			args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 			if(ServerInfo.checkServerVersion(context, "1.13") && !Util.isOffline(context)) {
 				args.putSerializable(Constants.INTENT_EXTRA_NAME_DIRECTORY, new MusicDirectory.Entry(artist));
 			}
