@@ -1704,6 +1704,10 @@ public class DownloadService extends Service {
 				nextPlayingTask.cancel();
 				nextPlayingTask = null;
 			}
+
+			if(nextPlayerState != IDLE) {
+				setNextPlayerState(IDLE);
+			}
 		}
 
 		if(remoteState == LOCAL) {
