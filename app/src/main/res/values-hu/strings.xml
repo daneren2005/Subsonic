@@ -76,6 +76,10 @@
 	<string name="main.albums_alphabetical">Betűrendben</string>
 	<string name="main.videos">Videók</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
+	<string name="main.songs_newest">@string/main.albums_newest</string>
+	<string name="main.songs_top_played">Top Played</string>
+	<string name="main.songs_recent">@string/main.albums_recent</string>
+	<string name="main.songs_frequent">@string/main.albums_frequent</string>
 	<string name="main.back_confirm">Nyomja meg még egyszer a kilépéshez!</string>
 	<string name="main.scan_complete">A médiatár frissítése befejeződött a kiszolgálón!</string>
 	<string name="main.artist">Előadó</string>
@@ -111,6 +115,7 @@
 	<string name="menu.rate">Értékelés</string>
 	<string name="menu.top_tracks">Last.fm legjobb dalok</string>
 	<string name="menu.similar_artists">Hasonló előadók</string>
+	<string name="menu.show_missing">Hiányzó megjelenítése</string>
 	<string name="menu.start_radio">Rádió indítása</string>
 	<string name="menu.first_level_artist">Részletes megjelenítés</string>
 
@@ -186,6 +191,7 @@
 	<string name="download.playerstate_mobile_disabled">Letöltés, várakozás a Wi-Fi hálózatra...</string>
     <string name="download.playerstate_buffering">Pufferelés</string>
     <string name="download.playerstate_playing_shuffle">Dalsorrend keverése</string>
+	<string name="download.playerstate_playing_artist_radio">Előadó rádió</string>
     <string name="download.menu_show_album">Ugrás az albumhoz</string>
     <string name="download.menu_lyrics">Dalszöveg</string>
 	<string name="download.menu_remove_all">Összes eltávolítása</string>
@@ -226,6 +232,7 @@
 	<string name="download.restore_play_queue">Folytatás onnan, ahol egy másik eszközön abbahagyta.</string>
 	<string name="download.thumbs_up">Jó</string>
 	<string name="download.thumbs_down">Nem jó</string>
+	<string name="download.batch_mode">Kötegelt mód</string>
 
 	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
 	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
@@ -290,6 +297,8 @@
     <string name="settings.cache_location">Gyorsítótár helye</string>
     <string name="settings.cache_location_error">Hibás gyorsítótár hely! Az alapértelmezett használata.</string>
     <string name="settings.cache_location_reset">A beállított gyorsítótár-hely már nem írható! Ha a közelmúltban frissítette telefonja Android rendszerét 4.4.x KitKat verzióra, abban az SD kártya kezelése megváltozott, és az alkalmazások csak egy speciális helyre tudnak írni. A Dsub már automatikusan átállt a megfelelő helyre. Ahhoz, hogy a régi adatokat törölni tudja, csatlakoztassa az SD kártyát a számítógépéhez, és törölje a régi mappát!</string>
+	<string name="settings.cache_location_internal">Belső</string>
+	<string name="settings.cache_location_external">Külső</string>
 	<string name="settings.cache_clear">Gyorsítótár törlése</string>
 	<string name="settings.cache_clear_complete">Gyorsítótár törlése kész.</string>
     <string name="settings.testing_connection">Kapcsolat tesztelése...</string>
@@ -472,6 +481,8 @@
 	<string name="settings.shuffle_by_album">Keverés albumok szerint</string>
 	<string name="settings.shuffle_by_album.true">Dalsorrend keverése albumonként szétválasztva.</string>
 	<string name="settings.shuffle_by_album.false">Dalsorrend keverése az összes dalt együtt kezelve.</string>
+	<string name="settings.casting_stream_original">Eredeti stream</string>
+	<string name="settings.casting_stream_original_summary">Az eredeti fájl streamelése, ha a cast eszköz támogatja a fájltípust.</string>
 
 	<string name="shuffle.title">Dalsorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -479,10 +490,9 @@
 	<string name="shuffle.genre">Műfaj:</string>
 	<string name="shuffle.pick_genre">Műfaj kiválasztása</string>
 
-	<string name="share.info">Tulajdonos: %1$s
-		\nLeírás: %2$s
-		\nURL: %3$s
-		\nLétrehozva: %4$s
+	<string name="share.info">
+
+
 		\nUtolsó látogatás: %5$s
 		\nLejárati idő: %6$s
 		\nLátogatások száma: %7$s
@@ -516,6 +526,7 @@
 	<string name="admin.change_password">Jelszó csere</string>
 	<string name="admin.change_password_success">\"%1$s\" jelszavának módosítása kész.</string>
 	<string name="admin.change_password_error">\"%1$s\" jelszavának módosítása sikertelen!</string>
+	<string name="admin.change_password_current_label">Jelenlegi jelszó:</string>
 	<string name="admin.change_password_label">Új jelszó:</string>
 	<string name="admin.change_password_invalid">Adjon meg egy érvényes jelszót!</string>
 	<string name="admin.delete_user">Felhasználó törlése</string>
@@ -523,6 +534,8 @@
 	<string name="admin.delete_user_error">\"%1$s\" felhasználó törlése sikertelen!</string>
 	<string name="admin.confirm_password">Jelszó megerősítése</string>
 	<string name="admin.confirm_password_bad">A beírt jelszó nem egyezik!</string>
+	<string name="admin.permissions">Engedélyek</string>
+	<string name="admin.musicFolders">Zenekönyvtárak</string>
 	
 	<string name="admin.scrobblingEnabled">Scrobbling használata</string>
 	<string name="admin.role.admin">Adminisztrátor</string>
