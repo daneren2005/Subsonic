@@ -353,6 +353,8 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 		if(theme != null) {
 			theme.setSummary(theme.getEntry());
+		}
+		if(openToTab != null) {
 			openToTab.setSummary(openToTab.getEntry());
 		}
 

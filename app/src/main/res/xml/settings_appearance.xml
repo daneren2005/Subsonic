@@ -53,14 +53,6 @@
 			android:key="renameDuplicates"
 			android:defaultValue="true"/>
 
-		<ListPreference
-			android:title="@string/settings.open_to_tab"
-			android:summary="@string/settings.open_to_tab_summary"
-			android:key="openToTab"
-			android:entryValues="@array/defaultDrawerItemsDescriptions"
-			android:entries="@array/defaultDrawerItems"
-			android:defaultValue="Home"/>
-
 		<CheckBoxPreference
 			android:title="@string/settings.disable_exit_prompt"
 			android:summary="@string/settings.disable_exit_prompt_summary"

@@ -38,7 +38,15 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory
-		android:title="@string/button_bar.chat">
+		android:title="@string/settings.other_title">
+
+		<ListPreference
+			android:title="@string/settings.open_to_tab"
+			android:summary="@string/settings.open_to_tab_summary"
+			android:key="openToTab"
+			android:entryValues="@array/defaultDrawerItemsDescriptions"
+			android:entries="@array/defaultDrawerItems"
+			android:defaultValue="Home"/>
 
 		<github.daneren2005.dsub.view.SeekBarPreference
 			android:title="@string/settings.chat_refresh"
