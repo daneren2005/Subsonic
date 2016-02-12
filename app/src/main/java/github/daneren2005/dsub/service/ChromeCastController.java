@@ -62,6 +62,8 @@ public class ChromeCastController extends RemoteController {
 	private boolean error = false;
 	private boolean ignoreNextPaused = false;
 	private String sessionId;
+	private boolean isStopping = false;
+	private Runnable afterUpdateComplete = null;
 
 	private ServerProxy proxy;
 	private String rootLocation;
@@ -247,18 +249,38 @@ public class ChromeCastController extends RemoteController {
 		}
 	}
 
-	void startSong(DownloadFile currentPlaying, boolean autoStart, int position) {
+	void startSong(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
 		if(currentPlaying == null) {
 			try {
-				if (mediaPlayer != null && !error) {
-					mediaPlayer.stop(apiClient);
+				if (mediaPlayer != null && !error && !isStopping) {
+					isStopping = true;
+					mediaPlayer.stop(apiClient).setResultCallback(new ResultCallback<RemoteMediaPlayer.MediaChannelResult>() {
+						@Override
+						public void onResult(RemoteMediaPlayer.MediaChannelResult mediaChannelResult) {
+							isStopping = false;
+
+							if(afterUpdateComplete != null) {
+								afterUpdateComplete.run();
+								afterUpdateComplete = null;
+							}
+						}
+					});
 				}
 			} catch(Exception e) {
 				// Just means it didn't need to be stopped
 			}
 			downloadService.setPlayerState(PlayerState.IDLE);
 			return;
+		} else if(isStopping) {
+			afterUpdateComplete = new Runnable() {
+				@Override
+				public void run() {
+					startSong(currentPlaying, autoStart, position);
+				}
+			};
+			return;
 		}
+
 		downloadService.setPlayerState(PlayerState.PREPARING);
 		MusicDirectory.Entry song = currentPlaying.getSong();
 

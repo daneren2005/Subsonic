@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.1.5" versioncode="173" releasedate="2/11/2016">
+		<change>Toggle for Batch Mode on Now Playing</change>
+		<change>Admin tab: view/update music folders (Subsonic 5.2+)</change>
+		<change>Tag Browsing: can specify Music Folder (Subsonic 6.0+)</change>
+		<change>Show shuffle/radio mode in title bar</change>
+		<change>Madsonic only: Songs lists on Home tab</change>
+		<change>Clicking songs adds songs before it as well</change>
+		<change>Similar Artists: show missing artists below main list</change>
+		<change>Improve offline search (thanks fxthomas)</change>
+		<change>Improve podcast date formatting</change>
+		<change>Increase max sleep timer to 1 hour</change>
+		<change>Cast: added setting to disable DLNA gapless playback</change>
+		<change>Cast: added setting to stream original source files</change>
+		<change>Long press details dialogs to copy information</change>
+		<change>Android Auto improvements</change>
+		<change>Top Tracks: display #</change>
+		<change>Require current password when changing password</change>
+		<change>Improved Share Details dialog</change>
+		<change>Sort Music Folders alphabetically</change>
+		<change>Fix repeating same song if multiples copies in play queue</change>
+		<change>Fix freeze on Play x from Google Now</change>
+		<change>Fix Show Artist/Album back behavior</change>
+		<change>Minor Chromecast fixes</change>
+	</release>
 	<release version="5.1.4" versioncode="172" releasedate="1/17/2016">
 		<change>Minor theme improvements</change>
 	</release>

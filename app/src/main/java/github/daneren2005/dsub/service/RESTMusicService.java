@@ -947,10 +947,9 @@ public class RESTMusicService implements MusicService {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
 		builder.append("&id=").append(song.getId());
 
-		// If we are doing mp3 to mp3, just specify raw so that stuff works better
-		if("mp3".equals(song.getSuffix()) && (song.getTranscodedSuffix() == null || "mp3".equals(song.getTranscodedSuffix())) && ServerInfo.checkServerVersion(context, "1.9", getInstance(context))) {
+		// Allow user to specify to stream raw formats if available
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_STREAM_ORIGINAL, true) && ("mp3".equals(song.getSuffix()) || "flac".equals(song.getSuffix()) || "wav".equals(song.getSuffix()) || "aac".equals(song.getSuffix())) && ServerInfo.checkServerVersion(context, "1.9", getInstance(context))) {
 			builder.append("&format=raw");
-			builder.append("&estimateContentLength=true");
 		} else {
 			builder.append("&maxBitRate=").append(maxBitrate);
 		}
