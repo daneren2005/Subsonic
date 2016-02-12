@@ -220,14 +220,14 @@ public class DownloadService extends Service {
 					}
 				});
 
-				try {
+				/*try {
 					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
 					i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId);
 					i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
 					sendBroadcast(i);
 				} catch(Throwable e) {
 					// Froyo or lower
-				}
+				}*/
 
 				effectsController = new AudioEffectsController(DownloadService.this, audioSessionId);
 				if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
