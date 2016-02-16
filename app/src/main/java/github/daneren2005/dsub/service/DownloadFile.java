@@ -529,8 +529,9 @@ public class DownloadFile implements BufferFile {
 			}
 			
 			// Only run these if not interrupted, ie: cancelled
-			if(!isCancelled()) {
-				new CacheCleaner(context, DownloadService.getInstance()).cleanSpace();
+			DownloadService downloadService = DownloadService.getInstance();
+			if(downloadService != null && !isCancelled()) {
+				new CacheCleaner(context, downloadService).cleanSpace();
 				checkDownloads();
 			}
 
