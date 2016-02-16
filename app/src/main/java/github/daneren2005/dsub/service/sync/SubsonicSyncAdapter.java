@@ -65,39 +65,54 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 
 	@Override
 	public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-		
-		// Don't try to sync if no network!
-		if(networkInfo == null || !networkInfo.isConnected() || Util.isOffline(context)) {
-			Log.w(TAG, "Not running sync, not connected to network");
+		String invalidMessage = isNetworkValid();
+		if(invalidMessage != null) {
+			Log.w(TAG, "Not running sync: " + invalidMessage);
 			return;
 		}
-		
+
 		// Make sure battery > x% or is charging
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 		Intent batteryStatus = context.registerReceiver(null, intentFilter);
 		int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-		if(status != BatteryManager.BATTERY_STATUS_CHARGING && status != BatteryManager.BATTERY_STATUS_FULL) {
+		if (status != BatteryManager.BATTERY_STATUS_CHARGING && status != BatteryManager.BATTERY_STATUS_FULL) {
 			int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
 			int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-			
-			if((level / (float)scale) < 0.15) {
+
+			if ((level / (float) scale) < 0.15) {
 				Log.w(TAG, "Not running sync, battery too low");
 				return;
 			}
+		}
+
+		executeSync(context);
+	}
+
+	private String isNetworkValid() {
+		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+
+		// Don't try to sync if no network!
+		if(networkInfo == null || !networkInfo.isConnected() || Util.isOffline(context)) {
+			return "Not connected to any network";
 		}
 
 		// Check if user wants to only sync on wifi
 		SharedPreferences prefs = Util.getPreferences(context);
 		if(prefs.getBoolean(Constants.PREFERENCES_KEY_SYNC_WIFI, true)) {
 			if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-				executeSync(context);
+				return null;
 			} else {
-				Log.w(TAG, "Not running sync, not connected to wifi");
+				return "Not connected to WIFI";
 			}
 		} else {
-			executeSync(context);
+			return null;
+		}
+	}
+	protected void throwIfNetworkInvalid() throws NetworkNotValidException {
+		String invalidMessage = isNetworkValid();
+		if(invalidMessage != null) {
+			throw new NetworkNotValidException(invalidMessage);
 		}
 	}
 	
@@ -106,32 +121,39 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		Log.i(TAG, "Running sync for " + className);
 		long start = System.currentTimeMillis();
 		int servers = Util.getServerCount(context);
-		for(int i = 1; i <= servers; i++) {
-			try {
-				if(isValidServer(context, i) && Util.isSyncEnabled(context, i)) {
-					tagBrowsing = Util.isTagBrowsing(context, i);
-					musicService.setInstance(i);
-					onExecuteSync(context, i);
-				} else {
-					Log.i(TAG, "Skipped sync for " + i);
+		try {
+			for (int i = 1; i <= servers; i++) {
+				try {
+					throwIfNetworkInvalid();
+
+					if (isValidServer(context, i) && Util.isSyncEnabled(context, i)) {
+						tagBrowsing = Util.isTagBrowsing(context, i);
+						musicService.setInstance(i);
+						onExecuteSync(context, i);
+					} else {
+						Log.i(TAG, "Skipped sync for " + i);
+					}
+				} catch (Exception e) {
+					Log.e(TAG, "Failed sync for " + className + "(" + i + ")", e);
 				}
-			} catch(Exception e) {
-				Log.e(TAG, "Failed sync for " + className + "(" + i + ")", e);
 			}
+		} catch (NetworkNotValidException e) {
+			Log.e(TAG, "Stopped sync due to network loss", e);
 		}
 		
 		Log.i(TAG, className + " executed in " + (System.currentTimeMillis() - start) + " ms");
 	}
-	public void onExecuteSync(Context context, int instance) {
+	public void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
 	
 	}
 
-	protected boolean downloadRecursively(List<String> paths, MusicDirectory parent, Context context, boolean save) throws Exception {
+	protected boolean downloadRecursively(List<String> paths, MusicDirectory parent, Context context, boolean save) throws Exception,NetworkNotValidException {
 		boolean downloaded = false;
 		for (MusicDirectory.Entry song: parent.getChildren(false, true)) {
 			if (!song.isVideo()) {
 				DownloadFile file = new DownloadFile(context, song, save);
 				while(!(save && file.isSaved() || !save && file.isCompleteFileAvailable()) && !file.isFailedMax()) {
+					throwIfNetworkInvalid();
 					file.downloadNow(musicService);
 					if(!file.isFailed()) {
 						downloaded = true;
@@ -170,5 +192,11 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	private boolean isValidServer(Context context, int instance) {
 		String url = Util.getRestUrl(context, "null", instance, false);
 		return !(url.contains("demo.subsonic.org") || url.contains("yourhost"));
+	}
+
+	public class NetworkNotValidException extends Throwable {
+		public NetworkNotValidException(String reason) {
+			super("Not running sync: " + reason);
+		}
 	}
 }

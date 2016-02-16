@@ -23,7 +23,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 	}
 
 	@Override
-	public void onExecuteSync(Context context, int instance) {
+	public void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
 		ArrayList<SyncSet> podcastList = SyncUtil.getSyncedPodcasts(context, instance);
 
 		try {
@@ -81,6 +80,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 						if(entry.getId() != null && "completed".equals(((PodcastEpisode)entry).getStatus()) && !existingEpisodes.contains(entry.getId())) {
 							DownloadFile file = new DownloadFile(context, entry, false);
 							while(!file.isCompleteFileAvailable() && !file.isFailedMax()) {
+								throwIfNetworkInvalid();
 								file.downloadNow(musicService);
 							}
 							// Only add if actualy downloaded correctly

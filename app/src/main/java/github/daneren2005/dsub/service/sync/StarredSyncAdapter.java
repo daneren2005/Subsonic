@@ -20,7 +20,6 @@
 package github.daneren2005.dsub.service.sync;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.content.Context;
 import android.util.Log;
 
@@ -50,7 +49,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 	}
 
 	@Override
-	public void onExecuteSync(Context context, int instance) {
+	public void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
 		try {
 			ArrayList<String> syncedList = new ArrayList<String>();
 			MusicDirectory starredList = musicService.getStarredList(context, null);

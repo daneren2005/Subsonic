@@ -56,7 +56,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 	}
 
 	@Override
-	public void onExecuteSync(Context context, int instance) {
+	public void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
 		String serverName = Util.getServerName(context, instance);
 
 		List<Playlist> remainder = null;
@@ -95,6 +95,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 					DownloadFile file = new DownloadFile(context, entry, true);
 					String path = file.getCompleteFile().getPath();
 					while(!file.isSaved() && !file.isFailedMax()) {
+						throwIfNetworkInvalid();
 						file.downloadNow(musicService);
 						if(file.isSaved() && !updated.contains(playlist.getName())) {
 							updated.add(playlist.getName());
