@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="5.1.5" versioncode="173" releasedate="2/11/2016">
+	<release version="5.1.5" versioncode="173" releasedate="2/15/2016">
 		<change>Toggle for Batch Mode on Now Playing</change>
 		<change>Admin tab: view/update music folders (Subsonic 5.2+)</change>
 		<change>Tag Browsing: can specify Music Folder (Subsonic 6.0+)</change>
