@@ -49,7 +49,7 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 	}
 
 	@Override
-	public void onExecuteSync(Context context, int instance) {
+	public void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
 		try {
 			ArrayList<String> syncedList = SyncUtil.getSyncedMostRecent(context, instance);
 			MusicDirectory albumList = musicService.getAlbumList("newest", 20, 0, tagBrowsing, context, null);

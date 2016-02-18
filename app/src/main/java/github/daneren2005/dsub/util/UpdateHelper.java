@@ -248,6 +248,7 @@ public final class UpdateHelper {
 					msg = context.getResources().getString(rating > 0 ? R.string.rating_set_rating_failed : R.string.rating_remove_rating_failed, entry.getTitle()) + " " + getErrorMessage(error);
 				}
 
+				Log.e(TAG, "Failed to setRating", error);
 				Util.toast(context, msg, false);
 			}
 		}.execute();

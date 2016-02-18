@@ -200,11 +200,13 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			@Override
 			public void onPanelCollapsed(View panel) {
 				isPanelClosing = false;
-				bottomBar.setVisibility(View.VISIBLE);
-				nowPlayingToolbar.setVisibility(View.GONE);
-				nowPlayingFragment.setPrimaryFragment(false);
-				setSupportActionBar(mainToolbar);
-				recreateSpinner();
+				if(bottomBar.getVisibility() == View.GONE) {
+					bottomBar.setVisibility(View.VISIBLE);
+					nowPlayingToolbar.setVisibility(View.GONE);
+					nowPlayingFragment.setPrimaryFragment(false);
+					setSupportActionBar(mainToolbar);
+					recreateSpinner();
+				}
 			}
 
 			@Override

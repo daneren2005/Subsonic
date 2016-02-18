@@ -548,6 +548,7 @@
 	<string name="admin.role.stream">Stream music</string>
 	<string name="admin.role.jukebox">Control jukebox</string>
 	<string name="admin.role.share">Manage shares</string>
+	<string name="admin.role.video_conversion">Convert videos</string>
 	<string name="admin.role.lastfm">Use Last.FM feature</string>
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>

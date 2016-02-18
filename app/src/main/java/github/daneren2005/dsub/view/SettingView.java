@@ -81,6 +81,8 @@ public class SettingView extends UpdateView2<Setting, Boolean> {
 			res = R.string.admin_role_jukebox;
 		} else if(User.SHARE.equals(name)) {
 			res = R.string.admin_role_share;
+		} else if(User.VIDEO_CONVERSION.equals(name)) {
+			res = R.string.admin_role_video_conversion;
 		} else if(User.LASTFM.equals(name)) {
 			res = R.string.admin_role_lastfm;
 		} else {
