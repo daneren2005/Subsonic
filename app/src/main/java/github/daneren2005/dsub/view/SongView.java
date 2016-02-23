@@ -20,7 +20,6 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
@@ -30,6 +29,7 @@ import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.util.DrawableTint;
+import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
@@ -50,6 +50,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private TextView statusTextView;
 	private ImageView statusImageView;
 	private ImageView bookmarkButton;
+	private ImageView playedButton;
 	private View bottomRowView;
 
 	private DownloadService downloadService;
@@ -66,8 +67,10 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private boolean partialFileExists = false;
 	private boolean loaded = false;
 	private boolean isBookmarked = false;
-	private boolean bookmarked = false;
+	private boolean isBookmarkedShown = false;
 	private boolean showPodcast = false;
+	private boolean isPlayed = false;
+	private boolean isPlayedShown = false;
 
 	public SongView(Context context) {
 		super(context);
@@ -84,6 +87,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		starButton.setFocusable(false);
 		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
 		bookmarkButton.setFocusable(false);
+		playedButton = (ImageButton) findViewById(R.id.song_played);
 		moreButton = (ImageView) findViewById(R.id.item_more);
 		bottomRowView = findViewById(R.id.song_bottom);
 	}
@@ -209,6 +213,10 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			item.loadMetadata(downloadFile.getCompleteFile());
 			loaded = true;
 		}
+
+		if(item instanceof PodcastEpisode || item.isAudioBook() || item.isPodcast()) {
+			isPlayed = SongDBHandler.getHandler(context).hasBeenCompleted(item);
+		}
 	}
 
 	@Override
@@ -274,18 +282,34 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		}
 
 		if(isBookmarked) {
-			if(!bookmarked) {
+			if(!isBookmarkedShown) {
 				if(bookmarkButton.getDrawable() == null) {
 					bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
 				}
 
 				bookmarkButton.setVisibility(View.VISIBLE);
-				bookmarked = true;
+				isBookmarkedShown = true;
 			}
 		} else {
-			if(bookmarked) {
+			if(isBookmarkedShown) {
 				bookmarkButton.setVisibility(View.GONE);
-				bookmarked = false;
+				isBookmarkedShown = false;
+			}
+		}
+
+		if(isPlayed) {
+			if(!isPlayedShown) {
+				if(playedButton.getDrawable() == null) {
+					playedButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_played));
+				}
+
+				playedButton.setVisibility(View.VISIBLE);
+				isPlayedShown = true;
+			}
+		} else {
+			if(isPlayedShown) {
+				playedButton.setVisibility(View.GONE);
+				isPlayedShown = false;
 			}
 		}
 

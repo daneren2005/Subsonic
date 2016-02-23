@@ -150,6 +150,14 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		db.close();
 	}
 
+	public boolean hasBeenPlayed(MusicDirectory.Entry entry) {
+		Long[] lastPlayed = getLastPlayed(entry);
+		return lastPlayed != null && lastPlayed[0] != null && lastPlayed[0] > 0;
+	}
+	public boolean hasBeenCompleted(MusicDirectory.Entry entry) {
+		Long[] lastPlayed = getLastPlayed(entry);
+		return lastPlayed != null && lastPlayed[1] != null && lastPlayed[1] > 0;
+	}
 	public synchronized Long[] getLastPlayed(MusicDirectory.Entry entry) {
 		return getLastPlayed(getOnlineSongId(entry));
 	}

@@ -44,8 +44,8 @@
 
 			<ImageButton
 				android:id="@+id/song_bookmark"
-				android:layout_width="24dp"
-				android:layout_height="24dp"
+				android:layout_width="@dimen/SongStatusIcon"
+				android:layout_height="@dimen/SongStatusIcon"
 				android:layout_gravity="right|top"
 				android:background="@null"
 				android:focusable="false"
@@ -62,6 +62,16 @@
 				android:focusable="false"
 				android:visibility="gone"/>
 
+			<ImageButton
+				android:id="@+id/song_played"
+				android:layout_width="@dimen/SongStatusIcon"
+				android:layout_height="@dimen/SongStatusIcon"
+				android:scaleType="fitCenter"
+				android:layout_gravity="right|top"
+				android:background="@null"
+				android:focusable="false"
+				android:visibility="gone"/>
+
             <TextView
 				android:id="@+id/song_status"
 				android:layout_width="wrap_content"
@@ -72,8 +82,8 @@
 
 			<ImageView
 				android:id="@+id/song_status_icon"
-				android:layout_width="24dip"
-				android:layout_height="24dip"
+				android:layout_width="@dimen/SongStatusIcon"
+				android:layout_height="@dimen/SongStatusIcon"
 				android:layout_gravity="top"
 				android:src="?attr/downloading"
 				android:visibility="gone"/>
