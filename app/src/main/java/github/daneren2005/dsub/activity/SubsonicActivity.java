@@ -1064,6 +1064,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 		UserUtil.seedCurrentUser(this);
 		this.updateDrawerHeader();
+		drawer.closeDrawers();
 	}
 
 	private void showOfflineSyncDialog(final int scrobbleCount, final int starsCount) {
