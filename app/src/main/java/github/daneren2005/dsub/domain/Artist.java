@@ -138,9 +138,9 @@ public class Artist implements Serializable {
 			char rhs1 = rhs.charAt(0);
 
 			if (Character.isDigit(lhs1) && !Character.isDigit(rhs1)) {
-				return 1;
-			} else if (Character.isDigit(rhs1) && !Character.isDigit(lhs1)) {
 				return -1;
+			} else if (Character.isDigit(rhs1) && !Character.isDigit(lhs1)) {
+				return 1;
 			}
 
 			for (String article : ignoredArticles) {
