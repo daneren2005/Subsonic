@@ -8,11 +8,15 @@ android {
 		applicationId "github.daneren2005.dsub"
 		minSdkVersion 14
 		targetSdkVersion 22
+		versionCode 174
+		versionName '5.1.5'
+		setProperty("archivesBaseName", "DSub $versionName")
 	}
 	buildTypes {
 		release {
 			minifyEnabled true
 			proguardFiles 'proguard.cfg'
+			zipAlignEnabled true
 		}
 	}
 
