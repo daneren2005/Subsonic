@@ -32,8 +32,7 @@
 
     <string name="button_bar.home">Hem</string>
     <string name="button_bar.browse">Bibliotek</string>
-    <string name="button_bar.search">Sök</string>
-    <string name="button_bar.playlists">Spellista</string>
+	<string name="button_bar.playlists">Spellista</string>
     <string name="button_bar.now_playing">Spelar nu</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bokmärken</string>
@@ -58,8 +57,7 @@
 		<br/>Avmarkera "Första steget artister" i inställningsmenyn.  Det kommer göra så att hela första steget kommer att hanteras som grupper istället för som enstaka artister.
 	]]>
 	</string>
-    <string name="main.select_server">Välj server</string>
-    <string name="main.shuffle">Slumpad uppspelning</string>
+	<string name="main.shuffle">Slumpad uppspelning</string>
     <string name="main.offline">Gå Offline</string>
 	<string name="main.online">Gå Online</string>
     <string name="main.settings">Inställningar</string>
@@ -130,20 +128,13 @@
     <string name="search.artists">Artister</string>
     <string name="search.albums">Album</string>
     <string name="search.songs">Spår</string>
-    <string name="search.more">Visa mer</string>
 
-    <string name="progress.wait">Vänta...</string>
+	<string name="progress.wait">Vänta...</string>
 	<string name="progress.artist_info">Laddar information om artist</string>
 
-    <string name="music_library.label">Media bibliotek</string>
-    <string name="music_library.label_offline">Offline media</string>
-
-    <string name="select_album.select">Markera allt</string>
-    <string name="select_album.n_selected">%d vald.</string>
-	<string name="select_album.more">Mer</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">Söker...</string>
-    <string name="select_album.no_sdcard">Error: Inget SD-kort tillgängligt.</string>
+	<string name="select_album.n_selected">%d vald.</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Error: Inget SD-kort tillgängligt.</string>
     <string name="select_album.no_network">Varning: Inget nätverk tillgängligt.</string>
 	<string name="select_album.no_room">Varning: Du har bara %s kvar</string>
     <string name="select_album.not_licensed">Servern är inte licenserad. %d testdagar kvar.</string>
@@ -202,13 +193,9 @@
     <string name="download.repeat_off">Upprepa inte</string>
     <string name="download.repeat_all">Upprepa alla</string>
     <string name="download.repeat_single">Upprepa spåret</string>
-    <string name="download.jukebox_on">Startade fjärrkontroll. Musiken spelas upp på datorn.</string>
-    <string name="download.jukebox_off">Stängde av fjärrkontroll. Musiken spelas upp på telefonen.</string>
-    <string name="download.jukebox_volume">Fjärrkontroll volym</string>
-    <string name="download.jukebox_server_too_old">Fjärrkontroll stöds inte. Uppdatera din Subsonic server.</string>
+	<string name="download.jukebox_server_too_old">Fjärrkontroll stöds inte. Uppdatera din Subsonic server.</string>
     <string name="download.jukebox_offline">Fjärrkontroll fungerar inte i offline läge.</string>
     <string name="download.jukebox_not_authorized">Fjärrkontroll acceptaras inte. Acceptera Jukebox läge i <b>Användare &gt; Inställningar</b> på din Subsonic server.</string>
-	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Starta timer</string>
 	<string name="download.stop_time_remaining">Stoppa om %1$s</string>
 	<string name="download.need_download">Videon måste laddas ner först</string>
@@ -476,15 +463,6 @@
 	<string name="shuffle.genre">Genre:</string>
 	<string name="shuffle.pick_genre">Välj en genre</string>
 
-	<string name="share.info">Ägare: %1$s
-		\nBeskrivning: %2$s
-		\nURL: %3$s
-		\nSkapad: %4$s
-		\nSenast besökt: %5$s
-		\nGår ut: %6$s
-		\nAntal besök: %7$s
-
-	</string>
 	<string name="share.expires">Går ut: %s</string>
 	<string name="share.expires_never">Går aldrig ut</string>
 	<string name="share.deleted">Tog bort delning %s</string>
@@ -536,9 +514,7 @@
 
     <string name="music_service.retry">Ett nätverksproblem har uppstått. Försök %1$d av %2$d.</string>
 
-    <string name="background_task.wait">Vänta...</string>
-    <string name="background_task.loading">Laddar.</string>
-    <string name="background_task.no_network">Appen kräver nätverk. Slå på Wi-Fi eller mkobil data för att kunna använda den.</string>
+	<string name="background_task.no_network">Appen kräver nätverk. Slå på Wi-Fi eller mkobil data för att kunna använda den.</string>
     <string name="background_task.network_error">Ett nätverksproblem uppstod. Kontrollera server adressen och försök igen.</string>
     <string name="background_task.not_found">Resurs kunde inte hittas. Kontrollera server adressen och försök igen.</string>
     <string name="background_task.parse_error">Problem med kommunikationen med servern. Kontrollera server adressen och att du kan ansluta till servern via webbläsaren.</string>
@@ -553,8 +529,7 @@
 	<string name="parser.server_error">Server fel: %s</string>
 	<string name="parser.scan_count">Scannade %d rader</string>
 
-    <string name="select_artist.refresh">Ladda om</string>
-    <string name="select_artist.folder">Välj mapp</string>
+	<string name="select_artist.folder">Välj mapp</string>
     <string name="select_artist.all_folders">Alla mappar</string>
 
     <string name="equalizer.label">Equalizer</string>

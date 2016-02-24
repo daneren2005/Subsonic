@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="drawerItemsDescriptions">
-		<item>Home</item>
-		<item>Artist</item>
-		<item>Playlist</item>
-		<item>Podcast</item>
-		<item>Bookmark</item>
-		<item>Share</item>
-		<item>Chat</item>
-		<item>Admin</item>
-		<item>Download</item>
-		<item>Settings</item>
-	</string-array>
-
 	<string-array name="defaultDrawerItems">
 		<item>@string/button_bar.home</item>
 		<item>@string/button_bar.browse</item>

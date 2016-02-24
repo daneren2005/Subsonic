@@ -28,8 +28,7 @@
 
     <string name="button_bar.home">Accueil</string>
     <string name="button_bar.browse">Bibliothèque</string>
-    <string name="button_bar.search">Recherche</string>
-    <string name="button_bar.playlists">Playlists</string>
+	<string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Lecture en cours</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Favoris</string>
@@ -50,8 +49,7 @@
 		<br/>Assurez-vous de ne pas utiliser un certificat auto-signé, Chromecast les rejette systématiquement.
 	]]>
 	</string>
-    <string name="main.select_server">Choisir un serveur</string>
-    <string name="main.shuffle">Jouer au hasard</string>
+	<string name="main.shuffle">Jouer au hasard</string>
     <string name="main.offline">Déconnecter</string>
 	<string name="main.online">Connecter</string>
     <string name="main.settings">Paramètres</string>
@@ -114,19 +112,12 @@
     <string name="search.artists">Artistes</string>
     <string name="search.albums">Albums</string>
     <string name="search.songs">Chansons</string>
-    <string name="search.more">Afficher plus</string>
 
-    <string name="progress.wait">Patientez…</string>
+	<string name="progress.wait">Patientez…</string>
 
-    <string name="music_library.label">Bibliothèque</string>
-    <string name="music_library.label_offline">Média mode déconnecté</string>
-
-    <string name="select_album.select">Tout sélectionner</string>
-    <string name="select_album.n_selected">%d pistes sélectionnées.</string>
-	<string name="select_album.more">Plus</string>
-    <string name="select_album.offline">Déconnecté</string>
-    <string name="select_album.searching">Recherche en cours...</string>
-    <string name="select_album.no_sdcard">Erreur : Aucune carte SD card disponible.</string>
+	<string name="select_album.n_selected">%d pistes sélectionnées.</string>
+	<string name="select_album.offline">Déconnecté</string>
+	<string name="select_album.no_sdcard">Erreur : Aucune carte SD card disponible.</string>
     <string name="select_album.no_network">Problème : Aucun réseau disponible.</string>
     <string name="select_album.not_licensed">Serveur sans licence valide. %d jours restant.</string>
     <string name="select_album.donate_dialog_message">Téléchargement illimité en supportant Subsonic.</string>
@@ -183,13 +174,9 @@
     <string name="download.repeat_off">Répéter inactif</string>
     <string name="download.repeat_all">Répéter tout</string>
     <string name="download.repeat_single">Répéter titre</string>
-    <string name="download.jukebox_on">Télécommande activée. La musique est diffusée sur l\'ordinateur.</string>
-    <string name="download.jukebox_off">Télécommande désactivée. La musique est diffusée sur le mobile.</string>
-    <string name="download.jukebox_volume">Volume distant</string>
-    <string name="download.jukebox_server_too_old">Télécommande non supportée. Mettre à jour le serveur Subsonic.</string>
+	<string name="download.jukebox_server_too_old">Télécommande non supportée. Mettre à jour le serveur Subsonic.</string>
     <string name="download.jukebox_offline">La télécommande n\'est pas disponible en mode déconnecté.</string>
     <string name="download.jukebox_not_authorized">Mode télécommande non autorisée. Activer le mode jukebox.<b>Users &gt; Settings</b> on your Subsonic server.</string>
-	<string name="download.timer_length">Minuteur :</string>
 	<string name="download.start_timer">Démarrer le minuteur</string>
 	<string name="download.need_download">La vidéo doit d\'abord être téléchargée</string>
 	<string name="download.no_streaming_player">Aucun lecteur ne peut afficher ce flux</string>
@@ -424,15 +411,6 @@
 	<string name="shuffle.genre">Genre :</string>
 	<string name="shuffle.pick_genre">Choisir un genre</string>
 
-	<string name="share.info">Propriétaire : %1$s
-		\nDescription: %2$s
-		\nURL: %3$s
-		\nCréation : %4$s
-		\nDernière visite : %5$s
-		\nExpiration : %6$s
-		\nNombre de visites : %7$s
-
-	</string>
 	<string name="share.expires">Expiration : %s</string>
 	<string name="share.expires_never">N\'expire jamais</string>
 	<string name="share.deleted">Supprimer le partage %s</string>
@@ -484,9 +462,7 @@
 
     <string name="music_service.retry">Erreur réseau. Nouvelle tentative %1$d de %2$d.</string>
 
-    <string name="background_task.wait">Patienter...</string>
-    <string name="background_task.loading">Chargement.</string>
-    <string name="background_task.no_network">Cette application nécessite un accès réseau. Activer les connexion Wifi ou mobile.</string>
+	<string name="background_task.no_network">Cette application nécessite un accès réseau. Activer les connexion Wifi ou mobile.</string>
     <string name="background_task.network_error">Une erreur réseau est survenue. Merci de vérifier l\'adresse du serveur ou réessayer plus tard.</string>
     <string name="background_task.not_found">Ressource non trouvée. Vérifier l\'adresse du serveur.</string>
     <string name="background_task.parse_error">Erreur de communication avec le serveur.Vérifier l\'adresse du serveur et que la connexion via un navigateur fonctionne.</string>
@@ -501,8 +477,7 @@
 	<string name="parser.server_error">Erreur serveur : %s</string>
 	<string name="parser.scan_count">%d entrées trouvées</string>
 
-    <string name="select_artist.refresh">Recharger</string>
-    <string name="select_artist.folder">Sélectionner un dossier</string>
+	<string name="select_artist.folder">Sélectionner un dossier</string>
     <string name="select_artist.all_folders">Tous les dossier</string>
 
     <string name="equalizer.label">Equaliseur</string>

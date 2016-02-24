@@ -32,8 +32,7 @@
 
     <string name="button_bar.home">Főoldal</string>
     <string name="button_bar.browse">Médiatár</string>
-    <string name="button_bar.search">Keresés</string>
-    <string name="button_bar.playlists">Lejátszási listák</string>
+	<string name="button_bar.playlists">Lejátszási listák</string>
     <string name="button_bar.now_playing">Várólista</string>
 	<string name="button_bar.podcasts">Podcastok</string>
 	<string name="button_bar.bookmarks">Könyvjelzők</string>
@@ -58,8 +57,7 @@
 		<br/>Ha a Beállítások menüben kikapcsolja az "Részletes megjelenítés" opciót, akkor a mappák teljes első szintje ugyanúgy lesz megjelenítve, mint az előadók listája.
 	]]>
 	</string>
-    <string name="main.select_server">Kiszolgáló kiválasztása</string>
-    <string name="main.shuffle">Lejátszás kevert sorrendben</string>
+	<string name="main.shuffle">Lejátszás kevert sorrendben</string>
     <string name="main.offline">Offline mód</string>
 	<string name="main.online">Online mód</string>
     <string name="main.settings">Beállítások</string>
@@ -135,20 +133,13 @@
     <string name="search.artists">Előadók</string>
     <string name="search.albums">Albumok</string>
     <string name="search.songs">Dalok</string>
-    <string name="search.more">Továbbiak</string>
 
-    <string name="progress.wait">Kérem várjon...</string>
+	<string name="progress.wait">Kérem várjon...</string>
 	<string name="progress.artist_info">Az előadó életrajzának betöltése...</string>
 
-    <string name="music_library.label">Médiatár</string>
-    <string name="music_library.label_offline">Kapcsolat nélküli médiák</string>
-
-    <string name="select_album.select">Összes jelölése be/ki</string>
-    <string name="select_album.n_selected">%d kijelölve.</string>
-	<string name="select_album.more">Továbbiak</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">Keresés...</string>
-    <string name="select_album.no_sdcard">Hiba: SD kártya nem áll rendelkezésre!</string>
+	<string name="select_album.n_selected">%d kijelölve.</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Hiba: SD kártya nem áll rendelkezésre!</string>
     <string name="select_album.no_network">Figyelem: Hálózat nem áll rendelkezésre!</string>
 	<string name="select_album.no_room">Figyelem: Már csak %s hely áll rendelkezésre!</string>
     <string name="select_album.not_licensed">A kiszolgálónak nincs licence! %d próbanap van hátra!</string>
@@ -209,13 +200,9 @@
     <string name="download.repeat_off">Ismétlés ki</string>
     <string name="download.repeat_all">Összes ismétlése</string>
     <string name="download.repeat_single">Dal ismétlése</string>
-    <string name="download.jukebox_on">Távvezérlés bekapcsolása. A zenelejátszás a számítógépen történik.</string>
-    <string name="download.jukebox_off">Távvezérlés kikapcsolása. A zenelejátszás az eszközön történik.</string>
-    <string name="download.jukebox_volume">Hangerő távvezérlése</string>
-    <string name="download.jukebox_server_too_old">A távvezérlés nem támogatott. Kérjük, frissítse a Subsonic kiszolgálót!</string>
+	<string name="download.jukebox_server_too_old">A távvezérlés nem támogatott. Kérjük, frissítse a Subsonic kiszolgálót!</string>
     <string name="download.jukebox_offline">A távvezérlés nem lehetséges offline módban!</string>
     <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Engedélyezze a Jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
-	<string name="download.timer_length">Időhossz:</string>
 	<string name="download.start_timer">Időzítő indítása</string>
 	<string name="download.stop_timer">Időzítő megállítása</string>
 	<string name="download.need_download">A videót először le kell tölteni!</string>
@@ -490,14 +477,6 @@
 	<string name="shuffle.genre">Műfaj:</string>
 	<string name="shuffle.pick_genre">Műfaj kiválasztása</string>
 
-	<string name="share.info">
-
-
-		\nUtolsó látogatás: %5$s
-		\nLejárati idő: %6$s
-		\nLátogatások száma: %7$s
-
-	</string>
 	<string name="share.expires">Lejárati idő: %s</string>
 	<string name="share.expires_never">Nincs lejárati idő</string>
 	<string name="share.deleted">\"%s\" megosztás törölve</string>
@@ -552,9 +531,7 @@
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
 
-    <string name="background_task.wait">Kérem várjon...</string>
-    <string name="background_task.loading">Betöltés...</string>
-    <string name="background_task.no_network">Az alkalmazás hálózati hozzáférést igényel. Kérjük, kapcsolja be a Wi-Fi-t vagy a mobilhálózatot!</string>
+	<string name="background_task.no_network">Az alkalmazás hálózati hozzáférést igényel. Kérjük, kapcsolja be a Wi-Fi-t vagy a mobilhálózatot!</string>
     <string name="background_task.network_error">Hálózati hiba történt! Kérjük, ellenőrizze a kiszolgáló címét, vagy próbálja később!</string>
     <string name="background_task.not_found">Az erőforrás nem található! Kérjük, ellenőrizze a kiszolgáló címét!</string>
     <string name="background_task.parse_error">Hiba történt a kiszolgálóval történő kommunikációban. Kérjük, ellenőrizze a kiszolgáló címét, és próbáljon meg web böngészővel kapcsolódni a kiszolgálóhoz!</string>
@@ -569,8 +546,7 @@
 	<string name="parser.server_error">Kiszolgáló hiba: %s</string>
 	<string name="parser.scan_count">%d tétel átvizsgálva.</string>
 
-    <string name="select_artist.refresh">Frissítés</string>
-    <string name="select_artist.folder">Mappa kiválasztása</string>
+	<string name="select_artist.folder">Mappa kiválasztása</string>
     <string name="select_artist.all_folders">Összes mappa</string>
 
     <string name="equalizer.label">Equalizer</string>

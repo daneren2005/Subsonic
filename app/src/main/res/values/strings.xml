@@ -32,8 +32,7 @@
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Library</string>
-    <string name="button_bar.search">Search</string>
-    <string name="button_bar.playlists">Playlists</string>
+	<string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Now Playing</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bookmarks</string>
@@ -58,8 +57,7 @@
 		<br/>In the option menu, deselect "First level artists".  This will make it so that the entire first level of directories shown will be treated like groups of artists instead of the artists themselves.
 	]]>
 	</string>
-    <string name="main.select_server">Select server</string>
-    <string name="main.shuffle">Shuffle play</string>
+	<string name="main.shuffle">Shuffle play</string>
     <string name="main.offline">Go Offline</string>
 	<string name="main.online">Go Online</string>
     <string name="main.settings">Settings</string>
@@ -135,20 +133,13 @@
     <string name="search.artists">Artists</string>
     <string name="search.albums">Albums</string>
     <string name="search.songs">Songs</string>
-    <string name="search.more">Show more</string>
 
-    <string name="progress.wait">Please wait...</string>
+	<string name="progress.wait">Please wait...</string>
 	<string name="progress.artist_info">Loading Artist Bio</string>
 
-    <string name="music_library.label">Media library</string>
-    <string name="music_library.label_offline">Offline media</string>
-
-    <string name="select_album.select">Select all</string>
-    <string name="select_album.n_selected">%d selected.</string>
-	<string name="select_album.more">More</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">Searching...</string>
-    <string name="select_album.no_sdcard">Error: No SD card available.</string>
+	<string name="select_album.n_selected">%d selected.</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Error: No SD card available.</string>
     <string name="select_album.no_network">Warning: No network available.</string>
 	<string name="select_album.no_room">Warning: you only have %s left</string>
     <string name="select_album.not_licensed">Server not licensed. %d trial days left.</string>
@@ -209,13 +200,9 @@
     <string name="download.repeat_off">Repeat off</string>
     <string name="download.repeat_all">Repeat all</string>
     <string name="download.repeat_single">Repeat song</string>
-    <string name="download.jukebox_on">Turned on remote control. Music is played on the computer.</string>
-    <string name="download.jukebox_off">Turned off remote control. Music is played on the phone.</string>
-    <string name="download.jukebox_volume">Remote volume</string>
-    <string name="download.jukebox_server_too_old">Remote control is not supported. Please upgrade your Subsonic server.</string>
+	<string name="download.jukebox_server_too_old">Remote control is not supported. Please upgrade your Subsonic server.</string>
     <string name="download.jukebox_offline">Remote control is not available in offline mode.</string>
     <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your Subsonic server.</string>
-	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Start Timer</string>
 	<string name="download.stop_time_remaining">Stop in %1$s</string>
 	<string name="download.need_download">Video needs to be downloaded first</string>
@@ -490,14 +477,6 @@
 	<string name="shuffle.genre">Genre:</string>
 	<string name="shuffle.pick_genre">Pick a genre</string>
 
-	<string name="share.info">
-
-
-		\nLast Visited: %5$s
-		\nExpiration: %6$s
-		\nVisit Count: %7$s
-
-	</string>
 	<string name="share.expires">Expires: %s</string>
 	<string name="share.expires_never">Never Expires</string>
 	<string name="share.deleted">Deleted share %s</string>
@@ -553,9 +532,7 @@
 
     <string name="music_service.retry">A network error occurred. Retrying %1$d of %2$d.</string>
 
-    <string name="background_task.wait">Please wait...</string>
-    <string name="background_task.loading">Loading.</string>
-    <string name="background_task.no_network">This program requires network access. Please turn on Wi-Fi or mobile network.</string>
+	<string name="background_task.no_network">This program requires network access. Please turn on Wi-Fi or mobile network.</string>
     <string name="background_task.network_error">A network error occurred. Please check the server address or try again later.</string>
     <string name="background_task.not_found">Resource not found. Please check the server address.</string>
     <string name="background_task.parse_error">A problem occurred communicating with the server. Please check the server address and verify that you can connect using a regular browser on your device.</string>
@@ -570,8 +547,7 @@
 	<string name="parser.server_error">Server error: %s</string>
 	<string name="parser.scan_count">Scanned %d entries</string>
 
-    <string name="select_artist.refresh">Refresh</string>
-    <string name="select_artist.folder">Select folder</string>
+	<string name="select_artist.folder">Select folder</string>
     <string name="select_artist.all_folders">All folders</string>
 
     <string name="equalizer.label">Equalizer</string>

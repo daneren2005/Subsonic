@@ -28,8 +28,7 @@
 
     <string name="button_bar.home">Inicio</string>
     <string name="button_bar.browse">Biblioteca</string>
-    <string name="button_bar.search">Buscar</string>
-    <string name="button_bar.playlists">Listas de reproducción</string>
+	<string name="button_bar.playlists">Listas de reproducción</string>
     <string name="button_bar.now_playing">Ahora suena</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Marcadores</string>
@@ -41,8 +40,7 @@
     <string name="main.welcome_title">Bienvenido!</string>
     <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
 	<string name="main.about_title">Acerca de DSub</string>
-	<string name="main.select_server">Seleccionar servidor</string>
-    <string name="main.shuffle">Reproducción aleatoria</string>
+	<string name="main.shuffle">Reproducción aleatoria</string>
     <string name="main.offline">Modo Offline</string>
 	<string name="main.online">Modo Online</string>
     <string name="main.settings">Preferencias</string>
@@ -114,19 +112,12 @@
     <string name="search.artists">Artista</string>
     <string name="search.albums">Disco</string>
     <string name="search.songs">Canción</string>
-    <string name="search.more">Mostrar más</string>
 
-    <string name="progress.wait">Espere por favor...</string>
+	<string name="progress.wait">Espere por favor...</string>
 
-    <string name="music_library.label">Biblioteca de medios</string>
-    <string name="music_library.label_offline">Archivos Offline</string>
-
-    <string name="select_album.select">Seleccionar todo</string>
-    <string name="select_album.n_selected">Seleccionadas %d canciones</string>
-	<string name="select_album.more">Más</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">Buscando...</string>
-    <string name="select_album.no_sdcard">Error: No hay tarjeta SD disponible</string>
+	<string name="select_album.n_selected">Seleccionadas %d canciones</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Error: No hay tarjeta SD disponible</string>
     <string name="select_album.no_network">Aviso: No hay red disponible</string>
     <string name="select_album.not_licensed">Servidor sin licencia. Quedan %d días de prueba</string>
     <string name="select_album.donate_dialog_message">Consigue descargas ilimitadas haciendo una donación a Subsonic</string>
@@ -182,13 +173,9 @@
     <string name="download.repeat_off">Repetir off</string>
     <string name="download.repeat_all">Repetir todo</string>
     <string name="download.repeat_single">Repetir canción</string>
-    <string name="download.jukebox_on">Control remoto encendido. La música se está reproduciendo en el ordenador.</string>
-    <string name="download.jukebox_off">Control remoto apagado. La música se está reproduciendo en el dispositivo móvil.</string>
-    <string name="download.jukebox_volume">Volumen remoto</string>
-    <string name="download.jukebox_server_too_old">Control remoto no soportado. Por favor, actualice su servidor Subsonic.</string>
+	<string name="download.jukebox_server_too_old">Control remoto no soportado. Por favor, actualice su servidor Subsonic.</string>
     <string name="download.jukebox_offline">Control remoto no disponible en modo offline.</string>
     <string name="download.jukebox_not_authorized">Control remoto no permitido. Por favor, active el modo jukebox en <b>Users &gt; Settings</b> en su servidor Subsonic.</string>
-	<string name="download.timer_length">Temporizador</string>
 	<string name="download.start_timer">Iniciar temporizador</string>
 	<string name="download.need_download">El vídeo ha de ser descargado antes</string>
 	<string name="download.no_streaming_player">Ningún reproductor puede reproducir este stream</string>
@@ -419,14 +406,6 @@
 	<string name="settings.open_to_tab">Abrir en pestaña</string>
 	<string name="settings.open_to_tab_summary">Abrir directamente a esta pestaña</string>
 
-	<string name="share.info">Dueño: %1$s
-		\nDescripción: %2$s
-		\nURL: %3$s
-		\nCreado: %4$s
-		\nÚltima visita: %5$s
-		\nExpira: %6$s
-		\nNúmero de visitas: %7$s
-	</string>
 	<string name="share.expires">Expira: %s</string>
 	<string name="share.expires_never">Nunca expira</string>
 	<string name="share.deleted">Compartición eliminada %s</string>
@@ -489,9 +468,7 @@
 
     <string name="music_service.retry">Error de red. Reintentando %1$d de %2$d.</string>
 
-    <string name="background_task.wait">Por favor, espere...</string>
-    <string name="background_task.loading">Cargando.</string>
-    <string name="background_task.no_network">Este programa requiere de acceso a la red. Encienda el Wi-Fi o la conexión de datos móviles.</string>
+	<string name="background_task.no_network">Este programa requiere de acceso a la red. Encienda el Wi-Fi o la conexión de datos móviles.</string>
     <string name="background_task.network_error">Error de red. Por favor, compruebe la dirección del servidor o inténtelo más tarde.</string>
     <string name="background_task.not_found">Recurso no encontrado. Por favor, compruebe la dirección del servidor.</string>
     <string name="background_task.parse_error">Respuesta desconocida. Por favor, compruebe la dirección del servidor.</string>
@@ -505,8 +482,7 @@
     <string name="parser.artist_count">Recibidos %d artistas.</string>
 	<string name="parser.scan_count">Escaneados %d entradas</string>
 
-    <string name="select_artist.refresh">Actualizar</string>
-    <string name="select_artist.folder">Seleccionar carpeta</string>
+	<string name="select_artist.folder">Seleccionar carpeta</string>
     <string name="select_artist.all_folders">Todas las carpetas</string>
 
 	<string name="equalizer.bass_booster">Potenciar bajos</string>

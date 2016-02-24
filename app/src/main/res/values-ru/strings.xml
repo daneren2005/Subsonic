@@ -24,7 +24,6 @@
 
     <string name="button_bar.home">Домой</string>
     <string name="button_bar.browse">Медиатека</string>
-    <string name="button_bar.search">Поиск</string>
     <string name="button_bar.playlists">Списки</string>
     <string name="button_bar.now_playing">Плеер</string>
 
@@ -32,7 +31,6 @@
     <string name="main.welcome_text">Добро пожаловать в DSub! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
 	
 	<string name="main.about_title">О программе DSub</string>
-    <string name="main.select_server">Выбрать сервер</string>
     <string name="main.shuffle">Случайное воспроизведение</string>
     <string name="main.offline">Отключиться</string>
 	<string name="main.online">Подключиться</string>
@@ -74,18 +72,11 @@
     <string name="search.artists">Исполнители</string>
     <string name="search.albums">Альбомы</string>
     <string name="search.songs">Композиции</string>
-    <string name="search.more">Показать еще</string>
 
     <string name="progress.wait">Пожалуйста, подождите...</string>
 
-    <string name="music_library.label">Медиатека</string>
-    <string name="music_library.label_offline">Оффлайн медиа</string>
-
-    <string name="select_album.select">Выбрать все</string>
     <string name="select_album.n_selected">%d композиций выбрано.</string>
-    <string name="select_album.more">Еще</string>
     <string name="select_album.offline">Оффлайн</string>
-    <string name="select_album.searching">Выполняется поиск...</string>
     <string name="select_album.no_sdcard">Ошибка: SD карта недоступна</string>
     <string name="select_album.no_network">Внимание: сеть недоступна.</string>
     <string name="select_album.not_licensed">Сервер не лицензирован. %d дней до окончания пробного периода.</string>
@@ -115,14 +106,10 @@
     <string name="download.repeat_off">Повторение отключено</string>
     <string name="download.repeat_all">Повторять все</string>
     <string name="download.repeat_single">Повторять композицию</string>
-    <string name="download.jukebox_on">Удаленное управление включено. Музыка воспроизводится на компьютере.</string>
-    <string name="download.jukebox_off">Удаленное управление отключено. Музыка воспроизводится на устройстве.</string>
-    <string name="download.jukebox_volume">Удаленное управление громкостью</string>
     <string name="download.jukebox_server_too_old">Удаленное управление не поддерживается. Пожалуйста, обновите Ваш сервер Subsonic.</string>
     <string name="download.jukebox_offline">Удаленное управление не поддерживается в оффлайн режиме.</string>
     <string name="download.jukebox_not_authorized">Удаленное управление запрещено. Пожалуйста, активируйте режим jukebox в разделе <b>Настройки &gt; Проигрыватели</b> на вашем сервере Subsonic.</string>
-	<string name="download.timer_length">Длительность</string>
-	<string name="download.start_timer">Запустить таймер</string>
+    <string name="download.start_timer">Запустить таймер</string>
     <string name="download.need_download">Необходимо сначала скачать видео</string>
 	<string name="download.no_streaming_player">Нет плеера для воспроизведения потока</string>
     
@@ -233,8 +220,6 @@
 
     <string name="music_service.retry">Ошибка подключения. Попытка %1$d из %2$d.</string>
 
-    <string name="background_task.wait">Пожалуйста, подождите...</string>
-    <string name="background_task.loading">Загрузка</string>
     <string name="background_task.no_network">Эта программа требует доступ к сети. Пожалуйста, включите Wi-Fi или мобильный интернет</string>
     <string name="background_task.network_error">Ошибка сети. Пожалуйста, проверьте адрес сервера и попробуйте снова</string>
     <string name="background_task.not_found">Ресурс не найден. Пожалуйста, проверьте адрес сервера</string>
@@ -248,7 +233,6 @@
     <string name="parser.not_authorized">Не авторизирован. Проверьте права пользователя на сервере Subsonic.</string>
     <string name="parser.artist_count">Получено %d исполнителей.</string>
 
-    <string name="select_artist.refresh">Обновить</string>
     <string name="select_artist.folder">Выбрать папку</string>
     <string name="select_artist.all_folders">Все папки</string>
 

@@ -31,8 +31,7 @@
 
     <string name="button_bar.home">Home</string>
     <string name="button_bar.browse">Bibliotheek</string>
-    <string name="button_bar.search">Zoek</string>
-    <string name="button_bar.playlists">Playlists</string>
+	<string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Speelt nu</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bladwijzers</string>
@@ -56,8 +55,7 @@
 		<br/>In het optiemenu deselecteer "Eerste niveau artiesten". Dit zorgt ervoor dat het gehele eerste niveau directories wordt behandeld als een groep artisten ipv individuele artiesten.
 	]]>
 	</string>
-    <string name="main.select_server">Selecteer server</string>
-    <string name="main.shuffle">Willekeurig afspelen</string>
+	<string name="main.shuffle">Willekeurig afspelen</string>
     <string name="main.offline">Ga offline</string>
 	<string name="main.online">Ga online</string>
     <string name="main.settings">Instellingen</string>
@@ -128,20 +126,13 @@
     <string name="search.artists">Artiesten</string>
     <string name="search.albums">Albums</string>
     <string name="search.songs">Nummers</string>
-    <string name="search.more">Laat meer zien</string>
 
-    <string name="progress.wait">Moment aub...</string>
+	<string name="progress.wait">Moment aub...</string>
 	<string name="progress.artist_info">Laadt artiesten bio</string>
 
-    <string name="music_library.label">Media bibliotheek</string>
-    <string name="music_library.label_offline">Offline media</string>
-
-    <string name="select_album.select">Selecteer alles</string>
-    <string name="select_album.n_selected">%d geselecteerd.</string>
-	<string name="select_album.more">Meer</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">Zoeken...</string>
-    <string name="select_album.no_sdcard">Fout: Geen SD kaart beschikbaar.</string>
+	<string name="select_album.n_selected">%d geselecteerd.</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Fout: Geen SD kaart beschikbaar.</string>
     <string name="select_album.no_network">Waarschuwing: Netwerk onbeschikbaar.</string>
 	<string name="select_album.no_room">Waarschuwing: je hebt nog maar %s over</string>
     <string name="select_album.not_licensed">Server niet gelicenseerd. %d proefdagen over.</string>
@@ -201,13 +192,9 @@
     <string name="download.repeat_off">Herhalen uit</string>
     <string name="download.repeat_all">Herhaal alles</string>
     <string name="download.repeat_single">Herhaal nummer</string>
-    <string name="download.jukebox_on">Afstandbediening aangezet. Muziek wordt op de computer afgespeeld.</string>
-    <string name="download.jukebox_off">Afstandbediening uitgezet. Muziek wordt afgespeeld op de telefoon.</string>
-    <string name="download.jukebox_volume">Volume op afstand</string>
-    <string name="download.jukebox_server_too_old">Afstandbediending wordt niet ondersteund. Upgrade de Subsonic server.</string>
+	<string name="download.jukebox_server_too_old">Afstandbediending wordt niet ondersteund. Upgrade de Subsonic server.</string>
     <string name="download.jukebox_offline">Afstandbediending is in offline mode niet beschikbaar.</string>
     <string name="download.jukebox_not_authorized">Afstandbediening is niet toegestaan. Zet de jukebox mode aan in <b>Users &gt; Instellingen</b> op je Subsonic server.</string>
-	<string name="download.timer_length">Timer:</string>
 	<string name="download.start_timer">Start Timer</string>
 	<string name="download.stop_time_remaining">Stop in %1$s</string>
 	<string name="download.need_download">Video moet eerst gedownload worden</string>
@@ -477,15 +464,6 @@
 	<string name="shuffle.genre">Genre:</string>
 	<string name="shuffle.pick_genre">Kies een genre</string>
 
-	<string name="share.info">Eigenaar: %1$s
-		\nBeschrijving: %2$s
-		\nURL: %3$s
-		\nAangemaakt: %4$s
-		\nLaatst bezocht: %5$s
-		\nVervaldatum: %6$s
-		\nAantal bezoeken: %7$s
-
-	</string>
 	<string name="share.expires">Vervaldatum: %s</string>
 	<string name="share.expires_never">Verloopt nooit</string>
 	<string name="share.deleted">Verwijderde share %s</string>
@@ -537,9 +515,7 @@
 
     <string name="music_service.retry">Er is een netwerkfout opgetreden. Probeer opnieuw %1$d van %2$d.</string>
 
-    <string name="background_task.wait">Moment geduld aub...</string>
-    <string name="background_task.loading">Laden.</string>
-    <string name="background_task.no_network">Dit programma het netwerktoegang nodig. Zet wifi of mobiel netwerk aan.</string>
+	<string name="background_task.no_network">Dit programma het netwerktoegang nodig. Zet wifi of mobiel netwerk aan.</string>
     <string name="background_task.network_error">Er is een netwerkfout opgetreden. Controleer het serveradres of probeer het later nog eens.</string>
     <string name="background_task.not_found">De bron is niet gevonden. Controleer het serveradres.</string>
     <string name="background_task.parse_error">Er is een communicatieprobleem ontstaan met de server. Controleer het serveradres en verifieer dat je met een webbrowser vanaf je apparaat een verbinding kan maken met het serveradres.</string>
@@ -554,8 +530,7 @@
 	<string name="parser.server_error">Server fout: %s</string>
 	<string name="parser.scan_count">%d Items gescand</string>
 
-    <string name="select_artist.refresh">Ververs</string>
-    <string name="select_artist.folder">Selecteer map</string>
+	<string name="select_artist.folder">Selecteer map</string>
     <string name="select_artist.all_folders">Alle mappen</string>
 
     <string name="equalizer.label">Equalizer</string>
