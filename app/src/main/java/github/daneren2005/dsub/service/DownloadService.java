@@ -785,6 +785,8 @@ public class DownloadService extends Service {
 
 		suggestedPlaylistName = null;
 		suggestedPlaylistId = null;
+
+		checkDownloads();
 	}
 
 	public synchronized void remove(int which) {
@@ -811,6 +813,8 @@ public class DownloadService extends Service {
 		if(downloadFile == nextPlaying) {
 			setNextPlaying();
 		}
+
+		checkDownloads();
 	}
 	public synchronized void removeBackground(DownloadFile downloadFile) {
 		if (downloadFile == currentDownloading && downloadFile != currentPlaying && downloadFile != nextPlaying) {
