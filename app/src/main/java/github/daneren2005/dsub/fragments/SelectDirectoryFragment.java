@@ -190,27 +190,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		recyclerView.setHasFixedSize(true);
 		fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
 		setupScrollList(recyclerView);
-
-		if(largeAlbums) {
-			GridLayoutManager gridLayoutManager = new GridLayoutManager(context, getRecyclerColumnCount());
-			gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-				@Override
-				public int getSpanSize(int position) {
-					int viewType = entryGridAdapter.getItemViewType(position);
-					if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == EntryInfiniteGridAdapter.VIEW_TYPE_LOADING) {
-						return getRecyclerColumnCount();
-					} else {
-						return 1;
-					}
-				}
-			});
-			recyclerView.addItemDecoration(new GridSpacingDecoration());
-			recyclerView.setLayoutManager(gridLayoutManager);
-		} else {
-			LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-			layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-			recyclerView.setLayoutManager(layoutManager);
-		}
+		setupLayoutManager(recyclerView, largeAlbums);
 
 		if(entries == null) {
 			if(primaryFragment || secondaryFragment) {
@@ -691,6 +671,21 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	@Override
 	public SectionAdapter<Entry> getCurrentAdapter() {
 		return entryGridAdapter;
+	}
+
+	@Override
+	public GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final GridLayoutManager gridLayoutManager) {
+		return new GridLayoutManager.SpanSizeLookup() {
+			@Override
+			public int getSpanSize(int position) {
+				int viewType = entryGridAdapter.getItemViewType(position);
+				if(viewType == EntryGridAdapter.VIEW_TYPE_SONG || viewType == EntryGridAdapter.VIEW_TYPE_HEADER || viewType == EntryInfiniteGridAdapter.VIEW_TYPE_LOADING) {
+					return gridLayoutManager.getSpanCount();
+				} else {
+					return 1;
+				}
+			}
+		};
 	}
 
     private void finishLoading() {
