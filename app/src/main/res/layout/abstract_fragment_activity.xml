@@ -44,7 +44,7 @@
 				android:layout_width="match_parent"
 				android:elevation="4dp"
 				android:visibility="gone"
-				app:theme="?attr/actionbarThemeStyle"
+				android:theme="?attr/actionbarThemeStyle"
 				app:popupTheme="?attr/actionbarPopupStyle"/>
 
 			<LinearLayout

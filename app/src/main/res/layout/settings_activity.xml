@@ -10,7 +10,7 @@
 		android:layout_width="match_parent"
 		android:background="?attr/actionbarBackgroundColor"
 		android:elevation="4dp"
-		app:theme="?attr/actionbarThemeStyle"
+		android:theme="?attr/actionbarThemeStyle"
 		app:popupTheme="?attr/actionbarPopupStyle"/>
 
 	<FrameLayout
