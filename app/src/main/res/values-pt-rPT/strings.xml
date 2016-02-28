@@ -32,8 +32,7 @@
 
     <string name="button_bar.home">Início</string>
     <string name="button_bar.browse">Bibilioteca</string>
-    <string name="button_bar.search">Pesquisar</string>
-    <string name="button_bar.playlists">Listas de reprodução</string>
+	<string name="button_bar.playlists">Listas de reprodução</string>
     <string name="button_bar.now_playing">A reproduzir agora</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Marcadores</string>
@@ -52,13 +51,12 @@
 		<font color="red">Cache vs Cache permanente</font>:
 		<br/>Quando o DSub transfere as músicas, elas poderão vir a ser eliminadas mais tarde para dar espaço para novas transferências.  Por outro lado, as músicas que ficam permanentemente na cache nunca serão eliminadas.
 		<p/><font color="red">Falhas com o ChromeCast</font>:
-		<br/>Experimente a opção Definições -> Reprodução -> Usar proxy do dispositivo.  É um remedeio devido ao Chromecast não aceitar certificados auto-assinados.
+		<br/>Experimente a opção Definições -> Reprodução -> Usar dispositivo como proxy.  É uma solução alternativa devido ao Chromecast não aceitar certificados auto-assinados.
 		<p/><font color="red">Primeiro nível na biblioteca são grupos de artistas</font>:
 		<br/>No menu de opções, desmarque a opção "Artistas no primeiro nível".  Isto irá fazer com que o primeiro nível de diretorias apresentado seja tratado como grupos de artistas em vez de artistas propriamente ditos.
 	]]>
 	</string>
-    <string name="main.select_server">Selecionar servidor</string>
-    <string name="main.shuffle">Aleatório</string>
+	<string name="main.shuffle">Aleatório</string>
     <string name="main.offline">Ficar offline</string>
 	<string name="main.online">Ficar online</string>
     <string name="main.settings">Definições</string>
@@ -75,7 +73,7 @@
 	<string name="main.albums_alphabetical">Alfabeticamente</string>
 	<string name="main.videos">Vídeos</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
-	<string name="main.back_confirm">Prima voltar novamente para sair</string>
+	<string name="main.back_confirm">Prima \"voltar\" novamente para sair</string>
 	<string name="main.scan_complete">Análise ao servidor completa</string>
 	<string name="main.artist">Artista</string>
 	<string name="main.title">Título</string>
@@ -110,7 +108,6 @@
 	<string name="menu.rate">Classificar</string>
 	<string name="menu.top_tracks">Top faixas do Last.FM</string>
 	<string name="menu.similar_artists">Artistas semelhantes</string>
-	<string name="menu.show_missing">Mostrar os que faltam</string>
 	<string name="menu.start_radio">Iniciar rádio</string>
 	<string name="menu.first_level_artist">Artistas no primeiro nível</string>
 
@@ -130,20 +127,13 @@
     <string name="search.artists">Artistas</string>
     <string name="search.albums">Álbuns</string>
     <string name="search.songs">Músicas</string>
-    <string name="search.more">Mostrar mais</string>
 
-    <string name="progress.wait">Por favor aguarde...</string>
+	<string name="progress.wait">Por favor aguarde...</string>
 	<string name="progress.artist_info">A carregar a informação do artista</string>
 
-    <string name="music_library.label">Biblioteca multimédia</string>
-    <string name="music_library.label_offline">Biblioteca offline</string>
-
-    <string name="select_album.select">Selecionar tudo</string>
-    <string name="select_album.n_selected">%d selecionadas.</string>
-	<string name="select_album.more">Mais</string>
-    <string name="select_album.offline">Offline</string>
-    <string name="select_album.searching">A procurar...</string>
-    <string name="select_album.no_sdcard">Erro: Cartão SD não disponível.</string>
+	<string name="select_album.n_selected">%d selecionadas.</string>
+	<string name="select_album.offline">Offline</string>
+	<string name="select_album.no_sdcard">Erro: Cartão SD não disponível.</string>
     <string name="select_album.no_network">Aviso: Sem ligação à rede.</string>
 	<string name="select_album.no_room">Aviso: apenas tem %s restantes</string>
     <string name="select_album.not_licensed">Servidor sem licença. %d dias de teste restantes.</string>
@@ -172,7 +162,7 @@
 	<string name="select_podcasts.server_delete">Eliminar do servidor</string>
 	<string name="select_podcasts.downloading">A transferir %s no servidor</string>
 	<string name="select_podcasts.refreshing">O servidor está a procurar por novos podcasts agora</string>
-	<string name="select_podcasts.deleted">Eliminado o podcast %s</string>
+	<string name="select_podcasts.deleted">Podcast %s eliminado</string>
 	<string name="select_podcasts.deleted_error">Falha ao eliminar o podcast %s</string>
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Falha ao adicionar podcast</string>
@@ -203,13 +193,9 @@
     <string name="download.repeat_off">Repetição desligada</string>
     <string name="download.repeat_all">Repetir tudo</string>
     <string name="download.repeat_single">Repetir música</string>
-    <string name="download.jukebox_on">Controlo remoto ligado. A música será reproduzida no computador.</string>
-    <string name="download.jukebox_off">Controlo remoto desligado. A música será reproduzida no dispositivo móvel.</string>
-    <string name="download.jukebox_volume">Volume remoto</string>
-    <string name="download.jukebox_server_too_old">Controlo remoto não é suportado. Por favor atualize o seu servidor Subsonic.</string>
+	<string name="download.jukebox_server_too_old">Controlo remoto não é suportado. Por favor atualize o seu servidor Subsonic.</string>
     <string name="download.jukebox_offline">Controlo remoto não está disponível em modo offline.</string>
     <string name="download.jukebox_not_authorized">Controlo remoto não é permitido. Por favor ative o modo jukebox em <b>Utilizadores &gt; Definições</b> no seu servidor Subsonic.</string>
-	<string name="download.timer_length">Temporizador:</string>
 	<string name="download.start_timer">Iniciar temporizador</string>
 	<string name="download.stop_time_remaining">Para em %1$s</string>
 	<string name="download.need_download">O vídeo deve ser transferido primeiro</string>
@@ -232,8 +218,8 @@
 	<string name="sync.new_albums">Novos álbuns disponíveis</string>
 	<string name="sync.new_starred">Novas músicas com estrela disponíveis</string>
     
-	<string name="starring_content_starred">Marcado com estrela \"%s\"</string>
-	<string name="starring_content_unstarred">Estrela removida \"%s\"</string>
+	<string name="starring_content_starred">\"%s\" foi marcado com estrela</string>
+	<string name="starring_content_unstarred">A estrela de \"%s\" foi removida</string>
     <string name="starring_content_error">Falha ao atualizar \"%s\", tente novamente mais tarde.</string>
 
 	<string name="playlist.mine">Minhas listas de reprodução</string>
@@ -254,10 +240,10 @@
 	<string name="bookmark.action_start_over">Começar de novo</string>
 
 	<string name="rating.title">Classificar \"%s\"</string>
-	<string name="rating.set_rating">Definida a classificação para \"%s\"</string>
-	<string name="rating.set_rating_failed">Falha ao definir classificação para \"%s\"</string>
-	<string name="rating.remove_rating">Removida a classificação para \"%s\"</string>
-	<string name="rating.remove_rating_failed">Falha ao remover a classificação para \"%s\"</string>
+	<string name="rating.set_rating">Classificação de \"%s\" definida com êxito</string>
+	<string name="rating.set_rating_failed">Falha ao classificar \"%s\"</string>
+	<string name="rating.remove_rating">Removida a classificação de \"%s\"</string>
+	<string name="rating.remove_rating_failed">Falha ao remover a classificação de \"%s\"</string>
 
 	<string name="song_details.error">Erro</string>
 	<string name="song_details.skipped">Saltado</string>
@@ -391,7 +377,7 @@
 	<string name="settings.gapless_playback_summary">Se notar falhas estranhas durante a reprodução, desmarcar esta opção pode ajudar.</string>
 	<string name="settings.chat_refresh">Taxa de atualização do Chat (Secs)</string>
 	<string name="settings.chat_enabled">Chat ativo</string>
-	<string name="settings.chat_enabled_summary">Mostrar ou não a opção de chat no menu lateral</string>
+	<string name="settings.chat_enabled_summary">Mostrar ou não a opção \"Chat\" no menu lateral</string>
 	<string name="settings.video_title">Vídeo</string>
 	<string name="settings.video_player">Reprodutor de vídeo</string>
 	<string name="settings.video_raw">Raw (Requer Subsonic 4.8+)</string>
@@ -433,9 +419,9 @@
 	<string name="settings.menu_options.play_shuffled_summary">Mostrar \"Reproduzir aleatóriamente\" nos menus</string>
 	<string name="settings.menu_options.play_next_summary">Mostrar \"Reproduzir a seguir\" nos menus</string>
 	<string name="settings.menu_options.play_last_summary">Mostrar \"Reproduzir no final\" nos menus</string>
-	<string name="settings.menu_options.download_summary">Mostrar \"Transferir\" nos menus</string>
+	<string name="settings.menu_options.download_summary">Mostrar \"Cache\" nos menus</string>
 	<string name="settings.menu_options.pin_summary">Mostrar \"Cache permanente\" nos menus</string>
-	<string name="settings.menu_options.delete_summary">Mostrar \"Eliminar\" nos menus</string>
+	<string name="settings.menu_options.delete_summary">Mostrar \"Eliminar cache\" nos menus</string>
 	<string name="settings.menu_options.star_summary">Mostrar \"Marcar/Remover estrela\" nos menus</string>
 	<string name="settings.menu_options.shared_summary">Mostrar \"Partilhar\" nos menus</string>
 	<string name="settings.menu_options.rate_summary">Mostrar \"Classificar\" nos menus</string>
@@ -479,23 +465,14 @@
 	<string name="shuffle.genre">Género:</string>
 	<string name="shuffle.pick_genre">Selecione um género</string>
 
-	<string name="share.info">Proprietário: %1$s
-		\nDescrição: %2$s
-		\nURL: %3$s
-		\nData de criação: %4$s
-		\nÚltima visita: %5$s
-		\nExpira em: %6$s
-		\nNúmero de visitas: %7$s
-
-	</string>
 	<string name="share.expires">Expira em: %s</string>
 	<string name="share.expires_never">Nunca expira</string>
-	<string name="share.deleted">Partilha eliminada %s</string>
-	<string name="share.deleted_error">Falha ao eliminar partilha %s</string>
+	<string name="share.deleted">Partilha %s eliminada</string>
+	<string name="share.deleted_error">Falha ao eliminar a partilha %s</string>
 	<string name="share.no_expiration">Sem expiração</string>
 	<string name="share.expiration">Expira em:</string>
-	<string name="share.updated_info">Atualizada a informação da partilha para %s</string>
-	<string name="share.updated_info_error">Falha ao atualizar a informação da partilha para %s</string>
+	<string name="share.updated_info">A informação da partilha %s foi atualizada</string>
+	<string name="share.updated_info_error">Falha ao atualizar a informação da partilha %s</string>
 	<string name="share.via">Partilhar via</string>
 	<string name="share.delete">Eliminar partilha</string>
 
@@ -539,9 +516,7 @@
 
     <string name="music_service.retry">Ocurreu um erro de ligação. A tentar novamente %1$d de %2$d.</string>
 
-    <string name="background_task.wait">Por favor aguarde...</string>
-    <string name="background_task.loading">A carregar.</string>
-    <string name="background_task.no_network">Este programa requer acesso à rede. Por favor ligue o Wi-Fi ou os dados móveis.</string>
+	<string name="background_task.no_network">Este programa requer acesso à rede. Por favor ligue o Wi-Fi ou os dados móveis.</string>
     <string name="background_task.network_error">Ocurreu um erro de ligação. Por favor verifique o endereço do servidor ou tente novamente mais tarde.</string>
     <string name="background_task.not_found">Recurso não encontrado. Por favor verifique o endereço do servidor.</string>
     <string name="background_task.parse_error">Ocurreu um problema ao comunicar com o servidor. Por favor verifique o endereço do servidor e verifique se consegue conectar-se usando um navegador normal no seu dispositivo.</string>
@@ -556,8 +531,7 @@
 	<string name="parser.server_error">Erro no servidor: %s</string>
 	<string name="parser.scan_count">Analisadas %d entradas</string>
 
-    <string name="select_artist.refresh">Atualizar</string>
-    <string name="select_artist.folder">Selecionar pasta</string>
+	<string name="select_artist.folder">Selecionar pasta</string>
     <string name="select_artist.all_folders">Todas as pastas</string>
 
     <string name="equalizer.label">Equalizador</string>
@@ -641,6 +615,9 @@
 	<string name="details.position">Posição</string>
 	<string name="details.updated">Atualizado</string>
 	<string name="details.starred">Com estrela</string>
+	<string name="details.last_played">Última reprodução</string>
+	<string name="details.expiration">Expiração</string>
+	<string name="details.played_count">Nº de reproduções</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Sem músicas</item>
