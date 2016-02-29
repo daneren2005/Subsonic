@@ -51,7 +51,7 @@
 		<font color="red">Cache vs Cache permanente</font>:
 		<br/>Quando o DSub transfere as músicas, elas poderão vir a ser eliminadas mais tarde para dar espaço para novas transferências.  Por outro lado, as músicas que ficam permanentemente na cache nunca serão eliminadas.
 		<p/><font color="red">Falhas com o ChromeCast</font>:
-		<br/>Experimente a opção Definições -> Reprodução -> Usar proxy do dispositivo.  É um remedeio devido ao Chromecast não aceitar certificados auto-assinados.
+		<br/>Experimente a opção Definições -> Reprodução -> Usar dispositivo como proxy.  É uma solução alternativa devido ao Chromecast não aceitar certificados auto-assinados.
 		<p/><font color="red">Primeiro nível na biblioteca são grupos de artistas</font>:
 		<br/>No menu de opções, desmarque a opção "Artistas no primeiro nível".  Isto irá fazer com que o primeiro nível de diretorias apresentado seja tratado como grupos de artistas em vez de artistas propriamente ditos.
 	]]>
@@ -73,7 +73,7 @@
 	<string name="main.albums_alphabetical">Alfabeticamente</string>
 	<string name="main.videos">Vídeos</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
-	<string name="main.back_confirm">Prima voltar novamente para sair</string>
+	<string name="main.back_confirm">Prima \"voltar\" novamente para sair</string>
 	<string name="main.scan_complete">Análise ao servidor completa</string>
 	<string name="main.artist">Artista</string>
 	<string name="main.title">Título</string>
@@ -162,7 +162,7 @@
 	<string name="select_podcasts.server_delete">Eliminar do servidor</string>
 	<string name="select_podcasts.downloading">A transferir %s no servidor</string>
 	<string name="select_podcasts.refreshing">O servidor está a procurar por novos podcasts agora</string>
-	<string name="select_podcasts.deleted">Eliminado o podcast %s</string>
+	<string name="select_podcasts.deleted">Podcast %s eliminado</string>
 	<string name="select_podcasts.deleted_error">Falha ao eliminar o podcast %s</string>
 	<string name="select_podcasts.add_url">URL:</string>
 	<string name="select_podcasts.created_error">Falha ao adicionar podcast</string>
@@ -218,8 +218,8 @@
 	<string name="sync.new_albums">Novos álbuns disponíveis</string>
 	<string name="sync.new_starred">Novas músicas com estrela disponíveis</string>
     
-	<string name="starring_content_starred">Marcado com estrela \"%s\"</string>
-	<string name="starring_content_unstarred">Estrela removida \"%s\"</string>
+	<string name="starring_content_starred">\"%s\" foi marcado com estrela</string>
+	<string name="starring_content_unstarred">A estrela de \"%s\" foi removida</string>
     <string name="starring_content_error">Falha ao atualizar \"%s\", tente novamente mais tarde.</string>
 
 	<string name="playlist.mine">Minhas listas de reprodução</string>
@@ -240,10 +240,10 @@
 	<string name="bookmark.action_start_over">Começar de novo</string>
 
 	<string name="rating.title">Classificar \"%s\"</string>
-	<string name="rating.set_rating">Definida a classificação para \"%s\"</string>
-	<string name="rating.set_rating_failed">Falha ao definir classificação para \"%s\"</string>
-	<string name="rating.remove_rating">Removida a classificação para \"%s\"</string>
-	<string name="rating.remove_rating_failed">Falha ao remover a classificação para \"%s\"</string>
+	<string name="rating.set_rating">Classificação de \"%s\" definida com êxito</string>
+	<string name="rating.set_rating_failed">Falha ao classificar \"%s\"</string>
+	<string name="rating.remove_rating">Removida a classificação de \"%s\"</string>
+	<string name="rating.remove_rating_failed">Falha ao remover a classificação de \"%s\"</string>
 
 	<string name="song_details.error">Erro</string>
 	<string name="song_details.skipped">Saltado</string>
@@ -377,7 +377,7 @@
 	<string name="settings.gapless_playback_summary">Se notar falhas estranhas durante a reprodução, desmarcar esta opção pode ajudar.</string>
 	<string name="settings.chat_refresh">Taxa de atualização do Chat (Secs)</string>
 	<string name="settings.chat_enabled">Chat ativo</string>
-	<string name="settings.chat_enabled_summary">Mostrar ou não a opção de chat no menu lateral</string>
+	<string name="settings.chat_enabled_summary">Mostrar ou não a opção \"Chat\" no menu lateral</string>
 	<string name="settings.video_title">Vídeo</string>
 	<string name="settings.video_player">Reprodutor de vídeo</string>
 	<string name="settings.video_raw">Raw (Requer Subsonic 4.8+)</string>
@@ -419,9 +419,9 @@
 	<string name="settings.menu_options.play_shuffled_summary">Mostrar \"Reproduzir aleatóriamente\" nos menus</string>
 	<string name="settings.menu_options.play_next_summary">Mostrar \"Reproduzir a seguir\" nos menus</string>
 	<string name="settings.menu_options.play_last_summary">Mostrar \"Reproduzir no final\" nos menus</string>
-	<string name="settings.menu_options.download_summary">Mostrar \"Transferir\" nos menus</string>
+	<string name="settings.menu_options.download_summary">Mostrar \"Cache\" nos menus</string>
 	<string name="settings.menu_options.pin_summary">Mostrar \"Cache permanente\" nos menus</string>
-	<string name="settings.menu_options.delete_summary">Mostrar \"Eliminar\" nos menus</string>
+	<string name="settings.menu_options.delete_summary">Mostrar \"Eliminar cache\" nos menus</string>
 	<string name="settings.menu_options.star_summary">Mostrar \"Marcar/Remover estrela\" nos menus</string>
 	<string name="settings.menu_options.shared_summary">Mostrar \"Partilhar\" nos menus</string>
 	<string name="settings.menu_options.rate_summary">Mostrar \"Classificar\" nos menus</string>
@@ -467,12 +467,12 @@
 
 	<string name="share.expires">Expira em: %s</string>
 	<string name="share.expires_never">Nunca expira</string>
-	<string name="share.deleted">Partilha eliminada %s</string>
-	<string name="share.deleted_error">Falha ao eliminar partilha %s</string>
+	<string name="share.deleted">Partilha %s eliminada</string>
+	<string name="share.deleted_error">Falha ao eliminar a partilha %s</string>
 	<string name="share.no_expiration">Sem expiração</string>
 	<string name="share.expiration">Expira em:</string>
-	<string name="share.updated_info">Atualizada a informação da partilha para %s</string>
-	<string name="share.updated_info_error">Falha ao atualizar a informação da partilha para %s</string>
+	<string name="share.updated_info">A informação da partilha %s foi atualizada</string>
+	<string name="share.updated_info_error">Falha ao atualizar a informação da partilha %s</string>
 	<string name="share.via">Partilhar via</string>
 	<string name="share.delete">Eliminar partilha</string>
 
@@ -615,6 +615,9 @@
 	<string name="details.position">Posição</string>
 	<string name="details.updated">Atualizado</string>
 	<string name="details.starred">Com estrela</string>
+	<string name="details.last_played">Última reprodução</string>
+	<string name="details.expiration">Expiração</string>
+	<string name="details.played_count">Nº de reproduções</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Sem músicas</item>
