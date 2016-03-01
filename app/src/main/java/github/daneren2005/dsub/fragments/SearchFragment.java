@@ -187,6 +187,11 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 		return selectedMedia;
 	}
 
+	@Override
+	protected boolean isShowArtistEnabled() {
+		return true;
+	}
+
 	public void search(final String query, final boolean autoplay) {
 		if(skipSearch) {
 			skipSearch = false;

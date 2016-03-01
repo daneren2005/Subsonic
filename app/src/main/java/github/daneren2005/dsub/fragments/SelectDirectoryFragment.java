@@ -312,10 +312,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(!entry.isVideo() && !Util.isOffline(context) && (playlistId == null || !playlistOwner) && (podcastId == null  || Util.isOffline(context) && podcastId != null)) {
 			menu.removeItem(R.id.song_menu_remove_playlist);
 		}
-		// Remove show artists if parent is not set and if not on a album list
-		if((albumListType == null || (entry.getParent() == null && entry.getArtistId() == null)) && !Util.isOffline(context)) {
-			menu.removeItem(R.id.album_menu_show_artist);
-		}
 
 		recreateContextMenu(menu);
 	}
@@ -386,6 +382,11 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(!"root".equals(id)) {
 			load(refresh);
 		}
+	}
+
+	@Override
+	protected boolean isShowArtistEnabled() {
+		return albumListType != null;
 	}
 
 	private void load(boolean refresh) {

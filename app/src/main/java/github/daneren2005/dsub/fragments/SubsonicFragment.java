@@ -272,7 +272,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						menu.removeItem(R.id.menu_rate);
 					}
 				}
-				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else if(!entry.isVideo()) {
 				if(Util.isOffline(context)) {
 					menuInflater.inflate(R.menu.select_song_context_offline, menu);
@@ -284,7 +283,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						menu.removeItem(R.id.bookmark_menu_delete);
 					}
 				}
-				menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star).setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			} else {
 				if(Util.isOffline(context)) {
 					menuInflater.inflate(R.menu.select_video_context_offline, menu);
@@ -292,6 +290,15 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				else {
 					menuInflater.inflate(R.menu.select_video_context, menu);
 				}
+			}
+
+			MenuItem starMenu = menu.findItem(entry.isDirectory() ? R.id.album_menu_star : R.id.song_menu_star);
+			if(starMenu != null) {
+				starMenu.setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
+			}
+
+			if(!isShowArtistEnabled() || entry.getParent() == null || (Util.isTagBrowsing(context) && entry.getArtistId() == null)) {
+				menu.setGroupVisible(R.id.hide_show_artist, false);
 			}
 		} else if(selected instanceof Artist) {
 			Artist artist = (Artist) selected;
@@ -1906,6 +1913,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	protected void toggleSelectedStarred() {
 		UpdateHelper.toggleStarred(context, getSelectedEntries());
+	}
+
+	protected boolean isShowArtistEnabled() {
+		return false;
 	}
 
 	public abstract class RecursiveLoader extends LoadingTask<Boolean> {
