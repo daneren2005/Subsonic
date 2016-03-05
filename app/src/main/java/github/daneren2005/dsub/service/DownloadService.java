@@ -743,7 +743,7 @@ public class DownloadService extends Service {
 		int position = getPlayerPosition();
 		int duration = getPlayerDuration();
 		boolean cutoff = isPastCutoff(position, duration, true);
-		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
+		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode && !currentPlaying.isSaved()) {
 			if(cutoff) {
 				currentPlaying.delete();
 			}
@@ -1178,7 +1178,7 @@ public class DownloadService extends Service {
 		} else {
 			cutoff = isPastCutoff(position, duration);
 		}
-		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode) {
+		if(currentPlaying != null && currentPlaying.getSong() instanceof PodcastEpisode && !currentPlaying.isSaved()) {
 			if(cutoff) {
 				toDelete.add(currentPlaying);
 			}
