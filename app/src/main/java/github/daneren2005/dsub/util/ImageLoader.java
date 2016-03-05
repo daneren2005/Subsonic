@@ -524,44 +524,49 @@ public class ImageLoader {
 
 		@Override
 		protected Void doInBackground() throws Throwable {
-			MusicService musicService = MusicServiceFactory.getMusicService(mContext);
-			ArtistInfo artistInfo = musicService.getArtistInfo(mEntry.getId(), false, true, mContext, null);
-			String url = artistInfo.getImageUrl();
+			try {
+				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
+				ArtistInfo artistInfo = musicService.getArtistInfo(mEntry.getId(), false, true, mContext, null);
+				String url = artistInfo.getImageUrl();
 
-			// Figure out whether we are going to get a artist image or the standard image
-			if(url != null && !"".equals(url.trim())) {
-				// If getting the artist image fails for any reason, retry for the standard version
-				subTask = new ViewUrlTask(mContext, mView, url, mSize) {
-					@Override
-					protected void failedToDownload() {
-						// Call loadImage so we can take advantage of all of it's logic checks
-						loadImage(mView, mEntry, mSize == imageSizeLarge, mCrossfade);
+				// Figure out whether we are going to get a artist image or the standard image
+				if (url != null && !"".equals(url.trim())) {
+					// If getting the artist image fails for any reason, retry for the standard version
+					subTask = new ViewUrlTask(mContext, mView, url, mSize) {
+						@Override
+						protected void failedToDownload() {
+							// Call loadImage so we can take advantage of all of it's logic checks
+							loadImage(mView, mEntry, mSize == imageSizeLarge, mCrossfade);
 
-						// Delete subTask so it doesn't get called in done
-						subTask = null;
-					}
-				};
-			} else {
-				if (mEntry != null && mEntry.getCoverArt() == null && mEntry.isDirectory() && !Util.isOffline(context)) {
-					// Try to lookup child cover art
-					MusicDirectory.Entry firstChild = FileUtil.lookupChild(context, mEntry, true);
-					if (firstChild != null) {
-						mEntry.setCoverArt(firstChild.getCoverArt());
-					}
-				}
-
-				if (mEntry != null && mEntry.getCoverArt() != null) {
-					subTask = new ViewImageTask(mContext, mEntry, mSize, mSaveSize, mIsNowPlaying, mView, mCrossfade);
+							// Delete subTask so it doesn't get called in done
+							subTask = null;
+						}
+					};
 				} else {
-					// If entry is null as well, we need to just set as a blank image
-					Bitmap bitmap = getUnknownImage(mEntry, mSize);
-					mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
-					return null;
-				}
-			}
+					if (mEntry != null && mEntry.getCoverArt() == null && mEntry.isDirectory() && !Util.isOffline(context)) {
+						// Try to lookup child cover art
+						MusicDirectory.Entry firstChild = FileUtil.lookupChild(context, mEntry, true);
+						if (firstChild != null) {
+							mEntry.setCoverArt(firstChild.getCoverArt());
+						}
+					}
 
-			// Execute whichever way we decided to go
-			subTask.doInBackground();
+					if (mEntry != null && mEntry.getCoverArt() != null) {
+						subTask = new ViewImageTask(mContext, mEntry, mSize, mSaveSize, mIsNowPlaying, mView, mCrossfade);
+					} else {
+						// If entry is null as well, we need to just set as a blank image
+						Bitmap bitmap = getUnknownImage(mEntry, mSize);
+						mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
+						return null;
+					}
+				}
+
+				// Execute whichever way we decided to go
+				subTask.doInBackground();
+			} catch (Throwable x) {
+				Log.e(TAG, "Failed to get artist info", x);
+				cancelled.set(true);
+			}
 			return null;
 		}
 
