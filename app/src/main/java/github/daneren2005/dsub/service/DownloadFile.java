@@ -111,7 +111,7 @@ public class DownloadFile implements BufferFile {
 			}
 		} else if(song.getSuffix() != null && (song.getTranscodedSuffix() == null || song.getSuffix().equals(song.getTranscodedSuffix()))) {
 			// If just downsampling, don't try to upsample (ie: 128 kpbs -> 192 kpbs)
-			if(song.getBitRate() != null && br > song.getBitRate()) {
+			if(song.getBitRate() != null && (br == 0 || br > song.getBitRate())) {
 				br = song.getBitRate();
 			}
 		}
