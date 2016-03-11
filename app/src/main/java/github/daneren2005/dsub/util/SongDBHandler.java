@@ -177,9 +177,12 @@ public class SongDBHandler extends SQLiteOpenHelper {
 			dates[0] = cursor.getLong(0);
 			dates[1] = cursor.getLong(1);
 			return dates;
-		} catch(Exception e) {}
-
-		return null;
+		} catch(Exception e) {
+			return null;
+		}
+		finally {
+			db.close();
+		}
 	}
 
 	public synchronized Pair<Integer, String> getOnlineSongId(MusicDirectory.Entry entry) {
@@ -218,9 +221,12 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		try {
 			cursor.moveToFirst();
 			return new Pair(cursor.getInt(0), cursor.getString(1));
-		} catch(Exception e) {}
-
-		return null;
+		} catch(Exception e) {
+			return null;
+		}
+		finally {
+			db.close();
+		}
 	}
 	public synchronized Pair<Integer, String> getIdFromPath(int serverKey, String path) {
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -231,9 +237,12 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		try {
 			cursor.moveToFirst();
 			return new Pair(cursor.getInt(0), cursor.getString(1));
-		} catch(Exception e) {}
-
-		return null;
+		} catch(Exception e) {
+			return null;
+		}
+		finally {
+			db.close();
+		}
 	}
 
 	public static SongDBHandler getHandler(Context context) {
