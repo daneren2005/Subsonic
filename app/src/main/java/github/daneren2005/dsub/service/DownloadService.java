@@ -1380,7 +1380,9 @@ public class DownloadService extends Service {
 
 		if (playerState == PAUSED) {
 			lifecycleSupport.serializeDownloadQueue();
-			checkAddBookmark(true);
+			if(!isPastCutoff()) {
+				checkAddBookmark(true);
+			}
 		}
 
 		boolean show = playerState == PlayerState.STARTED;
