@@ -166,7 +166,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			DLNADevice device = deviceEntry.getValue();
 
 			int volume;
-			if(device.volumeMax == 0) {
+			if(device.volumeMax <= 0) {
 				volume = 5;
 			} else {
 				int increments = (int) Math.ceil(device.volumeMax / 10.0);
