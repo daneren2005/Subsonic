@@ -761,7 +761,7 @@ public class DownloadService extends Service {
 			checkAddBookmark();
 		}
 		if(currentPlaying != null) {
-			scrobbler.conditionalScrobble(this, currentPlaying, position, duration);
+			scrobbler.conditionalScrobble(this, currentPlaying, position, duration, cutoff);
 		}
 
 		reset();
@@ -1187,7 +1187,7 @@ public class DownloadService extends Service {
 			clearCurrentBookmark(true);
 		}
 		if(currentPlaying != null) {
-			scrobbler.conditionalScrobble(this, currentPlaying, position, duration);
+			scrobbler.conditionalScrobble(this, currentPlaying, position, duration, cutoff);
 		}
 
 		int index = getCurrentPlayingIndex();
@@ -1411,9 +1411,9 @@ public class DownloadService extends Service {
 		}
 
 		if (playerState == STARTED) {
-			scrobbler.scrobble(this, currentPlaying, false);
+			scrobbler.scrobble(this, currentPlaying, false, false);
 		} else if (playerState == COMPLETED) {
-			scrobbler.scrobble(this, currentPlaying, true);
+			scrobbler.scrobble(this, currentPlaying, true, true);
 		}
 
 		if(playerState == STARTED && positionCache == null) {
@@ -1459,7 +1459,7 @@ public class DownloadService extends Service {
 			positionCache.stop();
 			positionCache = null;
 		}
-		scrobbler.scrobble(this, currentPlaying, true);
+		scrobbler.scrobble(this, currentPlaying, true, true);
 
 		onStateUpdate();
 	}
