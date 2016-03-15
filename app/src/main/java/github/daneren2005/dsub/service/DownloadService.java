@@ -786,6 +786,8 @@ public class DownloadService extends Service {
 		suggestedPlaylistName = null;
 		suggestedPlaylistId = null;
 
+		setShufflePlayEnabled(false);
+		setArtistRadio(null);
 		checkDownloads();
 	}
 

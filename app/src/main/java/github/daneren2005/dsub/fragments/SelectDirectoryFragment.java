@@ -1082,6 +1082,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			@Override
 			protected Void doInBackground() throws Throwable {
 				DownloadService downloadService = getDownloadService();
+				downloadService.clear();
 				downloadService.setArtistRadio(artistId);
 				return null;
 			}

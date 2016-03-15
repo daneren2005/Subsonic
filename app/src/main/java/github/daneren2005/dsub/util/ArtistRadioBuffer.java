@@ -66,7 +66,6 @@ public class ArtistRadioBuffer {
 			buffer.clear();
 		}
 
-		context.clear();
 		this.artistId = artistId;
 		awaitingResults = true;
 		refill();
