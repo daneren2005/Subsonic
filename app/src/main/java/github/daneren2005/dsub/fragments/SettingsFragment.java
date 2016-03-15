@@ -638,7 +638,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to create " + musicNoMedia, e);
 			}
-		} else if (nomediaDir.exists()) {
+		} else if (!hide && nomediaDir.exists()) {
 			if (!nomediaDir.delete()) {
 				Log.w(TAG, "Failed to delete " + nomediaDir);
 			}
