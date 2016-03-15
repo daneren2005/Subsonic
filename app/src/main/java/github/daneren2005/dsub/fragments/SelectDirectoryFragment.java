@@ -1083,10 +1083,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			protected Void doInBackground() throws Throwable {
 				DownloadService downloadService = getDownloadService();
 				downloadService.setArtistRadio(artistId);
-				if(downloadService.size() == 0) {
-					Log.e(TAG, "Failed to create artist radio");
-					throw new Exception("Failed to create artist radio");
-				}
 				return null;
 			}
 
