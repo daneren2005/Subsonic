@@ -21,9 +21,11 @@ package github.daneren2005.dsub.domain;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Sindre Mehus
@@ -119,9 +121,12 @@ public class Artist implements Serializable {
 
 	public static class ArtistComparator implements Comparator<Artist> {
 		private String[] ignoredArticles;
+		private Collator collator;
 
 		public ArtistComparator(String[] ignoredArticles) {
 			this.ignoredArticles = ignoredArticles;
+			this.collator = Collator.getInstance(Locale.US);
+			this.collator.setStrength(Collator.PRIMARY);
 		}
 
 		public int compare(Artist lhsArtist, Artist rhsArtist) {
@@ -134,15 +139,6 @@ public class Artist implements Serializable {
 			String lhs = lhsArtist.getName().toLowerCase();
 			String rhs = rhsArtist.getName().toLowerCase();
 
-			char lhs1 = lhs.charAt(0);
-			char rhs1 = rhs.charAt(0);
-
-			if (Character.isDigit(lhs1) && !Character.isDigit(rhs1)) {
-				return -1;
-			} else if (Character.isDigit(rhs1) && !Character.isDigit(lhs1)) {
-				return 1;
-			}
-
 			for (String article : ignoredArticles) {
 				int index = lhs.indexOf(article.toLowerCase() + " ");
 				if (index == 0) {
@@ -154,7 +150,7 @@ public class Artist implements Serializable {
 				}
 			}
 
-			return lhs.compareTo(rhs);
+			return collator.compare(lhs, rhs);
 		}
 	}
 
