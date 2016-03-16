@@ -18,6 +18,10 @@ android {
 			proguardFiles 'proguard.cfg'
 			zipAlignEnabled true
 		}
+		fix {
+			minifyEnabled true
+			proguardFiles 'proguard.cfg'
+		}
 	}
 
 	packagingOptions {
