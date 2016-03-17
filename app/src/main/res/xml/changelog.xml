@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.1.6" versioncode="175" releasedate="3/16/2016">
+		<change>Podcasts/Audio Books: Show listened indicator</change>
+		<change>Podcasts/Audio Books: Improve what is considered fully played</change>
+		<change>Improved Artist sorting to closer match Web GUI</change>
+		<change>Show Artist/Album from Search and Album Lists</change>
+		<change>Videos: ability to star</change>
+		<change>Admin: Show/update Video Conversion role (Subsonic 6.0+)</change>
+		<change>Stop background sync if lose Wifi</change>
+		<change>Fix upsampling mp3s when cache rate is set to unlimited</change>
+		<change>Fix "Failed to create artist radio" error</change>
+		<change>Fix rare issue causing arrow to get stuck</change>
+		<change>Fix rare issue with background download getting stuck</change>
+	</release>
 	<release version="5.1.5" versioncode="173" releasedate="2/15/2016">
 		<change>Toggle for Batch Mode on Now Playing</change>
 		<change>Admin tab: view/update music folders (Subsonic 5.2+)</change>
