@@ -225,6 +225,7 @@ public class DownloadServiceLifecycleSupport {
 							}
 							editor.commit();
 
+							downloadService.clear();
 							downloadService.setShufflePlayEnabled(true);
 						} else {
 							downloadService.start();

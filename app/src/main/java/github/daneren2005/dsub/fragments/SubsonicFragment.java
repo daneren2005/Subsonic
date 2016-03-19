@@ -735,6 +735,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			if(downloadService == null) {
 				return;
 			}
+			downloadService.clear();
 			downloadService.setShufflePlayEnabled(true);
 			context.openNowPlaying();
 			return;
@@ -838,6 +839,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						if (downloadService == null) {
 							return;
 						}
+
+						downloadService.clear();
 						downloadService.setShufflePlayEnabled(true);
 						context.openNowPlaying();
 					}
