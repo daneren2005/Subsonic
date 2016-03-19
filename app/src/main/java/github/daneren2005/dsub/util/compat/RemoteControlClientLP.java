@@ -468,6 +468,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		public void onPlayFromSearch (String query, Bundle extras) {
 			// User just asked to playing something
 			if("".equals(query)) {
+				downloadService.clear();
 				downloadService.setShufflePlayEnabled(true);
 			} else {
 				String mediaFocus = extras.getString(MediaStore.EXTRA_MEDIA_FOCUS);
@@ -488,6 +489,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
 					editor.commit();
 
+					downloadService.clear();
 					downloadService.setShufflePlayEnabled(true);
 				}
 				else {

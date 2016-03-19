@@ -574,7 +574,6 @@ public class DownloadService extends Service {
 	public synchronized void setShufflePlayEnabled(boolean enabled) {
 		shufflePlay = enabled;
 		if (shufflePlay) {
-			clear();
 			checkDownloads();
 		}
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
