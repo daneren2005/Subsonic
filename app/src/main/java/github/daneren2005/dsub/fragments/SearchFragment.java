@@ -39,7 +39,7 @@ import github.daneren2005.dsub.view.UpdateView;
 public class SearchFragment extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<Serializable> {
 	private static final String TAG = SearchFragment.class.getSimpleName();
 
-	private static final int MAX_ARTISTS = 10;
+	private static final int MAX_ARTISTS = 20;
 	private static final int MAX_ALBUMS = 10;
 	private static final int MAX_SONGS = 25;
 	private static final int MIN_CLOSENESS = 1;

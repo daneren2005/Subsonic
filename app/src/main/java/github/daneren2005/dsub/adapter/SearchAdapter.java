@@ -19,7 +19,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,10 +30,12 @@ import java.util.List;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.SearchResult;
+import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.AlbumView;
 import github.daneren2005.dsub.view.ArtistView;
+import github.daneren2005.dsub.view.BasicHeaderView;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
@@ -40,32 +44,39 @@ import static github.daneren2005.dsub.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_C
 import static github.daneren2005.dsub.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_LINE;
 import static github.daneren2005.dsub.adapter.EntryGridAdapter.VIEW_TYPE_SONG;
 
-public class SearchAdapter extends SectionAdapter<Serializable> {
-	private SearchResult searchResult;
+public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
 	private ImageLoader imageLoader;
 	private boolean largeAlbums;
 
+	private static final int MAX_ARTISTS = 10;
+	private static final int MAX_ALBUMS = 4;
+	private static final int MAX_SONGS = 10;
+
 	public SearchAdapter(Context context, SearchResult searchResult, ImageLoader imageLoader, boolean largeAlbums, OnItemClickedListener listener) {
-		this.context = context;
-		this.searchResult = searchResult;
 		this.imageLoader = imageLoader;
 		this.largeAlbums = largeAlbums;
 
-		this.sections = new ArrayList<>();
-		this.headers = new ArrayList<>();
+		List<List<Serializable>> sections = new ArrayList<>();
+		List<String> headers = new ArrayList<>();
+		List<Integer> defaultVisible = new ArrayList<>();
 		Resources res = context.getResources();
 		if(!searchResult.getArtists().isEmpty()) {
-			this.sections.add((List<Serializable>) (List<?>) searchResult.getArtists());
-			this.headers.add(res.getString(R.string.search_artists));
+			sections.add((List<Serializable>) (List<?>) searchResult.getArtists());
+			headers.add(res.getString(R.string.search_artists));
+			defaultVisible.add(MAX_ARTISTS);
 		}
 		if(!searchResult.getAlbums().isEmpty()) {
-			this.sections.add((List<Serializable>) (List<?>) searchResult.getAlbums());
-			this.headers.add(res.getString(R.string.search_albums));
+			sections.add((List<Serializable>) (List<?>) searchResult.getAlbums());
+			headers.add(res.getString(R.string.search_albums));
+			defaultVisible.add(MAX_ALBUMS);
 		}
 		if(!searchResult.getSongs().isEmpty()) {
-			this.sections.add((List<Serializable>) (List<?>) searchResult.getSongs());
-			this.headers.add(res.getString(R.string.search_songs));
+			sections.add((List<Serializable>) (List<?>) searchResult.getSongs());
+			headers.add(res.getString(R.string.search_songs));
+			defaultVisible.add(MAX_SONGS);
 		}
+		init(context, headers, sections, defaultVisible);
+
 		this.onItemClickedListener = listener;
 		checkable = true;
 	}
