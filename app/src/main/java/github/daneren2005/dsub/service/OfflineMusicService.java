@@ -95,7 +95,7 @@ public class OfflineMusicService implements MusicService {
                 artist.setIndex(file.getName().substring(0, 1));
                 artist.setName(file.getName());
                 artists.add(artist);
-            } else {
+            } else if(!file.getName().equals("albumart.jpg") && !file.getName().equals(".nomedia")) {
 				entries.add(createEntry(context, file));
 			}
         }
