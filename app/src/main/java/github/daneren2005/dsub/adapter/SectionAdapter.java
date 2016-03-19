@@ -194,7 +194,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		for(List<T> section: sections) {
 			boolean validHeader = headers.get(subHeader) != null;
 			if(position == subPosition && validHeader) {
-				onBindHeaderHolder(holder, headers.get(subHeader));
+				onBindHeaderHolder(holder, headers.get(subHeader), subHeader);
 				return;
 			}
 
@@ -289,7 +289,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	public UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
 		return new UpdateViewHolder(new BasicHeaderView(context));
 	}
-	public void onBindHeaderHolder(UpdateViewHolder holder, String header) {
+	public void onBindHeaderHolder(UpdateViewHolder holder, String header, int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
 		if(view != null) {
 			view.setObject(header);

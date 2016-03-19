@@ -16,14 +16,12 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -96,7 +94,7 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	public UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
 		return new UpdateViewHolder(header, false);
 	}
-	public void onBindHeaderHolder(UpdateViewHolder holder, String header) {
+	public void onBindHeaderHolder(UpdateViewHolder holder, String header, int sectionIndex) {
 
 	}
 

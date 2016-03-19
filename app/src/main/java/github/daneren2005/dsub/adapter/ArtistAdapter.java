@@ -92,7 +92,7 @@ public class ArtistAdapter extends SectionAdapter<Artist> implements FastScrolle
 		return new UpdateView.UpdateViewHolder(header, false);
 	}
 	@Override
-	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header) {
+	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
 		TextView folderName = (TextView) holder.getView().findViewById(R.id.select_artist_folder_2);
 
 		String musicFolderId = Util.getSelectedMusicFolderId(context);

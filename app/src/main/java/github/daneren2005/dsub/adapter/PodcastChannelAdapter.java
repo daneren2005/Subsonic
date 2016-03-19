@@ -131,11 +131,11 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 
 	@Override
 	public UpdateView.UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
-		return new UpdateView.UpdateViewHolder(new BasicHeaderView(context, R.layout.newest_episode_header));
+		return new UpdateView.UpdateViewHolder(new BasicHeaderView(context, R.layout.expandable_header));
 	}
 
 	@Override
-	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header) {
+	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
 		ImageView toggleSelectionView = (ImageView) view.findViewById(R.id.item_select);
 
@@ -164,7 +164,6 @@ public class PodcastChannelAdapter extends SectionAdapter<Serializable> implemen
 						}
 
 						((ImageView) v).setImageResource(DrawableTint.getDrawableRes(context, selectToggleAttr));
-
 					}
 				});
 				toggleSelectionView.setImageResource(DrawableTint.getDrawableRes(context, selectToggleAttr));

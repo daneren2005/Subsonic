@@ -16,15 +16,12 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -82,7 +79,7 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 		View header = LayoutInflater.from(context).inflate(R.layout.user_header, parent, false);
 		return new UpdateView.UpdateViewHolder(header, false);
 	}
-	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String description) {
+	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String description, int sectionIndex) {
 		View header = holder.getView();
 
 		RecyclingImageView coverArtView = (RecyclingImageView) header.findViewById(R.id.user_avatar);
