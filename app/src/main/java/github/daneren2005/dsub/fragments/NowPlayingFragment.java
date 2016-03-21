@@ -194,6 +194,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				@Override
 				public void onClick(View v) {
 					getDownloadService().toggleStarred();
+					setControlsVisible(true);
 				}
 			});
 		} else {
@@ -330,6 +331,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				createBookmark();
+				setControlsVisible(true);
 			}
 		});
 
@@ -341,6 +343,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					return;
 				}
 				downloadService.toggleRating(1);
+				setControlsVisible(true);
 			}
 		});
 		rateGoodButton.setOnClickListener(new View.OnClickListener() {
@@ -351,6 +354,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					return;
 				}
 				downloadService.toggleRating(5);
+				setControlsVisible(true);
 			}
 		});
 
