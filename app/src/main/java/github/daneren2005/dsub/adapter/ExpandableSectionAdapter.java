@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -41,6 +42,12 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 	protected int collapseToggleRes;
 
 	protected ExpandableSectionAdapter() {}
+	public ExpandableSectionAdapter(Context context, List<T> section) {
+		List<List<T>> sections = new ArrayList<>();
+		sections.add(section);
+
+		init(context, Arrays.asList("Section"), sections, Arrays.asList((Integer) null));
+	}
 	public ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
 		init(context, headers, sections, null);
 	}
