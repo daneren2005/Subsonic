@@ -162,7 +162,11 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		return getLastPlayed(getOnlineSongId(entry));
 	}
 	protected synchronized Long[] getLastPlayed(Pair<Integer, String> pair) {
-		return getLastPlayed(pair.getFirst(), pair.getSecond());
+		if(pair == null) {
+			return null;
+		} else {
+			return getLastPlayed(pair.getFirst(), pair.getSecond());
+		}
 	}
 	public synchronized Long[] getLastPlayed(int serverKey, String id) {
 		SQLiteDatabase db = this.getReadableDatabase();
