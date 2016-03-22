@@ -297,7 +297,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				starMenu.setTitle(entry.isStarred() ? R.string.common_unstar : R.string.common_star);
 			}
 
-			if(!isShowArtistEnabled() || entry.getParent() == null || (Util.isTagBrowsing(context) && entry.getArtistId() == null)) {
+			if(!isShowArtistEnabled() || (!Util.isTagBrowsing(context) && entry.getParent() == null) || (Util.isTagBrowsing(context) && entry.getArtistId() == null)) {
 				menu.setGroupVisible(R.id.hide_show_artist, false);
 			}
 		} else if(selected instanceof Artist) {
