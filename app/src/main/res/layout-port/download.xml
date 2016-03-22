@@ -4,57 +4,50 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:id="@+id/download_layout"
-			android:orientation="vertical"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent">
+	<LinearLayout
+		android:id="@+id/download_layout"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
 
 		<github.daneren2005.dsub.view.MyViewFlipper
-					 android:id="@+id/download_playlist_flipper"
-					 android:layout_width="fill_parent"
-					 android:layout_height="0dip"
-					 android:layout_weight="1">
+			android:id="@+id/download_playlist_flipper"
+			android:layout_width="fill_parent"
+			android:layout_height="0dip"
+			android:layout_weight="1">
 
-			<RelativeLayout
-					android:id="@+id/download_album_art_layout"
-					android:orientation="vertical"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent"
-					android:layout_weight="1"
-					android:background="@android:color/transparent">
+			<LinearLayout
+				android:id="@+id/download_album_art_layout"
+				android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:background="@android:color/transparent">
 
-				<FrameLayout android:orientation="vertical"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_alignParentTop="true">
+				<FrameLayout
+					android:layout_width="match_parent"
+					android:layout_height="0dp"
+					android:layout_weight="1">
 
-					<github.daneren2005.dsub.view.RecyclingImageView
-						android:id="@+id/download_album_art_image"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:scaleType="fitCenter"
-						android:layout_gravity="center_horizontal|top"/>
+					<FrameLayout android:orientation="vertical"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content">
 
-					<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-						android:id="@+id/download_overlay_buttons"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:background="@color/overlayColor"
-						android:layout_gravity="center_horizontal|bottom"
-						android:visibility="invisible">
-
-						<LinearLayout
+						<github.daneren2005.dsub.view.RecyclingImageView
+							android:id="@+id/download_album_art_image"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
-							android:layout_centerHorizontal="true">
+							android:scaleType="fitCenter"
+							android:layout_gravity="center_horizontal|top"/>
 
-							<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-								android:id="@+id/download_other_controls_layout"
-								android:orientation="horizontal"
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								android:layout_gravity="center_horizontal">
+						<LinearLayout
+							android:id="@+id/download_overlay_buttons"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_gravity="center_horizontal|bottom"
+							android:background="@color/overlayColor"
+							android:visibility="invisible"
+							android:gravity="center"
+							android:orientation="horizontal">
 
 								<ImageButton
 									android:id="@+id/download_rating_bad"
@@ -75,40 +68,35 @@
 									android:id="@+id/download_rating_good"
 									style="@style/DownloadActionImageButton"
 									android:src="@drawable/ic_action_rating_good_dark"/>
-							</LinearLayout>
 						</LinearLayout>
-					</RelativeLayout>
+					</FrameLayout>
 				</FrameLayout>
 
 				<TextView
-						android:id="@+id/download_status"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_alignParentBottom="true"
-						android:layout_centerHorizontal="true"
-						android:layout_marginLeft="16dip"
-						android:layout_marginRight="16dip"
-						android:singleLine="true"
-						android:ellipsize="end"
-						android:textAppearance="?android:attr/textAppearanceSmall"
-						android:textColor="?android:textColorSecondary"/>
+					android:id="@+id/download_status"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal"
+					android:layout_marginLeft="16dip"
+					android:layout_marginRight="16dip"
+					android:layout_marginTop="6dp"
+					android:singleLine="true"
+					android:ellipsize="end"
+					style="?attr/actionbarSubtitleStyle"
+					android:textColor="?android:textColorSecondary"/>
 
 				<TextView
-						android:id="@+id/download_song_title"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_gravity="center_horizontal"
-						android:layout_above="@+id/download_status"
-						android:layout_centerHorizontal="true"
-						android:layout_marginLeft="16dip"
-						android:layout_marginRight="16dip"
-						android:singleLine="true"
-						android:textColor="?android:textColorPrimary"
-						android:textStyle="bold"
-						android:textSize="18sp"
-						android:ellipsize="end"/>
-
-			</RelativeLayout>
+					android:id="@+id/download_song_title"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal"
+					android:layout_marginLeft="16dip"
+					android:layout_marginRight="16dip"
+					android:singleLine="true"
+					android:textStyle="bold"
+					style="?attr/actionbarTitleStyle"
+					android:textColor="?android:textColorPrimary"/>
+			</LinearLayout>
 
 			<include layout="@layout/download_playlist"/>
 

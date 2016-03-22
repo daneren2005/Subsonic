@@ -409,11 +409,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		});
 
-		if(Build.MODEL.equals("Nexus 4") || Build.MODEL.equals("GT-I9100")) {
-			View slider = rootView.findViewById(R.id.download_slider);
-			slider.setPadding(0, 0, 0, 0);
-		}
-
 		return rootView;
 	}
 
