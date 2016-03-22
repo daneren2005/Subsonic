@@ -57,7 +57,7 @@
 		<br/>Ha a Beállítások menüben kikapcsolja az "Részletes megjelenítés" opciót, akkor a mappák teljes első szintje ugyanúgy lesz megjelenítve, mint az előadók listája.
 	]]>
 	</string>
-	<string name="main.shuffle">Lejátszás kevert sorrendben</string>
+    <string name="main.shuffle">Lejátszás kevert sorrendben</string>
     <string name="main.offline">Offline mód</string>
 	<string name="main.online">Online mód</string>
     <string name="main.settings">Beállítások</string>
@@ -527,6 +527,7 @@
 	<string name="admin.role.stream">Zene streamelése</string>
 	<string name="admin.role.jukebox">Jukebox vezérlése</string>
 	<string name="admin.role.share">Megosztások kezelése</string>
+	<string name="admin.role.video_conversion">Videók konvertálása</string>
 	<string name="admin.role.lastfm">Last.fm funkció használata</string>
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
