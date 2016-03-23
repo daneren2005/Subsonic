@@ -151,7 +151,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 
 	@Override
 	public SectionAdapter getAdapter(List<Serializable> channels) {
-		if(newestEpisodes == null || newestEpisodes.getChildrenSize() == 0 || true) {
+		if(newestEpisodes == null || newestEpisodes.getChildrenSize() == 0) {
 			return new PodcastChannelAdapter(context, channels, hasCoverArt ? getImageLoader() : null, this, largeAlbums);
 		} else {
 			Resources res = context.getResources();
