@@ -74,6 +74,10 @@ public final class Notifications {
 		}
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			notification.visibility = Notification.VISIBILITY_PUBLIC;
+
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false)) {
+				notification.vibrate = new long[0];
+			}
 		}
 
 		RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);

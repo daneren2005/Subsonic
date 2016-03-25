@@ -41,6 +41,12 @@
 			android:defaultValue="false"/>
 
 		<CheckBoxPreference
+			android:title="@string/settings.heads_up_notification"
+			android:summary="@string/settings.heads_up_notification_summary"
+			android:key="headsUpNotification"
+			android:defaultValue="false"/>
+
+		<CheckBoxPreference
 			android:title="@string/settings.play_now_after"
 			android:summary="@string/settings.play_now_after_summary"
 			android:key="playNowAfter"

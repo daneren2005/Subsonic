@@ -172,6 +172,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_BATCH_MODE = "batchMode";
 	public static final String PREFERENCES_KEY_CAST_GAPLESS_PLAYBACK = "castingGaplessPlayback";
 	public static final String PREFERENCES_KEY_CAST_STREAM_ORIGINAL = "castStreamOriginal";
+	public static final String PREFERENCES_KEY_HEADS_UP_NOTIFICATION = "headsUpNotification";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";
