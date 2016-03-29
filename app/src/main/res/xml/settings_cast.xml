@@ -21,5 +21,11 @@
 			android:summary="@string/settings.casting_stream_original_summary"
 			android:key="castStreamOriginal"
 			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.casting_cache"
+			android:summary="@string/settings.casting_cache_summary"
+			android:key="castCache"
+			android:defaultValue="false"/>
 	</PreferenceCategory>
 </PreferenceScreen>

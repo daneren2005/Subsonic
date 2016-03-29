@@ -694,6 +694,10 @@ public final class Util {
 		editor.commit();
 	}
 
+	public static boolean shouldCacheDuringCasting(Context context) {
+		return Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_CACHE, false);
+	}
+
 	public static boolean shouldStartOnHeadphones(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_START_ON_HEADPHONES, false);

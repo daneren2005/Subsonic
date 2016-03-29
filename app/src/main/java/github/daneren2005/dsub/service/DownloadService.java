@@ -1042,6 +1042,8 @@ public class DownloadService extends Service {
 				bufferAndPlay(position, start);
 				checkDownloads();
 				setNextPlaying();
+			} else {
+				checkDownloads();
 			}
 		}
 	}
@@ -1716,10 +1718,7 @@ public class DownloadService extends Service {
 				setNextPlayerState(IDLE);
 			}
 		}
-
-		if(remoteState == LOCAL) {
-			checkDownloads();
-		}
+		checkDownloads();
 
 		if(routeId != null) {
 			final Runnable delayedReconnect = new Runnable() {
@@ -2154,7 +2153,7 @@ public class DownloadService extends Service {
 
 			int preloaded = 0;
 
-			if(n != 0 && remoteState == LOCAL) {
+			if(n != 0 && (remoteState == LOCAL || Util.shouldCacheDuringCasting(this))) {
 				int start = currentPlaying == null ? 0 : getCurrentPlayingIndex();
 				if(start == -1) {
 					start = 0;
