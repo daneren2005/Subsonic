@@ -1675,15 +1675,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		new LoadingTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {
-				DownloadService downloadService = getDownloadService();
-				if(downloadService == null) {
-					return null;
-				}
-
-				downloadService.clear();
-				downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
-				downloadService.setSuggestedPlaylistName(playlistName, playlistId);
-
+				playNowInTask(entries, song, position, playlistName, playlistId);
 				return null;
 			}
 
@@ -1692,6 +1684,19 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				context.openNowPlaying();
 			}
 		}.execute();
+	}
+	protected void playNowInTask(final List<Entry> entries, final Entry song, final int position) {
+		playNowInTask(entries, song, position, null, null);
+	}
+	protected void playNowInTask(final List<Entry> entries, final Entry song, final int position, final String playlistName, final String playlistId) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService == null) {
+			return;
+		}
+
+		downloadService.clear();
+		downloadService.download(entries, false, true, true, false, entries.indexOf(song), position);
+		downloadService.setSuggestedPlaylistName(playlistName, playlistId);
 	}
 
 	protected void deleteBookmark(final MusicDirectory.Entry entry, final SectionAdapter adapter) {
@@ -1933,6 +1938,23 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			musicService = MusicServiceFactory.getMusicService(context);
 		}
 
+		protected void getSiblingsRecursively(Entry entry) throws Exception {
+			MusicDirectory parent = new MusicDirectory();
+			if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
+				parent.setId(entry.getAlbumId());
+			} else {
+				parent.setId(entry.getParent());
+			}
+
+			if(parent.getId() == null) {
+				songs.add(entry);
+			} else {
+				MusicDirectory.Entry dir = new Entry(parent.getId());
+				dir.setDirectory(true);
+				parent.addChild(dir);
+				getSongsRecursively(parent, songs);
+			}
+		}
 		protected void getSongsRecursively(List<Entry> entry) throws Exception {
 			getSongsRecursively(entry, false);
 		}
