@@ -2744,7 +2744,9 @@ public class DownloadService extends Service {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+					if(mRemoteControl != null) {
+						mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+					}
 				}
 			});
 		}
