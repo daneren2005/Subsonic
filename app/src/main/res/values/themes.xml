@@ -4,6 +4,8 @@
 		<item name="offline_icon">@drawable/main_offline_light</item>
 		<item name="media_button_backward">@drawable/media_backward_light</item>
 		<item name="media_button_forward">@drawable/media_forward_light</item>
+		<item name="media_button_rewind">@drawable/media_rewind_light</item>
+		<item name="media_button_fastforward">@drawable/media_fastforward_light</item>
 		<item name="media_button_pause">@drawable/media_pause_light</item>
 		<item name="media_button_repeat_off">@drawable/media_repeat_off_light</item>
 		<item name="media_button_repeat_single">@drawable/media_repeat_single_light</item>
@@ -15,6 +17,8 @@
 		<item name="actionbar_pause">@drawable/media_pause_dark</item>
 		<item name="actionbar_start">@drawable/media_start_dark</item>
 		<item name="actionbar_stop">@drawable/media_stop_dark</item>
+		<item name="actionbar_rewind">@drawable/media_rewind_dark</item>
+		<item name="actionbar_fastforward">@drawable/media_fastforward_dark</item>
 		<item name="chat_send">@drawable/ic_menu_chat_send_light</item>
 		<item name="add">@drawable/ic_action_add_dark</item>
 		<item name="download_none">@drawable/download_none_light</item>
@@ -70,6 +74,8 @@
 		<item name="offline_icon">@drawable/main_offline_dark</item>
 		<item name="media_button_backward">@drawable/media_backward_dark</item>
 		<item name="media_button_forward">@drawable/media_forward_dark</item>
+		<item name="media_button_rewind">@drawable/media_rewind_dark</item>
+		<item name="media_button_fastforward">@drawable/media_fastforward_dark</item>
 		<item name="media_button_pause">@drawable/media_pause_dark</item>
 		<item name="media_button_repeat_off">@drawable/media_repeat_off_dark</item>
 		<item name="media_button_repeat_single">@drawable/media_repeat_single_dark</item>
@@ -81,6 +87,8 @@
 		<item name="actionbar_pause">@drawable/media_pause_dark</item>
 		<item name="actionbar_start">@drawable/media_start_dark</item>
 		<item name="actionbar_stop">@drawable/media_stop_dark</item>
+		<item name="actionbar_rewind">@drawable/media_rewind_dark</item>
+		<item name="actionbar_fastforward">@drawable/media_fastforward_dark</item>
 		<item name="chat_send">@drawable/ic_menu_chat_send_dark</item>
 		<item name="add">@drawable/ic_action_add_dark</item>
 		<item name="download_none">@drawable/download_none_dark</item>
@@ -183,6 +191,8 @@
 		<item name="actionbar_pause">@drawable/media_pause_light</item>
 		<item name="actionbar_start">@drawable/media_start_light</item>
 		<item name="actionbar_stop">@drawable/media_stop_light</item>
+		<item name="actionbar_rewind">@drawable/media_rewind_light</item>
+		<item name="actionbar_fastforward">@drawable/media_fastforward_light</item>
 		<item name="add">@drawable/ic_action_add_light</item>
 		<item name="shuffle">@drawable/ic_menu_shuffle_light</item>
 		<item name="refresh">@drawable/ic_menu_refresh_light</item>

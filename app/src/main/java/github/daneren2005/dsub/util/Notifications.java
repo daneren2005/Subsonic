@@ -104,7 +104,7 @@ public final class Notifications {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					if(playing) {
+					if (playing) {
 						downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
 					} else {
 						playShowing = false;
@@ -121,7 +121,8 @@ public final class Notifications {
 		DSubWidgetProvider.notifyInstances(context, downloadService, playing);
 	}
 
-	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote){
+	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote) {
+		boolean isLongFile = song.isAudioBook() || song.isPodcast();
 
 		// Use the same text for the ticker and the expanded notification
 		String title = song.getTitle();
@@ -156,20 +157,47 @@ public final class Notifications {
 		if(persistent) {
 			if(expanded) {
 				rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_pause : R.drawable.notification_start);
+
+				if(isLongFile && playing) {
+					rv.setImageViewResource(R.id.control_previous, R.drawable.notification_rewind);
+					rv.setImageViewResource(R.id.control_next, R.drawable.notification_fastforward);
+				} else {
+					rv.setImageViewResource(R.id.control_previous, R.drawable.notification_backward);
+					rv.setImageViewResource(R.id.control_next, R.drawable.notification_forward);
+				}
 			} else {
 				rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_start);
-				rv.setImageViewResource(R.id.control_pause, R.drawable.notification_forward);
+				if(isLongFile && playing) {
+					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_fastforward);
+				} else {
+					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_forward);
+				}
 				rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
 			}
+		} else if(isLongFile) {
+			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_rewind);
+			rv.setImageViewResource(R.id.control_next, R.drawable.notification_fastforward);
+		} else {
+			// Necessary for switching back since it appears to re-use the same layout
+			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_backward);
+			rv.setImageViewResource(R.id.control_next, R.drawable.notification_forward);
 		}
 
 		// Create actions for media buttons
 		PendingIntent pendingIntent;
-		int previous = 0, pause = 0, next = 0, close = 0;
+		int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
 		if(persistent && !expanded) {
 			pause = R.id.control_previous;
-			next = R.id.control_pause;
+			if(isLongFile && playing) {
+				fastForward = R.id.control_pause;
+			} else {
+				next = R.id.control_pause;
+			}
 			close = R.id.control_next;
+		} else if(isLongFile && (!persistent || (expanded && playing))) {
+			rewind = R.id.control_previous;
+			pause = R.id.control_pause;
+			fastForward = R.id.control_next;
 		} else {
 			previous = R.id.control_previous;
 			pause = R.id.control_pause;
@@ -187,6 +215,13 @@ public final class Notifications {
 			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
 			rv.setOnClickPendingIntent(previous, pendingIntent);
+		}
+		if(rewind > 0) {
+			Intent rewindIntent = new Intent("KEYCODE_MEDIA_REWIND");
+			rewindIntent.setComponent(new ComponentName(context, DownloadService.class));
+			rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_REWIND));
+			pendingIntent = PendingIntent.getService(context, 0, rewindIntent, 0);
+			rv.setOnClickPendingIntent(rewind, pendingIntent);
 		}
 		if(pause > 0) {
 			if(playing) {
@@ -209,6 +244,13 @@ public final class Notifications {
 			nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT));
 			pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
 			rv.setOnClickPendingIntent(next, pendingIntent);
+		}
+		if(fastForward > 0) {
+			Intent fastForwardIntent = new Intent("KEYCODE_MEDIA_FAST_FORWARD");
+			fastForwardIntent.setComponent(new ComponentName(context, DownloadService.class));
+			fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
+			pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, 0);
+			rv.setOnClickPendingIntent(fastForward, pendingIntent);
 		}
 		if(close > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_STOP");

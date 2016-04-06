@@ -3,6 +3,8 @@
     <attr name="offline_icon" format="reference"/>
     <attr name="media_button_backward" format="reference"/>
     <attr name="media_button_forward" format="reference"/>
+	<attr name="media_button_rewind" format="reference"/>
+	<attr name="media_button_fastforward" format="reference"/>
     <attr name="media_button_pause" format="reference"/>
     <attr name="media_button_repeat_off" format="reference"/>
 	<attr name="media_button_repeat_single" format="reference"/>
@@ -14,6 +16,8 @@
 	<attr name="actionbar_pause" format="reference"/>
 	<attr name="actionbar_start" format="reference"/>
 	<attr name="actionbar_stop" format="reference"/>
+	<attr name="actionbar_rewind" format="reference"/>
+	<attr name="actionbar_fastforward" format="reference"/>
 	<attr name="chat_send" format="reference"/>
 	<attr name="add" format="reference"/>
 	<attr name="download_none" format="reference"/>

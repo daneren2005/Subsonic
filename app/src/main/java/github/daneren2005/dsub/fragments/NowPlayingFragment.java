@@ -88,7 +88,6 @@ import java.util.concurrent.ScheduledFuture;
 public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile>, OnSongChangedListener {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();
 	private static final int PERCENTAGE_OF_SCREEN_FOR_SWIPE = 10;
-	private static final int INCREMENT_TIME = 5000;
 
 	private static final int ACTION_PREVIOUS = 1;
 	private static final int ACTION_NEXT = 2;
@@ -106,6 +105,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private SeekBar progressBar;
 	private AutoRepeatButton previousButton;
 	private AutoRepeatButton nextButton;
+	private AutoRepeatButton rewindButton;
+	private AutoRepeatButton fastforwardButton;
 	private View pauseButton;
 	private View stopButton;
 	private View startButton;
@@ -172,6 +173,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		progressBar = (SeekBar)rootView.findViewById(R.id.download_progress_bar);
 		previousButton = (AutoRepeatButton)rootView.findViewById(R.id.download_previous);
 		nextButton = (AutoRepeatButton)rootView.findViewById(R.id.download_next);
+		rewindButton = (AutoRepeatButton) rootView.findViewById(R.id.download_rewind);
+		fastforwardButton = (AutoRepeatButton) rootView.findViewById(R.id.download_fastforward);
 		pauseButton =rootView.findViewById(R.id.download_pause);
 		stopButton =rootView.findViewById(R.id.download_stop);
 		startButton =rootView.findViewById(R.id.download_start);
@@ -240,7 +243,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 		previousButton.setOnRepeatListener(new Runnable() {
 			public void run() {
-				changeProgress(-INCREMENT_TIME);
+				changeProgress(true);
 			}
 		});
 
@@ -260,9 +263,34 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 		nextButton.setOnRepeatListener(new Runnable() {
 			public void run() {
-				changeProgress(INCREMENT_TIME);
+				changeProgress(false);
 			}
 		});
+
+		rewindButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				changeProgress(true);
+			}
+		});
+		rewindButton.setOnRepeatListener(new Runnable() {
+			public void run() {
+				changeProgress(true);
+			}
+		});
+
+		fastforwardButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				changeProgress(false);
+			}
+		});
+		fastforwardButton.setOnRepeatListener(new Runnable() {
+			public void run() {
+				changeProgress(false);
+			}
+		});
+
 
 		pauseButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -948,31 +976,22 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 	}
 
-	private void changeProgress(final int ms) {
+	private void changeProgress(final boolean rewind) {
 		final DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
 			return;
 		}
 
 		new SilentBackgroundTask<Void>(context) {
-			boolean isJukeboxEnabled;
-			int msPlayed;
-			Integer duration;
-			PlayerState playerState;
 			int seekTo;
 
 			@Override
 			protected Void doInBackground() throws Throwable {
-				msPlayed = Math.max(0, downloadService.getPlayerPosition());
-				duration = downloadService.getPlayerDuration();
-				playerState = getDownloadService().getPlayerState();
-				int msTotal = duration == null ? 0 : duration;
-				if(msPlayed + ms > msTotal) {
-					seekTo = msTotal;
+				if(rewind) {
+					seekTo = downloadService.rewind();
 				} else {
-					seekTo = msPlayed + ms;
+					seekTo = downloadService.fastForward();
 				}
-				downloadService.seekTo(seekTo);
 				return null;
 			}
 
@@ -1169,6 +1188,20 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
+
+		if(currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
+			previousButton.setVisibility(View.GONE);
+			nextButton.setVisibility(View.GONE);
+
+			rewindButton.setVisibility(View.VISIBLE);
+			fastforwardButton.setVisibility(View.VISIBLE);
+		} else {
+			previousButton.setVisibility(View.VISIBLE);
+			nextButton.setVisibility(View.VISIBLE);
+
+			rewindButton.setVisibility(View.GONE);
+			fastforwardButton.setVisibility(View.GONE);
+		}
 	}
 
 	private void setupSubtitle(int currentPlayingIndex) {

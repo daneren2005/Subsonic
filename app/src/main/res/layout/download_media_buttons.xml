@@ -21,6 +21,14 @@
             android:layout_centerVertical="true"
             />
 
+	<github.daneren2005.dsub.view.AutoRepeatButton
+		style="@style/PlaybackControl.Large"
+		android:id="@+id/download_rewind"
+		android:src="?attr/media_button_rewind"
+		android:layout_toLeftOf="@+id/download_pause"
+		android:layout_centerVertical="true"
+		android:visibility="invisible"/>
+
     <ImageButton
             style="@style/PlaybackControl.Large"
             android:id="@+id/download_pause"
@@ -43,6 +51,14 @@
             android:src="?attr/media_button_start"
             android:layout_centerInParent="true"
             />
+
+	<github.daneren2005.dsub.view.AutoRepeatButton
+		style="@style/PlaybackControl.Large"
+		android:id="@+id/download_fastforward"
+		android:src="?attr/media_button_fastforward"
+		android:layout_toRightOf="@+id/download_start"
+		android:layout_centerVertical="true"
+		android:visibility="invisible"/>
 
     <github.daneren2005.dsub.view.AutoRepeatButton
             style="@style/PlaybackControl.Small"

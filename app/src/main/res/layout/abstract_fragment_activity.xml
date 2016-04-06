@@ -105,6 +105,13 @@
 
 					<ImageButton
 						style="@style/PlaybackControl.BottomBar"
+						android:id="@+id/download_rewind"
+						android:src="?attr/actionbar_rewind"
+						android:padding="2dp"
+						android:visibility="gone"/>
+
+					<ImageButton
+						style="@style/PlaybackControl.BottomBar"
 						android:id="@+id/download_previous"
 						android:src="?attr/actionbar_backward"
 						android:padding="2dp"/>
@@ -119,6 +126,13 @@
 						android:id="@+id/download_next"
 						android:src="?attr/actionbar_forward"
 						android:padding="2dp"/>
+
+					<ImageButton
+						style="@style/PlaybackControl.BottomBar"
+						android:id="@+id/download_fastforward"
+						android:src="?attr/actionbar_fastforward"
+						android:padding="2dp"
+						android:visibility="gone"/>
 				</LinearLayout>
 			</LinearLayout>
 		</FrameLayout>

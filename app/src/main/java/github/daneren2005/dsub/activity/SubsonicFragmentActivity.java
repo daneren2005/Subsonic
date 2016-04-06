@@ -107,6 +107,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private long lastBackPressTime = 0;
 	private DownloadFile currentPlaying;
 	private PlayerState currentState;
+	private ImageButton previousButton;
+	private ImageButton nextButton;
+	private ImageButton rewindButton;
+	private ImageButton fastforwardButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -267,7 +271,25 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			trans.commit();
 		}
 
-		ImageButton previousButton = (ImageButton) findViewById(R.id.download_previous);
+		rewindButton = (ImageButton) findViewById(R.id.download_rewind);
+		rewindButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						if (getDownloadService() == null) {
+							return null;
+						}
+
+						getDownloadService().rewind();
+						return null;
+					}
+				}.execute();
+			}
+		});
+
+		previousButton = (ImageButton) findViewById(R.id.download_previous);
 		previousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -305,7 +327,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		});
 
-		ImageButton nextButton = (ImageButton) findViewById(R.id.download_next);
+		nextButton = (ImageButton) findViewById(R.id.download_next);
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -317,6 +339,24 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 						}
 
 						getDownloadService().next();
+						return null;
+					}
+				}.execute();
+			}
+		});
+
+		fastforwardButton = (ImageButton) findViewById(R.id.download_fastforward);
+		fastforwardButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+					@Override
+					protected Void doInBackground() throws Throwable {
+						if (getDownloadService() == null) {
+							return null;
+						}
+
+						getDownloadService().fastForward();
 						return null;
 					}
 				}.execute();
@@ -874,6 +914,20 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				typedArray.recycle();
 			}
 			getImageLoader().loadImage(coverArtView, song, false, height, false);
+		}
+
+		if(currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
+			previousButton.setVisibility(View.GONE);
+			nextButton.setVisibility(View.GONE);
+
+			rewindButton.setVisibility(View.VISIBLE);
+			fastforwardButton.setVisibility(View.VISIBLE);
+		} else {
+			previousButton.setVisibility(View.VISIBLE);
+			nextButton.setVisibility(View.VISIBLE);
+
+			rewindButton.setVisibility(View.GONE);
+			fastforwardButton.setVisibility(View.GONE);
 		}
 	}
 

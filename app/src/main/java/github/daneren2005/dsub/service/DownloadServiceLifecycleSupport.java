@@ -408,6 +408,12 @@ public class DownloadServiceLifecycleSupport {
 				case KeyEvent.KEYCODE_MEDIA_NEXT:
 					downloadService.next();
 					break;
+				case KeyEvent.KEYCODE_MEDIA_REWIND:
+					downloadService.rewind();
+					break;
+				case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+					downloadService.fastForward();
+					break;
 				case RemoteControlClient.FLAG_KEY_MEDIA_STOP:
 				case KeyEvent.KEYCODE_MEDIA_STOP:
 					downloadService.stop();

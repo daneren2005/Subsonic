@@ -1131,6 +1131,27 @@ public class DownloadService extends Service {
 			handleError(x);
 		}
 	}
+	public synchronized int rewind() {
+		return seekToWrapper(-REWIND);
+	}
+	public synchronized int fastForward() {
+		return seekToWrapper(FAST_FORWARD);
+	}
+	protected int seekToWrapper(int difference) {
+		int msPlayed = Math.max(0, getPlayerPosition());
+		Integer duration = getPlayerDuration();
+		int msTotal = duration == null ? 0 : duration;
+
+		int seekTo;
+		if(msPlayed + difference > msTotal) {
+			seekTo = msTotal;
+		} else {
+			seekTo = msPlayed + difference;
+		}
+		seekTo(seekTo);
+
+		return seekTo;
+	}
 
 	public synchronized void previous() {
 		int index = getCurrentPlayingIndex();
