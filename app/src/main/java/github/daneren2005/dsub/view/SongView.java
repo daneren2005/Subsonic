@@ -330,7 +330,15 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			// Still highlight red if a 1-star
 			if(isRated == 1) {
 				this.setBackgroundColor(Color.RED);
-				this.getBackground().setAlpha(20);
+
+				String theme = Util.getTheme(context);
+				if("black".equals(theme)) {
+					this.getBackground().setAlpha(80);
+				} else if("dark".equals(theme) || "holo".equals(theme)) {
+					this.getBackground().setAlpha(60);
+				} else {
+					this.getBackground().setAlpha(20);
+				}
 			} else if(rating == 1) {
 				this.setBackgroundColor(0x00000000);
 			}
