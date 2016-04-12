@@ -57,7 +57,7 @@
 		<br/>Ha a Beállítások menüben kikapcsolja az "Részletes megjelenítés" opciót, akkor a mappák teljes első szintje ugyanúgy lesz megjelenítve, mint az előadók listája.
 	]]>
 	</string>
-    <string name="main.shuffle">Lejátszás kevert sorrendben</string>
+	<string name="main.shuffle">Lejátszás kevert sorrendben</string>
     <string name="main.offline">Offline mód</string>
 	<string name="main.online">Online mód</string>
     <string name="main.settings">Beállítások</string>
@@ -469,7 +469,11 @@
 	<string name="settings.shuffle_by_album.true">Dalsorrend keverése albumonként szétválasztva.</string>
 	<string name="settings.shuffle_by_album.false">Dalsorrend keverése az összes dalt együtt kezelve.</string>
 	<string name="settings.casting_stream_original">Eredeti stream</string>
-	<string name="settings.casting_stream_original_summary">Az eredeti fájl streamelése, ha a cast eszköz támogatja a fájltípust.</string>
+	<string name="settings.casting_stream_original_summary">Az eredeti fájl streamelése, ha a Cast-kompatibilis eszköz támogatja a fájltípust.</string>
+	<string name="settings.heads_up_notification">Felugró értesítések (5.0+)</string>
+	<string name="settings.heads_up_notification_summary">Lejátszási értesítések megjelenítése felugró értesítésekként (Android Lollipop+).</string>
+	<string name="settings.casting_cache">Casting közbeni gyorsítótárazás</string>
+	<string name="settings.casting_cache_summary">Az éppen lejátszott dal gyorsítótárazása a tartalomátküldés (Casting) alatt.</string>
 
 	<string name="shuffle.title">Dalsorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -632,6 +636,8 @@
 	<string name="details.updated">Frissítve</string>
 	<string name="details.starred">Csillagozott</string>
 	<string name="details.last_played">Utoljára lejátszott</string>
+	<string name="details.expiration">Lejárati idő</string>
+	<string name="details.played_count">Lejátszások száma</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Nincsenek dalok</item>
