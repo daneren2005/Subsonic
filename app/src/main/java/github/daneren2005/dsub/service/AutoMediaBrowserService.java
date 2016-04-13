@@ -58,7 +58,6 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 	private static final String PODCAST_PREFIX = "po-";
 	private static final String ALBUM_TYPE_PREFIX = "ty-";
 	private static final String MUSIC_DIRECTORY_PREFIX = "md-";
-	private static final int MAX_DOUBLE_LINE_ITEMS = 9;
 
 	private DownloadService downloadService;
 	private Handler handler = new Handler();
@@ -195,7 +194,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 						albumListType = "newest";
 				}
 
-				return musicService.getAlbumList(albumListType, MAX_DOUBLE_LINE_ITEMS, 0, true, downloadService, null);
+				return musicService.getAlbumList(albumListType, 20, 0, true, downloadService, null);
 			}
 
 			@Override
@@ -287,7 +286,6 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 			protected void done(MusicDirectory podcasts) {
 				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
 
-				int i = 0;
 				for(Entry entry: podcasts.getChildren(false, true)) {
 					PodcastEpisode podcast = (PodcastEpisode) entry;
 					Bundle podcastExtras = new Bundle();
@@ -302,10 +300,6 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 							.build();
 
 					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
-					i++;
-					if(i >= MAX_DOUBLE_LINE_ITEMS) {
-						break;
-					}
 				}
 
 				result.sendResult(mediaItems);
