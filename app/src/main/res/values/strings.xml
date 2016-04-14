@@ -582,7 +582,7 @@
 
 	<string name="chat.send_a_message">Send a message</string>
 
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+    <string name="changelog_version_format">Version %s</string>
 
 	<string name="tasker.start_playing">Start playing</string>
 	<string name="tasker.start_playing_shuffled">Start playing in Shuffle Mode</string>

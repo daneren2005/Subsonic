@@ -561,7 +561,7 @@
 
 	<string name="chat.send_a_message">Stuur een bericht</string>
 
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Versie <xliff:g id="version_name">%s</xliff:g></string>
+    <string name="changelog_version_format">Versie %s</string>
 
 	<string name="tasker.start_playing">Begin met spelen</string>
 	<string name="tasker.start_playing_shuffled">Begin met spelen in shuffle-modus</string>

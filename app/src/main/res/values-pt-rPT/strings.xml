@@ -562,7 +562,7 @@
 
 	<string name="chat.send_a_message">Enviar uma mensagem</string>
 
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Versão <xliff:g id="version_name">%s</xliff:g></string>
+    <string name="changelog_version_format">Versão %s</string>
 
 	<string name="tasker.start_playing">Iniciar reprodução</string>
 	<string name="tasker.start_playing_shuffled">Iniciar reprodução em modo aleatório</string>

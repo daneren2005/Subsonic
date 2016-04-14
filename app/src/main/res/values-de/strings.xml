@@ -511,9 +511,7 @@
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mehr…</string>
 
-	<string name="chat.send_a_message">Nachricht senden</string> 
-
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+	<string name="chat.send_a_message">Nachricht senden</string>
 
 	<string name="tasker.start_playing">Starte Wiedergabe</string>
 	<string name="tasker.start_playing_shuffled">Starte Zufallswiedergabe</string>

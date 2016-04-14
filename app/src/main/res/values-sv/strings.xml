@@ -560,8 +560,6 @@
 
 	<string name="chat.send_a_message">Skicka ett meddelande</string>
 
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
-
 	<string name="tasker.start_playing">Börja spela</string>
 	<string name="tasker.start_playing_shuffled">Börja spela i slumpat läge</string>
 	<string name="tasker.start_playing_title">Tasker -> Starta DSub</string>

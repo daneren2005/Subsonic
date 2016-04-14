@@ -506,9 +506,7 @@
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Plus…</string>
 
-	<string name="chat.send_a_message">Envoyer un message</string> 
-
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Version <xliff:g id="version_name">%s</xliff:g></string>
+	<string name="chat.send_a_message">Envoyer un message</string>
 
 	<string name="tasker.start_playing">Commencer la lecture</string>
 	<string name="tasker.start_playing_title">Tasker -> Démarrer DSub</string>
