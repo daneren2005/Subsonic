@@ -212,14 +212,14 @@ public final class Notifications {
 		if(previous > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
 			prevIntent.setComponent(new ComponentName(context, DownloadService.class));
-			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
 			rv.setOnClickPendingIntent(previous, pendingIntent);
 		}
 		if(rewind > 0) {
 			Intent rewindIntent = new Intent("KEYCODE_MEDIA_REWIND");
 			rewindIntent.setComponent(new ComponentName(context, DownloadService.class));
-			rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_REWIND));
+			rewindIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_REWIND));
 			pendingIntent = PendingIntent.getService(context, 0, rewindIntent, 0);
 			rv.setOnClickPendingIntent(rewind, pendingIntent);
 		}
@@ -227,13 +227,13 @@ public final class Notifications {
 			if(playing) {
 				Intent pauseIntent = new Intent("KEYCODE_MEDIA_PLAY_PAUSE");
 				pauseIntent.setComponent(new ComponentName(context, DownloadService.class));
-				pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+				pauseIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
 				pendingIntent = PendingIntent.getService(context, 0, pauseIntent, 0);
 				rv.setOnClickPendingIntent(pause, pendingIntent);
 			} else {
 				Intent prevIntent = new Intent("KEYCODE_MEDIA_START");
 				prevIntent.setComponent(new ComponentName(context, DownloadService.class));
-				prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY));
+				prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY));
 				pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
 				rv.setOnClickPendingIntent(pause, pendingIntent);
 			}
@@ -241,21 +241,21 @@ public final class Notifications {
 		if(next > 0) {
 			Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
 			nextIntent.setComponent(new ComponentName(context, DownloadService.class));
-			nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT));
+			nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
 			pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
 			rv.setOnClickPendingIntent(next, pendingIntent);
 		}
 		if(fastForward > 0) {
 			Intent fastForwardIntent = new Intent("KEYCODE_MEDIA_FAST_FORWARD");
 			fastForwardIntent.setComponent(new ComponentName(context, DownloadService.class));
-			fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
+			fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
 			pendingIntent = PendingIntent.getService(context, 0, fastForwardIntent, 0);
 			rv.setOnClickPendingIntent(fastForward, pendingIntent);
 		}
 		if(close > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_STOP");
 			prevIntent.setComponent(new ComponentName(context, DownloadService.class));
-			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_STOP));
+			prevIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_STOP));
 			pendingIntent = PendingIntent.getService(context, 0, prevIntent, 0);
 			rv.setOnClickPendingIntent(close, pendingIntent);
 		}
