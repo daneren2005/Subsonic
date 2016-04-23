@@ -51,6 +51,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -116,6 +117,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private ImageButton bookmarkButton;
 	private ImageButton rateBadButton;
 	private ImageButton rateGoodButton;
+	private ImageButton playbackSpeedButton;
 
 	private ScheduledExecutorService executorService;
 	private DownloadFile currentPlaying;
@@ -182,6 +184,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		bookmarkButton = (ImageButton) rootView.findViewById(R.id.download_bookmark);
 		rateBadButton = (ImageButton) rootView.findViewById(R.id.download_rating_bad);
 		rateGoodButton = (ImageButton) rootView.findViewById(R.id.download_rating_good);
+		playbackSpeedButton = (ImageButton) rootView.findViewById(R.id.download_playback_speed);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
 
 		playlistView = (RecyclerView)rootView.findViewById(R.id.download_list);
@@ -216,6 +219,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		bookmarkButton.setOnTouchListener(touchListener);
 		rateBadButton.setOnTouchListener(touchListener);
 		rateGoodButton.setOnTouchListener(touchListener);
+		playbackSpeedButton.setOnTouchListener(touchListener);
 		emptyTextView.setOnTouchListener(touchListener);
 		albumArtImageView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
@@ -385,6 +389,48 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				setControlsVisible(true);
 			}
 		});
+
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			playbackSpeedButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					PopupMenu popup = new PopupMenu(context, v);
+					popup.getMenuInflater().inflate(R.menu.playback_speed_options, popup.getMenu());
+
+					popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+						@Override
+						public boolean onMenuItemClick(MenuItem menuItem) {
+							DownloadService downloadService = getDownloadService();
+							if (downloadService == null) {
+								return false;
+							}
+
+							float playbackSpeed = 1.0f;
+							switch (menuItem.getItemId()) {
+								case R.id.playback_speed_half:
+									playbackSpeed = 0.5f;
+									break;
+								case R.id.playback_speed_one_half:
+									playbackSpeed = 1.5f;
+									break;
+								case R.id.playback_speed_double:
+									playbackSpeed = 2.0f;
+									break;
+								case R.id.playback_speed_tripple:
+									playbackSpeed = 3.0f;
+									break;
+							}
+
+							downloadService.setPlaybackSpeed(playbackSpeed);
+							return true;
+						}
+					});
+					popup.show();
+				}
+			});
+		} else {
+			playbackSpeedButton.setVisibility(View.GONE);
+		}
 
 		toggleListButton.setOnClickListener(new View.OnClickListener() {
 			@Override

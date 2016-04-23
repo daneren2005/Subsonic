@@ -60,6 +60,11 @@
 									android:src="@drawable/ic_toggle_star_outline_dark"/>
 
 								<ImageButton
+									android:id="@+id/download_playback_speed"
+									style="@style/DownloadActionImageButton"
+									android:src="@drawable/ic_action_playback_speed_dark"/>
+
+								<ImageButton
 									android:id="@+id/download_bookmark"
 									style="@style/DownloadActionImageButton"
 									android:src="@drawable/ic_menu_bookmark_dark"/>

@@ -76,6 +76,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.media.audiofx.AudioEffect;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -161,6 +162,7 @@ public class DownloadService extends Service {
 	private int cachedPosition = 0;
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
+	private long delayUpdateProgress = 1000L;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = LOCAL;
@@ -1503,7 +1505,7 @@ public class DownloadService extends Service {
 			while(isRunning) {
 				try {
 					onSongProgress();
-					Thread.sleep(1000L);
+					Thread.sleep(delayUpdateProgress);
 				}
 				catch(Exception e) {
 					isRunning = false;
@@ -1545,7 +1547,7 @@ public class DownloadService extends Service {
 						}
 					}
 					onSongProgress(cachedPosition < 2000 ? true: false);
-					Thread.sleep(1000L);
+					Thread.sleep(delayUpdateProgress);
 				}
 				catch(Exception e) {
 					Log.w(TAG, "Crashed getting current position", e);
@@ -1877,6 +1879,7 @@ public class DownloadService extends Service {
 							cachedPosition = position;
 
 							applyReplayGain(mediaPlayer, downloadFile);
+							applyPlaybackParams(mediaPlayer);
 
 							if (start || autoPlayStart) {
 								mediaPlayer.start();
@@ -1947,6 +1950,7 @@ public class DownloadService extends Service {
 						}
 
 						applyReplayGain(nextMediaPlayer, downloadFile);
+						applyPlaybackParams(nextMediaPlayer);
 					} catch (Exception x) {
 						handleErrorNext(x);
 					}
@@ -2597,6 +2601,30 @@ public class DownloadService extends Service {
 			mediaPlayer.setVolume(rg_result, rg_result);
 		} catch(IOException e) {
 			Log.w(TAG, "Failed to apply replay gain values", e);
+		}
+	}
+
+	public void setPlaybackSpeed(float playbackSpeed) {
+		Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
+		applyPlaybackParams(mediaPlayer);
+		if(nextMediaPlayer != null && nextPlayerState == PREPARED) {
+			applyPlaybackParams(nextMediaPlayer);
+		}
+
+		delayUpdateProgress = Math.round(1000L / playbackSpeed);
+	}
+	public float getPlaybackSpeed() {
+		return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, 1.0f);
+	}
+	private synchronized void applyPlaybackParams(MediaPlayer mediaPlayer) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			float playbackSpeed = getPlaybackSpeed();
+
+			if(playbackSpeed != 1.0f || mediaPlayer.getPlaybackParams() != null) {
+				PlaybackParams playbackParams = new PlaybackParams();
+				playbackParams.setSpeed(playbackSpeed);
+				mediaPlayer.setPlaybackParams(playbackParams);
+			}
 		}
 	}
 

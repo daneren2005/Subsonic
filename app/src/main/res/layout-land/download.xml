@@ -65,6 +65,11 @@
 							android:src="@android:drawable/star_big_off"/>
 
 						<ImageButton
+							android:id="@+id/download_playback_speed"
+							style="@style/DownloadActionImageButton"
+							android:src="?attr/playback_speed"/>
+
+						<ImageButton
 							android:id="@+id/download_bookmark"
 							style="@style/DownloadActionImageButton"
 							android:src="?attr/bookmark"/>

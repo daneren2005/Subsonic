@@ -42,6 +42,7 @@
 	<attr name="radio" format="reference"/>
 	<attr name="star_outline" format="reference"/>
 	<attr name="download" format="reference"/>
+	<attr name="playback_speed" format="reference"/>
 	<attr name="drawerItemsIcons" format="reference"/>
 	<attr name="drawerHome" format="reference"/>
 	<attr name="drawerLibrary" format="reference"/>
