@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.1.7" versioncode="177" releasedate="4/22/2016">
+		<change>Audio Books/Podcasts: Replace back/forward with rewind/fast forward buttons</change>
+		<change>Expandable Search Results</change>
+		<change>Add option to cache while casting</change>
+		<change>Add optional Heads Up Notifications (Lollipop+)</change>
+		<change>Clicking bookmarked song plays entire album from bookmarked position</change>
+		<change>Auto: Remove podcast/album limit now that Google removed limit</change>
+		<change>Fix tall album art running into controls</change>
+		<change>Fix Show Artist not being an option when browsing By Tags</change>
+		<change>Fix 1-star song background on darker themes</change>
+		<change>Fix Bluetooth multiple skips</change>
+	</release>
 	<release version="5.1.6" versioncode="175" releasedate="3/16/2016">
 		<change>Podcasts/Audio Books: Show listened indicator</change>
 		<change>Podcasts/Audio Books: Improve what is considered fully played</change>
