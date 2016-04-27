@@ -41,6 +41,7 @@ import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.view.UpdateView;
 
 public final class Notifications {
 	private static final String TAG = Notifications.class.getSimpleName();
@@ -75,7 +76,7 @@ public final class Notifications {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			notification.visibility = Notification.VISIBILITY_PUBLIC;
 
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false)) {
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false) && !UpdateView.hasActiveActivity()) {
 				notification.vibrate = new long[0];
 			}
 		}
