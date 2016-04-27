@@ -35,6 +35,7 @@ import github.daneren2005.dsub.util.Util;
 public class ServerInfo implements Serializable {
 	public static final int TYPE_SUBSONIC = 1;
 	public static final int TYPE_MADSONIC = 2;
+	public static final int TYPE_AMPACHE = 3;
 	private static final Map<Integer, ServerInfo> SERVERS = new ConcurrentHashMap<Integer, ServerInfo>();
 	
 	private boolean isLicenseValid;
@@ -188,6 +189,13 @@ public class ServerInfo implements Serializable {
 	}
 	public static boolean isMadsonic6(Context context, int instance) {
 		return getServerType(context, instance) == TYPE_MADSONIC && checkServerVersion(context, "2.0", instance);
+	}
+
+	public static boolean isAmpache(Context context) {
+		return isAmpache(context, Util.getActiveServer(context));
+	}
+	public static boolean isAmpache(Context context, int instance) {
+		return getServerType(context, instance) == TYPE_AMPACHE;
 	}
 	
 	private static String getCacheName(Context context, int instance) {
