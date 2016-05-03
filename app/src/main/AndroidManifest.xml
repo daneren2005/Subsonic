@@ -41,7 +41,7 @@
 
 		<activity android:name="github.daneren2005.dsub.activity.SubsonicFragmentActivity"
 				  android:configChanges="orientation|keyboardHidden"
-				  android:launchMode="standard">
+				  android:launchMode="singleTask">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>

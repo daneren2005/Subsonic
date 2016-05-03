@@ -91,7 +91,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		Intent activityIntent = new Intent(context, SubsonicFragmentActivity.class);
 		activityIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
-		activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		activityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent activityPendingIntent = PendingIntent.getActivity(context, 0, activityIntent, 0);
 		mediaSession.setSessionActivity(activityPendingIntent);
 
