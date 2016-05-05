@@ -511,7 +511,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		boolean equalizerAvailable = downloadService != null && downloadService.getEqualizerAvailable();
-		if(equalizerAvailable && !downloadService.isRemoteEnabled()) {
+		boolean isRemoteEnabled = downloadService != null && downloadService.isRemoteEnabled();
+		if(equalizerAvailable && !isRemoteEnabled) {
 			SharedPreferences prefs = Util.getPreferences(context);
 			boolean equalizerOn = prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false);
 			if (equalizerOn && downloadService != null) {
@@ -521,6 +522,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		} else {
 			menu.removeItem(R.id.menu_equalizer);
+		}
+
+		if(isRemoteEnabled) {
+			playbackSpeedButton.setVisibility(View.GONE);
+		} else {
+			playbackSpeedButton.setVisibility(View.VISIBLE);
 		}
 
 		if(downloadService != null) {
