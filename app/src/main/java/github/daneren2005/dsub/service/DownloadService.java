@@ -864,7 +864,10 @@ public class DownloadService extends Service {
 
 		if (currentPlaying != null && currentPlaying.getSong() != null) {
 			Util.broadcastNewTrackInfo(this, currentPlaying.getSong());
-			mRemoteControl.updateMetadata(this, currentPlaying.getSong());
+
+			if(mRemoteControl != null) {
+				mRemoteControl.updateMetadata(this, currentPlaying.getSong());
+			}
 		} else {
 			Util.broadcastNewTrackInfo(this, null);
 			Notifications.hidePlayingNotification(this, this, handler);

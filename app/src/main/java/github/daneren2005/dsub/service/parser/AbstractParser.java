@@ -36,6 +36,12 @@ import github.daneren2005.dsub.util.Util;
  */
 public abstract class AbstractParser {
     private static final String TAG = AbstractParser.class.getSimpleName();
+	private static final String SUBSONIC_RESPONSE = "subsonic-response";
+	private static final String MADSONIC_RESPONSE = "madsonic-response";
+	private static final String SUBSONIC = "subsonic";
+	private static final String MADSONIC = "madsonic";
+	private static final String AMPACHE = "ampache";
+
     protected final Context context;
 	protected final int instance;
     private XmlPullParser parser;
@@ -132,16 +138,18 @@ public abstract class AbstractParser {
 
     protected String getElementName() {
         String name = parser.getName();
-        if ("subsonic-response".equals(name) || "madsonic-response".equals(name)) {
+        if (SUBSONIC_RESPONSE.equals(name) || MADSONIC_RESPONSE.equals(name)) {
             rootElementFound = true;
             String version = get("version");
             if (version != null) {
             	ServerInfo server = new ServerInfo();
             	server.setRestVersion(new Version(version));
 
-            	if("madsonic".equals(get("type")) || "madsonic-response".equals(name)) {
+            	if(MADSONIC.equals(get("type")) || MADSONIC_RESPONSE.equals(name)) {
 					server.setRestType(ServerInfo.TYPE_MADSONIC);
-            	} else if("subsonic".equals(get("type")) && server.checkServerVersion(context, "1.13")) {
+            	} if(AMPACHE.equals(get("type"))) {
+                    server.setRestType(ServerInfo.TYPE_AMPACHE);
+                } else if(SUBSONIC.equals(get("type")) && server.checkServerVersion(context, "1.13")) {
                     // Oh am I going to regret this
                     server.setRestType(ServerInfo.TYPE_MADSONIC);
                     server.setRestVersion(new Version("2.0.0"));

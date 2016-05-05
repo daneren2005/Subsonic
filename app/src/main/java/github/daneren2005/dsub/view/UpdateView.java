@@ -201,6 +201,10 @@ public abstract class UpdateView<T> extends LinearLayout {
 		});
 	}
 
+	public static boolean hasActiveActivity() {
+		return activeActivities > 0;
+	}
+
 	public static void addActiveActivity() {
 		activeActivities++;
 

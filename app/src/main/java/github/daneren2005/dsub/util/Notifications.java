@@ -41,6 +41,7 @@ import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.provider.DSubWidgetProvider;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.view.UpdateView;
 
 public final class Notifications {
 	private static final String TAG = Notifications.class.getSimpleName();
@@ -75,7 +76,7 @@ public final class Notifications {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			notification.visibility = Notification.VISIBILITY_PUBLIC;
 
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false)) {
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false) && !UpdateView.hasActiveActivity()) {
 				notification.vibrate = new long[0];
 			}
 		}
@@ -86,7 +87,7 @@ public final class Notifications {
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
-		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
 		playShowing = true;
@@ -316,7 +317,7 @@ public final class Notifications {
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
-		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		builder.setContentIntent(PendingIntent.getActivity(context, 2, notificationIntent, 0));
 
 		final Notification notification = builder.build();
@@ -372,7 +373,7 @@ public final class Notifications {
 					.setAutoCancel(true);
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
-			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			
 			String tab = null, type = null;
 			switch(stringId) {

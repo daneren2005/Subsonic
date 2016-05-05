@@ -412,6 +412,10 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				SearchFragment fragment = new SearchFragment();
 				replaceFragment(fragment, fragment.getSupportTag());
 			}
+		} else if(intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, false)) {
+			if(slideUpPanel.getPanelState() != SlidingUpPanelLayout.PanelState.EXPANDED) {
+				openNowPlaying();
+			}
 		} else {
 			setIntent(intent);
 		}

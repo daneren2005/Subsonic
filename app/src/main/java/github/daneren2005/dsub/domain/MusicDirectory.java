@@ -309,6 +309,10 @@ public class MusicDirectory implements Serializable {
 		public void rebaseTitleOffPath() {
 			try {
 				String filename = getPath();
+				if(filename == null) {
+					return;
+				}
+
 				int index = filename.lastIndexOf('/');
 				if (index != -1) {
 					filename = filename.substring(index + 1);

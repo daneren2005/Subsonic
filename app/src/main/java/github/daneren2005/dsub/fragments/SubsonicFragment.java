@@ -1588,7 +1588,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				.setPositiveButton(R.string.bookmark_action_resume, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						playNow(songs, song, position);
+						playNow(songs, song, position, playlistName, playlistId);
 					}
 				})
 				.setNegativeButton(R.string.bookmark_action_start_over, new DialogInterface.OnClickListener() {
@@ -1621,7 +1621,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 							}
 						}.execute();
 
-						playNow(songs, 0);
+						playNow(songs, 0, playlistName, playlistId);
 					}
 				});
 		AlertDialog dialog = builder.create();
