@@ -106,6 +106,7 @@ public class DownloadService extends Service {
 	public static final String START_PLAY = "github.daneren2005.dsub.START_PLAYING";
 	public static final int FAST_FORWARD = 30000;
 	public static final int REWIND = 10000;
+	private static final long DEFAULT_DELAY_UPDATE_PROGRESS = 1000L;
 	private static final double DELETE_CUTOFF = 0.84;
 	private static final int REQUIRED_ALBUM_MATCHES = 4;
 	private static final int REMOTE_PLAYLIST_TOTAL = 3;
@@ -162,7 +163,7 @@ public class DownloadService extends Service {
 	private int cachedPosition = 0;
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
-	private long delayUpdateProgress = 1000L;
+	private long delayUpdateProgress = DEFAULT_DELAY_UPDATE_PROGRESS;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = LOCAL;
@@ -853,6 +854,9 @@ public class DownloadService extends Service {
 	synchronized void setCurrentPlaying(DownloadFile currentPlaying, boolean showNotification) {
 		if(this.currentPlaying != null) {
 			this.currentPlaying.setPlaying(false);
+		}
+		if(delayUpdateProgress != DEFAULT_DELAY_UPDATE_PROGRESS && !isNextPlayingSameAlbum(currentPlaying, this.currentPlaying)) {
+			resetPlaybackSpeed();
 		}
 		this.currentPlaying = currentPlaying;
 		if(currentPlaying == null) {
@@ -1953,7 +1957,7 @@ public class DownloadService extends Service {
 						}
 
 						applyReplayGain(nextMediaPlayer, downloadFile);
-						applyPlaybackParams(nextMediaPlayer);
+						applyPlaybackParamsNext();
 					} catch (Exception x) {
 						handleErrorNext(x);
 					}
@@ -2609,16 +2613,40 @@ public class DownloadService extends Service {
 
 	public void setPlaybackSpeed(float playbackSpeed) {
 		Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
-		applyPlaybackParams(mediaPlayer);
+		applyPlaybackParamsMain();
 		if(nextMediaPlayer != null && nextPlayerState == PREPARED) {
-			applyPlaybackParams(nextMediaPlayer);
+			applyPlaybackParamsNext();
 		}
 
-		delayUpdateProgress = Math.round(1000L / playbackSpeed);
+		delayUpdateProgress = Math.round(DEFAULT_DELAY_UPDATE_PROGRESS / playbackSpeed);
 	}
+	private void resetPlaybackSpeed() {
+		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_PLAYBACK_SPEED).commit();
+	}
+
 	public float getPlaybackSpeed() {
 		return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, 1.0f);
 	}
+
+	private synchronized void applyPlaybackParamsMain() {
+		applyPlaybackParams(mediaPlayer);
+	}
+	private synchronized void applyPlaybackParamsNext() {
+		if(isNextPlayingSameAlbum()) {
+			applyPlaybackParams(nextMediaPlayer);
+		}
+	}
+	private synchronized boolean isNextPlayingSameAlbum() {
+		return isNextPlayingSameAlbum(currentPlaying, nextPlaying);
+	}
+	private synchronized boolean isNextPlayingSameAlbum(DownloadFile currentPlaying, DownloadFile nextPlaying) {
+		if(currentPlaying == null || nextPlaying == null) {
+			return false;
+		} else {
+			return currentPlaying.getSong().getAlbum().equals(nextPlaying.getSong().getAlbum());
+		}
+	}
+
 	private synchronized void applyPlaybackParams(MediaPlayer mediaPlayer) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			float playbackSpeed = getPlaybackSpeed();
