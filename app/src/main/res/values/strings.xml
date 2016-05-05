@@ -221,10 +221,10 @@
 	<string name="download.thumbs_down">Thumbs Down</string>
 	<string name="download.batch_mode">Batch Mode</string>
 	<string name="download.playback_speed_half">0.5x</string>
-	<string name="download.playback_speed_normal">1.0x</string>
+	<string name="download.playback_speed_normal">1x</string>
 	<string name="download.playback_speed_one_half">1.5x</string>
-	<string name="download.playback_speed_double">2.0x</string>
-	<string name="download.playback_speed_tripple">3.0x</string>
+	<string name="download.playback_speed_double">2x</string>
+	<string name="download.playback_speed_tripple">3x</string>
 
 	<string name="sync.new_podcasts">New podcasts available</string>
 	<string name="sync.new_playlists">New songs in playlists</string>

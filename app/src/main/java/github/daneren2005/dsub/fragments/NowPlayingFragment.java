@@ -422,6 +422,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 							}
 
 							downloadService.setPlaybackSpeed(playbackSpeed);
+							updateTitle();
 							return true;
 						}
 					});
@@ -524,7 +525,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			menu.removeItem(R.id.menu_equalizer);
 		}
 
-		if(isRemoteEnabled) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isRemoteEnabled) {
 			playbackSpeedButton.setVisibility(View.GONE);
 		} else {
 			playbackSpeedButton.setVisibility(View.VISIBLE);
@@ -794,6 +795,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					downloadService.addOnSongChangedListener(NowPlayingFragment.this, true);
 				}
 				updateRepeatButton();
+				updateTitle();
 			}
 		});
 	}
@@ -1255,6 +1257,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			rewindButton.setVisibility(View.GONE);
 			fastforwardButton.setVisibility(View.GONE);
 		}
+		updateTitle();
 	}
 
 	private void setupSubtitle(int currentPlayingIndex) {
@@ -1464,6 +1467,27 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			default:
 				break;
 		}
+	}
+	private void updateTitle() {
+		DownloadService downloadService = getDownloadService();
+		float playbackSpeed = downloadService.getPlaybackSpeed();
+
+		String title = context.getResources().getString(R.string.button_bar_now_playing);
+		int stringRes = -1;
+		if(playbackSpeed == 0.5f) {
+			stringRes = R.string.download_playback_speed_half;
+		} else if(playbackSpeed == 1.5f) {
+			stringRes = R.string.download_playback_speed_one_half;
+		} else if(playbackSpeed == 2.0f) {
+			stringRes = R.string.download_playback_speed_double;
+		} else if(playbackSpeed == 3.0f) {
+			stringRes = R.string.download_playback_speed_tripple;
+		}
+
+		if(stringRes != -1) {
+			title += " (" + context.getResources().getString(stringRes) + ")";
+		}
+		setTitle(title);
 	}
 
 	@Override
