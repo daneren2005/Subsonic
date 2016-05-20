@@ -10,7 +10,7 @@
     <string name="common.play_next">Suivant</string>
     <string name="common.play_last">Précédent</string>
 	<string name="common.download">Mettre en cache</string>
-    <string name="common.pin">Mettre en cache Permanent</string>
+    <string name="common.pin">Mettre en cache permanent</string>
     <string name="common.delete">Supprimer</string>
 	<string name="common.star">Favori</string>
 	<string name="common.unstar">Supp. favori</string>
@@ -19,11 +19,11 @@
 	<string name="common.comment">Commentaire</string>
 	<string name="common.public">Publique</string>
 	<string name="common.play_external">Jouer Video</string>
-	<string name="common.stream_external">Stream Video</string>
+	<string name="common.stream_external">Stream Vidéo</string>
 	<string name="common.confirm">Confirmer</string>
 	<string name="common.confirm_message">Voulez-vous %1$s %2$s ?</string>
 	<string name="common.confirm_message_cache">cache</string>
-	<string name="common.empty">Aucune donnée</string>
+	<string name="common.empty">Aucune données</string>
 	<string name="common.warning">Avertissement</string>
 
     <string name="button_bar.home">Accueil</string>
@@ -39,7 +39,7 @@
 
     <string name="main.welcome_title">Bienvenue !</string>
     <string name="main.welcome_text">Bienvenue dans DSub ! L\'application est actuellement configurée pour se connecter au serveur de démo Subsonic (<b>demo.subsonic.org</b>). Vous pouvez configurer votre propre serveur dans les paramètres. Choisir <b>Paramètres</b> et mettre à jour la configuration pour vous y connecter.</string>
-    	<string name="main.about_title">A propos de DSub</string>
+    	<string name="main.about_title">À propos de DSub</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
@@ -55,7 +55,7 @@
     <string name="main.settings">Paramètres</string>
     <string name="main.albums_title">Albums</string>
     <string name="main.albums_newest">Ajoutés récemments</string>
-    <string name="main.albums_recent">Joués récemment</string>
+    <string name="main.albums_recent">Joués récemments</string>
     <string name="main.albums_frequent">Les plus joués</string>
     <string name="main.albums_highest">Les mieux notés</string>
     <string name="main.albums_starred">Favoris</string>
@@ -64,7 +64,7 @@
 	<string name="main.albums_year">Par décennies</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Presser retour à nouveau pour quitter</string>
-	<string name="main.scan_complete">Completed scan of Server</string>
+	<string name="main.scan_complete">Analyse du server terminée</string>
 
 	<string name="menu.search">Recherche</string>
 	<string name="menu.shuffle">Hasard</string>
@@ -75,31 +75,31 @@
     
     <string name="menu.settings">Paramètres</string>
     <string name="menu.help">Aide</string>
-	<string name="menu.about">A propos</string>
+	<string name="menu.about">À propos</string>
 	<string name="menu.add_playlist">Ajouter à la playlist</string>
 	<string name="menu.remove_playlist">Supprimer de la playlist</string>
 	<string name="menu.deleted_playlist">Supprimer la playlist %s</string>
-	<string name="menu.deleted_playlist_error">Echec de la suppression de la playlist %s</string>
+	<string name="menu.deleted_playlist_error">Échec de la suppression de la playlist %s</string>
 	<string name="menu.log">Envoyer le journal</string>
 	<string name="menu.set_timer">Ajuster le minuteur</string>
 	<string name="menu.check_podcasts">Vérifier les nouveaux podcasts</string>
 	<string name="menu.add_podcast">Ajouter une chaîne</string>
 	<string name="menu.keep_synced">Synchronisation automatique</string>
 	<string name="menu.stop_sync">Arrêter la synchro.</string>
-	<string name="menu.show_all">Afficher tous les media</string>
+	<string name="menu.show_all">Afficher tous les médias</string>
 	<string name="menu.show_artist">Afficher l\'artiste</string>
 	<string name="menu.share">Partager</string>
 	<string name="menu.delete_cache">Supprimer du cache</string>
 	<string name="menu.cast">Diffuser vers appareil</string>
 	<string name="menu.faq">FAQ</string>
-	<string name="menu.add_user">Ajouter utilisateur</string>
-	<string name="menu.rescan">Relire le server</string>
+	<string name="menu.add_user">Ajouter un utilisateur</string>
+	<string name="menu.rescan">Relire le serveur</string>
 	<string name="menu.rate">Noter</string>
 
     <string name="playlist.label">Playlists</string>
-	<string name="playlist.update_info">Mise à jour informations</string>
+	<string name="playlist.update_info">Mise à jour des informations</string>
 	<string name="playlist.updated_info">Informations de la playlist %s mises à jour</string>
-	<string name="playlist.updated_info_error">Echec de la mise à jour des informations de la playlist %s</string>
+	<string name="playlist.updated_info_error">Échec de la mise à jour des informations de la playlist %s</string>
 	<string name="playlist.overwrite">Remplacer la playlist existante</string>
 	<string name="playlist.add_to">Ajouter à la playlist</string>
 	<string name="playlist.create_new">Créer une nouvelle</string>
@@ -119,7 +119,7 @@
 	<string name="select_album.offline">Déconnecté</string>
 	<string name="select_album.no_sdcard">Erreur : Aucune carte SD card disponible.</string>
     <string name="select_album.no_network">Problème : Aucun réseau disponible.</string>
-    <string name="select_album.not_licensed">Serveur sans licence valide. %d jours restant.</string>
+    <string name="select_album.not_licensed">Serveur sans licence valide. %d jours restants.</string>
     <string name="select_album.donate_dialog_message">Téléchargement illimité en supportant Subsonic.</string>
     <string name="select_album.donate_dialog_now">Maintenant</string>
     <string name="select_album.donate_dialog_later">Plus tard</string>
@@ -138,19 +138,19 @@
 	<string name="select_genre.songs">%d chansons</string>
 	<string name="select_genre.albums">%d albums</string>
 
-	<string name="select_podcasts.error">Une erreur est survenue avec ce podcast pendant le chargement.  Le serveur doit d\'abord le télécharger.</string>
-	<string name="select_podcasts.skipped">Ce podcast n\'a pas été chargé sur le serveur.  Le serveur doit d\'abord le télécharger.</string>
-    <string name="select_podcasts.initializing">Le chargement du podcast a commencer sur le serveur.  Recharger SVP dans quelques instants.</string>
+	<string name="select_podcasts.error">Une erreur est survenue avec ce podcast pendant le chargement. Le serveur doit d\'abord le télécharger.</string>
+	<string name="select_podcasts.skipped">Ce podcast n\'a pas été chargé sur le serveur. Le serveur doit d\'abord le télécharger.</string>
+    <string name="select_podcasts.initializing">Le chargement du podcast a commencé sur le serveur.  Recharger SVP dans quelques instants.</string>
 	<string name="select_podcasts.server_download">Télécharger sur le serveur</string>
 	<string name="select_podcasts.server_delete">Supprimer du serveur</string>
 	<string name="select_podcasts.downloading">Téléchargement %s sur le serveur</string>
-	<string name="select_podcasts.refreshing">Le serveur recherche les mises à jour de podcasts</string>
+	<string name="select_podcasts.refreshing">Le serveur recherche les mises à jour des podcasts</string>
 	<string name="select_podcasts.deleted">Podcast supprimé %s</string>
 	<string name="select_podcasts.deleted_error">Erreur lors de la suppression du podcast %s</string>
 	<string name="select_podcasts.add_url">URL :</string>
 	<string name="select_podcasts.created_error">Erreur lors de l\'ajout du podcast</string>
 	<string name="select_podcasts.invalid_podcast_channel">Podcast invalide : %s</string>
-	<string name="select_podcasts.delete">Supprimer podcast</string>
+	<string name="select_podcasts.delete">Supprimer le podcast</string>
 
     <string name="download.empty">La playlist est vide</string>
 	<string name="download.shuffle_loading">Chargement en cours liste au hasard...</string>
@@ -160,7 +160,7 @@
     <string name="download.menu_show_album">Afficher l\'album</string>
     <string name="download.menu_lyrics">Paroles</string>
 	<string name="download.menu_remove_all">Enlever tout</string>
-    <string name="download.menu_screen_on">Ecran actif</string>
+    <string name="download.menu_screen_on">Écran actif</string>
     <string name="download.menu_shuffle">Hasard</string>
 	<string name="download.menu_toggle">Basculer</string>
     <string name="download.menu_save">Enregistrer la playlist</string>
@@ -187,8 +187,8 @@
 	<string name="download.downloading_summary">En cours : %1$s</string>
 	<string name="download.downloading_summary_expanded">En cours : %1$s
 		\nTaille estimée : %2$s</string>
-	<string name="download.failed_to_load">Echec du chargement</string>
-	<string name="download.save_bookmark_failed">Echec de la création du favori</string>
+	<string name="download.failed_to_load">Échec du chargement</string>
+	<string name="download.save_bookmark_failed">Échec de la création du favori</string>
 
 	<string name="sync.new_podcasts">Nouveaux podcasts disponibles</string>
 	<string name="sync.new_playlists">Nouveaux titres dans les playlists</string>
@@ -197,17 +197,17 @@
     
 	<string name="starring_content_starred">Noté \&quot;%s\&quot;</string>
 	<string name="starring_content_unstarred">Dévalués \&quot;%s\&quot;</string>
-    <string name="starring_content_error">Echec de la mise à jour \&quot;%s\&quot;, Réessayer plus tard.</string>
+    <string name="starring_content_error">Échec de la mise à jour \&quot;%s\&quot;, réessayer plus tard.</string>
 	
-	<string name="playlist_error">Echec de la récupération des playlists</string>
+	<string name="playlist_error">Échec de la récupération des playlists</string>
 	<string name="updated_playlist">Titre %1$s ajouté à \&quot;%2$s\&quot;</string>
-    <string name="updated_playlist_error">Echec de la mise à jour \&quot;%s\&quot;, réessayer plus tard.</string>
+    <string name="updated_playlist_error">Échec de la mise à jour \&quot;%s\&quot;, réessayer plus tard.</string>
 	<string name="removed_playlist">Titre %1$s retiré de \&quot;%2$s\&quot;</string>
 	
 	<string name="bookmark.delete">Supprimer le favori</string>
-	<string name="bookmark.delete_title">Dupprimer le favori pour</string>
+	<string name="bookmark.delete_title">Supprimer le favori pour</string>
 	<string name="bookmark.deleted">Favori pour \&quot;%s\&quot; supprimé</string>
-	<string name="bookmark.deleted_error">Echec de la suppression du favori pour \&quot;%s\&quot;</string>
+	<string name="bookmark.deleted_error">Échec de la suppression du favori pour \&quot;%s\&quot;</string>
 	<string name="bookmark.details_title">Détails du favori</string>
 	<string name="bookmark.details">Titre : %1$s
 		\nPosition : %2$s
@@ -217,13 +217,13 @@
 	<string name="bookmark.resume_title">Reprendre la lecture ?</string>
 	<string name="bookmark.resume">Reprendre la lecture de \'%1$s\' depuis %2$s</string>
 	<string name="bookmark.action_resume">Reprendre</string>
-	<string name="bookmark.action_start_over">Start Over</string>
+	<string name="bookmark.action_start_over">Relire depuis le début</string>
 
 	<string name="rating.title">Noter \"%s\"</string>
 	<string name="rating.set_rating">Note attribuée à \"%s\"</string>
 	<string name="rating.set_rating_failed">Echec de l\'attribution de la note à \"%s\"</string>
 	<string name="rating.remove_rating">Note supprimée pour \"%s\"</string>
-	<string name="rating.remove_rating_failed">Echec de la suppression de la note pour \"%s\"</string>
+	<string name="rating.remove_rating_failed">Échec de la suppression de la note pour \"%s\"</string>
 
 	<string name="song_details.error">Erreur</string>
 	<string name="song_details.skipped">Ignoré</string>
@@ -264,9 +264,9 @@
     <string name="settings.invalid_username">Saisir un nom d\'utilisateur valide (espaces interdits).</string>
     <string name="settings.appearance_title">Apparence</string>
     <string name="settings.theme_title">Thème</string>
-    <string name="settings.theme_light">Light</string>
-    <string name="settings.theme_dark">Dark</string>
-	<string name="settings.theme_black">Black</string>
+    <string name="settings.theme_light">Clair</string>
+    <string name="settings.theme_dark">Sombre</string>
+	<string name="settings.theme_black">Noir</string>
 	<string name="settings.theme_holo">Holo</string>
 	<string name="settings.theme_fullscreen">Plein écran</string>
 	<string name="settings.theme_fullscreen_summary">Cacher autant d\'élément graphique que possible</string>
@@ -300,8 +300,8 @@
     <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
     <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
     <string name="settings.max_bitrate_unlimited">Illimité</string>
-    <string name="settings.wifi_required_title">Streaming en Wifi uniquement</string>
-    <string name="settings.wifi_required_summary">Ne lire les média qu\'avec une connexion Wifi</string>
+    <string name="settings.wifi_required_title">Streaming en wifi uniquement</string>
+    <string name="settings.wifi_required_summary">Ne lire les média qu\'avec une connexion wifi</string>
 	<string name="settings.network_timeout_title">Délai d\'attente réseau (timeout)</string>
 	<string name="settings.network_timeout_10000">10 secondes</string>
 	<string name="settings.network_timeout_15000">15 secondes</string>
@@ -331,7 +331,7 @@
 	<string name="settings.playlist_random_size_title">Taille de la liste de lecture aléatoire</string>
 	<string name="settings.sleep_timer_title">Temporisateur</string>
 	<string name="settings.sleep_timer_duration_title">Durée temporisation</string>
-	<string name="settings.sleep_timer_off">Eteindre</string>
+	<string name="settings.sleep_timer_off">Éteindre</string>
 	<string name="settings.sleep_timer_on">Allumer</string>
 	<string name="settings.sleep_timer_always_on">Toujours en fonctionnement</string>
 	<string name="settings.temp_loss_title">Perte temporaire de focus</string>
@@ -405,7 +405,7 @@
 	<string name="settings.admin_enabled">Administration</string>
 	<string name="settings.admin_enabled_summary">Afficher ou non l\'accès aux outils d\'administration</string>
 
-	<string name="shuffle.title">Shuffle By</string>
+	<string name="shuffle.title">Mélanger par</string>
 	<string name="shuffle.startYear">Année début :</string>
 	<string name="shuffle.endYear">Année fin :</string>
 	<string name="shuffle.genre">Genre :</string>
@@ -414,11 +414,11 @@
 	<string name="share.expires">Expiration : %s</string>
 	<string name="share.expires_never">N\'expire jamais</string>
 	<string name="share.deleted">Supprimer le partage %s</string>
-	<string name="share.deleted_error">Echec de la suppression du partage %s</string>
+	<string name="share.deleted_error">Échec de la suppression du partage %s</string>
 	<string name="share.no_expiration">Pas d\'expiration</string>
 	<string name="share.expiration">Expiration :</string>
 	<string name="share.updated_info">Informations de partage mises à jour pour %s</string>
-	<string name="share.updated_info_error">Echec de la mise à jour des informations de partage pour %s</string>
+	<string name="share.updated_info_error">Échec de la mise à jour des informations de partage pour %s</string>
 	<string name="share.via">Partager via</string>
 	<string name="share.delete">Supprimer le partage</string>
 
@@ -430,20 +430,20 @@
 	<string name="admin.change_username_invalid">Saisir un nom d\'utilisateur valide</string>
 	<string name="admin.update_permissions">Mettre à jour les autorisations</string>
 	<string name="admin.update_permissions_success">Autorisation mises à jour pour %1$s</string>
-	<string name="admin.update_permissions_error">Echec lors de lamise à jour des autorisations de %1$s</string>
+	<string name="admin.update_permissions_error">Échec lors de lamise à jour des autorisations de %1$s</string>
 	<string name="admin.change_email">Modifier Email</string>
 	<string name="admin.change_email_success">Email remplacé pour %1$s</string>
-	<string name="admin.change_email_error">Echec lors du remplacement de l\'Email de %1$s</string>
+	<string name="admin.change_email_error">Échec lors du remplacement de l\'Email de %1$s</string>
 	<string name="admin.change_email_label">Nouvel Email :</string>
 	<string name="admin.change_email_invalid">Saisir un Email valide</string>
 	<string name="admin.change_password">Modifier le mot de passe</string>
 	<string name="admin.change_password_success">Mot de passe modifié pour %1$s</string>
-	<string name="admin.change_password_error">Echec du remplacement du mot de passe pour %1$s</string>
+	<string name="admin.change_password_error">Échec du remplacement du mot de passe pour %1$s</string>
 	<string name="admin.change_password_label">Nouveau mot de passe :</string>
 	<string name="admin.change_password_invalid">Saisir un mot de passe valide</string>
 	<string name="admin.delete_user">Supprimer l\'utilisateur</string>
 	<string name="admin.delete_user_success">Suppression effectuée %1$s</string>
-	<string name="admin.delete_user_error">Echec de la suppression %1$s</string>
+	<string name="admin.delete_user_error">Échec de la suppression %1$s</string>
 	<string name="admin.confirm_password">Confirmer le mot de passe</string>
 	<string name="admin.confirm_password_bad">Mot de passe saisi erroné</string>
 	
@@ -455,7 +455,7 @@
 	<string name="admin.role.coverArt">Modifier les pochettes</string>
 	<string name="admin.role.comment">Ajouter des commentaires</string>
 	<string name="admin.role.podcast">Gérer les podcasts</string>
-	<string name="admin.role.stream">Ecouter de la musique</string>
+	<string name="admin.role.stream">Écouter de la musique</string>
 	<string name="admin.role.jukebox">Télécommander la lecture (jukebox)</string>
 	<string name="admin.role.share">Gérer les partages</string>
 	<string name="admin.role.lastfm">Utiliser Last.FM</string>
@@ -469,8 +469,8 @@
 
     <string name="service.connecting">Interrogation du serveur, veuillez patienter.</string>
 
-    <string name="parser.upgrade_client"> Versions incompatible. Mettre à jour DSub.</string>
-    <string name="parser.upgrade_server">Versions incompatibles. Mettre à jour le serveur Subsonic.</string>
+    <string name="parser.upgrade_client">Version incompatible. Mettre à jour DSub.</string>
+    <string name="parser.upgrade_server">Version incompatible. Mettre à jour le serveur Subsonic.</string>
     <string name="parser.not_authenticated">Mauvais nom d\'utilisateur ou mot de passe.</string>
     <string name="parser.not_authorized">Non autorisé. Vérifier les droit de l\'utilisateur sur le serveur Subsonic.</string>
     <string name="parser.artist_count">%d artistes récupérés.</string>
@@ -480,9 +480,9 @@
 	<string name="select_artist.folder">Sélectionner un dossier</string>
     <string name="select_artist.all_folders">Tous les dossier</string>
 
-    <string name="equalizer.label">Equaliseur</string>
+    <string name="equalizer.label">Équaliseur</string>
     <string name="equalizer.enabled">Activé</string>
-    <string name="equalizer.preset">Selectioner un préréglage</string>
+    <string name="equalizer.preset">Sélectionner un préréglage</string>
 	<string name="equalizer.bass_booster">Bass Booster</string>
 	<string name="equalizer.voice_booster">Voice Booster</string>
 	<string name="equalizer.db_size">%d dB</string>
@@ -501,8 +501,8 @@
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
 
-	<string name="changelog_full_title">Change Log</string>
-    <string name="changelog_title">What\'s New</string>
+	<string name="changelog_full_title">Liste des changements</string>
+    <string name="changelog_title">Nouveautés</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Plus…</string>
 
