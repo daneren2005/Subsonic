@@ -1769,13 +1769,13 @@ public class RESTMusicService implements MusicService {
 		int count = offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
 		int retry = 0;
 		for(int i = 1; i <= count; i++) {
-			String id = offline.getString(Constants.OFFLINE_SCROBBLE_ID + i, null);
-			long time = offline.getLong(Constants.OFFLINE_SCROBBLE_TIME + i, 0);
-			if(id != null) {
-				scrobble(id, true, time, context, progressListener);
-			} else {
-				String search = offline.getString(Constants.OFFLINE_SCROBBLE_SEARCH + i, "");
-				try{
+			try {
+				String id = offline.getString(Constants.OFFLINE_SCROBBLE_ID + i, null);
+				long time = offline.getLong(Constants.OFFLINE_SCROBBLE_TIME + i, 0);
+				if(id != null) {
+					scrobble(id, true, time, context, progressListener);
+				} else {
+					String search = offline.getString(Constants.OFFLINE_SCROBBLE_SEARCH + i, "");
 					SearchCritera critera = new SearchCritera(search, 0, 0, 1);
 					SearchResult result = searchNew(critera, context, progressListener);
 					if(result.getSongs().size() == 1){
@@ -1787,10 +1787,10 @@ public class RESTMusicService implements MusicService {
 						throw new Exception("Song not found on server");
 					}
 				}
-				catch(Exception e){
-					Log.e(TAG, e.toString());
-					retry++;
-				}
+			}
+			catch(Exception e){
+				Log.e(TAG, e.toString());
+				retry++;
 			}
 		}
 
