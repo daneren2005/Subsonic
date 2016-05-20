@@ -401,10 +401,10 @@ public class DownloadServiceLifecycleSupport {
 		} else if(event.getAction() == KeyEvent.ACTION_UP) {
 			switch (event.getKeyCode()) {
 				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
-				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
 					downloadService.togglePlayPause();
 					break;
 				case KeyEvent.KEYCODE_HEADSETHOOK:
+				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
 					if(lastPressTime < (System.currentTimeMillis() - 500)) {
 						lastPressTime = System.currentTimeMillis();
 						downloadService.togglePlayPause();
