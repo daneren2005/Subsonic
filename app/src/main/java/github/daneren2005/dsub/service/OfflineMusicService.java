@@ -775,7 +775,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception {
+	public MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

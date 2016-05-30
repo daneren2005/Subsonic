@@ -1336,8 +1336,8 @@ public class RESTMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getNewestPodcasts", null, Arrays.asList("count"), Arrays.<Object>asList(count));
+	public MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception {
+		Reader reader = getReader(context, progressListener, "getNewestPodcasts", null, Arrays.asList("count"), Arrays.<Object>asList(count), true);
 
 		try {
 			return new PodcastEntryParser(context, getInstance(context)).parse(null, reader, progressListener);

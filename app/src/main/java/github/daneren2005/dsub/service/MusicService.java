@@ -149,7 +149,7 @@ public interface MusicService {
 	
 	MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception;
 
-	MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception;
+	MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception;
 	
 	void refreshPodcasts(Context context, ProgressListener progressListener) throws Exception;
 	
