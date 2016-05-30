@@ -61,7 +61,6 @@ public class CardView extends FrameLayout{
 		// clipPath is not supported with Hardware Acceleration before API 18
 		// http://stackoverflow.com/questions/8895677/work-around-canvas-clippath-that-is-not-supported-in-android-any-more/8895894#8895894
 		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 && isHardwareAccelerated()) {
-			Log.d(TAG, "Change to software");
 			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 		}
 	}

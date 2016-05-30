@@ -78,7 +78,6 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 			} else {
 				visibleSection.addAll(fullSection.subList(0, defaultVisible));
 				this.sectionsExtras.add(fullSection.subList(defaultVisible, fullSection.size()));
-				Log.d(TAG, visibleSection.size() + " + " + this.sectionsExtras.get(i).size());
 			}
 			this.sections.add(visibleSection);
 
