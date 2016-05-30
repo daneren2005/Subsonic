@@ -133,7 +133,16 @@ public abstract class AbstractParser {
     }
 
     protected int nextParseEvent() throws Exception {
-        return parser.next();
+		try {
+			return parser.next();
+		} catch(Exception e) {
+			if(ServerInfo.isMadsonic6(context, instance)) {
+				ServerInfo overrideInfo = new ServerInfo();
+				overrideInfo.saveServerInfo(context, instance);
+			}
+
+			throw e;
+		}
     }
 
     protected String getElementName() {
@@ -162,6 +171,11 @@ public abstract class AbstractParser {
 
     protected void validate() throws Exception {
         if (!rootElementFound) {
+			if(ServerInfo.isMadsonic6(context, instance)) {
+				ServerInfo overrideInfo = new ServerInfo();
+				overrideInfo.saveServerInfo(context, instance);
+			}
+
             throw new Exception(context.getResources().getString(R.string.background_task_parse_error));
         }
     }

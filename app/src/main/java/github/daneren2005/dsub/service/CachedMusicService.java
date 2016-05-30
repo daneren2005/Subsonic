@@ -22,8 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -59,7 +57,6 @@ import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.TimeLimitedCache;
 import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.Util;
 
 import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
@@ -926,8 +923,18 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getNewestPodcastEpisodes(int count, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getNewestPodcastEpisodes(count, context, progressListener);
+	public MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception {
+		MusicDirectory result = null;
+
+		String cacheName = getCacheName(context, "newestPodcastEpisodes");
+		try {
+			result = musicService.getNewestPodcastEpisodes(refresh, context, progressListener, count);
+			FileUtil.serialize(context, result, cacheName);
+		} catch(IOException e) {
+			result = FileUtil.deserialize(context, cacheName, MusicDirectory.class, 24);
+		} finally {
+			return result;
+		}
 	}
 
 	@Override

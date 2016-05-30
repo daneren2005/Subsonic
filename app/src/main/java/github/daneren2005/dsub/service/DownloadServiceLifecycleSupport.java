@@ -56,6 +56,7 @@ import static github.daneren2005.dsub.domain.PlayerState.PREPARING;
 public class DownloadServiceLifecycleSupport {
 	private static final String TAG = DownloadServiceLifecycleSupport.class.getSimpleName();
 	public static final String FILENAME_DOWNLOADS_SER = "downloadstate2.ser";
+	private static final int DEBOUNCE_TIME = 200;
 
 	private final DownloadService downloadService;
 	private Looper eventLooper;
@@ -400,10 +401,10 @@ public class DownloadServiceLifecycleSupport {
 		} else if(event.getAction() == KeyEvent.ACTION_UP) {
 			switch (event.getKeyCode()) {
 				case RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE:
-				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
 					downloadService.togglePlayPause();
 					break;
 				case KeyEvent.KEYCODE_HEADSETHOOK:
+				case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
 					if(lastPressTime < (System.currentTimeMillis() - 500)) {
 						lastPressTime = System.currentTimeMillis();
 						downloadService.togglePlayPause();
@@ -413,11 +414,17 @@ public class DownloadServiceLifecycleSupport {
 					break;
 				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:
 				case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-					downloadService.previous();
+					if(lastPressTime < (System.currentTimeMillis() - DEBOUNCE_TIME)) {
+						lastPressTime = System.currentTimeMillis();
+						downloadService.previous();
+					}
 					break;
 				case RemoteControlClient.FLAG_KEY_MEDIA_NEXT:
 				case KeyEvent.KEYCODE_MEDIA_NEXT:
-					downloadService.next();
+					if(lastPressTime < (System.currentTimeMillis() - DEBOUNCE_TIME)) {
+						lastPressTime = System.currentTimeMillis();
+						downloadService.next();
+					}
 					break;
 				case KeyEvent.KEYCODE_MEDIA_REWIND:
 					downloadService.rewind();

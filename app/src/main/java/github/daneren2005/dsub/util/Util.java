@@ -1418,72 +1418,79 @@ public final class Util {
      * <p>Broadcasts the given song info as the new song being played.</p>
      */
     public static void broadcastNewTrackInfo(Context context, MusicDirectory.Entry song) {
-		DownloadService downloadService = (DownloadService)context;
-        Intent intent = new Intent(EVENT_META_CHANGED);
-		Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
+		try {
+			Intent intent = new Intent(EVENT_META_CHANGED);
+			Intent avrcpIntent = new Intent(AVRCP_METADATA_CHANGED);
 
-        if (song != null) {
-            intent.putExtra("title", song.getTitle());
-            intent.putExtra("artist", song.getArtist());
-            intent.putExtra("album", song.getAlbum());
+			if (song != null) {
+				intent.putExtra("title", song.getTitle());
+				intent.putExtra("artist", song.getArtist());
+				intent.putExtra("album", song.getAlbum());
 
-            File albumArtFile = FileUtil.getAlbumArtFile(context, song);
-            intent.putExtra("coverart", albumArtFile.getAbsolutePath());
-			avrcpIntent.putExtra("playing", true);
-        } else {
-            intent.putExtra("title", "");
-            intent.putExtra("artist", "");
-            intent.putExtra("album", "");
-            intent.putExtra("coverart", "");
-			avrcpIntent.putExtra("playing", false);
-        }
-		addTrackInfo(context, song, avrcpIntent);
+				File albumArtFile = FileUtil.getAlbumArtFile(context, song);
+				intent.putExtra("coverart", albumArtFile.getAbsolutePath());
+				avrcpIntent.putExtra("playing", true);
+			} else {
+				intent.putExtra("title", "");
+				intent.putExtra("artist", "");
+				intent.putExtra("album", "");
+				intent.putExtra("coverart", "");
+				avrcpIntent.putExtra("playing", false);
+			}
+			addTrackInfo(context, song, avrcpIntent);
 
-        context.sendBroadcast(intent);
-		context.sendBroadcast(avrcpIntent);
+			context.sendBroadcast(intent);
+			context.sendBroadcast(avrcpIntent);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to broadcastNewTrackInfo", e);
+		}
     }
 
     /**
      * <p>Broadcasts the given player state as the one being set.</p>
      */
     public static void broadcastPlaybackStatusChange(Context context, MusicDirectory.Entry song, PlayerState state) {
-        Intent intent = new Intent(EVENT_PLAYSTATE_CHANGED);
-		Intent avrcpIntent = new Intent(AVRCP_PLAYSTATE_CHANGED);
+		try {
+			Intent intent = new Intent(EVENT_PLAYSTATE_CHANGED);
+			Intent avrcpIntent = new Intent(AVRCP_PLAYSTATE_CHANGED);
 
-        switch (state) {
-            case STARTED:
-                intent.putExtra("state", "play");
-				avrcpIntent.putExtra("playing", true);
-                break;
-            case STOPPED:
-                intent.putExtra("state", "stop");
-				avrcpIntent.putExtra("playing", false);
-                break;
-            case PAUSED:
-                intent.putExtra("state", "pause");
-				avrcpIntent.putExtra("playing", false);
-                break;
-			case PREPARED:
-				// Only send quick pause event for samsung devices, causes issues for others
-				if(Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+			switch (state) {
+				case STARTED:
+					intent.putExtra("state", "play");
+					avrcpIntent.putExtra("playing", true);
+					break;
+				case STOPPED:
+					intent.putExtra("state", "stop");
 					avrcpIntent.putExtra("playing", false);
-				} else {
-					return; // Don't broadcast anything
-				}
-				break;
-            case COMPLETED:
-                intent.putExtra("state", "complete");
-				avrcpIntent.putExtra("playing", false);
-                break;
-            default:
-                return; // No need to broadcast.
-        }
-		addTrackInfo(context, song, avrcpIntent);
+					break;
+				case PAUSED:
+					intent.putExtra("state", "pause");
+					avrcpIntent.putExtra("playing", false);
+					break;
+				case PREPARED:
+					// Only send quick pause event for samsung devices, causes issues for others
+					if (Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+						avrcpIntent.putExtra("playing", false);
+					} else {
+						return; // Don't broadcast anything
+					}
+					break;
+				case COMPLETED:
+					intent.putExtra("state", "complete");
+					avrcpIntent.putExtra("playing", false);
+					break;
+				default:
+					return; // No need to broadcast.
+			}
+			addTrackInfo(context, song, avrcpIntent);
 
-		if(state != PlayerState.PREPARED) {
-			context.sendBroadcast(intent);
+			if (state != PlayerState.PREPARED) {
+				context.sendBroadcast(intent);
+			}
+			context.sendBroadcast(avrcpIntent);
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to broadcastPlaybackStatusChange", e);
 		}
-		context.sendBroadcast(avrcpIntent);
     }
 
 	private static void addTrackInfo(Context context, MusicDirectory.Entry song, Intent intent) {

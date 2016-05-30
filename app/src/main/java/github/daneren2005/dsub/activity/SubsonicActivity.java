@@ -883,8 +883,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		restart(true);
 	}
 	protected void restart(boolean resumePosition) {
-		Intent intent = new Intent(this, ((Object) this).getClass());
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		Intent intent = new Intent(this, this.getClass());
 		intent.putExtras(getIntent());
 		if(resumePosition) {
 			intent.putExtra(Constants.FRAGMENT_POSITION, lastSelectedPosition);
@@ -893,6 +892,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			intent.putExtra(Constants.INTENT_EXTRA_FRAGMENT_TYPE, fragmentType);
 			intent.putExtra(Constants.FRAGMENT_POSITION, getDrawerItemId(fragmentType));
 		}
+		finish();
 		Util.startActivityWithoutTransition(this, intent);
 	}
 
