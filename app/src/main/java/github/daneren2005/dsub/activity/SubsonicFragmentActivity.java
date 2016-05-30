@@ -396,14 +396,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			if(currentFragment instanceof SearchFragment) {
 				String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 				boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-				boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
 
 				if (query != null) {
 					((SearchFragment)currentFragment).search(query, autoplay);
-				} else {
-					if (requestsearch) {
-						onSearchRequested();
-					}
 				}
 				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 			} else {

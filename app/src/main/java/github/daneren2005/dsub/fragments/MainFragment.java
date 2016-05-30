@@ -63,6 +63,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.main, menu);
+		onFinishSetupOptionsMenu(menu);
 
 		try {
 			if (!ServerInfo.isMadsonic(context) || !UserUtil.isCurrentAdmin()) {

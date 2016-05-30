@@ -5,13 +5,14 @@
 		android:id="@+id/menu_global_search"
 		android:icon="?attr/search"
 		android:title="@string/menu.search"
-		compat:showAsAction="always|withText"/>
+		compat:actionViewClass="android.support.v7.widget.SearchView"
+		compat:showAsAction="ifRoom|collapseActionView"/>
 
 	<item 
 		android:id="@+id/menu_global_shuffle"
 		android:icon="?attr/shuffle"
 		android:title="@string/menu.shuffle"
-		compat:showAsAction="always|withText"/>
+		compat:showAsAction="ifRoom|withText"/>
 
 	<group android:id="@+id/not_touchscreen">
 		<item
