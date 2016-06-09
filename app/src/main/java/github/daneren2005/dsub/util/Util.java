@@ -919,6 +919,10 @@ public final class Util {
 		return formatDate(context, dateString, true);
 	}
 	public static String formatDate(Context context, String dateString, boolean includeTime) {
+		if(dateString == null) {
+			return "";
+		}
+
 		try {
 			dateString = dateString.replace(' ', 'T');
 			boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
