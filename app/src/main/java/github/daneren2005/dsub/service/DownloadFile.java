@@ -84,6 +84,9 @@ public class DownloadFile implements BufferFile {
     public MusicDirectory.Entry getSong() {
         return song;
     }
+	public boolean isSong() {
+		return song.isSong();
+	}
 
 	public Context getContext() {
 		return context;

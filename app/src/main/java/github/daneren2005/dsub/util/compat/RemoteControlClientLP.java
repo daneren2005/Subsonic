@@ -145,11 +145,17 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			position = downloadService.getPlayerPosition();
 		}
 		builder.setState(newState, position, 1.0f);
-		builder.setActions(getPlaybackActions());
-
 		DownloadFile downloadFile = downloadService.getCurrentPlaying();
+		Entry entry = null;
+		boolean isSong = true;
 		if(downloadFile != null) {
-			Entry entry = downloadFile.getSong();
+			entry = downloadFile.getSong();
+			isSong = entry.isSong();
+		}
+
+		builder.setActions(getPlaybackActions(isSong));
+
+		if(entry != null) {
 			addCustomActions(entry, builder);
 			builder.setActiveQueueItemId(entry.getId().hashCode());
 		}
@@ -231,7 +237,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		return mediaSession;
 	}
 
-	protected long getPlaybackActions() {
+	protected long getPlaybackActions(boolean isSong) {
 		long actions = PlaybackState.ACTION_PLAY |
 				PlaybackState.ACTION_PAUSE |
 				PlaybackState.ACTION_SEEK_TO |
@@ -239,10 +245,15 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		int currentIndex = downloadService.getCurrentPlayingIndex();
 		int size = downloadService.size();
-		if(currentIndex > 0) {
+		if(isSong) {
+			if (currentIndex > 0) {
+				actions |= PlaybackState.ACTION_SKIP_TO_PREVIOUS;
+			}
+			if (currentIndex < size - 1) {
+				actions |= PlaybackState.ACTION_SKIP_TO_NEXT;
+			}
+		} else {
 			actions |= PlaybackState.ACTION_SKIP_TO_PREVIOUS;
-		}
-		if(currentIndex < size - 1) {
 			actions |= PlaybackState.ACTION_SKIP_TO_NEXT;
 		}
 
@@ -311,7 +322,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 				return null;
 			}
-			
+
 			private void playFromParent(Entry parent) throws Exception {
 				List<Entry> songs = new ArrayList<>();
 				getSongsRecursively(parent, songs);

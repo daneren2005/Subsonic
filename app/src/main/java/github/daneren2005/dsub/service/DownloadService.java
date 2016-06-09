@@ -1163,8 +1163,8 @@ public class DownloadService extends Service {
 		}
 
 		// If only one song, just skip within song
-		if(size() == 1) {
-			seekTo(getPlayerPosition() - REWIND);
+		if(size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+			rewind();
 			return;
 		}
 
@@ -1189,8 +1189,8 @@ public class DownloadService extends Service {
 	}
 	public synchronized void next(boolean forceCutoff, boolean forceStart) {
 		// If only one song, just skip within song
-		if(size() == 1) {
-			seekTo(getPlayerPosition() + FAST_FORWARD);
+		if(size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+			fastForward();
 			return;
 		} else if(playerState == PREPARING || playerState == PREPARED) {
 			return;
