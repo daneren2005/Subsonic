@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="5.1.8" versioncode="178" releasedate="5/9/2016">
+	<release version="5.1.8" versioncode="178" releasedate="6/9/2016">
 		<change>Improved Search Bar</change>
 		<change>Display songs in root folder</change>
 		<change>Heads Up Setting: Only when out of app</change>
