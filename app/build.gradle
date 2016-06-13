@@ -8,8 +8,8 @@ android {
 		applicationId "github.daneren2005.dsub"
 		minSdkVersion 14
 		targetSdkVersion 22
-		versionCode 180
-		versionName '5.1.8'
+		versionCode 181
+		versionName '5.1.9'
 		setProperty("archivesBaseName", "DSub $versionName")
 	}
 	buildTypes {

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="5.1.8" versioncode="178" releasedate="6/9/2016">
+	<release version="5.1.9" versioncode="181" releasedate="6/13/2016">
+		<change>Fix First level artists option</change>
+		<change>Fix some artist menu items missing</change>
+	</release>
+	<release version="5.1.8" versioncode="179" releasedate="6/9/2016">
 		<change>Improved Search Bar</change>
 		<change>Display songs in root folder</change>
 		<change>Heads Up Setting: Only when out of app</change>
