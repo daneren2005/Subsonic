@@ -1942,7 +1942,7 @@ public class RESTMusicService implements MusicService {
             for (int i = 0; i < parameterNames.size(); i++) {
                 builder.append("&").append(parameterNames.get(i)).append("=");
 				String part = URLEncoder.encode(String.valueOf(parameterValues.get(i)), "UTF-8");
-				part = part.replaceAll("\\%27", "&#39;");
+				part = part.replaceAll("\\%27", "'");
                 builder.append(part);
             }
             url = builder.toString();
