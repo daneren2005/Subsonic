@@ -208,8 +208,18 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
-							if(!isCancelled()) {
-								onDone(result);
+							if (!isCancelled()) {
+								try {
+									onDone(result);
+								} catch (Throwable t) {
+									if(!isCancelled()) {
+										try {
+											onError(t);
+										} catch(Exception e) {
+											// Don't care
+										}
+									}
+								}
 							}
 
 							taskStart.set(false);
