@@ -71,6 +71,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private boolean showPodcast = false;
 	private boolean isPlayed = false;
 	private boolean isPlayedShown = false;
+	private boolean showAlbum = false;
 
 	public SongView(Context context) {
 		super(context);
@@ -114,7 +115,11 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 				}
 			}
 			else if(song.getArtist() != null) {
-				artist.append(song.getArtist());
+				if(showAlbum) {
+					artist.append(song.getAlbum());
+				} else {
+					artist.append(song.getArtist());
+				}
 			}
 
 			if(isPodcast) {
@@ -353,5 +358,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 	public void setShowPodcast(boolean showPodcast) {
 		this.showPodcast = showPodcast;
+	}
+
+	public void setShowAlbum(boolean showAlbum) {
+		this.showAlbum = showAlbum;
 	}
 }
