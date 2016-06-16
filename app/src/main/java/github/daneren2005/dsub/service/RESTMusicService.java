@@ -696,7 +696,13 @@ public class RESTMusicService implements MusicService {
 
 		int instance = getInstance(context);
 		String method;
-		if(ServerInfo.isMadsonic(context, instance)) {
+		if(ServerInfo.isMadsonic6(context, instance)) {
+			if (Util.isTagBrowsing(context, instance)) {
+				method = "getSimilarSongsID3";
+			} else {
+				method = "getSimilarSongs";
+			}
+		} else if(ServerInfo.isMadsonic(context, instance)) {
 			method = "getPandoraSongs";
 		} else {
 			if (Util.isTagBrowsing(context, instance)) {
