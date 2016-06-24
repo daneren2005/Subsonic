@@ -386,7 +386,7 @@ public class DownloadServiceLifecycleSupport {
 		return lastChange;
 	}
 
-	private void handleKeyEvent(KeyEvent event) {
+	public void handleKeyEvent(KeyEvent event) {
 		if(event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() > 0) {
 			switch (event.getKeyCode()) {
 				case RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS:

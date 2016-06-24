@@ -87,6 +87,7 @@ import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.support.v4.util.LruCache;
+import android.view.KeyEvent;
 
 /**
  * @author Sindre Mehus
@@ -2661,6 +2662,10 @@ public class DownloadService extends Service {
 	}
 	public void acquireWakelock(int ms) {
 		wakeLock.acquire(ms);
+	}
+
+	public void handleKeyEvent(KeyEvent keyEvent) {
+		lifecycleSupport.handleKeyEvent(keyEvent);
 	}
 
 	public void addOnSongChangedListener(OnSongChangedListener listener) {

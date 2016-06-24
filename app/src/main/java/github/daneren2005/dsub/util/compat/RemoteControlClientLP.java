@@ -34,7 +34,10 @@ import android.media.session.PlaybackState;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.media.MediaRouter;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -579,6 +582,19 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			} else if(CUSTOM_ACTION_STAR.equals(action)) {
 				downloadService.toggleStarred();
 			}
+		}
+
+		@Override
+		public boolean onMediaButtonEvent(@NonNull Intent mediaButtonIntent) {
+			if (getMediaSession() != null && Intent.ACTION_MEDIA_BUTTON.equals(mediaButtonIntent.getAction())) {
+				KeyEvent keyEvent = mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+				if (keyEvent != null) {
+					downloadService.handleKeyEvent(keyEvent);
+					return true;
+				}
+			}
+
+			return super.onMediaButtonEvent(mediaButtonIntent);
 		}
 	}
 }
