@@ -412,13 +412,15 @@ public final class Util {
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
 		if(allowAltAddress && Util.isWifiConnected(context)) {
 			String SSID = prefs.getString(Constants.PREFERENCES_KEY_SERVER_LOCAL_NETWORK_SSID + instance, "");
-			String currentSSID = Util.getSSID(context);
-			
-			String[] ssidParts = SSID.split(",");
-			if("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
-				String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
-				if(internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
-					serverUrl = internalUrl;
+			if(!SSID.isEmpty()) {
+				String currentSSID = Util.getSSID(context);
+
+				String[] ssidParts = SSID.split(",");
+				if ("".equals(SSID) || SSID.equals(currentSSID) || Arrays.asList(ssidParts).contains(currentSSID)) {
+					String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
+					if (internalUrl != null && !"".equals(internalUrl) && !"http://".equals(internalUrl)) {
+						serverUrl = internalUrl;
+					}
 				}
 			}
 		}
