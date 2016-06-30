@@ -6,7 +6,7 @@
     <string name="common.save">Guardar</string>
     <string name="common.cancel">Cancelar</string>
     <string name="common.play_now">Reproduzir</string>
-	<string name="common.play_shuffled">Reproduzir aleatóriamente</string>
+	<string name="common.play_shuffled">Reproduzir aleatoriamente</string>
     <string name="common.play_next">Reproduzir a seguir</string>
     <string name="common.play_last">Reproduzir no final</string>
 	<string name="common.download">Cache</string>
@@ -73,6 +73,10 @@
 	<string name="main.albums_alphabetical">Alfabeticamente</string>
 	<string name="main.videos">Vídeos</string>
 	<string name="main.songs_genres">@string/main.albums_genres</string>
+	<string name="main.songs_newest">@string/main.albums_newest</string>
+	<string name="main.songs_top_played">Top de reproduções</string>
+	<string name="main.songs_recent">@string/main.albums_recent</string>
+	<string name="main.songs_frequent">@string/main.albums_frequent</string>
 	<string name="main.back_confirm">Prima \"voltar\" novamente para sair</string>
 	<string name="main.scan_complete">Análise ao servidor completa</string>
 	<string name="main.artist">Artista</string>
@@ -106,8 +110,9 @@
 	<string name="menu.add_user">Adicionar utilizador</string>
 	<string name="menu.rescan">Reanalisar</string>
 	<string name="menu.rate">Classificar</string>
-	<string name="menu.top_tracks">Top faixas do Last.FM</string>
+	<string name="menu.top_tracks">Top de faixas do Last.FM</string>
 	<string name="menu.similar_artists">Artistas semelhantes</string>
+	<string name="menu.similar_artists.missing">Artistas em falta</string>
 	<string name="menu.start_radio">Iniciar rádio</string>
 	<string name="menu.first_level_artist">Artistas no primeiro nível</string>
 
@@ -175,7 +180,8 @@
     <string name="download.playerstate_downloading">A transferir - %s</string>
 	<string name="download.playerstate_mobile_disabled">À espera de rede Wi-Fi para transferir</string>
     <string name="download.playerstate_buffering">Buffering</string>
-    <string name="download.playerstate_playing_shuffle">A reproduzir aleatóriamente</string>
+    <string name="download.playerstate_playing_shuffle">Modo aleatório</string>
+	<string name="download.playerstate_playing_artist_radio">Rádio do artista</string>
     <string name="download.menu_show_album">Mostrar álbum</string>
     <string name="download.menu_lyrics">Letra</string>
 	<string name="download.menu_remove_all">Remover tudo</string>
@@ -212,6 +218,7 @@
 	<string name="download.restore_play_queue">continuar onde ficou no outro dispositivo em</string>
 	<string name="download.thumbs_up">Gosto</string>
 	<string name="download.thumbs_down">Não gosto</string>
+	<string name="download.batch_mode">Modo batch</string>
 
 	<string name="sync.new_podcasts">Novos podcasts disponíveis</string>
 	<string name="sync.new_playlists">Novas músicas nas listas de reprodução</string>
@@ -276,6 +283,8 @@
     <string name="settings.cache_location">Localização da cache</string>
     <string name="settings.cache_location_error">Localização da cache inválida. A utilizar predefinição.</string>
     <string name="settings.cache_location_reset">Não foi possível escrever na localização da cache que definiu. Se atualizou recentemente o SO do seu dispositivo para o KitKat 4.4, então o modo como as aplicações escrevem no cartão SD mudou e só podem escrever numa localização específica. A localização que o DSub usa já foi alterada para a localização correta.  Para eliminar os antigos dados da aplicação, terá que montar o cartão SD no computador e eliminar a pasta manualmente</string>
+	<string name="settings.cache_location_internal">Interna</string>
+	<string name="settings.cache_location_external">Externa</string>
 	<string name="settings.cache_clear">Limpar cache</string>
 	<string name="settings.cache_clear_complete">Limpeza da cache terminada</string>
     <string name="settings.testing_connection">A testar ligação...</string>
@@ -389,11 +398,11 @@
 	<string name="settings.hide_widget_title">Ocultar widget</string>
 	<string name="settings.hide_widget_summary">Ocultar widget depois de fechar a aplicação</string>
 	<string name="settings.podcasts_enabled">Podcasts ativos</string>
-	<string name="settings.podcasts_enabled_summary">Mostrar ou não a opção \"Podcasts\" na barra lateral</string>
+	<string name="settings.podcasts_enabled_summary">Mostrar ou não a opção \"Podcasts\" no menu lateral</string>
 	<string name="settings.bookmarks_enabled">Marcadores ativos</string>
-	<string name="settings.bookmarks_enabled_summary">Mostrar ou não a opção \"Marcadores\" na barra lateral</string>
+	<string name="settings.bookmarks_enabled_summary">Mostrar ou não a opção \"Marcadores\" no menu lateral</string>
 	<string name="settings.shares_enabled">Partilhas ativas</string>
-	<string name="settings.shares_enabled_summary">Mostrar ou não a opção \"Partilhas\" na barra lateral</string>
+	<string name="settings.shares_enabled_summary">Mostrar ou não a opção \"Partilhas\" no menu lateral</string>
 	<string name="settings.sync_title">Sincronização</string>
 	<string name="settings.sync_enabled">Sincronização ativa</string>
 	<string name="settings.sync_enabled_summary">Sincronizar periodicamente ou não as listas de reprodução ou podcasts por alterações</string>
@@ -416,7 +425,7 @@
 	<string name="settings.sync_notification_summary">Mostrar uma notificação depois de sincronizados novos conteúdos</string>
 	<string name="settings.menu_options.title">Opções de menu opcionais</string>
 	<string name="settings.menu_options.play_now_summary">Mostrar \"Reproduzir agora\" nos menus</string>
-	<string name="settings.menu_options.play_shuffled_summary">Mostrar \"Reproduzir aleatóriamente\" nos menus</string>
+	<string name="settings.menu_options.play_shuffled_summary">Mostrar \"Reproduzir aleatoriamente\" nos menus</string>
 	<string name="settings.menu_options.play_next_summary">Mostrar \"Reproduzir a seguir\" nos menus</string>
 	<string name="settings.menu_options.play_last_summary">Mostrar \"Reproduzir no final\" nos menus</string>
 	<string name="settings.menu_options.download_summary">Mostrar \"Cache\" nos menus</string>
@@ -432,12 +441,12 @@
 	<string name="settings.override_system_language">Sobrepor linguagem do sistema</string>
 	<string name="settings.override_system_language_summary">Mostra a aplicação em inglês mesmo se o DSub tiver uma tradução disponível para a linguagem do sistema.  Talvez seja necessário limpar a aplicação da memória para as alterações terem efeito.</string>
 	<string name="settings.drawer_items_title">Separadores laterais</string>
-	<string name="settings.play_now_after">Reproduzir agora - Depois</string>
-	<string name="settings.play_now_after_summary">A opção \"Reproduzir agora\" do menu de contexto reproduz todos os itens a seguir ao item selecionado (como na interface web do Subsonic)</string>
+	<string name="settings.play_now_after">Premir uma música - Reproduzir tudo</string>
+	<string name="settings.play_now_after_summary">Premir uma música adiciona à fila \"Reproduzir agora\" todas as músicas do álbum a seguir à música selecionada</string>
 	<string name="settings.large_album_art">Grandes capas de álbum</string>
 	<string name="settings.large_album_art_summary">Mostra os álbuns com uma grande capa em vez de em lista</string>
 	<string name="settings.admin_enabled">Administração ativa</string>
-	<string name="settings.admin_enabled_summary">Mostrar ou não a opção \"Administração\" na barra lateral</string>
+	<string name="settings.admin_enabled_summary">Mostrar ou não a opção \"Administração\" no menu lateral</string>
 	<string name="settings.replay_gain">Replay Gain</string>
 	<string name="settings.replay_gain_summary">Escalar ou não o volume da reprodução por tags de replay gain nos álbuns e faixas</string>
 	<string name="settings.replay_gain_type">Ler pelas tags</string>
@@ -458,6 +467,12 @@
 	<string name="settings.shuffle_by_album">Aleatorizar por álbum</string>
 	<string name="settings.shuffle_by_album.true">Aleatorizar a ordem dos álbuns</string>
 	<string name="settings.shuffle_by_album.false">Aleatorizar todas as músicas juntas</string>
+	<string name="settings.casting_stream_original">Transmitir original</string>
+	<string name="settings.casting_stream_original_summary">Transmitir os ficheiros originais se suportado pelo dispositivo de transmissão</string>
+	<string name="settings.heads_up_notification">Notificações Heads Up (5.0+)</string>
+	<string name="settings.heads_up_notification_summary">Mostrar notificações de reprodução como notificações Heads Up (Android Lollipop+ apenas)</string>
+	<string name="settings.casting_cache">Cache durante a transmissão</string>
+	<string name="settings.casting_cache_summary">Adicionar à cache as músicas a reproduzir atualmente durante a transmissão</string>
 
 	<string name="shuffle.title">Aleatorizar por</string>
 	<string name="shuffle.startYear">Ano de início:</string>
@@ -493,13 +508,16 @@
 	<string name="admin.change_password">Alterar palavra-passe</string>
 	<string name="admin.change_password_success">Palavra-passe alterada com sucesso para %1$s</string>
 	<string name="admin.change_password_error">Falha ao alterar palavra-passe para %1$s</string>
+	<string name="admin.change_password_current_label">Palavra-passe atual:</string>
 	<string name="admin.change_password_label">Nova palavra-passe:</string>
 	<string name="admin.change_password_invalid">Introduza uma palavra-passe válida</string>
 	<string name="admin.delete_user">Eliminar utilizador</string>
 	<string name="admin.delete_user_success">Utilizador %1$s eliminado com sucesso</string>
 	<string name="admin.delete_user_error">Falha ao eliminar utilizador %1$s</string>
 	<string name="admin.confirm_password">Confirmar palavra-passe</string>
-	<string name="admin.confirm_password_bad">Palavra-passe introduzida está incorreta</string>
+	<string name="admin.confirm_password_bad">A palavra-passe introduzida está incorreta</string>
+	<string name="admin.permissions">Permissões</string>
+	<string name="admin.musicFolders">Pastas de músicas</string>
 	
 	<string name="admin.scrobblingEnabled">Scrobbling permitido</string>
 	<string name="admin.role.admin">Administrador</string>
@@ -512,14 +530,15 @@
 	<string name="admin.role.stream">Transmitir música</string>
 	<string name="admin.role.jukebox">Controlar jukebox</string>
 	<string name="admin.role.share">Gerir partilhas</string>
-	<string name="admin.role.lastfm">Usar o Last.FM</string>
+	<string name="admin.role.video_conversion">Converter vídeos</string>
+	<string name="admin.role.lastfm">Usar a funcionalidade Last.FM</string>
 
-    <string name="music_service.retry">Ocurreu um erro de ligação. A tentar novamente %1$d de %2$d.</string>
+    <string name="music_service.retry">Ocorreu um erro de ligação. A tentar novamente %1$d de %2$d.</string>
 
 	<string name="background_task.no_network">Este programa requer acesso à rede. Por favor ligue o Wi-Fi ou os dados móveis.</string>
-    <string name="background_task.network_error">Ocurreu um erro de ligação. Por favor verifique o endereço do servidor ou tente novamente mais tarde.</string>
+    <string name="background_task.network_error">Ocorreu um erro de ligação. Por favor verifique o endereço do servidor ou tente novamente mais tarde.</string>
     <string name="background_task.not_found">Recurso não encontrado. Por favor verifique o endereço do servidor.</string>
-    <string name="background_task.parse_error">Ocurreu um problema ao comunicar com o servidor. Por favor verifique o endereço do servidor e verifique se consegue conectar-se usando um navegador normal no seu dispositivo.</string>
+    <string name="background_task.parse_error">Ocorreu um problema ao comunicar com o servidor. Por favor verifique o endereço do servidor e verifique se consegue conectar-se usando um navegador normal no seu dispositivo.</string>
 
     <string name="service.connecting">A contactar o servidor, por favor aguarde.</string>
 
@@ -562,7 +581,7 @@
 
 	<string name="chat.send_a_message">Enviar uma mensagem</string>
 
-    <string name="changelog_version_format" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">Versão <xliff:g id="version_name">%s</xliff:g></string>
+    <string name="changelog_version_format">Versão %s</string>
 
 	<string name="tasker.start_playing">Iniciar reprodução</string>
 	<string name="tasker.start_playing_shuffled">Iniciar reprodução em modo aleatório</string>
