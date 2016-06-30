@@ -478,7 +478,7 @@
 	<string name="parser.scan_count">%d entrées trouvées</string>
 
 	<string name="select_artist.folder">Sélectionner un dossier</string>
-    <string name="select_artist.all_folders">Tous les dossier</string>
+    <string name="select_artist.all_folders">Tous les dossiers</string>
 
     <string name="equalizer.label">Équaliseur</string>
     <string name="equalizer.enabled">Activé</string>
