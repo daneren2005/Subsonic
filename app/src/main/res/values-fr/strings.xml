@@ -430,12 +430,12 @@
 	<string name="admin.change_username_invalid">Saisir un nom d\'utilisateur valide</string>
 	<string name="admin.update_permissions">Mettre à jour les autorisations</string>
 	<string name="admin.update_permissions_success">Autorisation mises à jour pour %1$s</string>
-	<string name="admin.update_permissions_error">Échec lors de lamise à jour des autorisations de %1$s</string>
-	<string name="admin.change_email">Modifier Email</string>
+	<string name="admin.update_permissions_error">Échec lors de la mise à jour des autorisations de %1$s</string>
+	<string name="admin.change_email">Modifier l\'email</string>
 	<string name="admin.change_email_success">Email remplacé pour %1$s</string>
-	<string name="admin.change_email_error">Échec lors du remplacement de l\'Email de %1$s</string>
-	<string name="admin.change_email_label">Nouvel Email :</string>
-	<string name="admin.change_email_invalid">Saisir un Email valide</string>
+	<string name="admin.change_email_error">Échec lors du remplacement de l\'email de %1$s</string>
+	<string name="admin.change_email_label">Nouvel email :</string>
+	<string name="admin.change_email_invalid">Saisir un email valide</string>
 	<string name="admin.change_password">Modifier le mot de passe</string>
 	<string name="admin.change_password_success">Mot de passe modifié pour %1$s</string>
 	<string name="admin.change_password_error">Échec du remplacement du mot de passe pour %1$s</string>
@@ -478,7 +478,7 @@
 	<string name="parser.scan_count">%d entrées trouvées</string>
 
 	<string name="select_artist.folder">Sélectionner un dossier</string>
-    <string name="select_artist.all_folders">Tous les dossier</string>
+    <string name="select_artist.all_folders">Tous les dossiers</string>
 
     <string name="equalizer.label">Équaliseur</string>
     <string name="equalizer.enabled">Activé</string>
