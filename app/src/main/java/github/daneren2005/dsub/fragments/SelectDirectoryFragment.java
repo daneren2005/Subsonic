@@ -234,7 +234,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			if(!ServerInfo.hasTopSongs(context)) {
 				menu.removeItem(R.id.menu_top_tracks);
 			}
-			if(!ServerInfo.checkServerVersion(context, "1.11") || (id != null && "root".equals(id))) {
+			if(!ServerInfo.checkServerVersion(context, "1.11")) {
 				menu.removeItem(R.id.menu_radio);
 				menu.removeItem(R.id.menu_similar_artists);
 			} else if(!ServerInfo.hasSimilarArtists(context)) {
@@ -379,9 +379,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 	@Override
 	protected void refresh(boolean refresh) {
-		if(!"root".equals(id)) {
-			load(refresh);
-		}
+		load(refresh);
 	}
 
 	@Override
@@ -747,11 +745,14 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(!artist) {
 			entryGridAdapter.setShowArtist(true);
 		}
+		if(topTracks) {
+			entryGridAdapter.setShowAlbum(true);
+		}
 
 		// Show header if not album list type and not root and not artist
 		// For Subsonic 5.1+ display a header for artists with getArtistInfo data if it exists
 		boolean addedHeader = false;
-		if(albumListType == null && !"root".equals(id) && (!artist || artistInfo != null || artistInfoDelayed != null) && (share == null || entries.size() != albums.size())) {
+		if(albumListType == null && (!artist || artistInfo != null || artistInfoDelayed != null) && (share == null || entries.size() != albums.size())) {
 			View header = createHeader();
 
 			if(header != null) {

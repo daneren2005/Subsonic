@@ -1,6 +1,7 @@
 package github.daneren2005.dsub.fragments;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
@@ -63,6 +64,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		menuInflater.inflate(R.menu.main, menu);
+		onFinishSetupOptionsMenu(menu);
 
 		try {
 			if (!ServerInfo.isMadsonic(context) || !UserUtil.isCurrentAdmin()) {
@@ -269,7 +271,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 	private void getLogs() {
 		try {
-			final String version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+			final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 			new LoadingTask<String>(context) {
 				@Override
 				protected String doInBackground() throws Throwable {
@@ -372,10 +374,11 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
 					footer += "\nROM: " + Build.DISPLAY;
 					footer += "\nLogs: " + logcat;
+					footer += "\nBuild Number: " + packageInfo.versionCode;
 
 					Intent email = new Intent(Intent.ACTION_SENDTO,
 						Uri.fromParts("mailto", "dsub.android@gmail.com", null));
-					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + version + " Error Logs");
+					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + packageInfo.versionName + " Error Logs");
 					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
 					startActivity(email);
 				}

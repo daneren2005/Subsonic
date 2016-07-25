@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.1.9" versioncode="181" releasedate="6/13/2016">
+		<change>Fix First level artists option</change>
+		<change>Fix some artist menu items missing</change>
+	</release>
+	<release version="5.1.8" versioncode="179" releasedate="6/9/2016">
+		<change>Improved Search Bar</change>
+		<change>Display songs in root folder</change>
+		<change>Heads Up Setting: Only when out of app</change>
+		<change>Speed up resuming app from notifications/widgets</change>
+		<change>Bluetooth: Double click play/pause button to skip to next some</change>
+		<change>Auto: Previous/Next rewind/fast forward on Podcasts/Audio Books</change>
+		<change>Fix playlist not overwriting when resumed from bookmark</change>
+		<change>Fix some bluetooth devices sending next/previous multiple times</change>
+		<change>Fix reverting to stock Subsonic after using Madsonic 6+ servers</change>
+		<change>Fix Podcast list cache not working with no internet</change>
+	</release>
 	<release version="5.1.7" versioncode="177" releasedate="4/22/2016">
 		<change>Audio Books/Podcasts: Replace back/forward with rewind/fast forward buttons</change>
 		<change>Expandable Search Results</change>

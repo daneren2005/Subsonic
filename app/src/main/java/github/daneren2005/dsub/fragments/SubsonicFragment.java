@@ -20,6 +20,9 @@ package github.daneren2005.dsub.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +40,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -125,6 +129,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean artistOverride = false;
 	protected SwipeRefreshLayout refreshLayout;
 	protected boolean firstRun;
+	protected MenuItem searchItem;
+	protected SearchView searchView;
 
 	public SubsonicFragment() {
 		super();
@@ -177,14 +183,35 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		this.context = context;
 	}
 
+	protected void onFinishSetupOptionsMenu(final Menu menu) {
+		searchItem = menu.findItem(R.id.menu_global_search);
+		if(searchItem != null) {
+			searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+			SearchManager searchManager = (SearchManager) context.getSystemService(Context.SEARCH_SERVICE);
+			SearchableInfo searchableInfo = searchManager.getSearchableInfo(context.getComponentName());
+			if(searchableInfo == null) {
+				Log.w(TAG, "Failed to get SearchableInfo");
+			} else {
+				searchView.setSearchableInfo(searchableInfo);
+			}
+
+			String currentQuery = getCurrentQuery();
+			if(currentQuery != null) {
+				searchView.setOnSearchClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						searchView.setQuery(getCurrentQuery(), false);
+					}
+				});
+			}
+		}
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_global_shuffle:
 				onShuffleRequested();
-				return true;
-			case R.id.menu_global_search:
-				context.onSearchRequested();
 				return true;
 			case R.id.menu_exit:
 				exit();
@@ -1925,6 +1952,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	protected boolean isShowArtistEnabled() {
 		return false;
+	}
+
+	protected String getCurrentQuery() {
+		return null;
 	}
 
 	public abstract class RecursiveLoader extends LoadingTask<Boolean> {

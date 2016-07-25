@@ -225,7 +225,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				bottomBar.setVisibility(View.GONE);
 				nowPlayingToolbar.setVisibility(View.VISIBLE);
 				setSupportActionBar(nowPlayingToolbar);
-				nowPlayingFragment.setPrimaryFragment(true);
+
+				if(secondaryFragment == null) {
+					nowPlayingFragment.setPrimaryFragment(true);
+				} else {
+					secondaryFragment.setPrimaryFragment(true);
+				}
 
 				drawerToggle.setDrawerIndicatorEnabled(false);
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -396,14 +401,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			if(currentFragment instanceof SearchFragment) {
 				String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 				boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-				boolean requestsearch = intent.getBooleanExtra(Constants.INTENT_EXTRA_REQUEST_SEARCH, false);
 
 				if (query != null) {
 					((SearchFragment)currentFragment).search(query, autoplay);
-				} else {
-					if (requestsearch) {
-						onSearchRequested();
-					}
 				}
 				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 			} else {
@@ -472,6 +472,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		super.onSaveInstanceState(savedInstanceState);
 		savedInstanceState.putString(Constants.MAIN_NOW_PLAYING, nowPlayingFragment.getTag());
+		if(secondaryFragment != null) {
+			savedInstanceState.putString(Constants.MAIN_NOW_PLAYING_SECONDARY, secondaryFragment.getTag());
+		}
 		savedInstanceState.putInt(Constants.MAIN_SLIDE_PANEL_STATE, slideUpPanel.getPanelState().hashCode());
 	}
 	@Override
@@ -481,6 +484,19 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		String id = savedInstanceState.getString(Constants.MAIN_NOW_PLAYING);
 		FragmentManager fm = getSupportFragmentManager();
 		nowPlayingFragment = (NowPlayingFragment) fm.findFragmentByTag(id);
+
+		String secondaryId = savedInstanceState.getString(Constants.MAIN_NOW_PLAYING_SECONDARY);
+		if(secondaryId != null) {
+			secondaryFragment = (SubsonicFragment) fm.findFragmentByTag(secondaryId);
+
+			nowPlayingFragment.setPrimaryFragment(false);
+			secondaryFragment.setPrimaryFragment(true);
+
+			FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+			trans.hide(nowPlayingFragment);
+			trans.commit();
+		}
+
 		if(drawerToggle != null && backStack.size() > 0) {
 			drawerToggle.setDrawerIndicatorEnabled(false);
 		}

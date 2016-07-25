@@ -88,6 +88,7 @@ import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.support.v4.util.LruCache;
+import android.view.KeyEvent;
 
 /**
  * @author Sindre Mehus
@@ -1169,8 +1170,8 @@ public class DownloadService extends Service {
 		}
 
 		// If only one song, just skip within song
-		if(size() == 1) {
-			seekTo(getPlayerPosition() - REWIND);
+		if(size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+			rewind();
 			return;
 		}
 
@@ -1195,8 +1196,8 @@ public class DownloadService extends Service {
 	}
 	public synchronized void next(boolean forceCutoff, boolean forceStart) {
 		// If only one song, just skip within song
-		if(size() == 1) {
-			seekTo(getPlayerPosition() + FAST_FORWARD);
+		if(size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+			fastForward();
 			return;
 		} else if(playerState == PREPARING || playerState == PREPARED) {
 			return;
@@ -2717,6 +2718,10 @@ public class DownloadService extends Service {
 	}
 	public void acquireWakelock(int ms) {
 		wakeLock.acquire(ms);
+	}
+
+	public void handleKeyEvent(KeyEvent keyEvent) {
+		lifecycleSupport.handleKeyEvent(keyEvent);
 	}
 
 	public void addOnSongChangedListener(OnSongChangedListener listener) {

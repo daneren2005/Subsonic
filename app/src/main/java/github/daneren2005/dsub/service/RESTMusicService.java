@@ -608,7 +608,7 @@ public class RESTMusicService implements MusicService {
 
 			int decade = Integer.parseInt(extra);
 			// Reverse chronological order only supported in 5.3+
-			if(ServerInfo.checkServerVersion(context, "1.13", instance) && ServerInfo.isStockSubsonic(context, instance)) {
+			if(ServerInfo.checkServerVersion(context, "1.13", instance) && !ServerInfo.isMadsonic(context, instance)) {
 				values.add(decade + 9);
 				values.add(decade);
 			} else {
@@ -696,7 +696,13 @@ public class RESTMusicService implements MusicService {
 
 		int instance = getInstance(context);
 		String method;
-		if(ServerInfo.isMadsonic(context, instance)) {
+		if(ServerInfo.isMadsonic6(context, instance)) {
+			if (Util.isTagBrowsing(context, instance)) {
+				method = "getSimilarSongsID3";
+			} else {
+				method = "getSimilarSongs";
+			}
+		} else if(ServerInfo.isMadsonic(context, instance)) {
 			method = "getPandoraSongs";
 		} else {
 			if (Util.isTagBrowsing(context, instance)) {
@@ -1942,7 +1948,7 @@ public class RESTMusicService implements MusicService {
             for (int i = 0; i < parameterNames.size(); i++) {
                 builder.append("&").append(parameterNames.get(i)).append("=");
 				String part = URLEncoder.encode(String.valueOf(parameterValues.get(i)), "UTF-8");
-				part = part.replaceAll("\\%27", "&#39;");
+				part = part.replaceAll("\\%27", "'");
                 builder.append(part);
             }
             url = builder.toString();

@@ -203,7 +203,7 @@ public class ServerInfo implements Serializable {
 	}
 
 	public static boolean hasArtistInfo(Context context) {
-		if(isStockSubsonic(context) && ServerInfo.checkServerVersion(context, "1.11")) {
+		if(!isMadsonic(context) && ServerInfo.checkServerVersion(context, "1.11")) {
 			return true;
 		} else if(isMadsonic(context)) {
 			return checkServerVersion(context, "2.0");

@@ -52,13 +52,6 @@ public class Indexes implements Serializable {
 		this.shortcuts = shortcuts;
 		this.artists = artists;
 		this.entries = entries;
-		if(!entries.isEmpty()) {
-			Artist root = new Artist();
-			root.setId("root");
-			root.setName("Root");
-			root.setIndex("#");
-			artists.add(root);
-		}
 	}
 
     public long getLastModified() {

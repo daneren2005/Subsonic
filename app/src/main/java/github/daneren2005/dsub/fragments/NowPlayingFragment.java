@@ -1244,7 +1244,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
 
-		if(currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
+		if(currentPlaying != null && !currentPlaying.isSong()) {
 			previousButton.setVisibility(View.GONE);
 			nextButton.setVisibility(View.GONE);
 
