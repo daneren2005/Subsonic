@@ -1008,6 +1008,14 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void addToPlaylist(final List<Entry> songs) {
+		Iterator<Entry> it = songs.iterator();
+		while(it.hasNext()) {
+			Entry entry = it.next();
+			if(entry.isDirectory()) {
+				it.remove();
+			}
+		}
+
 		if(songs.isEmpty()) {
 			Util.toast(context, "No songs selected");
 			return;
