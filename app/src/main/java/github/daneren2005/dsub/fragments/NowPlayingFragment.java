@@ -60,7 +60,6 @@ import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
@@ -74,6 +73,7 @@ import github.daneren2005.dsub.service.ServerTooOldException;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
+import github.daneren2005.dsub.view.compat.CustomMediaRouteDialogFactory;
 import github.daneren2005.dsub.view.FadeOutAnimation;
 import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.UpdateView;
@@ -535,6 +535,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			MenuItem mediaRouteItem = menu.findItem(R.id.menu_mediaroute);
 			if(mediaRouteItem != null) {
 				MediaRouteButton mediaRouteButton = (MediaRouteButton) MenuItemCompat.getActionView(mediaRouteItem);
+				mediaRouteButton.setDialogFactory(new CustomMediaRouteDialogFactory());
 				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 			}
 		}
