@@ -21,6 +21,7 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.AttrRes;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.util.TypedValue;
 
@@ -43,6 +44,17 @@ public class DrawableTint {
 		}
 
 		int color = getColorRes(context, colorAttr);
+		Drawable background = context.getResources().getDrawable(drawableRes);
+		background.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+		tintedDrawables.put(drawableRes, background);
+		return background;
+	}
+	public static Drawable getTintedDrawableFromColor(Context context, @DrawableRes int drawableRes, @ColorRes int colorRes) {
+		if(tintedDrawables.containsKey(drawableRes)) {
+			return tintedDrawables.get(drawableRes);
+		}
+
+		int color = context.getResources().getColor(colorRes);
 		Drawable background = context.getResources().getDrawable(drawableRes);
 		background.setColorFilter(color, PorterDuff.Mode.SRC_IN);
 		tintedDrawables.put(drawableRes, background);

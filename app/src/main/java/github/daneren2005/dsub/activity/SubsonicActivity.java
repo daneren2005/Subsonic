@@ -192,7 +192,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	protected void createCustomActionBarView() {
 		actionBarSpinner = (Spinner) getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
 		if((this instanceof SubsonicFragmentActivity || this instanceof SettingsActivity) && (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true) || Util.getThemeRes(this) != R.style.Theme_DSub_Light_No_Color)) {
-			actionBarSpinner.setBackgroundResource(R.drawable.abc_spinner_mtrl_am_alpha);
+			actionBarSpinner.setBackgroundDrawable(DrawableTint.getTintedDrawableFromColor(this, R.drawable.abc_spinner_mtrl_am_alpha, android.R.color.white));
 		}
 		spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
 		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
