@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.2" versioncode="182" releasedate="7/27/2016">
+		<change>Variable Playback Speed (Android 6.0+)</change>
+		<change>Show album instead of artist on Top Tracks</change>
+		<change>Fix search/comments with ' not working</change>
+		<change>Fix double press to skip from some headsets</change>
+		<change>Fix newer versions of Madsonic's Artist Radio</change>
+		<change>Fix no SSID using local network address on all WiFi connections</change>
+		<change>Fix rotation/sleep while EQ was visible</change>
+		<change>Fix being able to add albums to playlists</change>
+		<change>Fix cast dialog in landscape</change>
+	</release>
 	<release version="5.1.9" versioncode="181" releasedate="6/13/2016">
 		<change>Fix First level artists option</change>
 		<change>Fix some artist menu items missing</change>
