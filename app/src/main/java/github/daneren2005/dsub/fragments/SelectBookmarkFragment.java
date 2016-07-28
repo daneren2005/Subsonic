@@ -91,7 +91,8 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 			return;
 		}
 
-		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true) && ((!Util.isTagBrowsing(context) && bookmark.getParent() != null) || (Util.isTagBrowsing(context) && bookmark.getAlbumId() != null)) && !bookmark.isPodcast()) {
+		boolean allowPlayAll = ((!Util.isTagBrowsing(context) && bookmark.getParent() != null) || (Util.isTagBrowsing(context) && bookmark.getAlbumId() != null)) && !bookmark.isPodcast();
+		if(allowPlayAll && "all".equals(Util.getSongPressAction(context))) {
 			new RecursiveLoader(context) {
 				@Override
 				protected Boolean doInBackground() throws Throwable {
@@ -111,7 +112,7 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 				}
 			}.execute();
 		} else {
-			playNow(Arrays.asList(bookmark), bookmark, bookmark.getBookmark().getPosition());
+			onSongPress(Arrays.asList(bookmark), bookmark, bookmark.getBookmark().getPosition(), false);
 		}
 	}
 

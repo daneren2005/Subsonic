@@ -37,13 +37,17 @@ public class Updater {
 	protected Context context;
 	
 	public Updater(int version) {
+		// 5.2 should show as 520 instead of 52
+		if(version < 100) {
+			version *= 10;
+		}
 		this.version = version;
 	}
 	
 	public void checkUpdates(Context context) {
 		this.context = context;
 		List<Updater> updaters = new ArrayList<Updater>();
-		updaters.add(new Updater403());
+		updaters.add(new UpdaterSongPress());
 		
 		SharedPreferences prefs = Util.getPreferences(context);
 		int lastVersion = prefs.getInt(Constants.LAST_VERSION, 0);

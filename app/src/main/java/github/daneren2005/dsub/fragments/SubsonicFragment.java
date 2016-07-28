@@ -1663,6 +1663,33 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		dialog.show();
 	}
 
+	protected void onSongPress(List<Entry> entries, Entry entry) {
+		onSongPress(entries, entry, 0, true);
+	}
+	protected void onSongPress(List<Entry> entries, Entry entry, boolean allowPlayAll) {
+		onSongPress(entries, entry, 0, allowPlayAll);
+	}
+	protected void onSongPress(List<Entry> entries, Entry entry, int position, boolean allowPlayAll) {
+		List<Entry> songs = new ArrayList<Entry>();
+
+		String songPressAction = Util.getSongPressAction(context);
+		if("all".equals(songPressAction) && allowPlayAll) {
+			for(Entry song: entries) {
+				if(!song.isDirectory() && !song.isVideo()) {
+					songs.add(song);
+				}
+			}
+			playNow(songs, entry, position);
+		} else if("next".equals(songPressAction)) {
+			getDownloadService().download(Arrays.asList(entry), false, false, true, false);
+		}  else if("last".equals(songPressAction)) {
+			getDownloadService().download(Arrays.asList(entry), false, false, false, false);
+		} else {
+			songs.add(entry);
+			playNow(songs);
+		}
+	}
+
 	protected void playNow(List<Entry> entries) {
 		playNow(entries, null, null);
 	}

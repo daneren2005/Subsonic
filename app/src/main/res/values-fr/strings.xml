@@ -398,8 +398,6 @@
 	<string name="settings.override_system_language">Ne pas utiliser la langue du système</string>
 	<string name="settings.override_system_language_summary">Afficher DSub en Anglais même si une traduction existe pour la langue système. Peut nécessiter un vidage du cache de l\'application.</string>
 	<string name="settings.drawer_items_title">Entrées de menu</string>
-	<string name="settings.play_now_after">Jouer maintenant - Plus tard</string>
-	<string name="settings.play_now_after_summary">Play Now context menu for a song plays everything after selected item (like the Subsonic web GUI)</string>
 	<string name="settings.large_album_art">Pochettes larges</string>
 	<string name="settings.large_album_art_summary">Afficher les pochettes en grand plutôt qu\'en liste.</string>
 	<string name="settings.admin_enabled">Administration</string>

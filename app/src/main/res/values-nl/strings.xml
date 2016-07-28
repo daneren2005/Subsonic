@@ -431,8 +431,6 @@
 	<string name="settings.override_system_language">Systeemtaal overschrijven</string>
 	<string name="settings.override_system_language_summary">Toon de app in Engels, ook als de systeemtaal voor Dsub beschikbaar is. Het is misschien nodig om de app uit cache geheugen te wissen voordat het effectief is.</string>
 	<string name="settings.drawer_items_title">Server tabs</string>
-	<string name="settings.play_now_after">Speel af - na</string>
-	<string name="settings.play_now_after_summary">Nu afspelen contextmenu speelt alles af na het geselecteerde item (net zoals de Subsonic website)</string>
 	<string name="settings.large_album_art">Grote albumhoezen</string>
 	<string name="settings.large_album_art_summary">Toon albums met grote hoes in plaats van een lijst</string>
 	<string name="settings.admin_enabled">Beheer ingeschakeld</string>

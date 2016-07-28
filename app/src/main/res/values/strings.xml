@@ -447,8 +447,11 @@
 	<string name="settings.override_system_language">Override System Language</string>
 	<string name="settings.override_system_language_summary">Display app in english even if the system language is something DSub has a translation for.  May need to clear the app from memory for changes to take affect.</string>
 	<string name="settings.drawer_items_title">Drawer Tabs</string>
-	<string name="settings.play_now_after">Song Press - Play All</string>
-	<string name="settings.play_now_after_summary">Pressing on a song adds everything in the album to the Now Playing Queue after the pressed song</string>
+	<string name="settings.song_press_action">Song Press Action</string>
+	<string name="settings.song_press_play_single">Play only that song</string>
+	<string name="settings.song_press_play_all">Adds everything in the album to the Now Playing Queue</string>
+	<string name="settings.song_press_play_next">Adds song as next song</string>
+	<string name="settings.song_press_play_last">Adds song to end of Now Playing Queue</string>
 	<string name="settings.large_album_art">Large Album Art</string>
 	<string name="settings.large_album_art_summary">Display albums with large album art instead of in a list</string>
 	<string name="settings.admin_enabled">Admin Enabled</string>

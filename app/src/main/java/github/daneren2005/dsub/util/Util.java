@@ -705,6 +705,10 @@ public final class Util {
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_START_ON_HEADPHONES, false);
 	}
 
+	public static String getSongPressAction(Context context) {
+		return getPreferences(context).getString(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION, "all");
+	}
+
     /**
      * Get the contents of an <code>InputStream</code> as a <code>byte[]</code>.
      * <p/>

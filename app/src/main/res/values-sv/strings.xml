@@ -430,8 +430,6 @@
 	<string name="settings.override_system_language">Ignorera systemspråket</string>
 	<string name="settings.override_system_language_summary">Visa appen på engelska även om systemet är på ett språk Subsonic har stöd för. Du kan eventuellt behöva rensa appen från minnet för att det ska ta effekt.</string>
 	<string name="settings.drawer_items_title">Sidoflikar</string>
-	<string name="settings.play_now_after">Spela nu - Efter</string>
-	<string name="settings.play_now_after_summary">Spela nu i context menyn spelar allt efter spåret (som i Subsonic webb GUI)</string>
 	<string name="settings.large_album_art">Stora album bilder</string>
 	<string name="settings.large_album_art_summary">Visa album med stora bilder istället för en lista</string>
 	<string name="settings.admin_enabled">Admin aktiverad</string>

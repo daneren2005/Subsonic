@@ -359,21 +359,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				return;
 			}
 
-			playNow(Arrays.asList(entry));
+			onSongPress(Arrays.asList(entry), entry, false);
 		} else {
-			List<Entry> songs = new ArrayList<Entry>();
-
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PLAY_NOW_AFTER, true) && (albumListType == null || "starred".equals(albumListType))) {
-				for(Entry song: entries) {
-					if(!song.isDirectory() && !song.isVideo()) {
-						songs.add(song);
-					}
-				}
-				playNow(songs, entry, 0);
-			} else {
-				songs.add(entry);
-				playNow(songs);
-			}
+			onSongPress(entries, entry, albumListType == null || "starred".equals(albumListType));
 		}
 	}
 

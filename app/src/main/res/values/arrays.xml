@@ -222,4 +222,17 @@
 		<item>@string/main.online</item>
 		<item>@string/main.offline</item>
 	</string-array>
+
+	<string-array name="songPressActionValues">
+		<item>single</item>
+		<item>all</item>
+		<item>next</item>
+		<item>last</item>
+	</string-array>
+	<string-array name="songPressActionNames">
+		<item>@string/settings.song_press_play_single</item>
+		<item>@string/settings.song_press_play_all</item>
+		<item>@string/settings.song_press_play_next</item>
+		<item>@string/settings.song_press_play_last</item>
+	</string-array>
 </resources>

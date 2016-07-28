@@ -442,8 +442,6 @@
 	<string name="settings.override_system_language">A rendszer nyelvének felülbírálása</string>
 	<string name="settings.override_system_language_summary">A Dsub megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
 	<string name="settings.drawer_items_title">Oldalsáv elemei</string>
-	<string name="settings.play_now_after">Lejátszás utána</string>
-	<string name="settings.play_now_after_summary">Egy helyi menü, amivel lehetővé válik minden dal lejátszása a kijelölt elem után (mint a Subsonic webes felületén)</string>
 	<string name="settings.large_album_art">Nagyméretű albumborítók</string>
 	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben és nagyméretű albumborítóval a listanézet helyett.</string>
 	<string name="settings.admin_enabled">Admin engedélyezése</string>

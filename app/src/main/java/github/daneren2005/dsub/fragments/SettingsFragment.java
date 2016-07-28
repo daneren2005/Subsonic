@@ -78,6 +78,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference pauseDisconnect;
 	private Preference addServerPreference;
 	private PreferenceCategory serversCategory;
+	private ListPreference songPressAction;
 	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
 	private CheckBoxPreference syncEnabled;
@@ -217,6 +218,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serversCategory = (PreferenceCategory) this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
 		addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
+		songPressAction = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION);
 		syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
 		syncEnabled = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
 		syncWifi = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
@@ -384,6 +386,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			keepPlayedCount.setSummary(keepPlayedCount.getEntry());
 			tempLoss.setSummary(tempLoss.getEntry());
 			pauseDisconnect.setSummary(pauseDisconnect.getEntry());
+			songPressAction.setSummary(songPressAction.getEntry());
 			videoPlayer.setSummary(videoPlayer.getEntry());
 
 			if(replayGain.isChecked()) {

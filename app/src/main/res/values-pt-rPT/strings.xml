@@ -441,8 +441,6 @@
 	<string name="settings.override_system_language">Sobrepor linguagem do sistema</string>
 	<string name="settings.override_system_language_summary">Mostrar a aplicação em inglês mesmo se o DSub tiver uma tradução disponível para a linguagem do sistema.  Poderá ser necessário limpar a aplicação da memória para as alterações terem efeito</string>
 	<string name="settings.drawer_items_title">Separadores laterais</string>
-	<string name="settings.play_now_after">Premir uma música - Reproduzir tudo</string>
-	<string name="settings.play_now_after_summary">Premir uma música adiciona à fila \"Reproduzir agora\" todas as músicas do álbum a seguir à música selecionada</string>
 	<string name="settings.large_album_art">Grandes capas de álbum</string>
 	<string name="settings.large_album_art_summary">Mostrar os álbuns com uma grande capa em vez de em lista</string>
 	<string name="settings.admin_enabled">Ativar administração</string>

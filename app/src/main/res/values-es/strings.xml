@@ -386,8 +386,6 @@
 	<string name="settings.override_system_language">Sobreescribir idioma del sistema</string>
 	<string name="settings.override_system_language_summary">Mostrar la aplicación en inglés aún teniendo disponible DSub en el idioma del sistema. Probablemente necesite borrar la aplicación de la memoria para efectuar los cambios.</string>
 	<string name="settings.drawer_items_title">Pestañas</string>
-	<string name="settings.play_now_after">Reproducir ahora - Después</string>
-	<string name="settings.play_now_after_summary">Pulsar "Reproducir ahora" desde el menú contextual actúa como la interfaz web de Subsonic, reproduciendo todos los items a partir del seleccionado</string>
 	<string name="settings.large_album_art">Carátulas grandes</string>
 	<string name="settings.large_album_art_summary">Mostrar los discos con carátulas grandes en vez de en lista</string>
 	<string name="settings.admin_enabled">Admin Habilitado</string>
