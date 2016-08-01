@@ -800,7 +800,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		Bundle args = getArguments();
 		boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
 		if (playAll && !restoredInstance) {
-			playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false);
+			playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false, false);
 		}
 	}
 
@@ -810,20 +810,19 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(!songs.isEmpty()) {
 			download(songs, append, false, !append, playNext, shuffle);
 			entryGridAdapter.clearSelected();
-		}
-		else {
-			playAll(shuffle, append);
+		} else {
+			playAll(shuffle, append, playNext);
 		}
 	}
-	private void playAll(final boolean shuffle, final boolean append) {
+	private void playAll(final boolean shuffle, final boolean append, final boolean playNext) {
 		boolean hasSubFolders = albums != null && !albums.isEmpty();
 
 		if (hasSubFolders && (id != null || share != null || "starred".equals(albumListType))) {
-			downloadRecursively(id, false, append, !append, shuffle, false);
+			downloadRecursively(id, false, append, !append, shuffle, false, playNext);
 		} else if(hasSubFolders && albumListType != null) {
-			downloadRecursively(albums, shuffle, append);
+			downloadRecursively(albums, shuffle, append, playNext);
 		} else {
-			download(entries, append, false, !append, false, shuffle);
+			download(entries, append, false, !append, playNext, shuffle);
 		}
 	}
 

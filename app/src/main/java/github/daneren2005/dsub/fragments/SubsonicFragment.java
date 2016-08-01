@@ -952,7 +952,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	protected void downloadRecursively(final List<Entry> albums, final boolean shuffle, final boolean append) {
+	protected void downloadRecursively(final List<Entry> albums, final boolean shuffle, final boolean append, final boolean playNext) {
 		new RecursiveLoader(context) {
 			@Override
 			protected Boolean doInBackground() throws Throwable {
@@ -980,7 +980,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						downloadService.clear();
 					}
 
-					downloadService.download(songs, false, true, false, false);
+					downloadService.download(songs, false, true, playNext, false);
 					if(!append) {
 						transition = true;
 					}
