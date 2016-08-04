@@ -2614,7 +2614,9 @@ public class DownloadService extends Service {
 
 	public void setPlaybackSpeed(float playbackSpeed) {
 		Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
-		applyPlaybackParamsMain();
+		if(mediaPlayer != null && (playerState == PREPARED || playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP)) {
+			applyPlaybackParamsMain();
+		}
 		if(nextMediaPlayer != null && nextPlayerState == PREPARED) {
 			applyPlaybackParamsNext();
 		}
