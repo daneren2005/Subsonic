@@ -78,7 +78,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		outRect.left = halfSpacing - margins;
 		outRect.right = halfSpacing - margins;
 
-		if (isTopEdge(childIndex, spanCount)) {
+		if (isTopEdge(childIndex, spanIndex, spanCount)) {
 			outRect.top = spacing - doubleMargins;
 		}
 
@@ -123,8 +123,8 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		return spanIndex == spanCount - 1;
 	}
 
-	protected boolean isTopEdge(int childIndex, int spanCount) {
-		return childIndex < spanCount;
+	protected boolean isTopEdge(int childIndex, int spanIndex, int spanCount) {
+		return childIndex < spanCount && childIndex == spanIndex;
 	}
 
 	protected boolean isBottomEdge(int childIndex, int childCount, int spanCount) {
