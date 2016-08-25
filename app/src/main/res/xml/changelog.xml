@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.2.1" versioncode="183" releasedate="8/24/2016">
+		<change>Add option for different actions when pressing a song</change>
+		<change>Fix some N release issues</change>
+		<change>Fix grid alignment for some albums</change>
+	</release>
 	<release version="5.2" versioncode="182" releasedate="7/27/2016">
 		<change>Variable Playback Speed (Android 6.0+)</change>
 		<change>Show album instead of artist on Top Tracks</change>
