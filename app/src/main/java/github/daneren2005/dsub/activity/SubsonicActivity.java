@@ -1146,6 +1146,10 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 	
 	public int getDrawerItemId(String fragmentType) {
+		if(fragmentType == null) {
+			return R.id.drawer_home;
+		}
+
 		switch(fragmentType) {
 			case "Home":
 				return R.id.drawer_home;
