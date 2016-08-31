@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.2.2" versioncode="184" releasedate="8/30/2016">
+		<change>Fix lagging in landscape view on the Now Playing screen</change>
+	</release>
 	<release version="5.2.1" versioncode="183" releasedate="8/24/2016">
 		<change>Add option for different actions when pressing a song</change>
 		<change>Fix some N release issues</change>
