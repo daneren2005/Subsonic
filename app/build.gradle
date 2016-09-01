@@ -8,7 +8,7 @@ android {
 	defaultConfig {
 		applicationId "github.daneren2005.dsub"
 		minSdkVersion 14
-		targetSdkVersion 22
+		targetSdkVersion 23
 		versionCode 185
 		versionName '5.2.2'
 		setProperty("archivesBaseName", "DSub $versionName")

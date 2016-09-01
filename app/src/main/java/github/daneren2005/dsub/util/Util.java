@@ -1198,22 +1198,22 @@ public final class Util {
 		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
 	}
 
-	private static void showDialog(Context context, int icon, int titleId, int messageId) {
+	public static void showDialog(Context context, int icon, int titleId, int messageId) {
 		showDialog(context, icon, titleId, messageId, true);
 	}
-	private static void showDialog(Context context, int icon, int titleId, String message) {
+	public static void showDialog(Context context, int icon, int titleId, String message) {
 		showDialog(context, icon, titleId, message, true);
 	}
-	private static void showDialog(Context context, int icon, String title, String message) {
+	public static void showDialog(Context context, int icon, String title, String message) {
 		showDialog(context, icon, title, message, true);
 	}
-	private static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
+	public static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
 		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
 	}
-	private static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
+	public static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
 		showDialog(context, icon, context.getResources().getString(titleId), message, linkify);
 	}
-	private static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
+	public static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
 		SpannableString ss = new SpannableString(message);
 		if(linkify) {
 			Linkify.addLinks(ss, Linkify.ALL);

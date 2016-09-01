@@ -648,6 +648,8 @@
 	<string name="details.expiration">Expiration</string>
 	<string name="details.played_count">Played Count</string>
 
+	<string name="permission.external_storage.failed">DSub cannot function without the ability to write to storage</string>
+
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>
         <item quantity="one">One song</item>
