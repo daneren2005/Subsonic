@@ -19,4 +19,8 @@
 	<item
 		android:id="@+id/playback_speed_tripple"
 		android:title="@string/download.playback_speed_tripple"/>
+
+	<item
+		android:id="@+id/playback_speed_custom"
+		android:title="@string/download.playback_speed_custom"/>
 </menu>

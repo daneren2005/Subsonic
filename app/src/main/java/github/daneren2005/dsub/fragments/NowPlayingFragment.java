@@ -400,11 +400,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 						@Override
 						public boolean onMenuItemClick(MenuItem menuItem) {
-							DownloadService downloadService = getDownloadService();
-							if (downloadService == null) {
-								return false;
-							}
-
 							float playbackSpeed = 1.0f;
 							switch (menuItem.getItemId()) {
 								case R.id.playback_speed_half:
@@ -419,10 +414,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 								case R.id.playback_speed_tripple:
 									playbackSpeed = 3.0f;
 									break;
+								case R.id.playback_speed_custom:
+									setPlaybackSpeed();
+									return true;
 							}
 
-							downloadService.setPlaybackSpeed(playbackSpeed);
-							updateTitle();
+							setPlaybackSpeed(playbackSpeed);
 							return true;
 						}
 					});
@@ -1485,8 +1482,15 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			stringRes = R.string.download_playback_speed_tripple;
 		}
 
+		String playbackSpeedText = null;
 		if(stringRes != -1) {
-			title += " (" + context.getResources().getString(stringRes) + ")";
+			playbackSpeedText = context.getResources().getString(stringRes);
+		} else if(Math.abs(playbackSpeed - 1.0) > 0.01) {
+			playbackSpeedText = Float.toString(playbackSpeed) + "x";
+		}
+
+		if(playbackSpeedText != null) {
+			title += " (" + playbackSpeedText + ")";
 		}
 		setTitle(title);
 	}
@@ -1503,5 +1507,65 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		return entries;
+	}
+
+	private void setPlaybackSpeed() {
+		View dialogView = context.getLayoutInflater().inflate(R.layout.set_playback_speed, null);
+
+		// Setup playbackSpeed label
+		final TextView playbackSpeedBox = (TextView) dialogView.findViewById(R.id.playback_speed_label);
+		final SharedPreferences prefs = Util.getPreferences(context);
+		String playbackSpeedString = prefs.getString(Constants.PREFERENCES_KEY_CUSTOM_PLAYBACK_SPEED, "17");
+		int playbackSpeed = Integer.parseInt(playbackSpeedString);
+		playbackSpeedBox.setText(new Float(playbackSpeed / 10.0).toString());
+
+		// Setup playbackSpeed slider
+		final SeekBar playbackSpeedBar = (SeekBar) dialogView.findViewById(R.id.playback_speed_bar);
+		playbackSpeedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				if (fromUser) {
+					playbackSpeedBox.setText(new Float((progress + 5) / 10.0).toString());
+					seekBar.setProgress(progress);
+				}
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
+		playbackSpeedBar.setProgress(playbackSpeed - 5);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.download_playback_speed_custom)
+				.setView(dialogView)
+				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						int playbackSpeed = playbackSpeedBar.getProgress() + 5;
+
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putString(Constants.PREFERENCES_KEY_CUSTOM_PLAYBACK_SPEED, Integer.toString(playbackSpeed));
+						editor.commit();
+
+						setPlaybackSpeed(new Float(playbackSpeed / 10.0));
+					}
+				})
+				.setNegativeButton(R.string.common_cancel, null);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	private void setPlaybackSpeed(float playbackSpeed) {
+		DownloadService downloadService = getDownloadService();
+		if (downloadService == null) {
+			return;
+		}
+
+		downloadService.setPlaybackSpeed(playbackSpeed);
+		updateTitle();
 	}
 }

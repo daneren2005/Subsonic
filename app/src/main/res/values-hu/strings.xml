@@ -220,6 +220,11 @@
 	<string name="download.thumbs_up">Jó</string>
 	<string name="download.thumbs_down">Nem jó</string>
 	<string name="download.batch_mode">Kötegelt mód</string>
+	<string name="download.playback_speed_half">0.5x</string>
+	<string name="download.playback_speed_normal">1x</string>
+	<string name="download.playback_speed_one_half">1.5x</string>
+	<string name="download.playback_speed_double">2x</string>
+	<string name="download.playback_speed_tripple">3x</string>
 
 	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
 	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
@@ -442,6 +447,11 @@
 	<string name="settings.override_system_language">A rendszer nyelvének felülbírálása</string>
 	<string name="settings.override_system_language_summary">A Dsub megjelenítése angol nyelven abban az esetben is, ha rendelkezik fordítással. Az alkalmazást törölni kell a memóriából, mert a beállítás csak újraindítás után lép érvénybe!</string>
 	<string name="settings.drawer_items_title">Oldalsáv elemei</string>
+	<string name="settings.song_press_action">Viselkedés dal megérintésekor</string>
+	<string name="settings.song_press_play_single">Dal lejátszása</string>
+	<string name="settings.song_press_play_all">A teljes album hozzáadása a várólistához</string>
+	<string name="settings.song_press_play_next">Dal sorba állítása következőnek</string>
+	<string name="settings.song_press_play_last">Dal sorba állítása utolsónak</string>
 	<string name="settings.large_album_art">Nagyméretű albumborítók</string>
 	<string name="settings.large_album_art_summary">Albumok megjelenítése rácsnézetben és nagyméretű albumborítóval a listanézet helyett.</string>
 	<string name="settings.admin_enabled">Admin engedélyezése</string>
@@ -530,7 +540,7 @@
 	<string name="admin.role.jukebox">Jukebox vezérlése</string>
 	<string name="admin.role.share">Megosztások kezelése</string>
 	<string name="admin.role.video_conversion">Videók konvertálása</string>
-	<string name="admin.role.lastfm">Last.fm funkció használata</string>
+	<string name="admin.role.lastfm">Last.fm szolgáltatás használata</string>
 
     <string name="music_service.retry">Hálózati hiba történt! Újrapróbálkozás %1$d/%2$d.</string>
 
@@ -555,8 +565,8 @@
     <string name="equalizer.label">Equalizer</string>
     <string name="equalizer.enabled">Engedélyezve</string>
     <string name="equalizer.preset">Profil kiválasztása</string>
-	<string name="equalizer.bass_booster">Basszus fokozás</string>
-	<string name="equalizer.voice_booster">Beszédhang fokozás</string>
+	<string name="equalizer.bass_booster">Basszus fokozása</string>
+	<string name="equalizer.voice_booster">Beszédhang fokozása</string>
 	<string name="equalizer.db_size">%d dB</string>
 	<string name="equalizer.bass_size">%d ezer</string>
 
@@ -578,7 +588,9 @@
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Továbbiak…</string>
 
-	<string name="chat.send_a_message">Üzenet küldése</string>
+	<string name="chat.send_a_message">Üzenet küldése</string> 
+
+    <string name="changelog_version_format">Verzió %s</string>
 
 	<string name="tasker.start_playing">Lejátszás indítása</string>
 	<string name="tasker.start_playing_shuffled">Lejátszás indítása kevert sorrendben</string>
@@ -624,7 +636,7 @@
 	<string name="details.version">Verzió</string>
 	<string name="details.files_cached">Gyorsítótárazott fájlok</string>
 	<string name="details.files_permanent">Megőrzött fájlok</string>
-	<string name="details.used_space">Felhasznált tároló</string>
+	<string name="details.used_space">Felhasznált tárhely</string>
 	<string name="details.available_space">Rendelkezésre álló hely</string>
 	<string name="details.of">%1$s/%2$s</string>
 	<string name="details.song">Dal</string>
