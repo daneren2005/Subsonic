@@ -274,65 +274,6 @@ public final class Util {
 		editor.putBoolean(Constants.PREFERENCES_KEY_ALBUMS_PER_FOLDER + instance, perFolder);
 		editor.commit();
 	}
-
-    public static String getTheme(Context context) {
-        SharedPreferences prefs = getPreferences(context);
-        return prefs.getString(Constants.PREFERENCES_KEY_THEME, null);
-    }
-	public static int getThemeRes(Context context) {
-		return getThemeRes(context, getTheme(context));
-	}
-	public static int getThemeRes(Context context, String theme) {
-		if(context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
-			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
-				if ("dark".equals(theme)) {
-					return R.style.Theme_DSub_Dark_No_Actionbar;
-				} else if ("black".equals(theme)) {
-					return R.style.Theme_DSub_Black_No_Actionbar;
-				} else if ("holo".equals(theme)) {
-					return R.style.Theme_DSub_Holo_No_Actionbar;
-				} else {
-					return R.style.Theme_DSub_Light_No_Actionbar;
-				}
-			} else {
-				if ("dark".equals(theme)) {
-					return R.style.Theme_DSub_Dark_No_Color;
-				} else if ("black".equals(theme)) {
-					return R.style.Theme_DSub_Black_No_Color;
-				} else if ("holo".equals(theme)) {
-					return R.style.Theme_DSub_Holo_No_Color;
-				} else {
-					return R.style.Theme_DSub_Light_No_Color;
-				}
-			}
-		} else {
-			if ("dark".equals(theme)) {
-				return R.style.Theme_DSub_Dark;
-			} else if ("black".equals(theme)) {
-				return R.style.Theme_DSub_Black;
-			} else if ("holo".equals(theme)) {
-				return R.style.Theme_DSub_Holo;
-			} else {
-				return R.style.Theme_DSub_Light;
-			}
-		}
-	}
-	public static void setTheme(Context context, String theme) {
-		SharedPreferences.Editor editor = getPreferences(context).edit();
-		editor.putString(Constants.PREFERENCES_KEY_THEME, theme);
-		editor.commit();
-	}
-
-	public static void applyTheme(Context context, String theme) {
-		context.setTheme(getThemeRes(context, theme));
-
-		SharedPreferences prefs = Util.getPreferences(context);
-		if(prefs.getBoolean(Constants.PREFERENCES_KEY_OVERRIDE_SYSTEM_LANGUAGE, false)) {
-			Configuration config = new Configuration();
-			config.locale = Locale.ENGLISH;
-			context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-		}
-	}
 	
 	public static boolean getDisplayTrack(Context context) {
 		SharedPreferences prefs = getPreferences(context);

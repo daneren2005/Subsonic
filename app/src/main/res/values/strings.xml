@@ -306,6 +306,8 @@
     <string name="settings.theme_dark">Dark</string>
 	<string name="settings.theme_black">Black</string>
 	<string name="settings.theme_holo">Holo</string>
+	<string name="settings.theme_day_night">Day/Night</string>
+	<string name="settings.theme_day_black_night">Day/Black Night</string>
 	<string name="settings.theme_fullscreen">Fullscreen</string>
 	<string name="settings.theme_fullscreen_summary">Hide as many UI elements as Android will allow</string>
 	<string name="settings.track_title">Display Track #</string>

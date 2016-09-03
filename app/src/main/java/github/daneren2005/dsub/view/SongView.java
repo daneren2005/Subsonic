@@ -30,6 +30,7 @@ import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.SongDBHandler;
+import github.daneren2005.dsub.util.ThemeUtil;
 import github.daneren2005.dsub.util.Util;
 
 import java.io.File;
@@ -336,7 +337,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 			if(isRated == 1) {
 				this.setBackgroundColor(Color.RED);
 
-				String theme = Util.getTheme(context);
+				String theme = ThemeUtil.getTheme(context);
 				if("black".equals(theme)) {
 					this.getBackground().setAlpha(80);
 				} else if("dark".equals(theme) || "holo".equals(theme)) {
