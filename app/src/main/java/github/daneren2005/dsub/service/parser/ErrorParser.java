@@ -27,7 +27,6 @@ import java.io.Reader;
  * @author Sindre Mehus
  */
 public class ErrorParser extends AbstractParser {
-
     public ErrorParser(Context context, int instance) {
 		super(context, instance);
 	}
@@ -45,5 +44,6 @@ public class ErrorParser extends AbstractParser {
         } while (eventType != XmlPullParser.END_DOCUMENT);
 
         validate();
+		reader.close();
     }
 }
