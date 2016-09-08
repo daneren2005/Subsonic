@@ -49,6 +49,7 @@
 	<attr name="drawerPlaylists" format="reference"/>
 	<attr name="drawerPodcasts" format="reference"/>
 	<attr name="drawerBookmarks" format="reference"/>
+	<attr name="drawerInternetRadioStations" format="reference"/>
 	<attr name="drawerShares" format="reference"/>
 	<attr name="drawerChat" format="reference"/>
 	<attr name="drawerAdmin" format="reference"/>

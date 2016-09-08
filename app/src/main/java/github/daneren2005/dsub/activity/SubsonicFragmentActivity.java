@@ -66,6 +66,7 @@ import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectBookmarkFragment;
 import github.daneren2005.dsub.fragments.SelectDirectoryFragment;
+import github.daneren2005.dsub.fragments.SelectInternetRadioStationFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
 import github.daneren2005.dsub.fragments.SelectPodcastsFragment;
 import github.daneren2005.dsub.fragments.SelectShareFragment;
@@ -662,6 +663,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			return new SelectPodcastsFragment();
 		} else if("Bookmark".equals(fragmentType)) {
 			return new SelectBookmarkFragment();
+		} else if("Internet Radio".equals(fragmentType)) {
+			return new SelectInternetRadioStationFragment();
 		} else if("Share".equals(fragmentType)) {
 			return new SelectShareFragment();
 		} else if("Admin".equals(fragmentType)) {

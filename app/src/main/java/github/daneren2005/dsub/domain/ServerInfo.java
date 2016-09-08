@@ -215,6 +215,9 @@ public class ServerInfo implements Serializable {
 	public static boolean canBookmark(Context context) {
 		return checkServerVersion(context, "1.9");
 	}
+	public static boolean canInternetRadio(Context context) {
+		return checkServerVersion(context, "1.9");
+	}
 
 	public static boolean canSavePlayQueue(Context context) {
 		return ServerInfo.checkServerVersion(context, "1.12") && (!ServerInfo.isMadsonic(context) || checkServerVersion(context, "2.0"));

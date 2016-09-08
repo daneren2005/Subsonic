@@ -49,6 +49,7 @@
 		<item name="drawerPlaylists">@drawable/ic_menu_playlist_light</item>
 		<item name="drawerPodcasts">@drawable/ic_menu_podcast_light</item>
 		<item name="drawerBookmarks">@drawable/ic_menu_bookmark_light</item>
+		<item name="drawerInternetRadioStations">@drawable/ic_menu_radio_light</item>
 		<item name="drawerShares">@drawable/ic_menu_share_light</item>
 		<item name="drawerChat">@drawable/ic_menu_chat_light</item>
 		<item name="drawerAdmin">@drawable/ic_menu_admin_light</item>
@@ -120,6 +121,7 @@
 		<item name="drawerPlaylists">@drawable/ic_menu_playlist_dark</item>
 		<item name="drawerPodcasts">@drawable/ic_menu_podcast_dark</item>
 		<item name="drawerBookmarks">@drawable/ic_menu_bookmark_dark</item>
+		<item name="drawerInternetRadioStations">@drawable/ic_menu_radio_dark</item>
 		<item name="drawerShares">@drawable/ic_menu_share_dark</item>
 		<item name="drawerChat">@drawable/ic_menu_chat_dark</item>
 		<item name="drawerAdmin">@drawable/ic_menu_admin_dark</item>

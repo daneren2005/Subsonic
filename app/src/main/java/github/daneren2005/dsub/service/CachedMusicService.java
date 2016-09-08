@@ -39,6 +39,7 @@ import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.InternetRadioStation;
 import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteStatus;
@@ -1215,6 +1216,22 @@ public class CachedMusicService implements MusicService {
 	@Override
 	public PlayerQueue getPlayQueue(Context context, ProgressListener progressListener) throws Exception {
 		return musicService.getPlayQueue(context, progressListener);
+	}
+
+	@Override
+	public List<InternetRadioStation> getInternetRadioStations(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		List<InternetRadioStation> result = null;
+
+		if(!refresh) {
+			result = FileUtil.deserialize(context, getCacheName(context, "internetRadioStations"), ArrayList.class);
+		}
+
+		if(result == null) {
+			result = musicService.getInternetRadioStations(refresh, context, progressListener);
+			FileUtil.serialize(context, new ArrayList<>(result), getCacheName(context, "internetRadioStations"));
+		}
+
+		return result;
 	}
 
 	@Override

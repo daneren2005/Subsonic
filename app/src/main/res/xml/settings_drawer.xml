@@ -19,6 +19,12 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
+			android:title="@string/settings.internet_radio_enabled"
+			android:summary="@string/settings.internet_radio_enabled_summary"
+			android:key="internetRadioEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
 			android:title="@string/settings.shares_enabled"
 			android:summary="@string/settings.shares_enabled_summary"
 			android:key="sharedEnabled"
