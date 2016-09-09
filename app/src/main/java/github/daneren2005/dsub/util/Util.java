@@ -421,6 +421,18 @@ public final class Util {
 		return builder.toString().hashCode();
 	}
 
+	public static String getBlockTokenUsePref(Context context, int instance) {
+		return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false);
+	}
+	public static boolean getBlockTokenUse(Context context, int instance) {
+		return getPreferences(context).getBoolean(getBlockTokenUsePref(context, instance), false);
+	}
+	public static void setBlockTokenUse(Context context, int instance, boolean block) {
+		SharedPreferences.Editor editor = getPreferences(context).edit();
+		editor.putBoolean(getBlockTokenUsePref(context, instance), block);
+		editor.commit();
+	}
+
 	public static String replaceInternalUrl(Context context, String url) {
 		// Only change to internal when using https
 		if(url.indexOf("https") != -1) {
