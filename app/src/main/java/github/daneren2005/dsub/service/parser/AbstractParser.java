@@ -18,6 +18,7 @@
  */
 package github.daneren2005.dsub.service.parser;
 
+import java.io.IOException;
 import java.io.Reader;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -72,6 +73,11 @@ public abstract class AbstractParser {
             case 40:
                 message = context.getResources().getString(R.string.parser_not_authenticated);
                 break;
+			case 41:
+				Util.setBlockTokenUse(context, instance, true);
+
+				// Throw IOException so RESTMusicService knows to retry
+				throw new IOException();
             case 50:
                 message = context.getResources().getString(R.string.parser_not_authorized);
                 break;
