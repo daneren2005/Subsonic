@@ -29,8 +29,10 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.adapter.InternetRadioStationAdapter;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.InternetRadioStation;
+import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.TabBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.UpdateView;
 
@@ -56,8 +58,24 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 	}
 
 	@Override
-	public void onItemClicked(UpdateView<InternetRadioStation> updateView, InternetRadioStation item) {
+	public void onItemClicked(UpdateView<InternetRadioStation> updateView, final InternetRadioStation item) {
+		new TabBackgroundTask<Void>(this) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				DownloadService downloadService = getDownloadService();
+				if(downloadService == null) {
+					return null;
+				}
 
+				downloadService.download(item);
+				return null;
+			}
+
+			@Override
+			protected void done(Void result) {
+				context.openNowPlaying();
+			}
+		}.execute();
 	}
 
 	@Override

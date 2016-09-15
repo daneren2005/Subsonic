@@ -535,6 +535,15 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				mediaRouteButton.setDialogFactory(new CustomMediaRouteDialogFactory());
 				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 			}
+
+			if(downloadService.isCurrentPlayingSingle()) {
+				if(!Util.isOffline(context)) {
+					menu.removeItem(R.id.menu_save_playlist);
+				}
+
+				menu.removeItem(R.id.menu_batch_mode);
+				menu.removeItem(R.id.menu_remove_played);
+			}
 		}
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_BATCH_MODE, false)) {
@@ -867,6 +876,11 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	private void setControlsVisible(boolean visible) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService != null && downloadService.isCurrentPlayingSingle()) {
+			return;
+		}
+
 		try {
 			long duration = 1700L;
 			FadeOutAnimation.createAndStart(rootView.findViewById(R.id.download_overlay_buttons), !visible, duration);
@@ -1242,18 +1256,25 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
 
-		if(currentPlaying != null && !currentPlaying.isSong()) {
+		if(getDownloadService().isCurrentPlayingSingle()) {
 			previousButton.setVisibility(View.GONE);
 			nextButton.setVisibility(View.GONE);
-
-			rewindButton.setVisibility(View.VISIBLE);
-			fastforwardButton.setVisibility(View.VISIBLE);
-		} else {
-			previousButton.setVisibility(View.VISIBLE);
-			nextButton.setVisibility(View.VISIBLE);
-
 			rewindButton.setVisibility(View.GONE);
 			fastforwardButton.setVisibility(View.GONE);
+		} else {
+			if (currentPlaying != null && !currentPlaying.isSong()) {
+				previousButton.setVisibility(View.GONE);
+				nextButton.setVisibility(View.GONE);
+
+				rewindButton.setVisibility(View.VISIBLE);
+				fastforwardButton.setVisibility(View.VISIBLE);
+			} else {
+				previousButton.setVisibility(View.VISIBLE);
+				nextButton.setVisibility(View.VISIBLE);
+
+				rewindButton.setVisibility(View.GONE);
+				fastforwardButton.setVisibility(View.GONE);
+			}
 		}
 		updateTitle();
 	}
@@ -1265,7 +1286,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			getImageLoader().loadImage(albumArtImageView, song, true, true);
 
 			DownloadService downloadService = getDownloadService();
-			if(downloadService.isShufflePlayEnabled()) {
+			if(downloadService.isCurrentPlayingSingle()) {
+				setSubtitle(null);
+			} else if(downloadService.isShufflePlayEnabled()) {
 				setSubtitle(context.getResources().getString(R.string.download_playerstate_playing_shuffle));
 			} else if(downloadService.isArtistRadio()) {
 				setSubtitle(context.getResources().getString(R.string.download_playerstate_playing_artist_radio));
@@ -1313,6 +1336,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
 		} else {
 			setupSubtitle(currentPlayingIndex);
+		}
+
+		if(downloadService.isCurrentPlayingSingle()) {
+			toggleListButton.setVisibility(View.GONE);
+			repeatButton.setVisibility(View.GONE);
+		} else {
+			toggleListButton.setVisibility(View.VISIBLE);
+			repeatButton.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -1368,11 +1399,16 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				break;
 			default:
 				if(currentPlaying != null) {
-					String artist = "";
-					if(currentPlaying.getSong().getArtist() != null) {
-						artist = currentPlaying.getSong().getArtist() + " - ";
+					Entry entry = currentPlaying.getSong();
+					if(entry.getAlbum() != null) {
+						String artist = "";
+						if (entry.getArtist() != null) {
+							artist = currentPlaying.getSong().getArtist() + " - ";
+						}
+						statusTextView.setText(artist + entry.getAlbum());
+					} else {
+						statusTextView.setText(null);
 					}
-					statusTextView.setText(artist + currentPlaying.getSong().getAlbum());
 				} else {
 					statusTextView.setText(null);
 				}
