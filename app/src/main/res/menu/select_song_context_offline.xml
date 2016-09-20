@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:compat="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 	
 	<item
 		android:id="@+id/song_menu_info"
@@ -14,6 +13,12 @@
 		<item
 			android:id="@+id/song_menu_show_artist"
 			android:title="@string/menu.show_artist"/>
+	</group>
+
+	<group android:id="@+id/hide_play_now">
+		<item
+			android:id="@+id/song_menu_play_now"
+			android:title="@string/common.play_now"/>
 	</group>
 
 	<group android:id="@+id/hide_play_next">
