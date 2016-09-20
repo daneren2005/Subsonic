@@ -1125,7 +1125,7 @@ public final class Util {
     }
 
 	public static boolean isAllowedToDownload(Context context) {
-		return !isWifiRequiredForDownload(context) || isWifiConnected(context);
+		return isNetworkConnected(context, true) && !isOffline(context);
 	}
     public static boolean isWifiRequiredForDownload(Context context) {
         SharedPreferences prefs = getPreferences(context);

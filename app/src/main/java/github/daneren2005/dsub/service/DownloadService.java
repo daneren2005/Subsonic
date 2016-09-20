@@ -2160,7 +2160,7 @@ public class DownloadService extends Service {
 			checkArtistRadio();
 		}
 
-		if (!Util.isNetworkConnected(this, true) || Util.isOffline(this)) {
+		if (!Util.isAllowedToDownload(this)) {
 			return;
 		}
 
