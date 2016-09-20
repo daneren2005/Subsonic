@@ -67,9 +67,10 @@ public final class Notifications {
 			notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 		}
 		boolean remote = downloadService.isRemoteEnabled();
+		boolean isSingle = downloadService.isCurrentPlayingSingle();
 		if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
 			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-			setupViews(expandedContentView ,context, song, true, playing, remote);
+			setupViews(expandedContentView ,context, song, true, playing, remote, isSingle);
 			notification.bigContentView = expandedContentView;
 			notification.priority = Notification.PRIORITY_HIGH;
 		}
@@ -82,7 +83,7 @@ public final class Notifications {
 		}
 
 		RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
-		setupViews(smallContentView, context, song, false, playing, remote);
+		setupViews(smallContentView, context, song, false, playing, remote, isSingle);
 		notification.contentView = smallContentView;
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
@@ -122,7 +123,7 @@ public final class Notifications {
 		DSubWidgetProvider.notifyInstances(context, downloadService, playing);
 	}
 
-	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote) {
+	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote, boolean isSingleFile) {
 		boolean isLongFile = song.isAudioBook() || song.isPodcast();
 
 		// Use the same text for the ticker and the expanded notification
@@ -208,6 +209,27 @@ public final class Notifications {
 		if((remote || persistent) && close == 0 && expanded) {
 			close = R.id.notification_close;
 			rv.setViewVisibility(close, View.VISIBLE);
+		}
+		
+		if(isSingleFile) {
+			if(previous > 0) {
+				rv.setViewVisibility(previous, View.GONE);
+				previous = 0;
+			}
+			if(rewind > 0) {
+				rv.setViewVisibility(rewind, View.GONE);
+				rewind = 0;
+			}
+
+			if(next > 0) {
+				rv.setViewVisibility(next, View.GONE);
+				next = 0;
+			}
+
+			if(fastForward > 0) {
+				rv.setViewVisibility(fastForward, View.GONE);
+				fastForward = 0;
+			}
 		}
 
 		if(previous > 0) {

@@ -35,6 +35,7 @@ import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.audiofx.AudioEffectsController;
 import github.daneren2005.dsub.audiofx.EqualizerController;
 import github.daneren2005.dsub.domain.Bookmark;
+import github.daneren2005.dsub.domain.InternetRadioStation;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.PodcastEpisode;
@@ -60,6 +61,7 @@ import github.daneren2005.serverproxy.BufferProxy;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -123,7 +125,7 @@ public class DownloadService extends Service {
 
 	private RemoteControlClientBase mRemoteControl;
 
-	private final IBinder binder = new SimpleServiceBinder<DownloadService>(this);
+	private final IBinder binder = new SimpleServiceBinder<>(this);
 	private Looper mediaPlayerLooper;
 	private MediaPlayer mediaPlayer;
 	private MediaPlayer nextMediaPlayer;
@@ -382,6 +384,10 @@ public class DownloadService extends Service {
 		handler.postDelayed(r, millis);
 	}
 
+	public synchronized void download(InternetRadioStation station) {
+		clear();
+		download(Arrays.asList((MusicDirectory.Entry) station), false, true, false, false);
+	}
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
 		download(songs, save, autoplay, playNext, shuffle, 0, 0);
 	}
@@ -394,7 +400,10 @@ public class DownloadService extends Service {
 
 		if (songs.isEmpty()) {
 			return;
+		} else if(isCurrentPlayingSingle()) {
+			clear();
 		}
+
 		if (playNext) {
 			if (autoplay && getCurrentPlayingIndex() >= 0) {
 				offset = 0;
@@ -995,6 +1004,21 @@ public class DownloadService extends Service {
 	}
 
 	public List<DownloadFile> getToDelete() { return toDelete; }
+
+	public boolean isCurrentPlayingSingle() {
+		if(currentPlaying != null && currentPlaying.getSong() instanceof InternetRadioStation) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public boolean isCurrentPlayingStream() {
+		if(currentPlaying != null) {
+			return currentPlaying.isStream();
+		} else {
+			return false;
+		}
+	}
 
 	public synchronized List<DownloadFile> getDownloads() {
 		List<DownloadFile> temp = new ArrayList<DownloadFile>();
@@ -1819,7 +1843,7 @@ public class DownloadService extends Service {
 		bufferAndPlay(position, true);
 	}
 	private synchronized void bufferAndPlay(int position, boolean start) {
-		if(!currentPlaying.isCompleteFileAvailable()) {
+		if(!currentPlaying.isCompleteFileAvailable() && !currentPlaying.isStream()) {
 			if(Util.isAllowedToDownload(this)) {
 				reset();
 
@@ -1835,11 +1859,6 @@ public class DownloadService extends Service {
 
 	private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
 		try {
-			downloadFile.setPlaying(true);
-			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-			boolean isPartial = file.equals(downloadFile.getPartialFile());
-			downloadFile.updateModificationDate();
-
 			subtractPosition = 0;
 			mediaPlayer.setOnCompletionListener(null);
 			mediaPlayer.setOnPreparedListener(null);
@@ -1851,19 +1870,33 @@ public class DownloadService extends Service {
 			} catch(Throwable e) {
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			}
-			String dataSource = file.getAbsolutePath();
-			if(isPartial && !Util.isOffline(this)) {
-				if (proxy == null) {
-					proxy = new BufferProxy(this);
-					proxy.start();
-				}
-				proxy.setBufferFile(downloadFile);
-				dataSource = proxy.getPrivateAddress(dataSource);
+
+			String dataSource;
+			boolean isPartial = false;
+			if(downloadFile.isStream()) {
+				dataSource = downloadFile.getStream();
 				Log.i(TAG, "Data Source: " + dataSource);
-			} else if(proxy != null) {
-				proxy.stop();
-				proxy = null;
+			} else {
+				downloadFile.setPlaying(true);
+				final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
+				isPartial = file.equals(downloadFile.getPartialFile());
+				downloadFile.updateModificationDate();
+
+				dataSource = file.getAbsolutePath();
+				if (isPartial && !Util.isOffline(this)) {
+					if (proxy == null) {
+						proxy = new BufferProxy(this);
+						proxy.start();
+					}
+					proxy.setBufferFile(downloadFile);
+					dataSource = proxy.getPrivateAddress(dataSource);
+					Log.i(TAG, "Data Source: " + dataSource);
+				} else if (proxy != null) {
+					proxy.stop();
+					proxy = null;
+				}
 			}
+
 			mediaPlayer.setDataSource(dataSource);
 			setPlayerState(PREPARING);
 
@@ -2165,6 +2198,9 @@ public class DownloadService extends Service {
 		}
 
 		if (downloadList.isEmpty() && backgroundDownloadList.isEmpty()) {
+			return;
+		}
+		if(currentPlaying != null && currentPlaying.isStream()) {
 			return;
 		}
 
