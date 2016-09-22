@@ -36,6 +36,8 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
+
+import github.daneren2005.dsub.domain.InternetRadioStation;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerQueue;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -310,7 +312,7 @@ public class DownloadServiceLifecycleSupport {
 		FileUtil.serialize(downloadService, state, FILENAME_DOWNLOADS_SER);
 
 		// If we are on Subsonic 5.2+, save play queue
-		if(serializeRemote && ServerInfo.canSavePlayQueue(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0) {
+		if(serializeRemote && ServerInfo.canSavePlayQueue(downloadService) && !Util.isOffline(downloadService) && state.songs.size() > 0 && !(state.songs.get(0) instanceof InternetRadioStation)) {
 			// Cancel any currently running tasks
 			if(currentSavePlayQueueTask != null) {
 				currentSavePlayQueueTask.cancel();

@@ -43,6 +43,7 @@ import java.lang.ref.WeakReference;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ArtistInfo;
+import github.daneren2005.dsub.domain.InternetRadioStation;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastChannel;
@@ -221,8 +222,11 @@ public class ImageLoader {
 		return loadImage(view, entry, large, size, crossfade);
 	}
 	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade) {
-		// TODO: If we know this a artist, try to load artist info instead
-		if(entry != null && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
+		if(entry != null && entry instanceof InternetRadioStation) {
+			// Continue on and load a null bitmap
+		}
+		// If we know this a artist, try to load artist info instead
+		else if(entry != null && !entry.isAlbum() && ServerInfo.checkServerVersion(context, "1.11")  && !Util.isOffline(context)) {
 			SilentBackgroundTask task = new ArtistImageTask(view.getContext(), entry, size, imageSizeLarge, large, view, crossfade);
 			task.execute();
 			return task;
