@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
@@ -215,6 +216,9 @@ public class ServerInfo implements Serializable {
 	public static boolean canBookmark(Context context) {
 		return checkServerVersion(context, "1.9");
 	}
+	public static boolean canInternetRadio(Context context) {
+		return checkServerVersion(context, "1.9");
+	}
 
 	public static boolean canSavePlayQueue(Context context) {
 		return ServerInfo.checkServerVersion(context, "1.12") && (!ServerInfo.isMadsonic(context) || checkServerVersion(context, "2.0"));
@@ -231,8 +235,15 @@ public class ServerInfo implements Serializable {
 		return canUseToken(context, Util.getActiveServer(context));
 	}
 	public static boolean canUseToken(Context context, int instance) {
-		return false; /*isStockSubsonic(context, instance) && checkServerVersion(context, "1.13", instance) ||
-				isMadsonic(context, instance) && checkServerVersion(context, "2.0", instance);*/
+		if(isStockSubsonic(context, instance) && checkServerVersion(context, "1.14", instance)) {
+			if(Util.getBlockTokenUse(context, instance)) {
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return false;
+		}
 	}
 	public static boolean hasSimilarArtists(Context context) {
 		return !ServerInfo.isMadsonic(context) || ServerInfo.checkServerVersion(context, "2.0");

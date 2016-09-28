@@ -29,6 +29,8 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.util.Log;
+
+import github.daneren2005.dsub.domain.InternetRadioStation;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
@@ -374,6 +376,18 @@ public class DownloadFile implements BufferFile {
 			mediaStoreService.renameInMediaStore(start, end);
 		} catch(Exception e) {
 			Log.w(TAG, "Failed to rename in store", e);
+		}
+	}
+
+	public boolean isStream() {
+		return song != null && song instanceof InternetRadioStation;
+	}
+	public String getStream() {
+		if(song != null && song instanceof InternetRadioStation) {
+			InternetRadioStation station = (InternetRadioStation) song;
+			return station.getStreamUrl();
+		} else {
+			return null;
 		}
 	}
 

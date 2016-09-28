@@ -82,6 +82,7 @@ import github.daneren2005.dsub.service.parser.ChatMessageParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
 import github.daneren2005.dsub.service.parser.GenreParser;
 import github.daneren2005.dsub.service.parser.IndexesParser;
+import github.daneren2005.dsub.service.parser.InternetRadioStationParser;
 import github.daneren2005.dsub.service.parser.JukeboxStatusParser;
 import github.daneren2005.dsub.service.parser.LicenseParser;
 import github.daneren2005.dsub.service.parser.LyricsParser;
@@ -1725,6 +1726,18 @@ public class RESTMusicService implements MusicService {
 		Reader reader = getReader(context, progressListener, "getPlayQueue");
 		try {
 			return new PlayQueueParser(context, getInstance(context)).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
+
+	@Override
+	public List<InternetRadioStation> getInternetRadioStations(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+		checkServerVersion(context, "1.9", null);
+
+		Reader reader = getReader(context, progressListener, "getInternetRadioStations", null);
+		try {
+			return new InternetRadioStationParser(context, getInstance(context)).parse(reader, progressListener);
 		} finally {
 			Util.close(reader);
 		}

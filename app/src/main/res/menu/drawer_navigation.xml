@@ -22,6 +22,10 @@
 			android:icon="?attr/drawerBookmarks"
 			android:title="@string/button_bar.bookmarks"/>
 		<item
+			android:id="@+id/drawer_internet_radio_stations"
+			android:icon="?attr/drawerInternetRadioStations"
+			android:title="@string/button_bar.internet_radio"/>
+		<item
 			android:id="@+id/drawer_shares"
 			android:icon="?attr/drawerShares"
 			android:title="@string/button_bar.shares"/>

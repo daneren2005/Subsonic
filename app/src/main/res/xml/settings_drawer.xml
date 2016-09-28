@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:myns="http://schemas.android.com/apk/res/github.daneren2005.dsub"
+	xmlns:myns="http://schemas.android.com/apk/res-auto"
 	android:title="@string/settings.drawer_items_title">
 
 	<PreferenceCategory
@@ -16,6 +16,12 @@
 			android:title="@string/settings.bookmarks_enabled"
 			android:summary="@string/settings.bookmarks_enabled_summary"
 			android:key="bookmarksEnabled"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:title="@string/settings.internet_radio_enabled"
+			android:summary="@string/settings.internet_radio_enabled_summary"
+			android:key="internetRadioEnabled"
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference

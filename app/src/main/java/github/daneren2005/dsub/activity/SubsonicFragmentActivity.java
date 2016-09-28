@@ -66,6 +66,7 @@ import github.daneren2005.dsub.fragments.SearchFragment;
 import github.daneren2005.dsub.fragments.SelectArtistFragment;
 import github.daneren2005.dsub.fragments.SelectBookmarkFragment;
 import github.daneren2005.dsub.fragments.SelectDirectoryFragment;
+import github.daneren2005.dsub.fragments.SelectInternetRadioStationFragment;
 import github.daneren2005.dsub.fragments.SelectPlaylistFragment;
 import github.daneren2005.dsub.fragments.SelectPodcastsFragment;
 import github.daneren2005.dsub.fragments.SelectShareFragment;
@@ -662,6 +663,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			return new SelectPodcastsFragment();
 		} else if("Bookmark".equals(fragmentType)) {
 			return new SelectBookmarkFragment();
+		} else if("Internet Radio".equals(fragmentType)) {
+			return new SelectInternetRadioStationFragment();
 		} else if("Share".equals(fragmentType)) {
 			return new SelectShareFragment();
 		} else if("Admin".equals(fragmentType)) {
@@ -922,7 +925,13 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		if (currentPlaying != null) {
 			song = currentPlaying.getSong();
 			trackView.setText(song.getTitle());
-			artistView.setText(song.getArtist());
+
+			if(song.getArtist() != null) {
+				artistView.setVisibility(View.VISIBLE);
+				artistView.setText(song.getArtist());
+			} else {
+				artistView.setVisibility(View.GONE);
+			}
 		} else {
 			trackView.setText(R.string.main_title);
 			artistView.setText(R.string.main_artist);
@@ -939,18 +948,25 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			getImageLoader().loadImage(coverArtView, song, false, height, false);
 		}
 
-		if(currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
+		if(getDownloadService().isCurrentPlayingSingle()) {
 			previousButton.setVisibility(View.GONE);
 			nextButton.setVisibility(View.GONE);
-
-			rewindButton.setVisibility(View.VISIBLE);
-			fastforwardButton.setVisibility(View.VISIBLE);
-		} else {
-			previousButton.setVisibility(View.VISIBLE);
-			nextButton.setVisibility(View.VISIBLE);
-
 			rewindButton.setVisibility(View.GONE);
 			fastforwardButton.setVisibility(View.GONE);
+		} else {
+			if (currentPlaying != null && currentPlaying.getSong() != null && (currentPlaying.getSong().isPodcast() || currentPlaying.getSong().isAudioBook())) {
+				previousButton.setVisibility(View.GONE);
+				nextButton.setVisibility(View.GONE);
+
+				rewindButton.setVisibility(View.VISIBLE);
+				fastforwardButton.setVisibility(View.VISIBLE);
+			} else {
+				previousButton.setVisibility(View.VISIBLE);
+				nextButton.setVisibility(View.VISIBLE);
+
+				rewindButton.setVisibility(View.GONE);
+				fastforwardButton.setVisibility(View.GONE);
+			}
 		}
 	}
 

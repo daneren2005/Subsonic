@@ -3,6 +3,7 @@ package github.daneren2005.dsub.service;
 import android.content.Context;
 import android.util.Log;
 
+import github.daneren2005.dsub.domain.InternetRadioStation;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
@@ -69,7 +70,7 @@ public class Scrobbler {
 					return null;
 				}
 				// Ignore podcasts
-				else if(song.getSong() instanceof PodcastEpisode) {
+				else if(song.getSong() instanceof PodcastEpisode || song.getSong() instanceof InternetRadioStation) {
 					return null;
 				}
 

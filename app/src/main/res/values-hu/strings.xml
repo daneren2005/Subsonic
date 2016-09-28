@@ -36,6 +36,7 @@
     <string name="button_bar.now_playing">Várólista</string>
 	<string name="button_bar.podcasts">Podcastok</string>
 	<string name="button_bar.bookmarks">Könyvjelzők</string>
+	<string name="button_bar.internet_radio">Internet rádió</string>
 	<string name="button_bar.shares">Megosztások</string>
 	<string name="button_bar.chat">Csevegés (Chat)</string>
 	<string name="button_bar.admin">Admin</string>
@@ -225,6 +226,7 @@
 	<string name="download.playback_speed_one_half">1.5x</string>
 	<string name="download.playback_speed_double">2x</string>
 	<string name="download.playback_speed_tripple">3x</string>
+	<string name="download.playback_speed_custom">Egyéni</string>
 
 	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
 	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
@@ -305,6 +307,8 @@
     <string name="settings.theme_dark">Sötét</string>
 	<string name="settings.theme_black">Fekete</string>
 	<string name="settings.theme_holo">Holo</string>
+	<string name="settings.theme_day_night">Nappal/Éjszaka</string>
+	<string name="settings.theme_day_black_night">Nappal/Fekete éjszaka</string>
 	<string name="settings.theme_fullscreen">Teljes képernyős</string>
 	<string name="settings.theme_fullscreen_summary">Teljes képernyős üzemmód (értesítési sáv elrejtése).</string>
 	<string name="settings.track_title">Dalsorszám megjelenítése</string>
@@ -407,6 +411,8 @@
 	<string name="settings.podcasts_enabled_summary">Podcastok menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.bookmarks_enabled">Könyvjelzők engedélyezése</string>
 	<string name="settings.bookmarks_enabled_summary">Könyvjelzők menüpont megjelenítése az elhúzható oldalsávon.</string>
+	<string name="settings.internet_radio_enabled">Internet rádió engedélyezése</string>
+	<string name="settings.internet_radio_enabled_summary">Internet rádió menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.shares_enabled">Megosztások engedélyezése</string>
 	<string name="settings.shares_enabled_summary">Megosztások menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.sync_title">Szinkronizálás</string>
@@ -464,7 +470,7 @@
 	<string name="settings.replay_gain_type.track">Dal értékeiből</string>
 	<string name="settings.replay_gain_bump">Hangerő-kiegyenlítés előerősítése</string>
 	<string name="settings.replay_gain_untagged">Dalok hangerő-kiegyenlítés nélkül</string>
-	<string name="settings.casting">Casting (Tartalmak átküldése)</string>
+	<string name="settings.casting">Casting (tartalmak átküldése)</string>
 	<string name="settings.casting_proxy">Eszköz használata proxyként</string>
 	<string name="settings.casting_proxy_summary">Streamelés az eszközön (mint egy proxyn) keresztül. Ez megoldást jelenthet néhány esetben, pl. saját aláírású tanúsítvány használatakor.</string>
 	<string name="settings.rename_duplicates">Duplikált dalok átnevezése</string>

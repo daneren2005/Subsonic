@@ -47,7 +47,7 @@ public class AdminFragment extends SelectRecyclerFragment<User> {
 
 		switch (item.getItemId()) {
 			case R.id.menu_add_user:
-				UserUtil.addNewUser(context, this, objects.get(0));
+				UserUtil.addNewUser(context, this, (objects.size() > 0) ? objects.get(0) : null);
 				break;
 		}
 

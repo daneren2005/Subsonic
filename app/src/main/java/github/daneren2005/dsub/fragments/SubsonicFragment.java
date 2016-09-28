@@ -309,6 +309,12 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					if(entry.getBookmark() == null) {
 						menu.removeItem(R.id.bookmark_menu_delete);
 					}
+
+
+					String songPressAction = Util.getSongPressAction(context);
+					if(!"next".equals(songPressAction) && !"last".equals(songPressAction)) {
+						menu.setGroupVisible(R.id.hide_play_now, false);
+					}
 				}
 			} else {
 				if(Util.isOffline(context)) {
@@ -429,6 +435,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				break;
 			case R.id.album_menu_share:
 				createShare(songs);
+				break;
+			case R.id.song_menu_play_now:
+				playNow(songs);
 				break;
 			case R.id.song_menu_play_next:
 				getDownloadService().download(songs, false, false, true, false);

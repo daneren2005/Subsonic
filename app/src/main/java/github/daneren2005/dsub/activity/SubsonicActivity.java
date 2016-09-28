@@ -162,6 +162,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 						case Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED:
 							setDrawerItemVisible(R.id.drawer_bookmarks, false);
 							break;
+						case Constants.PREFERENCES_KEY_INTERNET_RADIO_ENABLED:
+							setDrawerItemVisible(R.id.drawer_internet_radio_stations, false);
+							break;
 						case Constants.PREFERENCES_KEY_SHARED_ENABLED:
 							setDrawerItemVisible(R.id.drawer_shares, false);
 							break;
@@ -310,6 +313,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 							return true;
 						case R.id.drawer_bookmarks:
 							drawerItemSelected("Bookmark");
+							return true;
+						case R.id.drawer_internet_radio_stations:
+							drawerItemSelected("Internet Radio");
 							return true;
 						case R.id.drawer_shares:
 							drawerItemSelected("Share");
@@ -586,6 +592,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		SharedPreferences prefs = Util.getPreferences(this);
 		boolean podcastsEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_PODCASTS_ENABLED, true);
 		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this) && ServerInfo.canBookmark(this);
+		boolean internetRadioEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_INTERNET_RADIO_ENABLED, true) && !Util.isOffline(this) && ServerInfo.canInternetRadio(this);
 		boolean sharedEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SHARED_ENABLED, true) && !Util.isOffline(this);
 		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		boolean adminEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_ADMIN_ENABLED, true) && !Util.isOffline(this);
@@ -614,6 +621,9 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 		if(!bookmarksEnabled) {
 			setDrawerItemVisible(R.id.drawer_bookmarks, false);
+		}
+		if(!internetRadioEnabled) {
+			setDrawerItemVisible(R.id.drawer_internet_radio_stations, false);
 		}
 		if(!sharedEnabled) {
 			setDrawerItemVisible(R.id.drawer_shares, false);
@@ -1191,6 +1201,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				return R.id.drawer_podcasts;
 			case "Bookmark":
 				return R.id.drawer_bookmarks;
+			case "Internet Radio":
+				return R.id.drawer_internet_radio_stations;
 			case "Share":
 				return R.id.drawer_shares;
 			case "Chat":

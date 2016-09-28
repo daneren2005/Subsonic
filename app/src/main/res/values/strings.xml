@@ -36,6 +36,7 @@
     <string name="button_bar.now_playing">Now Playing</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bookmarks</string>
+	<string name="button_bar.internet_radio">Internet Radio</string>
 	<string name="button_bar.shares">Shares</string>
 	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Admin</string>
@@ -410,6 +411,8 @@
 	<string name="settings.podcasts_enabled_summary">Whether or not to display the podcast listing in the pull out drawer</string>
 	<string name="settings.bookmarks_enabled">Bookmarks Enabled</string>
 	<string name="settings.bookmarks_enabled_summary">Whether or not to display the bookmarks listing in the pull out drawer</string>
+	<string name="settings.internet_radio_enabled">Internet Radio Enabled</string>
+	<string name="settings.internet_radio_enabled_summary">Whether or not to display the internet radio listing in the pull out drawer</string>
 	<string name="settings.shares_enabled">Shares Enabled</string>
 	<string name="settings.shares_enabled_summary">Whether or not to display the shares listing in the pull out drawer</string>
 	<string name="settings.sync_title">Sync</string>
@@ -610,6 +613,7 @@
 	<string name="details.title.podcast">Podcast Details</string>
 	<string name="details.title.playlist">Playlist Details</string>
 	<string name="details.title.artist">Artist Details</string>
+	<string name="details.title.internet_radio_station">Internet Radio Details</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Status</string>
 	<string name="details.artist">Artist</string>
@@ -649,6 +653,8 @@
 	<string name="details.last_played">Last Played</string>
 	<string name="details.expiration">Expiration</string>
 	<string name="details.played_count">Played Count</string>
+	<string name="details.stream_url">Stream URL</string>
+	<string name="details.home_page">Home Page</string>
 
 	<string name="permission.external_storage.failed">DSub cannot function without the ability to write to storage</string>
 

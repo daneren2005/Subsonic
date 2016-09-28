@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.3" versioncode="186" releasedate="9/23/2016">
+		<change>Listen to Radio Internet Stations</change>
+		<change>Automatic Day/Night theme</change>
+		<change>Android 6.0 runtime permissions</change>
+		<change>Custom variable playback speed</change>
+		<change>Add Play Now for songs when click action is add to queue</change>
+		<change>More secure connections with tokens (Subsonic 6+)</change>
+		<change>Auto skip uncached songs when no network</change>
+		<change>Shrink install size</change>
+		<change>Fix DLNA casting on Android 7.0+</change>
+	</release>
 	<release version="5.2.2" versioncode="184" releasedate="8/30/2016">
 		<change>Fix lagging in landscape view on the Now Playing screen</change>
 	</release>

@@ -15,6 +15,12 @@
 			android:title="@string/menu.show_artist"/>
 	</group>
 
+	<group android:id="@+id/hide_play_now">
+		<item
+			android:id="@+id/song_menu_play_now"
+			android:title="@string/common.play_now"/>
+	</group>
+
 	<group android:id="@+id/hide_play_next">
 		<item
 			android:id="@+id/song_menu_play_next"

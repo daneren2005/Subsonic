@@ -431,6 +431,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		for (ServerSettings ss : serverSettings.values()) {
 			if(!ss.update()) {
 				serversCategory.removePreference(ss.getScreen());
+				serverCount--;
 			}
 		}
 	}
