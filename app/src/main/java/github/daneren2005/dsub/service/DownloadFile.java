@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
@@ -39,15 +40,6 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.CacheCleaner;
 import github.daneren2005.serverproxy.BufferFile;
 
-import org.apache.http.Header;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-
-/**
- * @author Sindre Mehus
- * @version $Id$
- */
 public class DownloadFile implements BufferFile {
     private static final String TAG = DownloadFile.class.getSimpleName();
     private static final int MAX_FAILURES = 5;
@@ -467,17 +459,15 @@ public class DownloadFile implements BufferFile {
 				}
 				if(compare) {
 					// Attempt partial HTTP GET, appending to the file if it exists.
-					HttpResponse response = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
-					Header contentLengthHeader = response.getFirstHeader("Content-Length");
-					if(contentLengthHeader != null) {
-						String contentLengthString = contentLengthHeader.getValue();
-						if(contentLengthString != null) {
-							Log.i(TAG, "Content Length: " + contentLengthString);
-							contentLength = Long.parseLong(contentLengthString);
-						}
+					HttpURLConnection connection = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
+					long contentLength = connection.getContentLength();
+					if(contentLength > 0) {
+						Log.i(TAG, "Content Length: " + contentLength);
+						DownloadFile.this.contentLength = contentLength;
 					}
-					in = response.getEntity().getContent();
-					boolean partial = response.getStatusLine().getStatusCode() == HttpStatus.SC_PARTIAL_CONTENT;
+
+					in = connection.getInputStream();
+					boolean partial = connection.getResponseCode() == HttpURLConnection.HTTP_PARTIAL;
 					if (partial) {
 						Log.i(TAG, "Executed partial HTTP GET, skipping " + partialFile.length() + " bytes");
 					}
