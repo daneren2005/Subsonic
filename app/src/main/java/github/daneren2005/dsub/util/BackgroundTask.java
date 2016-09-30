@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -54,6 +55,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>());
 	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
 	private static Handler handler = null;
+	private static AtomicInteger currentlyRunning = new AtomicInteger(0);
 	static {
 		try {
 			handler = new Handler(Looper.getMainLooper());
@@ -71,6 +73,11 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 				threads.add(thread);
 				thread.start();
 			}
+		} else if(currentlyRunning.get() >= threads.size()) {
+			Log.w(TAG, "Emergency add new thread: " + (threads.size() + 1));
+			Thread thread = new Thread(new TaskRunnable(), String.format("BackgroundTask_%d", threads.size()));
+			threads.add(thread);
+			thread.start();
 		}
 		if(handler == null) {
 			try {
@@ -304,22 +311,30 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		@Override
 		public void run() {
 			Looper.prepare();
+			final Thread currentThread = Thread.currentThread();
 			while(running) {
 				try {
 					Task task = queue.take();
+					currentlyRunning.incrementAndGet();
 					task.execute();
 				} catch(InterruptedException stop) {
 					Log.e(TAG, "Thread died");
 					running = false;
-					threads.remove(Thread.currentThread());
 				} catch(Throwable t) {
 					Log.e(TAG, "Unexpected crash in BackgroundTask thread", t);
+					running = false;
 				}
+
+				currentlyRunning.decrementAndGet();
+			}
+
+			if(threads.contains(currentThread)) {
+				threads.remove(currentThread);
 			}
 		}
 	}
 
-	public static interface OnCancelListener {
+	public interface OnCancelListener {
 		void onCancel();
 	}
 }
