@@ -36,6 +36,7 @@
     <string name="button_bar.now_playing">A reproduzir agora</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Marcadores</string>
+	<string name="button_bar.internet_radio">Rádios online</string>
 	<string name="button_bar.shares">Partilhas</string>
 	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Administração</string>
@@ -43,17 +44,17 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Bem-vindo!</string>
-    <string name="main.welcome_text">Bem-vindo ao DSub! Atualmente a aplicação está configurada para usar o servidor de demonstração do Subsonic. Depois de configurar o seu servidor pessoal (disponível em <b>subsonic.org</b>), vá às <b>Definições</b> e altere as configurações para que possa conectar-se.</string>
+    <string name="main.welcome_text">Bem-vindo ao DSub! Atualmente a aplicação está configurada para usar o servidor de demonstração do Subsonic. Depois de configurar o seu servidor pessoal (disponível em <b>subsonic.org</b>), consulte as <b>Definições</b> e altere as configurações para que possa conectar-se.</string>
 	<string name="main.about_title">Sobre o DSub</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Cache permanente</font>:
-		<br/>Quando o DSub transfere as músicas, elas poderão vir a ser eliminadas mais tarde para dar espaço para novas transferências.  Por outro lado, as músicas que ficam permanentemente na cache nunca serão eliminadas.
-		<p/><font color="red">Falhas com o ChromeCast</font>:
-		<br/>Experimente a opção Definições -> Reprodução -> Usar dispositivo como proxy.  É uma solução alternativa devido ao Chromecast não aceitar certificados auto-assinados.
+		<br/>Quando o DSub transfere as músicas, as mesmas poderão ser eliminadas mais tarde para dar espaço para novas transferências.  Por outro lado, as músicas que ficam permanentemente na cache nunca serão eliminadas.
+		<p/><font color="red">Falhas com o Chromecast</font>:
+		<br/>Experimente a opção Definições -> Transmissão -> Usar dispositivo como proxy.  É uma solução alternativa devido ao Chromecast não aceitar certificados auto-assinados.
 		<p/><font color="red">Primeiro nível na biblioteca são grupos de artistas</font>:
-		<br/>No menu de opções, desmarque a opção "Artistas no primeiro nível".  Isto irá fazer com que o primeiro nível de diretorias apresentado seja tratado como grupos de artistas em vez de artistas propriamente ditos.
+		<br/>No menu de opções, desmarque a opção "Artistas no primeiro nível".  Isto fará com que o primeiro nível de diretorias apresentado seja tratado como grupos de artistas em vez de artistas propriamente ditos.
 	]]>
 	</string>
 	<string name="main.shuffle">Aleatório</string>
@@ -192,7 +193,7 @@
     <string name="download.menu_shuffle_notification">A lista de reprodução foi aleatorizada</string>
 	<string name="download.menu_remove_played_songs">Remover músicas reproduzidas</string>
     <string name="download.playlist_title">Guardar lista de reprodução</string>
-    <string name="download.playlist_name">Introduza o nome da lista de reprodução:</string>
+    <string name="download.playlist_name">Introduza um nome para a lista de reprodução:</string>
     <string name="download.playlist_saving">A guardar a lista de reprodução \"%s\"...</string>
     <string name="download.playlist_done">A lista de reprodução foi guardada com sucesso.</string>
     <string name="download.playlist_error">Falha ao guardar a lista de reprodução, tente novamente mais tarde.</string>
@@ -219,6 +220,12 @@
 	<string name="download.thumbs_up">Gosto</string>
 	<string name="download.thumbs_down">Não gosto</string>
 	<string name="download.batch_mode">Modo em série</string>
+	<string name="download.playback_speed_half">0.5x</string>
+	<string name="download.playback_speed_normal">1x</string>
+	<string name="download.playback_speed_one_half">1.5x</string>
+	<string name="download.playback_speed_double">2x</string>
+	<string name="download.playback_speed_tripple">3x</string>
+	<string name="download.playback_speed_custom">Personalizado</string>
 
 	<string name="sync.new_podcasts">Novos podcasts disponíveis</string>
 	<string name="sync.new_playlists">Novas músicas nas listas de reprodução</string>
@@ -277,8 +284,8 @@
 	<string name="settings.server_sync_summary">Ativar ou não a sincronização para este servidor</string>
 	<string name="settings.server_sync">Sincronização ativa</string>
     <string name="settings.cache_title">Cache de música</string>
-    <string name="settings.preload_wifi">Músicas para pre-carregar (Wi-Fi)</string>
-	<string name="settings.preload_mobile">Músicas para pre-carregar (dados móveis)</string>
+    <string name="settings.preload_wifi">Músicas para pré-carregar (Wi-Fi)</string>
+	<string name="settings.preload_mobile">Músicas para pré-carregar (dados móveis)</string>
     <string name="settings.cache_size">Tamanho da cache</string>
     <string name="settings.cache_location">Localização da cache</string>
     <string name="settings.cache_location_error">Localização da cache inválida. A utilizar predefinição.</string>
@@ -299,6 +306,8 @@
     <string name="settings.theme_dark">Escuro</string>
 	<string name="settings.theme_black">Preto</string>
 	<string name="settings.theme_holo">Holo</string>
+	<string name="settings.theme_day_night">Dia/Noite</string>
+	<string name="settings.theme_day_black_night">Dia/Noite (Preto)</string>
 	<string name="settings.theme_fullscreen">Ecrã inteiro</string>
 	<string name="settings.theme_fullscreen_summary">Ocultar o maior número de elementos da interface que o Android permita</string>
 	<string name="settings.track_title">Mostrar número da faixa</string>
@@ -332,7 +341,7 @@
     <string name="settings.max_video_bitrate_2000">2000 Kbps</string>
     <string name="settings.max_video_bitrate_3000">3000 Kbps</string>
     <string name="settings.max_video_bitrate_5000">5000 Kbps</string>
-    <string name="settings.max_bitrate_unlimited">Ilimitado</string>
+    <string name="settings.max_bitrate_unlimited">Ilimitada</string>
     <string name="settings.wifi_required_title">Transmissão apenas em Wi-Fi</string>
     <string name="settings.wifi_required_summary">Apenas transmitir multimédia se ligado por Wi-Fi</string>
 	<string name="settings.network_timeout_title">Intervalo de ligação</string>
@@ -352,7 +361,7 @@
     <string name="settings.search_history_cleared">O histório de pesquisa foi apagado</string>
     <string name="settings.other_title">Outras definições</string>
     <string name="settings.scrobble_title">Scrobble para Last.FM</string>
-    <string name="settings.scrobble_summary">Lembrar de configurar o nome de utilizador e palavra-passe do Last.FM no servidor Subsonic</string>
+    <string name="settings.scrobble_summary">Não se esqueça de configurar o seu nome de utilizador e palavra-passe do Last.FM no servidor Subsonic</string>
     <string name="settings.hide_media_title">Ocultar do resto</string>
     <string name="settings.hide_media_summary">Ocultar ficheiros de música das outras aplicações</string>
     <string name="settings.hide_media_toast">As mudanças terão efeito na próxima vez que o Android procure músicas no seu dispositivo.</string>
@@ -367,12 +376,12 @@
 	<string name="settings.sleep_timer_off">Desligado</string>
 	<string name="settings.sleep_timer_on">Ligado</string>
 	<string name="settings.sleep_timer_always_on">Sempre ligado</string>
-	<string name="settings.temp_loss_title">Perda de foco temporário</string>
+	<string name="settings.temp_loss_title">Perda temporária de foco</string>
 	<string name="settings.temp_loss_pause">Pausar sempre</string>
 	<string name="settings.temp_loss_pause_lower">Pausar, baixar volume quando pedido</string>
 	<string name="settings.temp_loss_lower">Baixar sempre o volume</string>
 	<string name="settings.temp_loss_nothing">Não fazer nada</string>
-	<string name="settings.keep_played_count_title">Manter músicas reproduzidas</string>
+	<string name="settings.keep_played_count_title">Manter as músicas reproduzidas</string>
 	<string name="settings.keep_played_count_none">Remover todas as músicas reproduzidas</string>
 	<string name="settings.keep_played_count_one">Manter as últimas músicas reproduzidas</string>
 	<string name="settings.keep_played_count_two">Manter as 2 últimas músicas reproduzidas</string>
@@ -384,14 +393,14 @@
 	<string name="settings.persistent_summary">Mostrar a notificação mesmo depois de pausar.  Pressione o botão de parar para a remover</string>
 	<string name="settings.gapless_playback">Reprodução sem pausas</string>
 	<string name="settings.gapless_playback_summary">Se notar falhas estranhas durante a reprodução, desmarcar esta opção pode ajudar</string>
-	<string name="settings.chat_refresh">Taxa de atualização do Chat (s)</string>
+	<string name="settings.chat_refresh">Taxa de atualização do chat (s)</string>
 	<string name="settings.chat_enabled">Ativar chat</string>
 	<string name="settings.chat_enabled_summary">Mostrar ou não a opção \"Chat\" no menu lateral</string>
 	<string name="settings.video_title">Vídeo</string>
 	<string name="settings.video_player">Reprodutor de vídeo</string>
 	<string name="settings.video_raw">Raw (Requer Subsonic 4.8+)</string>
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requer Subsonic 4.8+)</string>
-	<string name="settings.video_transcode">Transcodificação direta (Requísitos de vídeo -> mp4 ou configuração similar no servidor</string>
+	<string name="settings.video_transcode">Transcodificação direta (Requer vídeo -> mp4 ou configuração similar no servidor</string>
 	<string name="settings.video_flash">Flash (Requer plugin)</string>
 	<string name="settings.cache_screen_title">Cache/Ligação</string>
 	<string name="settings.playback_title">Reprodução</string>
@@ -401,6 +410,8 @@
 	<string name="settings.podcasts_enabled_summary">Mostrar ou não a opção \"Podcasts\" no menu lateral</string>
 	<string name="settings.bookmarks_enabled">Ativar marcadores</string>
 	<string name="settings.bookmarks_enabled_summary">Mostrar ou não a opção \"Marcadores\" no menu lateral</string>
+	<string name="settings.internet_radio_enabled">Ativar rádios online</string>
+	<string name="settings.internet_radio_enabled_summary">Mostrar ou não a opção \"Rádios online\" no menu lateral</string>
 	<string name="settings.shares_enabled">Ativar partilhas</string>
 	<string name="settings.shares_enabled_summary">Mostrar ou não a opção \"Partilhas\" no menu lateral</string>
 	<string name="settings.sync_title">Sincronização</string>
@@ -437,23 +448,26 @@
 	<string name="settings.browse_by_tags">Procurar por tags</string>
 	<string name="settings.browse_by_tags_summary">Procurar por tags em vez da estrutura das pastas.  Requer Subsonic 4.7+</string>
 	<string name="settings.disable_exit_prompt">Desativar diálogo de saída</string>
-	<string name="settings.disable_exit_prompt_summary">Fechar a aplicação imediatamente após pressionar o botão voltar no ecrã inicial</string>
+	<string name="settings.disable_exit_prompt_summary">Fechar a aplicação imediatamente após pressionar o botão de voltar no ecrã inicial</string>
 	<string name="settings.override_system_language">Sobrepor linguagem do sistema</string>
 	<string name="settings.override_system_language_summary">Mostrar a aplicação em inglês mesmo se o DSub tiver uma tradução disponível para a linguagem do sistema.  Poderá ser necessário limpar a aplicação da memória para as alterações terem efeito</string>
 	<string name="settings.drawer_items_title">Separadores laterais</string>
-	<string name="settings.play_now_after">Premir uma música - Reproduzir tudo</string>
-	<string name="settings.play_now_after_summary">Premir uma música adiciona à fila \"Reproduzir agora\" todas as músicas do álbum a seguir à música selecionada</string>
+	<string name="settings.song_press_action">Ação ao pressionar uma música</string>
+	<string name="settings.song_press_play_single">Reproduzir apenas essa música</string>
+	<string name="settings.song_press_play_all">Adicionar tudo no álbum à fila de reprodução</string>
+	<string name="settings.song_press_play_next">Adicionar como próxima música</string>
+	<string name="settings.song_press_play_last">Adicionar música ao fim da fila de reprodução</string>
 	<string name="settings.large_album_art">Grandes capas de álbum</string>
 	<string name="settings.large_album_art_summary">Mostrar os álbuns com uma grande capa em vez de em lista</string>
 	<string name="settings.admin_enabled">Ativar administração</string>
 	<string name="settings.admin_enabled_summary">Mostrar ou não a opção \"Administração\" no menu lateral</string>
 	<string name="settings.replay_gain">Replay Gain</string>
-	<string name="settings.replay_gain_summary">Escalar ou não o volume da reprodução por tags de replay gain nos álbuns e faixas</string>
+	<string name="settings.replay_gain_summary">Escalar ou não o volume da reprodução por tags \"replay gain\" nos álbuns e faixas</string>
 	<string name="settings.replay_gain_type">Ler pelas tags</string>
 	<string name="settings.replay_gain_type.smart">Deteção inteligente</string>
 	<string name="settings.replay_gain_type.album">Tags nos álbuns</string>
 	<string name="settings.replay_gain_type.track">Tags nas faixas</string>
-	<string name="settings.replay_gain_bump">Pré-amp do Replay Gain</string>
+	<string name="settings.replay_gain_bump">Pré-amplificação do Replay Gain</string>
 	<string name="settings.replay_gain_untagged">Músicas sem Replay Gain</string>
 	<string name="settings.casting">Transmissão</string>
 	<string name="settings.casting_proxy">Usar dispositivo como proxy</string>
@@ -463,14 +477,14 @@
 	<string name="settings.start_on_headphones">Iniciar com os auscultadores</string>
 	<string name="settings.start_on_headphones_summary">Iniciar quando os auscultadores são ligados.  Isto requer o uso de um serviço que inicia com o arranque, para verificar o evento de ligação dos auscultadores mesmo quando o DSub não está a ser executado</string>
 	<string name="settings.color_action_bar">Colorir barra de ações</string>
-	<string name="settings.color_action_bar.summary">Colorir ou não a barra de ações e barra de estado</string>
+	<string name="settings.color_action_bar.summary">Colorir ou não a barra de ações e a barra de estado</string>
 	<string name="settings.shuffle_by_album">Aleatorizar por álbum</string>
 	<string name="settings.shuffle_by_album.true">Aleatorizar a ordem dos álbuns</string>
 	<string name="settings.shuffle_by_album.false">Aleatorizar todas as músicas juntas</string>
 	<string name="settings.casting_stream_original">Transmitir original</string>
 	<string name="settings.casting_stream_original_summary">Transmitir os ficheiros originais se suportado pelo dispositivo de transmissão</string>
 	<string name="settings.heads_up_notification">Notificações Heads Up (5.0+)</string>
-	<string name="settings.heads_up_notification_summary">Mostrar notificações de reprodução como notificações Heads Up (Android Lollipop+ apenas)</string>
+	<string name="settings.heads_up_notification_summary">Mostrar notificações de reprodução como notificações \"Heads Up\" (Android Lollipop+ apenas)</string>
 	<string name="settings.casting_cache">Cache durante a transmissão</string>
 	<string name="settings.casting_cache_summary">Adicionar à cache as músicas a reproduzir no momento da transmissão</string>
 
@@ -598,6 +612,7 @@
 	<string name="details.title.podcast">Detalhes do podcast</string>
 	<string name="details.title.playlist">Detalhes da lista de reprodução</string>
 	<string name="details.title.artist">Detalhes do artista</string>
+	<string name="details.title.internet_radio_station">Detalhes da rádio online</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Estado</string>
 	<string name="details.artist">Artista</string>
@@ -637,6 +652,10 @@
 	<string name="details.last_played">Última reprodução</string>
 	<string name="details.expiration">Expiração</string>
 	<string name="details.played_count">Nº de reproduções</string>
+	<string name="details.stream_url">URL da transmissão</string>
+	<string name="details.home_page">Página web</string>
+
+	<string name="permission.external_storage.failed">O DSub não funciona se não puder escrever no armazenamento</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Sem músicas</item>
@@ -648,8 +667,8 @@
         <item quantity="other">%d músicas agendadas para transferência.</item>
     </plurals>
     <plurals name="select_album_n_songs_added">
-        <item quantity="one">Uma música adicionada à lista de reprodução.</item>
-        <item quantity="other">%d músicas adicionadas à lista de reprodução.</item>
+        <item quantity="one">Uma música adicionada à fila de reprodução.</item>
+        <item quantity="other">%d músicas adicionadas à fila de reprodução.</item>
     </plurals>
     <plurals name="select_album_donate_dialog_n_trial_days_left">
         <item quantity="one">Um dia de período de testes restante</item>
