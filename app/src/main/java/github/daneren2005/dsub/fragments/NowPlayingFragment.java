@@ -522,7 +522,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			menu.removeItem(R.id.menu_equalizer);
 		}
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isRemoteEnabled) {
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M || isRemoteEnabled) {
 			playbackSpeedButton.setVisibility(View.GONE);
 		} else {
 			playbackSpeedButton.setVisibility(View.VISIBLE);

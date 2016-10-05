@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.3.1" versioncode="187" releasedate="10/4/2016">
+		<change>Fix Internet Radio streams which point to playlists</change>
+		<change>Don't show playback speed button below Android 6.0</change>
+	</release>
 	<release version="5.3" versioncode="186" releasedate="9/23/2016">
 		<change>Listen to Radio Internet Stations</change>
 		<change>Automatic Day/Night theme</change>

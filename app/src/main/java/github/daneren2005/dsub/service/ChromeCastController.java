@@ -41,6 +41,7 @@ import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.EnvironmentVariables;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.CastCompat;
@@ -465,14 +466,14 @@ public class ChromeCastController extends RemoteController {
 
 		void launchApplication() {
 			try {
-				Cast.CastApi.launchApplication(apiClient, CastCompat.APPLICATION_ID, false).setResultCallback(resultCallback);
+				Cast.CastApi.launchApplication(apiClient, EnvironmentVariables.CAST_APPLICATION_ID, false).setResultCallback(resultCallback);
 			} catch (Exception e) {
 				Log.e(TAG, "Failed to launch application", e);
 			}
 		}
 		void reconnectApplication() {
 			try {
-				Cast.CastApi.joinApplication(apiClient, CastCompat.APPLICATION_ID, sessionId).setResultCallback(resultCallback);
+				Cast.CastApi.joinApplication(apiClient, EnvironmentVariables.CAST_APPLICATION_ID, sessionId).setResultCallback(resultCallback);
 			} catch (Exception e) {
 				Log.e(TAG, "Failed to reconnect application", e);
 			}
