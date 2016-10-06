@@ -54,7 +54,7 @@ public class RemoteControlClientICS extends RemoteControlClientBase {
 		audioManager.unregisterRemoteControlClient(mRemoteControl);
 	}
 	
-	public void setPlaybackState(final int state) {
+	public void setPlaybackState(final int state, int index, int queueSize) {
 		if(mRemoteControl == null) {
 			return;
 		}
