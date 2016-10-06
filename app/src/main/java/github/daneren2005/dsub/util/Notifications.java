@@ -99,7 +99,12 @@ public final class Notifications {
 				public void run() {
 					downloadService.stopForeground(true);
 					showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
-					downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+
+					try {
+						downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+					} catch(Exception e) {
+						Log.e(TAG, "Failed to start notifications after stopping foreground download");
+					}
 				}
 			});
 		} else {
@@ -107,13 +112,22 @@ public final class Notifications {
 				@Override
 				public void run() {
 					if (playing) {
-						downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+						try {
+							downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+						} catch(Exception e) {
+							Log.e(TAG, "Failed to start notifications while playing");
+						}
 					} else {
 						playShowing = false;
 						persistentPlayingShowing = true;
 						NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 						downloadService.stopForeground(false);
-						notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
+
+						try {
+							notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
+						} catch(Exception e) {
+							Log.e(TAG, "Failed to start notifications while paused");
+						}
 					}
 				}
 			});

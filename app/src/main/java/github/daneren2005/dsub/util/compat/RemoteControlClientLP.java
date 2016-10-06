@@ -39,7 +39,6 @@ import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +49,6 @@ import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.Playlist;
-import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.service.DownloadFile;
@@ -123,8 +121,12 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		mediaSession.release();
 	}
 
+	private void setPlaybackState(int state) {
+		setPlaybackState(state, downloadService.getCurrentPlayingIndex(), downloadService.size());
+	}
+
 	@Override
-	public void setPlaybackState(int state) {
+	public void setPlaybackState(int state, int index, int queueSize) {
 		PlaybackState.Builder builder = new PlaybackState.Builder();
 
 		int newState = PlaybackState.STATE_NONE;
@@ -156,7 +158,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			isSong = entry.isSong();
 		}
 
-		builder.setActions(getPlaybackActions(isSong));
+		builder.setActions(getPlaybackActions(isSong, index, queueSize));
 
 		if(entry != null) {
 			addCustomActions(entry, builder);
@@ -240,14 +242,12 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		return mediaSession;
 	}
 
-	protected long getPlaybackActions(boolean isSong) {
+	protected long getPlaybackActions(boolean isSong, int currentIndex, int size) {
 		long actions = PlaybackState.ACTION_PLAY |
 				PlaybackState.ACTION_PAUSE |
 				PlaybackState.ACTION_SEEK_TO |
 				PlaybackState.ACTION_SKIP_TO_QUEUE_ITEM;
 
-		int currentIndex = downloadService.getCurrentPlayingIndex();
-		int size = downloadService.size();
 		if(isSong) {
 			if (currentIndex > 0) {
 				actions |= PlaybackState.ACTION_SKIP_TO_PREVIOUS;

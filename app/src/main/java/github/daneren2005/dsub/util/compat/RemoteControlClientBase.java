@@ -29,7 +29,7 @@ public abstract class RemoteControlClientBase {
 	
 	public abstract void register(final Context context, final ComponentName mediaButtonReceiverComponent);
 	public abstract void unregister(final Context context);
-	public abstract void setPlaybackState(int state);
+	public abstract void setPlaybackState(int state, int index, int queueSize);
 	public abstract void updateMetadata(Context context, MusicDirectory.Entry currentSong);
 	public abstract void metadataChanged(MusicDirectory.Entry currentSong);
 	public abstract void updateAlbumArt(MusicDirectory.Entry currentSong, Bitmap bitmap);

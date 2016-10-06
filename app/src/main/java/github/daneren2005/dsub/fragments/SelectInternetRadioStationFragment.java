@@ -18,10 +18,18 @@
 */
 package github.daneren2005.dsub.fragments;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +45,8 @@ import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<InternetRadioStation> {
+	private static final String TAG = SelectInternetRadioStationFragment.class.getSimpleName();
+
 	@Override
 	public int getOptionsMenu() {
 		return R.menu.abstract_top_menu;
@@ -67,6 +77,7 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 					return null;
 				}
 
+				getStreamFromPlaylist(item);
 				downloadService.download(item);
 				return null;
 			}
@@ -92,6 +103,40 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 		}
 
 		return false;
+	}
+
+	private void getStreamFromPlaylist(InternetRadioStation internetRadioStation) {
+		if(internetRadioStation.getStreamUrl() != null && (internetRadioStation.getStreamUrl().indexOf(".m3u") != -1 || internetRadioStation.getStreamUrl().indexOf(".pls") != -1)) {
+			try {
+				URL url = new URL(internetRadioStation.getStreamUrl());
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+				try {
+					BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					String line;
+					while((line = in.readLine()) != null) {
+						// Not blank line or comment
+						if(line.length() > 0 && line.indexOf('#') != 0) {
+							if(internetRadioStation.getStreamUrl().indexOf(".m3u") != -1) {
+								internetRadioStation.setStreamUrl(line);
+								break;
+							} else {
+								if(line.indexOf("File1=") == 0) {
+									internetRadioStation.setStreamUrl(line.replace("File1=", ""));
+								} else if(line.indexOf("Title1=") == 0) {
+									internetRadioStation.setTitle(line.replace("Title1=", ""));
+								}
+							}
+						}
+					}
+				} finally {
+					connection.disconnect();
+				}
+			} catch (Exception e) {
+				Log.e(TAG, "Failed to get stream data from playlist");
+			}
+
+		}
 	}
 
 	private void displayInternetRadioStationInfo(final InternetRadioStation station) {
