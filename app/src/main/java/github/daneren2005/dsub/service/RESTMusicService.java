@@ -33,19 +33,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.params.ConnManagerParams;
-import org.apache.http.conn.params.ConnPerRouteBean;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.scheme.SocketFactory;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -83,8 +70,6 @@ import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.TopSongsParser;
 import github.daneren2005.dsub.service.parser.UserParser;
 import github.daneren2005.dsub.service.parser.VideosParser;
-import github.daneren2005.dsub.service.ssl.SSLSocketFactory;
-import github.daneren2005.dsub.service.ssl.TrustSelfSignedStrategy;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
@@ -115,12 +100,10 @@ public class RESTMusicService implements MusicService {
     private static final long REDIRECTION_CHECK_INTERVAL_MILLIS = 60L * 60L * 1000L;
 
 	private HostnameVerifier selfSignedHostnameVerifier;
-    private final DefaultHttpClient httpClient;
     private long redirectionLastChecked;
     private int redirectionNetworkType = -1;
     private String redirectFrom;
     private String redirectTo;
-    private final ThreadSafeClientConnManager connManager;
 	private Integer instance;
 
     public RESTMusicService() {
@@ -129,37 +112,6 @@ public class RESTMusicService implements MusicService {
 				return true;
 			}
 		};
-
-        // Create and initialize default HTTP parameters
-        HttpParams params = new BasicHttpParams();
-        ConnManagerParams.setMaxTotalConnections(params, 20);
-        ConnManagerParams.setMaxConnectionsPerRoute(params, new ConnPerRouteBean(20));
-        HttpConnectionParams.setConnectionTimeout(params, SOCKET_CONNECT_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(params, SOCKET_READ_TIMEOUT_DEFAULT);
-
-        // Turn off stale checking.  Our connections break all the time anyway,
-        // and it's not worth it to pay the penalty of checking every time.
-        HttpConnectionParams.setStaleCheckingEnabled(params, false);
-
-        // Create and initialize scheme registry
-        SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        schemeRegistry.register(new Scheme("https", createSSLSocketFactory(), 443));
-
-        // Create an HttpClient with the ThreadSafeClientConnManager.
-        // This connection manager must be used if more than one thread will
-        // be using the HttpClient.
-        connManager = new ThreadSafeClientConnManager(params, schemeRegistry);
-        httpClient = new DefaultHttpClient(connManager, params);
-    }
-
-    private SocketFactory createSSLSocketFactory() {
-        try {
-            return new SSLSocketFactory(new TrustSelfSignedStrategy(), SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-        } catch (Throwable x) {
-            Log.e(TAG, "Failed to create custom SSL socket factory, using default.", x);
-            return org.apache.http.conn.ssl.SSLSocketFactory.getSocketFactory();
-        }
     }
 
     @Override
@@ -1974,7 +1926,7 @@ public class RESTMusicService implements MusicService {
 		}
 	}
 
-	public HttpClient getHttpClient() {
-		return httpClient;
+	public HostnameVerifier getHostNameVerifier() {
+		return selfSignedHostnameVerifier;
 	}
 }

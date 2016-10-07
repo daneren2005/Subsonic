@@ -19,7 +19,6 @@ package github.daneren2005.dsub.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.graphics.Color;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.content.ClipboardManager;
@@ -29,7 +28,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,15 +48,11 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.Gravity;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SettingsActivity;
-import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 import github.daneren2005.dsub.adapter.DetailsAdapter;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
@@ -66,8 +60,6 @@ import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.service.DownloadService;
-
-import org.apache.http.HttpEntity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -80,7 +72,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -602,13 +593,6 @@ public final class Util {
 			return null;
 		}
 	}
-
-    public static String getContentType(HttpEntity entity) {
-        if (entity == null || entity.getContentType() == null) {
-            return null;
-        }
-        return entity.getContentType().getValue();
-    }
 
     public static int getRemainingTrialDays(Context context) {
         SharedPreferences prefs = getPreferences(context);
