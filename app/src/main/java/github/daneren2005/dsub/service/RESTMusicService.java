@@ -40,6 +40,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.google.android.gms.security.ProviderInstaller;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.*;
 import github.daneren2005.dsub.fragments.MainFragment;
@@ -105,6 +107,7 @@ public class RESTMusicService implements MusicService {
     private String redirectFrom;
     private String redirectTo;
 	private Integer instance;
+	private boolean hasInstalledGoogleSSL = false;
 
     public RESTMusicService() {
 		selfSignedHostnameVerifier = new HostnameVerifier() {
@@ -1831,6 +1834,16 @@ public class RESTMusicService implements MusicService {
 	}
 
 	private HttpURLConnection getConnectionDirect(Context context, String url, int minNetworkTimeout) throws Exception {
+		if(!hasInstalledGoogleSSL) {
+			try {
+				ProviderInstaller.installIfNeeded(context);
+			} catch(Exception e) {
+				// Just continue on anyways, doesn't really harm anything if this fails
+				Log.w(TAG, "Failed to update to use Google Play SSL", e);
+			}
+			hasInstalledGoogleSSL = true;
+		}
+
 		// Connect and add headers
 		URL urlObj = new URL(url);
 		HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
