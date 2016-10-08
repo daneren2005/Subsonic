@@ -30,6 +30,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,6 +81,7 @@ import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.Util;
 import java.io.*;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HostnameVerifier;
@@ -90,7 +92,6 @@ public class RESTMusicService implements MusicService {
 
     private static final String TAG = RESTMusicService.class.getSimpleName();
 
-    private static final int SOCKET_CONNECT_TIMEOUT = 10 * 1000;
     private static final int SOCKET_READ_TIMEOUT_DEFAULT = 10 * 1000;
     private static final int SOCKET_READ_TIMEOUT_DOWNLOAD = 30 * 1000;
     private static final int SOCKET_READ_TIMEOUT_GET_PLAYLIST = 60 * 1000;
@@ -804,19 +805,17 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-		// TODO: Use task
-		// TODO: Add range header
-		// Add "Range" header if offset is given.
-		/*List<Header> headers = new ArrayList<Header>();
+		// Add "Range" header if offset is given
+		Map<String, String> headers = new HashMap<>();
 		if (offset > 0) {
-			headers.add(new BasicHeader("Range", "bytes=" + offset + "-"));
-		}*/
+			headers.put("Range", "bytes=" + offset + "-");
+		}
 
 		// Set socket read timeout. Note: The timeout increases as the offset gets larger. This is
 		// to avoid the thrashing effect seen when offset is combined with transcoding/downsampling on the server.
 		// In that case, the server uses a long time before sending any data, causing the client to time out.
 		int timeout = (int) (SOCKET_READ_TIMEOUT_DOWNLOAD + offset * TIMEOUT_MILLIS_PER_OFFSET_BYTE);
-		HttpURLConnection connection = getConnection(context, url, parameterNames, parameterValues, timeout);
+		HttpURLConnection connection = getConnection(context, url, parameterNames, parameterValues, headers, timeout);
 
 		// If content type is XML, an error occurred.  Get it.
 		String contentType = connection.getContentType();
@@ -1769,29 +1768,34 @@ public class RESTMusicService implements MusicService {
 		return in;
 	}
 
-	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues) throws Exception {
-		return getConnection(context, url, parameterNames, parameterValues, null, true);
-	}
-	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues, int minNetworkTimeout) throws Exception {
-		return getConnection(context, url, parameterNames, parameterValues, minNetworkTimeout, null, true);
+	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues, Map<String, String> headers, int minNetworkTimeout) throws Exception {
+		return getConnection(context, url, parameterNames, parameterValues, headers, minNetworkTimeout, null, true);
 	}
 	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues, ProgressListener progressListener, boolean throwErrors) throws Exception {
 		return getConnection(context, url, parameterNames, parameterValues, 0, progressListener, throwErrors);
 	}
 	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues, int minNetworkTimeout, ProgressListener progressListener, boolean throwErrors) throws Exception {
+		return getConnection(context, url, parameterNames, parameterValues, null, minNetworkTimeout, progressListener, throwErrors);
+	}
+	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues, Map<String, String> headers, int minNetworkTimeout, ProgressListener progressListener, boolean throwErrors) throws Exception {
 		if(throwErrors) {
-			return getConnectionDirect(context, url, parameterNames, parameterValues, minNetworkTimeout);
+			SharedPreferences prefs = Util.getPreferences(context);
+			int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, SOCKET_READ_TIMEOUT_DEFAULT + ""));
+			return getConnectionDirect(context, url, parameterNames, parameterValues, headers, Math.max(minNetworkTimeout, networkTimeout));
 		} else {
-			return getConnection(context, url, parameterNames, parameterValues, minNetworkTimeout, progressListener, HTTP_REQUEST_MAX_ATTEMPTS, 0);
+			return getConnection(context, url, parameterNames, parameterValues, headers, minNetworkTimeout, progressListener, HTTP_REQUEST_MAX_ATTEMPTS, 0);
 		}
 	}
 
-	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues, ProgressListener progressListener, int retriesLeft, int attempts) throws Exception {
-		return getConnection(context, url, parameterNames, parameterValues, 0, progressListener, retriesLeft, attempts);
-	}
-	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues, int minNetworkTimeout, ProgressListener progressListener, int retriesLeft, int attempts) throws Exception {
+	private HttpURLConnection getConnection(Context context, String url, List<String> parameterNames, List<Object> parameterValues, Map<String, String> headers, int minNetworkTimeout, ProgressListener progressListener, int retriesLeft, int attempts) throws Exception {
+		SharedPreferences prefs = Util.getPreferences(context);
+		int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, SOCKET_READ_TIMEOUT_DEFAULT + ""));
+		minNetworkTimeout = Math.max(minNetworkTimeout, networkTimeout);
+		attempts++;
+		retriesLeft--;
+
 		try {
-			return getConnectionDirect(context, url, parameterNames, parameterValues, minNetworkTimeout);
+			return getConnectionDirect(context, url, parameterNames, parameterValues, headers, minNetworkTimeout);
 		} catch (IOException x) {
 			if(retriesLeft > 0) {
 				if (progressListener != null) {
@@ -1802,16 +1806,15 @@ public class RESTMusicService implements MusicService {
 				Log.w(TAG, "Got IOException " + x + " (" + attempts + "), will retry");
 				Thread.sleep(2000L);
 
-				// TODO: Increase timeouts on failures
-				// TODO: Detect task cancellation
-				return getConnection(context, url, parameterNames, parameterValues, minNetworkTimeout, progressListener, retriesLeft--, attempts + 1);
+				minNetworkTimeout = (int) (minNetworkTimeout * 1.3);
+				return getConnection(context, url, parameterNames, parameterValues, headers, minNetworkTimeout, progressListener, retriesLeft, attempts);
 			} else {
 				throw x;
 			}
 		}
 	}
 
-	private HttpURLConnection getConnectionDirect(Context context, String url, List<String> parameterNames, List<Object> parameterValues, int minNetworkTimeout) throws Exception {
+	private HttpURLConnection getConnectionDirect(Context context, String url, List<String> parameterNames, List<Object> parameterValues, Map<String, String> headers, int minNetworkTimeout) throws Exception {
 		// Add params to query
 		if (parameterNames != null) {
 			StringBuilder builder = new StringBuilder(url);
@@ -1830,10 +1833,10 @@ public class RESTMusicService implements MusicService {
 			Log.i(TAG, stripUrlInfo(rewrittenUrl));
 		}
 
-		return getConnectionDirect(context, rewrittenUrl, minNetworkTimeout);
+		return getConnectionDirect(context, rewrittenUrl, headers, minNetworkTimeout);
 	}
 
-	private HttpURLConnection getConnectionDirect(Context context, String url, int minNetworkTimeout) throws Exception {
+	private HttpURLConnection getConnectionDirect(Context context, String url, Map<String, String> headers, int minNetworkTimeout) throws Exception {
 		if(!hasInstalledGoogleSSL) {
 			try {
 				ProviderInstaller.installIfNeeded(context);
@@ -1853,16 +1856,25 @@ public class RESTMusicService implements MusicService {
 		connection.addRequestProperty("User-Agent", Constants.REST_CLIENT_ID);
 
 		// Set timeout
-		SharedPreferences prefs = Util.getPreferences(context);
-		int networkTimeout = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT, SOCKET_CONNECT_TIMEOUT + ""));
-		connection.setConnectTimeout(Math.max(minNetworkTimeout, networkTimeout));
-		connection.setReadTimeout(SOCKET_READ_TIMEOUT_DEFAULT);
+		connection.setConnectTimeout(minNetworkTimeout);
+		connection.setReadTimeout(minNetworkTimeout);
+
+		// Add headers
+		if(headers != null) {
+			for(Map.Entry<String, String> header: headers.entrySet()) {
+				connection.setRequestProperty(header.getKey(), header.getValue());
+			}
+		}
 
 		if(connection instanceof HttpsURLConnection) {
 			HttpsURLConnection sslConnection = (HttpsURLConnection) connection;
 			sslConnection.setHostnameVerifier(selfSignedHostnameVerifier);
 		}
 
+		// Force the connection to initiate
+		if(connection.getResponseCode() >= 500) {
+			throw new IOException("Error code: " + connection.getResponseCode());
+		}
 		detectRedirect(context, urlObj, connection);
 		return connection;
 	}
