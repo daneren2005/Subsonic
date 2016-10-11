@@ -37,7 +37,7 @@
 			android:layout_centerHorizontal="true"
 			android:layout_above="@+id/download_song_title">
 
-			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			<LinearLayout
 				android:id="@+id/download_other_controls_layout"
 				android:orientation="horizontal"
 				android:layout_width="wrap_content"
