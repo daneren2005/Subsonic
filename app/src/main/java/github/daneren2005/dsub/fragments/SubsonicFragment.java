@@ -660,7 +660,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 			});
 
-			refreshLayout.setColorScheme(
+			refreshLayout.setColorSchemeResources(
 					R.color.holo_blue_light,
 					R.color.holo_orange_light,
 					R.color.holo_green_light,
@@ -683,7 +683,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				}
 			});
 
-			refreshLayout.setColorScheme(
+			refreshLayout.setColorSchemeResources(
 					R.color.holo_blue_light,
 					R.color.holo_orange_light,
 					R.color.holo_green_light,
@@ -1113,7 +1113,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 			@Override
 			protected void done(Void result) {
-				Util.toast(context, context.getResources().getString(R.string.updated_playlist, songs.size(), playlist.getName()));
+				Util.toast(context, context.getResources().getString(R.string.updated_playlist, String.valueOf(songs.size()), playlist.getName()));
 			}
 
 			@Override
