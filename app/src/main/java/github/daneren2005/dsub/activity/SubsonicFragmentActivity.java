@@ -30,6 +30,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -402,9 +403,12 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			if(currentFragment instanceof SearchFragment) {
 				String query = intent.getStringExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 				boolean autoplay = intent.getBooleanExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+				String artist = intent.getStringExtra(MediaStore.EXTRA_MEDIA_ARTIST);
+				String album = intent.getStringExtra(MediaStore.EXTRA_MEDIA_ALBUM);
+				String title = intent.getStringExtra(MediaStore.EXTRA_MEDIA_TITLE);
 
 				if (query != null) {
-					((SearchFragment)currentFragment).search(query, autoplay);
+					((SearchFragment)currentFragment).search(query, autoplay, artist, album, title);
 				}
 				getIntent().removeExtra(Constants.INTENT_EXTRA_NAME_QUERY);
 			} else {
