@@ -66,17 +66,12 @@ public class ChromeCastController extends RemoteController {
 	private boolean isStopping = false;
 	private Runnable afterUpdateComplete = null;
 
-	private ServerProxy proxy;
-	private String rootLocation;
 	private RemoteMediaPlayer mediaPlayer;
 	private double gain = 0.5;
 
 	public ChromeCastController(DownloadService downloadService, CastDevice castDevice) {
-		this.downloadService = downloadService;
+		super(downloadService);
 		this.castDevice = castDevice;
-
-		SharedPreferences prefs = Util.getPreferences(downloadService);
-		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 	}
 
 	@Override
@@ -287,49 +282,7 @@ public class ChromeCastController extends RemoteController {
 
 		try {
 			MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-			String url;
-			// Offline, use file proxy
-			if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
-				if(proxy == null) {
-					proxy = new FileProxy(downloadService);
-					proxy.start();
-				}
-
-				// Offline song
-				if(song.getId().indexOf(rootLocation) != -1) {
-					url = proxy.getPublicAddress(song.getId());
-				} else {
-					// Playing online song in offline mode
-					url = proxy.getPublicAddress(currentPlaying.getCompleteFile().getPath());
-				}
-			} else {
-				// Check if we want a proxy going still
-				if(Util.isCastProxy(downloadService)) {
-					if(proxy instanceof FileProxy) {
-						proxy.stop();
-						proxy = null;
-					}
-
-					if(proxy == null) {
-						proxy = createWebProxy();
-						proxy.start();
-					}
-				} else if(proxy != null) {
-					proxy.stop();
-					proxy = null;
-				}
-
-				if(song.isVideo()) {
-					url = musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService);
-				} else {
-					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
-				}
-
-				// If proxy is going, it is a WebProxy
-				if(proxy != null) {
-					url = proxy.getPublicAddress(url);
-				}
-			}
+			String url = getStreamUrl(musicService, currentPlaying);
 
 			// Setup song/video information
 			MediaMetadata meta = new MediaMetadata(song.isVideo() ? MediaMetadata.MEDIA_TYPE_MOVIE : MediaMetadata.MEDIA_TYPE_MUSIC_TRACK);

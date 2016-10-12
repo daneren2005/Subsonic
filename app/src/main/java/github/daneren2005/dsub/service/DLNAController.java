@@ -83,9 +83,6 @@ public class DLNAController extends RemoteController {
 	SubscriptionCallback callback;
 	boolean supportsSeek = false;
 	boolean supportsSetupNext = false;
-
-	private ServerProxy proxy;
-	String rootLocation = "";
 	boolean error = false;
 
 	final AtomicLong lastUpdate = new AtomicLong();
@@ -108,12 +105,9 @@ public class DLNAController extends RemoteController {
 	};
 
 	public DLNAController(DownloadService downloadService, ControlPoint controlPoint, DLNADevice device) {
-		this.downloadService = downloadService;
+		super(downloadService);
 		this.controlPoint = controlPoint;
 		this.device = device;
-
-		SharedPreferences prefs = Util.getPreferences(downloadService);
-		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 		nextSupported = true;
 	}
 
@@ -473,49 +467,7 @@ public class DLNAController extends RemoteController {
 
 		// Get url for entry
 		MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-		String url;
-		// In offline mode or playing offline song
-		if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
-			if(proxy == null) {
-				proxy = new FileProxy(downloadService);
-				proxy.start();
-			}
-
-			// Offline song
-			if(song.getId().indexOf(rootLocation) != -1) {
-				url = proxy.getPublicAddress(song.getId());
-			} else {
-				// Playing online song in offline mode
-				url = proxy.getPublicAddress(downloadFile.getCompleteFile().getPath());
-			}
-		} else {
-			// Check if we want a proxy going still
-			if(Util.isCastProxy(downloadService)) {
-				if(proxy instanceof FileProxy) {
-					proxy.stop();
-					proxy = null;
-				}
-
-				if(proxy == null) {
-					proxy = createWebProxy();
-					proxy.start();
-				}
-			} else if(proxy != null) {
-				proxy.stop();
-				proxy = null;
-			}
-
-			if(song.isVideo()) {
-				url = musicService.getHlsUrl(song.getId(), downloadFile.getBitRate(), downloadService);
-			} else {
-				url = musicService.getMusicUrl(downloadService, song, downloadFile.getBitRate());
-			}
-
-			// If proxy is going, it is a WebProxy
-			if(proxy != null) {
-				url = proxy.getPublicAddress(url);
-			}
-		}
+		String url = getStreamUrl(musicService, downloadFile);
 
 		// Create metadata for entry
 		Item track;
@@ -585,7 +537,7 @@ public class DLNAController extends RemoteController {
 			Log.w(TAG, "Metadata generation failed", e);
 		}
 
-		return new Pair<String, String>(url, metadata);
+		return new Pair<>(url, metadata);
 	}
 
 	private void failedLoad() {

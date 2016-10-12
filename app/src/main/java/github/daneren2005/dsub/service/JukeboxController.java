@@ -48,7 +48,7 @@ public class JukeboxController extends RemoteController {
 	private float gain = 0.5f;
     
     public JukeboxController(DownloadService downloadService, Handler handler) {
-    	this.downloadService = downloadService;
+		super(downloadService);
 		this.handler = handler;
     }
 

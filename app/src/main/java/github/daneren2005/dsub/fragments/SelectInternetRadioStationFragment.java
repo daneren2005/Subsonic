@@ -133,7 +133,7 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 					connection.disconnect();
 				}
 			} catch (Exception e) {
-				Log.e(TAG, "Failed to get stream data from playlist");
+				Log.e(TAG, "Failed to get stream data from playlist", e);
 			}
 
 		}

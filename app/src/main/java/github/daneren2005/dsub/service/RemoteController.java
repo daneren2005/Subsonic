@@ -19,20 +19,32 @@
 
 package github.daneren2005.dsub.service;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.Iterator;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.RemoteStatus;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
+import github.daneren2005.serverproxy.FileProxy;
+import github.daneren2005.serverproxy.ServerProxy;
 import github.daneren2005.serverproxy.WebProxy;
 
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();
 	protected DownloadService downloadService;
 	protected boolean nextSupported = false;
+	protected ServerProxy proxy;
+	protected String rootLocation = "";
+
+	public RemoteController(DownloadService downloadService) {
+		this.downloadService = downloadService;
+		SharedPreferences prefs = Util.getPreferences(downloadService);
+		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+	}
 
 	public abstract void create(boolean playing, int seconds);
 	public abstract void start();
@@ -109,5 +121,57 @@ public abstract class RemoteController {
 		} else {
 			return new WebProxy(downloadService);
 		}
+	}
+
+	protected String getStreamUrl(MusicService musicService, DownloadFile downloadFile) throws Exception {
+		MusicDirectory.Entry song = downloadFile.getSong();
+
+		String url;
+		// In offline mode or playing offline song
+		if(downloadFile.isStream()) {
+			url = downloadFile.getStream();
+		} else if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
+			if(proxy == null) {
+				proxy = new FileProxy(downloadService);
+				proxy.start();
+			}
+
+			// Offline song
+			if(song.getId().indexOf(rootLocation) != -1) {
+				url = proxy.getPublicAddress(song.getId());
+			} else {
+				// Playing online song in offline mode
+				url = proxy.getPublicAddress(downloadFile.getCompleteFile().getPath());
+			}
+		} else {
+			// Check if we want a proxy going still
+			if(Util.isCastProxy(downloadService)) {
+				if(proxy instanceof FileProxy) {
+					proxy.stop();
+					proxy = null;
+				}
+
+				if(proxy == null) {
+					proxy = createWebProxy();
+					proxy.start();
+				}
+			} else if(proxy != null) {
+				proxy.stop();
+				proxy = null;
+			}
+
+			if(song.isVideo()) {
+				url = musicService.getHlsUrl(song.getId(), downloadFile.getBitRate(), downloadService);
+			} else {
+				url = musicService.getMusicUrl(downloadService, song, downloadFile.getBitRate());
+			}
+
+			// If proxy is going, it is a WebProxy
+			if(proxy != null) {
+				url = proxy.getPublicAddress(url);
+			}
+		}
+
+		return url;
 	}
 }
