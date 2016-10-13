@@ -737,7 +737,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(!artist) {
 			entryGridAdapter.setShowArtist(true);
 		}
-		if(topTracks) {
+		if(topTracks || showAll) {
 			entryGridAdapter.setShowAlbum(true);
 		}
 
