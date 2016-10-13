@@ -459,8 +459,12 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				}
 				List<Entry> songs = new ArrayList<Entry>();
 				getSongsRecursively(root, songs);
-				root.replaceChildren(songs);
-				return root;
+
+				// CachedMusicService is refreshing this data in the background, so will wipe out the songs list from root
+				MusicDirectory clonedRoot = new MusicDirectory(songs);
+				clonedRoot.setId(root.getId());
+				clonedRoot.setName(root.getName());
+				return clonedRoot;
 			}
 
 			private void getSongsRecursively(MusicDirectory parent, List<Entry> songs) throws Exception {
@@ -916,7 +920,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				for(Integer index: indexes) {
 					entryGridAdapter.removeAt(index);
 				}
-				Util.toast(context, context.getResources().getString(R.string.removed_playlist, indexes.size(), name));
+				Util.toast(context, context.getResources().getString(R.string.removed_playlist, String.valueOf(indexes.size()), name));
 			}
 
 			@Override
