@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.3.2 BETA" versioncode="188" releasedate="10/12/2016">
+		<change>Add support for casting Internet Radio to ChromeCast/DLNA</change>
+		<change>Add support for Play Title by Artist from Google Search</change>
+		<change>Use Google Play SSL</change>
+		<change>Move to more modern connection framework</change>
+	</release>
 	<release version="5.3.1" versioncode="187" releasedate="10/4/2016">
 		<change>Fix Internet Radio streams which point to playlists</change>
 		<change>Don't show playback speed button below Android 6.0</change>
