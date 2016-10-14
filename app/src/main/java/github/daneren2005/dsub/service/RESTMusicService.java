@@ -1875,12 +1875,29 @@ public class RESTMusicService implements MusicService {
 		if(connection.getResponseCode() >= 500) {
 			throw new IOException("Error code: " + connection.getResponseCode());
 		}
-		detectRedirect(context, urlObj, connection);
+		if(detectRedirect(context, urlObj, connection)) {
+			String rewrittenUrl = rewriteUrlWithRedirect(context, url);
+			if(!rewrittenUrl.equals(url)) {
+				connection.disconnect();
+				return getConnectionDirect(context, rewrittenUrl, headers, minNetworkTimeout);
+			}
+		}
+
 		return connection;
 	}
 
-	private void detectRedirect(Context context, URL originalUrl, HttpURLConnection connection) throws Exception {
+	// Returns true when we should immediately retry with the redirect
+	private boolean detectRedirect(Context context, URL originalUrl, HttpURLConnection connection) throws Exception {
+		if(connection.getResponseCode() == HttpURLConnection.HTTP_MOVED_TEMP || connection.getResponseCode() == HttpURLConnection.HTTP_MOVED_PERM) {
+			String redirectLocation = connection.getHeaderField("Location");
+			if(redirectLocation != null) {
+				detectRedirect(context, originalUrl.toExternalForm(), redirectLocation);
+				return true;
+			}
+		}
+
 		detectRedirect(context, originalUrl, connection.getURL());
+		return false;
 	}
 	private void detectRedirect(Context context, URL originalUrl, URL redirectedUrl) throws Exception {
 		detectRedirect(context, originalUrl.toExternalForm(), redirectedUrl.toExternalForm());
