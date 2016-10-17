@@ -1135,16 +1135,24 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
 		final CheckBox overwriteCheckBox = (CheckBox) layout.findViewById(R.id.save_playlist_overwrite);
 		if(getSuggestion) {
-			String playlistName = (getDownloadService() != null) ? getDownloadService().getSuggestedPlaylistName() : null;
+			DownloadService downloadService = getDownloadService();
+			String playlistName = null;
+			String playlistId = null;
+			if(downloadService != null) {
+				playlistName = downloadService.getSuggestedPlaylistName();
+				playlistId = downloadService.getSuggestedPlaylistId();
+			}
 			if (playlistName != null) {
 				playlistNameView.setText(playlistName);
-				try {
-					if(ServerInfo.checkServerVersion(context, "1.8.0") && Integer.parseInt(getDownloadService().getSuggestedPlaylistId()) != -1) {
-						overwriteCheckBox.setChecked(true);
-						overwriteCheckBox.setVisibility(View.VISIBLE);
+				if(playlistId != null) {
+					try {
+						if (ServerInfo.checkServerVersion(context, "1.8.0") && Integer.parseInt(playlistId) != -1) {
+							overwriteCheckBox.setChecked(true);
+							overwriteCheckBox.setVisibility(View.VISIBLE);
+						}
+					} catch (Exception e) {
+						Log.i(TAG, "Playlist id isn't a integer, probably MusicCabinet", e);
 					}
-				} catch(Exception e) {
-					Log.i(TAG, "Playlist id isn't a integer, probably MusicCabinet");
 				}
 			} else {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -1205,6 +1213,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			@Override
 			protected void error(Throwable error) {
 				String msg = context.getResources().getString(R.string.download_playlist_error) + " " + getErrorMessage(error);
+				Log.e(TAG, "Failed to create playlist", error);
 				Util.toast(context, msg);
 			}
 		}.execute();
@@ -1234,6 +1243,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					msg = context.getResources().getString(R.string.download_playlist_error) + " " + getErrorMessage(error);
 				}
 
+				Log.e(TAG, "Failed to overwrite playlist", error);
 				Util.toast(context, msg, false);
 			}
 		}.execute();
