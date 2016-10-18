@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.3.2 BETA" versioncode="189" releasedate="10/14/2016">
+		<change>Fix errors with Self Signed Certificates</change>
+		<change>Fix error following redirect from http to https</change>
+		<change>Fix Show all media sometimes failing</change>
+		<change>Show album instead of artist for Show all media</change>
+	</release>
 	<release version="5.3.2 BETA" versioncode="188" releasedate="10/12/2016">
 		<change>Add support for casting Internet Radio to ChromeCast/DLNA</change>
 		<change>Add support for Play Title by Artist from Google Search</change>
