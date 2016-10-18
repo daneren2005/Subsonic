@@ -117,7 +117,8 @@ public abstract class RemoteController {
 	protected WebProxy createWebProxy() {
 		MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
 		if(musicService instanceof CachedMusicService) {
-			return new WebProxy(downloadService, ((CachedMusicService)musicService).getMusicService().getHostNameVerifier());
+			RESTMusicService restMusicService = ((CachedMusicService)musicService).getMusicService();
+			return new WebProxy(downloadService, restMusicService.getSSLSocketFactory(), restMusicService.getHostNameVerifier());
 		} else {
 			return new WebProxy(downloadService);
 		}

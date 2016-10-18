@@ -86,7 +86,11 @@ import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class RESTMusicService implements MusicService {
 
@@ -102,6 +106,7 @@ public class RESTMusicService implements MusicService {
     private static final int HTTP_REQUEST_MAX_ATTEMPTS = 5;
     private static final long REDIRECTION_CHECK_INTERVAL_MILLIS = 60L * 60L * 1000L;
 
+	private SSLSocketFactory sslSocketFactory;
 	private HostnameVerifier selfSignedHostnameVerifier;
     private long redirectionLastChecked;
     private int redirectionNetworkType = -1;
@@ -111,6 +116,26 @@ public class RESTMusicService implements MusicService {
 	private boolean hasInstalledGoogleSSL = false;
 
     public RESTMusicService() {
+		TrustManager[] trustAllCerts = new TrustManager[]{
+			new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+				public void checkClientTrusted(
+						java.security.cert.X509Certificate[] certs, String authType) {
+				}
+				public void checkServerTrusted(
+						java.security.cert.X509Certificate[] certs, String authType) {
+				}
+			}
+		};
+		try {
+			SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			sslSocketFactory = sslContext.getSocketFactory();
+		} catch (Exception e) {
+		}
+
 		selfSignedHostnameVerifier = new HostnameVerifier() {
 			public boolean verify(String hostname, SSLSession session) {
 				return true;
@@ -1868,6 +1893,7 @@ public class RESTMusicService implements MusicService {
 
 		if(connection instanceof HttpsURLConnection) {
 			HttpsURLConnection sslConnection = (HttpsURLConnection) connection;
+			sslConnection.setSSLSocketFactory(sslSocketFactory);
 			sslConnection.setHostnameVerifier(selfSignedHostnameVerifier);
 		}
 
@@ -1968,6 +1994,9 @@ public class RESTMusicService implements MusicService {
 		}
 	}
 
+	public SSLSocketFactory getSSLSocketFactory() {
+		return sslSocketFactory;
+	}
 	public HostnameVerifier getHostNameVerifier() {
 		return selfSignedHostnameVerifier;
 	}
