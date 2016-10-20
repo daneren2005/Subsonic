@@ -245,7 +245,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		if (theme != null && !theme.equals(ThemeUtil.getTheme(this)) || fullScreen != prefs.getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false) || actionbarColored != prefs.getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
 			restart();
 			overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-			DrawableTint.wipeTintCache();
+			DrawableTint.clearCache();
 		}
 
 		populateTabs();
