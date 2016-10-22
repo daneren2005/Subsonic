@@ -23,6 +23,7 @@ import android.util.Log;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
+import com.google.android.gms.cast.CastStatusCodes;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
@@ -343,6 +344,8 @@ public class ChromeCastController extends RemoteController {
 				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
 					if (result.getStatus().isSuccess()) {
 						// Handled in other handler
+					} else if(result.getStatus().getStatusCode() == CastStatusCodes.REPLACED) {
+						Log.w(TAG, "Request was replaced: " + currentPlaying.toString());
 					} else {
 						Log.e(TAG, "Failed to load: " + result.getStatus().toString());
 						failedLoad();
@@ -459,7 +462,9 @@ public class ChromeCastController extends RemoteController {
 								break;
 							case MediaStatus.PLAYER_STATE_IDLE:
 								if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
-									downloadService.onSongCompleted();
+									if(downloadService.getPlayerState() != PlayerState.PREPARING) {
+										downloadService.onSongCompleted();
+									}
 								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
 									if (downloadService.getPlayerState() != PlayerState.PREPARING) {
 										downloadService.setPlayerState(PlayerState.PREPARING);
