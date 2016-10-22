@@ -23,6 +23,7 @@ import android.util.Log;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
+import com.google.android.gms.cast.CastStatusCodes;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
@@ -66,17 +67,12 @@ public class ChromeCastController extends RemoteController {
 	private boolean isStopping = false;
 	private Runnable afterUpdateComplete = null;
 
-	private ServerProxy proxy;
-	private String rootLocation;
 	private RemoteMediaPlayer mediaPlayer;
 	private double gain = 0.5;
 
 	public ChromeCastController(DownloadService downloadService, CastDevice castDevice) {
-		this.downloadService = downloadService;
+		super(downloadService);
 		this.castDevice = castDevice;
-
-		SharedPreferences prefs = Util.getPreferences(downloadService);
-		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 	}
 
 	@Override
@@ -287,49 +283,7 @@ public class ChromeCastController extends RemoteController {
 
 		try {
 			MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-			String url;
-			// Offline, use file proxy
-			if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
-				if(proxy == null) {
-					proxy = new FileProxy(downloadService);
-					proxy.start();
-				}
-
-				// Offline song
-				if(song.getId().indexOf(rootLocation) != -1) {
-					url = proxy.getPublicAddress(song.getId());
-				} else {
-					// Playing online song in offline mode
-					url = proxy.getPublicAddress(currentPlaying.getCompleteFile().getPath());
-				}
-			} else {
-				// Check if we want a proxy going still
-				if(Util.isCastProxy(downloadService)) {
-					if(proxy instanceof FileProxy) {
-						proxy.stop();
-						proxy = null;
-					}
-
-					if(proxy == null) {
-						proxy = createWebProxy();
-						proxy.start();
-					}
-				} else if(proxy != null) {
-					proxy.stop();
-					proxy = null;
-				}
-
-				if(song.isVideo()) {
-					url = musicService.getHlsUrl(song.getId(), currentPlaying.getBitRate(), downloadService);
-				} else {
-					url = musicService.getMusicUrl(downloadService, song, currentPlaying.getBitRate());
-				}
-
-				// If proxy is going, it is a WebProxy
-				if(proxy != null) {
-					url = proxy.getPublicAddress(url);
-				}
-			}
+			String url = getStreamUrl(musicService, currentPlaying);
 
 			// Setup song/video information
 			MediaMetadata meta = new MediaMetadata(song.isVideo() ? MediaMetadata.MEDIA_TYPE_MOVIE : MediaMetadata.MEDIA_TYPE_MUSIC_TRACK);
@@ -390,6 +344,8 @@ public class ChromeCastController extends RemoteController {
 				public void onResult(RemoteMediaPlayer.MediaChannelResult result) {
 					if (result.getStatus().isSuccess()) {
 						// Handled in other handler
+					} else if(result.getStatus().getStatusCode() == CastStatusCodes.REPLACED) {
+						Log.w(TAG, "Request was replaced: " + currentPlaying.toString());
 					} else {
 						Log.e(TAG, "Failed to load: " + result.getStatus().toString());
 						failedLoad();
@@ -506,7 +462,9 @@ public class ChromeCastController extends RemoteController {
 								break;
 							case MediaStatus.PLAYER_STATE_IDLE:
 								if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
-									downloadService.onSongCompleted();
+									if(downloadService.getPlayerState() != PlayerState.PREPARING) {
+										downloadService.onSongCompleted();
+									}
 								} else if (mediaStatus.getIdleReason() == MediaStatus.IDLE_REASON_INTERRUPTED) {
 									if (downloadService.getPlayerState() != PlayerState.PREPARING) {
 										downloadService.setPlayerState(PlayerState.PREPARING);

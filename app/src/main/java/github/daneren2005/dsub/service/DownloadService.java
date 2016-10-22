@@ -1469,7 +1469,7 @@ public class DownloadService extends Service {
 			Notifications.hidePlayingNotification(this, this, handler);
 		}
 		if(mRemoteControl != null) {
-			mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+			mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState(), getCurrentPlayingIndex(), size());
 		}
 
 		if (playerState == STARTED) {
@@ -2842,6 +2842,8 @@ public class DownloadService extends Service {
 		final Integer duration = getPlayerDuration();
 		final boolean isSeekable = isSeekable();
 		final int position = getPlayerPosition();
+		final int index = getCurrentPlayingIndex();
+		final int queueSize = size();
 
 		synchronized(onSongChangedListeners) {
 			for (final OnSongChangedListener listener : onSongChangedListeners) {
@@ -2861,7 +2863,7 @@ public class DownloadService extends Service {
 				@Override
 				public void run() {
 					if(mRemoteControl != null) {
-						mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState());
+						mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState(), index, queueSize);
 					}
 				}
 			});

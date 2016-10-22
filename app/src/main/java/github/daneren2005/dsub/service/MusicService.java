@@ -18,15 +18,14 @@
  */
 package github.daneren2005.dsub.service;
 
+import java.net.HttpURLConnection;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 
 import github.daneren2005.dsub.domain.ArtistInfo;
-import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.domain.Indexes;
@@ -104,7 +103,7 @@ public interface MusicService {
 
     Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 
-    HttpResponse getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception;
+    HttpURLConnection getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception;
 
 	String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception;
 

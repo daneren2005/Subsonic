@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 23
+	compileSdkVersion 24
 	buildToolsVersion "23.0.3"
-	useLibrary 'org.apache.http.legacy'
 
 	defaultConfig {
 		applicationId "github.daneren2005.dsub"
 		minSdkVersion 14
 		targetSdkVersion 23
-		versionCode 187
-		versionName '5.3.1'
+		versionCode 190
+		versionName '5.3.2'
 		setProperty("archivesBaseName", "DSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
 	}
@@ -47,11 +46,11 @@ android {
 dependencies {
 	compile project(':Server Proxy')
 	compile fileTree(include: ['*.jar'], dir: 'libs')
-	compile 'com.android.support:support-v4:23.4.+'
-	compile 'com.android.support:appcompat-v7:23.4.+'
-	compile 'com.android.support:mediarouter-v7:23.4.+'
-	compile 'com.android.support:recyclerview-v7:23.4.+'
-	compile 'com.android.support:design:23.4.+'
+	compile 'com.android.support:support-v4:24.2.+'
+	compile 'com.android.support:appcompat-v7:24.2.+'
+	compile 'com.android.support:mediarouter-v7:24.2.+'
+	compile 'com.android.support:recyclerview-v7:24.2.+'
+	compile 'com.android.support:design:24.2.+'
 	compile 'com.google.android.gms:play-services-cast:8.1.0'
 	compile 'com.sothree.slidinguppanel:library:3.0.0'
 	compile 'de.hdodenhof:circleimageview:1.2.1'

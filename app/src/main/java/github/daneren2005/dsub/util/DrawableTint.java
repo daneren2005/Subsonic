@@ -95,7 +95,7 @@ public class DrawableTint {
 		return getTintedDrawable(context, drawableRes, colorAttr);
 	}
 
-	public static void wipeTintCache() {
+	public static void clearCache() {
 		attrMap.clear();
 		tintedDrawables.clear();
 	}

@@ -121,7 +121,7 @@
 			android:contentDescription="@null"/>
 	</RelativeLayout>
 
-	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<FrameLayout
 		android:id="@+id/header_progress"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"

@@ -103,7 +103,7 @@
 	<string name="menu.add_podcast">Add Channel</string>
 	<string name="menu.keep_synced">Keep Synced</string>
 	<string name="menu.stop_sync">Stop syncing</string>
-	<string name="menu.show_all">Show all media</string>
+	<string name="menu.show_all">Show all songs</string>
 	<string name="menu.show_artist">Show Artist</string>
 	<string name="menu.share">Share</string>
 	<string name="menu.delete_cache">Delete Cache</string>

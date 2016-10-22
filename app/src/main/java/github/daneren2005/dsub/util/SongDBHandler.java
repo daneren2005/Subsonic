@@ -120,7 +120,6 @@ public class SongDBHandler extends SQLiteOpenHelper {
 				values.put(SONGS_SERVER_KEY, serverKey);
 				values.put(SONGS_SERVER_ID, entry.getFirst());
 				values.put(SONGS_COMPLETE_PATH, entry.getSecond());
-				// Util.sleepQuietly(10000);
 
 				db.insertWithOnConflict(TABLE_SONGS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 			}

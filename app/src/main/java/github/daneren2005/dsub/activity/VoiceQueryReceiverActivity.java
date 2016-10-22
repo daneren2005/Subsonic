@@ -55,6 +55,22 @@ public class VoiceQueryReceiverActivity extends Activity {
 			if(!GMS_SEARCH_ACTION.equals(getIntent().getAction())) {
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_AUTOPLAY, true);
 			}
+
+			String artist = getIntent().getStringExtra(MediaStore.EXTRA_MEDIA_ARTIST);
+			if(artist != null) {
+				intent.putExtra(MediaStore.EXTRA_MEDIA_ARTIST, artist);
+			}
+
+			String album = getIntent().getStringExtra(MediaStore.EXTRA_MEDIA_ALBUM);
+			if(album != null) {
+				intent.putExtra(MediaStore.EXTRA_MEDIA_ALBUM, album);
+			}
+
+			String title = getIntent().getStringExtra(MediaStore.EXTRA_MEDIA_TITLE);
+			if(title != null) {
+				intent.putExtra(MediaStore.EXTRA_MEDIA_TITLE, title);
+			}
+
             intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, getIntent().getStringExtra(MediaStore.EXTRA_MEDIA_FOCUS));
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             Util.startActivityWithoutTransition(VoiceQueryReceiverActivity.this, intent);
