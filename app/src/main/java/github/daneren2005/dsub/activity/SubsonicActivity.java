@@ -95,7 +95,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	protected static boolean actionbarColored;
 	private static final int MENU_GROUP_SERVER = 10;
 	private static final int MENU_ITEM_SERVER_BASE = 100;
-	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+	public static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+	public static final int PERMISSIONS_REQUEST_LOCATION = 2;
 
 	private final List<Runnable> afterServiceAvailable = new ArrayList<>();
 	private boolean drawerIdle = true;

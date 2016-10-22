@@ -15,12 +15,14 @@
 
 package github.daneren2005.dsub.fragments;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -29,6 +31,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,6 +51,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.HeadphoneListenerService;
 import github.daneren2005.dsub.service.MusicService;
@@ -187,6 +192,13 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				context.startService(serviceIntent);
 			} else {
 				context.stopService(serviceIntent);
+			}
+		} else if(Constants.PREFERENCES_KEY_THEME.equals(key)) {
+			String value = sharedPreferences.getString(key, null);
+			if("day/night".equals(value) || "day/black".equals(value)) {
+				if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+					ActivityCompat.requestPermissions(context, new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION }, SubsonicActivity.PERMISSIONS_REQUEST_LOCATION);
+				}
 			}
 		}
 
