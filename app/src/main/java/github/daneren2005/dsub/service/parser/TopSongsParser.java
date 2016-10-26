@@ -34,17 +34,17 @@ public class TopSongsParser extends MusicDirectoryEntryParser {
 
 		MusicDirectory dir = new MusicDirectory();
 		int eventType;
-		int trackNumber = 1;
+		int customOrder = 1;
 		do {
 			eventType = nextParseEvent();
 			if (eventType == XmlPullParser.START_TAG) {
 				String name = getElementName();
 				if ("song".equals(name)) {
 					MusicDirectory.Entry entry = parseEntry("");
-					entry.setTrack(trackNumber);
+					entry.setCustomOrder(customOrder);
 					dir.addChild(entry);
 
-					trackNumber++;
+					customOrder++;
 				} else if ("error".equals(name)) {
 					handleError();
 				}

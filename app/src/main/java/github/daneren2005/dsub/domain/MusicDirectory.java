@@ -236,6 +236,7 @@ public class MusicDirectory implements Serializable {
 		private String album;
 		private String artist;
 		private Integer track;
+		private Integer customOrder;
 		private Integer year;
 		private String genre;
 		private String contentType;
@@ -423,6 +424,13 @@ public class MusicDirectory implements Serializable {
         public void setTrack(Integer track) {
             this.track = track;
         }
+
+		public Integer getCustomOrder() {
+			return customOrder;
+		}
+		public void setCustomOrder(Integer customOrder) {
+			this.customOrder = customOrder;
+		}
 
         public Integer getYear() {
             return year;

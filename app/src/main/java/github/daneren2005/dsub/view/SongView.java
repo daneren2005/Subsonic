@@ -151,6 +151,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		String title = song.getTitle();
 		Integer track = song.getTrack();
+		if(song.getCustomOrder() != null) {
+			track = song.getCustomOrder();
+		}
 		TextView newPlayingTextView;
 		if(track != null && Util.getDisplayTrack(context)) {
 			trackTextView.setText(String.format("%02d", track));
