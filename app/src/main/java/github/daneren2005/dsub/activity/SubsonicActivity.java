@@ -247,6 +247,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			restart();
 			overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 			DrawableTint.clearCache();
+			return;
 		}
 
 		populateTabs();
