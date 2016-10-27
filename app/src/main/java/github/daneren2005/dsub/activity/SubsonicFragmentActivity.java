@@ -320,6 +320,8 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 						PlayerState state = getDownloadService().getPlayerState();
 						if(state == PlayerState.STARTED) {
 							getDownloadService().pause();
+						} else if(state == PlayerState.IDLE) {
+							getDownloadService().play();
 						} else {
 							getDownloadService().start();
 						}
