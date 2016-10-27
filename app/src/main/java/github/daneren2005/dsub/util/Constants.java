@@ -190,6 +190,7 @@ public final class Constants {
 	
 	public static final String CACHE_KEY_IGNORE = "ignoreArticles";
 	public static final String CACHE_AUDIO_SESSION_ID = "audioSessionId";
+	public static final String CACHE_AUDIO_SESSION_VERSION_CODE = "audioSessionVersionCode";
 	public static final String CACHE_BLOCK_TOKEN_USE = "blockTokenUse";
 	
 	public static final String MAIN_BACK_STACK = "backStackIds";

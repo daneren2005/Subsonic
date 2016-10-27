@@ -197,13 +197,16 @@ public class DownloadService extends Service {
 				mediaPlayer = new MediaPlayer();
 				mediaPlayer.setWakeMode(DownloadService.this, PowerManager.PARTIAL_WAKE_LOCK);
 
+				// We want to change audio session id's between upgrading Android versions.  Upgrading to Android 7.0 is broken (probably updated session id format)
 				audioSessionId = -1;
-				Integer id = prefs.getInt(Constants.CACHE_AUDIO_SESSION_ID, -1);
-				if(id != -1) {
+				int id = prefs.getInt(Constants.CACHE_AUDIO_SESSION_ID, -1);
+				int versionCode = prefs.getInt(Constants.CACHE_AUDIO_SESSION_VERSION_CODE, -1);
+				if(versionCode == Build.VERSION.SDK_INT && id != -1) {
 					try {
 						audioSessionId = id;
 						mediaPlayer.setAudioSessionId(audioSessionId);
 					} catch (Throwable e) {
+						Log.w(TAG, "Failed to use cached audio session", e);
 						audioSessionId = -1;
 					}
 				}
@@ -212,7 +215,11 @@ public class DownloadService extends Service {
 					mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 					try {
 						audioSessionId = mediaPlayer.getAudioSessionId();
-						prefs.edit().putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId).commit();
+
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId);
+						editor.putInt(Constants.CACHE_AUDIO_SESSION_VERSION_CODE, Build.VERSION.SDK_INT);
+						editor.commit();
 					} catch (Throwable t) {
 						// Froyo or lower
 					}
