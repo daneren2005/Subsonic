@@ -39,6 +39,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.security.ProviderInstaller;
@@ -1896,6 +1897,13 @@ public class RESTMusicService implements MusicService {
 			sslConnection.setSSLSocketFactory(sslSocketFactory);
 			sslConnection.setHostnameVerifier(selfSignedHostnameVerifier);
 		}
+
+		SharedPreferences prefs = Util.getPreferences(context);
+		int instance = getInstance(context);
+		String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
+		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
+		String encoded = Base64.encodeToString((username + ":" + password).getBytes("UTF-8"), Base64.NO_WRAP);;
+		connection.setRequestProperty("Authorization", "Basic " + encoded);
 
 		// Force the connection to initiate
 		if(connection.getResponseCode() >= 500) {
