@@ -2690,10 +2690,14 @@ public class DownloadService extends Service {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			float playbackSpeed = getPlaybackSpeed();
 
-			if(Math.abs(playbackSpeed - 1.0) > 0.01 || mediaPlayer.getPlaybackParams() != null) {
-				PlaybackParams playbackParams = new PlaybackParams();
-				playbackParams.setSpeed(playbackSpeed);
-				mediaPlayer.setPlaybackParams(playbackParams);
+			try {
+				if (Math.abs(playbackSpeed - 1.0) > 0.01 || mediaPlayer.getPlaybackParams() != null) {
+					PlaybackParams playbackParams = new PlaybackParams();
+					playbackParams.setSpeed(playbackSpeed);
+					mediaPlayer.setPlaybackParams(playbackParams);
+				}
+			} catch(Exception e) {
+				Log.e(TAG, "Error while applying media player params", e);
 			}
 		}
 	}
