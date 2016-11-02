@@ -65,8 +65,8 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 
 		final Handler handler = new Handler();
 		Runnable runnable = new Runnable() {
@@ -86,8 +86,8 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
+	public void onStop() {
+		super.onStop();
 		executorService.shutdown();
 	}
 

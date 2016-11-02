@@ -764,8 +764,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		if(this.primaryFragment) {
 			onResumeHandlers();
 		} else {
@@ -808,8 +808,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
+	public void onStop() {
+		super.onStop();
 		onPauseHandlers();
 	}
 	private void onPauseHandlers() {

@@ -135,8 +135,8 @@ public class ChatFragment extends SubsonicFragment {
 	}
 	
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		
 		final Handler handler = new Handler();
 		Runnable runnable = new Runnable() {
@@ -164,8 +164,8 @@ public class ChatFragment extends SubsonicFragment {
 	}
 	
 	@Override
-	public void onPause() {
-		super.onPause();
+	public void onStop() {
+		super.onStop();
 		if(executorService != null) {
 			executorService.shutdown();
 			executorService = null;

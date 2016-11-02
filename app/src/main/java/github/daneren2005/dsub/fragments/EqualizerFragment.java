@@ -110,8 +110,8 @@ public class EqualizerFragment extends SubsonicFragment {
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
+	public void onStop() {
+		super.onStop();
 
 		try {
 			equalizerController.saveSettings();
@@ -125,8 +125,8 @@ public class EqualizerFragment extends SubsonicFragment {
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		equalizerController = DownloadService.getInstance().getEqualizerController();
 		equalizer = equalizerController.getEqualizer();
 		bass = equalizerController.getBassBoost();

@@ -237,8 +237,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
 		Util.registerMediaButtonEventReceiver(this);
 
 		// Make sure to update theme
@@ -256,8 +256,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
+	protected void onStop() {
+		super.onStop();
 
 		UpdateView.removeActiveActivity();
 	}
