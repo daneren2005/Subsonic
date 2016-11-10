@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.3.3" versioncode="191" releasedate="11/9/2016">
+		<change>Add support for Android 7's split screen UI</change>
+		<change>Fix for Android 7 not playing</change>
+		<change>Fix basic authentication for servers</change>
+		<change>Fix top track songs using different save file</change>
+	</release>
 	<release version="5.3.2" versioncode="190" releasedate="10/22/2016">
 		<change>Add support for casting Internet Radio to ChromeCast/DLNA</change>
 		<change>Add support for Play Title by Artist from Google Search</change>
