@@ -21,6 +21,7 @@ package github.daneren2005.dsub.util;
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.BackupDataInput;
 import android.app.backup.SharedPreferencesBackupHelper;
+import android.content.SharedPreferences;
 import android.os.ParcelFileDescriptor;
 
 import java.io.IOError;
@@ -39,6 +40,10 @@ public class SettingsBackupAgent extends BackupAgentHelper {
 	@Override
 	public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException{
 		super.onRestore(data, appVersionCode, newState);
-		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_CACHE_LOCATION).apply();
+
+		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
+		editor.remove(Constants.PREFERENCES_KEY_CACHE_LOCATION);
+		editor.remove(Constants.CACHE_AUDIO_SESSION_ID);
+		editor.apply();
 	}
  }
