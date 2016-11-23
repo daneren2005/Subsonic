@@ -1665,6 +1665,9 @@ public class DownloadService extends Service {
 		return controller;
 	}
 
+	public MediaRouteManager getMediaRouter() {
+		return mediaRouter;
+	}
 	public MediaRouteSelector getRemoteSelector() {
 		return mediaRouter.getSelector();
 	}

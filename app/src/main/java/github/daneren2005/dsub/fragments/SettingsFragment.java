@@ -59,6 +59,7 @@ import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.LoadingTask;
+import github.daneren2005.dsub.util.MediaRouteManager;
 import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.CacheLocationPreference;
@@ -198,6 +199,18 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			if("day/night".equals(value) || "day/black".equals(value)) {
 				if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 					ActivityCompat.requestPermissions(context, new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION }, SubsonicActivity.PERMISSIONS_REQUEST_LOCATION);
+				}
+			}
+		} else if(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED.equals(key)) {
+			DownloadService downloadService = DownloadService.getInstance();
+			if(downloadService != null) {
+				MediaRouteManager mediaRouter = downloadService.getMediaRouter();
+
+				Boolean enabled = sharedPreferences.getBoolean(key, true);
+				if (enabled) {
+					mediaRouter.addDLNAProvider();
+				} else {
+					mediaRouter.removeDLNAProvider();
 				}
 			}
 		}

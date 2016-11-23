@@ -178,6 +178,7 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_CAST_CACHE = "castCache";
 	public static final String PREFERENCES_KEY_PLAYBACK_SPEED = "playbackSpeed";
 	public static final String PREFERENCES_KEY_CUSTOM_PLAYBACK_SPEED = "customPlaybackSpeed";
+	public static final String PREFERENCES_KEY_DLNA_CASTING_ENABLED = "dlnaCastingEnabled";
 	
 	public static final String OFFLINE_SCROBBLE_COUNT = "scrobbleCount";
 	public static final String OFFLINE_SCROBBLE_ID = "scrobbleID";

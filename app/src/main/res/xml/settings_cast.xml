@@ -28,4 +28,14 @@
 			android:key="castCache"
 			android:defaultValue="false"/>
 	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:title="@string/settings.other_title">
+
+		<CheckBoxPreference
+			android:title="@string/settings.casting.dlna_casting_enabled"
+			android:summary="@string/settings.casting.dlna_casting_enabled.summary"
+			android:key="dlnaCastingEnabled"
+			android:defaultValue="true"/>
+	</PreferenceCategory>
 </PreferenceScreen>

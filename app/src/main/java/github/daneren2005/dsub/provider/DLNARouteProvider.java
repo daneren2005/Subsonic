@@ -71,6 +71,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	private List<String> removing = new ArrayList<String>();
 	private AndroidUpnpService dlnaService;
 	private ServiceConnection dlnaServiceConnection;
+	private RegistryListener registryListener;
 	private boolean searchOnConnect = false;
 
 	public DLNARouteProvider(Context context) {
@@ -84,7 +85,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
 				dlnaService = (AndroidUpnpService) service;
-				dlnaService.getRegistry().addListener(new RegistryListener() {
+				dlnaService.getRegistry().addListener(registryListener = new RegistryListener() {
 					@Override
 					public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice remoteDevice) {
 
@@ -142,6 +143,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			@Override
 			public void onServiceDisconnected(ComponentName name) {
 				dlnaService = null;
+				registryListener = null;
 			}
 		};
 
@@ -287,6 +289,17 @@ public class DLNARouteProvider extends MediaRouteProvider {
 					}
 				}
 			}, 5000L);
+		}
+	}
+
+	public void destroy() {
+		if(dlnaService != null) {
+			dlnaService.getRegistry().removeListener(registryListener);
+			registryListener = null;
+		}
+
+		if(dlnaServiceConnection != null) {
+			getContext().getApplicationContext().unbindService(dlnaServiceConnection);
 		}
 	}
 

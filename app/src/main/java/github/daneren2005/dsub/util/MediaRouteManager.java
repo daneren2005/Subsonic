@@ -48,6 +48,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private MediaRouteSelector selector;
 	private List<MediaRouteProvider> providers = new ArrayList<MediaRouteProvider>();
 	private List<MediaRouteProvider> onlineProviders = new ArrayList<MediaRouteProvider>();
+	private DLNARouteProvider dlnaProvider;
 
 	static {
 		try {
@@ -159,10 +160,8 @@ public class MediaRouteManager extends MediaRouter.Callback {
 			addOnlineProviders();
 		}
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			DLNARouteProvider dlnaProvider = new DLNARouteProvider(downloadService);
-			router.addProvider(dlnaProvider);
-			providers.add(dlnaProvider);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED, true)) {
+			addDLNAProvider();
 		}
 	}
 	public void buildSelector() {
@@ -177,5 +176,21 @@ public class MediaRouteManager extends MediaRouter.Callback {
 			builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);
 		}
 		selector = builder.build();
+	}
+
+	public void addDLNAProvider() {
+		if(dlnaProvider == null) {
+			dlnaProvider = new DLNARouteProvider(downloadService);
+			router.addProvider(dlnaProvider);
+			providers.add(dlnaProvider);
+		}
+	}
+	public void removeDLNAProvider() {
+		if(dlnaProvider != null) {
+			router.removeProvider(dlnaProvider);
+			providers.remove(dlnaProvider);
+			dlnaProvider.destroy();
+			dlnaProvider = null;
+		}
 	}
 }
