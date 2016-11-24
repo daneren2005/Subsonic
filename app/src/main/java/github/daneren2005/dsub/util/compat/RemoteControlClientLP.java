@@ -433,7 +433,9 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	private void noResults() {
-
+		// Keep getting emails from Google that not playing something with no results is bad
+		downloadService.clear();
+		downloadService.setShufflePlayEnabled(true);
 	}
 
 	private class EventCallback extends MediaSession.Callback {
