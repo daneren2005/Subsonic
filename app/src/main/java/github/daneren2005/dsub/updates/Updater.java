@@ -48,6 +48,7 @@ public class Updater {
 		this.context = context;
 		List<Updater> updaters = new ArrayList<Updater>();
 		updaters.add(new UpdaterSongPress());
+		updaters.add(new UpdaterNoDLNA());
 		
 		SharedPreferences prefs = Util.getPreferences(context);
 		int lastVersion = prefs.getInt(Constants.LAST_VERSION, 0);
