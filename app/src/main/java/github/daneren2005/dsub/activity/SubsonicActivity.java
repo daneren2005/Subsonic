@@ -250,9 +250,17 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			return;
 		}
 
-		populateTabs();
 		getImageLoader().onUIVisible();
 		UpdateView.addActiveActivity();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// If this is in onStart is causes crashes when rotating screen in offline mode
+		// Actual root cause of error is `drawerItemSelected(newFragment);` in the offline mode branch of code
+		populateTabs();
 	}
 
 	@Override
