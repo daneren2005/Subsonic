@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.3.4" versioncode="193" releasedate="11/28/2016">
+		<change>Added toggle for DLNA casting to fix battery issues some users are having on Android 7.0+</change>
+		<change>Fix rotating screen in offline mode</change>
+	</release>
 	<release version="5.3.3" versioncode="191" releasedate="11/9/2016">
 		<change>Add support for Android 7's split screen UI</change>
 		<change>Fix for Android 7 not playing</change>
