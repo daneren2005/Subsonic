@@ -384,7 +384,7 @@
 	<string name="settings.temp_loss_nothing">Do Nothing</string>
 	<string name="settings.keep_played_count_title">Keep played songs</string>
 	<string name="settings.keep_played_count_none">Remove all played songs</string>
-	<string name="settings.keep_played_count_one">Keep last played songs</string>
+	<string name="settings.keep_played_count_one">Keep last played song</string>
 	<string name="settings.keep_played_count_two">Keep 2 played songs</string>
 	<string name="settings.keep_played_count_three">Keep 3 played songs</string>
 	<string name="settings.disconnect_pause_title">Pause on Disconnect</string>
