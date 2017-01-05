@@ -31,7 +31,7 @@
 	<string name="button_bar.playlists">Playlists</string>
     <string name="button_bar.now_playing">Lecture en cours</string>
 	<string name="button_bar.podcasts">Podcasts</string>
-	<string name="button_bar.bookmarks">Favoris</string>
+	<string name="button_bar.bookmarks">Signets</string>
 	<string name="button_bar.shares">Partages</string>
 	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Admin</string>
@@ -204,11 +204,11 @@
     <string name="updated_playlist_error">Échec de la mise à jour \&quot;%s\&quot;, réessayer plus tard.</string>
 	<string name="removed_playlist">Titre %1$s retiré de \&quot;%2$s\&quot;</string>
 	
-	<string name="bookmark.delete">Supprimer le favori</string>
-	<string name="bookmark.delete_title">Supprimer le favori pour</string>
-	<string name="bookmark.deleted">Favori pour \&quot;%s\&quot; supprimé</string>
-	<string name="bookmark.deleted_error">Échec de la suppression du favori pour \&quot;%s\&quot;</string>
-	<string name="bookmark.details_title">Détails du favori</string>
+	<string name="bookmark.delete">Supprimer le signet</string>
+	<string name="bookmark.delete_title">Supprimer le signet pour</string>
+	<string name="bookmark.deleted">Signet pour \&quot;%s\&quot; supprimé</string>
+	<string name="bookmark.deleted_error">Échec de la suppression du signet pour \&quot;%s\&quot;</string>
+	<string name="bookmark.details_title">Détails du signet</string>
 	<string name="bookmark.details">Titre : %1$s
 		\nPosition : %2$s
 		\nCréé le : %3$s
@@ -361,8 +361,8 @@
 	<string name="settings.hide_widget_summary">Cacher le widget après avoir quitté l\'application</string>
 	<string name="settings.podcasts_enabled">Podcasts autorisés</string>
 	<string name="settings.podcasts_enabled_summary">Afficher ou non l\'accès aux podcasts</string>
-	<string name="settings.bookmarks_enabled">Favoris autorisés</string>
-	<string name="settings.bookmarks_enabled_summary">Afficher ou non l\'accès aux favoris</string>
+	<string name="settings.bookmarks_enabled">Signets autorisés</string>
+	<string name="settings.bookmarks_enabled_summary">Afficher ou non l\'accès aux signets</string>
 	<string name="settings.shares_enabled">Partages autorisés</string>
 	<string name="settings.shares_enabled_summary">Afficher ou non l\'accès aux partages</string>
 	<string name="settings.sync_title">Sync</string>
