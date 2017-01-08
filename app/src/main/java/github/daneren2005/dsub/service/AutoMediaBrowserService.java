@@ -269,7 +269,6 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 				// music directories
 				for(Artist artist : indexes.getArtists()) {
-					Log.d(TAG, "Found index entry " + artist.getName() + "(" + artist.getId() + ")");
 					MediaDescription description = new MediaDescription.Builder()
 							.setTitle(artist.getName())
 							.setMediaId(MUSIC_DIRECTORY_CONTENTS_PREFIX + artist.getId())
