@@ -21,6 +21,7 @@ package github.daneren2005.dsub.service;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.media.MediaDescription;
+import android.media.MediaMetadata;
 import android.media.browse.MediaBrowser;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,8 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.domain.Artist;
+import github.daneren2005.dsub.domain.Indexes;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
+import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.PodcastEpisode;
@@ -58,6 +62,8 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 	private static final String PODCAST_PREFIX = "po-";
 	private static final String ALBUM_TYPE_PREFIX = "ty-";
 	private static final String MUSIC_DIRECTORY_PREFIX = "md-";
+	private static final String MUSIC_FOLDER_PREFIX = "mf-";
+	private static final String MUSIC_DIRECTORY_CONTENTS_PREFIX = "mdc-";
 
 	private DownloadService downloadService;
 	private Handler handler = new Handler();
@@ -89,6 +95,12 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 			getPlayOptions(result, id, Constants.INTENT_EXTRA_NAME_ID);
 		} else if(BROWSER_LIBRARY.equals(parentId)) {
 			getLibrary(result);
+		}  else if(parentId.startsWith(MUSIC_FOLDER_PREFIX)) {
+			String id = parentId.substring(MUSIC_FOLDER_PREFIX.length());
+			getIndexes(result, id);
+		}  else if(parentId.startsWith(MUSIC_DIRECTORY_CONTENTS_PREFIX)) {
+			String id = parentId.substring(MUSIC_DIRECTORY_CONTENTS_PREFIX.length());
+			getMusicDirectory(result, id);
 		} else if(BROWSER_PLAYLISTS.equals(parentId)) {
 			getPlaylists(result);
 		} else if(parentId.startsWith(PLAYLIST_PREFIX)) {
@@ -115,10 +127,10 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				.setMediaId(BROWSER_ALBUM_LISTS);
 		mediaItems.add(new MediaBrowser.MediaItem(albumLists.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
 
-		/*MediaDescription.Builder library = new MediaDescription.Builder();
+		MediaDescription.Builder library = new MediaDescription.Builder();
 		library.setTitle(downloadService.getString(R.string.button_bar_browse))
 			.setMediaId(BROWSER_LIBRARY);
-		mediaItems.add(new MediaBrowser.MediaItem(library.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));*/
+		mediaItems.add(new MediaBrowser.MediaItem(library.build(), MediaBrowser.MediaItem.FLAG_BROWSABLE));
 
 		MediaDescription.Builder playlists = new MediaDescription.Builder();
 		playlists.setTitle(downloadService.getString(R.string.button_bar_playlists))
@@ -218,8 +230,107 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 		result.detach();
 	}
 
-	private void getLibrary(Result<List<MediaBrowser.MediaItem>> result) {
+	private void getLibrary(final Result<List<MediaBrowser.MediaItem>> result) {
+		new SilentServiceTask<List<MusicFolder>>(downloadService) {
+			@Override
+			protected List<MusicFolder> doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getMusicFolders(false, downloadService, null);
+			}
 
+			@Override
+			protected void done(List<MusicFolder> folders) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				for(MusicFolder folder: folders) {
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(folder.getName())
+							.setMediaId(MUSIC_FOLDER_PREFIX + folder.getId())
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+	private void getIndexes(final Result<List<MediaBrowser.MediaItem>> result, final String musicFolderId) {
+		new SilentServiceTask<Indexes>(downloadService) {
+			@Override
+			protected Indexes doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getIndexes(musicFolderId, false, downloadService, null);
+			}
+
+			@Override
+			protected void done(Indexes indexes) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				// music directories
+				for(Artist artist : indexes.getArtists()) {
+					Log.d(TAG, "Found index entry " + artist.getName() + "(" + artist.getId() + ")");
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(artist.getName())
+							.setMediaId(MUSIC_DIRECTORY_CONTENTS_PREFIX + artist.getId())
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
+				}
+
+				// music files
+				for(Entry entry: indexes.getEntries()) {
+					MediaDescription description = new MediaDescription.Builder()
+							.setTitle(entry.getTitle())
+							.setMediaId(MUSIC_DIRECTORY_PREFIX + entry.getId())
+							.build();
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getMusicDirectory(final Result<List<MediaBrowser.MediaItem>> result, final String musicDirectoryId) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getMusicDirectory(musicDirectoryId, "", false, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory directory) {
+				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+				addPlayOptions(mediaItems, musicDirectoryId, Constants.INTENT_EXTRA_NAME_ID);
+
+				for(Entry entry : directory.getChildren()) {
+					MediaDescription description;
+					if (entry.isDirectory()) {
+						// browse deeper
+						description = new MediaDescription.Builder()
+								.setTitle(entry.getTitle())
+								.setMediaId(MUSIC_DIRECTORY_CONTENTS_PREFIX + entry.getId())
+								.build();
+					} else {
+						// playback options for a single item
+						description = new MediaDescription.Builder()
+								.setTitle(entry.getTitle())
+								.setMediaId(MUSIC_DIRECTORY_PREFIX + entry.getId())
+								.build();
+					}
+
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
+				}
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
 	}
 
 	private void getPlaylists(final Result<List<MediaBrowser.MediaItem>> result) {
@@ -341,10 +452,8 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 		result.detach();
 	}
-	
-	private void getPlayOptions(Result<List<MediaBrowser.MediaItem>> result, String id, String idConstant) {
-		List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
 
+	private void addPlayOptions(List<MediaBrowser.MediaItem> mediaItems, String id, String idConstant) {
 		Bundle playAllExtras = new Bundle();
 		playAllExtras.putString(idConstant, id);
 
@@ -373,6 +482,12 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				.setMediaId("playLast-" + id)
 				.setExtras(playLastExtras);
 		mediaItems.add(new MediaBrowser.MediaItem(playLast.build(), MediaBrowser.MediaItem.FLAG_PLAYABLE));
+	}
+
+	private void getPlayOptions(Result<List<MediaBrowser.MediaItem>> result, String id, String idConstant) {
+		List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
+
+		addPlayOptions(mediaItems, id, idConstant);
 
 		result.sendResult(mediaItems);
 	}
