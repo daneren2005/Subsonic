@@ -321,6 +321,7 @@
     <string name="settings.max_bitrate_wifi">Max Audio bitrate - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max Audio bitrate - Mobile</string>
     <string name="settings.max_bitrate_32">32 Kbps</string>
+	<string name="settings.max_bitrate_48">48 Kbps</string>
     <string name="settings.max_bitrate_64">64 Kbps</string>
     <string name="settings.max_bitrate_80">80 Kbps</string>
     <string name="settings.max_bitrate_96">96 Kbps</string>
