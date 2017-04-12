@@ -2669,10 +2669,18 @@ public class DownloadService extends Service {
 	}
 	private void resetPlaybackSpeed() {
 		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_PLAYBACK_SPEED).commit();
+		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED).commit();
 	}
 
 	public float getPlaybackSpeed() {
-		return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, 1.0f);
+		if (currentPlaying == null)
+			return  1.0f;
+		else {
+			if (currentPlaying.isSong())
+				return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, 1.0f);
+			else
+				return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, 1.0f);
+		}
 	}
 
 	private synchronized void applyPlaybackParamsMain() {
