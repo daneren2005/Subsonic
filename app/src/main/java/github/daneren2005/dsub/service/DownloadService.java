@@ -873,7 +873,7 @@ public class DownloadService extends Service {
 			this.currentPlaying.setPlaying(false);
 		}
 		if(delayUpdateProgress != DEFAULT_DELAY_UPDATE_PROGRESS && !isNextPlayingSameAlbum(currentPlaying, this.currentPlaying)) {
-			resetPlaybackSpeed();
+//			resetPlaybackSpeed();
 		}
 		this.currentPlaying = currentPlaying;
 		if(currentPlaying == null) {
@@ -2657,7 +2657,10 @@ public class DownloadService extends Service {
 	}
 
 	public void setPlaybackSpeed(float playbackSpeed) {
-		Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
+		if(currentPlaying.isSong())
+			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, playbackSpeed).commit();
+		else
+			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
 		if(mediaPlayer != null && (playerState == PREPARED || playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP)) {
 			applyPlaybackParamsMain();
 		}
