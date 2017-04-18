@@ -251,4 +251,9 @@ public class ServerInfo implements Serializable {
 	public static boolean hasNewestPodcastEpisodes(Context context) {
 		return ServerInfo.checkServerVersion(context, "1.13");
 	}
+
+	public static boolean canRescanServer(Context context) {
+		return ServerInfo.isMadsonic(context) ||
+			(ServerInfo.isStockSubsonic(context) && ServerInfo.checkServerVersion(context, "1.15"));
+	}
 }

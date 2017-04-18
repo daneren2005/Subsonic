@@ -67,8 +67,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		onFinishSetupOptionsMenu(menu);
 
 		try {
-			if (!ServerInfo.isMadsonic(context) || !UserUtil.isCurrentAdmin()) {
-				menu.setGroupVisible(R.id.madsonic, false);
+			if (!ServerInfo.canRescanServer(context) || !UserUtil.isCurrentAdmin()) {
+				menu.setGroupVisible(R.id.rescan_server, false);
 			}
 		} catch(Exception e) {
 			Log.w(TAG, "Error on setting madsonic invisible", e);

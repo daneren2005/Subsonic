@@ -177,7 +177,17 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public void startRescan(Context context, ProgressListener listener) throws Exception {
-		Reader reader = getReader(context, listener, "startRescan");
+		String startMethod = ServerInfo.isMadsonic(context, getInstance(context)) ? "startRescan" : "startScan";
+		String refreshMethod = null;
+		if(ServerInfo.isMadsonic(context, getInstance(context))) {
+			startMethod = "startRescan";
+			refreshMethod = "scanstatus";
+		} else {
+			startMethod = "startScan";
+			refreshMethod = "getScanStatus";
+		}
+
+		Reader reader = getReader(context, listener, startMethod);
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
@@ -187,7 +197,7 @@ public class RESTMusicService implements MusicService {
 		// Now check if still running
 		boolean done = false;
 		while(!done) {
-			reader = getReader(context, null, "scanstatus");
+			reader = getReader(context, null, refreshMethod);
 			try {
 				boolean running = new ScanStatusParser(context, getInstance(context)).parse(reader, listener);
 				if(running) {
