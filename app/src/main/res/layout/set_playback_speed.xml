@@ -1,8 +1,48 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:layout_gravity="center">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:background="?android:colorBackground"
+	>
+
+
+	<LinearLayout
+		android:id="@+id/playback_speed_buttons"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:orientation="horizontal"
+		>
+
+		<Button
+			android:id="@+id/playback_speed_normal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="1.0x"
+			android:tag="1.0"/>
+		<Button
+			android:id="@+id/playback_speed_one_half"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:tag="1.5"
+			android:text="1.5x"/>
+
+		<Button
+			android:id="@+id/playback_speed_double"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:tag="2.0"
+			android:text="2.0x"/>
+
+
+		<Button
+			android:id="@+id/playback_speed_triple"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="3.0x"
+			android:tag="3.0"/>
+	</LinearLayout>
 
 	<TextView
 		android:id="@+id/playback_speed_label"
@@ -11,12 +51,16 @@
 		android:layout_marginLeft="8dp"
 		android:textSize="20dp"
 		android:paddingRight="10px"
-		android:layout_gravity="center"
-		android:textColor="?android:textColorPrimary"/>
+		android:textColor="?android:textColorPrimary"
+		android:layout_below="@+id/playback_speed_buttons"/>
 
 	<SeekBar
 		android:id="@+id/playback_speed_bar"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:max="25"/>
-</LinearLayout>
+		android:max="25"
+		android:layout_toRightOf="@+id/playback_speed_label"
+		android:layout_below="@+id/playback_speed_buttons"
+		/>
+
+</RelativeLayout>
