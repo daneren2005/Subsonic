@@ -1,5 +1,8 @@
 package github.daneren2005.dsub.fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
@@ -342,7 +345,24 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 	private void syncPlaylist(Playlist playlist) {
 		SyncUtil.addSyncedPlaylist(context, playlist.getId());
-		downloadPlaylist(playlist.getId(), playlist.getName(), true, true, false, false, true);
+
+		boolean syncImmediately;
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SYNC_WIFI, true)) {
+			ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+
+			if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+				syncImmediately = true;
+			} else {
+				syncImmediately = false;
+			}
+		} else {
+			syncImmediately = true;
+		}
+
+		if(syncImmediately) {
+			downloadPlaylist(playlist.getId(), playlist.getName(), true, true, false, false, true);
+		}
 	}
 
 	private void stopSyncPlaylist(final Playlist playlist) {
