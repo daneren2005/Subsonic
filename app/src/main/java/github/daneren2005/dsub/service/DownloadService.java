@@ -873,7 +873,7 @@ public class DownloadService extends Service {
 			this.currentPlaying.setPlaying(false);
 		}
 		if(delayUpdateProgress != DEFAULT_DELAY_UPDATE_PROGRESS && !isNextPlayingSameAlbum(currentPlaying, this.currentPlaying)) {
-			resetPlaybackSpeed();
+//			resetPlaybackSpeed();
 		}
 		this.currentPlaying = currentPlaying;
 		if(currentPlaying == null) {
@@ -2657,7 +2657,10 @@ public class DownloadService extends Service {
 	}
 
 	public void setPlaybackSpeed(float playbackSpeed) {
-		Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
+		if(currentPlaying.isSong())
+			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, playbackSpeed).commit();
+		else
+			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
 		if(mediaPlayer != null && (playerState == PREPARED || playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP)) {
 			applyPlaybackParamsMain();
 		}
@@ -2666,10 +2669,18 @@ public class DownloadService extends Service {
 	}
 	private void resetPlaybackSpeed() {
 		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_PLAYBACK_SPEED).commit();
+		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED).commit();
 	}
 
 	public float getPlaybackSpeed() {
-		return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, 1.0f);
+		if (currentPlaying == null)
+			return  1.0f;
+		else {
+			if (currentPlaying.isSong())
+				return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, 1.0f);
+			else
+				return Util.getPreferences(this).getFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, 1.0f);
+		}
 	}
 
 	private synchronized void applyPlaybackParamsMain() {
