@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.3.5" versioncode="195" releasedate="04/18/2016">
+		<change>Add option to scan server for Subsonic 6.1+</change>
+		<change>Enhanced custom playback speed UI (thanks SilentViking)</change>
+		<change>Keep custom playback speed between songs (thanks SilentViking)</change>
+		<change>Auto: Browse full library while parked (thanks hufman)</change>
+		<change>Add bitrate option for 48kpbs</change>
+		<change>Only download playlist when setting to sync if on Wifi</change>
+	</release>
 	<release version="5.3.4" versioncode="193" releasedate="11/28/2016">
 		<change>Added toggle for DLNA casting to fix battery issues some users are having on Android 7.0+</change>
 		<change>Fix rotating screen in offline mode</change>
