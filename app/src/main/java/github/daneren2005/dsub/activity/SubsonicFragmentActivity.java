@@ -729,7 +729,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 			editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + 1, "Demo Server");
 			editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + 1, "http://demo.subsonic.org");
-			editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, "guest");
+			editor.putString(Constants.PREFERENCES_KEY_USERNAME + 1, "guest2");
 			editor.putString(Constants.PREFERENCES_KEY_PASSWORD + 1, "guest");
 			editor.putInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 			editor.commit();

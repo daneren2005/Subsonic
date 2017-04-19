@@ -54,6 +54,7 @@ dependencies {
 	compile 'com.google.android.gms:play-services-cast:8.1.0'
 	compile 'com.sothree.slidinguppanel:library:3.0.0'
 	compile 'de.hdodenhof:circleimageview:1.2.1'
+    compile 'com.shehabic.droppy:Droppy:0.5.1@aar'
 	compile group: 'org.fourthline.cling', name: 'cling-core', version:'2.1.1'
 	compile group: 'org.fourthline.cling', name: 'cling-support', version:'2.1.1'
 	compile group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'
