@@ -38,6 +38,7 @@ import github.daneren2005.dsub.util.Util;
 public abstract class AbstractParser {
     private static final String TAG = AbstractParser.class.getSimpleName();
 	private static final String SUBSONIC_RESPONSE = "subsonic-response";
+	private static final String LIBRESONIC_RESPONSE = "libresonic-response";
 	private static final String MADSONIC_RESPONSE = "madsonic-response";
 	private static final String SUBSONIC = "subsonic";
 	private static final String MADSONIC = "madsonic";
@@ -153,7 +154,7 @@ public abstract class AbstractParser {
 
     protected String getElementName() {
         String name = parser.getName();
-        if (SUBSONIC_RESPONSE.equals(name) || MADSONIC_RESPONSE.equals(name)) {
+        if (SUBSONIC_RESPONSE.equals(name) || LIBRESONIC_RESPONSE.equals(name) || MADSONIC_RESPONSE.equals(name)) {
             rootElementFound = true;
             String version = get("version");
             if (version != null) {
