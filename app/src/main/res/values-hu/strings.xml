@@ -307,8 +307,8 @@
     <string name="settings.theme_dark">Sötét</string>
 	<string name="settings.theme_black">Fekete</string>
 	<string name="settings.theme_holo">Holo</string>
-	<string name="settings.theme_day_night">Nappal/Éjszaka</string>
-	<string name="settings.theme_day_black_night">Nappal/Fekete éjszaka</string>
+	<string name="settings.theme_day_night">Nappali/Éjszakai</string>
+	<string name="settings.theme_day_black_night">Nappali/Éjszakai (fekete)</string>
 	<string name="settings.theme_fullscreen">Teljes képernyős</string>
 	<string name="settings.theme_fullscreen_summary">Teljes képernyős üzemmód (értesítési sáv elrejtése).</string>
 	<string name="settings.track_title">Dalsorszám megjelenítése</string>
@@ -321,6 +321,7 @@
     <string name="settings.max_bitrate_wifi">Max. audió bitráta - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Max. audió bitráta - Mobilhálózat</string>
     <string name="settings.max_bitrate_32">32 Kbps</string>
+	<string name="settings.max_bitrate_48">48 Kbps</string>
     <string name="settings.max_bitrate_64">64 Kbps</string>
     <string name="settings.max_bitrate_80">80 Kbps</string>
     <string name="settings.max_bitrate_96">96 Kbps</string>
@@ -488,6 +489,8 @@
 	<string name="settings.heads_up_notification_summary">Lejátszási értesítések megjelenítése felugró értesítésekként (Android Lollipop+).</string>
 	<string name="settings.casting_cache">Casting közbeni gyorsítótárazás</string>
 	<string name="settings.casting_cache_summary">Az éppen lejátszott dal gyorsítótárazása a tartalomátküldés (Casting) alatt.</string>
+	<string name="settings.casting.dlna_casting_enabled">DLNA engedélyezve</string>
+	<string name="settings.casting.dlna_casting_enabled.summary">Ha akkumulátor-merülési probléma lépne fel Android 7.0 alatt, kapcsolja ki a funkciót!</string>
 
 	<string name="shuffle.title">Dalsorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -613,6 +616,7 @@
 	<string name="details.title.podcast">Podcast információi</string>
 	<string name="details.title.playlist">Lejátszási lista információi</string>
 	<string name="details.title.artist">Előadó információi</string>
+	<string name="details.title.internet_radio_station">Internet Radio részletezés</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Státusz</string>
 	<string name="details.artist">Előadó</string>
@@ -652,6 +656,10 @@
 	<string name="details.last_played">Utoljára lejátszott</string>
 	<string name="details.expiration">Lejárati idő</string>
 	<string name="details.played_count">Lejátszások száma</string>
+	<string name="details.stream_url">Stream URL</string>
+	<string name="details.home_page">Honlap</string>
+
+	<string name="permission.external_storage.failed">A DSub nem tud működni tárhely-írási engedély nélkül!</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Nincsenek dalok</item>
