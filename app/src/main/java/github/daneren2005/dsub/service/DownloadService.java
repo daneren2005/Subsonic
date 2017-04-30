@@ -2600,7 +2600,7 @@ public class DownloadService extends Service {
 						
 						// Check forwards
 						for(int i = index + 1; i < downloadList.size() && matched < REQUIRED_ALBUM_MATCHES; i++) {
-							if(albumName.equals(downloadList.get(i).getSong().getAlbum())) {
+							if(Util.equals(albumName, downloadList.get(i).getSong().getAlbum())) {
 								matched++;
 							} else {
 								break;
@@ -2609,7 +2609,7 @@ public class DownloadService extends Service {
 						
 						// Check backwards
 						for(int i = index - 1; i >= 0 && matched < REQUIRED_ALBUM_MATCHES; i--) {
-							if(albumName.equals(downloadList.get(i).getSong().getAlbum())) {
+							if(Util.equals(albumName, downloadList.get(i).getSong().getAlbum())) {
 								matched++;
 							} else {
 								break;
