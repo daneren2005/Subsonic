@@ -498,6 +498,7 @@
 	<string name="shuffle.genre">Genre:</string>
 	<string name="shuffle.pick_genre">Pick a genre</string>
 
+	<string name="share.create_error">Failed to create share %s</string>
 	<string name="share.expires">Expires: %s</string>
 	<string name="share.expires_never">Never Expires</string>
 	<string name="share.deleted">Deleted share %s</string>
