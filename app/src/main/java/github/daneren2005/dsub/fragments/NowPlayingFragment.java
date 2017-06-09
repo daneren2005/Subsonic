@@ -1175,10 +1175,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 							downloadService.previous();
 							break;
 						case ACTION_FORWARD:
-							downloadService.fastForward();
+							downloadService.seekTo(downloadService.getPlayerPosition() + DownloadService.FAST_FORWARD);
 							break;
 						case ACTION_REWIND:
-							downloadService.rewind();
+							downloadService.seekTo(downloadService.getPlayerPosition() - DownloadService.REWIND);
 							break;
 					}
 					return null;
