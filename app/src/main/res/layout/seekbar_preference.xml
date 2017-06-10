@@ -9,7 +9,7 @@
 		android:padding="5dip"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:gravity="right"
+		android:gravity="center"
 		android:textColor="?android:textColorPrimary"/>
 	<SeekBar
 		android:id="@+id/seek_bar"
