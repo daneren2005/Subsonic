@@ -107,8 +107,6 @@ public class DownloadService extends Service {
 	public static final String CMD_NEXT = "github.daneren2005.dsub.CMD_NEXT";
 	public static final String CANCEL_DOWNLOADS = "github.daneren2005.dsub.CANCEL_DOWNLOADS";
 	public static final String START_PLAY = "github.daneren2005.dsub.START_PLAYING";
-	public static final int FAST_FORWARD = 30000;
-	public static final int REWIND = 10000;
 	private static final long DEFAULT_DELAY_UPDATE_PROGRESS = 1000L;
 	private static final double DELETE_CUTOFF = 0.84;
 	private static final int REQUIRED_ALBUM_MATCHES = 4;
@@ -1174,10 +1172,10 @@ public class DownloadService extends Service {
 		}
 	}
 	public synchronized int rewind() {
-		return seekToWrapper(-REWIND);
+		return seekToWrapper(Integer.parseInt(Util.getPreferences(this).getString(Constants.PREFERENCES_KEY_REWIND_INTERVAL, "10"))*-1000);
 	}
 	public synchronized int fastForward() {
-		return seekToWrapper(FAST_FORWARD);
+		return seekToWrapper(Integer.parseInt(Util.getPreferences(this).getString(Constants.PREFERENCES_KEY_FASTFORWARD_INTERVAL, "30"))*1000);
 	}
 	protected int seekToWrapper(int difference) {
 		int msPlayed = Math.max(0, getPlayerPosition());
