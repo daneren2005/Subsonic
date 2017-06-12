@@ -200,31 +200,38 @@ public final class Notifications {
 		}
 
 		// Create actions for media buttons
-		PendingIntent pendingIntent;
 		int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
-		if(persistent && !expanded) {
-			pause = R.id.control_previous;
-			if(isLongFile && playing) {
-				fastForward = R.id.control_pause;
+		if (expanded) {
+			if (isLongFile && playing) {
+				rewind = R.id.control_previous;
+				pause = R.id.control_pause;
+				fastForward = R.id.control_next;
 			} else {
-				next = R.id.control_pause;
+				previous = R.id.control_previous;
+				pause = R.id.control_pause;
+				next = R.id.control_next;
 			}
-			close = R.id.control_next;
-		} else if(isLongFile && (!persistent || (expanded && playing))) {
-			rewind = R.id.control_previous;
-			pause = R.id.control_pause;
-			fastForward = R.id.control_next;
+
+			if (remote || persistent) {
+				close = R.id.notification_close;
+				rv.setViewVisibility(close, View.VISIBLE);
+			}
 		} else {
-			previous = R.id.control_previous;
-			pause = R.id.control_pause;
-			next = R.id.control_next;
+			if (persistent) {
+				pause = R.id.control_previous;
+				if(isLongFile && playing) {
+					fastForward = R.id.control_pause;
+				} else {
+					next = R.id.control_pause;
+				}
+				close = R.id.control_next;
+			} else {
+				rewind = R.id.control_previous;
+				pause = R.id.control_pause;
+				fastForward = R.id.control_next;
+			}
 		}
 
-		if((remote || persistent) && close == 0 && expanded) {
-			close = R.id.notification_close;
-			rv.setViewVisibility(close, View.VISIBLE);
-		}
-		
 		if(isSingleFile) {
 			if(previous > 0) {
 				rv.setViewVisibility(previous, View.GONE);
@@ -246,6 +253,7 @@ public final class Notifications {
 			}
 		}
 
+		PendingIntent pendingIntent;
 		if(previous > 0) {
 			Intent prevIntent = new Intent("KEYCODE_MEDIA_PREVIOUS");
 			prevIntent.setComponent(new ComponentName(context, DownloadService.class));
