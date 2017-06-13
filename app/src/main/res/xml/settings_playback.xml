@@ -52,6 +52,20 @@
 			android:defaultValue="all"
 			android:entryValues="@array/songPressActionValues"
 			android:entries="@array/songPressActionNames"/>
+
+        <github.daneren2005.dsub.view.SeekBarPreference
+            android:title="@string/settings.rewind_interval"
+            android:key="rewindInterval"
+            android:defaultValue="10"
+            android:dialogLayout="@layout/seekbar_preference"
+            myns:max="60"/>
+
+        <github.daneren2005.dsub.view.SeekBarPreference
+            android:title="@string/settings.fastforward_interval"
+            android:key="fastforwardInterval"
+            android:defaultValue="30"
+            android:dialogLayout="@layout/seekbar_preference"
+            myns:max="60"/>
 	</PreferenceCategory>
 
 	<PreferenceCategory
