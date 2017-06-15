@@ -173,7 +173,7 @@ public final class Notifications {
 			if(expanded) {
 				rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_pause : R.drawable.notification_start);
 
-				if(shouldFastForward && playing) {
+				if(shouldFastForward) {
 					rv.setImageViewResource(R.id.control_previous, R.drawable.notification_rewind);
 					rv.setImageViewResource(R.id.control_next, R.drawable.notification_fastforward);
 				} else {
@@ -182,7 +182,7 @@ public final class Notifications {
 				}
 			} else {
 				rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_start);
-				if(shouldFastForward && playing) {
+				if(shouldFastForward) {
 					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_fastforward);
 				} else {
 					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_forward);
@@ -201,7 +201,7 @@ public final class Notifications {
 		// Create actions for media buttons
 		int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
 		if (expanded) {
-			if (shouldFastForward && playing) {
+			if (shouldFastForward) {
 				rewind = R.id.control_previous;
 				pause = R.id.control_pause;
 				fastForward = R.id.control_next;
@@ -218,7 +218,7 @@ public final class Notifications {
 		} else {
 			if (persistent) {
 				pause = R.id.control_previous;
-				if(shouldFastForward && playing) {
+				if(shouldFastForward) {
 					fastForward = R.id.control_pause;
 				} else {
 					next = R.id.control_pause;
