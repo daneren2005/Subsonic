@@ -1200,10 +1200,6 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void previous() {
-		if(playerState == PREPARING || playerState == PREPARED) {
-			return;
-		}
-
 		int index = getCurrentPlayingIndex();
 		if (index == -1) {
 			return;
