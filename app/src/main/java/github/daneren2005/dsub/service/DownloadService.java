@@ -1209,6 +1209,14 @@ public class DownloadService extends Service {
 			return;
 		}
 
+		// If only one song, just skip within song
+		if(shouldFastForward()) {
+			rewind();
+			return;
+		} else if(playerState == PREPARING || playerState == PREPARED) {
+			return;
+		}
+
 		// Restart song if played more than five seconds.
 		if (getPlayerPosition() > 5000 || (index == 0 && getRepeatMode() != RepeatMode.ALL)) {
 			seekTo(0);
@@ -1228,7 +1236,11 @@ public class DownloadService extends Service {
 		next(forceCutoff, false);
 	}
 	public synchronized void next(boolean forceCutoff, boolean forceStart) {
-		if(playerState == PREPARING || playerState == PREPARED) {
+		// If only one song, just skip within song
+		if(shouldFastForward()) {
+			fastForward();
+			return;
+		} else if(playerState == PREPARING || playerState == PREPARED) {
 			return;
 		}
 
