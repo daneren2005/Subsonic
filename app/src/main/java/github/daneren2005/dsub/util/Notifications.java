@@ -68,9 +68,10 @@ public final class Notifications {
 		}
 		boolean remote = downloadService.isRemoteEnabled();
 		boolean isSingle = downloadService.isCurrentPlayingSingle();
+		boolean shouldFastForward = downloadService.shouldFastForward();
 		if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
 			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-			setupViews(expandedContentView ,context, song, true, playing, remote, isSingle);
+			setupViews(expandedContentView ,context, song, true, playing, remote, isSingle, shouldFastForward);
 			notification.bigContentView = expandedContentView;
 			notification.priority = Notification.PRIORITY_HIGH;
 		}
@@ -83,7 +84,7 @@ public final class Notifications {
 		}
 
 		RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);
-		setupViews(smallContentView, context, song, false, playing, remote, isSingle);
+		setupViews(smallContentView, context, song, false, playing, remote, isSingle, shouldFastForward);
 		notification.contentView = smallContentView;
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
@@ -137,9 +138,7 @@ public final class Notifications {
 		DSubWidgetProvider.notifyInstances(context, downloadService, playing);
 	}
 
-	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote, boolean isSingleFile) {
-		boolean isLongFile = song.isAudioBook() || song.isPodcast();
-
+	private static void setupViews(RemoteViews rv, Context context, MusicDirectory.Entry song, boolean expanded, boolean playing, boolean remote, boolean isSingleFile, boolean shouldFastForward) {
 		// Use the same text for the ticker and the expanded notification
 		String title = song.getTitle();
 		String arist = song.getArtist();
@@ -174,7 +173,7 @@ public final class Notifications {
 			if(expanded) {
 				rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_pause : R.drawable.notification_start);
 
-				if(isLongFile && playing) {
+				if(shouldFastForward && playing) {
 					rv.setImageViewResource(R.id.control_previous, R.drawable.notification_rewind);
 					rv.setImageViewResource(R.id.control_next, R.drawable.notification_fastforward);
 				} else {
@@ -183,14 +182,14 @@ public final class Notifications {
 				}
 			} else {
 				rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_start);
-				if(isLongFile && playing) {
+				if(shouldFastForward && playing) {
 					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_fastforward);
 				} else {
 					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_forward);
 				}
 				rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
 			}
-		} else if(isLongFile) {
+		} else if(shouldFastForward) {
 			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_rewind);
 			rv.setImageViewResource(R.id.control_next, R.drawable.notification_fastforward);
 		} else {
@@ -202,7 +201,7 @@ public final class Notifications {
 		// Create actions for media buttons
 		int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
 		if (expanded) {
-			if (isLongFile && playing) {
+			if (shouldFastForward && playing) {
 				rewind = R.id.control_previous;
 				pause = R.id.control_pause;
 				fastForward = R.id.control_next;
@@ -219,7 +218,7 @@ public final class Notifications {
 		} else {
 			if (persistent) {
 				pause = R.id.control_previous;
-				if(isLongFile && playing) {
+				if(shouldFastForward && playing) {
 					fastForward = R.id.control_pause;
 				} else {
 					next = R.id.control_pause;
