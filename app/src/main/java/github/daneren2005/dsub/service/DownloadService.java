@@ -1027,6 +1027,10 @@ public class DownloadService extends Service {
 		}
 	}
 
+	public synchronized boolean shouldFastForward() {
+		return size() == 1 || (currentPlaying != null && !currentPlaying.isSong());
+	}
+
 	public synchronized List<DownloadFile> getDownloads() {
 		List<DownloadFile> temp = new ArrayList<DownloadFile>();
 		temp.addAll(downloadList);
@@ -1202,11 +1206,12 @@ public class DownloadService extends Service {
 		}
 
 		// If only one song, just skip within song
-		if(size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+		if(shouldFastForward()) {
 			rewind();
 			return;
+		} else if(playerState == PREPARING || playerState == PREPARED) {
+			return;
 		}
-
 
 		// Restart song if played more than five seconds.
 		if (getPlayerPosition() > 5000 || (index == 0 && getRepeatMode() != RepeatMode.ALL)) {
@@ -1228,7 +1233,7 @@ public class DownloadService extends Service {
 	}
 	public synchronized void next(boolean forceCutoff, boolean forceStart) {
 		// If only one song, just skip within song
-		if(size() == 1 || (currentPlaying != null && !currentPlaying.isSong())) {
+		if(shouldFastForward()) {
 			fastForward();
 			return;
 		} else if(playerState == PREPARING || playerState == PREPARED) {
@@ -2819,12 +2824,13 @@ public class DownloadService extends Service {
 	private void onSongChanged() {
 		final long atRevision = revision;
 		synchronized(onSongChangedListeners) {
+			final boolean shouldFastForward = shouldFastForward();
 			for (final OnSongChangedListener listener : onSongChangedListeners) {
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
 						if (revision == atRevision && instance != null) {
-							listener.onSongChanged(currentPlaying, currentPlayingIndex);
+							listener.onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
 
 							MusicDirectory.Entry entry = currentPlaying != null ? currentPlaying.getSong() : null;
 							listener.onMetadataUpdate(entry, METADATA_UPDATED_ALL);
@@ -2846,12 +2852,13 @@ public class DownloadService extends Service {
 	private void onSongsChanged() {
 		final long atRevision = revision;
 		synchronized(onSongChangedListeners) {
+			final boolean shouldFastForward = shouldFastForward();
 			for (final OnSongChangedListener listener : onSongChangedListeners) {
 				handler.post(new Runnable() {
 					@Override
 					public void run() {
 						if (revision == atRevision && instance != null) {
-							listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex);
+							listener.onSongsChanged(downloadList, currentPlaying, currentPlayingIndex, shouldFastForward);
 						}
 					}
 				});
@@ -3051,8 +3058,8 @@ public class DownloadService extends Service {
 	}
 
 	public interface OnSongChangedListener {
-		void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex);
-		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex);
+		void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward);
+		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward);
 		void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable);
 		void onStateUpdate(DownloadFile downloadFile, PlayerState playerState);
 		void onMetadataUpdate(MusicDirectory.Entry entry, int fieldChange);

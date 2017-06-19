@@ -1222,17 +1222,24 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex) {
+	public void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward) {
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
 
-		if(getDownloadService().isCurrentPlayingSingle()) {
+		updateMediaButton(shouldFastForward);
+		updateTitle();
+		setPlaybackSpeed();
+	}
+
+	private void updateMediaButton(boolean shouldFastForward) {
+		DownloadService downloadService = getDownloadService();
+		if(downloadService.isCurrentPlayingSingle()) {
 			previousButton.setVisibility(View.GONE);
 			nextButton.setVisibility(View.GONE);
 			rewindButton.setVisibility(View.GONE);
 			fastforwardButton.setVisibility(View.GONE);
 		} else {
-			if (currentPlaying != null && !currentPlaying.isSong()) {
+			if (downloadService.shouldFastForward()) {
 				previousButton.setVisibility(View.GONE);
 				nextButton.setVisibility(View.GONE);
 
@@ -1246,8 +1253,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				fastforwardButton.setVisibility(View.GONE);
 			}
 		}
-		updateTitle();
-		setPlaybackSpeed();
 	}
 
 	private void setupSubtitle(int currentPlayingIndex) {
@@ -1274,7 +1279,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex) {
+	public void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward) {
 		currentPlayingSize = songs.size();
 
 		DownloadService downloadService = getDownloadService();
@@ -1303,9 +1308,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		if(this.currentPlaying != currentPlaying) {
-			onSongChanged(currentPlaying, currentPlayingIndex);
+			onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
 			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
 		} else {
+			updateMediaButton(shouldFastForward);
 			setupSubtitle(currentPlayingIndex);
 		}
 
