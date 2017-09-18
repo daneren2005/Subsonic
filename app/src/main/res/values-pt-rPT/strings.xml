@@ -50,11 +50,11 @@
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Cache permanente</font>:
-		<br/>Quando o DSub transfere as músicas, as mesmas poderão ser eliminadas mais tarde para dar espaço para novas transferências.  Por outro lado, as músicas que ficam permanentemente na cache nunca serão eliminadas.
+		<br/>Quando o DSub transfere as músicas, as mesmas poderão vir a ser eliminadas para dar espaço a novas transferências.  Por outro lado, as músicas que ficam permanentemente na cache nunca serão eliminadas automaticamente.
 		<p/><font color="red">Falhas com o Chromecast</font>:
 		<br/>Experimente a opção Definições -> Transmissão -> Usar dispositivo como proxy.  É uma solução alternativa devido ao Chromecast não aceitar certificados auto-assinados.
 		<p/><font color="red">Primeiro nível na biblioteca são grupos de artistas</font>:
-		<br/>No menu de opções, desmarque a opção "Artistas no primeiro nível".  Isto fará com que o primeiro nível de diretorias apresentado seja tratado como grupos de artistas em vez de artistas propriamente ditos.
+		<br/>No menu de opções, desmarque a opção "Artistas no primeiro nível".  Isto fará com que o primeiro nível de diretórios apresentado seja tratado como grupos de artistas em vez de artistas propriamente ditos.
 	]]>
 	</string>
 	<string name="main.shuffle">Aleatório</string>
@@ -102,7 +102,7 @@
 	<string name="menu.add_podcast">Adicionar canal</string>
 	<string name="menu.keep_synced">Manter sincronizado</string>
 	<string name="menu.stop_sync">Parar sincronização</string>
-	<string name="menu.show_all">Mostrar todo o conteúdo</string>
+	<string name="menu.show_all">Mostrar todas as músicas</string>
 	<string name="menu.show_artist">Mostrar artista</string>
 	<string name="menu.share">Partilhar</string>
 	<string name="menu.delete_cache">Eliminar cache</string>
@@ -161,8 +161,8 @@
 	<string name="select_genre.songs">%d músicas</string>
 	<string name="select_genre.albums">%d álbuns</string>
 
-	<string name="select_podcasts.error">Houve um erro ao transferir este podcast no servidor.  O servidor deve transferi-lo primeiro.</string>
-	<string name="select_podcasts.skipped">Este podcast não foi transferido no servidor.  O servidor deve transferi-lo primeiro.</string>
+	<string name="select_podcasts.error">Ocorreu um erro ao transferir este podcast no servidor.  O servidor deve de o transferir primeiro.</string>
+	<string name="select_podcasts.skipped">Este podcast não foi transferido no servidor.  O servidor deve de o transferir primeiro.</string>
     <string name="select_podcasts.initializing">Este podcast está a ser inicializado no servidor.  Por favor atualize dentro de momentos.</string>
 	<string name="select_podcasts.server_download">Transferir no servidor</string>
 	<string name="select_podcasts.server_delete">Eliminar do servidor</string>
@@ -282,13 +282,13 @@
     <string name="settings.server_password">Palavra-passe</string>
 	<string name="settings.server_open_browser">Abrir no navegador</string>
 	<string name="settings.server_sync_summary">Ativar ou não a sincronização para este servidor</string>
-	<string name="settings.server_sync">Sincronização ativa</string>
+	<string name="settings.server_sync">Ativar sincronização</string>
     <string name="settings.cache_title">Cache de música</string>
     <string name="settings.preload_wifi">Músicas para pré-carregar (Wi-Fi)</string>
 	<string name="settings.preload_mobile">Músicas para pré-carregar (dados móveis)</string>
     <string name="settings.cache_size">Tamanho da cache</string>
     <string name="settings.cache_location">Localização da cache</string>
-    <string name="settings.cache_location_error">Localização da cache inválida. A utilizar predefinição.</string>
+    <string name="settings.cache_location_error">Localização da cache inválida. A usar predefinição.</string>
     <string name="settings.cache_location_reset">Não foi possível escrever na localização da cache que definiu. Se atualizou recentemente o SO do seu dispositivo para o KitKat 4.4, então o modo como as aplicações escrevem no cartão SD mudou e só podem escrever numa localização específica. A localização que o DSub usa já foi alterada para a localização correta.  Para eliminar os antigos dados da aplicação, terá que montar o cartão SD no computador e eliminar a pasta manualmente</string>
 	<string name="settings.cache_location_internal">Interna</string>
 	<string name="settings.cache_location_external">Externa</string>
@@ -320,6 +320,7 @@
     <string name="settings.max_bitrate_wifi">Taxa de bits máxima do áudio - Wi-Fi</string>
     <string name="settings.max_bitrate_mobile">Taxa de bits máxima do áudio - Dados móveis</string>
     <string name="settings.max_bitrate_32">32 Kbps</string>
+	<string name="settings.max_bitrate_48">48 Kbps</string>
     <string name="settings.max_bitrate_64">64 Kbps</string>
     <string name="settings.max_bitrate_80">80 Kbps</string>
     <string name="settings.max_bitrate_96">96 Kbps</string>
@@ -383,7 +384,7 @@
 	<string name="settings.temp_loss_nothing">Não fazer nada</string>
 	<string name="settings.keep_played_count_title">Manter as músicas reproduzidas</string>
 	<string name="settings.keep_played_count_none">Remover todas as músicas reproduzidas</string>
-	<string name="settings.keep_played_count_one">Manter as últimas músicas reproduzidas</string>
+	<string name="settings.keep_played_count_one">Manter a última música reproduzida</string>
 	<string name="settings.keep_played_count_two">Manter as 2 últimas músicas reproduzidas</string>
 	<string name="settings.keep_played_count_three">Manter as 3 últimas músicas reproduzidas</string>
 	<string name="settings.disconnect_pause_title">Pausar ao desconectar</string>
@@ -400,7 +401,7 @@
 	<string name="settings.video_player">Reprodutor de vídeo</string>
 	<string name="settings.video_raw">Raw (Requer Subsonic 4.8+)</string>
 	<string name="settings.video_hls">HTTP Live Stream (HLS) (Requer Subsonic 4.8+)</string>
-	<string name="settings.video_transcode">Transcodificação direta (Requer vídeo -> mp4 ou configuração similar no servidor</string>
+	<string name="settings.video_transcode">Transcodificação direta (Requer vídeo -> mp4 ou configuração semelhante no servidor</string>
 	<string name="settings.video_flash">Flash (Requer plugin)</string>
 	<string name="settings.cache_screen_title">Cache/Ligação</string>
 	<string name="settings.playback_title">Reprodução</string>
@@ -415,8 +416,8 @@
 	<string name="settings.shares_enabled">Ativar partilhas</string>
 	<string name="settings.shares_enabled_summary">Mostrar ou não a opção \"Partilhas\" no menu lateral</string>
 	<string name="settings.sync_title">Sincronização</string>
-	<string name="settings.sync_enabled">Sincronização ativa</string>
-	<string name="settings.sync_enabled_summary">Verificar periodicamente ou não as listas de reprodução ou podcasts por alterações</string>
+	<string name="settings.sync_enabled">Ativar sincronização</string>
+	<string name="settings.sync_enabled_summary">Verificar ou não periodicamente as listas de reprodução ou podcasts por alterações</string>
 	<string name="settings.sync_interval">Intervalo de sincronização</string>
 	<string name="settings.sync_interval_15">15 minutos</string>
 	<string name="settings.sync_interval_30">30 minutos</string>
@@ -445,8 +446,8 @@
 	<string name="settings.menu_options.star_summary">Mostrar \"Marcar/Remover estrela\" nos menus</string>
 	<string name="settings.menu_options.shared_summary">Mostrar \"Partilhar\" nos menus</string>
 	<string name="settings.menu_options.rate_summary">Mostrar \"Classificar\" nos menus</string>
-	<string name="settings.browse_by_tags">Procurar por tags</string>
-	<string name="settings.browse_by_tags_summary">Procurar por tags em vez da estrutura das pastas.  Requer Subsonic 4.7+</string>
+	<string name="settings.browse_by_tags">Navegar por etiquetas</string>
+	<string name="settings.browse_by_tags_summary">Navegar por etiquetas em vez da estrutura das pastas.  Requer Subsonic 4.7+</string>
 	<string name="settings.disable_exit_prompt">Desativar diálogo de saída</string>
 	<string name="settings.disable_exit_prompt_summary">Fechar a aplicação imediatamente após pressionar o botão de voltar no ecrã inicial</string>
 	<string name="settings.override_system_language">Sobrepor linguagem do sistema</string>
@@ -462,11 +463,11 @@
 	<string name="settings.admin_enabled">Ativar administração</string>
 	<string name="settings.admin_enabled_summary">Mostrar ou não a opção \"Administração\" no menu lateral</string>
 	<string name="settings.replay_gain">Replay Gain</string>
-	<string name="settings.replay_gain_summary">Escalar ou não o volume da reprodução por tags \"replay gain\" nos álbuns e faixas</string>
-	<string name="settings.replay_gain_type">Ler pelas tags</string>
+	<string name="settings.replay_gain_summary">Escalar ou não o volume da reprodução por etiquetas \"replay gain\" nos álbuns e faixas</string>
+	<string name="settings.replay_gain_type">Ler pelas etiquetas</string>
 	<string name="settings.replay_gain_type.smart">Deteção inteligente</string>
-	<string name="settings.replay_gain_type.album">Tags nos álbuns</string>
-	<string name="settings.replay_gain_type.track">Tags nas faixas</string>
+	<string name="settings.replay_gain_type.album">Etiquetas nos álbuns</string>
+	<string name="settings.replay_gain_type.track">Etiquetas nas faixas</string>
 	<string name="settings.replay_gain_bump">Pré-amplificação do Replay Gain</string>
 	<string name="settings.replay_gain_untagged">Músicas sem Replay Gain</string>
 	<string name="settings.casting">Transmissão</string>
@@ -487,7 +488,12 @@
 	<string name="settings.heads_up_notification_summary">Mostrar notificações de reprodução como notificações \"Heads Up\" (Android Lollipop+ apenas)</string>
 	<string name="settings.casting_cache">Cache durante a transmissão</string>
 	<string name="settings.casting_cache_summary">Adicionar à cache as músicas a reproduzir no momento da transmissão</string>
+	<string name="settings.casting.dlna_casting_enabled">Ativar DLNA</string>
+	<string name="settings.casting.dlna_casting_enabled.summary">Se tiver problemas com o descarregamento da bateria no Android 7.0 experimente desativar isto</string>
+    <string name="settings.rewind_interval">Intervalo de retrocesso</string>
+    <string name="settings.fastforward_interval">Intervalo de avanço</string>
 
+	<string name="share.create_error">Falha ao criar a partilha %s</string>
 	<string name="shuffle.title">Aleatorizar por</string>
 	<string name="shuffle.startYear">Ano de início:</string>
 	<string name="shuffle.endYear">Ano de fim:</string>
@@ -521,7 +527,7 @@
 	<string name="admin.change_email_invalid">Introduza um email válido</string>
 	<string name="admin.change_password">Alterar palavra-passe</string>
 	<string name="admin.change_password_success">A palavra-passe de %1$s foi alterada com sucesso</string>
-	<string name="admin.change_password_error">Falha ao alterar palavra-passe de %1$s</string>
+	<string name="admin.change_password_error">Falha ao alterar a palavra-passe de %1$s</string>
 	<string name="admin.change_password_current_label">Palavra-passe atual:</string>
 	<string name="admin.change_password_label">Nova palavra-passe:</string>
 	<string name="admin.change_password_invalid">Introduza uma palavra-passe válida</string>
