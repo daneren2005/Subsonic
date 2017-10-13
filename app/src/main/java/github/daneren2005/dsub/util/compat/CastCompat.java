@@ -27,6 +27,9 @@ import github.daneren2005.dsub.util.EnvironmentVariables;
 
 public final class CastCompat {
 	static {
+		if (EnvironmentVariables.CAST_APPLICATION_ID == null) {
+			throw new RuntimeException("CAST_APPLICATION_ID not provided");
+		}
 		try {
 			Class.forName("com.google.android.gms.cast.CastDevice");
 		} catch (Exception ex) {

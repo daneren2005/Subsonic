@@ -270,6 +270,10 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	}
 
 	private void getLogs() {
+		if (EnvironmentVariables.PASTEBIN_DEV_KEY == null) {
+			Util.toast(context, "No PASTEBIN_DEV_KEY configured - can't upload logs");
+			return;
+		}
 		try {
 			final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 			new LoadingTask<String>(context) {
