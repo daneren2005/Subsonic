@@ -28,6 +28,16 @@ android {
 		}
 	}
 
+	productFlavors {
+		floss {
+			// FLOSS build (no proprietary libraries)
+		}
+		google {
+			// FLOSS build + Google libraries
+			// Adds ChromeCast support
+		}
+	}
+
 	packagingOptions {
 		exclude 'META-INF/beans.xml'
 	}
@@ -51,7 +61,7 @@ dependencies {
 	compile 'com.android.support:mediarouter-v7:24.2.+'
 	compile 'com.android.support:recyclerview-v7:24.2.+'
 	compile 'com.android.support:design:24.2.+'
-	compile 'com.google.android.gms:play-services-cast:8.1.0'
+	googleCompile 'com.google.android.gms:play-services-cast:8.1.0'
 	compile 'com.sothree.slidinguppanel:library:3.0.0'
 	compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.shehabic.droppy:Droppy:0.5.1@aar'
