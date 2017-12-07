@@ -19,10 +19,6 @@ import android.os.Build;
 import android.support.v7.media.MediaRouteProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
-import android.util.Log;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +28,7 @@ import github.daneren2005.dsub.provider.DLNARouteProvider;
 import github.daneren2005.dsub.provider.JukeboxRouteProvider;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.RemoteController;
-import github.daneren2005.dsub.util.compat.CastCompat;
+import github.daneren2005.dsub.util.compat.GoogleCompat;
 
 import static android.support.v7.media.MediaRouter.RouteInfo;
 
@@ -50,25 +46,10 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private List<MediaRouteProvider> onlineProviders = new ArrayList<MediaRouteProvider>();
 	private DLNARouteProvider dlnaProvider;
 
-	static {
-		try {
-			CastCompat.checkAvailable();
-			castAvailable = true;
-		} catch(Throwable t) {
-			castAvailable = false;
-		}
-	}
-
 	public MediaRouteManager(DownloadService downloadService) {
 		this.downloadService = downloadService;
 		router = MediaRouter.getInstance(downloadService);
-
-		// Check if play services is available
-		int result = GooglePlayServicesUtil.isGooglePlayServicesAvailable(downloadService);
-		if(result != ConnectionResult.SUCCESS){
-			Log.w(TAG, "No play services, failed with result: " + result);
-			castAvailable = false;
-		}
+		castAvailable = GoogleCompat.playServicesAvailable(downloadService) && GoogleCompat.castAvailable();
 
 		addProviders();
 		buildSelector();
@@ -83,7 +64,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	@Override
 	public void onRouteSelected(MediaRouter router, RouteInfo info) {
 		if(castAvailable) {
-			RemoteController controller = CastCompat.getController(downloadService, info);
+			RemoteController controller = GoogleCompat.getController(downloadService, info);
 			if(controller != null) {
 				downloadService.setRemoteEnabled(RemoteControlState.CHROMECAST, controller);
 			}
@@ -137,7 +118,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	}
 	public RemoteController getRemoteController(RouteInfo info) {
 		if(castAvailable) {
-			return CastCompat.getController(downloadService, info);
+			return GoogleCompat.getController(downloadService, info);
 		} else {
 			return null;
 		}
@@ -170,7 +151,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 			builder.addControlCategory(JukeboxRouteProvider.CATEGORY_JUKEBOX_ROUTE);
 		}
 		if(castAvailable) {
-			builder.addControlCategory(CastCompat.getCastControlCategory());
+			builder.addControlCategory(GoogleCompat.getCastControlCategory());
 		}
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);

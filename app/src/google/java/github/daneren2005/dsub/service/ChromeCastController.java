@@ -45,7 +45,6 @@ import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.EnvironmentVariables;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.util.compat.CastCompat;
 import github.daneren2005.serverproxy.FileProxy;
 import github.daneren2005.serverproxy.ServerProxy;
 import github.daneren2005.serverproxy.WebProxy;
