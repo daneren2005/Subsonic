@@ -795,7 +795,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						try {
 							String url = (String) value;
 							new URL(url);
-							if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+							if (url.contains(" ") || url.contains("@")) {
 								throw new Exception();
 							}
 						} catch (Exception x) {
@@ -816,7 +816,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 							}
 
 							new URL(url);
-							if (url.contains(" ") || url.contains("@") || url.contains("_")) {
+							if (url.contains(" ") || url.contains("@")) {
 								throw new Exception();
 							}
 						} catch (Exception x) {
