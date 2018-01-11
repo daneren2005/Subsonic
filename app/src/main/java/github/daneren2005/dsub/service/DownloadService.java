@@ -1036,6 +1036,14 @@ public class DownloadService extends Service {
 		return temp;
 	}
 
+	public synchronized List<DownloadFile> getRecentDownloads() {
+		int from = Math.max(currentPlayingIndex - 10, 0);
+		int to = Math.min(currentPlayingIndex + 20, downloadList.size() - 1);
+		List<DownloadFile> temp = downloadList.subList(from, to);
+		temp.addAll(backgroundDownloadList);
+		return temp;
+	}
+
 	public List<DownloadFile> getBackgroundDownloads() {
 		return backgroundDownloadList;
 	}

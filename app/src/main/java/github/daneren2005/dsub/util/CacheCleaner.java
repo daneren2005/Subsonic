@@ -151,7 +151,7 @@ public class CacheCleaner {
     private Set<File> findUndeletableFiles() {
         Set<File> undeletable = new HashSet<File>(5);
 
-        for (DownloadFile downloadFile : downloadService.getDownloads()) {
+        for (DownloadFile downloadFile : downloadService.getRecentDownloads()) {
             undeletable.add(downloadFile.getPartialFile());
             undeletable.add(downloadFile.getCompleteFile());
         }
