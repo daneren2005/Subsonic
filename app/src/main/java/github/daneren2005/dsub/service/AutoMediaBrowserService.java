@@ -279,12 +279,18 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 				// music files
 				for(Entry entry: indexes.getEntries()) {
+					entry.setBookmark(null);    // don't resume from a bookmark in a browse listing
+					Bundle extras = new Bundle();
+					extras.putSerializable(Constants.INTENT_EXTRA_ENTRY, entry);
+					extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+
 					MediaDescription description = new MediaDescription.Builder()
 							.setTitle(entry.getTitle())
-							.setMediaId(MUSIC_DIRECTORY_PREFIX + entry.getId())
+							.setMediaId(entry.getId())
+							.setExtras(extras)
 							.build();
 
-					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
+					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
 				}
 
 				result.sendResult(mediaItems);
@@ -315,15 +321,24 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 								.setTitle(entry.getTitle())
 								.setMediaId(MUSIC_DIRECTORY_CONTENTS_PREFIX + entry.getId())
 								.build();
+
+						mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
 					} else {
-						// playback options for a single item
+						// mark individual songs as directly playable
+						entry.setBookmark(null);    // don't resume from a bookmark in a browse listing
+						Bundle extras = new Bundle();
+						extras.putSerializable(Constants.INTENT_EXTRA_ENTRY, entry);
+						extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+
 						description = new MediaDescription.Builder()
 								.setTitle(entry.getTitle())
-								.setMediaId(MUSIC_DIRECTORY_PREFIX + entry.getId())
+								.setMediaId(entry.getId())
+								.setExtras(extras)
 								.build();
+
+						mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
 					}
 
-					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
 				}
 				result.sendResult(mediaItems);
 			}

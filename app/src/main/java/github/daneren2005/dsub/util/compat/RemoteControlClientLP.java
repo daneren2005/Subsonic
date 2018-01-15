@@ -564,7 +564,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				playSong(entry, true);
 			}
 
-			// Currently only happens when playing bookmarks so we should be looking up parent
+			// Enqueue an entire directory when selecting a bookmark or a song
 			String childId = extras.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID, null);
 			if(childId != null) {
 				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
