@@ -370,6 +370,30 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	private void playMusicDirectory(Entry dir, boolean shuffle, boolean append, boolean playFromBookmark) {
 		playMusicDirectory(dir.getId(), shuffle, append, playFromBookmark);
 	}
+	private void playMusicDirectory(final String dirId, final boolean shuffle, final boolean append, final Entry startEntry) {
+		new SilentServiceTask<Void>(downloadService) {
+			@Override
+			protected Void doInBackground(MusicService musicService) throws Throwable {
+				MusicDirectory musicDirectory;
+				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
+					musicDirectory = musicService.getAlbum(dirId, "dir", false, downloadService, null);
+				} else {
+					musicDirectory = musicService.getMusicDirectory(dirId, "dir", false, downloadService, null);
+				}
+
+				List<Entry> playEntries = new ArrayList<>();
+				List<Entry> allEntries = musicDirectory.getChildren(false, true);
+				for(Entry song: allEntries) {
+					if (!song.isVideo() && song.getRating() != 1) {
+						playEntries.add(song);
+					}
+				}
+				playSongs(playEntries, shuffle, append, startEntry);
+
+				return null;
+			}
+		}.execute();
+	}
 	private void playMusicDirectory(final String dirId, final boolean shuffle, final boolean append, final boolean playFromBookmark) {
 		new SilentServiceTask<Void>(downloadService) {
 			@Override
@@ -409,6 +433,19 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	private void playSongs(List<Entry> entries, boolean shuffle, boolean append) {
 		playSongs(entries, shuffle, append, false);
 	}
+	private void playSongs(List<Entry> entries, boolean shuffle, boolean append, Entry startEntry) {
+		if(!append) {
+			downloadService.clear();
+		}
+
+		int startIndex = entries.indexOf(startEntry);
+		int startPosition = 0;
+		if(startEntry.getBookmark() != null) {
+			Bookmark bookmark = startEntry.getBookmark();
+			startPosition = bookmark.getPosition();
+		}
+		downloadService.download(entries, false, true, !append, shuffle, startIndex, startPosition);
+	}
 	private void playSongs(List<Entry> entries, boolean shuffle, boolean append, boolean resumeFromBookmark) {
 		if(!append) {
 			downloadService.clear();
@@ -429,7 +466,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}
 
-		downloadService.download(entries, false, !append, false, shuffle, startIndex, startPosition);
+		downloadService.download(entries, false, true, !append, shuffle, startIndex, startPosition);
 	}
 
 	private void noResults() {
@@ -568,9 +605,9 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			String childId = extras.getString(Constants.INTENT_EXTRA_NAME_CHILD_ID, null);
 			if(childId != null) {
 				if(Util.isTagBrowsing(downloadService) && !Util.isOffline(downloadService)) {
-					playMusicDirectory(entry.getAlbumId(), shuffle, playLast, true);
+					playMusicDirectory(entry.getAlbumId(), shuffle, playLast, entry);
 				} else {
-					playMusicDirectory(entry.getParent(), shuffle, playLast, true);
+					playMusicDirectory(entry.getParent(), shuffle, playLast, entry);
 				}
 			}
 		}
