@@ -110,7 +110,8 @@ public class DownloadService extends Service {
 	private static final long DEFAULT_DELAY_UPDATE_PROGRESS = 1000L;
 	private static final double DELETE_CUTOFF = 0.84;
 	private static final int REQUIRED_ALBUM_MATCHES = 4;
-	private static final int REMOTE_PLAYLIST_TOTAL = 3;
+	private static final int REMOTE_PLAYLIST_PREV = 10;
+	private static final int REMOTE_PLAYLIST_NEXT = 40;
 	private static final int SHUFFLE_MODE_NONE = 0;
 	private static final int SHUFFLE_MODE_ALL = 1;
 	private static final int SHUFFLE_MODE_ARTIST = 2;
@@ -507,14 +508,17 @@ public class DownloadService extends Service {
 	private synchronized void updateRemotePlaylist() {
 		List<DownloadFile> playlist = new ArrayList<>();
 		if(currentPlaying != null) {
-			int index = downloadList.indexOf(currentPlaying);
-			if(index == -1) {
-				index = 0;
+			int startIndex = downloadList.indexOf(currentPlaying) - REMOTE_PLAYLIST_PREV;
+			if(startIndex < 0) {
+				startIndex = 0;
 			}
 
 			int size = size();
-			int end = index + REMOTE_PLAYLIST_TOTAL;
-			for(int i = index; i < size && i < end; i++) {
+			int endIndex = downloadList.indexOf(currentPlaying) + REMOTE_PLAYLIST_NEXT;
+			if(endIndex > size) {
+				endIndex = size;
+			}
+			for(int i = startIndex; i < endIndex; i++) {
 				playlist.add(downloadList.get(i));
 			}
 		}
