@@ -168,7 +168,7 @@
     <string name="download.empty">Wiedergabeliste ist leer</string>
 	<string name="download.shuffle_loading">Wiedergabeliste wird gemischt...</string>
     <string name="download.playerstate_downloading">Downloade - %s</string>
-	 <string name="download.playerstate_mobile_disabled">Warte auf Wi-Fi für den Download</string>
+	 <string name="download.playerstate_mobile_disabled">Warte auf Wi-Fi oder lokales Netzwerk für den Download</string>
     <string name="download.playerstate_buffering">Buffere</string>
     <string name="download.playerstate_playing_shuffle">Playing shuffle</string>
     <string name="download.menu_show_album">Zeige Album</string>
@@ -301,6 +301,8 @@
     <string name="settings.max_bitrate_unlimited">Unbegrenzt</string>
     <string name="settings.wifi_required_title">Nur Wi-Fi streaming</string>
     <string name="settings.wifi_required_summary">Medien nur streamen, wenn mit Wi-Fi verbunden</string>
+    <string name="settings.local_network_required_title">Kein streaming mit Roaming-Netzwerken</string>
+    <string name="settings.local_network_required_summary">Medien nur streamen, wenn mit lokalem Anbieter verbunden</string>
 	<string name="settings.network_timeout_title">Netzwerk Timeout</string>
 	<string name="settings.network_timeout_10000">10 Sekunden</string>
 	<string name="settings.network_timeout_15000">15 Sekunden</string>

@@ -1364,7 +1364,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		switch (playerState) {
 			case DOWNLOADING:
 				if(currentPlaying != null) {
-					if(Util.isWifiRequiredForDownload(context)) {
+					if(Util.isWifiRequiredForDownload(context) || Util.isLocalNetworkRequiredForDownload(context)) {
 						statusTextView.setText(context.getResources().getString(R.string.download_playerstate_mobile_disabled));
 					} else {
 						long bytes = currentPlaying.getPartialFile().length();

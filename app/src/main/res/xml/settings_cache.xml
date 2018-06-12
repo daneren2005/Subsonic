@@ -40,6 +40,12 @@
 			android:key="wifiRequiredForDownload"
 			android:defaultValue="false"/>
 
+		<CheckBoxPreference
+			android:title="@string/settings.local_network_required_title"
+			android:summary="@string/settings.local_network_required_summary"
+			android:key="localNetworkRequiredForDownload"
+			android:defaultValue="false"/>
+
 		<ListPreference
 			android:title="@string/settings.network_timeout_title"
 			android:key="networkTimeout"
