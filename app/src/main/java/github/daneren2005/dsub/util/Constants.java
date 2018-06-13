@@ -103,6 +103,7 @@ public final class Constants {
     public static final String PREFERENCES_KEY_SCROBBLE = "scrobble";
     public static final String PREFERENCES_KEY_REPEAT_MODE = "repeatMode";
     public static final String PREFERENCES_KEY_WIFI_REQUIRED_FOR_DOWNLOAD = "wifiRequiredForDownload";
+    public static final String PREFERENCES_KEY_LOCAL_NETWORK_REQUIRED_FOR_DOWNLOAD = "localNetworkRequiredForDownload";
 	public static final String PREFERENCES_KEY_RANDOM_SIZE = "randomSize";
 	public static final String PREFERENCES_KEY_SLEEP_TIMER_DURATION = "sleepTimerDuration";
 	public static final String PREFERENCES_KEY_OFFLINE = "offline";

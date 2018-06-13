@@ -36,6 +36,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -1082,7 +1083,10 @@ public final class Util {
 			boolean wifiConnected = connected && networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
 			boolean wifiRequired = isWifiRequiredForDownload(context);
 
-			return connected && (!wifiRequired || wifiConnected);
+			boolean isLocalNetwork = connected && !networkInfo.isRoaming();
+			boolean localNetworkRequired = isLocalNetworkRequiredForDownload(context);
+
+			return connected && (!wifiRequired || wifiConnected) && (!localNetworkRequired || isLocalNetwork);
 		} else {
 			return connected;
 		}
@@ -1114,6 +1118,11 @@ public final class Util {
     public static boolean isWifiRequiredForDownload(Context context) {
         SharedPreferences prefs = getPreferences(context);
         return prefs.getBoolean(Constants.PREFERENCES_KEY_WIFI_REQUIRED_FOR_DOWNLOAD, false);
+    }
+
+    public static boolean isLocalNetworkRequiredForDownload(Context context) {
+        SharedPreferences prefs = getPreferences(context);
+        return prefs.getBoolean(Constants.PREFERENCES_KEY_LOCAL_NETWORK_REQUIRED_FOR_DOWNLOAD, false);
     }
 
     public static void info(Context context, int titleId, int messageId) {
