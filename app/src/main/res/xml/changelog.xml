@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.4" versioncode="197" releasedate="07/26/2018">
+		<change>Add option to change rewind/fast forward interval (thanks KBerstene)</change>
+		<change>Auto: Play entire directory when selecting song (thanks hufman)</change>
+		<change>Auto: Show 50 songs instead of 3 (thanks hufman)</change>
+		<change>Auto: Fix playing from a bookmark when multiple bookmarks in directory (thanks hufman)</change>
+		<change>Add option to disable downloads while roaming (thanks The-Compiler)</change>
+		<change>Fix persistent notification showing different actions when paused</change>
+		<change>Fix OPUS files not showing up in Offline mode</change>
+		<change>Fix not being able to have servers with _ in the domain</change>
+		<change>Fix cache exceeding limit with long playlist</change>
+		<change>Fix error if null album when applying ReplayGain</change>
+		<change>Fix deadlock bug</change>
+	</release>
 	<release version="5.3.5" versioncode="195" releasedate="04/18/2016">
 		<change>Add option to scan server for Subsonic 6.1+</change>
 		<change>Enhanced custom playback speed UI (thanks SilentViking)</change>
