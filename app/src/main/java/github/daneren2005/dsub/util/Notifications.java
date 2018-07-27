@@ -15,7 +15,9 @@
 
 package github.daneren2005.dsub.util;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -56,11 +58,24 @@ public final class Notifications {
 	private static boolean downloadForeground = false;
 	private static boolean persistentPlayingShowing = false;
 
+	private static NotificationChannel playingChannel;
+	private static NotificationChannel downloadingChannel;
+	private static NotificationChannel syncChannel;
+
 	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
 
 	public static void showPlayingNotification(final Context context, final DownloadService downloadService, final Handler handler, MusicDirectory.Entry song) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			getPlayingNotificationChannel(context);
+		}
+
 		// Set the icon, scrolling text and timestamp
-		final Notification notification = new Notification(R.drawable.stat_notify_playing, song.getTitle(), System.currentTimeMillis());
+		final Notification notification = new NotificationCompat.Builder(context)
+				.setSmallIcon(R.drawable.stat_notify_playing)
+				.setTicker(song.getTitle())
+				.setWhen(System.currentTimeMillis())
+				.setChannelId("now-playing-channel")
+				.build();
 
 		final boolean playing = downloadService.getPlayerState() == PlayerState.STARTED;
 		if(playing) {
@@ -331,7 +346,24 @@ public final class Notifications {
 		DSubWidgetProvider.notifyInstances(context, downloadService, false);
 	}
 
+	@TargetApi(Build.VERSION_CODES.O)
+	private static NotificationChannel getPlayingNotificationChannel(Context context) {
+		if(playingChannel == null) {
+			playingChannel = new NotificationChannel("now-playing-channel", "Now Playing", NotificationManager.IMPORTANCE_DEFAULT);
+			playingChannel.setDescription("Now playing notification");
+
+			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+			notificationManager.createNotificationChannel(playingChannel);
+		}
+
+		return playingChannel;
+	}
+
 	public static void showDownloadingNotification(final Context context, final DownloadService downloadService, Handler handler, DownloadFile file, int size) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			getDownloadingNotificationChannel(context);
+		}
+
 		Intent cancelIntent = new Intent(context, DownloadService.class);
 		cancelIntent.setAction(DownloadService.CANCEL_DOWNLOADS);
 		PendingIntent cancelPI = PendingIntent.getService(context, 0, cancelIntent, 0);
@@ -356,7 +388,8 @@ public final class Notifications {
 				.setOngoing(true)
 				.addAction(R.drawable.notification_close,
 						context.getResources().getString(R.string.common_cancel),
-						cancelPI);
+						cancelPI)
+				.setChannelId("downloading-channel");
 
 		Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD_VIEW, true);
@@ -395,6 +428,19 @@ public final class Notifications {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.O)
+	private static NotificationChannel getDownloadingNotificationChannel(Context context) {
+		if(downloadingChannel == null) {
+			downloadingChannel = new NotificationChannel("downloading-channel", "Downloading Notification", NotificationManager.IMPORTANCE_DEFAULT);
+			downloadingChannel.setDescription("Ongoing downloading notification to keep the service alive");
+
+			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+			notificationManager.createNotificationChannel(downloadingChannel);
+		}
+
+		return downloadingChannel;
+	}
+
 	public static void showSyncNotification(final Context context, int stringId, String extra) {
 		showSyncNotification(context, stringId, extra, null);
 	}
@@ -402,6 +448,10 @@ public final class Notifications {
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION, true)) {
 			if(extra == null) {
 				extra = "";
+			}
+
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				getSyncNotificationChannel(context);
 			}
 
 			NotificationCompat.Builder builder;
@@ -413,6 +463,7 @@ public final class Notifications {
 					.setOngoing(false)
 					.setGroup(NOTIFICATION_SYNC_GROUP)
 					.setPriority(NotificationCompat.PRIORITY_LOW)
+					.setChannelId("sync-channel")
 					.setAutoCancel(true);
 
 			Intent notificationIntent = new Intent(context, SubsonicFragmentActivity.class);
@@ -448,5 +499,18 @@ public final class Notifications {
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(stringId, builder.build());
 		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.O)
+	private static NotificationChannel getSyncNotificationChannel(Context context) {
+		if(syncChannel == null) {
+			syncChannel = new NotificationChannel("sync-channel", "Sync Notifications", NotificationManager.IMPORTANCE_LOW);
+			syncChannel.setDescription("Sync notifications");
+
+			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+			notificationManager.createNotificationChannel(syncChannel);
+		}
+
+		return syncChannel;
 	}
 }
