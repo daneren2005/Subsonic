@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 24
+	compileSdkVersion 26
 	buildToolsVersion '25.0.0'
 
 	defaultConfig {
 		applicationId "github.daneren2005.dsub"
 		minSdkVersion 14
-		targetSdkVersion 23
+		targetSdkVersion 26
 		versionCode 197
 		versionName '5.4'
 		setProperty("archivesBaseName", "DSub $versionName")
