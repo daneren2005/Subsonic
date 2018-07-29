@@ -349,7 +349,7 @@ public final class Notifications {
 	@TargetApi(Build.VERSION_CODES.O)
 	private static NotificationChannel getPlayingNotificationChannel(Context context) {
 		if(playingChannel == null) {
-			playingChannel = new NotificationChannel("now-playing-channel", "Now Playing", NotificationManager.IMPORTANCE_DEFAULT);
+			playingChannel = new NotificationChannel("now-playing-channel", "Now Playing", NotificationManager.IMPORTANCE_LOW);
 			playingChannel.setDescription("Now playing notification");
 
 			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
@@ -431,7 +431,7 @@ public final class Notifications {
 	@TargetApi(Build.VERSION_CODES.O)
 	private static NotificationChannel getDownloadingNotificationChannel(Context context) {
 		if(downloadingChannel == null) {
-			downloadingChannel = new NotificationChannel("downloading-channel", "Downloading Notification", NotificationManager.IMPORTANCE_DEFAULT);
+			downloadingChannel = new NotificationChannel("downloading-channel", "Downloading Notification", NotificationManager.IMPORTANCE_LOW);
 			downloadingChannel.setDescription("Ongoing downloading notification to keep the service alive");
 
 			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
@@ -504,7 +504,7 @@ public final class Notifications {
 	@TargetApi(Build.VERSION_CODES.O)
 	private static NotificationChannel getSyncNotificationChannel(Context context) {
 		if(syncChannel == null) {
-			syncChannel = new NotificationChannel("sync-channel", "Sync Notifications", NotificationManager.IMPORTANCE_LOW);
+			syncChannel = new NotificationChannel("sync-channel", "Sync Notifications", NotificationManager.IMPORTANCE_MIN);
 			syncChannel.setDescription("Sync notifications");
 
 			NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
