@@ -2,17 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="github.daneren2005.dsub">
 
-    <meta-data
-        android:name="com.google.android.backup.api_key"
-        android:value="AEdPqrEAAAAIUhOMtwa_eG-f0oYUHnetl_Cz7cO9zae8ZXOK5w" />
-    <meta-data
-        android:name="com.google.android.gms.version"
-        android:value="@integer/google_play_services_version" />
-    <meta-data
-        android:name="com.google.android.gms.car.application"
-        android:resource="@xml/auto_app_description" />
-    <meta-data
-        android:name="com.google.android.gms.car.notification.SmallIcon"
-        android:resource="@drawable/stat_notify_playing" />
+    <application android:label="@string/common.appname"
+         android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
+         android:icon="@drawable/launch"
+         android:theme="@style/Theme.DSub.Light">
+
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIUhOMtwa_eG-f0oYUHnetl_Cz7cO9zae8ZXOK5w" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/auto_app_description" />
+        <meta-data
+            android:name="com.google.android.gms.car.notification.SmallIcon"
+            android:resource="@drawable/stat_notify_playing" />
+    </application>
 
 </manifest>
