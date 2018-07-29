@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.4.1" versioncode="198" releasedate="07/29/2018">
+		<change>Fix Android Auto compatibility</change>
+	</release>
 	<release version="5.4" versioncode="197" releasedate="07/26/2018">
 		<change>Add option to change rewind/fast forward interval (thanks KBerstene)</change>
 		<change>Auto: Play entire directory when selecting song (thanks hufman)</change>
