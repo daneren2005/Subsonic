@@ -228,7 +228,9 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			removing.remove(id);
 			return;
 		}
-		adding.add(id);
+		synchronized (adding) {
+			adding.add(id);
+		}
 
 		if(device.getType().getType().equals("MediaRenderer") && device instanceof RemoteDevice) {
 			try {
@@ -255,21 +257,35 @@ public class DLNARouteProvider extends MediaRouteProvider {
 								broadcastDescriptors();
 							}
 						});
-						adding.remove(id);
+
+						synchronized (adding) {
+							if (adding.contains(id)) {
+								adding.remove(id);
+							}
+						}
 					}
 
 					@Override
 					public void failure(ActionInvocation actionInvocation, UpnpResponse upnpResponse, String s) {
 						Log.w(TAG, "Failed to get default volume for DLNA route");
 						Log.w(TAG, "Reason: " + s);
-						adding.remove(id);
+
+						synchronized (adding) {
+							if (adding.contains(id)) {
+								adding.remove(id);
+							}
+						}
 					}
 				});
 			} catch(Exception e) {
 				Log.e(TAG, "Failed to add device", e);
 			}
 		} else {
-			adding.remove(id);
+			synchronized (adding) {
+				if(adding.contains(id)) {
+					adding.remove(id);
+				}
+			}
 		}
 	}
 	private void deviceRemoved(Device device) {

@@ -346,6 +346,8 @@
     <string name="settings.max_bitrate_unlimited">Korlátlan</string>
     <string name="settings.wifi_required_title">Streamelés csak Wi-Fivel</string>
     <string name="settings.wifi_required_summary">Streamelés csak Wi-Fi hálózaton keresztül.</string>
+    <string name="settings.local_network_required_title">Ne streameljen roaming közben</string>
+    <string name="settings.local_network_required_summary">Ne streameljen médiát roaming közben</string>
 	<string name="settings.network_timeout_title">Hálózati időtúllépés</string>
 	<string name="settings.network_timeout_10000">10 másodperc</string>
 	<string name="settings.network_timeout_15000">15 másodperc</string>
@@ -491,6 +493,8 @@
 	<string name="settings.casting_cache_summary">Az éppen lejátszott dal gyorsítótárazása a tartalomátküldés (Casting) alatt.</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA engedélyezve</string>
 	<string name="settings.casting.dlna_casting_enabled.summary">Ha akkumulátor-merülési probléma lépne fel Android 7.0 alatt, kapcsolja ki a funkciót!</string>
+    <string name="settings.rewind_interval">Visszatekerés időintervalluma</string>
+    <string name="settings.fastforward_interval">Gyors előretekerés időintervalluma</string>
 
 	<string name="shuffle.title">Dalsorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
@@ -498,6 +502,7 @@
 	<string name="shuffle.genre">Műfaj:</string>
 	<string name="shuffle.pick_genre">Műfaj kiválasztása</string>
 
+	<string name="share.create_error">%s megosztás létrehozása sikertelen!</string>
 	<string name="share.expires">Lejárati idő: %s</string>
 	<string name="share.expires_never">Nincs lejárati idő</string>
 	<string name="share.deleted">\"%s\" megosztás törölve</string>
