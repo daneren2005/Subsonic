@@ -68,6 +68,7 @@ public final class Constants {
 	public static final String INTENT_EXTRA_SHOW_ALL = "showAll";
 	public static final String INTENT_EXTRA_PLAY_LAST = "playLast";
 	public static final String INTENT_EXTRA_ENTRY = "passedEntry";
+	public static final String INTENT_EXTRA_ENTRY_BYTES = "passedEntryBytes";
 
     // Preferences keys.
 	public static final String PREFERENCES_KEY_SERVER_KEY = "server";
