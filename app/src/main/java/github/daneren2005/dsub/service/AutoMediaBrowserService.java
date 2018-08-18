@@ -325,7 +325,9 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 						mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
 					} else {
 						// mark individual songs as directly playable
+						entry.setBookmark(null);    // don't resume from a bookmark in a browse listing
 						Bundle extras = new Bundle();
+						extras.putSerializable(Constants.INTENT_EXTRA_ENTRY, entry);
 						extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
 
 						description = new MediaDescription.Builder()
