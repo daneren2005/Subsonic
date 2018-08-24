@@ -25,6 +25,13 @@ import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.util.Log;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -628,6 +635,40 @@ public class MusicDirectory implements Serializable {
         public String toString() {
             return title;
         }
+
+        public byte[] toByteArray() throws IOException {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutput out = null;
+			try {
+				out = new ObjectOutputStream(bos);
+				out.writeObject(this);
+				out.flush();
+				return bos.toByteArray();
+			} finally {
+				try {
+					bos.close();
+				} catch (IOException ex) {
+					// ignore close exception
+				}
+			}
+		}
+
+		public static Entry fromByteArray(byte[] byteArray) throws IOException, ClassNotFoundException {
+			ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
+			ObjectInput in = null;
+			try {
+				in = new ObjectInputStream(bis);
+				return (Entry) in.readObject();
+			} finally {
+				try {
+					if (in != null) {
+						in.close();
+					}
+				} catch (IOException ex) {
+					// ignore close exception
+				}
+			}
+		}
 	}
 	
 	public static class EntryComparator implements Comparator<Entry> {

@@ -216,13 +216,13 @@ public final class Notifications {
 		// Create actions for media buttons
 		int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
 		if (expanded) {
+			pause = R.id.control_pause;
+
 			if (shouldFastForward) {
 				rewind = R.id.control_previous;
-				pause = R.id.control_pause;
 				fastForward = R.id.control_next;
 			} else {
 				previous = R.id.control_previous;
-				pause = R.id.control_pause;
 				next = R.id.control_next;
 			}
 
@@ -240,9 +240,15 @@ public final class Notifications {
 				}
 				close = R.id.control_next;
 			} else {
-				rewind = R.id.control_previous;
+				if (shouldFastForward) {
+					rewind = R.id.control_previous;
+					fastForward = R.id.control_next;
+				} else {
+					previous = R.id.control_previous;
+					next = R.id.control_next;
+				}
+
 				pause = R.id.control_pause;
-				fastForward = R.id.control_next;
 			}
 		}
 

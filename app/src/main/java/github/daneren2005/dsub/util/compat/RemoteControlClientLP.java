@@ -39,6 +39,7 @@ import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -584,6 +585,13 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			boolean shuffle = extras.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false);
 			boolean playLast = extras.getBoolean(Constants.INTENT_EXTRA_PLAY_LAST, false);
 			Entry entry = (Entry) extras.getSerializable(Constants.INTENT_EXTRA_ENTRY);
+			if(extras.containsKey(Constants.INTENT_EXTRA_ENTRY_BYTES)) {
+				try {
+					entry = Entry.fromByteArray(extras.getByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES));
+				} catch(Exception e) {
+					Log.e(TAG, "Failed to deserialize from entry: ", e);
+				}
+			}
 
 			String playlistId = extras.getString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, null);
 			if(playlistId != null) {

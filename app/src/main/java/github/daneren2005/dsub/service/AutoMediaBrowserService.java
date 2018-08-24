@@ -30,6 +30,7 @@ import android.service.media.MediaBrowserService;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -279,18 +280,22 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 				// music files
 				for(Entry entry: indexes.getEntries()) {
-					entry.setBookmark(null);    // don't resume from a bookmark in a browse listing
-					Bundle extras = new Bundle();
-					extras.putSerializable(Constants.INTENT_EXTRA_ENTRY, entry);
-					extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+					try {
+						entry.setBookmark(null);    // don't resume from a bookmark in a browse listing
+						Bundle extras = new Bundle();
+						extras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, entry.toByteArray());
+						extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
 
-					MediaDescription description = new MediaDescription.Builder()
-							.setTitle(entry.getTitle())
-							.setMediaId(entry.getId())
-							.setExtras(extras)
-							.build();
+						MediaDescription description = new MediaDescription.Builder()
+								.setTitle(entry.getTitle())
+								.setMediaId(entry.getId())
+								.setExtras(extras)
+								.build();
 
-					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+						mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+					} catch(IOException e) {
+						Log.e(TAG, "Failed to add entry", e);
+					}
 				}
 
 				result.sendResult(mediaItems);
@@ -324,21 +329,24 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 						mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_BROWSABLE));
 					} else {
-						// mark individual songs as directly playable
-						entry.setBookmark(null);    // don't resume from a bookmark in a browse listing
-						Bundle extras = new Bundle();
-						extras.putSerializable(Constants.INTENT_EXTRA_ENTRY, entry);
-						extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+						try {
+							// mark individual songs as directly playable
+							entry.setBookmark(null);    // don't resume from a bookmark in a browse listing
+							Bundle extras = new Bundle();
+							extras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, entry.toByteArray());
+							extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
 
-						description = new MediaDescription.Builder()
-								.setTitle(entry.getTitle())
-								.setMediaId(entry.getId())
-								.setExtras(extras)
-								.build();
+							description = new MediaDescription.Builder()
+									.setTitle(entry.getTitle())
+									.setMediaId(entry.getId())
+									.setExtras(extras)
+									.build();
 
-						mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+							mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+						} catch (IOException e) {
+							Log.e(TAG, "Failed to add entry", e);
+						}
 					}
-
 				}
 				result.sendResult(mediaItems);
 			}
@@ -412,19 +420,23 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
 
 				for(Entry entry: podcasts.getChildren(false, true)) {
-					PodcastEpisode podcast = (PodcastEpisode) entry;
-					Bundle podcastExtras = new Bundle();
-					podcastExtras.putSerializable(Constants.INTENT_EXTRA_ENTRY, podcast);
-					podcastExtras.putString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, podcast.getId());
+					try {
+						PodcastEpisode podcast = (PodcastEpisode) entry;
+						Bundle podcastExtras = new Bundle();
+						podcastExtras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, podcast.toByteArray());
+						podcastExtras.putString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, podcast.getId());
 
-					MediaDescription description = new MediaDescription.Builder()
-							.setTitle(podcast.getTitle())
-							.setSubtitle(Util.formatDate(downloadService, podcast.getDate(), false))
-							.setMediaId(PODCAST_PREFIX + podcast.getId())
-							.setExtras(podcastExtras)
-							.build();
+						MediaDescription description = new MediaDescription.Builder()
+								.setTitle(podcast.getTitle())
+								.setSubtitle(Util.formatDate(downloadService, podcast.getDate(), false))
+								.setMediaId(PODCAST_PREFIX + podcast.getId())
+								.setExtras(podcastExtras)
+								.build();
 
-					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+						mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+					} catch(IOException e) {
+						Log.e(TAG, "Failed to add podcast", e);
+					}
 				}
 
 				result.sendResult(mediaItems);
@@ -446,18 +458,22 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 				List<MediaBrowser.MediaItem> mediaItems = new ArrayList<>();
 
 				for(Entry entry: bookmarkList.getChildren(false, true)) {
-					Bundle extras = new Bundle();
-					extras.putSerializable(Constants.INTENT_EXTRA_ENTRY, entry);
-					extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+					try {
+						Bundle extras = new Bundle();
+						extras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, entry.toByteArray());
+						extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
 
-					MediaDescription description = new MediaDescription.Builder()
-							.setTitle(entry.getTitle())
-							.setSubtitle(Util.formatDuration(entry.getBookmark().getPosition() / 1000))
-							.setMediaId(entry.getId())
-							.setExtras(extras)
-							.build();
+						MediaDescription description = new MediaDescription.Builder()
+								.setTitle(entry.getTitle())
+								.setSubtitle(Util.formatDuration(entry.getBookmark().getPosition() / 1000))
+								.setMediaId(entry.getId())
+								.setExtras(extras)
+								.build();
 
-					mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+						mediaItems.add(new MediaBrowser.MediaItem(description, MediaBrowser.MediaItem.FLAG_PLAYABLE));
+					} catch(IOException e) {
+						Log.e(TAG, "Failed to add entry", e);
+					}
 				}
 
 				result.sendResult(mediaItems);
