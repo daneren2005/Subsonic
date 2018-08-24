@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.4.2" versioncode="199" releasedate="08/23/2018">
+		<change>Implement notification channels</change>
+		<change>Fix lockscreen back/forward controls rewinding/fast forwarding instead</change>
+		<change>Fix Android Auto compatibility</change>
+	</release>
 	<release version="5.4.1" versioncode="198" releasedate="07/29/2018">
 		<change>Fix Android Auto compatibility</change>
 	</release>
