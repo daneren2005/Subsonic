@@ -19,6 +19,9 @@ package github.daneren2005.dsub.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
+import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.content.ClipboardManager;
@@ -113,6 +116,7 @@ public final class Util {
 	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
 
 	private static OnAudioFocusChangeListener focusListener;
+	private static AudioFocusRequest audioFocusRequest;
 	private static boolean pauseFocus = false;
 	private static boolean lowerFocus = false;
 
@@ -1324,43 +1328,68 @@ public final class Util {
     
     @TargetApi(8)
 	public static void requestAudioFocus(final Context context) {
-    	if (Build.VERSION.SDK_INT >= 8 && focusListener == null) {
+    	if(Build.VERSION.SDK_INT >= 26) {
+    		if(audioFocusRequest == null) {
+				final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+				AudioAttributes playbackAttributes = new AudioAttributes.Builder()
+						.setUsage(AudioAttributes.USAGE_MEDIA)
+						.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+						.build();
+
+				audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+						.setAudioAttributes(playbackAttributes)
+						.setOnAudioFocusChangeListener(getAudioFocusChangeListener(context, audioManager))
+						.build();
+				audioManager.requestAudioFocus(audioFocusRequest);
+			}
+		} else if (Build.VERSION.SDK_INT >= 8 && focusListener == null) {
     		final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-    		audioManager.requestAudioFocus(focusListener = new OnAudioFocusChangeListener() {
-				public void onAudioFocusChange(int focusChange) {
-					DownloadService downloadService = (DownloadService)context;
-					if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isRemoteEnabled()) {
-						if(downloadService.getPlayerState() == PlayerState.STARTED) {
-							Log.i(TAG, "Temporary loss of focus");
-							SharedPreferences prefs = getPreferences(context);
-							int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
-							if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
-								lowerFocus = true;
-								downloadService.setVolume(0.1f);
-							} else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
-								pauseFocus = true;
-								downloadService.pause(true);
-							}
+    		audioManager.requestAudioFocus(focusListener = getAudioFocusChangeListener(context, audioManager), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    	}
+    }
+
+    private static OnAudioFocusChangeListener getAudioFocusChangeListener(final Context context, final AudioManager audioManager) {
+		return new OnAudioFocusChangeListener() {
+			public void onAudioFocusChange(int focusChange) {
+				DownloadService downloadService = (DownloadService)context;
+				if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isRemoteEnabled()) {
+					if(downloadService.getPlayerState() == PlayerState.STARTED) {
+						Log.i(TAG, "Temporary loss of focus");
+						SharedPreferences prefs = getPreferences(context);
+						int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
+						if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
+							lowerFocus = true;
+							downloadService.setVolume(0.1f);
+						} else if(lossPref == 0 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)) {
+							pauseFocus = true;
+							downloadService.pause(true);
 						}
-					} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-						if(pauseFocus) {
-							pauseFocus = false;
-							downloadService.start();
-						}
-						if(lowerFocus) {
-							lowerFocus = false;
-							downloadService.setVolume(1.0f);
-						}
-					} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isRemoteEnabled()) {
-						Log.i(TAG, "Permanently lost focus");
-						focusListener = null;
-						downloadService.pause();
+					}
+				} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+					if(pauseFocus) {
+						pauseFocus = false;
+						downloadService.start();
+					}
+					if(lowerFocus) {
+						lowerFocus = false;
+						downloadService.setVolume(1.0f);
+					}
+				} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isRemoteEnabled()) {
+					Log.i(TAG, "Permanently lost focus");
+					focusListener = null;
+					downloadService.pause();
+
+					if(audioFocusRequest != null && Build.VERSION.SDK_INT >= 26) {
+						audioManager.abandonAudioFocusRequest(audioFocusRequest);
+						audioFocusRequest = null;
+					} else {
 						audioManager.abandonAudioFocus(this);
 					}
 				}
-			}, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-    	}
-    }
+			}
+		};
+	}
 
 	public static void abandonAudioFocus(Context context) {
 		if(focusListener != null) {
