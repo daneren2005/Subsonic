@@ -45,7 +45,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
         Intent serviceIntent = new Intent(context, DownloadService.class);
         serviceIntent.putExtra(Intent.EXTRA_KEY_EVENT, event);
-        context.startService(serviceIntent);
+        DownloadService.startService(context, serviceIntent);
         if (isOrderedBroadcast()) {
 			try {
 				abortBroadcast();
