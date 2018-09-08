@@ -51,6 +51,7 @@ public final class Notifications {
 	// Notification IDs.
 	public static final int NOTIFICATION_ID_PLAYING = 100;
 	public static final int NOTIFICATION_ID_DOWNLOADING = 102;
+	public static final int NOTIFICATION_ID_SHUT_GOOGLE_UP = 103;
 	public static final String NOTIFICATION_SYNC_GROUP = "github.daneren2005.dsub.sync";
 
 	private static boolean playShowing = false;
@@ -445,6 +446,23 @@ public final class Notifications {
 		}
 
 		return downloadingChannel;
+	}
+
+	@TargetApi(Build.VERSION_CODES.O)
+	public static void shutGoogleUpNotification(final DownloadService downloadService) {
+		// On Android O+, service crashes if startForeground isn't called within 5 seconds of starting
+		getDownloadingNotificationChannel(downloadService);
+
+		NotificationCompat.Builder builder;
+		builder = new NotificationCompat.Builder(downloadService)
+				.setSmallIcon(android.R.drawable.stat_sys_download)
+				.setContentTitle(downloadService.getResources().getString(R.string.download_downloading_title, 0))
+				.setContentText(downloadService.getResources().getString(R.string.download_downloading_summary, "Temp"))
+				.setChannelId("downloading-channel");
+
+		final Notification notification = builder.build();
+		downloadService.startForeground(NOTIFICATION_ID_SHUT_GOOGLE_UP, notification);
+		downloadService.stopForeground(true);
 	}
 
 	public static void showSyncNotification(final Context context, int stringId, String extra) {
