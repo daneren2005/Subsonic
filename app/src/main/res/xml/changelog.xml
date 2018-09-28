@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.4.4" versioncode="201" releasedate="09/27/2018">
+		<change>Reverted back to target SDK 23 to fix service crashes</change>
+	</release>
+	<release version="5.4.2" versioncode="199" releasedate="08/23/2018">
+		<change>Fix lockscreen back/forward controls rewinding/fast forwarding instead</change>
+		<change>Fix Android Auto compatibility</change>
+	</release>
 	<release version="5.4.1" versioncode="198" releasedate="07/29/2018">
 		<change>Fix Android Auto compatibility</change>
 	</release>
