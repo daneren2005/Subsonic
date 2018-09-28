@@ -148,7 +148,11 @@ public class CachedMusicService implements MusicService {
             cachedIndexes.clear();
             cachedMusicFolders.clear();
         }
-        Indexes result = cachedIndexes.get();
+        Indexes result = null;
+		if(Util.equals(musicFolderId, this.musicFolderId)) {
+			result = cachedIndexes.get();
+		}
+
         if (result == null) {
 			String name = Util.isTagBrowsing(context, musicService.getInstance(context)) ? "artists" : "indexes";
 			name = getCacheName(context, name, musicFolderId);
@@ -160,7 +164,10 @@ public class CachedMusicService implements MusicService {
             	result = musicService.getIndexes(musicFolderId, refresh, context, progressListener);
             	FileUtil.serialize(context, result, name);
         	}
-            cachedIndexes.set(result);
+
+			if(Util.equals(musicFolderId, this.musicFolderId)) {
+				cachedIndexes.set(result);
+			}
         }
         return result;
     }
