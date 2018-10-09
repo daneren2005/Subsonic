@@ -315,9 +315,9 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				SearchResult results = musicService.search(searchCritera, downloadService, null);
 
 				if(results.hasArtists()) {
-					playFromParent(new Entry(results.getArtists().get(0)));
+					playFromParent(new Entry(results.getArtists().get(0)), true);
 				} else if(results.hasAlbums()) {
-					playFromParent(results.getAlbums().get(0));
+					playFromParent(results.getAlbums().get(0), false);
 				} else if(results.hasSongs()) {
 					playSong(results.getSongs().get(0));
 				} else {
@@ -327,10 +327,10 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 				return null;
 			}
 
-			private void playFromParent(Entry parent) throws Exception {
+			private void playFromParent(Entry parent, boolean shuffle) throws Exception {
 				List<Entry> songs = new ArrayList<>();
 				getSongsRecursively(parent, songs);
-				playSongs(songs);
+				playSongs(songs, shuffle, false, false);
 			}
 			private void getSongsRecursively(Entry parent, List<Entry> songs) throws Exception {
 				MusicDirectory musicDirectory;
@@ -421,7 +421,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	private void playSong(Entry entry) {
-
+		playSong(entry, false);
 	}
 	private void playSong(Entry entry, boolean resumeFromBookmark) {
 		List<Entry> entries = new ArrayList<>();

@@ -33,7 +33,7 @@ public class HeadphonePlugReceiver extends BroadcastReceiver {
 			if(headphoneState == 1 && Util.shouldStartOnHeadphones(context)) {
 				Intent start = new Intent(context, DownloadService.class);
 				start.setAction(DownloadService.START_PLAY);
-				context.startService(start);
+				DownloadService.startService(context, start);
 			}
 		}
 	}

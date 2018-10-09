@@ -144,7 +144,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		applyTheme();
 		applyFullscreen();
 		super.onCreate(bundle);
-		startService(new Intent(this, DownloadService.class));
+		DownloadService.startService(this);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		if(getIntent().hasExtra(Constants.FRAGMENT_POSITION)) {
@@ -1003,7 +1003,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				break;
 			}
 			Log.w(TAG, "DownloadService not running. Attempting to start it.");
-			startService(new Intent(this, DownloadService.class));
+			DownloadService.startService(this);
 			Util.sleepQuietly(50L);
 		}
 

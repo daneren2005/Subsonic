@@ -71,6 +71,7 @@ import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
@@ -273,7 +274,7 @@ public class DownloadService extends Service {
 		wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, this.getClass().getName());
 		wakeLock.setReferenceCounted(false);
 
-		WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 		wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL, "downloadServiceLock");
 
 		try {
@@ -291,6 +292,10 @@ public class DownloadService extends Service {
 		shufflePlayBuffer = new ShufflePlayBuffer(this);
 		artistRadioBuffer = new ArtistRadioBuffer(this);
 		lifecycleSupport.onCreate();
+
+		if(Build.VERSION.SDK_INT >= 26) {
+			Notifications.shutGoogleUpNotification(this);
+		}
 	}
 
 	@Override
@@ -375,6 +380,17 @@ public class DownloadService extends Service {
 		Notifications.hideDownloadingNotification(this, this, handler);
 	}
 
+	public static void startService(Context context) {
+		startService(context, new Intent(context, DownloadService.class));
+	}
+	public static void startService(Context context, Intent intent) {
+		PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
+		if (Build.VERSION.SDK_INT < 26 || (powerManager != null && powerManager.isIgnoringBatteryOptimizations(intent.getPackage()))) {
+			context.startService(intent);
+		} else {
+			context.startForegroundService(intent);
+		}
+	}
 	public static DownloadService getInstance() {
 		return instance;
 	}

@@ -524,7 +524,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
 	public void getDownloadService() {
 		if(DownloadService.getInstance() == null) {
-			startService(new Intent(this, DownloadService.class));
+			DownloadService.startService(this);
 		}
 
 		waitForDownloadService();

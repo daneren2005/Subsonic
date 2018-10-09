@@ -5,7 +5,8 @@
     <application android:label="@string/common.appname"
          android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
          android:icon="@drawable/launch"
-         android:theme="@style/Theme.DSub.Light">
+         android:theme="@style/Theme.DSub.Light"
+         android:largeHeap="true">
 
         <meta-data
             android:name="com.google.android.backup.api_key"
