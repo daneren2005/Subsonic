@@ -25,21 +25,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.media.AudioAttributes;
-import android.media.MediaDescription;
-import android.media.MediaMetadata;
+import android.media.AudioManager;
 import android.media.RemoteControlClient;
-import android.media.session.MediaSession;
-import android.media.session.PlaybackState;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.media.MediaDescriptionCompat;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +74,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	private static final String AUTO_RESERVE_SKIP_TO_NEXT = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_NEXT";
 	private static final String AUTO_RESERVE_SKIP_TO_PREVIOUS = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_PREVIOUS";
 
-	protected MediaSession mediaSession;
+	protected MediaSessionCompat mediaSession;
 	protected DownloadService downloadService;
 	protected ImageLoader imageLoader;
 	protected List<DownloadFile> currentQueue;
@@ -84,7 +83,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	@Override
 	public void register(Context context, ComponentName mediaButtonReceiverComponent) {
 		downloadService = (DownloadService) context;
-		mediaSession = new MediaSession(downloadService, "DSub MediaSession");
+		mediaSession = new MediaSessionCompat(downloadService, "DSub MediaSession");
 
 		Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
 		mediaButtonIntent.setComponent(mediaButtonReceiverComponent);
@@ -97,13 +96,10 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		PendingIntent activityPendingIntent = PendingIntent.getActivity(context, 0, activityIntent, 0);
 		mediaSession.setSessionActivity(activityPendingIntent);
 
-		mediaSession.setFlags(MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS | MediaSession.FLAG_HANDLES_MEDIA_BUTTONS);
+		mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
 		mediaSession.setCallback(new EventCallback());
 
-		AudioAttributes.Builder audioAttributesBuilder = new AudioAttributes.Builder();
-		audioAttributesBuilder.setUsage(AudioAttributes.USAGE_MEDIA)
-			.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC);
-		mediaSession.setPlaybackToLocal(audioAttributesBuilder.build());
+		mediaSession.setPlaybackToLocal(AudioManager.STREAM_MUSIC);
 		mediaSession.setActive(true);
 
 		Bundle sessionExtras = new Bundle();
@@ -128,21 +124,21 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 	@Override
 	public void setPlaybackState(int state, int index, int queueSize) {
-		PlaybackState.Builder builder = new PlaybackState.Builder();
+		PlaybackStateCompat.Builder builder = new PlaybackStateCompat.Builder();
 
-		int newState = PlaybackState.STATE_NONE;
+		int newState = PlaybackStateCompat.STATE_NONE;
 		switch(state) {
 			case RemoteControlClient.PLAYSTATE_PLAYING:
-				newState = PlaybackState.STATE_PLAYING;
+				newState = PlaybackStateCompat.STATE_PLAYING;
 				break;
 			case RemoteControlClient.PLAYSTATE_STOPPED:
-				newState = PlaybackState.STATE_STOPPED;
+				newState = PlaybackStateCompat.STATE_STOPPED;
 				break;
 			case RemoteControlClient.PLAYSTATE_PAUSED:
-				newState = PlaybackState.STATE_PAUSED;
+				newState = PlaybackStateCompat.STATE_PAUSED;
 				break;
 			case RemoteControlClient.PLAYSTATE_BUFFERING:
-				newState = PlaybackState.STATE_BUFFERING;
+				newState = PlaybackStateCompat.STATE_BUFFERING;
 				break;
 		}
 
@@ -166,7 +162,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			builder.setActiveQueueItemId(entry.getId().hashCode());
 		}
 
-		PlaybackState playbackState = builder.build();
+		PlaybackStateCompat playbackState = builder.build();
 		mediaSession.setPlaybackState(playbackState);
 		previousState = state;
 	}
@@ -186,19 +182,19 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	public void setMetadata(Entry currentSong, Bitmap bitmap) {
-		MediaMetadata.Builder builder = new MediaMetadata.Builder();
-		builder.putString(MediaMetadata.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
-				.putString(MediaMetadata.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
-				.putString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
-				.putString(MediaMetadata.METADATA_KEY_TITLE, (currentSong) == null ? null : currentSong.getTitle())
-				.putString(MediaMetadata.METADATA_KEY_GENRE, (currentSong) == null ? null : currentSong.getGenre())
-				.putLong(MediaMetadata.METADATA_KEY_TRACK_NUMBER, (currentSong == null) ?
+		MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+		builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
+				.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
+				.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
+				.putString(MediaMetadataCompat.METADATA_KEY_TITLE, (currentSong) == null ? null : currentSong.getTitle())
+				.putString(MediaMetadataCompat.METADATA_KEY_GENRE, (currentSong) == null ? null : currentSong.getGenre())
+				.putLong(MediaMetadataCompat.METADATA_KEY_TRACK_NUMBER, (currentSong == null) ?
 						0 : ((currentSong.getTrack() == null) ? 0 : currentSong.getTrack()))
-				.putLong(MediaMetadata.METADATA_KEY_DURATION, (currentSong == null) ?
+				.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, (currentSong == null) ?
 						0 : ((currentSong.getDuration() == null) ? 0 : (currentSong.getDuration() * 1000)));
 
 		if(bitmap != null) {
-			builder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, bitmap);
+			builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, bitmap);
 		}
 
 		mediaSession.setMetadata(builder.build());
@@ -221,17 +217,17 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 	@Override
 	public void updatePlaylist(List<DownloadFile> playlist) {
-		List<MediaSession.QueueItem> queue = new ArrayList<>();
+		List<MediaSessionCompat.QueueItem> queue = new ArrayList<>();
 
 		for(DownloadFile file: playlist) {
 			Entry entry = file.getSong();
 
-			MediaDescription description = new MediaDescription.Builder()
+			MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
 					.setMediaId(entry.getId())
 					.setTitle(entry.getTitle())
 					.setSubtitle(entry.getAlbumDisplay())
 					.build();
-			MediaSession.QueueItem item = new MediaSession.QueueItem(description, entry.getId().hashCode());
+			MediaSessionCompat.QueueItem item = new MediaSessionCompat.QueueItem(description, entry.getId().hashCode());
 			queue.add(item);
 		}
 
@@ -239,46 +235,46 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		currentQueue = playlist;
 	}
 
-	public MediaSession getMediaSession() {
+	public MediaSessionCompat getMediaSession() {
 		return mediaSession;
 	}
 
 	protected long getPlaybackActions(boolean isSong, int currentIndex, int size) {
-		long actions = PlaybackState.ACTION_PLAY |
-				PlaybackState.ACTION_PAUSE |
-				PlaybackState.ACTION_SEEK_TO |
-				PlaybackState.ACTION_SKIP_TO_QUEUE_ITEM;
+		long actions = PlaybackStateCompat.ACTION_PLAY |
+				PlaybackStateCompat.ACTION_PAUSE |
+				PlaybackStateCompat.ACTION_SEEK_TO |
+				PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM;
 
 		if(isSong) {
 			if (currentIndex > 0) {
-				actions |= PlaybackState.ACTION_SKIP_TO_PREVIOUS;
+				actions |= PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
 			}
 			if (currentIndex < size - 1) {
-				actions |= PlaybackState.ACTION_SKIP_TO_NEXT;
+				actions |= PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
 			}
 		} else {
-			actions |= PlaybackState.ACTION_SKIP_TO_PREVIOUS;
-			actions |= PlaybackState.ACTION_SKIP_TO_NEXT;
+			actions |= PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
+			actions |= PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
 		}
 
 		return actions;
 	}
-	protected void addCustomActions(Entry currentSong, PlaybackState.Builder builder) {
+	protected void addCustomActions(Entry currentSong, PlaybackStateCompat.Builder builder) {
 		Bundle showOnWearExtras = new Bundle();
 		showOnWearExtras.putBoolean(SHOW_ON_WEAR, true);
 
 		int rating = currentSong.getRating();
-		PlaybackState.CustomAction thumbsUp = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_THUMBS_UP,
+		PlaybackStateCompat.CustomAction thumbsUp = new PlaybackStateCompat.CustomAction.Builder(CUSTOM_ACTION_THUMBS_UP,
 					downloadService.getString(R.string.download_thumbs_up),
 					rating == 5 ? R.drawable.ic_action_rating_good_selected : R.drawable.ic_action_rating_good)
 				.setExtras(showOnWearExtras).build();
 
-		PlaybackState.CustomAction thumbsDown = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_THUMBS_DOWN,
+		PlaybackStateCompat.CustomAction thumbsDown = new PlaybackStateCompat.CustomAction.Builder(CUSTOM_ACTION_THUMBS_DOWN,
 					downloadService.getString(R.string.download_thumbs_down),
 					rating == 1 ? R.drawable.ic_action_rating_bad_selected : R.drawable.ic_action_rating_bad)
 				.setExtras(showOnWearExtras).build();
 
-		PlaybackState.CustomAction star = new PlaybackState.CustomAction.Builder(CUSTOM_ACTION_STAR,
+		PlaybackStateCompat.CustomAction star = new PlaybackStateCompat.CustomAction.Builder(CUSTOM_ACTION_STAR,
 					downloadService.getString(R.string.common_star),
 					currentSong.isStarred() ? R.drawable.ic_toggle_star : R.drawable.ic_toggle_star_outline)
 				.setExtras(showOnWearExtras).build();
@@ -476,7 +472,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		downloadService.setShufflePlayEnabled(true);
 	}
 
-	private class EventCallback extends MediaSession.Callback {
+	private class EventCallback extends MediaSessionCompat.Callback {
 		@Override
 		public void onPlay() {
 			downloadService.start();
