@@ -166,12 +166,6 @@
 			</intent-filter>
         </receiver>
 
-		<receiver android:name="github.daneren2005.dsub.receiver.AudioNoisyReceiver">
-			<intent-filter android:priority="999">
-				<action android:name="android.media.AUDIO_BECOMING_NOISY" />
-			</intent-filter>
-		</receiver>
-		
 		<receiver android:name="github.daneren2005.dsub.receiver.A2dpIntentReceiver">
 			<intent-filter>
 				<action android:name="android.music.playstatusrequest"/>

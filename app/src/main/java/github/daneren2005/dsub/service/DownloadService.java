@@ -42,6 +42,7 @@ import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
+import github.daneren2005.dsub.receiver.AudioNoisyReceiver;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.ArtistRadioBuffer;
 import github.daneren2005.dsub.util.ImageLoader;
@@ -77,6 +78,7 @@ import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -179,6 +181,9 @@ public class DownloadService extends Service {
 	private long timerStart;
 	private boolean autoPlayStart = false;
 	private boolean runListenersOnInit = false;
+
+	private IntentFilter audioNoisyIntent = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+	private AudioNoisyReceiver audioNoisyReceiver = new AudioNoisyReceiver();
 
 	private MediaRouteManager mediaRouter;
 	
@@ -1328,6 +1333,7 @@ public class DownloadService extends Service {
 			} else if(playerState == PAUSED_TEMP) {
 				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
 			}
+			unregisterReceiver(audioNoisyReceiver);
 		} catch (Exception x) {
 			handleError(x);
 		}
@@ -1352,6 +1358,7 @@ public class DownloadService extends Service {
 			} else if(playerState == PAUSED) {
 				setPlayerState(STOPPED);
 			}
+			unregisterReceiver(audioNoisyReceiver);
 		} catch(Exception x) {
 			handleError(x);
 		}
@@ -1371,6 +1378,7 @@ public class DownloadService extends Service {
 					autoPlayStart = true;
 				}
 			}
+			registerReceiver(audioNoisyReceiver, audioNoisyIntent);
 			setPlayerState(STARTED);
 		} catch (Exception x) {
 			handleError(x);
