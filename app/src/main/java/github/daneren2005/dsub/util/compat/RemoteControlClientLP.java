@@ -221,11 +221,16 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		for(DownloadFile file: playlist) {
 			Entry entry = file.getSong();
+			Bundle extras = new Bundle();
+			extras.putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
+					((entry.getDuration() == null) ? 0 : (entry.getDuration() * 1000)));
 
 			MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
 					.setMediaId(entry.getId())
 					.setTitle(entry.getTitle())
-					.setSubtitle(entry.getAlbumDisplay())
+					.setSubtitle(entry.getArtist())
+					.setDescription(entry.getAlbum())
+					.setExtras(extras)
 					.build();
 			MediaSessionCompat.QueueItem item = new MediaSessionCompat.QueueItem(description, entry.getId().hashCode());
 			queue.add(item);
