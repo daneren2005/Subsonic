@@ -1294,11 +1294,11 @@ public final class Util {
 
     public static void registerMediaButtonEventReceiver(Context context) {
 
-        // Only do it if enabled in the settings.
+        // Only do it if enabled in the settings and api < 21
         SharedPreferences prefs = getPreferences(context);
         boolean enabled = prefs.getBoolean(Constants.PREFERENCES_KEY_MEDIA_BUTTONS, true);
 
-        if (enabled) {
+        if (enabled && Build.VERSION.SDK_INT < 21) {
 
             // AudioManager.registerMediaButtonEventReceiver() was introduced in Android 2.2.
             // Use reflection to maintain compatibility with 1.5.
