@@ -183,7 +183,7 @@ public class DownloadService extends Service {
 	private boolean runListenersOnInit = false;
 
 	private IntentFilter audioNoisyIntent = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-	private AudioNoisyReceiver audioNoisyReceiver = new AudioNoisyReceiver();
+	private AudioNoisyReceiver audioNoisyReceiver = null;
 
 	private MediaRouteManager mediaRouter;
 	
@@ -267,6 +267,8 @@ public class DownloadService extends Service {
 		}, "DownloadService").start();
 
 		Util.registerMediaButtonEventReceiver(this);
+		audioNoisyReceiver = new AudioNoisyReceiver();
+		registerReceiver(audioNoisyReceiver, audioNoisyIntent);
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
@@ -379,6 +381,9 @@ public class DownloadService extends Service {
 		if(proxy != null) {
 			proxy.stop();
 			proxy = null;
+		}
+		if (audioNoisyReceiver != null) {
+			unregisterReceiver(audioNoisyReceiver);
 		}
 		mediaRouter.destroy();
 		Notifications.hidePlayingNotification(this, this, handler);
@@ -1333,7 +1338,6 @@ public class DownloadService extends Service {
 			} else if(playerState == PAUSED_TEMP) {
 				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
 			}
-			unregisterReceiver(audioNoisyReceiver);
 		} catch (Exception x) {
 			handleError(x);
 		}
@@ -1358,7 +1362,6 @@ public class DownloadService extends Service {
 			} else if(playerState == PAUSED) {
 				setPlayerState(STOPPED);
 			}
-			unregisterReceiver(audioNoisyReceiver);
 		} catch(Exception x) {
 			handleError(x);
 		}
@@ -1378,7 +1381,6 @@ public class DownloadService extends Service {
 					autoPlayStart = true;
 				}
 			}
-			registerReceiver(audioNoisyReceiver, audioNoisyIntent);
 			setPlayerState(STARTED);
 		} catch (Exception x) {
 			handleError(x);
