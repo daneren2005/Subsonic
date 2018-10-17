@@ -1506,7 +1506,8 @@ public class DownloadService extends Service {
 		this.playerState = playerState;
 
 		if(playerState == STARTED) {
-			Util.requestAudioFocus(this);
+			AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+			Util.requestAudioFocus(this, audioManager);
 		}
 
 		if (show) {
