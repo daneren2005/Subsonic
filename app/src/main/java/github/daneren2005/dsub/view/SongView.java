@@ -204,7 +204,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		}
 
 		long newRevision = downloadService.getDownloadListUpdateRevision();
-		if((revision != newRevision && dontChangeDownloadFile == false) || downloadFile == null) {
+		if((revision != newRevision && !dontChangeDownloadFile) || downloadFile == null) {
 			downloadFile = downloadService.forSong(item);
 			revision = newRevision;
 		}

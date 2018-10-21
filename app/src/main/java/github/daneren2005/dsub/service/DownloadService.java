@@ -1641,7 +1641,7 @@ public class DownloadService extends Service {
 							subtractNextPosition = 0;
 						}
 					}
-					onSongProgress(cachedPosition < 2000 ? true: false);
+					onSongProgress(cachedPosition < 2000);
 					Thread.sleep(delayUpdateProgress);
 				}
 				catch(Exception e) {

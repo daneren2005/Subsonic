@@ -103,7 +103,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 			imageTask.cancel();
 			imageTask = null;
 		}
-		if(coverArtView != null && coverArtView instanceof ImageView) {
+		if(coverArtView instanceof ImageView) {
 			((ImageView) coverArtView).setImageDrawable(null);
 		}
 		setObjectImpl(obj);
@@ -280,7 +280,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 			rating = isRated;
 		}
 
-		if(coverArtView != null && coverArtView instanceof RecyclingImageView) {
+		if(coverArtView instanceof RecyclingImageView) {
 			RecyclingImageView recyclingImageView = (RecyclingImageView) coverArtView;
 			if(recyclingImageView.isInvalidated()) {
 				onUpdateImageView();

@@ -150,7 +150,7 @@ public class MusicDirectory implements Serializable {
 		boolean metadataUpdated = false;
 		for (Entry entry : children) {
 			int index = refreshedDirectory.children.indexOf(entry);
-			if(index != -1) {
+			if (index != -1) {
 				final Entry refreshed = refreshedDirectory.children.get(index);
 
 				entry.setTitle(refreshed.getTitle());
@@ -165,7 +165,7 @@ public class MusicDirectory implements Serializable {
 				entry.setStarred(refreshed.isStarred());
 				entry.setRating(refreshed.getRating());
 				entry.setType(refreshed.getType());
-				if(!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
+				if (!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
 					metadataUpdated = true;
 					entry.setCoverArt(refreshed.getCoverArt());
 				}
@@ -712,7 +712,7 @@ public class MusicDirectory implements Serializable {
 			
 			Integer lhsTrack = lhs.getTrack();
 			Integer rhsTrack = rhs.getTrack();
-			if(lhsTrack != null && rhsTrack != null && lhsTrack != rhsTrack) {
+			if(lhsTrack != null && rhsTrack != null && !Objects.equals(lhsTrack, rhsTrack)) {
 				return lhsTrack.compareTo(rhsTrack);
 			} else if(lhsTrack != null) {
 				return -1;

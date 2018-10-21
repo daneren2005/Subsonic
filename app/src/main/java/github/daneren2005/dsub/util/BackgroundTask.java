@@ -327,9 +327,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 				currentlyRunning.decrementAndGet();
 			}
 
-			if(threads.contains(currentThread)) {
-				threads.remove(currentThread);
-			}
+			threads.remove(currentThread);
 		}
 	}
 

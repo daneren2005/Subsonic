@@ -29,7 +29,7 @@ public abstract class UpdateView2<T1, T2> extends UpdateView<T1> {
 			imageTask.cancel();
 			imageTask = null;
 		}
-		if(coverArtView != null && coverArtView instanceof ImageView) {
+		if(coverArtView instanceof ImageView) {
 			((ImageView) coverArtView).setImageDrawable(null);
 		}
 

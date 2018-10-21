@@ -63,7 +63,7 @@ public class OggFile extends Common {
 		bread = s.read(p_header);
 		if(bread != OGG_PAGE_SIZE)
 			xdie("Unable to read() OGG_PAGE_HEADER");
-		if((new String(p_header, 0, 5)).equals("OggS\0") != true)
+		if(!(new String(p_header, 0, 5)).equals("OggS\0"))
 			xdie("Invalid magic - not an ogg file?");
 		
 		nsegs = b2u(p_header[26]); 
@@ -105,7 +105,7 @@ public class OggFile extends Common {
 		s.seek(offset);
 		s.read(pfx);
 		
-		if( (new String(pfx, 0, pfx_len)).equals("\3vorbis") == false )
+		if(!(new String(pfx, 0, pfx_len)).equals("\3vorbis"))
 			xdie("Damaged packet found!");
 		
 		return parse_vorbis_comment(s, offset+pfx_len, pl_len-pfx_len);

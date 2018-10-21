@@ -1941,7 +1941,7 @@ public class RESTMusicService implements MusicService {
 		detectRedirect(context, originalUrl.toExternalForm(), redirectedUrl.toExternalForm());
 	}
 	private void detectRedirect(Context context, String originalUrl, String redirectedUrl) throws Exception {
-		if(redirectedUrl != null && "http://subsonic.org/pages/".equals(redirectedUrl)) {
+		if("http://subsonic.org/pages/".equals(redirectedUrl)) {
 			throw new Exception("Invalid url, redirects to http://subsonic.org/pages/");
 		}
 

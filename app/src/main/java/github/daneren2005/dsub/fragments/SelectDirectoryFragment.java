@@ -964,7 +964,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	@Override
 	protected void toggleSelectedStarred() {
 		UpdateHelper.OnStarChange onStarChange = null;
-		if(albumListType != null && "starred".equals(albumListType)) {
+		if("starred".equals(albumListType)) {
 			onStarChange = new UpdateHelper.OnStarChange() {
 				@Override
 				public void starChange(boolean starred) {

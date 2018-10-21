@@ -744,7 +744,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private boolean resetCacheLocation(SharedPreferences prefs) {
 		String newDirectory = FileUtil.getDefaultMusicDirectory(this).getPath();
 		String oldDirectory = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(newDirectory == null || (oldDirectory != null && newDirectory.equals(oldDirectory))) {
+		if(newDirectory == null || (newDirectory.equals(oldDirectory))) {
 			return false;
 		} else {
 			SharedPreferences.Editor editor = prefs.edit();

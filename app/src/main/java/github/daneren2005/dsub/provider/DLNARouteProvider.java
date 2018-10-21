@@ -259,9 +259,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 						});
 
 						synchronized (adding) {
-							if (adding.contains(id)) {
-								adding.remove(id);
-							}
+                            adding.remove(id);
 						}
 					}
 
@@ -271,9 +269,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 						Log.w(TAG, "Reason: " + s);
 
 						synchronized (adding) {
-							if (adding.contains(id)) {
-								adding.remove(id);
-							}
+                            adding.remove(id);
 						}
 					}
 				});
@@ -282,9 +278,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			}
 		} else {
 			synchronized (adding) {
-				if(adding.contains(id)) {
-					adding.remove(id);
-				}
+                adding.remove(id);
 			}
 		}
 	}

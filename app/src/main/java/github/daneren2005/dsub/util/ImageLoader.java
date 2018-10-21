@@ -220,7 +220,7 @@ public class ImageLoader {
 		return loadImage(view, entry, large, size, crossfade);
 	}
 	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade) {
-		if(entry != null && entry instanceof InternetRadioStation) {
+		if(entry instanceof InternetRadioStation) {
 			// Continue on and load a null bitmap
 		}
 		// If we know this a artist, try to load artist info instead

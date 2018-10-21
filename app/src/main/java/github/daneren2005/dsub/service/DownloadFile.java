@@ -375,7 +375,7 @@ public class DownloadFile implements BufferFile {
 		return song != null && song instanceof InternetRadioStation;
 	}
 	public String getStream() {
-		if(song != null && song instanceof InternetRadioStation) {
+		if(song instanceof InternetRadioStation) {
 			InternetRadioStation station = (InternetRadioStation) song;
 			return station.getStreamUrl();
 		} else {
