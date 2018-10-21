@@ -428,7 +428,7 @@ public final class Util {
 
 	public static String replaceInternalUrl(Context context, String url) {
 		// Only change to internal when using https
-		if(url.indexOf("https") != -1) {
+		if(url.contains("https")) {
 			SharedPreferences prefs = Util.getPreferences(context);
 			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
@@ -1021,7 +1021,7 @@ public final class Util {
 			throw new IllegalArgumentException("Strings must not be null");
 		}
 
-		if(t.toString().toLowerCase().indexOf(s.toString().toLowerCase()) != -1) {
+		if(t.toString().toLowerCase().contains(s.toString().toLowerCase())) {
 			return 1;
 		}
 
@@ -1448,7 +1448,7 @@ public final class Util {
 					break;
 				case PREPARED:
 					// Only send quick pause event for samsung devices, causes issues for others
-					if (Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+					if (Build.MANUFACTURER.toLowerCase().contains("samsung")) {
 						avrcpIntent.putExtra("playing", false);
 					} else {
 						return; // Don't broadcast anything

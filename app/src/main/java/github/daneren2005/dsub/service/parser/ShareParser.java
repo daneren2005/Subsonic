@@ -82,7 +82,7 @@ public class ShareParser extends MusicDirectoryEntryParser {
 					}
 
 					String url = get("url");
-					if(url != null && url.indexOf(".php") == -1) {
+					if(url != null && !url.contains(".php")) {
 						url = url.replaceFirst(".*/([^/?]+).*", serverUrl + "$1");
 					}
 					share.setUrl(url);

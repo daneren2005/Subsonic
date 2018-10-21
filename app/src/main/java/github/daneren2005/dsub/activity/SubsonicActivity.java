@@ -949,7 +949,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private void applyTheme() {
 		theme = ThemeUtil.getTheme(this);
 
-		if(theme != null && theme.indexOf("fullscreen") != -1) {
+		if(theme != null && theme.contains("fullscreen")) {
 			theme = theme.substring(0, theme.indexOf("_fullscreen"));
 			ThemeUtil.setTheme(this, theme);
 		}

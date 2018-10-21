@@ -193,10 +193,10 @@ public class FileUtil {
 		return getAlbumArtFile(context, entry);
 	}
     public static File getAlbumArtFile(Context context, MusicDirectory.Entry entry) {
-		if(entry.getId().indexOf(ImageLoader.PLAYLIST_PREFIX) != -1) {
+		if(entry.getId().contains(ImageLoader.PLAYLIST_PREFIX)) {
 			File dir = getAlbumArtDirectory(context);
 			return  new File(dir, Util.md5Hex(ImageLoader.PLAYLIST_PREFIX + entry.getTitle()) + ".jpeg");
-		} else if(entry.getId().indexOf(ImageLoader.PODCAST_PREFIX) != -1) {
+		} else if(entry.getId().contains(ImageLoader.PODCAST_PREFIX)) {
 			File dir = getAlbumArtDirectory(context);
 			return  new File(dir, Util.md5Hex(ImageLoader.PODCAST_PREFIX + entry.getTitle()) + ".jpeg");
 		} else {
@@ -517,7 +517,7 @@ public class FileUtil {
 	}
 	public static void deleteSerializedCache(Context context) {
 		for(File file: context.getCacheDir().listFiles()) {
-			if(file.getName().indexOf(".ser") != -1) {
+			if(file.getName().contains(".ser")) {
 				file.delete();
 			}
 		}
@@ -776,7 +776,7 @@ public class FileUtil {
 		
 		if(file.isFile()) {
 			if(isMediaFile(file)) {
-				if(file.getAbsolutePath().indexOf(".complete") == -1) {
+				if(!file.getAbsolutePath().contains(".complete")) {
 					permanent++;
 				}
 				return new Long[] {1L, permanent, file.length()};

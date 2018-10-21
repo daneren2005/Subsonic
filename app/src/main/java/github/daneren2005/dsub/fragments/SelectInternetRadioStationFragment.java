@@ -103,7 +103,7 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 	}
 
 	private void getStreamFromPlaylist(InternetRadioStation internetRadioStation) {
-		if(internetRadioStation.getStreamUrl() != null && (internetRadioStation.getStreamUrl().indexOf(".m3u") != -1 || internetRadioStation.getStreamUrl().indexOf(".pls") != -1)) {
+		if(internetRadioStation.getStreamUrl() != null && (internetRadioStation.getStreamUrl().contains(".m3u") || internetRadioStation.getStreamUrl().contains(".pls"))) {
 			try {
 				URL url = new URL(internetRadioStation.getStreamUrl());
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -114,7 +114,7 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 					while((line = in.readLine()) != null) {
 						// Not blank line or comment
 						if(line.length() > 0 && line.indexOf('#') != 0) {
-							if(internetRadioStation.getStreamUrl().indexOf(".m3u") != -1) {
+							if(internetRadioStation.getStreamUrl().contains(".m3u")) {
 								internetRadioStation.setStreamUrl(line);
 								break;
 							} else {

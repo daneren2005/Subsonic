@@ -554,7 +554,7 @@ public class OfflineMusicService implements MusicService {
 		scrobbles++;
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		
-		if(id.indexOf(cacheLocn) != -1) {
+		if(id.contains(cacheLocn)) {
 			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(id);
 			if(cachedSongId != null) {
 				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, cachedSongId.getSecond());
@@ -650,7 +650,7 @@ public class OfflineMusicService implements MusicService {
 		SharedPreferences.Editor offlineEditor = offline.edit();
 
 		String id = entries.get(0).getId();
-		if(id.indexOf(cacheLocn) != -1) {
+		if(id.contains(cacheLocn)) {
 			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
 			offlineEditor.putString(Constants.OFFLINE_STAR_SEARCH + stars, searchCriteria);
 			offlineEditor.remove(Constants.OFFLINE_STAR_ID + stars);

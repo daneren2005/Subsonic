@@ -230,7 +230,7 @@ public class RESTMusicService implements MusicService {
     public MusicDirectory getMusicDirectory(String id, String name, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
+		if(cacheLocn != null && id.contains(cacheLocn)) {
 			String search = Util.parseOfflineIDSearch(context, id, cacheLocn);
 			SearchCritera critera = new SearchCritera(search, 1, 1, 0);
 			SearchResult result = searchNew(critera, context, progressListener);
@@ -1432,7 +1432,7 @@ public class RESTMusicService implements MusicService {
 		values.add(user.getUsername());
 
 		for(User.Setting setting: user.getSettings()) {
-			if(setting.getName().indexOf("Role") != -1) {
+			if(setting.getName().contains("Role")) {
 				names.add(setting.getName());
 				values.add(setting.getValue());
 			}
@@ -1681,7 +1681,7 @@ public class RESTMusicService implements MusicService {
 	private String getOfflineSongId(String id, Context context, ProgressListener progressListener) throws Exception {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
+		if(id.contains(cacheLocn)) {
 			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(Util.getRestUrlHash(context, getInstance(context)), id);
 			if(cachedSongId != null) {
 				id = cachedSongId.getSecond();
@@ -1859,7 +1859,7 @@ public class RESTMusicService implements MusicService {
 
 		// Rewrite url based on redirects
 		String rewrittenUrl = rewriteUrlWithRedirect(context, url);
-		if(rewrittenUrl.indexOf("scanstatus") == -1) {
+		if(!rewrittenUrl.contains("scanstatus")) {
 			Log.i(TAG, stripUrlInfo(rewrittenUrl));
 		}
 
@@ -1880,7 +1880,7 @@ public class RESTMusicService implements MusicService {
 		// Connect and add headers
 		URL urlObj = new URL(url);
 		HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
-		if(url.indexOf("getCoverArt") == -1 && url.indexOf("stream") == -1 && url.indexOf("getAvatar") == -1) {
+		if(!url.contains("getCoverArt") && !url.contains("stream") && !url.contains("getAvatar")) {
 			connection.addRequestProperty("Accept-Encoding", "gzip");
 		}
 		connection.addRequestProperty("User-Agent", Constants.REST_CLIENT_ID);

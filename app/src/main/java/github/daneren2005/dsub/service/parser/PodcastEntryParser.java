@@ -78,7 +78,7 @@ public class PodcastEntryParser extends AbstractParser {
 					if(episode.getDate() == null) {
 						episode.setDate(get("created"));
 					}
-					if(episode.getDate() != null && episode.getDate().indexOf("T") != -1) {
+					if(episode.getDate().contains("T")) {
 						episode.setDate(episode.getDate().replace("T", " "));
 					}
 					episode.setStatus(get("status"));

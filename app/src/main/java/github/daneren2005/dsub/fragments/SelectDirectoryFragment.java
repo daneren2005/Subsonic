@@ -573,7 +573,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					}
 				} else if("genres".equals(albumListType) || "genres-songs".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
-				} else if(albumListType.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+				} else if(albumListType.contains(MainFragment.SONGS_LIST_PREFIX)) {
 					result = service.getSongList(albumListType, size, 0, context, this);
 				} else {
 					result = service.getAlbumList(albumListType, size, 0, refresh, context, this);

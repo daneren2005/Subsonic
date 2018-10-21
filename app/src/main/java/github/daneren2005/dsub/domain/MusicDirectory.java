@@ -603,7 +603,7 @@ public class MusicDirectory implements Serializable {
 		public boolean isOnlineId(Context context) {
 			try {
 				String cacheLocation = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-				return cacheLocation == null || id == null || id.indexOf(cacheLocation) == -1;
+				return cacheLocation == null || id == null || !id.contains(cacheLocation);
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to check online id validity");
 

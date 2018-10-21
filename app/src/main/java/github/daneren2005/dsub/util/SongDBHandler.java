@@ -205,7 +205,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
+		if(cacheLocn != null && id.contains(cacheLocn)) {
 			if(requireServerKey) {
 				return getIdFromPath(serverKey, savePath);
 			} else {
