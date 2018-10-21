@@ -48,7 +48,7 @@ public class ID3v2File extends Common {
 		v3len      = ((v3len & 0x7f000000) >> 3) | // for some funky reason, this is encoded as 7*4 bits
 		             ((v3len & 0x007f0000) >> 2) |
 		             ((v3len & 0x00007f00) >> 1) |
-		             ((v3len & 0x0000007f) >> 0) ;
+		             ((v3len & 0x0000007f)) ;
 		
 		// debug(">> tag version ID3v2."+id3v);
 		// debug(">> LEN= "+v3len+" // "+v3len);

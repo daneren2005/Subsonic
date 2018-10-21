@@ -279,7 +279,7 @@ public class DownloadServiceTest extends
 		musicEntry.setBitRate(198);
 		musicEntry.setAlbumId("49");
 		musicEntry.setDuration(247);
-		musicEntry.setSize(Long.valueOf(6162717));
+		musicEntry.setSize(6162717L);
 		musicEntry.setArtistId("23");
 		musicEntry.setArtist("The Dada Weatherman");
 		musicEntry.setCloseness(0);
