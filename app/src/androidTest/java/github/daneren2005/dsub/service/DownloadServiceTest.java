@@ -76,7 +76,7 @@ public class DownloadServiceTest extends
 		int oldCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		downloadService.next();
 		int newCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
-		assertTrue(oldCurrentPlayingIndex == newCurrentPlayingIndex);
+		assertEquals(oldCurrentPlayingIndex, newCurrentPlayingIndex);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class DownloadServiceTest extends
 		int oldCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		downloadService.previous();
 		int newCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
-		assertTrue(oldCurrentPlayingIndex == newCurrentPlayingIndex);
+		assertEquals(oldCurrentPlayingIndex, newCurrentPlayingIndex);
 	}
 
 	/**
