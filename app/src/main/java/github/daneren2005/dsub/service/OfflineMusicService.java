@@ -96,9 +96,8 @@ public class OfflineMusicService implements MusicService {
 				entries.add(createEntry(context, file));
 			}
         }
-		
-        Indexes indexes = new Indexes(0L, Collections.<Artist>emptyList(), artists, entries);
-		return indexes;
+
+		return new Indexes(0L, Collections.<Artist>emptyList(), artists, entries);
     }
 
     @Override
@@ -267,41 +266,17 @@ public class OfflineMusicService implements MusicService {
 		
 		Collections.sort(artists, new Comparator<Artist>() {
 			public int compare(Artist lhs, Artist rhs) {
-				if(lhs.getCloseness() == rhs.getCloseness()) {
-					return 0;
-				}
-				else if(lhs.getCloseness() > rhs.getCloseness()) {
-					return -1;
-				}
-				else {
-					return 1;
-				}
+				return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
 			}
 		});
 		Collections.sort(albums, new Comparator<Entry>() {
 			public int compare(Entry lhs, Entry rhs) {
-				if(lhs.getCloseness() == rhs.getCloseness()) {
-					return 0;
-				}
-				else if(lhs.getCloseness() > rhs.getCloseness()) {
-					return -1;
-				}
-				else {
-					return 1;
-				}
+				return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
 			}
 		});
 		Collections.sort(songs, new Comparator<Entry>() {
 			public int compare(Entry lhs, Entry rhs) {
-				if(lhs.getCloseness() == rhs.getCloseness()) {
-					return 0;
-				}
-				else if(lhs.getCloseness() > rhs.getCloseness()) {
-					return -1;
-				}
-				else {
-					return 1;
-				}
+				return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
 			}
 		});
 

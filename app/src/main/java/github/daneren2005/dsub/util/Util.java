@@ -584,10 +584,8 @@ public final class Util {
 				title = index == -1 ? title : title.substring(0, index);
 				title = title.substring(title.indexOf('-') + 1);
 
-				String query = "artist:\"" + entry.getArtist() + "\"" +
+				return "artist:\"" + entry.getArtist() + "\"" +
 					" AND title:\"" + title + "\"";
-
-				return query;
 			} else {
 				return null;
 			}
@@ -767,20 +765,17 @@ public final class Util {
 
         // More than 1 GB?
         if (byteCount >= 1024 * 1024 * 1024) {
-            NumberFormat gigaByteFormat = GIGA_BYTE_FORMAT;
-            return gigaByteFormat.format((double) byteCount / (1024 * 1024 * 1024));
+			return GIGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024 * 1024));
         }
 
         // More than 1 MB?
         if (byteCount >= 1024 * 1024) {
-            NumberFormat megaByteFormat = MEGA_BYTE_FORMAT;
-            return megaByteFormat.format((double) byteCount / (1024 * 1024));
+			return MEGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024));
         }
 
         // More than 1 KB?
         if (byteCount >= 1024) {
-            NumberFormat kiloByteFormat = KILO_BYTE_FORMAT;
-            return kiloByteFormat.format((double) byteCount / 1024);
+			return KILO_BYTE_FORMAT.format((double) byteCount / 1024);
         }
 
         return byteCount + " B";

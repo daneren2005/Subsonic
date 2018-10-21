@@ -235,11 +235,7 @@ public class ServerInfo implements Serializable {
 	}
 	public static boolean canUseToken(Context context, int instance) {
 		if(isStockSubsonic(context, instance) && checkServerVersion(context, "1.14", instance)) {
-			if(Util.getBlockTokenUse(context, instance)) {
-				return false;
-			} else {
-				return true;
-			}
+			return !Util.getBlockTokenUse(context, instance);
 		} else {
 			return false;
 		}

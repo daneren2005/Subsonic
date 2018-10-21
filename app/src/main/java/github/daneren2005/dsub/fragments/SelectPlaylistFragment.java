@@ -351,11 +351,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 			ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-			if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-				syncImmediately = true;
-			} else {
-				syncImmediately = false;
-			}
+			syncImmediately = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
 		} else {
 			syncImmediately = true;
 		}

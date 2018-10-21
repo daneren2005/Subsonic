@@ -278,11 +278,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		public boolean isCancelled() {
 			if(Thread.interrupted()) {
 				return true;
-			} else if(BackgroundTask.this.isCancelled()) {
-				return true;
-			} else {
-				return false;
-			}
+			} else return BackgroundTask.this.isCancelled();
 		}
 		public void onDone(T result) {
 			done(result);

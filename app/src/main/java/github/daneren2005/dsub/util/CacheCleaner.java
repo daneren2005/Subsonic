@@ -131,14 +131,8 @@ public class CacheCleaner {
         Collections.sort(files, new Comparator<File>() {
             @Override
             public int compare(File a, File b) {
-                if (a.lastModified() < b.lastModified()) {
-                    return -1;
-                }
-                if (a.lastModified() > b.lastModified()) {
-                    return 1;
-                }
-                return 0;
-            }
+				return Long.compare(a.lastModified(), b.lastModified());
+			}
         });
     }
 

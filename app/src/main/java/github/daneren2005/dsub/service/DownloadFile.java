@@ -372,7 +372,7 @@ public class DownloadFile implements BufferFile {
 	}
 
 	public boolean isStream() {
-		return song != null && song instanceof InternetRadioStation;
+		return song instanceof InternetRadioStation;
 	}
 	public String getStream() {
 		if(song instanceof InternetRadioStation) {
@@ -617,11 +617,7 @@ public class DownloadFile implements BufferFile {
 					// Re-establish every few seconds whether screen is on or not
 					if(rateLimit) {
 						PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-						if(pm.isScreenOn()) {
-							activeLimit = true;
-						} else {
-							activeLimit = false;
-						}
+						activeLimit = pm.isScreenOn();
 					}
                 }
                 

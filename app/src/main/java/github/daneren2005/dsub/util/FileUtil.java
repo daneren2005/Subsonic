@@ -332,12 +332,10 @@ public class FileUtil {
 	}
 
 	public static File getArtistDirectory(Context context, Artist artist) {
-		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getName()));
-		return dir;
+		return new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getName()));
 	}
 	public static File getArtistDirectory(Context context, MusicDirectory.Entry artist) {
-		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getTitle()));
-		return dir;
+		return new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getTitle()));
 	}
 
     public static File getAlbumDirectory(Context context, MusicDirectory.Entry entry) {
@@ -422,12 +420,10 @@ public class FileUtil {
 		return dir;
 	}
 	public static File getPodcastDirectory(Context context, PodcastChannel channel) {
-		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel.getName()));
-		return dir;
+		return new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel.getName()));
 	}
 	public static File getPodcastDirectory(Context context, String channel) {
-		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel));
-		return dir;
+		return new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel));
 	}
 
     public static void createDirectoryForParent(File file) {
@@ -837,8 +833,7 @@ public class FileUtil {
 
 			in = new Input(new FileInputStream(randomFile.getFD()));
 			synchronized (kryo) {
-				T result = kryo.readObject(in, tClass);
-				return result;
+				return kryo.readObject(in, tClass);
 			}
 		} catch(FileNotFoundException e) {
 			// Different error message
@@ -877,8 +872,7 @@ public class FileUtil {
 
 			in = new Input(new InflaterInputStream(new FileInputStream(file.getFD())));
 			synchronized (kryo) {
-				T result = kryo.readObject(in, tClass);
-				return result;
+				return kryo.readObject(in, tClass);
 			}
 		} catch(FileNotFoundException e) {
 			// Different error message

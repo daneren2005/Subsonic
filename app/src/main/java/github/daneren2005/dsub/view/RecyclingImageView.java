@@ -92,11 +92,7 @@ public class RecyclingImageView extends ImageView {
 		}
 
 		BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-		if (bitmapDrawable.getBitmap() != null && bitmapDrawable.getBitmap().isRecycled()) {
-			return true;
-		} else {
-			return false;
-		}
+		return bitmapDrawable.getBitmap() != null && bitmapDrawable.getBitmap().isRecycled();
 	}
 
 	public void setInvalidated(boolean invalidated) {

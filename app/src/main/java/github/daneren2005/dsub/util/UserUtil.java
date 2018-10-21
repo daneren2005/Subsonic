@@ -151,7 +151,7 @@ public final class UserUtil {
 
 		for(User.Setting setting: currentUser.getSettings()) {
 			if(setting.getName().equals(role)) {
-				return setting.getValue() == true;
+				return setting.getValue();
 			}
 		}
 

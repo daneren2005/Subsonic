@@ -74,8 +74,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 	@Nullable
 	@Override
 	public BrowserRoot onGetRoot(String clientPackageName, int clientUid, Bundle rootHints) {
-		BrowserRoot root = new BrowserRoot(BROWSER_ROOT, null);
-		return root;
+		return new BrowserRoot(BROWSER_ROOT, null);
 	}
 
 	@Override

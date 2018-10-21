@@ -322,11 +322,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 
 		@Override
 		public boolean onControlRequest(Intent intent, android.support.v7.media.MediaRouter.ControlRequestCallback callback) {
-			if (intent.hasCategory(CATEGORY_DLNA)) {
-				return true;
-			} else {
-				return false;
-			}
+			return intent.hasCategory(CATEGORY_DLNA);
 		}
 
 		@Override
