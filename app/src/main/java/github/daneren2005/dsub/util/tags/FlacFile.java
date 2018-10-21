@@ -20,8 +20,6 @@ package github.daneren2005.dsub.util.tags;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
-import java.util.Enumeration;
-
 
 public class FlacFile extends Common {
 	private static final int FLAC_TYPE_COMMENT = 4;   // ID of 'VorbisComment's

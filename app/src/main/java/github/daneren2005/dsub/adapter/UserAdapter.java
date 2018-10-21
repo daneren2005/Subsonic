@@ -16,13 +16,10 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.UpdateView;

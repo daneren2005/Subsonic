@@ -2,7 +2,6 @@ package github.daneren2005.dsub.util;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 
 import org.eclipse.jetty.util.ArrayQueue;
 

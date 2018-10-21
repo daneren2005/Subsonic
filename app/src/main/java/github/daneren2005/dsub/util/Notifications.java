@@ -30,10 +30,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;

@@ -13,7 +13,6 @@ import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.UserUtil;
-import github.daneren2005.dsub.util.Util;
 
 import java.text.DateFormat;
 import java.util.ArrayList;

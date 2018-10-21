@@ -16,7 +16,6 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -26,7 +25,6 @@ import java.util.List;
 
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.domain.User;
-import github.daneren2005.dsub.domain.User.MusicFolderSetting;
 import github.daneren2005.dsub.domain.User.Setting;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;

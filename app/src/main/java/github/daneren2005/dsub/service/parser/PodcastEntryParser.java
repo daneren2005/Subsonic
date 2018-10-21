@@ -19,9 +19,7 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import android.util.Log;
 
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;

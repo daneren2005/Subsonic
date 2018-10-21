@@ -23,13 +23,9 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
-import android.util.Log;
 
-import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.provider.DSubSearchProvider;
 
 /**
  * Receives search queries and forwards to the SearchFragment.

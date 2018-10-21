@@ -21,8 +21,6 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -31,7 +29,6 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 
 public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {

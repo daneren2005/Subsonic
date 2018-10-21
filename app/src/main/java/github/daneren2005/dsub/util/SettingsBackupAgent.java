@@ -24,10 +24,7 @@ import android.app.backup.SharedPreferencesBackupHelper;
 import android.content.SharedPreferences;
 import android.os.ParcelFileDescriptor;
 
-import java.io.IOError;
 import java.io.IOException;
-
-import github.daneren2005.dsub.util.Constants;
 
 public class SettingsBackupAgent extends BackupAgentHelper {
 	@Override

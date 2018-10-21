@@ -25,14 +25,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.FileUtil;
 
 /**
  * @author Sindre Mehus

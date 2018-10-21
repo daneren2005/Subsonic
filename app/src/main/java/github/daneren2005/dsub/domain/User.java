@@ -15,8 +15,6 @@
 
 package github.daneren2005.dsub.domain;
 
-import android.util.Pair;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;

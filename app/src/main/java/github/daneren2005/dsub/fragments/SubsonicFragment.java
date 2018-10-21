@@ -18,7 +18,6 @@
  */
 package github.daneren2005.dsub.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -32,7 +31,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.support.v4.app.Fragment;
@@ -53,7 +51,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
@@ -85,19 +82,14 @@ import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.AlbumView;
-import github.daneren2005.dsub.view.ArtistEntryView;
-import github.daneren2005.dsub.view.ArtistView;
 import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.PlaylistSongView;
-import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;

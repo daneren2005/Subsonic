@@ -19,14 +19,12 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 import java.io.Reader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

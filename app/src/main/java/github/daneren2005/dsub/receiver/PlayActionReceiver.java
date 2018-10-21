@@ -19,7 +19,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;

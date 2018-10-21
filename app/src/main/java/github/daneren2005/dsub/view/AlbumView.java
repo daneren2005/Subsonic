@@ -21,10 +21,6 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;

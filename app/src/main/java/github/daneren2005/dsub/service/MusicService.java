@@ -41,7 +41,6 @@ import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Share;
 import github.daneren2005.dsub.domain.User;
-import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.ProgressListener;
 

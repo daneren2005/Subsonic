@@ -62,7 +62,6 @@ import github.daneren2005.serverproxy.BufferProxy;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -72,7 +71,6 @@ import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;

@@ -18,7 +18,6 @@
 */
 package github.daneren2005.dsub.fragments;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,10 +28,8 @@ import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MenuUtil;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.BookmarkAdapter;
 import github.daneren2005.dsub.view.UpdateView;

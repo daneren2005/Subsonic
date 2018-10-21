@@ -19,9 +19,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,12 +28,10 @@ import java.util.List;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.SearchResult;
-import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.AlbumView;
 import github.daneren2005.dsub.view.ArtistView;
-import github.daneren2005.dsub.view.BasicHeaderView;
 import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 

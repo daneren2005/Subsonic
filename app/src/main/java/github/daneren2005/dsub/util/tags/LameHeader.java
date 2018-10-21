@@ -20,8 +20,6 @@ package github.daneren2005.dsub.util.tags;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
-import java.util.Enumeration;
-
 
 public class LameHeader extends Common {
 	

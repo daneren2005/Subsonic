@@ -28,7 +28,6 @@ import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.util.Util;

@@ -16,7 +16,6 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import github.daneren2005.dsub.R;

@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.util.Log;
 
 import github.daneren2005.dsub.domain.PlayerState;
 import github.daneren2005.dsub.service.DownloadService;

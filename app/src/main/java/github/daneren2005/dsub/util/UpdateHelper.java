@@ -33,9 +33,7 @@ import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
-import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;

@@ -16,7 +16,6 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 

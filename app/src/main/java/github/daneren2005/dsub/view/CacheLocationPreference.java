@@ -17,7 +17,6 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
-import android.preference.DialogPreference;
 import android.preference.EditTextPreference;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -28,12 +27,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.File;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.util.FileUtil;
 
 public class CacheLocationPreference extends EditTextPreference {
 	private static final String TAG = CacheLocationPreference.class.getSimpleName();
