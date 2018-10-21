@@ -148,9 +148,7 @@ public class MusicDirectory implements Serializable {
 
 	public synchronized boolean updateMetadata(MusicDirectory refreshedDirectory) {
 		boolean metadataUpdated = false;
-		Iterator<Entry> it = children.iterator();
-		while(it.hasNext()) {
-			Entry entry = it.next();
+		for (Entry entry : children) {
 			int index = refreshedDirectory.children.indexOf(entry);
 			if(index != -1) {
 				final Entry refreshed = refreshedDirectory.children.get(index);
@@ -187,7 +185,7 @@ public class MusicDirectory implements Serializable {
 						found.setStarred(refreshed.isStarred());
 						found.setRating(refreshed.getRating());
 						found.setType(refreshed.getType());
-						if(!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
+						if (!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
 							found.setCoverArt(refreshed.getCoverArt());
 							metadataUpdate = DownloadService.METADATA_UPDATED_COVER_ART;
 						}

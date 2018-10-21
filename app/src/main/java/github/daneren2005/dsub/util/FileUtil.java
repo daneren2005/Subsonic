@@ -483,10 +483,10 @@ public class FileUtil {
 	private static File getBestDir(File[] dirs) {
 		// Past 5.0 we can query directly for SD Card
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			for(int i = 0; i < dirs.length; i++) {
+			for(File dir: dirs) {
 				try {
-					if (dirs[i] != null && Environment.isExternalStorageRemovable(dirs[i])) {
-						return dirs[i];
+					if (dir != null && Environment.isExternalStorageRemovable(dir)) {
+						return dir;
 					}
 				} catch (Exception e) {
 					Log.e(TAG, "Failed to check if is external", e);

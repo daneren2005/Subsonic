@@ -73,15 +73,15 @@ public class CacheLocationPreference extends EditTextPreference {
 			// Past 5.0 we can query directly for SD Card
 			File internalDir = null, externalDir = null;
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				for(int i = 0; i < dirs.length; i++) {
+				for(File dir: dirs) {
 					try {
-						if (dirs[i] != null) {
-							if(Environment.isExternalStorageRemovable(dirs[i])) {
+						if (dir != null) {
+							if(Environment.isExternalStorageRemovable(dir)) {
 								if(externalDir != null) {
-									externalDir = dirs[i];
+									externalDir = dir;
 								}
 							} else {
-								internalDir = dirs[i];
+								internalDir = dir;
 							}
 
 							if(internalDir != null && externalDir != null) {
@@ -104,9 +104,9 @@ public class CacheLocationPreference extends EditTextPreference {
 				}
 			}
 			if(internalDir == null) {
-				for (int i = 0; i < dirs.length; i++) {
-					if (dirs[i] != null) {
-						internalDir = dirs[i];
+				for (File dir: dirs) {
+					if (dir != null) {
+						internalDir = dir;
 						break;
 					}
 				}
