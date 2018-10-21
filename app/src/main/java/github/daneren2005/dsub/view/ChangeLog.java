@@ -114,24 +114,24 @@ public class ChangeLog {
      * Contains constants for the root element of {@code changelog.xml}.
      */
     protected interface ChangeLogTag {
-        static final String NAME = "changelog";
+        String NAME = "changelog";
     }
 
     /**
      * Contains constants for the release element of {@code changelog.xml}.
      */
     protected interface ReleaseTag {
-        static final String NAME = "release";
-        static final String ATTRIBUTE_VERSION = "version";
-        static final String ATTRIBUTE_VERSION_CODE = "versioncode";
-		static final String ATTRIBUTE_RELEASE_DATE = "releasedate";
+        String NAME = "release";
+        String ATTRIBUTE_VERSION = "version";
+        String ATTRIBUTE_VERSION_CODE = "versioncode";
+	String ATTRIBUTE_RELEASE_DATE = "releasedate";
     }
 
     /**
      * Contains constants for the change element of {@code changelog.xml}.
      */
     protected interface ChangeTag {
-        static final String NAME = "change";
+        String NAME = "change";
     }
 
     /**
