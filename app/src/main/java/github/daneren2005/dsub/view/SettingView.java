@@ -36,8 +36,8 @@ public class SettingView extends UpdateView2<Setting, Boolean> {
 		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.basic_choice_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		checkBox = (CheckBox) findViewById(R.id.item_checkbox);
+		titleView = findViewById(R.id.item_name);
+		checkBox = findViewById(R.id.item_checkbox);
 		checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

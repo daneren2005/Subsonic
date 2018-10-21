@@ -28,8 +28,8 @@ public class InternetRadioStationView extends UpdateView<InternetRadioStation> {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		titleView = findViewById(R.id.item_name);
+		moreButton = findViewById(R.id.item_more);
 	}
 
 	protected void setObjectImpl(InternetRadioStation station) {

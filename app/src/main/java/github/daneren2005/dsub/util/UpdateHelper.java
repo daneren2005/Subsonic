@@ -182,7 +182,7 @@ public final class UpdateHelper {
 	}
 	public static void setRating(final Activity context, final Entry entry, final OnRatingChange onRatingChange) {
 		View layout = context.getLayoutInflater().inflate(R.layout.rating, null);
-		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
+		final RatingBar ratingBar = layout.findViewById(R.id.rating_bar);
 		ratingBar.setRating((float) entry.getRating());
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);

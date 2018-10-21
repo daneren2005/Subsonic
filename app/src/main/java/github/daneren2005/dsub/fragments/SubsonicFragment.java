@@ -592,7 +592,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	public void updateProgress(String message) {
-		TextView view = (TextView) rootView.findViewById(R.id.tab_progress_message);
+		TextView view = rootView.findViewById(R.id.tab_progress_message);
 		if (view != null) {
 			view.setText(message);
 		}
@@ -606,7 +606,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			View progress = view.findViewById(R.id.tab_progress_spinner);
 			progress.setVisibility(View.GONE);
 
-			TextView text = (TextView) view.findViewById(R.id.tab_progress_message);
+			TextView text = view.findViewById(R.id.tab_progress_message);
 			text.setText(R.string.common_empty);
 		} else {
 			view.setVisibility(View.GONE);
@@ -770,10 +770,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 
 		View dialogView = context.getLayoutInflater().inflate(R.layout.shuffle_dialog, null);
-		final EditText startYearBox = (EditText)dialogView.findViewById(R.id.start_year);
-		final EditText endYearBox = (EditText)dialogView.findViewById(R.id.end_year);
-		final EditText genreBox = (EditText)dialogView.findViewById(R.id.genre);
-		final Button genreCombo = (Button)dialogView.findViewById(R.id.genre_combo);
+		final EditText startYearBox = dialogView.findViewById(R.id.start_year);
+		final EditText endYearBox = dialogView.findViewById(R.id.end_year);
+		final EditText genreBox = dialogView.findViewById(R.id.genre);
+		final Button genreCombo = dialogView.findViewById(R.id.genre_combo);
 
 		final SharedPreferences prefs = Util.getPreferences(context);
 		final String oldStartYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
@@ -1124,8 +1124,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	protected void createNewPlaylist(final List<Entry> songs, final boolean getSuggestion) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
-		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
-		final CheckBox overwriteCheckBox = (CheckBox) layout.findViewById(R.id.save_playlist_overwrite);
+		final EditText playlistNameView = layout.findViewById(R.id.save_playlist_name);
+		final CheckBox overwriteCheckBox = layout.findViewById(R.id.save_playlist_overwrite);
 		if(getSuggestion) {
 			DownloadService downloadService = getDownloadService();
 			String playlistName = null;

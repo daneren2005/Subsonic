@@ -282,9 +282,9 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 	private void updatePlaylistInfo(final Playlist playlist) {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.update_playlist, null);
-		final EditText nameBox = (EditText)dialogView.findViewById(R.id.get_playlist_name);
-		final EditText commentBox = (EditText)dialogView.findViewById(R.id.get_playlist_comment);
-		final CheckBox publicBox = (CheckBox)dialogView.findViewById(R.id.get_playlist_public);
+		final EditText nameBox = dialogView.findViewById(R.id.get_playlist_name);
+		final EditText commentBox = dialogView.findViewById(R.id.get_playlist_comment);
+		final CheckBox publicBox = dialogView.findViewById(R.id.get_playlist_public);
 
 		nameBox.setText(playlist.getName());
 		commentBox.setText(playlist.getComment());

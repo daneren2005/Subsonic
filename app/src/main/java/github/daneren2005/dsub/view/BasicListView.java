@@ -29,10 +29,10 @@ public class BasicListView extends UpdateView<String> {
 		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		starButton = (ImageButton) findViewById(R.id.item_star);
+		titleView = findViewById(R.id.item_name);
+		starButton = findViewById(R.id.item_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 		moreButton.setVisibility(View.GONE);
 	}
 

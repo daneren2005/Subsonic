@@ -56,12 +56,12 @@ public class CacheLocationPreference extends EditTextPreference {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			view.setLayoutParams(new ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
-			final EditText editText = (EditText) view.findViewById(android.R.id.edit);
+			final EditText editText = view.findViewById(android.R.id.edit);
 			ViewGroup vg = (ViewGroup) editText.getParent();
 
 			LinearLayout cacheButtonsWrapper = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.cache_location_buttons, vg, true);
-			Button internalLocation = (Button) cacheButtonsWrapper.findViewById(R.id.location_internal);
-			Button externalLocation = (Button) cacheButtonsWrapper.findViewById(R.id.location_external);
+			Button internalLocation = cacheButtonsWrapper.findViewById(R.id.location_internal);
+			Button externalLocation = cacheButtonsWrapper.findViewById(R.id.location_external);
 
 			File[] dirs;
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -114,7 +114,7 @@ public class CacheLocationPreference extends EditTextPreference {
 			final File finalInternalDir = new File(internalDir, "music");
 			final File finalExternalDir = new File(externalDir, "music");
 
-			final EditText editTextBox = (EditText)view.findViewById(android.R.id.edit);
+			final EditText editTextBox = view.findViewById(android.R.id.edit);
 			if(finalInternalDir != null && (finalInternalDir.exists() || finalInternalDir.mkdirs())) {
 				internalLocation.setOnClickListener(new View.OnClickListener() {
 					@Override

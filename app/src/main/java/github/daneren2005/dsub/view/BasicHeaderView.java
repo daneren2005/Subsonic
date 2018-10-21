@@ -31,7 +31,7 @@ public class BasicHeaderView extends UpdateView<String> {
 		super(context, false);
 
 		LayoutInflater.from(context).inflate(layout, this, true);
-		nameView = (TextView) findViewById(R.id.item_name);
+		nameView = findViewById(R.id.item_name);
 	}
 
 	protected void setObjectImpl(String string) {

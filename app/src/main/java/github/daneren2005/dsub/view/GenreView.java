@@ -36,9 +36,9 @@ public class GenreView extends UpdateView<Genre> {
 		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.genre_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.genre_name);
-		songsView = (TextView) findViewById(R.id.genre_songs);
-		albumsView = (TextView) findViewById(R.id.genre_albums);
+		titleView = findViewById(R.id.genre_name);
+		songsView = findViewById(R.id.genre_songs);
+		albumsView = findViewById(R.id.genre_albums);
 	}
 
 	public void setObjectImpl(Genre genre) {

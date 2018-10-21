@@ -1217,8 +1217,8 @@ public final class Util {
 		listView.setOnItemLongClickListener(new ListView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
-				TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-				TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+				TextView nameView = view.findViewById(R.id.detail_name);
+				TextView detailsView = view.findViewById(R.id.detail_value);
 				if(nameView == null || detailsView == null) {
 					return false;
 				}

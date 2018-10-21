@@ -74,7 +74,7 @@ public class FastScroller extends LinearLayout {
 		setClipChildren(false);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.fast_scroller,this,true);
-		bubble = (TextView)findViewById(R.id.fastscroller_bubble);
+		bubble = findViewById(R.id.fastscroller_bubble);
 		handle = findViewById(R.id.fastscroller_handle);
 		bubble.setVisibility(INVISIBLE);
 		setVisibility(GONE);

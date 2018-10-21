@@ -39,11 +39,11 @@ public class ShareView extends UpdateView<Share> {
 		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.complex_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		descriptionView = (TextView) findViewById(R.id.item_description);
-		starButton = (ImageButton) findViewById(R.id.item_star);
+		titleView = findViewById(R.id.item_name);
+		descriptionView = findViewById(R.id.item_description);
+		starButton = findViewById(R.id.item_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				v.showContextMenu();

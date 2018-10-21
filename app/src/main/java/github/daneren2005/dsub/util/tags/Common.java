@@ -82,7 +82,7 @@ public class Common {
 		// debug("comments count = "+comments);
 		for(int i=0; i<comments; i++) {
 			
-			int clen = (int)b2le32(scratch, xoff);
+			int clen = b2le32(scratch, xoff);
 			xoff += 4+clen;
 			
 			if(xoff > scratch.length)

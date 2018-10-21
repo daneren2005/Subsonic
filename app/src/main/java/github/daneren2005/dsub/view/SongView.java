@@ -78,19 +78,19 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
-		trackTextView = (TextView) findViewById(R.id.song_track);
-		titleTextView = (TextView) findViewById(R.id.song_title);
-		artistTextView = (TextView) findViewById(R.id.song_artist);
-		durationTextView = (TextView) findViewById(R.id.song_duration);
-		statusTextView = (TextView) findViewById(R.id.song_status);
-		statusImageView = (ImageView) findViewById(R.id.song_status_icon);
-		ratingBar = (RatingBar) findViewById(R.id.song_rating);
-		starButton = (ImageButton) findViewById(R.id.song_star);
+		trackTextView = findViewById(R.id.song_track);
+		titleTextView = findViewById(R.id.song_title);
+		artistTextView = findViewById(R.id.song_artist);
+		durationTextView = findViewById(R.id.song_duration);
+		statusTextView = findViewById(R.id.song_status);
+		statusImageView = findViewById(R.id.song_status_icon);
+		ratingBar = findViewById(R.id.song_rating);
+		starButton = findViewById(R.id.song_star);
 		starButton.setFocusable(false);
 		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
 		bookmarkButton.setFocusable(false);
 		playedButton = (ImageButton) findViewById(R.id.song_played);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 		bottomRowView = findViewById(R.id.song_bottom);
 	}
 

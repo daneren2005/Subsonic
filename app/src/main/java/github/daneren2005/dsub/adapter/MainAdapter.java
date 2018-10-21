@@ -79,7 +79,7 @@ public class MainAdapter extends SectionAdapter<Integer> {
 	@Override
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
-		CheckBox checkBox = (CheckBox) view.findViewById(R.id.item_checkbox);
+		CheckBox checkBox = view.findViewById(R.id.item_checkbox);
 
 		String display;
 		if ("albums".equals(header)) {

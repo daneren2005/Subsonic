@@ -88,7 +88,7 @@ public class EqualizerFragment extends SubsonicFragment {
 			}
 		});
 
-		CheckBox enabledCheckBox = (CheckBox) rootView.findViewById(R.id.equalizer_enabled);
+		CheckBox enabledCheckBox = rootView.findViewById(R.id.equalizer_enabled);
 		enabledCheckBox.setChecked(equalizer.getEnabled());
 		enabledCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
@@ -251,7 +251,7 @@ public class EqualizerFragment extends SubsonicFragment {
 	}
 
 	private void initEqualizer() {
-		LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.equalizer_layout);
+		LinearLayout layout = rootView.findViewById(R.id.equalizer_layout);
 
 		final short minEQLevel = equalizer.getBandLevelRange()[0];
 		final short maxEQLevel = equalizer.getBandLevelRange()[1];
@@ -265,9 +265,9 @@ public class EqualizerFragment extends SubsonicFragment {
 			final short band = i;
 
 			View bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
-			TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
-			final TextView levelTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
-			SeekBar bar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+			TextView freqTextView = bandBar.findViewById(R.id.equalizer_frequency);
+			final TextView levelTextView = bandBar.findViewById(R.id.equalizer_level);
+			SeekBar bar = bandBar.findViewById(R.id.equalizer_bar);
 
 			freqTextView.setText((equalizer.getCenterFreq(band) / 1000) + " Hz");
 
@@ -306,13 +306,13 @@ public class EqualizerFragment extends SubsonicFragment {
 			layout.addView(bandBar);
 		}
 
-		LinearLayout specialLayout = (LinearLayout) rootView.findViewById(R.id.special_effects_layout);
+		LinearLayout specialLayout = rootView.findViewById(R.id.special_effects_layout);
 
 		// Setup bass booster
 		View bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
-		TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
-		final TextView bassTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
-		bassBar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+		TextView freqTextView = bandBar.findViewById(R.id.equalizer_frequency);
+		final TextView bassTextView = bandBar.findViewById(R.id.equalizer_level);
+		bassBar = bandBar.findViewById(R.id.equalizer_bar);
 
 		freqTextView.setText(R.string.equalizer_bass_booster);
 		bassBar.setEnabled(equalizer.getEnabled());
@@ -359,9 +359,9 @@ public class EqualizerFragment extends SubsonicFragment {
 		if(loudnessEnhancer != null && loudnessEnhancer.isAvailable()) {
 			// Setup loudness enhancer
 			bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
-			freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
-			final TextView loudnessTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
-			loudnessBar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+			freqTextView = bandBar.findViewById(R.id.equalizer_frequency);
+			final TextView loudnessTextView = bandBar.findViewById(R.id.equalizer_level);
+			loudnessBar = bandBar.findViewById(R.id.equalizer_bar);
 
 			freqTextView.setText(R.string.equalizer_voice_booster);
 			loudnessBar.setEnabled(equalizer.getEnabled());
@@ -409,9 +409,9 @@ public class EqualizerFragment extends SubsonicFragment {
 
 	private void initPregain(LinearLayout layout, final short minEQLevel, final short maxEQLevel) {
 		View bandBar = LayoutInflater.from(context).inflate(R.layout.equalizer_bar, null);
-		TextView freqTextView = (TextView) bandBar.findViewById(R.id.equalizer_frequency);
-		final TextView levelTextView = (TextView) bandBar.findViewById(R.id.equalizer_level);
-		SeekBar bar = (SeekBar) bandBar.findViewById(R.id.equalizer_bar);
+		TextView freqTextView = bandBar.findViewById(R.id.equalizer_frequency);
+		final TextView levelTextView = bandBar.findViewById(R.id.equalizer_level);
+		SeekBar bar = bandBar.findViewById(R.id.equalizer_bar);
 
 		freqTextView.setText("Master");
 

@@ -49,14 +49,14 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		}
 
 		coverArtView = findViewById(R.id.album_coverart);
-		titleView = (TextView) findViewById(R.id.album_title);
-		artistView = (TextView) findViewById(R.id.album_artist);
+		titleView = findViewById(R.id.album_title);
+		artistView = findViewById(R.id.album_artist);
 
-		ratingBar = (RatingBar) findViewById(R.id.album_rating);
+		ratingBar = findViewById(R.id.album_rating);
 		ratingBar.setFocusable(false);
-		starButton = (ImageButton) findViewById(R.id.album_star);
+		starButton = findViewById(R.id.album_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 
 		checkable = true;
 	}

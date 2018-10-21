@@ -65,9 +65,9 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 			
 			convertView = LayoutInflater.from(activity).inflate(layout, parent, false);
 			
-	        TextView usernameView = (TextView) convertView.findViewById(R.id.chat_username);
-	        TextView timeView = (TextView) convertView.findViewById(R.id.chat_time);
-	        TextView messageView = (TextView) convertView.findViewById(R.id.chat_message);
+	        TextView usernameView = convertView.findViewById(R.id.chat_username);
+	        TextView timeView = convertView.findViewById(R.id.chat_time);
+	        TextView messageView = convertView.findViewById(R.id.chat_message);
 	        
 	        messageView.setMovementMethod(LinkMovementMethod.getInstance());
 	        Linkify.addLinks(messageView, Linkify.EMAIL_ADDRESSES);
@@ -77,7 +77,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 	        holder.message = messageView;
 			holder.username = usernameView;
 			holder.time = timeView;
-			holder.avatar = (ImageView) convertView.findViewById(R.id.chat_avatar);
+			holder.avatar = convertView.findViewById(R.id.chat_avatar);
 			
 			convertView.setTag(holder);
 		}

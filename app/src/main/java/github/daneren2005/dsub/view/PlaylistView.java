@@ -42,8 +42,8 @@ public class PlaylistView extends UpdateView<Playlist> {
 		LayoutInflater.from(context).inflate(largeCell ? R.layout.basic_cell_item : R.layout.basic_art_item, this, true);
 
 		coverArtView = findViewById(R.id.item_art);
-		titleView = (TextView) findViewById(R.id.item_name);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		titleView = findViewById(R.id.item_name);
+		moreButton = findViewById(R.id.item_more);
 
 		this.imageLoader = imageLoader;
 	}

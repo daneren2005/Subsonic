@@ -97,7 +97,7 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 	}
 	@Override
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
-		TextView folderName = (TextView) holder.getView().findViewById(R.id.select_artist_folder_2);
+		TextView folderName = holder.getView().findViewById(R.id.select_artist_folder_2);
 
 		String musicFolderId = Util.getSelectedMusicFolderId(context);
 		if(musicFolderId != null) {

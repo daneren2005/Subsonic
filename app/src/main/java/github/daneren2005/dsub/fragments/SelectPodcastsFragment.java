@@ -305,7 +305,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 	
 	private void addNewPodcast() {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.create_podcast, null);
-		final TextView urlBox = (TextView) dialogView.findViewById(R.id.create_podcast_url);
+		final TextView urlBox = dialogView.findViewById(R.id.create_podcast_url);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_add_podcast)

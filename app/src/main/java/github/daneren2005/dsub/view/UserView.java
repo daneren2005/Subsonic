@@ -33,9 +33,9 @@ public class UserView extends UpdateView2<User, ImageLoader> {
 		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.user_list_item, this, true);
 
-		usernameView = (TextView) findViewById(R.id.item_name);
-		avatarView = (ImageView) findViewById(R.id.item_avatar);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		usernameView = findViewById(R.id.item_name);
+		avatarView = findViewById(R.id.item_avatar);
+		moreButton = findViewById(R.id.item_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				v.showContextMenu();

@@ -109,10 +109,10 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	{
 		View view = super.onCreateDialogView();
 
-		mValueText = (TextView)view.findViewById(R.id.value);
+		mValueText = view.findViewById(R.id.value);
 		mValueText.setText(getSummary(mValue));
 
-		SeekBar seekBar = (SeekBar)view.findViewById(R.id.seek_bar);
+		SeekBar seekBar = view.findViewById(R.id.seek_bar);
 		seekBar.setMax(mMax - mMin);
 		try {
 			seekBar.setProgress(Integer.parseInt(mValue));

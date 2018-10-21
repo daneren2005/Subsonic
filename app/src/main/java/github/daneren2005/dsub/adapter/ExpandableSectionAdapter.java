@@ -95,7 +95,7 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 	@Override
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, final int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
-		ImageView toggleSelectionView = (ImageView) view.findViewById(R.id.item_select);
+		ImageView toggleSelectionView = view.findViewById(R.id.item_select);
 
 		List<T> visibleSelection = sections.get(sectionIndex);
 		List<T> sectionExtras = sectionsExtras.get(sectionIndex);

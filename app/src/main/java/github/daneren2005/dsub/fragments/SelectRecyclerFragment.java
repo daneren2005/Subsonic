@@ -72,11 +72,11 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout = rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
 
-		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
-		fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
+		recyclerView = rootView.findViewById(R.id.fragment_recycler);
+		fastScroller = rootView.findViewById(R.id.fragment_fast_scroller);
 		setupLayoutManager();
 
 		if(pullToRefresh) {

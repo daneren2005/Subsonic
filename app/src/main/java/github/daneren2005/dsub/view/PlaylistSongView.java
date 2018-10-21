@@ -43,8 +43,8 @@ public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.
 		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.basic_count_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.basic_count_name);
-		countView = (TextView) findViewById(R.id.basic_count_count);
+		titleView = findViewById(R.id.basic_count_name);
+		countView = findViewById(R.id.basic_count_count);
 	}
 
 	protected void setObjectImpl(Playlist playlist, List<MusicDirectory.Entry> songs) {

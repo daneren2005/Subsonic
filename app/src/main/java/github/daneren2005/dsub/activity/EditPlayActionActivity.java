@@ -64,7 +64,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		final Activity context = this;
 		doNothing = context.getResources().getString(R.string.tasker_edit_do_nothing);
 
-		shuffleCheckbox = (CheckBox) findViewById(R.id.edit_shuffle_checkbox);
+		shuffleCheckbox = findViewById(R.id.edit_shuffle_checkbox);
 		shuffleCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
@@ -74,8 +74,8 @@ public class EditPlayActionActivity extends SubsonicActivity {
 			}
 		});
 
-		startYearCheckbox = (CheckBox) findViewById(R.id.edit_start_year_checkbox);
-		startYearBox = (EditText) findViewById(R.id.edit_start_year);
+		startYearCheckbox = findViewById(R.id.edit_start_year_checkbox);
+		startYearBox = findViewById(R.id.edit_start_year);
 		// Disable/enable number box if checked
 		startYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
@@ -84,8 +84,8 @@ public class EditPlayActionActivity extends SubsonicActivity {
 			}
 		});
 		
-		endYearCheckbox = (CheckBox) findViewById(R.id.edit_end_year_checkbox);
-		endYearBox = (EditText) findViewById(R.id.edit_end_year);
+		endYearCheckbox = findViewById(R.id.edit_end_year_checkbox);
+		endYearBox = findViewById(R.id.edit_end_year);
 		endYearCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton view, boolean isChecked) {
@@ -93,7 +93,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 			}
 		});
 
-		genreButton = (Button) findViewById(R.id.edit_genre_spinner);
+		genreButton = findViewById(R.id.edit_genre_spinner);
 		genreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				new LoadingTask<List<Genre>>(context, true) {
@@ -145,7 +145,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 		});
 		genreButton.setText(doNothing);
 
-		offlineSpinner = (Spinner) findViewById(R.id.edit_offline_spinner);
+		offlineSpinner = findViewById(R.id.edit_offline_spinner);
 		ArrayAdapter<CharSequence> offlineAdapter = ArrayAdapter.createFromResource(this, R.array.editServerOptions, android.R.layout.simple_spinner_item);
 		offlineAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		offlineSpinner.setAdapter(offlineAdapter);

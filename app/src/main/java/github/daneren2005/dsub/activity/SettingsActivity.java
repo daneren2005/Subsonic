@@ -52,7 +52,7 @@ public class SettingsActivity extends SubsonicActivity {
 			getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, currentFragment, currentFragment.getSupportTag() + "").commit();
 		}
 
-		Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		Toolbar mainToolbar = findViewById(R.id.main_toolbar);
 		setSupportActionBar(mainToolbar);
 	}
 }

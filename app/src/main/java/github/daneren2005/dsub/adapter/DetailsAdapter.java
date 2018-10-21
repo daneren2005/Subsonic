@@ -47,8 +47,8 @@ public class DetailsAdapter extends ArrayAdapter<String> {
 			view = convertView;
 		}
 
-		TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-		TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+		TextView nameView = view.findViewById(R.id.detail_name);
+		TextView detailsView = view.findViewById(R.id.detail_value);
 
 		nameView.setText(headers.get(position));
 

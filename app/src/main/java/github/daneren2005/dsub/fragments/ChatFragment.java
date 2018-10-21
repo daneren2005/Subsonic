@@ -61,15 +61,15 @@ public class ChatFragment extends SubsonicFragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) messageList);
+		outState.putSerializable(Constants.FRAGMENT_LIST, messageList);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.chat, container, false);
 		
-		messageEditText = (EditText) rootView.findViewById(R.id.chat_edittext);
-		sendButton = (ImageButton) rootView.findViewById(R.id.chat_send);
+		messageEditText = rootView.findViewById(R.id.chat_edittext);
+		sendButton = rootView.findViewById(R.id.chat_send);
 
 		sendButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -78,7 +78,7 @@ public class ChatFragment extends SubsonicFragment {
 			}
 		});
 
-		chatListView = (ListView) rootView.findViewById(R.id.chat_entries);
+		chatListView = rootView.findViewById(R.id.chat_entries);
 		chatListView.setStackFromBottom(true);
 
 		messageEditText.setImeActionLabel("Send", KeyEvent.KEYCODE_ENTER);
@@ -125,7 +125,7 @@ public class ChatFragment extends SubsonicFragment {
 		}
 		setTitle(R.string.button_bar_chat);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout = rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
 		setupScrollList(chatListView);
 

@@ -80,10 +80,10 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 		rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 		setTitle(R.string.search_title);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout = rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setEnabled(false);
 
-		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
+		recyclerView = rootView.findViewById(R.id.fragment_recycler);
 		setupLayoutManager(recyclerView, largeAlbums);
 
 		registerForContextMenu(recyclerView);
