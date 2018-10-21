@@ -102,13 +102,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private boolean drawerIdle = true;
 	private boolean destroyed = false;
 	private boolean finished = false;
-	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
+	protected final List<SubsonicFragment> backStack = new ArrayList<>();
 	protected SubsonicFragment currentFragment;
 	protected View primaryContainer;
 	protected View secondaryContainer;
-	protected boolean tv = false;
+	protected final boolean tv = false;
 	protected boolean touchscreen = true;
-	protected Handler handler = new Handler();
+	protected final Handler handler = new Handler();
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
 	ViewGroup rootView;

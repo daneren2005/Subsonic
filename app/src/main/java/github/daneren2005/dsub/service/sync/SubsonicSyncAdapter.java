@@ -49,9 +49,9 @@ import github.daneren2005.dsub.util.Util;
 
 public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	private static final String TAG = SubsonicSyncAdapter.class.getSimpleName();
-	protected CachedMusicService musicService = new CachedMusicService(new RESTMusicService());
+	protected final CachedMusicService musicService = new CachedMusicService(new RESTMusicService());
 	protected boolean tagBrowsing;
-	private Context context;
+	private final Context context;
 
 	public SubsonicSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);

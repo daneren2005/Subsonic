@@ -25,7 +25,7 @@ import github.daneren2005.dsub.view.UpdateView;
 import java.util.List;
 
 public class GenreAdapter extends SectionAdapter<Genre> implements FastScroller.BubbleTextGetter{
-	public static int VIEW_TYPE_GENRE = 1;
+	public static final int VIEW_TYPE_GENRE = 1;
 
 	public GenreAdapter(Context context, List<Genre> genres, OnItemClickedListener listener) {
         super(context, genres);

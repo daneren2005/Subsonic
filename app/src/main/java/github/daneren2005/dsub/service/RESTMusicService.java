@@ -102,7 +102,7 @@ public class RESTMusicService implements MusicService {
     private static final long REDIRECTION_CHECK_INTERVAL_MILLIS = 60L * 60L * 1000L;
 
 	private SSLSocketFactory sslSocketFactory;
-	private HostnameVerifier selfSignedHostnameVerifier;
+	private final HostnameVerifier selfSignedHostnameVerifier;
     private long redirectionLastChecked;
     private int redirectionNetworkType = -1;
     private String redirectFrom;

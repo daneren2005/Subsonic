@@ -43,16 +43,16 @@ import java.io.File;
 public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private static final String TAG = SongView.class.getSimpleName();
 
-	private TextView trackTextView;
-	private TextView titleTextView;
+	private final TextView trackTextView;
+	private final TextView titleTextView;
 	private TextView playingTextView;
-	private TextView artistTextView;
-	private TextView durationTextView;
-	private TextView statusTextView;
-	private ImageView statusImageView;
-	private ImageView bookmarkButton;
-	private ImageView playedButton;
-	private View bottomRowView;
+	private final TextView artistTextView;
+	private final TextView durationTextView;
+	private final TextView statusTextView;
+	private final ImageView statusImageView;
+	private final ImageView bookmarkButton;
+	private final ImageView playedButton;
+	private final View bottomRowView;
 
 	private DownloadService downloadService;
 	private long revision = -1;

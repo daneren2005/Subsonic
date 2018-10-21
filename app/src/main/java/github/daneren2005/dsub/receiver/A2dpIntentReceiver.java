@@ -8,7 +8,7 @@ import github.daneren2005.dsub.service.DownloadService;
 
 public class A2dpIntentReceiver extends BroadcastReceiver {
 	private static final String PLAYSTATUS_RESPONSE = "com.android.music.playstatusresponse";
-	private String TAG = A2dpIntentReceiver.class.getSimpleName();
+	private final String TAG = A2dpIntentReceiver.class.getSimpleName();
 
 	@Override
 	public void onReceive(Context context, Intent intent) {

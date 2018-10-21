@@ -38,7 +38,7 @@ import github.daneren2005.dsub.util.Util;
  */
 
 public class StarredSyncAdapter extends SubsonicSyncAdapter {
-	private static String TAG = StarredSyncAdapter.class.getSimpleName();
+	private static final String TAG = StarredSyncAdapter.class.getSimpleName();
 
 	public StarredSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);

@@ -34,7 +34,7 @@ import github.daneren2005.dsub.R;
 
 public class CacheLocationPreference extends EditTextPreference {
 	private static final String TAG = CacheLocationPreference.class.getSimpleName();
-	private Context context;
+	private final Context context;
 
 	public CacheLocationPreference(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);

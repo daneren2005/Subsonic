@@ -42,7 +42,7 @@ import github.daneren2005.dsub.util.Util;
  */
 
 public class PodcastSyncAdapter extends SubsonicSyncAdapter {
-	private static String TAG = PodcastSyncAdapter.class.getSimpleName();
+	private static final String TAG = PodcastSyncAdapter.class.getSimpleName();
 
 	public PodcastSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);

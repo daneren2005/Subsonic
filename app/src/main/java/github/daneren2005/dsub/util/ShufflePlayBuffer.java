@@ -42,14 +42,14 @@ public class ShufflePlayBuffer {
 	private static final String CACHE_FILENAME = "shuffleBuffer.ser";
 
 	private ScheduledExecutorService executorService;
-	private Runnable runnable;
+	private final Runnable runnable;
 	private boolean firstRun = true;
 	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<>();
 	private int lastCount = -1;
-	private DownloadService context;
+	private final DownloadService context;
 	private boolean awaitingResults = false;
 	private int capacity;
-	private int refillThreshold;
+	private final int refillThreshold;
 
 	private SharedPreferences.OnSharedPreferenceChangeListener listener;
 	private int currentServer;

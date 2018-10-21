@@ -1351,7 +1351,7 @@ public class CachedMusicService implements MusicService {
   		}
   	}
   	private abstract class UserUpdater extends SerializeUpdater<User> {
-  		String username;
+  		final String username;
   		
   		public UserUpdater(Context context, String username) {
   			super(context, "users");
@@ -1364,7 +1364,7 @@ public class CachedMusicService implements MusicService {
   		}
   	}
 	private abstract class PlaylistUpdater extends SerializeUpdater<Playlist> {
-		String id;
+		final String id;
 
 		public PlaylistUpdater(Context context, String id) {
 			super(context, "playlist");
@@ -1401,7 +1401,7 @@ public class CachedMusicService implements MusicService {
 		}
 	}
 	private abstract class PlaylistDirectoryUpdater {
-		Context context;
+		final Context context;
 		
 		public PlaylistDirectoryUpdater(Context context) {
 			this.context = context;
@@ -1433,8 +1433,8 @@ public class CachedMusicService implements MusicService {
 		}
 	}
 	private abstract class GenericEntryUpdater {
-		Context context;
-		List<Entry> entries;
+		final Context context;
+		final List<Entry> entries;
 		
 		public GenericEntryUpdater(Context context, Entry entry) {
 			this.context = context;

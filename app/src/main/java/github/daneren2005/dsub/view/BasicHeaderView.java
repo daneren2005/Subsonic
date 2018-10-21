@@ -22,7 +22,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 
 public class BasicHeaderView extends UpdateView<String> {
-	TextView nameView;
+	final TextView nameView;
 
 	public BasicHeaderView(Context context) {
 		this(context, R.layout.basic_header);

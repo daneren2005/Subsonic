@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 	
 	private final SubsonicActivity activity;
-	private ArrayList<ChatMessage> messages;
+	private final ArrayList<ChatMessage> messages;
 	private final ImageLoader imageLoader;
 	
     private static final String phoneRegex = "1?\\W*([2-9][0-8][0-9])\\W*([2-9][0-9]{2})\\W*([0-9]{4})"; //you can just place your support phone here

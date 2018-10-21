@@ -37,11 +37,11 @@ import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class ArtistAdapter extends SectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
-	public static int VIEW_TYPE_SONG = 3;
-	public static int VIEW_TYPE_ARTIST = 4;
+	public static final int VIEW_TYPE_SONG = 3;
+	public static final int VIEW_TYPE_ARTIST = 4;
 
-	private List<MusicFolder> musicFolders;
-	private OnMusicFolderChanged onMusicFolderChanged;
+	private final List<MusicFolder> musicFolders;
+	private final OnMusicFolderChanged onMusicFolderChanged;
 
 	public ArtistAdapter(Context context, List<Serializable> artists, OnItemClickedListener listener) {
 		this(context, artists, null, listener, null);

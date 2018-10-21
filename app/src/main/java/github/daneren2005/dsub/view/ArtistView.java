@@ -37,7 +37,7 @@ public class ArtistView extends UpdateView<Artist> {
 	private static final String TAG = ArtistView.class.getSimpleName();
 
 	private File file;
-    private TextView titleView;
+    private final TextView titleView;
 
     public ArtistView(Context context) {
         super(context);

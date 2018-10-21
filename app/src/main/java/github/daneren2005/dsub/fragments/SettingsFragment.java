@@ -778,13 +778,13 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	}
 
 	private class ServerSettings {
-		private int instance;
-		private EditTextPreference serverName;
-		private EditTextPreference serverUrl;
-		private EditTextPreference serverLocalNetworkSSID;
-		private EditTextPreference serverInternalUrl;
-		private EditTextPreference username;
-		private PreferenceScreen screen;
+		private final int instance;
+		private final EditTextPreference serverName;
+		private final EditTextPreference serverUrl;
+		private final EditTextPreference serverLocalNetworkSSID;
+		private final EditTextPreference serverInternalUrl;
+		private final EditTextPreference username;
+		private final PreferenceScreen screen;
 
 		private ServerSettings(int instance) {
 			this.instance = instance;

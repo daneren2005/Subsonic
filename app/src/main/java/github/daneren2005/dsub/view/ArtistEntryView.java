@@ -36,7 +36,7 @@ public class ArtistEntryView extends UpdateView<MusicDirectory.Entry> {
 	private static final String TAG = ArtistEntryView.class.getSimpleName();
 
 	private File file;
-    private TextView titleView;
+    private final TextView titleView;
 
     public ArtistEntryView(Context context) {
         super(context);

@@ -33,8 +33,8 @@ public class PodcastChannelView extends UpdateView<PodcastChannel> {
 	private static final String TAG = PodcastChannelView.class.getSimpleName();
 
 	private File file;
-	private TextView titleView;
-	private ImageLoader imageLoader;
+	private final TextView titleView;
+	private final ImageLoader imageLoader;
 
 	public PodcastChannelView(Context context) {
 		this(context, null, false);

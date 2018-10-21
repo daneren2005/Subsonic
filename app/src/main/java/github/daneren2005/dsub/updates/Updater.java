@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class Updater {
 	protected String TAG = Updater.class.getSimpleName();
-	protected int version;
+	protected final int version;
 	protected Context context;
 	
 	public Updater(int version) {

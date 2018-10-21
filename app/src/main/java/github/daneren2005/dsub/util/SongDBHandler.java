@@ -43,7 +43,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public static final String SONGS_LAST_PLAYED = "lastPlayed";
 	public static final String SONGS_LAST_COMPLETED = "lastCompleted";
 
-	private Context context;
+	private final Context context;
 
 	private SongDBHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

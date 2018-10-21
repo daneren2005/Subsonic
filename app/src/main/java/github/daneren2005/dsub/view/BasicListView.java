@@ -23,7 +23,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 
 public class BasicListView extends UpdateView<String> {
-	private TextView titleView;
+	private final TextView titleView;
 
 	public BasicListView(Context context) {
 		super(context, false);

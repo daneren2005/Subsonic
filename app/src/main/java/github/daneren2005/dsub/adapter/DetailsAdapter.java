@@ -28,8 +28,8 @@ import java.util.List;
 import github.daneren2005.dsub.R;
 
 public class DetailsAdapter extends ArrayAdapter<String> {
-	private List<String> headers;
-	private List<String> details;
+	private final List<String> headers;
+	private final List<String> details;
 
 	public DetailsAdapter(Context context, int layout, List<String> headers, List<String> details) {
 		super(context, layout, headers);

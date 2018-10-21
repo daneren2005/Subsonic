@@ -53,7 +53,7 @@ public class User implements Serializable {
 	private String password;
 	private String email;
 
-	private List<Setting> settings = new ArrayList<Setting>();
+	private final List<Setting> settings = new ArrayList<>();
 	private List<Setting> musicFolders;
 
 	public User() {

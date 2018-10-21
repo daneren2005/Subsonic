@@ -63,14 +63,14 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	private static final String TAG = DLNARouteProvider.class.getSimpleName();
 	public static final String CATEGORY_DLNA = "github.daneren2005.dsub.DLNA";
 
-	private DownloadService downloadService;
+	private final DownloadService downloadService;
 	private RemoteController controller;
 
-	private HashMap<String, DLNADevice> devices = new HashMap<String, DLNADevice>();
-	private List<String> adding = new ArrayList<String>();
-	private List<String> removing = new ArrayList<String>();
+	private final HashMap<String, DLNADevice> devices = new HashMap<>();
+	private final List<String> adding = new ArrayList<>();
+	private final List<String> removing = new ArrayList<>();
 	private AndroidUpnpService dlnaService;
-	private ServiceConnection dlnaServiceConnection;
+	private final ServiceConnection dlnaServiceConnection;
 	private RegistryListener registryListener;
 	private boolean searchOnConnect = false;
 
@@ -320,7 +320,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	}
 
 	private class DLNARouteController extends RouteController {
-		private DLNADevice device;
+		private final DLNADevice device;
 
 		public DLNARouteController(DLNADevice device) {
 			this.device = device;
@@ -374,7 +374,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		final private static java.util.logging.Logger log = java.util.logging.Logger.getLogger("Jetty");
 
 		public static boolean __isIgnoredEnabled = false;
-		public String _name;
+		public final String _name;
 
 		public JettyAndroidLog() {
 			this (JettyAndroidLog.class.getName());

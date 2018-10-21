@@ -34,8 +34,8 @@ import github.daneren2005.dsub.util.SyncUtil;
 public class PlaylistView extends UpdateView<Playlist> {
 	private static final String TAG = PlaylistView.class.getSimpleName();
 
-	private TextView titleView;
-	private ImageLoader imageLoader;
+	private final TextView titleView;
+	private final ImageLoader imageLoader;
 
 	public PlaylistView(Context context, ImageLoader imageLoader, boolean largeCell) {
 		super(context);

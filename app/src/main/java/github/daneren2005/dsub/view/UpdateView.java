@@ -312,7 +312,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 
 	public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
 		private UpdateView updateView;
-		private View view;
+		private final View view;
 		private T item;
 
 		public UpdateViewHolder(UpdateView itemView) {

@@ -35,10 +35,10 @@ import github.daneren2005.serverproxy.WebProxy;
 
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();
-	protected DownloadService downloadService;
+	protected final DownloadService downloadService;
 	protected boolean nextSupported = false;
 	protected ServerProxy proxy;
-	protected String rootLocation = "";
+	protected final String rootLocation;
 
 	public RemoteController(DownloadService downloadService) {
 		this.downloadService = downloadService;

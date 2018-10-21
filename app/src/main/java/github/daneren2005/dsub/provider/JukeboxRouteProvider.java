@@ -40,7 +40,7 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 	private RemoteController controller;
 	private static final int MAX_VOLUME = 10;
 
-	private DownloadService downloadService;
+	private final DownloadService downloadService;
 
 	public JukeboxRouteProvider(Context context) {
 		super(context);
@@ -79,7 +79,7 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 	}
 
 	private class JukeboxRouteController extends RouteController {
-		private DownloadService downloadService;
+		private final DownloadService downloadService;
 
 		public JukeboxRouteController(DownloadService downloadService) {
 			this.downloadService = downloadService;

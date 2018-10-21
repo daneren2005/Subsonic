@@ -26,7 +26,7 @@ import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.view.UserView;
 
 public class UserAdapter extends SectionAdapter<User> {
-	public static int VIEW_TYPE_USER = 1;
+	public static final int VIEW_TYPE_USER = 1;
 
 	private final ImageLoader imageLoader;
 

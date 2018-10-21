@@ -26,10 +26,10 @@ import github.daneren2005.dsub.view.PlaylistView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScroller.BubbleTextGetter {
-	public static int VIEW_TYPE_PLAYLIST = 1;
+	public static final int VIEW_TYPE_PLAYLIST = 1;
 
-	private ImageLoader imageLoader;
-	private boolean largeCell;
+	private final ImageLoader imageLoader;
+	private final boolean largeCell;
 
 	public PlaylistAdapter(Context context, List<Playlist> playlists, ImageLoader imageLoader, boolean largeCell, OnItemClickedListener listener) {
 		super(context, playlists);

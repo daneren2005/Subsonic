@@ -101,10 +101,10 @@ public final class Util {
     private static DecimalFormat MEGA_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat KILO_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
-	private static SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
-	private static SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
-	private static SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
-	private static int CURRENT_YEAR = new Date().getYear();
+	private static final SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
+	private static final SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
+	private static final SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
+	private static final int CURRENT_YEAR = new Date().getYear();
 
     public static final String EVENT_META_CHANGED = "github.daneren2005.dsub.EVENT_META_CHANGED";
     public static final String EVENT_PLAYSTATE_CHANGED = "github.daneren2005.dsub.EVENT_PLAYSTATE_CHANGED";
@@ -122,7 +122,7 @@ public final class Util {
 
     private static Toast toast;
 	// private static Map<Integer, Pair<String, String>> tokens = new HashMap<>();
-	private static SparseArray<Pair<String, String>> tokens = new SparseArray<>();
+	private static final SparseArray<Pair<String, String>> tokens = new SparseArray<>();
 	private static Random random;
 
     private Util() {

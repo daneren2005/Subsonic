@@ -34,7 +34,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class EntryInfiniteGridAdapter extends EntryGridAdapter {
-	public static int VIEW_TYPE_LOADING = 4;
+	public static final int VIEW_TYPE_LOADING = 4;
 
 	private String type;
 	private String extra;

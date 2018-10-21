@@ -38,7 +38,7 @@ import github.daneren2005.dsub.util.Util;
  */
 
 public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
-	private static String TAG = MostRecentSyncAdapter.class.getSimpleName();
+	private static final String TAG = MostRecentSyncAdapter.class.getSimpleName();
 
 	public MostRecentSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);

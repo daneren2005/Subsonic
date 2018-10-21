@@ -50,7 +50,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 	private ListView mList;
 	private PreferenceManager mPreferenceManager;
 
-	private Handler mHandler = new Handler() {
+	private final Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {

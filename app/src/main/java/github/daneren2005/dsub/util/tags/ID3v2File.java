@@ -25,16 +25,16 @@ import java.util.Locale;
 
 
 public class ID3v2File extends Common {
-	private static int ID3_ENC_LATIN   = 0x00;
-	private static int ID3_ENC_UTF16LE = 0x01;
-	private static int ID3_ENC_UTF16BE = 0x02;
-	private static int ID3_ENC_UTF8    = 0x03;
+	private static final int ID3_ENC_LATIN   = 0x00;
+	private static final int ID3_ENC_UTF16LE = 0x01;
+	private static final int ID3_ENC_UTF16BE = 0x02;
+	private static final int ID3_ENC_UTF8    = 0x03;
 	
 	public ID3v2File() {
 	}
 	
 	public HashMap getTags(RandomAccessFile s) throws IOException {
-		HashMap tags = new HashMap();
+		HashMap tags;
 		
 		final int v2hdr_len = 10;
 		byte[] v2hdr = new byte[v2hdr_len];

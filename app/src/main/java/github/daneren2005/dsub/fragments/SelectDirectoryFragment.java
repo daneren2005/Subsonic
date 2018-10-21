@@ -584,7 +584,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	private abstract class LoadTask extends TabBackgroundTask<Pair<MusicDirectory, Boolean>> {
-		private boolean refresh;
+		private final boolean refresh;
 
 		public LoadTask(boolean refresh) {
 			super(SelectDirectoryFragment.this);

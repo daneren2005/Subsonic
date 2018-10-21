@@ -66,7 +66,7 @@ public class DownloadServiceLifecycleSupport {
 	private BroadcastReceiver ejectEventReceiver;
 	private PhoneStateListener phoneStateListener;
 	private boolean externalStorageAvailable= true;
-	private ReentrantLock lock = new ReentrantLock();
+	private final ReentrantLock lock = new ReentrantLock();
 	private final AtomicBoolean setup = new AtomicBoolean(false);
 	private long lastPressTime = 0;
 	private SilentBackgroundTask<Void> currentSavePlayQueueTask = null;
@@ -75,7 +75,7 @@ public class DownloadServiceLifecycleSupport {
 	/**
 	 * This receiver manages the intent that could come from other applications.
 	 */
-	private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
+	private final BroadcastReceiver intentReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 			eventHandler.post(new Runnable() {

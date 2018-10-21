@@ -83,10 +83,10 @@ import github.daneren2005.dsub.view.ChangeLog;
  * Created by Scott on 10/14/13.
  */
 public class SubsonicFragmentActivity extends SubsonicActivity implements DownloadService.OnSongChangedListener {
-	private static String TAG = SubsonicFragmentActivity.class.getSimpleName();
+	private static final String TAG = SubsonicFragmentActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
 	private static boolean sessionInitialized = false;
-	private static long ALLOWED_SKEW = 30000L;
+	private static final long ALLOWED_SKEW = 30000L;
 
 	private SlidingUpPanelLayout slideUpPanel;
 	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;

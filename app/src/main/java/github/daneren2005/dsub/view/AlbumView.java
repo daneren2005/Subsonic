@@ -34,8 +34,8 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private static final String TAG = AlbumView.class.getSimpleName();
 
 	private File file;
-	private TextView titleView;
-	private TextView artistView;
+	private final TextView titleView;
+	private final TextView artistView;
 	private boolean showArtist = true;
 	private String coverArtId;
 

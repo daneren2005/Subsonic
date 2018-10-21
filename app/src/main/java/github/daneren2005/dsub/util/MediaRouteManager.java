@@ -39,11 +39,11 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	private static final String TAG = MediaRouteManager.class.getSimpleName();
 	private static boolean castAvailable = false;
 
-	private DownloadService downloadService;
-	private MediaRouter router;
+	private final DownloadService downloadService;
+	private final MediaRouter router;
 	private MediaRouteSelector selector;
-	private List<MediaRouteProvider> providers = new ArrayList<MediaRouteProvider>();
-	private List<MediaRouteProvider> onlineProviders = new ArrayList<MediaRouteProvider>();
+	private final List<MediaRouteProvider> providers = new ArrayList<>();
+	private final List<MediaRouteProvider> onlineProviders = new ArrayList<>();
 	private DLNARouteProvider dlnaProvider;
 
 	public MediaRouteManager(DownloadService downloadService) {

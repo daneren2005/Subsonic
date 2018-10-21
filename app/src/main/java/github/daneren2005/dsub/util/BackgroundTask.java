@@ -45,16 +45,16 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     private static final String TAG = BackgroundTask.class.getSimpleName();
 
     private final Context context;
-	protected AtomicBoolean cancelled =  new AtomicBoolean(false);
+	protected final AtomicBoolean cancelled =  new AtomicBoolean(false);
 	protected OnCancelListener cancelListener;
 	protected Runnable onCompletionListener = null;
 	protected Task task;
 
 	private static final int DEFAULT_CONCURRENCY = 8;
 	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>());
-	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<BackgroundTask.Task>(10);
+	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<>(10);
 	private static Handler handler = null;
-	private static AtomicInteger currentlyRunning = new AtomicInteger(0);
+	private static final AtomicInteger currentlyRunning = new AtomicInteger(0);
 	static {
 		try {
 			handler = new Handler(Looper.getMainLooper());
@@ -192,7 +192,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
 	protected class Task {
 		private Thread thread;
-		private AtomicBoolean taskStart = new AtomicBoolean(false);
+		private final AtomicBoolean taskStart = new AtomicBoolean(false);
 
 		private void execute() throws Exception {
 			// Don't run if cancelled already

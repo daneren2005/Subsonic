@@ -74,8 +74,8 @@ public class DLNAController extends RemoteController {
 	private static final long SEARCH_UPDATE_INTERVAL_SECONDS = 10L * 60L * 1000L;
 	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 3000L;
 
-	DLNADevice device;
-	ControlPoint controlPoint;
+	final DLNADevice device;
+	final ControlPoint controlPoint;
 	SubscriptionCallback callback;
 	boolean supportsSeek = false;
 	boolean supportsSetupNext = false;
@@ -88,7 +88,7 @@ public class DLNAController extends RemoteController {
 	DownloadFile nextPlaying;
 	boolean running = true;
 	boolean hasDuration = false;
-	Runnable searchDLNA = new Runnable() {
+	final Runnable searchDLNA = new Runnable() {
 		@Override
 		public void run() {
 			if(controlPoint == null || !running) {

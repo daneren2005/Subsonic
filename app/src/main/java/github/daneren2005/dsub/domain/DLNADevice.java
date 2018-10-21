@@ -29,11 +29,11 @@ import org.fourthline.cling.model.meta.Device;
  */
 public class DLNADevice implements Parcelable {
 	public Device renderer;
-	public String id;
-	public String name;
-	public String description;
+	public final String id;
+	public final String name;
+	public final String description;
 	public int volume;
-	public int volumeMax;
+	public final int volumeMax;
 
 	public static final Parcelable.Creator<DLNADevice> CREATOR = new Parcelable.Creator<DLNADevice>() {
 		public DLNADevice createFromParcel(Parcel in) {

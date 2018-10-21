@@ -31,7 +31,7 @@ import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements FastScroller.BubbleTextGetter {
-	public static int VIEW_TYPE_DOWNLOAD_FILE = 1;
+	public static final int VIEW_TYPE_DOWNLOAD_FILE = 1;
 
 	public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
 		super(context, entries);

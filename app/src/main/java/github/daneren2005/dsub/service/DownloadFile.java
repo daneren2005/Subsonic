@@ -51,7 +51,7 @@ public class DownloadFile implements BufferFile {
 
     private final MediaStoreService mediaStoreService;
     private DownloadTask downloadTask;
-    private boolean save;
+    private final boolean save;
 	private boolean failedDownload = false;
     private int failed = 0;
     private int bitRate;

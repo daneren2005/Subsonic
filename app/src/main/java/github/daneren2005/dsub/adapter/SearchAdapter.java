@@ -41,8 +41,8 @@ import static github.daneren2005.dsub.adapter.EntryGridAdapter.VIEW_TYPE_ALBUM_L
 import static github.daneren2005.dsub.adapter.EntryGridAdapter.VIEW_TYPE_SONG;
 
 public class SearchAdapter extends ExpandableSectionAdapter<Serializable> {
-	private ImageLoader imageLoader;
-	private boolean largeAlbums;
+	private final ImageLoader imageLoader;
+	private final boolean largeAlbums;
 
 	private static final int MAX_ARTISTS = 10;
 	private static final int MAX_ALBUMS = 4;

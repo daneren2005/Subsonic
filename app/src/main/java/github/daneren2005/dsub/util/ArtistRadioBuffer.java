@@ -32,13 +32,13 @@ public class ArtistRadioBuffer {
 	private static final String TAG = ArtistRadioBuffer.class.getSimpleName();
 
 	private ScheduledExecutorService executorService;
-	private Runnable runnable;
+	private final Runnable runnable;
 	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<>();
 	private int lastCount = -1;
-	private DownloadService context;
+	private final DownloadService context;
 	private boolean awaitingResults = false;
 	private int capacity;
-	private int refillThreshold;
+	private final int refillThreshold;
 
 	private String artistId;
 

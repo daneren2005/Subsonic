@@ -26,8 +26,8 @@ import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.ImageLoader;
 
 public class UserView extends UpdateView2<User, ImageLoader> {
-	private TextView usernameView;
-	private ImageView avatarView;
+	private final TextView usernameView;
+	private final ImageView avatarView;
 
 	public UserView(Context context) {
 		super(context, false);

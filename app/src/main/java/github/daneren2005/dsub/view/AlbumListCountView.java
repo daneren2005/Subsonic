@@ -35,8 +35,8 @@ import github.daneren2005.dsub.util.Util;
 public class AlbumListCountView extends UpdateView2<Integer, Void> {
 	private final String TAG = AlbumListCountView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView countView;
+	private final TextView titleView;
+	private final TextView countView;
 	private int startCount;
 	private int count = 0;
 

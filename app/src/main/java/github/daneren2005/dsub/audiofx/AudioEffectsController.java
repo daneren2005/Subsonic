@@ -25,7 +25,7 @@ public class AudioEffectsController {
     private static final String TAG = AudioEffectsController.class.getSimpleName();
 
     private final Context context;
-	private int audioSessionId = 0;
+	private final int audioSessionId;
 
 	private boolean available = false;
 

@@ -22,7 +22,7 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.InternetRadioStation;
 
 public class InternetRadioStationView extends UpdateView<InternetRadioStation> {
-	private TextView titleView;
+	private final TextView titleView;
 
 	public InternetRadioStationView(Context context) {
 		super(context);

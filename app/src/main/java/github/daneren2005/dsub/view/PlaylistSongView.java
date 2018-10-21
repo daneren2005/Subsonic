@@ -34,8 +34,8 @@ import github.daneren2005.dsub.util.Util;
 public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {
 	private static final String TAG = PlaylistSongView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView countView;
+	private final TextView titleView;
+	private final TextView countView;
 	private int count = 0;
 
 	public PlaylistSongView(Context context) {

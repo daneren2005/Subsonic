@@ -25,7 +25,7 @@ import github.daneren2005.dsub.view.InternetRadioStationView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class InternetRadioStationAdapter extends SectionAdapter<InternetRadioStation> implements FastScroller.BubbleTextGetter {
-	public static int VIEW_TYPE_INTERNET_RADIO_STATION = 1;
+	public static final int VIEW_TYPE_INTERNET_RADIO_STATION = 1;
 
 	public InternetRadioStationAdapter(Context context, List<InternetRadioStation> stations, OnItemClickedListener listener) {
 		super(context, stations);

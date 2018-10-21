@@ -171,7 +171,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	}
 
 	private class UpdateTask extends TabBackgroundTask<List<T>> {
-		private boolean refresh;
+		private final boolean refresh;
 
 		public UpdateTask(SubsonicFragment fragment, boolean refresh) {
 			super(fragment);

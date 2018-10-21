@@ -28,9 +28,9 @@ import github.daneren2005.dsub.domain.Genre;
 public class GenreView extends UpdateView<Genre> {
 	private static final String TAG = GenreView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView songsView;
-	private TextView albumsView;
+	private final TextView titleView;
+	private final TextView songsView;
+	private final TextView albumsView;
 
 	public GenreView(Context context) {
 		super(context, false);

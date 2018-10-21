@@ -25,7 +25,7 @@ import github.daneren2005.dsub.view.ShareView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class ShareAdapter extends SectionAdapter<Share>{
-	public static int VIEW_TYPE_SHARE = 1;
+	public static final int VIEW_TYPE_SHARE = 1;
 
 	public ShareAdapter(Context context, List<Share> shares, OnItemClickedListener listener) {
         super(context, shares);

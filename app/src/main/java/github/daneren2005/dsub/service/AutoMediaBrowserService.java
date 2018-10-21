@@ -63,7 +63,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 	private static final String MUSIC_DIRECTORY_CONTENTS_PREFIX = "mdc-";
 
 	private DownloadService downloadService;
-	private Handler handler = new Handler();
+	private final Handler handler = new Handler();
 
 	@Override
 	public void onCreate() {

@@ -39,8 +39,8 @@ public class PodcastChannelAdapter extends ExpandableSectionAdapter<Serializable
 	public static final int VIEW_TYPE_PODCAST_CELL = 3;
 	public static final int VIEW_TYPE_PODCAST_EPISODE = 4;
 
-	private ImageLoader imageLoader;
-	private boolean largeCell;
+	private final ImageLoader imageLoader;
+	private final boolean largeCell;
 
 	public PodcastChannelAdapter(Context context, List<Serializable> podcasts, ImageLoader imageLoader, OnItemClickedListener listener, boolean largeCell) {
 		super(context, podcasts);

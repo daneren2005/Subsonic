@@ -41,15 +41,15 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	 * The current value.
 	 */
 	private String mValue;
-	private int mMin;
-	private int mMax;
-	private float mStepSize;
+	private final int mMin;
+	private final int mMax;
+	private final float mStepSize;
 	private String mDisplay;
 
 	/**
 	 * Our context (needed for getResources())
 	 */
-	private Context mContext;
+	private final Context mContext;
 
 	/**
 	 * TextView to display current threshold.

@@ -114,7 +114,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean alwaysFullscreen = false;
 	protected boolean alwaysStartFullscreen = false;
 	protected boolean invalidated = false;
-	protected static Random random = new Random();
+	protected static final Random random = new Random();
 	protected GestureDetector gestureScanner;
 	protected Share share;
 	protected boolean artist = false;

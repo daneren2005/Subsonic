@@ -671,8 +671,8 @@ public class MusicDirectory implements Serializable {
 	}
 	
 	public static class EntryComparator implements Comparator<Entry> {
-		private boolean byYear;
-		private Collator collator;
+		private final boolean byYear;
+		private final Collator collator;
 		
 		public EntryComparator(boolean byYear) {
 			this.byYear = byYear;
