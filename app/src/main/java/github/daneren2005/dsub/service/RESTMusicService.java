@@ -171,8 +171,8 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public void startRescan(Context context, ProgressListener listener) throws Exception {
-		String startMethod = ServerInfo.isMadsonic(context, getInstance(context)) ? "startRescan" : "startScan";
-		String refreshMethod = null;
+		String startMethod;
+		String refreshMethod;
 		if(ServerInfo.isMadsonic(context, getInstance(context))) {
 			startMethod = "startRescan";
 			refreshMethod = "scanstatus";

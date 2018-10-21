@@ -1457,7 +1457,7 @@ public class DownloadService extends Service {
 
 	public synchronized int getPlayerDuration() {
 		if (playerState != IDLE && playerState != DOWNLOADING && playerState != PlayerState.PREPARING) {
-			int duration = 0;
+			int duration;
 			if(remoteState == LOCAL) {
 				try {
 					duration = mediaPlayer.getDuration();
@@ -1677,7 +1677,7 @@ public class DownloadService extends Service {
 	}
 
 	public EqualizerController getEqualizerController() {
-		EqualizerController controller = null;
+		EqualizerController controller;
 		try {
 			controller = effectsController.getEqualizerController();
 			if(controller.getEqualizer() == null) {

@@ -56,9 +56,9 @@ public class FlacFile extends Common {
 	private int[] parse_metadata_block(RandomAccessFile s, long offset) throws IOException {
 		int[] result   = new int[4];
 		byte[] mb_head = new byte[4];
-		int stop_after = 0;
-		int block_type = 0;
-		int block_size = 0;
+		int stop_after;
+		int block_type;
+		int block_size;
 		
 		s.seek(offset);
 		

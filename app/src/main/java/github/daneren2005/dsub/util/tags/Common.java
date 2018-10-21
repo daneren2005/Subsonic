@@ -65,7 +65,7 @@ public class Common {
 	
 	public HashMap parse_vorbis_comment(RandomAccessFile s, long offset, long payload_len) throws IOException {
 		HashMap tags = new HashMap();
-		int comments   = 0;                // number of found comments 
+		int comments;                      // number of found comments
 		int xoff       = 0;                // offset within 'scratch'
 		int can_read   = (int)(payload_len > MAX_PKT_SIZE ? MAX_PKT_SIZE : payload_len);
 		byte[] scratch = new byte[can_read];

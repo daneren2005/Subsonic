@@ -55,9 +55,9 @@ public class OggFile extends Common {
 		long[] result   = new long[3];               // [header_size, payload_size]
 		byte[] p_header = new byte[OGG_PAGE_SIZE];   // buffer for the page header 
 		byte[] scratch;
-		int bread       = 0;                         // number of bytes read
+		int bread;                                   // number of bytes read
 		int psize       = 0;                         // payload-size
-		int nsegs       = 0;                         // Number of segments
+		int nsegs;                                   // Number of segments
 		
 		s.seek(offset);
 		bread = s.read(p_header);

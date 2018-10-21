@@ -212,7 +212,7 @@ public final class Notifications {
 		}
 
 		// Create actions for media buttons
-		int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
+		int previous = 0, pause, next = 0, close = 0, rewind = 0, fastForward = 0;
 		if (expanded) {
 			pause = R.id.control_pause;
 

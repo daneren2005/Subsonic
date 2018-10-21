@@ -247,7 +247,7 @@ public class OfflineMusicService implements MusicService {
 		List<Entry> albums = new ArrayList<>();
 		List<Entry> songs = new ArrayList<>();
         File root = FileUtil.getMusicDirectory(context);
-		int closeness = 0;
+		int closeness;
         for (File artistFile : FileUtil.listFiles(root)) {
 			String artistName = artistFile.getName();
             if (artistFile.isDirectory()) {

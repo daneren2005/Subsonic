@@ -123,7 +123,7 @@ public class ID3v2File extends Common {
 					rv[1] = txData[1];
 				} else {
 					// Check for replaygain tags just thrown randomly in field
-					int nextStartIndex = 1;
+					int nextStartIndex;
 					int startName = txData[1].toLowerCase(Locale.US).indexOf("replaygain_");
 					ArrayList<String> parts = new ArrayList<>();
 					while(startName != -1) {

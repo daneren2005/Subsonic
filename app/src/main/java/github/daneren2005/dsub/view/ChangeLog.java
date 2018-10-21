@@ -391,7 +391,7 @@ public class ChangeLog {
 		}
 
         for (Integer version : versions) {
-            int key = version.intValue();
+            int key = version;
 
             // Use release information from localized change log and fall back to the master file
             // if necessary.
