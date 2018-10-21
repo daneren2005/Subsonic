@@ -169,7 +169,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				albums = (List<Entry>) args.getSerializable(Constants.FRAGMENT_LIST2);
 
 				if(albums == null) {
-					albums = new ArrayList<Entry>();
+					albums = new ArrayList<>();
 				}
 			}
 		}
@@ -454,7 +454,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				} else {
 					root = share.getMusicDirectory();
 				}
-				List<Entry> songs = new ArrayList<Entry>();
+				List<Entry> songs = new ArrayList<>();
 				getSongsRecursively(root, songs);
 
 				// CachedMusicService is refreshing this data in the background, so will wipe out the songs list from root
@@ -829,7 +829,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 	private List<Integer> getSelectedIndexes() {
 		List<Entry> selected = entryGridAdapter.getSelected();
-		List<Integer> indexes = new ArrayList<Integer>();
+		List<Integer> indexes = new ArrayList<>();
 
 		for(Entry entry: selected) {
 			indexes.add(entries.indexOf(entry));
@@ -1178,8 +1178,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		int songCount = 0;
 
-		Set<String> artists = new HashSet<String>();
-		Set<Integer> years = new HashSet<Integer>();
+		Set<String> artists = new HashSet<>();
+		Set<Integer> years = new HashSet<>();
 		Integer totalDuration = 0;
 		for (Entry entry : entries) {
 			if (!entry.isDirectory()) {

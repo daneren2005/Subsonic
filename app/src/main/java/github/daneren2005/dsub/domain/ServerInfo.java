@@ -36,7 +36,7 @@ public class ServerInfo implements Serializable {
 	public static final int TYPE_SUBSONIC = 1;
 	public static final int TYPE_MADSONIC = 2;
 	public static final int TYPE_AMPACHE = 3;
-	private static final Map<Integer, ServerInfo> SERVERS = new ConcurrentHashMap<Integer, ServerInfo>();
+	private static final Map<Integer, ServerInfo> SERVERS = new ConcurrentHashMap<>();
 	
 	private boolean isLicenseValid;
 	private Version restVersion;

@@ -210,8 +210,8 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        List<String> parameterNames = new ArrayList<String>();
-        List<Object> parameterValues = new ArrayList<Object>();
+        List<String> parameterNames = new ArrayList<>();
+        List<Object> parameterValues = new ArrayList<>();
 
 	if (musicFolderId != null) {
             parameterNames.add("musicFolderId");
@@ -370,8 +370,8 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public void createPlaylist(String id, String name, List<MusicDirectory.Entry> entries, Context context, ProgressListener progressListener) throws Exception {
-        List<String> parameterNames = new LinkedList<String>();
-        List<Object> parameterValues = new LinkedList<Object>();
+        List<String> parameterNames = new LinkedList<>();
+        List<Object> parameterValues = new LinkedList<>();
 
         if (id != null) {
             parameterNames.add("playlistId");
@@ -407,8 +407,8 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public void addToPlaylist(String id, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 		names.add("playlistId");
 		values.add(id);
 		for(MusicDirectory.Entry song: toAdd) {
@@ -426,8 +426,8 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public void removeFromPlaylist(String id, List<Integer> toRemove, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 		names.add("playlistId");
 		values.add(id);
 		for(Integer song: toRemove) {
@@ -445,8 +445,8 @@ public class RESTMusicService implements MusicService {
 	@Override
 	public void overwritePlaylist(String id, String name, int toRemove, List<MusicDirectory.Entry> toAdd, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.8", "Updating playlists is not supported.");
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 		names.add("playlistId");
 		values.add(id);
 		names.add("name");
@@ -512,8 +512,8 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getAlbumList(String type, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 
 		names.add("type");
 		values.add(type);
@@ -555,8 +555,8 @@ public class RESTMusicService implements MusicService {
 	public MusicDirectory getAlbumList(String type, String extra, int size, int offset, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.10.1", "This type of album list is not supported");
 
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 
 		names.add("size");
 		names.add("offset");
@@ -619,8 +619,8 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getSongList(String type, int size, int offset, Context context, ProgressListener progressListener) throws Exception {
-        List<String> names = new ArrayList<String>();
-        List<Object> values = new ArrayList<Object>();
+        List<String> names = new ArrayList<>();
+        List<Object> values = new ArrayList<>();
 
         names.add("size");
         values.add(size);
@@ -657,8 +657,8 @@ public class RESTMusicService implements MusicService {
 	public MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.11", "Artist radio is not supported");
 
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 
 		names.add("id");
 		names.add("count");
@@ -694,8 +694,8 @@ public class RESTMusicService implements MusicService {
 
 	@Override
     public MusicDirectory getStarredList(Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 
 		// Add folder if it was set and is non null
 		int instance = getInstance(context);
@@ -728,8 +728,8 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public MusicDirectory getRandomSongs(int size, String musicFolderId, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
-        List<String> names = new ArrayList<String>();
-        List<Object> values = new ArrayList<Object>();
+        List<String> names = new ArrayList<>();
+        List<Object> values = new ArrayList<>();
 
         names.add("size");
         values.add(size);
@@ -810,7 +810,7 @@ public class RESTMusicService implements MusicService {
     @Override
     public HttpURLConnection getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
         String url = getRestUrl(context, "stream");
-		List<String> parameterNames = new ArrayList<String>();
+		List<String> parameterNames = new ArrayList<>();
 		parameterNames.add("id");
 		parameterNames.add("maxBitRate");
 
@@ -926,12 +926,12 @@ public class RESTMusicService implements MusicService {
     @Override
     public RemoteStatus updateJukeboxPlaylist(List<String> ids, Context context, ProgressListener progressListener) throws Exception {
         int n = ids.size();
-        List<String> parameterNames = new ArrayList<String>(n + 1);
+        List<String> parameterNames = new ArrayList<>(n + 1);
         parameterNames.add("action");
         for (int i = 0; i < n; i++) {
             parameterNames.add("id");
         }
-        List<Object> parameterValues = new ArrayList<Object>();
+        List<Object> parameterValues = new ArrayList<>();
         parameterValues.add("set");
         parameterValues.addAll(ids);
 
@@ -982,8 +982,8 @@ public class RESTMusicService implements MusicService {
     public void setStarred(List<MusicDirectory.Entry> entries, List<MusicDirectory.Entry> artists, List<MusicDirectory.Entry> albums, boolean starred, ProgressListener progressListener, Context context) throws Exception {
     	checkServerVersion(context, "1.8", "Starring is not supported.");
 
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 
 		if(entries != null && entries.size() > 0) {
 			if(entries.size() > 1) {
@@ -1031,8 +1031,8 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public List<Share> createShare(List<String> ids, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
-		List<String> parameterNames = new LinkedList<String>();
-		List<Object> parameterValues = new LinkedList<Object>();
+		List<String> parameterNames = new LinkedList<>();
+		List<Object> parameterValues = new LinkedList<>();
 
 		for (String id : ids) {
 			parameterNames.add("id");
@@ -1062,8 +1062,8 @@ public class RESTMusicService implements MusicService {
 	public void deleteShare(String id, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Shares not supported.");
 
-		List<String> parameterNames = new ArrayList<String>();
-		List<Object> parameterValues = new ArrayList<Object>();
+		List<String> parameterNames = new ArrayList<>();
+		List<Object> parameterValues = new ArrayList<>();
 
 		parameterNames.add("id");
 		parameterValues.add(id);
@@ -1082,8 +1082,8 @@ public class RESTMusicService implements MusicService {
 	public void updateShare(String id, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Updating share not supported.");
 
-		List<String> parameterNames = new ArrayList<String>();
-		List<Object> parameterValues = new ArrayList<Object>();
+		List<String> parameterNames = new ArrayList<>();
+		List<Object> parameterValues = new ArrayList<>();
 
 		parameterNames.add("id");
 		parameterValues.add(id);
@@ -1109,8 +1109,8 @@ public class RESTMusicService implements MusicService {
 	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.2", "Chat not supported.");
 
-		List<String> parameterNames = new ArrayList<String>();
-		List<Object> parameterValues = new ArrayList<Object>();
+		List<String> parameterNames = new ArrayList<>();
+		List<Object> parameterValues = new ArrayList<>();
 
 		parameterNames.add("since");
 		parameterValues.add(since);
@@ -1128,8 +1128,8 @@ public class RESTMusicService implements MusicService {
 	public void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.2", "Chat not supported.");
 
-		List<String> parameterNames = new ArrayList<String>();
-		List<Object> parameterValues = new ArrayList<Object>();
+		List<String> parameterNames = new ArrayList<>();
+		List<Object> parameterValues = new ArrayList<>();
 
 		parameterNames.add("message");
 		parameterValues.add(message);
@@ -1159,8 +1159,8 @@ public class RESTMusicService implements MusicService {
 	public MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Genres not supported.");
 
-		List<String> parameterNames = new ArrayList<String>();
-		List<Object> parameterValues = new ArrayList<Object>();
+		List<String> parameterNames = new ArrayList<>();
+		List<Object> parameterValues = new ArrayList<>();
 
 		parameterNames.add("genre");
 		parameterValues.add(genre);
@@ -1189,8 +1189,8 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getTopTrackSongs(String artist, int size, Context context, ProgressListener progressListener) throws Exception {
-		List<String> parameterNames = new ArrayList<String>();
-		List<Object> parameterValues = new ArrayList<Object>();
+		List<String> parameterNames = new ArrayList<>();
+		List<Object> parameterValues = new ArrayList<>();
 
 		parameterNames.add("artist");
 		parameterValues.add(artist);
@@ -1389,8 +1389,8 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public void createUser(User user, Context context, ProgressListener progressListener) throws Exception {
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 
 		names.add("username");
 		values.add(user.getUsername());
@@ -1425,8 +1425,8 @@ public class RESTMusicService implements MusicService {
 	public void updateUser(User user, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.10", "Updating user is not supported");
 
-		List<String> names = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+		List<String> names = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
 
 		names.add("username");
 		values.add(user.getUsername());
@@ -1547,8 +1547,8 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public void savePlayQueue(List<MusicDirectory.Entry> songs, MusicDirectory.Entry currentPlaying, int position, Context context, ProgressListener progressListener) throws Exception {
-		List<String> parameterNames = new LinkedList<String>();
-		List<Object> parameterValues = new LinkedList<Object>();
+		List<String> parameterNames = new LinkedList<>();
+		List<Object> parameterValues = new LinkedList<>();
 
 		for(MusicDirectory.Entry song: songs) {
 			parameterNames.add("id");

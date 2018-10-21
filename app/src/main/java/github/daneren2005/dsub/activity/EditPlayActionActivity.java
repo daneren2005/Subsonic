@@ -105,7 +105,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 
 					@Override
 					protected void done(final List<Genre> genres) {
-						List<String> names = new ArrayList<String>();
+						List<String> names = new ArrayList<>();
 						String blank = context.getResources().getString(R.string.select_genre_blank);
 						names.add(doNothing);
 						names.add(blank);

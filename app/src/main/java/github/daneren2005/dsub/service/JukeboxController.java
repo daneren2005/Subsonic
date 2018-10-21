@@ -95,7 +95,7 @@ public class JukeboxController extends RemoteController {
 		tasks.remove(Stop.class);
 		tasks.remove(Start.class);
 		
-		List<String> ids = new ArrayList<String>();
+		List<String> ids = new ArrayList<>();
 		for (DownloadFile file : downloadService.getDownloads()) {
 			ids.add(file.getSong().getId());
 		}

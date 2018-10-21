@@ -426,7 +426,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 
 			@Override
 			protected void done(MusicDirectory result) {
-				List<String> existingEpisodes = new ArrayList<String>();
+				List<String> existingEpisodes = new ArrayList<>();
 				for(MusicDirectory.Entry entry: result.getChildren()) {
 					String id = entry.getId();
 					if(id != null) {

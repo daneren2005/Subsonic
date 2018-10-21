@@ -340,7 +340,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void recreateContextMenu(Menu menu) {
-		List<MenuItem> menuItems = new ArrayList<MenuItem>();
+		List<MenuItem> menuItems = new ArrayList<>();
 		for(int i = 0; i < menu.size(); i++) {
 			MenuItem item = menu.getItem(i);
 			if(item.isVisible()) {
@@ -361,7 +361,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(selectedItem instanceof DownloadFile) {
 			entry = ((DownloadFile) selectedItem).getSong();
 		}
-		List<Entry> songs = new ArrayList<Entry>(1);
+		List<Entry> songs = new ArrayList<>(1);
 		songs.add(entry);
 
 		switch (menuItem.getItemId()) {
@@ -794,7 +794,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 						@Override
 						protected void done(final List<Genre> genres) {
-							List<String> names = new ArrayList<String>();
+							List<String> names = new ArrayList<>();
 							String blank = context.getResources().getString(R.string.select_genre_blank);
 							names.add(blank);
 							for(Genre genre: genres) {
@@ -917,7 +917,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					Collections.shuffle(root.getChildren());
 				}
 
-				songs = new LinkedList<Entry>();
+				songs = new LinkedList<>();
 				getSongsRecursively(root, songs);
 
 				if(shuffle && !shuffleByAlbum) {
@@ -963,7 +963,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					Collections.shuffle(albums);
 				}
 
-				songs = new LinkedList<Entry>();
+				songs = new LinkedList<>();
 				MusicDirectory root = new MusicDirectory();
 				root.addChildren(albums);
 				getSongsRecursively(root, songs);
@@ -1578,7 +1578,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		new LoadingTask<List<Share>>(context, true) {
 			@Override
 			protected List<Share> doInBackground() throws Throwable {
-				List<String> ids = new ArrayList<String>(entries.size());
+				List<String> ids = new ArrayList<>(entries.size());
 				for(Entry entry: entries) {
 					ids.add(entry.getId());
 				}
@@ -1682,7 +1682,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		onSongPress(entries, entry, 0, allowPlayAll);
 	}
 	protected void onSongPress(List<Entry> entries, Entry entry, int position, boolean allowPlayAll) {
-		List<Entry> songs = new ArrayList<Entry>();
+		List<Entry> songs = new ArrayList<>();
 
 		String songPressAction = Util.getSongPressAction(context);
 		if("all".equals(songPressAction) && allowPlayAll) {
@@ -1853,7 +1853,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
 						if (getDownloadService() != null) {
-							List<Entry> episodeList = new ArrayList<Entry>(1);
+							List<Entry> episodeList = new ArrayList<>(1);
 							episodeList.add(episode);
 							getDownloadService().delete(episodeList);
 						}

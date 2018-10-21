@@ -67,7 +67,7 @@ import github.daneren2005.dsub.view.ErrorDialog;
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();
 
-	private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<String, ServerSettings>();
+	private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<>();
 	private boolean testingConnection;
 	private ListPreference theme;
 	private ListPreference maxBitrateWifi;

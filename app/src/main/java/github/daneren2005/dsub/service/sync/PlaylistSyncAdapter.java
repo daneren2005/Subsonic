@@ -68,7 +68,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 		}
 
 		ArrayList<SyncSet> playlistList = SyncUtil.getSyncedPlaylists(context, instance);
-		List<String> updated = new ArrayList<String>();
+		List<String> updated = new ArrayList<>();
 		String updatedId = null;
 		boolean removed = false;
 		for(int i = 0; i < playlistList.size(); i++) {
@@ -84,11 +84,11 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 				MusicDirectory playlist = musicService.getPlaylist(true, id, serverName, context, null);
 
 				// Get list of original paths
-				List<String> origPathList = new ArrayList<String>();
+				List<String> origPathList = new ArrayList<>();
 				if(cachedPlaylist.synced != null) {
 					origPathList.addAll(cachedPlaylist.synced);
 				} else {
-					cachedPlaylist.synced = new ArrayList<String>();
+					cachedPlaylist.synced = new ArrayList<>();
 				}
 
 				for(MusicDirectory.Entry entry: playlist.getChildren()) {

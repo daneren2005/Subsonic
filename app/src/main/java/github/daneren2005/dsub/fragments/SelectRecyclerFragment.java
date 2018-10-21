@@ -141,7 +141,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		if(backgroundUpdate) {
 			currentTask.execute();
 		} else {
-			objects = new ArrayList<T>();
+			objects = new ArrayList<>();
 
 			try {
 				objects = getObjects(null, refresh, null);
@@ -182,7 +182,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		public List<T> doInBackground() throws Exception {
 			MusicService musicService = MusicServiceFactory.getMusicService(context);
 
-			objects = new ArrayList<T>();
+			objects = new ArrayList<>();
 
 			try {
 				objects = getObjects(musicService, refresh, this);

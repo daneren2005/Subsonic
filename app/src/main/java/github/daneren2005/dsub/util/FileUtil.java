@@ -380,7 +380,7 @@ public class FileUtil {
 			
 			// Create it if 
 			if(entryLookup == null) {
-				entryLookup = new HashMap<String, MusicDirectory.Entry>();
+				entryLookup = new HashMap<>();
 			}
 		}
 		
@@ -708,10 +708,10 @@ public class FileUtil {
         File[] files = dir.listFiles();
         if (files == null) {
             Log.w(TAG, "Failed to list children for " + dir.getPath());
-            return new TreeSet<File>();
+            return new TreeSet<>();
         }
 
-        return new TreeSet<File>(Arrays.asList(files));
+        return new TreeSet<>(Arrays.asList(files));
     }
 
     public static SortedSet<File> listMediaFiles(File dir) {

@@ -143,7 +143,7 @@ public class CacheCleaner {
     }
 
     private Set<File> findUndeletableFiles() {
-        Set<File> undeletable = new HashSet<File>(5);
+        Set<File> undeletable = new HashSet<>(5);
 
         for (DownloadFile downloadFile : downloadService.getRecentDownloads()) {
             undeletable.add(downloadFile.getPartialFile());
@@ -157,7 +157,7 @@ public class CacheCleaner {
 	private void cleanupCoverArt(Context context) {
 		File dir = FileUtil.getAlbumArtDirectory(context);
 		
-		List<File> files = new ArrayList<File>();
+		List<File> files = new ArrayList<>();
 		long bytesUsed = 0L;
 		for(File file: dir.listFiles()) {
 			if(file.isFile()) {
@@ -202,9 +202,9 @@ public class CacheCleaner {
 			}
 
 			try {
-				List<File> files = new ArrayList<File>();
-				List<File> pinned = new ArrayList<File>();
-				List<File> dirs = new ArrayList<File>();
+				List<File> files = new ArrayList<>();
+				List<File> pinned = new ArrayList<>();
+				List<File> dirs = new ArrayList<>();
 
 				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
 				sortByAscendingModificationTime(files);
@@ -237,9 +237,9 @@ public class CacheCleaner {
 			}
 
 			try {
-				List<File> files = new ArrayList<File>();
-				List<File> pinned = new ArrayList<File>();
-				List<File> dirs = new ArrayList<File>();
+				List<File> files = new ArrayList<>();
+				List<File> pinned = new ArrayList<>();
+				List<File> dirs = new ArrayList<>();
 				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
 
 				long bytesToDelete = getMinimumDelete(files, pinned);

@@ -672,7 +672,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}.execute();
 				return true;
 			case R.id.menu_save_playlist:
-				List<Entry> entries = new LinkedList<Entry>();
+				List<Entry> entries = new LinkedList<>();
 				for (DownloadFile downloadFile : getDownloadService().getSongs()) {
 					entries.add(downloadFile.getSong());
 				}
@@ -693,7 +693,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				displaySongInfo(song.getSong());
 				return true;
 			case R.id.menu_share:
-				songs = new ArrayList<Entry>(1);
+				songs = new ArrayList<>(1);
 				songs.add(song.getSong());
 				createShare(songs);
 				return true;

@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 public class PlayerQueue implements Serializable {
-	public List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
-	public List<MusicDirectory.Entry> toDelete = new ArrayList<MusicDirectory.Entry>();
+	public final List<MusicDirectory.Entry> songs = new ArrayList<>();
+	public final List<MusicDirectory.Entry> toDelete = new ArrayList<>();
 	public int currentPlayingIndex;
 	public int currentPlayingPosition;
 	public boolean renameCurrent = false;

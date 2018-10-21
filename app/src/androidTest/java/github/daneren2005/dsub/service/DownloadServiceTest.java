@@ -298,7 +298,7 @@ public class DownloadServiceTest extends
 		musicEntry.setType(0);
 		musicEntry.setVideo(false);
 
-		List<MusicDirectory.Entry> musicEntries = new LinkedList<MusicDirectory.Entry>();
+		List<MusicDirectory.Entry> musicEntries = new LinkedList<>();
 
 		for (int i = 0; i < size; i++) {
 			musicEntries.add(musicEntry);

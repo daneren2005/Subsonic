@@ -44,7 +44,7 @@ public class GenreParser extends AbstractParser {
 	}
 
     public List<Genre> parse(Reader reader, ProgressListener progressListener) throws Exception {
-        List<Genre> result = new ArrayList<Genre>();
+        List<Genre> result = new ArrayList<>();
         StringReader sr = null;
         
         try {

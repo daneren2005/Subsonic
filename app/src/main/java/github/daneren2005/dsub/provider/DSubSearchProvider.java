@@ -86,7 +86,7 @@ public class DSubSearchProvider extends ContentProvider {
 		}
 		
 		// Add all results into one pot
-		List<Object> results = new ArrayList<Object>();
+		List<Object> results = new ArrayList<>();
 		results.addAll(searchResult.getArtists());
 		results.addAll(searchResult.getAlbums());
 		results.addAll(searchResult.getSongs());

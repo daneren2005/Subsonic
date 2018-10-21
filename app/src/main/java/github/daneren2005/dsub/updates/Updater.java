@@ -46,7 +46,7 @@ public class Updater {
 	
 	public void checkUpdates(Context context) {
 		this.context = context;
-		List<Updater> updaters = new ArrayList<Updater>();
+		List<Updater> updaters = new ArrayList<>();
 		updaters.add(new UpdaterSongPress());
 		updaters.add(new UpdaterNoDLNA());
 		

@@ -285,7 +285,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 					Process logcatProc = null;
 
 					try {
-						List<String> progs = new ArrayList<String>();
+						List<String> progs = new ArrayList<>();
 						progs.add("logcat");
 						progs.add("-v");
 						progs.add("time");

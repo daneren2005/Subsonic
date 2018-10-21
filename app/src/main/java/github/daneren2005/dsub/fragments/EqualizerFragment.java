@@ -52,7 +52,7 @@ public class EqualizerFragment extends SubsonicFragment {
 
 	private static final int MENU_GROUP_PRESET = 100;
 
-	private final Map<Short, SeekBar> bars = new HashMap<Short, SeekBar>();
+	private final Map<Short, SeekBar> bars = new HashMap<>();
 	private SeekBar bassBar;
 	private SeekBar loudnessBar;
 	private EqualizerController equalizerController;

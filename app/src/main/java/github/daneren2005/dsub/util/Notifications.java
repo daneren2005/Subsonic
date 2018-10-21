@@ -60,7 +60,7 @@ public final class Notifications {
 	private static NotificationChannel downloadingChannel;
 	private static NotificationChannel syncChannel;
 
-	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
+	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<>();
 
 	public static void showPlayingNotification(final Context context, final DownloadService downloadService, final Handler handler, MusicDirectory.Entry song) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

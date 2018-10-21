@@ -49,7 +49,7 @@ public class ShareParser extends MusicDirectoryEntryParser {
     public List<Share> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-        List<Share> dir = new ArrayList<Share>();
+        List<Share> dir = new ArrayList<>();
         Share share = null;
         int eventType;
 

@@ -110,7 +110,7 @@ public class AdminFragment extends SelectRecyclerFragment<User> {
 			File file = new File(context.getCacheDir(), cache);
 			file.delete();
 
-			List<User> users = new ArrayList<User>();
+			List<User> users = new ArrayList<>();
 			User user = musicService.getUser(refresh, UserUtil.getCurrentUsername(context), context, listener);
 			if(user != null) {
 				SubsonicFragment fragment = new UserFragment();

@@ -49,7 +49,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
         int eventType;
 		boolean isArtist = false;
 		boolean checkForDuplicates = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_RENAME_DUPLICATES, true);
-		Map<String, Entry> titleMap = new HashMap<String, Entry>();
+		Map<String, Entry> titleMap = new HashMap<>();
         do {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {

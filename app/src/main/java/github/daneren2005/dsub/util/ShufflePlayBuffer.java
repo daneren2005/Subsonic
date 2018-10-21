@@ -44,7 +44,7 @@ public class ShufflePlayBuffer {
 	private ScheduledExecutorService executorService;
 	private Runnable runnable;
 	private boolean firstRun = true;
-	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
+	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<>();
 	private int lastCount = -1;
 	private DownloadService context;
 	private boolean awaitingResults = false;
@@ -85,7 +85,7 @@ public class ShufflePlayBuffer {
 		// Make sure fetcher is running if needed
 		restart();
 
-		List<MusicDirectory.Entry> result = new ArrayList<MusicDirectory.Entry>(size);
+		List<MusicDirectory.Entry> result = new ArrayList<>(size);
 		synchronized (buffer) {
 			boolean removed = false;
 			while (!buffer.isEmpty() && result.size() < size) {

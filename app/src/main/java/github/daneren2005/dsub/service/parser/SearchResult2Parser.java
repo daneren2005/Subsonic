@@ -41,9 +41,9 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
     public SearchResult parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-        List<Artist> artists = new ArrayList<Artist>();
-        List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
-        List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+        List<Artist> artists = new ArrayList<>();
+        List<MusicDirectory.Entry> albums = new ArrayList<>();
+        List<MusicDirectory.Entry> songs = new ArrayList<>();
         int eventType;
         do {
             eventType = nextParseEvent();

@@ -85,7 +85,7 @@ public abstract class RemoteController {
 	}
 
 	protected static class TaskQueue {
-		private final LinkedBlockingQueue<RemoteTask> queue = new LinkedBlockingQueue<RemoteTask>();
+		private final LinkedBlockingQueue<RemoteTask> queue = new LinkedBlockingQueue<>();
 
 		void add(RemoteTask jukeboxTask) {
 			queue.add(jukeboxTask);

@@ -51,7 +51,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 	@Override
 	public void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
 		try {
-			ArrayList<String> syncedList = new ArrayList<String>();
+			ArrayList<String> syncedList = new ArrayList<>();
 			MusicDirectory starredList = musicService.getStarredList(context, null);
 
 			// Pin all the starred stuff

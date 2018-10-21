@@ -39,7 +39,7 @@ public class Share implements Serializable {
     private List<Entry> entries;
     
     public Share() {
-    	entries = new ArrayList<Entry>();
+    	entries = new ArrayList<>();
     }
 
 	public String getName() {

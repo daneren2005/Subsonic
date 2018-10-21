@@ -82,7 +82,7 @@ public class OfflineMusicService implements MusicService {
 
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        List<Artist> artists = new ArrayList<Artist>();
+        List<Artist> artists = new ArrayList<>();
 		List<Entry> entries = new ArrayList<>();
         File root = FileUtil.getMusicDirectory(context);
         for (File file : FileUtil.listFiles(root)) {
@@ -110,7 +110,7 @@ public class OfflineMusicService implements MusicService {
 		MusicDirectory result = new MusicDirectory();
 		result.setName(dir.getName());
 
-		Set<String> names = new HashSet<String>();
+		Set<String> names = new HashSet<>();
 
 		for (File file : FileUtil.listMediaFiles(dir)) {
 			String name = getName(file);
@@ -244,9 +244,9 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
     public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
-		List<Artist> artists = new ArrayList<Artist>();
-		List<Entry> albums = new ArrayList<Entry>();
-		List<Entry> songs = new ArrayList<Entry>();
+		List<Artist> artists = new ArrayList<>();
+		List<Entry> albums = new ArrayList<>();
+		List<Entry> songs = new ArrayList<>();
         File root = FileUtil.getMusicDirectory(context);
 		int closeness = 0;
         for (File artistFile : FileUtil.listFiles(root)) {
@@ -375,7 +375,7 @@ public class OfflineMusicService implements MusicService {
 
     @Override
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        List<Playlist> playlists = new ArrayList<Playlist>();
+        List<Playlist> playlists = new ArrayList<>();
         File root = FileUtil.getPlaylistDirectory(context);
 		String lastServer = null;
 		boolean removeServer = true;
@@ -712,7 +712,7 @@ public class OfflineMusicService implements MusicService {
 	@Override
     public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         File root = FileUtil.getMusicDirectory(context);
-        List<File> children = new LinkedList<File>();
+        List<File> children = new LinkedList<>();
         listFilesRecursively(root, children);
         MusicDirectory result = new MusicDirectory();
 
@@ -734,7 +734,7 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		List<PodcastChannel> channels = new ArrayList<PodcastChannel>();
+		List<PodcastChannel> channels = new ArrayList<>();
 		
 		File dir = FileUtil.getPodcastDirectory(context);
 		String line;

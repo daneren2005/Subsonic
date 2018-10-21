@@ -40,7 +40,7 @@ public class MusicFoldersParser extends AbstractParser {
     public List<MusicFolder> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-        List<MusicFolder> result = new ArrayList<MusicFolder>();
+        List<MusicFolder> result = new ArrayList<>();
         int eventType;
         do {
             eventType = nextParseEvent();

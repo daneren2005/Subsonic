@@ -64,7 +64,7 @@ public class AlbumListCountView extends UpdateView2<Integer, Void> {
 			String recentAddedFile = Util.getCacheName(context, "recent_count");
 			ArrayList<String> recents = FileUtil.deserialize(context, recentAddedFile, ArrayList.class);
 			if (recents == null) {
-				recents = new ArrayList<String>();
+				recents = new ArrayList<>();
 			}
 
 			MusicService musicService = MusicServiceFactory.getMusicService(context);

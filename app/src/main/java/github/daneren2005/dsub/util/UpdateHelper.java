@@ -75,9 +75,9 @@ public final class UpdateHelper {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<Entry> songs = new ArrayList<Entry>();
-				List<Entry> artists = new ArrayList<Entry>();
-				List<Entry> albums = new ArrayList<Entry>();
+				List<Entry> songs = new ArrayList<>();
+				List<Entry> artists = new ArrayList<>();
+				List<Entry> albums = new ArrayList<>();
 				for(Entry entry: entries) {
 					if(entry.isDirectory() && Util.isTagBrowsing(context)) {
 						if(entry.isAlbum()) {

@@ -38,7 +38,7 @@ public class ChatMessageParser extends AbstractParser {
 
     public List<ChatMessage> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
-        List<ChatMessage> result = new ArrayList<ChatMessage>();
+        List<ChatMessage> result = new ArrayList<>();
         int eventType;
         
         do {

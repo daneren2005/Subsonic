@@ -39,7 +39,7 @@ public class UserParser extends AbstractParser {
 
 	public List<User> parse(Reader reader, ProgressListener progressListener) throws Exception {
 		init(reader);
-		List<User> result = new ArrayList<User>();
+		List<User> result = new ArrayList<>();
 		List<MusicFolder> musicFolders = null;
 		User user = null;
 		int eventType;

@@ -54,7 +54,7 @@ public class ChatFragment extends SubsonicFragment {
 
 		if(bundle != null) {
 			List<ChatMessage> abstractList = (List<ChatMessage>) bundle.getSerializable(Constants.FRAGMENT_LIST);
-			messageList = new ArrayList<ChatMessage>(abstractList);
+			messageList = new ArrayList<>(abstractList);
 		}
 	}
 
@@ -111,7 +111,7 @@ public class ChatFragment extends SubsonicFragment {
 		});
 
 		if(messageList == null) {
-			messageList = new ArrayList<ChatMessage>();
+			messageList = new ArrayList<>();
 			refresh(true);
 		} else {
 			for (ChatMessage message : messageList) {

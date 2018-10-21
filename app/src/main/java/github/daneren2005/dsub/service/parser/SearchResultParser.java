@@ -42,7 +42,7 @@ public class SearchResultParser extends MusicDirectoryEntryParser {
     public SearchResult parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-        List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+        List<MusicDirectory.Entry> songs = new ArrayList<>();
         int eventType;
         do {
             eventType = nextParseEvent();

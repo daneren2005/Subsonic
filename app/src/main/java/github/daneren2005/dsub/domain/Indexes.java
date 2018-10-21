@@ -45,7 +45,7 @@ public class Indexes implements Serializable {
         this.lastModified = lastModified;
         this.shortcuts = shortcuts;
         this.artists = artists;
-		this.entries = new ArrayList<MusicDirectory.Entry>();
+		this.entries = new ArrayList<>();
     }
 	public Indexes(long lastModified, List<Artist> shortcuts, List<Artist> artists, List<MusicDirectory.Entry> entries) {
 		this.lastModified = lastModified;
@@ -67,7 +67,7 @@ public class Indexes implements Serializable {
     }
 
 	public void setArtists(List<Artist> artists) {
-		this.shortcuts = new ArrayList<Artist>();
+		this.shortcuts = new ArrayList<>();
 		this.artists.clear();
 		this.artists.addAll(artists);
 	}

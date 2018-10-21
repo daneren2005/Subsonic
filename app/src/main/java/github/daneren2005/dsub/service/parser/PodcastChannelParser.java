@@ -38,7 +38,7 @@ public class PodcastChannelParser extends AbstractParser {
 	public List<PodcastChannel> parse(Reader reader, ProgressListener progressListener) throws Exception {
 		init(reader);
 
-		List<PodcastChannel> channels = new ArrayList<PodcastChannel>();
+		List<PodcastChannel> channels = new ArrayList<>();
 		int eventType;
 		do {
 			eventType = nextParseEvent();

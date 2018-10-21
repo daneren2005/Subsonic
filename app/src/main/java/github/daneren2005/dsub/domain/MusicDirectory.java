@@ -58,7 +58,7 @@ public class MusicDirectory implements Serializable {
     private List<Entry> children;
 
 	public MusicDirectory() {
-		children = new ArrayList<Entry>();
+		children = new ArrayList<>();
 	}
 	public MusicDirectory(List<Entry> children) {
 		this.children = children;
@@ -110,7 +110,7 @@ public class MusicDirectory implements Serializable {
             return children;
         }
 
-        List<Entry> result = new ArrayList<Entry>(children.size());
+        List<Entry> result = new ArrayList<>(children.size());
         for (Entry child : children) {
             if (child != null && child.isDirectory() && includeDirs || !child.isDirectory() && includeFiles) {
                 result.add(child);
@@ -119,7 +119,7 @@ public class MusicDirectory implements Serializable {
         return result;
     }
 	public synchronized List<Entry> getSongs() {
-		List<Entry> result = new ArrayList<Entry>();
+		List<Entry> result = new ArrayList<>();
 		for (Entry child : children) {
 			if (child != null && !child.isDirectory() && !child.isVideo()) {
 				result.add(child);

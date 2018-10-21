@@ -276,7 +276,7 @@ public class DownloadServiceLifecycleSupport {
 			return;
 		}
 
-		final List<DownloadFile> songs = new ArrayList<DownloadFile>(downloadService.getSongs());
+		final List<DownloadFile> songs = new ArrayList<>(downloadService.getSongs());
 		eventHandler.post(new Runnable() {
 			@Override
 			public void run() {

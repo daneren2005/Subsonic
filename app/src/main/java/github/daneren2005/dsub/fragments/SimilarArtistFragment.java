@@ -155,7 +155,7 @@ public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
 					root.shuffleChildren();
 				}
 
-				songs = new LinkedList<MusicDirectory.Entry>();
+				songs = new LinkedList<>();
 				getSongsRecursively(root, songs);
 
 				DownloadService downloadService = getDownloadService();

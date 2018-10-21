@@ -125,7 +125,7 @@ public class ID3v2File extends Common {
 					// Check for replaygain tags just thrown randomly in field
 					int nextStartIndex = 1;
 					int startName = txData[1].toLowerCase(Locale.US).indexOf("replaygain_");
-					ArrayList<String> parts = new ArrayList<String>();
+					ArrayList<String> parts = new ArrayList<>();
 					while(startName != -1) {
 						int endName = txData[1].indexOf((char) 0, startName);
 						if(endName != -1) {

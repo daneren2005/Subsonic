@@ -43,7 +43,7 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
     public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-		List<MusicDirectory.Entry> bookmarks = new ArrayList<MusicDirectory.Entry>();
+		List<MusicDirectory.Entry> bookmarks = new ArrayList<>();
         Bookmark bookmark = null;
         int eventType;
 

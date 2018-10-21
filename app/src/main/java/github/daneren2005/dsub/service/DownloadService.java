@@ -132,17 +132,17 @@ public class DownloadService extends Service {
 	private MediaPlayer nextMediaPlayer;
 	private int audioSessionId;
 	private boolean nextSetup = false;
-	private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
-	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
-	private final List<DownloadFile> toDelete = new ArrayList<DownloadFile>();
+	private final List<DownloadFile> downloadList = new ArrayList<>();
+	private final List<DownloadFile> backgroundDownloadList = new ArrayList<>();
+	private final List<DownloadFile> toDelete = new ArrayList<>();
 	private final Handler handler = new Handler();
 	private Handler mediaPlayerHandler;
 	private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
 	private ShufflePlayBuffer shufflePlayBuffer;
 	private ArtistRadioBuffer artistRadioBuffer;
 
-	private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<MusicDirectory.Entry, DownloadFile>(100);
-	private final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
+	private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<>(100);
+	private final List<DownloadFile> cleanupCandidates = new ArrayList<>();
 	private final Scrobbler scrobbler = new Scrobbler();
 	private RemoteController remoteController;
 	private DownloadFile currentPlaying;
@@ -1071,7 +1071,7 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized List<DownloadFile> getDownloads() {
-		List<DownloadFile> temp = new ArrayList<DownloadFile>();
+		List<DownloadFile> temp = new ArrayList<>();
 		temp.addAll(downloadList);
 		temp.addAll(backgroundDownloadList);
 		return temp;
