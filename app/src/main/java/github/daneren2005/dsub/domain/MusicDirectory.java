@@ -635,37 +635,22 @@ public class MusicDirectory implements Serializable {
         }
 
         public byte[] toByteArray() throws IOException {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ObjectOutput out = null;
-			try {
+			ObjectOutput out;
+			try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
 				out = new ObjectOutputStream(bos);
 				out.writeObject(this);
 				out.flush();
 				return bos.toByteArray();
-			} finally {
-				try {
-					bos.close();
-				} catch (IOException ex) {
-					// ignore close exception
-				}
 			}
+			// ignore close exception
 		}
 
 		public static Entry fromByteArray(byte[] byteArray) throws IOException, ClassNotFoundException {
 			ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
-			ObjectInput in = null;
-			try {
-				in = new ObjectInputStream(bis);
+			try (ObjectInput in = new ObjectInputStream(bis)) {
 				return (Entry) in.readObject();
-			} finally {
-				try {
-					if (in != null) {
-						in.close();
-					}
-				} catch (IOException ex) {
-					// ignore close exception
-				}
 			}
+			// ignore close exception
 		}
 	}
 	

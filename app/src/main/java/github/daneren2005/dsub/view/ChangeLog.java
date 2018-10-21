@@ -370,11 +370,8 @@ public class ChangeLog {
 
         // Read master change log from xml/changelog.xml
 		SparseArray<ReleaseItem> changelog;
-        XmlResourceParser resXml = mContext.getResources().getXml(R.xml.changelog);
-        try {
-			changelog = readChangeLog(resXml, full);
-        } finally {
-            resXml.close();
+        try (XmlResourceParser resXml = mContext.getResources().getXml(R.xml.changelog)) {
+            changelog = readChangeLog(resXml, full);
         }
 
         String versionFormat = resources.getString(R.string.changelog_version_format);
@@ -448,9 +445,7 @@ public class ChangeLog {
                 }
                 eventType = xml.next();
             }
-        } catch (XmlPullParserException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
         }
 
