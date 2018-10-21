@@ -108,8 +108,7 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 			return new ArrayList<>();
 		}
 
-		List<DownloadFile> songList = new ArrayList<DownloadFile>();
-		songList.addAll(downloadService.getBackgroundDownloads());
+		List<DownloadFile> songList = new ArrayList<>(downloadService.getBackgroundDownloads());
 		currentRevision = downloadService.getDownloadListUpdateRevision();
 		return songList;
 	}

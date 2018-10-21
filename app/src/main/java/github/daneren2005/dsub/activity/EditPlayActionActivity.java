@@ -116,7 +116,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 
 						AlertDialog.Builder builder = new AlertDialog.Builder(context);
 						builder.setTitle(R.string.shuffle_pick_genre)
-								.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+								.setItems(names.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int which) {
 										if(which == 1) {
 											genreButton.setText("");

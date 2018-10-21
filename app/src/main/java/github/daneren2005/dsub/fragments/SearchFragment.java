@@ -2,7 +2,7 @@ package github.daneren2005.dsub.fragments;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -252,7 +252,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 			if (!append) {
 				downloadService.clear();
 			}
-			downloadService.download(Arrays.asList(song), save, false, playNext, false);
+			downloadService.download(Collections.singletonList(song), save, false, playNext, false);
 			if (autoplay) {
 				downloadService.play(downloadService.size() - 1);
 			}

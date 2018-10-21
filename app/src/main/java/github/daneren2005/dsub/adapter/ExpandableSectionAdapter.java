@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -45,7 +45,7 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 		List<List<T>> sections = new ArrayList<>();
 		sections.add(section);
 
-		init(context, Arrays.asList("Section"), sections, Arrays.asList((Integer) null));
+		init(context, Collections.singletonList("Section"), sections, Collections.singletonList((Integer) null));
 	}
 	public ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
 		init(context, headers, sections, null);

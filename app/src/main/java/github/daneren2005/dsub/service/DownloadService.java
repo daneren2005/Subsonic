@@ -421,7 +421,7 @@ public class DownloadService extends Service {
 
 	public synchronized void download(InternetRadioStation station) {
 		clear();
-		download(Arrays.asList((MusicDirectory.Entry) station), false, true, false, false);
+		download(Collections.singletonList((MusicDirectory.Entry) station), false, true, false, false);
 	}
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
 		download(songs, save, autoplay, playNext, shuffle, 0, 0);

@@ -28,7 +28,7 @@ import android.view.View;
 import android.widget.RatingBar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -50,7 +50,7 @@ public final class UpdateHelper {
 	}
 
 	public static void toggleStarred(final Context context, final Entry entry, final OnStarChange onStarChange) {
-		toggleStarred(context, Arrays.asList(entry), onStarChange);
+		toggleStarred(context, Collections.singletonList(entry), onStarChange);
 	}
 
 	public static void toggleStarred(Context context, List<Entry> entries) {
@@ -147,9 +147,9 @@ public final class UpdateHelper {
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					musicService.setStarred(null, Arrays.asList(new Entry(entry)), null, starred, null, context);
+					musicService.setStarred(null, Collections.singletonList(new Entry(entry)), null, starred, null, context);
 				} else {
-					musicService.setStarred(Arrays.asList(new Entry(entry)), null, null, starred, null, context);
+					musicService.setStarred(Collections.singletonList(new Entry(entry)), null, null, starred, null, context);
 				}
 				return null;
 			}

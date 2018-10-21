@@ -49,6 +49,7 @@ import github.daneren2005.dsub.view.UpdateView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable> {
@@ -239,7 +240,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 				return;
 			}
 
-			onSongPress(Arrays.asList((MusicDirectory.Entry) episode), episode, false);
+			onSongPress(Collections.singletonList((MusicDirectory.Entry) episode), episode, false);
 		}
 	}
 

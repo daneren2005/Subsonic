@@ -196,7 +196,6 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 			items.addAll(entries);
 		} else {
 			List<Artist> artists = new ArrayList<>();
-			items = new ArrayList<>();
 			MusicDirectory dir = musicService.getMusicDirectory(groupId, groupName, refresh, context, listener);
 			for(Entry entry: dir.getChildren(true, false)) {
 				Artist artist = new Artist();
@@ -208,12 +207,11 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 
 			Indexes indexes = new Indexes(0, new ArrayList<Artist>(), artists);
 			indexes.sortChildren(context);
+			items = new ArrayList();
 			items.addAll(indexes.getArtists());
 
 			entries = dir.getChildren(false, true);
-			for(Entry entry: entries) {
-				items.add(entry);
-			}
+			items.addAll(entries);
 		}
 		
 		return items;

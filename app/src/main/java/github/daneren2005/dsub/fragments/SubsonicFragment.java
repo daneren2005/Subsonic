@@ -804,7 +804,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 							AlertDialog.Builder builder = new AlertDialog.Builder(context);
 							builder.setTitle(R.string.shuffle_pick_genre)
-									.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+									.setItems(names.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
 										public void onClick(DialogInterface dialog, int which) {
 											if(which == 0) {
 												genreCombo.setText("");
@@ -1026,8 +1026,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			@Override
 			protected List<Playlist> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<Playlist> playlists = new ArrayList<Playlist>();
-				playlists.addAll(musicService.getPlaylists(false, context, this));
+				List<Playlist> playlists = new ArrayList<>(musicService.getPlaylists(false, context, this));
 
 				// Iterate through and remove all non owned public playlists
 				Iterator<Playlist> it = playlists.iterator();
@@ -1693,9 +1692,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 			playNow(songs, entry, position);
 		} else if("next".equals(songPressAction)) {
-			getDownloadService().download(Arrays.asList(entry), false, false, true, false);
+			getDownloadService().download(Collections.singletonList(entry), false, false, true, false);
 		}  else if("last".equals(songPressAction)) {
-			getDownloadService().download(Arrays.asList(entry), false, false, false, false);
+			getDownloadService().download(Collections.singletonList(entry), false, false, false, false);
 		} else {
 			songs.add(entry);
 			playNow(songs);

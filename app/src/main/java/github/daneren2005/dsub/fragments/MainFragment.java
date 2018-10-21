@@ -40,7 +40,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -148,7 +148,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		}
 
 		if(ServerInfo.checkServerVersion(context, "1.8")) {
-			List<Integer> videos = Arrays.asList(R.string.main_videos);
+			List<Integer> videos = Collections.singletonList(R.string.main_videos);
 			sections.add(videos);
 			headers.add("videos");
 		}
@@ -158,7 +158,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 	@Override
 	public List<Integer> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		return Arrays.asList(0);
+		return Collections.singletonList(0);
 	}
 
 	@Override
@@ -294,7 +294,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 						progs.add(logcat.getCanonicalPath());
 						progs.add("*:I");
 
-						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
+						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[0]));
 						logcatProc.waitFor();
 					} finally {
 						if(logcatProc != null) {

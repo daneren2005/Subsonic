@@ -800,8 +800,8 @@ public class RESTMusicService implements MusicService {
         // Synchronize on the entry so that we don't download concurrently for the same song.
         synchronized (entry) {
 			String url = getRestUrl(context, "getCoverArt");
-			List<String> parameterNames = Arrays.asList("id");
-			List<Object> parameterValues = Arrays.<Object>asList(entry.getCoverArt());
+			List<String> parameterNames = Collections.singletonList("id");
+			List<Object> parameterValues = Collections.<Object>singletonList(entry.getCoverArt());
 
 			return getBitmapFromUrl(context, url, parameterNames, parameterValues, size, FileUtil.getAlbumArtFile(context, entry), true, progressListener, task);
         }
@@ -947,17 +947,17 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public RemoteStatus stopJukebox(Context context, ProgressListener progressListener) throws Exception {
-        return executeJukeboxCommand(context, progressListener, Arrays.asList("action"), Arrays.<Object>asList("stop"));
+        return executeJukeboxCommand(context, progressListener, Collections.singletonList("action"), Collections.<Object>singletonList("stop"));
     }
 
     @Override
     public RemoteStatus startJukebox(Context context, ProgressListener progressListener) throws Exception {
-        return executeJukeboxCommand(context, progressListener, Arrays.asList("action"), Arrays.<Object>asList("start"));
+        return executeJukeboxCommand(context, progressListener, Collections.singletonList("action"), Collections.<Object>singletonList("start"));
     }
 
     @Override
     public RemoteStatus getJukeboxStatus(Context context, ProgressListener progressListener) throws Exception {
-        return executeJukeboxCommand(context, progressListener, Arrays.asList("action"), Arrays.<Object>asList("status"));
+        return executeJukeboxCommand(context, progressListener, Collections.singletonList("action"), Collections.<Object>singletonList("status"));
     }
 
     @Override
@@ -1210,7 +1210,7 @@ public class RESTMusicService implements MusicService {
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.6", "Podcasts not supported.");
 
-		Reader reader = getReader(context, progressListener, "getPodcasts", Arrays.asList("includeEpisodes"), Arrays.<Object>asList("false"));
+		Reader reader = getReader(context, progressListener, "getPodcasts", Collections.singletonList("includeEpisodes"), Collections.<Object>singletonList("false"));
         try {
             List<PodcastChannel> channels = new PodcastChannelParser(context, getInstance(context)).parse(reader, progressListener);
 
@@ -1232,7 +1232,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getPodcasts", Arrays.asList("id"), Arrays.<Object>asList(id));
+		Reader reader = getReader(context, progressListener, "getPodcasts", Collections.singletonList("id"), Collections.<Object>singletonList(id));
         try {
             return new PodcastEntryParser(context, getInstance(context)).parse(id, reader, progressListener);
         } finally {
@@ -1242,7 +1242,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception {
-		Reader reader = getReader(context, progressListener, "getNewestPodcasts", Arrays.asList("count"), Arrays.<Object>asList(count), true);
+		Reader reader = getReader(context, progressListener, "getNewestPodcasts", Collections.singletonList("count"), Collections.<Object>singletonList(count), true);
 
 		try {
 			return new PodcastEntryParser(context, getInstance(context)).parse(null, reader, progressListener);
@@ -1351,7 +1351,7 @@ public class RESTMusicService implements MusicService {
 	public void deleteBookmark(MusicDirectory.Entry entry, Context context, ProgressListener progressListener) throws Exception {
 		checkServerVersion(context, "1.9", "Deleting bookmarks not supported.");
 
-		Reader reader = getReader(context, progressListener, "deleteBookmark", Arrays.asList("id"), Arrays.<Object>asList(entry.getId()));
+		Reader reader = getReader(context, progressListener, "deleteBookmark", Collections.singletonList("id"), Collections.<Object>singletonList(entry.getId()));
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
@@ -1361,7 +1361,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "getUser", Arrays.asList("username"), Arrays.<Object>asList(username));
+		Reader reader = getReader(context, progressListener, "getUser", Collections.singletonList("username"), Collections.<Object>singletonList(username));
 		try {
 			List<User> users = new UserParser(context, getInstance(context)).parse(reader, progressListener);
 			if(users.size() > 0) {
@@ -1457,7 +1457,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public void deleteUser(String username, Context context, ProgressListener progressListener) throws Exception {
-		Reader reader = getReader(context, progressListener, "deleteUser", Arrays.asList("username"), Arrays.<Object>asList(username));
+		Reader reader = getReader(context, progressListener, "deleteUser", Collections.singletonList("username"), Collections.<Object>singletonList(username));
 		try {
 			new ErrorParser(context, getInstance(context)).parse(reader);
 		} finally {
@@ -1497,7 +1497,7 @@ public class RESTMusicService implements MusicService {
 		synchronized (username) {
 			String url = Util.getRestUrl(context, "getAvatar");
 			List<String> parameterNames = Collections.singletonList("username");
-			List<Object> parameterValues = Arrays.<Object>asList(username);
+			List<Object> parameterValues = Collections.<Object>singletonList(username);
 
 			return getBitmapFromUrl(context, url, parameterNames, parameterValues, size, FileUtil.getAvatarFile(context, username), false, progressListener, task);
 		}
@@ -1642,7 +1642,7 @@ public class RESTMusicService implements MusicService {
 			String id = offline.getString(Constants.OFFLINE_STAR_ID + i, null);
 			boolean starred = offline.getBoolean(Constants.OFFLINE_STAR_SETTING + i, false);
 			if(id != null) {
-				setStarred(Arrays.asList(new MusicDirectory.Entry(id)), null, null, starred, progressListener, context);
+				setStarred(Collections.singletonList(new MusicDirectory.Entry(id)), null, null, starred, progressListener, context);
 			} else {
 				String search = offline.getString(Constants.OFFLINE_STAR_SEARCH + i, "");
 				try{
@@ -1651,14 +1651,14 @@ public class RESTMusicService implements MusicService {
 					if(result.getSongs().size() == 1) {
 						MusicDirectory.Entry song = result.getSongs().get(0);
 						Log.i(TAG, "Query '" + search + "' returned song " + song.getTitle() + " by " + song.getArtist() + " with id " + song.getId());
-						setStarred(Arrays.asList(song), null, null, starred, progressListener, context);
+						setStarred(Collections.singletonList(song), null, null, starred, progressListener, context);
 					} else if(result.getAlbums().size() == 1) {
 						MusicDirectory.Entry album = result.getAlbums().get(0);
 						Log.i(TAG, "Query '" + search + "' returned album " + album.getTitle() + " by " + album.getArtist() + " with id " + album.getId());
 						if(Util.isTagBrowsing(context, getInstance(context))) {
-							setStarred(null, null, Arrays.asList(album), starred, progressListener, context);
+							setStarred(null, null, Collections.singletonList(album), starred, progressListener, context);
 						} else {
-							setStarred(Arrays.asList(album), null, null, starred, progressListener, context);
+							setStarred(Collections.singletonList(album), null, null, starred, progressListener, context);
 						}
 					}
 					else {
@@ -1749,7 +1749,7 @@ public class RESTMusicService implements MusicService {
 		return getReader(context, progressListener, method, parameterName, parameterValue, 0);
 	}
     private Reader getReader(Context context, ProgressListener progressListener, String method, String parameterName, Object parameterValue, int minNetworkTimeout) throws Exception {
-        return getReader(context, progressListener, method, Arrays.asList(parameterName), Arrays.asList(parameterValue), minNetworkTimeout);
+        return getReader(context, progressListener, method, Collections.singletonList(parameterName), Collections.singletonList(parameterValue), minNetworkTimeout);
     }
 
 	private Reader getReader(Context context, ProgressListener progressListener, String method, List<String> parameterNames, List<Object> parameterValues) throws Exception {

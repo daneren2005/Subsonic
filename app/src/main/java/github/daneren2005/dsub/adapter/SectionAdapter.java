@@ -33,7 +33,7 @@ import android.view.WindowManager;
 import android.widget.PopupMenu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -66,7 +66,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 	}
 	public SectionAdapter(Context context, List<T> section, boolean singleSectionHeader) {
 		this.context = context;
-		this.headers = Arrays.asList("Section");
+		this.headers = Collections.singletonList("Section");
 		this.sections = new ArrayList<>();
 		this.sections.add(section);
 		this.singleSectionHeader = singleSectionHeader;
@@ -342,9 +342,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		selected.add(item);
 	}
 	public List<T> getSelected() {
-		List<T> selected = new ArrayList<>();
-		selected.addAll(this.selected);
-		return selected;
+		return new ArrayList<>(this.selected);
 	}
 
 	public void clearSelected() {

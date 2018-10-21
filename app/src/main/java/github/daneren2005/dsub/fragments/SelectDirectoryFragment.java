@@ -44,6 +44,7 @@ import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.PodcastEpisode;
@@ -65,7 +66,6 @@ import github.daneren2005.dsub.view.RecyclingImageView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -320,7 +320,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		switch (menuItem.getItemId()) {
 			case R.id.song_menu_remove_playlist:
-				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(entries.indexOf(entry)));
+				removeFromPlaylist(playlistId, playlistName, Collections.singletonList(entries.indexOf(entry)));
 				break;
 		}
 
@@ -356,7 +356,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				return;
 			}
 
-			onSongPress(Arrays.asList(entry), entry, false);
+			onSongPress(Collections.singletonList(entry), entry, false);
 		} else {
 			onSongPress(entries, entry, albumListType == null || "starred".equals(albumListType));
 		}

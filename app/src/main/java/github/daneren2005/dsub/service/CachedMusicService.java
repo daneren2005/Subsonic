@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -692,8 +692,7 @@ public class CachedMusicService implements MusicService {
 
 			MusicDirectory oldDir = FileUtil.deserialize(context, "starred", MusicDirectory.class);
 			if (oldDir != null) {
-				final List<Entry> newList = new ArrayList<Entry>();
-				newList.addAll(dir.getChildren());
+				final List<Entry> newList = new ArrayList<>(dir.getChildren());
 				final List<Entry> oldList = oldDir.getChildren();
 
 				for (Iterator<Entry> it = oldList.iterator(); it.hasNext(); ) {
@@ -1275,8 +1274,7 @@ public class CachedMusicService implements MusicService {
 
 	private void deleteRemovedEntries(Context context, MusicDirectory dir, MusicDirectory cached) {
 		if(cached != null) {
-			List<Entry> oldList = new ArrayList<Entry>();
-			oldList.addAll(cached.getChildren());
+			List<Entry> oldList = new ArrayList<>(cached.getChildren());
 
 			// Remove all current items from old list
 			for(Entry entry: dir.getChildren()) {
@@ -1438,7 +1436,7 @@ public class CachedMusicService implements MusicService {
 		
 		public GenericEntryUpdater(Context context, Entry entry) {
 			this.context = context;
-			this.entries = Arrays.asList(entry);
+			this.entries = Collections.singletonList(entry);
 		}
 		public GenericEntryUpdater(Context context, List<Entry> entries) {
 			this.context = context;
