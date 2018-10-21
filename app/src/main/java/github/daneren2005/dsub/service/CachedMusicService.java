@@ -1611,7 +1611,7 @@ public class CachedMusicService implements MusicService {
 		public void updateResult(Entry result) {
 
 		}
-	};
+	}
 	private abstract class IndexesUpdater extends SerializeUpdater<Artist> {
 		Indexes indexes;
 

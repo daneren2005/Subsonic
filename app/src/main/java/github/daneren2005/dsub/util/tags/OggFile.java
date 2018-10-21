@@ -111,4 +111,4 @@ public class OggFile extends Common {
 		return parse_vorbis_comment(s, offset+pfx_len, pl_len-pfx_len);
 	}
 	
-};
+}

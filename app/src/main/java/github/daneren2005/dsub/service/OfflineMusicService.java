@@ -382,7 +382,7 @@ public class OfflineMusicService implements MusicService {
 								// Don't add file to playlist if it doesn't exist as cached or pinned!
 								File checkFile = entryFile;
 								if(!checkFile.exists()) {
-									// If normal file doens't exist, check if .complete version does
+									// If normal file doesn't exist, check if .complete version does
 									checkFile = new File(entryFile.getParent(), FileUtil.getBaseName(entryFile.getName())
 											+ ".complete." + FileUtil.getExtension(entryFile.getName()));
 								}
