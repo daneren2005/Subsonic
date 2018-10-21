@@ -787,9 +787,7 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception {
-		StringBuilder builder = new StringBuilder(getRestUrl(context, "getCoverArt"));
-		builder.append("&id=").append(entry.getCoverArt());
-		String url = builder.toString();
+		String url = getRestUrl(context, "getCoverArt") + "&id=" + entry.getCoverArt();
 		url = Util.replaceInternalUrl(context, url);
 		url = rewriteUrlWithRedirect(context, url);
 		return url;
@@ -883,12 +881,11 @@ public class RESTMusicService implements MusicService {
 
 	@Override
     public String getVideoUrl(int maxBitrate, Context context, String id) {
-        StringBuilder builder = new StringBuilder(getRestUrl(context, "videoPlayer"));
-        builder.append("&id=").append(id);
-        builder.append("&maxBitRate=").append(maxBitrate);
-        builder.append("&autoplay=true");
 
-        String url = rewriteUrlWithRedirect(context, builder.toString());
+		String builder = getRestUrl(context, "videoPlayer") + "&id=" + id +
+				"&maxBitRate=" + maxBitrate +
+				"&autoplay=true";
+		String url = rewriteUrlWithRedirect(context, builder);
         Log.i(TAG, "Using video URL: " + stripUrlInfo(url));
         return url;
     }
@@ -1214,14 +1211,14 @@ public class RESTMusicService implements MusicService {
         try {
             List<PodcastChannel> channels = new PodcastChannelParser(context, getInstance(context)).parse(reader, progressListener);
 
-			String content = "";
+			StringBuilder content = new StringBuilder();
 			for(PodcastChannel channel: channels) {
-				content += channel.getName() + "\t" + channel.getUrl() + "\n";
+				content.append(channel.getName()).append("\t").append(channel.getUrl()).append("\n");
 			}
 
 			File file = FileUtil.getPodcastFile(context, Util.getServerName(context, getInstance(context)));
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-			bw.write(content);
+			bw.write(content.toString());
 			bw.close();
 
 			return channels;

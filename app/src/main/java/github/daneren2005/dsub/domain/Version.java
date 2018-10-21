@@ -136,7 +136,7 @@ public class Version implements Comparable<Version>, Serializable {
 	 * @return A string representation of the form "1.27", "1.27.2" or "1.27.beta3".
 	 */
 	public String toString() {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append(major).append('.').append(minor);
 		if (beta != 0) {
 			buf.append(".beta").append(beta);

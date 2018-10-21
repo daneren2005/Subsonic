@@ -304,7 +304,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 					URL url = new URL("https://pastebin.com/api/api_post.php");
 					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-					StringBuffer responseBuffer = new StringBuffer();
+					StringBuilder responseBuffer = new StringBuilder();
 					try {
 						urlConnection.setReadTimeout(10000);
 						urlConnection.setConnectTimeout(15000);

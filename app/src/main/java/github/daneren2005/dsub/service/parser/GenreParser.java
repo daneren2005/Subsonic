@@ -49,31 +49,31 @@ public class GenreParser extends AbstractParser {
         
         try {
         	BufferedReader br = new BufferedReader(reader);
-        	String xml = null;
-        	String line = null;
+        	StringBuilder xml = null;
+        	String line;
         
         	while ((line = br.readLine()) != null) {
         		if (xml == null) {
-        			xml = line;
+        			xml = new StringBuilder(line);
         		} else {
-        			xml += line;
+        			xml.append(line);
         		}
         	}
         	br.close();
         	
         	// Replace double escaped ampersand (&amp;apos;) 
-        	xml = xml.replaceAll("(?:&amp;)(amp;|lt;|gt;|#37;|apos;)", "&$1");
+        	xml = new StringBuilder(xml.toString().replaceAll("(?:&amp;)(amp;|lt;|gt;|#37;|apos;)", "&$1"));
         	
             // Replace unescaped ampersand
-            xml = xml.replaceAll("&(?!amp;|lt;|gt;|#37;|apos;)", "&amp;");
+            xml = new StringBuilder(xml.toString().replaceAll("&(?!amp;|lt;|gt;|#37;|apos;)", "&amp;"));
 
             // Replace unescaped percent symbol
             // No replacements for <> at this time
-            xml = xml.replaceAll("%", "&#37;");
+            xml = new StringBuilder(xml.toString().replaceAll("%", "&#37;"));
             
-            xml = xml.replaceAll("'", "&apos;");
+            xml = new StringBuilder(xml.toString().replaceAll("'", "&apos;"));
             
-            sr = new StringReader(xml);
+            sr = new StringReader(xml.toString());
         } catch (IOException ioe) {
         	Log.e(TAG, "Error parsing Genre XML", ioe);
         }
