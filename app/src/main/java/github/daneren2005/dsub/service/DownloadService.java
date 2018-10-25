@@ -42,6 +42,7 @@ import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
+import github.daneren2005.dsub.receiver.AudioNoisyReceiver;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.ArtistRadioBuffer;
 import github.daneren2005.dsub.util.ImageLoader;
@@ -77,6 +78,7 @@ import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -180,6 +182,9 @@ public class DownloadService extends Service {
 	private boolean autoPlayStart = false;
 	private boolean runListenersOnInit = false;
 
+	private IntentFilter audioNoisyIntent = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+	private AudioNoisyReceiver audioNoisyReceiver = null;
+
 	private MediaRouteManager mediaRouter;
 	
 	// Variables to manage getCurrentPosition sometimes starting from an arbitrary non-zero number
@@ -262,6 +267,8 @@ public class DownloadService extends Service {
 		}, "DownloadService").start();
 
 		Util.registerMediaButtonEventReceiver(this);
+		audioNoisyReceiver = new AudioNoisyReceiver();
+		registerReceiver(audioNoisyReceiver, audioNoisyIntent);
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
@@ -302,6 +309,9 @@ public class DownloadService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		lifecycleSupport.onStart(intent);
+		if(Build.VERSION.SDK_INT >= 26) {
+			Notifications.shutGoogleUpNotification(this);
+		}
 		return START_NOT_STICKY;
 	}
 
@@ -374,6 +384,9 @@ public class DownloadService extends Service {
 		if(proxy != null) {
 			proxy.stop();
 			proxy = null;
+		}
+		if (audioNoisyReceiver != null) {
+			unregisterReceiver(audioNoisyReceiver);
 		}
 		mediaRouter.destroy();
 		Notifications.hidePlayingNotification(this, this, handler);
@@ -1493,7 +1506,8 @@ public class DownloadService extends Service {
 		this.playerState = playerState;
 
 		if(playerState == STARTED) {
-			Util.requestAudioFocus(this);
+			AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+			Util.requestAudioFocus(this, audioManager);
 		}
 
 		if (show) {
