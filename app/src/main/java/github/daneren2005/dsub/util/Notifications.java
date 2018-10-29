@@ -114,11 +114,11 @@ public final class Notifications {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					downloadService.stopForeground(true);
+					stopForeground(downloadService, true);
 					showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
 
 					try {
-						downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+						startForeground(downloadService, NOTIFICATION_ID_PLAYING, notification);
 					} catch(Exception e) {
 						Log.e(TAG, "Failed to start notifications after stopping foreground download");
 					}
@@ -130,7 +130,7 @@ public final class Notifications {
 				public void run() {
 					if (playing) {
 						try {
-							downloadService.startForeground(NOTIFICATION_ID_PLAYING, notification);
+							startForeground(downloadService, NOTIFICATION_ID_PLAYING, notification);
 						} catch(Exception e) {
 							Log.e(TAG, "Failed to start notifications while playing");
 						}
@@ -138,7 +138,7 @@ public final class Notifications {
 						playShowing = false;
 						persistentPlayingShowing = true;
 						NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-						downloadService.stopForeground(false);
+						stopForeground(downloadService, false);
 
 						try {
 							notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
@@ -334,7 +334,7 @@ public final class Notifications {
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
-				downloadService.stopForeground(true);
+				stopForeground(downloadService, true);
 
 				if(persistentPlayingShowing) {
 					NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -413,7 +413,7 @@ public final class Notifications {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					downloadService.startForeground(NOTIFICATION_ID_DOWNLOADING, notification);
+					startForeground(downloadService, NOTIFICATION_ID_DOWNLOADING, notification);
 				}
 			});
 		}
@@ -429,7 +429,7 @@ public final class Notifications {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					downloadService.stopForeground(true);
+					stopForeground(downloadService, true);
 				}
 			});
 		}
@@ -461,8 +461,8 @@ public final class Notifications {
 				.setChannelId("downloading-channel");
 
 		final Notification notification = builder.build();
-		downloadService.startForeground(NOTIFICATION_ID_SHUT_GOOGLE_UP, notification);
-		downloadService.stopForeground(true);
+		startForeground(downloadService, NOTIFICATION_ID_SHUT_GOOGLE_UP, notification);
+		stopForeground(downloadService, true);
 	}
 
 	public static void showSyncNotification(final Context context, int stringId, String extra) {
@@ -536,5 +536,15 @@ public final class Notifications {
 		}
 
 		return syncChannel;
+	}
+
+	private static void startForeground(DownloadService downloadService, int notificationId, Notification notification) {
+		downloadService.startForeground(notificationId, notification);
+		downloadService.setIsForeground(true);
+	}
+
+	private static void stopForeground(DownloadService downloadService, boolean removeNotification) {
+		downloadService.stopForeground(removeNotification);
+		downloadService.setIsForeground(false);
 	}
 }
