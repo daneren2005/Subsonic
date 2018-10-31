@@ -170,6 +170,7 @@ public class DownloadService extends Service {
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
 	private long delayUpdateProgress = DEFAULT_DELAY_UPDATE_PROGRESS;
+	private boolean foregroundService = false;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = LOCAL;
@@ -309,7 +310,7 @@ public class DownloadService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		lifecycleSupport.onStart(intent);
-		if(Build.VERSION.SDK_INT >= 26) {
+		if(Build.VERSION.SDK_INT >= 26 && !this.isForeground()) {
 			Notifications.shutGoogleUpNotification(this);
 		}
 		return START_NOT_STICKY;
@@ -1061,6 +1062,14 @@ public class DownloadService extends Service {
 
 	public synchronized boolean shouldFastForward() {
 		return size() == 1 || (currentPlaying != null && !currentPlaying.isSong());
+	}
+
+	public synchronized boolean isForeground() {
+		return this.foregroundService;
+	}
+
+	public synchronized void setIsForeground(boolean foreground) {
+		this.foregroundService = foreground;
 	}
 
 	public synchronized List<DownloadFile> getDownloads() {
