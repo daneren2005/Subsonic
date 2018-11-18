@@ -917,9 +917,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 			@Override
 			protected void done(Void result) {
-				for(Integer index: indexes) {
-					entryGridAdapter.removeAt(index);
-				}
+				entryGridAdapter.removeAt(indexes);
 				Util.toast(context, context.getResources().getString(R.string.removed_playlist, String.valueOf(indexes.size()), name));
 			}
 
