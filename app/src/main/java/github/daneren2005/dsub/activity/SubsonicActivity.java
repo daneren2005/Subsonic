@@ -673,7 +673,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				item.setChecked(true);
 			}
 		}
-		drawerHeaderToggle.setImageResource(R.drawable.main_select_server_dark);
+		drawerHeaderToggle.setImageResource(R.drawable.main_select_server);
 
 		showingTabs = true;
 	}
@@ -689,7 +689,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 		}
 		drawerList.getMenu().setGroupCheckable(MENU_GROUP_SERVER, true, true);
-		drawerHeaderToggle.setImageResource(R.drawable.main_select_tabs_dark);
+		drawerHeaderToggle.setImageResource(R.drawable.main_select_tabs);
 
 		showingTabs = false;
 	}

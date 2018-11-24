@@ -297,31 +297,31 @@ public final class Notifications {
 		boolean persistent = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false);
 		if(persistent) {
 			if(expanded) {
-				rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_pause : R.drawable.notification_start);
+				rv.setImageViewResource(R.id.control_pause, playing ? R.drawable.notification_media_pause : R.drawable.notification_media_start);
 
 				if(shouldFastForward) {
-					rv.setImageViewResource(R.id.control_previous, R.drawable.notification_rewind);
-					rv.setImageViewResource(R.id.control_next, R.drawable.notification_fastforward);
+					rv.setImageViewResource(R.id.control_previous, R.drawable.notification_media_rewind);
+					rv.setImageViewResource(R.id.control_next, R.drawable.notification_media_fastforward);
 				} else {
-					rv.setImageViewResource(R.id.control_previous, R.drawable.notification_backward);
-					rv.setImageViewResource(R.id.control_next, R.drawable.notification_forward);
+					rv.setImageViewResource(R.id.control_previous, R.drawable.notification_media_backward);
+					rv.setImageViewResource(R.id.control_next, R.drawable.notification_media_forward);
 				}
 			} else {
-				rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_pause : R.drawable.notification_start);
+				rv.setImageViewResource(R.id.control_previous, playing ? R.drawable.notification_media_pause : R.drawable.notification_media_start);
 				if(shouldFastForward) {
-					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_fastforward);
+					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_media_fastforward);
 				} else {
-					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_forward);
+					rv.setImageViewResource(R.id.control_pause, R.drawable.notification_media_forward);
 				}
 				rv.setImageViewResource(R.id.control_next, R.drawable.notification_close);
 			}
 		} else if(shouldFastForward) {
-			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_rewind);
-			rv.setImageViewResource(R.id.control_next, R.drawable.notification_fastforward);
+			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_media_rewind);
+			rv.setImageViewResource(R.id.control_next, R.drawable.notification_media_fastforward);
 		} else {
 			// Necessary for switching back since it appears to re-use the same layout
-			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_backward);
-			rv.setImageViewResource(R.id.control_next, R.drawable.notification_forward);
+			rv.setImageViewResource(R.id.control_previous, R.drawable.notification_media_backward);
+			rv.setImageViewResource(R.id.control_next, R.drawable.notification_media_forward);
 		}
 
 		// Create actions for media buttons

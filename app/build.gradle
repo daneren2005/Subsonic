@@ -9,6 +9,7 @@ android {
 		targetSdkVersion 29
 		versionCode 208
 		versionName '5.5.3'
+		vectorDrawables.useSupportLibrary = true
 		setProperty("archivesBaseName", "DSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv", "zh"
 		vectorDrawables.useSupportLibrary = true
@@ -72,10 +73,11 @@ dependencies {
 	googleImplementation 'com.google.android.gms:play-services-cast:8.1.0'
 	implementation 'com.sothree.slidinguppanel:library:3.0.0'
 	implementation 'de.hdodenhof:circleimageview:1.2.1'
-    implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'
-	implementation group: 'org.fourthline.cling', name: 'cling-core', version:'2.1.1'
-	implementation group: 'org.fourthline.cling', name: 'cling-support', version:'2.1.1'
-	implementation group: 'org.eclipse.jetty', name: 'jetty-server', version:'8.1.16.v20140903'
-	implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version:'8.1.16.v20140903'
-	implementation group: 'org.eclipse.jetty', name: 'jetty-client', version:'8.1.16.v20140903'
+	implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'
+	implementation 'org.fourthline.cling:cling-core:2.1.1'
+	implementation 'org.fourthline.cling:cling-support:2.1.1'
+	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
+	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
+	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
+	implementation 'com.android.support:support-vector-drawable:27.1.1'
 }
