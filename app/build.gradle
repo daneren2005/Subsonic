@@ -9,6 +9,7 @@ android {
 		targetSdkVersion 26
 		versionCode 202
 		versionName '5.4.4'
+		vectorDrawables.useSupportLibrary = true
 		setProperty("archivesBaseName", "DSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
 	}
