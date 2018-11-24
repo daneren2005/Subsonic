@@ -2806,14 +2806,16 @@ public class DownloadService extends Service {
 	}
 	public void setRating(int rating) {
 		final DownloadFile currentPlaying = this.currentPlaying;
-		if(currentPlaying == null) {
+		if (currentPlaying == null) {
 			return;
 		}
 		MusicDirectory.Entry entry = currentPlaying.getSong();
 
 		// Immediately skip to the next song if down thumbed
-		if(rating == 1) {
+		if (rating == 1 && size() > 1) {
 			next(true);
+		} else if (rating == 1 && size() == 1) {
+			stop();
 		}
 
 		UpdateHelper.setRating(this, entry, rating, new UpdateHelper.OnRatingChange() {
