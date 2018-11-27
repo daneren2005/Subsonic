@@ -132,6 +132,7 @@ public class DownloadServiceTest extends
 		// Do a next before the previous
 		downloadService.next();
 
+		downloadService.setPlayerState(STARTED);
 		// Do the previous
 		downloadService.previous();
 
