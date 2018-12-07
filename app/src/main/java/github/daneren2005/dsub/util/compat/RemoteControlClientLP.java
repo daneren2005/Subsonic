@@ -207,12 +207,12 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 	@Override
 	public void registerRoute(MediaRouter router) {
-		router.setMediaSession(mediaSession);
+		router.setMediaSessionCompat(mediaSession);
 	}
 
 	@Override
 	public void unregisterRoute(MediaRouter router) {
-		router.setMediaSession(null);
+		router.setMediaSessionCompat(null);
 	}
 
 	@Override
