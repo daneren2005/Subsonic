@@ -1,2 +1,4 @@
-include ':app', ':Server Proxy'
-project(':Server Proxy').projectDir = new File('ServerProxy')
+include ':app'
+
+include ':ServerProxy'
+project(':ServerProxy').projectDir = new File('ServerProxy')

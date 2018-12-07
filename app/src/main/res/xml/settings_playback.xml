@@ -117,7 +117,8 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory
-		android:title="@string/settings.other_title">
+		android:title="@string/settings.other_title"
+		android:key="otherSettings">
 
 		<CheckBoxPreference
 			android:title="@string/settings.shuffle_by_album"

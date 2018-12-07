@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -108,6 +109,14 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+
+		if(Build.VERSION.SDK_INT >= 21) {
+			CheckBoxPreference mediaButtons = (CheckBoxPreference) findPreference("mediaButtons");
+			if (mediaButtons != null) {
+				PreferenceCategory otherCategory = (PreferenceCategory) findPreference("otherSettings");
+				otherCategory.removePreference(mediaButtons);
+			}
+		}
 
 		int instance = this.getArguments().getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, -1);
 		if (instance != -1) {

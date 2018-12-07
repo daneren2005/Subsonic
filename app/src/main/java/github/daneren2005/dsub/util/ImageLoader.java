@@ -640,7 +640,7 @@ public class ImageLoader {
 		private final ImageView mView;
 		private Drawable mDrawable;
 
-		public AvatarTask(Context context, ImageView view, String username) {
+		private AvatarTask(Context context, ImageView view, String username) {
 			super(context);
 			mContext = context;
 			mView = view;
@@ -659,8 +659,10 @@ public class ImageLoader {
 
 					mDrawable = Util.createDrawableFromBitmap(mContext, bitmap);
 				}
+			} catch (java.io.FileNotFoundException  x) {
+				Log.i(TAG, "Avatar not available for download.");
 			} catch (Throwable x) {
-				Log.e(TAG, "Failed to download album art.", x);
+				Log.e(TAG, "Failed to download avatar.", x);
 			}
 
 			return null;

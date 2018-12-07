@@ -16,7 +16,7 @@ public class GenreComparatorTest extends TestCase {
 
 		Genre g2 = new Genre();
 		
-		List<Genre> genres = new ArrayList<Genre>();
+		List<Genre> genres = new ArrayList<>();
 		genres.add(g1);
 		genres.add(g2);
 		
@@ -34,7 +34,7 @@ public class GenreComparatorTest extends TestCase {
 		Genre g2 = new Genre();
 		g2.setName("genre");
 		
-		List<Genre> genres = new ArrayList<Genre>();
+		List<Genre> genres = new ArrayList<>();
 		genres.add(g1);
 		genres.add(g2);
 		
@@ -53,9 +53,9 @@ public class GenreComparatorTest extends TestCase {
 		g2.setName("Pop");
 		
 		Genre g3 = new Genre();
-		g2.setName("Rap");
+		g3.setName("Rap");
 		
-		List<Genre> genres = new ArrayList<Genre>();
+		List<Genre> genres = new ArrayList<>();
 		genres.add(g1);
 		genres.add(g2);
 		genres.add(g3);

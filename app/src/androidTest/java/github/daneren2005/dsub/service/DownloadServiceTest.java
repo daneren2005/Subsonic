@@ -49,6 +49,20 @@ public class DownloadServiceTest extends
 		assertEquals(0, position);
 	}
 
+	public void testGetRecentDownloadsWithoutPlaylist() {
+		int output_length = downloadService.getRecentDownloads().size();
+		assertEquals(0, output_length);
+	}
+
+	public void testGetRecentDownloadsWithPlaylist() {
+		downloadService.getDownloads().clear();
+		downloadService.download(this.createMusicSongs(2), false, false, false,
+				false, 0, 0);
+
+		int output_length = downloadService.getRecentDownloads().size();
+		assertEquals(1, output_length);
+	}
+
 	public void testGetCurrentPlayingIndexWithoutPlayList() {
 		int currentPlayingIndex = activity.getDownloadService()
 				.getCurrentPlayingIndex();
@@ -118,6 +132,7 @@ public class DownloadServiceTest extends
 		// Do a next before the previous
 		downloadService.next();
 
+		downloadService.setPlayerState(STARTED);
 		// Do the previous
 		downloadService.previous();
 

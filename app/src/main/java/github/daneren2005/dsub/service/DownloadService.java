@@ -42,6 +42,7 @@ import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.domain.RepeatMode;
 import github.daneren2005.dsub.domain.ServerInfo;
+import github.daneren2005.dsub.receiver.AudioNoisyReceiver;
 import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
 import github.daneren2005.dsub.util.ArtistRadioBuffer;
 import github.daneren2005.dsub.util.ImageLoader;
@@ -77,6 +78,7 @@ import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -168,6 +170,7 @@ public class DownloadService extends Service {
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
 	private long delayUpdateProgress = DEFAULT_DELAY_UPDATE_PROGRESS;
+	private boolean foregroundService = false;
 
 	private AudioEffectsController effectsController;
 	private RemoteControlState remoteState = LOCAL;
@@ -179,6 +182,9 @@ public class DownloadService extends Service {
 	private long timerStart;
 	private boolean autoPlayStart = false;
 	private boolean runListenersOnInit = false;
+
+	private IntentFilter audioNoisyIntent = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+	private AudioNoisyReceiver audioNoisyReceiver = null;
 
 	private MediaRouteManager mediaRouter;
 	
@@ -262,6 +268,8 @@ public class DownloadService extends Service {
 		}, "DownloadService").start();
 
 		Util.registerMediaButtonEventReceiver(this);
+		audioNoisyReceiver = new AudioNoisyReceiver();
+		registerReceiver(audioNoisyReceiver, audioNoisyIntent);
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
@@ -302,6 +310,9 @@ public class DownloadService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		lifecycleSupport.onStart(intent);
+		if(Build.VERSION.SDK_INT >= 26 && !this.isForeground()) {
+			Notifications.shutGoogleUpNotification(this);
+		}
 		return START_NOT_STICKY;
 	}
 
@@ -374,6 +385,9 @@ public class DownloadService extends Service {
 		if(proxy != null) {
 			proxy.stop();
 			proxy = null;
+		}
+		if (audioNoisyReceiver != null) {
+			unregisterReceiver(audioNoisyReceiver);
 		}
 		mediaRouter.destroy();
 		Notifications.hidePlayingNotification(this, this, handler);
@@ -1050,6 +1064,14 @@ public class DownloadService extends Service {
 		return size() == 1 || (currentPlaying != null && !currentPlaying.isSong());
 	}
 
+	public synchronized boolean isForeground() {
+		return this.foregroundService;
+	}
+
+	public synchronized void setIsForeground(boolean foreground) {
+		this.foregroundService = foreground;
+	}
+
 	public synchronized List<DownloadFile> getDownloads() {
 		List<DownloadFile> temp = new ArrayList<DownloadFile>();
 		temp.addAll(downloadList);
@@ -1060,7 +1082,7 @@ public class DownloadService extends Service {
 	public synchronized List<DownloadFile> getRecentDownloads() {
 		int from = Math.max(currentPlayingIndex - 10, 0);
 		int songsToKeep = Math.max(Util.getPreloadCount(this), 20);
-		int to = Math.min(currentPlayingIndex + songsToKeep, downloadList.size() - 1);
+		int to = Math.min(currentPlayingIndex + songsToKeep, Math.max(downloadList.size() - 1, 0));
 		List<DownloadFile> temp = downloadList.subList(from, to);
 		temp.addAll(backgroundDownloadList);
 		return temp;
@@ -1493,7 +1515,8 @@ public class DownloadService extends Service {
 		this.playerState = playerState;
 
 		if(playerState == STARTED) {
-			Util.requestAudioFocus(this);
+			AudioManager audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+			Util.requestAudioFocus(this, audioManager);
 		}
 
 		if (show) {
@@ -2783,14 +2806,16 @@ public class DownloadService extends Service {
 	}
 	public void setRating(int rating) {
 		final DownloadFile currentPlaying = this.currentPlaying;
-		if(currentPlaying == null) {
+		if (currentPlaying == null) {
 			return;
 		}
 		MusicDirectory.Entry entry = currentPlaying.getSong();
 
 		// Immediately skip to the next song if down thumbed
-		if(rating == 1) {
+		if (rating == 1 && size() > 1) {
 			next(true);
+		} else if (rating == 1 && size() == 1) {
+			stop();
 		}
 
 		UpdateHelper.setRating(this, entry, rating, new UpdateHelper.OnRatingChange() {
