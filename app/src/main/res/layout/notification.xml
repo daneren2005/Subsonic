@@ -49,18 +49,18 @@
 
 	<ImageButton
 		android:id="@+id/control_previous"
-		android:src="@drawable/notification_backward"
+		android:src="@drawable/notification_media_backward"
 		style="@style/NotificationButton"/>
 
 	<ImageButton
 		android:id="@+id/control_pause"
-		android:src="@drawable/notification_pause"
+		android:src="@drawable/notification_media_pause"
 		style="@style/NotificationButton"
 		android:layout_width="54dip"
 		android:padding="0dip"/>
 
 	<ImageButton
 		android:id="@+id/control_next"
-		android:src="@drawable/notification_forward"
+		android:src="@drawable/notification_media_forward"
 		style="@style/NotificationButton"/>
 </LinearLayout>

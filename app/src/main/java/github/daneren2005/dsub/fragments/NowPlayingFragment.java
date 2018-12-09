@@ -1107,7 +1107,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(oldBookmark == null) {
 					int bookmark;
 					if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						bookmark = R.drawable.ic_menu_bookmark_dark;
+						bookmark = R.drawable.ic_menu_bookmark;
 					} else {
 						bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 					}
@@ -1426,7 +1426,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			rateBadButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_bad_selected));
 		} else {
 			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-				badRating = R.drawable.ic_action_rating_bad_dark;
+				badRating = R.drawable.ic_action_rating_bad;
 			} else {
 				badRating = DrawableTint.getDrawableRes(context, R.attr.rating_bad);
 			}
@@ -1437,7 +1437,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			rateGoodButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_good_selected));
 		} else {
 			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-				goodRating = R.drawable.ic_action_rating_good_dark;
+				goodRating = R.drawable.ic_action_rating_good;
 			} else {
 				goodRating = DrawableTint.getDrawableRes(context, R.attr.rating_good);
 			}
@@ -1448,7 +1448,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
 		} else {
 			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-				bookmark = R.drawable.ic_menu_bookmark_dark;
+				bookmark = R.drawable.ic_menu_bookmark;
 			} else {
 				bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 			}

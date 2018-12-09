@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="offline_icon" format="reference"/>
-    <attr name="media_button_backward" format="reference"/>
-    <attr name="media_button_forward" format="reference"/>
+	<attr name="element_color" format="reference"/>
+	<attr name="actionbar_element_color" format="reference"/>
+	<attr name="card_background" format="reference"/>
+  <attr name="offline_icon" format="reference"/>
+  <attr name="media_button_backward" format="reference"/>
+  <attr name="media_button_forward" format="reference"/>
 	<attr name="media_button_rewind" format="reference"/>
 	<attr name="media_button_fastforward" format="reference"/>
-    <attr name="media_button_pause" format="reference"/>
-    <attr name="media_button_repeat_off" format="reference"/>
+  <attr name="media_button_pause" format="reference"/>
+  <attr name="media_button_repeat_off" format="reference"/>
 	<attr name="media_button_repeat_single" format="reference"/>
 	<attr name="media_button_repeat_all" format="reference"/>
-    <attr name="media_button_start" format="reference"/>
-    <attr name="media_button_stop" format="reference"/>
+  <attr name="media_button_start" format="reference"/>
+  <attr name="media_button_stop" format="reference"/>
 	<attr name="actionbar_backward" format="reference"/>
 	<attr name="actionbar_forward" format="reference"/>
 	<attr name="actionbar_pause" format="reference"/>

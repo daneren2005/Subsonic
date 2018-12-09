@@ -81,17 +81,17 @@
 	        <ImageButton
 	            android:id="@+id/control_previous"
 	            style="@style/NotificationButton.Expanded"
-	            android:src="@drawable/notification_backward" />
+	            android:src="@drawable/notification_media_backward" />
 
 	        <ImageButton
 	            android:id="@+id/control_pause"
 				style="@style/NotificationButton.Expanded"
-	            android:src="@drawable/notification_pause" />
+	            android:src="@drawable/notification_media_pause" />
 
 	        <ImageButton
 	            android:id="@+id/control_next"
 				style="@style/NotificationButton.Expanded"
-	            android:src="@drawable/notification_forward" />
+	            android:src="@drawable/notification_media_forward" />
 	    </LinearLayout>
 	</LinearLayout>
 
