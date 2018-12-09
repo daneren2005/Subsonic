@@ -1111,7 +1111,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(oldBookmark == null) {
 					int bookmark;
 					if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						bookmark = R.drawable.ic_menu_bookmark;
+						bookmark = R.drawable.ic_action_bookmark;
 					} else {
 						bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 					}
@@ -1452,7 +1452,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
 		} else {
 			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-				bookmark = R.drawable.ic_menu_bookmark;
+				bookmark = R.drawable.ic_action_bookmark;
 			} else {
 				bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 			}
