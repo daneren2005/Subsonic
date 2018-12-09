@@ -9,8 +9,9 @@
 
     <TextView
         android:id="@+id/item_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:background="@android:color/transparent"
         android:gravity="center_vertical|start"
         android:minHeight="50dip"
@@ -31,7 +32,7 @@
 		android:id="@+id/item_more"
 		style="@style/MoreButton"
 		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
+		android:layout_height="wrap_content"
 		android:layout_gravity="center_vertical|end"
 		android:src="?attr/download_none" />
 </LinearLayout>
