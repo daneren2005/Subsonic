@@ -36,7 +36,7 @@
 		<item name="select_tabs">@drawable/main_select_tabs</item>
 		<item name="playing">@drawable/playing</item>
 		<item name="downloading">@drawable/downloading</item>
-		<item name="bookmark">@drawable/ic_menu_bookmark</item>
+		<item name="bookmark">@drawable/ic_action_bookmark</item>
 		<item name="share">@drawable/ic_menu_share</item>
 		<item name="add_person">@drawable/ic_menu_add_person</item>
 		<item name="rating_bad">@drawable/ic_action_rating_bad</item>
@@ -110,7 +110,7 @@
 		<item name="select_tabs">@drawable/main_select_tabs</item>
 		<item name="playing">@drawable/playing</item>
 		<item name="downloading">@drawable/downloading</item>
-		<item name="bookmark">@drawable/ic_menu_bookmark</item>
+		<item name="bookmark">@drawable/ic_action_bookmark</item>
 		<item name="share">@drawable/ic_menu_share</item>
 		<item name="add_person">@drawable/ic_menu_add_person</item>
 		<item name="rating_bad">@drawable/ic_action_rating_bad</item>
