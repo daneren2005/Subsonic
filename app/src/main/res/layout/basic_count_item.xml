@@ -3,35 +3,34 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:background="?attr/selectableItemBackground"
-	android:minHeight="50dip">
+	android:minHeight="50dip"
+	android:paddingLeft="16dp"
+	android:paddingRight="16dp">
 
 	<TextView
 		android:id="@+id/basic_count_name"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:gravity="left|center_vertical"
-		android:paddingLeft="6dip"
-		android:paddingRight="6dip"
 		android:background="@android:color/transparent"
+		android:gravity="left|center_vertical"
 		android:text="Text"
-		android:textColor="?android:textColorPrimary"/>
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:textColor="?android:textColorPrimary" />
 
 	<TextView
 		android:id="@+id/basic_count_count"
 		android:layout_width="32dp"
 		android:layout_height="32dp"
+		android:layout_gravity="center_vertical"
+		android:layout_marginLeft="20px"
 		android:layout_marginRight="12dp"
+		android:layout_marginBottom="4px"
 		android:background="@drawable/ic_number_border"
 		android:focusable="false"
-		android:paddingRight="10dp"
-		android:layout_marginLeft="20px"
-		android:layout_marginBottom="4px"
+		android:gravity="right|center_vertical"
 		android:text="99"
 		android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
-		android:textSize="11sp"
-		android:gravity="right|center_vertical"
-		android:layout_gravity="center_vertical"
 		android:textColor="?android:textColorPrimary"
-		android:visibility="gone"/>
+		android:textSize="11sp"
+		android:visibility="gone" />
 </LinearLayout>
