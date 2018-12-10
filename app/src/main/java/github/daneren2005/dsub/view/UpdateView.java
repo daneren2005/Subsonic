@@ -103,7 +103,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 			imageTask.cancel();
 			imageTask = null;
 		}
-		if(coverArtView != null && coverArtView instanceof ImageView) {
+		if(coverArtView instanceof ImageView) {
 			((ImageView) coverArtView).setImageDrawable(null);
 		}
 		setObjectImpl(obj);
@@ -156,7 +156,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 				return;
 			}
 
-			List<UpdateView> views = new ArrayList<UpdateView>();
+			List<UpdateView> views = new ArrayList<>();
             for (UpdateView view : INSTANCES.keySet()) {
                 if (view.isShown()) {
 					views.add(view);
@@ -280,7 +280,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 			rating = isRated;
 		}
 
-		if(coverArtView != null && coverArtView instanceof RecyclingImageView) {
+		if(coverArtView instanceof RecyclingImageView) {
 			RecyclingImageView recyclingImageView = (RecyclingImageView) coverArtView;
 			if(recyclingImageView.isInvalidated()) {
 				onUpdateImageView();
@@ -312,7 +312,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 
 	public static class UpdateViewHolder<T> extends RecyclerView.ViewHolder {
 		private UpdateView updateView;
-		private View view;
+		private final View view;
 		private T item;
 
 		public UpdateViewHolder(UpdateView itemView) {

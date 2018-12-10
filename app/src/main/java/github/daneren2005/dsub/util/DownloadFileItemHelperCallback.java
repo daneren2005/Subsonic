@@ -2,7 +2,6 @@ package github.daneren2005.dsub.util;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 
 import org.eclipse.jetty.util.ArrayQueue;
 
@@ -18,11 +17,11 @@ import github.daneren2005.dsub.view.UpdateView;
 public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallback {
 	private static final String TAG = DownloadFileItemHelperCallback.class.getSimpleName();
 
-	private SubsonicFragment fragment;
-	private boolean mainList;
+	private final SubsonicFragment fragment;
+	private final boolean mainList;
 
 	private BackgroundTask pendingTask = null;
-	private Queue pendingOperations = new ArrayQueue();
+	private final Queue pendingOperations = new ArrayQueue();
 
 	public DownloadFileItemHelperCallback(SubsonicFragment fragment, boolean mainList) {
 		super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);

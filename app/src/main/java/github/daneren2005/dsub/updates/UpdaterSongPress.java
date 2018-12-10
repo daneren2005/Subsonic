@@ -33,7 +33,7 @@ public class UpdaterSongPress extends Updater {
 		boolean playNowAfter = prefs.getBoolean("playNowAfter", true);
 
 		// Migrate the old preference so behavior stays the same
-		if(playNowAfter == false) {
+		if(!playNowAfter) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION, "single");
 			editor.commit();

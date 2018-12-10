@@ -105,11 +105,10 @@ public class DownloadFragment extends SelectRecyclerFragment<DownloadFile> imple
 	public List<DownloadFile> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
 		DownloadService downloadService = getDownloadService();
 		if(downloadService == null) {
-			return new ArrayList<DownloadFile>();
+			return new ArrayList<>();
 		}
 
-		List<DownloadFile> songList = new ArrayList<DownloadFile>();
-		songList.addAll(downloadService.getBackgroundDownloads());
+		List<DownloadFile> songList = new ArrayList<>(downloadService.getBackgroundDownloads());
 		currentRevision = downloadService.getDownloadListUpdateRevision();
 		return songList;
 	}

@@ -21,8 +21,6 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -34,18 +32,18 @@ import github.daneren2005.dsub.domain.Share;
 public class ShareView extends UpdateView<Share> {
 	private static final String TAG = ShareView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView descriptionView;
+	private final TextView titleView;
+	private final TextView descriptionView;
 
 	public ShareView(Context context) {
 		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.complex_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		descriptionView = (TextView) findViewById(R.id.item_description);
-		starButton = (ImageButton) findViewById(R.id.item_star);
+		titleView = findViewById(R.id.item_name);
+		descriptionView = findViewById(R.id.item_description);
+		starButton = findViewById(R.id.item_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				v.showContextMenu();

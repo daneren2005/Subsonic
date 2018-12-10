@@ -1,7 +1,6 @@
 package github.daneren2005.dsub.util;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -52,9 +51,9 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
     public DroppySpeedControl setOnSeekBarChangeListener(Context context, final DroppyClickCallbackInterface callback, int seekBarByID, int textViewByID, float playbackSpeed) {
         updateBarCallback = callback;
         render(context);
-        final TextView textBox = (TextView) renderedView.findViewById(textViewByID);
+        final TextView textBox = renderedView.findViewById(textViewByID);
         textBox.setText(Float.toString(playbackSpeed));
-        SeekBar seekBar = ((SeekBar) renderedView.findViewById(seekBarByID));
+        SeekBar seekBar = renderedView.findViewById(seekBarByID);
         this.seekBar = seekBar;
         seekBar.setTag(textBox);
         seekBar.setProgress((int)(playbackSpeed*10)-5);

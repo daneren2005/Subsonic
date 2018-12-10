@@ -42,7 +42,7 @@ import github.daneren2005.dsub.util.Util;
  */
 
 public class PodcastSyncAdapter extends SubsonicSyncAdapter {
-	private static String TAG = PodcastSyncAdapter.class.getSimpleName();
+	private static final String TAG = PodcastSyncAdapter.class.getSimpleName();
 
 	public PodcastSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
@@ -66,7 +66,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 				musicService.refreshPodcasts(context, null);
 			}
 
-			List<String> updated = new ArrayList<String>();
+			List<String> updated = new ArrayList<>();
 			String updatedId = null;
 			for(int i = 0; i < podcastList.size(); i++) {
 				SyncSet set = podcastList.get(i);

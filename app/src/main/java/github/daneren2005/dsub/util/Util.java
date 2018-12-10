@@ -21,7 +21,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
-import android.support.annotation.RequiresApi;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.content.ClipboardManager;
@@ -39,7 +38,6 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -78,7 +76,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -104,10 +101,10 @@ public final class Util {
     private static DecimalFormat MEGA_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat KILO_BYTE_LOCALIZED_FORMAT = null;
     private static DecimalFormat BYTE_LOCALIZED_FORMAT = null;
-	private static SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
-	private static SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
-	private static SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
-	private static int CURRENT_YEAR = new Date().getYear();
+	private static final SimpleDateFormat DATE_FORMAT_SHORT = new SimpleDateFormat("MMM d h:mm a");
+	private static final SimpleDateFormat DATE_FORMAT_LONG = new SimpleDateFormat("MMM d, yyyy h:mm a");
+	private static final SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
+	private static final int CURRENT_YEAR = new Date().getYear();
 
     public static final String EVENT_META_CHANGED = "github.daneren2005.dsub.EVENT_META_CHANGED";
     public static final String EVENT_PLAYSTATE_CHANGED = "github.daneren2005.dsub.EVENT_PLAYSTATE_CHANGED";
@@ -125,7 +122,7 @@ public final class Util {
 
     private static Toast toast;
 	// private static Map<Integer, Pair<String, String>> tokens = new HashMap<>();
-	private static SparseArray<Pair<String, String>> tokens = new SparseArray<>();
+	private static final SparseArray<Pair<String, String>> tokens = new SparseArray<>();
 	private static Random random;
 
     private Util() {
@@ -431,7 +428,7 @@ public final class Util {
 
 	public static String replaceInternalUrl(Context context, String url) {
 		// Only change to internal when using https
-		if(url.indexOf("https") != -1) {
+		if(url.contains("https")) {
 			SharedPreferences prefs = Util.getPreferences(context);
 			int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 			String internalUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_INTERNAL_URL + instance, null);
@@ -587,10 +584,8 @@ public final class Util {
 				title = index == -1 ? title : title.substring(0, index);
 				title = title.substring(title.indexOf('-') + 1);
 
-				String query = "artist:\"" + entry.getArtist() + "\"" +
+				return "artist:\"" + entry.getArtist() + "\"" +
 					" AND title:\"" + title + "\"";
-
-				return query;
 			} else {
 				return null;
 			}
@@ -770,20 +765,17 @@ public final class Util {
 
         // More than 1 GB?
         if (byteCount >= 1024 * 1024 * 1024) {
-            NumberFormat gigaByteFormat = GIGA_BYTE_FORMAT;
-            return gigaByteFormat.format((double) byteCount / (1024 * 1024 * 1024));
+			return GIGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024 * 1024));
         }
 
         // More than 1 MB?
         if (byteCount >= 1024 * 1024) {
-            NumberFormat megaByteFormat = MEGA_BYTE_FORMAT;
-            return megaByteFormat.format((double) byteCount / (1024 * 1024));
+			return MEGA_BYTE_FORMAT.format((double) byteCount / (1024 * 1024));
         }
 
         // More than 1 KB?
         if (byteCount >= 1024) {
-            NumberFormat kiloByteFormat = KILO_BYTE_FORMAT;
-            return kiloByteFormat.format((double) byteCount / 1024);
+			return KILO_BYTE_FORMAT.format((double) byteCount / 1024);
         }
 
         return byteCount + " B";
@@ -1024,7 +1016,7 @@ public final class Util {
 			throw new IllegalArgumentException("Strings must not be null");
 		}
 
-		if(t.toString().toLowerCase().indexOf(s.toString().toLowerCase()) != -1) {
+		if(t.toString().toLowerCase().contains(s.toString().toLowerCase())) {
 			return 1;
 		}
 
@@ -1220,8 +1212,8 @@ public final class Util {
 		listView.setOnItemLongClickListener(new ListView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
-				TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-				TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+				TextView nameView = view.findViewById(R.id.detail_name);
+				TextView detailsView = view.findViewById(R.id.detail_value);
 				if(nameView == null || detailsView == null) {
 					return false;
 				}
@@ -1451,7 +1443,7 @@ public final class Util {
 					break;
 				case PREPARED:
 					// Only send quick pause event for samsung devices, causes issues for others
-					if (Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
+					if (Build.MANUFACTURER.toLowerCase().contains("samsung")) {
 						avrcpIntent.putExtra("playing", false);
 					} else {
 						return; // Don't broadcast anything

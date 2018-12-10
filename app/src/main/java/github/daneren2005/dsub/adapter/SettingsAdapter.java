@@ -82,7 +82,7 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String description, int sectionIndex) {
 		View header = holder.getView();
 
-		RecyclingImageView coverArtView = (RecyclingImageView) header.findViewById(R.id.user_avatar);
+		RecyclingImageView coverArtView = header.findViewById(R.id.user_avatar);
 		if(coverArtView != null) {
 			imageLoader.loadAvatar(context, coverArtView, user.getUsername());
 			coverArtView.setOnInvalidated(new RecyclingImageView.OnInvalidated() {
@@ -92,17 +92,17 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 				}
 			});
 
-			TextView usernameView = (TextView) header.findViewById(R.id.user_username);
+			TextView usernameView = header.findViewById(R.id.user_username);
 			usernameView.setText(user.getUsername());
 
-			final TextView emailView = (TextView) header.findViewById(R.id.user_email);
+			final TextView emailView = header.findViewById(R.id.user_email);
 			if (user.getEmail() != null) {
 				emailView.setText(user.getEmail());
 			} else {
 				emailView.setVisibility(View.GONE);
 			}
 		} else {
-			TextView nameView = (TextView) header.findViewById(R.id.item_name);
+			TextView nameView = header.findViewById(R.id.item_name);
 			nameView.setText(description);
 		}
 	}

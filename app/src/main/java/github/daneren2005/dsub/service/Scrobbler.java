@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import github.daneren2005.dsub.domain.InternetRadioStation;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.SongDBHandler;

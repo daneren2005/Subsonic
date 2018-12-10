@@ -21,7 +21,6 @@ package github.daneren2005.dsub.service.parser;
 import android.content.Context;
 import android.text.Html;
 import android.util.Log;
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Genre;
 import github.daneren2005.dsub.util.ProgressListener;
 
@@ -45,36 +44,36 @@ public class GenreParser extends AbstractParser {
 	}
 
     public List<Genre> parse(Reader reader, ProgressListener progressListener) throws Exception {
-        List<Genre> result = new ArrayList<Genre>();
+        List<Genre> result = new ArrayList<>();
         StringReader sr = null;
         
         try {
         	BufferedReader br = new BufferedReader(reader);
-        	String xml = null;
-        	String line = null;
+        	StringBuilder xml = null;
+        	String line;
         
         	while ((line = br.readLine()) != null) {
         		if (xml == null) {
-        			xml = line;
+        			xml = new StringBuilder(line);
         		} else {
-        			xml += line;
+        			xml.append(line);
         		}
         	}
         	br.close();
         	
         	// Replace double escaped ampersand (&amp;apos;) 
-        	xml = xml.replaceAll("(?:&amp;)(amp;|lt;|gt;|#37;|apos;)", "&$1");
+        	xml = new StringBuilder(xml.toString().replaceAll("(?:&amp;)(amp;|lt;|gt;|#37;|apos;)", "&$1"));
         	
             // Replace unescaped ampersand
-            xml = xml.replaceAll("&(?!amp;|lt;|gt;|#37;|apos;)", "&amp;");
+            xml = new StringBuilder(xml.toString().replaceAll("&(?!amp;|lt;|gt;|#37;|apos;)", "&amp;"));
 
             // Replace unescaped percent symbol
             // No replacements for <> at this time
-            xml = xml.replaceAll("%", "&#37;");
+            xml = new StringBuilder(xml.toString().replaceAll("%", "&#37;"));
             
-            xml = xml.replaceAll("'", "&apos;");
+            xml = new StringBuilder(xml.toString().replaceAll("'", "&apos;"));
             
-            sr = new StringReader(xml);
+            sr = new StringReader(xml.toString());
         } catch (IOException ioe) {
         	Log.e(TAG, "Error parsing Genre XML", ioe);
         }

@@ -51,7 +51,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -73,14 +72,11 @@ import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
 import github.daneren2005.dsub.service.OfflineException;
 import github.daneren2005.dsub.service.ServerTooOldException;
-import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.adapter.DownloadFileAdapter;
 import github.daneren2005.dsub.view.compat.CustomMediaRouteDialogFactory;
 import github.daneren2005.dsub.view.FadeOutAnimation;
 import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.UpdateView;
-import github.daneren2005.dsub.util.Util;
 
 import static github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import static github.daneren2005.dsub.domain.PlayerState.*;
@@ -169,36 +165,36 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		swipeVelocity = (d.getWidth() + d.getHeight()) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
 		gestureScanner = new GestureDetector(this);
 
-		playlistFlipper = (ViewFlipper)rootView.findViewById(R.id.download_playlist_flipper);
-		emptyTextView = (TextView)rootView.findViewById(R.id.download_empty);
-		songTitleTextView = (TextView)rootView.findViewById(R.id.download_song_title);
-		albumArtImageView = (ImageView)rootView.findViewById(R.id.download_album_art_image);
-		positionTextView = (TextView)rootView.findViewById(R.id.download_position);
-		durationTextView = (TextView)rootView.findViewById(R.id.download_duration);
-		statusTextView = (TextView)rootView.findViewById(R.id.download_status);
-		progressBar = (SeekBar)rootView.findViewById(R.id.download_progress_bar);
-		previousButton = (AutoRepeatButton)rootView.findViewById(R.id.download_previous);
-		nextButton = (AutoRepeatButton)rootView.findViewById(R.id.download_next);
-		rewindButton = (AutoRepeatButton) rootView.findViewById(R.id.download_rewind);
-		fastforwardButton = (AutoRepeatButton) rootView.findViewById(R.id.download_fastforward);
+		playlistFlipper = rootView.findViewById(R.id.download_playlist_flipper);
+		emptyTextView = rootView.findViewById(R.id.download_empty);
+		songTitleTextView = rootView.findViewById(R.id.download_song_title);
+		albumArtImageView = rootView.findViewById(R.id.download_album_art_image);
+		positionTextView = rootView.findViewById(R.id.download_position);
+		durationTextView = rootView.findViewById(R.id.download_duration);
+		statusTextView = rootView.findViewById(R.id.download_status);
+		progressBar = rootView.findViewById(R.id.download_progress_bar);
+		previousButton = rootView.findViewById(R.id.download_previous);
+		nextButton = rootView.findViewById(R.id.download_next);
+		rewindButton = rootView.findViewById(R.id.download_rewind);
+		fastforwardButton = rootView.findViewById(R.id.download_fastforward);
 		pauseButton =rootView.findViewById(R.id.download_pause);
 		stopButton =rootView.findViewById(R.id.download_stop);
 		startButton =rootView.findViewById(R.id.download_start);
-		repeatButton = (ImageButton)rootView.findViewById(R.id.download_repeat);
-		bookmarkButton = (ImageButton) rootView.findViewById(R.id.download_bookmark);
-		rateBadButton = (ImageButton) rootView.findViewById(R.id.download_rating_bad);
-		rateGoodButton = (ImageButton) rootView.findViewById(R.id.download_rating_good);
-		playbackSpeedButton = (ImageButton) rootView.findViewById(R.id.download_playback_speed);
+		repeatButton = rootView.findViewById(R.id.download_repeat);
+		bookmarkButton = rootView.findViewById(R.id.download_bookmark);
+		rateBadButton = rootView.findViewById(R.id.download_rating_bad);
+		rateGoodButton = rootView.findViewById(R.id.download_rating_good);
+		playbackSpeedButton = rootView.findViewById(R.id.download_playback_speed);
 		toggleListButton =rootView.findViewById(R.id.download_toggle_list);
 
-		playlistView = (RecyclerView)rootView.findViewById(R.id.download_list);
-		FastScroller fastScroller = (FastScroller) rootView.findViewById(R.id.download_fast_scroller);
+		playlistView = rootView.findViewById(R.id.download_list);
+		FastScroller fastScroller = rootView.findViewById(R.id.download_fast_scroller);
 		fastScroller.attachRecyclerView(playlistView);
 		setupLayoutManager(playlistView, false);
 		ItemTouchHelper touchHelper = new ItemTouchHelper(new DownloadFileItemHelperCallback(this, true));
 		touchHelper.attachToRecyclerView(playlistView);
 
-		starButton = (ImageButton)rootView.findViewById(R.id.download_star);
+		starButton = rootView.findViewById(R.id.download_star);
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
 			starButton.setOnClickListener(new OnClickListener() {
 				@Override
@@ -676,7 +672,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				}.execute();
 				return true;
 			case R.id.menu_save_playlist:
-				List<Entry> entries = new LinkedList<Entry>();
+				List<Entry> entries = new LinkedList<>();
 				for (DownloadFile downloadFile : getDownloadService().getSongs()) {
 					entries.add(downloadFile.getSong());
 				}
@@ -697,7 +693,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				displaySongInfo(song.getSong());
 				return true;
 			case R.id.menu_share:
-				songs = new ArrayList<Entry>(1);
+				songs = new ArrayList<>(1);
 				songs.add(song.getSong());
 				createShare(songs);
 				return true;
@@ -917,14 +913,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		View dialogView = context.getLayoutInflater().inflate(R.layout.start_timer, null);
 
 		// Setup length label
-		final TextView lengthBox = (TextView) dialogView.findViewById(R.id.timer_length_label);
+		final TextView lengthBox = dialogView.findViewById(R.id.timer_length_label);
 		final SharedPreferences prefs = Util.getPreferences(context);
 		String lengthString = prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5");
 		int length = Integer.parseInt(lengthString);
 		lengthBox.setText(Util.formatDuration(length));
 
 		// Setup length slider
-		final SeekBar lengthBar = (SeekBar) dialogView.findViewById(R.id.timer_length_bar);
+		final SeekBar lengthBar = dialogView.findViewById(R.id.timer_length_bar);
 		lengthBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -1051,7 +1047,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 
 		View dialogView = context.getLayoutInflater().inflate(R.layout.create_bookmark, null);
-		final EditText commentBox = (EditText)dialogView.findViewById(R.id.comment_text);
+		final EditText commentBox = dialogView.findViewById(R.id.comment_text);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.download_save_bookmark_title)

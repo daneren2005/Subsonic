@@ -20,8 +20,6 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Playlist;
@@ -36,16 +34,16 @@ import github.daneren2005.dsub.util.SyncUtil;
 public class PlaylistView extends UpdateView<Playlist> {
 	private static final String TAG = PlaylistView.class.getSimpleName();
 
-	private TextView titleView;
-	private ImageLoader imageLoader;
+	private final TextView titleView;
+	private final ImageLoader imageLoader;
 
 	public PlaylistView(Context context, ImageLoader imageLoader, boolean largeCell) {
 		super(context);
 		LayoutInflater.from(context).inflate(largeCell ? R.layout.basic_cell_item : R.layout.basic_art_item, this, true);
 
 		coverArtView = findViewById(R.id.item_art);
-		titleView = (TextView) findViewById(R.id.item_name);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		titleView = findViewById(R.id.item_name);
+		moreButton = findViewById(R.id.item_more);
 
 		this.imageLoader = imageLoader;
 	}

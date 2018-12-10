@@ -23,12 +23,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +103,7 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 	}
 
 	private void getStreamFromPlaylist(InternetRadioStation internetRadioStation) {
-		if(internetRadioStation.getStreamUrl() != null && (internetRadioStation.getStreamUrl().indexOf(".m3u") != -1 || internetRadioStation.getStreamUrl().indexOf(".pls") != -1)) {
+		if(internetRadioStation.getStreamUrl() != null && (internetRadioStation.getStreamUrl().contains(".m3u") || internetRadioStation.getStreamUrl().contains(".pls"))) {
 			try {
 				URL url = new URL(internetRadioStation.getStreamUrl());
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -117,7 +114,7 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 					while((line = in.readLine()) != null) {
 						// Not blank line or comment
 						if(line.length() > 0 && line.indexOf('#') != 0) {
-							if(internetRadioStation.getStreamUrl().indexOf(".m3u") != -1) {
+							if(internetRadioStation.getStreamUrl().contains(".m3u")) {
 								internetRadioStation.setStreamUrl(line);
 								break;
 							} else {

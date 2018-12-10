@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class Updater {
 	protected String TAG = Updater.class.getSimpleName();
-	protected int version;
+	protected final int version;
 	protected Context context;
 	
 	public Updater(int version) {
@@ -46,7 +46,7 @@ public class Updater {
 	
 	public void checkUpdates(Context context) {
 		this.context = context;
-		List<Updater> updaters = new ArrayList<Updater>();
+		List<Updater> updaters = new ArrayList<>();
 		updaters.add(new UpdaterSongPress());
 		updaters.add(new UpdaterNoDLNA());
 		

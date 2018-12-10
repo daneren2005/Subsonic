@@ -15,8 +15,6 @@
 
 package github.daneren2005.dsub.domain;
 
-import android.util.Pair;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +53,7 @@ public class User implements Serializable {
 	private String password;
 	private String email;
 
-	private List<Setting> settings = new ArrayList<Setting>();
+	private final List<Setting> settings = new ArrayList<>();
 	private List<Setting> musicFolders;
 
 	public User() {

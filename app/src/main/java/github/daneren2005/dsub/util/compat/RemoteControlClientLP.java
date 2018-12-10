@@ -623,12 +623,16 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		@Override
 		public void onCustomAction(String action, Bundle extras) {
-			if(CUSTOM_ACTION_THUMBS_UP.equals(action)) {
-				downloadService.toggleRating(5);
-			} else if(CUSTOM_ACTION_THUMBS_DOWN.equals(action)) {
-				downloadService.toggleRating(1);
-			} else if(CUSTOM_ACTION_STAR.equals(action)) {
-				downloadService.toggleStarred();
+			switch (action) {
+				case CUSTOM_ACTION_THUMBS_UP:
+					downloadService.toggleRating(5);
+					break;
+				case CUSTOM_ACTION_THUMBS_DOWN:
+					downloadService.toggleRating(1);
+					break;
+				case CUSTOM_ACTION_STAR:
+					downloadService.toggleStarred();
+					break;
 			}
 		}
 

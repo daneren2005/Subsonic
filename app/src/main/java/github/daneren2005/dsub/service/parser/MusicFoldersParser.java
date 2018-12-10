@@ -25,7 +25,6 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.util.ProgressListener;
 
@@ -41,7 +40,7 @@ public class MusicFoldersParser extends AbstractParser {
     public List<MusicFolder> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-        List<MusicFolder> result = new ArrayList<MusicFolder>();
+        List<MusicFolder> result = new ArrayList<>();
         int eventType;
         do {
             eventType = nextParseEvent();

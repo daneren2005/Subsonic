@@ -16,8 +16,6 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +28,8 @@ import java.util.List;
 import github.daneren2005.dsub.R;
 
 public class DetailsAdapter extends ArrayAdapter<String> {
-	private List<String> headers;
-	private List<String> details;
+	private final List<String> headers;
+	private final List<String> details;
 
 	public DetailsAdapter(Context context, int layout, List<String> headers, List<String> details) {
 		super(context, layout, headers);
@@ -49,8 +47,8 @@ public class DetailsAdapter extends ArrayAdapter<String> {
 			view = convertView;
 		}
 
-		TextView nameView = (TextView) view.findViewById(R.id.detail_name);
-		TextView detailsView = (TextView) view.findViewById(R.id.detail_value);
+		TextView nameView = view.findViewById(R.id.detail_name);
+		TextView detailsView = view.findViewById(R.id.detail_value);
 
 		nameView.setText(headers.get(position));
 

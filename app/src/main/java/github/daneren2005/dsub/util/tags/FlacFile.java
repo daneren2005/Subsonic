@@ -20,8 +20,6 @@ package github.daneren2005.dsub.util.tags;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
-import java.util.Enumeration;
-
 
 public class FlacFile extends Common {
 	private static final int FLAC_TYPE_COMMENT = 4;   // ID of 'VorbisComment's
@@ -58,9 +56,9 @@ public class FlacFile extends Common {
 	private int[] parse_metadata_block(RandomAccessFile s, long offset) throws IOException {
 		int[] result   = new int[4];
 		byte[] mb_head = new byte[4];
-		int stop_after = 0;
-		int block_type = 0;
-		int block_size = 0;
+		int stop_after;
+		int block_type;
+		int block_size;
 		
 		s.seek(offset);
 		

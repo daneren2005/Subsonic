@@ -151,7 +151,7 @@ public final class UserUtil {
 
 		for(User.Setting setting: currentUser.getSettings()) {
 			if(setting.getName().equals(role)) {
-				return setting.getValue() == true;
+				return setting.getValue();
 			}
 		}
 
@@ -168,7 +168,7 @@ public final class UserUtil {
 			onSuccess.run();
 		} else {
 			View layout = context.getLayoutInflater().inflate(R.layout.confirm_password, null);
-			final TextView passwordView = (TextView) layout.findViewById(R.id.password);
+			final TextView passwordView = layout.findViewById(R.id.password);
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
 			builder.setTitle(R.string.admin_confirm_password)
@@ -203,8 +203,8 @@ public final class UserUtil {
 	public static void changePassword(final Activity context, final User user) {
 		View layout = context.getLayoutInflater().inflate(R.layout.change_password, null);
 		View currentPasswordLayout = layout.findViewById(R.id.current_password_layout);
-		final TextView currentPasswordView = (TextView) layout.findViewById(R.id.current_password);
-		final TextView passwordView = (TextView) layout.findViewById(R.id.new_password);
+		final TextView currentPasswordView = layout.findViewById(R.id.current_password);
+		final TextView passwordView = layout.findViewById(R.id.new_password);
 
 		if(isCurrentAdmin()) {
 			currentPasswordLayout.setVisibility(View.GONE);
@@ -305,7 +305,7 @@ public final class UserUtil {
 
 	public static void changeEmail(final Activity context, final User user) {
 		View layout = context.getLayoutInflater().inflate(R.layout.change_email, null);
-		final TextView emailView = (TextView) layout.findViewById(R.id.new_email);
+		final TextView emailView = layout.findViewById(R.id.new_email);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.admin_change_email)
@@ -414,10 +414,10 @@ public final class UserUtil {
 		}
 
 		View layout = context.getLayoutInflater().inflate(R.layout.create_user, null);
-		final TextView usernameView = (TextView) layout.findViewById(R.id.username);
-		final TextView emailView = (TextView) layout.findViewById(R.id.email);
-		final TextView passwordView = (TextView) layout.findViewById(R.id.password);
-		final RecyclerView recyclerView = (RecyclerView) layout.findViewById(R.id.settings_list);
+		final TextView usernameView = layout.findViewById(R.id.username);
+		final TextView emailView = layout.findViewById(R.id.email);
+		final TextView passwordView = layout.findViewById(R.id.password);
+		final RecyclerView recyclerView = layout.findViewById(R.id.settings_list);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
 		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(layoutManager);

@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.SearchResult;
 import github.daneren2005.dsub.domain.Artist;
@@ -42,9 +41,9 @@ public class SearchResult2Parser extends MusicDirectoryEntryParser {
     public SearchResult parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-        List<Artist> artists = new ArrayList<Artist>();
-        List<MusicDirectory.Entry> albums = new ArrayList<MusicDirectory.Entry>();
-        List<MusicDirectory.Entry> songs = new ArrayList<MusicDirectory.Entry>();
+        List<Artist> artists = new ArrayList<>();
+        List<MusicDirectory.Entry> albums = new ArrayList<>();
+        List<MusicDirectory.Entry> songs = new ArrayList<>();
         int eventType;
         do {
             eventType = nextParseEvent();

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.SortedSet;
@@ -69,7 +70,7 @@ public class FileUtil {
     private static final String[] FILE_SYSTEM_UNSAFE_DIR = {"\\", "..", ":", "\"", "?", "*", "<", ">", "|"};
     private static final List<String> MUSIC_FILE_EXTENSIONS = Arrays.asList("mp3", "ogg", "aac", "flac", "m4a", "wav", "wma", "opus", "oga");
 	private static final List<String> VIDEO_FILE_EXTENSIONS = Arrays.asList("flv", "mp4", "m4v", "wmv", "avi", "mov", "mpg", "mkv", "3gp", "webm");
-	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Arrays.asList("m3u");
+	private static final List<String> PLAYLIST_FILE_EXTENSIONS = Collections.singletonList("m3u");
 	private static final int MAX_FILENAME_LENGTH = 254 - ".complete.mp3".length();
     private static File DEFAULT_MUSIC_DIR;
 	private static final Kryo kryo = new Kryo();
@@ -193,10 +194,10 @@ public class FileUtil {
 		return getAlbumArtFile(context, entry);
 	}
     public static File getAlbumArtFile(Context context, MusicDirectory.Entry entry) {
-		if(entry.getId().indexOf(ImageLoader.PLAYLIST_PREFIX) != -1) {
+		if(entry.getId().contains(ImageLoader.PLAYLIST_PREFIX)) {
 			File dir = getAlbumArtDirectory(context);
 			return  new File(dir, Util.md5Hex(ImageLoader.PLAYLIST_PREFIX + entry.getTitle()) + ".jpeg");
-		} else if(entry.getId().indexOf(ImageLoader.PODCAST_PREFIX) != -1) {
+		} else if(entry.getId().contains(ImageLoader.PODCAST_PREFIX)) {
 			File dir = getAlbumArtDirectory(context);
 			return  new File(dir, Util.md5Hex(ImageLoader.PODCAST_PREFIX + entry.getTitle()) + ".jpeg");
 		} else {
@@ -331,12 +332,10 @@ public class FileUtil {
 	}
 
 	public static File getArtistDirectory(Context context, Artist artist) {
-		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getName()));
-		return dir;
+		return new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getName()));
 	}
 	public static File getArtistDirectory(Context context, MusicDirectory.Entry artist) {
-		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getTitle()));
-		return dir;
+		return new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(artist.getTitle()));
 	}
 
     public static File getAlbumDirectory(Context context, MusicDirectory.Entry entry) {
@@ -380,7 +379,7 @@ public class FileUtil {
 			
 			// Create it if 
 			if(entryLookup == null) {
-				entryLookup = new HashMap<String, MusicDirectory.Entry>();
+				entryLookup = new HashMap<>();
 			}
 		}
 		
@@ -421,12 +420,10 @@ public class FileUtil {
 		return dir;
 	}
 	public static File getPodcastDirectory(Context context, PodcastChannel channel) {
-		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel.getName()));
-		return dir;
+		return new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel.getName()));
 	}
 	public static File getPodcastDirectory(Context context, String channel) {
-		File dir = new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel));
-		return dir;
+		return new File(getMusicDirectory(context).getPath() + "/" + fileSystemSafe(channel));
 	}
 
     public static void createDirectoryForParent(File file) {
@@ -483,10 +480,10 @@ public class FileUtil {
 	private static File getBestDir(File[] dirs) {
 		// Past 5.0 we can query directly for SD Card
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			for(int i = 0; i < dirs.length; i++) {
+			for(File dir: dirs) {
 				try {
-					if (dirs[i] != null && Environment.isExternalStorageRemovable(dirs[i])) {
-						return dirs[i];
+					if (dir != null && Environment.isExternalStorageRemovable(dir)) {
+						return dir;
 					}
 				} catch (Exception e) {
 					Log.e(TAG, "Failed to check if is external", e);
@@ -517,7 +514,7 @@ public class FileUtil {
 	}
 	public static void deleteSerializedCache(Context context) {
 		for(File file: context.getCacheDir().listFiles()) {
-			if(file.getName().indexOf(".ser") != -1) {
+			if(file.getName().contains(".ser")) {
 				file.delete();
 			}
 		}
@@ -708,10 +705,10 @@ public class FileUtil {
         File[] files = dir.listFiles();
         if (files == null) {
             Log.w(TAG, "Failed to list children for " + dir.getPath());
-            return new TreeSet<File>();
+            return new TreeSet<>();
         }
 
-        return new TreeSet<File>(Arrays.asList(files));
+        return new TreeSet<>(Arrays.asList(files));
     }
 
     public static SortedSet<File> listMediaFiles(File dir) {
@@ -776,7 +773,7 @@ public class FileUtil {
 		
 		if(file.isFile()) {
 			if(isMediaFile(file)) {
-				if(file.getAbsolutePath().indexOf(".complete") == -1) {
+				if(!file.getAbsolutePath().contains(".complete")) {
 					permanent++;
 				}
 				return new Long[] {1L, permanent, file.length()};
@@ -836,8 +833,7 @@ public class FileUtil {
 
 			in = new Input(new FileInputStream(randomFile.getFD()));
 			synchronized (kryo) {
-				T result = kryo.readObject(in, tClass);
-				return result;
+				return kryo.readObject(in, tClass);
 			}
 		} catch(FileNotFoundException e) {
 			// Different error message
@@ -876,8 +872,7 @@ public class FileUtil {
 
 			in = new Input(new InflaterInputStream(new FileInputStream(file.getFD())));
 			synchronized (kryo) {
-				T result = kryo.readObject(in, tClass);
-				return result;
+				return kryo.readObject(in, tClass);
 			}
 		} catch(FileNotFoundException e) {
 			// Different error message

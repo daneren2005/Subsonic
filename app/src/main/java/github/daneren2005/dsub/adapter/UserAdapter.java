@@ -16,20 +16,17 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.view.UpdateView;
 import github.daneren2005.dsub.view.UserView;
 
 public class UserAdapter extends SectionAdapter<User> {
-	public static int VIEW_TYPE_USER = 1;
+	public static final int VIEW_TYPE_USER = 1;
 
 	private final ImageLoader imageLoader;
 

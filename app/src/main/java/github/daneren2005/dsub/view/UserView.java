@@ -26,16 +26,16 @@ import github.daneren2005.dsub.domain.User;
 import github.daneren2005.dsub.util.ImageLoader;
 
 public class UserView extends UpdateView2<User, ImageLoader> {
-	private TextView usernameView;
-	private ImageView avatarView;
+	private final TextView usernameView;
+	private final ImageView avatarView;
 
 	public UserView(Context context) {
 		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.user_list_item, this, true);
 
-		usernameView = (TextView) findViewById(R.id.item_name);
-		avatarView = (ImageView) findViewById(R.id.item_avatar);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		usernameView = findViewById(R.id.item_name);
+		avatarView = findViewById(R.id.item_avatar);
+		moreButton = findViewById(R.id.item_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				v.showContextMenu();

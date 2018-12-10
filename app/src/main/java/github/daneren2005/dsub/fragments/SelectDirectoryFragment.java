@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,7 +44,7 @@ import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 
 import java.io.Serializable;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.PodcastEpisode;
@@ -62,13 +61,11 @@ import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.FastScroller;
-import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.MyLeadingMarginSpan2;
 import github.daneren2005.dsub.view.RecyclingImageView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -135,7 +132,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		super.onSaveInstanceState(outState);
 		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) entries);
 		outState.putSerializable(Constants.FRAGMENT_LIST2, (Serializable) albums);
-		outState.putSerializable(Constants.FRAGMENT_EXTRA, (Serializable) artistInfo);
+		outState.putSerializable(Constants.FRAGMENT_EXTRA, artistInfo);
 	}
 
 	@Override
@@ -172,23 +169,23 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				albums = (List<Entry>) args.getSerializable(Constants.FRAGMENT_LIST2);
 
 				if(albums == null) {
-					albums = new ArrayList<Entry>();
+					albums = new ArrayList<>();
 				}
 			}
 		}
 
 		rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout = rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true)) {
 			largeAlbums = true;
 		}
 
-		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
+		recyclerView = rootView.findViewById(R.id.fragment_recycler);
 		recyclerView.setHasFixedSize(true);
-		fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
+		fastScroller = rootView.findViewById(R.id.fragment_fast_scroller);
 		setupScrollList(recyclerView);
 		setupLayoutManager(recyclerView, largeAlbums);
 
@@ -323,7 +320,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		switch (menuItem.getItemId()) {
 			case R.id.song_menu_remove_playlist:
-				removeFromPlaylist(playlistId, playlistName, Arrays.<Integer>asList(entries.indexOf(entry)));
+				removeFromPlaylist(playlistId, playlistName, Collections.singletonList(entries.indexOf(entry)));
 				break;
 		}
 
@@ -359,7 +356,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				return;
 			}
 
-			onSongPress(Arrays.asList(entry), entry, false);
+			onSongPress(Collections.singletonList(entry), entry, false);
 		} else {
 			onSongPress(entries, entry, albumListType == null || "starred".equals(albumListType));
 		}
@@ -457,7 +454,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				} else {
 					root = share.getMusicDirectory();
 				}
-				List<Entry> songs = new ArrayList<Entry>();
+				List<Entry> songs = new ArrayList<>();
 				getSongsRecursively(root, songs);
 
 				// CachedMusicService is refreshing this data in the background, so will wipe out the songs list from root
@@ -576,7 +573,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					}
 				} else if("genres".equals(albumListType) || "genres-songs".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
-				} else if(albumListType.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+				} else if(albumListType.contains(MainFragment.SONGS_LIST_PREFIX)) {
 					result = service.getSongList(albumListType, size, 0, context, this);
 				} else {
 					result = service.getAlbumList(albumListType, size, 0, refresh, context, this);
@@ -587,7 +584,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	private abstract class LoadTask extends TabBackgroundTask<Pair<MusicDirectory, Boolean>> {
-		private boolean refresh;
+		private final boolean refresh;
 
 		public LoadTask(boolean refresh) {
 			super(SelectDirectoryFragment.this);
@@ -832,7 +829,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 	private List<Integer> getSelectedIndexes() {
 		List<Entry> selected = entryGridAdapter.getSelected();
-		List<Integer> indexes = new ArrayList<Integer>();
+		List<Integer> indexes = new ArrayList<>();
 
 		for(Entry entry: selected) {
 			indexes.add(entries.indexOf(entry));
@@ -967,7 +964,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	@Override
 	protected void toggleSelectedStarred() {
 		UpdateHelper.OnStarChange onStarChange = null;
-		if(albumListType != null && "starred".equals(albumListType)) {
+		if("starred".equals(albumListType)) {
 			onStarChange = new UpdateHelper.OnStarChange() {
 				@Override
 				public void starChange(boolean starred) {
@@ -1163,7 +1160,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		});
 	}
 	private void setupTextDisplay(final View header) {
-		final TextView titleView = (TextView) header.findViewById(R.id.select_album_title);
+		final TextView titleView = header.findViewById(R.id.select_album_title);
 		if(playlistName != null) {
 			titleView.setText(playlistName);
 		} else if(podcastName != null) {
@@ -1181,8 +1178,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		int songCount = 0;
 
-		Set<String> artists = new HashSet<String>();
-		Set<Integer> years = new HashSet<Integer>();
+		Set<String> artists = new HashSet<>();
+		Set<Integer> years = new HashSet<>();
 		Integer totalDuration = 0;
 		for (Entry entry : entries) {
 			if (!entry.isDirectory()) {
@@ -1200,7 +1197,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}
 
-		final TextView artistView = (TextView) header.findViewById(R.id.select_album_artist);
+		final TextView artistView = header.findViewById(R.id.select_album_artist);
 		if(podcastDescription != null || artistInfo != null) {
 			artistView.setVisibility(View.VISIBLE);
 			String text = podcastDescription != null ? podcastDescription : artistInfo.getBiography();
@@ -1222,7 +1219,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					if(artistView.getMaxLines() == minLines) {
 						// Use LeadingMarginSpan2 to try to make text flow around image
 						Display display = context.getWindowManager().getDefaultDisplay();
-						ImageView coverArtView = (ImageView) header.findViewById(R.id.select_album_art);
+						ImageView coverArtView = header.findViewById(R.id.select_album_art);
 						coverArtView.measure(display.getWidth(), display.getHeight());
 
 						int height, width;
@@ -1274,8 +1271,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			artistView.setVisibility(View.GONE);
 		}
 
-		TextView songCountView = (TextView) header.findViewById(R.id.select_album_song_count);
-		TextView songLengthView = (TextView) header.findViewById(R.id.select_album_song_length);
+		TextView songCountView = header.findViewById(R.id.select_album_song_count);
+		TextView songLengthView = header.findViewById(R.id.select_album_song_length);
 		if(podcastDescription != null || artistInfo != null) {
 			songCountView.setVisibility(View.GONE);
 			songLengthView.setVisibility(View.GONE);
@@ -1286,7 +1283,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 	}
 	private void setupButtonEvents(View header) {
-		ImageView shareButton = (ImageView) header.findViewById(R.id.select_album_share);
+		ImageView shareButton = header.findViewById(R.id.select_album_share);
 		if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || !UserUtil.canShare() || artistInfo != null) {
 			shareButton.setVisibility(View.GONE);
 		} else {
@@ -1298,7 +1295,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			});
 		}
 
-		final ImageButton starButton = (ImageButton) header.findViewById(R.id.select_album_star);
+		final ImageButton starButton = header.findViewById(R.id.select_album_star);
 		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true) && artistInfo == null) {
 			if(directory.isStarred()) {
 				starButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_toggle_star));
@@ -1331,7 +1328,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 
 		View ratingBarWrapper = header.findViewById(R.id.select_album_rate_wrapper);
-		final RatingBar ratingBar = (RatingBar) header.findViewById(R.id.select_album_rate);
+		final RatingBar ratingBar = header.findViewById(R.id.select_album_rate);
 		if(directory != null && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true) && !Util.isOffline(context)  && artistInfo == null) {
 			ratingBar.setRating(directory.getRating());
 			ratingBarWrapper.setOnClickListener(new View.OnClickListener() {

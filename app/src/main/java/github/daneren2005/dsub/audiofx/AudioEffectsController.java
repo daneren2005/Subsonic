@@ -19,17 +19,13 @@
 package github.daneren2005.dsub.audiofx;
 
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.media.audiofx.AudioEffect;
-import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
-import android.util.Log;
 
 public class AudioEffectsController {
     private static final String TAG = AudioEffectsController.class.getSimpleName();
 
     private final Context context;
-	private int audioSessionId = 0;
+	private final int audioSessionId;
 
 	private boolean available = false;
 

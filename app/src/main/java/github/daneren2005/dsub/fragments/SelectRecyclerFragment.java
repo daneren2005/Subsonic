@@ -15,15 +15,9 @@
 
 package github.daneren2005.dsub.fragments;
 
-import android.app.SearchManager;
-import android.app.SearchableInfo;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -78,11 +72,11 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout = rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
 
-		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
-		fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
+		recyclerView = rootView.findViewById(R.id.fragment_recycler);
+		fastScroller = rootView.findViewById(R.id.fragment_fast_scroller);
 		setupLayoutManager();
 
 		if(pullToRefresh) {
@@ -147,7 +141,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		if(backgroundUpdate) {
 			currentTask.execute();
 		} else {
-			objects = new ArrayList<T>();
+			objects = new ArrayList<>();
 
 			try {
 				objects = getObjects(null, refresh, null);
@@ -177,7 +171,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 	}
 
 	private class UpdateTask extends TabBackgroundTask<List<T>> {
-		private boolean refresh;
+		private final boolean refresh;
 
 		public UpdateTask(SubsonicFragment fragment, boolean refresh) {
 			super(fragment);
@@ -188,7 +182,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		public List<T> doInBackground() throws Exception {
 			MusicService musicService = MusicServiceFactory.getMusicService(context);
 
-			objects = new ArrayList<T>();
+			objects = new ArrayList<>();
 
 			try {
 				objects = getObjects(musicService, refresh, this);

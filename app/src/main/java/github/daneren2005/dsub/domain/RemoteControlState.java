@@ -28,7 +28,7 @@ public enum RemoteControlState {
 	
 	private final int mRemoteControlState;
 	
-	private RemoteControlState(int value) {
+	RemoteControlState(int value) {
 		mRemoteControlState = value;
 	}
 	

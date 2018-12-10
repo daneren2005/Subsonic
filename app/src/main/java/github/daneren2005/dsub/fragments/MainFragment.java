@@ -40,7 +40,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -148,7 +148,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		}
 
 		if(ServerInfo.checkServerVersion(context, "1.8")) {
-			List<Integer> videos = Arrays.asList(R.string.main_videos);
+			List<Integer> videos = Collections.singletonList(R.string.main_videos);
 			sections.add(videos);
 			headers.add("videos");
 		}
@@ -158,7 +158,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 	@Override
 	public List<Integer> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
-		return Arrays.asList(0);
+		return Collections.singletonList(0);
 	}
 
 	@Override
@@ -285,7 +285,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 					Process logcatProc = null;
 
 					try {
-						List<String> progs = new ArrayList<String>();
+						List<String> progs = new ArrayList<>();
 						progs.add("logcat");
 						progs.add("-v");
 						progs.add("time");
@@ -294,7 +294,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 						progs.add(logcat.getCanonicalPath());
 						progs.add("*:I");
 
-						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[progs.size()]));
+						logcatProc = Runtime.getRuntime().exec(progs.toArray(new String[0]));
 						logcatProc.waitFor();
 					} finally {
 						if(logcatProc != null) {
@@ -304,7 +304,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 					URL url = new URL("https://pastebin.com/api/api_post.php");
 					HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
-					StringBuffer responseBuffer = new StringBuffer();
+					StringBuilder responseBuffer = new StringBuilder();
 					try {
 						urlConnection.setReadTimeout(10000);
 						urlConnection.setConnectTimeout(15000);

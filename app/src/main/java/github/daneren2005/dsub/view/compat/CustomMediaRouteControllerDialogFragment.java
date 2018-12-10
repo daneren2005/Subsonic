@@ -6,7 +6,6 @@ import android.support.v7.app.MediaRouteControllerDialog;
 import android.support.v7.app.MediaRouteControllerDialogFragment;
 
 import github.daneren2005.dsub.util.ThemeUtil;
-import github.daneren2005.dsub.util.Util;
 
 public class CustomMediaRouteControllerDialogFragment extends MediaRouteControllerDialogFragment {
 	@Override

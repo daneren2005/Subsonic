@@ -18,7 +18,6 @@
 */
 package github.daneren2005.dsub.fragments;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,16 +28,14 @@ import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
-import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.MenuUtil;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.adapter.BookmarkAdapter;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirectory.Entry> {
@@ -99,7 +96,7 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 					getSiblingsRecursively(bookmark);
 
 					if(songs.isEmpty() || !songs.contains(bookmark)) {
-						playNowInTask(Arrays.asList(bookmark), bookmark, bookmark.getBookmark().getPosition());
+						playNowInTask(Collections.singletonList(bookmark), bookmark, bookmark.getBookmark().getPosition());
 					} else {
 						playNowInTask(songs, bookmark, bookmark.getBookmark().getPosition());
 					}
@@ -112,7 +109,7 @@ public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirector
 				}
 			}.execute();
 		} else {
-			onSongPress(Arrays.asList(bookmark), bookmark, bookmark.getBookmark().getPosition(), false);
+			onSongPress(Collections.singletonList(bookmark), bookmark, bookmark.getBookmark().getPosition(), false);
 		}
 	}
 

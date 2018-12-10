@@ -83,10 +83,10 @@ import github.daneren2005.dsub.view.ChangeLog;
  * Created by Scott on 10/14/13.
  */
 public class SubsonicFragmentActivity extends SubsonicActivity implements DownloadService.OnSongChangedListener {
-	private static String TAG = SubsonicFragmentActivity.class.getSimpleName();
+	private static final String TAG = SubsonicFragmentActivity.class.getSimpleName();
 	private static boolean infoDialogDisplayed;
 	private static boolean sessionInitialized = false;
-	private static long ALLOWED_SKEW = 30000L;
+	private static final long ALLOWED_SKEW = 30000L;
 
 	private SlidingUpPanelLayout slideUpPanel;
 	private SlidingUpPanelLayout.PanelSlideListener panelSlideListener;
@@ -192,7 +192,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		}
 
-		slideUpPanel = (SlidingUpPanelLayout) findViewById(R.id.slide_up_panel);
+		slideUpPanel = findViewById(R.id.slide_up_panel);
 		panelSlideListener = new SlidingUpPanelLayout.PanelSlideListener() {
 			@Override
 			public void onPanelSlide(View panel, float slideOffset) {
@@ -259,11 +259,11 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}
 
 		bottomBar = findViewById(R.id.bottom_bar);
-		mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-		nowPlayingToolbar = (Toolbar) findViewById(R.id.now_playing_toolbar);
-		coverArtView = (ImageView) bottomBar.findViewById(R.id.album_art);
-		trackView = (TextView) bottomBar.findViewById(R.id.track_name);
-		artistView = (TextView) bottomBar.findViewById(R.id.artist_name);
+		mainToolbar = findViewById(R.id.main_toolbar);
+		nowPlayingToolbar = findViewById(R.id.now_playing_toolbar);
+		coverArtView = bottomBar.findViewById(R.id.album_art);
+		trackView = bottomBar.findViewById(R.id.track_name);
+		artistView = bottomBar.findViewById(R.id.artist_name);
 
 		setSupportActionBar(mainToolbar);
 
@@ -274,7 +274,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			trans.commit();
 		}
 
-		rewindButton = (ImageButton) findViewById(R.id.download_rewind);
+		rewindButton = findViewById(R.id.download_rewind);
 		rewindButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -292,7 +292,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		});
 
-		previousButton = (ImageButton) findViewById(R.id.download_previous);
+		previousButton = findViewById(R.id.download_previous);
 		previousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -310,7 +310,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		});
 
-		startButton = (ImageButton) findViewById(R.id.download_start);
+		startButton = findViewById(R.id.download_start);
 		startButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -332,7 +332,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		});
 
-		nextButton = (ImageButton) findViewById(R.id.download_next);
+		nextButton = findViewById(R.id.download_next);
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -350,7 +350,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		});
 
-		fastforwardButton = (ImageButton) findViewById(R.id.download_fastforward);
+		fastforwardButton = findViewById(R.id.download_fastforward);
 		fastforwardButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -744,7 +744,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private boolean resetCacheLocation(SharedPreferences prefs) {
 		String newDirectory = FileUtil.getDefaultMusicDirectory(this).getPath();
 		String oldDirectory = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(newDirectory == null || (oldDirectory != null && newDirectory.equals(oldDirectory))) {
+		if(newDirectory == null || (newDirectory.equals(oldDirectory))) {
 			return false;
 		} else {
 			SharedPreferences.Editor editor = prefs.edit();

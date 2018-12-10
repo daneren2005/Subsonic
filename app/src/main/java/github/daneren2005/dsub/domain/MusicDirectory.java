@@ -20,7 +20,6 @@ package github.daneren2005.dsub.domain;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.util.Log;
@@ -41,6 +40,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Objects;
 
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.util.Constants;
@@ -59,7 +59,7 @@ public class MusicDirectory implements Serializable {
     private List<Entry> children;
 
 	public MusicDirectory() {
-		children = new ArrayList<Entry>();
+		children = new ArrayList<>();
 	}
 	public MusicDirectory(List<Entry> children) {
 		this.children = children;
@@ -111,7 +111,7 @@ public class MusicDirectory implements Serializable {
             return children;
         }
 
-        List<Entry> result = new ArrayList<Entry>(children.size());
+        List<Entry> result = new ArrayList<>(children.size());
         for (Entry child : children) {
             if (child != null && child.isDirectory() && includeDirs || !child.isDirectory() && includeFiles) {
                 result.add(child);
@@ -120,7 +120,7 @@ public class MusicDirectory implements Serializable {
         return result;
     }
 	public synchronized List<Entry> getSongs() {
-		List<Entry> result = new ArrayList<Entry>();
+		List<Entry> result = new ArrayList<>();
 		for (Entry child : children) {
 			if (child != null && !child.isDirectory() && !child.isVideo()) {
 				result.add(child);
@@ -149,11 +149,9 @@ public class MusicDirectory implements Serializable {
 
 	public synchronized boolean updateMetadata(MusicDirectory refreshedDirectory) {
 		boolean metadataUpdated = false;
-		Iterator<Entry> it = children.iterator();
-		while(it.hasNext()) {
-			Entry entry = it.next();
+		for (Entry entry : children) {
 			int index = refreshedDirectory.children.indexOf(entry);
-			if(index != -1) {
+			if (index != -1) {
 				final Entry refreshed = refreshedDirectory.children.get(index);
 
 				entry.setTitle(refreshed.getTitle());
@@ -168,7 +166,7 @@ public class MusicDirectory implements Serializable {
 				entry.setStarred(refreshed.isStarred());
 				entry.setRating(refreshed.getRating());
 				entry.setType(refreshed.getType());
-				if(!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
+				if (!Util.equals(entry.getCoverArt(), refreshed.getCoverArt())) {
 					metadataUpdated = true;
 					entry.setCoverArt(refreshed.getCoverArt());
 				}
@@ -188,7 +186,7 @@ public class MusicDirectory implements Serializable {
 						found.setStarred(refreshed.isStarred());
 						found.setRating(refreshed.getRating());
 						found.setType(refreshed.getType());
-						if(!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
+						if (!Util.equals(found.getCoverArt(), refreshed.getCoverArt())) {
 							found.setCoverArt(refreshed.getCoverArt());
 							metadataUpdate = DownloadService.METADATA_UPDATED_COVER_ART;
 						}
@@ -604,7 +602,7 @@ public class MusicDirectory implements Serializable {
 		public boolean isOnlineId(Context context) {
 			try {
 				String cacheLocation = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-				return cacheLocation == null || id == null || id.indexOf(cacheLocation) == -1;
+				return cacheLocation == null || id == null || !id.contains(cacheLocation);
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to check online id validity");
 
@@ -637,43 +635,28 @@ public class MusicDirectory implements Serializable {
         }
 
         public byte[] toByteArray() throws IOException {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			ObjectOutput out = null;
-			try {
+			ObjectOutput out;
+			try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
 				out = new ObjectOutputStream(bos);
 				out.writeObject(this);
 				out.flush();
 				return bos.toByteArray();
-			} finally {
-				try {
-					bos.close();
-				} catch (IOException ex) {
-					// ignore close exception
-				}
 			}
+			// ignore close exception
 		}
 
 		public static Entry fromByteArray(byte[] byteArray) throws IOException, ClassNotFoundException {
 			ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
-			ObjectInput in = null;
-			try {
-				in = new ObjectInputStream(bis);
+			try (ObjectInput in = new ObjectInputStream(bis)) {
 				return (Entry) in.readObject();
-			} finally {
-				try {
-					if (in != null) {
-						in.close();
-					}
-				} catch (IOException ex) {
-					// ignore close exception
-				}
 			}
+			// ignore close exception
 		}
 	}
 	
 	public static class EntryComparator implements Comparator<Entry> {
-		private boolean byYear;
-		private Collator collator;
+		private final boolean byYear;
+		private final Collator collator;
 		
 		public EntryComparator(boolean byYear) {
 			this.byYear = byYear;
@@ -715,7 +698,7 @@ public class MusicDirectory implements Serializable {
 			
 			Integer lhsTrack = lhs.getTrack();
 			Integer rhsTrack = rhs.getTrack();
-			if(lhsTrack != null && rhsTrack != null && lhsTrack != rhsTrack) {
+			if(lhsTrack != null && rhsTrack != null && !Objects.equals(lhsTrack, rhsTrack)) {
 				return lhsTrack.compareTo(rhsTrack);
 			} else if(lhsTrack != null) {
 				return -1;

@@ -1,18 +1,11 @@
 package github.daneren2005.dsub.util;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
 
 /**
  * Created by Scott on 11/24/13.
@@ -48,7 +41,7 @@ public final class SyncUtil {
 		String syncFile = getPlaylistSyncFile(context, instance);
 		ArrayList<SyncSet> playlists = FileUtil.deserializeCompressed(context, syncFile, ArrayList.class);
 		if(playlists == null) {
-			playlists = new ArrayList<SyncSet>();
+			playlists = new ArrayList<>();
 
 			// Try to convert old style into new style
 			ArrayList<String> oldPlaylists = FileUtil.deserialize(context, syncFile, ArrayList.class);
@@ -112,7 +105,7 @@ public final class SyncUtil {
 	public static ArrayList<SyncSet> getSyncedPodcasts(Context context, int instance) {
 		ArrayList<SyncSet> podcasts = FileUtil.deserialize(context, getPodcastSyncFile(context, instance), ArrayList.class);
 		if(podcasts == null) {
-			podcasts = new ArrayList<SyncSet>();
+			podcasts = new ArrayList<>();
 		}
 		return podcasts;
 	}
@@ -151,7 +144,7 @@ public final class SyncUtil {
 	public static ArrayList<String> getSyncedStarred(Context context, int instance) {
 		ArrayList<String> list = FileUtil.deserializeCompressed(context, getStarredSyncFile(context, instance), ArrayList.class);
 		if(list == null) {
-			list = new ArrayList<String>();
+			list = new ArrayList<>();
 		}
 		return list;
 	}
@@ -166,7 +159,7 @@ public final class SyncUtil {
 	public static ArrayList<String> getSyncedMostRecent(Context context, int instance) {
 		ArrayList<String> list = FileUtil.deserialize(context, getMostRecentSyncFile(context, instance), ArrayList.class);
 		if(list == null) {
-			list = new ArrayList<String>();
+			list = new ArrayList<>();
 		}
 		return list;
 	}

@@ -18,9 +18,6 @@
  */
 package github.daneren2005.dsub.service;
 
-import java.io.File;
-import java.io.Reader;
-import java.io.FileReader;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,7 +82,7 @@ public class OfflineMusicService implements MusicService {
 
     @Override
     public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        List<Artist> artists = new ArrayList<Artist>();
+        List<Artist> artists = new ArrayList<>();
 		List<Entry> entries = new ArrayList<>();
         File root = FileUtil.getMusicDirectory(context);
         for (File file : FileUtil.listFiles(root)) {
@@ -99,9 +96,8 @@ public class OfflineMusicService implements MusicService {
 				entries.add(createEntry(context, file));
 			}
         }
-		
-        Indexes indexes = new Indexes(0L, Collections.<Artist>emptyList(), artists, entries);
-		return indexes;
+
+		return new Indexes(0L, Collections.<Artist>emptyList(), artists, entries);
     }
 
     @Override
@@ -113,7 +109,7 @@ public class OfflineMusicService implements MusicService {
 		MusicDirectory result = new MusicDirectory();
 		result.setName(dir.getName());
 
-		Set<String> names = new HashSet<String>();
+		Set<String> names = new HashSet<>();
 
 		for (File file : FileUtil.listMediaFiles(dir)) {
 			String name = getName(file);
@@ -247,11 +243,11 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
     public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
-		List<Artist> artists = new ArrayList<Artist>();
-		List<Entry> albums = new ArrayList<Entry>();
-		List<Entry> songs = new ArrayList<Entry>();
+		List<Artist> artists = new ArrayList<>();
+		List<Entry> albums = new ArrayList<>();
+		List<Entry> songs = new ArrayList<>();
         File root = FileUtil.getMusicDirectory(context);
-		int closeness = 0;
+		int closeness;
         for (File artistFile : FileUtil.listFiles(root)) {
 			String artistName = artistFile.getName();
             if (artistFile.isDirectory()) {
@@ -270,41 +266,17 @@ public class OfflineMusicService implements MusicService {
 		
 		Collections.sort(artists, new Comparator<Artist>() {
 			public int compare(Artist lhs, Artist rhs) {
-				if(lhs.getCloseness() == rhs.getCloseness()) {
-					return 0;
-				}
-				else if(lhs.getCloseness() > rhs.getCloseness()) {
-					return -1;
-				}
-				else {
-					return 1;
-				}
+				return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
 			}
 		});
 		Collections.sort(albums, new Comparator<Entry>() {
 			public int compare(Entry lhs, Entry rhs) {
-				if(lhs.getCloseness() == rhs.getCloseness()) {
-					return 0;
-				}
-				else if(lhs.getCloseness() > rhs.getCloseness()) {
-					return -1;
-				}
-				else {
-					return 1;
-				}
+				return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
 			}
 		});
 		Collections.sort(songs, new Comparator<Entry>() {
 			public int compare(Entry lhs, Entry rhs) {
-				if(lhs.getCloseness() == rhs.getCloseness()) {
-					return 0;
-				}
-				else if(lhs.getCloseness() > rhs.getCloseness()) {
-					return -1;
-				}
-				else {
-					return 1;
-				}
+				return Integer.compare(rhs.getCloseness(), lhs.getCloseness());
 			}
 		});
 
@@ -378,7 +350,7 @@ public class OfflineMusicService implements MusicService {
 
     @Override
     public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        List<Playlist> playlists = new ArrayList<Playlist>();
+        List<Playlist> playlists = new ArrayList<>();
         File root = FileUtil.getPlaylistDirectory(context);
 		String lastServer = null;
 		boolean removeServer = true;
@@ -410,7 +382,7 @@ public class OfflineMusicService implements MusicService {
 								// Don't add file to playlist if it doesn't exist as cached or pinned!
 								File checkFile = entryFile;
 								if(!checkFile.exists()) {
-									// If normal file doens't exist, check if .complete version does
+									// If normal file doesn't exist, check if .complete version does
 									checkFile = new File(entryFile.getParent(), FileUtil.getBaseName(entryFile.getName())
 											+ ".complete." + FileUtil.getExtension(entryFile.getName()));
 								}
@@ -557,7 +529,7 @@ public class OfflineMusicService implements MusicService {
 		scrobbles++;
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		
-		if(id.indexOf(cacheLocn) != -1) {
+		if(id.contains(cacheLocn)) {
 			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(id);
 			if(cachedSongId != null) {
 				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, cachedSongId.getSecond());
@@ -653,7 +625,7 @@ public class OfflineMusicService implements MusicService {
 		SharedPreferences.Editor offlineEditor = offline.edit();
 
 		String id = entries.get(0).getId();
-		if(id.indexOf(cacheLocn) != -1) {
+		if(id.contains(cacheLocn)) {
 			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
 			offlineEditor.putString(Constants.OFFLINE_STAR_SEARCH + stars, searchCriteria);
 			offlineEditor.remove(Constants.OFFLINE_STAR_ID + stars);
@@ -715,7 +687,7 @@ public class OfflineMusicService implements MusicService {
 	@Override
     public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
         File root = FileUtil.getMusicDirectory(context);
-        List<File> children = new LinkedList<File>();
+        List<File> children = new LinkedList<>();
         listFilesRecursively(root, children);
         MusicDirectory result = new MusicDirectory();
 
@@ -737,7 +709,7 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
 	public List<PodcastChannel> getPodcastChannels(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-		List<PodcastChannel> channels = new ArrayList<PodcastChannel>();
+		List<PodcastChannel> channels = new ArrayList<>();
 		
 		File dir = FileUtil.getPodcastDirectory(context);
 		String line;

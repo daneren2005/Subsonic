@@ -53,7 +53,7 @@ public class BookmarkAdapter extends SectionAdapter<MusicDirectory.Entry> {
 		songView.setObject(item, true);
 
 		// Add current position to duration
-		TextView durationTextView = (TextView) songView.findViewById(R.id.song_duration);
+		TextView durationTextView = songView.findViewById(R.id.song_duration);
 		String duration = durationTextView.getText().toString();
 		durationTextView.setText(Util.formatDuration(bookmark.getPosition() / 1000) + " / " + duration);
 	}

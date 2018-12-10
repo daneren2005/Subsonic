@@ -26,13 +26,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.util.Constants;
 
 /**
  * SeekBar preference to set the shake force threshold.
@@ -43,15 +41,15 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	 * The current value.
 	 */
 	private String mValue;
-	private int mMin;
-	private int mMax;
-	private float mStepSize;
+	private final int mMin;
+	private final int mMax;
+	private final float mStepSize;
 	private String mDisplay;
 
 	/**
 	 * Our context (needed for getResources())
 	 */
-	private Context mContext;
+	private final Context mContext;
 
 	/**
 	 * TextView to display current threshold.
@@ -111,10 +109,10 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	{
 		View view = super.onCreateDialogView();
 
-		mValueText = (TextView)view.findViewById(R.id.value);
+		mValueText = view.findViewById(R.id.value);
 		mValueText.setText(getSummary(mValue));
 
-		SeekBar seekBar = (SeekBar)view.findViewById(R.id.seek_bar);
+		SeekBar seekBar = view.findViewById(R.id.seek_bar);
 		seekBar.setMax(mMax - mMin);
 		try {
 			seekBar.setProgress(Integer.parseInt(mValue));

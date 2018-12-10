@@ -35,10 +35,10 @@ import github.daneren2005.serverproxy.WebProxy;
 
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();
-	protected DownloadService downloadService;
+	protected final DownloadService downloadService;
 	protected boolean nextSupported = false;
 	protected ServerProxy proxy;
-	protected String rootLocation = "";
+	protected final String rootLocation;
 
 	public RemoteController(DownloadService downloadService) {
 		this.downloadService = downloadService;
@@ -85,7 +85,7 @@ public abstract class RemoteController {
 	}
 
 	protected static class TaskQueue {
-		private final LinkedBlockingQueue<RemoteTask> queue = new LinkedBlockingQueue<RemoteTask>();
+		private final LinkedBlockingQueue<RemoteTask> queue = new LinkedBlockingQueue<>();
 
 		void add(RemoteTask jukeboxTask) {
 			queue.add(jukeboxTask);
@@ -131,14 +131,14 @@ public abstract class RemoteController {
 		// In offline mode or playing offline song
 		if(downloadFile.isStream()) {
 			url = downloadFile.getStream();
-		} else if(Util.isOffline(downloadService) || song.getId().indexOf(rootLocation) != -1) {
+		} else if(Util.isOffline(downloadService) || song.getId().contains(rootLocation)) {
 			if(proxy == null) {
 				proxy = new FileProxy(downloadService);
 				proxy.start();
 			}
 
 			// Offline song
-			if(song.getId().indexOf(rootLocation) != -1) {
+			if(song.getId().contains(rootLocation)) {
 				url = proxy.getPublicAddress(song.getId());
 			} else {
 				// Playing online song in offline mode

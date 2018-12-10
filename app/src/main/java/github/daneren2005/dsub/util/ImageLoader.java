@@ -39,8 +39,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.ref.WeakReference;
-
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ArtistInfo;
 import github.daneren2005.dsub.domain.InternetRadioStation;
@@ -64,9 +62,9 @@ public class ImageLoader {
 	public static final String PLAYLIST_PREFIX = "pl-";
 	public static final String PODCAST_PREFIX = "pc-";
 
-	private Context context;
+	private final Context context;
 	private LruCache<String, Bitmap> cache;
-	private Handler handler;
+	private final Handler handler;
 	private Bitmap nowPlaying;
 	private Bitmap nowPlayingSmall;
 	private final int imageSizeDefault;
@@ -222,7 +220,7 @@ public class ImageLoader {
 		return loadImage(view, entry, large, size, crossfade);
 	}
 	public SilentBackgroundTask loadImage(View view, MusicDirectory.Entry entry, boolean large, int size, boolean crossfade) {
-		if(entry != null && entry instanceof InternetRadioStation) {
+		if(entry instanceof InternetRadioStation) {
 			// Continue on and load a null bitmap
 		}
 		// If we know this a artist, try to load artist info instead
@@ -472,8 +470,8 @@ public class ImageLoader {
 	}
 
 	private class ViewImageTask extends ImageTask {
-		protected boolean mCrossfade;
-		private View mView;
+		protected final boolean mCrossfade;
+		private final View mView;
 
 		public ViewImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, View view, boolean crossfade) {
 			super(context, entry, size, saveSize, isNowPlaying);
@@ -489,7 +487,7 @@ public class ImageLoader {
 	}
 
 	private class RemoteControlClientImageTask extends ImageTask {
-		private RemoteControlClientBase mRemoteControl;
+		private final RemoteControlClientBase mRemoteControl;
 
 		public RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClientBase remoteControl) {
 			super(context, entry, size, saveSize, isNowPlaying);
@@ -510,8 +508,8 @@ public class ImageLoader {
 		private final int mSaveSize;
 		private final boolean mIsNowPlaying;
 		private Drawable mDrawable;
-		private boolean mCrossfade;
-		private View mView;
+		private final boolean mCrossfade;
+		private final View mView;
 
 		private SilentBackgroundTask subTask;
 
@@ -589,7 +587,7 @@ public class ImageLoader {
 		private final String mUrl;
 		private final ImageView mView;
 		private Drawable mDrawable;
-		private int mSize;
+		private final int mSize;
 
 		public ViewUrlTask(Context context, View view, String url, int size) {
 			super(context);

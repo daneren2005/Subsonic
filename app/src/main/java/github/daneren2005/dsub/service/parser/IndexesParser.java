@@ -51,15 +51,15 @@ public class IndexesParser extends MusicDirectoryEntryParser {
         long t0 = System.currentTimeMillis();
         init(reader);
 
-        List<Artist> artists = new ArrayList<Artist>();
-        List<Artist> shortcuts = new ArrayList<Artist>();
-		List<MusicDirectory.Entry> entries = new ArrayList<MusicDirectory.Entry>();
+        List<Artist> artists = new ArrayList<>();
+        List<Artist> shortcuts = new ArrayList<>();
+		List<MusicDirectory.Entry> entries = new ArrayList<>();
         Long lastModified = null;
         int eventType;
         String index = "#";
 		String ignoredArticles = null;
         boolean changed = false;
-		Map<String, Artist> artistList = new HashMap<String, Artist>();
+		Map<String, Artist> artistList = new HashMap<>();
 
         do {
             eventType = nextParseEvent();

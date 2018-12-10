@@ -22,7 +22,7 @@ import android.widget.TextView;
 import github.daneren2005.dsub.R;
 
 public class BasicHeaderView extends UpdateView<String> {
-	TextView nameView;
+	final TextView nameView;
 
 	public BasicHeaderView(Context context) {
 		this(context, R.layout.basic_header);
@@ -31,7 +31,7 @@ public class BasicHeaderView extends UpdateView<String> {
 		super(context, false);
 
 		LayoutInflater.from(context).inflate(layout, this, true);
-		nameView = (TextView) findViewById(R.id.item_name);
+		nameView = findViewById(R.id.item_name);
 	}
 
 	protected void setObjectImpl(String string) {

@@ -19,9 +19,7 @@ import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import java.util.List;
 
@@ -33,7 +31,7 @@ import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements FastScroller.BubbleTextGetter {
-	public static int VIEW_TYPE_DOWNLOAD_FILE = 1;
+	public static final int VIEW_TYPE_DOWNLOAD_FILE = 1;
 
 	public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
 		super(context, entries);

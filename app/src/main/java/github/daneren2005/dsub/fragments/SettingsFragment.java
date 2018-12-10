@@ -36,8 +36,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -69,7 +67,7 @@ import github.daneren2005.dsub.view.ErrorDialog;
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();
 
-	private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<String, ServerSettings>();
+	private final Map<String, ServerSettings> serverSettings = new LinkedHashMap<>();
 	private boolean testingConnection;
 	private ListPreference theme;
 	private ListPreference maxBitrateWifi;
@@ -780,13 +778,13 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	}
 
 	private class ServerSettings {
-		private int instance;
-		private EditTextPreference serverName;
-		private EditTextPreference serverUrl;
-		private EditTextPreference serverLocalNetworkSSID;
-		private EditTextPreference serverInternalUrl;
-		private EditTextPreference username;
-		private PreferenceScreen screen;
+		private final int instance;
+		private final EditTextPreference serverName;
+		private final EditTextPreference serverUrl;
+		private final EditTextPreference serverLocalNetworkSSID;
+		private final EditTextPreference serverInternalUrl;
+		private final EditTextPreference username;
+		private final PreferenceScreen screen;
 
 		private ServerSettings(int instance) {
 			this.instance = instance;

@@ -16,13 +16,12 @@
 package github.daneren2005.dsub.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -46,7 +45,7 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 		List<List<T>> sections = new ArrayList<>();
 		sections.add(section);
 
-		init(context, Arrays.asList("Section"), sections, Arrays.asList((Integer) null));
+		init(context, Collections.singletonList("Section"), sections, Collections.singletonList((Integer) null));
 	}
 	public ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
 		init(context, headers, sections, null);
@@ -96,7 +95,7 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 	@Override
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, final int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
-		ImageView toggleSelectionView = (ImageView) view.findViewById(R.id.item_select);
+		ImageView toggleSelectionView = view.findViewById(R.id.item_select);
 
 		List<T> visibleSelection = sections.get(sectionIndex);
 		List<T> sectionExtras = sectionsExtras.get(sectionIndex);

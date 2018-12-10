@@ -28,17 +28,17 @@ import github.daneren2005.dsub.domain.Genre;
 public class GenreView extends UpdateView<Genre> {
 	private static final String TAG = GenreView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView songsView;
-	private TextView albumsView;
+	private final TextView titleView;
+	private final TextView songsView;
+	private final TextView albumsView;
 
 	public GenreView(Context context) {
 		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.genre_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.genre_name);
-		songsView = (TextView) findViewById(R.id.genre_songs);
-		albumsView = (TextView) findViewById(R.id.genre_albums);
+		titleView = findViewById(R.id.genre_name);
+		songsView = findViewById(R.id.genre_songs);
+		albumsView = findViewById(R.id.genre_albums);
 	}
 
 	public void setObjectImpl(Genre genre) {

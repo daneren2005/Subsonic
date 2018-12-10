@@ -37,12 +37,12 @@ import github.daneren2005.dsub.view.UpdateView.UpdateViewHolder;
 public class EntryGridAdapter extends SectionAdapter<Entry> {
 	private static String TAG = EntryGridAdapter.class.getSimpleName();
 
-	public static int VIEW_TYPE_ALBUM_CELL = 1;
-	public static int VIEW_TYPE_ALBUM_LINE = 2;
-	public static int VIEW_TYPE_SONG = 3;
+	public static final int VIEW_TYPE_ALBUM_CELL = 1;
+	public static final int VIEW_TYPE_ALBUM_LINE = 2;
+	public static final int VIEW_TYPE_SONG = 3;
 
-	private ImageLoader imageLoader;
-	private boolean largeAlbums;
+	private final ImageLoader imageLoader;
+	private final boolean largeAlbums;
 	private boolean showArtist = false;
 	private boolean showAlbum = false;
 	private boolean removeFromPlaylist = false;

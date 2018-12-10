@@ -37,7 +37,7 @@ public enum PlayerState {
     
     private final int mRemoteControlClientPlayState;
     
-    private PlayerState(int playState) {
+    PlayerState(int playState) {
     	mRemoteControlClientPlayState = playState;
     }
     

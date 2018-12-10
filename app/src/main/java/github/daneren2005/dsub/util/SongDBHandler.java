@@ -43,7 +43,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public static final String SONGS_LAST_PLAYED = "lastPlayed";
 	public static final String SONGS_LAST_COMPLETED = "lastCompleted";
 
-	private Context context;
+	private final Context context;
 
 	private SongDBHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -190,10 +190,10 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	}
 
 	public synchronized Pair<Integer, String> getOnlineSongId(MusicDirectory.Entry entry) {
-		return getOnlineSongId(Util.getRestUrlHash(context), entry.getId(), FileUtil.getSongFile(context, entry).getAbsolutePath(), Util.isOffline(context) ? false : true);
+		return getOnlineSongId(Util.getRestUrlHash(context), entry.getId(), FileUtil.getSongFile(context, entry).getAbsolutePath(), !Util.isOffline(context));
 	}
 	public synchronized Pair<Integer, String> getOnlineSongId(DownloadFile downloadFile) {
-		return getOnlineSongId(Util.getRestUrlHash(context), downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), Util.isOffline(context) ? false : true);
+		return getOnlineSongId(Util.getRestUrlHash(context), downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), !Util.isOffline(context));
 	}
 
 	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, MusicDirectory.Entry entry) {
@@ -205,7 +205,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-		if(cacheLocn != null && id.indexOf(cacheLocn) != -1) {
+		if(cacheLocn != null && id.contains(cacheLocn)) {
 			if(requireServerKey) {
 				return getIdFromPath(serverKey, savePath);
 			} else {

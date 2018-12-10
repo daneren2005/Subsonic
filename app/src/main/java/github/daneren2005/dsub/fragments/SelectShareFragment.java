@@ -137,9 +137,9 @@ public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 
 	private void updateShareInfo(final Share share) {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.update_share, null);
-		final EditText nameBox = (EditText)dialogView.findViewById(R.id.get_share_name);
-		final DatePicker expireBox = (DatePicker)dialogView.findViewById(R.id.get_share_expire);
-		final CheckBox noExpiresBox = (CheckBox)dialogView.findViewById(R.id.get_share_no_expire);
+		final EditText nameBox = dialogView.findViewById(R.id.get_share_name);
+		final DatePicker expireBox = dialogView.findViewById(R.id.get_share_expire);
+		final CheckBox noExpiresBox = dialogView.findViewById(R.id.get_share_no_expire);
 
 		nameBox.setText(share.getDescription());
 		Date expires = share.getExpires();

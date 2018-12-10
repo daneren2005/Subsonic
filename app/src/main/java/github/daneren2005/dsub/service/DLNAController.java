@@ -15,7 +15,6 @@
 
 package github.daneren2005.dsub.service;
 
-import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
 
@@ -65,12 +64,9 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.DLNADevice;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PlayerState;
-import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.serverproxy.FileProxy;
-import github.daneren2005.serverproxy.ServerProxy;
 import github.daneren2005.serverproxy.WebProxy;
 
 public class DLNAController extends RemoteController {
@@ -78,8 +74,8 @@ public class DLNAController extends RemoteController {
 	private static final long SEARCH_UPDATE_INTERVAL_SECONDS = 10L * 60L * 1000L;
 	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 3000L;
 
-	DLNADevice device;
-	ControlPoint controlPoint;
+	final DLNADevice device;
+	final ControlPoint controlPoint;
 	SubscriptionCallback callback;
 	boolean supportsSeek = false;
 	boolean supportsSetupNext = false;
@@ -92,7 +88,7 @@ public class DLNAController extends RemoteController {
 	DownloadFile nextPlaying;
 	boolean running = true;
 	boolean hasDuration = false;
-	Runnable searchDLNA = new Runnable() {
+	final Runnable searchDLNA = new Runnable() {
 		@Override
 		public void run() {
 			if(controlPoint == null || !running) {
@@ -175,7 +171,7 @@ public class DLNAController extends RemoteController {
 						case STOPPED:
 							boolean failed = false;
 							for(StateVariableValue val: m.values()) {
-								if(val.toString().indexOf("TransportStatus val=\"ERROR_OCCURRED\"") != -1) {
+								if(val.toString().contains("TransportStatus val=\"ERROR_OCCURRED\"")) {
 									Log.w(TAG, "Failed to load with event: " + val.toString());
 									failed = true;
 								}
@@ -483,7 +479,7 @@ public class DLNAController extends RemoteController {
 
 			MimeType mimeType;
 			// If we can parse the content type, use it instead of hard coding
-			if(contentType != null && contentType.indexOf("/") != -1 && contentType.indexOf("/") != (contentType.length() - 1)) {
+			if(contentType != null && contentType.contains("/") && contentType.indexOf("/") != (contentType.length() - 1)) {
 				String[] typeParts = contentType.split("/");
 				mimeType = new MimeType(typeParts[0], typeParts[1]);
 			} else {

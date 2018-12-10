@@ -16,21 +16,20 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.InternetRadioStation;
 
 public class InternetRadioStationView extends UpdateView<InternetRadioStation> {
-	private TextView titleView;
+	private final TextView titleView;
 
 	public InternetRadioStationView(Context context) {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		titleView = findViewById(R.id.item_name);
+		moreButton = findViewById(R.id.item_more);
 	}
 
 	protected void setObjectImpl(InternetRadioStation station) {

@@ -19,10 +19,7 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import android.util.Log;
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
 import github.daneren2005.dsub.util.Util;
@@ -52,7 +49,7 @@ public class MusicDirectoryParser extends MusicDirectoryEntryParser {
         int eventType;
 		boolean isArtist = false;
 		boolean checkForDuplicates = Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_RENAME_DUPLICATES, true);
-		Map<String, Entry> titleMap = new HashMap<String, Entry>();
+		Map<String, Entry> titleMap = new HashMap<>();
         do {
             eventType = nextParseEvent();
             if (eventType == XmlPullParser.START_TAG) {

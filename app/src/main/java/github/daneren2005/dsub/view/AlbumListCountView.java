@@ -35,8 +35,8 @@ import github.daneren2005.dsub.util.Util;
 public class AlbumListCountView extends UpdateView2<Integer, Void> {
 	private final String TAG = AlbumListCountView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView countView;
+	private final TextView titleView;
+	private final TextView countView;
 	private int startCount;
 	private int count = 0;
 
@@ -45,8 +45,8 @@ public class AlbumListCountView extends UpdateView2<Integer, Void> {
 		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.basic_count_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.basic_count_name);
-		countView = (TextView) findViewById(R.id.basic_count_count);
+		titleView = findViewById(R.id.basic_count_name);
+		countView = findViewById(R.id.basic_count_count);
 	}
 
 	protected void setObjectImpl(Integer albumListString, Void dummy) {
@@ -64,7 +64,7 @@ public class AlbumListCountView extends UpdateView2<Integer, Void> {
 			String recentAddedFile = Util.getCacheName(context, "recent_count");
 			ArrayList<String> recents = FileUtil.deserialize(context, recentAddedFile, ArrayList.class);
 			if (recents == null) {
-				recents = new ArrayList<String>();
+				recents = new ArrayList<>();
 			}
 
 			MusicService musicService = MusicServiceFactory.getMusicService(context);

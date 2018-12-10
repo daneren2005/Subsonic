@@ -43,16 +43,16 @@ import java.io.File;
 public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private static final String TAG = SongView.class.getSimpleName();
 
-	private TextView trackTextView;
-	private TextView titleTextView;
+	private final TextView trackTextView;
+	private final TextView titleTextView;
 	private TextView playingTextView;
-	private TextView artistTextView;
-	private TextView durationTextView;
-	private TextView statusTextView;
-	private ImageView statusImageView;
-	private ImageView bookmarkButton;
-	private ImageView playedButton;
-	private View bottomRowView;
+	private final TextView artistTextView;
+	private final TextView durationTextView;
+	private final TextView statusTextView;
+	private final ImageView statusImageView;
+	private final ImageView bookmarkButton;
+	private final ImageView playedButton;
+	private final View bottomRowView;
 
 	private DownloadService downloadService;
 	private long revision = -1;
@@ -78,19 +78,19 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		super(context);
 		LayoutInflater.from(context).inflate(R.layout.song_list_item, this, true);
 
-		trackTextView = (TextView) findViewById(R.id.song_track);
-		titleTextView = (TextView) findViewById(R.id.song_title);
-		artistTextView = (TextView) findViewById(R.id.song_artist);
-		durationTextView = (TextView) findViewById(R.id.song_duration);
-		statusTextView = (TextView) findViewById(R.id.song_status);
-		statusImageView = (ImageView) findViewById(R.id.song_status_icon);
-		ratingBar = (RatingBar) findViewById(R.id.song_rating);
-		starButton = (ImageButton) findViewById(R.id.song_star);
+		trackTextView = findViewById(R.id.song_track);
+		titleTextView = findViewById(R.id.song_title);
+		artistTextView = findViewById(R.id.song_artist);
+		durationTextView = findViewById(R.id.song_duration);
+		statusTextView = findViewById(R.id.song_status);
+		statusImageView = findViewById(R.id.song_status_icon);
+		ratingBar = findViewById(R.id.song_rating);
+		starButton = findViewById(R.id.song_star);
 		starButton.setFocusable(false);
 		bookmarkButton = (ImageButton) findViewById(R.id.song_bookmark);
 		bookmarkButton.setFocusable(false);
 		playedButton = (ImageButton) findViewById(R.id.song_played);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 		bottomRowView = findViewById(R.id.song_bottom);
 	}
 
@@ -204,7 +204,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		}
 
 		long newRevision = downloadService.getDownloadListUpdateRevision();
-		if((revision != newRevision && dontChangeDownloadFile == false) || downloadFile == null) {
+		if((revision != newRevision && !dontChangeDownloadFile) || downloadFile == null) {
 			downloadFile = downloadService.forSong(item);
 			revision = newRevision;
 		}

@@ -3,13 +3,11 @@ package github.daneren2005.dsub.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -56,22 +54,22 @@ public class ChatFragment extends SubsonicFragment {
 
 		if(bundle != null) {
 			List<ChatMessage> abstractList = (List<ChatMessage>) bundle.getSerializable(Constants.FRAGMENT_LIST);
-			messageList = new ArrayList<ChatMessage>(abstractList);
+			messageList = new ArrayList<>(abstractList);
 		}
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(Constants.FRAGMENT_LIST, (Serializable) messageList);
+		outState.putSerializable(Constants.FRAGMENT_LIST, messageList);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		rootView = inflater.inflate(R.layout.chat, container, false);
 		
-		messageEditText = (EditText) rootView.findViewById(R.id.chat_edittext);
-		sendButton = (ImageButton) rootView.findViewById(R.id.chat_send);
+		messageEditText = rootView.findViewById(R.id.chat_edittext);
+		sendButton = rootView.findViewById(R.id.chat_send);
 
 		sendButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -80,7 +78,7 @@ public class ChatFragment extends SubsonicFragment {
 			}
 		});
 
-		chatListView = (ListView) rootView.findViewById(R.id.chat_entries);
+		chatListView = rootView.findViewById(R.id.chat_entries);
 		chatListView.setStackFromBottom(true);
 
 		messageEditText.setImeActionLabel("Send", KeyEvent.KEYCODE_ENTER);
@@ -113,7 +111,7 @@ public class ChatFragment extends SubsonicFragment {
 		});
 
 		if(messageList == null) {
-			messageList = new ArrayList<ChatMessage>();
+			messageList = new ArrayList<>();
 			refresh(true);
 		} else {
 			for (ChatMessage message : messageList) {
@@ -127,7 +125,7 @@ public class ChatFragment extends SubsonicFragment {
 		}
 		setTitle(R.string.button_bar_chat);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout = rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
 		setupScrollList(chatListView);
 

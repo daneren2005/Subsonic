@@ -13,7 +13,6 @@ import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.UserUtil;
-import github.daneren2005.dsub.util.Util;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import java.util.regex.Pattern;
 public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 	
 	private final SubsonicActivity activity;
-	private ArrayList<ChatMessage> messages;
+	private final ArrayList<ChatMessage> messages;
 	private final ImageLoader imageLoader;
 	
     private static final String phoneRegex = "1?\\W*([2-9][0-8][0-9])\\W*([2-9][0-9]{2})\\W*([0-9]{4})"; //you can just place your support phone here
@@ -66,9 +65,9 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 			
 			convertView = LayoutInflater.from(activity).inflate(layout, parent, false);
 			
-	        TextView usernameView = (TextView) convertView.findViewById(R.id.chat_username);
-	        TextView timeView = (TextView) convertView.findViewById(R.id.chat_time);
-	        TextView messageView = (TextView) convertView.findViewById(R.id.chat_message);
+	        TextView usernameView = convertView.findViewById(R.id.chat_username);
+	        TextView timeView = convertView.findViewById(R.id.chat_time);
+	        TextView messageView = convertView.findViewById(R.id.chat_message);
 	        
 	        messageView.setMovementMethod(LinkMovementMethod.getInstance());
 	        Linkify.addLinks(messageView, Linkify.EMAIL_ADDRESSES);
@@ -78,7 +77,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 	        holder.message = messageView;
 			holder.username = usernameView;
 			holder.time = timeView;
-			holder.avatar = (ImageView) convertView.findViewById(R.id.chat_avatar);
+			holder.avatar = convertView.findViewById(R.id.chat_avatar);
 			
 			convertView.setTag(holder);
 		}

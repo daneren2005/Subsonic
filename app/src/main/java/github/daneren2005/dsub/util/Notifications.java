@@ -30,10 +30,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
@@ -63,7 +60,7 @@ public final class Notifications {
 	private static NotificationChannel downloadingChannel;
 	private static NotificationChannel syncChannel;
 
-	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
+	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<>();
 
 	public static void showPlayingNotification(final Context context, final DownloadService downloadService, final Handler handler, MusicDirectory.Entry song) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -215,7 +212,7 @@ public final class Notifications {
 		}
 
 		// Create actions for media buttons
-		int previous = 0, pause = 0, next = 0, close = 0, rewind = 0, fastForward = 0;
+		int previous = 0, pause, next = 0, close = 0, rewind = 0, fastForward = 0;
 		if (expanded) {
 			pause = R.id.control_pause;
 

@@ -1,12 +1,6 @@
 package github.daneren2005.dsub.util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import android.content.Context;
 import android.util.Log;
@@ -137,19 +131,13 @@ public class CacheCleaner {
         Collections.sort(files, new Comparator<File>() {
             @Override
             public int compare(File a, File b) {
-                if (a.lastModified() < b.lastModified()) {
-                    return -1;
-                }
-                if (a.lastModified() > b.lastModified()) {
-                    return 1;
-                }
-                return 0;
-            }
+				return Long.compare(a.lastModified(), b.lastModified());
+			}
         });
     }
 
     private Set<File> findUndeletableFiles() {
-        Set<File> undeletable = new HashSet<File>(5);
+        Set<File> undeletable = new HashSet<>(5);
 
         for (DownloadFile downloadFile : downloadService.getRecentDownloads()) {
             undeletable.add(downloadFile.getPartialFile());
@@ -163,7 +151,7 @@ public class CacheCleaner {
 	private void cleanupCoverArt(Context context) {
 		File dir = FileUtil.getAlbumArtDirectory(context);
 		
-		List<File> files = new ArrayList<File>();
+		List<File> files = new ArrayList<>();
 		long bytesUsed = 0L;
 		for(File file: dir.listFiles()) {
 			if(file.isFile()) {
@@ -208,9 +196,9 @@ public class CacheCleaner {
 			}
 
 			try {
-				List<File> files = new ArrayList<File>();
-				List<File> pinned = new ArrayList<File>();
-				List<File> dirs = new ArrayList<File>();
+				List<File> files = new ArrayList<>();
+				List<File> pinned = new ArrayList<>();
+				List<File> dirs = new ArrayList<>();
 
 				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
 				sortByAscendingModificationTime(files);
@@ -243,9 +231,9 @@ public class CacheCleaner {
 			}
 
 			try {
-				List<File> files = new ArrayList<File>();
-				List<File> pinned = new ArrayList<File>();
-				List<File> dirs = new ArrayList<File>();
+				List<File> files = new ArrayList<>();
+				List<File> pinned = new ArrayList<>();
+				List<File> dirs = new ArrayList<>();
 				findCandidatesForDeletion(FileUtil.getMusicDirectory(context), files, pinned, dirs);
 
 				long bytesToDelete = getMinimumDelete(files, pinned);

@@ -36,10 +36,10 @@ public class Share implements Serializable {
     private Date lastVisited;
     private Date expires;
     private Long visitCount;
-    private List<Entry> entries;
+    private final List<Entry> entries;
     
     public Share() {
-    	entries = new ArrayList<Entry>();
+    	entries = new ArrayList<>();
     }
 
 	public String getName() {

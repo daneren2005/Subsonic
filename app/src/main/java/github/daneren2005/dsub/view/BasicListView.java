@@ -18,23 +18,21 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 
 public class BasicListView extends UpdateView<String> {
-	private TextView titleView;
+	private final TextView titleView;
 
 	public BasicListView(Context context) {
 		super(context, false);
 		LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.item_name);
-		starButton = (ImageButton) findViewById(R.id.item_star);
+		titleView = findViewById(R.id.item_name);
+		starButton = findViewById(R.id.item_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 		moreButton.setVisibility(View.GONE);
 	}
 

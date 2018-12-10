@@ -44,7 +44,7 @@ public class TimeLimitedCache<T> {
     }
 
     public void set(T value, long ttl, TimeUnit timeUnit) {
-        this.value = new SoftReference<T>(value);
+        this.value = new SoftReference<>(value);
         expires = System.currentTimeMillis() + timeUnit.toMillis(ttl);
     }
 

@@ -66,7 +66,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 			if(!ServerInfo.checkServerVersion(context, "1.8")) {
 				menu.removeItem(R.id.playlist_update_info);
-			} else if(playlist.getPublic() != null && playlist.getPublic() == true && playlist.getId().indexOf(".m3u") == -1 && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
+			} else if(playlist.getPublic() != null && playlist.getPublic() && !playlist.getId().contains(".m3u") && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
 				menu.removeItem(R.id.playlist_update_info);
 				menu.removeItem(R.id.playlist_menu_delete);
 			}
@@ -179,7 +179,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 		Bundle args = new Bundle();
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_ID, playlist.getId());
 		args.putString(Constants.INTENT_EXTRA_NAME_PLAYLIST_NAME, playlist.getName());
-		if(ServerInfo.checkServerVersion(context, "1.8") && (playlist.getOwner() != null && playlist.getOwner().equals(UserUtil.getCurrentUsername(context)) || playlist.getId().indexOf(".m3u") != -1)) {
+		if(ServerInfo.checkServerVersion(context, "1.8") && (playlist.getOwner() != null && playlist.getOwner().equals(UserUtil.getCurrentUsername(context)) || playlist.getId().contains(".m3u"))) {
 			args.putBoolean(Constants.INTENT_EXTRA_NAME_PLAYLIST_OWNER, true);
 		}
 		fragment.setArguments(args);
@@ -282,9 +282,9 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 	private void updatePlaylistInfo(final Playlist playlist) {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.update_playlist, null);
-		final EditText nameBox = (EditText)dialogView.findViewById(R.id.get_playlist_name);
-		final EditText commentBox = (EditText)dialogView.findViewById(R.id.get_playlist_comment);
-		final CheckBox publicBox = (CheckBox)dialogView.findViewById(R.id.get_playlist_public);
+		final EditText nameBox = dialogView.findViewById(R.id.get_playlist_name);
+		final EditText commentBox = dialogView.findViewById(R.id.get_playlist_comment);
+		final CheckBox publicBox = dialogView.findViewById(R.id.get_playlist_public);
 
 		nameBox.setText(playlist.getName());
 		commentBox.setText(playlist.getComment());
@@ -351,11 +351,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 			ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-			if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-				syncImmediately = true;
-			} else {
-				syncImmediately = false;
-			}
+			syncImmediately = networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
 		} else {
 			syncImmediately = true;
 		}

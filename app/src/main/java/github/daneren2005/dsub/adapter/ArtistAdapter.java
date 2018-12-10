@@ -28,7 +28,6 @@ import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.MusicFolder;
 import github.daneren2005.dsub.util.Util;
@@ -38,11 +37,11 @@ import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class ArtistAdapter extends SectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
-	public static int VIEW_TYPE_SONG = 3;
-	public static int VIEW_TYPE_ARTIST = 4;
+	public static final int VIEW_TYPE_SONG = 3;
+	public static final int VIEW_TYPE_ARTIST = 4;
 
-	private List<MusicFolder> musicFolders;
-	private OnMusicFolderChanged onMusicFolderChanged;
+	private final List<MusicFolder> musicFolders;
+	private final OnMusicFolderChanged onMusicFolderChanged;
 
 	public ArtistAdapter(Context context, List<Serializable> artists, OnItemClickedListener listener) {
 		this(context, artists, null, listener, null);
@@ -98,7 +97,7 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 	}
 	@Override
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
-		TextView folderName = (TextView) holder.getView().findViewById(R.id.select_artist_folder_2);
+		TextView folderName = holder.getView().findViewById(R.id.select_artist_folder_2);
 
 		String musicFolderId = Util.getSelectedMusicFolderId(context);
 		if(musicFolderId != null) {

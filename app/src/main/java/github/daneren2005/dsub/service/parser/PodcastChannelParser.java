@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.util.ProgressListener;
 import java.io.Reader;
@@ -39,7 +38,7 @@ public class PodcastChannelParser extends AbstractParser {
 	public List<PodcastChannel> parse(Reader reader, ProgressListener progressListener) throws Exception {
 		init(reader);
 
-		List<PodcastChannel> channels = new ArrayList<PodcastChannel>();
+		List<PodcastChannel> channels = new ArrayList<>();
 		int eventType;
 		do {
 			eventType = nextParseEvent();

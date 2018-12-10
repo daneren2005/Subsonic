@@ -68,24 +68,24 @@ public class SearchCritera {
 		//  * Replace spaces and wildcard '*' characters with ".*"
 		//  * All other characters are properly quoted
 		if (this.pattern == null) {
-			String regex = ".*";
-			String currentPart = "";
+			StringBuilder regex = new StringBuilder(".*");
+			StringBuilder currentPart = new StringBuilder();
 			for (int i = 0; i < query.length(); i++) {
 				char c = query.charAt(i);
 				if (c == '*' || c == ' ') {
-					regex += Pattern.quote(currentPart);
-					regex += ".*";
-					currentPart = "";
+					regex.append(Pattern.quote(currentPart.toString()));
+					regex.append(".*");
+					currentPart = new StringBuilder();
 				} else {
-					currentPart += c;
+					currentPart.append(c);
 				}
 			}
 			if (currentPart.length() > 0) {
-				regex += Pattern.quote(currentPart);
+				regex.append(Pattern.quote(currentPart.toString()));
 			}
 
-			regex += ".*";
-			this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+			regex.append(".*");
+			this.pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
 		}
 
 		return this.pattern;

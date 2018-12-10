@@ -38,7 +38,7 @@ import github.daneren2005.dsub.util.Util;
  */
 
 public class StarredSyncAdapter extends SubsonicSyncAdapter {
-	private static String TAG = StarredSyncAdapter.class.getSimpleName();
+	private static final String TAG = StarredSyncAdapter.class.getSimpleName();
 
 	public StarredSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
@@ -51,7 +51,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 	@Override
 	public void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
 		try {
-			ArrayList<String> syncedList = new ArrayList<String>();
+			ArrayList<String> syncedList = new ArrayList<>();
 			MusicDirectory starredList = musicService.getStarredList(context, null);
 
 			// Pin all the starred stuff

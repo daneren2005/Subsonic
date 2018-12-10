@@ -33,14 +33,12 @@
 package github.daneren2005.dsub.view;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
@@ -99,7 +97,7 @@ public class ChangeLog {
     /**
      * Last version code read from {@code SharedPreferences} or {@link #NO_VERSION}.
      */
-    private int mLastVersionCode;
+    private final int mLastVersionCode;
 
     /**
      * Version code of the current installation.
@@ -116,24 +114,24 @@ public class ChangeLog {
      * Contains constants for the root element of {@code changelog.xml}.
      */
     protected interface ChangeLogTag {
-        static final String NAME = "changelog";
+        String NAME = "changelog";
     }
 
     /**
      * Contains constants for the release element of {@code changelog.xml}.
      */
     protected interface ReleaseTag {
-        static final String NAME = "release";
-        static final String ATTRIBUTE_VERSION = "version";
-        static final String ATTRIBUTE_VERSION_CODE = "versioncode";
-		static final String ATTRIBUTE_RELEASE_DATE = "releasedate";
+        String NAME = "release";
+        String ATTRIBUTE_VERSION = "version";
+        String ATTRIBUTE_VERSION_CODE = "versioncode";
+	String ATTRIBUTE_RELEASE_DATE = "releasedate";
     }
 
     /**
      * Contains constants for the change element of {@code changelog.xml}.
      */
     protected interface ChangeTag {
-        static final String NAME = "change";
+        String NAME = "change";
     }
 
     /**
@@ -372,17 +370,14 @@ public class ChangeLog {
 
         // Read master change log from xml/changelog.xml
 		SparseArray<ReleaseItem> changelog;
-        XmlResourceParser resXml = mContext.getResources().getXml(R.xml.changelog);
-        try {
-			changelog = readChangeLog(resXml, full);
-        } finally {
-            resXml.close();
+        try (XmlResourceParser resXml = mContext.getResources().getXml(R.xml.changelog)) {
+            changelog = readChangeLog(resXml, full);
         }
 
         String versionFormat = resources.getString(R.string.changelog_version_format);
 
         // Get all version codes from the master change log...
-        List<Integer> versions = new ArrayList<Integer>(changelog.size());
+        List<Integer> versions = new ArrayList<>(changelog.size());
         for (int i = 0, len = changelog.size(); i < len; i++) {
             int key = changelog.keyAt(i);
             versions.add(key);
@@ -396,7 +391,7 @@ public class ChangeLog {
 		}
 
         for (Integer version : versions) {
-            int key = version.intValue();
+            int key = version;
 
             // Use release information from localized change log and fall back to the master file
             // if necessary.
@@ -436,7 +431,7 @@ public class ChangeLog {
      * @return A {@code SparseArray} mapping the version codes to release information.
      */
     protected SparseArray<ReleaseItem> readChangeLog(XmlPullParser xml, boolean full) {
-        SparseArray<ReleaseItem> result = new SparseArray<ReleaseItem>();
+        SparseArray<ReleaseItem> result = new SparseArray<>();
 
         try {
             int eventType = xml.getEventType();
@@ -450,9 +445,7 @@ public class ChangeLog {
                 }
                 eventType = xml.next();
             }
-        } catch (XmlPullParserException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-        } catch (IOException e) {
+        } catch (XmlPullParserException | IOException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
         }
 
@@ -499,7 +492,7 @@ public class ChangeLog {
         }
 
         int eventType = xml.getEventType();
-        List<String> changes = new ArrayList<String>();
+        List<String> changes = new ArrayList<>();
         while (eventType != XmlPullParser.END_TAG || xml.getName().equals(ChangeTag.NAME)) {
             if (eventType == XmlPullParser.START_TAG && xml.getName().equals(ChangeTag.NAME)) {
                 eventType = xml.next();

@@ -17,17 +17,13 @@ package github.daneren2005.dsub.adapter;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.PodcastChannel;
 import github.daneren2005.dsub.domain.PodcastEpisode;
-import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.BasicHeaderView;
 import github.daneren2005.dsub.view.FastScroller;
 import github.daneren2005.dsub.view.PodcastChannelView;
 import github.daneren2005.dsub.view.SongView;
@@ -43,8 +39,8 @@ public class PodcastChannelAdapter extends ExpandableSectionAdapter<Serializable
 	public static final int VIEW_TYPE_PODCAST_CELL = 3;
 	public static final int VIEW_TYPE_PODCAST_EPISODE = 4;
 
-	private ImageLoader imageLoader;
-	private boolean largeCell;
+	private final ImageLoader imageLoader;
+	private final boolean largeCell;
 
 	public PodcastChannelAdapter(Context context, List<Serializable> podcasts, ImageLoader imageLoader, OnItemClickedListener listener, boolean largeCell) {
 		super(context, podcasts);

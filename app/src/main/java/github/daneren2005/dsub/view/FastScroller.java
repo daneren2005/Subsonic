@@ -17,11 +17,9 @@ package github.daneren2005.dsub.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.AdapterDataObserver;
@@ -76,7 +74,7 @@ public class FastScroller extends LinearLayout {
 		setClipChildren(false);
 		LayoutInflater inflater = LayoutInflater.from(context);
 		inflater.inflate(R.layout.fast_scroller,this,true);
-		bubble = (TextView)findViewById(R.id.fastscroller_bubble);
+		bubble = findViewById(R.id.fastscroller_bubble);
 		handle = findViewById(R.id.fastscroller_handle);
 		bubble.setVisibility(INVISIBLE);
 		setVisibility(GONE);

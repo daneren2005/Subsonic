@@ -2,8 +2,7 @@ package github.daneren2005.dsub.fragments;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -11,7 +10,6 @@ import java.util.TreeMap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,7 +26,6 @@ import github.daneren2005.dsub.adapter.EntryGridAdapter;
 import github.daneren2005.dsub.adapter.SearchAdapter;
 import github.daneren2005.dsub.adapter.SectionAdapter;
 import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
 import github.daneren2005.dsub.domain.SearchCritera;
 import github.daneren2005.dsub.domain.SearchResult;
@@ -83,10 +80,10 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 		rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 		setTitle(R.string.search_title);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout = rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setEnabled(false);
 
-		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
+		recyclerView = rootView.findViewById(R.id.fragment_recycler);
 		setupLayoutManager(recyclerView, largeAlbums);
 
 		registerForContextMenu(recyclerView);
@@ -255,7 +252,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 			if (!append) {
 				downloadService.clear();
 			}
-			downloadService.download(Arrays.asList(song), save, false, playNext, false);
+			downloadService.download(Collections.singletonList(song), save, false, playNext, false);
 			if (autoplay) {
 				downloadService.play(downloadService.size() - 1);
 			}

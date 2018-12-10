@@ -28,14 +28,12 @@ import android.view.View;
 import android.widget.RatingBar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
-import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.MusicDirectory.Entry;
-import github.daneren2005.dsub.fragments.SubsonicFragment;
 import github.daneren2005.dsub.service.DownloadFile;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
@@ -52,7 +50,7 @@ public final class UpdateHelper {
 	}
 
 	public static void toggleStarred(final Context context, final Entry entry, final OnStarChange onStarChange) {
-		toggleStarred(context, Arrays.asList(entry), onStarChange);
+		toggleStarred(context, Collections.singletonList(entry), onStarChange);
 	}
 
 	public static void toggleStarred(Context context, List<Entry> entries) {
@@ -77,9 +75,9 @@ public final class UpdateHelper {
 			@Override
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<Entry> songs = new ArrayList<Entry>();
-				List<Entry> artists = new ArrayList<Entry>();
-				List<Entry> albums = new ArrayList<Entry>();
+				List<Entry> songs = new ArrayList<>();
+				List<Entry> artists = new ArrayList<>();
+				List<Entry> albums = new ArrayList<>();
 				for(Entry entry: entries) {
 					if(entry.isDirectory() && Util.isTagBrowsing(context)) {
 						if(entry.isAlbum()) {
@@ -149,9 +147,9 @@ public final class UpdateHelper {
 			protected Void doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
 				if(Util.isTagBrowsing(context) && !Util.isOffline(context)) {
-					musicService.setStarred(null, Arrays.asList(new Entry(entry)), null, starred, null, context);
+					musicService.setStarred(null, Collections.singletonList(new Entry(entry)), null, starred, null, context);
 				} else {
-					musicService.setStarred(Arrays.asList(new Entry(entry)), null, null, starred, null, context);
+					musicService.setStarred(Collections.singletonList(new Entry(entry)), null, null, starred, null, context);
 				}
 				return null;
 			}
@@ -184,7 +182,7 @@ public final class UpdateHelper {
 	}
 	public static void setRating(final Activity context, final Entry entry, final OnRatingChange onRatingChange) {
 		View layout = context.getLayoutInflater().inflate(R.layout.rating, null);
-		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
+		final RatingBar ratingBar = layout.findViewById(R.id.rating_bar);
 		ratingBar.setRating((float) entry.getRating());
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -255,7 +253,7 @@ public final class UpdateHelper {
 	}
 
 	public static abstract class EntryInstanceUpdater {
-		private Entry entry;
+		private final Entry entry;
 		protected int metadataUpdate = DownloadService.METADATA_UPDATED_ALL;
 
 		public EntryInstanceUpdater(Entry entry) {

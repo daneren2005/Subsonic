@@ -25,14 +25,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.service.DownloadService;
 import github.daneren2005.dsub.service.MusicService;
 import github.daneren2005.dsub.service.MusicServiceFactory;
-import github.daneren2005.dsub.util.FileUtil;
 
 /**
  * @author Sindre Mehus
@@ -44,14 +42,14 @@ public class ShufflePlayBuffer {
 	private static final String CACHE_FILENAME = "shuffleBuffer.ser";
 
 	private ScheduledExecutorService executorService;
-	private Runnable runnable;
+	private final Runnable runnable;
 	private boolean firstRun = true;
-	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<MusicDirectory.Entry>();
+	private final ArrayList<MusicDirectory.Entry> buffer = new ArrayList<>();
 	private int lastCount = -1;
-	private DownloadService context;
+	private final DownloadService context;
 	private boolean awaitingResults = false;
 	private int capacity;
-	private int refillThreshold;
+	private final int refillThreshold;
 
 	private SharedPreferences.OnSharedPreferenceChangeListener listener;
 	private int currentServer;
@@ -87,7 +85,7 @@ public class ShufflePlayBuffer {
 		// Make sure fetcher is running if needed
 		restart();
 
-		List<MusicDirectory.Entry> result = new ArrayList<MusicDirectory.Entry>(size);
+		List<MusicDirectory.Entry> result = new ArrayList<>(size);
 		synchronized (buffer) {
 			boolean removed = false;
 			while (!buffer.isEmpty() && result.size() < size) {

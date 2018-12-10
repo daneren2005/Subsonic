@@ -18,7 +18,6 @@
  */
 package github.daneren2005.dsub.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -32,7 +31,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.support.v4.app.Fragment;
@@ -53,7 +51,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
@@ -85,19 +82,14 @@ import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.view.AlbumView;
-import github.daneren2005.dsub.view.ArtistEntryView;
-import github.daneren2005.dsub.view.ArtistView;
 import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.PlaylistSongView;
-import github.daneren2005.dsub.view.SongView;
 import github.daneren2005.dsub.view.UpdateView;
 
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -122,7 +114,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected boolean alwaysFullscreen = false;
 	protected boolean alwaysStartFullscreen = false;
 	protected boolean invalidated = false;
-	protected static Random random = new Random();
+	protected static final Random random = new Random();
 	protected GestureDetector gestureScanner;
 	protected Share share;
 	protected boolean artist = false;
@@ -348,7 +340,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	protected void recreateContextMenu(Menu menu) {
-		List<MenuItem> menuItems = new ArrayList<MenuItem>();
+		List<MenuItem> menuItems = new ArrayList<>();
 		for(int i = 0; i < menu.size(); i++) {
 			MenuItem item = menu.getItem(i);
 			if(item.isVisible()) {
@@ -369,7 +361,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		if(selectedItem instanceof DownloadFile) {
 			entry = ((DownloadFile) selectedItem).getSong();
 		}
-		List<Entry> songs = new ArrayList<Entry>(1);
+		List<Entry> songs = new ArrayList<>(1);
 		songs.add(entry);
 
 		switch (menuItem.getItemId()) {
@@ -600,7 +592,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	public void updateProgress(String message) {
-		TextView view = (TextView) rootView.findViewById(R.id.tab_progress_message);
+		TextView view = rootView.findViewById(R.id.tab_progress_message);
 		if (view != null) {
 			view.setText(message);
 		}
@@ -614,7 +606,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			View progress = view.findViewById(R.id.tab_progress_spinner);
 			progress.setVisibility(View.GONE);
 
-			TextView text = (TextView) view.findViewById(R.id.tab_progress_message);
+			TextView text = view.findViewById(R.id.tab_progress_message);
 			text.setText(R.string.common_empty);
 		} else {
 			view.setVisibility(View.GONE);
@@ -778,10 +770,10 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}
 
 		View dialogView = context.getLayoutInflater().inflate(R.layout.shuffle_dialog, null);
-		final EditText startYearBox = (EditText)dialogView.findViewById(R.id.start_year);
-		final EditText endYearBox = (EditText)dialogView.findViewById(R.id.end_year);
-		final EditText genreBox = (EditText)dialogView.findViewById(R.id.genre);
-		final Button genreCombo = (Button)dialogView.findViewById(R.id.genre_combo);
+		final EditText startYearBox = dialogView.findViewById(R.id.start_year);
+		final EditText endYearBox = dialogView.findViewById(R.id.end_year);
+		final EditText genreBox = dialogView.findViewById(R.id.genre);
+		final Button genreCombo = dialogView.findViewById(R.id.genre_combo);
 
 		final SharedPreferences prefs = Util.getPreferences(context);
 		final String oldStartYear = prefs.getString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, "");
@@ -802,7 +794,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 						@Override
 						protected void done(final List<Genre> genres) {
-							List<String> names = new ArrayList<String>();
+							List<String> names = new ArrayList<>();
 							String blank = context.getResources().getString(R.string.select_genre_blank);
 							names.add(blank);
 							for(Genre genre: genres) {
@@ -812,7 +804,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 							AlertDialog.Builder builder = new AlertDialog.Builder(context);
 							builder.setTitle(R.string.shuffle_pick_genre)
-									.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
+									.setItems(names.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
 										public void onClick(DialogInterface dialog, int which) {
 											if(which == 0) {
 												genreCombo.setText("");
@@ -925,7 +917,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					Collections.shuffle(root.getChildren());
 				}
 
-				songs = new LinkedList<Entry>();
+				songs = new LinkedList<>();
 				getSongsRecursively(root, songs);
 
 				if(shuffle && !shuffleByAlbum) {
@@ -971,7 +963,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					Collections.shuffle(albums);
 				}
 
-				songs = new LinkedList<Entry>();
+				songs = new LinkedList<>();
 				MusicDirectory root = new MusicDirectory();
 				root.addChildren(albums);
 				getSongsRecursively(root, songs);
@@ -1034,14 +1026,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			@Override
 			protected List<Playlist> doInBackground() throws Throwable {
 				MusicService musicService = MusicServiceFactory.getMusicService(context);
-				List<Playlist> playlists = new ArrayList<Playlist>();
-				playlists.addAll(musicService.getPlaylists(false, context, this));
+				List<Playlist> playlists = new ArrayList<>(musicService.getPlaylists(false, context, this));
 
 				// Iterate through and remove all non owned public playlists
 				Iterator<Playlist> it = playlists.iterator();
 				while(it.hasNext()) {
 					Playlist playlist = it.next();
-					if(playlist.getPublic() == true && playlist.getId().indexOf(".m3u") == -1 && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
+					if(playlist.getPublic() && !playlist.getId().contains(".m3u") && !UserUtil.getCurrentUsername(context).equals(playlist.getOwner())) {
 						it.remove();
 					}
 				}
@@ -1132,8 +1123,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	protected void createNewPlaylist(final List<Entry> songs, final boolean getSuggestion) {
 		View layout = context.getLayoutInflater().inflate(R.layout.save_playlist, null);
-		final EditText playlistNameView = (EditText) layout.findViewById(R.id.save_playlist_name);
-		final CheckBox overwriteCheckBox = (CheckBox) layout.findViewById(R.id.save_playlist_overwrite);
+		final EditText playlistNameView = layout.findViewById(R.id.save_playlist_name);
+		final CheckBox overwriteCheckBox = layout.findViewById(R.id.save_playlist_overwrite);
 		if(getSuggestion) {
 			DownloadService downloadService = getDownloadService();
 			String playlistName = null;
@@ -1586,7 +1577,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		new LoadingTask<List<Share>>(context, true) {
 			@Override
 			protected List<Share> doInBackground() throws Throwable {
-				List<String> ids = new ArrayList<String>(entries.size());
+				List<String> ids = new ArrayList<>(entries.size());
 				for(Entry entry: entries) {
 					ids.add(entry.getId());
 				}
@@ -1690,7 +1681,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		onSongPress(entries, entry, 0, allowPlayAll);
 	}
 	protected void onSongPress(List<Entry> entries, Entry entry, int position, boolean allowPlayAll) {
-		List<Entry> songs = new ArrayList<Entry>();
+		List<Entry> songs = new ArrayList<>();
 
 		String songPressAction = Util.getSongPressAction(context);
 		if("all".equals(songPressAction) && allowPlayAll) {
@@ -1701,9 +1692,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			}
 			playNow(songs, entry, position);
 		} else if("next".equals(songPressAction)) {
-			getDownloadService().download(Arrays.asList(entry), false, false, true, false);
+			getDownloadService().download(Collections.singletonList(entry), false, false, true, false);
 		}  else if("last".equals(songPressAction)) {
-			getDownloadService().download(Arrays.asList(entry), false, false, false, false);
+			getDownloadService().download(Collections.singletonList(entry), false, false, false, false);
 		} else {
 			songs.add(entry);
 			playNow(songs);
@@ -1861,7 +1852,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						MusicService musicService = MusicServiceFactory.getMusicService(context);
 						musicService.deletePodcastEpisode(episode.getEpisodeId(), episode.getParent(), null, context);
 						if (getDownloadService() != null) {
-							List<Entry> episodeList = new ArrayList<Entry>(1);
+							List<Entry> episodeList = new ArrayList<>(1);
 							episodeList.add(episode);
 							getDownloadService().delete(episodeList);
 						}

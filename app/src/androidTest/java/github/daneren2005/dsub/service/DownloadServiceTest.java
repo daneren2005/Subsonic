@@ -76,7 +76,7 @@ public class DownloadServiceTest extends
 		int oldCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		downloadService.next();
 		int newCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
-		assertTrue(oldCurrentPlayingIndex == newCurrentPlayingIndex);
+		assertEquals(oldCurrentPlayingIndex, newCurrentPlayingIndex);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class DownloadServiceTest extends
 		int oldCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		downloadService.previous();
 		int newCurrentPlayingIndex = downloadService.getCurrentPlayingIndex();
-		assertTrue(oldCurrentPlayingIndex == newCurrentPlayingIndex);
+		assertEquals(oldCurrentPlayingIndex, newCurrentPlayingIndex);
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class DownloadServiceTest extends
 		musicEntry.setBitRate(198);
 		musicEntry.setAlbumId("49");
 		musicEntry.setDuration(247);
-		musicEntry.setSize(Long.valueOf(6162717));
+		musicEntry.setSize(6162717L);
 		musicEntry.setArtistId("23");
 		musicEntry.setArtist("The Dada Weatherman");
 		musicEntry.setCloseness(0);
@@ -298,7 +298,7 @@ public class DownloadServiceTest extends
 		musicEntry.setType(0);
 		musicEntry.setVideo(false);
 
-		List<MusicDirectory.Entry> musicEntries = new LinkedList<MusicDirectory.Entry>();
+		List<MusicDirectory.Entry> musicEntries = new LinkedList<>();
 
 		for (int i = 0; i < size; i++) {
 			musicEntries.add(musicEntry);

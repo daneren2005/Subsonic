@@ -21,10 +21,6 @@ package github.daneren2005.dsub.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
@@ -38,8 +34,8 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 	private static final String TAG = AlbumView.class.getSimpleName();
 
 	private File file;
-	private TextView titleView;
-	private TextView artistView;
+	private final TextView titleView;
+	private final TextView artistView;
 	private boolean showArtist = true;
 	private String coverArtId;
 
@@ -53,14 +49,14 @@ public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
 		}
 
 		coverArtView = findViewById(R.id.album_coverart);
-		titleView = (TextView) findViewById(R.id.album_title);
-		artistView = (TextView) findViewById(R.id.album_artist);
+		titleView = findViewById(R.id.album_title);
+		artistView = findViewById(R.id.album_artist);
 
-		ratingBar = (RatingBar) findViewById(R.id.album_rating);
+		ratingBar = findViewById(R.id.album_rating);
 		ratingBar.setFocusable(false);
-		starButton = (ImageButton) findViewById(R.id.album_star);
+		starButton = findViewById(R.id.album_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 
 		checkable = true;
 	}

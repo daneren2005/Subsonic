@@ -13,7 +13,7 @@ public class AutoRepeatButton extends ImageButton {
 	private boolean doClick = true;
 	private Runnable repeatEvent = null;
 
-	private Runnable repeatClickWhileButtonHeldRunnable = new Runnable() {
+	private final Runnable repeatClickWhileButtonHeldRunnable = new Runnable() {
 		@Override
 		public void run() {
 			doClick = false;

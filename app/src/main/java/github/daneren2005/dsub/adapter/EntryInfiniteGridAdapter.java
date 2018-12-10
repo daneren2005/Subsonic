@@ -34,7 +34,7 @@ import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.view.UpdateView;
 
 public class EntryInfiniteGridAdapter extends EntryGridAdapter {
-	public static int VIEW_TYPE_LOADING = 4;
+	public static final int VIEW_TYPE_LOADING = 4;
 
 	private String type;
 	private String extra;
@@ -131,7 +131,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 			result = service.getAlbumList(type, extra, size, offset, false, context, null);
 		} else if("genres".equals(type) || "genres-songs".equals(type)) {
 			result = service.getSongsByGenre(extra, size, offset, context, null);
-		}else if(type.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+		}else if(type.contains(MainFragment.SONGS_LIST_PREFIX)) {
 			result = service.getSongList(type, size, offset, context, null);
 		} else {
 			result = service.getAlbumList(type, size, offset, false, context, null);

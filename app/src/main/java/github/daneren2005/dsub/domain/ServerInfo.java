@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
 import github.daneren2005.dsub.util.Util;
 
@@ -37,7 +36,7 @@ public class ServerInfo implements Serializable {
 	public static final int TYPE_SUBSONIC = 1;
 	public static final int TYPE_MADSONIC = 2;
 	public static final int TYPE_AMPACHE = 3;
-	private static final Map<Integer, ServerInfo> SERVERS = new ConcurrentHashMap<Integer, ServerInfo>();
+	private static final Map<Integer, ServerInfo> SERVERS = new ConcurrentHashMap<>();
 	
 	private boolean isLicenseValid;
 	private Version restVersion;
@@ -236,11 +235,7 @@ public class ServerInfo implements Serializable {
 	}
 	public static boolean canUseToken(Context context, int instance) {
 		if(isStockSubsonic(context, instance) && checkServerVersion(context, "1.14", instance)) {
-			if(Util.getBlockTokenUse(context, instance)) {
-				return false;
-			} else {
-				return true;
-			}
+			return !Util.getBlockTokenUse(context, instance);
 		} else {
 			return false;
 		}

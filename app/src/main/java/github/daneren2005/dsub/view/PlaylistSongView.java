@@ -21,8 +21,6 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -31,14 +29,13 @@ import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.util.FileUtil;
-import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 
 public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {
 	private static final String TAG = PlaylistSongView.class.getSimpleName();
 
-	private TextView titleView;
-	private TextView countView;
+	private final TextView titleView;
+	private final TextView countView;
 	private int count = 0;
 
 	public PlaylistSongView(Context context) {
@@ -46,8 +43,8 @@ public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.
 		this.context = context;
 		LayoutInflater.from(context).inflate(R.layout.basic_count_item, this, true);
 
-		titleView = (TextView) findViewById(R.id.basic_count_name);
-		countView = (TextView) findViewById(R.id.basic_count_count);
+		titleView = findViewById(R.id.basic_count_name);
+		countView = findViewById(R.id.basic_count_count);
 	}
 
 	protected void setObjectImpl(Playlist playlist, List<MusicDirectory.Entry> songs) {

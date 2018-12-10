@@ -17,7 +17,6 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
-import android.preference.DialogPreference;
 import android.preference.EditTextPreference;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -28,16 +27,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.File;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.util.FileUtil;
 
 public class CacheLocationPreference extends EditTextPreference {
 	private static final String TAG = CacheLocationPreference.class.getSimpleName();
-	private Context context;
+	private final Context context;
 
 	public CacheLocationPreference(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -59,12 +56,12 @@ public class CacheLocationPreference extends EditTextPreference {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			view.setLayoutParams(new ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
-			final EditText editText = (EditText) view.findViewById(android.R.id.edit);
+			final EditText editText = view.findViewById(android.R.id.edit);
 			ViewGroup vg = (ViewGroup) editText.getParent();
 
 			LinearLayout cacheButtonsWrapper = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.cache_location_buttons, vg, true);
-			Button internalLocation = (Button) cacheButtonsWrapper.findViewById(R.id.location_internal);
-			Button externalLocation = (Button) cacheButtonsWrapper.findViewById(R.id.location_external);
+			Button internalLocation = cacheButtonsWrapper.findViewById(R.id.location_internal);
+			Button externalLocation = cacheButtonsWrapper.findViewById(R.id.location_external);
 
 			File[] dirs;
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -76,15 +73,15 @@ public class CacheLocationPreference extends EditTextPreference {
 			// Past 5.0 we can query directly for SD Card
 			File internalDir = null, externalDir = null;
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				for(int i = 0; i < dirs.length; i++) {
+				for(File dir: dirs) {
 					try {
-						if (dirs[i] != null) {
-							if(Environment.isExternalStorageRemovable(dirs[i])) {
+						if (dir != null) {
+							if(Environment.isExternalStorageRemovable(dir)) {
 								if(externalDir != null) {
-									externalDir = dirs[i];
+									externalDir = dir;
 								}
 							} else {
-								internalDir = dirs[i];
+								internalDir = dir;
 							}
 
 							if(internalDir != null && externalDir != null) {
@@ -107,9 +104,9 @@ public class CacheLocationPreference extends EditTextPreference {
 				}
 			}
 			if(internalDir == null) {
-				for (int i = 0; i < dirs.length; i++) {
-					if (dirs[i] != null) {
-						internalDir = dirs[i];
+				for (File dir: dirs) {
+					if (dir != null) {
+						internalDir = dir;
 						break;
 					}
 				}
@@ -117,7 +114,7 @@ public class CacheLocationPreference extends EditTextPreference {
 			final File finalInternalDir = new File(internalDir, "music");
 			final File finalExternalDir = new File(externalDir, "music");
 
-			final EditText editTextBox = (EditText)view.findViewById(android.R.id.edit);
+			final EditText editTextBox = view.findViewById(android.R.id.edit);
 			if(finalInternalDir != null && (finalInternalDir.exists() || finalInternalDir.mkdirs())) {
 				internalLocation.setOnClickListener(new View.OnClickListener() {
 					@Override

@@ -25,16 +25,16 @@ import java.util.Locale;
 
 
 public class ID3v2File extends Common {
-	private static int ID3_ENC_LATIN   = 0x00;
-	private static int ID3_ENC_UTF16LE = 0x01;
-	private static int ID3_ENC_UTF16BE = 0x02;
-	private static int ID3_ENC_UTF8    = 0x03;
+	private static final int ID3_ENC_LATIN   = 0x00;
+	private static final int ID3_ENC_UTF16LE = 0x01;
+	private static final int ID3_ENC_UTF16BE = 0x02;
+	private static final int ID3_ENC_UTF8    = 0x03;
 	
 	public ID3v2File() {
 	}
 	
 	public HashMap getTags(RandomAccessFile s) throws IOException {
-		HashMap tags = new HashMap();
+		HashMap tags;
 		
 		final int v2hdr_len = 10;
 		byte[] v2hdr = new byte[v2hdr_len];
@@ -48,7 +48,7 @@ public class ID3v2File extends Common {
 		v3len      = ((v3len & 0x7f000000) >> 3) | // for some funky reason, this is encoded as 7*4 bits
 		             ((v3len & 0x007f0000) >> 2) |
 		             ((v3len & 0x00007f00) >> 1) |
-		             ((v3len & 0x0000007f) >> 0) ;
+		             ((v3len & 0x0000007f)) ;
 		
 		// debug(">> tag version ID3v2."+id3v);
 		// debug(">> LEN= "+v3len+" // "+v3len);
@@ -123,9 +123,9 @@ public class ID3v2File extends Common {
 					rv[1] = txData[1];
 				} else {
 					// Check for replaygain tags just thrown randomly in field
-					int nextStartIndex = 1;
+					int nextStartIndex;
 					int startName = txData[1].toLowerCase(Locale.US).indexOf("replaygain_");
-					ArrayList<String> parts = new ArrayList<String>();
+					ArrayList<String> parts = new ArrayList<>();
 					while(startName != -1) {
 						int endName = txData[1].indexOf((char) 0, startName);
 						if(endName != -1) {

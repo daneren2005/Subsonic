@@ -120,8 +120,8 @@ public class Artist implements Serializable {
     }
 
 	public static class ArtistComparator implements Comparator<Artist> {
-		private String[] ignoredArticles;
-		private Collator collator;
+		private final String[] ignoredArticles;
+		private final Collator collator;
 
 		public ArtistComparator(String[] ignoredArticles) {
 			this.ignoredArticles = ignoredArticles;

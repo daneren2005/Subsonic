@@ -49,6 +49,7 @@ import github.daneren2005.dsub.view.UpdateView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable> {
@@ -239,7 +240,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 				return;
 			}
 
-			onSongPress(Arrays.asList((MusicDirectory.Entry) episode), episode, false);
+			onSongPress(Collections.singletonList((MusicDirectory.Entry) episode), episode, false);
 		}
 	}
 
@@ -305,7 +306,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 	
 	private void addNewPodcast() {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.create_podcast, null);
-		final TextView urlBox = (TextView) dialogView.findViewById(R.id.create_podcast_url);
+		final TextView urlBox = dialogView.findViewById(R.id.create_podcast_url);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_add_podcast)
@@ -426,7 +427,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 
 			@Override
 			protected void done(MusicDirectory result) {
-				List<String> existingEpisodes = new ArrayList<String>();
+				List<String> existingEpisodes = new ArrayList<>();
 				for(MusicDirectory.Entry entry: result.getChildren()) {
 					String id = entry.getId();
 					if(id != null) {

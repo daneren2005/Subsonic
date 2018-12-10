@@ -102,13 +102,13 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private boolean drawerIdle = true;
 	private boolean destroyed = false;
 	private boolean finished = false;
-	protected List<SubsonicFragment> backStack = new ArrayList<SubsonicFragment>();
+	protected final List<SubsonicFragment> backStack = new ArrayList<>();
 	protected SubsonicFragment currentFragment;
 	protected View primaryContainer;
 	protected View secondaryContainer;
-	protected boolean tv = false;
+	protected final boolean tv = false;
 	protected boolean touchscreen = true;
-	protected Handler handler = new Handler();
+	protected final Handler handler = new Handler();
 	Spinner actionBarSpinner;
 	ArrayAdapter<CharSequence> spinnerAdapter;
 	ViewGroup rootView;
@@ -181,9 +181,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			Util.getPreferences(this).registerOnSharedPreferenceChangeListener(preferencesListener);
 		}
 
-		if (ContextCompat.checkSelfPermission(this, permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			ActivityCompat.requestPermissions(this, new String[]{ permission.WRITE_EXTERNAL_STORAGE }, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-		}
+		if (ContextCompat.checkSelfPermission(this, permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+			ActivityCompat.requestPermissions(this, new String[]{permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 	}
 
 	@Override
@@ -290,14 +289,14 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		} else {
 			super.setContentView(R.layout.abstract_activity);
 		}
-		rootView = (ViewGroup) findViewById(R.id.content_frame);
+		rootView = findViewById(R.id.content_frame);
 
 		if(viewId != 0) {
 			LayoutInflater layoutInflater = getLayoutInflater();
 			layoutInflater.inflate(viewId, rootView);
 		}
 
-		drawerList = (NavigationView) findViewById(R.id.left_drawer);
+		drawerList = findViewById(R.id.left_drawer);
 		drawerList.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(final MenuItem menuItem) {
@@ -383,19 +382,19 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 		});
 
-		drawerHeaderToggle = (ImageView) drawerHeader.findViewById(R.id.header_select_image);
-		drawerServerName = (TextView) drawerHeader.findViewById(R.id.header_server_name);
-		drawerUserName = (TextView) drawerHeader.findViewById(R.id.header_user_name);
+		drawerHeaderToggle = drawerHeader.findViewById(R.id.header_select_image);
+		drawerServerName = drawerHeader.findViewById(R.id.header_server_name);
+		drawerUserName = drawerHeader.findViewById(R.id.header_user_name);
 
-		drawerUserAvatar = (ImageView) drawerHeader.findViewById(R.id.header_user_avatar);
+		drawerUserAvatar = drawerHeader.findViewById(R.id.header_user_avatar);
 
 		updateDrawerHeader();
 
 		if(!isTv()) {
-			drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+			drawer = findViewById(R.id.drawer_layout);
 
 			// Pass in toolbar if it exists
-			Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+			Toolbar toolbar = findViewById(R.id.main_toolbar);
 			drawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.common_appname, R.string.common_appname) {
 				@Override
 				public void onDrawerClosed(View view) {
@@ -949,7 +948,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private void applyTheme() {
 		theme = ThemeUtil.getTheme(this);
 
-		if(theme != null && theme.indexOf("fullscreen") != -1) {
+		if(theme != null && theme.contains("fullscreen")) {
 			theme = theme.substring(0, theme.indexOf("_fullscreen"));
 			ThemeUtil.setTheme(this, theme);
 		}
@@ -1130,7 +1129,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 
 		View checkBoxView = this.getLayoutInflater().inflate(R.layout.sync_dialog, null);
-		final CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.sync_default);
+		final CheckBox checkBox = checkBoxView.findViewById(R.id.sync_default);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(android.R.drawable.ic_dialog_info)

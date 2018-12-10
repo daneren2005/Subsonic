@@ -21,8 +21,6 @@ package github.daneren2005.dsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
@@ -39,16 +37,16 @@ public class ArtistView extends UpdateView<Artist> {
 	private static final String TAG = ArtistView.class.getSimpleName();
 
 	private File file;
-    private TextView titleView;
+    private final TextView titleView;
 
     public ArtistView(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.basic_list_item, this, true);
 
-        titleView = (TextView) findViewById(R.id.item_name);
-		starButton = (ImageButton) findViewById(R.id.item_star);
+        titleView = findViewById(R.id.item_name);
+		starButton = findViewById(R.id.item_star);
 		starButton.setFocusable(false);
-		moreButton = (ImageView) findViewById(R.id.item_more);
+		moreButton = findViewById(R.id.item_more);
 		moreButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				v.showContextMenu();

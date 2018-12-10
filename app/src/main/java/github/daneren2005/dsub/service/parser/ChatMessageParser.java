@@ -19,7 +19,6 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ChatMessage;
 import github.daneren2005.dsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
@@ -39,7 +38,7 @@ public class ChatMessageParser extends AbstractParser {
 
     public List<ChatMessage> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
-        List<ChatMessage> result = new ArrayList<ChatMessage>();
+        List<ChatMessage> result = new ArrayList<>();
         int eventType;
         
         do {

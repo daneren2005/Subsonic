@@ -63,7 +63,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 	private static final String MUSIC_DIRECTORY_CONTENTS_PREFIX = "mdc-";
 
 	private DownloadService downloadService;
-	private Handler handler = new Handler();
+	private final Handler handler = new Handler();
 
 	@Override
 	public void onCreate() {
@@ -74,8 +74,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 	@Nullable
 	@Override
 	public BrowserRoot onGetRoot(String clientPackageName, int clientUid, Bundle rootHints) {
-		BrowserRoot root = new BrowserRoot(BROWSER_ROOT, null);
-		return root;
+		return new BrowserRoot(BROWSER_ROOT, null);
 	}
 
 	@Override

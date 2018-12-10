@@ -19,9 +19,7 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import android.util.Log;
 
-import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Bookmark;
 import github.daneren2005.dsub.domain.MusicDirectory;
 import github.daneren2005.dsub.domain.PodcastEpisode;
@@ -80,7 +78,7 @@ public class PodcastEntryParser extends AbstractParser {
 					if(episode.getDate() == null) {
 						episode.setDate(get("created"));
 					}
-					if(episode.getDate() != null && episode.getDate().indexOf("T") != -1) {
+					if(episode.getDate().contains("T")) {
 						episode.setDate(episode.getDate().replace("T", " "));
 					}
 					episode.setStatus(get("status"));

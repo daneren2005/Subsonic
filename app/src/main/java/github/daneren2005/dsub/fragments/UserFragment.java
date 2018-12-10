@@ -20,8 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import github.daneren2005.dsub.R;

@@ -62,7 +62,6 @@ import github.daneren2005.serverproxy.BufferProxy;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -72,7 +71,6 @@ import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
@@ -134,17 +132,17 @@ public class DownloadService extends Service {
 	private MediaPlayer nextMediaPlayer;
 	private int audioSessionId;
 	private boolean nextSetup = false;
-	private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
-	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
-	private final List<DownloadFile> toDelete = new ArrayList<DownloadFile>();
+	private final List<DownloadFile> downloadList = new ArrayList<>();
+	private final List<DownloadFile> backgroundDownloadList = new ArrayList<>();
+	private final List<DownloadFile> toDelete = new ArrayList<>();
 	private final Handler handler = new Handler();
 	private Handler mediaPlayerHandler;
 	private final DownloadServiceLifecycleSupport lifecycleSupport = new DownloadServiceLifecycleSupport(this);
 	private ShufflePlayBuffer shufflePlayBuffer;
 	private ArtistRadioBuffer artistRadioBuffer;
 
-	private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<MusicDirectory.Entry, DownloadFile>(100);
-	private final List<DownloadFile> cleanupCandidates = new ArrayList<DownloadFile>();
+	private final LruCache<MusicDirectory.Entry, DownloadFile> downloadFileCache = new LruCache<>(100);
+	private final List<DownloadFile> cleanupCandidates = new ArrayList<>();
 	private final Scrobbler scrobbler = new Scrobbler();
 	private RemoteController remoteController;
 	private DownloadFile currentPlaying;
@@ -423,7 +421,7 @@ public class DownloadService extends Service {
 
 	public synchronized void download(InternetRadioStation station) {
 		clear();
-		download(Arrays.asList((MusicDirectory.Entry) station), false, true, false, false);
+		download(Collections.singletonList((MusicDirectory.Entry) station), false, true, false, false);
 	}
 	public synchronized void download(List<MusicDirectory.Entry> songs, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
 		download(songs, save, autoplay, playNext, shuffle, 0, 0);
@@ -1046,11 +1044,7 @@ public class DownloadService extends Service {
 	public List<DownloadFile> getToDelete() { return toDelete; }
 
 	public boolean isCurrentPlayingSingle() {
-		if(currentPlaying != null && currentPlaying.getSong() instanceof InternetRadioStation) {
-			return true;
-		} else {
-			return false;
-		}
+		return currentPlaying != null && currentPlaying.getSong() instanceof InternetRadioStation;
 	}
 	public boolean isCurrentPlayingStream() {
 		if(currentPlaying != null) {
@@ -1073,7 +1067,7 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized List<DownloadFile> getDownloads() {
-		List<DownloadFile> temp = new ArrayList<DownloadFile>();
+		List<DownloadFile> temp = new ArrayList<>();
 		temp.addAll(downloadList);
 		temp.addAll(backgroundDownloadList);
 		return temp;
@@ -1463,7 +1457,7 @@ public class DownloadService extends Service {
 
 	public synchronized int getPlayerDuration() {
 		if (playerState != IDLE && playerState != DOWNLOADING && playerState != PlayerState.PREPARING) {
-			int duration = 0;
+			int duration;
 			if(remoteState == LOCAL) {
 				try {
 					duration = mediaPlayer.getDuration();
@@ -1643,7 +1637,7 @@ public class DownloadService extends Service {
 							subtractNextPosition = 0;
 						}
 					}
-					onSongProgress(cachedPosition < 2000 ? true: false);
+					onSongProgress(cachedPosition < 2000);
 					Thread.sleep(delayUpdateProgress);
 				}
 				catch(Exception e) {
@@ -1683,7 +1677,7 @@ public class DownloadService extends Service {
 	}
 
 	public EqualizerController getEqualizerController() {
-		EqualizerController controller = null;
+		EqualizerController controller;
 		try {
 			controller = effectsController.getEqualizerController();
 			if(controller.getEqualizer() == null) {

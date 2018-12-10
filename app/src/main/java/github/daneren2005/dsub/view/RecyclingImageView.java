@@ -17,7 +17,6 @@ package github.daneren2005.dsub.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -93,11 +92,7 @@ public class RecyclingImageView extends ImageView {
 		}
 
 		BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-		if (bitmapDrawable.getBitmap() != null && bitmapDrawable.getBitmap().isRecycled()) {
-			return true;
-		} else {
-			return false;
-		}
+		return bitmapDrawable.getBitmap() != null && bitmapDrawable.getBitmap().isRecycled();
 	}
 
 	public void setInvalidated(boolean invalidated) {
