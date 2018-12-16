@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="Theme.DSub.Light.Base" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+	<style name="Theme.DSub.Light.Base" parent="@style/Theme.MaterialComponents.Light.DarkActionBar">
 		<item name="element_color">@color/lightElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>
@@ -74,7 +74,7 @@
 		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_light</item>
 	</style>
-	<style name="Theme.DSub.Dark.Base" parent="@style/Theme.AppCompat">
+	<style name="Theme.DSub.Dark.Base" parent="@style/Theme.MaterialComponents">
 		<item name="element_color">@color/darkElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>

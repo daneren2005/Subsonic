@@ -216,8 +216,8 @@ public final class Constants {
 	public static final String OFFLINE_SYNC_DEFAULT = "syncDefaults";
 
 	// Account prefs
-	public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
-	public static final String SYNC_ACCOUNT_TYPE = "subsonic.org";
+	public static final String SYNC_ACCOUNT_NAME = "XSub Account";
+	public static final String SYNC_ACCOUNT_TYPE = "xsub.org";
 	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "github.vrih.xsub.playlists.provider";
 	public static final String SYNC_ACCOUNT_PODCAST_AUTHORITY = "github.vrih.xsub.podcasts.provider";
 	public static final String SYNC_ACCOUNT_STARRED_AUTHORITY = "github.vrih.xsub.starred.provider";

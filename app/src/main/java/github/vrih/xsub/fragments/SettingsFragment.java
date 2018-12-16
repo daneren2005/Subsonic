@@ -34,6 +34,8 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import android.preference.SwitchPreference;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -561,14 +563,14 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverPasswordPreference.setSummary("***");
 		serverPasswordPreference.setTitle(R.string.settings_server_password);
 
-		final CheckBoxPreference serverTagPreference = new CheckBoxPreference(context);
+		final SwitchPreference serverTagPreference = new SwitchPreference(context);
 		serverTagPreference.setKey(Constants.PREFERENCES_KEY_BROWSE_TAGS + instance);
 		serverTagPreference.setChecked(Util.isTagBrowsing(context, instance));
 		serverTagPreference.setSummary(R.string.settings_browse_by_tags_summary);
 		serverTagPreference.setTitle(R.string.settings_browse_by_tags);
 		serverPasswordPreference.setDialogTitle(R.string.settings_server_password);
 
-		final CheckBoxPreference serverSyncPreference = new CheckBoxPreference(context);
+		final SwitchPreference serverSyncPreference = new SwitchPreference(context);
 		serverSyncPreference.setKey(Constants.PREFERENCES_KEY_SERVER_SYNC + instance);
 		serverSyncPreference.setChecked(Util.isSyncEnabled(context, instance));
 		serverSyncPreference.setSummary(R.string.settings_server_sync_summary);
