@@ -21,7 +21,7 @@ package github.daneren2005.dsub.activity;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.fragments.PreferenceCompatFragment;

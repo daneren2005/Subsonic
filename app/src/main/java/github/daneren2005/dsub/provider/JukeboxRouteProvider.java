@@ -23,10 +23,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaRouter;
-import android.support.v7.media.MediaControlIntent;
-import android.support.v7.media.MediaRouteDescriptor;
-import android.support.v7.media.MediaRouteProvider;
-import android.support.v7.media.MediaRouteProviderDescriptor;
+import androidx.mediarouter.media.MediaControlIntent;
+import androidx.mediarouter.media.MediaRouteDescriptor;
+import androidx.mediarouter.media.MediaRouteProvider;
+import androidx.mediarouter.media.MediaRouteProviderDescriptor;
 
 import github.daneren2005.dsub.domain.RemoteControlState;
 import github.daneren2005.dsub.service.DownloadService;
@@ -86,8 +86,12 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 		}
 
 		@Override
-		public boolean onControlRequest(Intent intent, android.support.v7.media.MediaRouter.ControlRequestCallback callback) {
-			return intent.hasCategory(CATEGORY_JUKEBOX_ROUTE);
+		public boolean onControlRequest(Intent intent, androidx.mediarouter.media.MediaRouter.ControlRequestCallback callback) {
+			if (intent.hasCategory(CATEGORY_JUKEBOX_ROUTE)) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		@Override

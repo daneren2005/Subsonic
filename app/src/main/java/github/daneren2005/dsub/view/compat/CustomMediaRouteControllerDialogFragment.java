@@ -2,8 +2,8 @@ package github.daneren2005.dsub.view.compat;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.MediaRouteControllerDialog;
-import android.support.v7.app.MediaRouteControllerDialogFragment;
+import androidx.mediarouter.app.MediaRouteControllerDialog;
+import androidx.mediarouter.app.MediaRouteControllerDialogFragment;
 
 import github.daneren2005.dsub.util.ThemeUtil;
 

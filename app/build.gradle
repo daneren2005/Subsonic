@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-	compileSdkVersion 27
-	buildToolsVersion '25.0.3'
+	compileSdkVersion 28
 
 	defaultConfig {
 		applicationId "github.daneren2005.dsub"
@@ -59,11 +58,11 @@ android {
 dependencies {
 	implementation project(path: ':ServerProxy')
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation 'com.android.support:support-v4:27.1.+'
-	implementation 'com.android.support:appcompat-v7:27.1.+'
-	implementation 'com.android.support:mediarouter-v7:27.1.+'
-	implementation 'com.android.support:recyclerview-v7:27.1.+'
-	implementation 'com.android.support:design:27.1.+'
+	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+	implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+	implementation 'androidx.mediarouter:mediarouter:1.1.0-alpha01'
+	implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
+	implementation 'com.google.android.material:material:1.1.0-alpha01'
 	googleImplementation 'com.google.android.gms:play-services-cast:8.1.0'
 	implementation 'com.sothree.slidinguppanel:library:3.0.0'
 	implementation 'de.hdodenhof:circleimageview:1.2.1'
