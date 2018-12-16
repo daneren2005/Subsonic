@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-	android:contentAuthority="github.daneren2005.dsub.podcasts.provider"
+	android:contentAuthority="github.vrih.xsub.podcasts.provider"
 	android:accountType="subsonic.org"
 	android:userVisible="true"
 	android:supportsUploading="false"

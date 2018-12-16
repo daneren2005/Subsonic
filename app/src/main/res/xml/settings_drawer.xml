@@ -54,7 +54,7 @@
 			android:entries="@array/defaultDrawerItems"
 			android:defaultValue="Home"/>
 
-		<github.daneren2005.dsub.view.SeekBarPreference
+		<github.vrih.xsub.view.SeekBarPreference
 			android:title="@string/settings.chat_refresh"
 			android:key="chatRefreshRate"
 			android:defaultValue="30"

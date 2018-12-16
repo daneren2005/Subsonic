@@ -110,7 +110,7 @@
 				android:layout_gravity="center_vertical"/>
 		</LinearLayout>
 
-		<github.daneren2005.dsub.view.RecyclingImageView
+		<github.vrih.xsub.view.RecyclingImageView
 			android:id="@+id/select_album_art"
 			android:layout_width="@dimen/AlbumArt.Header"
 			android:layout_height="@dimen/AlbumArt.Header"

@@ -23,7 +23,7 @@
 				android:layout_marginRight="@dimen/FastScroller.NormalBarMargin"
 				android:scrollbarStyle="outsideOverlay"/>
 
-			<github.daneren2005.dsub.view.FastScroller
+			<github.vrih.xsub.view.FastScroller
 				android:id="@+id/fragment_fast_scroller"
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"

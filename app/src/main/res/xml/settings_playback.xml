@@ -6,7 +6,7 @@
 	<PreferenceCategory
 		android:title="@string/settings.playback_title">
 
-		<github.daneren2005.dsub.view.SeekBarPreference
+		<github.vrih.xsub.view.SeekBarPreference
 			android:title="@string/settings.playlist_random_size_title"
 			android:key="randomSize"
 			android:defaultValue="20"
@@ -53,14 +53,14 @@
 			android:entryValues="@array/songPressActionValues"
 			android:entries="@array/songPressActionNames"/>
 
-        <github.daneren2005.dsub.view.SeekBarPreference
+        <github.vrih.xsub.view.SeekBarPreference
             android:title="@string/settings.rewind_interval"
             android:key="rewindInterval"
             android:defaultValue="10"
             android:dialogLayout="@layout/seekbar_preference"
             myns:max="60"/>
 
-        <github.daneren2005.dsub.view.SeekBarPreference
+        <github.vrih.xsub.view.SeekBarPreference
             android:title="@string/settings.fastforward_interval"
             android:key="fastforwardInterval"
             android:defaultValue="30"
@@ -95,7 +95,7 @@
 			android:entryValues="@array/replayGainTypeValues"
 			android:entries="@array/replayGainTypeNames"/>
 
-		<github.daneren2005.dsub.view.SeekBarPreference
+		<github.vrih.xsub.view.SeekBarPreference
 			android:key="replayGainBump2"
 			android:dialogLayout="@layout/seekbar_preference"
 			android:title="@string/settings.replay_gain_bump"
@@ -105,7 +105,7 @@
 			myns:stepSize="10"
 			myns:display="%+.1f dB"/>
 
-		<github.daneren2005.dsub.view.SeekBarPreference
+		<github.vrih.xsub.view.SeekBarPreference
 			android:key="replayGainUntagged2"
 			android:dialogLayout="@layout/seekbar_preference"
 			android:title="@string/settings.replay_gain_untagged"

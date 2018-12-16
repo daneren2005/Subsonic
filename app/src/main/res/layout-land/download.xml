@@ -11,7 +11,7 @@
 		android:layout_height="match_parent"
 		android:layout_weight="1">
 
-		<github.daneren2005.dsub.view.RecyclingImageView
+		<github.vrih.xsub.view.RecyclingImageView
 			android:id="@+id/download_album_art_image"
 			android:src="@drawable/unknown_album_large"
 			android:layout_width="wrap_content"

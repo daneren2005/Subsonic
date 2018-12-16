@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="github.daneren2005.dsub">
+          package="github.vrih.xsub">
 
     <application android:label="@string/common.appname"
-         android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
+         android:backupAgent="github.vrih.xsub.util.SettingsBackupAgent"
          android:icon="@drawable/launch"
          android:theme="@style/Theme.DSub.Light"
          android:largeHeap="true">

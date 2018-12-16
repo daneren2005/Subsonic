@@ -32,7 +32,7 @@
             android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"
             android:layout_marginRight="@dimen/FastScroller.NormalBarMargin"/>
 
-        <github.daneren2005.dsub.view.FastScroller
+        <github.vrih.xsub.view.FastScroller
             android:id="@+id/download_fast_scroller"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"

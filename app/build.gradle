@@ -4,13 +4,13 @@ android {
 	compileSdkVersion 28
 
 	defaultConfig {
-		applicationId "github.daneren2005.dsub"
+		applicationId 'github.vrih.xsub'
 		minSdkVersion 19
-		targetSdkVersion 26
-		versionCode 202
-		versionName '5.4.4'
+		targetSdkVersion 28
+		versionCode 1
+		versionName '1.0.0'
 		vectorDrawables.useSupportLibrary = true
-		setProperty("archivesBaseName", "DSub $versionName")
+		setProperty("archivesBaseName", "XSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
 	}
 	buildTypes {
@@ -64,7 +64,7 @@ dependencies {
 	implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
 	implementation 'com.google.android.material:material:1.1.0-alpha01'
 	googleImplementation 'com.google.android.gms:play-services-cast:8.1.0'
-	implementation 'com.sothree.slidinguppanel:library:3.0.0'
+	implementation 'com.sothree.slidinguppanel:library:3.2.0'
 	implementation 'de.hdodenhof:circleimageview:1.2.1'
 	implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'
 	implementation 'org.fourthline.cling:cling-core:2.1.1'
@@ -72,5 +72,5 @@ dependencies {
 	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
-	implementation 'com.android.support:support-vector-drawable:27.1.1'
+	implementation 'com.android.support:support-vector-drawable:28.0.0'
 }

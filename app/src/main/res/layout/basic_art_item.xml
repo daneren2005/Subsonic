@@ -5,7 +5,7 @@
 	android:layout_height="wrap_content"
 	android:background="?attr/selectableItemBackground">
 
-	<github.daneren2005.dsub.view.RecyclingImageView
+	<github.vrih.xsub.view.RecyclingImageView
 		android:id="@+id/item_art"
 		android:layout_width="@dimen/AlbumArt.Small"
 		android:layout_height="@dimen/AlbumArt.Small"
