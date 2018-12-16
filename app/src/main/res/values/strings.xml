@@ -44,14 +44,13 @@
 	<string name="button_bar.offline">Offline</string>
 
     <string name="main.welcome_title">Welcome!</string>
-    <string name="main.welcome_text">Welcome to DSub! The app is currently configured to use the Subsonic demo server. After you\'ve
-        set up your personal server (available from <b>subsonic.org</b>), please go to <b>Settings</b> and change the configuration to connect to it.</string>
+    <string name="main.welcome_text">Welcome to XSub! Please go to <b>Settings</b> and change the configuration to connect to it.</string>
 	<string name="main.about_title">About DSub</string>
 	<string name="main.faq_title">FAQ</string>
 	<string name="main.faq_text">
 	<![CDATA[
 		<font color="red">Cache vs Permanent Cache</font>:
-		<br/>When songs are downloaded by DSub, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
+		<br/>When songs are downloaded by XSub, they can be deleted to make room for new downloads.  Permanently cached music on the other hand will never be automatically deleted.
 		<p/><font color="red">ChromeCast fails</font>:
 		<br/>Try setting the option Settings -> Playback -> Use device proxy.  It is a work around for Chromecast not accepting self-signed certificates.
 		<p/><font color="red">First level in Library are actually groups of artists</font>:
