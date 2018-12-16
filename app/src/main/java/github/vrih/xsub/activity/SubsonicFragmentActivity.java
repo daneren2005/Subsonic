@@ -865,7 +865,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 		new SilentBackgroundTask<Void>(this) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
 				Account account = new Account(Constants.SYNC_ACCOUNT_NAME, Constants.SYNC_ACCOUNT_TYPE);
 				accountManager.addAccountExplicitly(account, null, null);

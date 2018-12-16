@@ -11,10 +11,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.android.material.card.MaterialCardView;
+
 import github.vrih.xsub.R;
 import github.vrih.xsub.util.DrawableTint;
 
-public class CardView extends FrameLayout{
+public class CardView extends MaterialCardView {
 	private static final String TAG = CardView.class.getSimpleName();
 
 	public CardView(Context context) {
@@ -31,12 +33,12 @@ public class CardView extends FrameLayout{
 		super(context, attrs, defStyleAttr);
 		init(context);
 	}
-
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	public CardView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-		init(context);
-	}
+//
+//	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//	public CardView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//		super(context, attrs, defStyleAttr, defStyleRes);
+//		init(context);
+//	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
