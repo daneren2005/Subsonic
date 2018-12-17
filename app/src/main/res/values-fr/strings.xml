@@ -242,7 +242,7 @@
     <string name="settings.cache_location_reset">L\'emplacement choisi pour la mémoire tampon ne peut plus être utilisé. S\'il y a eu une mise à jour récente vers Android 4.4 KiktKat, la façon dont les application écrivent sur la carte SD à changée afin que ces dernières ne puissent écrire que dans un emplacement spécifique. L\'emplacement à utiliser pour DSub a déjà été mis à jour. Afin de supprimer toutes les données obsolètes, il faut vider l\'ancien emplacement en utilisant un ordinateur.</string>
 	<string name="settings.cache_clear">Vider la mémoire tampon</string>
 	<string name="settings.cache_clear_complete">Mémoire tampon vidée</string>
-    <string name="settings.testing_connection">Test de connexion...</string>
+    <string name="settings.testing_connection">Test de connexion…</string>
     <string name="settings.testing_ok">Connexion OK</string>
     <string name="settings.testing_unlicensed">Connexion OK. Pas de licence.</string>
     <string name="settings.connection_failure">Echec de la connexion.</string>

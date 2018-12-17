@@ -20,7 +20,7 @@
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
 			android:paddingTop="4dp"
-			android:paddingLeft="2dp">
+			android:paddingStart="2dp">
 
 			<TextView
 				android:id="@+id/item_name"
@@ -31,14 +31,14 @@
 				android:singleLine="true"
 				android:ellipsize="marquee"
 				android:textColor="?android:textColorPrimary"
-				android:paddingLeft="@dimen/Card.TextLeftPadding"/>
+				android:paddingStart="@dimen/Card.TextLeftPadding"/>
 
 			<ImageView
 				android:id="@+id/item_more"
-				android:src="?attr/download_none"
+				android:srcCompat="?attr/download_none"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_gravity="right|center_vertical"
+				android:layout_gravity="end|center_vertical"
 				style="@style/MoreButton"/>
 		</LinearLayout>
 	</LinearLayout>

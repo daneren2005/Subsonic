@@ -38,7 +38,7 @@
 			android:orientation="horizontal"
 			android:paddingTop="4dp"
 			android:paddingBottom="4dp"
-			android:paddingLeft="2dp">
+			android:paddingStart="2dp">
 
 			<LinearLayout
 				android:layout_width="0dp"
@@ -56,7 +56,7 @@
 					android:ellipsize="marquee"
 					android:text="@string/search.albums"
 					android:textColor="?android:textColorPrimary"
-					android:paddingLeft="@dimen/Card.TextLeftPadding"/>
+					android:paddingStart="@dimen/Card.TextLeftPadding"/>
 
 				<LinearLayout
 					android:layout_width="fill_parent"
@@ -71,14 +71,14 @@
 						android:textColor="?android:textColorSecondary"
 						android:singleLine="true"
 						android:text="@string/search.artists"
-						android:paddingLeft="@dimen/Card.TextLeftPadding"/>
+						android:paddingStart="@dimen/Card.TextLeftPadding"/>
 
 					<ImageButton
 						android:id="@+id/album_star"
 						android:layout_width="@dimen/Star.Small"
 						android:layout_height="@dimen/Star.Small"
 						android:scaleType="fitCenter"
-						android:layout_gravity="right|center_vertical"
+						android:layout_gravity="end|center_vertical"
 						android:background="@android:color/transparent"
 						android:focusable="false"
 						android:visibility="gone"/>
@@ -87,10 +87,10 @@
 
 			<ImageView
 				android:id="@+id/item_more"
-				android:src="?attr/download_none"
+				android:srcCompat="?attr/download_none"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_gravity="right|center_vertical"
+				android:layout_gravity="end|center_vertical"
 				style="@style/MoreButton"/>
 		</LinearLayout>
 

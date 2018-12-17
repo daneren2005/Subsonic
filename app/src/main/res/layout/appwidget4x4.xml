@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -73,7 +74,7 @@
                 android:fadingEdgeLength="10dip"
                 android:minHeight="12sp"
                 android:paddingBottom="2dip"
-                android:paddingLeft="5dip"
+                android:paddingStart="5dip"
                 android:singleLine="true"
                 android:text="Artist"
                 android:layout_gravity="center_horizontal"
@@ -97,14 +98,14 @@
                 android:layout_height="56dip"
                 android:layout_weight="1"
                 style="@style/NotificationButton"
-                android:src="@drawable/widget_media_backward" />
+                app:srcCompat="@drawable/widget_media_backward" />
 
             <ImageButton
                 android:id="@+id/control_play"
                 android:layout_width="0dip"
                 android:layout_height="56dip"
                 android:layout_weight="1"
-                android:src="@drawable/widget_media_start"
+                app:srcCompat="@drawable/widget_media_start"
 				style="@style/NotificationButton" />
 
             <ImageButton
@@ -112,7 +113,7 @@
                 android:layout_width="0dip"
                 android:layout_height="56dip"
                 android:layout_weight="1"
-                android:src="@drawable/widget_media_forward"
+                app:srcCompat="@drawable/widget_media_forward"
 				style="@style/NotificationButton" />
         </LinearLayout>
 

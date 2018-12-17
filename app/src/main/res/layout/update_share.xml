@@ -12,7 +12,7 @@
 			android:id="@+id/get_share_name_label"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:textSize="20dp"
 			android:text="@string/common.name"
 			android:textColor="?android:textColorPrimary"/>
@@ -22,7 +22,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:hint="@string/common.name" />
 	</LinearLayout>
 		
@@ -35,7 +35,7 @@
 			android:id="@+id/get_share_expire_label"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:textSize="20dp"
 			android:text="@string/share.expiration"
 			android:textColor="?android:textColorPrimary"/>
@@ -44,7 +44,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:calendarViewShown="false"/>
 	</LinearLayout>
 
@@ -57,7 +57,7 @@
 			android:id="@+id/get_share_no_expire_label"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:textSize="20dp"
 			android:text="@string/share.no_expiration"
 			android:textColor="?android:textColorPrimary"/>
@@ -66,7 +66,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:checked="false"/>
 	</LinearLayout>
 </LinearLayout>

@@ -231,7 +231,7 @@
     <string name="settings.cache_location_error">Ruta de caché no válida. Utilizando la opción por defecto.</string>
 	<string name="settings.cache_clear">Limpiar cache</string>
 	<string name="settings.cache_clear_complete">Caché limpiada</string>
-    <string name="settings.testing_connection">Probando conexión...</string>
+    <string name="settings.testing_connection">Probando conexión…</string>
     <string name="settings.testing_ok">Conexión correcta</string>
     <string name="settings.testing_unlicensed">Conexión correcta. Servidor sin licencia.</string>
     <string name="settings.connection_failure">Error de conexión.</string>

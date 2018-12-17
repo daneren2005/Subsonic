@@ -13,7 +13,7 @@
 		android:layout_height="?android:attr/listPreferredItemHeight"
 		android:layout_weight="1"
 		android:background="@android:color/transparent"
-		android:gravity="left|center_vertical"
+		android:gravity="start|center_vertical"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:textColor="?android:textColorPrimary" />
 
@@ -22,6 +22,6 @@
 		style="@style/MoreButton"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
-		android:layout_gravity="right|center_vertical"
+		android:layout_gravity="end|center_vertical"
 		android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
 </LinearLayout>

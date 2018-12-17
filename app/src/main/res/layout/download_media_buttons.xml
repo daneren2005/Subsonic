@@ -9,7 +9,7 @@
             style="@style/PlaybackControl"
             android:id="@+id/download_repeat"
             android:src="?attr/media_button_repeat_off"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             />
 
@@ -17,7 +17,7 @@
             style="@style/PlaybackControl.Small"
             android:id="@+id/download_previous"
             android:src="?attr/media_button_backward"
-            android:layout_toLeftOf="@+id/download_pause"
+            android:layout_toStartOf="@+id/download_pause"
             android:layout_centerVertical="true"
             />
 
@@ -25,7 +25,7 @@
 		style="@style/PlaybackControl.Large"
 		android:id="@+id/download_rewind"
 		android:src="?attr/media_button_rewind"
-		android:layout_toLeftOf="@+id/download_pause"
+		android:layout_toStartOf="@+id/download_pause"
 		android:layout_centerVertical="true"
 		android:visibility="invisible"/>
 
@@ -56,7 +56,7 @@
 		style="@style/PlaybackControl.Large"
 		android:id="@+id/download_fastforward"
 		android:src="?attr/media_button_fastforward"
-		android:layout_toRightOf="@+id/download_start"
+		android:layout_toEndOf="@+id/download_start"
 		android:layout_centerVertical="true"
 		android:visibility="invisible"/>
 
@@ -64,7 +64,7 @@
             style="@style/PlaybackControl.Small"
             android:id="@+id/download_next"
             android:src="?attr/media_button_forward"
-            android:layout_toRightOf="@+id/download_start"
+            android:layout_toEndOf="@+id/download_start"
             android:layout_centerVertical="true"
             />
 
@@ -72,7 +72,7 @@
             style="@style/PlaybackControl"
 			android:id="@+id/download_toggle_list"
 			android:src="?attr/toggle_list"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             />
 </RelativeLayout>

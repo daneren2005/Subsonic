@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/statusbar"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/statusbar"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal" >
@@ -17,7 +18,7 @@
         android:layout_height="wrap_content"
 		android:layout_weight="1"
         android:orientation="vertical"
-		android:paddingLeft="11.0dip"
+		android:paddingStart="11.0dip"
 		android:layout_gravity="center_vertical">
 			
 		<TextView
@@ -25,7 +26,7 @@
 			style="@style/NotificationText.Title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="left"
+			android:layout_gravity="start"
 			android:ellipsize="marquee"
 			android:focusable="true"
 			android:singleLine="true" />
@@ -35,7 +36,7 @@
 			style="@style/NotificationText.Content"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_gravity="left"
+			android:layout_gravity="start"
 			android:ellipsize="end"
 			android:scrollHorizontally="true"
 			android:singleLine="true" />
@@ -49,18 +50,18 @@
 
 	<ImageButton
 		android:id="@+id/control_previous"
-		android:src="@drawable/notification_media_backward"
+		app:srcCompat="@drawable/notification_media_backward"
 		style="@style/NotificationButton"/>
 
 	<ImageButton
 		android:id="@+id/control_pause"
-		android:src="@drawable/notification_media_pause"
+		app:srcCompat="@drawable/notification_media_pause"
 		style="@style/NotificationButton"
 		android:layout_width="54dip"
 		android:padding="0dip"/>
 
 	<ImageButton
 		android:id="@+id/control_next"
-		android:src="@drawable/notification_media_forward"
+		app:srcCompat="@drawable/notification_media_forward"
 		style="@style/NotificationButton"/>
 </LinearLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@id/drag_handle"
 	android:layout_width="match_parent"
 	android:layout_height="?android:attr/listPreferredItemHeight"
@@ -28,7 +29,7 @@
 				android:layout_gravity="top|start"
 				android:drawablePadding="6dip"
 				android:gravity="start"
-				android:paddingRight="6dp"
+				android:paddingEnd="6dp"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:textColor="?android:textColorPrimary" />
 
@@ -36,11 +37,11 @@
 				android:id="@+id/song_title"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:layout_gravity="left|top"
+				android:layout_gravity="start|top"
 				android:layout_weight="1"
 				android:drawablePadding="6dip"
 				android:ellipsize="marquee"
-				android:paddingRight="6dp"
+				android:paddingEnd="6dp"
 				android:singleLine="true"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:textColor="?android:textColorPrimary" />
@@ -79,16 +80,16 @@
 				android:id="@+id/song_status"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_gravity="right|top"
+				android:layout_gravity="end|top"
 				android:drawablePadding="1dip"
-				android:paddingRight="2dip" />
+				android:paddingEnd="2dip" />
 
 			<ImageView
 				android:id="@+id/song_status_icon"
 				android:layout_width="@dimen/SongStatusIcon"
 				android:layout_height="@dimen/SongStatusIcon"
 				android:layout_gravity="top|end"
-				android:src="?attr/downloading"
+				app:srcCompat="?attr/downloading"
 				android:visibility="gone" />
 		</LinearLayout>
 
@@ -124,8 +125,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical|end"
-				android:paddingLeft="3dip"
-				android:paddingRight="4dip"
+				android:paddingStart="3dip"
+				android:paddingEnd="4dip"
 				android:singleLine="true"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:textColor="?android:textColorSecondary" />
@@ -139,6 +140,6 @@
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:layout_gravity="center_vertical|end"
-		android:src="?attr/download_none" />
+		app:srcCompat="?attr/download_none" />
 
 </LinearLayout>

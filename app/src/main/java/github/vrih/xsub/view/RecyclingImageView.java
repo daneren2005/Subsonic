@@ -25,7 +25,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-public class RecyclingImageView extends ImageView {
+public class RecyclingImageView extends android.support.v7.widget.AppCompatImageView {
 	private boolean invalidated = false;
 	private OnInvalidated onInvalidated;
 

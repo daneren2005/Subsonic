@@ -14,7 +14,7 @@
 			android:id="@+id/select_album_text_layout"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:layout_toRightOf="@+id/select_album_art"
+			android:layout_toEndOf="@+id/select_album_art"
 			android:orientation="vertical"
 			android:layout_centerVertical="true">
 
@@ -75,7 +75,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
-			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
 			android:padding="10dip">
 
 			<LinearLayout
@@ -115,8 +115,8 @@
 			android:layout_width="@dimen/AlbumArt.Header"
 			android:layout_height="@dimen/AlbumArt.Header"
 			android:layout_alignParentTop="true"
-			android:layout_alignParentLeft="true"
-			android:layout_marginRight="10dip"
+			android:layout_alignParentStart="true"
+			android:layout_marginEnd="10dip"
 			android:scaleType="fitCenter"
 			android:contentDescription="@null"/>
 	</RelativeLayout>
@@ -139,7 +139,7 @@
 				android:id="@+id/tab_progress_spinner"
 				style="?android:attr/progressBarStyleLarge"
 				android:layout_gravity="center_horizontal"
-				android:layout_marginRight="6dp"
+				android:layout_marginEnd="6dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"/>
 

@@ -20,14 +20,14 @@
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:scrollbars="vertical"
-				android:layout_marginRight="@dimen/FastScroller.NormalBarMargin"
+				android:layout_marginEnd="@dimen/FastScroller.NormalBarMargin"
 				android:scrollbarStyle="outsideOverlay"/>
 
 			<github.vrih.xsub.view.FastScroller
 				android:id="@+id/fragment_fast_scroller"
 				android:layout_width="wrap_content"
 				android:layout_height="fill_parent"
-				android:layout_alignParentRight="true"/>
+				android:layout_alignParentEnd="true"/>
 		</RelativeLayout>
 
 		<include layout="@layout/tab_progress" />

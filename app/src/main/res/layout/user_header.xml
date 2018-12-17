@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/select_album_header"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/select_album_header"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
 		
 	<github.vrih.xsub.view.RecyclingImageView
 		android:id="@+id/user_avatar"
-		android:src="@drawable/ic_social_person"
+		app:srcCompat="@drawable/ic_social_person"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
-		android:layout_alignParentLeft="true"
-		android:layout_marginRight="10dip"
+		android:layout_alignParentStart="true"
+		android:layout_marginEnd="10dip"
 		android:scaleType="fitCenter"
 		android:contentDescription="@null"/>
 
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_toRightOf="@+id/user_avatar"
+		android:layout_toEndOf="@+id/user_avatar"
 		android:orientation="vertical"
 		android:layout_centerVertical="true">
 

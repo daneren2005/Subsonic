@@ -257,7 +257,7 @@
     <string name="settings.cache_location_reset">Der gesetzte Cachepfad ist nicht (mehr) beschreibbar. Durch die Aktualisierung des Telefon-OS auf KitKat 4.4 wurde der Zugriff auf die SD-Karte durch Apps eingeschränkt auf spezielle Pfade. Der von DSub verwendete Pfad wurde entsprechend korrigiert. Um den alten Cache zu löschen, müssen Sie die SD-Karte an einem Computer anschliessend und den Ordner manuell löschen.</string>
 	<string name="settings.cache_clear">Lösche Cache</string>
 	<string name="settings.cache_clear_complete">Cache wurde geleert</string>
-    <string name="settings.testing_connection">Teste Verbindung...</string>
+    <string name="settings.testing_connection">Teste Verbindung…</string>
     <string name="settings.testing_ok">Verbindung ist OK</string>
     <string name="settings.testing_unlicensed">Verbindung ist OK. Server ist nicht lizensiert.</string>
     <string name="settings.connection_failure">Verbindung fehlgeschlagen.</string>

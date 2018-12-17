@@ -59,7 +59,7 @@
 					android:id="@+id/album_art"
 					android:layout_width="?attr/actionBarSize"
 					android:layout_height="?attr/actionBarSize"
-					android:layout_gravity="left|center"
+					android:layout_gravity="start|center"
 					android:scaleType="fitCenter"/>
 
 				<LinearLayout
@@ -68,7 +68,7 @@
 					android:layout_gravity="center_vertical"
 					android:layout_weight="1"
 					android:orientation="vertical"
-					android:paddingLeft="8dip">
+					android:paddingStart="8dip">
 
 					<TextView
 						android:id="@+id/track_name"

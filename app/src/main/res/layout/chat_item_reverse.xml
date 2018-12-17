@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:background="?attr/selectableItemBackground">
@@ -16,13 +17,13 @@
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="4dip"
 			android:orientation="horizontal"
-			android:layout_gravity="right" >
+			android:layout_gravity="end" >
 
 			<TextView
 				android:id="@+id/chat_time"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginRight="6dip"
+				android:layout_marginEnd="6dip"
 				android:singleLine="true"
 				android:text="00:00"
 				android:textAppearance="?android:attr/textAppearanceSmall"
@@ -32,7 +33,7 @@
 				android:id="@+id/chat_username"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginLeft="6dip"
+				android:layout_marginStart="6dip"
 				android:ellipsize="marquee"
 				android:singleLine="true"
 				android:text="User"
@@ -51,14 +52,14 @@
 			android:singleLine="false"
 			android:text="Chat message"
 			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:layout_gravity="right"
+			android:layout_gravity="end"
 			android:textColor="?android:textColorSecondary"/>
 	</LinearLayout>
 
 	<github.vrih.xsub.view.RecyclingImageView
 		android:id="@+id/chat_avatar"
-		android:src="@drawable/ic_social_person"
+		app:srcCompat="@drawable/ic_social_person"
 		android:layout_width="@dimen/AlbumArt.Small"
 		android:layout_height="@dimen/AlbumArt.Small"
-		android:layout_gravity="right|center_vertical"/>
+		android:layout_gravity="end|center_vertical"/>
 </LinearLayout>

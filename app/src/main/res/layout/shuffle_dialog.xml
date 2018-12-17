@@ -12,7 +12,7 @@
 			android:id="@+id/start_year_label"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:textSize="20dp"
 			android:text="@string/shuffle.startYear"
 			android:textColor="?android:textColorPrimary"/>
@@ -22,7 +22,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:hint="@string/shuffle.startYear" />
 	</LinearLayout>
 
@@ -35,7 +35,7 @@
 			android:id="@+id/end_year_label"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:textSize="20dp"
 			android:text="@string/shuffle.endYear"
 			android:textColor="?android:textColorPrimary"/>
@@ -45,7 +45,7 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:hint="@string/shuffle.endYear" />
 	</LinearLayout>
 		
@@ -58,7 +58,7 @@
 			android:id="@+id/genre_label"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:textSize="20dp"
 			android:text="@string/shuffle.genre" />
 		<EditText
@@ -67,7 +67,7 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:hint="@string/shuffle.genre"
 			android:textColor="?android:textColorPrimary"/>
 
@@ -76,7 +76,7 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:layout_marginLeft="4dp"
+			android:layout_marginStart="4dp"
 			android:text="@string/shuffle.genre"
 			style="?android:attr/spinnerStyle"/>
 	</LinearLayout>

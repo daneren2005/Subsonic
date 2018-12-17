@@ -9,19 +9,19 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="8dp"
-		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
 		android:textColor="?android:textColorPrimary"/>
 
 	<TextView
 		android:id="@+id/equalizer.level"
 		android:text="0 dB"
 		android:textSize="12sp"
-		android:gravity="right"
+		android:gravity="end"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="8dp"
-		android:layout_alignParentRight="true"
-		android:layout_toRightOf="@+id/equalizer.frequency"
+		android:layout_alignParentEnd="true"
+		android:layout_toEndOf="@+id/equalizer.frequency"
 		android:textColor="?android:textColorSecondary"/>
 
 	<SeekBar

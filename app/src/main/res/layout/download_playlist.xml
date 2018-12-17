@@ -28,14 +28,14 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:scrollbars="vertical"
-            android:paddingRight="@dimen/FastScroller.LeftAlignedMargin"
-            android:layout_marginRight="@dimen/FastScroller.NormalBarMargin"/>
+            android:paddingEnd="@dimen/FastScroller.LeftAlignedMargin"
+            android:layout_marginEnd="@dimen/FastScroller.NormalBarMargin"/>
 
         <github.vrih.xsub.view.FastScroller
             android:id="@+id/download_fast_scroller"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
 </LinearLayout>

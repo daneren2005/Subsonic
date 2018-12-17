@@ -7,10 +7,10 @@
 
 	<github.vrih.xsub.view.RecyclingImageView
 		android:id="@+id/item_avatar"
-		android:src="@drawable/ic_social_person"
+		android:srcCompat="@drawable/ic_social_person"
 		android:layout_width="@dimen/AlbumArt.Small"
 		android:layout_height="@dimen/AlbumArt.Small"
-		android:layout_gravity="left|center_vertical"/>
+		android:layout_gravity="start|center_vertical"/>
 
 	<TextView
 		android:id="@+id/item_name"
@@ -18,9 +18,9 @@
 		android:layout_height="match_parent"
 		android:layout_weight="1"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:gravity="left|center_vertical"
-		android:paddingLeft="12dip"
-		android:paddingRight="6dip"
+		android:gravity="start|center_vertical"
+		android:paddingStart="12dip"
+		android:paddingEnd="6dip"
 		android:minHeight="50dip"
 		android:background="@android:color/transparent"
 		android:textColor="?android:textColorPrimary"/>
@@ -30,16 +30,16 @@
 		android:layout_width="@dimen/Star.Small"
 		android:layout_height="@dimen/Star.Small"
 		android:scaleType="fitCenter"
-		android:layout_gravity="right|center_vertical"
+		android:layout_gravity="end|center_vertical"
 		android:background="@android:color/transparent"
 		android:focusable="false"
 		android:visibility="gone"/>
 
 	<ImageView
 		android:id="@+id/item_more"
-		android:src="?attr/download_none"
+		android:srcCompat="?attr/download_none"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
-		android:layout_gravity="right|center_vertical"
+		android:layout_gravity="end|center_vertical"
 		style="@style/MoreButton"/>
 </LinearLayout>

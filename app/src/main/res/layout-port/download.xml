@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/download_layout_container"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/download_layout_container"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
@@ -52,27 +53,27 @@
 								<ImageButton
 									android:id="@+id/download_rating_bad"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_rating_bad"/>
+									app:srcCompat="@drawable/ic_action_rating_bad"/>
 
 								<ImageButton
 									android:id="@+id/download_star"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_toggle_star_outline_dark"/>
+									app:srcCompat="@drawable/ic_toggle_star_outline_dark"/>
 
 								<ImageButton
 									android:id="@+id/download_playback_speed"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_playback_speed"/>
+									app:srcCompat="@drawable/ic_action_playback_speed"/>
 
 								<ImageButton
 									android:id="@+id/download_bookmark"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_menu_bookmark"/>
+									app:srcCompat="@drawable/ic_menu_bookmark"/>
 
 								<ImageButton
 									android:id="@+id/download_rating_good"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_rating_good"/>
+									app:srcCompat="@drawable/ic_action_rating_good"/>
 						</LinearLayout>
 					</FrameLayout>
 				</FrameLayout>
