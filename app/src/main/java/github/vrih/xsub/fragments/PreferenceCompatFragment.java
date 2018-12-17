@@ -50,17 +50,18 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 	private ListView mList;
 	private PreferenceManager mPreferenceManager;
 
-	private final Handler mHandler = new Handler() {
+	private final Handler mHandler = new Handler(new Handler.Callback() {
 		@Override
-		public void handleMessage(Message msg) {
+		public boolean handleMessage(Message msg) {
 			switch (msg.what) {
 
 				case MSG_BIND_PREFERENCES:
 					bindPreferences();
 					break;
 			}
+			return true;
 		}
-	};
+	});
 
 	final private Runnable mRequestFocus = new Runnable() {
 		public void run() {
