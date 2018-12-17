@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:myns="http://schemas.android.com/apk/res/github.vrih.xsub"
 	android:title="@string/settings.cache_screen_title">
 
 	<PreferenceCategory
