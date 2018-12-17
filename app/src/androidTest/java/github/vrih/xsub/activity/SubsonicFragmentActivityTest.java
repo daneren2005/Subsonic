@@ -1,7 +1,6 @@
 package github.vrih.xsub.activity;
 
 import github.vrih.xsub.R;
-import android.test.ActivityInstrumentationTestCase2;
 
 public class SubsonicFragmentActivityTest extends
 		ActivityInstrumentationTestCase2<SubsonicFragmentActivity> {

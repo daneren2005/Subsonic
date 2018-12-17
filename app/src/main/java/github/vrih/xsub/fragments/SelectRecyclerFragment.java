@@ -16,11 +16,10 @@
 package github.vrih.xsub.fragments;
 
 import android.os.Bundle;
-import androidx.core.view.MenuItemCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;

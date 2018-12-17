@@ -3,8 +3,6 @@ package github.vrih.xsub.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 public class GenreComparatorTest extends TestCase {
 
 	/**

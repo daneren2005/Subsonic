@@ -1,6 +1,5 @@
 package github.vrih.xsub.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
@@ -9,7 +8,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.google.android.material.card.MaterialCardView;
 

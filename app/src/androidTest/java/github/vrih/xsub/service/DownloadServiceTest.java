@@ -12,7 +12,7 @@ import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.PlayerState;
 
 import java.util.LinkedList;
-import android.test.ActivityInstrumentationTestCase2;
+
 import android.util.Log;
 
 public class DownloadServiceTest extends

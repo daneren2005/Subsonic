@@ -15,7 +15,6 @@
 
 package github.vrih.xsub.service;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,18 +34,14 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.images.WebImage;
 
 import java.io.File;
-import java.io.IOException;
 
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.PlayerState;
 import github.vrih.xsub.domain.RemoteControlState;
-import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.EnvironmentVariables;
 import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.Util;
-import github.daneren2005.serverproxy.FileProxy;
-import github.daneren2005.serverproxy.ServerProxy;
 import github.daneren2005.serverproxy.WebProxy;
 
 /**

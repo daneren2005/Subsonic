@@ -21,7 +21,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
-import androidx.annotation.RequiresApi;
+
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import android.content.ClipboardManager;
