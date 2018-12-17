@@ -30,9 +30,8 @@ import github.vrih.xsub.util.Constants;
 
 public class SettingsActivity extends SubsonicActivity {
 	private static final String TAG = SettingsActivity.class.getSimpleName();
-	private PreferenceCompatFragment fragment;
 
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,7 +39,7 @@ public class SettingsActivity extends SubsonicActivity {
 		setContentView(R.layout.settings_activity);
 
 		if (savedInstanceState == null) {
-			fragment = new SettingsFragment();
+            PreferenceCompatFragment fragment = new SettingsFragment();
 			Bundle args = new Bundle();
 			args.putInt(Constants.INTENT_EXTRA_FRAGMENT_TYPE, R.xml.settings);
 

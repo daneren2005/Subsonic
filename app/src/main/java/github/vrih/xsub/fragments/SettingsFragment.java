@@ -83,8 +83,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference keepPlayedCount;
 	private ListPreference tempLoss;
 	private ListPreference pauseDisconnect;
-	private Preference addServerPreference;
-	private PreferenceCategory serversCategory;
+    private PreferenceCategory serversCategory;
 	private ListPreference songPressAction;
 	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
@@ -250,7 +249,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		tempLoss = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_TEMP_LOSS);
 		pauseDisconnect = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PAUSE_DISCONNECT);
 		serversCategory = (PreferenceCategory) this.findPreference(Constants.PREFERENCES_KEY_SERVER_KEY);
-		addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
+        Preference addServerPreference = this.findPreference(Constants.PREFERENCES_KEY_SERVER_ADD);
 		videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		songPressAction = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION);
 		syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);

@@ -46,12 +46,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	private final float mStepSize;
 	private String mDisplay;
 
-	/**
-	 * Our context (needed for getResources())
-	 */
-	private final Context mContext;
-
-	/**
+    /**
 	 * TextView to display current threshold.
 	 */
 	private TextView mValueText;
@@ -59,7 +54,11 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	private SeekBarPreference(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		mContext = context;
+		/*
+	  Our context (needed for getResources())
+	 */ /**
+     * Our context (needed for getResources())
+     */Context mContext = context;
 
 		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SeekBarPreference);
 		mMin = a.getInteger(R.styleable.SeekBarPreference_min, 0);

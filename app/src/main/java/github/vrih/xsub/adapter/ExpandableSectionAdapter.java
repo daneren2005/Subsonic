@@ -35,12 +35,9 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 	private static final int EXPAND_TOGGLE = R.attr.select_server;
 	private static final int COLLAPSE_TOGGLE = R.attr.select_tabs;
 
-	private List<Integer> sectionsDefaultVisible;
-	private List<List<T>> sectionsExtras;
-	private int expandToggleRes;
-	private int collapseToggleRes;
+    private List<List<T>> sectionsExtras;
 
-	ExpandableSectionAdapter() {}
+    ExpandableSectionAdapter() {}
 	ExpandableSectionAdapter(Context context, List<T> section) {
 		List<List<T>> sections = new ArrayList<>();
 		sections.add(section);
@@ -56,7 +53,7 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 	void init(Context context, List<String> headers, List<List<T>> fullSections, List<Integer> sectionsDefaultVisible) {
 		this.context = context;
 		this.headers = headers;
-		this.sectionsDefaultVisible = sectionsDefaultVisible;
+        List<Integer> sectionsDefaultVisible1 = sectionsDefaultVisible;
 		if(sectionsDefaultVisible == null) {
 			sectionsDefaultVisible = new ArrayList<>(fullSections.size());
 			for(int i = 0; i < fullSections.size(); i++) {
@@ -83,8 +80,8 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 			i++;
 		}
 
-		expandToggleRes = DrawableTint.getDrawableRes(context, EXPAND_TOGGLE);
-		collapseToggleRes = DrawableTint.getDrawableRes(context, COLLAPSE_TOGGLE);
+        int expandToggleRes = DrawableTint.getDrawableRes(context, EXPAND_TOGGLE);
+        int collapseToggleRes = DrawableTint.getDrawableRes(context, COLLAPSE_TOGGLE);
 	}
 
 	@Override

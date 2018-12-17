@@ -66,9 +66,8 @@ public abstract class UpdateView<T> extends LinearLayout {
 	int rating = 0;
 	SilentBackgroundTask<Void> imageTask = null;
 	private Drawable startBackgroundDrawable;
-	
-	private final boolean autoUpdate;
-	boolean checkable;
+
+    boolean checkable;
 	
 	public UpdateView(Context context) {
 		this(context, true);
@@ -76,7 +75,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 	UpdateView(Context context, boolean autoUpdate) {
 		super(context);
 		this.context = context;
-		this.autoUpdate = autoUpdate;
+        boolean autoUpdate1 = autoUpdate;
 		
 		setLayoutParams(new AbsListView.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,

@@ -38,8 +38,7 @@ import static github.vrih.xsub.domain.User.Setting;
 
 public class SettingsAdapter extends SectionAdapter<Setting> {
 	private static final String TAG = SettingsAdapter.class.getSimpleName();
-	private final int VIEW_TYPE_SETTING = 1;
-	private final int VIEW_TYPE_SETTING_HEADER = 2;
+    private final int VIEW_TYPE_SETTING_HEADER = 2;
 
 	private final User user;
 	private final boolean editable;
@@ -123,7 +122,8 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 
 	@Override
 	public int getItemViewType(Setting item) {
-		return VIEW_TYPE_SETTING;
+        int VIEW_TYPE_SETTING = 1;
+        return VIEW_TYPE_SETTING;
 	}
 
 	@Override

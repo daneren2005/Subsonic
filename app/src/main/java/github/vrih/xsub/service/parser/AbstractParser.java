@@ -142,7 +142,6 @@ abstract class AbstractParser {
 		try {
 			return parser.next();
 		} catch(Exception e) {
-			if(ServerInfo.isMadsonic6(context, instance)) {
 				ServerInfo overrideInfo = new ServerInfo();
 				overrideInfo.saveServerInfo(context, instance);
 			}

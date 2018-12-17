@@ -104,15 +104,12 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	private boolean finished = false;
 	final List<SubsonicFragment> backStack = new ArrayList<>();
 	SubsonicFragment currentFragment;
-	private View primaryContainer;
-	View secondaryContainer;
-	private final boolean tv = false;
-	private boolean touchscreen = true;
+    View secondaryContainer;
+    private boolean touchscreen = true;
 	final Handler handler = new Handler();
 	private Spinner actionBarSpinner;
 	private ArrayAdapter<CharSequence> spinnerAdapter;
-	private ViewGroup rootView;
-	DrawerLayout drawer;
+    DrawerLayout drawer;
 	ActionBarDrawerToggle drawerToggle;
 	NavigationView drawerList;
 	private View drawerHeader;
@@ -289,7 +286,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		} else {
 			super.setContentView(R.layout.abstract_activity);
 		}
-		rootView = findViewById(R.id.content_frame);
+        ViewGroup rootView = findViewById(R.id.content_frame);
 
 		if(viewId != 0) {
 			LayoutInflater layoutInflater = getLayoutInflater();
@@ -442,7 +439,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		// Check whether this is a tablet or not
 		secondaryContainer = findViewById(R.id.fragment_second_container);
 		if(secondaryContainer != null) {
-			primaryContainer = findViewById(R.id.fragment_container);
+            View primaryContainer = findViewById(R.id.fragment_container);
 		}
 	}
 
@@ -1044,7 +1041,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	private boolean isTv() {
-		return tv;
+        boolean tv = false;
+        return tv;
 	}
 	public boolean isTouchscreen() {
 		return touchscreen;

@@ -83,8 +83,7 @@ public class DLNAController extends RemoteController {
 
 	private final AtomicLong lastUpdate = new AtomicLong();
 	private int currentPosition = 0;
-	private String currentPlayingURI;
-	private String nextPlayingURI;
+    private String nextPlayingURI;
 	private DownloadFile nextPlaying;
 	private boolean running = true;
 	private boolean hasDuration = false;
@@ -392,7 +391,7 @@ public class DLNAController extends RemoteController {
 		try {
 			Pair<String, String> songInfo = getSongInfo(currentPlaying);
 
-			currentPlayingURI = songInfo.getFirst();
+            String currentPlayingURI = songInfo.getFirst();
 			controlPoint.execute(new SetAVTransportURI(getTransportService(), songInfo.getFirst(), songInfo.getSecond()) {
 				@Override
 				public void success(ActionInvocation invocation) {

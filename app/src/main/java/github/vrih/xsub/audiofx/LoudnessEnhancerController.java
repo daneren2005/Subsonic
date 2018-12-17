@@ -25,15 +25,12 @@ import android.util.Log;
 public class LoudnessEnhancerController {
 	private static final String TAG = LoudnessEnhancerController.class.getSimpleName();
 
-	private final Context context;
-	private LoudnessEnhancer enhancer;
-	private boolean released = false;
-	private int audioSessionId = 0;
+    private LoudnessEnhancer enhancer;
 
-	public LoudnessEnhancerController(Context context, int audioSessionId) {
-		this.context = context;
+    public LoudnessEnhancerController(Context context, int audioSessionId) {
+        Context context1 = context;
 		try {
-			this.audioSessionId = audioSessionId;
+            int audioSessionId1 = audioSessionId;
 			enhancer = new LoudnessEnhancer(audioSessionId);
 		} catch (Throwable x) {
 			Log.w(TAG, "Failed to create enhancer", x);
@@ -69,7 +66,7 @@ public class LoudnessEnhancerController {
 	public void release() {
 		if (isAvailable()) {
 			enhancer.release();
-			released = true;
+            boolean released = true;
 		}
 	}
 
