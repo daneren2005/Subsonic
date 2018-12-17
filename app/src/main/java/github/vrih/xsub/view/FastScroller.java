@@ -143,9 +143,9 @@ public class FastScroller extends LinearLayout {
 			}
 
 			int itemCount = recyclerView.getAdapter().getItemCount();
-			float proportion = getValueInRange(0, 1f, y / (float) height);
+			float proportion = getValueInRang( 1f, y / (float) height);
 
-			float targetPosFloat = getValueInRange(0, itemCount - 1, proportion * (float)itemCount);
+			float targetPosFloat = getValueInRange(itemCount - 1, proportion * (float)itemCount);
 			int targetPos = (int) targetPosFloat;
 
 			// Immediately make sure that the target is visible
@@ -191,16 +191,16 @@ public class FastScroller extends LinearLayout {
 		}
 	}
 
-	private float getValueInRange(float min, float max, float value) {
-		float minimum = Math.max(min, value);
+	private float getValueInRange(float max, float value) {
+		float minimum = Math.max(0, value);
 		return Math.min(minimum,max);
 	}
 
 	private void setBubbleAndHandlePosition(float y) {
 		int bubbleHeight = bubble.getHeight();
 		int handleHeight = handle.getHeight();
-		handle.setY(getValueInRange(0,height-handleHeight,(int)(y-handleHeight/2)));
-		bubble.setY(getValueInRange(0, height - bubbleHeight - handleHeight / 2, (int) (y - bubbleHeight)));
+		handle.setY(getValueInRange(height-handleHeight,(int)(y-handleHeight/2)));
+		bubble.setY(getValueInRange(height - bubbleHeight - handleHeight / 2, (int) (y - bubbleHeight)));
 	}
 
 	private void showBubble() {
