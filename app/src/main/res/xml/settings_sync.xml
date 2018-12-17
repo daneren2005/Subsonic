@@ -5,7 +5,7 @@
 	<PreferenceCategory
 		android:title="@string/settings.sync_title">
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.sync_enabled"
 			android:summary="@string/settings.sync_enabled_summary"
 			android:key="syncEnabled"
@@ -18,13 +18,13 @@
 			android:entryValues="@array/syncIntervalValues"
 			android:entries="@array/syncIntervalNames"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.sync_wifi"
 			android:summary="@string/settings.sync_wifi_summary"
 			android:key="syncWifi"
 			android:defaultValue="true"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.sync_notification"
 			android:summary="@string/settings.sync_notification_summary"
 			android:key="syncNotification"
@@ -34,13 +34,13 @@
 	<PreferenceCategory
 		android:title="@string/settings.other_title">
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.sync_starred"
 			android:summary="@string/settings.sync_starred_summary"
 			android:key="syncStarred"
 			android:defaultValue="false"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.sync_most_recent"
 			android:summary="@string/settings.sync_most_recent_summary"
 			android:key="syncMostRecent"

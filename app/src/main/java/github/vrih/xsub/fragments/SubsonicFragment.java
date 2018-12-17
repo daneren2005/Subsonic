@@ -206,9 +206,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			case R.id.menu_global_shuffle:
 				onShuffleRequested();
 				return true;
-			case R.id.menu_exit:
-				exit();
-				return true;
 			case R.id.menu_refresh:
 				refresh();
 				return true;

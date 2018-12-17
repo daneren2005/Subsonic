@@ -7,8 +7,4 @@
 		android:title="@string/admin.change_password"
 		android:icon="?attr/password"
 		compat:showAsAction="always|withText"/>
-
-	<item
-		android:id="@+id/menu_exit"
-		android:title="@string/menu.exit"/>
 </menu>

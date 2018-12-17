@@ -26,8 +26,4 @@
 		android:id="@+id/menu_first_level_artist"
 		android:title="@string/menu.first_level_artist"
 		android:checkable="true"/>
-
-	<item
-		android:id="@+id/menu_exit"
-		android:title="@string/menu.exit"/>
 </menu>

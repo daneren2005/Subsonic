@@ -18,7 +18,7 @@
 		android:paddingTop="8dp"
 		android:paddingBottom="8dp"/>
 
-	<CheckBox
+	<Switch
 		android:id="@+id/item_checkbox"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

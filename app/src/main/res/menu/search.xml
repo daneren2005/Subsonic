@@ -7,9 +7,4 @@
 		android:title="@string/menu.search"
 		compat:actionViewClass="androidx.appcompat.widget.SearchView"
 		compat:showAsAction="always|collapseActionView"/>
-
-	<item 
-		android:id="@+id/menu_exit"
-		android:title="@string/menu.exit"/>
-
 </menu>

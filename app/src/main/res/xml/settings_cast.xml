@@ -4,25 +4,25 @@
 	<PreferenceCategory
 		android:title="@string/settings.casting">
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.casting_proxy"
 			android:summary="@string/settings.casting_proxy_summary"
 			android:key="castProxy"
 			android:defaultValue="false"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.gapless_playback"
 			android:summary="@string/settings.gapless_playback_summary"
 			android:key="castingGaplessPlayback"
 			android:defaultValue="true"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.casting_stream_original"
 			android:summary="@string/settings.casting_stream_original_summary"
 			android:key="castStreamOriginal"
 			android:defaultValue="true"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.casting_cache"
 			android:summary="@string/settings.casting_cache_summary"
 			android:key="castCache"
@@ -32,7 +32,7 @@
 	<PreferenceCategory
 		android:title="@string/settings.other_title">
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.casting.dlna_casting_enabled"
 			android:summary="@string/settings.casting.dlna_casting_enabled.summary"
 			android:key="dlnaCastingEnabled"

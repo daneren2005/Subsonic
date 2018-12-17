@@ -51,8 +51,4 @@
 	<item
         android:id="@+id/menu_toggle_timer"
         android:title="@string/download.start_timer"/>
-
-	<item
-		android:id="@+id/menu_exit"
-		android:title="@string/menu.exit"/>
 </menu>

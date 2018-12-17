@@ -12,13 +12,13 @@
 			android:entryValues="@array/themeValues"
 			android:entries="@array/themeNames"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.theme_fullscreen"
 			android:summary="@string/settings.theme_fullscreen_summary"
 			android:key="fullScreen"
 			android:defaultValue="false"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.color_action_bar"
 			android:summary="@string/settings.color_action_bar.summary"
 			android:key="colorActionBar"
@@ -28,43 +28,43 @@
 	<PreferenceCategory
 		android:title="@string/settings.appearance_title">
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.track_title"
 			android:summary="@string/settings.track_summary"
 			android:key="displayTrack"
 			android:defaultValue="true"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.hide_widget_title"
 			android:summary="@string/settings.hide_widget_summary"
 			android:key="hideWidget"
 			android:defaultValue="false"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.custom_sort"
 			android:summary="@string/settings.custom_sort_summary"
 			android:key="customSortEnabled"
 			android:defaultValue="true"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.rename_duplicates"
 			android:summary="@string/settings.rename_duplicates_summary"
 			android:key="renameDuplicates"
 			android:defaultValue="true"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.disable_exit_prompt"
 			android:summary="@string/settings.disable_exit_prompt_summary"
 			android:key="disableExitPrompt"
 			android:defaultValue="false"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.override_system_language"
 			android:summary="@string/settings.override_system_language_summary"
 			android:key="overrideSystemLanguage"
 			android:defaultValue="false"/>
 
-		<CheckBoxPreference
+		<SwitchPreference
 			android:title="@string/settings.large_album_art"
 			android:summary="@string/settings.large_album_art_summary"
 			android:key="largeAlbumArt"

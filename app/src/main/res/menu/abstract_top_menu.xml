@@ -15,8 +15,4 @@
 			android:title="@string/menu.refresh"
 			compat:showAsAction="ifRoom|withText"/>
 	</group>
-
-	<item
-		android:id="@+id/menu_exit"
-		android:title="@string/menu.exit"/>
 </menu>

@@ -25,8 +25,4 @@
 	<item 
 		android:id="@+id/menu_check"
 		android:title="@string/menu.check_podcasts"/>
-
-	<item
-		android:id="@+id/menu_exit"
-		android:title="@string/menu.exit"/>
 </menu>

@@ -6,8 +6,4 @@
         android:icon="?attr/remove"
         android:title="@string/download.menu_remove_all"
         compat:showAsAction="always|withText"/>
-		
-	<item 
-		android:id="@+id/menu_exit"
-		android:title="@string/menu.exit"/>
 </menu>
