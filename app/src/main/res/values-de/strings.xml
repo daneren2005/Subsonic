@@ -52,12 +52,9 @@
 		<br/>Im Optionsmenü deselektiere "Erste Ebene sind Künstler".  Dann wird die erste Verzeichnisebene wie Künstlergruppen anstelle von Künstler behandelt.
         ]]>
         </string>
-	<string name="main.shuffle">Zufallswiedergabe</string>
     <string name="main.offline">Gehe Offline</string>
 	<string name="main.online">Gehe Online</string>
-    <string name="main.settings">Einstellungen</string>
     <string name="main.albums_title">Album Liste</string>
-	<string name="main.albums_per_folder">Pro Ordner</string>
     <string name="main.albums_newest">Neue Alben</string>
     <string name="main.albums_recent">Vor kurzem gespielt</string>
     <string name="main.albums_frequent">Am meisten gespielt</string>
@@ -68,7 +65,6 @@
 	<string name="main.albums_year">Jahrzehnt</string>
 	<string name="main.albums_alphabetical">Alphabetisch</string>
 	<string name="main.videos">Videos</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Zum beenden nochmal zurück drücken</string>
 	<string name="main.scan_complete">Durchsuchen des Server abgeschlossen</string>
 	<string name="main.artist">Künstler</string>
@@ -81,8 +77,7 @@
 	<string name="menu.play_last">Ans Ende der Wiedergabeliste</string>
     <string name="menu.exit">Beenden</string>
     <string name="menu.settings">Einstellungen</string>
-    <string name="menu.help">Hilfe</string>
-	<string name="menu.about">Über</string>
+    <string name="menu.about">Über</string>
 	<string name="menu.add_playlist">Zur Wiedergabeliste hinzufügen</string>
 	<string name="menu.remove_playlist">Von Wiedergabeliste entfernen</string>
 	<string name="menu.deleted_playlist">Lösche Wiedergabeliste %s</string>
@@ -116,10 +111,7 @@
 	<string name="playlist.create_new">Neue Wiedergabeliste</string>
 	<string name="playlist.delete">Lösche Wiedergabeliste</string>
 
-    <string name="search.label">Suche</string>
     <string name="search.title">Suche</string>
-    <string name="search.search">Zum Suche klicken</string>
-    <string name="search.no_match">Nichts gefunden, bitte erneut versuchen</string>
     <string name="search.artists">Künstler</string>
     <string name="search.albums">Alben</string>
     <string name="search.songs">Lieder</string>
@@ -176,13 +168,11 @@
 	<string name="download.menu_remove_all">Alle entfernen</string>
     <string name="download.menu_screen_on">Bildschirm an</string>
     <string name="download.menu_shuffle">Mischen</string>
-	<string name="download.menu_toggle">Umschalten</string>
     <string name="download.menu_save">Wiedergabeliste speichern</string>
     <string name="download.menu_shuffle_notification">Wiedergabeliste wurde gemischt</string>
 	<string name="download.menu_remove_played_songs">Abgespielte Titel entfernen</string>
     <string name="download.playlist_title">Speichere Wiedergabeliste</string>
     <string name="download.playlist_name">Name der Wiedergabeliste eingeben:</string>
-    <string name="download.playlist_saving">Sichere Wiedergabeliste \"%s\"...</string>
     <string name="download.playlist_done">Wiedergabeliste wurde erfolgreich gespeichert.</string>
     <string name="download.playlist_error">Fehler beim speichern der Wiedergabeliste, bitte später erneut probieren.</string>
     <string name="download.repeat_off">Keine Wiederholung</string>
@@ -224,7 +214,6 @@
 	<string name="bookmark.deleted">Lesezeichen für \"%s\" gelöscht</string>
 	<string name="bookmark.deleted_error">Löschen des Lesezeichen für \"%s\" ist fehlgeschlagen</string>
 	<string name="bookmark.details_title">Lesezeichendetails</string>
-	<string name="bookmark.details">Lied: %1$s
 		\nPosition: %2$s
 		\nErzeugt: %3$s
 		\nZuletzt aktualisiert: %4$s
@@ -316,8 +305,6 @@
     <string name="settings.preload_5">5 Lieder</string>
     <string name="settings.preload_10">10 Lieder</string>
 	<string name="settings.preload_unlimited">unbegrenzt</string>
-    <string name="settings.clear_search_history">Lösche Suchanfragen</string>
-    <string name="settings.search_history_cleared">Suchanfragen gelöscht</string>
     <string name="settings.other_title">Sonstige Einstellungen</string>
     <string name="settings.scrobble_title">Scrobble zu Last.fm</string>
     <string name="settings.scrobble_summary">Ihr Benutzername und Passwort für Last.fm muss im Subsonic-Server konfiguriert sein</string>
@@ -328,13 +315,7 @@
     <string name="settings.media_button_summary">Verwende Medientasten des Telefon, Freisprecheinrichtung und Bluetooth</string>
     <string name="settings.screen_lit_title">Bildschirm aktiv halten</string>
     <string name="settings.screen_lit_summary">Ein aktiver Bildschirm verbessert die Downloadgeschwindigkeit.</string>
-	<string name="settings.playlist_title">Wiedergeben</string>
 	<string name="settings.playlist_random_size_title">Länge der Zufallswiedergabeliste</string>
-	<string name="settings.sleep_timer_title">Einschlaftimer</string>
-	<string name="settings.sleep_timer_duration_title">Einschlafdauer</string>
-	<string name="settings.sleep_timer_off">Aus</string>
-	<string name="settings.sleep_timer_on">An</string>
-	<string name="settings.sleep_timer_always_on">Immer An</string>
 	<string name="settings.temp_loss_title">Verhalten bei Benachrichtigungen</string>
 	<string name="settings.temp_loss_pause">Immer pausieren</string>
 	<string name="settings.temp_loss_pause_lower">Pausiere und Lautstärke bei Bedarf veringern</string>
@@ -621,7 +602,6 @@
 	<string name="settings.menu_options.delete_summary">Zeige \"Löschen\" im Menü</string>
 	<string name="settings.menu_options.download_summary">Zeige \"Downloads\" im Menü</string>
 	<string name="settings.menu_options.pin_summary">Zeige \"Permanent Cachen\" im Menü</string>
-	<string name="details.title.artist">Künstlerdetails</string>
 	<string name="common.true">Ja</string>
 	<string name="common.false">Nein</string>
 	<string name="settings.menu_options.play_now_summary">Zeige \"Jetzt wiedergeben\" im Menü</string>

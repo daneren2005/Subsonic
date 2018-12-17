@@ -57,12 +57,9 @@
 		<br/>No menu de opções, desmarque a opção "Artistas no primeiro nível".  Isto fará com que o primeiro nível de diretórios apresentado seja tratado como grupos de artistas em vez de artistas propriamente ditos.
 	]]>
 	</string>
-	<string name="main.shuffle">Aleatório</string>
     <string name="main.offline">Ficar offline</string>
 	<string name="main.online">Ficar online</string>
-    <string name="main.settings">Definições</string>
     <string name="main.albums_title">Lista de álbuns</string>
-	<string name="main.albums_per_folder">Por pasta</string>
     <string name="main.albums_newest">Adicionados recentemente</string>
     <string name="main.albums_recent">Reproduzidos recentemente</string>
     <string name="main.albums_frequent">Mais reproduzidos</string>
@@ -73,7 +70,6 @@
 	<string name="main.albums_year">Décadas</string>
 	<string name="main.albums_alphabetical">Alfabeticamente</string>
 	<string name="main.videos">Vídeos</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.songs_newest">@string/main.albums_newest</string>
 	<string name="main.songs_top_played">Top de reproduções</string>
 	<string name="main.songs_recent">@string/main.albums_recent</string>
@@ -90,7 +86,6 @@
 	<string name="menu.play_last">Reproduzir no final</string>
     <string name="menu.exit">Sair</string>
     <string name="menu.settings">Definições</string>
-    <string name="menu.help">Ajuda</string>
 	<string name="menu.about">Sobre</string>
 	<string name="menu.add_playlist">Adicionar à lista de reprodução</string>
 	<string name="menu.remove_playlist">Remover da lista de reprodução</string>
@@ -126,10 +121,7 @@
 	<string name="playlist.create_new">Criar nova</string>
 	<string name="playlist.delete">Eliminar lista de reprodução</string>
 
-    <string name="search.label">Pesquisar</string>
     <string name="search.title">Pesquisar</string>
-    <string name="search.search">Toque para pesquisar</string>
-    <string name="search.no_match">Sem resultados, por favor tente novamente</string>
     <string name="search.artists">Artistas</string>
     <string name="search.albums">Álbuns</string>
     <string name="search.songs">Músicas</string>
@@ -188,13 +180,11 @@
 	<string name="download.menu_remove_all">Remover tudo</string>
     <string name="download.menu_screen_on">Ecrã ligado</string>
     <string name="download.menu_shuffle">Aleatório</string>
-	<string name="download.menu_toggle">Alternar</string>
-    <string name="download.menu_save">Guardar lista de reprodução</string>
+	<string name="download.menu_save">Guardar lista de reprodução</string>
     <string name="download.menu_shuffle_notification">A lista de reprodução foi aleatorizada</string>
 	<string name="download.menu_remove_played_songs">Remover músicas reproduzidas</string>
     <string name="download.playlist_title">Guardar lista de reprodução</string>
     <string name="download.playlist_name">Introduza um nome para a lista de reprodução:</string>
-    <string name="download.playlist_saving">A guardar a lista de reprodução \"%s\"...</string>
     <string name="download.playlist_done">A lista de reprodução foi guardada com sucesso.</string>
     <string name="download.playlist_error">Falha ao guardar a lista de reprodução, tente novamente mais tarde.</string>
     <string name="download.repeat_off">Repetição desligada</string>
@@ -221,11 +211,9 @@
 	<string name="download.thumbs_down">Não gosto</string>
 	<string name="download.batch_mode">Modo em série</string>
 	<string name="download.playback_speed_half">0.5x</string>
-	<string name="download.playback_speed_normal">1x</string>
 	<string name="download.playback_speed_one_half">1.5x</string>
 	<string name="download.playback_speed_double">2x</string>
 	<string name="download.playback_speed_tripple">3x</string>
-	<string name="download.playback_speed_custom">Personalizado</string>
 
 	<string name="sync.new_podcasts">Novos podcasts disponíveis</string>
 	<string name="sync.new_playlists">Novas músicas nas listas de reprodução</string>
@@ -358,8 +346,6 @@
     <string name="settings.preload_5">5 músicas</string>
     <string name="settings.preload_10">10 músicas</string>
 	<string name="settings.preload_unlimited">Ilimitado</string>
-    <string name="settings.clear_search_history">Apagar histórico de pesquisa</string>
-    <string name="settings.search_history_cleared">O histório de pesquisa foi apagado</string>
     <string name="settings.other_title">Outras definições</string>
     <string name="settings.scrobble_title">Scrobble para Last.FM</string>
     <string name="settings.scrobble_summary">Não se esqueça de configurar o seu nome de utilizador e palavra-passe do Last.FM no servidor Subsonic</string>
@@ -370,13 +356,7 @@
     <string name="settings.media_button_summary">Responder aos botões multimédia do dispositivo, mãos livres e Bluetooth</string>
     <string name="settings.screen_lit_title">Manter ecrã ligado</string>
     <string name="settings.screen_lit_summary">Manter o ecrã ligado durante as transferências melhora a velocidade de transferência</string>
-	<string name="settings.playlist_title">Listas de reprodução</string>
 	<string name="settings.playlist_random_size_title">Tamanho da lista de reprodução aleatória</string>
-	<string name="settings.sleep_timer_title">Temporizador</string>
-	<string name="settings.sleep_timer_duration_title">Duração do temporizador</string>
-	<string name="settings.sleep_timer_off">Desligado</string>
-	<string name="settings.sleep_timer_on">Ligado</string>
-	<string name="settings.sleep_timer_always_on">Sempre ligado</string>
 	<string name="settings.temp_loss_title">Perda temporária de foco</string>
 	<string name="settings.temp_loss_pause">Pausar sempre</string>
 	<string name="settings.temp_loss_pause_lower">Pausar, baixar volume quando pedido</string>
@@ -617,7 +597,6 @@
 	<string name="details.title.album">Detalhes do álbum</string>
 	<string name="details.title.podcast">Detalhes do podcast</string>
 	<string name="details.title.playlist">Detalhes da lista de reprodução</string>
-	<string name="details.title.artist">Detalhes do artista</string>
 	<string name="details.title.internet_radio_station">Detalhes da rádio online</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Estado</string>

@@ -73,17 +73,6 @@
 		<item name="android:layout_weight">1</item>
 	</style>
 
-	<style name="DownloadActionButton" parent="@style/BasicButton">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:textStyle">bold</item>
-		<item name="android:textSize">22sp</item>
-		<item name="android:paddingTop">4dip</item>
-		<item name="android:paddingBottom">4dip</item>
-		<item name="android:paddingRight">4dip</item>
-		<item name="android:paddingLeft">4dip</item>
-	</style>
-
 	<style name="DownloadActionImageButton" parent="@style/BasicButton">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>

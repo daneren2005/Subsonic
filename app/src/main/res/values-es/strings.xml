@@ -40,10 +40,8 @@
     <string name="main.welcome_title">Bienvenido!</string>
     <string name="main.welcome_text">Bienvenido a DSub! Ahora la aplicación está configurada para usar el servidor de demostración de Subsonic. Cuando configures tu servidor personal (disponible en <b>subsonic.org</b>), accede a <b>Preferencias</b> y cambia la configuración para conectarte.</string>
 	<string name="main.about_title">Acerca de DSub</string>
-	<string name="main.shuffle">Reproducción aleatoria</string>
     <string name="main.offline">Modo Offline</string>
 	<string name="main.online">Modo Online</string>
-    <string name="main.settings">Preferencias</string>
     <string name="main.albums_title">Discos</string>
     <string name="main.albums_newest">Añadidos recientemente</string>
     <string name="main.albums_recent">Reproducidos recientemente</string>
@@ -63,7 +61,6 @@
 	]]>
    </string>
 	<string name="main.scan_complete">Escaneado del servidor completado</string>
-	<string name="main.albums_per_folder">Por carpetar</string>
 
 	<string name="menu.search">Buscar</string>
 	<string name="menu.shuffle">Aleatorio</string>
@@ -72,8 +69,7 @@
 	<string name="menu.play_last">Reproducir al final</string>
     <string name="menu.exit">Salir</string>
     <string name="menu.settings">Preferencias</string>
-    <string name="menu.help">Ayuda</string>
-	<string name="menu.about">Acerca de</string>
+    <string name="menu.about">Acerca de</string>
 	<string name="menu.add_playlist">Añadir a lista de reproducción</string>
 	<string name="menu.remove_playlist">Borrar de lista de reproducción</string>
 	<string name="menu.deleted_playlist">Listas borradas %s</string>
@@ -105,10 +101,7 @@
 	<string name="playlist.create_new">Crear nueva</string>
 	<string name="playlist.delete">Borrar lista de reproducción</string>
 
-    <string name="search.label">Buscar</string>
     <string name="search.title">Buscar</string>
-    <string name="search.search">Click para buscar</string>
-    <string name="search.no_match">No hay coincidencias, inténtelo de nuevo</string>
     <string name="search.artists">Artista</string>
     <string name="search.albums">Disco</string>
     <string name="search.songs">Canción</string>
@@ -162,12 +155,10 @@
 	<string name="download.menu_remove_all">Borrar todo</string>
     <string name="download.menu_screen_on">Pantalla encendida</string>
     <string name="download.menu_shuffle">Aleatorio</string>
-	<string name="download.menu_toggle">Cambiar</string>
     <string name="download.menu_save">Guardar lista de reproducción</string>
     <string name="download.menu_shuffle_notification">Lista de reproducción en aleatorio</string>
     <string name="download.playlist_title">Guardar lista de reproducción</string>
     <string name="download.playlist_name">Introduce un nombre válido para la lista de reproducción:</string>
-    <string name="download.playlist_saving">Guardando lista de reproducción \"%s\"...</string>
     <string name="download.playlist_done">Lista de reproducción guardada.</string>
     <string name="download.playlist_error">Error al guardar la lista de reproducción, inténtelo más tarde.</string>
     <string name="download.repeat_off">Repetir off</string>
@@ -203,7 +194,6 @@
 	<string name="bookmark.delete">Borrar marcador</string>
 	<string name="bookmark.deleted">Borrado marcador para \"%s\"</string>
 	<string name="bookmark.deleted_error">Error al borrar el marcador para \"%s\"</string>
-	<string name="bookmark.details">Canción: %1$s
 		\nComentario: %2$s
 		\nPosición: %3$s</string>
 	<string name="bookmark.resume_title">Reanudar reproducción?</string>
@@ -302,8 +292,6 @@
     <string name="settings.preload_5">5 canciones</string>
     <string name="settings.preload_10">10 canciones</string>
 	<string name="settings.preload_unlimited">Ilimitado</string>
-    <string name="settings.clear_search_history">Borrar historial de búsqueda</string>
-    <string name="settings.search_history_cleared">Historial de búsqueda borrado</string>
     <string name="settings.other_title">Otros ajustes</string>
     <string name="settings.scrobble_title">Scrobblear a Last.fm</string>
     <string name="settings.scrobble_summary">Recuerde configurar su usuario y contraseña de Last.fm en su servidor</string>
@@ -314,13 +302,7 @@
     <string name="settings.media_button_summary">Responder a los botones Bluetooth, teléfono y manos libres</string>
     <string name="settings.screen_lit_title">Mantener pantalla encendida</string>
     <string name="settings.screen_lit_summary">Mantener la pantalla encendida durantes las descargas mejora la velocidad de descarga.</string>
-	<string name="settings.playlist_title">Listas de reproducción</string>
 	<string name="settings.playlist_random_size_title">Tamaño de la lista de reproducción en aleatorio</string>
-	<string name="settings.sleep_timer_title">Temporizador</string>
-	<string name="settings.sleep_timer_duration_title">Duración del temporizador</string>
-	<string name="settings.sleep_timer_off">Encendido</string>
-	<string name="settings.sleep_timer_on">Apagado</string>
-	<string name="settings.sleep_timer_always_on">Siempre encendido</string>
 	<string name="settings.temp_loss_title">Pérdida temporal de foco</string>
 	<string name="settings.temp_loss_pause">Pausar siempre</string>
 	<string name="settings.temp_loss_pause_lower">Pausar, bajar el volumen cuando sea solicitado</string>

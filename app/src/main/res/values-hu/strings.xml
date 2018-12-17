@@ -58,12 +58,9 @@
 		<br/>Ha a Beállítások menüben kikapcsolja az "Részletes megjelenítés" opciót, akkor a mappák teljes első szintje ugyanúgy lesz megjelenítve, mint az előadók listája.
 	]]>
 	</string>
-	<string name="main.shuffle">Lejátszás kevert sorrendben</string>
     <string name="main.offline">Offline mód</string>
 	<string name="main.online">Online mód</string>
-    <string name="main.settings">Beállítások</string>
     <string name="main.albums_title">Albumok</string>
-	<string name="main.albums_per_folder">Mappánként</string>
     <string name="main.albums_newest">Utoljára hozzáadott</string>
     <string name="main.albums_recent">Utoljára lejátszott</string>
     <string name="main.albums_frequent">Legtöbbször lejátszott</string>
@@ -74,7 +71,6 @@
 	<string name="main.albums_year">Évtizedek</string>
 	<string name="main.albums_alphabetical">Betűrendben</string>
 	<string name="main.videos">Videók</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.songs_newest">@string/main.albums_newest</string>
 	<string name="main.songs_top_played">Top Played</string>
 	<string name="main.songs_recent">@string/main.albums_recent</string>
@@ -91,8 +87,7 @@
 	<string name="menu.play_last">Sorba állítás utolsónak</string>
     <string name="menu.exit">Kilépés</string>
     <string name="menu.settings">Beállítások</string>
-    <string name="menu.help">Súgó</string>
-	<string name="menu.about">Névjegy</string>
+    <string name="menu.about">Névjegy</string>
 	<string name="menu.add_playlist">Hozzáadás lejátszási listához</string>
 	<string name="menu.remove_playlist">Eltávolítás a lejátszási listából</string>
 	<string name="menu.deleted_playlist">\"%s\" lejátszási lista törölve</string>
@@ -114,7 +109,6 @@
 	<string name="menu.rate">Értékelés</string>
 	<string name="menu.top_tracks">Last.fm legjobb dalok</string>
 	<string name="menu.similar_artists">Hasonló előadók</string>
-	<string name="menu.show_missing">Hiányzó megjelenítése</string>
 	<string name="menu.start_radio">Rádió indítása</string>
 	<string name="menu.first_level_artist">Részletes megjelenítés</string>
 
@@ -127,10 +121,7 @@
 	<string name="playlist.create_new">Új lejátszási lista</string>
 	<string name="playlist.delete">Lejátszási lista törlése</string>
 
-    <string name="search.label">Keresés</string>
     <string name="search.title">Keresés</string>
-    <string name="search.search">Érintse meg a kereséshez</string>
-    <string name="search.no_match">Nincs találat, próbálja újra!</string>
     <string name="search.artists">Előadók</string>
     <string name="search.albums">Albumok</string>
     <string name="search.songs">Dalok</string>
@@ -189,13 +180,11 @@
 	<string name="download.menu_remove_all">Összes eltávolítása</string>
     <string name="download.menu_screen_on">Kijelző be</string>
     <string name="download.menu_shuffle">Dalsorrend keverése</string>
-	<string name="download.menu_toggle">Váltás</string>
     <string name="download.menu_save">Mentés lejátszási listába</string>
     <string name="download.menu_shuffle_notification">Lejátszás kevert sorrendben</string>
 	<string name="download.menu_remove_played_songs">Lejátszottak eltávolítása</string>
     <string name="download.playlist_title">Mentés lejátszási listába</string>
     <string name="download.playlist_name">Lejátszási lista neve:</string>
-    <string name="download.playlist_saving">\"%s\" lejátszási lista mentése...</string>
     <string name="download.playlist_done">Lejátszási lista mentése kész.</string>
     <string name="download.playlist_error">Lejátszási lista mentése sikertelen, próbálja később!</string>
     <string name="download.repeat_off">Ismétlés ki</string>
@@ -205,7 +194,6 @@
     <string name="download.jukebox_offline">A távvezérlés nem lehetséges offline módban!</string>
     <string name="download.jukebox_not_authorized">A távvezérlés nem lehetséges! Engedélyezze a Jukebox módot a <b>Users &gt; Settings</b> menüben a Subsonic kiszolgálón!</string>
 	<string name="download.start_timer">Időzítő indítása</string>
-	<string name="download.stop_timer">Időzítő megállítása</string>
 	<string name="download.need_download">A videót először le kell tölteni!</string>
 	<string name="download.no_streaming_player">Nincs megfelelő lejátszó a stream megjelenítéséhez!</string>
 	<string name="download.playing_out_of">Lejátszás: %1$d/%2$d</string>
@@ -222,11 +210,9 @@
 	<string name="download.thumbs_down">Nem jó</string>
 	<string name="download.batch_mode">Kötegelt mód</string>
 	<string name="download.playback_speed_half">0.5x</string>
-	<string name="download.playback_speed_normal">1x</string>
 	<string name="download.playback_speed_one_half">1.5x</string>
 	<string name="download.playback_speed_double">2x</string>
 	<string name="download.playback_speed_tripple">3x</string>
-	<string name="download.playback_speed_custom">Egyéni</string>
 
 	<string name="sync.new_podcasts">Új podcastok: \"%s\"</string>
 	<string name="sync.new_playlists">Új lejátszási listák: \"%s\"</string>
@@ -361,8 +347,6 @@
     <string name="settings.preload_5">5 dal</string>
     <string name="settings.preload_10">10 dal</string>
 	<string name="settings.preload_unlimited">Korlátlan</string>
-    <string name="settings.clear_search_history">Keresési előzmények törlése</string>
-    <string name="settings.search_history_cleared">Keresési előzmények törölve</string>
     <string name="settings.other_title">Egyéb beállítások</string>
     <string name="settings.scrobble_title">Továbbítás Last.fm-re (Scrobbling)</string>
     <string name="settings.scrobble_summary">A Last.fm felhasználónevet és jelszót be kell állítani a Subsonic kiszolgálón!</string>
@@ -373,13 +357,7 @@
     <string name="settings.media_button_summary">A lejátszó irányítása a bluetooth eszköz vagy a fülhallgató vezérlőgombjaival.</string>
     <string name="settings.screen_lit_title">Képernyő ébrentartása</string>
     <string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt a magasabb letöltési sebesség érdekében.</string>
-	<string name="settings.playlist_title">Lejátszási listák</string>
 	<string name="settings.playlist_random_size_title">Véletlenszerű lejátszási lista mérete</string>
-	<string name="settings.sleep_timer_title">Alvó üzemmód időzítő</string>
-	<string name="settings.sleep_timer_duration_title">Alvó üzemmód időtartam</string>
-	<string name="settings.sleep_timer_off">Ki</string>
-	<string name="settings.sleep_timer_on">Be</string>
-	<string name="settings.sleep_timer_always_on">Mindig be</string>
 	<string name="settings.temp_loss_title">Külső esemény bekövetkeztekor</string>
 	<string name="settings.temp_loss_pause">Megállítás minden esetben</string>
 	<string name="settings.temp_loss_pause_lower">Megállítás, kérésre alacsonyabb hangerő</string>
@@ -620,7 +598,6 @@
 	<string name="details.title.album">Album információi</string>
 	<string name="details.title.podcast">Podcast információi</string>
 	<string name="details.title.playlist">Lejátszási lista információi</string>
-	<string name="details.title.artist">Előadó információi</string>
 	<string name="details.title.internet_radio_station">Internet Radio részletezés</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Státusz</string>

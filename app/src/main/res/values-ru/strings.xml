@@ -31,10 +31,8 @@
     <string name="main.welcome_text">Добро пожаловать в DSub! Это приложение настроено на работу с демо сервером Subsonic. После настройки Вашего персонального сервера (доступен на <b>subsonic.org</b>), пожалуйста, перейдите в <b>Настройки</b> и измените параметры для подключения.</string>
 	
 	<string name="main.about_title">О программе DSub</string>
-    <string name="main.shuffle">Случайное воспроизведение</string>
     <string name="main.offline">Отключиться</string>
 	<string name="main.online">Подключиться</string>
-    <string name="main.settings">Настройки</string>
     <string name="main.albums_title">Альбомы</string>
     <string name="main.albums_newest">Недавно добавленные</string>
     <string name="main.albums_recent">Недавно прослушанные</string>
@@ -50,8 +48,7 @@
 	<string name="menu.play_last">Воспроизвести последним</string>
     <string name="menu.exit">Выход</string>
     <string name="menu.settings">Настройки</string>
-    <string name="menu.help">Помощь</string>
-	<string name="menu.about">О программе</string>
+    <string name="menu.about">О программе</string>
 	<string name="menu.add_playlist">Добавить в список</string>
 	<string name="menu.remove_playlist">Удалить из списка</string>
 	<string name="menu.deleted_playlist">Список воспроизведения %s удален</string>
@@ -65,10 +62,7 @@
 	<string name="playlist.updated_info">Информация для списка воспроизведения %s обновлена</string>
 	<string name="playlist.updated_info_error">Не удалось обновить информацию для списка воспроизведения %s</string>
 
-    <string name="search.label">Поиск</string>
     <string name="search.title">Поиск</string>
-    <string name="search.search">Нажмите для поиска</string>
-    <string name="search.no_match">Ничего не найдено, пожалуйста, попробуйте снова</string>
     <string name="search.artists">Исполнители</string>
     <string name="search.albums">Альбомы</string>
     <string name="search.songs">Композиции</string>
@@ -95,12 +89,10 @@
     <string name="download.menu_remove_all">Очистить</string>
     <string name="download.menu_screen_on">Включить подсветку</string>
     <string name="download.menu_shuffle">Перемешать</string>
-	<string name="download.menu_toggle">Переключатель</string>
     <string name="download.menu_save">Сохранить список</string>
     <string name="download.menu_shuffle_notification">Список воспроизведения был перемешан</string>
     <string name="download.playlist_title">Сохранение списка воспроизведения</string>
     <string name="download.playlist_name">Введите название:</string>
-    <string name="download.playlist_saving">Сохранение списка воспроизведения \"%s\"...</string>
     <string name="download.playlist_done">Список воспроизведения сохранен</string>
     <string name="download.playlist_error">Не удалось сохранить список воспроизведения, пожалуйста, попробуйте позже.</string>
     <string name="download.repeat_off">Повторение отключено</string>
@@ -189,8 +181,6 @@
     <string name="settings.preload_5">5 композиций</string>
     <string name="settings.preload_10">10 композиций</string>
 	<string name="settings.preload_unlimited">Неограничено</string>
-    <string name="settings.clear_search_history">Очистить историю поиска</string>
-    <string name="settings.search_history_cleared">История поиска очищена</string>
     <string name="settings.other_title">Другие настройки</string>
     <string name="settings.scrobble_title">Скробблинг на Last.fm</string>
     <string name="settings.scrobble_summary">Не забудьте установить логин и пароль от Last.fm на сервере DSub</string>
@@ -201,13 +191,7 @@
     <string name="settings.media_button_summary">Разрешить управление кнопками мультимедиа на устройстве и гарнитуре</string>
     <string name="settings.screen_lit_title">Держать экран включенным</string>
     <string name="settings.screen_lit_summary">Оставить экран включенным для повышения скорости при скачивании.</string>
-	<string name="settings.playlist_title">Списки воспроизведения</string>
 	<string name="settings.playlist_random_size_title">Размер случайного списка</string>
-	<string name="settings.sleep_timer_title">Таймер сна</string>
-	<string name="settings.sleep_timer_duration_title">Продолжительность таймера сна</string>
-	<string name="settings.sleep_timer_off">Выключен</string>
-	<string name="settings.sleep_timer_on">Включен</string>
-	<string name="settings.sleep_timer_always_on">Всегда включен</string>
 	<string name="settings.temp_loss_title">Временная потеря связи</string>
 	<string name="settings.temp_loss_pause">Всегда останавливать</string>
 	<string name="settings.temp_loss_pause_lower">Останавливать, понижать громкость, если требуется</string>

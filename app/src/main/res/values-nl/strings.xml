@@ -55,12 +55,9 @@
 		<br/>In het optiemenu deselecteer "Eerste niveau artiesten". Dit zorgt ervoor dat het gehele eerste niveau directories wordt behandeld als een groep artisten ipv individuele artiesten.
 	]]>
 	</string>
-	<string name="main.shuffle">Willekeurig afspelen</string>
     <string name="main.offline">Ga offline</string>
 	<string name="main.online">Ga online</string>
-    <string name="main.settings">Instellingen</string>
     <string name="main.albums_title">Album lijsten</string>
-	<string name="main.albums_per_folder">Per folder</string>
     <string name="main.albums_newest">Recent toegevoegd</string>
     <string name="main.albums_recent">Recent afgespeeld</string>
     <string name="main.albums_frequent">Meest afgespeeld</string>
@@ -71,7 +68,6 @@
 	<string name="main.albums_year">Decennia</string>
 	<string name="main.albums_alphabetical">Alfabetisch</string>
 	<string name="main.videos">Video\'s</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Druk nogmaals terug om te stoppen</string>
 	<string name="main.scan_complete">Server scan afgerond</string>
 	<string name="main.artist">Artiest</string>
@@ -84,8 +80,7 @@
 	<string name="menu.play_last">Speel laatst</string>
     <string name="menu.exit">Beëindigen</string>
     <string name="menu.settings">Instellingen</string>
-    <string name="menu.help">Help</string>
-	<string name="menu.about">Over</string>
+    <string name="menu.about">Over</string>
 	<string name="menu.add_playlist">Voeg toe aan playlist</string>
 	<string name="menu.remove_playlist">Verwijder van playlist</string>
 	<string name="menu.deleted_playlist">Verwijderde playlist %s</string>
@@ -119,10 +114,7 @@
 	<string name="playlist.create_new">Creëer nieuw</string>
 	<string name="playlist.delete">Verwijder playlist</string>
 
-    <string name="search.label">Zoek</string>
     <string name="search.title">Zoek</string>
-    <string name="search.search">Klik om te zoeken</string>
-    <string name="search.no_match">Geen overeenkomst, zoek nogmaals</string>
     <string name="search.artists">Artiesten</string>
     <string name="search.albums">Albums</string>
     <string name="search.songs">Nummers</string>
@@ -180,13 +172,11 @@
 	<string name="download.menu_remove_all">Verwijder alles</string>
     <string name="download.menu_screen_on">Scherm aan</string>
     <string name="download.menu_shuffle">Shuffle</string>
-	<string name="download.menu_toggle">Aan\/Uit</string>
     <string name="download.menu_save">Bewaar speellijst</string>
     <string name="download.menu_shuffle_notification">Speellijst was geshufffeld</string>
 	<string name="download.menu_remove_played_songs">Verwijder afgespeelde nummers</string>
     <string name="download.playlist_title">Bewaar playlist</string>
     <string name="download.playlist_name">Voer de naam in van de playlist:</string>
-    <string name="download.playlist_saving">Playlist \"%s\ wordt opgeslagen"...</string>
     <string name="download.playlist_done">Playlist was succesvol opgeslagen.</string>
     <string name="download.playlist_error">Niet gelukt playlist op te slaan, probeer het later nog eens.</string>
     <string name="download.repeat_off">Herhalen uit</string>
@@ -338,8 +328,6 @@
     <string name="settings.preload_5">5 nummers</string>
     <string name="settings.preload_10">10 nummers</string>
 	<string name="settings.preload_unlimited">Onbeperkt</string>
-    <string name="settings.clear_search_history">Verwijder zoekgeschiedenis</string>
-    <string name="settings.search_history_cleared">Zoekgeschiedenis verwijderd</string>
     <string name="settings.other_title">Andere instellingen</string>
     <string name="settings.scrobble_title">Scrobble naar Last.fm</string>
     <string name="settings.scrobble_summary">Vergeet niet om je last.fm account in te stellen op de Subsonic server.</string>
@@ -350,13 +338,7 @@
     <string name="settings.media_button_summary">Reageer op telefoon, koptelefoon en bluetooth mediaknoppen</string>
     <string name="settings.screen_lit_title">Houd scherm aan</string>
     <string name="settings.screen_lit_summary">Houdt scherm aan tijdens het downloaden verbetert de download snelheid.</string>
-	<string name="settings.playlist_title">Afspelen</string>
 	<string name="settings.playlist_random_size_title">Shuffle playlist grootte</string>
-	<string name="settings.sleep_timer_title">Sleeptimer</string>
-	<string name="settings.sleep_timer_duration_title">Sleeptimer duur</string>
-	<string name="settings.sleep_timer_off">Uit</string>
-	<string name="settings.sleep_timer_on">Aan</string>
-	<string name="settings.sleep_timer_always_on">Altijd aan</string>
 	<string name="settings.temp_loss_title">Tijdelijk focus verlies</string>
 	<string name="settings.temp_loss_pause">Altijd pauzeren</string>
 	<string name="settings.temp_loss_pause_lower">Pauze, lagere volume desgevraagd</string>
@@ -575,7 +557,6 @@
 	<string name="details.title.album">Album details</string>
 	<string name="details.title.podcast">Podcast details</string>
 	<string name="details.title.playlist">Playlist details</string>
-	<string name="details.title.artist">Artiest details</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Status</string>
 	<string name="details.artist">Artiest</string>

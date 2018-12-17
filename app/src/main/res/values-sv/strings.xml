@@ -57,12 +57,9 @@
 		<br/>Avmarkera "Första steget artister" i inställningsmenyn.  Det kommer göra så att hela första steget kommer att hanteras som grupper istället för som enstaka artister.
 	]]>
 	</string>
-	<string name="main.shuffle">Slumpad uppspelning</string>
     <string name="main.offline">Gå Offline</string>
 	<string name="main.online">Gå Online</string>
-    <string name="main.settings">Inställningar</string>
     <string name="main.albums_title">Album Listor</string>
-	<string name="main.albums_per_folder">Per album</string>
     <string name="main.albums_newest">Nyligen tillagt</string>
     <string name="main.albums_recent">Nyligen spelat</string>
     <string name="main.albums_frequent">Mest spelat</string>
@@ -73,7 +70,6 @@
 	<string name="main.albums_year">Årtionden</string>
 	<string name="main.albums_alphabetical">Alfabetiskt</string>
 	<string name="main.videos">Videor</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Tryck bakåt igen för att avsluta</string>
 	<string name="main.scan_complete">Skanning av server klar</string>
 	<string name="main.artist">Artist</string>
@@ -86,8 +82,7 @@
 	<string name="menu.play_last">Spela sista</string>
     <string name="menu.exit">Avsluta</string>
     <string name="menu.settings">Inställningar</string>
-    <string name="menu.help">Hjälp</string>
-	<string name="menu.about">Om</string>
+    <string name="menu.about">Om</string>
 	<string name="menu.add_playlist">Lägg till i spellista</string>
 	<string name="menu.remove_playlist">Ta bort från spellista</string>
 	<string name="menu.deleted_playlist">Tog bort spellistan  %s</string>
@@ -121,10 +116,7 @@
 	<string name="playlist.create_new">Skapa ny</string>
 	<string name="playlist.delete">Radera spellista</string>
 
-    <string name="search.label">Sök</string>
     <string name="search.title">Sök</string>
-    <string name="search.search">Klicka för att söka</string>
-    <string name="search.no_match">Inga träffar, försök igen</string>
     <string name="search.artists">Artister</string>
     <string name="search.albums">Album</string>
     <string name="search.songs">Spår</string>
@@ -181,13 +173,11 @@
 	<string name="download.menu_remove_all">Ta bort allt</string>
     <string name="download.menu_screen_on">Skärmen är på</string>
     <string name="download.menu_shuffle">Slumpa</string>
-	<string name="download.menu_toggle">Skifta</string>
     <string name="download.menu_save">Spara spellista</string>
     <string name="download.menu_shuffle_notification">Spellistan blandades om</string>
 	<string name="download.menu_remove_played_songs">Ta bort spelade spår</string>
     <string name="download.playlist_title">Spara spellista</string>
     <string name="download.playlist_name">Spellistans namn:</string>
-    <string name="download.playlist_saving">Sparar spellista \"%s\"...</string>
     <string name="download.playlist_done">Spellistan sparades.</string>
     <string name="download.playlist_error">Misslyckades med att spara spellistan, försök igen senare.</string>
     <string name="download.repeat_off">Upprepa inte</string>
@@ -337,8 +327,6 @@
     <string name="settings.preload_5">5 spår</string>
     <string name="settings.preload_10">10 spår</string>
 	<string name="settings.preload_unlimited">Oändlig</string>
-    <string name="settings.clear_search_history">Rensa sökhistoriken</string>
-    <string name="settings.search_history_cleared">Sökhistoriken har rensats</string>
     <string name="settings.other_title">Andra inställningar</string>
     <string name="settings.scrobble_title">Scrobble till Last.fm</string>
     <string name="settings.scrobble_summary">Kom ihåg att ställa in Last.fm användarnamn och lösenord på Subsonic servern</string>
@@ -349,13 +337,7 @@
     <string name="settings.media_button_summary">Reagera på telefonen, headset och bluetooths media knappar</string>
     <string name="settings.screen_lit_title">Håll skärmen igång</string>
     <string name="settings.screen_lit_summary">Att hålla skärmen igång när man laddar ner ökar nerladdningshastigheten.</string>
-	<string name="settings.playlist_title">Spela</string>
 	<string name="settings.playlist_random_size_title">Slumpad spelliste storlek</string>
-	<string name="settings.sleep_timer_title">Sömntimer</string>
-	<string name="settings.sleep_timer_duration_title">Längd på sömntimer</string>
-	<string name="settings.sleep_timer_off">Av</string>
-	<string name="settings.sleep_timer_on">på</string>
-	<string name="settings.sleep_timer_always_on">Alltid på</string>
 	<string name="settings.temp_loss_title">Förlorade fokus temporärt</string>
 	<string name="settings.temp_loss_pause">Pausa alltid</string>
 	<string name="settings.temp_loss_pause_lower">Pause, sänk volymen när tillsagd</string>
@@ -572,7 +554,6 @@
 	<string name="details.title.album">Album detaljer</string>
 	<string name="details.title.podcast">Podcast detaljer</string>
 	<string name="details.title.playlist">Playlist detaljer</string>
-	<string name="details.title.artist">Artist detaljer</string>
 	<string name="details.podcast">Podcasts</string>
 	<string name="details.status">Status</string>
 	<string name="details.artist">Artist</string>
@@ -599,8 +580,7 @@
 	<string name="details.error">Felmeddelande</string>
 	<string name="details.author">Utvecklare</string>
 	<string name="details.email">Email</string>
-	<string name="details.fork">Forked från</string>
-	<string name="details.version">Version</string>
+xxxxx	<string name="details.version">Version</string>
 	<string name="details.files_cached">Filer cachade</string>
 	<string name="details.files_permanent">Permanent cachade</string>
 	<string name="details.used_space">Använt utrymme</string>

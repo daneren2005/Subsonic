@@ -57,12 +57,9 @@
 		<br/>In the option menu, deselect "First level artists".  This will make it so that the entire first level of directories shown will be treated like groups of artists instead of the artists themselves.
 	]]>
 	</string>
-	<string name="main.shuffle">Shuffle play</string>
     <string name="main.offline">Go Offline</string>
 	<string name="main.online">Go Online</string>
-    <string name="main.settings">Settings</string>
-    <string name="main.albums_title">Album Lists</string>
-	<string name="main.albums_per_folder">Per Folder</string>
+	<string name="main.albums_title">Album Lists</string>
     <string name="main.albums_newest">Recently added</string>
     <string name="main.albums_recent">Recently played</string>
     <string name="main.albums_frequent">Most played</string>
@@ -73,7 +70,6 @@
 	<string name="main.albums_year">Decades</string>
 	<string name="main.albums_alphabetical">Alphabetically</string>
 	<string name="main.videos">Videos</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.songs_newest">@string/main.albums_newest</string>
 	<string name="main.songs_top_played">Top Played</string>
 	<string name="main.songs_recent">@string/main.albums_recent</string>
@@ -90,7 +86,6 @@
 	<string name="menu.play_last">Play Last</string>
     <string name="menu.exit">Exit</string>
     <string name="menu.settings">Settings</string>
-    <string name="menu.help">Help</string>
 	<string name="menu.about">About</string>
 	<string name="menu.add_playlist">Add To Playlist</string>
 	<string name="menu.remove_playlist">Remove From Playlist</string>
@@ -126,10 +121,7 @@
 	<string name="playlist.create_new">Create New</string>
 	<string name="playlist.delete">Delete Playlist</string>
 
-    <string name="search.label">Search</string>
     <string name="search.title">Search</string>
-    <string name="search.search">Click to search</string>
-    <string name="search.no_match">No matches, please try again</string>
     <string name="search.artists">Artists</string>
     <string name="search.albums">Albums</string>
     <string name="search.songs">Songs</string>
@@ -188,13 +180,11 @@
 	<string name="download.menu_remove_all">Remove all</string>
     <string name="download.menu_screen_on">Screen on</string>
     <string name="download.menu_shuffle">Shuffle</string>
-	<string name="download.menu_toggle">Toggle</string>
-    <string name="download.menu_save">Save playlist</string>
+	<string name="download.menu_save">Save playlist</string>
     <string name="download.menu_shuffle_notification">Playlist was shuffled</string>
 	<string name="download.menu_remove_played_songs">Remove played songs</string>
     <string name="download.playlist_title">Save playlist</string>
     <string name="download.playlist_name">Enter the playlist name:</string>
-    <string name="download.playlist_saving">Saving playlist \"%s\"...</string>
     <string name="download.playlist_done">Playlist was successfully saved.</string>
     <string name="download.playlist_error">Failed to save playlist, please try later.</string>
     <string name="download.repeat_off">Repeat off</string>
@@ -221,11 +211,9 @@
 	<string name="download.thumbs_down">Thumbs Down</string>
 	<string name="download.batch_mode">Batch Mode</string>
 	<string name="download.playback_speed_half">0.5x</string>
-	<string name="download.playback_speed_normal">1x</string>
 	<string name="download.playback_speed_one_half">1.5x</string>
 	<string name="download.playback_speed_double">2x</string>
 	<string name="download.playback_speed_tripple">3x</string>
-	<string name="download.playback_speed_custom">Custom</string>
 
 	<string name="sync.new_podcasts">New podcasts available</string>
 	<string name="sync.new_playlists">New songs in playlists</string>
@@ -360,8 +348,6 @@
     <string name="settings.preload_5">5 songs</string>
     <string name="settings.preload_10">10 songs</string>
 	<string name="settings.preload_unlimited">Unlimited</string>
-    <string name="settings.clear_search_history">Clear search history</string>
-    <string name="settings.search_history_cleared">Search history cleared</string>
     <string name="settings.other_title">Other settings</string>
     <string name="settings.scrobble_title">Scrobble to Last.fm</string>
     <string name="settings.scrobble_summary">Remember to set up your Last.fm user and password on the Subsonic server</string>
@@ -372,13 +358,7 @@
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
-	<string name="settings.playlist_title">Play</string>
 	<string name="settings.playlist_random_size_title">Shuffle Playlist Size</string>
-	<string name="settings.sleep_timer_title">Sleep Timer</string>
-	<string name="settings.sleep_timer_duration_title">Sleep Timer Duration</string>
-	<string name="settings.sleep_timer_off">Off</string>
-	<string name="settings.sleep_timer_on">On</string>
-	<string name="settings.sleep_timer_always_on">Always On</string>
 	<string name="settings.temp_loss_title">Temporary Loss of Focus</string>
 	<string name="settings.temp_loss_pause">Always Pause</string>
 	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
@@ -619,7 +599,6 @@
 	<string name="details.title.album">Album Details</string>
 	<string name="details.title.podcast">Podcast Details</string>
 	<string name="details.title.playlist">Playlist Details</string>
-	<string name="details.title.artist">Artist Details</string>
 	<string name="details.title.internet_radio_station">Internet Radio Details</string>
 	<string name="details.podcast">Podcast</string>
 	<string name="details.status">Status</string>

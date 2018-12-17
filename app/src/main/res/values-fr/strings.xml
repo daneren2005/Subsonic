@@ -49,10 +49,8 @@
 		<br/>Assurez-vous de ne pas utiliser un certificat auto-signé, Chromecast les rejette systématiquement.
 	]]>
 	</string>
-	<string name="main.shuffle">Jouer au hasard</string>
     <string name="main.offline">Déconnecter</string>
 	<string name="main.online">Connecter</string>
-    <string name="main.settings">Paramètres</string>
     <string name="main.albums_title">Albums</string>
     <string name="main.albums_newest">Ajoutés récemments</string>
     <string name="main.albums_recent">Joués récemments</string>
@@ -62,7 +60,6 @@
     <string name="main.albums_random">Au hasard</string>
 	<string name="main.albums_genres">Par genres</string>
 	<string name="main.albums_year">Par décennies</string>
-	<string name="main.songs_genres">@string/main.albums_genres</string>
 	<string name="main.back_confirm">Presser retour à nouveau pour quitter</string>
 	<string name="main.scan_complete">Analyse du server terminée</string>
 
@@ -74,8 +71,7 @@
 	<string name="menu.play_last">Jouer dernier</string>
     
     <string name="menu.settings">Paramètres</string>
-    <string name="menu.help">Aide</string>
-	<string name="menu.about">À propos</string>
+    <string name="menu.about">À propos</string>
 	<string name="menu.add_playlist">Ajouter à la playlist</string>
 	<string name="menu.remove_playlist">Supprimer de la playlist</string>
 	<string name="menu.deleted_playlist">Supprimer la playlist %s</string>
@@ -105,10 +101,7 @@
 	<string name="playlist.create_new">Créer une nouvelle</string>
 	<string name="playlist.delete">Supprimer la playlist</string>
 
-    <string name="search.label">Recherche</string>
     <string name="search.title">Recherche</string>
-    <string name="search.search">Cliquer pour rechercher</string>
-    <string name="search.no_match">Aucun résultat, recommencer</string>
     <string name="search.artists">Artistes</string>
     <string name="search.albums">Albums</string>
     <string name="search.songs">Chansons</string>
@@ -162,13 +155,11 @@
 	<string name="download.menu_remove_all">Enlever tout</string>
     <string name="download.menu_screen_on">Écran actif</string>
     <string name="download.menu_shuffle">Hasard</string>
-	<string name="download.menu_toggle">Basculer</string>
     <string name="download.menu_save">Enregistrer la playlist</string>
     <string name="download.menu_shuffle_notification">La playlist a été mélangée</string>
 	<string name="download.menu_remove_played_songs">Supprimer les titres déjà joué</string>
     <string name="download.playlist_title">Enregistrer la playlist</string>
     <string name="download.playlist_name">Nom de la playlist :</string>
-    <string name="download.playlist_saving">Enregistrement playlist \&quot;%s\&quot;...</string>
     <string name="download.playlist_done">La playlist a bien été enregistrée.</string>
     <string name="download.playlist_error">Erreur à l\'enregistrement de la playlist, réessayer plus tard.</string>
     <string name="download.repeat_off">Répéter inactif</string>
@@ -209,7 +200,6 @@
 	<string name="bookmark.deleted">Signet pour \&quot;%s\&quot; supprimé</string>
 	<string name="bookmark.deleted_error">Échec de la suppression du signet pour \&quot;%s\&quot;</string>
 	<string name="bookmark.details_title">Détails du signet</string>
-	<string name="bookmark.details">Titre : %1$s
 		\nPosition : %2$s
 		\nCréé le : %3$s
 		\nMis à jour : %4$s
@@ -315,8 +305,6 @@
     <string name="settings.preload_5">5 titres</string>
     <string name="settings.preload_10">10 titres</string>
 	<string name="settings.preload_unlimited">Illimité</string>
-    <string name="settings.clear_search_history">Effacer l\'historique de recherche</string>
-    <string name="settings.search_history_cleared">Rechercher dans l\'historique effacé</string>
     <string name="settings.other_title">Autres paramètres</string>
     <string name="settings.scrobble_title">Publier vers Last.fm</string>
     <string name="settings.scrobble_summary">Penser à paramétrer votre compte Last.fm sur le serveur Subsonic</string>
@@ -327,13 +315,7 @@
     <string name="settings.media_button_summary">Répondre aux boutons du mobile, du casque filaire ou bluetooth</string>
     <string name="settings.screen_lit_title">Garder l\'écran allumé</string>
     <string name="settings.screen_lit_summary">Garder l\'écran allumé augmente la vitesse de téléchargement.</string>
-	<string name="settings.playlist_title">Lecture</string>
 	<string name="settings.playlist_random_size_title">Taille de la liste de lecture aléatoire</string>
-	<string name="settings.sleep_timer_title">Temporisateur</string>
-	<string name="settings.sleep_timer_duration_title">Durée temporisation</string>
-	<string name="settings.sleep_timer_off">Éteindre</string>
-	<string name="settings.sleep_timer_on">Allumer</string>
-	<string name="settings.sleep_timer_always_on">Toujours en fonctionnement</string>
 	<string name="settings.temp_loss_title">Perte temporaire de focus</string>
 	<string name="settings.temp_loss_pause">Toujours mettre en pause</string>
 	<string name="settings.temp_loss_pause_lower">Pause, baisser le volume si demandé</string>
