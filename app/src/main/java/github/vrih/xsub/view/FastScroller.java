@@ -155,7 +155,7 @@ public class FastScroller extends LinearLayout {
 
 			// Calculate how far through this position we are
 			int columns = Math.round(recyclerView.getWidth() / firstVisibleView.getWidth());
-			int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
+			int firstVisiblePosition = recyclerView.getChildAdapterPosition(firstVisibleView);
 			int remainder = (targetPos - firstVisiblePosition) % columns;
 			float offsetPercentage = (targetPosFloat - targetPos + remainder) / columns;
 			if(offsetPercentage < 0) {
@@ -295,7 +295,7 @@ public class FastScroller extends LinearLayout {
 		if(firstVisibleView == null) {
 			return;
 		}
-		int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
+		int firstVisiblePosition = recyclerView.getChildAdapterPosition(firstVisibleView);
 
 		int itemCount = recyclerView.getAdapter().getItemCount();
 		int columns = Math.round(recyclerView.getWidth() / firstVisibleView.getWidth());

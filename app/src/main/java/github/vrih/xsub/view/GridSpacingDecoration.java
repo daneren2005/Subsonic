@@ -37,7 +37,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		int halfSpacing = spacing / 2;
 
 		int childCount = parent.getChildCount();
-		int childIndex = parent.getChildPosition(view);
+		int childIndex = parent.getChildAdapterPosition(view);
 		// Not an actual child (ie: during delete event)
 		if(childIndex == -1) {
 			return;
