@@ -3,8 +3,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="178dp"
 	android:orientation="vertical"
-	android:weightSum="1"
-	android:background="?attr/drawerHeaderBackground">
+	android:weightSum="1">
 
 	<LinearLayout
 		android:layout_width="match_parent"
