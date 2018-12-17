@@ -122,8 +122,7 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 
 	@Override
 	public int getItemViewType(Setting item) {
-        int VIEW_TYPE_SETTING = 1;
-        return VIEW_TYPE_SETTING;
+        return 1;
 	}
 
 	@Override

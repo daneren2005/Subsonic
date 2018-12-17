@@ -28,7 +28,6 @@ public class LoudnessEnhancerController {
     private LoudnessEnhancer enhancer;
 
     public LoudnessEnhancerController(Context context, int audioSessionId) {
-        Context context1 = context;
 		try {
             int audioSessionId1 = audioSessionId;
 			enhancer = new LoudnessEnhancer(audioSessionId);

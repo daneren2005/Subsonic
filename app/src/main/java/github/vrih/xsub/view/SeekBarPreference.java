@@ -58,9 +58,9 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	  Our context (needed for getResources())
 	 */ /**
      * Our context (needed for getResources())
-     */Context mContext = context;
+     */
 
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SeekBarPreference);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SeekBarPreference);
 		mMin = a.getInteger(R.styleable.SeekBarPreference_min, 0);
 		mMax = a.getInteger(R.styleable.SeekBarPreference_max, 100);
 		mStepSize = a.getFloat(R.styleable.SeekBarPreference_stepSize, 1f);

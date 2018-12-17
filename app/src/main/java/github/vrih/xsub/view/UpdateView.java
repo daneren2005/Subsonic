@@ -75,9 +75,8 @@ public abstract class UpdateView<T> extends LinearLayout {
 	UpdateView(Context context, boolean autoUpdate) {
 		super(context);
 		this.context = context;
-        boolean autoUpdate1 = autoUpdate;
-		
-		setLayoutParams(new AbsListView.LayoutParams(
+
+        setLayoutParams(new AbsListView.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT));
 		

@@ -49,7 +49,6 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
     }
 
     public DroppySpeedControl setOnSeekBarChangeListener(Context context, final DroppyClickCallbackInterface callback, int seekBarByID, int textViewByID, float playbackSpeed) {
-        DroppyClickCallbackInterface updateBarCallback = callback;
         render(context);
         final TextView textBox = renderedView.findViewById(textViewByID);
         textBox.setText(Float.toString(playbackSpeed));

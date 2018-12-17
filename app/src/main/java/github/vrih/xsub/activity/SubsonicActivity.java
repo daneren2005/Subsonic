@@ -1038,8 +1038,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	}
 
 	private boolean isTv() {
-        boolean tv = false;
-        return tv;
+		return false;
 	}
 	public boolean isTouchscreen() {
 		return touchscreen;
