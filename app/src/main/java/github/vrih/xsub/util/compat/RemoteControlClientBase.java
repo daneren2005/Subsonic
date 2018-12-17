@@ -16,10 +16,8 @@ public abstract class RemoteControlClientBase {
 	public static RemoteControlClientBase createInstance() {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			return new RemoteControlClientLP();
-		} else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-			return new RemoteControlClientJB();
 		} else {
-			return new RemoteControlClientICS();
+			return new RemoteControlClientJB();
 		}
 	}
 	

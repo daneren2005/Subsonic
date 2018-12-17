@@ -1334,7 +1334,7 @@ public final class Util {
 						.build();
 				audioManager.requestAudioFocus(audioFocusRequest);
 			}
-		} else if (Build.VERSION.SDK_INT >= 8 && focusListener == null) {
+		} else if (focusListener == null) {
     		audioManager.requestAudioFocus(focusListener = getAudioFocusChangeListener(context, audioManager), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     	}
     }
@@ -1498,9 +1498,7 @@ public final class Util {
 	public static WifiManager.WifiLock createWifiLock(Context context, String tag) {
 		WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		int lockType = WifiManager.WIFI_MODE_FULL;
-		if (Build.VERSION.SDK_INT >= 12) {
-			lockType = 3;
-		}
+		lockType = 3;
 		return wm.createWifiLock(lockType, tag);
 	}
 

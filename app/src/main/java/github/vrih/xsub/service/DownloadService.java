@@ -317,7 +317,7 @@ public class DownloadService extends Service {
 	@Override
 	public void onTrimMemory(int level) {
 		ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(this);
-		if(imageLoader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		if(imageLoader != null) {
 			Log.i(TAG, "Memory Trim Level: " + level);
 			if (level < ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
 				if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
@@ -1406,7 +1406,7 @@ public class DownloadService extends Service {
 			}
 			mediaPlayer.setOnErrorListener(null);
 			mediaPlayer.setOnCompletionListener(null);
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
+			if(nextSetup) {
 				mediaPlayer.setNextMediaPlayer(null);
 				nextSetup = false;
 			}
@@ -1421,7 +1421,7 @@ public class DownloadService extends Service {
     private synchronized void resetNext() {
 		try {
 			if (nextMediaPlayer != null) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
+				if (nextSetup) {
 					mediaPlayer.setNextMediaPlayer(null);
 				}
 				nextSetup = false;
@@ -2047,7 +2047,7 @@ public class DownloadService extends Service {
 					try {
 						setNextPlayerState(PREPARED);
 
-						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
+						if(playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED) {
 							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
 							nextSetup = true;
 						}

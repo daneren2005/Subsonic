@@ -82,13 +82,11 @@ public final class Notifications {
 		boolean remote = downloadService.isRemoteEnabled();
 		boolean isSingle = downloadService.isCurrentPlayingSingle();
 		boolean shouldFastForward = downloadService.shouldFastForward();
-		if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
-			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-			setupViews(expandedContentView ,context, song, true, playing, remote, isSingle, shouldFastForward);
-			notification.bigContentView = expandedContentView;
-			notification.priority = Notification.PRIORITY_HIGH;
-		}
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
+        setupViews(expandedContentView ,context, song, true, playing, remote, isSingle, shouldFastForward);
+        notification.bigContentView = expandedContentView;
+        notification.priority = Notification.PRIORITY_HIGH;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			notification.visibility = Notification.VISIBILITY_PUBLIC;
 
 			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false) && !UpdateView.hasActiveActivity()) {

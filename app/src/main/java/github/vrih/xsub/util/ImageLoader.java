@@ -410,7 +410,7 @@ public class ImageLoader {
 		if(remoteControl != null && drawable != null) {
 			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
 			if ( origBitmap != null && !origBitmap.isRecycled()) {
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && origBitmap != null) {
+				if(origBitmap != null) {
 					origBitmap = origBitmap.copy(origBitmap.getConfig(), false);
 				}
 

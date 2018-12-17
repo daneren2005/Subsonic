@@ -141,7 +141,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 			addOnlineProviders();
 		}
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED, true)) {
+		if(Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED, true)) {
 			addDLNAProvider();
 		}
 	}
@@ -153,10 +153,8 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		if(castAvailable) {
 			builder.addControlCategory(GoogleCompat.getCastControlCategory());
 		}
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);
-		}
-		selector = builder.build();
+        builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);
+        selector = builder.build();
 	}
 
 	public void addDLNAProvider() {
