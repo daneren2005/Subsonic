@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class BookmarkTest extends TestCase {
+class BookmarkTest extends TestCase {
 	
 	/**
 	 * tests the set created date

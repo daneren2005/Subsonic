@@ -23,7 +23,7 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 
 
-public class OggFile extends Common {
+class OggFile extends Common {
 
 	private static final int OGG_PAGE_SIZE    = 27;  // Static size of an OGG Page
 	private static final int OGG_TYPE_COMMENT = 3;   // ID of 'VorbisComment's

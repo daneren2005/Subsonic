@@ -38,7 +38,7 @@ public class DrawableTint {
 	public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableRes) {
 		return getTintedDrawable(context, drawableRes, R.attr.colorAccent);
 	}
-	public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableRes, @AttrRes int colorAttr) {
+	private static Drawable getTintedDrawable(Context context, @DrawableRes int drawableRes, @AttrRes int colorAttr) {
 		if(tintedDrawables.containsKey(drawableRes)) {
 			return tintedDrawables.get(drawableRes);
 		}

@@ -15,7 +15,7 @@ import java.util.LinkedList;
 
 import android.util.Log;
 
-public class DownloadServiceTest extends
+class DownloadServiceTest extends
 		ActivityInstrumentationTestCase2<SubsonicFragmentActivity> {
 
 	private SubsonicFragmentActivity activity;

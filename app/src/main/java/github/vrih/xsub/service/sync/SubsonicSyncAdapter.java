@@ -47,18 +47,18 @@ import github.vrih.xsub.util.Util;
  * Created by Scott on 9/6/13.
  */
 
-public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
+class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 	private static final String TAG = SubsonicSyncAdapter.class.getSimpleName();
-	protected final CachedMusicService musicService = new CachedMusicService(new RESTMusicService());
-	protected boolean tagBrowsing;
+	final CachedMusicService musicService = new CachedMusicService(new RESTMusicService());
+	boolean tagBrowsing;
 	private final Context context;
 
-	public SubsonicSyncAdapter(Context context, boolean autoInitialize) {
+	SubsonicSyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
 		this.context = context;
 	}
 	@TargetApi(14)
-	public SubsonicSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+    SubsonicSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 		this.context = context;
 	}
@@ -109,7 +109,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 			return null;
 		}
 	}
-	protected void throwIfNetworkInvalid() throws NetworkNotValidException {
+	void throwIfNetworkInvalid() throws NetworkNotValidException {
 		String invalidMessage = isNetworkValid();
 		if(invalidMessage != null) {
 			throw new NetworkNotValidException(invalidMessage);
@@ -143,11 +143,11 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		
 		Log.i(TAG, className + " executed in " + (System.currentTimeMillis() - start) + " ms");
 	}
-	public void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
+	void onExecuteSync(Context context, int instance) throws NetworkNotValidException {
 	
 	}
 
-	protected boolean downloadRecursively(List<String> paths, MusicDirectory parent, Context context, boolean save) throws Exception,NetworkNotValidException {
+	boolean downloadRecursively(List<String> paths, MusicDirectory parent, Context context, boolean save) throws Exception,NetworkNotValidException {
 		boolean downloaded = false;
 		for (MusicDirectory.Entry song: parent.getChildren(false, true)) {
 			if (!song.isVideo()) {
@@ -174,7 +174,7 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 
 		return downloaded;
 	}
-	protected MusicDirectory getMusicDirectory(MusicDirectory.Entry dir) throws Exception{
+	MusicDirectory getMusicDirectory(MusicDirectory.Entry dir) throws Exception{
 		String id = dir.getId();
 		String name = dir.getTitle();
 
@@ -194,8 +194,8 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		return !(url.contains("demo.subsonic.org") || url.contains("yourhost"));
 	}
 
-	public class NetworkNotValidException extends Throwable {
-		public NetworkNotValidException(String reason) {
+	class NetworkNotValidException extends Throwable {
+		NetworkNotValidException(String reason) {
 			super("Not running sync: " + reason);
 		}
 	}

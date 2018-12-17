@@ -60,7 +60,7 @@ public class MusicFolder implements Serializable {
 		return enabled;
 	}
 
-	public static class MusicFolderComparator implements Comparator<MusicFolder> {
+	static class MusicFolderComparator implements Comparator<MusicFolder> {
 		public int compare(MusicFolder lhsMusicFolder, MusicFolder rhsMusicFolder) {
 			if(lhsMusicFolder == rhsMusicFolder || lhsMusicFolder.getName().equals(rhsMusicFolder.getName())) {
 				return 0;

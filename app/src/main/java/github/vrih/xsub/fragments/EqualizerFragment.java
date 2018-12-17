@@ -47,7 +47,7 @@ import github.vrih.xsub.util.Util;
 /**
  * Created by Scott on 10/27/13.
  */
-public class EqualizerFragment extends SubsonicFragment {
+class EqualizerFragment extends SubsonicFragment {
 	private static final String TAG = EqualizerFragment.class.getSimpleName();
 
 	private static final int MENU_GROUP_PRESET = 100;

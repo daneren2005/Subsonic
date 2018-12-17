@@ -283,7 +283,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		}
 	}
 
-	public void refreshPodcasts() {
+	private void refreshPodcasts() {
 		new SilentBackgroundTask<Void>(context) {
 			@Override
 			protected Void doInBackground() throws Throwable {				

@@ -35,25 +35,25 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 	private static final int EXPAND_TOGGLE = R.attr.select_server;
 	private static final int COLLAPSE_TOGGLE = R.attr.select_tabs;
 
-	protected List<Integer> sectionsDefaultVisible;
-	protected List<List<T>> sectionsExtras;
-	protected int expandToggleRes;
-	protected int collapseToggleRes;
+	private List<Integer> sectionsDefaultVisible;
+	private List<List<T>> sectionsExtras;
+	private int expandToggleRes;
+	private int collapseToggleRes;
 
-	protected ExpandableSectionAdapter() {}
-	public ExpandableSectionAdapter(Context context, List<T> section) {
+	ExpandableSectionAdapter() {}
+	ExpandableSectionAdapter(Context context, List<T> section) {
 		List<List<T>> sections = new ArrayList<>();
 		sections.add(section);
 
 		init(context, Collections.singletonList("Section"), sections, Collections.singletonList((Integer) null));
 	}
-	public ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
+	private ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
 		init(context, headers, sections, null);
 	}
-	public ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections, List<Integer> sectionsDefaultVisible) {
+	ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections, List<Integer> sectionsDefaultVisible) {
 		init(context, headers, sections, sectionsDefaultVisible);
 	}
-	protected void init(Context context, List<String> headers, List<List<T>> fullSections, List<Integer> sectionsDefaultVisible) {
+	void init(Context context, List<String> headers, List<List<T>> fullSections, List<Integer> sectionsDefaultVisible) {
 		this.context = context;
 		this.headers = headers;
 		this.sectionsDefaultVisible = sectionsDefaultVisible;

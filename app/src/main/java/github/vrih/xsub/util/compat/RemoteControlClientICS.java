@@ -23,9 +23,9 @@ import github.vrih.xsub.activity.SubsonicActivity;
 public class RemoteControlClientICS extends RemoteControlClientBase {
 	private static String TAG = RemoteControlClientICS.class.getSimpleName();
 
-	protected RemoteControlClient mRemoteControl;
-	protected ImageLoader imageLoader;
-	protected DownloadService downloadService;
+	RemoteControlClient mRemoteControl;
+	private ImageLoader imageLoader;
+	DownloadService downloadService;
 	
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
 		downloadService = (DownloadService) context;
@@ -117,7 +117,7 @@ public class RemoteControlClientICS extends RemoteControlClientBase {
 
 	}
 
-	protected void updateMetadata(final MusicDirectory.Entry currentSong, final RemoteControlClient.MetadataEditor editor) {
+	private void updateMetadata(final MusicDirectory.Entry currentSong, final RemoteControlClient.MetadataEditor editor) {
 		editor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
 			.putString(MediaMetadataRetriever.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
 			.putString(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST, (currentSong == null) ? null : currentSong.getArtist())
@@ -129,7 +129,7 @@ public class RemoteControlClientICS extends RemoteControlClientBase {
 				0 : ((currentSong.getDuration() == null) ? 0 : (currentSong.getDuration() * 1000)));
 	}
 	
-	protected int getTransportFlags() {
+	int getTransportFlags() {
 		return RemoteControlClient.FLAG_KEY_MEDIA_PLAY | 
 			RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | 
 			RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE |

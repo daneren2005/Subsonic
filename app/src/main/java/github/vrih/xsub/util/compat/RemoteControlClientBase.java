@@ -23,7 +23,7 @@ public abstract class RemoteControlClientBase {
 		}
 	}
 	
-	protected RemoteControlClientBase() {
+	RemoteControlClientBase() {
 		// Avoid instantiation
 	}
 	

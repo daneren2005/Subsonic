@@ -517,14 +517,14 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 		result.sendResult(mediaItems);
 	}
 
-	public void getDownloadService() {
+	private void getDownloadService() {
 		if(DownloadService.getInstance() == null) {
 			DownloadService.startService(this);
 		}
 
 		waitForDownloadService();
 	}
-	public void waitForDownloadService() {
+	private void waitForDownloadService() {
 		downloadService = DownloadService.getInstance();
 		if(downloadService == null) {
 			handler.postDelayed(new Runnable() {

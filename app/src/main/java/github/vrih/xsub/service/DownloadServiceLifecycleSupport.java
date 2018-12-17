@@ -291,7 +291,7 @@ public class DownloadServiceLifecycleSupport {
 		});
 	}
 
-	public void serializeDownloadQueueNow(List<DownloadFile> songs, boolean serializeRemote) {
+	private void serializeDownloadQueueNow(List<DownloadFile> songs, boolean serializeRemote) {
 		final PlayerQueue state = new PlayerQueue();
 		for (DownloadFile downloadFile : songs) {
 			state.songs.add(downloadFile.getSong());

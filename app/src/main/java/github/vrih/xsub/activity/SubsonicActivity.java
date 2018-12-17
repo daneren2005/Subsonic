@@ -90,40 +90,40 @@ import static android.Manifest.*;
 public class SubsonicActivity extends AppCompatActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
 	private static ImageLoader IMAGE_LOADER;
-	protected static String theme;
-	protected static boolean fullScreen;
-	protected static boolean actionbarColored;
+	private static String theme;
+	private static boolean fullScreen;
+	private static boolean actionbarColored;
 	private static final int MENU_GROUP_SERVER = 10;
 	private static final int MENU_ITEM_SERVER_BASE = 100;
-	public static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+	private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 	public static final int PERMISSIONS_REQUEST_LOCATION = 2;
 
 	private final List<Runnable> afterServiceAvailable = new ArrayList<>();
 	private boolean drawerIdle = true;
 	private boolean destroyed = false;
 	private boolean finished = false;
-	protected final List<SubsonicFragment> backStack = new ArrayList<>();
-	protected SubsonicFragment currentFragment;
-	protected View primaryContainer;
-	protected View secondaryContainer;
-	protected final boolean tv = false;
-	protected boolean touchscreen = true;
-	protected final Handler handler = new Handler();
-	Spinner actionBarSpinner;
-	ArrayAdapter<CharSequence> spinnerAdapter;
-	ViewGroup rootView;
+	final List<SubsonicFragment> backStack = new ArrayList<>();
+	SubsonicFragment currentFragment;
+	private View primaryContainer;
+	View secondaryContainer;
+	private final boolean tv = false;
+	private boolean touchscreen = true;
+	final Handler handler = new Handler();
+	private Spinner actionBarSpinner;
+	private ArrayAdapter<CharSequence> spinnerAdapter;
+	private ViewGroup rootView;
 	DrawerLayout drawer;
 	ActionBarDrawerToggle drawerToggle;
 	NavigationView drawerList;
-	View drawerHeader;
-	ImageView drawerUserAvatar;
-	ImageView drawerHeaderToggle;
-	TextView drawerServerName;
-	TextView drawerUserName;
+	private View drawerHeader;
+	private ImageView drawerUserAvatar;
+	private ImageView drawerHeaderToggle;
+	private TextView drawerServerName;
+	private TextView drawerUserName;
 	int lastSelectedPosition = 0;
-	boolean showingTabs = true;
-	boolean drawerOpen = false;
-	SharedPreferences.OnSharedPreferenceChangeListener preferencesListener;
+	private boolean showingTabs = true;
+	private boolean drawerOpen = false;
+	private SharedPreferences.OnSharedPreferenceChangeListener preferencesListener;
 
 	static {
 		AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
@@ -222,7 +222,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 	}
 
-	protected void createCustomActionBarView() {
+	private void createCustomActionBarView() {
 		actionBarSpinner = (Spinner) getLayoutInflater().inflate(R.layout.actionbar_spinner, null);
 		if((this instanceof SubsonicFragmentActivity || this instanceof SettingsActivity) && (Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true) || ThemeUtil.getThemeRes(this) != R.style.Theme_DSub_Light_No_Color)) {
 			actionBarSpinner.setBackgroundDrawable(DrawableTint.getTintedDrawableFromColor(this, R.drawable.abc_spinner_mtrl_am_alpha, android.R.color.white));
@@ -677,14 +677,14 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 	}
 
-	protected void drawerItemSelected(String fragmentType) {
+	void drawerItemSelected(String fragmentType) {
 		if(currentFragment != null) {
 			currentFragment.stopActionMode();
 		}
 		startFragmentActivity(fragmentType);
 	}
 
-	public void startFragmentActivity(String fragmentType) {
+	void startFragmentActivity(String fragmentType) {
 		Intent intent = new Intent();
 		intent.setClass(SubsonicActivity.this, SubsonicFragmentActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -711,7 +711,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 	}
 
-	public boolean onBackPressedSupport() {
+	boolean onBackPressedSupport() {
 		if(drawerOpen) {
 			drawer.closeDrawers();
 			return false;
@@ -734,7 +734,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		return this.currentFragment;
 	}
 
-	public void replaceFragment(SubsonicFragment fragment, int tag) {
+	void replaceFragment(SubsonicFragment fragment, int tag) {
 		replaceFragment(fragment, tag, false);
 	}
 	public void replaceFragment(SubsonicFragment fragment, int tag, boolean replaceCurrent) {
@@ -884,7 +884,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		supportInvalidateOptionsMenu();
 	}
 
-	protected void recreateSpinner() {
+	void recreateSpinner() {
 		if(currentFragment == null || currentFragment.getTitle() == null) {
 			return;
 		}
@@ -928,10 +928,10 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 	}
 
-	protected void restart() {
+	private void restart() {
 		restart(true);
 	}
-	protected void restart(boolean resumePosition) {
+	private void restart(boolean resumePosition) {
 		Intent intent = new Intent(this, this.getClass());
 		intent.putExtras(getIntent());
 		if(resumePosition) {
@@ -1043,7 +1043,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		return theme;
 	}
 
-	public boolean isTv() {
+	private boolean isTv() {
 		return tv;
 	}
 	public boolean isTouchscreen() {
@@ -1057,7 +1057,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 	}
 
-	public void setActiveServer(int instance) {
+	private void setActiveServer(int instance) {
 		if (Util.getActiveServer(this) != instance) {
 			final DownloadService service = getDownloadService();
 			if (service != null) {
@@ -1076,7 +1076,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			updateDrawerHeader();
 		}
 	}
-	public void updateDrawerHeader() {
+	private void updateDrawerHeader() {
 		if(Util.isOffline(this)) {
 			drawerServerName.setText(R.string.select_album_offline);
 			drawerUserName.setText("");
@@ -1093,7 +1093,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 	}
 
-	public void toggleOffline() {
+	private void toggleOffline() {
 		boolean isOffline = Util.isOffline(this);
 		Util.setOffline(this, !isOffline);
 		invalidate();
@@ -1194,7 +1194,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		offline.commit();
 	}
 	
-	public int getDrawerItemId(String fragmentType) {
+	int getDrawerItemId(String fragmentType) {
 		if(fragmentType == null) {
 			return R.id.drawer_home;
 		}

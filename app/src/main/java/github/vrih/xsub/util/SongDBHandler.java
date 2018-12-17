@@ -33,15 +33,15 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	private static SongDBHandler dbHandler;
 
 	private static final int DATABASE_VERSION = 2;
-	public static final String DATABASE_NAME = "SongsDB";
+	private static final String DATABASE_NAME = "SongsDB";
 
-	public static final String TABLE_SONGS = "RegisteredSongs";
-	public static final String SONGS_ID = "id";
-	public static final String SONGS_SERVER_KEY = "serverKey";
-	public static final String SONGS_SERVER_ID = "serverId";
-	public static final String SONGS_COMPLETE_PATH = "completePath";
-	public static final String SONGS_LAST_PLAYED = "lastPlayed";
-	public static final String SONGS_LAST_COMPLETED = "lastCompleted";
+	private static final String TABLE_SONGS = "RegisteredSongs";
+	private static final String SONGS_ID = "id";
+	private static final String SONGS_SERVER_KEY = "serverKey";
+	private static final String SONGS_SERVER_ID = "serverId";
+	private static final String SONGS_COMPLETE_PATH = "completePath";
+	private static final String SONGS_LAST_PLAYED = "lastPlayed";
+	private static final String SONGS_LAST_COMPLETED = "lastCompleted";
 
 	private final Context context;
 
@@ -71,7 +71,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public synchronized void addSong(DownloadFile downloadFile) {
 		addSong(Util.getMostRecentActiveServer(context), downloadFile);
 	}
-	public synchronized void addSong(int instance, DownloadFile downloadFile) {
+	private synchronized void addSong(int instance, DownloadFile downloadFile) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		addSong(db, instance, downloadFile);
 		db.close();
@@ -79,17 +79,17 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	protected synchronized void addSong(SQLiteDatabase db, DownloadFile downloadFile) {
 		addSong(db, Util.getMostRecentActiveServer(context), downloadFile);
 	}
-	protected synchronized void addSong(SQLiteDatabase db, int instance, DownloadFile downloadFile) {
+	private synchronized void addSong(SQLiteDatabase db, int instance, DownloadFile downloadFile) {
 		addSong(db, instance, downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath());
 	}
 
 	protected synchronized void addSong(SQLiteDatabase db, String id, String absolutePath) {
 		addSong(db, Util.getMostRecentActiveServer(context), id, absolutePath);
 	}
-	protected synchronized void addSong(SQLiteDatabase db, int instance, String id, String absolutePath) {
+	private synchronized void addSong(SQLiteDatabase db, int instance, String id, String absolutePath) {
 		addSongImpl(db, Util.getRestUrlHash(context, instance), id, absolutePath);
 	}
-	protected synchronized void addSongImpl(SQLiteDatabase db, int serverKey, String id, String absolutePath) {
+	private synchronized void addSongImpl(SQLiteDatabase db, int serverKey, String id, String absolutePath) {
 		ContentValues values = new ContentValues();
 		values.put(SONGS_SERVER_KEY, serverKey);
 		values.put(SONGS_SERVER_ID, id);
@@ -109,10 +109,10 @@ public class SongDBHandler extends SQLiteOpenHelper {
 
 		db.close();
 	}
-	public synchronized void addSongs(SQLiteDatabase db, int instance, List<Pair<String, String>> entries) {
+	private synchronized void addSongs(SQLiteDatabase db, int instance, List<Pair<String, String>> entries) {
 		addSongsImpl(db, Util.getRestUrlHash(context, instance), entries);
 	}
-	protected synchronized void addSongsImpl(SQLiteDatabase db, int serverKey, List<Pair<String, String>> entries) {
+	private synchronized void addSongsImpl(SQLiteDatabase db, int serverKey, List<Pair<String, String>> entries) {
 		db.beginTransaction();
 		try {
 			for (Pair<String, String> entry : entries) {
@@ -161,14 +161,14 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public synchronized Long[] getLastPlayed(MusicDirectory.Entry entry) {
 		return getLastPlayed(getOnlineSongId(entry));
 	}
-	protected synchronized Long[] getLastPlayed(Pair<Integer, String> pair) {
+	private synchronized Long[] getLastPlayed(Pair<Integer, String> pair) {
 		if(pair == null) {
 			return null;
 		} else {
 			return getLastPlayed(pair.getFirst(), pair.getSecond());
 		}
 	}
-	public synchronized Long[] getLastPlayed(int serverKey, String id) {
+	private synchronized Long[] getLastPlayed(int serverKey, String id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String[] columns = {SONGS_LAST_PLAYED, SONGS_LAST_COMPLETED};
@@ -192,17 +192,17 @@ public class SongDBHandler extends SQLiteOpenHelper {
 	public synchronized Pair<Integer, String> getOnlineSongId(MusicDirectory.Entry entry) {
 		return getOnlineSongId(Util.getRestUrlHash(context), entry.getId(), FileUtil.getSongFile(context, entry).getAbsolutePath(), !Util.isOffline(context));
 	}
-	public synchronized Pair<Integer, String> getOnlineSongId(DownloadFile downloadFile) {
+	private synchronized Pair<Integer, String> getOnlineSongId(DownloadFile downloadFile) {
 		return getOnlineSongId(Util.getRestUrlHash(context), downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), !Util.isOffline(context));
 	}
 
 	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, MusicDirectory.Entry entry) {
 		return getOnlineSongId(serverKey, new DownloadFile(context, entry, true));
 	}
-	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, DownloadFile downloadFile) {
+	private synchronized Pair<Integer, String> getOnlineSongId(int serverKey, DownloadFile downloadFile) {
 		return getOnlineSongId(serverKey, downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath(), true);
 	}
-	public synchronized Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
+	private synchronized Pair<Integer, String> getOnlineSongId(int serverKey, String id, String savePath, boolean requireServerKey) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 		if(cacheLocn != null && id.contains(cacheLocn)) {

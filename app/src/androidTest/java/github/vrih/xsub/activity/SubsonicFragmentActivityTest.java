@@ -2,7 +2,7 @@ package github.vrih.xsub.activity;
 
 import github.vrih.xsub.R;
 
-public class SubsonicFragmentActivityTest extends
+class SubsonicFragmentActivityTest extends
 		ActivityInstrumentationTestCase2<SubsonicFragmentActivity> {
 
 	private SubsonicFragmentActivity activity;

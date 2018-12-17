@@ -43,15 +43,15 @@ import github.vrih.xsub.view.FastScroller;
 
 public abstract class SelectRecyclerFragment<T> extends SubsonicFragment implements SectionAdapter.OnItemClickedListener<T> {
 	private static final String TAG = SelectRecyclerFragment.class.getSimpleName();
-	protected RecyclerView recyclerView;
-	protected FastScroller fastScroller;
-	protected SectionAdapter<T> adapter;
-	protected UpdateTask currentTask;
-	protected List<T> objects;
-	protected boolean serialize = true;
-	protected boolean largeAlbums = false;
-	protected boolean pullToRefresh = true;
-	protected boolean backgroundUpdate = true;
+	RecyclerView recyclerView;
+	private FastScroller fastScroller;
+	SectionAdapter<T> adapter;
+	private UpdateTask currentTask;
+	List<T> objects;
+	boolean serialize = true;
+	boolean largeAlbums = false;
+	boolean pullToRefresh = true;
+	boolean backgroundUpdate = true;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -163,19 +163,19 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		setupLayoutManager(recyclerView, largeAlbums);
 	}
 
-	public abstract int getOptionsMenu();
-	public abstract SectionAdapter<T> getAdapter(List<T> objs);
-	public abstract List<T> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception;
-	public abstract int getTitleResource();
+	protected abstract int getOptionsMenu();
+	protected abstract SectionAdapter<T> getAdapter(List<T> objs);
+	protected abstract List<T> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception;
+	protected abstract int getTitleResource();
 	
-	public void onFinishRefresh() {
+	void onFinishRefresh() {
 		
 	}
 
 	private class UpdateTask extends TabBackgroundTask<List<T>> {
 		private final boolean refresh;
 
-		public UpdateTask(SubsonicFragment fragment, boolean refresh) {
+		UpdateTask(SubsonicFragment fragment, boolean refresh) {
 			super(fragment);
 			this.refresh = refresh;
 		}
@@ -196,7 +196,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		}
 
 		@Override
-		public void done(List<T> result) {
+		protected void done(List<T> result) {
 			if (result != null && !result.isEmpty()) {
 				recyclerView.setAdapter(adapter = getAdapter(result));
 				if(!fastScroller.isAttached()) {

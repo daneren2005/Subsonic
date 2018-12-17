@@ -115,7 +115,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 		setPreferenceScreen(screen);
 	}
 
-	public PreferenceScreen addPreferencesFromResource(int resId) {
+	private PreferenceScreen addPreferencesFromResource(int resId) {
 		requirePreferenceManager();
 		PreferenceScreen screen = inflateFromResource(getActivity(), resId, getPreferenceScreen());
 		setPreferenceScreen(screen);
@@ -136,19 +136,19 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 		return screen;
 	}
 
-	public Preference findPreference(CharSequence key) {
+	Preference findPreference(CharSequence key) {
 		if (mPreferenceManager == null) {
 			return null;
 		}
 		return mPreferenceManager.findPreference(key);
 	}
 
-	public ListView getListView() {
+	private ListView getListView() {
 		ensureList();
 		return mList;
 	}
 
-	public PreferenceManager getPreferenceManager() {
+	PreferenceManager getPreferenceManager() {
 		return mPreferenceManager;
 	}
 
@@ -247,7 +247,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 		}
 	}
 
-	protected void setPreferenceScreen(PreferenceScreen preferenceScreen) {
+	void setPreferenceScreen(PreferenceScreen preferenceScreen) {
 		try {
 			Method m = PreferenceManager.class.getDeclaredMethod("setPreferences", PreferenceScreen.class);
 			m.setAccessible(true);
@@ -304,7 +304,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 		}
 	}
 
-	public PreferenceScreen inflateFromResource(Context context, int resId, PreferenceScreen rootPreferences) {
+	private PreferenceScreen inflateFromResource(Context context, int resId, PreferenceScreen rootPreferences) {
 		PreferenceScreen preferenceScreen ;
 		try {
 			Method m = PreferenceManager.class.getDeclaredMethod("inflateFromResource", Context.class, int.class, PreferenceScreen.class);
@@ -316,7 +316,7 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 		return preferenceScreen;
 	}
 
-	public PreferenceScreen inflateFromIntent(Intent queryIntent, PreferenceScreen rootPreferences) {
+	private PreferenceScreen inflateFromIntent(Intent queryIntent, PreferenceScreen rootPreferences) {
 		PreferenceScreen preferenceScreen ;
 		try {
 			Method m = PreferenceManager.class.getDeclaredMethod("inflateFromIntent", Intent.class, PreferenceScreen.class);

@@ -32,9 +32,9 @@ import java.util.List;
  * @author Scott
  */
 public class Updater {
-	protected String TAG = Updater.class.getSimpleName();
-	protected final int version;
-	protected Context context;
+	String TAG = Updater.class.getSimpleName();
+	private final int version;
+	private Context context;
 	
 	public Updater(int version) {
 		// 5.2 should show as 520 instead of 52
@@ -71,14 +71,14 @@ public class Updater {
 		}
 	}
 	
-	public String getName() {
+	private String getName() {
 		return this.TAG;
 	}
 	
 	private class BackgroundUpdate extends SilentBackgroundTask<Void> {
 		private final Updater updater;
 
-		public BackgroundUpdate(Context context, Updater updater) {
+		BackgroundUpdate(Context context, Updater updater) {
 			super(context);
 			this.updater = updater;
 		}
@@ -94,10 +94,10 @@ public class Updater {
 		}
 	}
 	
-	public boolean shouldUpdate(int version) {
+	private boolean shouldUpdate(int version) {
 		return this.version > version;
 	}
-	public void update(Context context) {
+	void update(Context context) {
 		
 	}
 }

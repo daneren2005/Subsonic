@@ -53,7 +53,7 @@ public class FadeOutAnimation extends AlphaAnimation {
         }
     }
 
-    FadeOutAnimation(final View view, long durationMillis) {
+    private FadeOutAnimation(final View view, long durationMillis) {
         super(1.0F, 0.0F);
         setDuration(durationMillis);
         setAnimationListener(new AnimationListener() {

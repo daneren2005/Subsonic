@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
 
-public class LameHeader extends Common {
+class LameHeader extends Common {
 	
 	public LameHeader() {
 	}

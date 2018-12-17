@@ -1295,33 +1295,33 @@ public class CachedMusicService implements MusicService {
   		final String cacheName;
   		final boolean singleUpdate;
   		
-  		public SerializeUpdater(Context context, String cacheName) {
+  		SerializeUpdater(Context context, String cacheName) {
   			this(context, cacheName, true);
   		}
-  		public SerializeUpdater(Context context, String cacheName, boolean singleUpdate) {
+  		SerializeUpdater(Context context, String cacheName, boolean singleUpdate) {
   			this.context = context;
   			this.cacheName = getCacheName(context, cacheName);
   			this.singleUpdate = singleUpdate;
   		}
-  		public SerializeUpdater(Context context, String cacheName, String id) {
+  		SerializeUpdater(Context context, String cacheName, String id) {
   			this(context, cacheName, id, true);
   		}
-		public SerializeUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
+		SerializeUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
 			this.context = context;
 			this.cacheName = getCacheName(context, cacheName, id);
 			this.singleUpdate = singleUpdate;
 		}
 
-		public ArrayList<T> getArrayList() {
+		ArrayList<T> getArrayList() {
 			return FileUtil.deserialize(context, cacheName, ArrayList.class);
 		}
-  		public abstract boolean checkResult(T check);
-  		public abstract void updateResult(List<T> objects, T result);
-		public void save(ArrayList<T> objects) {
+  		protected abstract boolean checkResult(T check);
+  		protected abstract void updateResult(List<T> objects, T result);
+		void save(ArrayList<T> objects) {
 			FileUtil.serialize(context, objects, cacheName);
 		}
   		
-  		public void execute() {
+  		void execute() {
   			ArrayList<T> objects = getArrayList();
   			
   			// Only execute if something to check against
@@ -1351,7 +1351,7 @@ public class CachedMusicService implements MusicService {
   	private abstract class UserUpdater extends SerializeUpdater<User> {
   		final String username;
   		
-  		public UserUpdater(Context context, String username) {
+  		UserUpdater(Context context, String username) {
   			super(context, "users");
   			this.username = username;
   		}
@@ -1364,7 +1364,7 @@ public class CachedMusicService implements MusicService {
 	private abstract class PlaylistUpdater extends SerializeUpdater<Playlist> {
 		final String id;
 
-		public PlaylistUpdater(Context context, String id) {
+		PlaylistUpdater(Context context, String id) {
 			super(context, "playlist");
 			this.id = id;
 		}
@@ -1375,12 +1375,12 @@ public class CachedMusicService implements MusicService {
 		}
 	}
 	private abstract class MusicDirectoryUpdater extends SerializeUpdater<Entry> {
-		protected MusicDirectory musicDirectory;
+		MusicDirectory musicDirectory;
 
-		public MusicDirectoryUpdater(Context context, String cacheName, String id) {
+		MusicDirectoryUpdater(Context context, String cacheName, String id) {
 			super(context, cacheName, id, true);
 		}
-		public MusicDirectoryUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
+		MusicDirectoryUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
 			super(context, cacheName, id, singleUpdate);
 		}
 
@@ -1401,14 +1401,14 @@ public class CachedMusicService implements MusicService {
 	private abstract class PlaylistDirectoryUpdater {
 		final Context context;
 		
-		public PlaylistDirectoryUpdater(Context context) {
+		PlaylistDirectoryUpdater(Context context) {
 			this.context = context;
 		}
 		
-		public abstract boolean checkResult(Entry check);
-		public abstract void updateResult(Entry result);
+		protected abstract boolean checkResult(Entry check);
+		protected abstract void updateResult(Entry result);
 		
-		public void execute() {
+		void execute() {
 			List<Playlist> playlists = FileUtil.deserialize(context, getCacheName(context, "playlist"), ArrayList.class);
 			if(playlists == null) {
 				// No playlist list cache, nothing to update!
@@ -1434,21 +1434,21 @@ public class CachedMusicService implements MusicService {
 		final Context context;
 		final List<Entry> entries;
 		
-		public GenericEntryUpdater(Context context, Entry entry) {
+		GenericEntryUpdater(Context context, Entry entry) {
 			this.context = context;
 			this.entries = Collections.singletonList(entry);
 		}
-		public GenericEntryUpdater(Context context, List<Entry> entries) {
+		GenericEntryUpdater(Context context, List<Entry> entries) {
 			this.context = context;
 			this.entries = entries;
 		}
 		
-		public boolean checkResult(Entry entry, Entry check) {
+		boolean checkResult(Entry entry, Entry check) {
 			return entry.getId().equals(check.getId());
 		}
-		public abstract void updateResult(Entry result);
+		protected abstract void updateResult(Entry result);
 		
-		public void execute() {
+		void execute() {
 			String cacheName, parent;
 			// Make sure it is up to date
 			isTagBrowsing = Util.isTagBrowsing(context, musicService.getInstance(context));
@@ -1547,10 +1547,10 @@ public class CachedMusicService implements MusicService {
 		}
 	}
 	private class BookmarkUpdater extends GenericEntryUpdater {
-		public BookmarkUpdater(Context context, Entry entry) {
+		BookmarkUpdater(Context context, Entry entry) {
 			super(context, entry);
 		}
-		public BookmarkUpdater(Context context, List<Entry> entries) {
+		BookmarkUpdater(Context context, List<Entry> entries) {
 			super(context, entries);
 		}
 
@@ -1591,7 +1591,7 @@ public class CachedMusicService implements MusicService {
 		}
 	}
 	private class StarUpdater extends GenericEntryUpdater {
-		public StarUpdater(Context context, List<Entry> entries) {
+		StarUpdater(Context context, List<Entry> entries) {
 			super(context, entries);
 		}
 
@@ -1639,7 +1639,7 @@ public class CachedMusicService implements MusicService {
 		}
 	}
 
-	protected void updateAllSongs(Context context, MusicDirectory dir) {
+	private void updateAllSongs(Context context, MusicDirectory dir) {
 		List<Entry> songs = dir.getSongs();
 		if(!songs.isEmpty()) {
 			SongDBHandler.getHandler(context).addSongs(musicService.getInstance(context), songs);

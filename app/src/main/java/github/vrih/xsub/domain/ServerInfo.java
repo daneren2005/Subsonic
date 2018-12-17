@@ -33,7 +33,7 @@ import github.vrih.xsub.util.Util;
  * @author Sindre Mehus
  */
 public class ServerInfo implements Serializable {
-	public static final int TYPE_SUBSONIC = 1;
+	private static final int TYPE_SUBSONIC = 1;
 	public static final int TYPE_MADSONIC = 2;
 	public static final int TYPE_AMPACHE = 3;
 	private static final Map<Integer, ServerInfo> SERVERS = new ConcurrentHashMap<>();
@@ -54,7 +54,7 @@ public class ServerInfo implements Serializable {
 		isLicenseValid = licenseValid;
 	}
 
-	public Version getRestVersion() {
+	private Version getRestVersion() {
 		return restVersion;
 	}
 
@@ -62,7 +62,7 @@ public class ServerInfo implements Serializable {
 		this.restVersion = restVersion;
 	}
     
-	public int getRestType() {
+	private int getRestType() {
 		return type;
 	}
 	public void setRestType(int type) {
@@ -111,7 +111,7 @@ public class ServerInfo implements Serializable {
 	public static ServerInfo getServerInfo(Context context) {
 		return getServerInfo(context, Util.getActiveServer(context));
 	}
-	public static ServerInfo getServerInfo(Context context, int instance) {
+	private static ServerInfo getServerInfo(Context context, int instance) {
 		ServerInfo current = SERVERS.get(instance);
 		if(current != null) {
 			return current;
@@ -128,7 +128,7 @@ public class ServerInfo implements Serializable {
 	public static Version getServerVersion(Context context) {
 		return getServerVersion(context, Util.getActiveServer(context));
 	}
-	public static Version getServerVersion(Context context, int instance) {
+	private static Version getServerVersion(Context context, int instance) {
 		ServerInfo server = getServerInfo(context, instance);
 		if(server == null) {
 			return null;
@@ -158,7 +158,7 @@ public class ServerInfo implements Serializable {
 	public static int getServerType(Context context) {
 		return getServerType(context, Util.getActiveServer(context));
 	}
-	public static int getServerType(Context context, int instance) {
+	private static int getServerType(Context context, int instance) {
 		if(Util.isOffline(context)) {
 			return 0;
 		}
@@ -171,14 +171,14 @@ public class ServerInfo implements Serializable {
 		return server.getRestType();
 	}
 
-	public static boolean isStockSubsonic(Context context) {
+	private static boolean isStockSubsonic(Context context) {
 		return isStockSubsonic(context, Util.getActiveServer(context));
 	}
-	public static boolean isStockSubsonic(Context context, int instance) {
+	private static boolean isStockSubsonic(Context context, int instance) {
 		return getServerType(context, instance) == TYPE_SUBSONIC;
 	}
 
-	public static boolean isMadsonic(Context context) {
+	private static boolean isMadsonic(Context context) {
 		return isMadsonic(context, Util.getActiveServer(context));
 	}
 	public static boolean isMadsonic(Context context, int instance) {
@@ -194,7 +194,7 @@ public class ServerInfo implements Serializable {
 	public static boolean isAmpache(Context context) {
 		return isAmpache(context, Util.getActiveServer(context));
 	}
-	public static boolean isAmpache(Context context, int instance) {
+	private static boolean isAmpache(Context context, int instance) {
 		return getServerType(context, instance) == TYPE_AMPACHE;
 	}
 	

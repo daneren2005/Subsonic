@@ -15,7 +15,7 @@ import github.vrih.xsub.util.Util;
  * @author Sindre Mehus
  * @version $Id$
  */
-public class Scrobbler {
+class Scrobbler {
 	private static final String TAG = Scrobbler.class.getSimpleName();
 	private static final int FOUR_MINUTES = 4 * 60 * 1000;
 

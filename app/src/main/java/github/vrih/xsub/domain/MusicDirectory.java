@@ -227,7 +227,7 @@ public class MusicDirectory implements Serializable {
 	}
 
     public static class Entry implements Serializable {
-		public static final int TYPE_SONG = 0;
+		static final int TYPE_SONG = 0;
 		public static final int TYPE_PODCAST = 1;
 		public static final int TYPE_AUDIO_BOOK = 2;
 
@@ -575,7 +575,7 @@ public class MusicDirectory implements Serializable {
 			this.bookmark = bookmark;
 		}
 
-		public int getType() {
+		int getType() {
 			return type;
 		}
 		public void setType(int type) {
@@ -654,11 +654,11 @@ public class MusicDirectory implements Serializable {
 		}
 	}
 	
-	public static class EntryComparator implements Comparator<Entry> {
+	static class EntryComparator implements Comparator<Entry> {
 		private final boolean byYear;
 		private final Collator collator;
 		
-		public EntryComparator(boolean byYear) {
+		EntryComparator(boolean byYear) {
 			this.byYear = byYear;
 			this.collator = Collator.getInstance(Locale.US);
 			this.collator.setStrength(Collator.PRIMARY);
@@ -712,7 +712,7 @@ public class MusicDirectory implements Serializable {
 		public static void sort(List<Entry> entries) {
 			sort(entries, true);
 		}
-		public static void sort(List<Entry> entries, boolean byYear) {
+		static void sort(List<Entry> entries, boolean byYear) {
 			try {
 				Collections.sort(entries, new EntryComparator(byYear));
 			} catch (Exception e) {

@@ -405,12 +405,12 @@ public class DownloadFile implements BufferFile {
     private class DownloadTask extends SilentBackgroundTask<Void> {
 		private MusicService musicService;
 
-		public DownloadTask(Context context) {
+		DownloadTask(Context context) {
 			super(context);
 		}
 
         @Override
-        public Void doInBackground() throws InterruptedException {
+        protected Void doInBackground() throws InterruptedException {
             InputStream in = null;
             FileOutputStream out = null;
             PowerManager.WakeLock wakeLock = null;
@@ -557,7 +557,7 @@ public class DownloadFile implements BufferFile {
             return "DownloadTask (" + song + ")";
         }
 
-		public void setMusicService(MusicService musicService) {
+		void setMusicService(MusicService musicService) {
 			this.musicService = musicService;
 		}
 

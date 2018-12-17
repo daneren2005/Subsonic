@@ -74,11 +74,11 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	private static final String AUTO_RESERVE_SKIP_TO_NEXT = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_NEXT";
 	private static final String AUTO_RESERVE_SKIP_TO_PREVIOUS = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_PREVIOUS";
 
-	protected MediaSessionCompat mediaSession;
-	protected DownloadService downloadService;
-	protected ImageLoader imageLoader;
-	protected List<DownloadFile> currentQueue;
-	protected int previousState;
+	private MediaSessionCompat mediaSession;
+	private DownloadService downloadService;
+	private ImageLoader imageLoader;
+	private List<DownloadFile> currentQueue;
+	private int previousState;
 
 	@Override
 	public void register(Context context, ComponentName mediaButtonReceiverComponent) {
@@ -181,7 +181,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		setPlaybackState(previousState);
 	}
 
-	public void setMetadata(Entry currentSong, Bitmap bitmap) {
+	private void setMetadata(Entry currentSong, Bitmap bitmap) {
 		MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
 		builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, (currentSong == null) ? null : currentSong.getArtist())
 				.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, (currentSong == null) ? null : currentSong.getAlbum())
@@ -244,7 +244,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		return mediaSession;
 	}
 
-	protected long getPlaybackActions(boolean isSong, int currentIndex, int size) {
+	private long getPlaybackActions(boolean isSong, int currentIndex, int size) {
 		long actions = PlaybackStateCompat.ACTION_PLAY |
 				PlaybackStateCompat.ACTION_PAUSE |
 				PlaybackStateCompat.ACTION_SEEK_TO |
@@ -264,7 +264,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		return actions;
 	}
-	protected void addCustomActions(Entry currentSong, PlaybackStateCompat.Builder builder) {
+	private void addCustomActions(Entry currentSong, PlaybackStateCompat.Builder builder) {
 		Bundle showOnWearExtras = new Bundle();
 		showOnWearExtras.putBoolean(SHOW_ON_WEAR, true);
 

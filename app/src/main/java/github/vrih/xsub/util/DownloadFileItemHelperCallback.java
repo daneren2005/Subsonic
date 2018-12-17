@@ -54,10 +54,10 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
 		}
 	}
 
-	public DownloadService getDownloadService() {
+	private DownloadService getDownloadService() {
 		return fragment.getDownloadService();
 	}
-	public SectionAdapter getSectionAdapter() {
+	private SectionAdapter getSectionAdapter() {
 		return fragment.getCurrentAdapter();
 	}
 

@@ -38,14 +38,14 @@ import static github.vrih.xsub.domain.User.Setting;
 
 public class SettingsAdapter extends SectionAdapter<Setting> {
 	private static final String TAG = SettingsAdapter.class.getSimpleName();
-	public final int VIEW_TYPE_SETTING = 1;
-	public final int VIEW_TYPE_SETTING_HEADER = 2;
+	private final int VIEW_TYPE_SETTING = 1;
+	private final int VIEW_TYPE_SETTING_HEADER = 2;
 
 	private final User user;
 	private final boolean editable;
 	private final ImageLoader imageLoader;
 
-	public SettingsAdapter(Context context, User user, List<String> headers, List<List<User.Setting>> settingSections, ImageLoader imageLoader, boolean editable, OnItemClickedListener<Setting> onItemClickedListener) {
+	private SettingsAdapter(Context context, User user, List<String> headers, List<List<User.Setting>> settingSections, ImageLoader imageLoader, boolean editable, OnItemClickedListener<Setting> onItemClickedListener) {
 		super(context, headers, settingSections, imageLoader != null);
 		this.user = user;
 		this.imageLoader = imageLoader;

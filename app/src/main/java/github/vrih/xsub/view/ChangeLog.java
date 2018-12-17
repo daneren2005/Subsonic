@@ -62,17 +62,17 @@ public class ChangeLog {
     /**
      * Tag that is used when sending error/debug messages to the log.
      */
-    protected static final String LOG_TAG = "ckChangeLog";
+    private static final String LOG_TAG = "ckChangeLog";
 
     /**
      * This is the key used when storing the version code in SharedPreferences.
      */
-    protected static final String VERSION_KEY = "ckChangeLog_last_version_code";
+    private static final String VERSION_KEY = "ckChangeLog_last_version_code";
 
     /**
      * Constant that used when no version code is available.
      */
-    protected static final int NO_VERSION = -1;
+    private static final int NO_VERSION = -1;
 
     /**
      * Default CSS styles used to format the change log.
@@ -87,12 +87,12 @@ public class ChangeLog {
     /**
      * Context that is used to access the resources and to create the ChangeLog dialogs.
      */
-    protected final Context mContext;
+    private final Context mContext;
 
     /**
      * Contains the CSS rules used to format the change log.
      */
-    protected final String mCss;
+    private final String mCss;
 
     /**
      * Last version code read from {@code SharedPreferences} or {@link #NO_VERSION}.
@@ -120,7 +120,7 @@ public class ChangeLog {
     /**
      * Contains constants for the release element of {@code changelog.xml}.
      */
-    protected interface ReleaseTag {
+    interface ReleaseTag {
         String NAME = "release";
         String ATTRIBUTE_VERSION = "version";
         String ATTRIBUTE_VERSION_CODE = "versioncode";
@@ -130,7 +130,7 @@ public class ChangeLog {
     /**
      * Contains constants for the change element of {@code changelog.xml}.
      */
-    protected interface ChangeTag {
+    interface ChangeTag {
         String NAME = "change";
     }
 
@@ -172,7 +172,7 @@ public class ChangeLog {
      *         {@code </style>}).
      *
      */
-    public ChangeLog(Context context, SharedPreferences preferences, String css) {
+    private ChangeLog(Context context, SharedPreferences preferences, String css) {
         mContext = context;
         mCss = css;
 
@@ -276,7 +276,7 @@ public class ChangeLog {
      *
      * @return A dialog containing the (partial) change log.
      */
-    protected AlertDialog getDialog(boolean full) {
+    private AlertDialog getDialog(boolean full) {
         WebView wv = new WebView(mContext);
         //wv.setBackgroundColor(0); // transparent
 		String log = getLog(full);
@@ -430,7 +430,7 @@ public class ChangeLog {
      *
      * @return A {@code SparseArray} mapping the version codes to release information.
      */
-    protected SparseArray<ReleaseItem> readChangeLog(XmlPullParser xml, boolean full) {
+    private SparseArray<ReleaseItem> readChangeLog(XmlPullParser xml, boolean full) {
         SparseArray<ReleaseItem> result = new SparseArray<>();
 
         try {
@@ -511,23 +511,23 @@ public class ChangeLog {
     /**
      * Container used to store information about a release/version.
      */
-    protected static class ReleaseItem {
+    static class ReleaseItem {
         /**
          * Version code of the release.
          */
-        public final int versionCode;
+        final int versionCode;
 
         /**
          * Version name of the release.
          */
-        public final String versionName;
+        final String versionName;
 		
-		public final String releaseDate;
+		final String releaseDate;
 
         /**
          * List of changes introduced with that release.
          */
-        public final List<String> changes;
+        final List<String> changes;
 
         ReleaseItem(int versionCode, String versionName, String releaseDate, List<String> changes) {
             this.versionCode = versionCode;

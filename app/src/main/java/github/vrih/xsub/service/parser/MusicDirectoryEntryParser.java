@@ -26,12 +26,12 @@ import github.vrih.xsub.domain.MusicDirectory;
 /**
  * @author Sindre Mehus
  */
-public class MusicDirectoryEntryParser extends AbstractParser {
-    public MusicDirectoryEntryParser(Context context, int instance) {
+class MusicDirectoryEntryParser extends AbstractParser {
+    MusicDirectoryEntryParser(Context context, int instance) {
         super(context, instance);
     }
 
-    protected MusicDirectory.Entry parseEntry(String artist) {
+    MusicDirectory.Entry parseEntry(String artist) {
         MusicDirectory.Entry entry = new MusicDirectory.Entry();
         entry.setId(get("id"));
 		entry.setParent(get("parent"));
@@ -80,7 +80,7 @@ public class MusicDirectoryEntryParser extends AbstractParser {
         return entry;
     }
 	
-	protected MusicDirectory.Entry parseArtist() {
+	MusicDirectory.Entry parseArtist() {
 		MusicDirectory.Entry entry = new MusicDirectory.Entry();
 		
 		entry.setId(get("id"));

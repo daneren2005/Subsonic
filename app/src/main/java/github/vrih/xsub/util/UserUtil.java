@@ -66,7 +66,7 @@ public final class UserUtil {
 	public static void seedCurrentUser(Context context) {
 		seedCurrentUser(context, false);
 	}
-	public static void seedCurrentUser(final Context context, final boolean refresh) {
+	private static void seedCurrentUser(final Context context, final boolean refresh) {
 		// Only try to seed if online
 		if(Util.isOffline(context)) {
 			currentUser = null;
@@ -115,7 +115,7 @@ public final class UserUtil {
 		return currentUser;
 	}
 
-	public static String getCurrentUsername(Context context, int instance) {
+	private static String getCurrentUsername(Context context, int instance) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		return prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
 	}
@@ -144,7 +144,7 @@ public final class UserUtil {
 	public static boolean isCurrentRole(String role) {
 		return isCurrentRole(role, false);
 	}
-	public static boolean isCurrentRole(String role, boolean defaultValue) {
+	private static boolean isCurrentRole(String role, boolean defaultValue) {
 		if(currentUser == null) {
 			return defaultValue;
 		}
@@ -161,7 +161,7 @@ public final class UserUtil {
 	public static void confirmCredentials(Activity context, Runnable onSuccess) {
 		confirmCredentials(context, onSuccess, null);
 	}
-	public static void confirmCredentials(final Activity context, final Runnable onSuccess, final Runnable onCancel) {
+	private static void confirmCredentials(final Activity context, final Runnable onSuccess, final Runnable onCancel) {
 		final long currentTime = System.currentTimeMillis();
 		// If already ran this check within last x time, just go ahead and auth
 		if((currentTime - lastVerifiedTime) < MIN_VERIFY_DURATION) {

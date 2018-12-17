@@ -44,7 +44,7 @@ public class MostRecentSyncAdapter extends SubsonicSyncAdapter {
 		super(context, autoInitialize);
 	}
 	@TargetApi(14)
-	public MostRecentSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+    private MostRecentSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 	}
 

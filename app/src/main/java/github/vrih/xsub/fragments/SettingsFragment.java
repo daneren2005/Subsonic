@@ -461,7 +461,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			ss.update();
 		}
 	}
-	public void checkForRemoved() {
+	private void checkForRemoved() {
 		for (ServerSettings ss : serverSettings.values()) {
 			if(!ss.update()) {
 				serversCategory.removePreference(ss.getScreen());
@@ -850,11 +850,11 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			}
 		}
 
-		public PreferenceScreen getScreen() {
+		PreferenceScreen getScreen() {
 			return screen;
 		}
 
-		public boolean update() {
+		boolean update() {
 			SharedPreferences prefs = Util.getPreferences(context);
 
 			if(prefs.contains(Constants.PREFERENCES_KEY_SERVER_NAME + instance)) {

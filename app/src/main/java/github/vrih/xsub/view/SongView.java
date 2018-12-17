@@ -94,7 +94,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		bottomRowView = findViewById(R.id.song_bottom);
 	}
 
-	public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
+	protected void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
 		this.checkable = checkable;
 
 		StringBuilder artist = new StringBuilder(40);

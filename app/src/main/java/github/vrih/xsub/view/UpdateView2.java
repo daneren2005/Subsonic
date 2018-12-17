@@ -4,13 +4,13 @@ import android.content.Context;
 import android.widget.ImageView;
 
 public abstract class UpdateView2<T1, T2> extends UpdateView<T1> {
-	protected T2 item2;
+	T2 item2;
 
 	public UpdateView2(Context context) {
 		super(context);
 	}
 
-	public UpdateView2(Context context, boolean autoUpdate) {
+	UpdateView2(Context context, boolean autoUpdate) {
 		super(context, autoUpdate);
 	}
 

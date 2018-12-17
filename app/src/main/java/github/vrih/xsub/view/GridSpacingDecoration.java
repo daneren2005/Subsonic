@@ -93,7 +93,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		}
 	}
 
-	protected int getTotalSpan(View view, RecyclerView parent) {
+	private int getTotalSpan(View view, RecyclerView parent) {
 		RecyclerView.LayoutManager mgr = parent.getLayoutManager();
 		if (mgr instanceof GridLayoutManager) {
 			return ((GridLayoutManager) mgr).getSpanCount();
@@ -101,7 +101,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 
 		return -1;
 	}
-	protected int getSpanSize(RecyclerView parent, int childIndex) {
+	private int getSpanSize(RecyclerView parent, int childIndex) {
 		RecyclerView.LayoutManager mgr = parent.getLayoutManager();
 		if (mgr instanceof GridLayoutManager) {
 			GridLayoutManager.SpanSizeLookup lookup = ((GridLayoutManager) mgr).getSpanSizeLookup();
@@ -113,19 +113,19 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		return 1;
 	}
 
-	protected boolean isLeftEdge(int spanIndex, int spanCount) {
+	private boolean isLeftEdge(int spanIndex, int spanCount) {
 		return spanIndex == 0;
 	}
 
-	protected boolean isRightEdge(int spanIndex, int spanCount) {
+	private boolean isRightEdge(int spanIndex, int spanCount) {
 		return spanIndex == spanCount - 1;
 	}
 
-	protected boolean isTopEdge(int childIndex, int spanIndex, int spanCount) {
+	private boolean isTopEdge(int childIndex, int spanIndex, int spanCount) {
 		return childIndex < spanCount && childIndex == spanIndex;
 	}
 
-	protected boolean isBottomEdge(int childIndex, int childCount, int spanCount) {
+	private boolean isBottomEdge(int childIndex, int childCount, int spanCount) {
 		return childIndex >= childCount - spanCount;
 	}
 }

@@ -3,7 +3,7 @@ package github.vrih.xsub.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenreComparatorTest extends TestCase {
+class GenreComparatorTest extends TestCase {
 
 	/**
 	 * Sort genres which doesn't have name 

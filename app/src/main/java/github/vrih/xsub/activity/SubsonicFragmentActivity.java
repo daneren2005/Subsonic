@@ -678,7 +678,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}
 	}
 
-	public void checkUpdates() {
+	private void checkUpdates() {
 		try {
 			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
 			int ver = Integer.parseInt(version.replace(".", ""));

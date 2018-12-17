@@ -45,14 +45,14 @@ public abstract class BackgroundTask<T> implements ProgressListener {
     private static final String TAG = BackgroundTask.class.getSimpleName();
 
     private final Context context;
-	protected final AtomicBoolean cancelled =  new AtomicBoolean(false);
-	protected OnCancelListener cancelListener;
-	protected Runnable onCompletionListener = null;
-	protected Task task;
+	final AtomicBoolean cancelled =  new AtomicBoolean(false);
+	private OnCancelListener cancelListener;
+	private Runnable onCompletionListener = null;
+	Task task;
 
 	private static final int DEFAULT_CONCURRENCY = 8;
 	private static final Collection<Thread> threads = Collections.synchronizedCollection(new ArrayList<Thread>());
-	protected static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<>(10);
+	static final BlockingQueue<BackgroundTask.Task> queue = new LinkedBlockingQueue<>(10);
 	private static Handler handler = null;
 	private static final AtomicInteger currentlyRunning = new AtomicInteger(0);
 	static {
@@ -63,7 +63,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		}
 	}
 
-    public BackgroundTask(Context context) {
+    BackgroundTask(Context context) {
         this.context = context;
 
 		if(threads.size() < DEFAULT_CONCURRENCY) {
@@ -95,14 +95,14 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		queue.clear();
 	}
 
-    protected Activity getActivity() {
+    private Activity getActivity() {
         return (context instanceof Activity) ? ((Activity) context) : null;
     }
 
-	protected Context getContext() {
+	Context getContext() {
 		return context;
 	}
-    protected Handler getHandler() {
+    Handler getHandler() {
         return handler;
     }
 
@@ -268,14 +268,14 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 			}
 		}
 
-		public void cancel() {
+		void cancel() {
 			if(taskStart.compareAndSet(true, false)) {
 				if (thread != null) {
 					thread.interrupt();
 				}
 			}
 		}
-		public boolean isCancelled() {
+		boolean isCancelled() {
 			if(Thread.interrupted()) {
 				return true;
 			} else return BackgroundTask.this.isCancelled();
@@ -291,7 +291,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 			error(t);
 		}
 
-		public boolean isRunning() {
+		boolean isRunning() {
 			return taskStart.get();
 		}
 	}
@@ -299,7 +299,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	private class TaskRunnable implements Runnable {
 		private boolean running = true;
 
-		public TaskRunnable() {
+		TaskRunnable() {
 
 		}
 
@@ -327,7 +327,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		}
 	}
 
-	public interface OnCancelListener {
+	protected interface OnCancelListener {
 		void onCancel();
 	}
 }

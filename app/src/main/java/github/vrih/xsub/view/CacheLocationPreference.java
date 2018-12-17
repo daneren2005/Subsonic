@@ -36,15 +36,15 @@ public class CacheLocationPreference extends EditTextPreference {
 	private static final String TAG = CacheLocationPreference.class.getSimpleName();
 	private final Context context;
 
-	public CacheLocationPreference(Context context, AttributeSet attrs, int defStyle) {
+	private CacheLocationPreference(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.context = context;
 	}
-	public CacheLocationPreference(Context context, AttributeSet attrs) {
+	private CacheLocationPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
 	}
-	public CacheLocationPreference(Context context) {
+	private CacheLocationPreference(Context context) {
 		super(context);
 		this.context = context;
 	}

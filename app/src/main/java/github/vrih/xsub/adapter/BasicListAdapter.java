@@ -24,7 +24,7 @@ import github.vrih.xsub.view.BasicListView;
 import github.vrih.xsub.view.UpdateView;
 
 public class BasicListAdapter extends SectionAdapter<String> {
-	public static final int VIEW_TYPE_LINE = 1;
+	private static final int VIEW_TYPE_LINE = 1;
 
 	public BasicListAdapter(Context context, List<String> strings, OnItemClickedListener listener) {
 		super(context, strings);

@@ -26,7 +26,7 @@ import github.vrih.xsub.view.PlaylistView;
 import github.vrih.xsub.view.UpdateView;
 
 public class PlaylistAdapter extends SectionAdapter<Playlist> implements FastScroller.BubbleTextGetter {
-	public static final int VIEW_TYPE_PLAYLIST = 1;
+	private static final int VIEW_TYPE_PLAYLIST = 1;
 
 	private final ImageLoader imageLoader;
 	private final boolean largeCell;

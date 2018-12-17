@@ -35,7 +35,7 @@ import github.vrih.xsub.util.Util;
 /**
  * @author Sindre Mehus
  */
-public abstract class AbstractParser {
+abstract class AbstractParser {
     private static final String TAG = AbstractParser.class.getSimpleName();
 	private static final String SUBSONIC_RESPONSE = "subsonic-response";
 	private static final String MADSONIC_RESPONSE = "madsonic-response";
@@ -43,21 +43,21 @@ public abstract class AbstractParser {
 	private static final String MADSONIC = "madsonic";
 	private static final String AMPACHE = "ampache";
 
-    protected final Context context;
-	protected final int instance;
+    final Context context;
+	final int instance;
     private XmlPullParser parser;
     private boolean rootElementFound;
 
-    public AbstractParser(Context context, int instance) {
+    AbstractParser(Context context, int instance) {
         this.context = context;
 		this.instance = instance;
     }
 
-    protected Context getContext() {
+    Context getContext() {
         return context;
     }
 
-    protected void handleError() throws Exception {
+    void handleError() throws Exception {
         int code = getInteger("code");
         String message;
         switch (code) {
@@ -94,25 +94,25 @@ public abstract class AbstractParser {
         }
     }
 
-    protected void updateProgress(ProgressListener progressListener, String message) {
+    void updateProgress(ProgressListener progressListener, String message) {
         if (progressListener != null) {
             progressListener.updateProgress(message);
         }
     }
 
-    protected String getText() {
+    String getText() {
         return parser.getText();
     }
 
-    protected String get(String name) {
+    String get(String name) {
         return parser.getAttributeValue(null, name);
     }
 
-    protected boolean getBoolean(String name) {
+    boolean getBoolean(String name) {
         return "true".equals(get(name));
     }
 
-    protected Integer getInteger(String name) {
+    Integer getInteger(String name) {
         String s = get(name);
         try {
             return (s == null || "".equals(s)) ? null : Integer.valueOf(s);
@@ -122,23 +122,23 @@ public abstract class AbstractParser {
         }
     }
 
-    protected Long getLong(String name) {
+    Long getLong(String name) {
         String s = get(name);
         return s == null ? null : Long.valueOf(s);
     }
 
-    protected Float getFloat(String name) {
+    Float getFloat(String name) {
         String s = get(name);
         return s == null ? null : Float.valueOf(s);
     }
 
-    protected void init(Reader reader) throws Exception {
+    void init(Reader reader) throws Exception {
         parser = Xml.newPullParser();
         parser.setInput(reader);
         rootElementFound = false;
     }
 
-    protected int nextParseEvent() throws Exception {
+    int nextParseEvent() throws Exception {
 		try {
 			return parser.next();
 		} catch(Exception e) {
@@ -151,7 +151,7 @@ public abstract class AbstractParser {
 		}
     }
 
-    protected String getElementName() {
+    String getElementName() {
         String name = parser.getName();
         if (SUBSONIC_RESPONSE.equals(name) || MADSONIC_RESPONSE.equals(name)) {
             rootElementFound = true;
@@ -175,7 +175,7 @@ public abstract class AbstractParser {
         return name;
     }
 
-    protected void validate() throws Exception {
+    void validate() throws Exception {
         if (!rootElementFound) {
 			if(ServerInfo.isMadsonic6(context, instance)) {
 				ServerInfo overrideInfo = new ServerInfo();

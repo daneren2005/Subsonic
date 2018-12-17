@@ -425,15 +425,15 @@ public class ImageLoader {
 		}
 	}
 
-	public abstract class ImageTask extends SilentBackgroundTask<Void> {
+	protected abstract class ImageTask extends SilentBackgroundTask<Void> {
 		private final Context mContext;
-		protected final MusicDirectory.Entry mEntry;
+		final MusicDirectory.Entry mEntry;
 		private final int mSize;
 		private final int mSaveSize;
 		private final boolean mIsNowPlaying;
-		protected Drawable mDrawable;
+		Drawable mDrawable;
 
-		public ImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying) {
+		ImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying) {
 			super(context);
 			mContext = context;
 			mEntry = entry;
@@ -470,10 +470,10 @@ public class ImageLoader {
 	}
 
 	private class ViewImageTask extends ImageTask {
-		protected final boolean mCrossfade;
+		final boolean mCrossfade;
 		private final View mView;
 
-		public ViewImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, View view, boolean crossfade) {
+		ViewImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, View view, boolean crossfade) {
 			super(context, entry, size, saveSize, isNowPlaying);
 
 			mView = view;
@@ -489,7 +489,7 @@ public class ImageLoader {
 	private class RemoteControlClientImageTask extends ImageTask {
 		private final RemoteControlClientBase mRemoteControl;
 
-		public RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClientBase remoteControl) {
+		RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClientBase remoteControl) {
 			super(context, entry, size, saveSize, isNowPlaying);
 
 			mRemoteControl = remoteControl;
@@ -513,7 +513,7 @@ public class ImageLoader {
 
 		private SilentBackgroundTask subTask;
 
-		public ArtistImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, View view, boolean crossfade) {
+		ArtistImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, View view, boolean crossfade) {
 			super(context);
 			mContext = context;
 			mEntry = entry;
@@ -589,7 +589,7 @@ public class ImageLoader {
 		private Drawable mDrawable;
 		private final int mSize;
 
-		public ViewUrlTask(Context context, View view, String url, int size) {
+		ViewUrlTask(Context context, View view, String url, int size) {
 			super(context);
 			mContext = context;
 			mView = (ImageView) view;
@@ -627,7 +627,7 @@ public class ImageLoader {
 			}
 		}
 
-		protected void failedToDownload() {
+		void failedToDownload() {
 
 		}
 	}

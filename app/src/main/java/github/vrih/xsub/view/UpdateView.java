@@ -45,35 +45,35 @@ public abstract class UpdateView<T> extends LinearLayout {
 	private static final String TAG = UpdateView.class.getSimpleName();
 	private static final WeakHashMap<UpdateView, ?> INSTANCES = new WeakHashMap<UpdateView, Object>();
 
-	protected static Handler backgroundHandler;
-	protected static Handler uiHandler;
+	static Handler backgroundHandler;
+	static Handler uiHandler;
 	private static Runnable updateRunnable;
 	private static int activeActivities = 0;
 
-	protected Context context;
-	protected T item;
-	protected RatingBar ratingBar;
-	protected ImageButton starButton;
-	protected ImageView moreButton;
-	protected View coverArtView;
+	Context context;
+	T item;
+	RatingBar ratingBar;
+	ImageButton starButton;
+	ImageView moreButton;
+	View coverArtView;
 	
-	protected boolean exists = false;
-	protected boolean pinned = false;
-	protected boolean shaded = false;
-	protected boolean starred = false;
-	protected boolean isStarred = false;
-	protected int isRated = 0;
-	protected int rating = 0;
-	protected SilentBackgroundTask<Void> imageTask = null;
-	protected Drawable startBackgroundDrawable;
+	boolean exists = false;
+	boolean pinned = false;
+	boolean shaded = false;
+	boolean starred = false;
+	boolean isStarred = false;
+	int isRated = 0;
+	int rating = 0;
+	SilentBackgroundTask<Void> imageTask = null;
+	private Drawable startBackgroundDrawable;
 	
-	protected final boolean autoUpdate;
-	protected boolean checkable;
+	private final boolean autoUpdate;
+	boolean checkable;
 	
 	public UpdateView(Context context) {
 		this(context, true);
 	}
-	public UpdateView(Context context, boolean autoUpdate) {
+	UpdateView(Context context, boolean autoUpdate) {
 		super(context);
 		this.context = context;
 		this.autoUpdate = autoUpdate;
@@ -234,10 +234,10 @@ public abstract class UpdateView<T> extends LinearLayout {
 		return null;
 	}
 	
-	protected void updateBackground() {
+	void updateBackground() {
 		
 	}
-	protected void update() {
+	void update() {
 		if(moreButton != null) {
 			if(exists || pinned) {
 				if(!shaded) {
@@ -306,7 +306,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 
 	}
 
-	public void onUpdateImageView() {
+	void onUpdateImageView() {
 
 	}
 

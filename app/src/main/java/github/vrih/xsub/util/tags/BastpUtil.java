@@ -64,7 +64,7 @@ public final class BastpUtil {
 	/** LRU cache for ReplayGain values
 	 */
 	private static class RGLruCache extends LruCache<String, float[]> {
-		public RGLruCache(int size) {
+		RGLruCache(int size) {
 			super(size);
 		}
 	}

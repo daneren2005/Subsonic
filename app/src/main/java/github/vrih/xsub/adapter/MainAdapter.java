@@ -32,8 +32,8 @@ import github.vrih.xsub.view.BasicListView;
 import github.vrih.xsub.view.UpdateView;
 
 public class MainAdapter extends SectionAdapter<Integer> {
-	public static final int VIEW_TYPE_ALBUM_LIST = 1;
-	public static final int VIEW_TYPE_ALBUM_COUNT_LIST = 2;
+	private static final int VIEW_TYPE_ALBUM_LIST = 1;
+	private static final int VIEW_TYPE_ALBUM_COUNT_LIST = 2;
 
 	public MainAdapter(Context context, List<String> headers, List<List<Integer>> sections, OnItemClickedListener onItemClickedListener) {
 		super(context, headers, sections);

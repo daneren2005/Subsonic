@@ -123,7 +123,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 		}.execute();
 	}
 
-	protected List<Entry> cacheInBackground() throws Exception {
+	private List<Entry> cacheInBackground() throws Exception {
 		MusicService service = MusicServiceFactory.getMusicService(context);
 		MusicDirectory result;
 		int offset = sections.get(0).size();
@@ -139,7 +139,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 		return result.getChildren();
 	}
 
-	protected void appendCachedData(List<Entry> newData) {
+	private void appendCachedData(List<Entry> newData) {
 		if(newData.size() > 0) {
 			int start = sections.get(0).size();
 			sections.get(0).addAll(newData);
@@ -147,7 +147,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 		}
 	}
 
-	protected boolean isLoadingView(int position) {
+	private boolean isLoadingView(int position) {
 		return !allLoaded && position >= sections.get(0).size();
 	}
 }

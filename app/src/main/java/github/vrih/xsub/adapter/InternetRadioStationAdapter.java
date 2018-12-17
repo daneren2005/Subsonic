@@ -25,7 +25,7 @@ import github.vrih.xsub.view.InternetRadioStationView;
 import github.vrih.xsub.view.UpdateView;
 
 public class InternetRadioStationAdapter extends SectionAdapter<InternetRadioStation> implements FastScroller.BubbleTextGetter {
-	public static final int VIEW_TYPE_INTERNET_RADIO_STATION = 1;
+	private static final int VIEW_TYPE_INTERNET_RADIO_STATION = 1;
 
 	public InternetRadioStationAdapter(Context context, List<InternetRadioStation> stations, OnItemClickedListener listener) {
 		super(context, stations);

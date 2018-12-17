@@ -107,11 +107,11 @@ public final class Util {
 	private static final SimpleDateFormat DATE_FORMAT_NO_TIME = new SimpleDateFormat("MMM d, yyyy");
 	private static final int CURRENT_YEAR = new Date().getYear();
 
-    public static final String EVENT_META_CHANGED = "github.vrih.xsub.EVENT_META_CHANGED";
-    public static final String EVENT_PLAYSTATE_CHANGED = "github.vrih.xsub.EVENT_PLAYSTATE_CHANGED";
+    private static final String EVENT_META_CHANGED = "github.vrih.xsub.EVENT_META_CHANGED";
+    private static final String EVENT_PLAYSTATE_CHANGED = "github.vrih.xsub.EVENT_PLAYSTATE_CHANGED";
 	
-	public static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
-	public static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
+	private static final String AVRCP_PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
+	private static final String AVRCP_METADATA_CHANGED = "com.android.music.metachanged";
 
 	private static OnAudioFocusChangeListener focusListener;
 	private static AudioFocusRequest audioFocusRequest;
@@ -341,7 +341,7 @@ public final class Util {
     public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance) {
         return getRestUrl(context, method, prefs, instance, true);
     }
-	public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
+	private static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
 		StringBuilder builder = new StringBuilder();
 
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
@@ -415,7 +415,7 @@ public final class Util {
 		return builder.toString().hashCode();
 	}
 
-	public static String getBlockTokenUsePref(Context context, int instance) {
+	private static String getBlockTokenUsePref(Context context, int instance) {
 		return Constants.CACHE_BLOCK_TOKEN_USE + Util.getRestUrl(context, null, instance, false);
 	}
 	public static boolean getBlockTokenUse(Context context, int instance) {
@@ -512,7 +512,7 @@ public final class Util {
 	public static String getCacheName(Context context, String name) {
 		return getCacheName(context, getActiveServer(context), name);
 	}
-	public static String getCacheName(Context context, int instance, String name) {
+	private static String getCacheName(Context context, int instance, String name) {
 		String s = getRestUrl(context, null, instance, false);
 		return name + "-" + s.hashCode() + ".ser";
 	}
@@ -571,7 +571,7 @@ public final class Util {
 		return name;
 	}
 
-	public static String parseOfflineIDSearch(String id) {
+	private static String parseOfflineIDSearch(String id) {
 		MusicDirectory.Entry entry = new MusicDirectory.Entry();
 		File file = new File(id);
 
@@ -664,7 +664,7 @@ public final class Util {
         return output.toByteArray();
     }
 
-    public static long copy(InputStream input, OutputStream output)
+    private static long copy(InputStream input, OutputStream output)
             throws IOException {
         byte[] buffer = new byte[1024 * 4];
         long count = 0;
@@ -738,7 +738,7 @@ public final class Util {
 	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
 		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, onCancel);
 	}
-	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
+	private static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
 		new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(R.string.common_confirm)
@@ -921,7 +921,7 @@ public final class Util {
      * @param s The string to encode.
      * @return The encoded string.
      */
-    public static String utf8HexEncode(String s) {
+    private static String utf8HexEncode(String s) {
         if (s == null) {
             return null;
         }
@@ -942,7 +942,7 @@ public final class Util {
      * @param data Bytes to convert to hexadecimal characters.
      * @return A string containing hexadecimal characters.
      */
-    public static String hexEncode(byte[] data) {
+    private static String hexEncode(byte[] data) {
         int length = data.length;
         char[] out = new char[length << 1];
         // two characters form the hex value.
@@ -1071,7 +1071,7 @@ public final class Util {
 	public static boolean isNetworkConnected(Context context) {
 		return isNetworkConnected(context, false);
 	}
-    public static boolean isNetworkConnected(Context context, boolean streaming) {
+    private static boolean isNetworkConnected(Context context, boolean streaming) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean connected = networkInfo != null && networkInfo.isConnected();
@@ -1088,7 +1088,7 @@ public final class Util {
 			return connected;
 		}
     }
-	public static boolean isWifiConnected(Context context) {
+	private static boolean isWifiConnected(Context context) {
 		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 		boolean connected = networkInfo != null && networkInfo.isConnected();
@@ -1131,13 +1131,13 @@ public final class Util {
 	public static void info(Context context, String title, String message) {
 		info(context, title, message, true);
 	}
-	public static void info(Context context, int titleId, int messageId, boolean linkify) {
+	private static void info(Context context, int titleId, int messageId, boolean linkify) {
         showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, linkify);
     }
-	public static void info(Context context, int titleId, String message, boolean linkify) {
+	private static void info(Context context, int titleId, String message, boolean linkify) {
 		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message, linkify);
 	}
-	public static void info(Context context, String title, String message, boolean linkify) {
+	private static void info(Context context, String title, String message, boolean linkify) {
 		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
 	}
 
@@ -1150,13 +1150,13 @@ public final class Util {
 	public static void showDialog(Context context, int icon, String title, String message) {
 		showDialog(context, icon, title, message, true);
 	}
-	public static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
+	private static void showDialog(Context context, int icon, int titleId, int messageId, boolean linkify) {
 		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId), linkify);
 	}
-	public static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
+	private static void showDialog(Context context, int icon, int titleId, String message, boolean linkify) {
 		showDialog(context, icon, context.getResources().getString(titleId), message, linkify);
 	}
-	public static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
+	private static void showDialog(Context context, int icon, String title, String message, boolean linkify) {
 		SpannableString ss = new SpannableString(message);
 		if(linkify) {
 			Linkify.addLinks(ss, Linkify.ALL);
@@ -1179,7 +1179,7 @@ public final class Util {
 	public static void showHTMLDialog(Context context, int title, int message) {
 		showHTMLDialog(context, title, context.getResources().getString(message));
 	}
-	public static void showHTMLDialog(Context context, int title, String message) {
+	private static void showHTMLDialog(Context context, int title, String message) {
 		AlertDialog dialog = new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(title)
@@ -1202,7 +1202,7 @@ public final class Util {
 		}
 		showDetailsDialog(context, context.getResources().getString(title), headerStrings, details);
 	}
-	public static void showDetailsDialog(Context context, String title, List<String> headers, final List<String> details) {
+	private static void showDetailsDialog(Context context, String title, List<String> headers, final List<String> details) {
 		ListView listView = new ListView(context);
 		listView.setAdapter(new DetailsAdapter(context, R.layout.details_item, headers, details));
 		listView.setDivider(null);
@@ -1504,7 +1504,7 @@ public final class Util {
 		return wm.createWifiLock(lockType, tag);
 	}
 
-	public static Random getRandom() {
+	private static Random getRandom() {
 		if(random == null) {
 			random = new SecureRandom();
 		}

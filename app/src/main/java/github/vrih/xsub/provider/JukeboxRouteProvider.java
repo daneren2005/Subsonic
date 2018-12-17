@@ -81,7 +81,7 @@ public class JukeboxRouteProvider extends MediaRouteProvider {
 	private class JukeboxRouteController extends RouteController {
 		private final DownloadService downloadService;
 
-		public JukeboxRouteController(DownloadService downloadService) {
+		JukeboxRouteController(DownloadService downloadService) {
 			this.downloadService = downloadService;
 		}
 

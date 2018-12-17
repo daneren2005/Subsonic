@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 
-public class Bastp {
+class Bastp {
 	
 	public Bastp() {
 	}
@@ -42,7 +42,7 @@ public class Bastp {
 		return tags;
 	}
 	
-	public HashMap getTags(RandomAccessFile s) {
+	private HashMap getTags(RandomAccessFile s) {
 		HashMap tags = new HashMap();
 		byte[] file_ff = new byte[4];
 		

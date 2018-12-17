@@ -95,7 +95,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 		notifyInstances(context, DownloadService.getInstance(), false);
 	}
 	
-	protected int getLayout() {
+	int getLayout() {
 		return 0;
 	}
 
@@ -129,7 +129,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     /**
      * Handle a change notification coming over from {@link DownloadService}
      */
-    public void notifyChange(Context context, DownloadService service, boolean playing) {
+    void notifyChange(Context context, DownloadService service, boolean playing) {
         if (hasInstances(context)) {
             performUpdate(context, service, null, playing);
         }

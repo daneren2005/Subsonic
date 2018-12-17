@@ -74,21 +74,21 @@ public class DLNAController extends RemoteController {
 	private static final long SEARCH_UPDATE_INTERVAL_SECONDS = 10L * 60L * 1000L;
 	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 3000L;
 
-	final DLNADevice device;
-	final ControlPoint controlPoint;
-	SubscriptionCallback callback;
-	boolean supportsSeek = false;
-	boolean supportsSetupNext = false;
-	boolean error = false;
+	private final DLNADevice device;
+	private final ControlPoint controlPoint;
+	private SubscriptionCallback callback;
+	private boolean supportsSeek = false;
+	private boolean supportsSetupNext = false;
+	private boolean error = false;
 
-	final AtomicLong lastUpdate = new AtomicLong();
-	int currentPosition = 0;
-	String currentPlayingURI;
-	String nextPlayingURI;
-	DownloadFile nextPlaying;
-	boolean running = true;
-	boolean hasDuration = false;
-	final Runnable searchDLNA = new Runnable() {
+	private final AtomicLong lastUpdate = new AtomicLong();
+	private int currentPosition = 0;
+	private String currentPlayingURI;
+	private String nextPlayingURI;
+	private DownloadFile nextPlaying;
+	private boolean running = true;
+	private boolean hasDuration = false;
+	private final Runnable searchDLNA = new Runnable() {
 		@Override
 		public void run() {
 			if(controlPoint == null || !running) {
@@ -458,7 +458,7 @@ public class DLNAController extends RemoteController {
 		}
 	}
 
-	Pair<String, String> getSongInfo(final DownloadFile downloadFile) throws Exception {
+	private Pair<String, String> getSongInfo(final DownloadFile downloadFile) throws Exception {
 		MusicDirectory.Entry song = downloadFile.getSong();
 
 		// Get url for entry
@@ -610,7 +610,7 @@ public class DLNAController extends RemoteController {
 			this(new UnsignedIntegerFourBytes(0), service, uri, null);
 		}
 
-		public SetNextAVTransportURI(Service service, String uri, String metadata) {
+		SetNextAVTransportURI(Service service, String uri, String metadata) {
 			this(new UnsignedIntegerFourBytes(0), service, uri, metadata);
 		}
 
@@ -618,7 +618,7 @@ public class DLNAController extends RemoteController {
 			this(instanceId, service, uri, null);
 		}
 
-		public SetNextAVTransportURI(UnsignedIntegerFourBytes instanceId, Service service, String uri, String metadata) {
+		SetNextAVTransportURI(UnsignedIntegerFourBytes instanceId, Service service, String uri, String metadata) {
 			super(new ActionInvocation(service.getAction("SetNextAVTransportURI")));
 			getActionInvocation().setInput("InstanceID", instanceId);
 			getActionInvocation().setInput("NextURI", uri);

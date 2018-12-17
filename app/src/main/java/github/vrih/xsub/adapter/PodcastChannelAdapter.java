@@ -35,8 +35,8 @@ import java.util.List;
 
 public class PodcastChannelAdapter extends ExpandableSectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
 	public static final int VIEW_TYPE_PODCAST_LEGACY = 1;
-	public static final int VIEW_TYPE_PODCAST_LINE = 2;
-	public static final int VIEW_TYPE_PODCAST_CELL = 3;
+	private static final int VIEW_TYPE_PODCAST_LINE = 2;
+	private static final int VIEW_TYPE_PODCAST_CELL = 3;
 	public static final int VIEW_TYPE_PODCAST_EPISODE = 4;
 
 	private final ImageLoader imageLoader;

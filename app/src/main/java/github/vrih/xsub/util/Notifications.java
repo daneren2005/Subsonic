@@ -46,10 +46,10 @@ public final class Notifications {
 	private static final String TAG = Notifications.class.getSimpleName();
 
 	// Notification IDs.
-	public static final int NOTIFICATION_ID_PLAYING = 100;
-	public static final int NOTIFICATION_ID_DOWNLOADING = 102;
-	public static final int NOTIFICATION_ID_SHUT_GOOGLE_UP = 103;
-	public static final String NOTIFICATION_SYNC_GROUP = "github.vrih.xsub.sync";
+	private static final int NOTIFICATION_ID_PLAYING = 100;
+	private static final int NOTIFICATION_ID_DOWNLOADING = 102;
+	private static final int NOTIFICATION_ID_SHUT_GOOGLE_UP = 103;
+	private static final String NOTIFICATION_SYNC_GROUP = "github.vrih.xsub.sync";
 
 	private static boolean playShowing = false;
 	private static boolean downloadShowing = false;

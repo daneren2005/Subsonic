@@ -23,17 +23,17 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Vector;
 
-public class Common {
+class Common {
 	private static final long MAX_PKT_SIZE = 524288;
 	
-	public void xdie(String reason) throws IOException {
+	void xdie(String reason) throws IOException {
 		throw new IOException(reason);
 	}
 	
 	/*
 	** Returns a 32bit int from given byte offset in LE
 	*/
-	public int b2le32(byte[] b, int off) {
+    private int b2le32(byte[] b, int off) {
 		int r = 0;
 		for(int i=0; i<4; i++) {
 			r |= ( b2u(b[off+i]) << (8*i) );
@@ -41,18 +41,18 @@ public class Common {
 		return r;
 	}
 	
-	public int b2be32(byte[] b, int off) {
+	int b2be32(byte[] b, int off) {
 		return swap32(b2le32(b, off));
 	}
 	
-	public int swap32(int i) {
+	private int swap32(int i) {
 		return((i&0xff)<<24)+((i&0xff00)<<8)+((i&0xff0000)>>8)+((i>>24)&0xff);
 	}
 	
 	/*
 	** convert 'byte' value into unsigned int
 	*/
-	public int b2u(byte x) {
+    int b2u(byte x) {
 		return (x & 0xFF);
 	}
 	
@@ -63,7 +63,7 @@ public class Common {
 		System.out.println("DBUG "+s);
 	}
 	
-	public HashMap parse_vorbis_comment(RandomAccessFile s, long offset, long payload_len) throws IOException {
+	HashMap parse_vorbis_comment(RandomAccessFile s, long offset, long payload_len) throws IOException {
 		HashMap tags = new HashMap();
 		int comments;                      // number of found comments
 		int xoff       = 0;                // offset within 'scratch'
@@ -97,7 +97,7 @@ public class Common {
 		return tags;
 	}
 	
-	public void addTagEntry(HashMap tags, String key, String value) {
+	void addTagEntry(HashMap tags, String key, String value) {
 		if(tags.containsKey(key)) {
 			((Vector)tags.get(key)).add(value); // just add to existing vector
 		}

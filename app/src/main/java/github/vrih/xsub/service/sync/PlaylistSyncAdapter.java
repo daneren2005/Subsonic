@@ -51,7 +51,7 @@ public class PlaylistSyncAdapter extends SubsonicSyncAdapter {
 		super(context, autoInitialize);
 	}
 	@TargetApi(14)
-	public PlaylistSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+    private PlaylistSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 	}
 

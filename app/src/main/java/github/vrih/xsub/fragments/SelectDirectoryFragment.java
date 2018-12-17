@@ -91,25 +91,25 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	private Entry coverArtRep;
 	private String coverArtId;
 
-	String id;
-	String name;
-	Entry directory;
-	String playlistId;
-	String playlistName;
-	boolean playlistOwner;
-	String podcastId;
-	String podcastName;
-	String podcastDescription;
-	String albumListType;
-	String albumListExtra;
-	int albumListSize;
-	boolean refreshListing = false;
-	boolean showAll = false;
-	boolean restoredInstance = false;
-	boolean lookupParent = false;
-	boolean largeAlbums = false;
-	boolean topTracks = false;
-	String lookupEntry;
+	private String id;
+	private String name;
+	private Entry directory;
+	private String playlistId;
+	private String playlistName;
+	private boolean playlistOwner;
+	private String podcastId;
+	private String podcastName;
+	private String podcastDescription;
+	private String albumListType;
+	private String albumListExtra;
+	private int albumListSize;
+	private boolean refreshListing = false;
+	private boolean showAll = false;
+	private boolean restoredInstance = false;
+	private boolean lookupParent = false;
+	private boolean largeAlbums = false;
+	private boolean topTracks = false;
+	private String lookupEntry;
 
 	public SelectDirectoryFragment() {
 		super();
@@ -640,7 +640,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	private abstract class LoadTask extends TabBackgroundTask<Pair<MusicDirectory, Boolean>> {
 		private final boolean refresh;
 
-		public LoadTask(boolean refresh) {
+		LoadTask(boolean refresh) {
 			super(SelectDirectoryFragment.this);
 			this.refresh = refresh;
 
@@ -979,7 +979,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}
 	}
 
-	public void removeFromPlaylist(final String id, final String name, final List<Integer> indexes) {
+	private void removeFromPlaylist(final String id, final String name, final List<Integer> indexes) {
 		new LoadingTask<Void>(context, true) {
 			@Override
 			protected Void doInBackground() throws Throwable {				
@@ -1010,7 +1010,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		}.execute();
 	}
 	
-	public void downloadAllPodcastEpisodes() {
+	private void downloadAllPodcastEpisodes() {
 		new LoadingTask<Void>(context, true) {
 			@Override
 			protected Void doInBackground() throws Throwable {				

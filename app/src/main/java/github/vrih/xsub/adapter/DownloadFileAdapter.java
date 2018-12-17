@@ -31,7 +31,7 @@ import github.vrih.xsub.view.SongView;
 import github.vrih.xsub.view.UpdateView;
 
 public class DownloadFileAdapter extends SectionAdapter<DownloadFile> implements FastScroller.BubbleTextGetter {
-	public static final int VIEW_TYPE_DOWNLOAD_FILE = 1;
+	private static final int VIEW_TYPE_DOWNLOAD_FILE = 1;
 
 	public DownloadFileAdapter(Context context, List<DownloadFile> entries, OnItemClickedListener onItemClickedListener) {
 		super(context, entries);

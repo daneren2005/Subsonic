@@ -494,7 +494,7 @@ public class RESTMusicService implements MusicService {
 		scrobble(id, submission, 0, context, progressListener);
     }
 
-    public void scrobble(String id, boolean submission, long time, Context context, ProgressListener progressListener) throws Exception {
+    private void scrobble(String id, boolean submission, long time, Context context, ProgressListener progressListener) throws Exception {
         checkServerVersion(context, "1.5", "Scrobbling not supported.");
         Reader reader;
         if(time > 0){
@@ -1593,7 +1593,7 @@ public class RESTMusicService implements MusicService {
 		return processOfflineScrobbles(context, progressListener) + processOfflineStars(context, progressListener);
 	}
 
-	public int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception {
+	private int processOfflineScrobbles(final Context context, final ProgressListener progressListener) throws Exception {
 		SharedPreferences offline = Util.getOfflineSync(context);
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		int count = offline.getInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
@@ -1630,7 +1630,7 @@ public class RESTMusicService implements MusicService {
 		return count - retry;
 	}
 
-	public int processOfflineStars(final Context context, final ProgressListener progressListener) throws Exception {
+	private int processOfflineStars(final Context context, final ProgressListener progressListener) throws Exception {
 		SharedPreferences offline = Util.getOfflineSync(context);
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		int count = offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
@@ -1700,7 +1700,7 @@ public class RESTMusicService implements MusicService {
 		this.instance = instance;
 	}
 
-	protected Bitmap getBitmapFromUrl(Context context, String url, List<String> parameterNames, List<Object> parameterValues, int size, File saveToFile, boolean allowUnscaled, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+	private Bitmap getBitmapFromUrl(Context context, String url, List<String> parameterNames, List<Object> parameterValues, int size, File saveToFile, boolean allowUnscaled, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
 		InputStream in = null;
 		try {
 			HttpURLConnection connection = getConnection(context, url, parameterNames, parameterValues, progressListener, true);
@@ -1992,7 +1992,7 @@ public class RESTMusicService implements MusicService {
 			return instance;
 		}
 	}
-	public String getRestUrl(Context context, String method) {
+	private String getRestUrl(Context context, String method) {
 		return getRestUrl(context, method, true);
 	}
 	public String getRestUrl(Context context, String method, boolean allowAltAddress) {

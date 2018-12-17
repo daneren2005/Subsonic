@@ -184,7 +184,7 @@ public class CacheCleaner {
 	}
 	
 	private class BackgroundCleanup extends SilentBackgroundTask<Void> {
-		public BackgroundCleanup(Context context) {
+		BackgroundCleanup(Context context) {
 			super(context);
 		}
 
@@ -219,7 +219,7 @@ public class CacheCleaner {
 	}
 
 	private class BackgroundSpaceCleanup extends SilentBackgroundTask<Void> {
-		public BackgroundSpaceCleanup(Context context) {
+		BackgroundSpaceCleanup(Context context) {
 			super(context);
 		}
 
@@ -253,7 +253,7 @@ public class CacheCleaner {
 	private class BackgroundPlaylistsCleanup extends SilentBackgroundTask<Void> {
 		private final List<Playlist> playlists;
 
-		public BackgroundPlaylistsCleanup(Context context, List<Playlist> playlists) {
+		BackgroundPlaylistsCleanup(Context context, List<Playlist> playlists) {
 			super(context);
 			this.playlists = playlists;
 		}

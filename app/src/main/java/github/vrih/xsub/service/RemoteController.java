@@ -35,12 +35,12 @@ import github.daneren2005.serverproxy.WebProxy;
 
 public abstract class RemoteController {
 	private static final String TAG = RemoteController.class.getSimpleName();
-	protected final DownloadService downloadService;
-	protected boolean nextSupported = false;
-	protected ServerProxy proxy;
-	protected final String rootLocation;
+	final DownloadService downloadService;
+	boolean nextSupported = false;
+	ServerProxy proxy;
+	private final String rootLocation;
 
-	public RemoteController(DownloadService downloadService) {
+	RemoteController(DownloadService downloadService) {
 		this.downloadService = downloadService;
 		SharedPreferences prefs = Util.getPreferences(downloadService);
 		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
@@ -75,7 +75,7 @@ public abstract class RemoteController {
 		return 0;
 	}
 
-	protected abstract class RemoteTask {
+	abstract class RemoteTask {
 		abstract RemoteStatus execute() throws Exception;
 
 		@Override
@@ -84,7 +84,7 @@ public abstract class RemoteController {
 		}
 	}
 
-	protected static class TaskQueue {
+	static class TaskQueue {
 		private final LinkedBlockingQueue<RemoteTask> queue = new LinkedBlockingQueue<>();
 
 		void add(RemoteTask jukeboxTask) {
@@ -114,7 +114,7 @@ public abstract class RemoteController {
 		}
 	}
 
-	protected WebProxy createWebProxy() {
+	private WebProxy createWebProxy() {
 		MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
 		if(musicService instanceof CachedMusicService) {
 			RESTMusicService restMusicService = ((CachedMusicService)musicService).getMusicService();
@@ -124,7 +124,7 @@ public abstract class RemoteController {
 		}
 	}
 
-	protected String getStreamUrl(MusicService musicService, DownloadFile downloadFile) throws Exception {
+	String getStreamUrl(MusicService musicService, DownloadFile downloadFile) throws Exception {
 		MusicDirectory.Entry song = downloadFile.getSong();
 
 		String url;

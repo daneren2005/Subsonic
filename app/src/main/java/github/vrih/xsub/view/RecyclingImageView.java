@@ -95,7 +95,7 @@ public class RecyclingImageView extends ImageView {
 		return bitmapDrawable.getBitmap() != null && bitmapDrawable.getBitmap().isRecycled();
 	}
 
-	public void setInvalidated(boolean invalidated) {
+	private void setInvalidated(boolean invalidated) {
 		this.invalidated = invalidated;
 
 		if(invalidated && onInvalidated != null) {

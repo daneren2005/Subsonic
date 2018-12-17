@@ -909,7 +909,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 	}
 
-	protected void startTimer() {
+	private void startTimer() {
 		View dialogView = context.getLayoutInflater().inflate(R.layout.start_timer, null);
 
 		// Setup length label
@@ -1460,7 +1460,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 	}
 
-	public void updateRepeatButton() {
+	private void updateRepeatButton() {
 		DownloadService downloadService = getDownloadService();
 		switch (downloadService.getRepeatMode()) {
 			case OFF:

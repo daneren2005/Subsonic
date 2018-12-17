@@ -26,12 +26,12 @@ import github.vrih.xsub.activity.SettingsActivity;
 import github.vrih.xsub.activity.SubsonicFragmentActivity;
 
 public final class ThemeUtil {
-	public static final String THEME_DARK = "dark";
-	public static final String THEME_BLACK = "black";
-	public static final String THEME_LIGHT = "light";
-	public static final String THEME_HOLO = "holo";
-	public static final String THEME_DAY_NIGHT = "day/night";
-	public static final String THEME_DAY_BLACK_NIGHT = "day/black";
+	private static final String THEME_DARK = "dark";
+	private static final String THEME_BLACK = "black";
+	private static final String THEME_LIGHT = "light";
+	private static final String THEME_HOLO = "holo";
+	private static final String THEME_DAY_NIGHT = "day/night";
+	private static final String THEME_DAY_BLACK_NIGHT = "day/black";
 
 	public static String getTheme(Context context) {
 		SharedPreferences prefs = Util.getPreferences(context);
@@ -58,7 +58,7 @@ public final class ThemeUtil {
 	public static int getThemeRes(Context context) {
 		return getThemeRes(context, getTheme(context));
 	}
-	public static int getThemeRes(Context context, String theme) {
+	private static int getThemeRes(Context context, String theme) {
 		if(context instanceof SubsonicFragmentActivity || context instanceof SettingsActivity) {
 			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
 				if (THEME_DARK.equals(theme)) {

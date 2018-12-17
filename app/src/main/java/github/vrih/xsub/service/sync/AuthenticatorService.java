@@ -48,7 +48,7 @@ public class AuthenticatorService extends Service {
 	}
 
 	private class SubsonicAuthenticator extends AbstractAccountAuthenticator {
-		public SubsonicAuthenticator(Context context) {
+		SubsonicAuthenticator(Context context) {
 			super(context);
 		}
 

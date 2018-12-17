@@ -26,7 +26,7 @@ import github.vrih.xsub.view.UpdateView;
 import github.vrih.xsub.view.UserView;
 
 public class UserAdapter extends SectionAdapter<User> {
-	public static final int VIEW_TYPE_USER = 1;
+	private static final int VIEW_TYPE_USER = 1;
 
 	private final ImageLoader imageLoader;
 

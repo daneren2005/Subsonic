@@ -316,7 +316,7 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	private class DLNARouteController extends RouteController {
 		private final DLNADevice device;
 
-		public DLNARouteController(DLNADevice device) {
+		DLNARouteController(DLNADevice device) {
 			this.device = device;
 		}
 
@@ -364,17 +364,17 @@ public class DLNARouteProvider extends MediaRouteProvider {
 		}
 	}
 
-	public static class JettyAndroidLog implements Logger {
+	static class JettyAndroidLog implements Logger {
 		final private static java.util.logging.Logger log = java.util.logging.Logger.getLogger("Jetty");
 
-		public static boolean __isIgnoredEnabled = false;
-		public final String _name;
+		static boolean __isIgnoredEnabled = false;
+		final String _name;
 
-		public JettyAndroidLog() {
+		JettyAndroidLog() {
 			this (JettyAndroidLog.class.getName());
 		}
 
-		public JettyAndroidLog(String name) {
+		JettyAndroidLog(String name) {
 			_name = name;
 		}
 

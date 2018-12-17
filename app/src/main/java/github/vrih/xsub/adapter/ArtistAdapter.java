@@ -37,7 +37,7 @@ import github.vrih.xsub.view.SongView;
 import github.vrih.xsub.view.UpdateView;
 
 public class ArtistAdapter extends SectionAdapter<Serializable> implements FastScroller.BubbleTextGetter {
-	public static final int VIEW_TYPE_SONG = 3;
+	private static final int VIEW_TYPE_SONG = 3;
 	public static final int VIEW_TYPE_ARTIST = 4;
 
 	private final List<MusicFolder> musicFolders;

@@ -25,7 +25,7 @@ import github.vrih.xsub.view.ArtistView;
 import github.vrih.xsub.view.UpdateView;
 
 public class SimilarArtistAdapter extends SectionAdapter<Artist> {
-	public static final int VIEW_TYPE_ARTIST = 4;
+	private static final int VIEW_TYPE_ARTIST = 4;
 
 	public SimilarArtistAdapter(Context context, List<Artist> artists, OnItemClickedListener onItemClickedListener) {
 		super(context, artists);

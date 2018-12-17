@@ -119,11 +119,11 @@ public class Artist implements Serializable {
         return name;
     }
 
-	public static class ArtistComparator implements Comparator<Artist> {
+	static class ArtistComparator implements Comparator<Artist> {
 		private final String[] ignoredArticles;
 		private final Collator collator;
 
-		public ArtistComparator(String[] ignoredArticles) {
+		ArtistComparator(String[] ignoredArticles) {
 			this.ignoredArticles = ignoredArticles;
 			this.collator = Collator.getInstance(Locale.US);
 			this.collator.setStrength(Collator.PRIMARY);

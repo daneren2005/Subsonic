@@ -34,7 +34,7 @@ public final class SyncUtil {
 		}
 		return syncedPlaylists.contains(new SyncSet(playlistId));
 	}
-	public static ArrayList<SyncSet> getSyncedPlaylists(Context context) {
+	private static ArrayList<SyncSet> getSyncedPlaylists(Context context) {
 		return getSyncedPlaylists(context, Util.getActiveServer(context));
 	}
 	public static ArrayList<SyncSet> getSyncedPlaylists(Context context, int instance) {
@@ -83,11 +83,11 @@ public final class SyncUtil {
 			syncedPlaylists = playlists;
 		}
 	}
-	public static String getPlaylistSyncFile(Context context) {
+	private static String getPlaylistSyncFile(Context context) {
 		int instance = Util.getActiveServer(context);
 		return getPlaylistSyncFile(context, instance);
 	}
-	public static String getPlaylistSyncFile(Context context, int instance) {
+	private static String getPlaylistSyncFile(Context context, int instance) {
 		return "sync-playlist-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
 	}
 
@@ -99,7 +99,7 @@ public final class SyncUtil {
 		}
 		return syncedPodcasts.contains(new SyncSet(podcastId));
 	}
-	public static ArrayList<SyncSet> getSyncedPodcasts(Context context) {
+	private static ArrayList<SyncSet> getSyncedPodcasts(Context context) {
 		return getSyncedPodcasts(context, Util.getActiveServer(context));
 	}
 	public static ArrayList<SyncSet> getSyncedPodcasts(Context context, int instance) {
@@ -132,7 +132,7 @@ public final class SyncUtil {
 			syncedPodcasts = podcasts;
 		}
 	}
-	public static String getPodcastSyncFile(Context context) {
+	private static String getPodcastSyncFile(Context context) {
 		int instance = Util.getActiveServer(context);
 		return getPodcastSyncFile(context, instance);
 	}
@@ -151,7 +151,7 @@ public final class SyncUtil {
 	public static void setSyncedStarred(ArrayList<String> syncedList, Context context, int instance) {
 		FileUtil.serializeCompressed(context, syncedList, SyncUtil.getStarredSyncFile(context, instance));
 	}
-	public static String getStarredSyncFile(Context context, int instance) {
+	private static String getStarredSyncFile(Context context, int instance) {
 		return "sync-starred-" + (Util.getRestUrl(context, null, instance, false)).hashCode() + ".ser";
 	}
 	
@@ -190,10 +190,10 @@ public final class SyncUtil {
 		protected SyncSet() {
 
 		}
-		public SyncSet(String id) {
+		SyncSet(String id) {
 			this.id = id;
 		}
-		public SyncSet(String id, List<String> synced) {
+		SyncSet(String id, List<String> synced) {
 			this.id = id;
 			this.synced = synced;
 		}

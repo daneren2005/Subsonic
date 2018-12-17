@@ -240,7 +240,7 @@ public class ChromeCastController extends RemoteController {
 		}
 	}
 
-	void startSong(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
+	private void startSong(final DownloadFile currentPlaying, final boolean autoStart, final int position) {
 		if(currentPlaying == null) {
 			try {
 				if (mediaPlayer != null && !error && !isStopping) {

@@ -25,7 +25,7 @@ import github.vrih.xsub.view.ShareView;
 import github.vrih.xsub.view.UpdateView;
 
 public class ShareAdapter extends SectionAdapter<Share>{
-	public static final int VIEW_TYPE_SHARE = 1;
+	private static final int VIEW_TYPE_SHARE = 1;
 
 	public ShareAdapter(Context context, List<Share> shares, OnItemClickedListener listener) {
         super(context, shares);

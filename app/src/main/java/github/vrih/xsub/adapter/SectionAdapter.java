@@ -48,33 +48,33 @@ import github.vrih.xsub.view.UpdateView.UpdateViewHolder;
 public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewHolder<T>> {
 	private static final String TAG = SectionAdapter.class.getSimpleName();
 	public static final int VIEW_TYPE_HEADER = 0;
-	public static String[] ignoredArticles;
+	private static String[] ignoredArticles;
 
-	protected Context context;
-	protected List<String> headers;
-	protected List<List<T>> sections;
-	protected boolean singleSectionHeader;
-	protected OnItemClickedListener<T> onItemClickedListener;
-	protected final List<T> selected = new ArrayList<>();
-	protected final List<UpdateView> selectedViews = new ArrayList<>();
-	protected ActionMode currentActionMode;
-	protected boolean checkable = false;
+	Context context;
+	List<String> headers;
+	List<List<T>> sections;
+	boolean singleSectionHeader;
+	OnItemClickedListener<T> onItemClickedListener;
+	final List<T> selected = new ArrayList<>();
+	private final List<UpdateView> selectedViews = new ArrayList<>();
+	private ActionMode currentActionMode;
+	boolean checkable = false;
 
-	protected SectionAdapter() {}
-	public SectionAdapter(Context context, List<T> section) {
+	SectionAdapter() {}
+	SectionAdapter(Context context, List<T> section) {
 		this(context, section, false);
 	}
-	public SectionAdapter(Context context, List<T> section, boolean singleSectionHeader) {
+	private SectionAdapter(Context context, List<T> section, boolean singleSectionHeader) {
 		this.context = context;
 		this.headers = Collections.singletonList("Section");
 		this.sections = new ArrayList<>();
 		this.sections.add(section);
 		this.singleSectionHeader = singleSectionHeader;
 	}
-	public SectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
+	SectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
 		this(context, headers, sections, true);
 	}
-	public SectionAdapter(Context context, List<String> headers, List<List<T>> sections, boolean singleSectionHeader){
+	SectionAdapter(Context context, List<String> headers, List<List<T>> sections, boolean singleSectionHeader){
 		this.context = context;
 		this.headers = headers;
 		this.sections = sections;
@@ -286,17 +286,17 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		return -1;
 	}
 
-	public UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
+	UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
 		return new UpdateViewHolder(new BasicHeaderView(context));
 	}
-	public void onBindHeaderHolder(UpdateViewHolder holder, String header, int sectionIndex) {
+	void onBindHeaderHolder(UpdateViewHolder holder, String header, int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
 		if(view != null) {
 			view.setObject(header);
 		}
 	}
 
-	public T getItemForPosition(int position) {
+	T getItemForPosition(int position) {
 		if(sections.size() == 1 && !singleSectionHeader) {
 			return sections.get(0).get(position);
 		}
@@ -393,16 +393,16 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		}
 	}
 
-	public abstract UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType);
-	public abstract void onBindViewHolder(UpdateViewHolder holder, T item, int viewType);
-	public abstract int getItemViewType(T item);
+	protected abstract UpdateView.UpdateViewHolder onCreateSectionViewHolder(ViewGroup parent, int viewType);
+	protected abstract void onBindViewHolder(UpdateViewHolder holder, T item, int viewType);
+	protected abstract int getItemViewType(T item);
 	public void setCheckable(boolean checkable) {
 		this.checkable = checkable;
 	}
-	public void setChecked(UpdateView updateView, boolean checked) {
+	void setChecked(UpdateView updateView, boolean checked) {
 		updateView.setChecked(checked);
 	}
-	public void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {}
+	void onCreateActionModeMenu(Menu menu, MenuInflater menuInflater) {}
 
 	private void startActionMode(final UpdateView.UpdateViewHolder<T> holder) {
 		final UpdateView<T> updateView = holder.getUpdateView();
@@ -474,10 +474,10 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		}
 	}
 
-	public String getNameIndex(String name) {
+	String getNameIndex(String name) {
 		return getNameIndex(name, false);
 	}
-	public String getNameIndex(String name, boolean removeIgnoredArticles) {
+	String getNameIndex(String name, boolean removeIgnoredArticles) {
 		if(name == null) {
 			return "*";
 		}

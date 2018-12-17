@@ -152,10 +152,10 @@ public class EqualizerController {
 		private short bass;
 		private int loudness;
 
-		public EqualizerSettings() {
+		EqualizerSettings() {
 
 		}
-		public EqualizerSettings(Equalizer equalizer, BassBoost boost, LoudnessEnhancerController loudnessEnhancerController) {
+		EqualizerSettings(Equalizer equalizer, BassBoost boost, LoudnessEnhancerController loudnessEnhancerController) {
 			enabled = equalizer.getEnabled();
 			bandLevels = new short[equalizer.getNumberOfBands()];
 			for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
@@ -179,7 +179,7 @@ public class EqualizerController {
 			}
 		}
 
-		public void apply(Equalizer equalizer, BassBoost boost, LoudnessEnhancerController loudnessController) {
+		void apply(Equalizer equalizer, BassBoost boost, LoudnessEnhancerController loudnessController) {
 			for (short i = 0; i < bandLevels.length; i++) {
 				equalizer.setBandLevel(i, bandLevels[i]);
 			}

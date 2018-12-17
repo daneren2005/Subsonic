@@ -119,8 +119,8 @@ public class DownloadService extends Service {
 	private static final int SHUFFLE_MODE_ARTIST = 2;
 
 	public static final int METADATA_UPDATED_ALL = 0;
-	public static final int METADATA_UPDATED_STAR = 1;
-	public static final int METADATA_UPDATED_RATING = 2;
+	private static final int METADATA_UPDATED_STAR = 1;
+	private static final int METADATA_UPDATED_RATING = 2;
 	public static final int METADATA_UPDATED_BOOKMARK = 4;
 	public static final int METADATA_UPDATED_COVER_ART = 8;
 
@@ -788,7 +788,7 @@ public class DownloadService extends Service {
 	public synchronized void clear() {
 		clear(true);
 	}
-	public synchronized void clear(boolean serialize) {
+	private synchronized void clear(boolean serialize) {
 		// Delete podcast if fully listened to
 		int position = getPlayerPosition();
 		int duration = getPlayerDuration();
@@ -899,7 +899,7 @@ public class DownloadService extends Service {
 		}
 	}
 
-	synchronized void setCurrentPlaying(DownloadFile currentPlaying, boolean showNotification) {
+	private synchronized void setCurrentPlaying(DownloadFile currentPlaying, boolean showNotification) {
 		if(this.currentPlaying != null) {
 			this.currentPlaying.setPlaying(false);
 		}
@@ -927,7 +927,7 @@ public class DownloadService extends Service {
 		onSongChanged();
 	}
 
-	synchronized void setNextPlaying() {
+	private synchronized void setNextPlaying() {
 		SharedPreferences prefs = Util.getPreferences(DownloadService.this);
 
 		// Only obey gapless playback for local
@@ -1058,7 +1058,7 @@ public class DownloadService extends Service {
 		return size() == 1 || (currentPlaying != null && !currentPlaying.isSong());
 	}
 
-	public synchronized boolean isForeground() {
+	private synchronized boolean isForeground() {
 		return this.foregroundService;
 	}
 
@@ -1227,7 +1227,7 @@ public class DownloadService extends Service {
 	public synchronized int fastForward() {
 		return seekToWrapper(Integer.parseInt(Util.getPreferences(this).getString(Constants.PREFERENCES_KEY_FASTFORWARD_INTERVAL, "30"))*1000);
 	}
-	protected int seekToWrapper(int difference) {
+	private int seekToWrapper(int difference) {
 		int msPlayed = Math.max(0, getPlayerPosition());
 		Integer duration = getPlayerDuration();
 		int msTotal = duration == null ? 0 : duration;
@@ -1272,7 +1272,7 @@ public class DownloadService extends Service {
 	public synchronized void next() {
 		next(false);
 	}
-	public synchronized void next(boolean forceCutoff) {
+	private synchronized void next(boolean forceCutoff) {
 		next(forceCutoff, false);
 	}
 	public synchronized void next(boolean forceCutoff, boolean forceStart) {
@@ -1418,7 +1418,7 @@ public class DownloadService extends Service {
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	public synchronized void resetNext() {
+    private synchronized void resetNext() {
 		try {
 			if (nextMediaPlayer != null) {
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
@@ -1568,7 +1568,7 @@ public class DownloadService extends Service {
 		onStateUpdate();
 	}
 
-	public void setPlayerStateCompleted() {
+	private void setPlayerStateCompleted() {
 		// Acquire a temporary wakelock
 		acquireWakelock();
 
@@ -1586,7 +1586,7 @@ public class DownloadService extends Service {
 	private class PositionCache implements Runnable {
 		boolean isRunning = true;
 
-		public void stop() {
+		void stop() {
 			isRunning = false;
 		}
 
@@ -1722,7 +1722,7 @@ public class DownloadService extends Service {
 		return mediaRouter.getSelector();
 	}
 
-	public boolean isSeekable() {
+	private boolean isSeekable() {
 		if(remoteState == LOCAL) {
 			return currentPlaying != null && currentPlaying.isWorkDone() && playerState != PREPARING;
 		} else if(remoteController != null) {
@@ -2456,10 +2456,10 @@ public class DownloadService extends Service {
 		}
 	}
 
-	public void postPlayCleanup() {
+	private void postPlayCleanup() {
 		postPlayCleanup(currentPlaying);
 	}
-	public void postPlayCleanup(DownloadFile downloadFile) {
+	private void postPlayCleanup(DownloadFile downloadFile) {
 		if(downloadFile == null) {
 			return;
 		}
@@ -2798,7 +2798,7 @@ public class DownloadService extends Service {
 			setRating(rating);
 		}
 	}
-	public void setRating(int rating) {
+	private void setRating(int rating) {
 		final DownloadFile currentPlaying = this.currentPlaying;
 		if (currentPlaying == null) {
 			return;
@@ -2821,10 +2821,10 @@ public class DownloadService extends Service {
 			}
 		});
 	}
-	public void acquireWakelock() {
+	private void acquireWakelock() {
 		acquireWakelock(30000);
 	}
-	public void acquireWakelock(int ms) {
+	private void acquireWakelock(int ms) {
 		wakeLock.acquire(ms);
 	}
 
@@ -2985,7 +2985,7 @@ public class DownloadService extends Service {
 		private final File partialFile;
 		private final boolean start;
 
-		public BufferTask(DownloadFile downloadFile, int position, boolean start) {
+		BufferTask(DownloadFile downloadFile, int position, boolean start) {
 			super(instance);
 			this.downloadFile = downloadFile;
 			this.position = position;
@@ -3036,7 +3036,7 @@ public class DownloadService extends Service {
 		private final DownloadFile downloadFile;
 		private final File partialFile;
 
-		public CheckCompletionTask(DownloadFile downloadFile) {
+		CheckCompletionTask(DownloadFile downloadFile) {
 			super(instance);
 			this.downloadFile = downloadFile;
 			if(downloadFile != null) {

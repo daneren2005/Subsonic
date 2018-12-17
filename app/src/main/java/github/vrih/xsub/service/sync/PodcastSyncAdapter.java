@@ -48,7 +48,7 @@ public class PodcastSyncAdapter extends SubsonicSyncAdapter {
 		super(context, autoInitialize);
 	}
 	@TargetApi(14)
-	public PodcastSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+    private PodcastSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 	}
 

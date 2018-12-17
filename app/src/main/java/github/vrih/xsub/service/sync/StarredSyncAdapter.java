@@ -44,7 +44,7 @@ public class StarredSyncAdapter extends SubsonicSyncAdapter {
 		super(context, autoInitialize);
 	}
 	@TargetApi(14)
-	public StarredSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
+    private StarredSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 	}
 

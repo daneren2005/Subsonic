@@ -117,10 +117,10 @@ public class User implements Serializable {
 		private String name;
 		private Boolean value;
 
-		public Setting() {
+		Setting() {
 			
 		}
-		public Setting(String name, Boolean value) {
+		Setting(String name, Boolean value) {
 			this.name = name;
 			this.value = value;
 		}
@@ -142,7 +142,7 @@ public class User implements Serializable {
 		public MusicFolderSetting() {
 
 		}
-		public MusicFolderSetting(String name, String label, Boolean value) {
+		MusicFolderSetting(String name, String label, Boolean value) {
 			super(name, value);
 			this.label = label;
 		}

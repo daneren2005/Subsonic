@@ -46,9 +46,9 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 	private static final int MAX_SONGS = 50;
 	private static final int MIN_CLOSENESS = 1;
 
-	protected RecyclerView recyclerView;
-	protected SearchAdapter adapter;
-	protected boolean largeAlbums = false;
+	private RecyclerView recyclerView;
+	private SearchAdapter adapter;
+	private boolean largeAlbums = false;
 
 	private SearchResult searchResult;
 	private boolean skipSearch = false;

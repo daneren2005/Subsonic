@@ -217,10 +217,10 @@ public class FileUtil {
 		}
     }
 
-    public static File getAlbumArtFile(File albumDir) {
+    private static File getAlbumArtFile(File albumDir) {
         return new File(albumDir, Constants.ALBUM_ART_FILE);
     }
-	public static File getHexAlbumArtFile(Context context, File albumDir) {
+	private static File getHexAlbumArtFile(Context context, File albumDir) {
 		return new File(getAlbumArtDirectory(context), Util.md5Hex(albumDir.getPath()) + ".jpeg");
 	}
 
@@ -240,7 +240,7 @@ public class FileUtil {
         return null;
     }
 
-	public static File getAvatarDirectory(Context context) {
+	private static File getAvatarDirectory(Context context) {
 		File avatarDir = new File(getSubsonicDirectory(context), "avatars");
 		ensureDirectoryExistsAndIsReadWritable(avatarDir);
 		ensureDirectoryExistsAndIsReadWritable(new File(avatarDir, ".nomedia"));
@@ -267,7 +267,7 @@ public class FileUtil {
 		return null;
 	}
 
-	public static File getMiscDirectory(Context context) {
+	private static File getMiscDirectory(Context context) {
 		File dir = new File(getSubsonicDirectory(context), "misc");
 		ensureDirectoryExistsAndIsReadWritable(dir);
 		ensureDirectoryExistsAndIsReadWritable(new File(dir, ".nomedia"));
@@ -311,10 +311,10 @@ public class FileUtil {
 			return getScaledBitmap(bitmap, size, allowUnscaled);
 		}
 	}
-	public static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
+	private static Bitmap getScaledBitmap(Bitmap bitmap, int size) {
 		return getScaledBitmap(bitmap, size, true);
 	}
-	public static Bitmap getScaledBitmap(Bitmap bitmap, int size, boolean allowUnscaled) {
+	private static Bitmap getScaledBitmap(Bitmap bitmap, int size, boolean allowUnscaled) {
 		// Don't waste time scaling if the difference is minor
 		// Large album arts still need to be scaled since displayed as is on now playing!
 		if(allowUnscaled && size < 400 && bitmap.getWidth() < (size * 1.1)) {
@@ -528,7 +528,7 @@ public class FileUtil {
 		return recursiveDelete(artDirectory);
 	}
 
-	public static boolean recursiveDelete(File dir) {
+	private static boolean recursiveDelete(File dir) {
 		return recursiveDelete(dir, null);
 	}
 	public static boolean recursiveDelete(File dir, MediaStoreService mediaStore) {
@@ -597,7 +597,7 @@ public class FileUtil {
 		}
 	}
 
-    public static boolean ensureDirectoryExistsAndIsReadWritable(File dir) {
+    private static boolean ensureDirectoryExistsAndIsReadWritable(File dir) {
         if (dir == null) {
             return false;
         }
