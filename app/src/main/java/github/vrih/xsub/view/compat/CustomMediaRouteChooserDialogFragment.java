@@ -7,7 +7,7 @@ import androidx.mediarouter.app.MediaRouteChooserDialogFragment;
 
 import github.vrih.xsub.util.ThemeUtil;
 
-class CustomMediaRouteChooserDialogFragment extends MediaRouteChooserDialogFragment {
+public class CustomMediaRouteChooserDialogFragment extends MediaRouteChooserDialogFragment {
 	@Override
 	public MediaRouteChooserDialog onCreateChooserDialog(Context context, Bundle savedInstanceState) {
 		return new MediaRouteChooserDialog(context, ThemeUtil.getThemeRes(context));
