@@ -193,42 +193,6 @@ public class ChangeLog {
     }
 
     /**
-     * Get version code of last installation.
-     *
-     * @return The version code of the last installation of this app (as described in the former
-     *         manifest). This will be the same as returned by {@link #getCurrentVersionCode()} the
-     *         second time this version of the app is launched (more precisely: the second time
-     *         {@code ChangeLog} is instantiated).
-     *
-     * @see AndroidManifest.xml#android:versionCode
-     */
-    public int getLastVersionCode() {
-        return mLastVersionCode;
-    }
-
-    /**
-     * Get version code of current installation.
-     *
-     * @return The version code of this app as described in the manifest.
-     *
-     * @see AndroidManifest.xml#android:versionCode
-     */
-    public int getCurrentVersionCode() {
-        return mCurrentVersionCode;
-    }
-
-    /**
-     * Get version name of current installation.
-     *
-     * @return The version name of this app as described in the manifest.
-     *
-     * @see AndroidManifest.xml#android:versionName
-     */
-    public String getCurrentVersionName() {
-        return mCurrentVersionName;
-    }
-
-    /**
      * Check if this is the first execution of this app version.
      *
      * @return {@code true} if this version of your app is started the first time.

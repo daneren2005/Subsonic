@@ -55,8 +55,6 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	{
 		super(context, attrs);
 		/*
-	  Our context (needed for getResources())
-	 */ /**
      * Our context (needed for getResources())
      */
 
