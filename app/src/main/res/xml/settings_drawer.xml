@@ -53,13 +53,5 @@
 			android:entryValues="@array/defaultDrawerItemsDescriptions"
 			android:entries="@array/defaultDrawerItems"
 			android:defaultValue="Home"/>
-
-		<github.vrih.xsub.view.SeekBarPreference
-			android:title="@string/settings.chat_refresh"
-			android:key="chatRefreshRate"
-			android:defaultValue="30"
-			android:dialogLayout="@layout/seekbar_preference"
-			myns:max="120"
-			myns:display="%.0f seconds"/>
 	</PreferenceCategory>
 </PreferenceScreen>

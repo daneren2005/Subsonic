@@ -1,34 +1,18 @@
 package github.vrih.xsub.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-import github.vrih.xsub.R;
-import github.vrih.xsub.adapter.MainAdapter;
-import github.vrih.xsub.adapter.SectionAdapter;
-import github.vrih.xsub.domain.ServerInfo;
-import github.vrih.xsub.util.Constants;
-import github.vrih.xsub.util.EnvironmentVariables;
-import github.vrih.xsub.util.FileUtil;
-import github.vrih.xsub.util.LoadingTask;
-import github.vrih.xsub.util.ProgressListener;
-import github.vrih.xsub.util.UserUtil;
-import github.vrih.xsub.util.Util;
-import github.vrih.xsub.service.MusicService;
-import github.vrih.xsub.service.MusicServiceFactory;
-import github.vrih.xsub.view.ChangeLog;
-import github.vrih.xsub.view.UpdateView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,6 +28,21 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import github.vrih.xsub.R;
+import github.vrih.xsub.adapter.MainAdapter;
+import github.vrih.xsub.adapter.SectionAdapter;
+import github.vrih.xsub.domain.ServerInfo;
+import github.vrih.xsub.service.MusicService;
+import github.vrih.xsub.service.MusicServiceFactory;
+import github.vrih.xsub.util.Constants;
+import github.vrih.xsub.util.EnvironmentVariables;
+import github.vrih.xsub.util.FileUtil;
+import github.vrih.xsub.util.LoadingTask;
+import github.vrih.xsub.util.ProgressListener;
+import github.vrih.xsub.util.UserUtil;
+import github.vrih.xsub.util.Util;
+import github.vrih.xsub.view.UpdateView;
 
 public class MainFragment extends SelectRecyclerFragment<Integer> {
 	private static final String TAG = MainFragment.class.getSimpleName();
@@ -82,15 +81,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		}
 
 		switch (item.getItemId()) {
-			case R.id.menu_log:
-				getLogs();
-				return true;
 			case R.id.menu_about:
 				showAboutDialog();
-				return true;
-			case R.id.menu_changelog:
-				ChangeLog changeLog = new ChangeLog(context, Util.getPreferences(context));
-				changeLog.getFullLogDialog().show();
 				return true;
 			case R.id.menu_faq:
 				showFAQDialog();

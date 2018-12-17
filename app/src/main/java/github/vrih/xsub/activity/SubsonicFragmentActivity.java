@@ -20,7 +20,6 @@ package github.vrih.xsub.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -77,7 +76,6 @@ import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.SilentBackgroundTask;
 import github.vrih.xsub.util.UserUtil;
 import github.vrih.xsub.util.Util;
-import github.vrih.xsub.view.ChangeLog;
 
 /**
  * Created by Scott on 10/14/13.
@@ -374,18 +372,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 		showInfoDialog();
 		checkUpdates();
-
-		ChangeLog changeLog = new ChangeLog(this, Util.getPreferences(this));
-		if(changeLog.isFirstRun()) {
-			if(changeLog.isFirstRunEver()) {
-				changeLog.updateVersionInPreferences();
-			} else {
-				Dialog log = changeLog.getLogDialog();
-				if (log != null) {
-					log.show();
-				}
-			}
-		}
 	}
 
 	@Override

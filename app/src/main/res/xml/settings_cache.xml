@@ -62,9 +62,9 @@
 			android:defaultValue="2000"
 			android:digits="0123456789"/>
 
-		<github.vrih.xsub.view.CacheLocationPreference
+<!--		<github.vrih.xsub.view.CacheLocationPreference
 			android:title="@string/settings.cache_location"
-			android:key="cacheLocation"/>
+			android:key="cacheLocation"/> -->
 
 		<ListPreference
 			android:title="@string/settings.preload_wifi"

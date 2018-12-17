@@ -26,7 +26,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -86,15 +85,15 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference songPressAction;
 	private ListPreference videoPlayer;
 	private ListPreference syncInterval;
-	private CheckBoxPreference syncEnabled;
-	private CheckBoxPreference syncWifi;
-	private CheckBoxPreference syncNotification;
-	private CheckBoxPreference syncStarred;
-	private CheckBoxPreference syncMostRecent;
-	private CheckBoxPreference replayGain;
+	private SwitchPreference syncEnabled;
+	private SwitchPreference syncWifi;
+	private SwitchPreference syncNotification;
+	private SwitchPreference syncStarred;
+	private SwitchPreference syncMostRecent;
+	private SwitchPreference replayGain;
 	private ListPreference replayGainType;
-	private Preference replayGainBump;
-	private Preference replayGainUntagged;
+//	private Preference replayGainBump;
+//	private Preference replayGainUntagged;
 	private String internalSSID;
 	private String internalSSIDDisplay;
 	private EditTextPreference cacheSize;
@@ -109,7 +108,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		super.onCreate(bundle);
 
 		if(Build.VERSION.SDK_INT >= 21) {
-			CheckBoxPreference mediaButtons = (CheckBoxPreference) findPreference("mediaButtons");
+			SwitchPreference mediaButtons = (SwitchPreference) findPreference("mediaButtons");
 			if (mediaButtons != null) {
 				PreferenceCategory otherCategory = (PreferenceCategory) findPreference("otherSettings");
 				otherCategory.removePreference(mediaButtons);
@@ -252,15 +251,15 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		videoPlayer = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_VIDEO_PLAYER);
 		songPressAction = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SONG_PRESS_ACTION);
 		syncInterval = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_INTERVAL);
-		syncEnabled = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
-		syncWifi = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
-		syncNotification = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
-		syncStarred = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
-		syncMostRecent = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
-		replayGain = (CheckBoxPreference) this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
+		syncEnabled = (SwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_ENABLED);
+		syncWifi = (SwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_WIFI);
+		syncNotification = (SwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_NOTIFICATION);
+		syncStarred = (SwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_STARRED);
+		syncMostRecent = (SwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_SYNC_MOST_RECENT);
+		replayGain = (SwitchPreference) this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN);
 		replayGainType = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE);
-		replayGainBump = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
-		replayGainUntagged = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
+//		replayGainBump = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_BUMP);
+//		replayGainUntagged = this.findPreference(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED);
 		cacheSize = (EditTextPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_SIZE);
 		openToTab = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_OPEN_TO_TAB);
 
@@ -398,7 +397,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
 			maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
 			networkTimeout.setSummary(networkTimeout.getEntry());
-			cacheLocation.setSummary(cacheLocation.getText());
+//			cacheLocation.setSummary(cacheLocation.getText());
 			preloadCountWifi.setSummary(preloadCountWifi.getEntry());
 			preloadCountMobile.setSummary(preloadCountMobile.getEntry());
 
@@ -423,12 +422,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 			if(replayGain.isChecked()) {
 				replayGainType.setEnabled(true);
-				replayGainBump.setEnabled(true);
-				replayGainUntagged.setEnabled(true);
+	//			replayGainBump.setEnabled(true);
+//				replayGainUntagged.setEnabled(true);
 			} else {
 				replayGainType.setEnabled(false);
-				replayGainBump.setEnabled(false);
-				replayGainUntagged.setEnabled(false);
+//				replayGainBump.setEnabled(false);
+//				replayGainUntagged.setEnabled(false);
 			}
 			replayGainType.setSummary(replayGainType.getEntry());
 		}

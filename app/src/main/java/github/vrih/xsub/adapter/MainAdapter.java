@@ -18,8 +18,8 @@ package github.vrih.xsub.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import java.util.List;
 
@@ -79,7 +79,7 @@ public class MainAdapter extends SectionAdapter<Integer> {
 	@Override
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {
 		UpdateView view = holder.getUpdateView();
-		CheckBox checkBox = view.findViewById(R.id.item_checkbox);
+		Switch checkBox = view.findViewById(R.id.item_checkbox);
 
 		String display;
 		if ("albums".equals(header)) {
