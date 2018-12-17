@@ -194,8 +194,6 @@
 	<string name="bookmark.delete">Borrar marcador</string>
 	<string name="bookmark.deleted">Borrado marcador para \"%s\"</string>
 	<string name="bookmark.deleted_error">Error al borrar el marcador para \"%s\"</string>
-		\nComentario: %2$s
-		\nPosición: %3$s</string>
 	<string name="bookmark.resume_title">Reanudar reproducción?</string>
 	<string name="bookmark.resume">Reanudar reproducción \'%1$s\' desde%2$s</string>
 	<string name="bookmark.action_resume">Reanudar</string>

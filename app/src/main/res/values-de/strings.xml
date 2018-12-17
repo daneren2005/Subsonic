@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="common.appname">DSub</string>
     <string name="common.ok">OK</string>
     <string name="common.save">Speichern</string>
@@ -214,10 +213,6 @@
 	<string name="bookmark.deleted">Lesezeichen für \"%s\" gelöscht</string>
 	<string name="bookmark.deleted_error">Löschen des Lesezeichen für \"%s\" ist fehlgeschlagen</string>
 	<string name="bookmark.details_title">Lesezeichendetails</string>
-		\nPosition: %2$s
-		\nErzeugt: %3$s
-		\nZuletzt aktualisiert: %4$s
-		\nKommentar: %5$s</string>
 	<string name="bookmark.resume_title">Wiedergabe fortsetzen?</string>
 	<string name="bookmark.resume">\'%1$s\' fortsetzen bei %2$s</string>
 	<string name="bookmark.action_resume">Fortsetzen</string>

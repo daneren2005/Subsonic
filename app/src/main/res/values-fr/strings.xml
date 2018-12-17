@@ -200,10 +200,6 @@
 	<string name="bookmark.deleted">Signet pour \&quot;%s\&quot; supprimé</string>
 	<string name="bookmark.deleted_error">Échec de la suppression du signet pour \&quot;%s\&quot;</string>
 	<string name="bookmark.details_title">Détails du signet</string>
-		\nPosition : %2$s
-		\nCréé le : %3$s
-		\nMis à jour : %4$s
-		\nCommentaire : %5$s</string>
 	<string name="bookmark.resume_title">Reprendre la lecture ?</string>
 	<string name="bookmark.resume">Reprendre la lecture de \'%1$s\' depuis %2$s</string>
 	<string name="bookmark.action_resume">Reprendre</string>
