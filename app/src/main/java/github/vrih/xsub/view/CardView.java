@@ -7,7 +7,6 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.material.card.MaterialCardView;
 

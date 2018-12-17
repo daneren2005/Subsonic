@@ -19,7 +19,6 @@
 package github.vrih.xsub.audiofx;
 
 import android.content.Context;
-import android.os.Build;
 
 public class AudioEffectsController {
     private static final String TAG = AudioEffectsController.class.getSimpleName();

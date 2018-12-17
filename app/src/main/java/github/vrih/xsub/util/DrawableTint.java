@@ -27,8 +27,6 @@ import androidx.annotation.DrawableRes;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.WeakHashMap;
 
 import github.vrih.xsub.R;

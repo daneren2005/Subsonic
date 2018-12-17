@@ -15,7 +15,6 @@
 
 package github.vrih.xsub.util;
 
-import android.os.Build;
 import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouteSelector;
 import androidx.mediarouter.media.MediaRouter;
