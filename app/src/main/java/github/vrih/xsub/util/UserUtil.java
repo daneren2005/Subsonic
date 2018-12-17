@@ -131,8 +131,8 @@ public final class UserUtil {
 	public static boolean canPodcast() {
 		return isCurrentRole(User.PODCAST);
 	}
-	public static boolean canShare() {
-		return isCurrentRole(User.SHARE);
+	public static boolean cannotShare() {
+		return !isCurrentRole(User.SHARE);
 	}
 	public static boolean canJukebox() {
 		return isCurrentRole(User.JUKEBOX);

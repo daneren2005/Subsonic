@@ -883,7 +883,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		boolean hasSubFolders = albums != null && !albums.isEmpty();
 
 		if (hasSubFolders && (id != null || share != null || "starred".equals(albumListType))) {
-			downloadRecursively(id, false, append, !append, shuffle, false, playNext);
+			downloadRecursively(id, append, !append, shuffle, false, playNext);
 		} else if(hasSubFolders && albumListType != null) {
 			downloadRecursively(albums, shuffle, append, playNext);
 		} else {
@@ -953,11 +953,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		};
 
 		checkLicenseAndTrialPeriod(onValid);
-	}
-
-	@Override
-	protected void download(List<Entry> entries, boolean append, boolean autoplay, boolean playNext, boolean shuffle) {
-		download(entries, append, false, autoplay, playNext, shuffle, playlistName, playlistId);
 	}
 
 	@Override
@@ -1359,7 +1354,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 	private void setupButtonEvents(View header) {
 		ImageView shareButton = header.findViewById(R.id.select_album_share);
-		if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || !UserUtil.canShare() || artistInfo != null) {
+		if(share != null || podcastId != null || !Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || Util.isOffline(context) || UserUtil.cannotShare() || artistInfo != null) {
 			shareButton.setVisibility(View.GONE);
 		} else {
 			shareButton.setOnClickListener(new View.OnClickListener() {

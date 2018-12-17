@@ -71,7 +71,7 @@ public final class MenuUtil {
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_STAR, true)) {
 			menu.setGroupVisible(R.id.hide_star, false);
 		}
-		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || !UserUtil.canShare()) {
+		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_SHARED, true) || UserUtil.cannotShare()) {
 			menu.setGroupVisible(R.id.hide_share, false);
 		}
 		if(!prefs.getBoolean(Constants.PREFERENCES_KEY_MENU_RATING, true)) {

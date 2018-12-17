@@ -30,10 +30,6 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +43,10 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.PlayerQueue;
@@ -715,7 +715,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		} else {
 			String path = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 			File cacheLocation = new File(path);
-			if(!FileUtil.verifyCanWrite(cacheLocation)) {
+			if(FileUtil.cannotWrite(cacheLocation)) {
 				// Only warn user if there is a difference saved
 				if(resetCacheLocation(prefs)) {
 					Util.info(this, R.string.common_warning, R.string.settings_cache_location_reset);
@@ -777,7 +777,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 					// Make sure we wait until download service is ready
 					DownloadService downloadService = getDownloadService();
-					while(downloadService == null || !downloadService.isInitialized()) {
+					while(downloadService == null || downloadService.isNotInitialized()) {
 						Util.sleepQuietly(100L);
 						downloadService = getDownloadService();
 					}

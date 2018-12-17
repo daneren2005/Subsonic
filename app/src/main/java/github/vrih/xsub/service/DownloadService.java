@@ -600,8 +600,8 @@ public class DownloadService extends Service {
 		suggestedPlaylistId = prefs.getString(Constants.PREFERENCES_KEY_PLAYLIST_ID, null);
 	}
 
-	public boolean isInitialized() {
-		return lifecycleSupport != null && lifecycleSupport.isInitialized();
+	public boolean isNotInitialized() {
+		return lifecycleSupport != null || lifecycleSupport.isInitialized();
 	}
 
 	public synchronized Date getLastStateChanged() {
@@ -696,7 +696,7 @@ public class DownloadService extends Service {
 		DownloadFile returnFile = null;
 		for (DownloadFile downloadFile : downloadList) {
 			if (downloadFile.getSong().equals(song)) {
-				if(((downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && downloadFile.getPartialFile().exists()) || downloadFile.isWorkDone())) {
+				if(((downloadFile.isDownloading() && downloadFile.isDownloadRunning() && downloadFile.getPartialFile().exists()) || downloadFile.isWorkDone())) {
 					// If downloading, return immediately
 					return downloadFile;
 				} else {
@@ -2812,10 +2812,7 @@ public class DownloadService extends Service {
 		});
 	}
 	private void acquireWakelock() {
-		acquireWakelock(30000);
-	}
-	private void acquireWakelock(int ms) {
-		wakeLock.acquire(ms);
+		wakeLock.acquire(30000);
 	}
 
 	public void handleKeyEvent(KeyEvent keyEvent) {

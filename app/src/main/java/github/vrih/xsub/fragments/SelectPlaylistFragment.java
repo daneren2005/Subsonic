@@ -1,13 +1,11 @@
 package github.vrih.xsub.fragments;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +13,14 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentTransaction;
 import github.vrih.xsub.R;
+import github.vrih.xsub.adapter.PlaylistAdapter;
 import github.vrih.xsub.adapter.SectionAdapter;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.Playlist;
@@ -25,19 +30,14 @@ import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.service.MusicServiceFactory;
 import github.vrih.xsub.service.OfflineException;
 import github.vrih.xsub.service.ServerTooOldException;
-import github.vrih.xsub.util.ProgressListener;
-import github.vrih.xsub.util.SyncUtil;
 import github.vrih.xsub.util.CacheCleaner;
 import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.LoadingTask;
+import github.vrih.xsub.util.ProgressListener;
+import github.vrih.xsub.util.SyncUtil;
 import github.vrih.xsub.util.UserUtil;
 import github.vrih.xsub.util.Util;
-import github.vrih.xsub.adapter.PlaylistAdapter;
 import github.vrih.xsub.view.UpdateView;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
@@ -83,7 +83,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 
 		switch (menuItem.getItemId()) {
 			case R.id.playlist_menu_download:
-				downloadPlaylist(playlist.getId(), playlist.getName(), false, true, false, false, true);
+				downloadPlaylist(playlist.getId(), playlist.getName(), false);
 				break;
 			case R.id.playlist_menu_sync:
 				syncPlaylist(playlist);
@@ -357,7 +357,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 		}
 
 		if(syncImmediately) {
-			downloadPlaylist(playlist.getId(), playlist.getName(), true, true, false, false, true);
+			downloadPlaylist(playlist.getId(), playlist.getName(), true);
 		}
 	}
 

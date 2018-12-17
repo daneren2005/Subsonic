@@ -370,7 +370,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		}.execute();
 	}
 	private void playMusicDirectory(Entry dir, boolean shuffle, boolean append) {
-		playMusicDirectory(dir.getId(), shuffle, append, true);
+		playMusicDirectory(dir.getId(), shuffle, append);
 	}
 	private void playMusicDirectory(final String dirId, final boolean shuffle, final boolean append, final Entry startEntry) {
 		new SilentServiceTask<Void>(downloadService) {
@@ -396,7 +396,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}.execute();
 	}
-	private void playMusicDirectory(final String dirId, final boolean shuffle, final boolean append, final boolean playFromBookmark) {
+	private void playMusicDirectory(final String dirId, final boolean shuffle, final boolean append) {
 		new SilentServiceTask<Void>(downloadService) {
 			@Override
 			protected Void doInBackground(MusicService musicService) throws Throwable {
@@ -414,7 +414,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 						playEntries.add(song);
 					}
 				}
-				playSongs(playEntries, shuffle, append, playFromBookmark);
+				playSongs(playEntries, shuffle, append, true);
 
 				return null;
 			}

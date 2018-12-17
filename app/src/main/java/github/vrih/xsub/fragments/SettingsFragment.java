@@ -32,9 +32,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.preference.SwitchPreference;
 import android.text.InputType;
 import android.util.Log;
@@ -51,6 +48,8 @@ import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import github.vrih.xsub.R;
 import github.vrih.xsub.activity.SubsonicActivity;
 import github.vrih.xsub.service.DownloadService;
@@ -696,7 +695,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 
 	private void setCacheLocation(String path) {
 		File dir = new File(path);
-		if (!FileUtil.verifyCanWrite(dir)) {
+		if (FileUtil.cannotWrite(dir)) {
 			Util.toast(context, R.string.settings_cache_location_error, false);
 
 			// Reset it to the default.

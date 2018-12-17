@@ -18,27 +18,27 @@
  */
 package github.vrih.xsub.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+
+import github.daneren2005.serverproxy.BufferFile;
 import github.vrih.xsub.domain.InternetRadioStation;
 import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.util.Constants;
-import github.vrih.xsub.util.SilentBackgroundTask;
-import github.vrih.xsub.util.FileUtil;
-import github.vrih.xsub.util.Util;
 import github.vrih.xsub.util.CacheCleaner;
-import github.daneren2005.serverproxy.BufferFile;
+import github.vrih.xsub.util.Constants;
+import github.vrih.xsub.util.FileUtil;
+import github.vrih.xsub.util.SilentBackgroundTask;
+import github.vrih.xsub.util.Util;
 
 public class DownloadFile implements BufferFile {
     private static final String TAG = DownloadFile.class.getSimpleName();
@@ -240,7 +240,7 @@ public class DownloadFile implements BufferFile {
 
 	@Override
 	public synchronized void onResume() {
-		if(!isWorkDone() && !isFailedMax() && !isDownloading() && !isDownloadCancelled()) {
+		if(!isWorkDone() && !isFailedMax() && !isDownloading() && isDownloadRunning()) {
 			download();
 		}
 	}
@@ -249,8 +249,8 @@ public class DownloadFile implements BufferFile {
         return downloadTask != null && downloadTask.isRunning();
     }
 
-    public synchronized boolean isDownloadCancelled() {
-        return downloadTask != null && downloadTask.isCancelled();
+    public synchronized boolean isDownloadRunning() {
+        return downloadTask != null && !downloadTask.isCancelled();
     }
 
     public boolean shouldSave() {

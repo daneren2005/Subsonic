@@ -18,6 +18,18 @@
  */
 package github.vrih.xsub.util;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.Environment;
+import android.util.Log;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,34 +43,23 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.os.Environment;
 import androidx.core.content.ContextCompat;
-import android.util.Log;
 import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.domain.Genre;
 import github.vrih.xsub.domain.Indexes;
-import github.vrih.xsub.domain.Playlist;
-import github.vrih.xsub.domain.PodcastChannel;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.MusicFolder;
+import github.vrih.xsub.domain.Playlist;
+import github.vrih.xsub.domain.PodcastChannel;
 import github.vrih.xsub.domain.PodcastEpisode;
 import github.vrih.xsub.service.MediaStoreService;
-
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 
 /**
  * @author Sindre Mehus
@@ -627,14 +628,14 @@ public class FileUtil {
         }
         return true;
     }
-	public static boolean verifyCanWrite(File dir) {
+	public static boolean cannotWrite(File dir) {
 		if(ensureDirectoryExistsAndIsReadWritable(dir)) {
 			try {
 				File tmp = new File(dir, "checkWrite");
 				tmp.createNewFile();
 				if(tmp.exists()) {
 					if(tmp.delete()) {
-						return true;
+						return false;
 					} else {
 						Log.w(TAG, "Failed to delete temp file, retrying");
 						
@@ -642,22 +643,22 @@ public class FileUtil {
 						Thread.sleep(100L);
 						tmp = new File(dir, "checkWrite");
 						if(tmp.delete()) {
-							return true;
+							return false;
 						} else {
 							Log.w(TAG, "Failed retry to delete temp file");
-							return false;
+							return true;
 						}
 					}
 				} else {
 					Log.w(TAG, "Temp file does not actually exist");
-					return false;
+					return true;
 				}
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to create tmp file", e);
-				return false;
+				return true;
 			}
 		} else {
-			return false;
+			return true;
 		}
 	}
 
