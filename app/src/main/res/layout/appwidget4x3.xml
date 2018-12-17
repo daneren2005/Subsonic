@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/appwidget_coverart"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
 		android:scaleType="fitCenter"
 		android:layout_weight="1"
         android:layout_gravity="center_horizontal"

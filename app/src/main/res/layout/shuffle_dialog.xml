@@ -19,7 +19,7 @@
 		<EditText
 			android:id="@+id/start_year"
 			android:inputType="number"
-			android:layout_width="fill_parent"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"
@@ -42,7 +42,7 @@
 		<EditText
 			android:id="@+id/end_year"
 			android:inputType="number"
-			android:layout_width="fill_parent"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:layout_marginLeft="4dp"
