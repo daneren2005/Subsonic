@@ -46,15 +46,13 @@
 	<string name="menu.refresh">Обновить</string>
 	<string name="menu.play">Воспроизвести</string>
 	<string name="menu.play_last">Воспроизвести последним</string>
-    <string name="menu.exit">Выход</string>
     <string name="menu.settings">Настройки</string>
     <string name="menu.about">О программе</string>
 	<string name="menu.add_playlist">Добавить в список</string>
 	<string name="menu.remove_playlist">Удалить из списка</string>
 	<string name="menu.deleted_playlist">Список воспроизведения %s удален</string>
 	<string name="menu.deleted_playlist_error">Не удалось удалить список %s</string>
-	<string name="menu.log">Отправить журнал событий</string>
-	<string name="menu.set_timer">Установить таймер</string>
+    <string name="menu.set_timer">Установить таймер</string>
 	<string name="menu.delete_cache">Удалить кэш</string>
 
     <string name="playlist.label">Списки</string>
@@ -127,7 +125,6 @@
     <string name="settings.server_password">Пароль</string>
     <string name="settings.cache_title">Кэш музыки</string>
     <string name="settings.cache_size">Размер кэша (Мб)</string>
-    <string name="settings.cache_location">Путь кэша</string>
     <string name="settings.cache_location_error">Некорректный путь. Используем путь по умолчанию.</string>
     <string name="settings.testing_connection">Проверка соединения…</string>
     <string name="settings.testing_ok">Подключение прошло успешно!</string>
@@ -191,8 +188,7 @@
     <string name="settings.media_button_summary">Разрешить управление кнопками мультимедиа на устройстве и гарнитуре</string>
     <string name="settings.screen_lit_title">Держать экран включенным</string>
     <string name="settings.screen_lit_summary">Оставить экран включенным для повышения скорости при скачивании.</string>
-	<string name="settings.playlist_random_size_title">Размер случайного списка</string>
-	<string name="settings.temp_loss_title">Временная потеря связи</string>
+    <string name="settings.temp_loss_title">Временная потеря связи</string>
 	<string name="settings.temp_loss_pause">Всегда останавливать</string>
 	<string name="settings.temp_loss_pause_lower">Останавливать, понижать громкость, если требуется</string>
 	<string name="settings.temp_loss_lower">Всегда понижать громкость</string>
@@ -239,10 +235,6 @@
     <string name="settings.persistent_summary">Показывать уведомление даже во время паузы. Остановка воспроизведения уберет это уведомление.</string>
     <string name="settings.gapless_playback">Непрерывное воспроизведение</string>
     <string name="settings.gapless_playback_summary">Galaxy S3 может зависать или испытывать прочие трудности с момента начала непрерывного воспроизведения. Выключите эту функцию для исправления данной проблемы.</string>
-	<string name="changelog_full_title">Журнал изменений</string>
-    <string name="changelog_title">Что нового</string>
-    <string name="changelog_ok_button">OK</string>
-    <string name="changelog_show_full">Еще…</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">Нет композиций</item>

@@ -83,15 +83,13 @@
 	<string name="menu.refresh">Refresh</string>
 	<string name="menu.play">Play</string>
 	<string name="menu.play_last">Play Last</string>
-    <string name="menu.exit">Exit</string>
     <string name="menu.settings">Settings</string>
 	<string name="menu.about">About</string>
 	<string name="menu.add_playlist">Add To Playlist</string>
 	<string name="menu.remove_playlist">Remove From Playlist</string>
 	<string name="menu.deleted_playlist">Deleted playlist %s</string>
 	<string name="menu.deleted_playlist_error">Failed to delete playlist %s</string>
-	<string name="menu.log">Send Log</string>
-	<string name="menu.set_timer">Set Timer</string>
+    <string name="menu.set_timer">Set Timer</string>
 	<string name="menu.check_podcasts">Check For New Episodes</string>
 	<string name="menu.add_podcast">Add Channel</string>
 	<string name="menu.keep_synced">Keep Synced</string>
@@ -274,7 +272,6 @@
     <string name="settings.preload_wifi">Songs to preload (Wifi)</string>
 	<string name="settings.preload_mobile">Songs to preload (Mobile)</string>
     <string name="settings.cache_size">Cache size</string>
-    <string name="settings.cache_location">Cache location</string>
     <string name="settings.cache_location_error">Invalid cache location. Using default.</string>
     <string name="settings.cache_location_reset">The cache location you have set is no longer writable. If you recently upgraded your phone OS to KitKat 4.4, then the way apps write to the SD Card has changed so that they can only write to a specific location.  The location that DSub uses has already been automatically changed to the correct location.  In order to delete all of the old app data, you will need to mount the SD Card on your computer and delete the old folder manually</string>
 	<string name="settings.cache_location_internal">Internal</string>
@@ -357,8 +354,7 @@
     <string name="settings.media_button_summary">Respond to phone, headset and Bluetooth media buttons</string>
     <string name="settings.screen_lit_title">Keep screen on</string>
     <string name="settings.screen_lit_summary">Keeping the screen on while downloading improves download speed.</string>
-	<string name="settings.playlist_random_size_title">Shuffle Playlist Size</string>
-	<string name="settings.temp_loss_title">Temporary Loss of Focus</string>
+    <string name="settings.temp_loss_title">Temporary Loss of Focus</string>
 	<string name="settings.temp_loss_pause">Always Pause</string>
 	<string name="settings.temp_loss_pause_lower">Pause, lower volume when requested</string>
 	<string name="settings.temp_loss_lower">Always lower volume</string>
@@ -446,9 +442,7 @@
 	<string name="settings.replay_gain_type.smart">Smart detection</string>
 	<string name="settings.replay_gain_type.album">Album tags</string>
 	<string name="settings.replay_gain_type.track">Track tags</string>
-	<string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
-	<string name="settings.replay_gain_untagged">Songs without Replay Gain</string>
-	<string name="settings.casting">Casting</string>
+    <string name="settings.casting">Casting</string>
 	<string name="settings.casting_proxy">Use device proxy</string>
 	<string name="settings.casting_proxy_summary">Stream everything through the device as a proxy.  This gets around issues such as using self-signed certificates.</string>
 	<string name="settings.rename_duplicates">Rename duplicate tracks</string>
@@ -468,10 +462,8 @@
 	<string name="settings.casting_cache_summary">Cache currently playing songs while casting</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA Enabled</string>
 	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 try turning this off</string>
-    <string name="settings.rewind_interval">Rewind Interval</string>
-    <string name="settings.fastforward_interval">Fast Forward Interval</string>
 
-	<string name="shuffle.title">Shuffle By</string>
+    <string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
 	<string name="shuffle.endYear">End Year:</string>
 	<string name="shuffle.genre">Genre:</string>
@@ -572,14 +564,7 @@
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
 
-	<string name="changelog_full_title">Change Log</string>
-    <string name="changelog_title">What\'s New</string>
-    <string name="changelog_ok_button">OK</string>
-    <string name="changelog_show_full">More…</string>
-
-    <string name="changelog_version_format">Version %s</string>
-
-	<string name="tasker.start_playing">Start playing</string>
+    <string name="tasker.start_playing">Start playing</string>
 	<string name="tasker.start_playing_shuffled">Start playing in Shuffle Mode</string>
 	<string name="tasker.start_playing_title">Tasker -> Start DSub</string>
 	<string name="tasker.edit_shuffle_mode">Start in shuffle mode: </string>

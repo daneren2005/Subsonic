@@ -79,15 +79,13 @@
 	<string name="menu.refresh">Uppdatera</string>
 	<string name="menu.play">Spela</string>
 	<string name="menu.play_last">Spela sista</string>
-    <string name="menu.exit">Avsluta</string>
     <string name="menu.settings">Inställningar</string>
     <string name="menu.about">Om</string>
 	<string name="menu.add_playlist">Lägg till i spellista</string>
 	<string name="menu.remove_playlist">Ta bort från spellista</string>
 	<string name="menu.deleted_playlist">Tog bort spellistan  %s</string>
 	<string name="menu.deleted_playlist_error">Misslyckades med att ta bort spellistan %s</string>
-	<string name="menu.log">Skicka Logg</string>
-	<string name="menu.set_timer">Starta timer</string>
+    <string name="menu.set_timer">Starta timer</string>
 	<string name="menu.check_podcasts">Leta efter nya avsnitt</string>
 	<string name="menu.add_podcast">Lägg till kanal</string>
 	<string name="menu.keep_synced">Håll synkroniserad</string>
@@ -260,7 +258,6 @@
     <string name="settings.preload_wifi">Spår att ladda in i förväg (Wifi)</string>
 	<string name="settings.preload_mobile">Spår att ladda in i förväg (Mobil data)</string>
     <string name="settings.cache_size">Cache storlek</string>
-    <string name="settings.cache_location">Cache plats</string>
     <string name="settings.cache_location_error">Ogiltig cache placering. Använder standard.</string>
     <string name="settings.cache_location_reset">Din cache placering är inte skrivbar. Om du nyligen uppdaterade Android till KitKat 4.4 så har sättet appar skriver till SD-kortet ändrats så de bara kan skriva till en specifik plats. Platsen som DSub använder har automatiskt ändrats till den korrekta platsen. För att radera gammal data måste du sätta in SD-kortet i din dator och radera mappen manuellt</string>
 	<string name="settings.cache_clear">Rensa cachen</string>
@@ -336,8 +333,7 @@
     <string name="settings.media_button_summary">Reagera på telefonen, headset och bluetooths media knappar</string>
     <string name="settings.screen_lit_title">Håll skärmen igång</string>
     <string name="settings.screen_lit_summary">Att hålla skärmen igång när man laddar ner ökar nerladdningshastigheten.</string>
-	<string name="settings.playlist_random_size_title">Slumpad spelliste storlek</string>
-	<string name="settings.temp_loss_title">Förlorade fokus temporärt</string>
+    <string name="settings.temp_loss_title">Förlorade fokus temporärt</string>
 	<string name="settings.temp_loss_pause">Pausa alltid</string>
 	<string name="settings.temp_loss_pause_lower">Pause, sänk volymen när tillsagd</string>
 	<string name="settings.temp_loss_lower">Alltid lägre volym</string>
@@ -418,9 +414,7 @@
 	<string name="settings.replay_gain_type.smart">Smart upptäckande</string>
 	<string name="settings.replay_gain_type.album">Album taggar</string>
 	<string name="settings.replay_gain_type.track">Spår taggar</string>
-	<string name="settings.replay_gain_bump">Replay Gain Pre-amp</string>
-	<string name="settings.replay_gain_untagged">Spår utan Replay Gain</string>
-	<string name="settings.casting">Casting</string>
+    <string name="settings.casting">Casting</string>
 	<string name="settings.casting_proxy">Använd enhetens proxy</string>
 	<string name="settings.casting_proxy_summary">Streama allting genom enheten som en proxy.  Det här kommer runt problem med självsignerade certifikat.</string>
 	<string name="settings.rename_duplicates">Döp om tvillingspår</string>
@@ -529,12 +523,7 @@
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
 
-	<string name="changelog_full_title">Uppdateringslogg</string>
-    <string name="changelog_title">Vad är nytt</string>
-    <string name="changelog_ok_button">OK</string>
-    <string name="changelog_show_full">Mer…</string>
-
-	<string name="tasker.start_playing">Börja spela</string>
+    <string name="tasker.start_playing">Börja spela</string>
 	<string name="tasker.start_playing_shuffled">Börja spela i slumpat läge</string>
 	<string name="tasker.start_playing_title">Tasker -> Starta DSub</string>
 	<string name="tasker.edit_shuffle_mode">Starta i slumpat läge: </string>

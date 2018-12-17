@@ -84,15 +84,13 @@
 	<string name="menu.refresh">Frissítés</string>
 	<string name="menu.play">Lejátszás</string>
 	<string name="menu.play_last">Sorba állítás utolsónak</string>
-    <string name="menu.exit">Kilépés</string>
     <string name="menu.settings">Beállítások</string>
     <string name="menu.about">Névjegy</string>
 	<string name="menu.add_playlist">Hozzáadás lejátszási listához</string>
 	<string name="menu.remove_playlist">Eltávolítás a lejátszási listából</string>
 	<string name="menu.deleted_playlist">\"%s\" lejátszási lista törölve</string>
 	<string name="menu.deleted_playlist_error">\"%s\" lejátszási lista törlése sikertelen!</string>
-	<string name="menu.log">Log küldése</string>
-	<string name="menu.set_timer">Időzítő beállítása</string>
+    <string name="menu.set_timer">Időzítő beállítása</string>
 	<string name="menu.check_podcasts">Új epizódok ellenőrzése</string>
 	<string name="menu.add_podcast">Csatorna hozzáadása</string>
 	<string name="menu.keep_synced">Tartsa szinkronizálva</string>
@@ -273,7 +271,6 @@
     <string name="settings.preload_wifi">Dalok előolvasása (Wi-Fi)</string>
 	<string name="settings.preload_mobile">Dalok előolvasása (Mobilhálózat)</string>
     <string name="settings.cache_size">Gyorsítótár mérete (MB)</string>
-    <string name="settings.cache_location">Gyorsítótár helye</string>
     <string name="settings.cache_location_error">Hibás gyorsítótár hely! Az alapértelmezett használata.</string>
     <string name="settings.cache_location_reset">A beállított gyorsítótár-hely már nem írható! Ha a közelmúltban frissítette telefonja Android rendszerét 4.4.x KitKat verzióra, abban az SD kártya kezelése megváltozott, és az alkalmazások csak egy speciális helyre tudnak írni. A Dsub már automatikusan átállt a megfelelő helyre. Ahhoz, hogy a régi adatokat törölni tudja, csatlakoztassa az SD kártyát a számítógépéhez, és törölje a régi mappát!</string>
 	<string name="settings.cache_location_internal">Belső</string>
@@ -356,8 +353,7 @@
     <string name="settings.media_button_summary">A lejátszó irányítása a bluetooth eszköz vagy a fülhallgató vezérlőgombjaival.</string>
     <string name="settings.screen_lit_title">Képernyő ébrentartása</string>
     <string name="settings.screen_lit_summary">Képernyő ébrentartása a letöltés alatt a magasabb letöltési sebesség érdekében.</string>
-	<string name="settings.playlist_random_size_title">Véletlenszerű lejátszási lista mérete</string>
-	<string name="settings.temp_loss_title">Külső esemény bekövetkeztekor</string>
+    <string name="settings.temp_loss_title">Külső esemény bekövetkeztekor</string>
 	<string name="settings.temp_loss_pause">Megállítás minden esetben</string>
 	<string name="settings.temp_loss_pause_lower">Megállítás, kérésre alacsonyabb hangerő</string>
 	<string name="settings.temp_loss_lower">Alacsonyabb hangerő</string>
@@ -445,9 +441,7 @@
 	<string name="settings.replay_gain_type.smart">Intelligens módon</string>
 	<string name="settings.replay_gain_type.album">Album értékeiből</string>
 	<string name="settings.replay_gain_type.track">Dal értékeiből</string>
-	<string name="settings.replay_gain_bump">Hangerő-kiegyenlítés előerősítése</string>
-	<string name="settings.replay_gain_untagged">Dalok hangerő-kiegyenlítés nélkül</string>
-	<string name="settings.casting">Casting (tartalmak átküldése)</string>
+    <string name="settings.casting">Casting (tartalmak átküldése)</string>
 	<string name="settings.casting_proxy">Eszköz használata proxyként</string>
 	<string name="settings.casting_proxy_summary">Streamelés az eszközön (mint egy proxyn) keresztül. Ez megoldást jelenthet néhány esetben, pl. saját aláírású tanúsítvány használatakor.</string>
 	<string name="settings.rename_duplicates">Duplikált dalok átnevezése</string>
@@ -467,10 +461,8 @@
 	<string name="settings.casting_cache_summary">Az éppen lejátszott dal gyorsítótárazása a tartalomátküldés (Casting) alatt.</string>
 	<string name="settings.casting.dlna_casting_enabled">DLNA engedélyezve</string>
 	<string name="settings.casting.dlna_casting_enabled.summary">Ha akkumulátor-merülési probléma lépne fel Android 7.0 alatt, kapcsolja ki a funkciót!</string>
-    <string name="settings.rewind_interval">Visszatekerés időintervalluma</string>
-    <string name="settings.fastforward_interval">Gyors előretekerés időintervalluma</string>
 
-	<string name="shuffle.title">Dalsorrend keverése</string>
+    <string name="shuffle.title">Dalsorrend keverése</string>
 	<string name="shuffle.startYear">Kezdő év:</string>
 	<string name="shuffle.endYear">Befejező év:</string>
 	<string name="shuffle.genre">Műfaj:</string>
@@ -571,14 +563,7 @@
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
 
-	<string name="changelog_full_title">Újdonságok</string>
-    <string name="changelog_title">Újdonságok</string>
-    <string name="changelog_ok_button">OK</string>
-    <string name="changelog_show_full">Továbbiak…</string>
-
-    <string name="changelog_version_format">Verzió %s</string>
-
-	<string name="tasker.start_playing">Lejátszás indítása</string>
+    <string name="tasker.start_playing">Lejátszás indítása</string>
 	<string name="tasker.start_playing_shuffled">Lejátszás indítása kevert sorrendben</string>
 	<string name="tasker.start_playing_title">Tasker -> DSub indítása</string>
 	<string name="tasker.edit_shuffle_mode">Indítás kevert sorrendben: </string>

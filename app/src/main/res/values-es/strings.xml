@@ -66,15 +66,13 @@
 	<string name="menu.refresh">Actualizar</string>
 	<string name="menu.play">Reproducir</string>
 	<string name="menu.play_last">Reproducir al final</string>
-    <string name="menu.exit">Salir</string>
     <string name="menu.settings">Preferencias</string>
     <string name="menu.about">Acerca de</string>
 	<string name="menu.add_playlist">Añadir a lista de reproducción</string>
 	<string name="menu.remove_playlist">Borrar de lista de reproducción</string>
 	<string name="menu.deleted_playlist">Listas borradas %s</string>
 	<string name="menu.deleted_playlist_error">Error al borrar la lista de reproducción %s</string>
-	<string name="menu.log">Enviar Log</string>
-	<string name="menu.set_timer">Ajustar temporizador</string>
+    <string name="menu.set_timer">Ajustar temporizador</string>
 	<string name="menu.check_podcasts">Comprobar nuevos episodios</string>
 	<string name="menu.add_podcast">Añadir canal</string>
 	<string name="menu.keep_synced">Mantener sincronizado</string>
@@ -226,7 +224,6 @@
     <string name="settings.preload_wifi">Canciones para precargar (Wifi)</string>
 	<string name="settings.preload_mobile">Canciones pare precargar (Móvil)</string>
     <string name="settings.cache_size">Tamaño de caché (MB)</string>
-    <string name="settings.cache_location">Ruta de caché</string>
     <string name="settings.cache_location_error">Ruta de caché no válida. Utilizando la opción por defecto.</string>
 	<string name="settings.cache_clear">Limpiar cache</string>
 	<string name="settings.cache_clear_complete">Caché limpiada</string>
@@ -299,8 +296,7 @@
     <string name="settings.media_button_summary">Responder a los botones Bluetooth, teléfono y manos libres</string>
     <string name="settings.screen_lit_title">Mantener pantalla encendida</string>
     <string name="settings.screen_lit_summary">Mantener la pantalla encendida durantes las descargas mejora la velocidad de descarga.</string>
-	<string name="settings.playlist_random_size_title">Tamaño de la lista de reproducción en aleatorio</string>
-	<string name="settings.temp_loss_title">Pérdida temporal de foco</string>
+    <string name="settings.temp_loss_title">Pérdida temporal de foco</string>
 	<string name="settings.temp_loss_pause">Pausar siempre</string>
 	<string name="settings.temp_loss_pause_lower">Pausar, bajar el volumen cuando sea solicitado</string>
 	<string name="settings.temp_loss_lower">Bajar volumen siempre</string>
@@ -371,9 +367,7 @@
 	<string name="settings.menu_options.rate_summary">Mostrar valoración en los menús</string>
 	<string name="settings.replay_gain">Ganancia de reproducción</string>
 	<string name="settings.replay_gain_summary">Modificar la ganancia de reproducción por tags de pista o álbum</string>
-	<string name="settings.replay_gain_bump">Ganancia de Pre-amp en la reproducciónReplay Gain Pre-amp</string>
-	<string name="settings.replay_gain_untagged">Canciones sin ganancia de reproducciónSongs without Replay Gain</string>
-	<string name="settings.replay_gain_type">Leer desde los tags</string>
+    <string name="settings.replay_gain_type">Leer desde los tags</string>
 	<string name="settings.replay_gain_type.smart">Detección inteligente</string>
 	<string name="settings.replay_gain_type.album">Tags de albums</string>
 	<string name="settings.replay_gain_type.track">Tags de pistas</string>
@@ -481,12 +475,7 @@
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
 
-	<string name="changelog_full_title">Log de cambios</string>
-    <string name="changelog_title">Novedades</string>
-    <string name="changelog_ok_button">OK</string>
-    <string name="changelog_show_full">Más…</string>
-
-	<string name="tasker.start_playing">Comenzar reproduciendo</string>
+    <string name="tasker.start_playing">Comenzar reproduciendo</string>
 	<string name="tasker.start_playing_title">Tasker -> Encender DSub</string>
 	<string name="tasker.edit_shuffle_mode">Comenzar en modo aleatorio: </string>
 	<string name="tasker.start_playing_shuffled">Comenzar en modo aleatorio</string>

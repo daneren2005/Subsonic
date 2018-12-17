@@ -77,15 +77,13 @@
 	<string name="menu.refresh">Ververs</string>
 	<string name="menu.play">Speel af</string>
 	<string name="menu.play_last">Speel laatst</string>
-    <string name="menu.exit">Beëindigen</string>
     <string name="menu.settings">Instellingen</string>
     <string name="menu.about">Over</string>
 	<string name="menu.add_playlist">Voeg toe aan playlist</string>
 	<string name="menu.remove_playlist">Verwijder van playlist</string>
 	<string name="menu.deleted_playlist">Verwijderde playlist %s</string>
 	<string name="menu.deleted_playlist_error">Playlist %s kon niet verwijderd worden</string>
-	<string name="menu.log">Stuur log</string>
-	<string name="menu.set_timer">Stel timer in</string>
+    <string name="menu.set_timer">Stel timer in</string>
 	<string name="menu.check_podcasts">Controleer op nieuwe afleveringen</string>
 	<string name="menu.add_podcast">Voeg kanaal toe</string>
 	<string name="menu.keep_synced">Gesynchroniseerd houden</string>
@@ -261,7 +259,6 @@
     <string name="settings.preload_wifi">Nummers vooraf laden (Wifi)</string>
 	<string name="settings.preload_mobile">Nummers vooraf laden (Mobiel)</string>
     <string name="settings.cache_size">Cache grootte</string>
-    <string name="settings.cache_location">Cache locatie</string>
     <string name="settings.cache_location_error">Onjuiste cache locatie. Standaard wordt gebruikt.</string>
     <string name="settings.cache_location_reset">De locatie van de cache die u hebt ingesteld is niet meer beschrijfbaar. Als onlangs uw Android telefoon geüpgraded is naar KitKat 4.4 en hoger, dan is de manier waarop apps naar de SD-kaart schrijven veranderd zodat er alleen naar een specifieke locatie geschreven kan worden. De locatie die DSub gebruikt is al automatisch veranderd naar de juiste locatie. Om de oude app-data te verwijderen, moet de SD-kaart gekoppeld worden aan een computer om de oude folder handmatig te verwijderen.</string>
 	<string name="settings.cache_clear">Cache legen</string>
@@ -337,8 +334,7 @@
     <string name="settings.media_button_summary">Reageer op telefoon, koptelefoon en bluetooth mediaknoppen</string>
     <string name="settings.screen_lit_title">Houd scherm aan</string>
     <string name="settings.screen_lit_summary">Houdt scherm aan tijdens het downloaden verbetert de download snelheid.</string>
-	<string name="settings.playlist_random_size_title">Shuffle playlist grootte</string>
-	<string name="settings.temp_loss_title">Tijdelijk focus verlies</string>
+    <string name="settings.temp_loss_title">Tijdelijk focus verlies</string>
 	<string name="settings.temp_loss_pause">Altijd pauzeren</string>
 	<string name="settings.temp_loss_pause_lower">Pauze, lagere volume desgevraagd</string>
 	<string name="settings.temp_loss_lower">Altijd lagere volume</string>
@@ -419,9 +415,7 @@
 	<string name="settings.replay_gain_type.smart">Slimme detectie</string>
 	<string name="settings.replay_gain_type.album">Album tags</string>
 	<string name="settings.replay_gain_type.track">Nummer tags</string>
-	<string name="settings.replay_gain_bump">Normaliseren Pre-amp</string>
-	<string name="settings.replay_gain_untagged">Nummers zonder normalisatie</string>
-	<string name="settings.casting">Casten</string>
+    <string name="settings.casting">Casten</string>
 	<string name="settings.casting_proxy">Gebruik apparaat proxy</string>
 	<string name="settings.casting_proxy_summary">Stream alles via het apparaat als een proxy. Dit omzeilt problemen zoals zelf toegekende certificaten.</string>
 	<string name="settings.rename_duplicates">Hernoem dubbele nummers</string>
@@ -530,14 +524,7 @@
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
 
-	<string name="changelog_full_title">Verander Log</string>
-    <string name="changelog_title">Wat is er nieuw</string>
-    <string name="changelog_ok_button">OK</string>
-    <string name="changelog_show_full">Meer…</string>
-
-    <string name="changelog_version_format">Versie %s</string>
-
-	<string name="tasker.start_playing">Begin met spelen</string>
+    <string name="tasker.start_playing">Begin met spelen</string>
 	<string name="tasker.start_playing_shuffled">Begin met spelen in shuffle-modus</string>
 	<string name="tasker.start_playing_title">Tasker -> Start DSub</string>
 	<string name="tasker.edit_shuffle_mode">Start in shuffle-modus: </string>

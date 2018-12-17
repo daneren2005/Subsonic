@@ -73,15 +73,13 @@
 	<string name="menu.refresh">Aktualisieren</string>
 	<string name="menu.play">Abspielen</string>
 	<string name="menu.play_last">Ans Ende der Wiedergabeliste</string>
-    <string name="menu.exit">Beenden</string>
     <string name="menu.settings">Einstellungen</string>
     <string name="menu.about">Über</string>
 	<string name="menu.add_playlist">Zur Wiedergabeliste hinzufügen</string>
 	<string name="menu.remove_playlist">Von Wiedergabeliste entfernen</string>
 	<string name="menu.deleted_playlist">Lösche Wiedergabeliste %s</string>
 	<string name="menu.deleted_playlist_error">Löschen der Wiedergabeliste %s fehlgeschlagen</string>
-	<string name="menu.log">Sende Log</string>
-	<string name="menu.set_timer">Setze Timer</string>
+    <string name="menu.set_timer">Setze Timer</string>
 	<string name="menu.check_podcasts">Prüfe auf neue Episoden</string>
 	<string name="menu.add_podcast">Podcast hinzufügen</string>
 	<string name="menu.keep_synced">Synchron halten</string>
@@ -251,7 +249,6 @@
     <string name="settings.preload_wifi">Im Vorraus zu laden (Wifi)</string>
 	<string name="settings.preload_mobile">Im Vorraus zu laden (Mobil)</string>
     <string name="settings.cache_size">Größe des Cache (MB)</string>
-    <string name="settings.cache_location">Position des Cache</string>
     <string name="settings.cache_location_error">Ungültiger Pfad zum Cache. Nutze Standard.</string>
     <string name="settings.cache_location_reset">Der gesetzte Cachepfad ist nicht (mehr) beschreibbar. Durch die Aktualisierung des Telefon-OS auf KitKat 4.4 wurde der Zugriff auf die SD-Karte durch Apps eingeschränkt auf spezielle Pfade. Der von DSub verwendete Pfad wurde entsprechend korrigiert. Um den alten Cache zu löschen, müssen Sie die SD-Karte an einem Computer anschließend und den Ordner manuell löschen.</string>
 	<string name="settings.cache_clear">Lösche Cache</string>
@@ -309,8 +306,7 @@
     <string name="settings.media_button_summary">Verwende Medientasten des Telefon, Freisprecheinrichtung und Bluetooth</string>
     <string name="settings.screen_lit_title">Bildschirm aktiv halten</string>
     <string name="settings.screen_lit_summary">Ein aktiver Bildschirm verbessert die Downloadgeschwindigkeit.</string>
-	<string name="settings.playlist_random_size_title">Länge der Zufallswiedergabeliste</string>
-	<string name="settings.temp_loss_title">Verhalten bei Benachrichtigungen</string>
+    <string name="settings.temp_loss_title">Verhalten bei Benachrichtigungen</string>
 	<string name="settings.temp_loss_pause">Immer pausieren</string>
 	<string name="settings.temp_loss_pause_lower">Pausiere und Lautstärke bei Bedarf veringern</string>
 	<string name="settings.temp_loss_lower">Lautstärke veringern</string>
@@ -381,9 +377,7 @@
 	<string name="settings.replay_gain_type.smart">Automatische Erkennung</string>
 	<string name="settings.replay_gain_type.album">Album Tag</string>
 	<string name="settings.replay_gain_type.track">Track Tag</string>
-	<string name="settings.replay_gain_bump">Wiedergabevorverstärkung</string>
-	<string name="settings.replay_gain_untagged">Lieder ohne Wiedergabeverstärkung</string>
-	<string name="settings.casting">Casting</string>
+    <string name="settings.casting">Casting</string>
 	<string name="settings.casting_proxy">Nutze DSub als Proxy</string>
 	<string name="settings.casting_proxy_summary">Sende alles über dieses Gerät als Proxy.  Dies umgeht Probleme mit selbstsignierten Zertifikaten.</string>
 	<string name="settings.rename_duplicates">Doppelte Medien umbenennen</string>
@@ -478,12 +472,7 @@
     <string name="widget.sdcard_busy">SD-Karte nicht verfügbar</string>
     <string name="widget.sdcard_missing">Keine SD-Karte</string>
 
-	<string name="changelog_full_title">Änderungen</string>
-    <string name="changelog_title">Was ist Neu</string>
-    <string name="changelog_ok_button">OK</string>
-    <string name="changelog_show_full">Mehr…</string>
-
-	<string name="tasker.start_playing">Starte Wiedergabe</string>
+    <string name="tasker.start_playing">Starte Wiedergabe</string>
 	<string name="tasker.start_playing_shuffled">Starte Zufallswiedergabe</string>
 	<string name="tasker.start_playing_title">Tasker -> Starte DSub</string>
 	<string name="tasker.edit_shuffle_mode">Starte im Zufallsmodus: </string>

@@ -83,15 +83,13 @@
 	<string name="menu.refresh">Atualizar</string>
 	<string name="menu.play">Reproduzir</string>
 	<string name="menu.play_last">Reproduzir no final</string>
-    <string name="menu.exit">Sair</string>
     <string name="menu.settings">Definições</string>
 	<string name="menu.about">Sobre</string>
 	<string name="menu.add_playlist">Adicionar à lista de reprodução</string>
 	<string name="menu.remove_playlist">Remover da lista de reprodução</string>
 	<string name="menu.deleted_playlist">A lista de reprodução %s foi eliminada</string>
 	<string name="menu.deleted_playlist_error">Falha ao eliminar a lista de reprodução %s</string>
-	<string name="menu.log">Enviar relatório</string>
-	<string name="menu.set_timer">Definir temporizador</string>
+    <string name="menu.set_timer">Definir temporizador</string>
 	<string name="menu.check_podcasts">Procurar novos episódios</string>
 	<string name="menu.add_podcast">Adicionar canal</string>
 	<string name="menu.keep_synced">Manter sincronizado</string>
@@ -274,7 +272,6 @@
     <string name="settings.preload_wifi">Músicas para pré-carregar (Wi-Fi)</string>
 	<string name="settings.preload_mobile">Músicas para pré-carregar (dados móveis)</string>
     <string name="settings.cache_size">Tamanho da cache</string>
-    <string name="settings.cache_location">Localização da cache</string>
     <string name="settings.cache_location_error">Localização da cache inválida. A usar predefinição.</string>
     <string name="settings.cache_location_reset">Não foi possível escrever na localização da cache que definiu. Se atualizou recentemente o SO do seu dispositivo para o KitKat 4.4, então o modo como as aplicações escrevem no cartão SD mudou e só podem escrever numa localização específica. A localização que o DSub usa já foi alterada para a localização correta.  Para eliminar os antigos dados da aplicação, terá que montar o cartão SD no computador e eliminar a pasta manualmente</string>
 	<string name="settings.cache_location_internal">Interna</string>
@@ -355,8 +352,7 @@
     <string name="settings.media_button_summary">Responder aos botões multimédia do dispositivo, mãos livres e Bluetooth</string>
     <string name="settings.screen_lit_title">Manter ecrã ligado</string>
     <string name="settings.screen_lit_summary">Manter o ecrã ligado durante as transferências melhora a velocidade de transferência</string>
-	<string name="settings.playlist_random_size_title">Tamanho da lista de reprodução aleatória</string>
-	<string name="settings.temp_loss_title">Perda temporária de foco</string>
+    <string name="settings.temp_loss_title">Perda temporária de foco</string>
 	<string name="settings.temp_loss_pause">Pausar sempre</string>
 	<string name="settings.temp_loss_pause_lower">Pausar, baixar volume quando pedido</string>
 	<string name="settings.temp_loss_lower">Baixar sempre o volume</string>
@@ -444,9 +440,7 @@
 	<string name="settings.replay_gain_type.smart">Deteção inteligente</string>
 	<string name="settings.replay_gain_type.album">Etiquetas nos álbuns</string>
 	<string name="settings.replay_gain_type.track">Etiquetas nas faixas</string>
-	<string name="settings.replay_gain_bump">Pré-amplificação do Replay Gain</string>
-	<string name="settings.replay_gain_untagged">Músicas sem Replay Gain</string>
-	<string name="settings.casting">Transmissão</string>
+    <string name="settings.casting">Transmissão</string>
 	<string name="settings.casting_proxy">Usar dispositivo como proxy</string>
 	<string name="settings.casting_proxy_summary">Transmitir tudo através do dispositivo como um proxy.  Isto evita problemas como o uso de certificados auto-assinados</string>
 	<string name="settings.rename_duplicates">Renomear faixas duplicadas</string>
@@ -466,10 +460,8 @@
 	<string name="settings.casting_cache_summary">Adicionar à cache as músicas a reproduzir no momento da transmissão</string>
 	<string name="settings.casting.dlna_casting_enabled">Ativar DLNA</string>
 	<string name="settings.casting.dlna_casting_enabled.summary">Se tiver problemas com o descarregamento da bateria no Android 7.0 experimente desativar isto</string>
-    <string name="settings.rewind_interval">Intervalo de retrocesso</string>
-    <string name="settings.fastforward_interval">Intervalo de avanço</string>
 
-	<string name="share.create_error">Falha ao criar a partilha %s</string>
+    <string name="share.create_error">Falha ao criar a partilha %s</string>
 	<string name="shuffle.title">Aleatorizar por</string>
 	<string name="shuffle.startYear">Ano de início:</string>
 	<string name="shuffle.endYear">Ano de fim:</string>
@@ -570,14 +562,7 @@
     <string name="util.bytes_format.kilobyte">0 KB</string>
     <string name="util.bytes_format.byte">0 B</string>
 
-	<string name="changelog_full_title">Registo de alterações</string>
-    <string name="changelog_title">O que há de novo</string>
-    <string name="changelog_ok_button">OK</string>
-    <string name="changelog_show_full">Mais…</string>
-
-    <string name="changelog_version_format">Versão %s</string>
-
-	<string name="tasker.start_playing">Iniciar reprodução</string>
+    <string name="tasker.start_playing">Iniciar reprodução</string>
 	<string name="tasker.start_playing_shuffled">Iniciar reprodução em modo aleatório</string>
 	<string name="tasker.start_playing_title">Tasker -> Iniciar DSub</string>
 	<string name="tasker.edit_shuffle_mode">Iniciar em modo aleatório: </string>
