@@ -54,12 +54,14 @@ import org.seamless.util.MimeType;
 
 import java.io.File;
 import java.net.URI;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicLong;
 
+import github.daneren2005.serverproxy.WebProxy;
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.DLNADevice;
 import github.vrih.xsub.domain.MusicDirectory;
@@ -67,7 +69,6 @@ import github.vrih.xsub.domain.PlayerState;
 import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.Pair;
 import github.vrih.xsub.util.Util;
-import github.daneren2005.serverproxy.WebProxy;
 
 public class DLNAController extends RemoteController {
 	private static final String TAG = DLNAController.class.getSimpleName();
@@ -291,7 +292,7 @@ public class DLNAController extends RemoteController {
 
 	@Override
 	public void changePosition(int seconds) {
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+		DateFormat df = SimpleDateFormat.getTimeInstance();
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 		controlPoint.execute(new Seek(getTransportService(), SeekMode.REL_TIME, df.format(new Date(seconds * 1000))) {
 			@SuppressWarnings("rawtypes")
@@ -488,7 +489,7 @@ public class DLNAController extends RemoteController {
 			Res res = new Res(mimeType, song.getSize(), url);
 
 			if(song.getDuration() != null) {
-				SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+				DateFormat df = SimpleDateFormat.getTimeInstance();
 				df.setTimeZone(TimeZone.getTimeZone("UTC"));
 				res.setDuration(df.format(new Date(song.getDuration() * 1000)));
 			}

@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="4dp"
-			android:textSize="20dp"
+			android:textSize="20sp"
 			android:text="@string/common.name"
 			android:textColor="?android:textColorPrimary"/>
 		<EditText
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="4dp"
-			android:textSize="20dp"
+			android:textSize="20sp"
 			android:text="@string/share.expiration"
 			android:textColor="?android:textColorPrimary"/>
 		<DatePicker
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="4dp"
-			android:textSize="20dp"
+			android:textSize="20sp"
 			android:text="@string/share.no_expiration"
 			android:textColor="?android:textColorPrimary"/>
 		<CheckBox
