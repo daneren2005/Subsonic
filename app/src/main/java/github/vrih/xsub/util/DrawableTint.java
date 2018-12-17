@@ -23,6 +23,8 @@ import android.graphics.drawable.Drawable;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
+
+import android.util.SparseIntArray;
 import android.util.TypedValue;
 
 import java.util.HashMap;
@@ -32,7 +34,7 @@ import java.util.WeakHashMap;
 import github.vrih.xsub.R;
 
 public class DrawableTint {
-	private static final Map<Integer, Integer> attrMap = new HashMap<>();
+	private static final SparseIntArray attrMap = new SparseIntArray();
 	private static final WeakHashMap<Integer, Drawable> tintedDrawables = new WeakHashMap<>();
 
 	public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableRes) {
@@ -62,7 +64,7 @@ public class DrawableTint {
 	}
 	public static int getColorRes(Context context, @AttrRes int colorAttr) {
 		int color;
-		if(attrMap.containsKey(colorAttr)) {
+		if(attrMap.get(colorAttr) != 0) {
 			color = attrMap.get(colorAttr);
 		} else {
 			TypedValue typedValue = new TypedValue();
@@ -75,7 +77,7 @@ public class DrawableTint {
 		return color;
 	}
 	public static int getDrawableRes(Context context, @AttrRes int drawableAttr) {
-		if(attrMap.containsKey(drawableAttr)) {
+		if(attrMap.get(drawableAttr) != 0) {
 			return attrMap.get(drawableAttr);
 		} else {
 			int[] attrs = new int[]{drawableAttr};
