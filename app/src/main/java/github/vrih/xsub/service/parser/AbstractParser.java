@@ -138,17 +138,16 @@ abstract class AbstractParser {
         rootElementFound = false;
     }
 
-    int nextParseEvent() throws Exception {
+    int nextParseEvent() {
 		try {
 			return parser.next();
 		} catch(Exception e) {
-				ServerInfo overrideInfo = new ServerInfo();
-				overrideInfo.saveServerInfo(context, instance);
-			}
-
-			throw e;
+		    ServerInfo overrideInfo = new ServerInfo();
+		    overrideInfo.saveServerInfo(context, instance);
 		}
+		return 0;
     }
+
 
     String getElementName() {
         String name = parser.getName();
