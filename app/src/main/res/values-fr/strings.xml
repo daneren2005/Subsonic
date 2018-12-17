@@ -146,7 +146,7 @@
 	<string name="select_podcasts.delete">Supprimer le podcast</string>
 
     <string name="download.empty">La playlist est vide</string>
-	<string name="download.shuffle_loading">Chargement en cours liste au hasard...</string>
+	<string name="download.shuffle_loading">Chargement en cours liste au hasard…</string>
     <string name="download.playerstate_downloading">Chargement - %s</string>
     <string name="download.playerstate_buffering">Mise en mémoire tampon</string>
     <string name="download.playerstate_playing_shuffle">Lecture au hasard</string>

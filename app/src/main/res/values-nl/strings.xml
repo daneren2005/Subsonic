@@ -119,7 +119,7 @@
     <string name="search.albums">Albums</string>
     <string name="search.songs">Nummers</string>
 
-	<string name="progress.wait">Moment aub...</string>
+	<string name="progress.wait">Moment aub…</string>
 	<string name="progress.artist_info">Laadt artiesten bio</string>
 
 	<string name="select_album.n_selected">%d geselecteerd.</string>
@@ -162,7 +162,7 @@
 	<string name="select_podcasts.channels">Podcast kanalen</string>
 
     <string name="download.empty">Playlist is leeg</string>
-	<string name="download.shuffle_loading">Shuffle lijst wordt geladen...</string>
+	<string name="download.shuffle_loading">Shuffle lijst wordt geladen…</string>
     <string name="download.playerstate_downloading">Downloaden - %s</string>
 	<string name="download.playerstate_mobile_disabled">Wachten op WiFi network om te kunnen downloaden</string>
     <string name="download.playerstate_buffering">Bufferen</string>
@@ -267,7 +267,7 @@
     <string name="settings.cache_location_reset">De locatie van de cache die u hebt ingesteld is niet meer beschrijfbaar. Als onlangs uw Android telefoon geüpgraded is naar KitKat 4.4 en hoger, dan is de manier waarop apps naar de SD-kaart schrijven veranderd zodat er alleen naar een specifieke locatie geschreven kan worden. De locatie die DSub gebruikt is al automatisch veranderd naar de juiste locatie. Om de oude app-data te verwijderen, moet de SD-kaart gekoppeld worden aan een computer om de oude folder handmatig te verwijderen.</string>
 	<string name="settings.cache_clear">Cache legen</string>
 	<string name="settings.cache_clear_complete">Klaar met cache legen</string>
-    <string name="settings.testing_connection">Verbinding testen...</string>
+    <string name="settings.testing_connection">Verbinding testen…</string>
     <string name="settings.testing_ok">De verbinding is OK</string>
     <string name="settings.testing_unlicensed">Verbinding is OK. Server niet gelicenseerd.</string>
     <string name="settings.connection_failure">Verbinding mislukt.</string>

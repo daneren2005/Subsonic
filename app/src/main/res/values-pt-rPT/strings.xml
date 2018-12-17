@@ -126,7 +126,7 @@
     <string name="search.albums">Álbuns</string>
     <string name="search.songs">Músicas</string>
 
-	<string name="progress.wait">Por favor aguarde...</string>
+	<string name="progress.wait">Por favor aguarde…</string>
 	<string name="progress.artist_info">A carregar a informação do artista</string>
 
 	<string name="select_album.n_selected">%d selecionadas.</string>
@@ -169,7 +169,7 @@
 	<string name="select_podcasts.channels">Canais de podcast</string>
 
     <string name="download.empty">Lista de reprodução vazia</string>
-	<string name="download.shuffle_loading">A carregar lista aleatória...</string>
+	<string name="download.shuffle_loading">A carregar lista aleatória…</string>
     <string name="download.playerstate_downloading">A transferir - %s</string>
 	<string name="download.playerstate_mobile_disabled">À espera de rede Wi-Fi para transferir</string>
     <string name="download.playerstate_buffering">A colocar na memória intermédia</string>
@@ -282,7 +282,7 @@
 	<string name="settings.cache_location_external">Externa</string>
 	<string name="settings.cache_clear">Limpar cache</string>
 	<string name="settings.cache_clear_complete">A limpeza da cache foi concluída</string>
-    <string name="settings.testing_connection">A testar ligação...</string>
+    <string name="settings.testing_connection">A testar ligação…</string>
     <string name="settings.testing_ok">A ligação está OK</string>
     <string name="settings.testing_unlicensed">A ligação está OK. Servidor sem licença.</string>
     <string name="settings.connection_failure">Falha na ligação.</string>

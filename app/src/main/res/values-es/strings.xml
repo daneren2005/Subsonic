@@ -106,7 +106,7 @@
     <string name="search.albums">Disco</string>
     <string name="search.songs">Canción</string>
 
-	<string name="progress.wait">Espere por favor...</string>
+	<string name="progress.wait">Espere por favor…</string>
 
 	<string name="select_album.n_selected">Seleccionadas %d canciones</string>
 	<string name="select_album.offline">Offline</string>
@@ -146,7 +146,7 @@
 	<string name="select_podcasts.delete">Borrar podcast</string>
 
     <string name="download.empty">Lista de reproducción vaía</string>
-	<string name="download.shuffle_loading">Cargando lista aleatoria...</string>
+	<string name="download.shuffle_loading">Cargando lista aleatoria…</string>
     <string name="download.playerstate_downloading">Descargando - %s</string>
     <string name="download.playerstate_buffering">Buffering</string>
     <string name="download.playerstate_playing_shuffle">Reproduciendo en aleatorio</string>

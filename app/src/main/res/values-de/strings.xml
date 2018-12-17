@@ -116,7 +116,7 @@
     <string name="search.albums">Alben</string>
     <string name="search.songs">Lieder</string>
 
-	<string name="progress.wait">Bitte warten...</string>
+	<string name="progress.wait">Bitte warten…</string>
     <string name="progress.artist_info">Lade Informationen zum Künstler</string>
 
 	<string name="select_album.n_selected">%d Lieder ausgewählt.</string>
@@ -158,7 +158,7 @@
 	<string name="select_podcasts.delete">Lösche Podcast</string>
 
     <string name="download.empty">Wiedergabeliste ist leer</string>
-	<string name="download.shuffle_loading">Wiedergabeliste wird gemischt...</string>
+	<string name="download.shuffle_loading">Wiedergabeliste wird gemischt…</string>
     <string name="download.playerstate_downloading">Downloade - %s</string>
 	 <string name="download.playerstate_mobile_disabled">Warte auf Wi-Fi oder lokales Netzwerk für den Download</string>
     <string name="download.playerstate_buffering">Buffere</string>

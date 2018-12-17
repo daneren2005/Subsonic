@@ -67,7 +67,7 @@
     <string name="search.albums">Альбомы</string>
     <string name="search.songs">Композиции</string>
 
-    <string name="progress.wait">Пожалуйста, подождите...</string>
+    <string name="progress.wait">Пожалуйста, подождите…</string>
 
     <string name="select_album.n_selected">%d композиций выбрано.</string>
     <string name="select_album.offline">Оффлайн</string>
@@ -80,7 +80,7 @@
     <string name="select_album.donate_dialog_0_trial_days_left">Пробный период закончился</string>
 
     <string name="download.empty">Список воспроизведения пуст</string>
-	<string name="download.shuffle_loading">Загружается случайный список...</string>
+	<string name="download.shuffle_loading">Загружается случайный список…</string>
     <string name="download.playerstate_downloading">Загрузка - %s</string>
     <string name="download.playerstate_buffering">Буферизация</string>
     <string name="download.playerstate_playing_shuffle">Воспроизводится случайно</string>
@@ -129,7 +129,7 @@
     <string name="settings.cache_size">Размер кэша (Мб)</string>
     <string name="settings.cache_location">Путь кэша</string>
     <string name="settings.cache_location_error">Некорректный путь. Используем путь по умолчанию.</string>
-    <string name="settings.testing_connection">Проверка соединения...</string>
+    <string name="settings.testing_connection">Проверка соединения…</string>
     <string name="settings.testing_ok">Подключение прошло успешно!</string>
     <string name="settings.testing_unlicensed">Подключение прошло успешно. Сервер нелицензирован.</string>
     <string name="settings.connection_failure">Не удалось подключиться.</string>

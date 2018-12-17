@@ -126,8 +126,8 @@
     <string name="search.albums">Albumok</string>
     <string name="search.songs">Dalok</string>
 
-	<string name="progress.wait">Kérem várjon...</string>
-	<string name="progress.artist_info">Az előadó életrajzának betöltése...</string>
+	<string name="progress.wait">Kérem várjon…</string>
+	<string name="progress.artist_info">Az előadó életrajzának betöltése…</string>
 
 	<string name="select_album.n_selected">%d kijelölve.</string>
 	<string name="select_album.offline">Offline</string>
@@ -159,7 +159,7 @@
 	<string name="select_podcasts.server_download">Letöltés a kiszolgálóra</string>
 	<string name="select_podcasts.server_delete">Törlés a kiszolgálóról</string>
 	<string name="select_podcasts.downloading">\"%s\" letöltése a kiszolgálóra</string>
-	<string name="select_podcasts.refreshing">A kiszolgáló ellenőrzi az új podcastokat...</string>
+	<string name="select_podcasts.refreshing">A kiszolgáló ellenőrzi az új podcastokat…</string>
 	<string name="select_podcasts.deleted">\"%s\" podcast törölve</string>
 	<string name="select_podcasts.deleted_error">\"%s\" podcast törlése sikertelen!</string>
 	<string name="select_podcasts.add_url">URL:</string>
@@ -169,9 +169,9 @@
 	<string name="select_podcasts.channels">Podcast csatornák</string>
 
     <string name="download.empty">A várólista üres!</string>
-	<string name="download.shuffle_loading">Kevert sorrendű lista betöltése...</string>
+	<string name="download.shuffle_loading">Kevert sorrendű lista betöltése…</string>
     <string name="download.playerstate_downloading">Letöltés - \"%s\"</string>
-	<string name="download.playerstate_mobile_disabled">Letöltés, várakozás a Wi-Fi hálózatra...</string>
+	<string name="download.playerstate_mobile_disabled">Letöltés, várakozás a Wi-Fi hálózatra…</string>
     <string name="download.playerstate_buffering">Pufferelés</string>
     <string name="download.playerstate_playing_shuffle">Dalsorrend keverése</string>
 	<string name="download.playerstate_playing_artist_radio">Előadó rádió</string>
@@ -281,7 +281,7 @@
 	<string name="settings.cache_location_external">Külső</string>
 	<string name="settings.cache_clear">Gyorsítótár törlése</string>
 	<string name="settings.cache_clear_complete">Gyorsítótár törlése kész.</string>
-    <string name="settings.testing_connection">Kapcsolat tesztelése...</string>
+    <string name="settings.testing_connection">Kapcsolat tesztelése…</string>
     <string name="settings.testing_ok">Kapcsolat OK!</string>
     <string name="settings.testing_unlicensed">Kapcsolat OK! A kiszolgálónak nincs licence!</string>
     <string name="settings.connection_failure">Kapcsolódási hiba!</string>
@@ -541,7 +541,7 @@
     <string name="background_task.not_found">Az erőforrás nem található! Kérjük, ellenőrizze a kiszolgáló címét!</string>
     <string name="background_task.parse_error">Hiba történt a kiszolgálóval történő kommunikációban. Kérjük, ellenőrizze a kiszolgáló címét, és próbáljon meg web böngészővel kapcsolódni a kiszolgálóhoz!</string>
 
-    <string name="service.connecting">Kapcsolódás a kiszolgálóhoz, kérem várjon...</string>
+    <string name="service.connecting">Kapcsolódás a kiszolgálóhoz, kérem várjon…</string>
 
     <string name="parser.upgrade_client">Nem kompatibilis verzió. Kérjük, frissítse a DSub Android alkalmazást!</string>
     <string name="parser.upgrade_server">Nem kompatibilis verzió. Kérjük, frissítse a Subsonic kiszolgálót!</string>

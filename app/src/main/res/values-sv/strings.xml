@@ -121,7 +121,7 @@
     <string name="search.albums">Album</string>
     <string name="search.songs">Spår</string>
 
-	<string name="progress.wait">Vänta...</string>
+	<string name="progress.wait">Vänta…</string>
 	<string name="progress.artist_info">Laddar information om artist</string>
 
 	<string name="select_album.n_selected">%d vald.</string>
@@ -163,7 +163,7 @@
 	<string name="select_podcasts.delete">Radera podcast</string>
 
     <string name="download.empty">Spellistan är tom</string>
-	<string name="download.shuffle_loading">Slumpad lista laddas...</string>
+	<string name="download.shuffle_loading">Slumpad lista laddas…</string>
     <string name="download.playerstate_downloading">Laddar ner - %s</string>
 	<string name="download.playerstate_mobile_disabled">Väntar på WiFi nätverk för att ladda ner</string>
     <string name="download.playerstate_buffering">Buffrar</string>
@@ -266,7 +266,7 @@
     <string name="settings.cache_location_reset">Din cache placering är inte skrivbar. Om du nyligen uppdaterade Android till KitKat 4.4 så har sättet appar skriver till SD-kortet ändrats så de bara kan skriva till en specifik plats. Platsen som DSub använder har automatiskt ändrats till den korrekta platsen. För att radera gammal data måste du sätta in SD-kortet i din dator och radera mappen manuellt</string>
 	<string name="settings.cache_clear">Rensa cachen</string>
 	<string name="settings.cache_clear_complete">Cachen har rensats</string>
-    <string name="settings.testing_connection">Testar anslutning...</string>
+    <string name="settings.testing_connection">Testar anslutning…</string>
     <string name="settings.testing_ok">Anslutningen är OK</string>
     <string name="settings.testing_unlicensed">Anslutningen är OK. Servern är olicenserad.</string>
     <string name="settings.connection_failure">Kunde inte ansluta.</string>

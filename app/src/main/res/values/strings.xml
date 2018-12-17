@@ -126,7 +126,7 @@
     <string name="search.albums">Albums</string>
     <string name="search.songs">Songs</string>
 
-	<string name="progress.wait">Please wait...</string>
+	<string name="progress.wait">Please wait…</string>
 	<string name="progress.artist_info">Loading Artist Bio</string>
 
 	<string name="select_album.n_selected">%d selected.</string>
@@ -169,7 +169,7 @@
 	<string name="select_podcasts.channels">Podcast Channels</string>
 
     <string name="download.empty">Playlist is empty</string>
-	<string name="download.shuffle_loading">Shuffle list is loading...</string>
+	<string name="download.shuffle_loading">Shuffle list is loading…</string>
     <string name="download.playerstate_downloading">Downloading - %s</string>
 	<string name="download.playerstate_mobile_disabled">Waiting for WiFi or local (non-roaming) network to download</string>
     <string name="download.playerstate_buffering">Buffering</string>
@@ -282,7 +282,7 @@
 	<string name="settings.cache_location_external">External</string>
 	<string name="settings.cache_clear">Clear Cache</string>
 	<string name="settings.cache_clear_complete">Finished clearing cache</string>
-    <string name="settings.testing_connection">Testing connection...</string>
+    <string name="settings.testing_connection">Testing connection…</string>
     <string name="settings.testing_ok">Connection is OK</string>
     <string name="settings.testing_unlicensed">Connection is OK. Server unlicensed.</string>
     <string name="settings.connection_failure">Connection failure.</string>
