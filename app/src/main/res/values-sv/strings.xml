@@ -37,7 +37,6 @@
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bokmärken</string>
 	<string name="button_bar.shares">Delningar</string>
-	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Laddar ner</string>
 	<string name="button_bar.offline">Offline</string>
@@ -355,9 +354,6 @@
 	<string name="settings.persistent_summary">Visa notifikationen även när jag har pausat.  Tryck stop för att ta bort den.</string>
 	<string name="settings.gapless_playback">Spela upp utan mellanrum</string>
 	<string name="settings.gapless_playback_summary">Om du märker några konstiga buggar när du lyssnar kan det hjälpa att slå av den här.</string>
-	<string name="settings.chat_refresh">Hur ofta ska chat uppdateras (sekunder)</string>
-	<string name="settings.chat_enabled">Chat aktiverad</string>
-	<string name="settings.chat_enabled_summary">Om chatten ska visas i menyn till vänster</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video spelare</string>
 	<string name="settings.video_raw">Raw (kräver Subsonic 4.8+)</string>
@@ -537,8 +533,6 @@
     <string name="changelog_title">Vad är nytt</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mer…</string>
-
-	<string name="chat.send_a_message">Skicka ett meddelande</string>
 
 	<string name="tasker.start_playing">Börja spela</string>
 	<string name="tasker.start_playing_shuffled">Börja spela i slumpat läge</string>

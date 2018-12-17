@@ -31,12 +31,6 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
-			android:title="@string/settings.chat_enabled"
-			android:summary="@string/settings.chat_enabled_summary"
-			android:key="chatEnabled"
-			android:defaultValue="true"/>
-
-		<CheckBoxPreference
 			android:title="@string/settings.admin_enabled"
 			android:summary="@string/settings.admin_enabled_summary"
 			android:key="adminEnabled"

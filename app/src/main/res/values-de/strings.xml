@@ -32,7 +32,6 @@
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Lesezeichen</string>
 	<string name="button_bar.shares">Freigaben</string>
-	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Administration</string>
 	<string name="button_bar.downloading">Downloads</string>
 
@@ -323,9 +322,6 @@
 	<string name="settings.persistent_summary">Zeige die Benachrichtigung auch nach pausieren der Wiedergabe.  Zum entfernen Stop auswählen.</string>
 	<string name="settings.gapless_playback">Lückenlose Wiedergabe</string>
 	<string name="settings.gapless_playback_summary">Das Galaxy S3 scheint Probleme seit der Einführung der lückenlosen Wiedergabe zu haben. Zur Behebung schalten Sie dies ab.</string>
-	<string name="settings.chat_refresh">Chat Aktualisierungsrate (Sekunden)</string>
-	<string name="settings.chat_enabled">Chat aktiv</string>
-	<string name="settings.chat_enabled_summary">Chat im Seitenmenü anzeigen</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video Player</string>
 	<string name="settings.video_raw">Raw (benötigt Subsonic 4.8+)</string>
@@ -486,8 +482,6 @@
     <string name="changelog_title">Was ist Neu</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mehr…</string>
-
-	<string name="chat.send_a_message">Nachricht senden</string>
 
 	<string name="tasker.start_playing">Starte Wiedergabe</string>
 	<string name="tasker.start_playing_shuffled">Starte Zufallswiedergabe</string>

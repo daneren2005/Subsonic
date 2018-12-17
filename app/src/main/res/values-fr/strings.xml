@@ -33,7 +33,6 @@
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Signets</string>
 	<string name="button_bar.shares">Partages</string>
-	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Téléchargement</string>
 
@@ -324,9 +323,6 @@
 	<string name="settings.persistent_summary">Afficher la notification même après la mise en pause. Appuyer sur stop pour l\'effacer.</string>
 	<string name="settings.gapless_playback">Lecture sans saut</string>
 	<string name="settings.gapless_playback_summary">Si vous rencontrez des problèmes lors de la lecture, désactiver ceci pourrait aider.</string>
-	<string name="settings.chat_refresh">Fréquence de rafraîchissement du chat (Secs)</string>
-	<string name="settings.chat_enabled">Chat autorisé</string>
-	<string name="settings.chat_enabled_summary">Afficher ou non la zone de chat</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Lecteur vidéo</string>
 	<string name="settings.video_raw">Raw (Necessite Subsonic 4.8+)</string>
@@ -481,8 +477,6 @@
     <string name="changelog_title">Nouveautés</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Plus…</string>
-
-	<string name="chat.send_a_message">Envoyer un message</string>
 
 	<string name="tasker.start_playing">Commencer la lecture</string>
 	<string name="tasker.start_playing_title">Tasker -> Démarrer DSub</string>

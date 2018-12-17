@@ -18,31 +18,29 @@
  */
 package github.vrih.xsub.service;
 
-import java.net.HttpURLConnection;
-import java.util.List;
-
-
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import java.net.HttpURLConnection;
+import java.util.List;
+
 import github.vrih.xsub.domain.ArtistInfo;
-import github.vrih.xsub.domain.ChatMessage;
 import github.vrih.xsub.domain.Genre;
 import github.vrih.xsub.domain.Indexes;
 import github.vrih.xsub.domain.InternetRadioStation;
-import github.vrih.xsub.domain.PlayerQueue;
-import github.vrih.xsub.domain.RemoteStatus;
 import github.vrih.xsub.domain.Lyrics;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.MusicFolder;
+import github.vrih.xsub.domain.PlayerQueue;
 import github.vrih.xsub.domain.Playlist;
 import github.vrih.xsub.domain.PodcastChannel;
+import github.vrih.xsub.domain.RemoteStatus;
 import github.vrih.xsub.domain.SearchCritera;
 import github.vrih.xsub.domain.SearchResult;
 import github.vrih.xsub.domain.Share;
 import github.vrih.xsub.domain.User;
-import github.vrih.xsub.util.SilentBackgroundTask;
 import github.vrih.xsub.util.ProgressListener;
+import github.vrih.xsub.util.SilentBackgroundTask;
 
 /**
  * @author Sindre Mehus
@@ -134,10 +132,6 @@ public interface MusicService {
 
 	void updateShare(String id, String description, Long expires, Context context, ProgressListener progressListener) throws Exception;
     
-    List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception;
-    
-    void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception;
-	
 	List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception;
 	
 	MusicDirectory getSongsByGenre(String genre, int count, int offset, Context context, ProgressListener progressListener) throws Exception;

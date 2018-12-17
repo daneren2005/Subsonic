@@ -40,7 +40,6 @@ import java.util.SortedSet;
 
 import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.domain.ArtistInfo;
-import github.vrih.xsub.domain.ChatMessage;
 import github.vrih.xsub.domain.Genre;
 import github.vrih.xsub.domain.Indexes;
 import github.vrih.xsub.domain.InternetRadioStation;
@@ -659,16 +658,6 @@ public class OfflineMusicService implements MusicService {
 
 	@Override
 	public void updateShare(String id, String description, Long expires, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
-		throw new OfflineException(ERRORMSG);
-	}
-
-	@Override
-	public void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

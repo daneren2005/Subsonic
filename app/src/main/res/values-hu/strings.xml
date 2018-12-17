@@ -38,7 +38,6 @@
 	<string name="button_bar.bookmarks">Könyvjelzők</string>
 	<string name="button_bar.internet_radio">Internet rádió</string>
 	<string name="button_bar.shares">Megosztások</string>
-	<string name="button_bar.chat">Csevegés (Chat)</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Letöltések</string>
 	<string name="button_bar.offline">Offline</string>
@@ -375,9 +374,6 @@
 	<string name="settings.persistent_summary">Kijelzés az értesítési sávon a lejátszás megállítása után is. Nyomja meg a bezárás gombot a törléséhez!</string>
 	<string name="settings.gapless_playback">Egybefüggő lejátszás (Gapless)</string>
 	<string name="settings.gapless_playback_summary">Ha lefagyásokat/furcsaságokat tapasztal az egybefüggő lejátszás (Gapless) engedélyezése után, a probléma megoldásához kapcsolja ki a funkciót!</string>
-	<string name="settings.chat_refresh">Csevegés frissítési gyakorisága (mp.)</string>
-	<string name="settings.chat_enabled">Csevegés (Chat) engedélyezése</string>
-	<string name="settings.chat_enabled_summary">Csevegés (Chat) menüpont megjelenítése az elhúzható oldalsávon.</string>
 	<string name="settings.video_title">Videó</string>
 	<string name="settings.video_player">Videó-lejátszó</string>
 	<string name="settings.video_raw">Nyers (Subsonic 4.8-tól)</string>
@@ -579,8 +575,6 @@
     <string name="changelog_title">Újdonságok</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Továbbiak…</string>
-
-	<string name="chat.send_a_message">Üzenet küldése</string> 
 
     <string name="changelog_version_format">Verzió %s</string>
 

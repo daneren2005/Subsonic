@@ -32,7 +32,6 @@
     <string name="button_bar.now_playing">Ahora suena</string>
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Marcadores</string>
-	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.shares">Compartidos</string>
 	<string name="button_bar.downloading">Descargando</string>
 	<string name="button_bar.admin">Admin</string>
@@ -313,9 +312,6 @@
 	<string name="settings.persistent_summary">Mostrar la notificación incluso tras pausar. Pulsar botón stop para quitarlo.</string>
 	<string name="settings.gapless_playback">Reproducción sin pausas</string>
 	<string name="settings.gapless_playback_summary">El Galaxy S3 parece sufrir algunos bloqueos y funcionamentos extraños desde la introducción de la reproducción sin pausas. Desmarca esta opción para solucionar el problema.</string>
-	<string name="settings.chat_refresh">Tiempo de actualización de chat (Segundos)</string>
-	<string name="settings.chat_enabled">Chat habilitado</string>
-	<string name="settings.chat_enabled_summary">Para mostrar o no mostrar la pestaña de chat. Reinicia la aplicación tras el cambio.</string>
 	<string name="settings.video_title">Vídeo</string>
 	<string name="settings.video_player">Reproductor de vídeo</string>
 	<string name="settings.video_raw">Raw (Requiere Subsonic 4.8+)</string>
@@ -489,8 +485,6 @@
     <string name="changelog_title">Novedades</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Más…</string>
-
-	<string name="chat.send_a_message">Enviar un mensaje</string>
 
 	<string name="tasker.start_playing">Comenzar reproduciendo</string>
 	<string name="tasker.start_playing_title">Tasker -> Encender DSub</string>

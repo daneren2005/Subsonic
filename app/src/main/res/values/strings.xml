@@ -38,7 +38,6 @@
 	<string name="button_bar.bookmarks">Bookmarks</string>
 	<string name="button_bar.internet_radio">Internet Radio</string>
 	<string name="button_bar.shares">Shares</string>
-	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Downloading</string>
 	<string name="button_bar.offline">Offline</string>
@@ -376,9 +375,6 @@
 	<string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>
 	<string name="settings.gapless_playback">Gapless Playback</string>
 	<string name="settings.gapless_playback_summary">If you are seeing strange bugs during playback, turning this off may help.</string>
-	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
-	<string name="settings.chat_enabled">Chat Enabled</string>
-	<string name="settings.chat_enabled_summary">Whether or not to display the chat listing in the pull out drawer</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Video Player</string>
 	<string name="settings.video_raw">Raw (Requires Subsonic 4.8+)</string>
@@ -580,8 +576,6 @@
     <string name="changelog_title">What\'s New</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">More…</string>
-
-	<string name="chat.send_a_message">Send a message</string>
 
     <string name="changelog_version_format">Version %s</string>
 

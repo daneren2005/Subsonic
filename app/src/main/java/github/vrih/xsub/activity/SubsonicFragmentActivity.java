@@ -52,7 +52,6 @@ import github.vrih.xsub.domain.PlayerQueue;
 import github.vrih.xsub.domain.PlayerState;
 import github.vrih.xsub.domain.ServerInfo;
 import github.vrih.xsub.fragments.AdminFragment;
-import github.vrih.xsub.fragments.ChatFragment;
 import github.vrih.xsub.fragments.DownloadFragment;
 import github.vrih.xsub.fragments.MainFragment;
 import github.vrih.xsub.fragments.NowPlayingFragment;
@@ -644,8 +643,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			return new SelectArtistFragment();
 		} else if("Playlist".equals(fragmentType)) {
 			return new SelectPlaylistFragment();
-		} else if("Chat".equals(fragmentType)) {
-			return new ChatFragment();
 		} else if("Podcast".equals(fragmentType)) {
 			return new SelectPodcastsFragment();
 		} else if("Bookmark".equals(fragmentType)) {

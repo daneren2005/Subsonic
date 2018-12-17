@@ -30,10 +30,6 @@
 			android:icon="?attr/drawerShares"
 			android:title="@string/button_bar.shares"/>
 		<item
-			android:id="@+id/drawer_chat"
-			android:icon="?attr/drawerChat"
-			android:title="@string/button_bar.chat"/>
-		<item
 			android:id="@+id/drawer_admin"
 			android:icon="?attr/drawerAdmin"
 			android:title="@string/button_bar.admin"/>

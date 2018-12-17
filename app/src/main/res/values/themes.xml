@@ -21,7 +21,6 @@
 		<item name="actionbar_stop">@drawable/actionbar_media_stop</item>
 		<item name="actionbar_rewind">@drawable/actionbar_media_rewind</item>
 		<item name="actionbar_fastforward">@drawable/actionbar_media_fastforward</item>
-		<item name="chat_send">@drawable/ic_menu_chat_send</item>
 		<item name="add">@drawable/ic_action_add</item>
 		<item name="download_none">@drawable/download_none</item>
 		<item name="shuffle">@drawable/actionbar_shuffle</item>
@@ -52,7 +51,6 @@
 		<item name="drawerBookmarks">@drawable/ic_menu_bookmark</item>
 		<item name="drawerInternetRadioStations">@drawable/ic_menu_radio</item>
 		<item name="drawerShares">@drawable/ic_menu_share</item>
-		<item name="drawerChat">@drawable/ic_menu_chat</item>
 		<item name="drawerAdmin">@drawable/ic_menu_admin</item>
 		<item name="drawerDownloading">@drawable/ic_menu_download</item>
 		<item name="drawerSettings">@drawable/ic_menu_settings</item>
@@ -95,7 +93,6 @@
 		<item name="actionbar_stop">@drawable/actionbar_media_stop</item>
 		<item name="actionbar_rewind">@drawable/actionbar_media_rewind</item>
 		<item name="actionbar_fastforward">@drawable/actionbar_media_fastforward</item>
-		<item name="chat_send">@drawable/ic_menu_chat_send</item>
 		<item name="add">@drawable/ic_action_add</item>
 		<item name="download_none">@drawable/download_none</item>
 		<item name="shuffle">@drawable/actionbar_shuffle</item>
@@ -126,7 +123,6 @@
 		<item name="drawerBookmarks">@drawable/ic_menu_bookmark</item>
 		<item name="drawerInternetRadioStations">@drawable/ic_menu_radio</item>
 		<item name="drawerShares">@drawable/ic_menu_share</item>
-		<item name="drawerChat">@drawable/ic_menu_chat</item>
 		<item name="drawerAdmin">@drawable/ic_menu_admin</item>
 		<item name="drawerDownloading">@drawable/ic_menu_download</item>
 		<item name="drawerSettings">@drawable/ic_menu_settings</item>

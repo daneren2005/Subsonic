@@ -8,7 +8,6 @@
 		<item>@string/button_bar.bookmarks</item>
 		<item>@string/button_bar.internet_radio</item>
 		<item>@string/button_bar.shares</item>
-		<item>@string/button_bar.chat</item>
 	</string-array>
 
 	<string-array name="defaultDrawerItemsDescriptions">
@@ -19,7 +18,6 @@
 		<item>Bookmark</item>
 		<item>Internet Radio</item>
 		<item>Share</item>
-		<item>Chat</item>
 	</string-array>
 
     <string-array name="themeValues">

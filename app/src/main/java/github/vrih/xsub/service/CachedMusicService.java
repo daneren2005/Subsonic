@@ -35,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.domain.ArtistInfo;
 import github.vrih.xsub.domain.Bookmark;
-import github.vrih.xsub.domain.ChatMessage;
 import github.vrih.xsub.domain.Genre;
 import github.vrih.xsub.domain.Indexes;
 import github.vrih.xsub.domain.InternetRadioStation;
@@ -838,16 +837,6 @@ public class CachedMusicService implements MusicService {
 		musicService.updateShare(id, description, expires, context, progressListener);
 	}
 
-	@Override
-	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
-		return musicService.getChatMessages(since, context, progressListener);
-	}
-
-	@Override
-	public void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception {
-		musicService.addChatMessage(message, context, progressListener);
-	}
-	
 	@Override
 	public List<Genre> getGenres(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
 		List<Genre> result = null;

@@ -166,9 +166,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 						case Constants.PREFERENCES_KEY_SHARED_ENABLED:
 							setDrawerItemVisible(R.id.drawer_shares, false);
 							break;
-						case Constants.PREFERENCES_KEY_CHAT_ENABLED:
-							setDrawerItemVisible(R.id.drawer_chat, false);
-							break;
 						case Constants.PREFERENCES_KEY_ADMIN_ENABLED:
 							setDrawerItemVisible(R.id.drawer_admin, false);
 							break;
@@ -325,9 +322,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 							return true;
 						case R.id.drawer_shares:
 							drawerItemSelected("Share");
-							return true;
-						case R.id.drawer_chat:
-							drawerItemSelected("Chat");
 							return true;
 						case R.id.drawer_admin:
 							if (UserUtil.isCurrentAdmin()) {
@@ -599,7 +593,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		boolean bookmarksEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_BOOKMARKS_ENABLED, true) && !Util.isOffline(this) && ServerInfo.canBookmark(this);
 		boolean internetRadioEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_INTERNET_RADIO_ENABLED, true) && !Util.isOffline(this) && ServerInfo.canInternetRadio(this);
 		boolean sharedEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_SHARED_ENABLED, true) && !Util.isOffline(this);
-		boolean chatEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_CHAT_ENABLED, true) && !Util.isOffline(this);
 		boolean adminEnabled = prefs.getBoolean(Constants.PREFERENCES_KEY_ADMIN_ENABLED, true) && !Util.isOffline(this);
 
 		MenuItem offlineMenuItem = drawerList.getMenu().findItem(R.id.drawer_offline);
@@ -632,9 +625,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 		if(!sharedEnabled) {
 			setDrawerItemVisible(R.id.drawer_shares, false);
-		}
-		if(!chatEnabled) {
-			setDrawerItemVisible(R.id.drawer_chat, false);
 		}
 		if(!adminEnabled) {
 			setDrawerItemVisible(R.id.drawer_admin, false);
@@ -1191,8 +1181,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				return R.id.drawer_internet_radio_stations;
 			case "Share":
 				return R.id.drawer_shares;
-			case "Chat":
-				return R.id.drawer_chat;
 			default:
 				return R.id.drawer_home;
 		}

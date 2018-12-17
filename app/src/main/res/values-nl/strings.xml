@@ -36,7 +36,6 @@
 	<string name="button_bar.podcasts">Podcasts</string>
 	<string name="button_bar.bookmarks">Bladwijzers</string>
 	<string name="button_bar.shares">Shares</string>
-	<string name="button_bar.chat">Chatten</string>
 	<string name="button_bar.admin">Admin</string>
 	<string name="button_bar.downloading">Downloaden</string>
 	<string name="button_bar.offline">Offline</string>
@@ -356,9 +355,6 @@
 	<string name="settings.persistent_summary">Toon de vermelding zelfs na pauzeren. Druk op de stopknop om de vermelding te verwijderen.</string>
 	<string name="settings.gapless_playback">Ononderbroken afspelen</string>
 	<string name="settings.gapless_playback_summary">Indien je vreemde storingen ondervindt tijdens het afspelen, kan het uitzetten van deze functie misschien helpen.</string>
-	<string name="settings.chat_refresh">Chat vernieuwingsfrequentie (sec.)</string>
-	<string name="settings.chat_enabled">Chat aanzetten</string>
-	<string name="settings.chat_enabled_summary">Al dan niet weergeven van de chatlijst in de lade</string>
 	<string name="settings.video_title">Video</string>
 	<string name="settings.video_player">Videospeler</string>
 	<string name="settings.video_raw">Raw (Vereist Subsonic 4.8+)</string>
@@ -538,8 +534,6 @@
     <string name="changelog_title">Wat is er nieuw</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Meer…</string>
-
-	<string name="chat.send_a_message">Stuur een bericht</string>
 
     <string name="changelog_version_format">Versie %s</string>
 

@@ -120,8 +120,6 @@ public final class Constants {
 	public static final String PREFERENCES_KEY_KEEP_PLAYED_CNT = "keepPlayedCount";
 	public static final String PREFERENCES_KEY_SHUFFLE_MODE = "shuffleMode2";
 	public static final String PREFERENCES_KEY_SHUFFLE_MODE_EXTRA = "shuffleModeExtra";
-	public static final String PREFERENCES_KEY_CHAT_REFRESH = "chatRefreshRate";
-	public static final String PREFERENCES_KEY_CHAT_ENABLED = "chatEnabled";
 	public static final String PREFERENCES_KEY_VIDEO_PLAYER = "videoPlayer";
 	public static final String PREFERENCES_KEY_CONTROL_MODE = "remoteControlMode";
 	public static final String PREFERENCES_KEY_CONTROL_ID = "remoteControlId";

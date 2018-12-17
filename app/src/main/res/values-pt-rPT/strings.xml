@@ -38,7 +38,6 @@
 	<string name="button_bar.bookmarks">Marcadores</string>
 	<string name="button_bar.internet_radio">Rádios online</string>
 	<string name="button_bar.shares">Partilhas</string>
-	<string name="button_bar.chat">Chat</string>
 	<string name="button_bar.admin">Administração</string>
 	<string name="button_bar.downloading">A transferir</string>
 	<string name="button_bar.offline">Offline</string>
@@ -374,9 +373,6 @@
 	<string name="settings.persistent_summary">Mostrar a notificação mesmo depois de pausar.  Pressione o botão de parar para a remover</string>
 	<string name="settings.gapless_playback">Reprodução sem pausas</string>
 	<string name="settings.gapless_playback_summary">Se notar falhas estranhas durante a reprodução, desmarcar esta opção pode ajudar</string>
-	<string name="settings.chat_refresh">Taxa de atualização do chat (s)</string>
-	<string name="settings.chat_enabled">Ativar chat</string>
-	<string name="settings.chat_enabled_summary">Mostrar ou não a opção \"Chat\" no menu lateral</string>
 	<string name="settings.video_title">Vídeo</string>
 	<string name="settings.video_player">Reprodutor de vídeo</string>
 	<string name="settings.video_raw">Raw (Requer Subsonic 4.8+)</string>
@@ -578,8 +574,6 @@
     <string name="changelog_title">O que há de novo</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mais…</string>
-
-	<string name="chat.send_a_message">Enviar uma mensagem</string>
 
     <string name="changelog_version_format">Versão %s</string>
 

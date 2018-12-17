@@ -21,7 +21,6 @@
 	<attr name="actionbar_stop" format="reference"/>
 	<attr name="actionbar_rewind" format="reference"/>
 	<attr name="actionbar_fastforward" format="reference"/>
-	<attr name="chat_send" format="reference"/>
 	<attr name="add" format="reference"/>
 	<attr name="download_none" format="reference"/>
 	<attr name="shuffle" format="reference"/>
@@ -54,7 +53,6 @@
 	<attr name="drawerBookmarks" format="reference"/>
 	<attr name="drawerInternetRadioStations" format="reference"/>
 	<attr name="drawerShares" format="reference"/>
-	<attr name="drawerChat" format="reference"/>
 	<attr name="drawerAdmin" format="reference"/>
 	<attr name="drawerDownloading" format="reference"/>
 	<attr name="drawerSettings" format="reference"/>

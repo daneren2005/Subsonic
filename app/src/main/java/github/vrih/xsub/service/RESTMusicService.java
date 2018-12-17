@@ -57,7 +57,6 @@ import javax.net.ssl.X509TrustManager;
 
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.ArtistInfo;
-import github.vrih.xsub.domain.ChatMessage;
 import github.vrih.xsub.domain.Genre;
 import github.vrih.xsub.domain.Indexes;
 import github.vrih.xsub.domain.InternetRadioStation;
@@ -77,7 +76,6 @@ import github.vrih.xsub.domain.Version;
 import github.vrih.xsub.fragments.MainFragment;
 import github.vrih.xsub.service.parser.ArtistInfoParser;
 import github.vrih.xsub.service.parser.BookmarkParser;
-import github.vrih.xsub.service.parser.ChatMessageParser;
 import github.vrih.xsub.service.parser.EntryListParser;
 import github.vrih.xsub.service.parser.ErrorParser;
 import github.vrih.xsub.service.parser.GenreParser;
@@ -1122,44 +1120,6 @@ public class RESTMusicService implements MusicService {
 			new ErrorParser(context, getInstance(context)).parse(reader);
 		}
 		finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public List<ChatMessage> getChatMessages(Long since, Context context, ProgressListener progressListener) throws Exception {
-		checkServerVersion(context, "1.2", "Chat not supported.");
-
-		List<String> parameterNames = new ArrayList<>();
-		List<Object> parameterValues = new ArrayList<>();
-
-		parameterNames.add("since");
-		parameterValues.add(since);
-
-		Reader reader = getReader(context, progressListener, "getChatMessages", parameterNames, parameterValues);
-
-		try {
-			return new ChatMessageParser(context, getInstance(context)).parse(reader);
-		} finally {
-			Util.close(reader);
-		}
-	}
-
-	@Override
-	public void addChatMessage(String message, Context context, ProgressListener progressListener) throws Exception {
-		checkServerVersion(context, "1.2", "Chat not supported.");
-
-		List<String> parameterNames = new ArrayList<>();
-		List<Object> parameterValues = new ArrayList<>();
-
-		parameterNames.add("message");
-		parameterValues.add(message);
-
-		Reader reader = getReader(context, progressListener, "addChatMessage", parameterNames, parameterValues);
-
-		try {
-			new ErrorParser(context, getInstance(context)).parse(reader);
-		} finally {
 			Util.close(reader);
 		}
 	}
