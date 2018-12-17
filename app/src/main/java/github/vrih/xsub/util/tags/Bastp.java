@@ -36,7 +36,7 @@ class Bastp {
 			ra.close();
 		}
 		catch(Exception e) {
-			/* we dont' care much: SOMETHING went wrong. d'oh! */
+			/* we don't care much: SOMETHING went wrong. d'oh! */
 		}
 		
 		return tags;
