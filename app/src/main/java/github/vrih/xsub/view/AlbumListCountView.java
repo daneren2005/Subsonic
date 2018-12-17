@@ -93,7 +93,7 @@ public class AlbumListCountView extends UpdateView2<Integer, Void> {
 				count += startCount;
 				SharedPreferences.Editor editor = Util.getPreferences(context).edit();
 				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), count);
-				editor.commit();
+				editor.apply();
 			}
 		} catch(Exception e) {
 			Log.w(TAG, "Failed to refresh most recent count", e);
@@ -122,7 +122,7 @@ public class AlbumListCountView extends UpdateView2<Integer, Void> {
 	public void onClick() {
 		SharedPreferences.Editor editor = Util.getPreferences(context).edit();
 		editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
-		editor.commit();
+		editor.apply();
 
 		count = 0;
 		update();

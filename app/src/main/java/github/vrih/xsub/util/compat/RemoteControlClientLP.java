@@ -542,7 +542,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, null);
 					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, null);
 					editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
-					editor.commit();
+					editor.apply();
 
 					downloadService.clear();
 					downloadService.setShufflePlayEnabled(true);

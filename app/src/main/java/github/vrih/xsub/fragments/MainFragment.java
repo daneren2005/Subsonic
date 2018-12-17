@@ -178,7 +178,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			if("newest".equals(type)) {
 				SharedPreferences.Editor editor = Util.getPreferences(context).edit();
 				editor.putInt(Constants.PREFERENCES_KEY_RECENT_COUNT + Util.getActiveServer(context), 0);
-				editor.commit();
+				editor.apply();
 			}
 			
 			SubsonicFragment fragment = new SelectDirectoryFragment();

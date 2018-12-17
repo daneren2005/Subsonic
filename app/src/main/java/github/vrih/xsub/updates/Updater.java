@@ -55,12 +55,12 @@ public class Updater {
 		if(lastVersion == 0) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putInt(Constants.LAST_VERSION, version);
-			editor.commit();
+			editor.apply();
 		}
 		else if(version > lastVersion) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putInt(Constants.LAST_VERSION, version);
-			editor.commit();
+			editor.apply();
 			
 			Log.i(TAG, "Updating from version " + lastVersion + " to " + version);
 			for(Updater updater: updaters) {

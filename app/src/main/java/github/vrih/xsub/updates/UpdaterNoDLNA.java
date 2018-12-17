@@ -35,7 +35,7 @@ public class UpdaterNoDLNA extends Updater {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putBoolean(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED, false);
-			editor.commit();
+			editor.apply();
 		}
 	}
 }

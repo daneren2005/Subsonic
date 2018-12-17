@@ -861,7 +861,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 						editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_START_YEAR, startYear);
 						editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_END_YEAR, endYear);
 						editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
-						editor.commit();
+						editor.apply();
 
 						DownloadService downloadService = getDownloadService();
 						if (downloadService == null) {

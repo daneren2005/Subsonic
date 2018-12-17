@@ -546,7 +546,7 @@ public class OfflineMusicService implements MusicService {
 		
 		offlineEditor.putLong(Constants.OFFLINE_SCROBBLE_TIME + scrobbles, System.currentTimeMillis());
 		offlineEditor.putInt(Constants.OFFLINE_SCROBBLE_COUNT, scrobbles);
-		offlineEditor.commit();
+		offlineEditor.apply();
     }
 
     @Override
@@ -636,7 +636,7 @@ public class OfflineMusicService implements MusicService {
 		
 		offlineEditor.putBoolean(Constants.OFFLINE_STAR_SETTING + stars, starred);
 		offlineEditor.putInt(Constants.OFFLINE_STAR_COUNT, stars);
-		offlineEditor.commit();
+		offlineEditor.apply();
 	}
 
 	@Override

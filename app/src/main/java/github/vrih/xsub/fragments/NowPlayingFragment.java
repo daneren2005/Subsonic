@@ -951,7 +951,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 						SharedPreferences.Editor editor = prefs.edit();
 						editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
-						editor.commit();
+						editor.apply();
 
 						getDownloadService().setSleepTimerDuration(length);
 						getDownloadService().startSleepTimer();

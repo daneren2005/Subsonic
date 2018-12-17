@@ -343,7 +343,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 					editor.putString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + instance, null);
 					editor.putString(Constants.PREFERENCES_KEY_SERVER_URL + instance, "http://yourhost");
 					editor.putString(Constants.PREFERENCES_KEY_SERVER_NAME + instance, getResources().getString(R.string.settings_server_unused));
-					editor.commit();
+					editor.apply();
 
 					ServerSettings ss = new ServerSettings(instance);
 					serverSettings.put(String.valueOf(instance), ss);
@@ -613,7 +613,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						serverCount--;
 						SharedPreferences.Editor editor = settings.edit();
 						editor.putInt(Constants.PREFERENCES_KEY_SERVER_COUNT, serverCount);
-						editor.commit();
+						editor.apply();
 
 						removeCurrent();
 
@@ -705,7 +705,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				SharedPreferences prefs = Util.getPreferences(context);
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString(Constants.PREFERENCES_KEY_CACHE_LOCATION, defaultPath);
-				editor.commit();
+				editor.apply();
 
 				if(cacheLocation != null) {
 					cacheLocation.setSummary(defaultPath);

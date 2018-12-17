@@ -177,7 +177,7 @@ public class EqualizerFragment extends SubsonicFragment {
 		SharedPreferences prefs = Util.getPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_EQUALIZER_ON, enabled);
-		editor.commit();
+		editor.apply();
 		for(int i = 0; i < 10; i++) {
 			try {
 				equalizer.setEnabled(enabled);
@@ -243,7 +243,7 @@ public class EqualizerFragment extends SubsonicFragment {
 				SharedPreferences prefs = Util.getPreferences(context);
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
-				editor.commit();
+				editor.apply();
 			}
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to update bars");
@@ -430,7 +430,7 @@ public class EqualizerFragment extends SubsonicFragment {
 						SharedPreferences prefs = Util.getPreferences(context);
 						SharedPreferences.Editor editor = prefs.edit();
 						editor.putInt(Constants.PREFERENCES_EQUALIZER_SETTINGS, masterLevel);
-						editor.commit();
+						editor.apply();
 						for (short i = 0; i < equalizer.getNumberOfBands(); i++) {
 							short level = (short) ((bars.get(i).getProgress() + minEQLevel) + masterLevel);
 							equalizer.setBandLevel(i, level);

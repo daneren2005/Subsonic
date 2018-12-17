@@ -96,7 +96,7 @@ public final class ThemeUtil {
 	public static void setTheme(Context context, String theme) {
 		SharedPreferences.Editor editor = Util.getPreferences(context).edit();
 		editor.putString(Constants.PREFERENCES_KEY_THEME, theme);
-		editor.commit();
+		editor.apply();
 	}
 
 	public static void applyTheme(Context context, String theme) {

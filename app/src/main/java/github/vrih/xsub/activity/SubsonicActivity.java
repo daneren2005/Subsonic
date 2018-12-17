@@ -1185,7 +1185,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		SharedPreferences.Editor offline = Util.getOfflineSync(this).edit();
 		offline.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
 		offline.putInt(Constants.OFFLINE_STAR_COUNT, 0);
-		offline.commit();
+		offline.apply();
 	}
 	
 	int getDrawerItemId(String fragmentType) {

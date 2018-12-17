@@ -224,7 +224,7 @@ public class DownloadService extends Service {
 						SharedPreferences.Editor editor = prefs.edit();
 						editor.putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId);
 						editor.putInt(Constants.CACHE_AUDIO_SESSION_VERSION_CODE, Build.VERSION.SDK_INT);
-						editor.commit();
+						editor.apply();
 					} catch (Throwable t) {
 						// Froyo or lower
 					}
@@ -579,7 +579,7 @@ public class DownloadService extends Service {
 			}
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, startShufflePlay);
-			editor.commit();
+			editor.apply();
 		}
 		if (currentPlayingIndex != -1) {
 			while(mediaPlayer == null) {
@@ -616,7 +616,7 @@ public class DownloadService extends Service {
 		}
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_REMOVE_PLAYED, enabled);
-		editor.commit();
+		editor.apply();
 	}
 	public boolean isRemovePlayed() {
 		return removePlayed;
@@ -629,7 +629,7 @@ public class DownloadService extends Service {
 		}
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putInt(Constants.PREFERENCES_KEY_SHUFFLE_MODE, enabled ? SHUFFLE_MODE_ALL : SHUFFLE_MODE_NONE);
-		editor.commit();
+		editor.apply();
 	}
 
 	public boolean isShufflePlayEnabled() {
@@ -649,7 +649,7 @@ public class DownloadService extends Service {
 		if(artistId != null) {
 			editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_MODE_EXTRA, artistId);
 		}
-		editor.commit();
+		editor.apply();
 	}
 	public boolean isArtistRadio() {
 		return artistRadio;
@@ -689,7 +689,7 @@ public class DownloadService extends Service {
 		SharedPreferences prefs = Util.getPreferences(this);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putBoolean(Constants.PREFERENCES_KEY_KEEP_SCREEN_ON, keepScreenOn);
-		editor.commit();
+		editor.apply();
 	}
 
 	public synchronized DownloadFile forSong(MusicDirectory.Entry song) {
@@ -1661,7 +1661,7 @@ public class DownloadService extends Service {
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putString(Constants.PREFERENCES_KEY_PLAYLIST_NAME, name);
 		editor.putString(Constants.PREFERENCES_KEY_PLAYLIST_ID, id);
-		editor.commit();
+		editor.apply();
 	}
 
 	public String getSuggestedPlaylistName() {
@@ -1754,7 +1754,7 @@ public class DownloadService extends Service {
 		SharedPreferences.Editor editor = Util.getPreferences(this).edit();
 		editor.putInt(Constants.PREFERENCES_KEY_CONTROL_MODE, newState.getValue());
 		editor.putString(Constants.PREFERENCES_KEY_CONTROL_ID, routeId);
-		editor.commit();
+		editor.apply();
 	}
 	private void setRemoteState(RemoteControlState newState, Object ref) {
 		setRemoteState(newState, ref, null);
@@ -2711,9 +2711,9 @@ public class DownloadService extends Service {
 
 	public void setPlaybackSpeed(float playbackSpeed) {
 		if(currentPlaying.isSong())
-			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, playbackSpeed).commit();
+			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, playbackSpeed).apply();
 		else
-			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
+			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).apply();
 		if(mediaPlayer != null && (playerState == PREPARED || playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP)) {
 			applyPlaybackParamsMain();
 		}
@@ -2721,8 +2721,8 @@ public class DownloadService extends Service {
 		delayUpdateProgress = Math.round(DEFAULT_DELAY_UPDATE_PROGRESS / playbackSpeed);
 	}
 	private void resetPlaybackSpeed() {
-		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_PLAYBACK_SPEED).commit();
-		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED).commit();
+		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_PLAYBACK_SPEED).apply();
+		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED).apply();
 	}
 
 	public float getPlaybackSpeed() {

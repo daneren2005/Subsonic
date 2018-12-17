@@ -1625,7 +1625,7 @@ public class RESTMusicService implements MusicService {
 		}
 
 		offlineEditor.putInt(Constants.OFFLINE_SCROBBLE_COUNT, 0);
-		offlineEditor.commit();
+		offlineEditor.apply();
 
 		return count - retry;
 	}
@@ -1670,7 +1670,7 @@ public class RESTMusicService implements MusicService {
 		}
 
 		offlineEditor.putInt(Constants.OFFLINE_STAR_COUNT, 0);
-		offlineEditor.commit();
+		offlineEditor.apply();
 
 		return count - retry;
 	}

@@ -228,7 +228,7 @@ public class DownloadServiceLifecycleSupport {
 							if(genre != null) {
 								editor.putString(Constants.PREFERENCES_KEY_SHUFFLE_GENRE, genre);
 							}
-							editor.commit();
+							editor.apply();
 
 							downloadService.clear();
 							downloadService.setShufflePlayEnabled(true);

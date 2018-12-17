@@ -117,7 +117,7 @@ public class IndexesParser extends MusicDirectoryEntryParser {
 		if(ignoredArticles != null) {
 			SharedPreferences.Editor prefs = Util.getPreferences(context).edit();
 			prefs.putString(Constants.CACHE_KEY_IGNORE, ignoredArticles);
-			prefs.commit();
+			prefs.apply();
 		}
 
         if (!changed) {
