@@ -419,7 +419,7 @@ public final class UserUtil {
 		final TextView passwordView = layout.findViewById(R.id.password);
 		final RecyclerView recyclerView = layout.findViewById(R.id.settings_list);
 		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		layoutManager.setOrientation(RecyclerView.VERTICAL);
 		recyclerView.setLayoutManager(layoutManager);
 		recyclerView.setAdapter(SettingsAdapter.getSettingsAdapter(context, user, null, true, new SectionAdapter.OnItemClickedListener<User.Setting>() {
 			@Override

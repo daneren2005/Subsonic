@@ -709,7 +709,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 	private LinearLayoutManager getLinearLayoutManager() {
 		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		layoutManager.setOrientation(RecyclerView.VERTICAL);
 		return layoutManager;
 	}
 	GridLayoutManager.SpanSizeLookup getSpanSizeLookup(final GridLayoutManager gridLayoutManager) {
