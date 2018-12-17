@@ -19,13 +19,8 @@ package github.vrih.xsub.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.media.AudioAttributes;
-import android.media.AudioFocusRequest;
-
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
-import android.content.ClipboardManager;
 import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +31,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.ConnectivityManager;
@@ -49,20 +46,12 @@ import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import github.vrih.xsub.R;
-import github.vrih.xsub.adapter.DetailsAdapter;
-import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.domain.PlayerState;
-import github.vrih.xsub.domain.RepeatMode;
-import github.vrih.xsub.domain.ServerInfo;
-import github.vrih.xsub.receiver.MediaButtonIntentReceiver;
-import github.vrih.xsub.service.DownloadService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -87,6 +76,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
+
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import github.vrih.xsub.R;
+import github.vrih.xsub.adapter.DetailsAdapter;
+import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.domain.PlayerState;
+import github.vrih.xsub.domain.RepeatMode;
+import github.vrih.xsub.domain.ServerInfo;
+import github.vrih.xsub.receiver.MediaButtonIntentReceiver;
+import github.vrih.xsub.service.DownloadService;
 
 /**
  * @author Sindre Mehus
@@ -1124,23 +1124,14 @@ public final class Util {
         return prefs.getBoolean(Constants.PREFERENCES_KEY_LOCAL_NETWORK_REQUIRED_FOR_DOWNLOAD, false);
     }
 
-    public static void info(Context context, int titleId, int messageId) {
-    	info(context, titleId, messageId, true);
+	public static void info(Context context, int titleId, int messageId) {
+        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, true);
     }
 	public static void info(Context context, int titleId, String message) {
-		info(context, titleId, message, true);
+		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message, true);
 	}
 	public static void info(Context context, String title, String message) {
-		info(context, title, message, true);
-	}
-	private static void info(Context context, int titleId, int messageId, boolean linkify) {
-        showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId, linkify);
-    }
-	private static void info(Context context, int titleId, String message, boolean linkify) {
-		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message, linkify);
-	}
-	private static void info(Context context, String title, String message, boolean linkify) {
-		showDialog(context, android.R.drawable.ic_dialog_info, title, message, linkify);
+		showDialog(context, android.R.drawable.ic_dialog_info, title, message, true);
 	}
 
 	public static void showDialog(Context context, int icon, int titleId, int messageId) {

@@ -17,12 +17,13 @@
  
 package github.vrih.xsub.util.tags;
 
-import androidx.collection.LruCache;
 import java.util.HashMap;
 import java.util.Vector;
 
+import androidx.collection.LruCache;
+
 public final class BastpUtil {
-	private static final RGLruCache rgCache = new RGLruCache(16);
+	private static final RGLruCache rgCache = new RGLruCache();
 
 	/** Returns the ReplayGain values of 'path' as <track,album>
 	 */
@@ -64,8 +65,8 @@ public final class BastpUtil {
 	/** LRU cache for ReplayGain values
 	 */
 	private static class RGLruCache extends LruCache<String, float[]> {
-		RGLruCache(int size) {
-			super(size);
+		RGLruCache() {
+			super(16);
 		}
 	}
 

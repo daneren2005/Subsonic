@@ -19,10 +19,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -32,6 +28,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver;
 import github.vrih.xsub.R;
 
 import static androidx.recyclerview.widget.RecyclerView.OnScrollListener;
@@ -143,7 +143,7 @@ public class FastScroller extends LinearLayout {
 			}
 
 			int itemCount = recyclerView.getAdapter().getItemCount();
-			float proportion = getValueInRang( 1f, y / (float) height);
+			float proportion = getValueInRange( 1f, y / (float) height);
 
 			float targetPosFloat = getValueInRange(itemCount - 1, proportion * (float)itemCount);
 			int targetPos = (int) targetPosFloat;

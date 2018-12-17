@@ -374,7 +374,7 @@
 	<string name="settings.server_sync">Sincronización activada</string>
 	<string name="settings.menu_options.rate_summary">Mostrar valoración en los menús</string>
 	<string name="settings.replay_gain">Ganancia de reproducción</string>
-	<string name="settings.replay_gain_summary">Modificar la ganancia de reproducción por tags de pista o album</string>
+	<string name="settings.replay_gain_summary">Modificar la ganancia de reproducción por tags de pista o álbum</string>
 	<string name="settings.replay_gain_bump">Ganancia de Pre-amp en la reproducciónReplay Gain Pre-amp</string>
 	<string name="settings.replay_gain_untagged">Canciones sin ganancia de reproducciónSongs without Replay Gain</string>
 	<string name="settings.replay_gain_type">Leer desde los tags</string>
@@ -502,7 +502,6 @@
 	<string name="tasker.edit_shuffle_end_year">Último año de reproducción alteatoriar:</string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="zero">Sin canciones</item>
         <item quantity="one">Una canción</item>
         <item quantity="other">%d canciones</item>
     </plurals>

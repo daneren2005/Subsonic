@@ -123,7 +123,7 @@
 	<string name="select_album.no_sdcard">Fehler: Keine SD-Karte verfügbar.</string>
     <string name="select_album.no_network">Warnung: Kein Netzwerk verfügbar.</string>
     <string name="select_album.no_room">Warnung: Es sind nur %s verfügbar</string>
-    <string name="select_album.not_licensed">Server ist nicht lizensiert. Testzeitraum läuft ab in %d Tagen.</string>
+    <string name="select_album.not_licensed">Server ist nicht lizenziert. Testzeitraum läuft ab in %d Tagen.</string>
     <string name="select_album.donate_dialog_message">Erhalte unbegrenzte Downloads durch eine Spende an Subsonic.</string>
     <string name="select_album.donate_dialog_now">Jetzt</string>
     <string name="select_album.donate_dialog_later">Später</string>
@@ -254,12 +254,12 @@
     <string name="settings.cache_size">Größe des Cache (MB)</string>
     <string name="settings.cache_location">Position des Cache</string>
     <string name="settings.cache_location_error">Ungültiger Pfad zum Cache. Nutze Standard.</string>
-    <string name="settings.cache_location_reset">Der gesetzte Cachepfad ist nicht (mehr) beschreibbar. Durch die Aktualisierung des Telefon-OS auf KitKat 4.4 wurde der Zugriff auf die SD-Karte durch Apps eingeschränkt auf spezielle Pfade. Der von DSub verwendete Pfad wurde entsprechend korrigiert. Um den alten Cache zu löschen, müssen Sie die SD-Karte an einem Computer anschliessend und den Ordner manuell löschen.</string>
+    <string name="settings.cache_location_reset">Der gesetzte Cachepfad ist nicht (mehr) beschreibbar. Durch die Aktualisierung des Telefon-OS auf KitKat 4.4 wurde der Zugriff auf die SD-Karte durch Apps eingeschränkt auf spezielle Pfade. Der von DSub verwendete Pfad wurde entsprechend korrigiert. Um den alten Cache zu löschen, müssen Sie die SD-Karte an einem Computer anschließend und den Ordner manuell löschen.</string>
 	<string name="settings.cache_clear">Lösche Cache</string>
 	<string name="settings.cache_clear_complete">Cache wurde geleert</string>
     <string name="settings.testing_connection">Teste Verbindung…</string>
     <string name="settings.testing_ok">Verbindung ist OK</string>
-    <string name="settings.testing_unlicensed">Verbindung ist OK. Server ist nicht lizensiert.</string>
+    <string name="settings.testing_unlicensed">Verbindung ist OK. Server ist nicht lizenziert.</string>
     <string name="settings.connection_failure">Verbindung fehlgeschlagen.</string>
     <string name="settings.invalid_url">Bitte geben Sie eine gültige URL an.</string>
     <string name="settings.invalid_username">Bitte gültigen Nutzernamen angeben (keine führenden Leerzeichen).</string>
@@ -462,7 +462,7 @@
     <string name="parser.upgrade_client">Inkompatible Versionen. Aktualisierung von DSub erforderlich.</string>
     <string name="parser.upgrade_server">Inkompatible Versionen. Aktualisierung des Subsonic Server erforderlich.</string>
     <string name="parser.not_authenticated">Benutzername oder/und Passwort falsch.</string>
-    <string name="parser.not_authorized">Nicht authorisiert. Bitte prüfen Sie die Einstellungen im Subsonic-Server.</string>
+    <string name="parser.not_authorized">Nicht autorisiert. Bitte prüfen Sie die Einstellungen im Subsonic-Server.</string>
     <string name="parser.artist_count">%d Künstler.</string>
 	<string name="parser.server_error">Serverfehler: %s</string>
 	<string name="parser.scan_count">%d Einträge gefunden</string>
@@ -500,7 +500,6 @@
 	<string name="tasker.edit_do_nothing">Nichts tun</string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="zero">Keine Lieder</item>
         <item quantity="one">Ein Lied</item>
         <item quantity="other">%d Lieder</item>
     </plurals>
@@ -564,7 +563,7 @@
 	<string name="util.bytes_format.kilobyte">0 KB</string>
 	<string name="util.bytes_format.gigabyte">0.00 GB</string>
 	<string name="util.bytes_format.byte">0 B</string>
-	<string name="common.close">Schliessen</string>
+	<string name="common.close">Schließen</string>
 	<string name="details.cached_format">Format im Cache</string>
 	<string name="details.genre">Genre</string>
 	<string name="details.cached_bitrate">Bitrate im Cache</string>

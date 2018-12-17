@@ -34,11 +34,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import androidx.collection.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.collection.LruCache;
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.ArtistInfo;
 import github.vrih.xsub.domain.InternetRadioStation;
@@ -300,7 +300,7 @@ public class ImageLoader {
 		}
 
 		setImage(entry, remoteControl, Util.createDrawableFromBitmap(context, null));
-		ImageTask task = new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl);
+		ImageTask task = new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, remoteControl);
 		task.execute();
 	}
 
@@ -487,8 +487,8 @@ public class ImageLoader {
 	private class RemoteControlClientImageTask extends ImageTask {
 		private final RemoteControlClientBase mRemoteControl;
 
-		RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClientBase remoteControl) {
-			super(context, entry, size, saveSize, isNowPlaying);
+		RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, RemoteControlClientBase remoteControl) {
+			super(context, entry, size, saveSize, false);
 
 			mRemoteControl = remoteControl;
 		}

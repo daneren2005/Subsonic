@@ -395,7 +395,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 			fragment.setArguments(args);
 
-			replaceFragment(fragment, true);
+			replaceFragment(fragment);
 		} else if (entry.isVideo()) {
 			playVideo(entry);
 		} else if(entry instanceof PodcastEpisode) {
@@ -873,7 +873,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	protected void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
 		List<Entry> songs = getSelectedEntries();
 		if(!songs.isEmpty()) {
-			download(songs, append, false, !append, playNext, shuffle);
+			download(songs, append, !append, playNext, shuffle);
 			entryGridAdapter.clearSelected();
 		} else {
 			playAll(shuffle, append, playNext);
@@ -887,7 +887,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		} else if(hasSubFolders && albumListType != null) {
 			downloadRecursively(albums, shuffle, append, playNext);
 		} else {
-			download(entries, append, false, !append, playNext, shuffle);
+			download(entries, append, !append, playNext, shuffle);
 		}
 	}
 
@@ -956,8 +956,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	@Override
-	protected void download(List<Entry> entries, boolean append, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
-		download(entries, append, save, autoplay, playNext, shuffle, playlistName, playlistId);
+	protected void download(List<Entry> entries, boolean append, boolean autoplay, boolean playNext, boolean shuffle) {
+		download(entries, append, false, autoplay, playNext, shuffle, playlistName, playlistId);
 	}
 
 	@Override
@@ -1119,7 +1119,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		args.putBoolean(Constants.INTENT_EXTRA_TOP_TRACKS, true);
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, true);
+		replaceFragment(fragment);
 	}
 
 	private void setShowAll() {
@@ -1128,7 +1128,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		args.putBoolean(Constants.INTENT_EXTRA_SHOW_ALL, true);
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, true);
+		replaceFragment(fragment);
 	}
 
 	private void showSimilarArtists(String artistId) {
@@ -1137,7 +1137,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		args.putString(Constants.INTENT_EXTRA_NAME_ARTIST, artistId);
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, true);
+		replaceFragment(fragment);
 	}
 
 	private void startArtistRadio(final String artistId) {

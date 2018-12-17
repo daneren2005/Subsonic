@@ -62,14 +62,11 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 
 	SectionAdapter() {}
 	SectionAdapter(Context context, List<T> section) {
-		this(context, section, false);
-	}
-	private SectionAdapter(Context context, List<T> section, boolean singleSectionHeader) {
 		this.context = context;
 		this.headers = Collections.singletonList("Section");
 		this.sections = new ArrayList<>();
 		this.sections.add(section);
-		this.singleSectionHeader = singleSectionHeader;
+		this.singleSectionHeader = false;
 	}
 	SectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
 		this(context, headers, sections, true);

@@ -644,7 +644,6 @@
 	<string name="permission.external_storage.failed">A DSub nem tud működni tárhely-írási engedély nélkül!</string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="zero">Nincsenek dalok</item>
         <item quantity="one">1 dal</item>
         <item quantity="other">%d dal</item>
     </plurals>

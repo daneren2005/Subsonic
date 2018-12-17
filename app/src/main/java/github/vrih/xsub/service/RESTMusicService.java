@@ -18,6 +18,23 @@
  */
 package github.vrih.xsub.service;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Base64;
+import android.util.Log;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -27,22 +44,41 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Base64;
-import android.util.Log;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import github.vrih.xsub.R;
-import github.vrih.xsub.domain.*;
+import github.vrih.xsub.domain.ArtistInfo;
+import github.vrih.xsub.domain.ChatMessage;
+import github.vrih.xsub.domain.Genre;
+import github.vrih.xsub.domain.Indexes;
+import github.vrih.xsub.domain.InternetRadioStation;
+import github.vrih.xsub.domain.Lyrics;
+import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.domain.MusicFolder;
+import github.vrih.xsub.domain.PlayerQueue;
+import github.vrih.xsub.domain.Playlist;
+import github.vrih.xsub.domain.PodcastChannel;
+import github.vrih.xsub.domain.RemoteStatus;
+import github.vrih.xsub.domain.SearchCritera;
+import github.vrih.xsub.domain.SearchResult;
+import github.vrih.xsub.domain.ServerInfo;
+import github.vrih.xsub.domain.Share;
+import github.vrih.xsub.domain.User;
+import github.vrih.xsub.domain.Version;
 import github.vrih.xsub.fragments.MainFragment;
-import github.vrih.xsub.service.parser.EntryListParser;
 import github.vrih.xsub.service.parser.ArtistInfoParser;
 import github.vrih.xsub.service.parser.BookmarkParser;
 import github.vrih.xsub.service.parser.ChatMessageParser;
+import github.vrih.xsub.service.parser.EntryListParser;
 import github.vrih.xsub.service.parser.ErrorParser;
 import github.vrih.xsub.service.parser.GenreParser;
 import github.vrih.xsub.service.parser.IndexesParser;
@@ -66,26 +102,14 @@ import github.vrih.xsub.service.parser.StarredListParser;
 import github.vrih.xsub.service.parser.TopSongsParser;
 import github.vrih.xsub.service.parser.UserParser;
 import github.vrih.xsub.service.parser.VideosParser;
-import github.vrih.xsub.util.Pair;
-import github.vrih.xsub.util.SilentBackgroundTask;
 import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.FileUtil;
+import github.vrih.xsub.util.Pair;
 import github.vrih.xsub.util.ProgressListener;
+import github.vrih.xsub.util.SilentBackgroundTask;
 import github.vrih.xsub.util.SongDBHandler;
 import github.vrih.xsub.util.Util;
 import github.vrih.xsub.util.compat.GoogleCompat;
-
-import java.io.*;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public class RESTMusicService implements MusicService {
 
@@ -1756,7 +1780,7 @@ public class RESTMusicService implements MusicService {
 		return getReader(context, progressListener, method, parameterNames, parameterValues, minNetworkTimeout, false);
 	}
 	private Reader getReader(Context context, ProgressListener progressListener, String method, List<String> parameterNames, List<Object> parameterValues, boolean throwErrors) throws Exception {
-		return getReader(context, progressListener, method, parameterNames, parameterValues, 0, throwErrors);
+		return getReader(context, progressListener, method, parameterNames, parameterValues, 0, true);
 	}
     private Reader getReader(Context context, ProgressListener progressListener, String method, List<String> parameterNames, List<Object> parameterValues, int minNetworkTimeout, boolean throwErrors) throws Exception {
         if (progressListener != null) {

@@ -30,18 +30,18 @@ import android.media.RemoteControlClient;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import androidx.mediarouter.media.MediaRouter;
 import android.util.Log;
 import android.view.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.mediarouter.media.MediaRouter;
 import github.vrih.xsub.R;
 import github.vrih.xsub.activity.SubsonicActivity;
 import github.vrih.xsub.activity.SubsonicFragmentActivity;
@@ -369,8 +369,8 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			}
 		}.execute();
 	}
-	private void playMusicDirectory(Entry dir, boolean shuffle, boolean append, boolean playFromBookmark) {
-		playMusicDirectory(dir.getId(), shuffle, append, playFromBookmark);
+	private void playMusicDirectory(Entry dir, boolean shuffle, boolean append) {
+		playMusicDirectory(dir.getId(), shuffle, append, true);
 	}
 	private void playMusicDirectory(final String dirId, final boolean shuffle, final boolean append, final Entry startEntry) {
 		new SilentServiceTask<Void>(downloadService) {
@@ -602,7 +602,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 			String musicDirectoryId = extras.getString(Constants.INTENT_EXTRA_NAME_ID);
 			if(musicDirectoryId != null) {
 				Entry dir = new Entry(musicDirectoryId);
-				playMusicDirectory(dir, shuffle, playLast, true);
+				playMusicDirectory(dir, shuffle, playLast);
 			}
 
 			String podcastId = extras.getString(Constants.INTENT_EXTRA_NAME_PODCAST_ID, null);

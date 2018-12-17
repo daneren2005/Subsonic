@@ -18,58 +18,6 @@
  */
 package github.vrih.xsub.service;
 
-import static androidx.mediarouter.media.MediaRouter.RouteInfo;
-import static github.vrih.xsub.domain.PlayerState.COMPLETED;
-import static github.vrih.xsub.domain.PlayerState.DOWNLOADING;
-import static github.vrih.xsub.domain.PlayerState.IDLE;
-import static github.vrih.xsub.domain.PlayerState.PAUSED;
-import static github.vrih.xsub.domain.PlayerState.PAUSED_TEMP;
-import static github.vrih.xsub.domain.PlayerState.PREPARED;
-import static github.vrih.xsub.domain.PlayerState.PREPARING;
-import static github.vrih.xsub.domain.PlayerState.STARTED;
-import static github.vrih.xsub.domain.PlayerState.STOPPED;
-import static github.vrih.xsub.domain.RemoteControlState.LOCAL;
-
-import github.vrih.xsub.R;
-import github.vrih.xsub.activity.SubsonicActivity;
-import github.vrih.xsub.audiofx.AudioEffectsController;
-import github.vrih.xsub.audiofx.EqualizerController;
-import github.vrih.xsub.domain.Bookmark;
-import github.vrih.xsub.domain.InternetRadioStation;
-import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.domain.PlayerState;
-import github.vrih.xsub.domain.PodcastEpisode;
-import github.vrih.xsub.domain.RemoteControlState;
-import github.vrih.xsub.domain.RepeatMode;
-import github.vrih.xsub.domain.ServerInfo;
-import github.vrih.xsub.receiver.AudioNoisyReceiver;
-import github.vrih.xsub.receiver.MediaButtonIntentReceiver;
-import github.vrih.xsub.util.ArtistRadioBuffer;
-import github.vrih.xsub.util.ImageLoader;
-import github.vrih.xsub.util.Notifications;
-import github.vrih.xsub.util.SilentBackgroundTask;
-import github.vrih.xsub.util.Constants;
-import github.vrih.xsub.util.MediaRouteManager;
-import github.vrih.xsub.util.ShufflePlayBuffer;
-import github.vrih.xsub.util.SimpleServiceBinder;
-import github.vrih.xsub.util.UpdateHelper;
-import github.vrih.xsub.util.Util;
-import github.vrih.xsub.util.compat.RemoteControlClientBase;
-import github.vrih.xsub.util.tags.BastpUtil;
-import github.vrih.xsub.view.UpdateView;
-import github.daneren2005.serverproxy.BufferProxy;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
@@ -88,11 +36,63 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.util.Log;
+import android.view.KeyEvent;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import androidx.collection.LruCache;
 import androidx.mediarouter.media.MediaRouteSelector;
 import androidx.mediarouter.media.MediaRouter;
-import android.util.Log;
-import androidx.collection.LruCache;
-import android.view.KeyEvent;
+import github.daneren2005.serverproxy.BufferProxy;
+import github.vrih.xsub.R;
+import github.vrih.xsub.activity.SubsonicActivity;
+import github.vrih.xsub.audiofx.AudioEffectsController;
+import github.vrih.xsub.audiofx.EqualizerController;
+import github.vrih.xsub.domain.Bookmark;
+import github.vrih.xsub.domain.InternetRadioStation;
+import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.domain.PlayerState;
+import github.vrih.xsub.domain.PodcastEpisode;
+import github.vrih.xsub.domain.RemoteControlState;
+import github.vrih.xsub.domain.RepeatMode;
+import github.vrih.xsub.domain.ServerInfo;
+import github.vrih.xsub.receiver.AudioNoisyReceiver;
+import github.vrih.xsub.receiver.MediaButtonIntentReceiver;
+import github.vrih.xsub.util.ArtistRadioBuffer;
+import github.vrih.xsub.util.Constants;
+import github.vrih.xsub.util.ImageLoader;
+import github.vrih.xsub.util.MediaRouteManager;
+import github.vrih.xsub.util.Notifications;
+import github.vrih.xsub.util.ShufflePlayBuffer;
+import github.vrih.xsub.util.SilentBackgroundTask;
+import github.vrih.xsub.util.SimpleServiceBinder;
+import github.vrih.xsub.util.UpdateHelper;
+import github.vrih.xsub.util.Util;
+import github.vrih.xsub.util.compat.RemoteControlClientBase;
+import github.vrih.xsub.util.tags.BastpUtil;
+import github.vrih.xsub.view.UpdateView;
+
+import static androidx.mediarouter.media.MediaRouter.RouteInfo;
+import static github.vrih.xsub.domain.PlayerState.COMPLETED;
+import static github.vrih.xsub.domain.PlayerState.DOWNLOADING;
+import static github.vrih.xsub.domain.PlayerState.IDLE;
+import static github.vrih.xsub.domain.PlayerState.PAUSED;
+import static github.vrih.xsub.domain.PlayerState.PAUSED_TEMP;
+import static github.vrih.xsub.domain.PlayerState.PREPARED;
+import static github.vrih.xsub.domain.PlayerState.PREPARING;
+import static github.vrih.xsub.domain.PlayerState.STARTED;
+import static github.vrih.xsub.domain.PlayerState.STOPPED;
+import static github.vrih.xsub.domain.RemoteControlState.LOCAL;
 
 /**
  * @author Sindre Mehus
@@ -786,9 +786,6 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void clear() {
-		clear(true);
-	}
-	private synchronized void clear(boolean serialize) {
 		// Delete podcast if fully listened to
 		int position = getPlayerPosition();
 		int duration = getPlayerDuration();
@@ -823,9 +820,8 @@ public class DownloadService extends Service {
 		}
 		setCurrentPlaying(null, false);
 
-		if (serialize) {
-			lifecycleSupport.serializeDownloadQueue();
-		}
+		lifecycleSupport.serializeDownloadQueue();
+
 		updateRemotePlaylist();
 		setNextPlaying();
 		if(proxy != null) {
@@ -1896,12 +1892,6 @@ public class DownloadService extends Service {
 		mediaRouter.stopScan();
 	}
 
-	private synchronized void bufferAndPlay() {
-		bufferAndPlay(0);
-	}
-	private synchronized void bufferAndPlay(int position) {
-		bufferAndPlay(position, true);
-	}
 	private synchronized void bufferAndPlay(int position, boolean start) {
 		if(!currentPlaying.isCompleteFileAvailable() && !currentPlaying.isStream()) {
 			if(Util.isAllowedToDownload(this)) {

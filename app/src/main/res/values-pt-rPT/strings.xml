@@ -643,7 +643,6 @@
 	<string name="permission.external_storage.failed">O DSub não funciona se não puder escrever no armazenamento</string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="zero">Sem músicas</item>
         <item quantity="one">Uma música</item>
         <item quantity="other">%d músicas</item>
     </plurals>

@@ -18,14 +18,15 @@
  */
 package github.vrih.xsub.service.parser;
 
-import java.io.IOException;
-import java.io.Reader;
-
-import org.xmlpull.v1.XmlPullParser;
-
 import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.IOException;
+import java.io.Reader;
+
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.ServerInfo;
 import github.vrih.xsub.domain.Version;
@@ -127,8 +128,8 @@ abstract class AbstractParser {
         return s == null ? null : Long.valueOf(s);
     }
 
-    Float getFloat(String name) {
-        String s = get(name);
+    Float getFloat() {
+        String s = get("gain");
         return s == null ? null : Float.valueOf(s);
     }
 

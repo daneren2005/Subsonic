@@ -490,7 +490,6 @@
 	<string name="tasker.start_playing_shuffled">Démarrer la lecture en mode lecture aléatoire</string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="zero">Aucun titre</item>
         <item quantity="one">Un titre</item>
         <item quantity="other">%d titres</item>
     </plurals>

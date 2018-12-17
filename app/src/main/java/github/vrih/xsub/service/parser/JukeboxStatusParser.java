@@ -18,11 +18,12 @@
  */
 package github.vrih.xsub.service.parser;
 
-import java.io.Reader;
+import android.content.Context;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import android.content.Context;
+import java.io.Reader;
+
 import github.vrih.xsub.domain.RemoteStatus;
 
 /**
@@ -48,7 +49,7 @@ public class JukeboxStatusParser extends AbstractParser {
                     jukeboxStatus.setPositionSeconds(getInteger("position"));
                     jukeboxStatus.setCurrentIndex(getInteger("currentIndex"));
                     jukeboxStatus.setPlaying(getBoolean("playing"));
-                    jukeboxStatus.setGain(getFloat("gain"));
+                    jukeboxStatus.setGain(getFloat());
                 } else if ("error".equals(name)) {
                     handleError();
                 }

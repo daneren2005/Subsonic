@@ -592,7 +592,6 @@ xxxxx	<string name="details.version">Version</string>
 	<string name="details.starred">Favorit</string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="zero">Inga spår</item>
         <item quantity="one">Ett spår</item>
         <item quantity="other">%d spår</item>
     </plurals>

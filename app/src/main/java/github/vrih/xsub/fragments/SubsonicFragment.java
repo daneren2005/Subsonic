@@ -491,10 +491,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	}
 
 	void replaceFragment(SubsonicFragment fragment) {
-		replaceFragment(fragment, true);
-	}
-	void replaceFragment(SubsonicFragment fragment, boolean replaceCurrent) {
-		context.replaceFragment(fragment, fragment.getSupportTag(), secondaryFragment && replaceCurrent);
+		context.replaceFragment(fragment, fragment.getSupportTag(), secondaryFragment);
 	}
 	void replaceExistingFragment(SubsonicFragment fragment) {
 		context.replaceExistingFragment(fragment, fragment.getSupportTag());
@@ -880,8 +877,8 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, "", true, save, append, autoplay, shuffle, background);
 	}
-	void downloadRecursively(final String id, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
-		downloadRecursively(id, "", true, save, append, autoplay, shuffle, background, playNext);
+	void downloadRecursively(final String id, final boolean _save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background, final boolean playNext) {
+		downloadRecursively(id, "", true, false, append, autoplay, shuffle, background, playNext);
 	}
 	void downloadPlaylist(final String id, final String name, final boolean save, final boolean append, final boolean autoplay, final boolean shuffle, final boolean background) {
 		downloadRecursively(id, name, false, save, append, autoplay, shuffle, background);
@@ -1537,7 +1534,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, true);
+		replaceFragment(fragment);
 	}
 	private void showArtist(Entry entry) {
 		SubsonicFragment fragment = new SelectDirectoryFragment();
@@ -1555,7 +1552,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		args.putBoolean(Constants.INTENT_EXTRA_NAME_ARTIST, true);
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, true);
+		replaceFragment(fragment);
 	}
 
 	private void showAlbum(Entry entry) {
@@ -1569,7 +1566,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		args.putString(Constants.INTENT_EXTRA_NAME_NAME, entry.getAlbum());
 		fragment.setArguments(args);
 
-		replaceFragment(fragment, true);
+		replaceFragment(fragment);
 	}
 
 	void createShare(final List<Entry> entries) {
@@ -1895,13 +1892,13 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	void playNow(final boolean shuffle, final boolean append, final boolean playNext) {
 		List<Entry> songs = getSelectedEntries();
 		if(!songs.isEmpty()) {
-			download(songs, append, false, !append, playNext, shuffle);
+			download(songs, append, !append, playNext, shuffle);
 			clearSelected();
 		}
 	}
 
-	void download(List<Entry> entries, boolean append, boolean save, boolean autoplay, boolean playNext, boolean shuffle) {
-		download(entries, append, save, autoplay, playNext, shuffle, null, null);
+	void download(List<Entry> entries, boolean append, boolean autoplay, boolean playNext, boolean shuffle) {
+		download(entries, append, false, autoplay, playNext, shuffle, null, null);
 	}
 	void download(final List<Entry> entries, final boolean append, final boolean save, final boolean autoplay, final boolean playNext, final boolean shuffle, final String playlistName, final String playlistId) {
 		final DownloadService downloadService = getDownloadService();

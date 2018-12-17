@@ -1296,12 +1296,9 @@ public class CachedMusicService implements MusicService {
   		final boolean singleUpdate;
   		
   		SerializeUpdater(Context context, String cacheName) {
-  			this(context, cacheName, true);
-  		}
-  		SerializeUpdater(Context context, String cacheName, boolean singleUpdate) {
   			this.context = context;
   			this.cacheName = getCacheName(context, cacheName);
-  			this.singleUpdate = singleUpdate;
+  			this.singleUpdate = true;
   		}
   		SerializeUpdater(Context context, String cacheName, String id) {
   			this(context, cacheName, id, true);
@@ -1380,8 +1377,8 @@ public class CachedMusicService implements MusicService {
 		MusicDirectoryUpdater(Context context, String cacheName, String id) {
 			super(context, cacheName, id, true);
 		}
-		MusicDirectoryUpdater(Context context, String cacheName, String id, boolean singleUpdate) {
-			super(context, cacheName, id, singleUpdate);
+		MusicDirectoryUpdater(Context context, String id) {
+			super(context, "playlist", id, false);
 		}
 
 		@Override
@@ -1416,7 +1413,7 @@ public class CachedMusicService implements MusicService {
 			}
 			
 			for(Playlist playlist: playlists) {
-				new MusicDirectoryUpdater(context, "playlist", playlist.getId(), false) {
+				new MusicDirectoryUpdater(context, playlist.getId()) {
 					@Override
 					public boolean checkResult(Entry check) {
 						return PlaylistDirectoryUpdater.this.checkResult(check);

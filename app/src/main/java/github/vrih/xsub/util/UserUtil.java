@@ -16,13 +16,9 @@
 package github.vrih.xsub.util;
 
 import android.app.Activity;
-import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,8 +27,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import github.vrih.xsub.R;
 import github.vrih.xsub.adapter.SectionAdapter;
+import github.vrih.xsub.adapter.SettingsAdapter;
 import github.vrih.xsub.domain.User;
 import github.vrih.xsub.fragments.SubsonicFragment;
 import github.vrih.xsub.service.DownloadService;
@@ -40,7 +41,6 @@ import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.service.MusicServiceFactory;
 import github.vrih.xsub.service.OfflineException;
 import github.vrih.xsub.service.ServerTooOldException;
-import github.vrih.xsub.adapter.SettingsAdapter;
 import github.vrih.xsub.view.UpdateView;
 
 public final class UserUtil {
@@ -158,10 +158,7 @@ public final class UserUtil {
 		return defaultValue;
 	}
 
-	public static void confirmCredentials(Activity context, Runnable onSuccess) {
-		confirmCredentials(context, onSuccess, null);
-	}
-	private static void confirmCredentials(final Activity context, final Runnable onSuccess, final Runnable onCancel) {
+	public static void confirmCredentials(final Activity context, final Runnable onSuccess) {
 		final long currentTime = System.currentTimeMillis();
 		// If already ran this check within last x time, just go ahead and auth
 		if((currentTime - lastVerifiedTime) < MIN_VERIFY_DURATION) {
@@ -187,9 +184,6 @@ public final class UserUtil {
 				.setNegativeButton(R.string.common_cancel, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						if(onCancel != null) {
-							onCancel.run();
-						}
 					}
 				})
 				.setCancelable(true);

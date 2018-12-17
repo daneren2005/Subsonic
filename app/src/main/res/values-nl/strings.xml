@@ -596,7 +596,6 @@
 	<string name="details.last_played">Laatst afgespeeld</string>
 
     <plurals name="select_album_n_songs">
-        <item quantity="zero">Geen nummer</item>
         <item quantity="one">Een nummer</item>
         <item quantity="other">%d nummers</item>
     </plurals>

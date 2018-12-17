@@ -1,5 +1,16 @@
 package github.vrih.xsub.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,19 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import android.content.Intent;
-import android.os.Bundle;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.view.MenuItem;
-import android.net.Uri;
-import android.view.ViewGroup;
 import github.vrih.xsub.R;
 import github.vrih.xsub.adapter.ArtistAdapter;
 import github.vrih.xsub.adapter.EntryGridAdapter;
@@ -29,9 +30,9 @@ import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.domain.MusicDirectory.Entry;
 import github.vrih.xsub.domain.SearchCritera;
 import github.vrih.xsub.domain.SearchResult;
+import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.service.MusicServiceFactory;
-import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.util.BackgroundTask;
 import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.TabBackgroundTask;
@@ -160,7 +161,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 			} else if (entry.isVideo()) {
 				onVideoSelected(entry);
 			} else {
-				onSongSelected(entry, false, true, true, false);
+				onSongSelected(entry, true);
 			}
 		}
 	}
@@ -246,16 +247,14 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 		replaceFragment(fragment);
 	}
 
-	private void onSongSelected(Entry song, boolean save, boolean append, boolean autoplay, boolean playNext) {
+	private void onSongSelected(Entry song, boolean append) {
 		DownloadService downloadService = getDownloadService();
 		if (downloadService != null) {
 			if (!append) {
 				downloadService.clear();
 			}
-			downloadService.download(Collections.singletonList(song), save, false, playNext, false);
-			if (autoplay) {
-				downloadService.play(downloadService.size() - 1);
-			}
+			downloadService.download(Collections.singletonList(song), false, false, false, false);
+			downloadService.play(downloadService.size() - 1);
 
 			Util.toast(context, getResources().getQuantityString(R.plurals.select_album_n_songs_added, 1, 1));
 		}
@@ -282,7 +281,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 
 			Map.Entry<Integer, Entry> entry = tree.firstEntry();
 			if(entry.getKey() <= MIN_CLOSENESS) {
-				onSongSelected(entry.getValue(), false, false, true, false);
+				onSongSelected(entry.getValue(), false);
 			} else {
 				autoplay(query);
 			}
@@ -345,7 +344,7 @@ public class SearchFragment extends SubsonicFragment implements SectionAdapter.O
 				song == null || album.getCloseness() <= song.getCloseness())) {
 			onAlbumSelected(album, true);
 		} else if(song != null) {
-			onSongSelected(song, false, false, true, false);
+			onSongSelected(song, false);
 		}
 	}
 }
