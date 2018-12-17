@@ -18,7 +18,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.EditTextPreference;
-import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +29,7 @@ import android.widget.LinearLayout;
 
 import java.io.File;
 
+import androidx.core.content.ContextCompat;
 import github.vrih.xsub.R;
 
 public class CacheLocationPreference extends EditTextPreference {
@@ -84,9 +84,6 @@ public class CacheLocationPreference extends EditTextPreference {
 								internalDir = dir;
 							}
 
-							if(internalDir != null && externalDir != null) {
-								break;
-							}
 						}
 					} catch (Exception e) {
 						Log.e(TAG, "Failed to check if is external", e);

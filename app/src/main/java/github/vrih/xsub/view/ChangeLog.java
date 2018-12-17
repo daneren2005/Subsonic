@@ -32,15 +32,6 @@
  */
 package github.vrih.xsub.view;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -52,6 +43,16 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseArray;
 import android.webkit.WebView;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import androidx.appcompat.app.AlertDialog;
 import github.vrih.xsub.R;
 
 
@@ -103,11 +104,6 @@ public class ChangeLog {
      * Version code of the current installation.
      */
     private int mCurrentVersionCode;
-
-    /**
-     * Version name of the current installation.
-     */
-    private String mCurrentVersionName;
 
 
     /**
@@ -185,7 +181,6 @@ public class ChangeLog {
                     context.getPackageName(), 0);
 
             mCurrentVersionCode = packageInfo.versionCode;
-            mCurrentVersionName = packageInfo.versionName;
         } catch (NameNotFoundException e) {
             mCurrentVersionCode = NO_VERSION;
             Log.e(LOG_TAG, "Could not get version information from manifest!", e);

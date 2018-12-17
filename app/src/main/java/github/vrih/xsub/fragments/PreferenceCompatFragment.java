@@ -89,9 +89,6 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 			}
 
 			mList = (ListView)listView;
-			if (mList == null) {
-				throw new RuntimeException("Your content must have a ListView whose id attribute is 'android.R.id.list'");
-			}
 
 			mHandler.post(mRequestFocus);
 		}

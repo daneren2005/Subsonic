@@ -18,6 +18,10 @@
  */
 package github.vrih.xsub.service;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -28,10 +32,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.TimeUnit;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
-
 import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.domain.ArtistInfo;
 import github.vrih.xsub.domain.Bookmark;
@@ -39,24 +39,24 @@ import github.vrih.xsub.domain.ChatMessage;
 import github.vrih.xsub.domain.Genre;
 import github.vrih.xsub.domain.Indexes;
 import github.vrih.xsub.domain.InternetRadioStation;
-import github.vrih.xsub.domain.PlayerQueue;
-import github.vrih.xsub.domain.PodcastEpisode;
-import github.vrih.xsub.domain.RemoteStatus;
 import github.vrih.xsub.domain.Lyrics;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.MusicFolder;
+import github.vrih.xsub.domain.PlayerQueue;
 import github.vrih.xsub.domain.Playlist;
 import github.vrih.xsub.domain.PodcastChannel;
+import github.vrih.xsub.domain.PodcastEpisode;
+import github.vrih.xsub.domain.RemoteStatus;
 import github.vrih.xsub.domain.SearchCritera;
 import github.vrih.xsub.domain.SearchResult;
 import github.vrih.xsub.domain.Share;
 import github.vrih.xsub.domain.User;
-import github.vrih.xsub.util.SilentBackgroundTask;
+import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.ProgressListener;
+import github.vrih.xsub.util.SilentBackgroundTask;
 import github.vrih.xsub.util.SongDBHandler;
 import github.vrih.xsub.util.SyncUtil;
 import github.vrih.xsub.util.TimeLimitedCache;
-import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.Util;
 
 import static github.vrih.xsub.domain.MusicDirectory.Entry;
@@ -105,7 +105,7 @@ public class CachedMusicService implements MusicService {
 
 				// Only save a copy license is valid
 				if(result) {
-					FileUtil.serialize(context, result, getCacheName(context, "license"));
+					FileUtil.serialize(context, true, getCacheName(context, "license"));
 				}
 			}
             cachedLicenseValid.set(result, result ? 30L * 60L : 2L * 60L, TimeUnit.SECONDS);

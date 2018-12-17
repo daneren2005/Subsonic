@@ -1,25 +1,18 @@
 package github.vrih.xsub.fragments;
 
 import android.annotation.TargetApi;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,31 +24,39 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import github.vrih.xsub.R;
 import github.vrih.xsub.adapter.AlphabeticalAlbumAdapter;
-import github.vrih.xsub.adapter.EntryInfiniteGridAdapter;
 import github.vrih.xsub.adapter.EntryGridAdapter;
+import github.vrih.xsub.adapter.EntryInfiniteGridAdapter;
 import github.vrih.xsub.adapter.SectionAdapter;
 import github.vrih.xsub.adapter.TopRatedAlbumAdapter;
 import github.vrih.xsub.domain.ArtistInfo;
 import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.domain.PodcastEpisode;
 import github.vrih.xsub.domain.ServerInfo;
 import github.vrih.xsub.domain.Share;
 import github.vrih.xsub.service.CachedMusicService;
 import github.vrih.xsub.service.DownloadService;
-import github.vrih.xsub.util.DrawableTint;
-import github.vrih.xsub.util.ImageLoader;
-
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-
-import github.vrih.xsub.domain.PodcastEpisode;
 import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.service.MusicServiceFactory;
 import github.vrih.xsub.service.OfflineException;
 import github.vrih.xsub.service.ServerTooOldException;
 import github.vrih.xsub.util.Constants;
+import github.vrih.xsub.util.DrawableTint;
+import github.vrih.xsub.util.ImageLoader;
 import github.vrih.xsub.util.LoadingTask;
 import github.vrih.xsub.util.Pair;
 import github.vrih.xsub.util.SilentBackgroundTask;
@@ -67,10 +68,6 @@ import github.vrih.xsub.view.FastScroller;
 import github.vrih.xsub.view.MyLeadingMarginSpan2;
 import github.vrih.xsub.view.RecyclingImageView;
 import github.vrih.xsub.view.UpdateView;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import static github.vrih.xsub.domain.MusicDirectory.Entry;
 
@@ -219,7 +216,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					super.onScrolled(recyclerView, dx, dy);
 
 					RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-					int totalItemCount = layoutManager.getItemCount();
+					int totalItemCount = layoutManager != null ? layoutManager.getItemCount() : 0;
 					int lastVisibleItem;
 					if(layoutManager instanceof GridLayoutManager) {
 						lastVisibleItem = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
@@ -762,7 +759,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					super.onScrolled(recyclerView, dx, dy);
 
 					RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-					int totalItemCount = layoutManager.getItemCount();
+					int totalItemCount = layoutManager != null ? layoutManager.getItemCount() : 0;
 					int lastVisibleItem;
 					if(layoutManager instanceof GridLayoutManager) {
 						lastVisibleItem = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();

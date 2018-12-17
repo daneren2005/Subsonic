@@ -93,10 +93,6 @@ public class ArtistRadioBuffer {
 		return result;
 	}
 
-	public void shutdown() {
-		executorService.shutdown();
-	}
-
 	private void restart() {
 		synchronized(buffer) {
 			if(buffer.size() <= refillThreshold && lastCount != 0 && (executorService == null || executorService.isShutdown())) {
@@ -107,7 +103,7 @@ public class ArtistRadioBuffer {
 	}
 
 	private void refill() {
-		if (buffer != null && executorService != null && (buffer.size() > refillThreshold || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
+		if (executorService != null && (buffer.size() > refillThreshold || !Util.isNetworkConnected(context) && !Util.isOffline(context) || lastCount == 0)) {
 			executorService.shutdown();
 			return;
 		}

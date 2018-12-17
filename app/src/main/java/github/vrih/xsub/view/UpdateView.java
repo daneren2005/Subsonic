@@ -22,7 +22,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 
-import github.vrih.xsub.domain.MusicDirectory;
+import androidx.recyclerview.widget.RecyclerView;
 import github.vrih.xsub.R;
+import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.util.DrawableTint;
 import github.vrih.xsub.util.SilentBackgroundTask;
 
@@ -109,7 +109,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 		update();
 	}
 	public void setObject(T obj1, Object obj2) {
-		setObject(obj1, null);
+		setObject(obj1);
 	}
 	protected abstract void setObjectImpl(T obj);
 	
@@ -278,12 +278,6 @@ public abstract class UpdateView<T> extends LinearLayout {
 			rating = isRated;
 		}
 
-		if(coverArtView instanceof RecyclingImageView) {
-			RecyclingImageView recyclingImageView = (RecyclingImageView) coverArtView;
-			if(recyclingImageView.isInvalidated()) {
-				onUpdateImageView();
-			}
-		}
 	}
 
 	public boolean isCheckable() {

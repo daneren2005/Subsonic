@@ -18,6 +18,9 @@
  */
 package github.vrih.xsub.util;
 
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +28,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.content.SharedPreferences;
-import android.util.Log;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.service.MusicService;
@@ -123,7 +124,7 @@ public class ShufflePlayBuffer {
 		// Check if active server has changed.
 		clearBufferIfnecessary();
 
-		if (buffer != null && (buffer.size() > refillThreshold || (!Util.isNetworkConnected(context) && !Util.isOffline(context)) || lastCount == 0)) {
+		if (buffer.size() > refillThreshold || !Util.isNetworkConnected(context) && !Util.isOffline(context) || lastCount == 0) {
 			executorService.shutdown();
 			return;
 		}

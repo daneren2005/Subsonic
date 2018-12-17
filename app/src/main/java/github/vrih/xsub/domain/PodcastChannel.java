@@ -143,7 +143,7 @@ public class PodcastChannel implements Serializable {
 		public static List<PodcastChannel> sort(List<PodcastChannel> podcasts, Context context) {
 			SharedPreferences prefs = Util.getPreferences(context);
 			String ignoredArticlesString = prefs.getString(Constants.CACHE_KEY_IGNORE, "The El La Los Las Le Les");
-			ignoredArticles = ignoredArticlesString.split(" ");
+			ignoredArticles = ignoredArticlesString != null ? ignoredArticlesString.split(" ") : null;
 
 			Collections.sort(podcasts, new PodcastComparator());
 			return podcasts;

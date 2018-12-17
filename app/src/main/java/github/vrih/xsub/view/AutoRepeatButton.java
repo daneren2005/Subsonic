@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class AutoRepeatButton extends android.support.v7.widget.AppCompatImageButton {
+public class AutoRepeatButton extends ImageButton {
 
 	private static final long initialRepeatDelay = 1000;
 	private static final long repeatIntervalInMilliseconds = 300;
@@ -29,7 +29,7 @@ public class AutoRepeatButton extends android.support.v7.widget.AppCompatImageBu
 	};
 
 	private void commonConstructorCode() {
-		this.setOnTouchListener(new OnTouchListener() {
+		this.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				int action = event.getAction(); 

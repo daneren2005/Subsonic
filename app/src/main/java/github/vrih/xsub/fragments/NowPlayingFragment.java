@@ -37,7 +37,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
@@ -1000,7 +999,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		PlayerState state = service.getPlayerState();
 		if (state == PAUSED || state == COMPLETED || state == STOPPED) {
 			service.start();
-		} else if (state == STOPPED || state == IDLE) {
+		} else if (state == IDLE) {
 			warnIfStorageUnavailable();
 			int current = service.getCurrentPlayingIndex();
 			// TODO: Use play() method.

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  android:orientation="horizontal"
-			  android:layout_width="fill_parent"
-			  android:layout_height="wrap_content"
-			  android:background="?attr/selectableItemBackground">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:background="?attr/selectableItemBackground">
 
 	<github.vrih.xsub.view.RecyclingImageView
 		android:id="@+id/item_avatar"
-		android:srcCompat="@drawable/ic_social_person"
+		app:srcCompat="@drawable/ic_social_person"
 		android:layout_width="@dimen/AlbumArt.Small"
 		android:layout_height="@dimen/AlbumArt.Small"
 		android:layout_gravity="start|center_vertical"/>
@@ -37,7 +38,7 @@
 
 	<ImageView
 		android:id="@+id/item_more"
-		android:srcCompat="?attr/download_none"
+		app:srcCompat="?attr/download_none"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:layout_gravity="end|center_vertical"

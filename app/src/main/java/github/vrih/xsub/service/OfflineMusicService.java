@@ -18,19 +18,25 @@
  */
 package github.vrih.xsub.service;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.util.Log;
+import java.util.SortedSet;
 
 import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.domain.ArtistInfo;
@@ -38,15 +44,15 @@ import github.vrih.xsub.domain.ChatMessage;
 import github.vrih.xsub.domain.Genre;
 import github.vrih.xsub.domain.Indexes;
 import github.vrih.xsub.domain.InternetRadioStation;
-import github.vrih.xsub.domain.MusicDirectory.Entry;
-import github.vrih.xsub.domain.PlayerQueue;
-import github.vrih.xsub.domain.PodcastEpisode;
-import github.vrih.xsub.domain.RemoteStatus;
 import github.vrih.xsub.domain.Lyrics;
 import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.domain.MusicDirectory.Entry;
 import github.vrih.xsub.domain.MusicFolder;
+import github.vrih.xsub.domain.PlayerQueue;
 import github.vrih.xsub.domain.Playlist;
 import github.vrih.xsub.domain.PodcastChannel;
+import github.vrih.xsub.domain.PodcastEpisode;
+import github.vrih.xsub.domain.RemoteStatus;
 import github.vrih.xsub.domain.SearchCritera;
 import github.vrih.xsub.domain.SearchResult;
 import github.vrih.xsub.domain.Share;
@@ -58,9 +64,6 @@ import github.vrih.xsub.util.ProgressListener;
 import github.vrih.xsub.util.SilentBackgroundTask;
 import github.vrih.xsub.util.SongDBHandler;
 import github.vrih.xsub.util.Util;
-import java.io.*;
-import java.util.Comparator;
-import java.util.SortedSet;
 
 /**
  * @author Sindre Mehus
@@ -529,7 +532,7 @@ public class OfflineMusicService implements MusicService {
 		scrobbles++;
 		SharedPreferences.Editor offlineEditor = offline.edit();
 		
-		if(id.contains(cacheLocn)) {
+		if(cacheLocn != null && id.contains(cacheLocn)) {
 			Pair<Integer, String> cachedSongId = SongDBHandler.getHandler(context).getIdFromPath(id);
 			if(cachedSongId != null) {
 				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, cachedSongId.getSecond());
@@ -625,7 +628,7 @@ public class OfflineMusicService implements MusicService {
 		SharedPreferences.Editor offlineEditor = offline.edit();
 
 		String id = entries.get(0).getId();
-		if(id.contains(cacheLocn)) {
+		if(cacheLocn != null && id.contains(cacheLocn)) {
 			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
 			offlineEditor.putString(Constants.OFFLINE_STAR_SEARCH + stars, searchCriteria);
 			offlineEditor.remove(Constants.OFFLINE_STAR_ID + stars);

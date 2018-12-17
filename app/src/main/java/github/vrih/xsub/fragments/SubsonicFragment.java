@@ -21,8 +21,6 @@ package github.vrih.xsub.fragments;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,12 +31,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StatFs;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
@@ -52,6 +44,26 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import github.vrih.xsub.R;
 import github.vrih.xsub.activity.SubsonicActivity;
 import github.vrih.xsub.activity.SubsonicFragmentActivity;
@@ -74,10 +86,10 @@ import github.vrih.xsub.service.ServerTooOldException;
 import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.ImageLoader;
+import github.vrih.xsub.util.LoadingTask;
 import github.vrih.xsub.util.MenuUtil;
 import github.vrih.xsub.util.ProgressListener;
 import github.vrih.xsub.util.SilentBackgroundTask;
-import github.vrih.xsub.util.LoadingTask;
 import github.vrih.xsub.util.SongDBHandler;
 import github.vrih.xsub.util.UpdateHelper;
 import github.vrih.xsub.util.UserUtil;
@@ -85,17 +97,6 @@ import github.vrih.xsub.util.Util;
 import github.vrih.xsub.view.GridSpacingDecoration;
 import github.vrih.xsub.view.PlaylistSongView;
 import github.vrih.xsub.view.UpdateView;
-
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
 
 import static github.vrih.xsub.domain.MusicDirectory.Entry;
 
@@ -702,9 +703,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 			gridLayoutManager.setSpanSizeLookup(spanSizeLookup);
 		}
 		RecyclerView.ItemDecoration itemDecoration = getItemDecoration();
-		if(itemDecoration != null) {
-			recyclerView.addItemDecoration(itemDecoration);
-		}
+		recyclerView.addItemDecoration(itemDecoration);
 		return gridLayoutManager;
 	}
 	private LinearLayoutManager getLinearLayoutManager() {

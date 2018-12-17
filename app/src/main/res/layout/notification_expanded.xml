@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="fill_parent"
     android:layout_height="128dp"
     android:orientation="horizontal" >
 		
@@ -37,7 +38,7 @@
 				android:id="@+id/notification_close"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:srcCompat="@drawable/notification_close"
+				app:srcCompat="@drawable/notification_close"
 				style="@style/NotificationButton"
 				android:layout_gravity="end"
 				android:visibility="invisible"/>
@@ -80,17 +81,17 @@
 	        <ImageButton
 	            android:id="@+id/control_previous"
 	            style="@style/NotificationButton.Expanded"
-	            android:srcCompat="@drawable/notification_media_backward" />
+	            app:srcCompat="@drawable/notification_media_backward" />
 
 	        <ImageButton
 	            android:id="@+id/control_pause"
 				style="@style/NotificationButton.Expanded"
-	            android:srcCompat="@drawable/notification_media_pause" />
+	            app:srcCompat="@drawable/notification_media_pause" />
 
 	        <ImageButton
 	            android:id="@+id/control_next"
 				style="@style/NotificationButton.Expanded"
-	            android:srcCompat="@drawable/notification_media_forward" />
+	            app:srcCompat="@drawable/notification_media_forward" />
 	    </LinearLayout>
 	</LinearLayout>
 

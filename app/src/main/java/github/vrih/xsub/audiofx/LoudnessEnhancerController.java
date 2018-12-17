@@ -29,7 +29,6 @@ public class LoudnessEnhancerController {
 
     public LoudnessEnhancerController(Context context, int audioSessionId) {
 		try {
-            int audioSessionId1 = audioSessionId;
 			enhancer = new LoudnessEnhancer(audioSessionId);
 		} catch (Throwable x) {
 			Log.w(TAG, "Failed to create enhancer", x);

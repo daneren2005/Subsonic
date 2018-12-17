@@ -19,8 +19,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
-import androidx.appcompat.view.ActionMode;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -36,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.appcompat.view.ActionMode;
+import androidx.recyclerview.widget.RecyclerView;
 import github.vrih.xsub.R;
 import github.vrih.xsub.activity.SubsonicFragmentActivity;
 import github.vrih.xsub.util.Constants;
@@ -486,7 +486,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 			if (ignoredArticles == null) {
 				SharedPreferences prefs = Util.getPreferences(context);
 				String ignoredArticlesString = prefs.getString(Constants.CACHE_KEY_IGNORE, "The El La Los Las Le Les");
-				ignoredArticles = ignoredArticlesString.split(" ");
+				ignoredArticles = ignoredArticlesString != null ? ignoredArticlesString.split(" ") : null;
 			}
 
 			name = name.toLowerCase();

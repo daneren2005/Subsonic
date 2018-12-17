@@ -22,18 +22,21 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.File;
+
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.PodcastEpisode;
-import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.service.DownloadFile;
+import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.util.DrawableTint;
 import github.vrih.xsub.util.SongDBHandler;
 import github.vrih.xsub.util.ThemeUtil;
 import github.vrih.xsub.util.Util;
-
-import java.io.File;
 
 /**
  * Used to display songs in a {@code ListView}.
@@ -280,7 +283,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		boolean playing = Util.equals(downloadService.getCurrentPlaying(), downloadFile);
 		if (playing) {
 			if(!this.playing) {
-				this.playing = playing;
+				this.playing = true;
 				playingTextView.setCompoundDrawablesWithIntrinsicBounds(DrawableTint.getDrawableRes(context, R.attr.playing), 0, 0, 0);
 			}
 		} else {
