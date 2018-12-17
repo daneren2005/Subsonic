@@ -27,7 +27,7 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
 
     }
 
-    public DroppySpeedControl setOnClicks(Context context, final DroppyClickCallbackInterface callback, int ... elementsByID){
+    public void setOnClicks(Context context, final DroppyClickCallbackInterface callback, int ... elementsByID){
         render(context);
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -38,7 +38,6 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
         for (Integer element : elementsByID) {
             renderedView.findViewById(element).setOnClickListener(listener);
         }
-        return this;
     }
 
 
@@ -48,7 +47,7 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
         seekBar.setProgress((int)(playbackSpeed*10)-5);
     }
 
-    public DroppySpeedControl setOnSeekBarChangeListener(Context context, final DroppyClickCallbackInterface callback, int seekBarByID, int textViewByID, float playbackSpeed) {
+    public void setOnSeekBarChangeListener(Context context, final DroppyClickCallbackInterface callback, int seekBarByID, int textViewByID, float playbackSpeed) {
         render(context);
         final TextView textBox = renderedView.findViewById(textViewByID);
         textBox.setText(Float.toString(playbackSpeed));
@@ -75,6 +74,5 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
             }
         });
         seekBar.setProgress((int)((playbackSpeed/10.0) - 5));
-        return this;
     }
 }

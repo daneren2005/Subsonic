@@ -349,7 +349,7 @@ public final class Notifications {
 	}
 
 	@TargetApi(Build.VERSION_CODES.O)
-	private static NotificationChannel getPlayingNotificationChannel(Context context) {
+	private static void getPlayingNotificationChannel(Context context) {
 		if(playingChannel == null) {
 			playingChannel = new NotificationChannel("now-playing-channel", "Now Playing", NotificationManager.IMPORTANCE_LOW);
 			playingChannel.setDescription("Now playing notification");
@@ -358,8 +358,7 @@ public final class Notifications {
 			notificationManager.createNotificationChannel(playingChannel);
 		}
 
-		return playingChannel;
-	}
+    }
 
 	public static void showDownloadingNotification(final Context context, final DownloadService downloadService, Handler handler, DownloadFile file, int size) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -431,7 +430,7 @@ public final class Notifications {
 	}
 
 	@TargetApi(Build.VERSION_CODES.O)
-	private static NotificationChannel getDownloadingNotificationChannel(Context context) {
+	private static void getDownloadingNotificationChannel(Context context) {
 		if(downloadingChannel == null) {
 			downloadingChannel = new NotificationChannel("downloading-channel", "Downloading Notification", NotificationManager.IMPORTANCE_LOW);
 			downloadingChannel.setDescription("Ongoing downloading notification to keep the service alive");
@@ -440,8 +439,7 @@ public final class Notifications {
 			notificationManager.createNotificationChannel(downloadingChannel);
 		}
 
-		return downloadingChannel;
-	}
+    }
 
 	@TargetApi(Build.VERSION_CODES.O)
 	public static void shutGoogleUpNotification(final DownloadService downloadService) {
@@ -521,7 +519,7 @@ public final class Notifications {
 	}
 
 	@TargetApi(Build.VERSION_CODES.O)
-	private static NotificationChannel getSyncNotificationChannel(Context context) {
+	private static void getSyncNotificationChannel(Context context) {
 		if(syncChannel == null) {
 			syncChannel = new NotificationChannel("sync-channel", "Sync Notifications", NotificationManager.IMPORTANCE_MIN);
 			syncChannel.setDescription("Sync notifications");
@@ -530,8 +528,7 @@ public final class Notifications {
 			notificationManager.createNotificationChannel(syncChannel);
 		}
 
-		return syncChannel;
-	}
+    }
 
 	private static void startForeground(DownloadService downloadService, int notificationId, Notification notification) {
 		downloadService.startForeground(notificationId, notification);

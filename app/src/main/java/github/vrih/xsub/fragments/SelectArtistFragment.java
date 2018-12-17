@@ -207,8 +207,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 
 			Indexes indexes = new Indexes(0, new ArrayList<Artist>(), artists);
 			indexes.sortChildren(context);
-			items = new ArrayList();
-			items.addAll(indexes.getArtists());
+			items = new ArrayList(indexes.getArtists());
 
 			entries = dir.getChildren(false, true);
 			items.addAll(entries);

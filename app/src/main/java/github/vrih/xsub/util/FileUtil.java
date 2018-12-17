@@ -507,11 +507,11 @@ public class FileUtil {
         File dir = new File(path);
         return ensureDirectoryExistsAndIsReadWritable(dir) ? dir : getDefaultMusicDirectory(context);
     }
-	public static boolean deleteMusicDirectory(Context context) {
+	public static void deleteMusicDirectory(Context context) {
 		File musicDirectory = FileUtil.getMusicDirectory(context);
 		MediaStoreService mediaStore = new MediaStoreService(context);
-		return recursiveDelete(musicDirectory, mediaStore);
-	}
+        recursiveDelete(musicDirectory, mediaStore);
+    }
 	public static void deleteSerializedCache(Context context) {
 		for(File file: context.getCacheDir().listFiles()) {
 			if(file.getName().contains(".ser")) {
@@ -519,14 +519,14 @@ public class FileUtil {
 			}
 		}
 	}
-	public static boolean deleteArtworkCache(Context context) {
+	public static void deleteArtworkCache(Context context) {
 		File artDirectory = FileUtil.getAlbumArtDirectory(context);
-		return recursiveDelete(artDirectory);
-	}
-	public static boolean deleteAvatarCache(Context context) {
+        recursiveDelete(artDirectory);
+    }
+	public static void deleteAvatarCache(Context context) {
 		File artDirectory = FileUtil.getAvatarDirectory(context);
-		return recursiveDelete(artDirectory);
-	}
+        recursiveDelete(artDirectory);
+    }
 
 	private static boolean recursiveDelete(File dir) {
 		return recursiveDelete(dir, null);
@@ -791,7 +791,7 @@ public class FileUtil {
 		}
 	}
 
-    public static <T extends Serializable> boolean serialize(Context context, T obj, String fileName) {
+    public static <T extends Serializable> void serialize(Context context, T obj, String fileName) {
 		Output out = null;
 		try {
 			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
@@ -799,11 +799,9 @@ public class FileUtil {
 			synchronized (kryo) {
 				kryo.writeObject(out, obj);
 			}
-			return true;
-		} catch (Throwable x) {
+        } catch (Throwable x) {
 			Log.w(TAG, "Failed to serialize object to " + fileName);
-			return false;
-		} finally {
+        } finally {
 			Util.close(out);
 		}
     }
@@ -847,7 +845,7 @@ public class FileUtil {
 		}
     }
 
-	public static <T extends Serializable> boolean serializeCompressed(Context context, T obj, String fileName) {
+	public static <T extends Serializable> void serializeCompressed(Context context, T obj, String fileName) {
 		Output out = null;
 		try {
 			RandomAccessFile file = new RandomAccessFile(context.getCacheDir() + "/" + fileName, "rw");
@@ -855,11 +853,9 @@ public class FileUtil {
 			synchronized (kryo) {
 				kryo.writeObject(out, obj);
 			}
-			return true;
-		} catch (Throwable x) {
+        } catch (Throwable x) {
 			Log.w(TAG, "Failed to serialize compressed object to " + fileName);
-			return false;
-		} finally {
+        } finally {
 			Util.close(out);
 		}
 	}

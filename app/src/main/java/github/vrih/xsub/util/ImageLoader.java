@@ -261,7 +261,7 @@ public class ImageLoader {
 		return task;
 	}
 
-	public SilentBackgroundTask<Void> loadImage(View view, String url, boolean large) {
+	public void loadImage(View view, String url, boolean large) {
 		Bitmap bitmap;
 		int size = large ? imageSizeLarge : imageSizeDefault;
 		if (url == null) {
@@ -269,41 +269,39 @@ public class ImageLoader {
 			int color = COLORS[Math.abs(key.hashCode()) % COLORS.length];
 			bitmap = getUnknownImage(key, size, color, null, null);
 			setImage(view, Util.createDrawableFromBitmap(context, bitmap), true);
-			return null;
+			return;
 		}
 
 		bitmap = cache.get(getKey(url, size));
 		if (bitmap != null && !bitmap.isRecycled()) {
 			final Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
 			setImage(view, drawable, true);
-			return null;
+			return;
 		}
 		setImage(view, null, false);
 
 		SilentBackgroundTask<Void> task = new ViewUrlTask(view.getContext(), view, url, size);
 		task.execute();
-		return task;
 	}
 
-	public SilentBackgroundTask<Void> loadImage(Context context, RemoteControlClientBase remoteControl, MusicDirectory.Entry entry) {
+	public void loadImage(Context context, RemoteControlClientBase remoteControl, MusicDirectory.Entry entry) {
 		Bitmap bitmap;
 		if (entry == null || entry.getCoverArt() == null) {
 			bitmap = getUnknownImage(entry, imageSizeLarge);
 			setImage(entry, remoteControl, Util.createDrawableFromBitmap(context, bitmap));
-			return null;
+			return;
 		}
 
 		bitmap = cache.get(getKey(entry.getCoverArt(), imageSizeLarge));
 		if (bitmap != null && !bitmap.isRecycled()) {
 			Drawable drawable = Util.createDrawableFromBitmap(this.context, bitmap);
 			setImage(entry, remoteControl, drawable);
-			return null;
+			return;
 		}
 
 		setImage(entry, remoteControl, Util.createDrawableFromBitmap(context, null));
 		ImageTask task = new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, false, remoteControl);
 		task.execute();
-		return task;
 	}
 
 	public SilentBackgroundTask<Void> loadAvatar(Context context, ImageView view, String username) {

@@ -665,7 +665,7 @@ public final class Util {
         return output.toByteArray();
     }
 
-    private static long copy(InputStream input, OutputStream output)
+    private static void copy(InputStream input, OutputStream output)
             throws IOException {
         byte[] buffer = new byte[1024 * 4];
         long count = 0;
@@ -674,8 +674,7 @@ public final class Util {
             output.write(buffer, 0, n);
             count += n;
         }
-        return count;
-    }
+	}
 
 	public static void renameFile(File from, File to) throws IOException {
 		if(!from.renameTo(to)) {
