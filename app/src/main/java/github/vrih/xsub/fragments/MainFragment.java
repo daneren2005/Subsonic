@@ -206,8 +206,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			protected Void doInBackground() throws Throwable {
 				File rootFolder = FileUtil.getMusicDirectory(context);
 				StatFs stat = new StatFs(rootFolder.getPath());
-				bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
-				bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+				bytesTotalFs = stat.getBlockCountLong() * stat.getBlockSizeLong();
+				bytesAvailableFs = stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
 
 				used = FileUtil.getUsedSize(context, rootFolder);
 				return null;

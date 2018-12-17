@@ -69,8 +69,8 @@ public class CacheCleaner {
 		
 		// Ensure that file system is not more than 95% full.
         StatFs stat = new StatFs(files.get(0).getPath());
-        long bytesTotalFs = (long) stat.getBlockCount() * (long) stat.getBlockSize();
-        long bytesAvailableFs = (long) stat.getAvailableBlocks() * (long) stat.getBlockSize();
+        long bytesTotalFs = stat.getBlockCountLong() * stat.getBlockSizeLong();
+        long bytesAvailableFs = stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
         long bytesUsedFs = bytesTotalFs - bytesAvailableFs;
         long minFsAvailability = bytesTotalFs - MIN_FREE_SPACE;
 
