@@ -44,9 +44,7 @@
 			android:visible="false"/>
 	</group>
 
-	<group
-		android:id="@+id/drawer_bottom"
-		android:checkableBehavior="single">
+	<group android:checkableBehavior="single">
 
 		<item android:id="@+id/drawer_offline"
 			  android:title="@string/button_bar.offline"/>

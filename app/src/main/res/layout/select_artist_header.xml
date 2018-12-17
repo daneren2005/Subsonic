@@ -5,8 +5,7 @@
 	android:layout_height="wrap_content">
 
 	<LinearLayout
-			android:id="@+id/select_artist_folder"
-			android:orientation="horizontal"
+        android:orientation="horizontal"
 			android:paddingTop="2dip"
 			android:paddingBottom="2dip"
 			android:paddingStart="6dp"
@@ -25,8 +24,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content">
 
-			<TextView android:id="@+id/select_artist_folder_1"
-					  android:text="@string/select_artist.folder"
+			<TextView
+                android:text="@string/select_artist.folder"
 					  android:layout_width="fill_parent"
 					  android:layout_height="wrap_content"
 					  android:layout_marginStart="10dip"
