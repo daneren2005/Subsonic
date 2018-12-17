@@ -42,8 +42,7 @@ class ID3v2File extends Common {
 		// read the whole 10 byte header into memory
 		s.seek(0);
 		s.read(v2hdr);
-		
-		int id3v   = ((b2be32(v2hdr,0))) & 0xFF;   // swapped ID3\04 -> ver. ist the first byte
+
 		int v3len  = ((b2be32(v2hdr,6)));          // total size EXCLUDING the this 10 byte header
 		v3len      = ((v3len & 0x7f000000) >> 3) | // for some funky reason, this is encoded as 7*4 bits
 		             ((v3len & 0x007f0000) >> 2) |

@@ -320,7 +320,7 @@ public class DownloadServiceLifecycleSupport {
 
 			currentSavePlayQueueTask = new SilentBackgroundTask<Void>(downloadService) {
 				@Override
-				protected Void doInBackground() throws Throwable {
+				protected Void doInBackground() {
 					try {
 						int index = state.currentPlayingIndex;
 						int position = state.currentPlayingPosition;

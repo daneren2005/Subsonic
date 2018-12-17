@@ -22,15 +22,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import github.vrih.xsub.R;
-import github.vrih.xsub.domain.PodcastChannel;
-import github.vrih.xsub.util.ImageLoader;
-import github.vrih.xsub.util.SyncUtil;
-import github.vrih.xsub.util.FileUtil;
+
 import java.io.File;
 
+import github.vrih.xsub.R;
+import github.vrih.xsub.domain.PodcastChannel;
+import github.vrih.xsub.util.FileUtil;
+import github.vrih.xsub.util.ImageLoader;
+import github.vrih.xsub.util.SyncUtil;
+
 public class PodcastChannelView extends UpdateView<PodcastChannel> {
-	private static final String TAG = PodcastChannelView.class.getSimpleName();
 
 	private File file;
 	private final TextView titleView;

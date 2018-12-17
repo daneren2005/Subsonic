@@ -11,7 +11,6 @@ import java.util.List;
  * Created by Scott on 11/24/13.
  */
 public final class SyncUtil {
-	private static String TAG = SyncUtil.class.getSimpleName();
 	private static ArrayList<SyncSet> syncedPlaylists;
 	private static ArrayList<SyncSet> syncedPodcasts;
 	private static String url;
@@ -187,9 +186,6 @@ public final class SyncUtil {
 		public String id;
 		public List<String> synced;
 
-		protected SyncSet() {
-
-		}
 		SyncSet(String id) {
 			this.id = id;
 		}

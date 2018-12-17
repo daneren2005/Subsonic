@@ -29,7 +29,6 @@ import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.service.DownloadFile;
 
 public class SongDBHandler extends SQLiteOpenHelper {
-	private static final String TAG = SongDBHandler.class.getSimpleName();
 	private static SongDBHandler dbHandler;
 
 	private static final int DATABASE_VERSION = 2;
@@ -76,16 +75,11 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		addSong(db, instance, downloadFile);
 		db.close();
 	}
-	protected synchronized void addSong(SQLiteDatabase db, DownloadFile downloadFile) {
-		addSong(db, Util.getMostRecentActiveServer(context), downloadFile);
-	}
+
 	private synchronized void addSong(SQLiteDatabase db, int instance, DownloadFile downloadFile) {
 		addSong(db, instance, downloadFile.getSong().getId(), downloadFile.getSaveFile().getAbsolutePath());
 	}
 
-	protected synchronized void addSong(SQLiteDatabase db, String id, String absolutePath) {
-		addSong(db, Util.getMostRecentActiveServer(context), id, absolutePath);
-	}
 	private synchronized void addSong(SQLiteDatabase db, int instance, String id, String absolutePath) {
 		addSongImpl(db, Util.getRestUrlHash(context, instance), id, absolutePath);
 	}
@@ -150,10 +144,6 @@ public class SongDBHandler extends SQLiteOpenHelper {
 		db.close();
 	}
 
-	public boolean hasBeenPlayed(MusicDirectory.Entry entry) {
-		Long[] lastPlayed = getLastPlayed(entry);
-		return lastPlayed != null && lastPlayed[0] != null && lastPlayed[0] > 0;
-	}
 	public boolean hasBeenCompleted(MusicDirectory.Entry entry) {
 		Long[] lastPlayed = getLastPlayed(entry);
 		return lastPlayed != null && lastPlayed[1] != null && lastPlayed[1] > 0;
@@ -185,6 +175,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 			return null;
 		}
 		finally {
+			cursor.close();
 			db.close();
 		}
 	}
@@ -229,6 +220,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 			return null;
 		}
 		finally {
+			cursor.close();
 			db.close();
 		}
 	}
@@ -245,6 +237,7 @@ public class SongDBHandler extends SQLiteOpenHelper {
 			return null;
 		}
 		finally {
+			cursor.close();
 			db.close();
 		}
 	}

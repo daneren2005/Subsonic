@@ -21,13 +21,8 @@ package github.vrih.xsub.service.parser;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import github.vrih.xsub.domain.ServerInfo;
-import github.vrih.xsub.domain.Share;
-import github.vrih.xsub.util.Constants;
-import github.vrih.xsub.util.ProgressListener;
-import github.vrih.xsub.util.Util;
-
 import org.xmlpull.v1.XmlPullParser;
+
 import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,17 +31,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import github.vrih.xsub.domain.ServerInfo;
+import github.vrih.xsub.domain.Share;
+import github.vrih.xsub.util.Constants;
+import github.vrih.xsub.util.Util;
+
 /**
  * @author Joshua Bahnsen
  */
 public class ShareParser extends MusicDirectoryEntryParser {
-	private static final String TAG = ShareParser.class.getSimpleName();
 
 	public ShareParser(Context context, int instance) {
 		super(context, instance);
 	}
 
-    public List<Share> parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public List<Share> parse(Reader reader) throws Exception {
         init(reader);
 
         List<Share> dir = new ArrayList<>();

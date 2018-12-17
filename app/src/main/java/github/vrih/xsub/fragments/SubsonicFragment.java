@@ -504,7 +504,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		return rootView.getId();
 	}
 
-	public void setSupportTag(int tag) { this.tag = tag; }
 	public void setSupportTag(String tag) { this.tag = Integer.parseInt(tag); }
 	public int getSupportTag() {
 		return tag;
@@ -613,9 +612,6 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 	synchronized ImageLoader getImageLoader() {
 		return context.getImageLoader();
-	}
-	public synchronized static ImageLoader getStaticImageLoader(Context context) {
-		return SubsonicActivity.getStaticImageLoader(context);
 	}
 
 	void setTitle(CharSequence title) {
@@ -1475,7 +1471,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 		new LoadingTask<Void>(context) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				MediaStoreService mediaStore = new MediaStoreService(context);
 				FileUtil.recursiveDelete(dir, mediaStore);
 				return null;
@@ -1499,7 +1495,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	private void deleteSongs(final List<Entry> songs) {
 		new LoadingTask<Void>(context) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				getDownloadService().delete(songs);
 				return null;
 			}
@@ -1659,7 +1655,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 							}
 						}.execute();
 
-						playNow(songs, null, null);
+						playNow(songs, null);
 					}
 				});
 		AlertDialog dialog = builder.create();
@@ -1713,7 +1709,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 
 				// If no bookmark found, just play from start
 				if(bookmark == null) {
-					playNow(songs, null, null);
+					playNow(songs, null);
 				} else {
 					// If bookmark found, then give user choice to start from there or to start over
 					playBookmark(songs, bookmark);
@@ -1722,7 +1718,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		}.execute();
 	}
 
-	private void playNow(List<Entry> entries, String _playlistName, String _playlistId) {
+	private void playNow(List<Entry> entries, String _playlistId) {
 		Entry selected = entries.isEmpty() ? null : entries.get(0);
 		playNow(entries, selected, 0);
 	}
@@ -1730,7 +1726,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	private void playNow(final List<Entry> entries, final Entry song, final int position) {
 		new LoadingTask<Void>(context) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				playNowInTask(entries, song, position);
 				return null;
 			}
@@ -1940,7 +1936,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		new RecursiveLoader(context) {
 			@Override
 			protected Boolean doInBackground() throws Throwable {
-				getSongsRecursively(entries, true);
+				getSongsRecursively(entries);
 				getDownloadService().downloadBackground(songs, save);
 				return null;
 			}
@@ -2002,11 +1998,9 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 				getSongsRecursively(parent, songs);
 			}
 		}
-		protected void getSongsRecursively(List<Entry> entry) throws Exception {
-			getSongsRecursively(entry, false);
-		}
-		void getSongsRecursively(List<Entry> entry, boolean allowVideo) throws Exception {
-			getSongsRecursively(entry, songs, allowVideo);
+
+		void getSongsRecursively(List<Entry> entry) throws Exception {
+			getSongsRecursively(entry, songs, true);
 		}
 		void getSongsRecursively(List<Entry> entry, List<Entry> songs) throws Exception {
 			getSongsRecursively(entry, songs, false);

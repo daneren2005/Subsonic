@@ -45,7 +45,6 @@ import github.vrih.xsub.util.Util;
  * @author Sindre Mehus
  */
 public class DSubSearchProvider extends ContentProvider {
-	private static final String TAG = DSubSearchProvider.class.getSimpleName();
 
 	private static final String RESOURCE_PREFIX = "android.resource://github.vrih.xsub/";
 	private static final String[] COLUMNS = {"_id",

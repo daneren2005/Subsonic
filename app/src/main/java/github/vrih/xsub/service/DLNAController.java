@@ -79,7 +79,6 @@ public class DLNAController extends RemoteController {
 	private final ControlPoint controlPoint;
 	private SubscriptionCallback callback;
 	private boolean supportsSeek = false;
-	private boolean supportsSetupNext = false;
 	private boolean error = false;
 
 	private final AtomicLong lastUpdate = new AtomicLong();
@@ -130,7 +129,6 @@ public class DLNAController extends RemoteController {
 				}
 				Action setupNextAction = genaSubscription.getService().getAction("SetNextAVTransportURI");
 				if(setupNextAction != null) {
-					supportsSetupNext = true;
 				}
 
 				startSong(downloadService.getCurrentPlaying(), playing, seconds);
@@ -392,7 +390,6 @@ public class DLNAController extends RemoteController {
 		try {
 			Pair<String, String> songInfo = getSongInfo(currentPlaying);
 
-            String currentPlayingURI = songInfo.getFirst();
 			controlPoint.execute(new SetAVTransportURI(getTransportService(), songInfo.getFirst(), songInfo.getSecond()) {
 				@Override
 				public void success(ActionInvocation invocation) {
@@ -606,16 +603,8 @@ public class DLNAController extends RemoteController {
 	}
 
 	private abstract class SetNextAVTransportURI extends ActionCallback {
-		public SetNextAVTransportURI(Service service, String uri) {
-			this(new UnsignedIntegerFourBytes(0), service, uri, null);
-		}
-
 		SetNextAVTransportURI(Service service, String uri, String metadata) {
 			this(new UnsignedIntegerFourBytes(0), service, uri, metadata);
-		}
-
-		public SetNextAVTransportURI(UnsignedIntegerFourBytes instanceId, Service service, String uri) {
-			this(instanceId, service, uri, null);
 		}
 
 		SetNextAVTransportURI(UnsignedIntegerFourBytes instanceId, Service service, String uri, String metadata) {

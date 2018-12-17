@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
@@ -41,7 +40,6 @@ import github.vrih.xsub.R;
 import github.vrih.xsub.util.Constants;
 
 public abstract class PreferenceCompatFragment extends SubsonicFragment {
-	private static final String TAG = PreferenceCompatFragment.class.getSimpleName();
 	private static final int FIRST_REQUEST_CODE = 100;
 	private static final int MSG_BIND_PREFERENCES = 1;
 	private static final String PREFERENCES_TAG = "android:preferences";
@@ -286,17 +284,6 @@ public abstract class PreferenceCompatFragment extends SubsonicFragment {
 			Method m = PreferenceManager.class.getDeclaredMethod("dispatchActivityStop");
 			m.setAccessible(true);
 			m.invoke(mPreferenceManager);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-
-	private void setFragment(PreferenceFragment preferenceFragment) {
-		try {
-			Method m = PreferenceManager.class.getDeclaredMethod("setFragment", PreferenceFragment.class);
-			m.setAccessible(true);
-			m.invoke(mPreferenceManager, preferenceFragment);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

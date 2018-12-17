@@ -315,7 +315,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 		}
 
 		// Different is so that call is not ambiguous
-		public UpdateViewHolder(View view, boolean different) {
+		public UpdateViewHolder(View view) {
 			super(view);
 			this.view = view;
 		}

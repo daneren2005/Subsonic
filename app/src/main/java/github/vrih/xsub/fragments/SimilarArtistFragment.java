@@ -22,6 +22,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import github.vrih.xsub.R;
 import github.vrih.xsub.adapter.SectionAdapter;
 import github.vrih.xsub.adapter.SimilarArtistAdapter;
@@ -36,14 +42,7 @@ import github.vrih.xsub.util.ProgressListener;
 import github.vrih.xsub.util.Util;
 import github.vrih.xsub.view.UpdateView;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 public class SimilarArtistFragment extends SelectRecyclerFragment<Artist> {
-	private static final String TAG = SimilarArtistFragment.class.getSimpleName();
 	private ArtistInfo info;
 	private String artistId;
 

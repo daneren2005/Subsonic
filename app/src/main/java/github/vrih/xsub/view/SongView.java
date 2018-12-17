@@ -44,7 +44,6 @@ import github.vrih.xsub.util.Util;
  * @author Sindre Mehus
  */
 public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
-	private static final String TAG = SongView.class.getSimpleName();
 
 	private final TextView trackTextView;
 	private final TextView titleTextView;

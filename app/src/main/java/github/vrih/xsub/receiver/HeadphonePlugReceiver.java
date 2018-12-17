@@ -23,7 +23,6 @@ import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.util.Util;
 
 public class HeadphonePlugReceiver extends BroadcastReceiver {
-	private static final String TAG = HeadphonePlugReceiver.class.getSimpleName();
 
 	@Override
 	public void onReceive(Context context, Intent intent) {

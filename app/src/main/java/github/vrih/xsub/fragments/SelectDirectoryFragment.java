@@ -450,7 +450,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			if(showAll) {
 				getRecursiveMusicDirectory(id, name, refresh);
 			} else if(topTracks) {
-				getTopTracks(id, name, refresh);
+				getTopTracks(name, refresh);
 			} else {
 				getMusicDirectory(id, name, refresh);
 			}
@@ -567,13 +567,13 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 		new LoadTask(refresh) {
 			@Override
-			protected MusicDirectory load(MusicService service) throws Exception {
+			protected MusicDirectory load(MusicService service) {
 				return share.getMusicDirectory();
 			}
 		}.execute();
 	}
 
-	private void getTopTracks(final String id, final String name, final boolean refresh) {
+	private void getTopTracks(final String name, final boolean refresh) {
 		setTitle(name);
 
 		new LoadTask(refresh) {
@@ -941,7 +941,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		RecursiveLoader onValid = new RecursiveLoader(context) {
 			@Override
 			protected Boolean doInBackground() throws Throwable {
-				getSongsRecursively(entries, true);
+				getSongsRecursively(entries);
 				getDownloadService().downloadBackground(songs, save);
 				return null;
 			}
@@ -1138,7 +1138,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	private void startArtistRadio(final String artistId) {
 		new LoadingTask<Void>(context) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				DownloadService downloadService = getDownloadService();
 				downloadService.clear();
 				downloadService.setArtistRadio(artistId);
@@ -1406,7 +1406,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				public void onClick(View v) {
 					UpdateHelper.setRating(context, directory, new UpdateHelper.OnRatingChange() {
 						@Override
-						public void ratingChange(int rating) {
+						public void ratingChange() {
 							ratingBar.setRating(directory.getRating());
 						}
 					});

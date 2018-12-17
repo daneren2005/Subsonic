@@ -6,11 +6,11 @@
 		android:id="@+id/menu_cancel"
 		android:icon="?attr/remove"
 		android:title="@string/common.cancel"
-		compat:showAsAction="always|withText"/>
+		compat:showAsAction="ifRoom|withText"/>
 
 	<item
 		android:id="@+id/menu_accept"
 		android:icon="?attr/save"
 		android:title="@string/common.ok"
-		compat:showAsAction="always|withText"/>
+		compat:showAsAction="ifRoom|withText"/>
 </menu>

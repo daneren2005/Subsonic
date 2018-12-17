@@ -21,8 +21,6 @@ package github.vrih.xsub.service.parser;
 import android.content.Context;
 import android.text.Html;
 import android.util.Log;
-import github.vrih.xsub.domain.Genre;
-import github.vrih.xsub.util.ProgressListener;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -32,6 +30,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import github.vrih.xsub.domain.Genre;
 
 /**
  * @author Joshua Bahnsen
@@ -43,7 +43,7 @@ public class GenreParser extends AbstractParser {
 		super(context, instance);
 	}
 
-    public List<Genre> parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public List<Genre> parse(Reader reader) throws Exception {
         List<Genre> result = new ArrayList<>();
         StringReader sr = null;
         

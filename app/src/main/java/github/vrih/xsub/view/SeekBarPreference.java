@@ -36,7 +36,6 @@ import github.vrih.xsub.R;
  * SeekBar preference to set the shake force threshold.
  */
 public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
-	private static final String TAG = SeekBarPreference.class.getSimpleName();
 	/**
 	 * The current value.
 	 */
@@ -66,6 +65,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		if(mDisplay == null) {
 			mDisplay = "%.0f";
 		}
+		a.recycle();
 	}
 
 	@Override

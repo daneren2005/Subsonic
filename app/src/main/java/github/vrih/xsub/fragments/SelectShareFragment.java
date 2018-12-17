@@ -15,7 +15,6 @@
 
 package github.vrih.xsub.fragments;
 
-import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -32,8 +31,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import github.vrih.xsub.R;
 import github.vrih.xsub.adapter.SectionAdapter;
+import github.vrih.xsub.adapter.ShareAdapter;
 import github.vrih.xsub.domain.Share;
 import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.service.MusicServiceFactory;
@@ -43,11 +44,9 @@ import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.LoadingTask;
 import github.vrih.xsub.util.ProgressListener;
 import github.vrih.xsub.util.Util;
-import github.vrih.xsub.adapter.ShareAdapter;
 import github.vrih.xsub.view.UpdateView;
 
 public class SelectShareFragment extends SelectRecyclerFragment<Share> {
-	private static final String TAG = SelectShareFragment.class.getSimpleName();
 
 	@Override
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<Share> updateView, Share item) {

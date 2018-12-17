@@ -19,13 +19,14 @@
 package github.vrih.xsub.service.parser;
 
 import android.content.Context;
-import github.vrih.xsub.domain.ChatMessage;
-import github.vrih.xsub.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+
+import github.vrih.xsub.domain.ChatMessage;
 
 /**
  * @author Joshua Bahnsen
@@ -36,7 +37,7 @@ public class ChatMessageParser extends AbstractParser {
 		super(context, instance);
 	}
 
-    public List<ChatMessage> parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public List<ChatMessage> parse(Reader reader) throws Exception {
         init(reader);
         List<ChatMessage> result = new ArrayList<>();
         int eventType;

@@ -22,14 +22,13 @@ import org.xmlpull.v1.XmlPullParser;
 import java.io.Reader;
 
 import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.util.ProgressListener;
 
 public class VideosParser extends MusicDirectoryEntryParser {
 	public VideosParser(Context context, int instance) {
 		super(context, instance);
 	}
 
-	public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
+	public MusicDirectory parse(Reader reader) throws Exception {
 		init(reader);
 
 		MusicDirectory dir = new MusicDirectory();

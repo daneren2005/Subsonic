@@ -157,7 +157,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 	}
 
 	@Override
-	public List<Integer> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+	public List<Integer> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) {
 		return Collections.singletonList(0);
 	}
 
@@ -203,7 +203,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			long bytesAvailableFs;
 
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				File rootFolder = FileUtil.getMusicDirectory(context);
 				StatFs stat = new StatFs(rootFolder.getPath());
 				bytesTotalFs = stat.getBlockCountLong() * stat.getBlockSizeLong();

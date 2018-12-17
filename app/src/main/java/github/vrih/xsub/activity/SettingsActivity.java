@@ -29,9 +29,8 @@ import github.vrih.xsub.fragments.SettingsFragment;
 import github.vrih.xsub.util.Constants;
 
 public class SettingsActivity extends SubsonicActivity {
-	private static final String TAG = SettingsActivity.class.getSimpleName();
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -26,11 +26,6 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.media.MediaRouter;
 import android.os.IBinder;
-import androidx.mediarouter.media.MediaControlIntent;
-import androidx.mediarouter.media.MediaRouteDescriptor;
-import androidx.mediarouter.media.MediaRouteDiscoveryRequest;
-import androidx.mediarouter.media.MediaRouteProvider;
-import androidx.mediarouter.media.MediaRouteProviderDescriptor;
 import android.util.Log;
 
 import org.eclipse.jetty.util.log.Logger;
@@ -53,6 +48,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.mediarouter.media.MediaControlIntent;
+import androidx.mediarouter.media.MediaRouteDescriptor;
+import androidx.mediarouter.media.MediaRouteDiscoveryRequest;
+import androidx.mediarouter.media.MediaRouteProvider;
+import androidx.mediarouter.media.MediaRouteProviderDescriptor;
 import github.vrih.xsub.domain.DLNADevice;
 import github.vrih.xsub.domain.RemoteControlState;
 import github.vrih.xsub.service.DLNAController;
@@ -361,7 +361,6 @@ public class DLNARouteProvider extends MediaRouteProvider {
 	}
 
 	static class JettyAndroidLog implements Logger {
-		final private static java.util.logging.Logger log = java.util.logging.Logger.getLogger("Jetty");
 
 		static boolean __isIgnoredEnabled = false;
 		final String _name;
@@ -422,19 +421,10 @@ public class DLNARouteProvider extends MediaRouteProvider {
 			// Log.w(TAG, msg, th);
 		}
 
-		public boolean isIgnoredEnabled () {
-			return __isIgnoredEnabled;
-		}
-
-
 		public void ignore(Throwable ignored) {
 			if (__isIgnoredEnabled) {
 				warn("IGNORED", ignored);
 			}
-		}
-
-		public void setIgnoredEnabled(boolean enabled) {
-			__isIgnoredEnabled = enabled;
 		}
 
 		public void setDebugEnabled(boolean enabled) {

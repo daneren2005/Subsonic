@@ -78,17 +78,6 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 		this.singleSectionHeader = singleSectionHeader;
 	}
 
-	public void replaceExistingData(List<T> section) {
-		this.sections = new ArrayList<>();
-		this.sections.add(section);
-		notifyDataSetChanged();
-	}
-	public void replaceExistingData(List<String> headers, List<List<T>> sections) {
-		this.headers = headers;
-		this.sections = sections;
-		notifyDataSetChanged();
-	}
-
 	@Override
 	public UpdateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		if(viewType == VIEW_TYPE_HEADER) {

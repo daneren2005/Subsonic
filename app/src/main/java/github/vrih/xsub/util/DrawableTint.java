@@ -20,15 +20,14 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.AttrRes;
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 
 import java.util.WeakHashMap;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
 import github.vrih.xsub.R;
 
 public class DrawableTint {
@@ -85,14 +84,6 @@ public class DrawableTint {
 			attrMap.put(drawableAttr, drawableRes);
 			return drawableRes;
 		}
-	}
-	public static Drawable getTintedAttrDrawable(Context context, @AttrRes int drawableAttr, @AttrRes int colorAttr) {
-		if(tintedDrawables.containsKey(drawableAttr)) {
-			return getTintedDrawable(context, attrMap.get(drawableAttr), colorAttr);
-		}
-
-		@DrawableRes int drawableRes = getDrawableRes(context, drawableAttr);
-		return getTintedDrawable(context, drawableRes, colorAttr);
 	}
 
 	public static void clearCache() {

@@ -18,13 +18,14 @@
  */
 package github.vrih.xsub.audiofx;
 
-import java.io.Serializable;
-
 import android.content.Context;
 import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
 import android.os.Build;
 import android.util.Log;
+
+import java.io.Serializable;
+
 import github.vrih.xsub.util.FileUtil;
 
 /**
@@ -56,7 +57,7 @@ public class EqualizerController {
 		bass = new BassBoost(0, audioSessionId);
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			loudnessAvailable = true;
-			loudnessEnhancerController = new LoudnessEnhancerController(context, audioSessionId);
+			loudnessEnhancerController = new LoudnessEnhancerController(audioSessionId);
 		}
 	}
 
@@ -147,7 +148,6 @@ public class EqualizerController {
 	private static class EqualizerSettings implements Serializable {
 
 		private short[] bandLevels;
-		private short preset;
 		private boolean enabled;
 		private short bass;
 		private int loudness;
@@ -162,9 +162,7 @@ public class EqualizerController {
 				bandLevels[i] = equalizer.getBandLevel(i);
 			}
 			try {
-				preset = equalizer.getCurrentPreset();
 			} catch (Exception x) {
-				preset = -1;
 			}
 			try {
 				bass = boost.getRoundedStrength();

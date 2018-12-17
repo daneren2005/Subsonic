@@ -20,13 +20,13 @@ package github.vrih.xsub.service.parser;
 
 import android.content.Context;
 
-import github.vrih.xsub.domain.Playlist;
-import github.vrih.xsub.util.ProgressListener;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+
+import github.vrih.xsub.domain.Playlist;
 
 /**
  * @author Sindre Mehus
@@ -37,7 +37,7 @@ public class PlaylistsParser extends AbstractParser {
 		super(context, instance);
 	}
 
-    public List<Playlist> parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public List<Playlist> parse(Reader reader) throws Exception {
         init(reader);
 
         List<Playlist> result = new ArrayList<>();

@@ -22,16 +22,16 @@ package github.vrih.xsub.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.TextView;
+
+import java.io.File;
+
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.ImageLoader;
 import github.vrih.xsub.util.Util;
 
-import java.io.File;
-
 public class AlbumView extends UpdateView2<MusicDirectory.Entry, ImageLoader> {
-	private static final String TAG = AlbumView.class.getSimpleName();
 
 	private File file;
 	private final TextView titleView;

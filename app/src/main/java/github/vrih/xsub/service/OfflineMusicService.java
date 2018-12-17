@@ -74,17 +74,17 @@ public class OfflineMusicService implements MusicService {
 	private static final Random random = new Random();
 
 	@Override
-	public void ping(Context context, ProgressListener progressListener) throws Exception {
+	public void ping(Context context, ProgressListener progressListener) {
 
 	}
 
 	@Override
-    public boolean isLicenseValid(Context context, ProgressListener progressListener) throws Exception {
+    public boolean isLicenseValid(Context context, ProgressListener progressListener) {
         return true;
     }
 
     @Override
-    public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+    public Indexes getIndexes(String musicFolderId, boolean refresh, Context context, ProgressListener progressListener) {
         List<Artist> artists = new ArrayList<>();
 		List<Entry> entries = new ArrayList<>();
         File root = FileUtil.getMusicDirectory(context);
@@ -105,9 +105,9 @@ public class OfflineMusicService implements MusicService {
 
     @Override
     public MusicDirectory getMusicDirectory(String id, String artistName, boolean refresh, Context context, ProgressListener progressListener) throws Exception {
-        return getMusicDirectory(id, artistName, refresh, context, progressListener, false);
+        return getMusicDirectory(id, context, false);
     }
-	private MusicDirectory getMusicDirectory(String id, String artistName, boolean refresh, Context context, ProgressListener progressListener, boolean isPodcast) throws Exception {
+	private MusicDirectory getMusicDirectory(String id, Context context, boolean isPodcast) {
 		File dir = new File(id);
 		MusicDirectory result = new MusicDirectory();
 		result.setName(dir.getName());
@@ -216,7 +216,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
     @Override
-    public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception {
+    public Bitmap getCoverArt(Context context, Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) {
 		try {
 			return FileUtil.getAlbumArtBitmap(context, entry, size);
 		} catch(Exception e) {
@@ -245,7 +245,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-    public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) throws Exception {
+    public SearchResult search(SearchCritera criteria, Context context, ProgressListener progressListener) {
 		List<Artist> artists = new ArrayList<>();
 		List<Entry> albums = new ArrayList<>();
 		List<Entry> songs = new ArrayList<>();
@@ -352,7 +352,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
     @Override
-    public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) throws Exception {
+    public List<Playlist> getPlaylists(boolean refresh, Context context, ProgressListener progressListener) {
         List<Playlist> playlists = new ArrayList<>();
         File root = FileUtil.getPlaylistDirectory(context);
 		String lastServer = null;
@@ -519,7 +519,7 @@ public class OfflineMusicService implements MusicService {
     }
 
     @Override
-    public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) throws Exception {
+    public void scrobble(String id, boolean submission, Context context, ProgressListener progressListener) {
 		if(!submission) {
 			return;
 		}
@@ -538,7 +538,7 @@ public class OfflineMusicService implements MusicService {
 				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_ID + scrobbles, cachedSongId.getSecond());
 				offlineEditor.remove(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles);
 			} else {
-				String scrobbleSearchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+				String scrobbleSearchCriteria = Util.parseOfflineIDSearch(id, cacheLocn);
 				offlineEditor.putString(Constants.OFFLINE_SCROBBLE_SEARCH + scrobbles, scrobbleSearchCriteria);
 				offlineEditor.remove(Constants.OFFLINE_SCROBBLE_ID + scrobbles);
 			}
@@ -618,7 +618,7 @@ public class OfflineMusicService implements MusicService {
     }
 	
 	@Override
-	public void setStarred(List<Entry> entries, List<Entry> artists, List<Entry> albums, boolean starred, ProgressListener progressListener, Context context) throws Exception {
+	public void setStarred(List<Entry> entries, List<Entry> artists, List<Entry> albums, boolean starred, ProgressListener progressListener, Context context) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String cacheLocn = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
 
@@ -629,7 +629,7 @@ public class OfflineMusicService implements MusicService {
 
 		String id = entries.get(0).getId();
 		if(cacheLocn != null && id.contains(cacheLocn)) {
-			String searchCriteria = Util.parseOfflineIDSearch(context, id, cacheLocn);
+			String searchCriteria = Util.parseOfflineIDSearch(id, cacheLocn);
 			offlineEditor.putString(Constants.OFFLINE_STAR_SEARCH + stars, searchCriteria);
 			offlineEditor.remove(Constants.OFFLINE_STAR_ID + stars);
 		} else {
@@ -688,7 +688,7 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
-    public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) {
         File root = FileUtil.getMusicDirectory(context);
         List<File> children = new LinkedList<>();
         listFilesRecursively(root, children);
@@ -746,7 +746,7 @@ public class OfflineMusicService implements MusicService {
 	
 	@Override
 	public MusicDirectory getPodcastEpisodes(boolean refresh, String id, Context context, ProgressListener progressListener) throws Exception {
-		return getMusicDirectory(FileUtil.getPodcastDirectory(context, id).getPath(), null, false, context, progressListener, true);
+		return getMusicDirectory(FileUtil.getPodcastDirectory(context, id).getPath(), context, true);
 	}
 
 	@Override

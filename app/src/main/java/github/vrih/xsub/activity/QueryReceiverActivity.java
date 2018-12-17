@@ -34,8 +34,6 @@ import github.vrih.xsub.util.Util;
  */
 public class QueryReceiverActivity extends Activity {
 
-	private static final String TAG = QueryReceiverActivity.class.getSimpleName();
-
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

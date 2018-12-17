@@ -89,12 +89,6 @@ abstract class AbstractParser {
         throw new SubsonicRESTException(code, message);
     }
 
-    protected void updateProgress(ProgressListener progressListener, int messageId) {
-        if (progressListener != null) {
-            progressListener.updateProgress(messageId);
-        }
-    }
-
     void updateProgress(ProgressListener progressListener, String message) {
         if (progressListener != null) {
             progressListener.updateProgress(message);

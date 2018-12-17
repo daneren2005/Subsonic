@@ -32,7 +32,6 @@ import java.util.Locale;
  */
 public class Artist implements Serializable {
 	private static final String TAG = Artist.class.getSimpleName();
-	public static final String ROOT_ID = "-1";
 	public static final String MISSING_ID = "-2";
 
     private String id;
@@ -64,10 +63,7 @@ public class Artist implements Serializable {
         this.name = name;
     }
 
-    public String getIndex() {
-        return index;
-    }
-    public void setIndex(String index) {
+	public void setIndex(String index) {
         this.index = index;
     }
 	

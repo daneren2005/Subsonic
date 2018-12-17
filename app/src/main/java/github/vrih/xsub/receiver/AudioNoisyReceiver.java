@@ -27,7 +27,6 @@ import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.Util;
 
 public class AudioNoisyReceiver extends BroadcastReceiver {
-	private static final String TAG = AudioNoisyReceiver.class.getSimpleName();
 
 	@Override
 	public void onReceive(Context context, Intent intent) {

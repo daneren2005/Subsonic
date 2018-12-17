@@ -19,11 +19,6 @@
 			android:textFilterEnabled="true" />
 
 		<LinearLayout
-			android:layout_height="4dip"
-			android:layout_width="fill_parent"
-			android:layout_marginTop="4dip"/>
-
-		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"

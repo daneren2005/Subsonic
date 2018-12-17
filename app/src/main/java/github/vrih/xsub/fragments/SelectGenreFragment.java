@@ -20,19 +20,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import github.vrih.xsub.R;
+import github.vrih.xsub.adapter.GenreAdapter;
 import github.vrih.xsub.adapter.SectionAdapter;
 import github.vrih.xsub.domain.Genre;
 import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.ProgressListener;
-import github.vrih.xsub.adapter.GenreAdapter;
 import github.vrih.xsub.view.UpdateView;
 
-import java.util.List;
-
 public class SelectGenreFragment extends SelectRecyclerFragment<Genre> {
-	private static final String TAG = SelectGenreFragment.class.getSimpleName();
 
 	@Override
 	public int getOptionsMenu() {

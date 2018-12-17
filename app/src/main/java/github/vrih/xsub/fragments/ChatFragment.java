@@ -2,10 +2,6 @@ package github.vrih.xsub.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -23,24 +19,28 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import github.vrih.xsub.R;
+import github.vrih.xsub.adapter.ChatAdapter;
 import github.vrih.xsub.domain.ChatMessage;
 import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.service.MusicServiceFactory;
 import github.vrih.xsub.util.BackgroundTask;
+import github.vrih.xsub.util.Constants;
 import github.vrih.xsub.util.TabBackgroundTask;
 import github.vrih.xsub.util.Util;
-import github.vrih.xsub.adapter.ChatAdapter;
-import github.vrih.xsub.util.Constants;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Joshua Bahnsen
  */
 public class ChatFragment extends SubsonicFragment {
-	private static final String TAG = ChatFragment.class.getSimpleName();
 	private ListView chatListView;
 	private EditText messageEditText;
 	private ImageButton sendButton;

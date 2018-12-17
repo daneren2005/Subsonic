@@ -16,17 +16,16 @@
 package github.vrih.xsub.view;
 
 import android.graphics.Rect;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
-	private static final String TAG = GridSpacingDecoration.class.getSimpleName();
 	public static final int SPACING = 10;
 
 	@Override
@@ -42,7 +41,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		if(childIndex == -1) {
 			return;
 		}
-		int spanCount = getTotalSpan(view, parent);
+		int spanCount = getTotalSpan(parent);
 		int spanIndex = childIndex % spanCount;
 
 		// If we can, use the SpanSizeLookup since headers screw up the index calculation
@@ -80,7 +79,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 			outRect.top = spacing - doubleMargins;
 		}
 
-		if (isLeftEdge(spanIndex, spanCount)) {
+		if (isLeftEdge(spanIndex)) {
 			outRect.left = spacing - doubleMargins;
 		}
 
@@ -93,7 +92,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		}
 	}
 
-	private int getTotalSpan(View view, RecyclerView parent) {
+	private int getTotalSpan(RecyclerView parent) {
 		RecyclerView.LayoutManager mgr = parent.getLayoutManager();
 		if (mgr instanceof GridLayoutManager) {
 			return ((GridLayoutManager) mgr).getSpanCount();
@@ -113,7 +112,7 @@ public class GridSpacingDecoration extends RecyclerView.ItemDecoration {
 		return 1;
 	}
 
-	private boolean isLeftEdge(int spanIndex, int spanCount) {
+	private boolean isLeftEdge(int spanIndex) {
 		return spanIndex == 0;
 	}
 

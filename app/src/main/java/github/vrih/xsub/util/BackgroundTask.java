@@ -18,6 +18,14 @@
  */
 package github.vrih.xsub.util;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,13 +36,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import android.app.Activity;
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import github.vrih.xsub.R;
 import github.vrih.xsub.view.ErrorDialog;
 
@@ -46,7 +47,6 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
     private final Context context;
 	final AtomicBoolean cancelled =  new AtomicBoolean(false);
-	private OnCancelListener cancelListener;
 	private Runnable onCompletionListener = null;
 	Task task;
 
@@ -87,15 +87,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 		}
     }
 
-	public static void stopThreads() {
-		for(Thread thread: threads) {
-			thread.interrupt();
-		}
-		threads.clear();
-		queue.clear();
-	}
-
-    private Activity getActivity() {
+	private Activity getActivity() {
         return (context instanceof Activity) ? ((Activity) context) : null;
     }
 
@@ -148,11 +140,7 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	public void cancel() {
 		if(cancelled.compareAndSet(false, true)) {
 			if(isRunning()) {
-				if(cancelListener != null) {
-					cancelListener.onCancel();
-				} else {
-					task.cancel();
-				}
+				task.cancel();
 			}
 
 			task = null;
@@ -160,9 +148,6 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	}
 	public boolean isCancelled() {
 		return cancelled.get();
-	}
-	public void setOnCancelListener(OnCancelListener listener) {
-		cancelListener = listener;
 	}
 
 	public boolean isRunning() {
@@ -184,10 +169,6 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 	@Override
 	public void updateCache(int changeCode) {
 
-	}
-
-	public void setOnCompletionListener(Runnable onCompletionListener) {
-		this.onCompletionListener = onCompletionListener;
 	}
 
 	protected class Task {

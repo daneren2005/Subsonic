@@ -599,19 +599,7 @@ public class MusicDirectory implements Serializable {
 			this.closeness = closeness;
 		}
 
-		public boolean isOnlineId(Context context) {
-			try {
-				String cacheLocation = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
-				return cacheLocation == null || id == null || !id.contains(cacheLocation);
-			} catch(Exception e) {
-				Log.w(TAG, "Failed to check online id validity");
-
-				// Err on the side of default functionality
-				return true;
-			}
-		}
-
-        @Override
+		@Override
         public boolean equals(Object o) {
             if (this == o) {
                 return true;
@@ -708,11 +696,8 @@ public class MusicDirectory implements Serializable {
 
 			return collator.compare(lhs.getTitle(), rhs.getTitle());
 		}
-		
-		public static void sort(List<Entry> entries) {
-			sort(entries, true);
-		}
-		static void sort(List<Entry> entries, boolean byYear) {
+
+        static void sort(List<Entry> entries, boolean byYear) {
 			try {
 				Collections.sort(entries, new EntryComparator(byYear));
 			} catch (Exception e) {

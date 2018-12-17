@@ -54,10 +54,6 @@ public class Version implements Comparable<Version>, Serializable {
 		}
 	}
 
-	public int getMajor() {
-		return major;
-	}
-
 	public int getMinor() {
 		return minor;
 	}

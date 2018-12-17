@@ -102,9 +102,6 @@ public class RecyclingImageView extends ImageView {
 			onInvalidated.onInvalidated(this);
 		}
 	}
-	public boolean isInvalidated() {
-		return invalidated;
-	}
 
 	public void setOnInvalidated(OnInvalidated onInvalidated) {
 		this.onInvalidated = onInvalidated;

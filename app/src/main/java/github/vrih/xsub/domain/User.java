@@ -139,9 +139,6 @@ public class User implements Serializable {
 	public static class MusicFolderSetting extends Setting {
 		private String label;
 
-		public MusicFolderSetting() {
-
-		}
 		MusicFolderSetting(String name, String label, Boolean value) {
 			super(name, value);
 			this.label = label;

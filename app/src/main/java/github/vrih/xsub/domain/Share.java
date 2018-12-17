@@ -18,7 +18,6 @@
  */
 package github.vrih.xsub.domain;
 
-import github.vrih.xsub.domain.MusicDirectory.Entry;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import github.vrih.xsub.domain.MusicDirectory.Entry;
 
 public class Share implements Serializable {
 	private String id;
@@ -105,18 +106,7 @@ public class Share implements Serializable {
         return lastVisited;
     }
 
-    public void setLastVisited(String lastVisited) {
-    	if (lastVisited != null) {
-    		try {
-				this.lastVisited = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(lastVisited);
-			} catch (ParseException e) { 
-				this.lastVisited = null;
-			}
-    	} else {
-    		this.lastVisited = null;
-    	}
-    }
-	public void setLastVisited(Date lastVisited) {
+    public void setLastVisited(Date lastVisited) {
 		this.lastVisited = lastVisited;
 	}
     
@@ -155,10 +145,6 @@ public class Share implements Serializable {
 		return dir;
 	}
 
-    public List<Entry> getEntries() {
-    	return this.entries;
-    }
-    
     public void addEntry(Entry entry) {
 		entries.add(entry);
     }

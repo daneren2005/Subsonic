@@ -11,7 +11,7 @@ public abstract class UpdateView2<T1, T2> extends UpdateView<T1> {
 	}
 
 	UpdateView2(Context context, boolean autoUpdate) {
-		super(context, autoUpdate);
+		super(context, false);
 	}
 
 	public final void setObject(T1 obj1) {

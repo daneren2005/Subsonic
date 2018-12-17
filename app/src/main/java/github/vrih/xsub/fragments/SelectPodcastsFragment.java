@@ -186,7 +186,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 							// Update with information normally done in PodcastEntryParser
 							episode.setArtist(channel.getName());
 							episode.setCoverArt(channel.getCoverArt());
-							episode.setPath(FileUtil.getPodcastPath(context, episode));
+							episode.setPath(FileUtil.getPodcastPath(episode));
 							break;
 						}
 					}

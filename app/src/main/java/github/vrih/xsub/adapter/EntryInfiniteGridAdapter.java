@@ -52,7 +52,7 @@ public class EntryInfiniteGridAdapter extends EntryGridAdapter {
 		if(viewType == VIEW_TYPE_LOADING) {
 			View progress = LayoutInflater.from(context).inflate(R.layout.tab_progress, null);
 			progress.setVisibility(View.VISIBLE);
-			return new UpdateView.UpdateViewHolder(progress, false);
+			return new UpdateView.UpdateViewHolder(progress);
 		}
 
 		return super.onCreateViewHolder(parent, viewType);

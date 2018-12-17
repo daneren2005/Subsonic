@@ -26,7 +26,6 @@ import github.vrih.xsub.R;
 import github.vrih.xsub.domain.Genre;
 
 public class GenreView extends UpdateView<Genre> {
-	private static final String TAG = GenreView.class.getSimpleName();
 
 	private final TextView titleView;
 	private final TextView songsView;

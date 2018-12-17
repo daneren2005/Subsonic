@@ -36,7 +36,6 @@ import github.vrih.xsub.util.Util;
  * @author Sindre Mehus
  */
 public class VoiceQueryReceiverActivity extends Activity {
-	private static final String TAG = VoiceQueryReceiverActivity.class.getSimpleName();
 	private static final String GMS_SEARCH_ACTION = "com.google.android.gms.actions.SEARCH_ACTION";
 
     @Override

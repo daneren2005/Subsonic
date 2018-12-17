@@ -37,8 +37,7 @@ import github.vrih.xsub.view.UpdateView;
 import static github.vrih.xsub.domain.User.Setting;
 
 public class SettingsAdapter extends SectionAdapter<Setting> {
-	private static final String TAG = SettingsAdapter.class.getSimpleName();
-    private final int VIEW_TYPE_SETTING_HEADER = 2;
+	private final int VIEW_TYPE_SETTING_HEADER = 2;
 
 	private final User user;
 	private final boolean editable;
@@ -76,7 +75,7 @@ public class SettingsAdapter extends SectionAdapter<Setting> {
 
 	public UpdateView.UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
 		View header = LayoutInflater.from(context).inflate(R.layout.user_header, parent, false);
-		return new UpdateView.UpdateViewHolder(header, false);
+		return new UpdateView.UpdateViewHolder(header);
 	}
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String description, int sectionIndex) {
 		View header = holder.getView();

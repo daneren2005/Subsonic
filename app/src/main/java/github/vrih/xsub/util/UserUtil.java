@@ -111,11 +111,7 @@ public final class UserUtil {
 		}.execute();
 	}
 
-	public static User getCurrentUser() {
-		return currentUser;
-	}
-
-	private static String getCurrentUsername(Context context, int instance) {
+    private static String getCurrentUsername(Context context, int instance) {
 		SharedPreferences prefs = Util.getPreferences(context);
 		return prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
 	}

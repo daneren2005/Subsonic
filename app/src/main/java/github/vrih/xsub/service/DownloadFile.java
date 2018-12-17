@@ -59,7 +59,6 @@ public class DownloadFile implements BufferFile {
 	private boolean saveWhenDone = false;
 	private boolean completeWhenDone = false;
 	private Long contentLength = null;
-	private long currentSpeed = 0;
 	private boolean rateLimit = false;
 
     public DownloadFile(Context context, MusicDirectory.Entry song, boolean save) {
@@ -120,19 +119,6 @@ public class DownloadFile implements BufferFile {
 		return contentLength;
 	}
 
-	public long getCurrentSize() {
-		if(partialFile.exists()) {
-			return partialFile.length();
-		} else {
-			File file = getCompleteFile();
-			if(file.exists()) {
-				return file.length();
-			} else {
-				return 0L;
-			}
-		}
-	}
-
 	@Override
 	public long getEstimatedSize() {
 		if(contentLength != null) {
@@ -151,11 +137,7 @@ public class DownloadFile implements BufferFile {
 		}
 	}
 
-	public long getBytesPerSecond() {
-		return currentSpeed;
-	}
-
-    public synchronized void download() {
+	public synchronized void download() {
     	rateLimit = false;
         preDownload();
         downloadTask.execute();
@@ -314,34 +296,26 @@ public class DownloadFile implements BufferFile {
     }
 	
 	public void setPlaying(boolean isPlaying) {
-		try {
-			if(saveWhenDone && !isPlaying) {
-				Util.renameFile(completeFile, saveFile);
-				renameInStore(completeFile, saveFile);
-				saveWhenDone = false;
-			} else if(completeWhenDone && !isPlaying) {
-				if(save) {
-					Util.renameFile(partialFile, saveFile);
-                    saveToStore();
-				} else {
-					Util.renameFile(partialFile, completeFile);
-					saveToStore();
-				}
-				completeWhenDone = false;
+		if(saveWhenDone && !isPlaying) {
+			Util.renameFile(completeFile, saveFile);
+			renameInStore(completeFile, saveFile);
+			saveWhenDone = false;
+		} else if(completeWhenDone && !isPlaying) {
+			if(save) {
+				Util.renameFile(partialFile, saveFile);
+saveToStore();
+			} else {
+				Util.renameFile(partialFile, completeFile);
+				saveToStore();
 			}
-		} catch(IOException ex) {
-			Log.w(TAG, "Failed to rename file " + completeFile + " to " + saveFile, ex);
+			completeWhenDone = false;
 		}
-		
+
 		this.isPlaying = isPlaying;
 	}
 	public void renamePartial() {
-		try {
-			Util.renameFile(partialFile, completeFile);
-			saveToStore();
-		} catch(IOException ex) {
-			Log.w(TAG, "Failed to rename file " + partialFile + " to " + completeFile, ex);
-		}
+		Util.renameFile(partialFile, completeFile);
+		saveToStore();
 	}
 	public boolean getPlaying() {
 		return isPlaying;
@@ -387,20 +361,6 @@ public class DownloadFile implements BufferFile {
     public String toString() {
         return "DownloadFile (" + song + ")";
     }
-
-	// Don't do this.  Causes infinite loop if two instances of same song
-	/*@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-
-		DownloadFile downloadFile = (DownloadFile) o;
-		return Util.equals(this.getSong(), downloadFile.getSong());
-	}*/
 
     private class DownloadTask extends SilentBackgroundTask<Void> {
 		private MusicService musicService;
@@ -561,7 +521,7 @@ public class DownloadFile implements BufferFile {
 			this.musicService = musicService;
 		}
 
-        private void downloadAndSaveCoverArt(MusicService musicService) throws Exception {
+        private void downloadAndSaveCoverArt(MusicService musicService) {
             try {
                 if (song.getCoverArt() != null) {
 					// Check if album art already exists, don't want to needlessly load into memory
@@ -610,8 +570,7 @@ public class DownloadFile implements BufferFile {
                 long now = System.currentTimeMillis();
                 if (now - lastLog > 3000L) {  // Only every so often.
                     Log.i(TAG, "Downloaded " + Util.formatBytes(count) + " of " + song);
-					currentSpeed = lastCount / ((now - lastLog) / 1000L);
-                    lastLog = now;
+					lastLog = now;
 					lastCount = 0;
 					
 					// Re-establish every few seconds whether screen is on or not

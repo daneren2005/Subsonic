@@ -18,14 +18,6 @@ package github.vrih.xsub.service;
 import android.os.Handler;
 import android.util.Log;
 
-import github.vrih.xsub.R;
-import github.vrih.xsub.domain.RemoteStatus;
-import github.vrih.xsub.domain.PlayerState;
-import github.vrih.xsub.domain.RemoteControlState;
-import github.vrih.xsub.domain.RepeatMode;
-import github.vrih.xsub.service.parser.SubsonicRESTException;
-import github.vrih.xsub.util.Util;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -33,6 +25,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
+
+import github.vrih.xsub.R;
+import github.vrih.xsub.domain.PlayerState;
+import github.vrih.xsub.domain.RemoteControlState;
+import github.vrih.xsub.domain.RemoteStatus;
+import github.vrih.xsub.domain.RepeatMode;
+import github.vrih.xsub.service.parser.SubsonicRESTException;
+import github.vrih.xsub.util.Util;
 
 public class JukeboxController extends RemoteController {
 	private static final String TAG = JukeboxController.class.getSimpleName();
@@ -303,10 +303,4 @@ public class JukeboxController extends RemoteController {
 		}
 	}
 
-	private class ShutdownTask extends RemoteTask {
-		@Override
-		RemoteStatus execute() throws Exception {
-			return null;
-		}
-	}
 }

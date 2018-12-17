@@ -50,7 +50,6 @@ public final class BastpUtil {
 			String curKey = keys[i];
 			if(tags.containsKey(curKey)) {
 				String rg_raw = (String)((Vector)tags.get(curKey)).get(0);
-				String rg_numonly = "";
 				float rg_float = 0f;
 				try {
 					String nums = rg_raw.replaceAll("[^0-9.-]","");

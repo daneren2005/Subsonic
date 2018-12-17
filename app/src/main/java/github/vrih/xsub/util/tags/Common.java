@@ -55,14 +55,7 @@ class Common {
     int b2u(byte x) {
 		return (x & 0xFF);
 	}
-	
-	/*
-	** Printout debug message to STDOUT
-	*/
-	public void debug(String s) {
-		System.out.println("DBUG "+s);
-	}
-	
+
 	HashMap parse_vorbis_comment(RandomAccessFile s, long offset, long payload_len) throws IOException {
 		HashMap tags = new HashMap();
 		int comments;                      // number of found comments

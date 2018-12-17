@@ -16,7 +16,6 @@
 package github.vrih.xsub.adapter;
 
 import android.content.Context;
-import androidx.appcompat.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +25,7 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.List;
 
+import androidx.appcompat.widget.PopupMenu;
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.domain.MusicDirectory.Entry;
@@ -42,10 +42,6 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 
 	private final List<MusicFolder> musicFolders;
 	private final OnMusicFolderChanged onMusicFolderChanged;
-
-	public ArtistAdapter(Context context, List<Serializable> artists, OnItemClickedListener listener) {
-		this(context, artists, null, listener, null);
-	}
 
 	public ArtistAdapter(Context context, List<Serializable> artists, List<MusicFolder> musicFolders, OnItemClickedListener onItemClickedListener, OnMusicFolderChanged onMusicFolderChanged) {
 		super(context, artists);
@@ -93,7 +89,7 @@ public class ArtistAdapter extends SectionAdapter<Serializable> implements FastS
 			}
 		});
 
-		return new UpdateView.UpdateViewHolder(header, false);
+		return new UpdateView.UpdateViewHolder(header);
 	}
 	@Override
 	public void onBindHeaderHolder(UpdateView.UpdateViewHolder holder, String header, int sectionIndex) {

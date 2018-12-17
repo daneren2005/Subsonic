@@ -19,11 +19,12 @@
 package github.vrih.xsub.service.parser;
 
 import android.content.Context;
-import github.vrih.xsub.domain.Lyrics;
-import github.vrih.xsub.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
+
+import github.vrih.xsub.domain.Lyrics;
 
 /**
  * @author Sindre Mehus
@@ -34,7 +35,7 @@ public class LyricsParser extends AbstractParser {
 		super(context, instance);
 	}
 
-    public Lyrics parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public Lyrics parse(Reader reader) throws Exception {
         init(reader);
 
         Lyrics lyrics = null;

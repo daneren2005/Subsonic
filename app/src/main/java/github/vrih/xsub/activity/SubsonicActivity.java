@@ -31,17 +31,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -61,11 +50,23 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.ServerInfo;
 import github.vrih.xsub.fragments.AdminFragment;
@@ -80,11 +81,11 @@ import github.vrih.xsub.util.DrawableTint;
 import github.vrih.xsub.util.ImageLoader;
 import github.vrih.xsub.util.SilentBackgroundTask;
 import github.vrih.xsub.util.ThemeUtil;
+import github.vrih.xsub.util.UserUtil;
 import github.vrih.xsub.util.Util;
 import github.vrih.xsub.view.UpdateView;
-import github.vrih.xsub.util.UserUtil;
 
-import static android.Manifest.*;
+import static android.Manifest.permission;
 
 public class SubsonicActivity extends AppCompatActivity implements OnItemSelectedListener {
 	private static final String TAG = SubsonicActivity.class.getSimpleName();
@@ -438,7 +439,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		// Check whether this is a tablet or not
 		secondaryContainer = findViewById(R.id.fragment_second_container);
 		if(secondaryContainer != null) {
-            View primaryContainer = findViewById(R.id.fragment_container);
 		}
 	}
 
@@ -692,19 +692,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 		startActivity(intent);
 		finish();
-	}
-
-	protected void exit() {
-		if(((Object) this).getClass() != SubsonicFragmentActivity.class) {
-			Intent intent = new Intent(this, SubsonicFragmentActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			intent.putExtra(Constants.INTENT_EXTRA_NAME_EXIT, true);
-			Util.startActivityWithoutTransition(this, intent);
-		} else {
-			finished = true;
-			this.stopService(new Intent(this, DownloadService.class));
-			this.finish();
-		}
 	}
 
 	boolean onBackPressedSupport() {
@@ -1033,10 +1020,6 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		}
 	}
 
-	public static String getThemeName() {
-		return theme;
-	}
-
 	private boolean isTv() {
 		return false;
 	}
@@ -1057,7 +1040,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			if (service != null) {
 				new SilentBackgroundTask<Void>(this) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						service.clearIncomplete();
 						return null;
 					}

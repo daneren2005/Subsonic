@@ -19,16 +19,17 @@
 package github.vrih.xsub.service.parser;
 
 import android.content.Context;
-import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.domain.SearchResult;
-import github.vrih.xsub.domain.Artist;
-import github.vrih.xsub.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
+
+import github.vrih.xsub.domain.Artist;
+import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.domain.SearchResult;
 
 /**
  * @author Sindre Mehus
@@ -39,7 +40,7 @@ public class SearchResultParser extends MusicDirectoryEntryParser {
 		super(context, instance);
 	}
 
-    public SearchResult parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public SearchResult parse(Reader reader) throws Exception {
         init(reader);
 
         List<MusicDirectory.Entry> songs = new ArrayList<>();

@@ -19,11 +19,9 @@
 package github.vrih.xsub.service.parser;
 
 import android.content.Context;
-import github.vrih.xsub.domain.Bookmark;
-import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.domain.ServerInfo;
-import github.vrih.xsub.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
+
 import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +29,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import github.vrih.xsub.domain.Bookmark;
+import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.domain.ServerInfo;
 
 /**
  * @author Scott Jackson
@@ -40,7 +42,7 @@ public class BookmarkParser extends MusicDirectoryEntryParser {
 		super(context, instance);
 	}
 
-    public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public MusicDirectory parse(Reader reader) throws Exception {
         init(reader);
 
 		List<MusicDirectory.Entry> bookmarks = new ArrayList<>();

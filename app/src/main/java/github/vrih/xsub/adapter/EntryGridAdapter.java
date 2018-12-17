@@ -35,7 +35,6 @@ import github.vrih.xsub.view.UpdateView;
 import github.vrih.xsub.view.UpdateView.UpdateViewHolder;
 
 public class EntryGridAdapter extends SectionAdapter<Entry> {
-	private static String TAG = EntryGridAdapter.class.getSimpleName();
 
 	public static final int VIEW_TYPE_ALBUM_CELL = 1;
 	public static final int VIEW_TYPE_ALBUM_LINE = 2;
@@ -94,7 +93,7 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	}
 
 	public UpdateViewHolder onCreateHeaderHolder(ViewGroup parent) {
-		return new UpdateViewHolder(header, false);
+		return new UpdateViewHolder(header);
 	}
 	public void onBindHeaderHolder(UpdateViewHolder holder, String header, int sectionIndex) {
 
@@ -116,9 +115,6 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 	public void setHeader(View header) {
 		this.header = header;
 		this.singleSectionHeader = true;
-	}
-	public View getHeader() {
-		return header;
 	}
 
 	public void setShowArtist(boolean showArtist) {

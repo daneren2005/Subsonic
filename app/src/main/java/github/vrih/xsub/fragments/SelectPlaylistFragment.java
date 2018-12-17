@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentTransaction;
 import github.vrih.xsub.R;
 import github.vrih.xsub.adapter.PlaylistAdapter;
 import github.vrih.xsub.adapter.SectionAdapter;
@@ -40,9 +39,8 @@ import github.vrih.xsub.util.Util;
 import github.vrih.xsub.view.UpdateView;
 
 public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
-	private static final String TAG = SelectPlaylistFragment.class.getSimpleName();
 
-	@Override
+    @Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true)) {
@@ -79,9 +77,8 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 	public boolean onContextItemSelected(MenuItem menuItem, UpdateView<Playlist> updateView, Playlist playlist) {
 		SubsonicFragment fragment;
 		Bundle args;
-		FragmentTransaction trans;
 
-		switch (menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
 			case R.id.playlist_menu_download:
 				downloadPlaylist(playlist.getId(), playlist.getName(), false);
 				break;

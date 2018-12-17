@@ -51,7 +51,7 @@ public class SelectYearFragment extends SelectRecyclerFragment<String> {
 	}
 
 	@Override
-	public List<String> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+	public List<String> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) {
 		List<String> decades = new ArrayList<>();
 		for(int i = 2010; i >= 1800; i -= 10) {
 			decades.add(String.valueOf(i));

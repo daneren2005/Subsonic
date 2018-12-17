@@ -19,11 +19,12 @@
 package github.vrih.xsub.service.parser;
 
 import android.content.Context;
-import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.util.ProgressListener;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
+
+import github.vrih.xsub.domain.MusicDirectory;
 
 /**
  * @author Kurt Hardin
@@ -34,7 +35,7 @@ public class StarredListParser extends MusicDirectoryEntryParser {
 		super(context, instance);
 	}
 
-    public MusicDirectory parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public MusicDirectory parse(Reader reader) throws Exception {
         init(reader);
 
         MusicDirectory dir = new MusicDirectory();

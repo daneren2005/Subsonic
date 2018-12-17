@@ -209,7 +209,7 @@ public final class UpdateHelper {
 		entry.setRating(rating);
 
 		if(onRatingChange != null) {
-			onRatingChange.ratingChange(rating);
+			onRatingChange.ratingChange();
 		}
 
 		new SilentBackgroundTask<Void>(context) {
@@ -236,7 +236,7 @@ public final class UpdateHelper {
 			protected void error(Throwable error) {
 				entry.setRating(oldRating);
 				if(onRatingChange != null) {
-					onRatingChange.ratingChange(oldRating);
+					onRatingChange.ratingChange();
 				}
 
 				String msg;
@@ -304,6 +304,6 @@ public final class UpdateHelper {
 		public abstract void starCommited(boolean starred);
 	}
 	public static abstract class OnRatingChange {
-		public abstract void ratingChange(int rating);
+		public abstract void ratingChange();
 	}
 }

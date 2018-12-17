@@ -27,16 +27,14 @@ import java.util.TimeZone;
 
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.PlayerQueue;
-import github.vrih.xsub.util.ProgressListener;
 
 public class PlayQueueParser extends MusicDirectoryEntryParser {
-	private static final String TAG = PlayQueueParser.class.getSimpleName();
 
 	public PlayQueueParser(Context context, int instance) {
 		super(context, instance);
 	}
 
-	public PlayerQueue parse(Reader reader, ProgressListener progressListener) throws Exception {
+	public PlayerQueue parse(Reader reader) throws Exception {
 		init(reader);
 
 		PlayerQueue state = new PlayerQueue();

@@ -28,16 +28,14 @@ import github.vrih.xsub.domain.User;
 import github.vrih.xsub.domain.User.Setting;
 import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.service.MusicServiceFactory;
-import github.vrih.xsub.util.ProgressListener;
 
 public class UserParser extends AbstractParser {
-	private static final String TAG = UserParser.class.getSimpleName();
 
 	public UserParser(Context context, int instance) {
 		super(context, instance);
 	}
 
-	public List<User> parse(Reader reader, ProgressListener progressListener) throws Exception {
+	public List<User> parse(Reader reader) throws Exception {
 		init(reader);
 		List<User> result = new ArrayList<>();
 		List<MusicFolder> musicFolders = null;

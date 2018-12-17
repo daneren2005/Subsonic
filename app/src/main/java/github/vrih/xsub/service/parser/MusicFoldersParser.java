@@ -18,15 +18,15 @@
  */
 package github.vrih.xsub.service.parser;
 
+import android.content.Context;
+
+import org.xmlpull.v1.XmlPullParser;
+
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.xmlpull.v1.XmlPullParser;
-
-import android.content.Context;
 import github.vrih.xsub.domain.MusicFolder;
-import github.vrih.xsub.util.ProgressListener;
 
 /**
  * @author Sindre Mehus
@@ -37,7 +37,7 @@ public class MusicFoldersParser extends AbstractParser {
 		super(context, instance);
 	}
 
-    public List<MusicFolder> parse(Reader reader, ProgressListener progressListener) throws Exception {
+    public List<MusicFolder> parse(Reader reader) throws Exception {
         init(reader);
 
         List<MusicFolder> result = new ArrayList<>();

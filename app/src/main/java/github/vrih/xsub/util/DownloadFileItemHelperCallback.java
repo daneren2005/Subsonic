@@ -1,12 +1,11 @@
 package github.vrih.xsub.util;
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
-
 import org.eclipse.jetty.util.ArrayQueue;
 
 import java.util.Queue;
 
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 import github.vrih.xsub.adapter.SectionAdapter;
 import github.vrih.xsub.fragments.SubsonicFragment;
 import github.vrih.xsub.service.DownloadFile;
@@ -15,7 +14,6 @@ import github.vrih.xsub.view.SongView;
 import github.vrih.xsub.view.UpdateView;
 
 public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallback {
-	private static final String TAG = DownloadFileItemHelperCallback.class.getSimpleName();
 
 	private final SubsonicFragment fragment;
 	private final boolean mainList;
@@ -70,7 +68,7 @@ public class DownloadFileItemHelperCallback extends ItemTouchHelper.SimpleCallba
 
 			pendingTask = new SilentBackgroundTask<Void>(downloadService) {
 				@Override
-				protected Void doInBackground() throws Throwable {
+				protected Void doInBackground() {
 					boolean running = true;
 					while(running) {
 						Object nextOperation = null;

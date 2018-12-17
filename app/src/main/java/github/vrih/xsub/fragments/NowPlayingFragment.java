@@ -14,14 +14,7 @@
 */
 package github.vrih.xsub.fragments;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import android.annotation.TargetApi;
-import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,12 +22,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.core.view.MenuItemCompat;
-import androidx.mediarouter.app.MediaRouteButton;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -55,11 +42,28 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuPopup;
 import com.shehabic.droppy.animations.DroppyFadeInAnimation;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.MenuItemCompat;
+import androidx.mediarouter.app.MediaRouteButton;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import github.vrih.xsub.R;
 import github.vrih.xsub.activity.SubsonicFragmentActivity;
+import github.vrih.xsub.adapter.DownloadFileAdapter;
 import github.vrih.xsub.adapter.SectionAdapter;
 import github.vrih.xsub.audiofx.EqualizerController;
 import github.vrih.xsub.domain.Bookmark;
@@ -73,18 +77,26 @@ import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.service.MusicServiceFactory;
 import github.vrih.xsub.service.OfflineException;
 import github.vrih.xsub.service.ServerTooOldException;
-import github.vrih.xsub.adapter.DownloadFileAdapter;
-import github.vrih.xsub.view.compat.CustomMediaRouteDialogFactory;
+import github.vrih.xsub.util.Constants;
+import github.vrih.xsub.util.DownloadFileItemHelperCallback;
+import github.vrih.xsub.util.DrawableTint;
+import github.vrih.xsub.util.DroppySpeedControl;
+import github.vrih.xsub.util.FileUtil;
+import github.vrih.xsub.util.MenuUtil;
+import github.vrih.xsub.util.SilentBackgroundTask;
+import github.vrih.xsub.util.UpdateHelper;
+import github.vrih.xsub.util.Util;
+import github.vrih.xsub.view.AutoRepeatButton;
 import github.vrih.xsub.view.FadeOutAnimation;
 import github.vrih.xsub.view.FastScroller;
 import github.vrih.xsub.view.UpdateView;
+import github.vrih.xsub.view.compat.CustomMediaRouteDialogFactory;
 
 import static github.vrih.xsub.domain.MusicDirectory.Entry;
-import static github.vrih.xsub.domain.PlayerState.*;
-import github.vrih.xsub.util.*;
-import github.vrih.xsub.view.AutoRepeatButton;
-import java.util.ArrayList;
-import java.util.concurrent.ScheduledFuture;
+import static github.vrih.xsub.domain.PlayerState.COMPLETED;
+import static github.vrih.xsub.domain.PlayerState.IDLE;
+import static github.vrih.xsub.domain.PlayerState.PAUSED;
+import static github.vrih.xsub.domain.PlayerState.STOPPED;
 
 public class NowPlayingFragment extends SubsonicFragment implements OnGestureListener, SectionAdapter.OnItemClickedListener<DownloadFile>, OnSongChangedListener {
 	private static final String TAG = NowPlayingFragment.class.getSimpleName();
@@ -239,7 +251,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				warnIfStorageUnavailable();
 				new SilentBackgroundTask<Void>(context) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						getDownloadService().previous();
 						return null;
 					}
@@ -259,7 +271,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				warnIfStorageUnavailable();
 				new SilentBackgroundTask<Boolean>(context) {
 					@Override
-					protected Boolean doInBackground() throws Throwable {
+					protected Boolean doInBackground() {
 						getDownloadService().next();
 						return true;
 					}
@@ -303,7 +315,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onClick(View view) {
 				new SilentBackgroundTask<Void>(context) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						getDownloadService().pause();
 						return null;
 					}
@@ -316,7 +328,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onClick(View view) {
 				new SilentBackgroundTask<Void>(context) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						getDownloadService().reset();
 						return null;
 					}
@@ -330,7 +342,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				warnIfStorageUnavailable();
 				new SilentBackgroundTask<Void>(context) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						start();
 						return null;
 					}
@@ -423,7 +435,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			public void onStopTrackingTouch(final SeekBar seekBar) {
 				new SilentBackgroundTask<Void>(context) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						getDownloadService().seekTo(progressBar.getProgress());
 						return null;
 					}
@@ -627,7 +639,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					public void onClick(DialogInterface dialog, int which) {
 						new SilentBackgroundTask<Void>(context) {
 							@Override
-							protected Void doInBackground() throws Throwable {
+							protected Void doInBackground() {
 								getDownloadService().setShufflePlayEnabled(false);
 								getDownloadService().clear();
 								return null;
@@ -662,7 +674,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			case R.id.menu_shuffle:
 				new SilentBackgroundTask<Void>(context) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						getDownloadService().shuffle();
 						return null;
 					}
@@ -1021,7 +1033,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			int seekTo;
 
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				if(rewind) {
 					seekTo = downloadService.rewind();
 				} else {
@@ -1164,7 +1176,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			warnIfStorageUnavailable();
 			new SilentBackgroundTask<Void>(context) {
 				@Override
-				protected Void doInBackground() throws Throwable {
+				protected Void doInBackground() {
 					switch(performAction) {
 						case ACTION_NEXT:
 							downloadService.next();
@@ -1212,7 +1224,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		warnIfStorageUnavailable();
 		new SilentBackgroundTask<Void>(context) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				getDownloadService().play(item);
 				return null;
 			}
@@ -1224,12 +1236,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		this.currentPlaying = currentPlaying;
 		setupSubtitle(currentPlayingIndex);
 
-		updateMediaButton(shouldFastForward);
+		updateMediaButton();
 		updateTitle();
 		setPlaybackSpeed();
 	}
 
-	private void updateMediaButton(boolean shouldFastForward) {
+	private void updateMediaButton() {
 		DownloadService downloadService = getDownloadService();
 		if(downloadService.isCurrentPlayingSingle()) {
 			previousButton.setVisibility(View.GONE);
@@ -1309,7 +1321,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			onSongChanged(currentPlaying, currentPlayingIndex, shouldFastForward);
 			onMetadataUpdate(currentPlaying != null ? currentPlaying.getSong() : null, DownloadService.METADATA_UPDATED_ALL);
 		} else {
-			updateMediaButton(shouldFastForward);
+			updateMediaButton();
 			setupSubtitle(currentPlayingIndex);
 		}
 
@@ -1358,7 +1370,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	@Override
-	public void onStateUpdate(DownloadFile downloadFile, PlayerState playerState) {
+	public void onStateUpdate(PlayerState playerState) {
 		switch (playerState) {
 			case DOWNLOADING:
 				if(currentPlaying != null) {

@@ -25,16 +25,13 @@ import java.util.List;
 
 import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.domain.ArtistInfo;
-import github.vrih.xsub.util.ProgressListener;
 
 public class ArtistInfoParser extends AbstractParser {
-	private static final String TAG = ArtistInfo.class.getSimpleName();
-
 	public ArtistInfoParser(Context context, int instance) {
 		super(context, instance);
 	}
 
-	public ArtistInfo parse(Reader reader, ProgressListener progressListener) throws Exception {
+	public ArtistInfo parse(Reader reader) throws Exception {
 		init(reader);
 
 		ArtistInfo info = new ArtistInfo();

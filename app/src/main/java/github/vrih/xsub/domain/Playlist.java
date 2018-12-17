@@ -141,9 +141,6 @@ public class Playlist implements Serializable {
 			this.changed = null;
 		}
 	}
-	public void setChanged(Date changed) {
-		this.changed = changed;
-	}
 
 	public Integer getDuration() {
 		return duration;

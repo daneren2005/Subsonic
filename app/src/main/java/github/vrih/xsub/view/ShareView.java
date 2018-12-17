@@ -30,7 +30,6 @@ import github.vrih.xsub.R;
 import github.vrih.xsub.domain.Share;
 
 public class ShareView extends UpdateView<Share> {
-	private static final String TAG = ShareView.class.getSimpleName();
 
 	private final TextView titleView;
 	private final TextView descriptionView;

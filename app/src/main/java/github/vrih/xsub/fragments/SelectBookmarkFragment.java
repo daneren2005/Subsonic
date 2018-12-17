@@ -22,7 +22,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import github.vrih.xsub.R;
+import github.vrih.xsub.adapter.BookmarkAdapter;
 import github.vrih.xsub.adapter.SectionAdapter;
 import github.vrih.xsub.domain.Bookmark;
 import github.vrih.xsub.domain.MusicDirectory;
@@ -31,15 +36,9 @@ import github.vrih.xsub.service.MusicService;
 import github.vrih.xsub.util.MenuUtil;
 import github.vrih.xsub.util.ProgressListener;
 import github.vrih.xsub.util.Util;
-import github.vrih.xsub.adapter.BookmarkAdapter;
 import github.vrih.xsub.view.UpdateView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class SelectBookmarkFragment extends SelectRecyclerFragment<MusicDirectory.Entry> {
-	private static final String TAG = SelectBookmarkFragment.class.getSimpleName();
 
 	@Override
 	public void onCreateContextMenu(Menu menu, MenuInflater menuInflater, UpdateView<MusicDirectory.Entry> updateView, MusicDirectory.Entry item) {

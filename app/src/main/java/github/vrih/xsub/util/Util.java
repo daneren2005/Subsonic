@@ -332,17 +332,13 @@ public final class Util {
 		int instance = prefs.getInt(Constants.PREFERENCES_KEY_SERVER_INSTANCE, 1);
 		return getRestUrl(context, method, prefs, instance, allowAltAddress);
 	}
-    public static String getRestUrl(Context context, String method, int instance) {
-    	return getRestUrl(context, method, instance, true);
-    }
-	public static String getRestUrl(Context context, String method, int instance, boolean allowAltAddress) {
+
+    public static String getRestUrl(Context context, String method, int instance, boolean allowAltAddress) {
 		SharedPreferences prefs = getPreferences(context);
 		return getRestUrl(context, method, prefs, instance, allowAltAddress);
 	}
-    public static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance) {
-        return getRestUrl(context, method, prefs, instance, true);
-    }
-	private static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
+
+    private static String getRestUrl(Context context, String method, SharedPreferences prefs, int instance, boolean allowAltAddress) {
 		StringBuilder builder = new StringBuilder();
 
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
@@ -457,21 +453,7 @@ public final class Util {
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_SYNC + instance, true);
 	}
 
-	public static String getParentFromEntry(Context context, MusicDirectory.Entry entry) {
-		if(Util.isTagBrowsing(context)) {
-			if(!entry.isDirectory()) {
-				return entry.getAlbumId();
-			} else if(entry.isAlbum()) {
-				return entry.getArtistId();
-			} else {
-				return null;
-			}
-		} else {
-			return entry.getParent();
-		}
-	}
-
-	public static String openToTab(Context context) {
+    public static String openToTab(Context context) {
 		SharedPreferences prefs = getPreferences(context);
 		return prefs.getString(Constants.PREFERENCES_KEY_OPEN_TO_TAB, null);
 	}
@@ -527,7 +509,7 @@ public final class Util {
 		return offline.getInt(Constants.OFFLINE_STAR_COUNT, 0);
 	}
 	
-	public static String parseOfflineIDSearch(Context context, String id, String cacheLocation) {
+	public static String parseOfflineIDSearch(String id, String cacheLocation) {
 		// Try to get this info based off of tags first
 		String name = parseOfflineIDSearch(id);
 		if(name != null) {
@@ -676,7 +658,7 @@ public final class Util {
         }
 	}
 
-	public static void renameFile(File from, File to) throws IOException {
+	public static void renameFile(File from, File to) {
 		if(!from.renameTo(to)) {
 			Log.i(TAG, "Failed to rename " + from + " to " + to);
 		}
@@ -727,24 +709,20 @@ public final class Util {
     }
 	
 	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, null);
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick);
 	}
-	public static void confirmDialog(Context context, int action, int subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), context.getResources().getString(subject), onClick, onCancel);
+
+    public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
+		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick);
 	}
-	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, null);
-	}
-	public static void confirmDialog(Context context, int action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
-		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, onCancel);
-	}
-	private static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
+
+    private static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick) {
 		new AlertDialog.Builder(context)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(R.string.common_confirm)
 			.setMessage(context.getResources().getString(R.string.common_confirm_message, action, subject))
 			.setPositiveButton(R.string.common_ok, onClick)
-			.setNegativeButton(R.string.common_cancel, onCancel)
+			.setNegativeButton(R.string.common_cancel, null)
 			.show();
 	}
 
@@ -856,10 +834,7 @@ public final class Util {
         return builder.toString();
     }
 
-	public static String formatDate(Context context, String dateString) {
-		return formatDate(context, dateString, true);
-	}
-	public static String formatDate(Context context, String dateString, boolean includeTime) {
+    public static String formatDate(Context context, String dateString, boolean includeTime) {
 		if(dateString == null) {
 			return "";
 		}
@@ -1127,20 +1102,16 @@ public final class Util {
 	public static void info(Context context, int titleId, int messageId) {
         showDialog(context, android.R.drawable.ic_dialog_info, titleId, messageId);
     }
-	public static void info(Context context, int titleId, String message) {
-		showDialog(context, android.R.drawable.ic_dialog_info, titleId, message);
-	}
-	public static void info(Context context, String title, String message) {
+
+    public static void info(Context context, String title, String message) {
 		showDialog(context, android.R.drawable.ic_dialog_info, title, message);
 	}
 
     private static void showDialog(Context context, int icon, int titleId, int messageId) {
 		showDialog(context, icon, context.getResources().getString(titleId), context.getResources().getString(messageId));
 	}
-	private static void showDialog(Context context, int icon, int titleId, String message) {
-		showDialog(context, icon, context.getResources().getString(titleId), message);
-	}
-	private static void showDialog(Context context, int icon, String title, String message) {
+
+    private static void showDialog(Context context, int icon, String title, String message) {
 		SpannableString ss = new SpannableString(message);
 
 		Linkify.addLinks(ss, Linkify.ALL);
@@ -1234,10 +1205,6 @@ public final class Util {
         } catch (InterruptedException x) {
             Log.w(TAG, "Interrupted from sleep.", x);
         }
-    }
-
-    public static void startActivityWithoutTransition(Activity currentActivity, Class<? extends Activity> newActivitiy) {
-        startActivityWithoutTransition(currentActivity, new Intent(currentActivity, newActivitiy));
     }
 
     public static void startActivityWithoutTransition(Activity currentActivity, Intent intent) {
@@ -1362,14 +1329,6 @@ public final class Util {
 				}
 			}
 		};
-	}
-
-	public static void abandonAudioFocus(Context context) {
-		if(focusListener != null) {
-			final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-			audioManager.abandonAudioFocus(focusListener);
-			focusListener = null;
-		}
 	}
 
     /**

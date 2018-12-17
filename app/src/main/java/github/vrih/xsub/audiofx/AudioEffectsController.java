@@ -21,9 +21,7 @@ package github.vrih.xsub.audiofx;
 import android.content.Context;
 
 public class AudioEffectsController {
-    private static final String TAG = AudioEffectsController.class.getSimpleName();
-
-    private final Context context;
+	private final Context context;
 	private final int audioSessionId;
 
 	private boolean available = false;

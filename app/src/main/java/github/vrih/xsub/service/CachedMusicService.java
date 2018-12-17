@@ -67,8 +67,6 @@ import static github.vrih.xsub.domain.MusicDirectory.Entry;
 public class CachedMusicService implements MusicService {
 	private static final String TAG = CachedMusicService.class.getSimpleName();
 
-    private static final int MUSIC_DIR_CACHE_SIZE = 20;
-    private static final int TTL_MUSIC_DIR = 5 * 60; // Five minutes
 	public static final int CACHE_UPDATE_LIST = 1;
 	public static final int CACHE_UPDATE_METADATA = 2;
 	private static final int CACHED_LAST_FM = 24 * 60;
@@ -934,7 +932,7 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) throws Exception {
+	public MusicDirectory getNewestPodcastEpisodes(boolean refresh, Context context, ProgressListener progressListener, int count) {
 		MusicDirectory result = null;
 
 		String cacheName = getCacheName(context, "newestPodcastEpisodes");
@@ -1013,7 +1011,7 @@ public class CachedMusicService implements MusicService {
 			}
 
 			@Override
-			public void updateResult(Entry result) {
+			public void updateResult() {
 
 			}
 		}.execute();
@@ -1071,7 +1069,7 @@ public class CachedMusicService implements MusicService {
 	}
 
 	@Override
-	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) throws Exception {
+	public User getUser(boolean refresh, String username, Context context, ProgressListener progressListener) {
 		User result = null;
 
 		try {
@@ -1443,7 +1441,7 @@ public class CachedMusicService implements MusicService {
 		boolean checkResult(Entry entry, Entry check) {
 			return entry.getId().equals(check.getId());
 		}
-		protected abstract void updateResult(Entry result);
+		protected abstract void updateResult();
 		
 		void execute() {
 			String cacheName, parent;
@@ -1499,7 +1497,7 @@ public class CachedMusicService implements MusicService {
 						
 						@Override
 						public void updateResult(List<Entry> objects, Entry result) {
-							GenericEntryUpdater.this.updateResult(result);
+							GenericEntryUpdater.this.updateResult();
 						}
 					}.execute();
 				}
@@ -1513,7 +1511,7 @@ public class CachedMusicService implements MusicService {
 						
 						@Override
 						public void updateResult(List<Entry> objects, Entry result) {
-							GenericEntryUpdater.this.updateResult(result);
+							GenericEntryUpdater.this.updateResult();
 						}
 					}.execute();
 				} else if(!entry.isDirectory()) {
@@ -1537,7 +1535,7 @@ public class CachedMusicService implements MusicService {
 					
 					@Override
 					public void updateResult(Entry result) {
-						GenericEntryUpdater.this.updateResult(result);
+						GenericEntryUpdater.this.updateResult();
 					}
 				}.execute();
 			}
@@ -1583,7 +1581,7 @@ public class CachedMusicService implements MusicService {
 		}
 
 		@Override
-		public void updateResult(Entry result) {
+		public void updateResult() {
 
 		}
 	}
@@ -1605,7 +1603,7 @@ public class CachedMusicService implements MusicService {
 		}
 
 		@Override
-		public void updateResult(Entry result) {
+		public void updateResult() {
 
 		}
 	}

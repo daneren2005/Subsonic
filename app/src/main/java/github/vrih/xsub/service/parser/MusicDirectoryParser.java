@@ -19,30 +19,29 @@
 package github.vrih.xsub.service.parser;
 
 import android.content.Context;
-import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.util.Constants;
-import github.vrih.xsub.util.ProgressListener;
-import github.vrih.xsub.util.Util;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
-import static github.vrih.xsub.domain.MusicDirectory.*;
+import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.util.Constants;
+import github.vrih.xsub.util.Util;
+
+import static github.vrih.xsub.domain.MusicDirectory.Entry;
 
 /**
  * @author Sindre Mehus
  */
 public class MusicDirectoryParser extends MusicDirectoryEntryParser {
 
-    private static final String TAG = MusicDirectoryParser.class.getSimpleName();
-
-    public MusicDirectoryParser(Context context, int instance) {
+	public MusicDirectoryParser(Context context, int instance) {
         super(context, instance);
     }
 
-    public MusicDirectory parse(String artist, Reader reader, ProgressListener progressListener) throws Exception {
+    public MusicDirectory parse(String artist, Reader reader) throws Exception {
         init(reader);
 
         MusicDirectory dir = new MusicDirectory();

@@ -12,7 +12,7 @@ class SubsonicFragmentActivityTest extends
 	}
 
 	@Override
-	protected void setUp() throws Exception {
+	protected void setUp() {
 		super.setUp();
 	    activity = getActivity();
 	}

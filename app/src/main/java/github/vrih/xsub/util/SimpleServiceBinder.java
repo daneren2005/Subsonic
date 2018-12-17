@@ -31,7 +31,4 @@ public class SimpleServiceBinder<S> extends Binder {
         this.service = service;
     }
 
-    public S getService() {
-        return service;
-    }
 }

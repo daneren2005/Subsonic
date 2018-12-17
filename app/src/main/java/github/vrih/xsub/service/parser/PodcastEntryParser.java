@@ -20,13 +20,14 @@ package github.vrih.xsub.service.parser;
 
 import android.content.Context;
 
+import org.xmlpull.v1.XmlPullParser;
+
+import java.io.Reader;
+
 import github.vrih.xsub.domain.Bookmark;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.PodcastEpisode;
 import github.vrih.xsub.util.FileUtil;
-import github.vrih.xsub.util.ProgressListener;
-import java.io.Reader;
-import org.xmlpull.v1.XmlPullParser;
 
 /**
  *
@@ -39,7 +40,7 @@ public class PodcastEntryParser extends AbstractParser {
 		super(context, instance);
 	}
 	
-	public MusicDirectory parse(String channel, Reader reader, ProgressListener progressListener) throws Exception {
+	public MusicDirectory parse(String channel, Reader reader) throws Exception {
 		init(reader);
 
 		MusicDirectory episodes = new MusicDirectory();
@@ -95,7 +96,7 @@ public class PodcastEntryParser extends AbstractParser {
 					episode.setVideo(getBoolean("isVideo"));
 					episode.setPath(get("path"));
 					if(episode.getPath() == null) {
-						episode.setPath(FileUtil.getPodcastPath(context, episode));
+						episode.setPath(FileUtil.getPodcastPath(episode));
 					} else if(episode.getPath().indexOf("Podcasts/") == 0) {
 						episode.setPath(episode.getPath().substring("Podcasts/".length()));
 					}

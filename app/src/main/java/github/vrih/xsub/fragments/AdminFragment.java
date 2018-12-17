@@ -37,9 +37,8 @@ import github.vrih.xsub.adapter.UserAdapter;
 import github.vrih.xsub.view.UpdateView;
 
 public class AdminFragment extends SelectRecyclerFragment<User> {
-	private static String TAG = AdminFragment.class.getSimpleName();
 
-	@Override
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(super.onOptionsItemSelected(item)) {
 			return true;

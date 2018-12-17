@@ -181,7 +181,7 @@ public abstract class SelectRecyclerFragment<T> extends SubsonicFragment impleme
 		}
 
 		@Override
-		public List<T> doInBackground() throws Exception {
+		public List<T> doInBackground() {
 			MusicService musicService = MusicServiceFactory.getMusicService(context);
 
 			objects = new ArrayList<>();

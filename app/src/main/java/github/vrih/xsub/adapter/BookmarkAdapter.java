@@ -16,13 +16,12 @@
 package github.vrih.xsub.adapter;
 
 import android.content.Context;
-
-import java.util.List;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.List;
 
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.Bookmark;
@@ -32,8 +31,7 @@ import github.vrih.xsub.view.SongView;
 import github.vrih.xsub.view.UpdateView;
 
 public class BookmarkAdapter extends SectionAdapter<MusicDirectory.Entry> {
-	private final static String TAG = BookmarkAdapter.class.getSimpleName();
-	
+
 	public BookmarkAdapter(Context activity, List<MusicDirectory.Entry> bookmarks, OnItemClickedListener listener) {
 		super(activity, bookmarks);
 		this.onItemClickedListener = listener;

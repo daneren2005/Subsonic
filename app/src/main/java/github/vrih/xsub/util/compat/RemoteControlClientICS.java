@@ -1,9 +1,5 @@
 package github.vrih.xsub.util.compat;
 
-import github.vrih.xsub.domain.MusicDirectory;
-import github.vrih.xsub.service.DownloadFile;
-import github.vrih.xsub.service.DownloadService;
-import github.vrih.xsub.util.ImageLoader;
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -13,15 +9,18 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.RemoteControlClient;
-import androidx.mediarouter.media.MediaRouter;
 
 import java.util.List;
 
+import androidx.mediarouter.media.MediaRouter;
 import github.vrih.xsub.activity.SubsonicActivity;
+import github.vrih.xsub.domain.MusicDirectory;
+import github.vrih.xsub.service.DownloadFile;
+import github.vrih.xsub.service.DownloadService;
+import github.vrih.xsub.util.ImageLoader;
 
 @TargetApi(14)
 public class RemoteControlClientICS extends RemoteControlClientBase {
-	private static String TAG = RemoteControlClientICS.class.getSimpleName();
 
 	RemoteControlClient mRemoteControl;
 	private ImageLoader imageLoader;

@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import github.vrih.xsub.R;
 import github.vrih.xsub.adapter.ArtistAdapter;
 import github.vrih.xsub.adapter.SectionAdapter;
@@ -26,12 +30,7 @@ import github.vrih.xsub.util.ProgressListener;
 import github.vrih.xsub.util.Util;
 import github.vrih.xsub.view.UpdateView;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> implements ArtistAdapter.OnMusicFolderChanged {
-	private static final String TAG = SelectArtistFragment.class.getSimpleName();
 
 	private List<MusicFolder> musicFolders = null;
 	private List<Entry> entries;
@@ -205,7 +204,7 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
 				artists.add(artist);
 			}
 
-			Indexes indexes = new Indexes(0, new ArrayList<Artist>(), artists);
+			Indexes indexes = new Indexes(new ArrayList<Artist>(), artists);
 			indexes.sortChildren(context);
 			items = new ArrayList(indexes.getArtists());
 

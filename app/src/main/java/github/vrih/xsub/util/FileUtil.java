@@ -86,26 +86,7 @@ public class FileUtil {
 		kryo.register(Playlist.class);
 		kryo.register(Genre.class);
 	}
-	
-	public static File getAnySong(Context context) {
-		File dir = getMusicDirectory(context);
-		return getAnySong(context, dir);
-	}
-	private static File getAnySong(Context context, File dir) {
-		for(File file: dir.listFiles()) {
-			if(file.isDirectory()) {
-				return getAnySong(context, file);
-			}
-			
-			String extension = getExtension(file.getName());
-			if(MUSIC_FILE_EXTENSIONS.contains(extension)) {
-				return file;
-			}
-		}
-		
-		return null;
-	}
-	
+
 	public static File getEntryFile(Context context, MusicDirectory.Entry entry) {
 		if(entry.isDirectory()) {
 			return getAlbumDirectory(context, entry);
@@ -295,9 +276,6 @@ public class FileUtil {
 		return null;
 	}
 
-	public static Bitmap getSampledBitmap(byte[] bytes, int size) {
-		return getSampledBitmap(bytes, size, true);
-	}
 	public static Bitmap getSampledBitmap(byte[] bytes, int size, boolean allowUnscaled) {
 		final BitmapFactory.Options opt = new BitmapFactory.Options();
 		opt.inJustDecodeBounds = true;
@@ -408,7 +386,7 @@ public class FileUtil {
 		return null;
 	}
 	
-	public static String getPodcastPath(Context context, PodcastEpisode episode) {
+	public static String getPodcastPath(PodcastEpisode episode) {
 		return fileSystemSafe(episode.getArtist()) + "/" + fileSystemSafe(episode.getTitle());
 	}
 	public static File getPodcastFile(Context context, String server) {
@@ -436,15 +414,7 @@ public class FileUtil {
         }
     }
 
-    private static File createDirectory(Context context, String name) {
-        File dir = new File(getSubsonicDirectory(context), name);
-        if (!dir.exists() && !dir.mkdirs()) {
-            Log.e(TAG, "Failed to create " + name);
-        }
-        return dir;
-    }
-
-    public static File getSubsonicDirectory(Context context) {
+	public static File getSubsonicDirectory(Context context) {
         return context.getExternalFilesDir(null);
     }
 
@@ -728,11 +698,7 @@ public class FileUtil {
         String extension = getExtension(file.getName());
         return MUSIC_FILE_EXTENSIONS.contains(extension) || VIDEO_FILE_EXTENSIONS.contains(extension);
     }
-	
-	public static boolean isMusicFile(File file) {
-		String extension = getExtension(file.getName());
-        return MUSIC_FILE_EXTENSIONS.contains(extension);
-	}
+
 	public static boolean isVideoFile(File file) {
 		String extension = getExtension(file.getName());
         return VIDEO_FILE_EXTENSIONS.contains(extension);

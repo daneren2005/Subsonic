@@ -39,7 +39,6 @@ import static androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 public class FastScroller extends LinearLayout {
 	private static final String TAG = FastScroller.class.getSimpleName();
 	private static final int BUBBLE_ANIMATION_DURATION = 100;
-	private static final int TRACK_SNAP_RANGE = 5;
 
 	private TextView bubble;
 	private View handle;
@@ -125,13 +124,7 @@ public class FastScroller extends LinearLayout {
 		registerAdapter();
 		visibleRange = -1;
 	}
-	public void detachRecyclerView() {
-		recyclerView.removeOnScrollListener(scrollListener);
-		recyclerView.setVerticalScrollBarEnabled(true);
-		unregisterAdapter();
-		recyclerView = null;
-		setVisibility(View.GONE);
-	}
+
 	public boolean isAttached() {
 		return recyclerView != null;
 	}

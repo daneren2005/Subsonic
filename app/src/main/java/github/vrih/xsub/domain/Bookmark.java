@@ -48,12 +48,8 @@ public class Bookmark implements Serializable {
 	public void setPosition(int position) {
 		this.position = position;
 	}
-	
-	public String getUsername() {
-		return username;
-	}
-	
-	public void setUsername(String username) {
+
+    public void setUsername(String username) {
 		this.username = username;
 	}
 	

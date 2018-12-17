@@ -68,7 +68,7 @@ public class SelectInternetRadioStationFragment extends SelectRecyclerFragment<I
 	public void onItemClicked(UpdateView<InternetRadioStation> updateView, final InternetRadioStation item) {
 		new TabBackgroundTask<Void>(this) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				DownloadService downloadService = getDownloadService();
 				if(downloadService == null) {
 					return null;

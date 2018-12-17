@@ -18,7 +18,6 @@
 */
 package github.vrih.xsub.audiofx;
 
-import android.content.Context;
 import android.media.audiofx.LoudnessEnhancer;
 import android.util.Log;
 
@@ -27,7 +26,7 @@ public class LoudnessEnhancerController {
 
     private LoudnessEnhancer enhancer;
 
-    public LoudnessEnhancerController(Context context, int audioSessionId) {
+    public LoudnessEnhancerController(int audioSessionId) {
 		try {
 			enhancer = new LoudnessEnhancer(audioSessionId);
 		} catch (Throwable x) {
@@ -64,7 +63,6 @@ public class LoudnessEnhancerController {
 	public void release() {
 		if (isAvailable()) {
 			enhancer.release();
-            boolean released = true;
 		}
 	}
 

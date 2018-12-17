@@ -15,13 +15,12 @@
 
 package github.vrih.xsub.util;
 
-import androidx.mediarouter.media.MediaRouteProvider;
-import androidx.mediarouter.media.MediaRouteSelector;
-import androidx.mediarouter.media.MediaRouter;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.mediarouter.media.MediaRouteProvider;
+import androidx.mediarouter.media.MediaRouteSelector;
+import androidx.mediarouter.media.MediaRouter;
 import github.vrih.xsub.domain.RemoteControlState;
 import github.vrih.xsub.provider.DLNARouteProvider;
 import github.vrih.xsub.provider.JukeboxRouteProvider;
@@ -35,7 +34,6 @@ import static androidx.mediarouter.media.MediaRouter.RouteInfo;
  * Created by owner on 2/8/14.
  */
 public class MediaRouteManager extends MediaRouter.Callback {
-	private static final String TAG = MediaRouteManager.class.getSimpleName();
 	private static boolean castAvailable = false;
 
 	private final DownloadService downloadService;

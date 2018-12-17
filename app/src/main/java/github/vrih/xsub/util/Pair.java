@@ -28,9 +28,6 @@ public class Pair<S, T> implements Serializable {
     private S first;
     private T second;
 
-    public Pair() {
-    }
-
     public Pair(S first, T second) {
         this.first = first;
         this.second = second;
@@ -38,10 +35,6 @@ public class Pair<S, T> implements Serializable {
 
     public S getFirst() {
         return first;
-    }
-
-    public void setFirst(S first) {
-        this.first = first;
     }
 
     public T getSecond() {

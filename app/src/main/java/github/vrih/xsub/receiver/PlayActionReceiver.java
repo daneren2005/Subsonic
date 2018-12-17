@@ -24,7 +24,6 @@ import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.util.Constants;
 
 public class PlayActionReceiver extends BroadcastReceiver {
-	private static final String TAG = PlayActionReceiver.class.getSimpleName();
 
 	@Override
 	public void onReceive(Context context, Intent intent) {

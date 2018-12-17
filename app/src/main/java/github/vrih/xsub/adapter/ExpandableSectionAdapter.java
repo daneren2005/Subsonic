@@ -30,7 +30,6 @@ import github.vrih.xsub.view.BasicHeaderView;
 import github.vrih.xsub.view.UpdateView;
 
 public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
-	private static final String TAG = ExpandableSectionAdapter.class.getSimpleName();
 	private static final int DEFAULT_VISIBLE = 4;
 	private static final int EXPAND_TOGGLE = R.attr.select_server;
 	private static final int COLLAPSE_TOGGLE = R.attr.select_tabs;
@@ -44,16 +43,13 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 
 		init(context, Collections.singletonList("Section"), sections, Collections.singletonList((Integer) null));
 	}
-	private ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections) {
-		init(context, headers, sections, null);
-	}
+
 	ExpandableSectionAdapter(Context context, List<String> headers, List<List<T>> sections, List<Integer> sectionsDefaultVisible) {
 		init(context, headers, sections, sectionsDefaultVisible);
 	}
 	void init(Context context, List<String> headers, List<List<T>> fullSections, List<Integer> sectionsDefaultVisible) {
 		this.context = context;
 		this.headers = headers;
-        List<Integer> sectionsDefaultVisible1 = sectionsDefaultVisible;
 		if(sectionsDefaultVisible == null) {
 			sectionsDefaultVisible = new ArrayList<>(fullSections.size());
 			for(int i = 0; i < fullSections.size(); i++) {
@@ -79,9 +75,6 @@ public abstract class ExpandableSectionAdapter<T> extends SectionAdapter<T> {
 
 			i++;
 		}
-
-        int expandToggleRes = DrawableTint.getDrawableRes(context, EXPAND_TOGGLE);
-        int collapseToggleRes = DrawableTint.getDrawableRes(context, COLLAPSE_TOGGLE);
 	}
 
 	@Override

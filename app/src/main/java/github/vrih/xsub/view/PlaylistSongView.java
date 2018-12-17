@@ -32,7 +32,6 @@ import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.Util;
 
 public class PlaylistSongView extends UpdateView2<Playlist, List<MusicDirectory.Entry>> {
-	private static final String TAG = PlaylistSongView.class.getSimpleName();
 
 	private final TextView titleView;
 	private final TextView countView;

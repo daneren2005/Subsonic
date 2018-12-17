@@ -82,7 +82,7 @@ public class UserFragment extends SelectRecyclerFragment<User.Setting>{
 	}
 
 	@Override
-	public List<User.Setting> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) throws Exception {
+	public List<User.Setting> getObjects(MusicService musicService, boolean refresh, ProgressListener listener) {
 		return user.getSettings();
 	}
 

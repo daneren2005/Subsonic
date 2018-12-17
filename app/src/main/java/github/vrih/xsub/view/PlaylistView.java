@@ -32,7 +32,6 @@ import github.vrih.xsub.util.SyncUtil;
  * @author Sindre Mehus
  */
 public class PlaylistView extends UpdateView<Playlist> {
-	private static final String TAG = PlaylistView.class.getSimpleName();
 
 	private final TextView titleView;
 	private final ImageLoader imageLoader;

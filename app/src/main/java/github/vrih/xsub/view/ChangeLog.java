@@ -107,13 +107,6 @@ public class ChangeLog {
 
 
     /**
-     * Contains constants for the root element of {@code changelog.xml}.
-     */
-    protected interface ChangeLogTag {
-        String NAME = "changelog";
-    }
-
-    /**
      * Contains constants for the release element of {@code changelog.xml}.
      */
     interface ReleaseTag {
@@ -130,29 +123,7 @@ public class ChangeLog {
         String NAME = "change";
     }
 
-    /**
-     * Create a {@code ChangeLog} instance using the default {@link SharedPreferences} file.
-     *
-     * @param context
-     *         Context that is used to access the resources and to create the ChangeLog dialogs.
-     */
-    public ChangeLog(Context context) {
-        this(context, PreferenceManager.getDefaultSharedPreferences(context), DEFAULT_CSS);
-    }
-
-    /**
-     * Create a {@code ChangeLog} instance using the default {@link SharedPreferences} file.
-     *
-     * @param context
-     *         Context that is used to access the resources and to create the ChangeLog dialogs.
-     * @param css
-     *         CSS styles that will be used to format the change log.
-     */
-    public ChangeLog(Context context, String css) {
-        this(context, PreferenceManager.getDefaultSharedPreferences(context), css);
-    }
-	
-	public ChangeLog(Context context, SharedPreferences preferences) {
+    public ChangeLog(Context context, SharedPreferences preferences) {
 		this(context, preferences, DEFAULT_CSS);
 	}
 
@@ -288,25 +259,6 @@ public class ChangeLog {
 
         // TODO: Update preferences from a background thread
         editor.apply();
-    }
-
-    /**
-     * Get changes since last version as HTML string.
-     *
-     * @return HTML string containing the changes since the previous installed version of your app
-     *         (What's New).
-     */
-    public String getLog() {
-        return getLog(false);
-    }
-
-    /**
-     * Get full change log as HTML string.
-     *
-     * @return HTML string containing the full change log.
-     */
-    public String getFullLog() {
-        return getLog(true);
     }
 
     /**

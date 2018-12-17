@@ -68,14 +68,7 @@ public class ServerInfo implements Serializable {
 	public void setRestType(int type) {
 		this.type = type;
 	}
-	
-	public boolean isStockSubsonic() {
-		return type == TYPE_SUBSONIC;
-	}
-	public boolean isMadsonic() {
-		return type == TYPE_MADSONIC;
-	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if(this == o) {
@@ -96,10 +89,6 @@ public class ServerInfo implements Serializable {
 		}
 	}
 
-	// Stub to make sure this is never used, too easy to screw up
-	private void saveServerInfo(Context context) {
-
-	}
 	public void saveServerInfo(Context context, int instance) {
 		ServerInfo current = SERVERS.get(instance);
 		if(!this.equals(current)) {
@@ -107,10 +96,7 @@ public class ServerInfo implements Serializable {
 			FileUtil.serialize(context, this, getCacheName(context, instance));
 		}
 	}
-	
-	public static ServerInfo getServerInfo(Context context) {
-		return getServerInfo(context, Util.getActiveServer(context));
-	}
+
 	private static ServerInfo getServerInfo(Context context, int instance) {
 		ServerInfo current = SERVERS.get(instance);
 		if(current != null) {
@@ -155,9 +141,6 @@ public class ServerInfo implements Serializable {
 		return version.compareTo(required) >= 0;
 	}
 
-	public static int getServerType(Context context) {
-		return getServerType(context, Util.getActiveServer(context));
-	}
 	private static int getServerType(Context context, int instance) {
 		if(Util.isOffline(context)) {
 			return 0;
@@ -230,9 +213,6 @@ public class ServerInfo implements Serializable {
 		return ServerInfo.isMadsonic(context) || ServerInfo.checkServerVersion(context, "1.13");
 	}
 
-	public static boolean canUseToken(Context context) {
-		return canUseToken(context, Util.getActiveServer(context));
-	}
 	public static boolean canUseToken(Context context, int instance) {
 		if(isStockSubsonic(context, instance) && checkServerVersion(context, "1.14", instance)) {
 			return !Util.getBlockTokenUse(context, instance);

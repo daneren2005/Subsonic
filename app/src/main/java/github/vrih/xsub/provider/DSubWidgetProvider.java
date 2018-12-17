@@ -112,7 +112,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
 			views.setTextViewText(R.id.album, "");
 		}
 
-        linkButtons(context, views, false);
+        linkButtons(context, views);
 		performUpdate(context, null, appWidgetIds, false);
     }
 
@@ -239,7 +239,7 @@ public class DSubWidgetProvider extends AppWidgetProvider {
         }
 
         // Link actions buttons to intents
-        linkButtons(context, views, currentPlaying != null);
+        linkButtons(context, views);
 
         pushUpdate(context, appWidgetIds, views);
     }
@@ -273,9 +273,8 @@ public class DSubWidgetProvider extends AppWidgetProvider {
     /**
      * Link up various button actions using {@link PendingIntent}.
      *
-     * @param playerActive @param playerActive True if player is active in background.  Launch {@link github.vrih.xsub.activity.SubsonicFragmentActivity}.
      */
-    private void linkButtons(Context context, RemoteViews views, boolean playerActive) {
+    private void linkButtons(Context context, RemoteViews views) {
 		Intent intent = new Intent(context, SubsonicFragmentActivity.class);
 		intent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

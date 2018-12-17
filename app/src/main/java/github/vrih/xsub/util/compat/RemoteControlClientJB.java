@@ -24,7 +24,7 @@ public class RemoteControlClientJB extends RemoteControlClientICS {
 			public void onPlaybackPositionUpdate(final long newPosition) {
 				new SilentBackgroundTask<Void>(context) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						downloadService.seekTo((int) newPosition);
 						return null;
 					}

@@ -802,7 +802,7 @@ public class DownloadService extends Service {
 		
 		// Clear bookmarks from current playing if past a certain point
 		if(cutoff) {
-			clearCurrentBookmark(true);
+			clearCurrentBookmark();
 		} else {
 			// Check if we should be adding a new bookmark here
 			checkAddBookmark();
@@ -835,11 +835,6 @@ public class DownloadService extends Service {
 		setShufflePlayEnabled(false);
 		setArtistRadio(null);
 		checkDownloads();
-	}
-
-	public synchronized void remove(int which) {
-		downloadList.remove(which);
-		currentPlayingIndex = downloadList.indexOf(currentPlaying);
 	}
 
 	public synchronized void remove(DownloadFile downloadFile) {
@@ -1029,10 +1024,6 @@ public class DownloadService extends Service {
 		return currentDownloading;
 	}
 
-	public DownloadFile getNextPlaying() {
-		return nextPlaying;
-	}
-
 	public List<DownloadFile> getSongs() {
 		return downloadList;
 	}
@@ -1041,13 +1032,6 @@ public class DownloadService extends Service {
 
 	public boolean isCurrentPlayingSingle() {
 		return currentPlaying != null && currentPlaying.getSong() instanceof InternetRadioStation;
-	}
-	public boolean isCurrentPlayingStream() {
-		if(currentPlaying != null) {
-			return currentPlaying.isStream();
-		} else {
-			return false;
-		}
 	}
 
 	public synchronized boolean shouldFastForward() {
@@ -1295,7 +1279,7 @@ public class DownloadService extends Service {
 			}
 		}
 		if(cutoff) {
-			clearCurrentBookmark(true);
+			clearCurrentBookmark();
 		}
 		if(currentPlaying != null) {
 			scrobbler.conditionalScrobble(this, currentPlaying, position, duration, cutoff);
@@ -1683,7 +1667,6 @@ public class DownloadService extends Service {
 			Log.w(TAG, "Failed to start EQ, retrying with new mediaPlayer: " + e);
 
 			// If we failed, we are going to try to reinitialize the MediaPlayer
-			boolean playing = playerState == STARTED;
 			int pos = getPlayerPosition();
 			mediaPlayer.pause();
 			Util.sleepQuietly(10L);
@@ -2458,7 +2441,7 @@ public class DownloadService extends Service {
 		if (downloadFile.getSong() instanceof PodcastEpisode) {
 			toDelete.add(downloadFile);
 		}
-		clearCurrentBookmark(downloadFile.getSong(), true);
+		clearCurrentBookmark(downloadFile.getSong());
 	}
 
 	public RemoteControlClientBase getRemoteControlClient() {
@@ -2503,31 +2486,23 @@ public class DownloadService extends Service {
 		
 		return isPastCutoff;
 	}
-	
+
 	private void clearCurrentBookmark() {
-		clearCurrentBookmark(false);
-	}
-	private void clearCurrentBookmark(boolean checkDelete) {
 		// If current is null, nothing to do
 		if(currentPlaying == null) {
 			return;
 		}
 
-		clearCurrentBookmark(currentPlaying.getSong(), checkDelete);
+		clearCurrentBookmark(currentPlaying.getSong());
 	}
-	private void clearCurrentBookmark(final MusicDirectory.Entry entry, boolean checkDelete) {
+	private void clearCurrentBookmark(final MusicDirectory.Entry entry) {
 		// If no bookmark, move on
 		if(entry.getBookmark() == null) {
 			return;
 		}
-		
-		// If delete is not specified, check position
-		if(!checkDelete) {
-			checkDelete = isPastCutoff();
-		}
-		
+
 		// If supposed to delete
-		if(checkDelete) {
+		if(true) {
 			new SilentBackgroundTask<Void>(this) {
 				@Override
 				public Void doInBackground() throws Throwable {
@@ -2729,9 +2704,7 @@ public class DownloadService extends Service {
 	private synchronized void applyPlaybackParamsMain() {
 		applyPlaybackParams(mediaPlayer);
 	}
-	private synchronized boolean isNextPlayingSameAlbum() {
-		return isNextPlayingSameAlbum(currentPlaying, nextPlaying);
-	}
+
 	private synchronized boolean isNextPlayingSameAlbum(DownloadFile currentPlaying, DownloadFile nextPlaying) {
 		if(currentPlaying == null || nextPlaying == null) {
 			return false;
@@ -2804,7 +2777,7 @@ public class DownloadService extends Service {
 
 		UpdateHelper.setRating(this, entry, rating, new UpdateHelper.OnRatingChange() {
 			@Override
-			public void ratingChange(int rating) {
+			public void ratingChange() {
 				if (currentPlaying == DownloadService.this.currentPlaying) {
 					onMetadataUpdate(METADATA_UPDATED_RATING);
 				}
@@ -2819,9 +2792,6 @@ public class DownloadService extends Service {
 		lifecycleSupport.handleKeyEvent(keyEvent);
 	}
 
-	public void addOnSongChangedListener(OnSongChangedListener listener) {
-		addOnSongChangedListener(listener, false);
-	}
 	public void addOnSongChangedListener(OnSongChangedListener listener, boolean run) {
 		onSongChangedListeners.addIfAbsent(listener);
 
@@ -2933,15 +2903,13 @@ public class DownloadService extends Service {
 				@Override
 				public void run() {
 					if (revision == atRevision && instance != null) {
-						listener.onStateUpdate(currentPlaying, playerState);
+						listener.onStateUpdate(playerState);
 					}
 				}
 			});
 		}
 	}
-	public void onMetadataUpdate() {
-		onMetadataUpdate(METADATA_UPDATED_ALL);
-	}
+
 	public void onMetadataUpdate(final int updateType) {
 		for (final OnSongChangedListener listener : onSongChangedListeners) {
 			handler.post(new Runnable() {
@@ -3075,7 +3043,7 @@ public class DownloadService extends Service {
 		void onSongChanged(DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward);
 		void onSongsChanged(List<DownloadFile> songs, DownloadFile currentPlaying, int currentPlayingIndex, boolean shouldFastForward);
 		void onSongProgress(DownloadFile currentPlaying, int millisPlayed, Integer duration, boolean isSeekable);
-		void onStateUpdate(DownloadFile downloadFile, PlayerState playerState);
+		void onStateUpdate(PlayerState playerState);
 		void onMetadataUpdate(MusicDirectory.Entry entry, int fieldChange);
 	}
 }

@@ -33,7 +33,6 @@ import github.vrih.xsub.util.Util;
  */
 public class Indexes implements Serializable {
 
-    private long lastModified;
     private List<Artist> shortcuts;
     private List<Artist> artists;
 	private List<MusicDirectory.Entry> entries;
@@ -41,24 +40,18 @@ public class Indexes implements Serializable {
 	public Indexes() {
 
 	}
-    public Indexes(long lastModified, List<Artist> shortcuts, List<Artist> artists) {
-        this.lastModified = lastModified;
+    public Indexes(List<Artist> shortcuts, List<Artist> artists) {
         this.shortcuts = shortcuts;
         this.artists = artists;
 		this.entries = new ArrayList<>();
     }
 	public Indexes(long lastModified, List<Artist> shortcuts, List<Artist> artists, List<MusicDirectory.Entry> entries) {
-		this.lastModified = lastModified;
-		this.shortcuts = shortcuts;
+        this.shortcuts = shortcuts;
 		this.artists = artists;
 		this.entries = entries;
 	}
 
-    public long getLastModified() {
-        return lastModified;
-    }
-
-    public List<Artist> getShortcuts() {
+	public List<Artist> getShortcuts() {
         return shortcuts;
     }
 

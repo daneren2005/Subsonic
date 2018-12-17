@@ -12,7 +12,6 @@ import com.shehabic.droppy.DroppyMenuCustomItem;
  */
 public class DroppySpeedControl extends DroppyMenuCustomItem {
 
-    private Context context;
     private SeekBar seekBar;
 
     public DroppySpeedControl(int customResourceId) {

@@ -18,12 +18,8 @@ public class Genre implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    public String getIndex() {
-        return index;
-    }
 
-    public void setIndex(String index) {
+	public void setIndex(String index) {
         this.index = index;
     }
     

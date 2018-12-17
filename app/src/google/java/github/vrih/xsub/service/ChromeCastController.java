@@ -19,7 +19,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastStatusCodes;
@@ -35,6 +34,7 @@ import com.google.android.gms.common.images.WebImage;
 
 import java.io.File;
 
+import github.daneren2005.serverproxy.WebProxy;
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.MusicDirectory;
 import github.vrih.xsub.domain.PlayerState;
@@ -42,7 +42,6 @@ import github.vrih.xsub.domain.RemoteControlState;
 import github.vrih.xsub.util.EnvironmentVariables;
 import github.vrih.xsub.util.FileUtil;
 import github.vrih.xsub.util.Util;
-import github.daneren2005.serverproxy.WebProxy;
 
 /**
  * Created by owner on 2/9/14.
@@ -382,10 +381,7 @@ public class ChromeCastController extends RemoteController {
 				public void onResult(Cast.ApplicationConnectionResult result) {
 					Status status = result.getStatus();
 					if (status.isSuccess()) {
-						ApplicationMetadata applicationMetadata = result.getApplicationMetadata();
 						sessionId = result.getSessionId();
-						String applicationStatus = result.getApplicationStatus();
-						boolean wasLaunched = result.getWasLaunched();
 
 						applicationStarted = true;
 						setupChannel();

@@ -111,7 +111,7 @@ public class ImageLoader {
 		nowPlayingSmall = null;
 		new SilentBackgroundTask<Void>(context) {
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				clearingCache = true;
 				cache.evictAll();
 				clearingCache = false;
@@ -300,7 +300,7 @@ public class ImageLoader {
 		}
 
 		setImage(entry, remoteControl, Util.createDrawableFromBitmap(context, null));
-		ImageTask task = new RemoteControlClientImageTask(context, entry, imageSizeLarge, imageSizeLarge, remoteControl);
+		ImageTask task = new RemoteControlClientImageTask(context, entry, imageSizeLarge, remoteControl);
 		task.execute();
 	}
 
@@ -427,21 +427,19 @@ public class ImageLoader {
 		private final Context mContext;
 		final MusicDirectory.Entry mEntry;
 		private final int mSize;
-		private final int mSaveSize;
 		private final boolean mIsNowPlaying;
 		Drawable mDrawable;
 
-		ImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying) {
+		ImageTask(Context context, MusicDirectory.Entry entry, int size, boolean isNowPlaying) {
 			super(context);
 			mContext = context;
 			mEntry = entry;
 			mSize = size;
-			mSaveSize = saveSize;
 			mIsNowPlaying = isNowPlaying;
 		}
 
 		@Override
-		protected Void doInBackground() throws Throwable {
+		protected Void doInBackground() {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
 				Bitmap bitmap = musicService.getCoverArt(mContext, mEntry, mSize, null, this);
@@ -472,7 +470,7 @@ public class ImageLoader {
 		private final View mView;
 
 		ViewImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, View view, boolean crossfade) {
-			super(context, entry, size, saveSize, isNowPlaying);
+			super(context, entry, size, isNowPlaying);
 
 			mView = view;
 			mCrossfade = crossfade;
@@ -487,8 +485,8 @@ public class ImageLoader {
 	private class RemoteControlClientImageTask extends ImageTask {
 		private final RemoteControlClientBase mRemoteControl;
 
-		RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, RemoteControlClientBase remoteControl) {
-			super(context, entry, size, saveSize, false);
+		RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, RemoteControlClientBase remoteControl) {
+			super(context, entry, size, false);
 
 			mRemoteControl = remoteControl;
 		}
@@ -523,7 +521,7 @@ public class ImageLoader {
 		}
 
 		@Override
-		protected Void doInBackground() throws Throwable {
+		protected Void doInBackground() {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
 				ArtistInfo artistInfo = musicService.getArtistInfo(mEntry.getId(), false, true, mContext, null);
@@ -596,7 +594,7 @@ public class ImageLoader {
 		}
 
 		@Override
-		protected Void doInBackground() throws Throwable {
+		protected Void doInBackground() {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
 				Bitmap bitmap = musicService.getBitmap(mUrl, mSize, mContext, null, this);
@@ -644,7 +642,7 @@ public class ImageLoader {
 		}
 
 		@Override
-		protected Void doInBackground() throws Throwable {
+		protected Void doInBackground() {
 			try {
 				MusicService musicService = MusicServiceFactory.getMusicService(mContext);
 				Bitmap bitmap = musicService.getAvatar(mUsername, avatarSizeDefault, mContext, null, this);

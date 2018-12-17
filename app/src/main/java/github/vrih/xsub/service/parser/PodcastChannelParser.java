@@ -19,12 +19,14 @@
 package github.vrih.xsub.service.parser;
 
 import android.content.Context;
-import github.vrih.xsub.domain.PodcastChannel;
-import github.vrih.xsub.util.ProgressListener;
+
+import org.xmlpull.v1.XmlPullParser;
+
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import org.xmlpull.v1.XmlPullParser;
+
+import github.vrih.xsub.domain.PodcastChannel;
 
 /**
  *
@@ -35,7 +37,7 @@ public class PodcastChannelParser extends AbstractParser {
 		super(context, instance);
 	}
 
-	public List<PodcastChannel> parse(Reader reader, ProgressListener progressListener) throws Exception {
+	public List<PodcastChannel> parse(Reader reader) throws Exception {
 		init(reader);
 
 		List<PodcastChannel> channels = new ArrayList<>();

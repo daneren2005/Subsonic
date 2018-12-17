@@ -108,10 +108,6 @@ public abstract class RemoteController {
 				Log.w(TAG, "Failed to clean-up task queue.", x);
 			}
 		}
-
-		void clear() {
-			queue.clear();
-		}
 	}
 
 	private WebProxy createWebProxy() {

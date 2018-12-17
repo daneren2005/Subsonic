@@ -22,11 +22,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import java.io.File;
+
 import github.vrih.xsub.R;
 import github.vrih.xsub.domain.Artist;
 import github.vrih.xsub.util.FileUtil;
-
-import java.io.File;
 
 /**
  * Used to display albums in a {@code ListView}.
@@ -34,8 +35,6 @@ import java.io.File;
  * @author Sindre Mehus
  */
 public class ArtistView extends UpdateView<Artist> {
-	private static final String TAG = ArtistView.class.getSimpleName();
-
 	private File file;
     private final TextView titleView;
 

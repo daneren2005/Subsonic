@@ -103,7 +103,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	private ImageButton startButton;
 	private long lastBackPressTime = 0;
 	private DownloadFile currentPlaying;
-	private PlayerState currentState;
 	private ImageButton previousButton;
 	private ImageButton nextButton;
 	private ImageButton rewindButton;
@@ -280,7 +279,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			public void onClick(View v) {
 				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						if (getDownloadService() == null) {
 							return null;
 						}
@@ -298,7 +297,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			public void onClick(View v) {
 				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						if(getDownloadService() == null) {
 							return null;
 						}
@@ -316,7 +315,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			public void onClick(View v) {
 				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						PlayerState state = getDownloadService().getPlayerState();
 						if(state == PlayerState.STARTED) {
 							getDownloadService().pause();
@@ -338,7 +337,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			public void onClick(View v) {
 				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						if(getDownloadService() == null) {
 							return null;
 						}
@@ -356,7 +355,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			public void onClick(View v) {
 				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 					@Override
-					protected Void doInBackground() throws Throwable {
+					protected Void doInBackground() {
 						if (getDownloadService() == null) {
 							return null;
 						}
@@ -770,7 +769,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			private PlayerQueue playerQueue;
 
 			@Override
-			protected Void doInBackground() throws Throwable {
+			protected Void doInBackground() {
 				try {
 					MusicService musicService = MusicServiceFactory.getMusicService(context);
 					PlayerQueue remoteState = musicService.getPlayQueue(context, null);
@@ -817,7 +816,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 					public void onClick(DialogInterface dialogInterface, int i) {
 						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 							@Override
-							protected Void doInBackground() throws Throwable {
+							protected Void doInBackground() {
 								DownloadService downloadService = getDownloadService();
 								downloadService.clear();
 								downloadService.download(remoteState.songs, false, false, false, false, remoteState.currentPlayingIndex, remoteState.currentPlayingPosition);
@@ -831,7 +830,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 					public void onClick(DialogInterface dialogInterface, int i) {
 						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 							@Override
-							protected Void doInBackground() throws Throwable {
+							protected Void doInBackground() {
 								DownloadService downloadService = getDownloadService();
 								downloadService.serializeQueue(false);
 								return null;
@@ -844,7 +843,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 					public void onClick(DialogInterface dialogInterface, int i) {
 						new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
 							@Override
-							protected Void doInBackground() throws Throwable {
+							protected Void doInBackground() {
 								DownloadService downloadService = getDownloadService();
 								downloadService.serializeQueue(false);
 
@@ -902,10 +901,6 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 				Util.info(this, R.string.main_welcome_title, R.string.main_welcome_text);
 			}
 		}
-	}
-
-	public Toolbar getActiveToolbar() {
-		return slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED ? nowPlayingToolbar : mainToolbar;
 	}
 
 	@Override
@@ -981,7 +976,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 	}
 
 	@Override
-	public void onStateUpdate(DownloadFile downloadFile, PlayerState playerState) {
+	public void onStateUpdate(PlayerState playerState) {
 		int[] attrs = new int[]{(playerState == PlayerState.STARTED) ? R.attr.actionbar_pause : R.attr.actionbar_start};
 		TypedArray typedArray = this.obtainStyledAttributes(attrs);
 		startButton.setImageResource(typedArray.getResourceId(0, 0));

@@ -26,7 +26,7 @@ class DownloadServiceTest extends
 	}
 
 	@Override
-	protected void setUp() throws Exception {
+	protected void setUp() {
 		super.setUp();
 		activity = getActivity();
 		downloadService = activity.getDownloadService();
