@@ -61,7 +61,7 @@ public class DroppySpeedControl extends DroppyMenuCustomItem {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    textBox.setText(new Float((progress + 5) / 10.0).toString());
+                    textBox.setText(Float.valueOf((progress + 5) / 10.0).toString());
                     seekBar.setProgress(progress);
                     callback.call(seekBar,seekBar.getId());
                 }
