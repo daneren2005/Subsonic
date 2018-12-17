@@ -17,6 +17,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -1294,9 +1295,10 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				public void onClick(View v) {
 					if(artistView.getMaxLines() == minLines) {
 						// Use LeadingMarginSpan2 to try to make text flow around image
-						Display display = context.getWindowManager().getDefaultDisplay();
+                        DisplayMetrics dm = new DisplayMetrics();
+						context.getWindowManager().getDefaultDisplay().getMetrics(dm);
 						ImageView coverArtView = header.findViewById(R.id.select_album_art);
-						coverArtView.measure(display.getWidth(), display.getHeight());
+						coverArtView.measure(dm.widthPixels, dm.heightPixels);
 
 						int height, width;
 						ViewGroup.MarginLayoutParams vlp = (ViewGroup.MarginLayoutParams) coverArtView.getLayoutParams();

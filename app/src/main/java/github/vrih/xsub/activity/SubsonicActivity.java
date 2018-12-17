@@ -1244,7 +1244,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				PackageInfo packageInfo = context.getPackageManager().getPackageInfo("github.vrih.xsub", 0);
 				file = new File(Environment.getExternalStorageDirectory(), "dsub-stacktrace.txt");
 				printWriter = new PrintWriter(file);
-				printWriter.println("Android API level: " + Build.VERSION.SDK);
+				printWriter.println("Android API level: " + Build.VERSION.SDK_INT);
 				printWriter.println("Subsonic version name: " + packageInfo.versionName);
 				printWriter.println("Subsonic version code: " + packageInfo.versionCode);
 				printWriter.println();

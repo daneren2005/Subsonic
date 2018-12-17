@@ -373,7 +373,7 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 
 				@Override
 				protected void done(String logcat) {
-					String footer = "Android SDK: " + Build.VERSION.SDK;
+					String footer = "Android SDK: " + Build.VERSION.SDK_INT;
 					footer += "\nDevice Model: " + Build.MODEL;
 					footer += "\nDevice Name: " + Build.MANUFACTURER + " "  + Build.PRODUCT;
 					footer += "\nROM: " + Build.DISPLAY;

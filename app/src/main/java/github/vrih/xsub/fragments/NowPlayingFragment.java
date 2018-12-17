@@ -34,6 +34,8 @@ import androidx.mediarouter.app.MediaRouteButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.ItemTouchHelper;
+
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -160,9 +162,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		setTitle(R.string.button_bar_now_playing);
 
 		WindowManager w = context.getWindowManager();
-		Display d = w.getDefaultDisplay();
-		swipeDistance = (d.getWidth() + d.getHeight()) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
-		swipeVelocity = (d.getWidth() + d.getHeight()) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
+		DisplayMetrics dm = new DisplayMetrics();
+		w.getDefaultDisplay().getMetrics(dm);
+		swipeDistance = (dm.widthPixels + dm.heightPixels) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
+		swipeVelocity = (dm.widthPixels + dm.heightPixels) * PERCENTAGE_OF_SCREEN_FOR_SWIPE / 100;
 		gestureScanner = new GestureDetector(this);
 
 		playlistFlipper = rootView.findViewById(R.id.download_playlist_flipper);
