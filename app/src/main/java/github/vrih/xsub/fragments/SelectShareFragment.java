@@ -28,6 +28,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -144,7 +145,9 @@ public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 		nameBox.setText(share.getDescription());
 		Date expires = share.getExpires();
 		if(expires != null) {
-			expireBox.updateDate(expires.getYear() + 1900, expires.getMonth(), expires.getDate());
+			Calendar expiresCal = Calendar.getInstance();
+			expiresCal.setTime(expires);
+			expireBox.updateDate(expiresCal.get(Calendar.YEAR), expiresCal.get(Calendar.MONTH), expiresCal.get(Calendar.DATE));
 		}
 
 		boolean noExpires = share.getExpires() == null;
@@ -172,7 +175,9 @@ public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 							protected Void doInBackground() throws Throwable {
 								Long expiresIn = 0L;
 								if (!noExpiresBox.isChecked()) {
-									Date expires = new Date(expireBox.getYear() - 1900, expireBox.getMonth(), expireBox.getDayOfMonth());
+								    Calendar expiresCal = Calendar.getInstance();
+								    expiresCal.set(expireBox.getYear(), expireBox.getMonth(), expireBox.getDayOfMonth());
+									Date expires = expiresCal.getTime();
 									expiresIn = expires.getTime();
 								}
 
