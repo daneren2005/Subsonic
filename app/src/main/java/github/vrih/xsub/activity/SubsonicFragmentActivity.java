@@ -310,9 +310,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		startButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() {
+//				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
+//					@Override
+//					protected Void doInBackground() {
 						PlayerState state = getDownloadService().getPlayerState();
 						if(state == PlayerState.STARTED) {
 							getDownloadService().pause();
@@ -322,9 +322,9 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 							getDownloadService().start();
 						}
 
-						return null;
-					}
-				}.execute();
+//						return null;
+//					}
+//				}.execute();
 			}
 		});
 

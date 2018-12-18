@@ -21,7 +21,6 @@
 	<attr name="actionbar_stop" format="reference"/>
 	<attr name="actionbar_rewind" format="reference"/>
 	<attr name="actionbar_fastforward" format="reference"/>
-	<attr name="add" format="reference"/>
 	<attr name="download_none" format="reference"/>
 	<attr name="shuffle" format="reference"/>
 	<attr name="shuffle_button" format="reference"/>

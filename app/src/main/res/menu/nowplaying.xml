@@ -7,48 +7,64 @@
         android:id="@+id/menu_shuffle"
         android:icon="?attr/shuffle"
         android:title="@string/download.menu_shuffle"
+		android:visible="false"
         compat:showAsAction="ifRoom|withText"/>
 
+
 	<item
+		android:id="@+id/menu_mediaroutecast"
+		compat:actionProviderClass="androidx.mediarouter.app.MediaRouteActionProvider"
+		compat:showAsAction="always"
+		android:title="@string/menu.cast"/>
+
+	<!--<item
 		android:id="@+id/menu_mediaroute"
 		compat:actionProviderClass="androidx.mediarouter.app.MediaRouteActionProvider"
 		compat:actionViewClass="androidx.mediarouter.app.MediaRouteButton"
 		compat:showAsAction="always"
+		android:visible="false"
 		android:title="@string/menu.cast"/>
-		
+	-->
 	<item
         android:id="@+id/menu_remove_all"
         android:icon="?attr/remove"
         android:title="@string/download.menu_remove_all"
+		android:visible="false"
         compat:showAsAction="ifRoom|withText"/>
 
     <item
         android:id="@+id/menu_save_playlist"
         android:icon="?attr/save"
         android:title="@string/download.menu_save"
+		android:visible="false"
         compat:showAsAction="ifRoom|withText"/>
 
 	<item
 		android:id="@+id/menu_equalizer"
 		android:title="@string/equalizer.label"
+		android:visible="false"
 		android:checkable="true"/>
 
 	<item
 		android:id="@+id/menu_batch_mode"
 		android:title="@string/download.batch_mode"
+		android:visible="false"
 		android:checkable="true"/>
 
     <item
         android:id="@+id/menu_screen_on_off"
         android:title="@string/download.menu_screen_on"
+		android:visible="false"
 		android:checkable="true"/>
 
 	<item
 		android:id="@+id/menu_remove_played"
 		android:title="@string/download.menu_remove_played_songs"
+		android:visible="false"
 		android:checkable="true"/>
 		
 	<item
         android:id="@+id/menu_toggle_timer"
+		android:visible="false"
         android:title="@string/download.start_timer"/>
 </menu>

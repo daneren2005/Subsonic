@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 	<uses-permission android:name="android.permission.BLUETOOTH"/>
 	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
 	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
@@ -236,6 +237,11 @@
 
         <meta-data android:name="android.app.default_searchable"
                    android:value="github.vrih.xsub.activity.QueryReceiverActivity"/>
+
+		<meta-data
+			android:name=
+				"com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+			android:value="github.vrih.xsub.provider.CastOptionsProvider" />
 
 	</application>
 

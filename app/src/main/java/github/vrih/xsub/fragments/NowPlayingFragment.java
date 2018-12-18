@@ -43,6 +43,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.Session;
+import com.google.android.gms.cast.framework.SessionManager;
+import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuPopup;
 import com.shehabic.droppy.animations.DroppyFadeInAnimation;
@@ -68,8 +74,10 @@ import github.vrih.xsub.adapter.SectionAdapter;
 import github.vrih.xsub.audiofx.EqualizerController;
 import github.vrih.xsub.domain.Bookmark;
 import github.vrih.xsub.domain.PlayerState;
+import github.vrih.xsub.domain.RemoteControlState;
 import github.vrih.xsub.domain.RepeatMode;
 import github.vrih.xsub.domain.ServerInfo;
+import github.vrih.xsub.service.ChromeCastController;
 import github.vrih.xsub.service.DownloadFile;
 import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.service.DownloadService.OnSongChangedListener;
@@ -145,8 +153,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	private int currentPlayingSize = 0;
 	private MenuItem timerMenu;
     private DroppySpeedControl speed;
+	private SessionManagerListener<Session> mSessionManagerListener = new SessionManagerListenerImpl();
+	private CastSession mCastSession;
+	private CastContext mCastContext;
+	private SessionManager mSessionManager;
+	private ChromeCastController castController;
+    private int lastKnownRemotePosition;
 
-	/**
+    /**
 	 * Called when the activity is first created.
 	 */
 	@Override
@@ -158,7 +172,137 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				startFlipped = true;
 			}
 		}
-		primaryFragment = false;
+
+		mCastContext = CastContext.getSharedInstance(getContext());
+        mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+		mSessionManager = CastContext.getSharedInstance(getContext()).getSessionManager();
+		mSessionManager.addSessionManagerListener(mSessionManagerListener, Session.class);
+        DownloadService downloadService = getDownloadService();
+
+		if(mCastSession  != null && mCastSession.isConnected()) {
+			if(castController == null) {
+				castController = new ChromeCastController(downloadService);
+			}
+
+			castController.setSession(mCastSession);
+			downloadService.setRemoteEnabled(RemoteControlState.CHROMECAST, castController);
+		}
+
+        primaryFragment = false;
+	}
+
+	@Override
+	public void onResume() {
+		mCastSession = mSessionManager.getCurrentCastSession();
+		mSessionManager.addSessionManagerListener(mSessionManagerListener);
+		super.onResume();
+	}
+	@Override
+    public void onPause() {
+		super.onPause();
+		mSessionManager.removeSessionManagerListener(mSessionManagerListener);
+		mCastSession = null;
+	}
+
+
+	private class SessionManagerListenerImpl implements SessionManagerListener<Session> {
+			@Override
+			public void onSessionEnded(Session session, int error) {
+			    Log.w("CAST", "Session Ended");
+				onApplicationDisconnected();
+			}
+
+			@Override
+			public void onSessionResumed(Session session, boolean wasSuspended) {
+				onApplicationConnected();
+			}
+
+			@Override
+			public void onSessionResumeFailed(Session session, int error) {
+				onApplicationDisconnected();
+			}
+
+			@Override
+			public void onSessionStarted(Session session, String sessionId) {
+				onApplicationConnected();
+			}
+
+			@Override
+			public void onSessionStartFailed(Session session, int error) {
+				onApplicationDisconnected();
+			}
+
+			@Override
+			public void onSessionStarting(Session session) {
+			}
+
+			@Override
+			public void onSessionEnding(Session session) {
+			    Log.w("CAST","Session ending");
+                DownloadService downloadService = getDownloadService();
+                lastKnownRemotePosition = downloadService.getPlayerPosition() / 1000;
+				downloadService.setPlayerState(PlayerState.IDLE);
+			}
+
+			@Override
+			public void onSessionResuming(Session session, String sessionId) {
+			}
+
+			@Override
+			public void onSessionSuspended(Session session, int reason) {
+			}
+
+			private void onApplicationConnected() {
+                DownloadService downloadService = getDownloadService();
+				Log.w("CAST", "Callback c reated");
+
+                if(castController == null) {
+					castController = new ChromeCastController(downloadService);
+				}
+
+                castController.setSession(mSessionManager.getCurrentCastSession());
+                int position = downloadService.getPlayerPosition() / 1000;
+                downloadService.setRemoteEnabled(RemoteControlState.CHROMECAST, castController);
+
+				if (null != downloadService.getCurrentPlaying()) {
+				    if (downloadService.getPlayerState() == PlayerState.STARTED || downloadService.getPlayerState() == PlayerState.PREPARING) {
+				        //mVideoView.pause();
+                        castController.changeTrack(downloadService.getCurrentPlayingIndex(), downloadService.getCurrentPlaying(), position);
+				        return;
+				    } else {
+					    downloadService.setPlayerState(PlayerState.IDLE);
+				    }
+				}
+				downloadService.setPlayerState(PlayerState.IDLE);
+				//  invalidateOptionsMenu();
+			}
+
+			private void onApplicationDisconnected() {
+			    // Stop remote track, switch to local renderer and hit play
+				Log.w("CAST", "Application disconnected");
+                DownloadService downloadService = getDownloadService();
+				downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
+				Log.w("CAST", "Application disconnected position" + lastKnownRemotePosition);
+				downloadService.play(downloadService.getCurrentPlayingIndex(), true, lastKnownRemotePosition);
+				//invalidateOptionsMenu();
+			}
+		}
+
+
+	private void checkCastConnection() {
+		DownloadService downloadService = getDownloadService();
+
+		if (castController == null) {
+			castController = new ChromeCastController(downloadService);
+		}
+		mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+
+		if (mCastSession != null && mCastSession.isConnected()) {
+			castController.setSession(mCastSession);
+			downloadService.setRemoteEnabled(RemoteControlState.CHROMECAST, castController);
+		} else {
+		 	downloadService.setRemoteEnabled(RemoteControlState.LOCAL);
+		}
 	}
 
 	@Override
@@ -249,13 +393,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				warnIfStorageUnavailable();
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() {
-						getDownloadService().previous();
-						return null;
-					}
-				}.execute();
+				checkCastConnection();
+				getDownloadService().previous();
 				setControlsVisible(true);
 			}
 		});
@@ -269,13 +408,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				warnIfStorageUnavailable();
-				new SilentBackgroundTask<Boolean>(context) {
-					@Override
-					protected Boolean doInBackground() {
-						getDownloadService().next();
-						return true;
-					}
-				}.execute();
+				checkCastConnection();
+				getDownloadService().next();
 				setControlsVisible(true);
 			}
 		});
@@ -313,26 +447,21 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		pauseButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() {
-						getDownloadService().pause();
-						return null;
-					}
-				}.execute();
+				checkCastConnection();
+				getDownloadService().pause();
+				mCastContext.getSessionManager().removeSessionManagerListener(
+						mSessionManagerListener, CastSession.class);
 			}
 		});
 
 		stopButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() {
-						getDownloadService().reset();
-						return null;
-					}
-				}.execute();
+				checkCastConnection();
+				getDownloadService().stop();
+				getDownloadService().reset();
+				mCastContext.getSessionManager().removeSessionManagerListener(
+						mSessionManagerListener, CastSession.class);
 			}
 		});
 
@@ -340,13 +469,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			@Override
 			public void onClick(View view) {
 				warnIfStorageUnavailable();
-				new SilentBackgroundTask<Void>(context) {
-					@Override
-					protected Void doInBackground() {
-						start();
-						return null;
-					}
-				}.execute();
+				checkCastConnection();
+
+				start();
 			}
 		});
 
@@ -467,11 +592,12 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
 		DownloadService downloadService = getDownloadService();
-		if(Util.isOffline(context)) {
-			menuInflater.inflate(R.menu.nowplaying_offline, menu);
-		} else {
-			menuInflater.inflate(R.menu.nowplaying, menu);
-		}
+		//		if(Util.isOffline(context)) {
+		//		menuInflater.inflate(R.menu.nowplaying_offline, menu);
+		//} else {
+		menuInflater.inflate(R.menu.nowplaying, menu);
+		CastButtonFactory.setUpMediaRouteButton(getContext(), menu, R.id.menu_mediaroutecast);
+			//	}
 		if(downloadService != null && downloadService.getSleepTimer()) {
 			int timeRemaining = downloadService.getSleepTimeRemaining();
 			timerMenu = menu.findItem(R.id.menu_toggle_timer);
@@ -508,6 +634,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			playbackSpeedButton.setVisibility(View.VISIBLE);
 		}
 
+
 		if(downloadService != null) {
 			MenuItem mediaRouteItem = menu.findItem(R.id.menu_mediaroute);
 			if(mediaRouteItem != null) {
@@ -515,7 +642,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				mediaRouteButton.setDialogFactory(new CustomMediaRouteDialogFactory());
 				mediaRouteButton.setRouteSelector(downloadService.getRemoteSelector());
 			}
-
 			if(downloadService.isCurrentPlayingSingle()) {
 				if(!Util.isOffline(context)) {
 					menu.removeItem(R.id.menu_save_playlist);
@@ -769,7 +895,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 
 		updateButtons();
 
-		if(currentPlaying == null && downloadService != null && currentPlaying == downloadService.getCurrentPlaying()) {
+		if(currentPlaying == null && downloadService != null && null == downloadService.getCurrentPlaying()) {
 			getImageLoader().loadImage(albumArtImageView, (Entry) null, true, false);
 		}
 

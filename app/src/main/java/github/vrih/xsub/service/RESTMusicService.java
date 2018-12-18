@@ -107,7 +107,7 @@ import github.vrih.xsub.util.ProgressListener;
 import github.vrih.xsub.util.SilentBackgroundTask;
 import github.vrih.xsub.util.SongDBHandler;
 import github.vrih.xsub.util.Util;
-import github.vrih.xsub.util.compat.GoogleCompat;
+// import github.vrih.xsub.util.compat.GoogleCompat;
 
 public class RESTMusicService implements MusicService {
 
@@ -1843,7 +1843,7 @@ public class RESTMusicService implements MusicService {
 	private HttpURLConnection getConnectionDirect(Context context, String url, Map<String, String> headers, int minNetworkTimeout) throws Exception {
 		if(!hasInstalledGoogleSSL) {
 			try {
-				GoogleCompat.installProvider(context);
+//				GoogleCompat.installProvider(context);
 			} catch(Exception e) {
 				// Just continue on anyways, doesn't really harm anything if this fails
 				Log.w(TAG, "Failed to update to use Google Play SSL", e);

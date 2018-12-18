@@ -1086,7 +1086,7 @@ public class DownloadService extends Service {
 	private synchronized void play(int index, boolean start) {
 		play(index, start, 0);
 	}
-	private synchronized void play(int index, boolean start, int position) {
+	public synchronized void play(int index, boolean start, int position) {
 		int size = this.size();
 		cachedPosition = 0;
 		if (index < 0 || index >= size) {
@@ -1174,6 +1174,9 @@ public class DownloadService extends Service {
 		}
 	}
 
+	/**
+	 * @param position position in media in ms
+	 */
 	public synchronized void seekTo(int position) {
 		if(position < 0) {
 			position = 0;
@@ -1207,6 +1210,11 @@ public class DownloadService extends Service {
 	public synchronized int fastForward() {
 		return seekToWrapper(Integer.parseInt(Util.getPreferences(this).getString(Constants.PREFERENCES_KEY_FASTFORWARD_INTERVAL, "30"))*1000);
 	}
+
+	/**
+	 * @param difference seek delta in ms
+	 * @return new location
+	 */
 	private int seekToWrapper(int difference) {
 		int msPlayed = Math.max(0, getPlayerPosition());
 		Integer duration = getPlayerDuration();
@@ -1331,6 +1339,7 @@ public class DownloadService extends Service {
 
 	public synchronized void stop() {
 		try {
+			Log.w("CAST", "DS remote state: " + remoteState);
 			if (playerState == STARTED) {
 				if (remoteState != LOCAL) {
 					remoteController.stop();
@@ -1425,6 +1434,7 @@ public class DownloadService extends Service {
 				return 0;
 			}
 			if (remoteState != LOCAL) {
+			    Log.w("CAST", "remote controller position" + remoteController.getRemotePosition());
 				return remoteController.getRemotePosition() * 1000;
 			} else {
 				return Math.max(0, cachedPosition - subtractPosition);
@@ -1506,7 +1516,7 @@ public class DownloadService extends Service {
 			Notifications.hidePlayingNotification(this, this, handler);
 		}
 		if(mRemoteControl != null) {
-			mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState(), getCurrentPlayingIndex(), size());
+	mRemoteControl.setPlaybackState(playerState.getRemoteControlClientPlayState(), getCurrentPlayingIndex(), size());
 		}
 
 		if (playerState == STARTED) {
@@ -1765,6 +1775,7 @@ public class DownloadService extends Service {
 				remoteController = new JukeboxController(this, handler);
 				break;
 			case CHROMECAST: case DLNA:
+				Log.w("CAST", "ref: " + String.valueOf(ref));
 				if(ref == null) {
 					remoteState = LOCAL;
 					break;
@@ -1890,6 +1901,11 @@ public class DownloadService extends Service {
 		}
 	}
 
+	/**
+	 * @param downloadFile file to play
+	 * @param position position in file in ms
+	 * @param start commence playing if true
+	 */
 	private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
 		try {
 			subtractPosition = 0;
@@ -2796,21 +2812,15 @@ public class DownloadService extends Service {
 		onSongChangedListeners.addIfAbsent(listener);
 
 		if(run) {
-			if(mediaPlayerHandler != null) {
-				mediaPlayerHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						onSongsChanged();
-						onSongProgress();
-						onStateUpdate();
-						onMetadataUpdate(METADATA_UPDATED_ALL);
-					}
-				});
-			} else {
-				runListenersOnInit = true;
-			}
+			onSongsChanged();
+			onSongProgress();
+			onStateUpdate();
+			onMetadataUpdate(METADATA_UPDATED_ALL);
+		} else {
+			runListenersOnInit = true;
 		}
 	}
+
 	public void removeOnSongChangeListener(OnSongChangedListener listener) {
 		onSongChangedListeners.remove(listener);
 	}
@@ -2832,15 +2842,11 @@ public class DownloadService extends Service {
 			});
 		}
 
-		if (mediaPlayerHandler != null && !onSongChangedListeners.isEmpty()) {
-			mediaPlayerHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					onSongProgress();
-				}
-			});
-		}
+		if (!onSongChangedListeners.isEmpty()) {
+			onSongProgress();
+		};
 	}
+
 	private void onSongsChanged() {
 		final long atRevision = revision;
 		final boolean shouldFastForward = shouldFastForward();

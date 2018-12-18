@@ -7,8 +7,8 @@ android {
 		applicationId 'github.vrih.xsub'
 		minSdkVersion 19
 		targetSdkVersion 28
-		versionCode 7
-		versionName '7'
+		versionCode 14
+		versionName '14'
 		vectorDrawables.useSupportLibrary = true
 		setProperty("archivesBaseName", "XSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
@@ -63,8 +63,9 @@ dependencies {
 	implementation 'com.android.support:appcompat-v7:28.0.0'
 	implementation 'androidx.mediarouter:mediarouter:1.1.0-alpha01'
 	implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
-	implementation 'com.google.android.material:material:1.1.0-alpha01'
-	googleImplementation 'com.google.android.gms:play-services-cast:8.1.0'
+	implementation 'com.google.android.gms:play-services-cast:8.1.0'
+	implementation 'com.google.android.material:material:1.1.0-alpha02'
+	implementation 'com.google.android.gms:play-services-cast-framework:16.1.2'
 	implementation 'com.sothree.slidinguppanel:library:3.2.0'
 	implementation 'de.hdodenhof:circleimageview:1.2.1'
 	implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'

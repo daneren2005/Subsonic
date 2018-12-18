@@ -21,7 +21,6 @@
 		<item name="actionbar_stop">@drawable/actionbar_media_stop</item>
 		<item name="actionbar_rewind">@drawable/actionbar_media_rewind</item>
 		<item name="actionbar_fastforward">@drawable/actionbar_media_fastforward</item>
-		<item name="add">@drawable/ic_action_add</item>
 		<item name="download_none">@drawable/download_none</item>
 		<item name="shuffle">@drawable/actionbar_shuffle</item>
 		<item name="shuffle_button">@drawable/ic_menu_shuffle</item>
@@ -93,7 +92,6 @@
 		<item name="actionbar_stop">@drawable/actionbar_media_stop</item>
 		<item name="actionbar_rewind">@drawable/actionbar_media_rewind</item>
 		<item name="actionbar_fastforward">@drawable/actionbar_media_fastforward</item>
-		<item name="add">@drawable/ic_action_add</item>
 		<item name="download_none">@drawable/download_none</item>
 		<item name="shuffle">@drawable/actionbar_shuffle</item>
 		<item name="shuffle_button">@drawable/ic_menu_shuffle</item>
@@ -200,7 +198,6 @@
 		<item name="actionbar_stop">@drawable/actionbar_media_stop</item>
 		<item name="actionbar_rewind">@drawable/actionbar_media_rewind</item>
 		<item name="actionbar_fastforward">@drawable/actionbar_media_fastforward</item>
-		<item name="add">@drawable/ic_action_add</item>
 		<item name="shuffle">@drawable/actionbar_shuffle</item>
 		<item name="refresh">@drawable/actionbar_refresh</item>
 		<item name="search">@drawable/actionbar_search</item>

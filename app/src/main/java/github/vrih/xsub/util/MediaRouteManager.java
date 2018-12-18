@@ -26,7 +26,7 @@ import github.vrih.xsub.provider.DLNARouteProvider;
 import github.vrih.xsub.provider.JukeboxRouteProvider;
 import github.vrih.xsub.service.DownloadService;
 import github.vrih.xsub.service.RemoteController;
-import github.vrih.xsub.util.compat.GoogleCompat;
+// import github.vrih.xsub.util.compat.GoogleCompat;
 
 import static androidx.mediarouter.media.MediaRouter.RouteInfo;
 
@@ -46,7 +46,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	public MediaRouteManager(DownloadService downloadService) {
 		this.downloadService = downloadService;
 		router = MediaRouter.getInstance(downloadService);
-		castAvailable = GoogleCompat.playServicesAvailable(downloadService) && GoogleCompat.castAvailable();
+	// 	castAvailable = GoogleCompat.playServicesAvailable(downloadService) && GoogleCompat.castAvailable();
 
 		addProviders();
 		buildSelector();
@@ -61,10 +61,10 @@ public class MediaRouteManager extends MediaRouter.Callback {
 	@Override
 	public void onRouteSelected(MediaRouter router, RouteInfo info) {
 		if(castAvailable) {
-			RemoteController controller = GoogleCompat.getController(downloadService, info);
-			if(controller != null) {
-				downloadService.setRemoteEnabled(RemoteControlState.CHROMECAST, controller);
-			}
+	//		RemoteController controller = GoogleCompat.getController(downloadService, info);
+//			if(controller != null) {
+//				downloadService.setRemoteEnabled(RemoteControlState.CHROMECAST, controller);
+//			}
 		}
 
 		if(downloadService.isRemoteEnabled()) {
@@ -114,11 +114,11 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		return null;
 	}
 	public RemoteController getRemoteController(RouteInfo info) {
-		if(castAvailable) {
-			return GoogleCompat.getController(downloadService, info);
-		} else {
+//		if(castAvailable) {
+//			return GoogleCompat.getController(downloadService, info);
+//		} else {
 			return null;
-		}
+//		}
 	}
 
 	public void addOnlineProviders() {
@@ -148,7 +148,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 			builder.addControlCategory(JukeboxRouteProvider.CATEGORY_JUKEBOX_ROUTE);
 		}
 		if(castAvailable) {
-			builder.addControlCategory(GoogleCompat.getCastControlCategory());
+//			builder.addControlCategory(GoogleCompat.getCastControlCategory());
 		}
         builder.addControlCategory(DLNARouteProvider.CATEGORY_DLNA);
         selector = builder.build();
