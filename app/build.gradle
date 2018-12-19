@@ -13,29 +13,18 @@ android {
 		setProperty("archivesBaseName", "XSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
 	}
-	buildTypes {
-		release {
-			minifyEnabled true
-			shrinkResources true
-			proguardFiles 'proguard.cfg'
-			zipAlignEnabled true
-		}
-		fix {
-			minifyEnabled true
-			shrinkResources true
-			proguardFiles 'proguard.cfg'
-			zipAlignEnabled true
-		}
-	}
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles 'proguard.cfg'
+            zipAlignEnabled true
+        }
+    }
 	flavorDimensions "version"
 	productFlavors {
 		floss {
 			// FLOSS build (no proprietary libraries)
-			dimension "version"
-		}
-		google {
-			// FLOSS build + Google libraries
-			// Adds ChromeCast support
 			dimension "version"
 		}
 	}
@@ -56,23 +45,23 @@ android {
 }
 
 dependencies {
-	implementation project(path: ':ServerProxy')
-	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-	implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-	implementation 'com.android.support:appcompat-v7:28.0.0'
-	implementation 'androidx.mediarouter:mediarouter:1.1.0-alpha01'
-	implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
-	implementation 'com.google.android.gms:play-services-cast:8.1.0'
-	implementation 'com.google.android.material:material:1.1.0-alpha02'
-	implementation 'com.google.android.gms:play-services-cast-framework:16.1.2'
-	implementation 'com.sothree.slidinguppanel:library:3.2.0'
-	implementation 'de.hdodenhof:circleimageview:1.2.1'
-	implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'
-	implementation 'org.fourthline.cling:cling-core:2.1.1'
-	implementation 'org.fourthline.cling:cling-support:2.1.1'
-	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
-	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
-	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
-	implementation 'com.android.support:support-vector-drawable:28.0.0'
+    implementation project(path: ':ServerProxy')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.mediarouter:mediarouter:1.1.0-alpha01'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-alpha01'
+    implementation 'com.google.android.gms:play-services-cast:16.1.2'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'com.google.android.gms:play-services-cast-framework:16.1.2'
+    implementation 'com.sothree.slidinguppanel:library:3.2.0'
+    implementation 'de.hdodenhof:circleimageview:1.2.1'
+    implementation 'com.shehabic.droppy:Droppy:0.5.1@aar'
+    implementation 'org.fourthline.cling:cling-core:2.1.1'
+    implementation 'org.fourthline.cling:cling-support:2.1.1'
+    implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
+    implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
+    implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
+    implementation 'com.android.support:support-vector-drawable:28.0.0'
 }
