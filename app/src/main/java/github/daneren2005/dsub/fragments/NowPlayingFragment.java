@@ -21,6 +21,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.annotation.TargetApi;
+import android.app.TimePickerDialog;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,6 +55,8 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuPopup;
@@ -690,7 +693,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 					getDownloadService().stopSleepTimer();
 					context.supportInvalidateOptionsMenu();
 				} else {
-					startTimer();
+					startTimerDialog();
 				}
 				return true;
 			case R.id.menu_info:
@@ -913,72 +916,76 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		}
 	}
 
-	protected void startTimer() {
-		View dialogView = context.getLayoutInflater().inflate(R.layout.start_timer, null);
+	protected void startTimerDialog() {
+		// Create list of common times
+		String[] timerOptions = {"5 minutes", "10 minutes", "15 minutes",
+				"30 minutes", "1 hour", "End of track", "Custom length"};
 
-		// Setup length label
-		final TextView lengthBox = (TextView) dialogView.findViewById(R.id.timer_length_label);
-		final SharedPreferences prefs = Util.getPreferences(context);
-		String lengthString = prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5");
-		int length = Integer.parseInt(lengthString);
-		lengthBox.setText(Util.formatDuration(length));
-
-		// Setup length slider
-		final SeekBar lengthBar = (SeekBar) dialogView.findViewById(R.id.timer_length_bar);
-		lengthBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				if (fromUser) {
-					int length = getMinutes(progress);
-					lengthBox.setText(Util.formatDuration(length));
-					seekBar.setProgress(progress);
-				}
-			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-		});
-		lengthBar.setProgress(length - 1);
-
+		// Set up alert dialog builder
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(R.string.menu_set_timer)
-				.setView(dialogView)
-				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
+				.setNegativeButton(R.string.common_cancel, null)
+				.setItems(timerOptions, new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						int length = getMinutes(lengthBar.getProgress());
-
-						SharedPreferences.Editor editor = prefs.edit();
-						editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
-						editor.commit();
-
-						getDownloadService().setSleepTimerDuration(length);
-						getDownloadService().startSleepTimer();
-						context.supportInvalidateOptionsMenu();
+					public void onClick(DialogInterface dialog, int chosenOption) {
+						switch (chosenOption) {
+							// All options are in minutes, but pass length of milliseconds
+							// so multiply (minutes * 60 seconds * 1000 milliseconds)
+							case 0: startTimer(300000); break;
+							case 1: startTimer(600000); break;
+							case 2: startTimer(900000); break;
+							case 3: startTimer(1800000); break;
+							case 4: startTimer(3600000); break;
+							case 5: startTimer((progressBar.getMax() - progressBar.getProgress()));
+								// This tends to overrun slightly into the next song if the current song is playing
+								// since starting the timer takes several milliseconds.  There should probably be
+								// a check at the beginning of playing the next song to stop playing instead.
+								break;
+							case 6: startCustomTimerDialog();
+						}
 					}
-				})
-				.setNegativeButton(R.string.common_cancel, null);
+				}).create();
+
+		// Create and show list dialog
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}
 
-	private int getMinutes(int progress) {
-		if(progress < 30) {
-			return progress + 1;
-		} else if(progress < 49) {
-			return (progress - 30) * 5 + getMinutes(29);
-		} else if(progress < 57) {
-			return (progress - 48) * 30 + getMinutes(48);
-		} else if(progress < 81) {
-			return (progress - 56) * 60 + getMinutes(56);
-		} else {
-			return (progress - 80) * 150 + getMinutes(80);
-		}
+	protected void startCustomTimerDialog() {
+		// Retrieve previous custom time
+		final SharedPreferences prefs = Util.getPreferences(context);
+		String lengthString = prefs.getString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, "5");
+		int length = Integer.parseInt(lengthString);
+
+		// Create TimePicker dialog
+		TimePickerDialog timePicker = new TimePickerDialog(context,
+				new TimePickerDialog.OnTimeSetListener() {
+						@Override
+						public void onTimeSet(TimePicker timePicker, int i, int i1) {
+							// Parse length from dialog
+							int length = (timePicker.getCurrentHour() * 60) + timePicker.getCurrentMinute();
+
+							// Store custom length preference
+							SharedPreferences.Editor editor = prefs.edit();
+							editor.putString(Constants.PREFERENCES_KEY_SLEEP_TIMER_DURATION, Integer.toString(length));
+							editor.commit();
+
+							// Start timer
+							// length is in milliseconds so multiply (minutes * 60 seconds * 1000 milliseconds)
+							startTimer(length * 60000);
+						}
+					},
+				0, 5, true);
+
+		timePicker.setTitle(R.string.menu_set_timer);
+		timePicker.updateTime((length/60),(length%60));
+		timePicker.show();
+	}
+
+	protected void startTimer(int length) {
+		getDownloadService().setSleepTimerDuration(length);
+		getDownloadService().startSleepTimer();
+		context.supportInvalidateOptionsMenu();
 	}
 
 	private void toggleFullscreenAlbumArt() {

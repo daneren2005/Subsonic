@@ -2150,12 +2150,12 @@ public class DownloadService extends Service {
 				sleepTimer = null;
 			}
 
-		}, timerDuration * 60 * 1000);
+		}, timerDuration);
 		timerStart = System.currentTimeMillis();
 	}
 
 	public int getSleepTimeRemaining() {
-		return (int) (timerStart + (timerDuration * 60 * 1000) - System.currentTimeMillis()) / 1000;
+		return (int) (timerStart + timerDuration - System.currentTimeMillis()) / 1000;
 	}
 
 	public void stopSleepTimer() {
