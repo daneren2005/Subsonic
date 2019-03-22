@@ -116,6 +116,13 @@ public class FileUtil {
         File dir = getAlbumDirectory(context, song);
 
         StringBuilder fileName = new StringBuilder();
+        
+        Integer albumNumber=song.getDiscNumber();
+        if(albumNumber!=null){
+        	fileName.append(albumNumber);
+        	fileName.append('-');
+		}
+
         Integer track = song.getTrack();
         if (track != null) {
             if (track < 10) {
