@@ -223,14 +223,13 @@ public final class Notifications {
             builder.addAction(R.drawable.ic_play_arrow, "Play", pendingIntent);
         }
 
-        if(!shouldFastForward || downloadService.getCurrentPlayingIndex() < downloadService.getDownloadListSize() - 1) {
+        if(!shouldFastForward) {
             Intent nextIntent = new Intent("KEYCODE_MEDIA_NEXT");
             nextIntent.setComponent(new ComponentName(context, DownloadService.class));
             nextIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
             pendingIntent = PendingIntent.getService(context, 0, nextIntent, 0);
             builder.addAction(R.drawable.ic_skip_next, "Next", pendingIntent);
-        }
-        if(shouldFastForward) {
+        } else {
             Intent fastForwardIntent = new Intent("KEYCODE_MEDIA_FAST_FORWARD");
             fastForwardIntent.setComponent(new ComponentName(context, DownloadService.class));
             fastForwardIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
