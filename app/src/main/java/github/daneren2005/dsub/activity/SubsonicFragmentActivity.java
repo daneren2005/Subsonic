@@ -275,42 +275,32 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}
 
 		rewindButton = (ImageButton) findViewById(R.id.download_rewind);
+		previousButton = (ImageButton) findViewById(R.id.download_previous);
+		startButton = (ImageButton) findViewById(R.id.download_start);
+		nextButton = (ImageButton) findViewById(R.id.download_next);
+		fastforwardButton = (ImageButton) findViewById(R.id.download_fastforward);
+
 		rewindButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						if (getDownloadService() == null) {
-							return null;
-						}
-
-						getDownloadService().rewind();
-						return null;
-					}
-				}.execute();
+				changeProgress(true);
+			}
+		});
+		rewindButton.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				changeSong(true);
+				return true;
 			}
 		});
 
-		previousButton = (ImageButton) findViewById(R.id.download_previous);
 		previousButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						if(getDownloadService() == null) {
-							return null;
-						}
-
-						getDownloadService().previous();
-						return null;
-					}
-				}.execute();
+				changeSong(true);
 			}
 		});
 
-		startButton = (ImageButton) findViewById(R.id.download_start);
 		startButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -332,39 +322,24 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 			}
 		});
 
-		nextButton = (ImageButton) findViewById(R.id.download_next);
 		nextButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						if(getDownloadService() == null) {
-							return null;
-						}
-
-						getDownloadService().next();
-						return null;
-					}
-				}.execute();
+				changeSong(false);
 			}
 		});
 
-		fastforwardButton = (ImageButton) findViewById(R.id.download_fastforward);
 		fastforwardButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new SilentBackgroundTask<Void>(SubsonicFragmentActivity.this) {
-					@Override
-					protected Void doInBackground() throws Throwable {
-						if (getDownloadService() == null) {
-							return null;
-						}
-
-						getDownloadService().fastForward();
-						return null;
-					}
-				}.execute();
+				changeProgress(false);
+			}
+		});
+		fastforwardButton.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View view) {
+				changeSong(false);
+				return true;
 			}
 		});
 	}
@@ -917,6 +892,47 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 
 	public Toolbar getActiveToolbar() {
 		return slideUpPanel.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED ? nowPlayingToolbar : mainToolbar;
+	}
+
+	private void changeProgress(final boolean rewind) {
+		final DownloadService downloadService = getDownloadService();
+		final Context context = this;
+
+		if(downloadService == null) {
+			return;
+		}
+
+		new SilentBackgroundTask<Void>(context) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				if(rewind) {
+					downloadService.rewind();
+				} else {
+					downloadService.fastForward();
+				}
+				return null;
+			}
+		}.execute();
+	}
+
+	private void changeSong(final boolean previous) {
+		final DownloadService downloadService = getDownloadService();
+		final Context context = this;
+		if(downloadService == null) {
+			return;
+		}
+
+		new SilentBackgroundTask<Void>(this) {
+			@Override
+			protected Void doInBackground() throws Throwable {
+				if(previous) {
+					downloadService.previous();
+				} else {
+					downloadService.next();
+				}
+				return null;
+			}
+		}.execute();
 	}
 
 	@Override

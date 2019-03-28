@@ -1255,11 +1255,7 @@ public class DownloadService extends Service {
 			return;
 		}
 
-		// If only one song, just skip within song
-		if(shouldFastForward()) {
-			rewind();
-			return;
-		} else if(playerState == PREPARING || playerState == PREPARED) {
+		if(playerState == PREPARING || playerState == PREPARED) {
 			return;
 		}
 
@@ -1282,11 +1278,7 @@ public class DownloadService extends Service {
 		next(forceCutoff, false);
 	}
 	public synchronized void next(boolean forceCutoff, boolean forceStart) {
-		// If only one song, just skip within song
-		if(shouldFastForward()) {
-			fastForward();
-			return;
-		} else if(playerState == PREPARING || playerState == PREPARED) {
+		if(playerState == PREPARING || playerState == PREPARED) {
 			return;
 		}
 
