@@ -36,8 +36,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -65,6 +63,7 @@ import github.daneren2005.dsub.util.SyncUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.CacheLocationPreference;
 import github.daneren2005.dsub.view.ErrorDialog;
+import github.daneren2005.dsub.view.EditPasswordPreference;
 
 public class SettingsFragment extends PreferenceCompatFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private final static String TAG = SettingsFragment.class.getSimpleName();
@@ -557,7 +556,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverUsernamePreference.setTitle(R.string.settings_server_username);
 		serverUsernamePreference.setDialogTitle(R.string.settings_server_username);
 
-		final EditTextPreference serverPasswordPreference = new EditTextPreference(context);
+		final EditTextPreference serverPasswordPreference = new EditPasswordPreference(context, instance);
 		serverPasswordPreference.setKey(Constants.PREFERENCES_KEY_PASSWORD + instance);
 		serverPasswordPreference.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		serverPasswordPreference.setSummary("***");

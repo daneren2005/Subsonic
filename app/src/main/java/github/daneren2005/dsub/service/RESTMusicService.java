@@ -72,6 +72,7 @@ import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.TopSongsParser;
 import github.daneren2005.dsub.service.parser.UserParser;
 import github.daneren2005.dsub.service.parser.VideosParser;
+import github.daneren2005.dsub.util.KeyStoreUtil;
 import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
@@ -1912,6 +1913,7 @@ public class RESTMusicService implements MusicService {
 		int instance = getInstance(context);
 		String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
 		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
+		if (prefs.getBoolean(Constants.PREFERENCES_KEY_ENCRYPTED_PASSWORD + instance, false)) password = KeyStoreUtil.decrypt(password);
 		String encoded = Base64.encodeToString((username + ":" + password).getBytes("UTF-8"), Base64.NO_WRAP);;
 		connection.setRequestProperty("Authorization", "Basic " + encoded);
 

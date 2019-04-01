@@ -199,6 +199,7 @@ public final class Util {
 		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + newInstance, null);
 		String userName = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + newInstance, null);
 		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + newInstance, null);
+		if ((password != null) && (prefs.getBoolean(Constants.PREFERENCES_KEY_ENCRYPTED_PASSWORD + instance, false))) password = KeyStoreUtil.decrypt(password);
 		String musicFolderId = prefs.getString(Constants.PREFERENCES_KEY_MUSIC_FOLDER_ID + newInstance, null);
 
 		// Store the +1 server details in the to be deleted instance
@@ -364,6 +365,7 @@ public final class Util {
 
 		String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
 		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
+		if ((password != null) && (prefs.getBoolean(Constants.PREFERENCES_KEY_ENCRYPTED_PASSWORD + instance, false))) password = KeyStoreUtil.decrypt(password);
 
 		builder.append(serverUrl);
 		if (builder.charAt(builder.length() - 1) != '/') {
