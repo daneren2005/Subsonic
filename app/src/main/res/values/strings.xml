@@ -221,6 +221,8 @@
 	<string name="download.thumbs_up">Thumbs Up</string>
 	<string name="download.thumbs_down">Thumbs Down</string>
 	<string name="download.batch_mode">Batch Mode</string>
+	<string name="download.playback_rewind">Rewind</string>
+	<string name="download.playback_fast_forward">Fast Forward</string>
 	<string name="download.playback_speed_half">0.5x</string>
 	<string name="download.playback_speed_normal">1x</string>
 	<string name="download.playback_speed_one_half">1.5x</string>
