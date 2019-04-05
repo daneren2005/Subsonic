@@ -169,10 +169,11 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 	@Override
 	public void updateMetadata(Context context, Entry currentSong) {
-		setMetadata(currentSong, null);
-
 		if(currentSong != null && imageLoader != null) {
 			imageLoader.loadImage(context, this, currentSong);
+			setMetadata(currentSong, imageLoader.getCachedImage(context, currentSong, false));
+		} else {
+			setMetadata(currentSong, null);
 		}
 	}
 
