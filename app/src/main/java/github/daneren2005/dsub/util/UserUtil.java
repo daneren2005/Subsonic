@@ -272,6 +272,10 @@ public final class UserUtil {
 		SharedPreferences prefs = Util.getPreferences(context);
 		String correctPassword = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + Util.getActiveServer(context), null);
 
+		if (prefs.getBoolean(Constants.PREFERENCES_KEY_ENCRYPTED_PASSWORD + instance, false)) {
+			correctPassword = KeyStoreUtil.decrypt(correctPassword);
+		}
+
 		return password != null && password.equals(correctPassword);
 	}
 
