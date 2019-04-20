@@ -2,20 +2,20 @@
 <resources>
 	<style name="Theme.DSub.Light" parent="Theme.DSub.Light.Base">
 		<item name="android:windowTranslucentStatus">true</item>
-		<item name="android:timePickerDialogTheme">@style/LightTimePickerDialogTheme</item>
+		<item name="android:timePickerDialogTheme">@style/Theme.DSub.Light.TimePickerDialog</item>
 	</style>
 
 	<style name="Theme.DSub.Dark" parent="Theme.DSub.Dark.Base">
 		<item name="android:windowTranslucentStatus">true</item>
-        <item name="android:timePickerDialogTheme">@style/DarkTimePickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/Theme.DSub.Dark.TimePickerDialog</item>
 	</style>
 	<style name="Theme.DSub.Black" parent="Theme.DSub.Black.Base">
 		<item name="android:windowTranslucentStatus">true</item>
-		<item name="android:timePickerDialogTheme">@style/BlackTimePickerDialogTheme</item>
+		<item name="android:timePickerDialogTheme">@style/Theme.DSub.Black.TimePickerDialog</item>
 	</style>
 	<style name="Theme.DSub.Holo" parent="Theme.DSub.Holo.Base">
 		<item name="android:windowTranslucentStatus">true</item>
-		<item name="android:timePickerDialogTheme">@style/HoloTimePickerDialogTheme</item>
+		<item name="android:timePickerDialogTheme">@style/Theme.DSub.Holo.TimePickerDialog</item>
 	</style>
 
 	<style name="Theme.DSub.Light.No_Color" parent="Theme.DSub.Light.No_Color.Base">
@@ -35,19 +35,19 @@
 		<item name="android:statusBarColor">@android:color/black</item>
 	</style>
 
-	<style name="LightTimePickerDialogTheme" parent="Theme.DSub.Light.Base">
+	<style name="Theme.DSub.Light.TimePickerDialog" parent="Theme.DSub.Light.Base">
 		<item name="android:timePickerStyle">@style/TimePickerDialogStyle</item>
 		<item name="android:windowIsFloating">true</item>
 	</style>
-	<style name="DarkTimePickerDialogTheme" parent="Theme.DSub.Dark.Base">
+	<style name="Theme.DSub.Dark.TimePickerDialog" parent="Theme.DSub.Dark.Base">
 		<item name="android:timePickerStyle">@style/TimePickerDialogStyle</item>
 		<item name="android:windowIsFloating">true</item>
 	</style>
-	<style name="BlackTimePickerDialogTheme" parent="Theme.DSub.Black.Base">
+	<style name="Theme.DSub.Black.TimePickerDialog" parent="Theme.DSub.Black.Base">
 		<item name="android:timePickerStyle">@style/TimePickerDialogStyle</item>
 		<item name="android:windowIsFloating">true</item>
 	</style>
-	<style name="HoloTimePickerDialogTheme" parent="Theme.DSub.Holo.Base">
+	<style name="Theme.DSub.Holo.TimePickerDialog" parent="Theme.DSub.Holo.Base">
 		<item name="android:timePickerStyle">@style/TimePickerDialogStyle</item>
 		<item name="android:windowIsFloating">true</item>
 	</style>
