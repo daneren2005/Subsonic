@@ -34,6 +34,7 @@ import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -282,24 +283,33 @@ public class DSubWidgetProvider extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.appwidget_coverart, pendingIntent);
         views.setOnClickPendingIntent(R.id.appwidget_top, pendingIntent);
-        
+
         // Emulate media button clicks.
         intent = new Intent("DSub.PLAY_PAUSE");
         intent.setComponent(new ComponentName(context, DownloadService.class));
 		intent.setAction(DownloadService.CMD_TOGGLEPAUSE);
-        pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        if (Build.VERSION.SDK_INT >= 26)
+            pendingIntent = PendingIntent.getForegroundService(context, 0, intent, 0);
+        else
+            pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_play, pendingIntent);
 
         intent = new Intent("DSub.NEXT");  // Use a unique action name to ensure a different PendingIntent to be created.
         intent.setComponent(new ComponentName(context, DownloadService.class));
 		intent.setAction(DownloadService.CMD_NEXT);
-        pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        if (Build.VERSION.SDK_INT >= 26)
+            pendingIntent = PendingIntent.getForegroundService(context, 0, intent, 0);
+        else
+            pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_next, pendingIntent);
-        
+
         intent = new Intent("DSub.PREVIOUS");  // Use a unique action name to ensure a different PendingIntent to be created.
         intent.setComponent(new ComponentName(context, DownloadService.class));
 		intent.setAction(DownloadService.CMD_PREVIOUS);
-        pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        if (Build.VERSION.SDK_INT >= 26)
+            pendingIntent = PendingIntent.getForegroundService(context, 0, intent, 0);
+        else
+            pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
     }
 }
