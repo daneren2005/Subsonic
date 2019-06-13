@@ -465,11 +465,14 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		} else {
 			menuInflater.inflate(R.menu.nowplaying, menu);
 		}
-		if(downloadService != null && downloadService.getSleepTimer()) {
-			int timeRemaining = downloadService.getSleepTimeRemaining();
+		if (downloadService != null) {
 			timerMenu = menu.findItem(R.id.menu_toggle_timer);
-			if(timeRemaining > 1){
-				timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+			if (downloadService.getSleepTimer()) {
+				int timeRemaining = downloadService.getSleepTimeRemaining();
+				if (timeRemaining > 1)
+					timerMenu.setTitle(context.getResources().getString(R.string.download_stop_time_remaining, Util.formatDuration(timeRemaining)));
+			} else if (downloadService.getSleepTimerEndOfTrack()) {
+				timerMenu.setTitle(R.string.download_stop_at_end_of_track);
 			} else {
 				timerMenu.setTitle(R.string.menu_set_timer);
 			}
@@ -689,9 +692,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				UpdateHelper.setRating(context, song.getSong());
 				return true;
 			case R.id.menu_toggle_timer:
-				if(getDownloadService().getSleepTimer()) {
+				if(getDownloadService().getSleepTimer() || getDownloadService().getSleepTimerEndOfTrack()) {
 					getDownloadService().stopSleepTimer();
-					context.supportInvalidateOptionsMenu();
+					context.invalidateOptionsMenu();
 				} else {
 					startTimerDialog();
 				}
@@ -936,13 +939,10 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 							case 2: startTimer(900000); break;
 							case 3: startTimer(1800000); break;
 							case 4: startTimer(3600000); break;
-							case 5: startTimer((progressBar.getMax() - progressBar.getProgress()));
-								// This tends to overrun slightly into the next song if the current song is playing
-								// since starting the timer takes several milliseconds.  There should probably be
-								// a check at the beginning of playing the next song to stop playing instead.
-								break;
+							case 5: getDownloadService().setSleepTimerEndOfTrack(); break;
 							case 6: startCustomTimerDialog();
 						}
+						context.invalidateOptionsMenu();
 					}
 				}).create();
 
@@ -973,6 +973,8 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 							// Start timer
 							// length is in milliseconds so multiply (minutes * 60 seconds * 1000 milliseconds)
 							startTimer(length * 60000);
+
+							context.invalidateOptionsMenu();
 						}
 					},
 				0, 5, true);
@@ -985,7 +987,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	protected void startTimer(int length) {
 		getDownloadService().setSleepTimerDuration(length);
 		getDownloadService().startSleepTimer();
-		context.supportInvalidateOptionsMenu();
 	}
 
 	private void toggleFullscreenAlbumArt() {
@@ -1418,6 +1419,9 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				startButton.setVisibility(View.VISIBLE);
 				break;
 		}
+
+		// Reset options menu if sleep timer finished so text updates next time it's opened
+		context.invalidateOptionsMenu();
 	}
 
 	@Override
