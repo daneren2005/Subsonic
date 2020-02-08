@@ -380,11 +380,18 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 					footer += "\nLogs: " + logcat;
 					footer += "\nBuild Number: " + packageInfo.versionCode;
 
-					Intent email = new Intent(Intent.ACTION_SENDTO,
-						Uri.fromParts("mailto", "dsub.android@gmail.com", null));
-					email.putExtra(Intent.EXTRA_SUBJECT, "DSub " + packageInfo.versionName + " Error Logs");
-					email.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
-					startActivity(email);
+
+					Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
+					selectorIntent.setData(Uri.parse("mailto:"));
+
+					final Intent emailIntent = new Intent(Intent.ACTION_SEND);
+					emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"dsub.android@gmail.com"});
+					emailIntent.putExtra(Intent.EXTRA_SUBJECT, "DSub " + packageInfo.versionName + " Error Logs");
+					emailIntent.putExtra(Intent.EXTRA_TEXT, "Describe the problem here\n\n\n" + footer);
+					emailIntent.setSelector( selectorIntent );
+
+					startActivity(Intent.createChooser(emailIntent, "Send log..."));
+
 				}
 			}.execute();
 		} catch(Exception e) {}
