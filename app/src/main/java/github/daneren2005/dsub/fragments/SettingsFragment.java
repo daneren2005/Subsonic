@@ -803,9 +803,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						try {
 							String url = (String) value;
 							new URL(url);
-							if (url.contains(" ") || url.contains("@")) {
-								throw new Exception();
-							}
 						} catch (Exception x) {
 							new ErrorDialog(context, R.string.settings_invalid_url, false);
 							return false;
@@ -824,9 +821,6 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 							}
 
 							new URL(url);
-							if (url.contains(" ") || url.contains("@")) {
-								throw new Exception();
-							}
 						} catch (Exception x) {
 							new ErrorDialog(context, R.string.settings_invalid_url, false);
 							return false;
