@@ -94,6 +94,8 @@ public final class Constants {
     public static final String PREFERENCES_KEY_MAX_BITRATE_MOBILE = "maxBitrateMobile";
 	public static final String PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI = "maxVideoBitrateWifi";
     public static final String PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE = "maxVideoBitrateMobile";
+	public static final String PREFERENCES_KEY_TRANSCODE_AUDIO = "transcodeAudio";
+	public static final String PREFERENCES_KEY_AUDIO_TRANSCODE_FORMAT = "audioTranscodeFormat";
 	public static final String PREFERENCES_KEY_NETWORK_TIMEOUT = "networkTimeout";
     public static final String PREFERENCES_KEY_CACHE_SIZE = "cacheSize";
     public static final String PREFERENCES_KEY_CACHE_LOCATION = "cacheLocation";

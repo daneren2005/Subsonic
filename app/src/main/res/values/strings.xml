@@ -348,6 +348,16 @@
     <string name="settings.wifi_required_summary">Only stream media if connected to Wi-Fi</string>
     <string name="settings.local_network_required_title">Don\'t stream when roaming</string>
     <string name="settings.local_network_required_summary">Don\'t stream media while roaming</string>
+	<string name="settings.transcode_audio_title">Transcode Audio</string>
+    <string name="settings.transcode_audio_summary">Request server to transcode audio into different format</string>
+	<string name="settings.audio_transcode_format">Transcode Audio Format</string>
+	<string name="settings.audio_transcode_format_raw">raw</string>
+	<string name="settings.audio_transcode_format_opus">opus</string>
+	<string name="settings.audio_transcode_format_ogg">ogg</string>
+	<string name="settings.audio_transcode_format_aac">aac</string>
+	<string name="settings.audio_transcode_format_mp3">mp3</string>
+	<string name="settings.audio_transcode_format_m4a">m4a</string>
+	<string name="settings.audio_transcode_format_flac">flac</string>
 	<string name="settings.network_timeout_title">Network Timeout</string>
 	<string name="settings.network_timeout_10000">10 seconds</string>
 	<string name="settings.network_timeout_15000">15 seconds</string>

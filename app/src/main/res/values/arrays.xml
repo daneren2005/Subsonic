@@ -129,6 +129,26 @@
 		<item>@string/settings.max_video_bitrate_5000</item>
 		<item>@string/settings.max_bitrate_unlimited</item>
 	</string-array>
+
+	<string-array name="audioTranscodeFormatValues">
+		<item>raw</item>
+		<item>opus</item>
+		<item>ogg</item>
+		<item>aac</item>
+		<item>mp3</item>
+		<item>m4a</item>
+		<item>flac</item>
+	</string-array>
+
+	<string-array name="audioTranscodeFormatNames">
+		<item>@string/settings.audio_transcode_format_raw</item>
+		<item>@string/settings.audio_transcode_format_opus</item>
+		<item>@string/settings.audio_transcode_format_ogg</item>
+		<item>@string/settings.audio_transcode_format_aac</item>
+		<item>@string/settings.audio_transcode_format_mp3</item>
+		<item>@string/settings.audio_transcode_format_m4a</item>
+		<item>@string/settings.audio_transcode_format_flac</item>
+	</string-array>
 	
 	<string-array name="networkTimeoutValues">
 		<item>10000</item>
