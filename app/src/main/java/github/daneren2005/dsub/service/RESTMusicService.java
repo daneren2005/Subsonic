@@ -815,7 +815,7 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public HttpURLConnection getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+    public HttpURLConnection getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, String format, SilentBackgroundTask task) throws Exception {
         String url = getRestUrl(context, "stream");
 		List<String> parameterNames = new ArrayList<String>();
 		parameterNames.add("id");
@@ -824,6 +824,11 @@ public class RESTMusicService implements MusicService {
 		List<Object> parameterValues = new ArrayList<>();
 		parameterValues.add(song.getId());
 		parameterValues.add(maxBitrate);
+
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_TRANSCODE_AUDIO, true) && ServerInfo.checkServerVersion(context, "1.9", getInstance(context))) {
+			parameterNames.add("format");
+			parameterValues.add(format);
+		}
 
 		// If video specify what format to download
 		if(song.isVideo()) {
@@ -870,7 +875,7 @@ public class RESTMusicService implements MusicService {
     }
 
 	@Override
-	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
+	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate, String format) throws Exception {
 		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
 		builder.append("&id=").append(song.getId());
 
@@ -879,6 +884,9 @@ public class RESTMusicService implements MusicService {
 			builder.append("&format=raw");
 		} else {
 			builder.append("&maxBitRate=").append(maxBitrate);
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_TRANSCODE_AUDIO, true) && ServerInfo.checkServerVersion(context, "1.9", getInstance(context))) {
+				builder.append("&format=").append(format);
+			}
 		}
 
 		String url = builder.toString();

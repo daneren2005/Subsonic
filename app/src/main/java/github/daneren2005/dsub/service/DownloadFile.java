@@ -55,6 +55,7 @@ public class DownloadFile implements BufferFile {
 	private boolean failedDownload = false;
     private int failed = 0;
     private int bitRate;
+	private String format;
 	private boolean isPlaying = false;
 	private boolean saveWhenDone = false;
 	private boolean completeWhenDone = false;
@@ -66,6 +67,7 @@ public class DownloadFile implements BufferFile {
         this.context = context;
         this.song = song;
         this.save = save;
+		format = getTranscodeFormat();	//must come before saveFile gets created
         saveFile = FileUtil.getSongFile(context, song);
         bitRate = getActualBitrate();
         partialFile = new File(saveFile.getParent(), FileUtil.getBaseName(saveFile.getName()) +
@@ -114,6 +116,14 @@ public class DownloadFile implements BufferFile {
 		}
 
 		return br;
+	}
+
+	public String getTranscodeFormat() {
+		String TranscodeFormat = Util.getTranscodeFormat(context);
+		if (TranscodeFormat != null || !(TranscodeFormat.equals("raw"))) {
+				song.setTranscodedSuffix(TranscodeFormat);
+			}
+		return TranscodeFormat;
 	}
 	
 	public Long getContentLength() {
@@ -459,7 +469,7 @@ public class DownloadFile implements BufferFile {
 				}
 				if(compare) {
 					// Attempt partial HTTP GET, appending to the file if it exists.
-					HttpURLConnection connection = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, DownloadTask.this);
+					HttpURLConnection connection = musicService.getDownloadInputStream(context, song, partialFile.length(), bitRate, format, DownloadTask.this);
 					long contentLength = connection.getContentLength();
 					if(contentLength > 0) {
 						Log.i(TAG, "Content Length: " + contentLength);
