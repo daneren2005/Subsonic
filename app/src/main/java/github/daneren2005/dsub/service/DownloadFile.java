@@ -120,7 +120,7 @@ public class DownloadFile implements BufferFile {
 
 	public String getTranscodeFormat() {
 		String TranscodeFormat = Util.getTranscodeFormat(context);
-		if (TranscodeFormat != null || !(TranscodeFormat.equals("raw"))) {
+		if (TranscodeFormat != null || !("raw".equals(TranscodeFormat))) {
 				song.setTranscodedSuffix(TranscodeFormat);
 			}
 		return TranscodeFormat;
