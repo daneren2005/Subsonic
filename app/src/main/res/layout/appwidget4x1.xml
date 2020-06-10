@@ -87,14 +87,14 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 style="@style/NotificationButton"
-                android:src="@drawable/media_backward_dark" />
+                android:src="@drawable/widget_media_backward" />
 
             <ImageButton
                 android:id="@+id/control_play"
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:src="@drawable/media_start_dark"
+                android:src="@drawable/widget_media_start"
 				style="@style/NotificationButton" />
 
             <ImageButton
@@ -102,7 +102,7 @@
                 android:layout_width="0dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:src="@drawable/media_forward_dark"
+                android:src="@drawable/widget_media_forward"
 				style="@style/NotificationButton" />
         </LinearLayout>
     </LinearLayout>

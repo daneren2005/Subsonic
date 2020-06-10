@@ -52,7 +52,7 @@
 								<ImageButton
 									android:id="@+id/download_rating_bad"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_rating_bad_dark"/>
+									android:src="@drawable/ic_action_rating_bad"/>
 
 								<ImageButton
 									android:id="@+id/download_star"
@@ -62,17 +62,17 @@
 								<ImageButton
 									android:id="@+id/download_playback_speed"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_playback_speed_dark"/>
+									android:src="@drawable/ic_action_playback_speed"/>
 
 								<ImageButton
 									android:id="@+id/download_bookmark"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_menu_bookmark_dark"/>
+									android:src="@drawable/ic_menu_bookmark"/>
 
 								<ImageButton
 									android:id="@+id/download_rating_good"
 									style="@style/DownloadActionImageButton"
-									android:src="@drawable/ic_action_rating_good_dark"/>
+									android:src="@drawable/ic_action_rating_good"/>
 						</LinearLayout>
 					</FrameLayout>
 				</FrameLayout>
