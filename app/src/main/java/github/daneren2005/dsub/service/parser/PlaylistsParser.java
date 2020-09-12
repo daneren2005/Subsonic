@@ -19,13 +19,17 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
+import android.util.Log;
 
 import github.daneren2005.dsub.domain.Playlist;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.Util;
+
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,8 +57,8 @@ public class PlaylistsParser extends AbstractParser {
 					String comment = get("comment");
 					String songCount = get("songCount");
 					String pub = get("public");
-					String created = get("created");
-					String changed = get("changed");
+					Date created = Util.parseDate(context, get("created"));
+					Date changed = Util.parseDate(context, get("changed"));
 					Integer duration = getInteger("duration");
                     result.add(new Playlist(id, name, owner, comment, songCount, pub, created, changed, duration));
                 } else if ("error".equals(tag)) {

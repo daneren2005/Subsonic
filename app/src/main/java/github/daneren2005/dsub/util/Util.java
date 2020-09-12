@@ -865,12 +865,9 @@ public final class Util {
         return builder.toString();
     }
 
-	public static String formatDate(Context context, String dateString) {
-		return formatDate(context, dateString, true);
-	}
-	public static String formatDate(Context context, String dateString, boolean includeTime) {
+    public static Date parseDate(Context context, String dateString) {
 		if(dateString == null) {
-			return "";
+			return null;
 		}
 
 		try {
@@ -881,11 +878,21 @@ public final class Util {
 				dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 			}
 
-			return formatDate(dateFormat.parse(dateString), includeTime);
+			return dateFormat.parse(dateString);
 		} catch(ParseException e) {
 			Log.e(TAG, "Failed to parse date string", e);
-			return dateString;
+			return null;
 		}
+	}
+	public static String formatDate(Context context, String dateString) {
+		return formatDate(context, dateString, true);
+	}
+	public static String formatDate(Context context, String dateString, boolean includeTime) {
+		if(dateString == null) {
+			return "";
+		}
+
+		return formatDate(parseDate(context, dateString), includeTime);
 	}
 	public static String formatDate(Date date) {
 		return formatDate(date, true);
