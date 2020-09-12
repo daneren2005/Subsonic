@@ -67,7 +67,7 @@ public class CacheLocationPreference extends EditTextPreference {
 			Button externalLocation = (Button) cacheButtonsWrapper.findViewById(R.id.location_external);
 
 			File[] dirs;
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
 				dirs = context.getExternalMediaDirs();
 			} else {
 				dirs = ContextCompat.getExternalFilesDirs(context, null);

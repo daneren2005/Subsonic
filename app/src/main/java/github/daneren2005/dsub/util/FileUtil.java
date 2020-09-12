@@ -453,7 +453,7 @@ public class FileUtil {
     public static File getDefaultMusicDirectory(Context context) {
 		if(DEFAULT_MUSIC_DIR == null) {
 			File[] dirs;
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
 				dirs = context.getExternalMediaDirs();
 			} else {
 				dirs = ContextCompat.getExternalFilesDirs(context, null);
