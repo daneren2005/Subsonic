@@ -321,9 +321,11 @@ public class DownloadFile implements BufferFile {
 				saveWhenDone = false;
 			} else if(completeWhenDone && !isPlaying) {
 				if(save) {
+					deleteFromStore();
 					Util.renameFile(partialFile, saveFile);
                     saveToStore();
 				} else {
+					deleteFromStore();
 					Util.renameFile(partialFile, completeFile);
 					saveToStore();
 				}
@@ -337,6 +339,7 @@ public class DownloadFile implements BufferFile {
 	}
 	public void renamePartial() {
 		try {
+			deleteFromStore();
 			Util.renameFile(partialFile, completeFile);
 			saveToStore();
 		} catch(IOException ex) {
@@ -348,10 +351,12 @@ public class DownloadFile implements BufferFile {
 	}
 	
 	private void deleteFromStore() {
-		try {
-			mediaStoreService.deleteFromMediaStore(this);
-		} catch(Exception e) {
-			Log.w(TAG, "Failed to remove from store", e);
+		if(!Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HIDE_MEDIA, false)) {
+			try {
+				mediaStoreService.deleteFromMediaStore(this);
+			} catch (Exception e) {
+				Log.w(TAG, "Failed to remove from store", e);
+			}
 		}
 	}
 	private void saveToStore() {
@@ -490,6 +495,7 @@ public class DownloadFile implements BufferFile {
 				if(isPlaying) {
 					completeWhenDone = true;
 				} else {
+					deleteFromStore();
 					if(save) {
 						Util.renameFile(partialFile, saveFile);
 					} else {
