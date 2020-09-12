@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.5.0" versioncode="203" releasedate="09/12/2020">
+		<change>Fix saving files being broken on Android 11+</change>
+		<change>Upgrade to Android 8 target level again</change>
+		<change>Fix playlist created date showing UTC time</change>
+		<change>Encrypt passwords saved locally</change>
+	</release>
 	<release version="5.4.4" versioncode="201" releasedate="09/27/2018">
 		<change>Reverted back to target SDK 23 to fix service crashes</change>
 	</release>
