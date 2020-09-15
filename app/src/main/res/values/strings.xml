@@ -495,6 +495,8 @@
 	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 try turning this off</string>
     <string name="settings.rewind_interval">Rewind Interval</string>
     <string name="settings.fastforward_interval">Fast Forward Interval</string>
+	<string name="settings.media_style_notification">Native Android media notification (5.0+)</string>
+	<string name="settings.media_style_notification_summary">Show playing notifications as native media style notifications (Android Lollipop+ only)</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>

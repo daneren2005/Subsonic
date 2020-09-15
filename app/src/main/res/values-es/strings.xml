@@ -403,6 +403,8 @@
 	<string name="settings.replay_gain_type.track">Tags de pistas</string>
 	<string name="settings.open_to_tab">Abrir en pestaña</string>
 	<string name="settings.open_to_tab_summary">Abrir directamente a esta pestaña</string>
+	<string name="settings.media_style_notification">Notificaciones nativas multimedia de Android (5.0+)</string>
+	<string name="settings.media_style_notification_summary">Mostrar las notificaciones de reproducción como notificaciones de estilo multimedia nativas (solo en Android Lollipop y superior)</string>
 
 	<string name="share.expires">Expira: %s</string>
 	<string name="share.expires_never">Nunca expira</string>
