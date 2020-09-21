@@ -12,6 +12,7 @@ android {
 		setProperty("archivesBaseName", "DSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
 		vectorDrawables.useSupportLibrary = true
+		resValue 'string', 'account_type.subsonic', applicationId + ".subsonic"
 	}
 	buildTypes {
 		release {
