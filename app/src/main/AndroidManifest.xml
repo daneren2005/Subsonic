@@ -89,10 +89,10 @@
 			</intent-filter>
 		</activity>
 
-        <service android:name=".service.DownloadService"
+        <service android:name="github.daneren2005.dsub.service.DownloadService"
                  android:label="DSub Playback Service"/>
 
-		<service android:name=".service.AutoMediaBrowserService"
+		<service android:name="github.daneren2005.dsub.service.AutoMediaBrowserService"
 				 android:exported="true">
 
 			<intent-filter>
