@@ -223,10 +223,10 @@ public final class Constants {
 	// Account prefs
 	public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
 	public static final String SYNC_ACCOUNT_TYPE = BuildConfig.APPLICATION_ID + ".subsonic";
-	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "github.daneren2005.dsub.playlists.provider";
-	public static final String SYNC_ACCOUNT_PODCAST_AUTHORITY = "github.daneren2005.dsub.podcasts.provider";
-	public static final String SYNC_ACCOUNT_STARRED_AUTHORITY = "github.daneren2005.dsub.starred.provider";
-	public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = "github.daneren2005.dsub.mostrecent.provider";
+	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = BuildConfig.APPLICATION_ID + ".playlists.provider";
+	public static final String SYNC_ACCOUNT_PODCAST_AUTHORITY = BuildConfig.APPLICATION_ID + ".podcasts.provider";
+	public static final String SYNC_ACCOUNT_STARRED_AUTHORITY = BuildConfig.APPLICATION_ID + ".starred.provider";
+	public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = BuildConfig.APPLICATION_ID + ".mostrecent.provider";
 
 	public static final String TASKER_EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
 
