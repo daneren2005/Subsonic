@@ -1519,12 +1519,14 @@ public class DownloadService extends Service {
 			Util.requestAudioFocus(this, audioManager);
 		}
 
+		SharedPreferences prefs = Util.getPreferences(this);
+		boolean usingMediaStyleNotification = prefs.getBoolean(Constants.PREFERENCES_KEY_MEDIA_STYLE_NOTIFICATION, true) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+
 		if (show) {
-			Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong(), usingMediaStyleNotification);
 		} else if (pause) {
-			SharedPreferences prefs = Util.getPreferences(this);
-			if(prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
-				Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			if (prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+				Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong(), usingMediaStyleNotification);
 			} else {
 				Notifications.hidePlayingNotification(this, this, handler);
 			}

@@ -46,6 +46,12 @@
 			android:key="headsUpNotification"
 			android:defaultValue="false"/>
 
+		<CheckBoxPreference
+			android:title="@string/settings.media_style_notification"
+			android:summary="@string/settings.media_style_notification_summary"
+			android:key="mediaStyleNotification"
+			android:defaultValue="true"/>
+
 		<ListPreference
 			android:title="@string/settings.song_press_action"
 			android:key="songPressAction"
