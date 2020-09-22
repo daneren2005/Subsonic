@@ -11,6 +11,7 @@ android {
 		versionName '5.5.0'
 		setProperty("archivesBaseName", "DSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
+		vectorDrawables.useSupportLibrary = true
 	}
 	buildTypes {
 		release {
