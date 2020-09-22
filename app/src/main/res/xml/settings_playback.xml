@@ -50,7 +50,7 @@
 			android:title="@string/settings.media_style_notification"
 			android:summary="@string/settings.media_style_notification_summary"
 			android:key="mediaStyleNotification"
-			android:defaultValue="false"/>
+			android:defaultValue="true"/>
 
 		<ListPreference
 			android:title="@string/settings.song_press_action"

@@ -1520,7 +1520,7 @@ public class DownloadService extends Service {
 		}
 
 		SharedPreferences prefs = Util.getPreferences(this);
-		boolean usingMediaStyleNotification = prefs.getBoolean(Constants.PREFERENCES_KEY_MEDIA_STYLE_NOTIFICATION, false) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+		boolean usingMediaStyleNotification = prefs.getBoolean(Constants.PREFERENCES_KEY_MEDIA_STYLE_NOTIFICATION, true) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
 
 		if (show) {
 			Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong(), usingMediaStyleNotification);
