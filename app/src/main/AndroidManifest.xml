@@ -24,6 +24,7 @@
 	<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
@@ -39,7 +40,8 @@
     	android:backupAgent="github.daneren2005.dsub.util.SettingsBackupAgent"
     	android:icon="@drawable/launch"
     	android:theme="@style/Theme.DSub.Light"
-		android:largeHeap="true">
+		android:largeHeap="true"
+		android:usesCleartextTraffic="true">
     	
         <uses-library android:name="android.test.runner" />
 
