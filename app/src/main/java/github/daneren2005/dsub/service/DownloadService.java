@@ -310,7 +310,9 @@ public class DownloadService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		lifecycleSupport.onStart(intent);
-		if(Build.VERSION.SDK_INT >= 26 && !this.isForeground()) {
+
+		String action = intent.getAction();
+		if(Build.VERSION.SDK_INT >= 26 && !this.isForeground() && !"KEYCODE_MEDIA_START".equals(action)) {
 			Notifications.shutGoogleUpNotification(this);
 		}
 		return START_NOT_STICKY;
