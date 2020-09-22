@@ -14,3 +14,4 @@ proguard_logs/
 /build/
 local.properties
 *Thumbs.db
+app/google/release
