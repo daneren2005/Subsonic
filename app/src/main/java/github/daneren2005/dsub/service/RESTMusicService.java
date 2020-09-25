@@ -1911,11 +1911,16 @@ public class RESTMusicService implements MusicService {
 
 		SharedPreferences prefs = Util.getPreferences(context);
 		int instance = getInstance(context);
-		String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
-		String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
-		if (prefs.getBoolean(Constants.PREFERENCES_KEY_ENCRYPTED_PASSWORD + instance, false)) password = KeyStoreUtil.decrypt(password);
-		String encoded = Base64.encodeToString((username + ":" + password).getBytes("UTF-8"), Base64.NO_WRAP);;
-		connection.setRequestProperty("Authorization", "Basic " + encoded);
+		boolean authHeader = prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance, true);
+		if(authHeader) {
+			String username = prefs.getString(Constants.PREFERENCES_KEY_USERNAME + instance, null);
+			String password = prefs.getString(Constants.PREFERENCES_KEY_PASSWORD + instance, null);
+			if (prefs.getBoolean(Constants.PREFERENCES_KEY_ENCRYPTED_PASSWORD + instance, false)) {
+				password = KeyStoreUtil.decrypt(password);
+			}
+			String encoded = Base64.encodeToString((username + ":" + password).getBytes("UTF-8"), Base64.NO_WRAP);
+			connection.setRequestProperty("Authorization", "Basic " + encoded);
+		}
 
 		// Force the connection to initiate
 		if(connection.getResponseCode() >= 500) {

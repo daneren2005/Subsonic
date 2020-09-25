@@ -575,6 +575,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverSyncPreference.setSummary(R.string.settings_server_sync_summary);
 		serverSyncPreference.setTitle(R.string.settings_server_sync);
 
+		final CheckBoxPreference serverAuthHeaderPreference = new CheckBoxPreference(context);
+		serverAuthHeaderPreference.setKey(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance);
+		serverAuthHeaderPreference.setChecked(Util.isAuthHeaderEnabled(context, instance));
+		serverAuthHeaderPreference.setSummary(R.string.settings_server_authheaders_summary);
+		serverAuthHeaderPreference.setTitle(R.string.settings_server_authheaders);
+
 		final Preference serverOpenBrowser = new Preference(context);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
 		serverOpenBrowser.setPersistent(false);
@@ -649,6 +655,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverTagPreference);
 		screen.addPreference(serverSyncPreference);
+		screen.addPreference(serverAuthHeaderPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
 		screen.addPreference(serverRemoveServerPreference);
