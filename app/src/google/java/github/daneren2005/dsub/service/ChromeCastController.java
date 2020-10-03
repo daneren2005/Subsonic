@@ -49,6 +49,8 @@ import github.daneren2005.serverproxy.FileProxy;
 import github.daneren2005.serverproxy.ServerProxy;
 import github.daneren2005.serverproxy.WebProxy;
 
+import static github.daneren2005.dsub.util.compat.GoogleCompat.castApplicationId;
+
 /**
  * Created by owner on 2/9/14.
  */
@@ -421,14 +423,14 @@ public class ChromeCastController extends RemoteController {
 
 		void launchApplication() {
 			try {
-				Cast.CastApi.launchApplication(apiClient, EnvironmentVariables.CAST_APPLICATION_ID, false).setResultCallback(resultCallback);
+				Cast.CastApi.launchApplication(apiClient, castApplicationId(), false).setResultCallback(resultCallback);
 			} catch (Exception e) {
 				Log.e(TAG, "Failed to launch application", e);
 			}
 		}
 		void reconnectApplication() {
 			try {
-				Cast.CastApi.joinApplication(apiClient, EnvironmentVariables.CAST_APPLICATION_ID, sessionId).setResultCallback(resultCallback);
+				Cast.CastApi.joinApplication(apiClient, castApplicationId(), sessionId).setResultCallback(resultCallback);
 			} catch (Exception e) {
 				Log.e(TAG, "Failed to reconnect application", e);
 			}
