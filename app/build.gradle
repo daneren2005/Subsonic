@@ -6,9 +6,9 @@ android {
 	defaultConfig {
 		applicationId "github.daneren2005.dsub"
 		minSdkVersion 15
-		targetSdkVersion 26
-		versionCode 203
-		versionName '5.5.0'
+		targetSdkVersion 28
+		versionCode 204
+		versionName '5.5.1'
 		setProperty("archivesBaseName", "DSub $versionName")
 		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv"
 		vectorDrawables.useSupportLibrary = true
