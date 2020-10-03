@@ -284,6 +284,8 @@
 	<string name="settings.server_open_browser">Open in browser</string>
 	<string name="settings.server_sync_summary">Whether or not syncing is enabled for this server</string>
 	<string name="settings.server_sync">Sync Enabled</string>
+	<string name="settings.server_authheaders_summary">If this is enabled the request headers will include Authorization: Basic</string>
+	<string name="settings.server_authheaders">Authorization Basic headers</string>
     <string name="settings.cache_title">Music cache</string>
     <string name="settings.preload_wifi">Songs to preload (Wifi)</string>
 	<string name="settings.preload_mobile">Songs to preload (Mobile)</string>

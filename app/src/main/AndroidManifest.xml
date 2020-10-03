@@ -91,10 +91,10 @@
 			</intent-filter>
 		</activity>
 
-        <service android:name=".service.DownloadService"
+        <service android:name="github.daneren2005.dsub.service.DownloadService"
                  android:label="DSub Playback Service"/>
 
-		<service android:name=".service.AutoMediaBrowserService"
+		<service android:name="github.daneren2005.dsub.service.AutoMediaBrowserService"
 				 android:exported="true">
 
 			<intent-filter>
@@ -216,24 +216,24 @@
 		</receiver>
 
         <provider android:name="github.daneren2005.dsub.provider.DSubSearchProvider"
-                  android:authorities="github.daneren2005.dsub.provider.DSubSearchProvider"/>
+                  android:authorities="@string/provider.search"/>
 		<provider android:name="github.daneren2005.dsub.provider.PlaylistStubProvider"
-			android:authorities="github.daneren2005.dsub.playlists.provider"
+			android:authorities="@string/provider.playlist"
 			android:label="@string/button_bar.playlists"
 			android:exported="false"
 			android:syncable="true"/>
 		<provider android:name="github.daneren2005.dsub.provider.PodcastStubProvider"
-			android:authorities="github.daneren2005.dsub.podcasts.provider"
+			android:authorities="@string/provider.podcast"
 			android:label="@string/button_bar.podcasts"
 			android:exported="false"
 			android:syncable="true"/>
 		<provider android:name="github.daneren2005.dsub.provider.StarredStubProvider"
-				  android:authorities="github.daneren2005.dsub.starred.provider"
+				  android:authorities="@string/provider.starred"
 				  android:label="@string/main.albums_starred"
 				  android:exported="false"
 				  android:syncable="true"/>
 		<provider android:name="github.daneren2005.dsub.provider.MostRecentStubProvider"
-				  android:authorities="github.daneren2005.dsub.mostrecent.provider"
+				  android:authorities="@string/provider.recently_added"
 				  android:label="@string/main.albums_newest"
 				  android:exported="false"
 				  android:syncable="true"/>
