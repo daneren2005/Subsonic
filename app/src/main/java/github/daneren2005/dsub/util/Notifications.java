@@ -91,9 +91,29 @@ public final class Notifications {
 				mediaStyle.setShowActionsInCompactView(0, 2, 4);
 			}
 
+			String title = song.getTitle();
+			String artist = song.getArtist();
+			String album = song.getAlbum();
+
 			NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "now-playing-channel")
-					.setSmallIcon(R.drawable.stat_notify_playing)
-					.setStyle(mediaStyle);
+				.setSmallIcon(R.drawable.stat_notify_playing)
+				.setContentTitle(title)
+				.setContentText(artist + " - " + album)
+				.setStyle(mediaStyle);
+
+			// Set the album art.
+			try {
+				ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(context);
+				if(imageLoader != null) {
+					Bitmap bitmap = imageLoader.getCachedImage(context, song, false);
+
+					if(bitmap != null) {
+						notificationBuilder.setLargeIcon(bitmap);
+					}
+				}
+			} catch (Exception x) {
+				Log.w(TAG, "Failed to get notification cover art", x);
+			}
 
 			PendingIntent prevIntent = null;
 			PendingIntent nextIntent = null;
