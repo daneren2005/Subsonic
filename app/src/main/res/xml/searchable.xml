@@ -4,7 +4,7 @@
             android:hint="@string/search.title"
             android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
             android:voiceLanguageModel="web_search"
-            android:searchSuggestAuthority="github.daneren2005.dsub.provider.DSubSearchProvider"
+            android:searchSuggestAuthority="@string/provider.search"
             android:searchSuggestSelection=" unused"
 			android:searchSuggestIntentAction="android.intent.action.VIEW">
 </searchable>
