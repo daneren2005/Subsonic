@@ -141,7 +141,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 			addOnlineProviders();
 		}
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED, true)) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && Util.getPreferences(downloadService).getBoolean(Constants.PREFERENCES_KEY_DLNA_CASTING_ENABLED, false)) {
 			addDLNAProvider();
 		}
 	}

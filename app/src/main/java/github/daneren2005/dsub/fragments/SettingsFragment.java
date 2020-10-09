@@ -214,7 +214,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			if(downloadService != null) {
 				MediaRouteManager mediaRouter = downloadService.getMediaRouter();
 
-				Boolean enabled = sharedPreferences.getBoolean(key, true);
+				Boolean enabled = sharedPreferences.getBoolean(key, false);
 				if (enabled) {
 					mediaRouter.addDLNAProvider();
 				} else {
