@@ -198,6 +198,15 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 					finish();
 				}
 			}
+			case PERMISSIONS_REQUEST_LOCATION: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+				} else {
+					Util.toast(this, R.string.permission_location_failed);
+					finish();
+				}
+			}
 		}
 	}
 
