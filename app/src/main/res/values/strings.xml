@@ -669,7 +669,7 @@
 	<string name="details.home_page">Home Page</string>
 
 	<string name="permission.external_storage.failed">DSub cannot function without the ability to write to storage</string>
-	<string name="permission.location.failed">This apps uses location data to get the WIFI SSID when the app is in use.  No location data is collected.</string>
+	<string name="permission.location.failed">This apps uses location data to get the WIFI SSID to match against your local network settings. To get rid of this message, change the local network SSID to blank.</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>
