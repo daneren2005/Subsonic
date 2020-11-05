@@ -99,6 +99,7 @@ public final class Notifications {
 				.setSmallIcon(R.drawable.stat_notify_playing)
 				.setContentTitle(title)
 				.setContentText(artist + " - " + album)
+				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setStyle(mediaStyle);
 
 			// Set the album art.
