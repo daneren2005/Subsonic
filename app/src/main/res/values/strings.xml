@@ -284,6 +284,8 @@
 	<string name="settings.server_open_browser">Open in browser</string>
 	<string name="settings.server_sync_summary">Whether or not syncing is enabled for this server</string>
 	<string name="settings.server_sync">Sync Enabled</string>
+	<string name="settings.server_authheaders_summary">If this is enabled the request headers will include Authorization: Basic</string>
+	<string name="settings.server_authheaders">Authorization Basic headers</string>
     <string name="settings.cache_title">Music cache</string>
     <string name="settings.preload_wifi">Songs to preload (Wifi)</string>
 	<string name="settings.preload_mobile">Songs to preload (Mobile)</string>
@@ -495,6 +497,8 @@
 	<string name="settings.casting.dlna_casting_enabled.summary">If you are having battery drain problems on Android 7.0 try turning this off</string>
     <string name="settings.rewind_interval">Rewind Interval</string>
     <string name="settings.fastforward_interval">Fast Forward Interval</string>
+	<string name="settings.media_style_notification">Native Android media notification (5.0+)</string>
+	<string name="settings.media_style_notification_summary">Show playing notifications as native media style notifications (Android Lollipop+ only)</string>
 
 	<string name="shuffle.title">Shuffle By</string>
 	<string name="shuffle.startYear">Start Year:</string>
@@ -665,6 +669,7 @@
 	<string name="details.home_page">Home Page</string>
 
 	<string name="permission.external_storage.failed">DSub cannot function without the ability to write to storage</string>
+	<string name="permission.location.failed">This apps uses location data to get the WIFI SSID to match against your local network settings. To get rid of this message, change the local network SSID to blank.</string>
 
     <plurals name="select_album_n_songs">
         <item quantity="zero">No songs</item>

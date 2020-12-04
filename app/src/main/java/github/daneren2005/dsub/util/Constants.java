@@ -18,6 +18,8 @@
  */
 package github.daneren2005.dsub.util;
 
+import github.daneren2005.dsub.BuildConfig;
+
 /**
  * @author Sindre Mehus
  * @version $Id$
@@ -85,6 +87,7 @@ public final class Constants {
     public static final String PREFERENCES_KEY_MUSIC_FOLDER_ID = "musicFolderId";
     public static final String PREFERENCES_KEY_USERNAME = "username";
     public static final String PREFERENCES_KEY_PASSWORD = "password";
+	public static final String PREFERENCES_KEY_SERVER_AUTHHEADER = "authHeader";
     public static final String PREFERENCES_KEY_ENCRYPTED_PASSWORD = "encryptedPassword";
     public static final String PREFERENCES_KEY_INSTALL_TIME = "installTime";
     public static final String PREFERENCES_KEY_THEME = "theme";
@@ -117,6 +120,7 @@ public final class Constants {
 	public static final String PREFERENCES_EQUALIZER_ON = "equalizerOn";
 	public static final String PREFERENCES_EQUALIZER_SETTINGS = "equalizerSettings";
 	public static final String PREFERENCES_KEY_PERSISTENT_NOTIFICATION = "persistentNotification";
+	public static final String PREFERENCES_KEY_MEDIA_STYLE_NOTIFICATION = "mediaStyleNotification";
 	public static final String PREFERENCES_KEY_GAPLESS_PLAYBACK = "gaplessPlayback";
 	public static final String PREFERENCES_KEY_REMOVE_PLAYED = "removePlayed";
 	public static final String PREFERENCES_KEY_KEEP_PLAYED_CNT = "keepPlayedCount";
@@ -212,17 +216,17 @@ public final class Constants {
 	public static final String FRAGMENT_POSITION = "fragmentPosition";
 
     // Name of the preferences file.
-    public static final String PREFERENCES_FILE_NAME = "github.daneren2005.dsub_preferences";
-	public static final String OFFLINE_SYNC_NAME = "github.daneren2005.dsub.offline";
+    public static final String PREFERENCES_FILE_NAME = BuildConfig.APPLICATION_ID + "_preferences";
+	public static final String OFFLINE_SYNC_NAME = BuildConfig.APPLICATION_ID + ".offline";
 	public static final String OFFLINE_SYNC_DEFAULT = "syncDefaults";
 
 	// Account prefs
 	public static final String SYNC_ACCOUNT_NAME = "Subsonic Account";
-	public static final String SYNC_ACCOUNT_TYPE = "subsonic.org";
-	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = "github.daneren2005.dsub.playlists.provider";
-	public static final String SYNC_ACCOUNT_PODCAST_AUTHORITY = "github.daneren2005.dsub.podcasts.provider";
-	public static final String SYNC_ACCOUNT_STARRED_AUTHORITY = "github.daneren2005.dsub.starred.provider";
-	public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = "github.daneren2005.dsub.mostrecent.provider";
+	public static final String SYNC_ACCOUNT_TYPE = BuildConfig.APPLICATION_ID + ".subsonic";
+	public static final String SYNC_ACCOUNT_PLAYLIST_AUTHORITY = BuildConfig.APPLICATION_ID + ".playlists.provider";
+	public static final String SYNC_ACCOUNT_PODCAST_AUTHORITY = BuildConfig.APPLICATION_ID + ".podcasts.provider";
+	public static final String SYNC_ACCOUNT_STARRED_AUTHORITY = BuildConfig.APPLICATION_ID + ".starred.provider";
+	public static final String SYNC_ACCOUNT_MOST_RECENT_AUTHORITY = BuildConfig.APPLICATION_ID + ".mostrecent.provider";
 
 	public static final String TASKER_EXTRA_BUNDLE = "com.twofortyfouram.locale.intent.extra.BUNDLE";
 

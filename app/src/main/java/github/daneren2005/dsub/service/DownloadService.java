@@ -310,7 +310,9 @@ public class DownloadService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		lifecycleSupport.onStart(intent);
-		if(Build.VERSION.SDK_INT >= 26 && !this.isForeground()) {
+
+		String action = intent.getAction();
+		if(Build.VERSION.SDK_INT >= 26 && !this.isForeground() && !"KEYCODE_MEDIA_START".equals(action)) {
 			Notifications.shutGoogleUpNotification(this);
 		}
 		return START_NOT_STICKY;
@@ -1081,7 +1083,7 @@ public class DownloadService extends Service {
 
 	public synchronized List<DownloadFile> getRecentDownloads() {
 		int from = Math.max(currentPlayingIndex - 10, 0);
-		int songsToKeep = Math.max(Util.getPreloadCount(this), 20);
+		int songsToKeep = Math.min(Math.max(Util.getPreloadCount(this), 20), downloadList.size());
 		int to = Math.min(currentPlayingIndex + songsToKeep, Math.max(downloadList.size() - 1, 0));
 		List<DownloadFile> temp = downloadList.subList(from, to);
 		temp.addAll(backgroundDownloadList);
@@ -1519,12 +1521,14 @@ public class DownloadService extends Service {
 			Util.requestAudioFocus(this, audioManager);
 		}
 
+		SharedPreferences prefs = Util.getPreferences(this);
+		boolean usingMediaStyleNotification = prefs.getBoolean(Constants.PREFERENCES_KEY_MEDIA_STYLE_NOTIFICATION, true) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+
 		if (show) {
-			Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong(), usingMediaStyleNotification);
 		} else if (pause) {
-			SharedPreferences prefs = Util.getPreferences(this);
-			if(prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
-				Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong());
+			if (prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, false)) {
+				Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong(), usingMediaStyleNotification);
 			} else {
 				Notifications.hidePlayingNotification(this, this, handler);
 			}

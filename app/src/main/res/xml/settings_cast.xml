@@ -33,9 +33,9 @@
 		android:title="@string/settings.other_title">
 
 		<CheckBoxPreference
-			android:title="@string/settings.casting.dlna_casting_enabled"
-			android:summary="@string/settings.casting.dlna_casting_enabled.summary"
+			android:defaultValue="false"
 			android:key="dlnaCastingEnabled"
-			android:defaultValue="true"/>
+			android:summary="@string/settings.casting.dlna_casting_enabled.summary"
+			android:title="@string/settings.casting.dlna_casting_enabled" />
 	</PreferenceCategory>
 </PreferenceScreen>

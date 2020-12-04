@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-	android:contentAuthority="github.daneren2005.dsub.podcasts.provider"
-	android:accountType="subsonic.org"
+	android:contentAuthority="@string/provider.podcast"
+	android:accountType="@string/account_type.subsonic"
 	android:userVisible="true"
 	android:supportsUploading="false"
 	android:allowParallelSyncs="false"

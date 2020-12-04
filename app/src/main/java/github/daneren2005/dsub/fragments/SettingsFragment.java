@@ -214,7 +214,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			if(downloadService != null) {
 				MediaRouteManager mediaRouter = downloadService.getMediaRouter();
 
-				Boolean enabled = sharedPreferences.getBoolean(key, true);
+				Boolean enabled = sharedPreferences.getBoolean(key, false);
 				if (enabled) {
 					mediaRouter.addDLNAProvider();
 				} else {
@@ -528,6 +528,10 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				super.onAddEditTextToDialogView(dialogView, editText);
 				ViewGroup root = (ViewGroup) ((ViewGroup) dialogView).getChildAt(0);
 
+				if(internalSSID == "<unknown ssid>" && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+					ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, SubsonicActivity.PERMISSIONS_REQUEST_LOCATION);
+				}
+
 				Button defaultButton = new Button(getContext());
 				defaultButton.setText(internalSSIDDisplay);
 				defaultButton.setOnClickListener(new View.OnClickListener() {
@@ -574,6 +578,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverSyncPreference.setChecked(Util.isSyncEnabled(context, instance));
 		serverSyncPreference.setSummary(R.string.settings_server_sync_summary);
 		serverSyncPreference.setTitle(R.string.settings_server_sync);
+
+		final CheckBoxPreference serverAuthHeaderPreference = new CheckBoxPreference(context);
+		serverAuthHeaderPreference.setKey(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance);
+		serverAuthHeaderPreference.setChecked(Util.isAuthHeaderEnabled(context, instance));
+		serverAuthHeaderPreference.setSummary(R.string.settings_server_authheaders_summary);
+		serverAuthHeaderPreference.setTitle(R.string.settings_server_authheaders);
 
 		final Preference serverOpenBrowser = new Preference(context);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
@@ -649,6 +659,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverPasswordPreference);
 		screen.addPreference(serverTagPreference);
 		screen.addPreference(serverSyncPreference);
+		screen.addPreference(serverAuthHeaderPreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
 		screen.addPreference(serverRemoveServerPreference);
@@ -803,7 +814,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 						try {
 							String url = (String) value;
 							new URL(url);
-							if (url.contains(" ") || url.contains("@")) {
+							if (url.contains(" ")) {
 								throw new Exception();
 							}
 						} catch (Exception x) {
@@ -824,7 +835,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 							}
 
 							new URL(url);
-							if (url.contains(" ") || url.contains("@")) {
+							if (url.contains(" ")) {
 								throw new Exception();
 							}
 						} catch (Exception x) {

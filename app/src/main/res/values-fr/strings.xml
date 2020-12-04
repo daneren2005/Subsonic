@@ -8,7 +8,7 @@
     <string name="common.play_now">Jouer</string>
 	<string name="common.play_shuffled">Jouer au hasard</string>
     <string name="common.play_next">Suivant</string>
-    <string name="common.play_last">Précédent</string>
+    <string name="common.play_last">Jouer en dernier</string>
 	<string name="common.download">Mettre en cache</string>
     <string name="common.pin">Mettre en cache permanent</string>
     <string name="common.delete">Supprimer</string>
