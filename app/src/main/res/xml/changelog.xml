@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.5.2" versioncode="206" releasedate="12/03/2020">
+		<change>Update to Android 10 target level</change>
+		<change>Request location permissions if needed for local network check</change>
+		<change>Show new notification on secure lockscreen</change>
+		<change>Fix fullscreen not being fullscreen after upgrading to Android 9 target level</change>
+	</release>
 	<release version="5.5.1" versioncode="205" releasedate="10/08/2020">
 		<change>Update to Android 9 target level</change>
 		<change>Optionally use system default media style notification (on by default - thanks avm99963)</change>
