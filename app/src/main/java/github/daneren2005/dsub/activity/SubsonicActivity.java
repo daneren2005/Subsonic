@@ -307,6 +307,8 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 	public void setContentView(int viewId) {
 		if(isTv()) {
 			super.setContentView(R.layout.static_drawer_activity);
+		} else if(Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false)) {
+			super.setContentView(R.layout.abstract_fullscreen_activity);
 		} else {
 			super.setContentView(R.layout.abstract_activity);
 		}
