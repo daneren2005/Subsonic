@@ -97,9 +97,14 @@ public class KeyStoreUtil {
             outputStream.write(cipher.doFinal(plainTextString.getBytes(KEYSTORE_BYTE_ENCODING)));
 
             // Encode the return full stream for storage
-            Log.d(TAG, "Password encryption successful");
-            return Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP);
+            String encryptedPassword = Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP);
+            if(decrypt((encryptedPassword)) == null) {
+                Log.e(TAG, "We couldn't decrypt the password we just encypted!");
+                return null;
+            }
 
+            Log.d(TAG, "Password encryption successful");
+            return encryptedPassword;
         } catch (Exception e) {
             Log.w(TAG, "Password encryption failed");
             Log.d(TAG, Log.getStackTraceString(e));
