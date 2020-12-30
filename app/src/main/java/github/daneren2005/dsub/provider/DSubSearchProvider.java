@@ -145,7 +145,7 @@ public class DSubSearchProvider extends ContentProvider {
 			if(obj instanceof Artist) {
 				Artist artist = (Artist) obj;
 				String icon = RESOURCE_PREFIX + R.drawable.ic_action_artist;
-				cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "ar-" + artist.getId(), artist.getName(), icon});
+				cursor.addRow(new Object[]{artist.getId().hashCode(), artist.getName(), null, "dsub-ar-" + artist.getId(), artist.getName(), icon});
 			} else {
 				MusicDirectory.Entry entry = (MusicDirectory.Entry) obj;
 				
@@ -174,7 +174,7 @@ public class DSubSearchProvider extends ContentProvider {
 						artistDisplay = entry.getArtist();
 					}
 
-					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), artistDisplay, "so-" + id, entry.getTitle(), icon});
+					cursor.addRow(new Object[]{entry.getId().hashCode(), entry.getTitle(), artistDisplay, "dsub-so-" + id, entry.getTitle(), icon});
 				}
 			}
 		}

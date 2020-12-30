@@ -68,12 +68,12 @@ public class QueryReceiverActivity extends Activity {
 			Intent intent = new Intent(this, SubsonicFragmentActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra(Constants.INTENT_EXTRA_VIEW_ALBUM, true);
-			if(albumId.indexOf("ar-") == 0) {
+			if(albumId.indexOf("dsub-ar-") == 0) {
 				intent.putExtra(Constants.INTENT_EXTRA_NAME_ARTIST, true);
-				albumId = albumId.replace("ar-", "");
-			} else if(albumId.indexOf("so-") == 0) {
+				albumId = albumId.replace("dsub-ar-", "");
+			} else if(albumId.indexOf("dsub-so-") == 0) {
 				intent.putExtra(Constants.INTENT_EXTRA_SEARCH_SONG, name);
-				albumId = albumId.replace("so-", "");
+				albumId = albumId.replace("dsub-so-", "");
 			}
 			intent.putExtra(Constants.INTENT_EXTRA_NAME_ID, albumId);
 			if (name != null) {
