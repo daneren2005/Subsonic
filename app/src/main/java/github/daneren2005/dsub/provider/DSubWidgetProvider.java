@@ -218,6 +218,19 @@ public class DSubWidgetProvider extends AppWidgetProvider {
             views.setImageViewResource(R.id.control_play, R.drawable.media_start_dark);
         }
 
+        // Hide and show correct previous/next and rewind/fast forward buttons
+        if (service != null && service.shouldFastForward()) {
+            views.setViewVisibility(R.id.control_previous, View.GONE);
+            views.setViewVisibility(R.id.control_next, View.GONE);
+            views.setViewVisibility(R.id.control_rewind, View.VISIBLE);
+            views.setViewVisibility(R.id.control_fastforward, View.VISIBLE);
+        } else {
+            views.setViewVisibility(R.id.control_previous, View.VISIBLE);
+            views.setViewVisibility(R.id.control_next, View.VISIBLE);
+            views.setViewVisibility(R.id.control_rewind, View.GONE);
+            views.setViewVisibility(R.id.control_fastforward, View.GONE);
+        }
+
         // Set the cover art
         try {
             boolean large = false;
@@ -311,5 +324,17 @@ public class DSubWidgetProvider extends AppWidgetProvider {
         else
             pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         views.setOnClickPendingIntent(R.id.control_previous, pendingIntent);
+
+        intent = new Intent("DSub.REWIND");  // Use a unique action name to ensure a different PendingIntent to be created.
+        intent.setComponent(new ComponentName(context, DownloadService.class));
+        intent.setAction(DownloadService.CMD_REWIND);
+        pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        views.setOnClickPendingIntent(R.id.control_rewind, pendingIntent);
+
+        intent = new Intent("DSub.FASTFORWARD");  // Use a unique action name to ensure a different PendingIntent to be created.
+        intent.setComponent(new ComponentName(context, DownloadService.class));
+        intent.setAction(DownloadService.CMD_FASTFORWARD);
+        pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        views.setOnClickPendingIntent(R.id.control_fastforward, pendingIntent);
     }
 }

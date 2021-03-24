@@ -89,6 +89,10 @@ public class DownloadServiceLifecycleSupport {
 						downloadService.next();
 					} else if (DownloadService.CMD_PREVIOUS.equals(action)) {
 						downloadService.previous();
+					} else if (DownloadService.CMD_FASTFORWARD.equals(action)) {
+						downloadService.fastForward();
+					} else if (DownloadService.CMD_REWIND.equals(action)) {
+						downloadService.rewind();
 					} else if (DownloadService.CMD_TOGGLEPAUSE.equals(action)) {
 						downloadService.togglePlayPause();
 					} else if (DownloadService.CMD_PAUSE.equals(action)) {
@@ -170,6 +174,8 @@ public class DownloadServiceLifecycleSupport {
 		commandFilter.addAction(DownloadService.CMD_STOP);
 		commandFilter.addAction(DownloadService.CMD_PREVIOUS);
 		commandFilter.addAction(DownloadService.CMD_NEXT);
+		commandFilter.addAction(DownloadService.CMD_REWIND);
+		commandFilter.addAction(DownloadService.CMD_FASTFORWARD);
 		commandFilter.addAction(DownloadService.CANCEL_DOWNLOADS);
 		downloadService.registerReceiver(intentReceiver, commandFilter);
 
@@ -241,6 +247,10 @@ public class DownloadServiceLifecycleSupport {
 						downloadService.next();
 					} else if(DownloadService.CMD_PREVIOUS.equals(action)) {
 						downloadService.previous();
+					} else if(DownloadService.CMD_REWIND.equals(action)) {
+						downloadService.rewind();
+					} else if(DownloadService.CMD_FASTFORWARD.equals(action)) {
+						downloadService.fastForward();
 					} else if(DownloadService.CANCEL_DOWNLOADS.equals(action)) {
 						downloadService.clearBackground();
 					} else if(intent.getExtras() != null) {
