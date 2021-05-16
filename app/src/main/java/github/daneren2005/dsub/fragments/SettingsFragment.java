@@ -528,7 +528,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 				super.onAddEditTextToDialogView(dialogView, editText);
 				ViewGroup root = (ViewGroup) ((ViewGroup) dialogView).getChildAt(0);
 
-				if(internalSSID == "<unknown ssid>" && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+				if("<unknown ssid>".equals(internalSSID) && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 					ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, SubsonicActivity.PERMISSIONS_REQUEST_LOCATION);
 				}
 
