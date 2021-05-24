@@ -29,6 +29,7 @@ import android.media.AudioManager;
 import android.media.RemoteControlClient;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.media.MediaDescriptionCompat;
@@ -39,9 +40,15 @@ import android.support.v7.media.MediaRouter;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.fhucho.android.util.SimpleDiskCache;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.activity.SubsonicActivity;
 import github.daneren2005.dsub.activity.SubsonicFragmentActivity;
@@ -80,6 +87,10 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	protected List<DownloadFile> currentQueue;
 	protected int previousState;
 
+	public RemoteControlClientLP(SimpleDiskCache cache) {
+		super(cache);
+	}
+
 	@Override
 	public void register(Context context, ComponentName mediaButtonReceiverComponent) {
 		downloadService = (DownloadService) context;
@@ -97,7 +108,7 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		mediaSession.setSessionActivity(activityPendingIntent);
 
 		mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
-		mediaSession.setCallback(new EventCallback());
+		mediaSession.setCallback(new EventCallback(cache));
 
 		mediaSession.setPlaybackToLocal(AudioManager.STREAM_MUSIC);
 		mediaSession.setActive(true);
@@ -479,6 +490,12 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 	}
 
 	private class EventCallback extends MediaSessionCompat.Callback {
+		private final SimpleDiskCache cache;
+
+		public EventCallback(SimpleDiskCache cache) {
+			this.cache = cache;
+		}
+
 		@Override
 		public void onPlay() {
 			downloadService.start();
@@ -580,6 +597,9 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		@Override
 		public void onPlayFromMediaId (String mediaId, Bundle extras) {
+
+			extras = get(mediaId, extras);
+
 			if(extras == null) {
 				return;
 			}
@@ -620,6 +640,29 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					playMusicDirectory(entry.getParent(), shuffle, playLast, entry);
 				}
 			}
+		}
+
+		private Bundle get(String mediaId, Bundle extras) {
+			if (extras == null || extras.isEmpty()) {
+				try {
+					SimpleDiskCache.InputStreamEntry entry = cache.getInputStream(mediaId);
+					if (entry != null) {
+						InputStream inputStream = entry.getInputStream();
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						IOUtils.copy(inputStream, baos);
+						baos.flush();
+						baos.close();
+						byte[] data = baos.toByteArray();
+						Parcel parcel = Parcel.obtain();
+						parcel.unmarshall(data, 0, data.length);
+						parcel.setDataPosition(0);
+						return parcel.readBundle();
+					}
+				} catch (IOException e) {
+				}
+			}
+
+			return extras;
 		}
 
 		@Override

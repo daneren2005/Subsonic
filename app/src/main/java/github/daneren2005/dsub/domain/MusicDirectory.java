@@ -20,26 +20,25 @@ package github.daneren2005.dsub.domain;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.io.File;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import github.daneren2005.dsub.service.DownloadService;
@@ -263,6 +262,7 @@ public class MusicDirectory implements Serializable {
 		private int type = 0;
 		private int closeness;
 		private transient Artist linkedArtist;
+		private int albumPos = 0;
 
 		public Entry() {
 
@@ -601,6 +601,14 @@ public class MusicDirectory implements Serializable {
 			this.closeness = closeness;
 		}
 
+		public void setAlbumPos(int albumPos) {
+			this.albumPos = albumPos;
+		}
+
+		public int getAlbumPos() {
+			return albumPos;
+		}
+
 		public boolean isOnlineId(Context context) {
 			try {
 				String cacheLocation = Util.getPreferences(context).getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
@@ -712,7 +720,16 @@ public class MusicDirectory implements Serializable {
 					return 1;
 				}
 			}
-			
+
+			int lhsAPos = lhs.getAlbumPos();
+			int rhsAPos = rhs.getAlbumPos();
+
+			if(lhsAPos < rhsAPos) {
+				return -1;
+			} else if(lhsAPos > rhsAPos) {
+				return 1;
+			}
+
 			Integer lhsTrack = lhs.getTrack();
 			Integer rhsTrack = rhs.getTrack();
 			if(lhsTrack != null && rhsTrack != null && lhsTrack != rhsTrack) {

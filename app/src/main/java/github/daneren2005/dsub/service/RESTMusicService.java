@@ -18,7 +18,18 @@
  */
 package github.daneren2005.dsub.service;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Base64;
+import android.util.Log;
+
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,22 +44,41 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Base64;
-import android.util.Log;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.domain.*;
+import github.daneren2005.dsub.domain.ArtistInfo;
+import github.daneren2005.dsub.domain.ChatMessage;
+import github.daneren2005.dsub.domain.Genre;
+import github.daneren2005.dsub.domain.Indexes;
+import github.daneren2005.dsub.domain.InternetRadioStation;
+import github.daneren2005.dsub.domain.Lyrics;
+import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.MusicFolder;
+import github.daneren2005.dsub.domain.PlayerQueue;
+import github.daneren2005.dsub.domain.Playlist;
+import github.daneren2005.dsub.domain.PodcastChannel;
+import github.daneren2005.dsub.domain.RemoteStatus;
+import github.daneren2005.dsub.domain.SearchCritera;
+import github.daneren2005.dsub.domain.SearchResult;
+import github.daneren2005.dsub.domain.ServerInfo;
+import github.daneren2005.dsub.domain.Share;
+import github.daneren2005.dsub.domain.User;
+import github.daneren2005.dsub.domain.Version;
 import github.daneren2005.dsub.fragments.MainFragment;
-import github.daneren2005.dsub.service.parser.EntryListParser;
 import github.daneren2005.dsub.service.parser.ArtistInfoParser;
 import github.daneren2005.dsub.service.parser.BookmarkParser;
 import github.daneren2005.dsub.service.parser.ChatMessageParser;
+import github.daneren2005.dsub.service.parser.EntryListParser;
 import github.daneren2005.dsub.service.parser.ErrorParser;
 import github.daneren2005.dsub.service.parser.GenreParser;
 import github.daneren2005.dsub.service.parser.IndexesParser;
@@ -72,27 +102,15 @@ import github.daneren2005.dsub.service.parser.StarredListParser;
 import github.daneren2005.dsub.service.parser.TopSongsParser;
 import github.daneren2005.dsub.service.parser.UserParser;
 import github.daneren2005.dsub.service.parser.VideosParser;
-import github.daneren2005.dsub.util.KeyStoreUtil;
-import github.daneren2005.dsub.util.Pair;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.FileUtil;
+import github.daneren2005.dsub.util.KeyStoreUtil;
+import github.daneren2005.dsub.util.Pair;
 import github.daneren2005.dsub.util.ProgressListener;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
 import github.daneren2005.dsub.util.SongDBHandler;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.util.compat.GoogleCompat;
-
-import java.io.*;
-import java.util.Map;
-import java.util.zip.GZIPInputStream;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public class RESTMusicService implements MusicService {
 
@@ -250,21 +268,37 @@ public class RESTMusicService implements MusicService {
 
 		MusicDirectory dir = null;
 		int index, start = 0;
+		int albumPos = 0;
 		while((index = id.indexOf(';', start)) != -1) {
-			MusicDirectory extra = getMusicDirectoryImpl(id.substring(start, index), name, refresh, context, progressListener);
-			if(dir == null) {
-				dir = extra;
-			} else {
-				dir.addChildren(extra.getChildren());
+			try {
+				MusicDirectory extra = getMusicDirectoryImpl(id.substring(start, index), name, refresh, context, progressListener);
+				if(dir == null) {
+					dir = extra;
+				} else {
+					for (MusicDirectory.Entry c :extra.getChildren()){
+						c.setAlbumPos(albumPos);
+					}
+					dir.addChildren(extra.getChildren());
+				}
+			} catch (Exception e) {
+				//lenient
 			}
 
 			start = index + 1;
+			albumPos++;
 		}
-		MusicDirectory extra = getMusicDirectoryImpl(id.substring(start), name, refresh, context, progressListener);
-		if(dir == null) {
-			dir = extra;
-		} else {
-			dir.addChildren(extra.getChildren());
+		try {
+    		MusicDirectory extra = getMusicDirectoryImpl(id.substring(start), name, refresh, context, progressListener);
+            if(dir == null) {
+                dir = extra;
+            } else {
+				for (MusicDirectory.Entry c :extra.getChildren()){
+					c.setAlbumPos(albumPos);
+				}
+                dir.addChildren(extra.getChildren());
+            }
+		} catch (Exception e) {
+			//lenient
 		}
 
 		return dir;

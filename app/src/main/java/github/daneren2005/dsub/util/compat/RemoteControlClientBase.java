@@ -1,30 +1,33 @@
 package github.daneren2005.dsub.util.compat;
 
-import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.DownloadFile;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v7.media.MediaRouter;
 import android.os.Build;
+import android.support.v7.media.MediaRouter;
 
 import java.util.List;
 
+import cz.fhucho.android.util.SimpleDiskCache;
+import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadFile;
+
 public abstract class RemoteControlClientBase {
-	
-	public static RemoteControlClientBase createInstance() {
+
+	protected final SimpleDiskCache cache;
+
+	public static RemoteControlClientBase createInstance(SimpleDiskCache cache) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			return new RemoteControlClientLP();
+			return new RemoteControlClientLP(cache);
 		} else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-			return new RemoteControlClientJB();
+			return new RemoteControlClientJB(cache);
 		} else {
-			return new RemoteControlClientICS();
+			return new RemoteControlClientICS(cache);
 		}
 	}
 	
-	protected RemoteControlClientBase() {
-		// Avoid instantiation
+	protected RemoteControlClientBase(SimpleDiskCache cache) {
+		this.cache = cache;
 	}
 	
 	public abstract void register(final Context context, final ComponentName mediaButtonReceiverComponent);

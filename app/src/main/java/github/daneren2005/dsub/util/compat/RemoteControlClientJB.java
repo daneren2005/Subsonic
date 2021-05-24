@@ -5,10 +5,16 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.media.RemoteControlClient;
 
+import cz.fhucho.android.util.SimpleDiskCache;
 import github.daneren2005.dsub.util.SilentBackgroundTask;
 
 @TargetApi(18)
 public class RemoteControlClientJB extends RemoteControlClientICS {
+
+	public RemoteControlClientJB(SimpleDiskCache cache) {
+		super(cache);
+	}
+
 	@Override
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
 		super.register(context, mediaButtonReceiverComponent);

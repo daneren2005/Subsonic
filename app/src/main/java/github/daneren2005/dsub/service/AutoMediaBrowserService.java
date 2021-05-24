@@ -22,6 +22,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcel;
 import android.support.annotation.Nullable;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
@@ -29,9 +30,12 @@ import android.support.v4.media.MediaDescriptionCompat;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.fhucho.android.util.SimpleDiskCache;
+import github.daneren2005.dsub.DSub;
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.Artist;
 import github.daneren2005.dsub.domain.Indexes;
@@ -61,6 +65,8 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 	private static final String MUSIC_DIRECTORY_PREFIX = "md-";
 	private static final String MUSIC_FOLDER_PREFIX = "mf-";
 	private static final String MUSIC_DIRECTORY_CONTENTS_PREFIX = "mdc-";
+	private static final String ARTIST_CONTENTS_PREFIX = "art-";
+	private static final String ALBUM_CONTENTS_PREFIX = "alb-";
 
 	private DownloadService downloadService;
 	private Handler handler = new Handler();
@@ -91,13 +97,23 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 			String id = parentId.substring(MUSIC_DIRECTORY_PREFIX.length());
 			getPlayOptions(result, id, Constants.INTENT_EXTRA_NAME_ID);
 		} else if(BROWSER_LIBRARY.equals(parentId)) {
-			getLibrary(result);
+			if(Util.isTagBrowsing(downloadService)) {
+				getArtists(result);
+			} else {
+				getLibrary(result);
+			}
 		}  else if(parentId.startsWith(MUSIC_FOLDER_PREFIX)) {
 			String id = parentId.substring(MUSIC_FOLDER_PREFIX.length());
 			getIndexes(result, id);
 		}  else if(parentId.startsWith(MUSIC_DIRECTORY_CONTENTS_PREFIX)) {
 			String id = parentId.substring(MUSIC_DIRECTORY_CONTENTS_PREFIX.length());
 			getMusicDirectory(result, id);
+		}  else if(parentId.startsWith(ARTIST_CONTENTS_PREFIX)) {
+			String id = parentId.substring(ARTIST_CONTENTS_PREFIX.length());
+			getArtist(result, id);
+		} else if(parentId.startsWith(ALBUM_CONTENTS_PREFIX)) {
+			String id = parentId.substring(ALBUM_CONTENTS_PREFIX.length());
+			getAlbum(result, id);
 		} else if(BROWSER_PLAYLISTS.equals(parentId)) {
 			getPlaylists(result);
 		} else if(parentId.startsWith(PLAYLIST_PREFIX)) {
@@ -112,7 +128,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 			getBookmarks(result);
 		} else {
 			// No idea what it is, send empty result
-			result.sendResult(new ArrayList<MediaBrowserCompat.MediaItem>());
+			doSendResult(result,new ArrayList<MediaBrowserCompat.MediaItem>());
 		}
 	}
 
@@ -148,7 +164,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 			mediaItems.add(new MediaBrowserCompat.MediaItem(podcasts.build(), MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
 		}
 
-		result.sendResult(mediaItems);
+		doSendResult(result,mediaItems);
 	}
 
 	private void getAlbumLists(Result<List<MediaBrowserCompat.MediaItem>> result) {
@@ -173,7 +189,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 			mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
 		}
 
-		result.sendResult(mediaItems);
+		doSendResult(result,mediaItems);
 	}
 	private void getAlbumList(final Result<List<MediaBrowserCompat.MediaItem>> result, final int id) {
 		new SilentServiceTask<MusicDirectory>(downloadService) {
@@ -220,7 +236,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 					mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
 				}
 
-				result.sendResult(mediaItems);
+				doSendResult(result,mediaItems);
 			}
 		}.execute();
 
@@ -247,7 +263,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 					mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
 				}
 
-				result.sendResult(mediaItems);
+				doSendResult(result,mediaItems);
 			}
 		}.execute();
 
@@ -294,7 +310,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 					}
 				}
 
-				result.sendResult(mediaItems);
+				doSendResult(result,mediaItems);
 			}
 		}.execute();
 
@@ -312,7 +328,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 			protected void done(MusicDirectory directory) {
 				List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
 
-				addPlayOptions(mediaItems, musicDirectoryId, Constants.INTENT_EXTRA_NAME_ID);
+				addPlayOptions(mediaItems, musicDirectoryId, Constants.INTENT_EXTRA_NAME_ID, directory.getChildren());
 
 				for(Entry entry : directory.getChildren()) {
 					MediaDescriptionCompat description;
@@ -344,7 +360,121 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 						}
 					}
 				}
-				result.sendResult(mediaItems);
+				doSendResult(result,mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getArtists(final Result<List<MediaBrowserCompat.MediaItem>> result) {
+		new SilentServiceTask<Indexes>(downloadService) {
+			@Override
+			protected Indexes doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getIndexes(null, false, downloadService, null);
+			}
+
+			@Override
+			protected void done(Indexes indexes) {
+				List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+
+				// music directories
+				for(Artist artist : indexes.getArtists()) {
+					MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
+							.setTitle(artist.getName())
+							.setMediaId(ARTIST_CONTENTS_PREFIX + artist.getId())
+							.build();
+
+					mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
+				}
+
+				doSendResult(result,mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getAlbum(final Result<List<MediaBrowserCompat.MediaItem>> result, final String musicFolderId) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getAlbum(musicFolderId, "", false, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory songs) {
+				List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+
+				addPlayOptions(mediaItems, musicFolderId, Constants.INTENT_EXTRA_NAME_ID, null);
+
+				// songs
+				for(Entry entry : songs.getSongs()) {
+					try {
+						Bundle extras = new Bundle();
+						extras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, entry.toByteArray());
+						extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+
+						MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
+								.setTitle(entry.getTitle())
+								.setMediaId(entry.getId())
+								.setExtras(extras)
+								.build();
+
+						mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
+					} catch(IOException e) {
+						Log.e(TAG, "Failed to add entry", e);
+					}
+				}
+
+				doSendResult(result,mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getArtist(final Result<List<MediaBrowserCompat.MediaItem>> result, final String musicDirectoryId) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getArtist(musicDirectoryId, "", false, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory directory) {
+				List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+
+				for(Entry entry : directory.getChildren()) {
+					MediaDescriptionCompat description;
+					if (entry.isDirectory()) {
+						// browse deeper
+						description = new MediaDescriptionCompat.Builder()
+								.setTitle(entry.getTitle())
+								.setMediaId(ALBUM_CONTENTS_PREFIX + entry.getId())
+								.build();
+
+						mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
+					} else {
+						try {
+							// mark individual songs as directly playable
+							Bundle extras = new Bundle();
+							extras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, entry.toByteArray());
+							extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+
+							description = new MediaDescriptionCompat.Builder()
+									.setTitle(entry.getTitle())
+									.setMediaId(entry.getId())
+									.setExtras(extras)
+									.build();
+
+							mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
+						} catch (IOException e) {
+							Log.e(TAG, "Failed to add entry", e);
+						}
+					}
+				}
+				doSendResult(result,mediaItems);
 			}
 		}.execute();
 
@@ -371,7 +501,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 					mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
 				}
 
-				result.sendResult(mediaItems);
+				doSendResult(result,mediaItems);
 			}
 		}.execute();
 
@@ -398,7 +528,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 					mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
 				}
 
-				result.sendResult(mediaItems);
+				doSendResult(result,mediaItems);
 			}
 		}.execute();
 
@@ -435,7 +565,7 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 					}
 				}
 
-				result.sendResult(mediaItems);
+				doSendResult(result,mediaItems);
 			}
 		}.execute();
 
@@ -472,16 +602,27 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 					}
 				}
 
-				result.sendResult(mediaItems);
+				doSendResult(result,mediaItems);
 			}
 		}.execute();
 
 		result.detach();
 	}
 
-	private void addPlayOptions(List<MediaBrowserCompat.MediaItem> mediaItems, String id, String idConstant) {
+	private void addPlayOptions(List<MediaBrowserCompat.MediaItem> mediaItems, String id, String idConstant, List<Entry> children) {
 		Bundle playAllExtras = new Bundle();
-		playAllExtras.putString(idConstant, id);
+		if (children == null) {
+			playAllExtras.putString(idConstant, id);
+		} else {
+			StringBuffer sb = new StringBuffer();
+			sb.append(id);
+			for (Entry e : children) {
+				sb.append(';');
+				sb.append(e.getId());
+			}
+
+			playAllExtras.putString(idConstant, sb.toString());
+		}
 
 		MediaDescriptionCompat.Builder playAll = new MediaDescriptionCompat.Builder();
 		playAll.setTitle(downloadService.getString(R.string.menu_play))
@@ -513,10 +654,36 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 	private void getPlayOptions(Result<List<MediaBrowserCompat.MediaItem>> result, String id, String idConstant) {
 		List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
 
-		addPlayOptions(mediaItems, id, idConstant);
+		addPlayOptions(mediaItems, id, idConstant, null);
+
+		doSendResult(result,mediaItems);
+	}
+
+	private void doSendResult(Result<List<MediaBrowserCompat.MediaItem>> result, List<MediaBrowserCompat.MediaItem> mediaItems) {
+		try {
+			SimpleDiskCache cache = getCache();
+			for (MediaBrowserCompat.MediaItem item : mediaItems) {
+				String key = item.getMediaId();
+				Bundle extras = item.getDescription().getExtras();
+
+				if (key != null && extras!=null && !extras.isEmpty()) {
+					Parcel parcel = Parcel.obtain();
+					extras.writeToParcel(parcel, 0);
+					OutputStream outputStream = cache.openStream(key);
+					outputStream.write(parcel.marshall());
+					outputStream.close();
+				}
+			}
+		} catch (IOException e) {
+			Log.e(TAG, "Can't cache extras", e);
+		}
 
 		result.sendResult(mediaItems);
 	}
+
+	private SimpleDiskCache getCache(){
+	    return ((DSub) super.getApplication()).getCache();
+    }
 
 	public void getDownloadService() {
 		if(DownloadService.getInstance() == null) {

@@ -30,49 +30,7 @@ import static github.daneren2005.dsub.domain.PlayerState.STARTED;
 import static github.daneren2005.dsub.domain.PlayerState.STOPPED;
 import static github.daneren2005.dsub.domain.RemoteControlState.LOCAL;
 
-import github.daneren2005.dsub.R;
-import github.daneren2005.dsub.activity.SubsonicActivity;
-import github.daneren2005.dsub.audiofx.AudioEffectsController;
-import github.daneren2005.dsub.audiofx.EqualizerController;
-import github.daneren2005.dsub.domain.Bookmark;
-import github.daneren2005.dsub.domain.InternetRadioStation;
-import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.domain.PlayerState;
-import github.daneren2005.dsub.domain.PodcastEpisode;
-import github.daneren2005.dsub.domain.RemoteControlState;
-import github.daneren2005.dsub.domain.RepeatMode;
-import github.daneren2005.dsub.domain.ServerInfo;
-import github.daneren2005.dsub.receiver.AudioNoisyReceiver;
-import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
-import github.daneren2005.dsub.util.ArtistRadioBuffer;
-import github.daneren2005.dsub.util.ImageLoader;
-import github.daneren2005.dsub.util.Notifications;
-import github.daneren2005.dsub.util.SilentBackgroundTask;
-import github.daneren2005.dsub.util.Constants;
-import github.daneren2005.dsub.util.MediaRouteManager;
-import github.daneren2005.dsub.util.ShufflePlayBuffer;
-import github.daneren2005.dsub.util.SimpleServiceBinder;
-import github.daneren2005.dsub.util.UpdateHelper;
-import github.daneren2005.dsub.util.Util;
-import github.daneren2005.dsub.util.compat.RemoteControlClientBase;
-import github.daneren2005.dsub.util.tags.BastpUtil;
-import github.daneren2005.dsub.view.UpdateView;
-import github.daneren2005.serverproxy.BufferProxy;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
@@ -90,11 +48,53 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.support.v4.util.LruCache;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
-import android.support.v4.util.LruCache;
 import android.view.KeyEvent;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import github.daneren2005.dsub.DSub;
+import github.daneren2005.dsub.R;
+import github.daneren2005.dsub.activity.SubsonicActivity;
+import github.daneren2005.dsub.audiofx.AudioEffectsController;
+import github.daneren2005.dsub.audiofx.EqualizerController;
+import github.daneren2005.dsub.domain.Bookmark;
+import github.daneren2005.dsub.domain.InternetRadioStation;
+import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.domain.PlayerState;
+import github.daneren2005.dsub.domain.PodcastEpisode;
+import github.daneren2005.dsub.domain.RemoteControlState;
+import github.daneren2005.dsub.domain.RepeatMode;
+import github.daneren2005.dsub.domain.ServerInfo;
+import github.daneren2005.dsub.receiver.AudioNoisyReceiver;
+import github.daneren2005.dsub.receiver.MediaButtonIntentReceiver;
+import github.daneren2005.dsub.util.ArtistRadioBuffer;
+import github.daneren2005.dsub.util.Constants;
+import github.daneren2005.dsub.util.ImageLoader;
+import github.daneren2005.dsub.util.MediaRouteManager;
+import github.daneren2005.dsub.util.Notifications;
+import github.daneren2005.dsub.util.ShufflePlayBuffer;
+import github.daneren2005.dsub.util.SilentBackgroundTask;
+import github.daneren2005.dsub.util.SimpleServiceBinder;
+import github.daneren2005.dsub.util.UpdateHelper;
+import github.daneren2005.dsub.util.Util;
+import github.daneren2005.dsub.util.compat.RemoteControlClientBase;
+import github.daneren2005.dsub.util.tags.BastpUtil;
+import github.daneren2005.dsub.view.UpdateView;
+import github.daneren2005.serverproxy.BufferProxy;
 
 /**
  * @author Sindre Mehus
@@ -273,7 +273,7 @@ public class DownloadService extends Service {
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
-			mRemoteControl = RemoteControlClientBase.createInstance();
+			mRemoteControl = RemoteControlClientBase.createInstance(((DSub)getApplication()).getCache());
 			ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 			mRemoteControl.register(this, mediaButtonReceiverComponent);
 		}

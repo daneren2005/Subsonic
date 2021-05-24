@@ -1,9 +1,5 @@
 package github.daneren2005.dsub.util.compat;
 
-import github.daneren2005.dsub.domain.MusicDirectory;
-import github.daneren2005.dsub.service.DownloadFile;
-import github.daneren2005.dsub.service.DownloadService;
-import github.daneren2005.dsub.util.ImageLoader;
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -17,7 +13,12 @@ import android.support.v7.media.MediaRouter;
 
 import java.util.List;
 
+import cz.fhucho.android.util.SimpleDiskCache;
 import github.daneren2005.dsub.activity.SubsonicActivity;
+import github.daneren2005.dsub.domain.MusicDirectory;
+import github.daneren2005.dsub.service.DownloadFile;
+import github.daneren2005.dsub.service.DownloadService;
+import github.daneren2005.dsub.util.ImageLoader;
 
 @TargetApi(14)
 public class RemoteControlClientICS extends RemoteControlClientBase {
@@ -26,7 +27,11 @@ public class RemoteControlClientICS extends RemoteControlClientBase {
 	protected RemoteControlClient mRemoteControl;
 	protected ImageLoader imageLoader;
 	protected DownloadService downloadService;
-	
+
+	public RemoteControlClientICS(SimpleDiskCache cache) {
+		super(cache);
+	}
+
 	public void register(final Context context, final ComponentName mediaButtonReceiverComponent) {
 		downloadService = (DownloadService) context;
 		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
