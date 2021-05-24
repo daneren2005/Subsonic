@@ -61,6 +61,8 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 	private static final String MUSIC_DIRECTORY_PREFIX = "md-";
 	private static final String MUSIC_FOLDER_PREFIX = "mf-";
 	private static final String MUSIC_DIRECTORY_CONTENTS_PREFIX = "mdc-";
+	private static final String ARTIST_CONTENTS_PREFIX = "art-";
+	private static final String ALBUM_CONTENTS_PREFIX = "alb-";
 
 	private DownloadService downloadService;
 	private Handler handler = new Handler();
@@ -91,13 +93,23 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 			String id = parentId.substring(MUSIC_DIRECTORY_PREFIX.length());
 			getPlayOptions(result, id, Constants.INTENT_EXTRA_NAME_ID);
 		} else if(BROWSER_LIBRARY.equals(parentId)) {
-			getLibrary(result);
+			if(Util.isTagBrowsing(downloadService)) {
+				getArtists(result);
+			} else {
+				getLibrary(result);
+			}
 		}  else if(parentId.startsWith(MUSIC_FOLDER_PREFIX)) {
 			String id = parentId.substring(MUSIC_FOLDER_PREFIX.length());
 			getIndexes(result, id);
 		}  else if(parentId.startsWith(MUSIC_DIRECTORY_CONTENTS_PREFIX)) {
 			String id = parentId.substring(MUSIC_DIRECTORY_CONTENTS_PREFIX.length());
 			getMusicDirectory(result, id);
+		}  else if(parentId.startsWith(ARTIST_CONTENTS_PREFIX)) {
+			String id = parentId.substring(ARTIST_CONTENTS_PREFIX.length());
+			getArtist(result, id);
+		} else if(parentId.startsWith(ALBUM_CONTENTS_PREFIX)) {
+			String id = parentId.substring(ALBUM_CONTENTS_PREFIX.length());
+			getAlbum(result, id);
 		} else if(BROWSER_PLAYLISTS.equals(parentId)) {
 			getPlaylists(result);
 		} else if(parentId.startsWith(PLAYLIST_PREFIX)) {
@@ -328,6 +340,120 @@ public class AutoMediaBrowserService extends MediaBrowserServiceCompat {
 						try {
 							// mark individual songs as directly playable
 							entry.setBookmark(null);    // don't resume from a bookmark in a browse listing
+							Bundle extras = new Bundle();
+							extras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, entry.toByteArray());
+							extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+
+							description = new MediaDescriptionCompat.Builder()
+									.setTitle(entry.getTitle())
+									.setMediaId(entry.getId())
+									.setExtras(extras)
+									.build();
+
+							mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
+						} catch (IOException e) {
+							Log.e(TAG, "Failed to add entry", e);
+						}
+					}
+				}
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getArtists(final Result<List<MediaBrowserCompat.MediaItem>> result) {
+		new SilentServiceTask<Indexes>(downloadService) {
+			@Override
+			protected Indexes doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getIndexes(null, false, downloadService, null);
+			}
+
+			@Override
+			protected void done(Indexes indexes) {
+				List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+
+				// music directories
+				for(Artist artist : indexes.getArtists()) {
+					MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
+							.setTitle(artist.getName())
+							.setMediaId(ARTIST_CONTENTS_PREFIX + artist.getId())
+							.build();
+
+					mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getAlbum(final Result<List<MediaBrowserCompat.MediaItem>> result, final String musicFolderId) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getAlbum(musicFolderId, "", false, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory songs) {
+				List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+
+				addPlayOptions(mediaItems, musicFolderId, Constants.INTENT_EXTRA_NAME_ID);
+
+				// songs
+				for(Entry entry : songs.getSongs()) {
+					try {
+						Bundle extras = new Bundle();
+						extras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, entry.toByteArray());
+						extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
+
+						MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
+								.setTitle(entry.getTitle())
+								.setMediaId(entry.getId())
+								.setExtras(extras)
+								.build();
+
+						mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE));
+					} catch(IOException e) {
+						Log.e(TAG, "Failed to add entry", e);
+					}
+				}
+
+				result.sendResult(mediaItems);
+			}
+		}.execute();
+
+		result.detach();
+	}
+
+	private void getArtist(final Result<List<MediaBrowserCompat.MediaItem>> result, final String musicDirectoryId) {
+		new SilentServiceTask<MusicDirectory>(downloadService) {
+			@Override
+			protected MusicDirectory doInBackground(MusicService musicService) throws Throwable {
+				return musicService.getArtist(musicDirectoryId, "", false, downloadService, null);
+			}
+
+			@Override
+			protected void done(MusicDirectory directory) {
+				List<MediaBrowserCompat.MediaItem> mediaItems = new ArrayList<>();
+
+				for(Entry entry : directory.getChildren()) {
+					MediaDescriptionCompat description;
+					if (entry.isDirectory()) {
+						// browse deeper
+						description = new MediaDescriptionCompat.Builder()
+								.setTitle(entry.getTitle())
+								.setMediaId(ALBUM_CONTENTS_PREFIX + entry.getId())
+								.build();
+
+						mediaItems.add(new MediaBrowserCompat.MediaItem(description, MediaBrowserCompat.MediaItem.FLAG_BROWSABLE));
+					} else {
+						try {
+							// mark individual songs as directly playable
 							Bundle extras = new Bundle();
 							extras.putByteArray(Constants.INTENT_EXTRA_ENTRY_BYTES, entry.toByteArray());
 							extras.putString(Constants.INTENT_EXTRA_NAME_CHILD_ID, entry.getId());
