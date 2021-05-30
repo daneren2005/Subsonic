@@ -17,4 +17,9 @@
 	<style name="NotificationDivider">
 		<item name="android:background">@drawable/notification_divider</item>
 	</style>
+
+	<style name="TimePickerDialogStyle" parent="Theme.AppCompat.Dialog">
+		<item name="android:timePickerMode">spinner</item>
+	</style>
+
 </resources>

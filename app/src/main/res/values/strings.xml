@@ -206,6 +206,7 @@
     <string name="download.jukebox_not_authorized">Remote control is not allowed. Please enable jukebox mode in <b>Users &gt; Settings</b> on your Subsonic server.</string>
 	<string name="download.start_timer">Start Timer</string>
 	<string name="download.stop_time_remaining">Stop in %1$s</string>
+	<string name="download.stop_at_end_of_track">Stop at end of track</string>
 	<string name="download.need_download">Video needs to be downloaded first</string>
 	<string name="download.no_streaming_player">No player can play this stream</string>
 	<string name="download.playing_out_of">Playing: %1$d/%2$d</string>
