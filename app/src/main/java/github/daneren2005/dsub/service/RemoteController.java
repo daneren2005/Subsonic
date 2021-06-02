@@ -164,7 +164,7 @@ public abstract class RemoteController {
 			if(song.isVideo()) {
 				url = musicService.getHlsUrl(song.getId(), downloadFile.getBitRate(), downloadService);
 			} else {
-				url = musicService.getMusicUrl(downloadService, song, downloadFile.getBitRate());
+				url = musicService.getMusicUrl(downloadService, song, downloadFile.getBitRate(), downloadFile.getTranscodeFormat());
 			}
 
 			// If proxy is going, it is a WebProxy

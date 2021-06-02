@@ -226,12 +226,12 @@ public class OfflineMusicService implements MusicService {
     }
 
 	@Override
-	public HttpURLConnection getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
+	public HttpURLConnection getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, String format, SilentBackgroundTask task) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 
 	@Override
-	public String getMusicUrl(Context context, Entry song, int maxBitrate) throws Exception {
+	public String getMusicUrl(Context context, Entry song, int maxBitrate, String format) throws Exception {
 		throw new OfflineException(ERRORMSG);
 	}
 

@@ -103,9 +103,9 @@ public interface MusicService {
 
     Bitmap getCoverArt(Context context, MusicDirectory.Entry entry, int size, ProgressListener progressListener, SilentBackgroundTask task) throws Exception;
 
-    HttpURLConnection getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception;
+    HttpURLConnection getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, String format, SilentBackgroundTask task) throws Exception;
 
-	String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception;
+	String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate, String format) throws Exception;
 
 	String getVideoUrl(int maxBitrate, Context context, String id);
 	

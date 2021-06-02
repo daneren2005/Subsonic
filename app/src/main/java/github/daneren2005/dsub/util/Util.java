@@ -288,6 +288,11 @@ public final class Util {
         SharedPreferences prefs = getPreferences(context);
         return Integer.parseInt(prefs.getString(wifi ? Constants.PREFERENCES_KEY_MAX_BITRATE_WIFI : Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE, "0"));
     }
+
+    public static String getTranscodeFormat(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getString(Constants.PREFERENCES_KEY_AUDIO_TRANSCODE_FORMAT, null);
+	}
 	
 	public static int getMaxVideoBitrate(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

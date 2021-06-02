@@ -748,13 +748,13 @@ public class CachedMusicService implements MusicService {
     }
 
     @Override
-    public HttpURLConnection getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
-        return musicService.getDownloadInputStream(context, song, offset, maxBitrate, task);
+    public HttpURLConnection getDownloadInputStream(Context context, Entry song, long offset, int maxBitrate, String format, SilentBackgroundTask task) throws Exception {
+        return musicService.getDownloadInputStream(context, song, offset, maxBitrate, format, task);
     }
 
 	@Override
-	public String getMusicUrl(Context context, Entry song, int maxBitrate) throws Exception {
-		return musicService.getMusicUrl(context, song, maxBitrate);
+	public String getMusicUrl(Context context, Entry song, int maxBitrate, String format) throws Exception {
+		return musicService.getMusicUrl(context, song, maxBitrate, format);
 	}
 
 	@Override

@@ -75,6 +75,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	private ListPreference maxBitrateMobile;
 	private ListPreference maxVideoBitrateWifi;
 	private ListPreference maxVideoBitrateMobile;
+	private ListPreference audioTranscodeFormat;
 	private ListPreference networkTimeout;
 	private CacheLocationPreference cacheLocation;
 	private ListPreference preloadCountWifi;
@@ -241,6 +242,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		maxBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_BITRATE_MOBILE);
 		maxVideoBitrateWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_WIFI);
 		maxVideoBitrateMobile = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_MAX_VIDEO_BITRATE_MOBILE);
+		audioTranscodeFormat = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_AUDIO_TRANSCODE_FORMAT);
 		networkTimeout = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_NETWORK_TIMEOUT);
 		cacheLocation = (CacheLocationPreference) this.findPreference(Constants.PREFERENCES_KEY_CACHE_LOCATION);
 		preloadCountWifi = (ListPreference) this.findPreference(Constants.PREFERENCES_KEY_PRELOAD_COUNT_WIFI);
@@ -398,6 +400,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 			maxBitrateMobile.setSummary(maxBitrateMobile.getEntry());
 			maxVideoBitrateWifi.setSummary(maxVideoBitrateWifi.getEntry());
 			maxVideoBitrateMobile.setSummary(maxVideoBitrateMobile.getEntry());
+			audioTranscodeFormat.setSummary(audioTranscodeFormat.getEntry());
 			networkTimeout.setSummary(networkTimeout.getEntry());
 			cacheLocation.setSummary(cacheLocation.getText());
 			preloadCountWifi.setSummary(preloadCountWifi.getEntry());
