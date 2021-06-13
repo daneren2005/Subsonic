@@ -62,17 +62,14 @@ import github.daneren2005.dsub.util.Util;
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class RemoteControlClientLP extends RemoteControlClientBase {
 	private static final String TAG = RemoteControlClientLP.class.getSimpleName();
+	private static final String CUSTOM_ACTION_REWIND = "github.daneren2005.dsub.REWIND";
+	private static final String CUSTOM_ACTION_FAST_FORWARD = "github.daneren2005.dsub.FAST_FORWARD";
 	private static final String CUSTOM_ACTION_THUMBS_UP = "github.daneren2005.dsub.THUMBS_UP";
 	private static final String CUSTOM_ACTION_THUMBS_DOWN = "github.daneren2005.dsub.THUMBS_DOWN";
 	private static final String CUSTOM_ACTION_STAR = "github.daneren2005.dsub.STAR";
 	// Copied from MediaControlConstants so I did not have to include the entire Wear SDK just for these constant
 	private static final String SHOW_ON_WEAR = "android.support.wearable.media.extra.CUSTOM_ACTION_SHOW_ON_WEAR";
-	private static final String WEAR_RESERVE_SKIP_TO_NEXT = "android.support.wearable.media.extra.RESERVE_SLOT_SKIP_TO_NEXT";
-	private static final String WEAR_RESERVE_SKIP_TO_PREVIOUS = "android.support.wearable.media.extra.RESERVE_SLOT_SKIP_TO_PREVIOUS";
 	private static final String WEAR_BACKGROUND_THEME = "android.support.wearable.media.extra.BACKGROUND_COLOR_FROM_THEME";
-	// These constants don't seem to exist anywhere in the SDK.  Grabbed from Google's sample media player app
-	private static final String AUTO_RESERVE_SKIP_TO_NEXT = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_NEXT";
-	private static final String AUTO_RESERVE_SKIP_TO_PREVIOUS = "com.google.android.gms.car.media.ALWAYS_RESERVE_SPACE_FOR.ACTION_SKIP_TO_PREVIOUS";
 
 	protected MediaSessionCompat mediaSession;
 	protected DownloadService downloadService;
@@ -104,10 +101,6 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 
 		Bundle sessionExtras = new Bundle();
 		sessionExtras.putBoolean(WEAR_BACKGROUND_THEME, true);
-		sessionExtras.putBoolean(WEAR_RESERVE_SKIP_TO_PREVIOUS, true);
-		sessionExtras.putBoolean(WEAR_RESERVE_SKIP_TO_NEXT, true);
-		sessionExtras.putBoolean(AUTO_RESERVE_SKIP_TO_PREVIOUS, true);
-		sessionExtras.putBoolean(AUTO_RESERVE_SKIP_TO_NEXT, true);
 		mediaSession.setExtras(sessionExtras);
 
 		imageLoader = SubsonicActivity.getStaticImageLoader(context);
@@ -149,13 +142,11 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		builder.setState(newState, position, 1.0f);
 		DownloadFile downloadFile = downloadService.getCurrentPlaying();
 		Entry entry = null;
-		boolean isSong = true;
 		if(downloadFile != null) {
 			entry = downloadFile.getSong();
-			isSong = entry.isSong();
 		}
 
-		builder.setActions(getPlaybackActions(isSong, index, queueSize));
+		builder.setActions(getPlaybackActions(downloadService.shouldFastForward()));
 
 		if(entry != null) {
 			addCustomActions(entry, builder);
@@ -245,20 +236,13 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		return mediaSession;
 	}
 
-	protected long getPlaybackActions(boolean isSong, int currentIndex, int size) {
+	protected long getPlaybackActions(boolean shouldFastForward) {
 		long actions = PlaybackStateCompat.ACTION_PLAY |
 				PlaybackStateCompat.ACTION_PAUSE |
 				PlaybackStateCompat.ACTION_SEEK_TO |
 				PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM;
 
-		if(isSong) {
-			if (currentIndex > 0) {
-				actions |= PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
-			}
-			if (currentIndex < size - 1) {
-				actions |= PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
-			}
-		} else {
+		if(!shouldFastForward) {
 			actions |= PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
 			actions |= PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
 		}
@@ -285,7 +269,19 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 					currentSong.isStarred() ? R.drawable.ic_toggle_star : R.drawable.ic_toggle_star_outline)
 				.setExtras(showOnWearExtras).build();
 
-		builder.addCustomAction(thumbsDown).addCustomAction(star).addCustomAction(thumbsUp);
+		if (downloadService.shouldFastForward()) {
+			PlaybackStateCompat.CustomAction rewind = new PlaybackStateCompat.CustomAction.Builder(CUSTOM_ACTION_REWIND,
+					downloadService.getString(R.string.download_playback_rewind), R.drawable.media_rewind_dark)
+					.setExtras(showOnWearExtras).build();
+
+			PlaybackStateCompat.CustomAction fastForward = new PlaybackStateCompat.CustomAction.Builder(CUSTOM_ACTION_FAST_FORWARD,
+					downloadService.getString(R.string.download_playback_fast_forward), R.drawable.media_fastforward_dark)
+					.setExtras(showOnWearExtras).build();
+
+			builder.addCustomAction(rewind).addCustomAction(fastForward).addCustomAction(thumbsDown).addCustomAction(star).addCustomAction(thumbsUp);
+		} else {
+			builder.addCustomAction(thumbsDown).addCustomAction(star).addCustomAction(thumbsUp);
+		}
 	}
 
 	private void searchPlaylist(final String name) {
@@ -626,6 +622,10 @@ public class RemoteControlClientLP extends RemoteControlClientBase {
 		public void onCustomAction(String action, Bundle extras) {
 			if(CUSTOM_ACTION_THUMBS_UP.equals(action)) {
 				downloadService.toggleRating(5);
+			} else if(CUSTOM_ACTION_REWIND.equals(action)) {
+				downloadService.rewind();
+			} else if(CUSTOM_ACTION_FAST_FORWARD.equals(action)) {
+				downloadService.fastForward();
 			} else if(CUSTOM_ACTION_THUMBS_DOWN.equals(action)) {
 				downloadService.toggleRating(1);
 			} else if(CUSTOM_ACTION_STAR.equals(action)) {
