@@ -21,7 +21,7 @@
             android:layout_centerVertical="true"
             />
 
-	<github.daneren2005.dsub.view.AutoRepeatButton
+	<ImageButton
 		style="@style/PlaybackControl.Large"
 		android:id="@+id/download_rewind"
 		android:src="?attr/media_button_rewind"
@@ -52,7 +52,7 @@
             android:layout_centerInParent="true"
             />
 
-	<github.daneren2005.dsub.view.AutoRepeatButton
+	<ImageButton
 		style="@style/PlaybackControl.Large"
 		android:id="@+id/download_fastforward"
 		android:src="?attr/media_button_fastforward"
