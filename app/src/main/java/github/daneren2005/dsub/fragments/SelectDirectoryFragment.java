@@ -1,6 +1,7 @@
 package github.daneren2005.dsub.fragments;
 
 import android.annotation.TargetApi;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -139,7 +140,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		Bundle args = getArguments();
 		if(args != null) {
 			id = args.getString(Constants.INTENT_EXTRA_NAME_ID);
@@ -172,35 +173,87 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				albums = (List<Entry>) args.getSerializable(Constants.FRAGMENT_LIST2);
 
 				if(albums == null) {
-					albums = new ArrayList<Entry>();
+					albums = new ArrayList<>();
 				}
 			}
 		}
 
 		rootView = inflater.inflate(R.layout.abstract_recycler_fragment, container, false);
 
-		refreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+		refreshLayout = rootView.findViewById(R.id.refresh_layout);
 		refreshLayout.setOnRefreshListener(this);
 
 		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_LARGE_ALBUM_ART, true)) {
 			largeAlbums = true;
 		}
 
-		recyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_recycler);
+		recyclerView = rootView.findViewById(R.id.fragment_recycler);
 		recyclerView.setHasFixedSize(true);
-		fastScroller = (FastScroller) rootView.findViewById(R.id.fragment_fast_scroller);
+		fastScroller = rootView.findViewById(R.id.fragment_fast_scroller);
 		setupScrollList(recyclerView);
 		setupLayoutManager(recyclerView, largeAlbums);
 
 		if(entries == null) {
+			entries = new ArrayList<>();
+		}
+
+		if(albumListType == null || "starred".equals(albumListType)) {
+			entryGridAdapter = new EntryGridAdapter(context, entries, getImageLoader(), largeAlbums);
+			recyclerView.setAdapter(entryGridAdapter);
+			entryGridAdapter.setRemoveFromPlaylist(playlistId != null);
+		} else {
+			setupAlbumGridAdapter();
+			recyclerView.setAdapter(entryGridAdapter);
+
+			// Setup infinite loading based on scrolling
+			final EntryInfiniteGridAdapter infiniteGridAdapter = (EntryInfiniteGridAdapter) entryGridAdapter;
+			infiniteGridAdapter.setData(albumListType, albumListExtra, albumListSize);
+
+			recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+				@Override
+				public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+					super.onScrollStateChanged(recyclerView, newState);
+				}
+
+				@Override
+				public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+					super.onScrolled(recyclerView, dx, dy);
+
+					RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+					int totalItemCount = layoutManager.getItemCount();
+					int lastVisibleItem;
+					if(layoutManager instanceof GridLayoutManager) {
+						lastVisibleItem = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
+					} else if(layoutManager instanceof LinearLayoutManager) {
+						lastVisibleItem = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+					} else {
+						return;
+					}
+
+					if(totalItemCount > 0 && lastVisibleItem >= totalItemCount - 2) {
+						infiniteGridAdapter.loadMore();
+					}
+				}
+			});
+		}
+
+		boolean addedHeader = setupEntryGridAdapter();
+
+		fastScroller.attachRecyclerView(recyclerView);
+		context.supportInvalidateOptionsMenu();
+
+		scrollToPosition(addedHeader);
+		playAll(args);
+
+		if(entries.size() == 0) {
 			if(primaryFragment || secondaryFragment) {
 				load(false);
 			} else {
 				invalidated = true;
 			}
 		} else {
-            licenseValid = true;
-            finishLoading();
+			licenseValid = true;
+			finishLoading();
 		}
 
 		if(name != null) {
@@ -693,13 +746,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			entryGridAdapter = new EntryGridAdapter(context, entries, getImageLoader(), largeAlbums);
 			entryGridAdapter.setRemoveFromPlaylist(playlistId != null);
 		} else {
-			if("alphabeticalByName".equals(albumListType)) {
-				entryGridAdapter = new AlphabeticalAlbumAdapter(context, entries, getImageLoader(), largeAlbums);
-			} else if("highest".equals(albumListType)) {
-				entryGridAdapter = new TopRatedAlbumAdapter(context, entries, getImageLoader(), largeAlbums);
-			} else {
-				entryGridAdapter = new EntryInfiniteGridAdapter(context, entries, getImageLoader(), largeAlbums);
-			}
+			setupAlbumGridAdapter();
 
 			// Setup infinite loading based on scrolling
 			final EntryInfiniteGridAdapter infiniteGridAdapter = (EntryInfiniteGridAdapter) entryGridAdapter;
@@ -732,6 +779,31 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				}
 			});
 		}
+
+		boolean addedHeader = setupEntryGridAdapter();
+
+		recyclerView.setAdapter(entryGridAdapter);
+		fastScroller.attachRecyclerView(recyclerView);
+		context.supportInvalidateOptionsMenu();
+
+		scrollToPosition(addedHeader);
+		playAll(getArguments());
+	}
+
+	private void setupAlbumGridAdapter(){
+		switch(albumListType){
+			case "alphabeticalByName":
+				entryGridAdapter = new AlphabeticalAlbumAdapter(context, entries, getImageLoader(), largeAlbums);
+				break;
+			case "highest":
+				entryGridAdapter = new TopRatedAlbumAdapter(context, entries, getImageLoader(), largeAlbums);
+				break;
+			default:
+				entryGridAdapter = new EntryInfiniteGridAdapter(context, entries, getImageLoader(), largeAlbums);
+		}
+	}
+
+	private boolean setupEntryGridAdapter(){
 		entryGridAdapter.setOnItemClickedListener(this);
 		// Always show artist if this is not a artist we are viewing
 		if(!artist) {
@@ -747,7 +819,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 		if(albumListType == null && (!artist || artistInfo != null || artistInfoDelayed != null) && (share == null || entries.size() != albums.size())) {
 			View header = createHeader();
 
-			if(header != null) {
+			if (header != null) {
 				if (artistInfoDelayed != null) {
 					final View finalHeader = header.findViewById(R.id.select_album_header);
 					final View headerProgress = header.findViewById(R.id.header_progress);
@@ -780,12 +852,15 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 				addedHeader = true;
 			}
 		}
+		return addedHeader;
+	}
 
-		int scrollToPosition = -1;
+	private void scrollToPosition(boolean addedHeader){
+		int scrollPosition = -1;
 		if(lookupEntry != null) {
 			for(int i = 0; i < entries.size(); i++) {
 				if(lookupEntry.equals(entries.get(i).getTitle())) {
-					scrollToPosition = i;
+					scrollPosition = i;
 					entryGridAdapter.addSelected(entries.get(i));
 					lookupEntry = null;
 					break;
@@ -793,18 +868,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			}
 		}
 
-		recyclerView.setAdapter(entryGridAdapter);
-		fastScroller.attachRecyclerView(recyclerView);
-		context.supportInvalidateOptionsMenu();
-
-		if(scrollToPosition != -1) {
-			recyclerView.scrollToPosition(scrollToPosition + (addedHeader ? 1 : 0));
-		}
-
-		Bundle args = getArguments();
-		boolean playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
-		if (playAll && !restoredInstance) {
-			playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false, false);
+		if(scrollPosition != -1) {
+			recyclerView.scrollToPosition(scrollPosition + (addedHeader ? 1 : 0));
 		}
 	}
 
@@ -827,6 +892,16 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			downloadRecursively(albums, shuffle, append, playNext);
 		} else {
 			download(entries, append, false, !append, playNext, shuffle);
+		}
+	}
+
+	private void playAll(Bundle args){
+		boolean playAll = false;
+		if (args != null) {
+			playAll = args.getBoolean(Constants.INTENT_EXTRA_NAME_AUTOPLAY, false);
+		}
+		if (playAll && !restoredInstance) {
+			playAll(args.getBoolean(Constants.INTENT_EXTRA_NAME_SHUFFLE, false), false, false);
 		}
 	}
 
