@@ -694,6 +694,8 @@ public class FileUtil {
             return "";
         }
 
+		// Airsonic 11 appears to be returning backslashes instead of always forcing path with forward slashes
+		path = path.replace("\\", "/");
         for (String s : FILE_SYSTEM_UNSAFE_DIR) {
             path = path.replace(s, "-");
         }
