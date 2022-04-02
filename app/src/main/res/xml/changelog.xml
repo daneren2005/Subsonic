@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.5.3" versioncode="208" releasedate="04/01/2022">
+		<change>Fix album art with Airsonic 11</change>
+		<change>Fixed an issue with SSID detection</change>
+		<change>Fixed some Android Auto issues with browse by tags enabled</change>
+	</release>
 	<release version="5.5.2" versioncode="206" releasedate="12/03/2020">
 		<change>Update to Android 10 target level</change>
 		<change>Request location permissions if needed for local network check</change>
