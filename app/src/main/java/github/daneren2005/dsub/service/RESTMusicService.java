@@ -816,14 +816,21 @@ public class RESTMusicService implements MusicService {
 
     @Override
     public HttpURLConnection getDownloadInputStream(Context context, MusicDirectory.Entry song, long offset, int maxBitrate, SilentBackgroundTask task) throws Exception {
-        String url = getRestUrl(context, "stream");
+		String url;
 		List<String> parameterNames = new ArrayList<String>();
-		parameterNames.add("id");
-		parameterNames.add("maxBitRate");
-
 		List<Object> parameterValues = new ArrayList<>();
-		parameterValues.add(song.getId());
-		parameterValues.add(maxBitrate);
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_STREAM_ORIGINAL, true) && (offset == 0) && ("mp3".equals(song.getSuffix()) || "flac".equals(song.getSuffix()) || "wav".equals(song.getSuffix()) || "aac".equals(song.getSuffix()))) {
+			url = getRestUrl(context, "download");
+			parameterNames.add("id");
+			parameterValues.add(song.getId());
+		} else {
+			url = getRestUrl(context, "stream");
+			parameterNames.add("id");
+			parameterNames.add("maxBitRate");
+
+			parameterValues.add(song.getId());
+			parameterValues.add(maxBitrate);
+		}
 
 		// If video specify what format to download
 		if(song.isVideo()) {
@@ -871,13 +878,14 @@ public class RESTMusicService implements MusicService {
 
 	@Override
 	public String getMusicUrl(Context context, MusicDirectory.Entry song, int maxBitrate) throws Exception {
-		StringBuilder builder = new StringBuilder(getRestUrl(context, "stream"));
-		builder.append("&id=").append(song.getId());
-
+		StringBuilder builder;
 		// Allow user to specify to stream raw formats if available
-		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_STREAM_ORIGINAL, true) && ("mp3".equals(song.getSuffix()) || "flac".equals(song.getSuffix()) || "wav".equals(song.getSuffix()) || "aac".equals(song.getSuffix())) && ServerInfo.checkServerVersion(context, "1.9", getInstance(context))) {
-			builder.append("&format=raw");
+		if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_CAST_STREAM_ORIGINAL, true) && ("mp3".equals(song.getSuffix()) || "flac".equals(song.getSuffix()) || "wav".equals(song.getSuffix()) || "aac".equals(song.getSuffix()))) {
+			builder = new StringBuilder(getRestUrl(context, "download"));
+			builder.append("&id=").append(song.getId());
 		} else {
+			builder = new StringBuilder(getRestUrl(context, "stream"));
+			builder.append("&id=").append(song.getId());
 			builder.append("&maxBitRate=").append(maxBitrate);
 		}
 
