@@ -717,11 +717,9 @@ public class MusicDirectory implements Serializable {
 			Integer rhsTrack = rhs.getTrack();
 			if(lhsTrack == rhsTrack) {
 				return collator.compare(lhs.getTitle(), rhs.getTitle());
-			}
-			if(lhsTrack != null && rhsTrack != null) {
+			} else if(lhsTrack != null && rhsTrack != null) {
 				return lhsTrack.compareTo(rhsTrack);
-			}
-			if(lhsTrack != null) {
+			} else if(lhsTrack != null) {
 				return -1;
 			}
 			return 1;
