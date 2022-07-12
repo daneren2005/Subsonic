@@ -53,6 +53,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 	private ImageView bookmarkButton;
 	private ImageView playedButton;
 	private View bottomRowView;
+	private TextView suffixTextView;
 
 	private DownloadService downloadService;
 	private long revision = -1;
@@ -92,6 +93,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 		playedButton = (ImageButton) findViewById(R.id.song_played);
 		moreButton = (ImageView) findViewById(R.id.item_more);
 		bottomRowView = findViewById(R.id.song_bottom);
+		suffixTextView = (TextView) findViewById(R.id.song_suffix);
 	}
 
 	public void setObjectImpl(MusicDirectory.Entry song, Boolean checkable) {
@@ -175,6 +177,7 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		titleTextView.setText(title);
 		artistTextView.setText(artist);
+		suffixTextView.setText(song.getSuffix());
 
 		this.setBackgroundColor(0x00000000);
 		ratingBar.setVisibility(View.GONE);
