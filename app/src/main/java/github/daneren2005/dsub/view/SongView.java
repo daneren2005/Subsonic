@@ -177,7 +177,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 
 		titleTextView.setText(title);
 		artistTextView.setText(artist);
-		suffixTextView.setText(song.getSuffix());
+		if(Util.getDisplayFileSuffix(context)) {
+			suffixTextView.setText(song.getSuffix());
+		}
 
 		this.setBackgroundColor(0x00000000);
 		ratingBar.setVisibility(View.GONE);

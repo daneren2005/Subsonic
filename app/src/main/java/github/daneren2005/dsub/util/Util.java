@@ -277,6 +277,11 @@ public final class Util {
         return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_TRACK, true);
 	}
 
+	public static boolean getDisplayFileSuffix(Context context) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_DISPLAY_FILE_SUFFIX, true);
+	}
+
     public static int getMaxBitrate(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
