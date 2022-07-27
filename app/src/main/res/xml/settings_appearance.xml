@@ -36,6 +36,13 @@
 			android:defaultValue="true"/>
 
 		<CheckBoxPreference
+			android:title="@string/settings.file_suffix"
+			android:summary="@string/settings.file_suffix_summary"
+			android:key="displayFileSuffix"
+			android:defaultValue="true"/>
+
+
+		<CheckBoxPreference
 			android:title="@string/settings.hide_widget_title"
 			android:summary="@string/settings.hide_widget_summary"
 			android:key="hideWidget"
