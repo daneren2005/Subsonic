@@ -131,8 +131,9 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 		sections.add(albums);
 		headers.add("albums");
 
+		List<Integer> songs = new ArrayList<>();
+
 		if(ServerInfo.isMadsonic6(context)) {
-			List<Integer> songs = new ArrayList<>();
 
 			songs.add(R.string.main_songs_newest);
 			if(ServerInfo.checkServerVersion(context, "2.0.1")) {
@@ -143,9 +144,14 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 				songs.add(R.string.main_songs_frequent);
 			}
 
-			sections.add(songs);
-			headers.add("songs");
 		}
+
+		if(ServerInfo.checkServerVersion(context, "1.2.0")) {
+			songs.add(R.string.main_songs_random);
+		}
+
+		sections.add(songs);
+		headers.add("songs");
 
 		if(ServerInfo.checkServerVersion(context, "1.8")) {
 			List<Integer> videos = Arrays.asList(R.string.main_videos);
@@ -403,6 +409,8 @@ public class MainFragment extends SelectRecyclerFragment<Integer> {
 			showAlbumList("newest");
 		} else if (item == R.string.main_albums_random) {
 			showAlbumList("random");
+		} else if (item == R.string.main_songs_random) {
+			showAlbumList("randomsongs");
 		} else if (item == R.string.main_albums_highest) {
 			showAlbumList("highest");
 		} else if (item == R.string.main_albums_recent) {
