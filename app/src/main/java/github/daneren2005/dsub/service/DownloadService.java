@@ -2695,8 +2695,8 @@ public class DownloadService extends Service {
 				// Already false, no need to do anything here
 				
 				
-				// If playing a single album or no track gain, use album gain
-				if((singleAlbum || rg.album == 0) && rg.track != 0) {
+				// If playing a single album or no track gain, use album gain (if set)
+				if((singleAlbum || rg.track == 0) && rg.album != 0) {
 					adjust = rg.album;
 				} else {
 					// Otherwise, give priority to track gain
