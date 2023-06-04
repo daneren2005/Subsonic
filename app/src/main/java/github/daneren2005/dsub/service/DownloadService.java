@@ -1731,6 +1731,7 @@ public class DownloadService extends Service {
 	public MediaRouteSelector getRemoteSelector() {
 		return mediaRouter.getSelector();
 	}
+	public PowerManager.WakeLock getWakeLock() { return wakeLock;}
 
 	public boolean isSeekable() {
 		if(remoteState == LOCAL) {

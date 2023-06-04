@@ -16,8 +16,10 @@
 package github.daneren2005.dsub.service;
 
 import android.content.SharedPreferences;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.google.android.gms.cast.ApplicationMetadata;
@@ -70,10 +72,12 @@ public class ChromeCastController extends RemoteController {
 
 	private RemoteMediaPlayer mediaPlayer;
 	private double gain = 0.5;
+	private PowerManager.WakeLock wakeLock;
 
 	public ChromeCastController(DownloadService downloadService, CastDevice castDevice) {
 		super(downloadService);
 		this.castDevice = castDevice;
+		wakeLock = downloadService.getWakeLock();
 	}
 
 	@Override
@@ -145,6 +149,7 @@ public class ChromeCastController extends RemoteController {
 
 	@Override
 	public void shutdown() {
+		wakeLock.release();
 		try {
 			if(mediaPlayer != null && !error) {
 				mediaPlayer.stop(apiClient);
@@ -436,6 +441,7 @@ public class ChromeCastController extends RemoteController {
 			}
 		}
 		void setupChannel() {
+			wakeLock.acquire();
 			if(!waitingForReconnect) {
 				mediaPlayer = new RemoteMediaPlayer();
 				mediaPlayer.setOnStatusUpdatedListener(new RemoteMediaPlayer.OnStatusUpdatedListener() {
