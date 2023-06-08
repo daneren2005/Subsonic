@@ -11,7 +11,7 @@ android {
 		versionName '5.5.3'
 		vectorDrawables.useSupportLibrary = true
 		setProperty("archivesBaseName", "DSub $versionName")
-		resConfigs "de", "es", "fr", "hu", "nl", "pt-rPT", "ru", "sv", "zh"
+		resConfigs 'de', 'es', 'fr', 'hu', 'nl', 'pt-rPT', 'ru', 'sv', 'zh'
 		vectorDrawables.useSupportLibrary = true
 		resValue 'string', 'account_type.subsonic', applicationId + ".subsonic"
 		resValue 'string', 'provider.search', applicationId + ".provider.DSubSearchProvider"
@@ -19,6 +19,7 @@ android {
 		resValue 'string', 'provider.podcast', applicationId + ".podcasts.provider"
 		resValue 'string', 'provider.starred', applicationId + ".starred.provider"
 		resValue 'string', 'provider.recently_added', applicationId + ".mostrecent.provider"
+		signingConfig signingConfigs.debug
 	}
 	buildTypes {
 		release {
@@ -46,20 +47,18 @@ android {
 			dimension "version"
 		}
 	}
-
 	packagingOptions {
-		exclude 'META-INF/beans.xml'
+		resources {
+			excludes += ['META-INF/beans.xml']
+		}
 	}
 
-	lintOptions {
+	namespace 'github.daneren2005.dsub'
+	lint {
 		checkReleaseBuilds false
 	}
 
-	signingConfigs {
-		debug {
-			storeFile file('../debug.keystore')
-		}
-	}
+
 }
 
 dependencies {
