@@ -1,8 +1,8 @@
 package github.daneren2005.dsub.view.compat;
 
-import android.support.v7.app.MediaRouteChooserDialogFragment;
-import android.support.v7.app.MediaRouteControllerDialogFragment;
-import android.support.v7.app.MediaRouteDialogFactory;
+import androidx.mediarouter.app.MediaRouteChooserDialogFragment;
+import androidx.mediarouter.app.MediaRouteControllerDialogFragment;
+import androidx.mediarouter.app.MediaRouteDialogFactory;
 
 public class CustomMediaRouteDialogFactory extends MediaRouteDialogFactory {
 	@Override

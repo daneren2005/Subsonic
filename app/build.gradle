@@ -64,11 +64,11 @@ android {
 dependencies {
 	implementation project(path: ':ServerProxy')
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	implementation 'com.android.support:support-v4:27.1.+'
-	implementation 'com.android.support:appcompat-v7:27.1.+'
-	implementation 'com.android.support:mediarouter-v7:27.1.+'
-	implementation 'com.android.support:recyclerview-v7:27.1.+'
-	implementation 'com.android.support:design:27.1.+'
+	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+	implementation 'androidx.appcompat:appcompat:1.0.0'
+	implementation 'androidx.mediarouter:mediarouter:1.0.0'
+	implementation 'androidx.recyclerview:recyclerview:1.0.0'
+	implementation 'com.google.android.material:material:1.0.0'
 	googleImplementation 'com.google.android.gms:play-services-cast:8.1.0'
 	implementation 'com.sothree.slidinguppanel:library:3.0.0'
 	implementation 'de.hdodenhof:circleimageview:1.2.1'
@@ -78,5 +78,5 @@ dependencies {
 	implementation 'org.eclipse.jetty:jetty-server:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-servlet:8.1.16.v20140903'
 	implementation 'org.eclipse.jetty:jetty-client:8.1.16.v20140903'
-	implementation 'com.android.support:support-vector-drawable:27.1.1'
+	implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
 }

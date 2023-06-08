@@ -17,14 +17,12 @@ package github.daneren2005.dsub.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -36,7 +34,7 @@ import android.widget.TextView;
 
 import github.daneren2005.dsub.R;
 
-import static android.support.v7.widget.RecyclerView.OnScrollListener;
+import static androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 
 public class FastScroller extends LinearLayout {
 	private static final String TAG = FastScroller.class.getSimpleName();

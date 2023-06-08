@@ -6,7 +6,7 @@ import github.daneren2005.dsub.service.DownloadFile;
 import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v7.media.MediaRouter;
+import androidx.mediarouter.media.MediaRouter;
 import android.os.Build;
 
 import java.util.List;

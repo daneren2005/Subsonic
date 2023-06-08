@@ -70,7 +70,7 @@
 			android:textColor="?android:textColorPrimary"/>
 	</LinearLayout>
 
-	<android.support.v7.widget.RecyclerView
+	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/settings_list"
 		android:layout_width="fill_parent"
 		android:layout_height="0dip"

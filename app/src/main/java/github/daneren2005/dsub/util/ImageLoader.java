@@ -34,12 +34,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.lang.ref.WeakReference;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ArtistInfo;
