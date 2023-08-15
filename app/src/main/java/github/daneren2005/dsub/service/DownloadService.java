@@ -192,6 +192,11 @@ public class DownloadService extends Service {
 	private long subtractNextPosition = 0;
 	private int subtractPosition = 0;
 
+	/**
+	 * Reference to precreated BASTP Object
+	 */
+	private BastpUtil mBastpUtil;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -201,6 +206,7 @@ public class DownloadService extends Service {
 			public void run() {
 				Looper.prepare();
 
+				mBastpUtil = new BastpUtil();
 				mediaPlayer = new MediaPlayer();
 				mediaPlayer.setWakeMode(DownloadService.this, PowerManager.PARTIAL_WAKE_LOCK);
 
@@ -2645,7 +2651,7 @@ public class DownloadService extends Service {
 		try {
 			float adjust = 0f;
 			if (prefs.getBoolean(Constants.PREFERENCES_KEY_REPLAY_GAIN, false)) {
-				float[] rg = BastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
+				BastpUtil.GainValues rg = mBastpUtil.getReplayGainValues(downloadFile.getFile().getCanonicalPath()); /* track, album */
 				boolean singleAlbum = false;
 				
 				String replayGainType = prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_TYPE, "1");
@@ -2689,15 +2695,15 @@ public class DownloadService extends Service {
 				// Already false, no need to do anything here
 				
 				
-				// If playing a single album or no track gain, use album gain
-				if((singleAlbum || rg[0] == 0) && rg[1] != 0) {
-					adjust = rg[1];
+				// If playing a single album or no track gain, use album gain (if set)
+				if((singleAlbum || rg.track == 0) && rg.album != 0) {
+					adjust = rg.album;
 				} else {
 					// Otherwise, give priority to track gain
-					adjust = rg[0];
+					adjust = rg.track;
 				}
 			
-				if (adjust == 0) {
+				if (!rg.found) {
 					/* No RG value found: decrease volume for untagged song if requested by user */
 					int untagged = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_REPLAY_GAIN_UNTAGGED, "0"));
 					adjust = (untagged - 150) / 10f;

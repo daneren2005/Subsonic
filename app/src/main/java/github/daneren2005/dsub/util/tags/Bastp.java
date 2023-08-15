@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 Adrian Ulrich <adrian@blinkenlights.ch>
+ * Copyright (C) 2017 Google Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,10 +25,10 @@ import java.util.HashMap;
 
 
 public class Bastp {
-	
+
 	public Bastp() {
 	}
-	
+
 	public HashMap getTags(String fname) {
 		HashMap tags = new HashMap();
 		try {
@@ -44,31 +45,61 @@ public class Bastp {
 	
 	public HashMap getTags(RandomAccessFile s) {
 		HashMap tags = new HashMap();
-		byte[] file_ff = new byte[4];
+		byte[] file_ff = new byte[12];
 		
 		try {
 			s.read(file_ff);
 			String magic = new String(file_ff);
-			if(magic.equals("fLaC")) {
+			if(magic.substring(0,4).equals("fLaC")) {
 				tags = (new FlacFile()).getTags(s);
+				tags.put("type", "FLAC");
 			}
-			else if(magic.equals("OggS")) {
-				tags = (new OggFile()).getTags(s);
+			else if(magic.substring(0,4).equals("OggS")) {
+				// This may be an Opus OR an Ogg Vorbis file
+				tags = (new OpusFile()).getTags(s);
+				if (tags.size() > 0) {
+					tags.put("type", "OPUS");
+				} else {
+					tags = (new OggFile()).getTags(s);
+					tags.put("type", "OGG");
+				}
 			}
 			else if(file_ff[0] == -1 && file_ff[1] == -5) { /* aka 0xfffb in real languages */
 				tags = (new LameHeader()).getTags(s);
+				tags.put("type", "MP3/Lame");
 			}
 			else if(magic.substring(0,3).equals("ID3")) {
 				tags = (new ID3v2File()).getTags(s);
 				if(tags.containsKey("_hdrlen")) {
 					Long hlen = Long.parseLong( tags.get("_hdrlen").toString(), 10 );
 					HashMap lameInfo = (new LameHeader()).parseLameHeader(s, hlen);
-					/* add gain tags if not already present */
+					/* add tags from lame header if not already present */
 					inheritTag("REPLAYGAIN_TRACK_GAIN", lameInfo, tags);
 					inheritTag("REPLAYGAIN_ALBUM_GAIN", lameInfo, tags);
+					inheritTag("duration", lameInfo, tags);
 				}
+				tags.put("type", "MP3/ID3v2");
 			}
-			tags.put("_magic", magic);
+			else if(magic.substring(4,8).equals("ftyp") && (
+				// see http://www.ftyps.com/ for all MP4 subtypes
+				magic.substring(8,11).equals("M4A") ||  // Apple audio
+				magic.substring(8,11).equals("M4V") ||  // Apple video
+				magic.substring(8,12).equals("mp42") || // generic MP4, e.g. FAAC
+				magic.substring(8,12).equals("isom") || // generic MP4, e.g. ffmpeg
+				magic.substring(8,12).equals("dash")    // IEC 23009-1 data
+			)) {
+				tags = (new Mp4File()).getTags(s);
+				tags.put("type", "MP4");
+			}
+			else if(magic.substring(0,4).equals("MThd")) {
+				tags = (new RawFile()).getTags(s);
+				tags.put("type", "MIDI");
+			}
+			else if(file_ff[0] == -1 && (file_ff[1]&0xF0) == 0xF0) { /* aka 0xfff? */
+				tags = (new RawFile()).getTags(s);
+				tags.put("type", "ADTS");
+			}
+
 		}
 		catch (IOException e) {
 		}
