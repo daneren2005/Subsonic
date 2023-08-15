@@ -21,7 +21,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.annotation.TargetApi;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,11 +29,11 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.MediaRouteButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.core.view.MenuItemCompat;
+import androidx.mediarouter.app.MediaRouteButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -51,7 +51,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -1111,7 +1110,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 				if(oldBookmark == null) {
 					int bookmark;
 					if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-						bookmark = R.drawable.ic_menu_bookmark_dark;
+						bookmark = R.drawable.ic_action_bookmark;
 					} else {
 						bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 					}
@@ -1430,7 +1429,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			rateBadButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_bad_selected));
 		} else {
 			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-				badRating = R.drawable.ic_action_rating_bad_dark;
+				badRating = R.drawable.ic_action_rating_bad;
 			} else {
 				badRating = DrawableTint.getDrawableRes(context, R.attr.rating_bad);
 			}
@@ -1441,7 +1440,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			rateGoodButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_action_rating_good_selected));
 		} else {
 			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-				goodRating = R.drawable.ic_action_rating_good_dark;
+				goodRating = R.drawable.ic_action_rating_good;
 			} else {
 				goodRating = DrawableTint.getDrawableRes(context, R.attr.rating_good);
 			}
@@ -1452,7 +1451,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			bookmarkButton.setImageDrawable(DrawableTint.getTintedDrawable(context, R.drawable.ic_menu_bookmark_selected));
 		} else {
 			if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-				bookmark = R.drawable.ic_menu_bookmark_dark;
+				bookmark = R.drawable.ic_action_bookmark;
 			} else {
 				bookmark = DrawableTint.getDrawableRes(context, R.attr.bookmark);
 			}

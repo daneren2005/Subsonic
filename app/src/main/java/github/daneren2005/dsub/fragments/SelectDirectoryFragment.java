@@ -1,17 +1,17 @@
 package github.daneren2005.dsub.fragments;
 
 import android.annotation.TargetApi;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -45,7 +45,6 @@ import github.daneren2005.dsub.util.DrawableTint;
 import github.daneren2005.dsub.util.ImageLoader;
 
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
 import github.daneren2005.dsub.domain.PodcastEpisode;
@@ -62,7 +61,6 @@ import github.daneren2005.dsub.util.UpdateHelper;
 import github.daneren2005.dsub.util.UserUtil;
 import github.daneren2005.dsub.util.Util;
 import github.daneren2005.dsub.view.FastScroller;
-import github.daneren2005.dsub.view.GridSpacingDecoration;
 import github.daneren2005.dsub.view.MyLeadingMarginSpan2;
 import github.daneren2005.dsub.view.RecyclingImageView;
 import github.daneren2005.dsub.view.UpdateView;
@@ -917,9 +915,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 			@Override
 			protected void done(Void result) {
-				for(Integer index: indexes) {
-					entryGridAdapter.removeAt(index);
-				}
+				entryGridAdapter.removeAt(indexes);
 				Util.toast(context, context.getResources().getString(R.string.removed_playlist, String.valueOf(indexes.size()), name));
 			}
 

@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:layout_width="fill_parent"
 			  android:layout_height="wrap_content"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
 			  android:orientation="horizontal">
 
 	<TextView
@@ -13,8 +15,6 @@
 		android:background="@android:color/transparent"
 		android:textColor="?attr/colorAccent"
 		android:textStyle="bold"
-		android:paddingLeft="6dp"
-		android:paddingRight="6dp"
 		android:paddingTop="8dp"
 		android:paddingBottom="8dp"/>
 
@@ -25,8 +25,6 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:paddingRight="10dp"
-		android:paddingLeft="10dp"
-		android:paddingTop="10dp"
 		android:background="?attr/selectableItemBackgroundBorderless"
 		android:clickable="true"/>
 </LinearLayout>

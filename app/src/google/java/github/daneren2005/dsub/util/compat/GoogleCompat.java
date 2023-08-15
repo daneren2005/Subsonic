@@ -1,7 +1,7 @@
 package github.daneren2005.dsub.util.compat;
 
 import android.content.Context;
-import android.support.v7.media.MediaRouter;
+import androidx.mediarouter.media.MediaRouter;
 import android.util.Log;
 
 import com.google.android.gms.cast.CastDevice;

@@ -263,9 +263,9 @@ public class SongView extends UpdateView2<MusicDirectory.Entry, Boolean> {
 				moreButton.setImageResource(moreImage);
 				this.moreImage = moreImage;
 			}
-		} else if(this.moreImage != R.drawable.download_none_light) {
+		} else if(this.moreImage != R.drawable.download_none) {
 			moreButton.setImageResource(DrawableTint.getDrawableRes(context, R.attr.download_none));
-			this.moreImage = R.drawable.download_none_light;
+			this.moreImage = R.drawable.download_none;
 		}
 
 		if (downloadFile.isDownloading() && !downloadFile.isDownloadCancelled() && partialFileExists) {

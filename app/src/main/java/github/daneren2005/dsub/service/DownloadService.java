@@ -18,7 +18,7 @@
  */
 package github.daneren2005.dsub.service;
 
-import static android.support.v7.media.MediaRouter.RouteInfo;
+import static androidx.mediarouter.media.MediaRouter.RouteInfo;
 import static github.daneren2005.dsub.domain.PlayerState.COMPLETED;
 import static github.daneren2005.dsub.domain.PlayerState.DOWNLOADING;
 import static github.daneren2005.dsub.domain.PlayerState.IDLE;
@@ -72,7 +72,6 @@ import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
@@ -90,10 +89,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
-import android.support.v7.media.MediaRouteSelector;
-import android.support.v7.media.MediaRouter;
+import androidx.mediarouter.media.MediaRouteSelector;
+import androidx.mediarouter.media.MediaRouter;
 import android.util.Log;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 import android.view.KeyEvent;
 
 /**

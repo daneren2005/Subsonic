@@ -32,17 +32,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -673,7 +673,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 				item.setChecked(true);
 			}
 		}
-		drawerHeaderToggle.setImageResource(R.drawable.main_select_server_dark);
+		drawerHeaderToggle.setImageResource(R.drawable.main_select_server);
 
 		showingTabs = true;
 	}
@@ -689,7 +689,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 			}
 		}
 		drawerList.getMenu().setGroupCheckable(MENU_GROUP_SERVER, true, true);
-		drawerHeaderToggle.setImageResource(R.drawable.main_select_tabs_dark);
+		drawerHeaderToggle.setImageResource(R.drawable.main_select_tabs);
 
 		showingTabs = false;
 	}
