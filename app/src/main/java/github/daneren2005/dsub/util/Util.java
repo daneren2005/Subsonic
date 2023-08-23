@@ -1347,21 +1347,27 @@ public final class Util {
     
     @TargetApi(8)
 	public static void requestAudioFocus(final Context context, final AudioManager audioManager) {
-    	if(Build.VERSION.SDK_INT >= 26) {
-    		if(audioFocusRequest == null) {
-				AudioAttributes playbackAttributes = new AudioAttributes.Builder()
-						.setUsage(AudioAttributes.USAGE_MEDIA)
-						.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-						.build();
+		SharedPreferences prefs = getPreferences(context);
+		int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
 
-				audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-						.setAudioAttributes(playbackAttributes)
-						.setOnAudioFocusChangeListener(getAudioFocusChangeListener(context, audioManager))
-						.setWillPauseWhenDucked(true)
-						.build();
-				audioManager.requestAudioFocus(audioFocusRequest);
+		if(Build.VERSION.SDK_INT >= 26) {
+			// don't request audio focus if lossPref is 3 (don't use audiofocus)
+    		if(audioFocusRequest == null && lossPref != 3) {
+					AudioAttributes playbackAttributes = new AudioAttributes.Builder()
+							.setUsage(AudioAttributes.USAGE_MEDIA)
+							.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+							.build();
+
+					audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+							.setAudioAttributes(playbackAttributes)
+							.setOnAudioFocusChangeListener(getAudioFocusChangeListener(context, audioManager))
+							.setWillPauseWhenDucked(true)
+							.build();
+					audioManager.requestAudioFocus(audioFocusRequest);
+
+
 			}
-		} else if (Build.VERSION.SDK_INT >= 8 && focusListener == null) {
+		} else if (Build.VERSION.SDK_INT >= 8 && focusListener == null && lossPref != 3) {
     		audioManager.requestAudioFocus(focusListener = getAudioFocusChangeListener(context, audioManager), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     	}
     }
@@ -1370,10 +1376,10 @@ public final class Util {
 		return new OnAudioFocusChangeListener() {
 			public void onAudioFocusChange(int focusChange) {
 				DownloadService downloadService = (DownloadService)context;
+				SharedPreferences prefs = getPreferences(context);
 				if((focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) && !downloadService.isRemoteEnabled()) {
 					if(downloadService.getPlayerState() == PlayerState.STARTED) {
 						Log.i(TAG, "Temporary loss of focus");
-						SharedPreferences prefs = getPreferences(context);
 						int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
 						if(lossPref == 2 || (lossPref == 1 && focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)) {
 							lowerFocus = true;
@@ -1395,7 +1401,11 @@ public final class Util {
 				} else if(focusChange == AudioManager.AUDIOFOCUS_LOSS && !downloadService.isRemoteEnabled()) {
 					Log.i(TAG, "Permanently lost focus");
 					focusListener = null;
-					downloadService.pause();
+					int lossPref = Integer.parseInt(prefs.getString(Constants.PREFERENCES_KEY_TEMP_LOSS, "1"));
+					// if setting is "do nothing" - ignore audio focus switch because user wants background play
+					if (lossPref != 3) {
+						downloadService.pause();
+					}
 
 					if(audioFocusRequest != null && Build.VERSION.SDK_INT >= 26) {
 						audioManager.abandonAudioFocusRequest(audioFocusRequest);
