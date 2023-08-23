@@ -540,6 +540,8 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			setTitle(R.string.main_albums_newest);
 		} else if ("random".equals(albumListType)) {
 			setTitle(R.string.main_albums_random);
+		} else if ("randomsongs".equals(albumListType)) {
+			setTitle(R.string.main_songs_random);
 		} else if ("highest".equals(albumListType)) {
 			setTitle(R.string.main_albums_highest);
 		} else if ("recent".equals(albumListType)) {
@@ -576,7 +578,9 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 					}
 				} else if("genres".equals(albumListType) || "genres-songs".equals(albumListType)) {
 					result = service.getSongsByGenre(albumListExtra, size, 0, context, this);
-				} else if(albumListType.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
+				} else if("randomsongs".equals(albumListType)) {
+					result = service.getRandomTracks(size,context, this);
+				}  else if(albumListType.indexOf(MainFragment.SONGS_LIST_PREFIX) != -1) {
 					result = service.getSongList(albumListType, size, 0, context, this);
 				} else {
 					result = service.getAlbumList(albumListType, size, 0, refresh, context, this);
