@@ -180,6 +180,7 @@ public class DownloadService extends Service {
 	private Timer sleepTimer;
 	private int timerDuration;
 	private long timerStart;
+	private boolean stopAtEndOfTrack = false;
 	private boolean autoPlayStart = false;
 	private boolean runListenersOnInit = false;
 
@@ -959,7 +960,7 @@ public class DownloadService extends Service {
 		}
 		resetNext();
 
-		if(index < size() && index != -1 && index != currentPlayingIndex) {
+		if(index < size() && index != -1 && index != currentPlayingIndex && !stopAtEndOfTrack) {
 			nextPlaying = downloadList.get(index);
 
 			if(remoteState == LOCAL) {
@@ -1999,7 +2000,7 @@ public class DownloadService extends Service {
 
 							applyReplayGain(mediaPlayer, downloadFile);
 
-							if (start || autoPlayStart) {
+							if ((!stopAtEndOfTrack) && (start || autoPlayStart)) {
 								mediaPlayer.start();
 								applyPlaybackParamsMain();
 								setPlayerState(STARTED);
@@ -2007,6 +2008,9 @@ public class DownloadService extends Service {
 								// Disable autoPlayStart after done
 								autoPlayStart = false;
 							} else {
+								if (stopAtEndOfTrack) {
+									stopSleepTimer();
+								}
 								setPlayerState(PAUSED);
 								onSongProgress();
 							}
@@ -2143,6 +2147,11 @@ public class DownloadService extends Service {
 		timerDuration = duration;
 	}
 
+	public void setSleepTimerEndOfTrack() {
+		stopAtEndOfTrack = true;
+		setNextPlaying(); // Clear next playing state gracefully
+	}
+
 	public void startSleepTimer(){
 		if(sleepTimer != null){
 			sleepTimer.cancel();
@@ -2160,24 +2169,31 @@ public class DownloadService extends Service {
 				sleepTimer = null;
 			}
 
-		}, timerDuration * 60 * 1000);
+		}, timerDuration);
 		timerStart = System.currentTimeMillis();
 	}
 
 	public int getSleepTimeRemaining() {
-		return (int) (timerStart + (timerDuration * 60 * 1000) - System.currentTimeMillis()) / 1000;
+		return (int) (timerStart + timerDuration - System.currentTimeMillis()) / 1000;
 	}
 
 	public void stopSleepTimer() {
 		if(sleepTimer != null){
 			sleepTimer.cancel();
 			sleepTimer.purge();
+			sleepTimer = null;
+		} else if (stopAtEndOfTrack) {
+			stopAtEndOfTrack = false;
+			setNextPlaying(); // Reset next playing state
 		}
-		sleepTimer = null;
 	}
 
 	public boolean getSleepTimer() {
 		return sleepTimer != null;
+	}
+
+	public boolean getSleepTimerEndOfTrack() {
+		return stopAtEndOfTrack;
 	}
 
 	public void setVolume(float volume) {
