@@ -35,6 +35,19 @@
 			android:entries="@array/maxVideoBitrateNames"/>
 
 		<CheckBoxPreference
+			android:title="@string/settings.transcode_audio_title"
+			android:summary="@string/settings.transcode_audio_summary"
+			android:key="transcodeAudio"
+			android:defaultValue="false"/>
+
+		<ListPreference
+			android:title="@string/settings.audio_transcode_format"
+			android:key="audioTranscodeFormat"
+			android:defaultValue="raw"
+			android:entryValues="@array/audioTranscodeFormatValues"
+			android:entries="@array/audioTranscodeFormatNames"/>
+
+		<CheckBoxPreference
 			android:title="@string/settings.wifi_required_title"
 			android:summary="@string/settings.wifi_required_summary"
 			android:key="wifiRequiredForDownload"
