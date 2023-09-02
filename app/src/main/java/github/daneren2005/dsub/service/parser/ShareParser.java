@@ -19,15 +19,12 @@
 package github.daneren2005.dsub.service.parser;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.domain.ServerInfo;
 import github.daneren2005.dsub.domain.Share;
-import github.daneren2005.dsub.util.Constants;
 import github.daneren2005.dsub.util.ProgressListener;
-import github.daneren2005.dsub.util.Util;
 
 import org.xmlpull.v1.XmlPullParser;
 import java.io.Reader;
@@ -52,29 +49,22 @@ public class ShareParser extends MusicDirectoryEntryParser {
     public List<Share> parse(Reader reader, ProgressListener progressListener) throws Exception {
         init(reader);
 
-        List<Share> dir = new ArrayList<Share>();
+        List<Share> dir = new ArrayList<>();
         Share share = null;
         int eventType;
-
-		SharedPreferences prefs = Util.getPreferences(context);
-		String serverUrl = prefs.getString(Constants.PREFERENCES_KEY_SERVER_URL + instance, null);
-		if(serverUrl.charAt(serverUrl.length() - 1) != '/') {
-			serverUrl += '/';
-		}
-		serverUrl += "share/";
 
 		boolean isDateNormalized = ServerInfo.checkServerVersion(context, "1.11");
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
 		if(isDateNormalized) {
 			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		}
-        
+
         do {
             eventType = nextParseEvent();
-            
+
             if (eventType == XmlPullParser.START_TAG) {
                 String name = getElementName();
-                
+
                 if ("share".equals(name)) {
                 	share = new Share();
 
@@ -85,11 +75,8 @@ public class ShareParser extends MusicDirectoryEntryParser {
 					}
 
 					String url = get("url");
-					if(url != null && url.indexOf(".php") == -1) {
-						url = url.replaceFirst(".*/([^/?]+).*", serverUrl + "$1");
-					}
-					share.setUrl(url);
 
+					share.setUrl(url);
                 	share.setDescription(get("description"));
 
 					try {
