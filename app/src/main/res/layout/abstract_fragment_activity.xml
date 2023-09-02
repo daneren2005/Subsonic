@@ -108,6 +108,7 @@
 						android:id="@+id/download_rewind"
 						android:src="?attr/actionbar_rewind"
 						android:padding="2dp"
+						android:longClickable="true"
 						android:visibility="gone"/>
 
 					<ImageButton
@@ -132,6 +133,7 @@
 						android:id="@+id/download_fastforward"
 						android:src="?attr/actionbar_fastforward"
 						android:padding="2dp"
+						android:longClickable="true"
 						android:visibility="gone"/>
 				</LinearLayout>
 			</LinearLayout>
