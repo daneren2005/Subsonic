@@ -90,6 +90,15 @@
             android:paddingBottom="4dip">
 
             <ImageButton
+                android:id="@+id/control_rewind"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                style="@style/NotificationButton"
+                android:src="@drawable/media_rewind_dark"
+                android:visibility="gone" />
+
+            <ImageButton
                 android:id="@+id/control_previous"
                 android:layout_width="0dip"
                 android:layout_height="56dip"
@@ -112,6 +121,15 @@
                 android:layout_weight="1"
                 android:src="@drawable/media_forward_dark"
 				style="@style/NotificationButton" />
+
+            <ImageButton
+                android:id="@+id/control_fastforward"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                style="@style/NotificationButton"
+                android:src="@drawable/media_fastforward_dark"
+                android:visibility="gone" />
         </LinearLayout>
 
     </LinearLayout>
