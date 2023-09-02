@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Iterator;
 import java.util.List;
 
 import github.daneren2005.dsub.R;
@@ -129,12 +130,20 @@ public class EntryGridAdapter extends SectionAdapter<Entry> {
 		this.showAlbum = showAlbum;
 	}
 
-	public void removeAt(int index) {
-		sections.get(0).remove(index);
-		if(header != null) {
+	public void removeAt(List<Integer> indices) {
+		List<Entry> section = sections.get(0);
+
+		Iterator iter = section.iterator();
+		int index = 0;
+
+		while (iter.hasNext()) {
+			iter.next();
+			if (indices.contains(index)){
+				iter.remove();
+			}
 			index++;
 		}
-		notifyItemRemoved(index);
+		notifyDataSetChanged();
 	}
 
 	public void setRemoveFromPlaylist(boolean removeFromPlaylist) {
