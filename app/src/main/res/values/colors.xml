@@ -12,6 +12,10 @@
 	<color name="lightPrimaryDark">#1e88e5</color>
 	<color name="lightAccent">#448aff</color>
 
+	<color name="darkPrimary">#1664a2</color>
+	<color name="darkPrimaryDark">#0f4472</color>
+	<color name="darkAccent">#2d5caa</color>
+
 	<color name="holoPrimary">#009688</color>
 	<color name="holoPrimaryDark">#00897b</color>
 	<color name="holoAccent">#64ffda</color>
