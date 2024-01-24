@@ -849,7 +849,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	@Override
 	protected void downloadBackground(final boolean save) {
 		List<Entry> songs = getSelectedEntries();
-		if(playlistId != null) {
+		if(songs.isEmpty() && playlistId != null) {
 			songs = entries;
 		}
 
