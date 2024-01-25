@@ -649,5 +649,8 @@
 	<string name="menu.similar_artists.missing">Fehlende Künstler</string>
 	<string name="settings.casting_stream_original">Original streamen</string>
 	<string name="settings.casting_stream_original_summary">Zum streamen möglichst das Originalformat verwenden.</string>
+	<string name="settings.server_allowinsecure">Erlaube unsichere Verbindungen</string>
+	<string name="settings.server_allowinsecure_summary">Erlaube HTTP-Verbindungen und ignoriere Warnungen und Fehler bei HTTPS-Verbindungen (nicht empfohlen!)</string>
+	<string name="background_task.network_insecure_error">Die Verbindung zum Server ist unsicher. Unsichere Verbindungen sind in den Einstellungen nicht erlaubt worden.</string>
 
 </resources>

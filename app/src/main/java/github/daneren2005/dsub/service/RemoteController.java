@@ -39,11 +39,13 @@ public abstract class RemoteController {
 	protected boolean nextSupported = false;
 	protected ServerProxy proxy;
 	protected String rootLocation = "";
+	protected final boolean allowInsecure;
 
 	public RemoteController(DownloadService downloadService) {
 		this.downloadService = downloadService;
 		SharedPreferences prefs = Util.getPreferences(downloadService);
 		rootLocation = prefs.getString(Constants.PREFERENCES_KEY_CACHE_LOCATION, null);
+		allowInsecure = Util.isAllowInsecureEnabled(downloadService, Util.getActiveServer(downloadService));
 	}
 
 	public abstract void create(boolean playing, int seconds);
@@ -116,9 +118,10 @@ public abstract class RemoteController {
 
 	protected WebProxy createWebProxy() {
 		MusicService musicService = MusicServiceFactory.getMusicService(downloadService);
-		if(musicService instanceof CachedMusicService) {
+		// if we allow insecure connections, create WebProxy() with insecure ssl context
+		if(allowInsecure && (musicService instanceof CachedMusicService)) {
 			RESTMusicService restMusicService = ((CachedMusicService)musicService).getMusicService();
-			return new WebProxy(downloadService, restMusicService.getSSLSocketFactory(), restMusicService.getHostNameVerifier());
+			return new WebProxy(downloadService, restMusicService.getInsecureSSLSocketFactory(), restMusicService.getInsecureHostNameVerifier());
 		} else {
 			return new WebProxy(downloadService);
 		}
