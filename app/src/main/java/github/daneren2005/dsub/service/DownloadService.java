@@ -536,10 +536,6 @@ public class DownloadService extends Service {
 		}
 		revision++;
 
-		if(!Util.isOffline(this) && !Util.isNetworkConnected(this)) {
-			Util.toast(this, R.string.select_album_no_network);
-		}
-
 		checkDownloads();
 		lifecycleSupport.serializeDownloadQueue();
 	}
@@ -2269,7 +2265,17 @@ public class DownloadService extends Service {
 			checkArtistRadio();
 		}
 
-		if (!Util.isAllowedToDownload(this)) {
+		// If all files are local (like when permanently caching an already cached file) do not check if device is offline
+		boolean skipNetworkCheck = true;
+		for (DownloadFile d: downloadList) {
+			skipNetworkCheck &= d.isCompleteFileAvailable();
+		}
+		for (DownloadFile d: backgroundDownloadList) {
+			skipNetworkCheck &= d.isCompleteFileAvailable();
+		}
+
+		if (!skipNetworkCheck && !Util.isAllowedToDownload(this)) {
+			Util.toast(this, R.string.select_album_no_network);
 			return;
 		}
 
