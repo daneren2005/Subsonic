@@ -89,6 +89,7 @@ public final class Constants {
     public static final String PREFERENCES_KEY_PASSWORD = "password";
 	public static final String PREFERENCES_KEY_SERVER_AUTHHEADER = "authHeader";
     public static final String PREFERENCES_KEY_ENCRYPTED_PASSWORD = "encryptedPassword";
+    public static final String PREFERENCES_KEY_SERVER_ALLOW_INSECURE = "allowInsecure";
     public static final String PREFERENCES_KEY_INSTALL_TIME = "installTime";
     public static final String PREFERENCES_KEY_THEME = "theme";
     public static final String PREFERENCES_KEY_FULL_SCREEN = "fullScreen";

@@ -89,6 +89,7 @@ import java.util.zip.GZIPInputStream;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
@@ -108,7 +109,7 @@ public class RESTMusicService implements MusicService {
     private static final int HTTP_REQUEST_MAX_ATTEMPTS = 5;
     private static final long REDIRECTION_CHECK_INTERVAL_MILLIS = 60L * 60L * 1000L;
 
-	private SSLSocketFactory sslSocketFactory;
+	private SSLSocketFactory insecureSslSocketFactory;
 	private HostnameVerifier selfSignedHostnameVerifier;
     private long redirectionLastChecked;
     private int redirectionNetworkType = -1;
@@ -132,9 +133,9 @@ public class RESTMusicService implements MusicService {
 			}
 		};
 		try {
-			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-			sslSocketFactory = sslContext.getSocketFactory();
+			SSLContext insecureSslContext = SSLContext.getInstance("TLS");
+			insecureSslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			insecureSslSocketFactory = insecureSslContext.getSocketFactory();
 		} catch (Exception e) {
 		}
 
@@ -1884,6 +1885,10 @@ public class RESTMusicService implements MusicService {
 			hasInstalledGoogleSSL = true;
 		}
 
+		if(!url.startsWith("https://") && !Util.isAllowInsecureEnabled(context, getInstance(context))) {
+			throw new SSLException("Only https connections are allowed!");
+		}
+
 		// Connect and add headers
 		URL urlObj = new URL(url);
 		HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
@@ -1903,9 +1908,10 @@ public class RESTMusicService implements MusicService {
 			}
 		}
 
-		if(connection instanceof HttpsURLConnection) {
+		if(Util.isAllowInsecureEnabled(context, getInstance(context)) && (connection instanceof HttpsURLConnection)) {
+			// if we allow insecure connections, disable ssl checks
 			HttpsURLConnection sslConnection = (HttpsURLConnection) connection;
-			sslConnection.setSSLSocketFactory(sslSocketFactory);
+			sslConnection.setSSLSocketFactory(insecureSslSocketFactory);
 			sslConnection.setHostnameVerifier(selfSignedHostnameVerifier);
 		}
 
@@ -2019,10 +2025,10 @@ public class RESTMusicService implements MusicService {
 		}
 	}
 
-	public SSLSocketFactory getSSLSocketFactory() {
-		return sslSocketFactory;
+	public SSLSocketFactory getInsecureSSLSocketFactory() {
+		return insecureSslSocketFactory;
 	}
-	public HostnameVerifier getHostNameVerifier() {
+	public HostnameVerifier getInsecureHostNameVerifier() {
 		return selfSignedHostnameVerifier;
 	}
 }

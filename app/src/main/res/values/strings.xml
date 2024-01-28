@@ -690,5 +690,8 @@
         <item quantity="one">One day left of trial period</item>
         <item quantity="other">%d days left of trial period</item>
     </plurals>
+	<string name="settings.server_allowinsecure">Allow insecure connections</string>
+	<string name="settings.server_allowinsecure_summary">Allow http traffic and ignore warnings and errors with https connections (not recommended!)</string>
+	<string name="background_task.network_insecure_error">The connection to the server is insecure. Insecure connections have not been enabled in the settings.</string>
 
 </resources>

@@ -36,6 +36,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
+import javax.net.ssl.SSLException;
+
 import github.daneren2005.dsub.R;
 import github.daneren2005.dsub.view.ErrorDialog;
 
@@ -129,6 +132,10 @@ public abstract class BackgroundTask<T> implements ProgressListener {
 
         if (error instanceof FileNotFoundException) {
             return context.getResources().getString(R.string.background_task_not_found);
+        }
+
+        if (error instanceof SSLException) {
+            return context.getResources().getString(R.string.background_task_network_insecure_error);
         }
 
         if (error instanceof IOException) {

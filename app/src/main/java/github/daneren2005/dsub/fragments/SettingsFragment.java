@@ -585,6 +585,12 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		serverAuthHeaderPreference.setSummary(R.string.settings_server_authheaders_summary);
 		serverAuthHeaderPreference.setTitle(R.string.settings_server_authheaders);
 
+		final CheckBoxPreference serverAllowInsecurePreference = new CheckBoxPreference(context);
+		serverAllowInsecurePreference.setKey(Constants.PREFERENCES_KEY_SERVER_ALLOW_INSECURE + instance);
+		serverAllowInsecurePreference.setChecked(Util.isAllowInsecureEnabled(context, instance));
+		serverAllowInsecurePreference.setSummary(R.string.settings_server_allowinsecure_summary);
+		serverAllowInsecurePreference.setTitle(R.string.settings_server_allowinsecure);
+
 		final Preference serverOpenBrowser = new Preference(context);
 		serverOpenBrowser.setKey(Constants.PREFERENCES_KEY_OPEN_BROWSER);
 		serverOpenBrowser.setPersistent(false);
@@ -660,6 +666,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 		screen.addPreference(serverTagPreference);
 		screen.addPreference(serverSyncPreference);
 		screen.addPreference(serverAuthHeaderPreference);
+		screen.addPreference(serverAllowInsecurePreference);
 		screen.addPreference(serverTestConnectionPreference);
 		screen.addPreference(serverOpenBrowser);
 		screen.addPreference(serverRemoveServerPreference);

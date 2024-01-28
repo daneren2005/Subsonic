@@ -470,6 +470,11 @@ public final class Util {
 		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_AUTHHEADER + instance, true);
 	}
 
+	public static boolean isAllowInsecureEnabled(Context context, int instance) {
+		SharedPreferences prefs = getPreferences(context);
+		return prefs.getBoolean(Constants.PREFERENCES_KEY_SERVER_ALLOW_INSECURE + instance, false);
+	}
+
 	public static String getParentFromEntry(Context context, MusicDirectory.Entry entry) {
 		if(Util.isTagBrowsing(context)) {
 			if(!entry.isDirectory()) {
