@@ -734,17 +734,32 @@ public class RESTMusicService implements MusicService {
     }
 
     @Override
-    public MusicDirectory getRandomSongs(int size, String musicFolderId, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
+    public MusicDirectory getRandomTracks(int size, Context context, ProgressListener progressListener) throws Exception {
         List<String> names = new ArrayList<String>();
         List<Object> values = new ArrayList<Object>();
 
         names.add("size");
         values.add(size);
 
-        if (musicFolderId != null && !"".equals(musicFolderId) && !Util.isTagBrowsing(context, getInstance(context))) {
-            names.add("musicFolderId");
-            values.add(musicFolderId);
+        Reader reader = getReader(context, progressListener, "getRandomSongs", names, values);
+        try {
+            return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
+        } finally {
+            Util.close(reader);
         }
+    }
+	@Override
+	public MusicDirectory getRandomSongs(int size, String musicFolderId, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception {
+		List<String> names = new ArrayList<String>();
+		List<Object> values = new ArrayList<Object>();
+
+		names.add("size");
+		values.add(size);
+
+		if (musicFolderId != null && !"".equals(musicFolderId) && !Util.isTagBrowsing(context, getInstance(context))) {
+			names.add("musicFolderId");
+			values.add(musicFolderId);
+		}
 		if(genre != null && !"".equals(genre)) {
 			names.add("genre");
 			values.add(genre);
@@ -774,13 +789,13 @@ public class RESTMusicService implements MusicService {
 			values.add(endYear);
 		}
 
-        Reader reader = getReader(context, progressListener, "getRandomSongs", names, values);
-        try {
-            return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
-        } finally {
-            Util.close(reader);
-        }
-    }
+		Reader reader = getReader(context, progressListener, "getRandomSongs", names, values);
+		try {
+			return new RandomSongsParser(context, getInstance(context)).parse(reader, progressListener);
+		} finally {
+			Util.close(reader);
+		}
+	}
 
 	private void checkServerVersion(Context context, String version, String text) throws ServerTooOldException {
         Version serverVersion = ServerInfo.getServerVersion(context);

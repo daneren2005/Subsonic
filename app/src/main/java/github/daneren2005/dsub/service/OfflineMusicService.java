@@ -598,6 +598,11 @@ public class OfflineMusicService implements MusicService {
 	}
 
 	@Override
+	public MusicDirectory getRandomTracks(int size, Context context, ProgressListener progressListener) throws Exception {
+		throw new OfflineException(ERRORMSG);
+	}
+
+	@Override
     public String getVideoUrl(int maxBitrate, Context context, String id) {
         return null;
     }

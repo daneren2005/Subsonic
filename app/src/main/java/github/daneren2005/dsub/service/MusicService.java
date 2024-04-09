@@ -98,6 +98,7 @@ public interface MusicService {
 
 	MusicDirectory getRandomSongs(int size, String artistId, Context context, ProgressListener progressListener) throws Exception;
     MusicDirectory getRandomSongs(int size, String folder, String genre, String startYear, String endYear, Context context, ProgressListener progressListener) throws Exception;
+	MusicDirectory getRandomTracks(int size, Context context, ProgressListener progressListener) throws Exception;
 
 	String getCoverArtUrl(Context context, MusicDirectory.Entry entry) throws Exception;
 
