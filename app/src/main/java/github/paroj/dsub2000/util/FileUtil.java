@@ -164,7 +164,8 @@ public class FileUtil {
         String trackNumber = null;
         String title = null;
 
-        Pattern fileNameV2 = Pattern.compile("(\\d{2})-(\\d{3})-(.+)");
+		// fixup tracknumber written as null in v5.7.0. Can be removed in later releases
+        Pattern fileNameV2 = Pattern.compile("(\\d{2})-(\\d{3}|null)-(.+)");
         Matcher matcher = fileNameV2.matcher(fileName);
         if (matcher.matches()) {
             discNumber = matcher.group(1);
@@ -190,7 +191,6 @@ public class FileUtil {
             try {
                 entry.setTrack(Integer.parseInt(trackNumber));
             } catch(Exception e) {
-                entry.setTrack(1);
             }
         }
         if (title != null) {
