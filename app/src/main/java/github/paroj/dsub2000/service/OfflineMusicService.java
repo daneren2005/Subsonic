@@ -487,7 +487,7 @@ public class OfflineMusicService implements MusicService {
 				
 				String entryName = getName(entryFile);
 				if(checkFile.exists() && entryName != null){
-					playlist.addChild(createEntry(context, entryFile, entryName, false));
+					playlist.addChild(createEntry(context, checkFile, entryName, false));
 				}
 			}
 			
