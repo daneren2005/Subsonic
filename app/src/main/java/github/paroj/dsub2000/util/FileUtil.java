@@ -144,7 +144,7 @@ public class FileUtil {
     }
 
     private static String getSongFileNameV1(Integer trackNumber, String title) {
-        String fileName = String.format(Locale.ROOT, "%02d-%s", trackNumber, title);
+        String fileName = trackNumber == null ? title : String.format(Locale.ROOT, "%02d-%s", trackNumber, title);
         if(fileName.length() >= MAX_FILENAME_LENGTH_V1) {
             fileName = fileName.substring(0, MAX_FILENAME_LENGTH_V1);
         }
