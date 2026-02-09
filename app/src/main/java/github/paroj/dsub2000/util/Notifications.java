@@ -27,6 +27,9 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Handler;
 import androidx.core.app.NotificationCompat;
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
+import android.support.v4.media.session.MediaSessionCompat;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -79,9 +82,11 @@ public final class Notifications {
 
 		if (usingMediaStyleNotification) {
 			RemoteControlClientLP remoteControlClient = (RemoteControlClientLP) downloadService.getRemoteControlClient();
+            androidx.media3.session.MediaSession session = remoteControlClient.getMediaSession();
+            MediaSessionCompat.Token token = getSessionToken(session);
 
 			androidx.media.app.NotificationCompat.MediaStyle mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle()
-					.setMediaSession(remoteControlClient.getMediaSession().getSessionToken());
+					.setMediaSession(token);
 
 			if (isSingle) {
 				mediaStyle.setShowActionsInCompactView(1);
@@ -634,4 +639,12 @@ public final class Notifications {
 		downloadService.stopForeground(removeNotification);
 		downloadService.setIsForeground(false);
 	}
+
+    @OptIn(markerClass = UnstableApi.class)
+    private static MediaSessionCompat.Token getSessionToken(androidx.media3.session.MediaSession session) {
+        if (session != null) {
+            return MediaSessionCompat.Token.fromToken(session.getPlatformToken());
+        }
+        return null;
+    }
 }

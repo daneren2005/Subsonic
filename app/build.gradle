@@ -79,13 +79,15 @@ dependencies {
 	implementation project(':ServerProxy')
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-	implementation 'androidx.media:media:1.7.0'
+    implementation 'androidx.media3:media3-session:1.5.0'
+    implementation 'androidx.media3:media3-common:1.5.0'
 	implementation 'androidx.appcompat:appcompat:1.7.1'
 	implementation 'androidx.mediarouter:mediarouter:1.8.1'
 	implementation 'androidx.recyclerview:recyclerview:1.4.0'
 	implementation 'androidx.activity:activity:1.10.1'
 	implementation 'com.google.android.material:material:1.13.0'
-	googleImplementation 'com.google.android.gms:play-services-cast:22.1.0'
+    implementation 'androidx.media3:media3-common:1.9.2'
+    googleImplementation 'com.google.android.gms:play-services-cast:22.1.0'
 	implementation 'com.sothree.slidinguppanel:library:3.4.0'
 	implementation 'de.hdodenhof:circleimageview:3.1.0'
 	implementation 'com.shehabic.droppy:Droppy:0.6.0@aar'
