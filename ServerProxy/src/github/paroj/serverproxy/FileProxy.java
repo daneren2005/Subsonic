@@ -52,13 +52,15 @@ public class FileProxy extends ServerProxy {
 
 			Log.i(TAG, "Processing request for file " + path);
 			file = getFile(path);
-			if (!file.exists()) {
+			if (file == null || !file.exists()) {
 				Log.e(TAG, "File " + path + " does not exist");
 				return false;
 			}
 
-			// Make sure to not try to read past where the file is downloaded
-			if(cbSkip != 0 && cbSkip >= file.length()) {
+			Long contentLength = getContentLength();
+			if(cbSkip != 0 && ((contentLength != null && cbSkip >= contentLength)
+					|| (cbSkip >= file.length() && isWorkDone()))) {
+				Log.w(TAG, "Requested position is beyond the completed stream");
 				return false;
 			}
 
@@ -79,6 +81,11 @@ public class FileProxy extends ServerProxy {
 		@Override
 		public void run() {
 			Long contentLength = getContentLength();
+			// A growing stream without a known end cannot advertise a valid
+			// Content-Range. Send it from the start and let the client skip.
+			if (contentLength == null) {
+				cbSkip = 0;
+			}
 
 			// Create HTTP header
 			String headers;
@@ -86,13 +93,8 @@ public class FileProxy extends ServerProxy {
 				headers = "HTTP/1.0 200 OK\r\n";
 			} else {
 				headers = "HTTP/1.0 206 OK\r\n";
-				headers += "Content-Range: bytes " + cbSkip + "-" + (file.length() - 1) + "/";
-				if(contentLength == null) {
-					headers += "*";
-				} else {
-					headers += contentLength;
-				}
-				headers += "\r\n";
+				headers += "Content-Range: bytes " + cbSkip + "-" + (contentLength - 1)
+						+ "/" + contentLength + "\r\n";
 
 				Log.i(TAG, "Streaming starts from: " + cbSkip);
 			}

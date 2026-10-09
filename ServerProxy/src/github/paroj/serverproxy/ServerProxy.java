@@ -42,7 +42,7 @@ public abstract class ServerProxy implements Runnable, Closeable {
 	private static final String TAG = ServerProxy.class.getSimpleName();
 
 	private Thread thread;
-	protected boolean isRunning;
+	protected volatile boolean isRunning;
 	private ServerSocket socket;
 	private int port;
 	private Context context;
@@ -129,6 +129,8 @@ public abstract class ServerProxy implements Runnable, Closeable {
 				ProxyTask task = getTask(client);
 				if (task.processRequest()) {
 					new Thread(task, "ProxyTask").start();
+				} else {
+					client.close();
 				}
 
 			} catch (SocketTimeoutException e) {
