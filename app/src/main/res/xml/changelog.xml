@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
+	<release version="5.7.5" versioncode="218" releasedate="10/10/2026">
+		<change>Filter out outdated TLS protocols</change>
+		<change>Fix playback hang when many tracks are queued for download</change>
+		<change>minor fixes for ServerProxy</change>
+		<change>Show "No matches" empty state when search returns no results</change>
+	</release>
 	<release version="5.7.4" versioncode="217" releasedate="13/05/2026">
 		<change>fix AVRCP media browsing for Android 16</change>
 		<change>Use server-provided coverArt ID for playlists</change>
