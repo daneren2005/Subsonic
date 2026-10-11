@@ -8,7 +8,7 @@ android {
 		minSdkVersion 24
 		targetSdkVersion 36
 		versionCode 218
-		versionName '5.7.5'
+		versionName '5.8.0'
 		vectorDrawables.useSupportLibrary = true
 		setProperty("archivesBaseName", "DSub2000_$versionName")
         resourceConfigurations += ['de', 'es', 'fr', 'hu', 'nl', 'pt-rPT', 'ru', 'sv', 'zh']
