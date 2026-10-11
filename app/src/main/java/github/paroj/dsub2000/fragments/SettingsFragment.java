@@ -17,6 +17,7 @@ package github.paroj.dsub2000.fragments;
 
 import android.Manifest;
 import android.accounts.Account;
+import android.app.backup.BackupManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,8 +45,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
@@ -413,18 +412,7 @@ public class SettingsFragment extends PreferenceCompatFragment implements Shared
 	}
 
 	private void scheduleBackup() {
-		try {
-			Class managerClass = Class.forName("android.app.backup.BackupManager");
-			Constructor managerConstructor = managerClass.getConstructor(Context.class);
-			Object manager = managerConstructor.newInstance(context);
-			Method m = managerClass.getMethod("dataChanged");
-			m.invoke(manager);
-		} catch(ClassNotFoundException e) {
-			Log.e(TAG, "No backup manager found");
-		} catch(Throwable t) {
-			Log.e(TAG, "Scheduling backup failed " + t);
-			t.printStackTrace();
-		}
+		new BackupManager(context).dataChanged();
 	}
 
 	private void update() {

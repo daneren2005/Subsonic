@@ -18,7 +18,6 @@
  */
 package github.paroj.dsub2000.activity;
 
-import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,7 +37,6 @@ public class SettingsActivity extends SubsonicActivity {
 	private PreferenceCompatFragment fragment;
     private OnBackInvokedCallback backCallback;
 
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

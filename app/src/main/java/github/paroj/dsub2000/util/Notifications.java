@@ -148,18 +148,14 @@ public final class Notifications {
 				notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
 			}
 
-			if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.JELLY_BEAN){
-				RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
-				setupViews(expandedContentView, context, song, true, playing, remote, isSingle, shouldFastForward);
-				notification.bigContentView = expandedContentView;
-				notification.priority = Notification.PRIORITY_HIGH;
-			}
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				notification.visibility = Notification.VISIBILITY_PUBLIC;
+			RemoteViews expandedContentView = new RemoteViews(context.getPackageName(), R.layout.notification_expanded);
+			setupViews(expandedContentView, context, song, true, playing, remote, isSingle, shouldFastForward);
+			notification.bigContentView = expandedContentView;
+			notification.priority = Notification.PRIORITY_HIGH;
+			notification.visibility = Notification.VISIBILITY_PUBLIC;
 
-				if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false) && !UpdateView.hasActiveActivity()) {
-					notification.vibrate = new long[0];
-				}
+			if(Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_HEADS_UP_NOTIFICATION, false) && !UpdateView.hasActiveActivity()) {
+				notification.vibrate = new long[0];
 			}
 
 			RemoteViews smallContentView = new RemoteViews(context.getPackageName(), R.layout.notification);

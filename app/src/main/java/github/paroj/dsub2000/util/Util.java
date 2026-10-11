@@ -17,7 +17,6 @@
  */
 package github.paroj.dsub2000.util;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
@@ -74,8 +73,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -1302,29 +1299,13 @@ public final class Util {
     }
 
     public static void disablePendingTransition(Activity activity) {
-
-        // Activity.overridePendingTransition() was introduced in Android 2.0.  Use reflection to maintain
-        // compatibility with 1.5.
-        try {
-            Method method = Activity.class.getMethod("overridePendingTransition", int.class, int.class);
-            method.invoke(activity, 0, 0);
-        } catch (Throwable x) {
-            // Ignored
-        }
+        activity.overridePendingTransition(0, 0);
     }
 
     public static Drawable createDrawableFromBitmap(Context context, Bitmap bitmap) {
-        // BitmapDrawable(Resources, Bitmap) was introduced in Android 1.6.  Use reflection to maintain
-        // compatibility with 1.5.
-        try {
-            Constructor<BitmapDrawable> constructor = BitmapDrawable.class.getConstructor(Resources.class, Bitmap.class);
-            return constructor.newInstance(context.getResources(), bitmap);
-        } catch (Throwable x) {
-            return new BitmapDrawable(bitmap);
-        }
+        return new BitmapDrawable(context.getResources(), bitmap);
     }
-    
-    @TargetApi(8)
+
 	public static void requestAudioFocus(final Context context, final AudioManager audioManager) {
     	if(Build.VERSION.SDK_INT >= 26) {
     		if(audioFocusRequest == null) {
@@ -1344,7 +1325,7 @@ public final class Util {
 					audioFocusRequest = null;
 				}
 			}
-		} else if (Build.VERSION.SDK_INT >= 8 && focusListener == null) {
+		} else if (focusListener == null) {
     		int result = audioManager.requestAudioFocus(focusListener = getAudioFocusChangeListener(context, audioManager), AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 			if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 				Log.w(TAG, "Audio focus request not granted: " + result);
@@ -1543,11 +1524,7 @@ public final class Util {
 	
 	public static WifiManager.WifiLock createWifiLock(Context context, String tag) {
 		WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		int lockType = WifiManager.WIFI_MODE_FULL;
-		if (Build.VERSION.SDK_INT >= 12) {
-			lockType = 3;
-		}
-		return wm.createWifiLock(lockType, tag);
+		return wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, tag);
 	}
 
 	public static Random getRandom() {

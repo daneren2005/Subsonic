@@ -22,7 +22,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
@@ -34,7 +33,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -475,11 +473,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 			}
 		});
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-		    setPlaybackSpeed();
-		} else {
-			playbackSpeedButton.setVisibility(View.GONE);
-		}
+		setPlaybackSpeed();
 
 		toggleListButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -977,7 +971,6 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 	}
 
 	// Scroll to current playing/downloading.
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	private void scrollToCurrent() {
 		if (getDownloadService() == null || songListAdapter == null) {
 			scrollWhenLoaded = true;

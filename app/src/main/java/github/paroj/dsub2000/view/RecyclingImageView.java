@@ -15,13 +15,11 @@
 
 package github.paroj.dsub2000.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -45,7 +43,6 @@ public class RecyclingImageView extends ImageView {
 		super(context, attrs, defStyleAttr);
 	}
 
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	public RecyclingImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 	}

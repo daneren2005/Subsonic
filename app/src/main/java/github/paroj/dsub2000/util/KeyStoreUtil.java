@@ -1,6 +1,5 @@
 package github.paroj.dsub2000.util;
 
-import android.annotation.TargetApi;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import androidx.annotation.NonNull;
@@ -22,7 +21,6 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
 
-@TargetApi(23)
 public class KeyStoreUtil {
     private static String TAG = KeyStoreUtil.class.getSimpleName();
     private static final String KEYSTORE_ALIAS = "DSubKeyStoreAlias";

@@ -20,38 +20,33 @@
 	<style name="BasicButton">
 		<item name="android:background">?attr/selectableItemBackgroundBorderless</item>
 	</style>
-	<style name="NotificationButtonBase">
-		<item name="android:background">?android:selectableItemBackground</item>
+	<style name="NotificationButton">
+		<item name="android:background">?android:selectableItemBackgroundBorderless</item>
 		<item name="android:layout_width">46dip</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_gravity">center</item>
 		<item name="android:scaleType">fitCenter</item>
 		<item name="android:padding">2dip</item>
 	</style>
-	<style name="NotificationButton" parent="NotificationButtonBase">
-	</style>
 
-	<style name="NotificationButton.ExpandedBase">
-		<item name="android:background">?android:selectableItemBackground</item>
+	<style name="NotificationButton.Expanded">
+		<item name="android:background">?android:selectableItemBackgroundBorderless</item>
 		<item name="android:layout_width">0dp</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_weight">1</item>
 		<item name="android:layout_gravity">center</item>
 		<item name="android:scaleType">fitCenter</item>
+		<item name="android:padding">2dip</item>
 	</style>
 
-	<style name="NotificationButton.Expanded" parent="@style/NotificationButton.ExpandedBase">
-		<item name="android:padding">10dip</item>
-	</style>
-
-	<style name="NotificationText.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title"></style>
-	<style name="NotificationText.Content" parent="@android:style/TextAppearance.StatusBar.EventContent"></style>
+	<style name="NotificationText.Title" parent="@android:style/TextAppearance.Material.Notification.Title"></style>
+	<style name="NotificationText.Content" parent="@android:style/TextAppearance.Material.Notification"></style>
 
 	<style name="NotificationLayoutDivider">
-		<item name="android:divider">?android:listDivider</item>
+		<item name="android:divider">@drawable/notification_divider</item>
 	</style>
 	<style name="NotificationDivider">
-		<item name="android:background">?android:dividerHorizontal</item>
+		<item name="android:background">@drawable/notification_divider</item>
 	</style>
 
 	<style name="MoreButton" parent="@style/BasicButton">

@@ -70,7 +70,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
@@ -307,7 +306,7 @@ public class DownloadService extends MediaLibraryService {
 	@Override
 	public void onTrimMemory(int level) {
 		ImageLoader imageLoader = SubsonicActivity.getStaticImageLoader(this);
-		if(imageLoader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		if(imageLoader != null) {
 			Log.i(TAG, "Memory Trim Level: " + level);
 			if (level < ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
 				if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
@@ -1432,7 +1431,6 @@ public class DownloadService extends MediaLibraryService {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void reset() {
 		playbackError = null;
 		if (bufferTask != null) {
@@ -1450,7 +1448,6 @@ public class DownloadService extends MediaLibraryService {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void resetNext() {
 		mediaPlayer.clearNext();
 	}
@@ -1958,7 +1955,6 @@ public class DownloadService extends MediaLibraryService {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
 			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
