@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
-	<release version="5.8.0" versioncode="218" releasedate="10/10/2026">
+	<release version="5.8.0" versioncode="219" releasedate="10/10/2026">
 		<change>Port to Media3</change>
+		<change>Update theme to Material 3</change>
 	</release>
 	<release version="5.7.5" versioncode="218" releasedate="10/10/2026">
 		<change>Filter out outdated TLS protocols</change>
