@@ -9,6 +9,7 @@ import github.paroj.dsub2000.service.RemoteController;
 
 // Provides stubs for Google-related functionality
 public final class GoogleCompat {
+    public static void initializeCast(Context context) { }
 
     public static boolean playServicesAvailable(Context context) {
         return false;

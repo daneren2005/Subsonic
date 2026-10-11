@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
+import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
@@ -41,10 +42,15 @@ public final class GoogleCompat {
         }
     }
 
+    public static void initializeCast(Context context) {
+        CastContext.getSharedInstance(context);
+    }
+
     public static boolean castAvailable() {
         if (castApplicationId() == DEFAULT_MEDIA_RECEIVER_APPLICATION_ID)  {
             Log.i(TAG, "Using DEFAULT_MEDIA_RECEIVER_APPLICATION_ID for casting");
         }
+
         try {
             Class.forName("com.google.android.gms.cast.CastDevice");
         } catch (Exception ex) {
