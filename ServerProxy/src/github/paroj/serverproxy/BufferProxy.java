@@ -19,10 +19,11 @@ import java.io.File;
 import java.net.Socket;
 
 import android.content.Context;
+import android.util.Log;
 
 public class BufferProxy extends FileProxy {
 	private static final String TAG = BufferProxy.class.getSimpleName();
-	protected BufferFile progress;
+	private volatile BufferSource source;
 
 	public BufferProxy(Context context) {
 		super(context);
@@ -33,16 +34,45 @@ public class BufferProxy extends FileProxy {
 	}
 
 	public void setBufferFile(BufferFile progress) {
-		this.progress = progress;
+		if (progress == null) {
+			throw new IllegalArgumentException("Buffer file must not be null");
+		}
+		setBufferFile(progress, progress.getFile().getPath());
+	}
+
+	public void setBufferFile(BufferFile progress, String requestPath) {
+		if (progress == null || requestPath == null || requestPath.isEmpty()) {
+			throw new IllegalArgumentException("Buffer file and request path are required");
+		}
+		source = new BufferSource(progress, requestPath);
+	}
+
+	private static final class BufferSource {
+		final BufferFile progress;
+		final String path;
+
+		BufferSource(BufferFile progress, String requestPath) {
+			this.progress = progress;
+			path = requestPath;
+		}
 	}
 
 	protected class BufferFileTask extends StreamFileTask {
+		private final BufferSource requestSource;
+		private final BufferFile progress;
+
 		public BufferFileTask(Socket client) {
 			super(client);
+			requestSource = source;
+			progress = requestSource == null ? null : requestSource.progress;
 		}
 
 		@Override
 		File getFile(String path) {
+			if (requestSource == null || !requestSource.path.equals(path)) {
+				Log.w(TAG, "Rejecting request for a buffer that is no longer selected");
+				return null;
+			}
 			return progress.getFile();
 		}
 
