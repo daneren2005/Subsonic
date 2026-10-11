@@ -232,6 +232,8 @@ public class DownloadServiceTest {
 		Thread.sleep(500);
 		assertEquals(STARTED, downloadService.getPlayerState());
 		downloadService.togglePlayPause();
+		// The paused state is published by the player's own event shortly after the command.
+		Thread.sleep(500);
 		PlayerState newPlayState = downloadService.getPlayerState();
 		assertEquals(PAUSED, newPlayState);
 	}
