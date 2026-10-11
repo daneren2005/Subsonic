@@ -305,7 +305,12 @@ public class DLNAController extends RemoteController {
 
 	@Override
 	public void changeTrack(int index, DownloadFile song) {
-		startSong(song, true, 0);
+		prepareTrack(index, song, true, 0);
+	}
+
+	@Override
+	public void prepareTrack(int index, DownloadFile song, boolean playing, int seconds) {
+		startSong(song, playing, seconds);
 	}
 
 	@Override

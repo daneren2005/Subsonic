@@ -56,6 +56,7 @@ public abstract class RemoteController {
 	public abstract void updatePlaylist();
 	public abstract void changePosition(int seconds);
 	public abstract void changeTrack(int index, DownloadFile song);
+	public abstract void prepareTrack(int index, DownloadFile song, boolean playing, int seconds);
 	// Really is abstract, just don't want to require RemoteController's support it
 	public void changeNextTrack(DownloadFile song) {}
 	public boolean isNextSupported() {
@@ -68,6 +69,14 @@ public abstract class RemoteController {
 	public abstract void setVolume(int volume);
 	public abstract void updateVolume(boolean up);
 	public abstract double getVolume();
+	public boolean isPlayWhenReady() {
+		return downloadService.getPlayerState() == github.paroj.dsub2000.domain.PlayerState.STARTED;
+	}
+	public boolean supportsPlaybackSpeed() { return false; }
+	public float getPlaybackSpeed() { return 1f; }
+	public void setPlaybackSpeed(float speed) {
+		throw new UnsupportedOperationException("This output does not support playback speed");
+	}
 	public boolean isSeekable() {
 		return true;
 	}

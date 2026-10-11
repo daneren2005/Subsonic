@@ -39,7 +39,11 @@ public class JukeboxController extends RemoteController {
 	private static final long STATUS_UPDATE_INTERVAL_SECONDS = 5L;
 	
 	private final Handler handler;
-	private boolean running = false;
+	private volatile boolean running = false;
+	private volatile boolean wantsPlayback;
+	private volatile int pendingIndex = -1;
+	private volatile int pendingPosition;
+	private Thread worker;
 	private final TaskQueue tasks = new TaskQueue();
 	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	private ScheduledFuture<?> statusUpdateFuture;
@@ -54,30 +58,38 @@ public class JukeboxController extends RemoteController {
 
 	@Override
 	public void create(boolean playing, int seconds) {
-		new Thread("JukeboxController") {
+		wantsPlayback = playing;
+		pendingPosition = seconds;
+		pendingIndex = downloadService.getCurrentPlayingIndex();
+		running = true;
+		worker = new Thread("JukeboxController") {
 			@Override
 			public void run() {
-				running = true;
 				processTasks();
 			}
-		}.start();
+		};
+		worker.start();
 		updatePlaylist();
-		// Best I can do since API doesn't support seeking without starting playback
-		if(seconds != 0 && playing) {
-			changePosition(seconds);
-		}
 	}
 
 	@Override
 	public void start() {
+		wantsPlayback = true;
 		tasks.remove(Stop.class);
 		tasks.remove(Start.class);
 		
 		startStatusUpdate();
-		tasks.add(new Start());
+		if (pendingIndex >= 0) {
+			tasks.remove(Skip.class);
+			tasks.add(new Skip(pendingIndex, pendingPosition));
+		} else {
+			tasks.add(new Start());
+		}
 	}
 	@Override
 	public void stop() {
+		wantsPlayback = false;
+		tasks.remove(Skip.class);
 		tasks.remove(Stop.class);
 		tasks.remove(Start.class);
 		
@@ -87,42 +99,49 @@ public class JukeboxController extends RemoteController {
 	@Override
 	public void shutdown() {
 		running = false;
+		stopStatusUpdate();
+		executorService.shutdownNow();
+		tasks.clear();
+		tasks.add(new ShutdownTask());
+		if (worker != null) worker.interrupt();
 	}
+
+	@Override public boolean isPlayWhenReady() { return wantsPlayback; }
 	
 	@Override
 	public void updatePlaylist() {
-		tasks.remove(Skip.class);
-		tasks.remove(Stop.class);
-		tasks.remove(Start.class);
+		tasks.remove(SetPlaylist.class);
 		
 		List<String> ids = new ArrayList<String>();
-		for (DownloadFile file : downloadService.getDownloads()) {
+		for (DownloadFile file : downloadService.getSongs()) {
 			ids.add(file.getSong().getId());
 		}
 		tasks.add(new SetPlaylist(ids));
+		prepareTrack(downloadService.getCurrentPlayingIndex(), downloadService.getCurrentPlaying(),
+				wantsPlayback, getRemotePosition());
 	}
 	@Override
 	public void changePosition(int seconds) {
-		tasks.remove(Skip.class);
-		tasks.remove(Stop.class);
-		tasks.remove(Start.class);
-		
-		startStatusUpdate();
-		if (jukeboxStatus != null) {
-			jukeboxStatus.setPositionSeconds(seconds);
-		}
-		tasks.add(new Skip(downloadService.getCurrentPlayingIndex(), seconds));
-		downloadService.setPlayerState(PlayerState.STARTED);
+		prepareTrack(downloadService.getCurrentPlayingIndex(), downloadService.getCurrentPlaying(),
+				wantsPlayback, seconds);
 	}
 	@Override
 	public void changeTrack(int index, DownloadFile song) {
-		tasks.remove(Skip.class);
-		tasks.remove(Stop.class);
-		tasks.remove(Start.class);
-		
-		startStatusUpdate();
-		tasks.add(new Skip(index, 0));
-		downloadService.setPlayerState(PlayerState.STARTED);
+		prepareTrack(index, song, true, 0);
+	}
+
+	@Override
+	public void prepareTrack(int index, DownloadFile song, boolean playing, int seconds) {
+		pendingPosition = seconds;
+		pendingIndex = index;
+		if (playing && song != null && index >= 0) {
+			downloadService.setPlayerState(PlayerState.PREPARING);
+			start();
+		} else {
+			// The jukebox skip API starts audio; apply paused seeks only when play is requested.
+			stop();
+			downloadService.setPlayerState(song == null ? PlayerState.IDLE : PlayerState.PAUSED);
+		}
 	}
 	@Override
 	public void setVolume(int volume) {
@@ -148,6 +167,7 @@ public class JukeboxController extends RemoteController {
 	
 	@Override
 	public int getRemotePosition() {
+		if (pendingIndex >= 0) return pendingPosition;
 		if (jukeboxStatus == null || jukeboxStatus.getPositionSeconds() == null || timeOfLastUpdate.get() == 0) {
 			return 0;
 		}
@@ -169,8 +189,11 @@ public class JukeboxController extends RemoteController {
 				if(status != null && running) {
 					onStatusUpdate(status);
 				}
-			} catch (Throwable x) {
-				onError(task, x);
+			} catch (InterruptedException interrupted) {
+				Thread.currentThread().interrupt();
+				return;
+			} catch (Exception x) {
+				if (running) onError(task, x);
 			}
 		}
 	}
@@ -196,11 +219,20 @@ public class JukeboxController extends RemoteController {
 	}
     
 	private void onStatusUpdate(RemoteStatus jukeboxStatus) {
+		if (!running || downloadService.getRemoteController() != this) return;
 		timeOfLastUpdate.set(System.currentTimeMillis());
 		this.jukeboxStatus = jukeboxStatus;
 		
 		// Track change?
 		Integer index = jukeboxStatus.getCurrentPlayingIndex();
+		if (pendingIndex >= 0) {
+			if (wantsPlayback && jukeboxStatus.isPlaying() && index != null && index == pendingIndex) {
+				pendingIndex = -1;
+			} else {
+				return;
+			}
+		}
+		wantsPlayback = jukeboxStatus.isPlaying();
 		int currentPlayingIndex = downloadService.getCurrentPlayingIndex();
 		if (index != null && index != -1 && index != downloadService.getCurrentPlayingIndex()) {
 			downloadService.setPlayerState(PlayerState.COMPLETED);
@@ -211,6 +243,9 @@ public class JukeboxController extends RemoteController {
 				// Jukebox does not support any form of auto repeat
 				start();
 			}
+			PlayerState state = index == null || index < 0 ? PlayerState.IDLE
+					: jukeboxStatus.isPlaying() ? PlayerState.STARTED : PlayerState.PAUSED;
+			if (downloadService.getPlayerState() != state) downloadService.setPlayerState(state);
 		}
 	}
 
@@ -237,7 +272,7 @@ public class JukeboxController extends RemoteController {
 		});
 	}
 	
-	private MusicService getMusicService() {
+	MusicService getMusicService() {
 		return MusicServiceFactory.getMusicService(downloadService);
 	}
 

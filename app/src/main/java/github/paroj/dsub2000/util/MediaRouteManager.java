@@ -50,6 +50,7 @@ public class MediaRouteManager extends MediaRouter.Callback {
 		this.downloadService = downloadService;
 		router = MediaRouter.getInstance(downloadService);
 		castAvailable = GoogleCompat.playServicesAvailable(downloadService) && GoogleCompat.castAvailable();
+		if (castAvailable) GoogleCompat.initializeCast(downloadService);
 
 		addProviders();
 		buildSelector();

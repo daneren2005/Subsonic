@@ -30,7 +30,7 @@ import java.util.Map;
  * implementation deliberately omits Range and reports an unknown length, which
  * is fine for live audio streams that don't need seeking.
  *
- * Used only by {@link ExoPlayerAudio} for stream playback (Internet radios).
+ * Used only by {@link LocalPlayback} for stream playback (Internet radios).
  * Not intended for general-purpose use: it does not support range requests,
  * resumption, or content-length reporting.
  */

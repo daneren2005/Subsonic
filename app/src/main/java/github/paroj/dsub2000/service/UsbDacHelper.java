@@ -21,7 +21,7 @@ import github.paroj.dsub2000.util.Util;
 /**
  * Helpers for the optional "Route to USB DAC" preference (see issue #141).
  * Locates a connected USB audio output device so callers can hand it to
- * {@link AudioPlayer#setPreferredDevice(AudioDeviceInfo)} before {@code prepare},
+ * {@link LocalPlayback#setPreferredDevice(AudioDeviceInfo)} before {@code prepare},
  * and reads source sample rates for diagnostics so users can confirm what the
  * DAC is actually receiving.
  */

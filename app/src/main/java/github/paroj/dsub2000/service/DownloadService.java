@@ -54,7 +54,7 @@ import github.paroj.dsub2000.util.ShufflePlayBuffer;
 import github.paroj.dsub2000.util.SimpleServiceBinder;
 import github.paroj.dsub2000.util.UpdateHelper;
 import github.paroj.dsub2000.util.Util;
-import github.paroj.dsub2000.util.compat.RemoteControlClientBase;
+import github.paroj.dsub2000.util.compat.RemoteControlClientLP;
 import github.paroj.dsub2000.util.tags.BastpUtil;
 import github.paroj.dsub2000.view.UpdateView;
 import github.paroj.serverproxy.BufferProxy;
@@ -73,7 +73,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Service;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
@@ -82,11 +81,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-// AudioPlayer abstraction: legacy MediaPlayer is used for local files via
-// MediaPlayerAudio; HTTP streams (Internet radios with codecs MediaPlayer
-// handles unreliably, e.g. Ogg Vorbis/Opus) go through ExoPlayerAudio.
-import android.media.PlaybackParams;
 import android.media.audiofx.AudioEffect;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -98,13 +92,20 @@ import androidx.mediarouter.media.MediaRouteSelector;
 import androidx.mediarouter.media.MediaRouter;
 import android.util.Log;
 import androidx.collection.LruCache;
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.Player;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.session.MediaLibraryService;
+import androidx.media3.session.MediaSession;
 import android.view.KeyEvent;
 
 /**
  * @author Sindre Mehus
  * @version $Id$
  */
-public class DownloadService extends Service {
+@OptIn(markerClass = UnstableApi.class)
+public class DownloadService extends MediaLibraryService {
 	private static final String TAG = DownloadService.class.getSimpleName();
 
 	public static final String CMD_PLAY = "github.paroj.dsub2000.CMD_PLAY";
@@ -130,14 +131,14 @@ public class DownloadService extends Service {
 	public static final int METADATA_UPDATED_BOOKMARK = 4;
 	public static final int METADATA_UPDATED_COVER_ART = 8;
 
-	private RemoteControlClientBase mRemoteControl;
+	private RemoteControlClientLP mRemoteControl;
 
 	private final IBinder binder = new SimpleServiceBinder<>(this);
 	private Looper mediaPlayerLooper;
-	private AudioPlayer mediaPlayer;
-	private AudioPlayer nextMediaPlayer;
+	private LocalPlayback mediaPlayer;
 	private int audioSessionId;
-	private boolean nextSetup = false;
+	private boolean playWhenReady;
+	private PlaybackException playbackError;
 	private final List<DownloadFile> downloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> backgroundDownloadList = new ArrayList<DownloadFile>();
 	private final List<DownloadFile> toDelete = new ArrayList<DownloadFile>();
@@ -156,7 +157,6 @@ public class DownloadService extends Service {
 	private DownloadFile nextPlaying;
 	private DownloadFile currentDownloading;
 	private SilentBackgroundTask bufferTask;
-	private SilentBackgroundTask nextPlayingTask;
 	private PlayerState playerState = IDLE;
 	private PlayerState nextPlayerState = IDLE;
 	private boolean removePlayed;
@@ -192,10 +192,6 @@ public class DownloadService extends Service {
 
 	private MediaRouteManager mediaRouter;
 	
-	// Variables to manage getCurrentPosition sometimes starting from an arbitrary non-zero number
-	private long subtractNextPosition = 0;
-	private int subtractPosition = 0;
-
 	/**
 	 * Reference to precreated BASTP Object
 	 */
@@ -204,63 +200,28 @@ public class DownloadService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		setMediaNotificationProvider(new PlaybackNotificationProvider(this));
 
 		final SharedPreferences prefs = Util.getPreferences(this);
+		mediaPlayer = new LocalPlayback(this, new LocalPlayback.Listener() {
+			@Override public void onState(DownloadFile file, int state, boolean playing) {
+				onLocalState(file, state, playing);
+			}
+			@Override public void onTransition(DownloadFile previous, DownloadFile current) {
+				onLocalTransition(previous, current);
+			}
+			@Override public void onError(DownloadFile file, PlaybackException error) {
+				synchronized (DownloadService.this) {
+					if (remoteState == LOCAL && file == currentPlaying) handleError(error);
+				}
+			}
+		});
+		audioSessionId = mediaPlayer.getAudioSessionId();
 		new Thread(new Runnable() {
 			public void run() {
 				Looper.prepare();
 
 				mBastpUtil = new BastpUtil();
-				// Initial player is MediaPlayer-backed; bufferAndPlay() swaps in the
-				// stream-aware backend when starting an Internet radio.
-				mediaPlayer = new MediaPlayerAudio();
-				mediaPlayer.setWakeMode(DownloadService.this, PowerManager.PARTIAL_WAKE_LOCK);
-
-				// We want to change audio session id's between upgrading Android versions.  Upgrading to Android 7.0 is broken (probably updated session id format)
-				audioSessionId = -1;
-				int id = prefs.getInt(Constants.CACHE_AUDIO_SESSION_ID, -1);
-				int versionCode = prefs.getInt(Constants.CACHE_AUDIO_SESSION_VERSION_CODE, -1);
-				if(versionCode == Build.VERSION.SDK_INT && id != -1) {
-					try {
-						audioSessionId = id;
-						mediaPlayer.setAudioSessionId(audioSessionId);
-					} catch (Throwable e) {
-						Log.w(TAG, "Failed to use cached audio session", e);
-						audioSessionId = -1;
-					}
-				}
-
-				if(audioSessionId == -1) {
-					mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-					try {
-						audioSessionId = mediaPlayer.getAudioSessionId();
-
-						SharedPreferences.Editor editor = prefs.edit();
-						editor.putInt(Constants.CACHE_AUDIO_SESSION_ID, audioSessionId);
-						editor.putInt(Constants.CACHE_AUDIO_SESSION_VERSION_CODE, Build.VERSION.SDK_INT);
-						editor.commit();
-					} catch (Throwable t) {
-						// Froyo or lower
-					}
-				}
-
-				mediaPlayer.setOnErrorListener(new AudioPlayer.OnErrorListener() {
-					@Override
-					public boolean onError(AudioPlayer player, int what, int more) {
-						handleError(new Exception("MediaPlayer error: " + what + " (" + more + ")"));
-						return false;
-					}
-				});
-
-				/*try {
-					Intent i = new Intent(AudioEffect.ACTION_OPEN_AUDIO_EFFECT_CONTROL_SESSION);
-					i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, audioSessionId);
-					i.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, getPackageName());
-					sendBroadcast(i);
-				} catch(Throwable e) {
-					// Froyo or lower
-				}*/
-
 				effectsController = new AudioEffectsController(DownloadService.this, audioSessionId);
 				if(prefs.getBoolean(Constants.PREFERENCES_EQUALIZER_ON, false)) {
 					getEqualizerController();
@@ -289,9 +250,11 @@ public class DownloadService extends Service {
 
 		if (mRemoteControl == null) {
 			// Use the remote control APIs (if available) to set the playback state
-			mRemoteControl = RemoteControlClientBase.createInstance();
+			mRemoteControl = new RemoteControlClientLP();
 			ComponentName mediaButtonReceiverComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 			mRemoteControl.register(this, mediaButtonReceiverComponent);
+			// Without a connected controller Media3 would never request a notification for this session.
+			addSession(mRemoteControl.getMediaSession());
 		}
 
 		PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
@@ -325,6 +288,9 @@ public class DownloadService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
+		if (intent == null || Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
+			return START_NOT_STICKY;
+		}
 		lifecycleSupport.onStart(intent);
 
 		String action = intent.getAction();
@@ -377,9 +343,6 @@ public class DownloadService extends Service {
 		}
 
 		mediaPlayer.release();
-		if(nextMediaPlayer != null) {
-			nextMediaPlayer.release();
-		}
 		mediaPlayerLooper.quit();
 		shufflePlayBuffer.shutdown();
 		effectsController.release();
@@ -391,10 +354,6 @@ public class DownloadService extends Service {
 		if(bufferTask != null) {
 			bufferTask.cancel();
 			bufferTask = null;
-		}
-		if(nextPlayingTask != null) {
-			nextPlayingTask.cancel();
-			nextPlayingTask = null;
 		}
 		if(remoteController != null) {
 			remoteController.stop();
@@ -437,7 +396,43 @@ public class DownloadService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		return binder;
+		return intent != null && intent.getAction() == null ? binder : super.onBind(intent);
+	}
+
+	@Override
+	public MediaLibrarySession onGetSession(MediaSession.ControllerInfo controller) {
+		return mRemoteControl == null ? null : mRemoteControl.getMediaSession();
+	}
+
+	@Override
+	public void onUpdateNotification(MediaSession session, boolean startInForegroundRequired) {
+		final DownloadFile current;
+		final PlayerState state;
+		synchronized (this) {
+			current = currentPlaying;
+			state = playerState;
+		}
+		boolean persistent = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, true);
+		if (current == null || state == STOPPED || (state == PAUSED && !persistent)) {
+			Notifications.hidePlayingNotification(this, this, handler);
+			return;
+		}
+		Notifications.playbackNotificationShowing(this, this, handler, startInForegroundRequired);
+		try {
+			super.onUpdateNotification(session, startInForegroundRequired);
+			setIsForeground(startInForegroundRequired);
+		} catch (IllegalStateException e) {
+			if (Build.VERSION.SDK_INT >= 31 && e instanceof android.app.ForegroundServiceStartNotAllowedException) {
+				Log.w(TAG, "ForegroundServiceStartNotAllowedException: " + e.getMessage());
+			} else {
+				throw e;
+			}
+		}
+	}
+
+	@Override
+	public void onTaskRemoved(Intent rootIntent) {
+		// Retain the existing service lifetime: removing the UI must not cancel offline downloads.
 	}
 	
 	public void post(Runnable r) {
@@ -539,6 +534,33 @@ public class DownloadService extends Service {
 		} else {
 			downloadList.add(offset, file);
 		}
+	}
+
+	synchronized void insertSessionQueue(int index, List<MusicDirectory.Entry> entries) {
+		for (MusicDirectory.Entry entry : entries) {
+			downloadList.add(index++, new DownloadFile(this, entry, false));
+		}
+		if (currentPlaying == null && !downloadList.isEmpty()) {
+			setCurrentPlaying(0, false);
+		}
+		sessionQueueChanged();
+	}
+
+	synchronized void moveSessionQueue(int fromIndex, int toIndex, int newIndex) {
+		List<DownloadFile> moved = new ArrayList<>(downloadList.subList(fromIndex, toIndex));
+		downloadList.subList(fromIndex, toIndex).clear();
+		downloadList.addAll(newIndex, moved);
+		sessionQueueChanged();
+	}
+
+	private void sessionQueueChanged() {
+		currentPlayingIndex = downloadList.indexOf(currentPlaying);
+		revision++;
+		setNextPlaying();
+		onSongsChanged();
+		updateRemotePlaylist();
+		checkDownloads();
+		lifecycleSupport.serializeDownloadQueue();
 	}
 	public void downloadBackground(List<MusicDirectory.Entry> songs, boolean save) {
 		List<DownloadFile> toAdd = new ArrayList<>();
@@ -710,6 +732,7 @@ public class DownloadService extends Service {
 	public void setRepeatMode(RepeatMode repeatMode) {
 		Util.setRepeatMode(this, repeatMode);
 		setNextPlaying();
+		onStateUpdate();
 	}
 
 	public boolean getKeepScreenOn() {
@@ -941,6 +964,7 @@ public class DownloadService extends Service {
 		}
 		this.currentPlaying = currentPlaying;
 		if(currentPlaying == null) {
+			playWhenReady = false;
 			currentPlayingIndex = -1;
 			setPlayerState(IDLE);
 		} else {
@@ -967,6 +991,7 @@ public class DownloadService extends Service {
 		if(remoteState == LOCAL) {
 			boolean gaplessPlayback = prefs.getBoolean(Constants.PREFERENCES_KEY_GAPLESS_PLAYBACK, true);
 			if (!gaplessPlayback) {
+				resetNext();
 				nextPlaying = null;
 				nextPlayerState = IDLE;
 				return;
@@ -976,18 +1001,13 @@ public class DownloadService extends Service {
 
 		int index = getNextPlayingIndex();
 
-		if(nextPlayingTask != null) {
-			nextPlayingTask.cancel();
-			nextPlayingTask = null;
-		}
 		resetNext();
 
 		if(index < size() && index != -1 && index != currentPlayingIndex) {
 			nextPlaying = downloadList.get(index);
 
 			if(remoteState == LOCAL) {
-				nextPlayingTask = new CheckCompletionTask(nextPlaying);
-				nextPlayingTask.execute();
+				queueNextWhenReady();
 			} else if(remoteController != null && remoteController.isNextSupported()) {
 				remoteController.changeNextTrack(nextPlaying);
 			}
@@ -1143,10 +1163,13 @@ public class DownloadService extends Service {
 	private synchronized void play(int index, boolean start) {
 		play(index, start, 0);
 	}
-	private synchronized void play(int index, boolean start, int position) {
+	synchronized void play(int index, boolean start, int position) {
+		playbackError = null;
+		playWhenReady = start;
 		int size = this.size();
 		cachedPosition = 0;
 		if (index < 0 || index >= size) {
+			playWhenReady = false;
 			reset();
 			if(index >= size && size != 0) {
 				setCurrentPlaying(0, false);
@@ -1156,13 +1179,9 @@ public class DownloadService extends Service {
 			}
 			lifecycleSupport.serializeDownloadQueue();
 		} else {
-			if(nextPlayingTask != null) {
-				nextPlayingTask.cancel();
-				nextPlayingTask = null;
-			}
 			setCurrentPlaying(index, start);
-			if (start && remoteState != LOCAL) {
-				remoteController.changeTrack(index, currentPlaying);
+			if (remoteState != LOCAL) {
+				remoteController.prepareTrack(index, currentPlaying, start, position / 1000);
 			}
 			if (remoteState == LOCAL) {
 				bufferAndPlay(position, start);
@@ -1172,51 +1191,6 @@ public class DownloadService extends Service {
 				checkDownloads();
 			}
 		}
-	}
-	private synchronized void playNext() {
-		if(nextPlaying != null && nextPlayerState == PlayerState.PREPARED) {
-			if(!nextSetup) {
-				playNext(true);
-			} else {
-				nextSetup = false;
-				playNext(false);
-			}
-		} else {
-			onSongCompleted();
-		}
-	}
-	private synchronized void playNext(boolean start) {
-		Util.broadcastPlaybackStatusChange(this, currentPlaying.getSong(), PlayerState.PREPARED);
-		
-		// Swap the media players since nextMediaPlayer is ready to play
-		subtractPosition = 0;
-		if(start) {
-			nextMediaPlayer.start();
-		} else if(!nextMediaPlayer.isPlaying()) {
-			Log.w(TAG, "nextSetup lied about it's state!");
-			nextMediaPlayer.start();
-		} else {
-			Log.i(TAG, "nextMediaPlayer already playing");
-			
-			// Next time the cachedPosition is updated, use that as position 0
-			subtractNextPosition = System.currentTimeMillis();
-		}
-		AudioPlayer tmp = mediaPlayer;
-		mediaPlayer = nextMediaPlayer;
-		nextMediaPlayer = tmp;
-		setCurrentPlaying(nextPlaying, true);
-		setPlayerState(PlayerState.STARTED);
-		setupHandlers(currentPlaying, false, start);
-		applyPlaybackParamsMain();
-		setNextPlaying();
-
-		// Proxy should not be being used here since the next player was already setup to play
-		if(proxy != null) {
-			proxy.close();
-			proxy = null;
-		}
-		checkDownloads();
-		updateRemotePlaylist();
 	}
 
 	/** Plays or resumes the playback, depending on the current player state. */
@@ -1246,7 +1220,6 @@ public class DownloadService extends Service {
 				}
 
 				mediaPlayer.seekTo(position);
-				subtractPosition = 0;
 			}
 			cachedPosition = position;
 
@@ -1370,24 +1343,47 @@ public class DownloadService extends Service {
 		pause(false);
 	}
 	public synchronized void pause(boolean temp) {
+		playWhenReady = temp;
+		autoPlayStart = false;
 		try {
-			if (playerState == STARTED) {
-				if (remoteState != LOCAL) {
-					remoteController.stop();
-				} else {
+			PlayerState paused = temp ? PAUSED_TEMP : PAUSED;
+			if (remoteState == LOCAL) {
+				if (playerState == STARTED || playerState == PREPARING) {
+					// ExoPlayer's events publish PAUSED/PAUSED_TEMP once it has actually paused.
 					mediaPlayer.pause();
+				} else if (playerState == PAUSED || playerState == PAUSED_TEMP) {
+					// Also cancels a play() that is still queued; no player event follows an unchanged state.
+					mediaPlayer.pause();
+					if (playerState != paused) setPlayerState(paused);
 				}
-				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
-			} else if(playerState == PAUSED_TEMP) {
-				setPlayerState(temp ? PAUSED_TEMP : PAUSED);
+			} else if (playerState == STARTED) {
+				remoteController.stop();
+				setPlayerState(paused);
+			} else if (playerState == PAUSED_TEMP) {
+				setPlayerState(paused);
+			} else if (playerState == PREPARING) {
+				remoteController.stop();
 			}
+			onStateUpdate();
 		} catch (Exception x) {
 			handleError(x);
 		}
 	}
 
 	public synchronized void stop() {
+		playWhenReady = false;
+		autoPlayStart = false;
+		if (bufferTask != null) {
+			bufferTask.cancel();
+			bufferTask = null;
+		}
 		try {
+			if (remoteState == LOCAL) {
+				cachedPosition = mediaPlayer.getCurrentPosition();
+				mediaPlayer.stop();
+				setPlayerState(STOPPED);
+				return;
+			}
 			if (playerState == STARTED) {
 				if (remoteState != LOCAL) {
 					remoteController.stop();
@@ -1411,18 +1407,20 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void start() {
+		playbackError = null;
+		playWhenReady = true;
 		try {
 			if (remoteState != LOCAL) {
 				remoteController.start();
 			} else {
-				// Only start if done preparing
-				if(playerState != PREPARING) {
-					mediaPlayer.start();
+				if (playerState == IDLE || playerState == STOPPED || playerState == COMPLETED) {
+					play(getCurrentPlayingIndex(), true, cachedPosition);
+				} else if (playerState != DOWNLOADING) {
+					mediaPlayer.play();
 					applyPlaybackParamsMain();
-				} else {
-					// Otherwise, we need to set it up to start when done preparing
-					autoPlayStart = true;
 				}
+				onStateUpdate();
+				return;
 			}
 			setPlayerState(STARTED);
 		} catch (Exception x) {
@@ -1432,6 +1430,7 @@ public class DownloadService extends Service {
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void reset() {
+		playbackError = null;
 		if (bufferTask != null) {
 			bufferTask.cancel();
 			bufferTask = null;
@@ -1441,14 +1440,7 @@ public class DownloadService extends Service {
 			if(remoteState == LOCAL) {
 				setPlayerState(IDLE);
 			}
-			mediaPlayer.setOnErrorListener(null);
-			mediaPlayer.setOnCompletionListener(null);
-			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
-				mediaPlayer.setNextMediaPlayer(null);
-				nextSetup = false;
-			}
 			mediaPlayer.reset();
-			subtractPosition = 0;
 		} catch (Exception x) {
 			handleError(x);
 		}
@@ -1456,24 +1448,7 @@ public class DownloadService extends Service {
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public synchronized void resetNext() {
-		try {
-			if (nextMediaPlayer != null) {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && nextSetup) {
-					mediaPlayer.setNextMediaPlayer(null);
-				}
-				nextSetup = false;
-
-				nextMediaPlayer.setOnCompletionListener(null);
-				nextMediaPlayer.setOnErrorListener(null);
-				nextMediaPlayer.reset();
-				nextMediaPlayer.release();
-				nextMediaPlayer = null;
-			} else if(nextSetup) {
-				nextSetup = false;
-			}
-		} catch (Exception e) {
-			Log.w(TAG, "Failed to reset next media player");
-		}
+		mediaPlayer.clearNext();
 	}
 
 	public int getPlayerPosition() {
@@ -1483,8 +1458,10 @@ public class DownloadService extends Service {
 			}
 			if (remoteState != LOCAL) {
 				return remoteController.getRemotePosition() * 1000;
+			} else if (playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP) {
+				return Math.max(0, mediaPlayer.getCurrentPosition());
 			} else {
-				return Math.max(0, cachedPosition - subtractPosition);
+				return Math.max(0, cachedPosition);
 			}
 		} catch (Exception x) {
 			handleError(x);
@@ -1524,6 +1501,15 @@ public class DownloadService extends Service {
 		return playerState;
 	}
 
+	public synchronized boolean isPlayWhenReady() {
+		return currentPlaying != null && (remoteState == LOCAL ? playWhenReady
+				: remoteController != null && remoteController.isPlayWhenReady());
+	}
+
+	public synchronized PlaybackException getPlaybackError() {
+		return playbackError;
+	}
+
 	public PlayerState getNextPlayerState() {
 		return nextPlayerState;
 	}
@@ -1538,9 +1524,6 @@ public class DownloadService extends Service {
 			}
 		}
 
-		boolean show = playerState == PlayerState.STARTED;
-		boolean pause = playerState == PlayerState.PAUSED;
-		boolean hide = playerState == PlayerState.STOPPED;
 		Util.broadcastPlaybackStatusChange(this, (currentPlaying != null) ? currentPlaying.getSong() : null, playerState);
 
 		this.playerState = playerState;
@@ -1550,20 +1533,6 @@ public class DownloadService extends Service {
 			Util.requestAudioFocus(this, audioManager);
 		}
 
-		SharedPreferences prefs = Util.getPreferences(this);
-		boolean usingMediaStyleNotification = prefs.getBoolean(Constants.PREFERENCES_KEY_MEDIA_STYLE_NOTIFICATION, true) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
-
-		if (show) {
-			Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong(), usingMediaStyleNotification);
-		} else if (pause) {
-			if (prefs.getBoolean(Constants.PREFERENCES_KEY_PERSISTENT_NOTIFICATION, true)) {
-				Notifications.showPlayingNotification(this, this, handler, currentPlaying.getSong(), usingMediaStyleNotification);
-			} else {
-				Notifications.hidePlayingNotification(this, this, handler);
-			}
-		} else if(hide) {
-			Notifications.hidePlayingNotification(this, this, handler);
-		}
 		if(mRemoteControl != null) {
 			final int state = playerState.getRemoteControlClientPlayState();
 			final int index = getCurrentPlayingIndex();
@@ -1667,24 +1636,7 @@ public class DownloadService extends Service {
 			while(isRunning) {
 				try {
 					if(mediaPlayer != null && playerState == STARTED) {
-						int newPosition = mediaPlayer.getCurrentPosition();
-
-						// If sudden jump in position, something is wrong
-						if(subtractNextPosition == 0 && newPosition > (cachedPosition + 5000)) {
-							// Only 1 second should have gone by, subtract the rest
-							subtractPosition += (newPosition - cachedPosition) - 1000;
-						}
-
-						cachedPosition = newPosition;
-
-						if(subtractNextPosition > 0) {
-							// Subtraction amount is current position - how long ago onCompletionListener was called
-							subtractPosition = cachedPosition - (int) (System.currentTimeMillis() - subtractNextPosition);
-							if(subtractPosition < 0) {
-								subtractPosition = 0;
-							}
-							subtractNextPosition = 0;
-						}
+						cachedPosition = mediaPlayer.getCurrentPosition();
 					}
 					onSongProgress(cachedPosition < 2000 ? true: false);
 					Thread.sleep(delayUpdateProgress);
@@ -1733,32 +1685,8 @@ public class DownloadService extends Service {
 				throw new Exception("Failed to get EQ");
 			}
 		} catch(Exception e) {
-			Log.w(TAG, "Failed to start EQ, retrying with new mediaPlayer: " + e);
-
-			// If we failed, we are going to try to reinitialize the MediaPlayer
-			boolean playing = playerState == STARTED;
-			int pos = getPlayerPosition();
-			mediaPlayer.pause();
-			Util.sleepQuietly(10L);
-			reset();
-
-			try {
-				// Resetup media player
-				mediaPlayer.setAudioSessionId(audioSessionId);
-				mediaPlayer.setDataSource(currentPlaying.getFile().getCanonicalPath());
-
-				controller = effectsController.getEqualizerController();
-				if(controller.getEqualizer() == null) {
-					throw new Exception("Failed to get EQ");
-				}
-			} catch(Exception e2) {
-				Log.w(TAG, "Failed to setup EQ even after reinitialization");
-				// Don't try again, just resetup media player and continue on
-				controller = null;
-			}
-
-			// Restart from same position and state we left off in
-			play(getCurrentPlayingIndex(), false, pos);
+			Log.w(TAG, "Unable to attach equalizer to the playback audio session", e);
+			controller = null;
 		}
 
 		return controller;
@@ -1814,7 +1742,7 @@ public class DownloadService extends Service {
 			return;
 		}
 
-		boolean isPlaying = playerState == STARTED;
+		boolean isPlaying = isPlayWhenReady();
 		int position = getPlayerPosition();
 
 		if(remoteController != null) {
@@ -1874,10 +1802,6 @@ public class DownloadService extends Service {
 			if(bufferTask != null && bufferTask.isRunning()) {
 				bufferTask.cancel();
 				bufferTask = null;
-			}
-			if(nextPlayingTask != null && nextPlayingTask.isRunning()) {
-				nextPlayingTask.cancel();
-				nextPlayingTask = null;
 			}
 
 			if(nextPlayerState != IDLE) {
@@ -1966,56 +1890,9 @@ public class DownloadService extends Service {
 		}
 	}
 
-	/**
-	 * If {@code stream} is true, ensure the active player is the ExoPlayer-based
-	 * {@link ExoPlayerAudio} (needed for Ogg/Vorbis/Opus over HTTP, where the
-	 * legacy MediaPlayer is unreliable). Otherwise ensure it is
-	 * {@link MediaPlayerAudio} (so that equalizer / replay-gain / gapless paths
-	 * keep working). Releases the previous player when swapping.
-	 */
-	private AudioPlayer ensurePlayerForStream(AudioPlayer current, boolean stream) {
-		boolean wantExo = stream;
-		boolean haveExo = current instanceof ExoPlayerAudio;
-		if (wantExo == haveExo) {
-			return current;
-		}
-		try {
-			if (current != null) {
-				current.setOnErrorListener(null);
-				current.setOnPreparedListener(null);
-				current.setOnCompletionListener(null);
-				current.setOnBufferingUpdateListener(null);
-				current.release();
-			}
-		} catch (Throwable t) {
-			Log.w(TAG, "Failed to release previous player while swapping backends", t);
-		}
-		AudioPlayer fresh = wantExo ? new ExoPlayerAudio(this) : new MediaPlayerAudio();
-		fresh.setWakeMode(this, PowerManager.PARTIAL_WAKE_LOCK);
-		return fresh;
-	}
-
 	private synchronized void doPlay(final DownloadFile downloadFile, final int position, final boolean start) {
+		if (downloadFile != currentPlaying || remoteState != LOCAL) return;
 		try {
-			subtractPosition = 0;
-			// Choose the right backend before configuring the player. For HTTP
-			// streams (Internet radios) we use ExoPlayerAudio because the legacy
-			// android.media.MediaPlayer chokes on Ogg/Vorbis/Opus over HTTP on
-			// many devices; for everything else we keep MediaPlayerAudio so that
-			// existing equalizer / replay-gain / gapless paths keep working
-			// unchanged.
-			mediaPlayer = ensurePlayerForStream(mediaPlayer, downloadFile.isStream());
-			mediaPlayer.setOnCompletionListener(null);
-			mediaPlayer.setOnPreparedListener(null);
-			mediaPlayer.setOnErrorListener(null);
-			mediaPlayer.reset();
-			setPlayerState(IDLE);
-			try {
-				mediaPlayer.setAudioSessionId(audioSessionId);
-			} catch(Throwable e) {
-				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			}
-
 			String dataSource;
 			boolean isPartial = false;
 			if(downloadFile.isStream()) {
@@ -2033,7 +1910,7 @@ public class DownloadService extends Service {
 						proxy = new BufferProxy(this);
 						proxy.start();
 					}
-					proxy.setBufferFile(downloadFile);
+					proxy.setBufferFile(downloadFile, dataSource);
 					dataSource = proxy.getPrivateAddress(dataSource);
 					Log.i(TAG, "Data Source: " + dataSource);
 				} else if (proxy != null) {
@@ -2042,16 +1919,14 @@ public class DownloadService extends Service {
 				}
 			}
 
-			mediaPlayer.setDataSource(dataSource);
-
 			// Optional USB DAC routing (issue #141). Apply before prepareAsync so
 			// the player picks up the device on the upcoming prepare. Hot-plug
 			// mid-track is not handled here; the next track will pick up the new
 			// device. TODO: register AudioDeviceCallback to re-route mid-track.
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 				AudioDeviceInfo usbDevice = UsbDacHelper.findUsbAudioDevice(this);
+				mediaPlayer.setPreferredDevice(usbDevice);
 				if (usbDevice != null) {
-					mediaPlayer.setPreferredDevice(usbDevice);
 					if (!downloadFile.isStream()) {
 						// Sample-rate probe is diagnostic only; run it off the
 						// service monitor so MediaExtractor I/O does not delay
@@ -2072,57 +1947,11 @@ public class DownloadService extends Service {
 
 			setPlayerState(PREPARING);
 
-			mediaPlayer.setOnBufferingUpdateListener(new AudioPlayer.OnBufferingUpdateListener() {
-				public void onBufferingUpdate(AudioPlayer mp, int percent) {
-					Log.i(TAG, "Buffered " + percent + "%");
-					if (percent == 100) {
-						mediaPlayer.setOnBufferingUpdateListener(null);
-					}
-				}
-			});
-
-			mediaPlayer.setOnPreparedListener(new AudioPlayer.OnPreparedListener() {
-				public void onPrepared(AudioPlayer player) {
-					try {
-						setPlayerState(PREPARED);
-
-						synchronized (DownloadService.this) {
-							if (position != 0) {
-								Log.i(TAG, "Restarting player from position " + position);
-								player.seekTo(position);
-							}
-							cachedPosition = position;
-
-							applyReplayGain(player, downloadFile);
-
-							if (start || autoPlayStart) {
-								player.start();
-								applyPlaybackParamsMain();
-								setPlayerState(STARTED);
-
-								// Disable autoPlayStart after done
-								autoPlayStart = false;
-							} else {
-								setPlayerState(PAUSED);
-								onSongProgress();
-							}
-
-							updateRemotePlaylist();
-						}
-
-						// Only call when starting, setPlayerState(PAUSED) already calls this
-						if(start) {
-							lifecycleSupport.serializeDownloadQueue();
-						}
-					} catch (Exception x) {
-						handleError(x);
-					}
-				}
-			});
-
-			setupHandlers(downloadFile, isPartial, start);
-
-			mediaPlayer.prepareAsync();
+			cachedPosition = position;
+			mediaPlayer.prepare(downloadFile, dataSource, position, playWhenReady || autoPlayStart,
+					replayGain(downloadFile), getPlaybackSpeed());
+			autoPlayStart = false;
+			setNextPlaying();
 		} catch (Exception x) {
 			handleError(x);
 		}
@@ -2132,117 +1961,47 @@ public class DownloadService extends Service {
 	private synchronized void setupNext(final DownloadFile downloadFile) {
 		try {
 			final File file = downloadFile.isCompleteFileAvailable() ? downloadFile.getCompleteFile() : downloadFile.getPartialFile();
-			resetNext();
-
-			// Exit when using remote controllers
-			if(remoteState != LOCAL) {
+			if (remoteState != LOCAL || downloadFile != nextPlaying || !downloadFile.isCompleteFileAvailable()) {
 				return;
 			}
-
-			// Gapless prefetch only applies to local files (queued tracks); use the
-			// MediaPlayer-backed adapter so setNextMediaPlayer() is honored on the
-			// current player.
-			nextMediaPlayer = new MediaPlayerAudio();
-			nextMediaPlayer.setWakeMode(DownloadService.this, PowerManager.PARTIAL_WAKE_LOCK);
-			try {
-				nextMediaPlayer.setAudioSessionId(audioSessionId);
-			} catch(Throwable e) {
-				nextMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			}
-			nextMediaPlayer.setDataSource(file.getPath());
-			setNextPlayerState(PREPARING);
-
-			nextMediaPlayer.setOnPreparedListener(new AudioPlayer.OnPreparedListener() {
-				public void onPrepared(AudioPlayer mp) {
-					// Changed to different while preparing so ignore
-					if(nextMediaPlayer != mp) {
-						return;
-					}
-
-					try {
-						setNextPlayerState(PREPARED);
-
-						if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED)) {
-							mediaPlayer.setNextMediaPlayer(nextMediaPlayer);
-							nextSetup = true;
-						}
-
-						applyReplayGain(nextMediaPlayer, downloadFile);
-					} catch (Exception x) {
-						handleErrorNext(x);
-					}
-				}
-			});
-
-			nextMediaPlayer.setOnErrorListener(new AudioPlayer.OnErrorListener() {
-				public boolean onError(AudioPlayer player, int what, int extra) {
-					Log.w(TAG, "Error on playing next " + "(" + what + ", " + extra + "): " + downloadFile);
-					return true;
-				}
-			});
-
-			nextMediaPlayer.prepareAsync();
+			mediaPlayer.setNext(currentPlaying, downloadFile, file.getPath(), replayGain(downloadFile));
+			setNextPlayerState(PREPARED);
 		} catch (Exception x) {
 			handleErrorNext(x);
 		}
 	}
 
-	private void setupHandlers(final DownloadFile downloadFile, final boolean isPartial, final boolean isPlaying) {
-		final int duration = downloadFile.getSong().getDuration() == null ? 0 : downloadFile.getSong().getDuration() * 1000;
-		mediaPlayer.setOnErrorListener(new AudioPlayer.OnErrorListener() {
-			public boolean onError(AudioPlayer player, int what, int extra) {
-				Log.w(TAG, "Error on playing file " + "(" + what + ", " + extra + "): " + downloadFile);
-				int pos = getPlayerPosition();
-				reset();
-                boolean isError38 = (what == -38 && extra == 0);
-                if (isError38) {
-                    // Occasionally, an "Invalid state" error (-38) may occur
-                    // because the player state is not handled correctly in this
-                    // implementation. In such cases, we simply retry the operation.
-                    Log.w(TAG, "Error -38 occurred – retrying to play the current song.");
-                }
-                if (!isError38 && (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000)))) {
-					playNext();
-				} else {
-					downloadFile.setPlaying(false);
-					doPlay(downloadFile, pos, isPlaying);
-					downloadFile.setPlaying(true);
-				}
-				return true;
+	private synchronized void onLocalState(DownloadFile file, int state, boolean playWhenReadyNow) {
+		if (remoteState != LOCAL || file != currentPlaying) return;
+		if (state == Player.STATE_ENDED) {
+			onSongCompleted();
+		} else if (state == Player.STATE_BUFFERING) {
+			if (playerState != PREPARING) setPlayerState(PREPARING);
+		} else if (state == Player.STATE_READY) {
+			// The service-level playWhenReady flag distinguishes a temporary pause from a user pause.
+			PlayerState updated = playWhenReadyNow ? STARTED : playWhenReady ? PAUSED_TEMP : PAUSED;
+			cachedPosition = mediaPlayer.getCurrentPosition();
+			if (playerState != updated) {
+				setPlayerState(updated);
+				updateRemotePlaylist();
+				lifecycleSupport.serializeDownloadQueue();
+				queueNextWhenReady();
 			}
-		});
+		}
+	}
 
-		mediaPlayer.setOnCompletionListener(new AudioPlayer.OnCompletionListener() {
-			@Override
-			public void onCompletion(AudioPlayer player) {
-				setPlayerStateCompleted();
-
-				int pos = getPlayerPosition();
-				Log.i(TAG, "Ending position " + pos + " of " + duration);
-				if (!isPartial || (downloadFile.isWorkDone() && (Math.abs(duration - pos) < 10000)) || nextSetup) {
-					playNext();
-					postPlayCleanup(downloadFile);
-				} else {
-					// If file is not completely downloaded, restart the playback from the current position.
-					synchronized (DownloadService.this) {
-						if (downloadFile.isWorkDone()) {
-							// Complete was called early even though file is fully buffered
-							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
-							reset();
-							downloadFile.setPlaying(false);
-							doPlay(downloadFile, pos, true);
-							downloadFile.setPlaying(true);
-						} else {
-							Log.i(TAG, "Requesting restart from " + pos + " of " + duration);
-							reset();
-							bufferTask = new BufferTask(downloadFile, pos, true);
-							bufferTask.execute();
-						}
-					}
-					checkDownloads();
-				}
-			}
-		});
+	private synchronized void onLocalTransition(DownloadFile previous, DownloadFile current) {
+		if (remoteState != LOCAL || previous != currentPlaying) return;
+		onNextStarted(current);
+		cachedPosition = 0;
+		applyPlaybackParamsMain();
+		setNextPlaying();
+		checkDownloads();
+		updateRemotePlaylist();
+		if (proxy != null) {
+			proxy.close();
+			proxy = null;
+		}
 	}
 
 	public void setSleepTimerDuration(int duration){
@@ -2287,14 +2046,11 @@ public class DownloadService extends Service {
 	}
 
 	public void setVolume(float volume) {
-		if(mediaPlayer != null && (playerState == STARTED || playerState == PAUSED || playerState == STOPPED)) {
-			try {
-				this.volume = volume;
-				reapplyVolume();
-			} catch(Exception e) {
-				Log.w(TAG, "Failed to set volume");
-			}
+		if (!Float.isFinite(volume) || volume < 0 || volume > 1) {
+			throw new IllegalArgumentException("Volume must be between zero and one");
 		}
+		this.volume = volume;
+		if (mediaPlayer != null) reapplyVolume();
 	}
 
 	public float getVolume() {
@@ -2306,7 +2062,12 @@ public class DownloadService extends Service {
 	}
 
 	public void reapplyVolume() {
-		applyReplayGain(mediaPlayer, currentPlaying);
+		try {
+			if (currentPlaying != null) mediaPlayer.setGain(currentPlaying, replayGain(currentPlaying));
+			if (nextPlaying != null) mediaPlayer.setGain(nextPlaying, replayGain(nextPlaying));
+		} catch (IOException error) {
+			Log.w(TAG, "Unable to update ReplayGain", error);
+		}
 	}
 
 	public synchronized void swap(boolean mainList, DownloadFile from, DownloadFile to) {
@@ -2335,6 +2096,8 @@ public class DownloadService extends Service {
 			} else {
 				updateRemotePlaylist();
 			}
+			revision++;
+			onSongsChanged();
 		}
 	}
 
@@ -2347,7 +2110,8 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private void handleError(Exception x) {
+	synchronized void handleError(Exception x) {
+		playWhenReady = false;
 		Log.w(TAG, "Media player error: " + x, x);
 		if(mediaPlayer != null) {
 			try {
@@ -2356,12 +2120,14 @@ public class DownloadService extends Service {
 				Log.e(TAG, "Failed to reset player in error handler");
 			}
 		}
+		playbackError = x instanceof PlaybackException ? (PlaybackException) x
+				: new PlaybackException("Unable to play media", x, PlaybackException.ERROR_CODE_UNSPECIFIED);
 		setPlayerState(IDLE);
 	}
 	private void handleErrorNext(Exception x) {
 		Log.w(TAG, "Next Media player error: " + x, x);
 		try {
-			nextMediaPlayer.reset();
+			mediaPlayer.clearNext();
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to reset next media player", x);
 		}
@@ -2378,6 +2144,7 @@ public class DownloadService extends Service {
 	}
 
 	public synchronized void checkDownloads() {
+		queueNextWhenReady();
 		if (!Util.isExternalStoragePresent() || !lifecycleSupport.isExternalStorageAvailable()) {
 			return;
 		}
@@ -2622,7 +2389,7 @@ public class DownloadService extends Service {
 		clearCurrentBookmark(downloadFile.getSong(), true);
 	}
 
-	public RemoteControlClientBase getRemoteControlClient() {
+	public RemoteControlClientLP getRemoteControlClient() {
 		return mRemoteControl;
 	}
 	
@@ -2777,11 +2544,8 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private void applyReplayGain(AudioPlayer mediaPlayer, DownloadFile downloadFile) {
-		if(currentPlaying == null) {
-			return;
-		}
-
+	private float replayGain(DownloadFile downloadFile) throws IOException {
+		if (downloadFile.isStream()) return volume;
 		SharedPreferences prefs = Util.getPreferences(this);
 		try {
 			float adjust = 0f;
@@ -2854,13 +2618,23 @@ public class DownloadService extends Service {
 			} else if (rg_result < 0.0f) {
 				rg_result = 0.0f;
 			}
-			mediaPlayer.setVolume(rg_result, rg_result);
+			return rg_result;
 		} catch(IOException e) {
 			Log.w(TAG, "Failed to apply replay gain values", e);
+			throw e;
 		}
 	}
 
 	public void setPlaybackSpeed(float playbackSpeed) {
+		if (remoteState != LOCAL) {
+			if (remoteController != null && remoteController.supportsPlaybackSpeed()) {
+				remoteController.setPlaybackSpeed(playbackSpeed);
+			} else {
+				Log.w(TAG, "Playback speed is not supported by this output");
+			}
+			onStateUpdate();
+			return;
+		}
 		if(currentPlaying.isSong())
 			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, playbackSpeed).commit();
 		else
@@ -2870,6 +2644,7 @@ public class DownloadService extends Service {
 		}
 
 		delayUpdateProgress = Math.round(DEFAULT_DELAY_UPDATE_PROGRESS / playbackSpeed);
+		onStateUpdate();
 	}
 	private void resetPlaybackSpeed() {
 		Util.getPreferences(this).edit().remove(Constants.PREFERENCES_KEY_PLAYBACK_SPEED).commit();
@@ -2877,6 +2652,7 @@ public class DownloadService extends Service {
 	}
 
 	public float getPlaybackSpeed() {
+		if (remoteState != LOCAL) return remoteController == null ? 1f : remoteController.getPlaybackSpeed();
 		if (currentPlaying == null)
 			return  1.0f;
 		else {
@@ -2888,7 +2664,7 @@ public class DownloadService extends Service {
 	}
 
 	private synchronized void applyPlaybackParamsMain() {
-		applyPlaybackParams(mediaPlayer);
+		if (remoteState == LOCAL) mediaPlayer.setSpeed(getPlaybackSpeed());
 	}
 	private synchronized boolean isNextPlayingSameAlbum() {
 		return isNextPlayingSameAlbum(currentPlaying, nextPlaying);
@@ -2898,22 +2674,6 @@ public class DownloadService extends Service {
 			return false;
 		} else {
 			return currentPlaying.getSong().getAlbum().equals(nextPlaying.getSong().getAlbum());
-		}
-	}
-
-	private synchronized void applyPlaybackParams(AudioPlayer mediaPlayer) {
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			float playbackSpeed = getPlaybackSpeed();
-
-			try {
-				if (Math.abs(playbackSpeed - 1.0) > 0.01 || mediaPlayer.getPlaybackParams() != null) {
-					PlaybackParams playbackParams = new PlaybackParams();
-					playbackParams.setSpeed(playbackSpeed);
-					mediaPlayer.setPlaybackParams(playbackParams);
-				}
-			} catch(Exception e) {
-				Log.e(TAG, "Error while applying media player params", e);
-			}
 		}
 	}
 
@@ -3182,7 +2942,9 @@ public class DownloadService extends Service {
 					checkDownloads();
 				}
 			}
-			doPlay(downloadFile, position, start);
+			synchronized (DownloadService.this) {
+				if (!isCancelled()) doPlay(downloadFile, position, start);
+			}
 
 			return null;
 		}
@@ -3201,56 +2963,26 @@ public class DownloadService extends Service {
 		}
 	}
 
-	private class CheckCompletionTask extends SilentBackgroundTask<Void> {
-		private final DownloadFile downloadFile;
-		private final File partialFile;
-
-		public CheckCompletionTask(DownloadFile downloadFile) {
-			super(instance);
-			this.downloadFile = downloadFile;
-			if(downloadFile != null) {
-				partialFile = downloadFile.getPartialFile();
-			} else {
-				partialFile = null;
-			}
-		}
-
-		@Override
-		public Void doInBackground()  throws InterruptedException {
-			if(downloadFile == null) {
-				return null;
-			}
-
-			// Do an initial sleep so this prepare can't compete with main prepare
-			Thread.sleep(5000L);
-			while (!bufferComplete()) {
-				Thread.sleep(5000L);
-				if (isCancelled()) {
-					return null;
-				}
-			}
-
-			// Start the setup of the next media player
-			mediaPlayerHandler.post(new Runnable() {
+	/** Queues the next track in the player once its file is complete and playback has started. */
+	private void queueNextWhenReady() {
+		final Handler worker = mediaPlayerHandler;
+		if (worker != null) {
+			worker.post(new Runnable() {
+				@Override
 				public void run() {
-					if(!CheckCompletionTask.this.isCancelled()) {
-						setupNext(downloadFile);
-					}
+					queueNextNow();
 				}
 			});
-			return null;
 		}
+	}
 
-		private boolean bufferComplete() {
-			boolean completeFileAvailable = downloadFile.isWorkDone();
-			Log.i(TAG, "Buffering next " + partialFile + " (" + partialFile.length() + "): " + completeFileAvailable);
-			return completeFileAvailable && (playerState == PlayerState.STARTED || playerState == PlayerState.PAUSED);
+	private synchronized void queueNextNow() {
+		DownloadFile next = nextPlaying;
+		if (remoteState != LOCAL || next == null || nextPlayerState == PREPARED || !next.isWorkDone()
+				|| (playerState != STARTED && playerState != PAUSED)) {
+			return;
 		}
-
-		@Override
-		public String toString() {
-			return "CheckCompletionTask (" + downloadFile + ")";
-		}
+		setupNext(next);
 	}
 
 	public interface OnSongChangedListener {

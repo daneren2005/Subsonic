@@ -330,12 +330,20 @@ public class DownloadServiceLifecycleSupport {
 						List<MusicDirectory.Entry> songs = new ArrayList<>();
 
 						SongDBHandler dbHandler = SongDBHandler.getHandler(downloadService);
+						boolean currentIncluded = false;
 						for(MusicDirectory.Entry song: state.songs) {
 							Pair<Integer, String> onlineSongIds = dbHandler.getOnlineSongId(song);
 							if(onlineSongIds != null && onlineSongIds.getSecond() != null) {
 								song.setId(onlineSongIds.getSecond());
 								songs.add(song);
+								currentIncluded |= song == currentPlaying;
 							}
+						}
+
+						// Local-only files have no server ID, and the server rejects a current song outside the list.
+						if(!currentIncluded) {
+							Log.i(TAG, "Not saving play queue to server: current song is not on the server");
+							return null;
 						}
 
 						MusicService musicService = MusicServiceFactory.getMusicService(downloadService);

@@ -76,17 +76,20 @@ android {
 	}
 }
 
+def media3Version = '1.11.1'
+
 dependencies {
 	implementation project(':ServerProxy')
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-	implementation 'androidx.media:media:1.7.0'
 	implementation 'androidx.appcompat:appcompat:1.7.1'
+	androidTestImplementation 'androidx.media:media:1.7.0'
 	implementation 'androidx.mediarouter:mediarouter:1.8.1'
 	implementation 'androidx.recyclerview:recyclerview:1.4.0'
 	implementation 'androidx.activity:activity:1.10.1'
 	implementation 'com.google.android.material:material:1.13.0'
-	googleImplementation 'com.google.android.gms:play-services-cast:22.1.0'
+	googleImplementation 'com.google.android.gms:play-services-cast-framework:22.1.0'
+	googleImplementation "androidx.media3:media3-cast:$media3Version"
 	implementation 'com.sothree.slidinguppanel:library:3.4.0'
 	implementation 'de.hdodenhof:circleimageview:3.1.0'
 	implementation 'com.shehabic.droppy:Droppy:0.6.0@aar'
@@ -105,10 +108,9 @@ dependencies {
 	debugImplementation 'org.slf4j:slf4j-api:2.0.17'  // For jupnp logging in debug builds
 	debugImplementation 'uk.uuid.slf4j:slf4j-android:2.0.17-0'
 	implementation 'androidx.palette:palette:1.0.0'
-	// Media3/ExoPlayer for streaming radios with codecs that android.media.MediaPlayer
-	// handles unreliably over HTTP (Ogg Vorbis, Opus, ...). Used for stream playback only;
-	// local files keep using android.media.MediaPlayer via the AudioPlayer abstraction.
-	implementation 'androidx.media3:media3-exoplayer:1.4.1'
-	implementation 'androidx.media3:media3-common:1.4.1'
-	implementation 'androidx.media3:media3-extractor:1.4.1'
+	// Keep the native playback and session modules on the same Media3 release.
+	implementation "androidx.media3:media3-exoplayer:$media3Version"
+	implementation "androidx.media3:media3-common:$media3Version"
+	implementation "androidx.media3:media3-extractor:$media3Version"
+	implementation "androidx.media3:media3-session:$media3Version"
 }
