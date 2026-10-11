@@ -662,7 +662,7 @@ public class FileUtil {
 			Log.w(TAG, "Failed to upin " + saveFile + " to " + completeFile);
 		} else {
 			try {
-				new MediaStoreService(context).renameInMediaStore(completeFile, saveFile);
+				new MediaStoreService(context).renameInMediaStore(saveFile, completeFile);
 			} catch(Exception e) {
 				Log.w(TAG, "Failed to write to media store");
 			}
