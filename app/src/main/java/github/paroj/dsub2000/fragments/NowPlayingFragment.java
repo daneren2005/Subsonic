@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -1037,7 +1038,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		});
 		lengthBar.setProgress(length - 1);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.menu_set_timer)
 				.setView(dialogView)
 				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
@@ -1145,7 +1146,7 @@ public class NowPlayingFragment extends SubsonicFragment implements OnGestureLis
 		View dialogView = context.getLayoutInflater().inflate(R.layout.create_bookmark, null);
 		final EditText commentBox = (EditText)dialogView.findViewById(R.id.comment_text);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.download_save_bookmark_title)
 				.setView(dialogView)
 				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {

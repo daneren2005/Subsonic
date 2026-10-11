@@ -16,6 +16,7 @@ package github.paroj.dsub2000.fragments;
 
 import android.content.res.Resources;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -311,7 +312,7 @@ public class SelectPodcastsFragment extends SelectRecyclerFragment<Serializable>
 		View dialogView = context.getLayoutInflater().inflate(R.layout.create_podcast, null);
 		final TextView urlBox = (TextView) dialogView.findViewById(R.id.create_podcast_url);
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.menu_add_podcast)
 			.setView(dialogView)
 			.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {

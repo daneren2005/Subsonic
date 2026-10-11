@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
@@ -185,7 +186,7 @@ public final class UpdateHelper {
 		final RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.rating_bar);
 		ratingBar.setRating((float) entry.getRating());
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(context.getResources().getString(R.string.rating_title, entry.getTitle()))
 				.setView(layout)
 				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {

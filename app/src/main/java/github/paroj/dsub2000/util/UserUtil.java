@@ -17,6 +17,7 @@ package github.paroj.dsub2000.util;
 
 import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -170,7 +171,7 @@ public final class UserUtil {
 			View layout = context.getLayoutInflater().inflate(R.layout.confirm_password, null);
 			final TextView passwordView = (TextView) layout.findViewById(R.id.password);
 			
-			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 			builder.setTitle(R.string.admin_confirm_password)
 				.setView(layout)
 				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
@@ -210,7 +211,7 @@ public final class UserUtil {
 			currentPasswordLayout.setVisibility(View.GONE);
 		}
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.admin_change_password)
 				.setView(layout)
 				.setPositiveButton(R.string.common_save, null)
@@ -311,7 +312,7 @@ public final class UserUtil {
 		View layout = context.getLayoutInflater().inflate(R.layout.change_email, null);
 		final TextView emailView = (TextView) layout.findViewById(R.id.new_email);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.admin_change_email)
 				.setView(layout)
 				.setPositiveButton(R.string.common_save, null)
@@ -446,7 +447,7 @@ public final class UserUtil {
 			}
 		}));
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.menu_add_user)
 				.setView(layout)
 				.setPositiveButton(R.string.common_save, null)

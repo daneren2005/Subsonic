@@ -40,6 +40,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -1176,7 +1177,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		View checkBoxView = this.getLayoutInflater().inflate(R.layout.sync_dialog, null);
 		final CheckBox checkBox = (CheckBox)checkBoxView.findViewById(R.id.sync_default);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
 		builder.setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(R.string.offline_sync_dialog_title)
 				.setMessage(this.getResources().getString(R.string.offline_sync_dialog_message, scrobbleCount, starsCount))
