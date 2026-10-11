@@ -37,7 +37,7 @@ final class LocalPlayback {
     private final Listener listener;
     private final int audioSessionId;
     private Source current;
-    private Source next;
+    private volatile Source next;
     private volatile Snapshot snapshot = new Snapshot(0, 0, false, 1f);
     private volatile boolean released;
 
@@ -140,6 +140,10 @@ final class LocalPlayback {
     int getAudioSessionId() { return audioSessionId; }
     int getDuration() { return snapshot.duration; }
     int getCurrentPosition() { return snapshot.position(); }
+    boolean isQueued(DownloadFile file) {
+        Source queued = next;
+        return queued != null && queued.file == file;
+    }
 
     void reset() {
         execute(() -> {

@@ -24,7 +24,6 @@ import static github.paroj.dsub2000.domain.PlayerState.DOWNLOADING;
 import static github.paroj.dsub2000.domain.PlayerState.IDLE;
 import static github.paroj.dsub2000.domain.PlayerState.PAUSED;
 import static github.paroj.dsub2000.domain.PlayerState.PAUSED_TEMP;
-import static github.paroj.dsub2000.domain.PlayerState.PREPARED;
 import static github.paroj.dsub2000.domain.PlayerState.PREPARING;
 import static github.paroj.dsub2000.domain.PlayerState.STARTED;
 import static github.paroj.dsub2000.domain.PlayerState.STOPPED;
@@ -170,7 +169,7 @@ public class DownloadService extends MediaLibraryService {
 	private PowerManager.WakeLock wakeLock;
 	private WifiManager.WifiLock wifiLock;
 	private boolean keepScreenOn;
-	private int cachedPosition = 0;
+	private int cachedPosition = 0; // resume position while the player is not live (stopped, preparing, failed)
 	private boolean downloadOngoing = false;
 	private float volume = 1.0f;
 	private long delayUpdateProgress = DEFAULT_DELAY_UPDATE_PROGRESS;
@@ -1263,7 +1262,7 @@ public class DownloadService extends MediaLibraryService {
 		if(shouldFastForward()) {
 			rewind();
 			return;
-		} else if(playerState == PREPARING || playerState == PREPARED) {
+		} else if(playerState == PREPARING) {
 			return;
 		}
 
@@ -1290,7 +1289,7 @@ public class DownloadService extends MediaLibraryService {
 		if(shouldFastForward()) {
 			fastForward();
 			return;
-		} else if(playerState == PREPARING || playerState == PREPARED) {
+		} else if(playerState == PREPARING) {
 			return;
 		}
 
@@ -1635,10 +1634,7 @@ public class DownloadService extends MediaLibraryService {
 			// Stop checking position before the song reaches completion
 			while(isRunning) {
 				try {
-					if(mediaPlayer != null && playerState == STARTED) {
-						cachedPosition = mediaPlayer.getCurrentPosition();
-					}
-					onSongProgress(cachedPosition < 2000 ? true: false);
+					onSongProgress(getPlayerPosition() < 2000);
 					Thread.sleep(delayUpdateProgress);
 				}
 				catch(Exception e) {
@@ -1965,7 +1961,6 @@ public class DownloadService extends MediaLibraryService {
 				return;
 			}
 			mediaPlayer.setNext(currentPlaying, downloadFile, file.getPath(), replayGain(downloadFile));
-			setNextPlayerState(PREPARED);
 		} catch (Exception x) {
 			handleErrorNext(x);
 		}
@@ -1980,7 +1975,6 @@ public class DownloadService extends MediaLibraryService {
 		} else if (state == Player.STATE_READY) {
 			// The service-level playWhenReady flag distinguishes a temporary pause from a user pause.
 			PlayerState updated = playWhenReadyNow ? STARTED : playWhenReady ? PAUSED_TEMP : PAUSED;
-			cachedPosition = mediaPlayer.getCurrentPosition();
 			if (playerState != updated) {
 				setPlayerState(updated);
 				updateRemotePlaylist();
@@ -1993,7 +1987,6 @@ public class DownloadService extends MediaLibraryService {
 	private synchronized void onLocalTransition(DownloadFile previous, DownloadFile current) {
 		if (remoteState != LOCAL || previous != currentPlaying) return;
 		onNextStarted(current);
-		cachedPosition = 0;
 		applyPlaybackParamsMain();
 		setNextPlaying();
 		checkDownloads();
@@ -2214,9 +2207,6 @@ public class DownloadService extends MediaLibraryService {
 							currentDownloading = downloadFile;
 							currentDownloading.download();
 							cleanupCandidates.add(currentDownloading);
-							if(i == (start + 1)) {
-								setNextPlayerState(DOWNLOADING);
-							}
 							break;
 						}
 					} else if (currentPlaying != downloadFile) {
@@ -2639,7 +2629,7 @@ public class DownloadService extends MediaLibraryService {
 			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_SONG_PLAYBACK_SPEED, playbackSpeed).commit();
 		else
 			Util.getPreferences(this).edit().putFloat(Constants.PREFERENCES_KEY_PLAYBACK_SPEED, playbackSpeed).commit();
-		if(mediaPlayer != null && (playerState == PREPARED || playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP)) {
+		if(mediaPlayer != null && (playerState == STARTED || playerState == PAUSED || playerState == PAUSED_TEMP)) {
 			applyPlaybackParamsMain();
 		}
 
@@ -2978,7 +2968,7 @@ public class DownloadService extends MediaLibraryService {
 
 	private synchronized void queueNextNow() {
 		DownloadFile next = nextPlaying;
-		if (remoteState != LOCAL || next == null || nextPlayerState == PREPARED || !next.isWorkDone()
+		if (remoteState != LOCAL || next == null || mediaPlayer.isQueued(next) || !next.isWorkDone()
 				|| (playerState != STARTED && playerState != PAUSED)) {
 			return;
 		}

@@ -101,7 +101,6 @@ public final class SessionPlayer extends SimpleBasePlayer implements DownloadSer
                     case DOWNLOADING:
                     case PREPARING: playbackState = STATE_BUFFERING; break;
                     case COMPLETED: playbackState = STATE_ENDED; break;
-                    case PREPARED:
                     case STARTED:
                     case PAUSED:
                     case PAUSED_TEMP: playbackState = STATE_READY; break;

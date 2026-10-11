@@ -1497,14 +1497,6 @@ public final class Util {
 					intent.putExtra("state", "pause");
 					avrcpIntent.putExtra("playing", false);
 					break;
-				case PREPARED:
-					// Only send quick pause event for samsung devices, causes issues for others
-					if (Build.MANUFACTURER.toLowerCase().indexOf("samsung") != -1) {
-						avrcpIntent.putExtra("playing", false);
-					} else {
-						return; // Don't broadcast anything
-					}
-					break;
 				case COMPLETED:
 					intent.putExtra("state", "complete");
 					avrcpIntent.putExtra("playing", false);
@@ -1514,9 +1506,7 @@ public final class Util {
 			}
 			addTrackInfo(context, song, avrcpIntent);
 
-			if (state != PlayerState.PREPARED) {
-				context.sendBroadcast(intent);
-			}
+			context.sendBroadcast(intent);
 			context.sendBroadcast(avrcpIntent);
 		} catch(Exception e) {
 			Log.e(TAG, "Failed to broadcastPlaybackStatusChange", e);
