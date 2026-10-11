@@ -211,7 +211,12 @@ public class DownloadService extends MediaLibraryService {
 			}
 			@Override public void onError(DownloadFile file, PlaybackException error) {
 				synchronized (DownloadService.this) {
-					if (remoteState == LOCAL && file == currentPlaying) handleError(error);
+					if (remoteState == LOCAL && file == currentPlaying) {
+						if (error.getCause() instanceof androidx.media3.exoplayer.source.UnrecognizedInputFormatException) {
+							logUnreadableSource(file);
+						}
+						handleError(error);
+					}
 				}
 			}
 		});
@@ -2117,6 +2122,31 @@ public class DownloadService extends MediaLibraryService {
 				: new PlaybackException("Unable to play media", x, PlaybackException.ERROR_CODE_UNSPECIFIED);
 		setPlayerState(IDLE);
 	}
+	/** Logs what ExoPlayer was given when no extractor recognized it; never logs stream URLs (they carry credentials). */
+	private void logUnreadableSource(DownloadFile file) {
+		try {
+			MusicDirectory.Entry song = file.getSong();
+			if (file.isStream()) {
+				Log.w(TAG, "Unrecognized format from a stream; suffix=" + song.getSuffix());
+				return;
+			}
+			File source = file.isCompleteFileAvailable() ? file.getCompleteFile() : file.getPartialFile();
+			StringBuilder head = new StringBuilder();
+			try (java.io.FileInputStream in = new java.io.FileInputStream(source)) {
+				byte[] bytes = new byte[16];
+				int read = in.read(bytes);
+				for (int i = 0; i < read; i++) {
+					head.append(String.format("%02x", bytes[i]));
+				}
+			}
+			Log.w(TAG, "Unrecognized format in " + source + " (" + source.length() + " bytes, complete="
+					+ file.isCompleteFileAvailable() + ", suffix=" + song.getSuffix() + ", transcoded="
+					+ song.getTranscodedSuffix() + "), first bytes " + head);
+		} catch (Exception e) {
+			Log.w(TAG, "Unable to inspect the unreadable source", e);
+		}
+	}
+
 	private void handleErrorNext(Exception x) {
 		Log.w(TAG, "Next Media player error: " + x, x);
 		try {
