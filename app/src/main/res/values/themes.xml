@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="Theme.DSub2000.Light.Base" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+	<style name="Theme.DSub2000.Light.Base" parent="Theme.Material3.Light">
 		<item name="element_color">@color/lightElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>
@@ -61,6 +61,24 @@
 		<item name="colorPrimary">@color/lightPrimary</item>
 		<item name="colorPrimaryDark">@color/lightPrimaryDark</item>
 		<item name="colorAccent">@color/lightAccent</item>
+		<item name="colorOnPrimary">@color/m3_light_onPrimary</item>
+		<item name="colorPrimaryContainer">@color/m3_light_primaryContainer</item>
+		<item name="colorOnPrimaryContainer">@color/m3_light_onPrimaryContainer</item>
+		<item name="colorSecondary">@color/m3_light_secondary</item>
+		<item name="colorOnSecondary">@color/m3_light_onSecondary</item>
+		<item name="colorSecondaryContainer">@color/m3_light_secondaryContainer</item>
+		<item name="colorOnSecondaryContainer">@color/m3_light_onSecondaryContainer</item>
+		<item name="colorSurface">@color/m3_light_surface</item>
+		<item name="colorOnSurface">@color/m3_light_onSurface</item>
+		<item name="colorSurfaceVariant">@color/m3_light_surfaceVariant</item>
+		<item name="colorOnSurfaceVariant">@color/m3_light_onSurfaceVariant</item>
+		<item name="colorSurfaceContainerLowest">@color/m3_light_surfaceContainerLowest</item>
+		<item name="colorSurfaceContainerLow">@color/m3_light_surfaceContainerLow</item>
+		<item name="colorSurfaceContainer">@color/m3_light_surfaceContainer</item>
+		<item name="colorSurfaceContainerHigh">@color/m3_light_surfaceContainerHigh</item>
+		<item name="colorSurfaceContainerHighest">@color/m3_light_surfaceContainerHighest</item>
+		<item name="colorOutline">@color/m3_light_outline</item>
+		<item name="colorOutlineVariant">@color/m3_light_outlineVariant</item>
 		<item name="actionbarBackgroundColor">@color/lightPrimary</item>
         <item name="actionbarNowPlayingBackgroundColor">@color/lightPrimaryDark</item>
 		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
@@ -78,7 +96,7 @@
         <item name="android:navigationBarColor">@android:color/white</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
-	<style name="Theme.DSub2000.Dark.Base" parent="@style/Theme.AppCompat">
+	<style name="Theme.DSub2000.Dark.Base" parent="Theme.Material3.Dark">
 		<item name="element_color">@color/darkElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>
@@ -139,6 +157,24 @@
 		<item name="colorPrimary">@color/lightPrimary</item>
 		<item name="colorPrimaryDark">@color/lightPrimaryDark</item>
 		<item name="colorAccent">@color/lightAccent</item>
+		<item name="colorOnPrimary">@color/m3_dark_onPrimary</item>
+		<item name="colorPrimaryContainer">@color/m3_dark_primaryContainer</item>
+		<item name="colorOnPrimaryContainer">@color/m3_dark_onPrimaryContainer</item>
+		<item name="colorSecondary">@color/m3_dark_secondary</item>
+		<item name="colorOnSecondary">@color/m3_dark_onSecondary</item>
+		<item name="colorSecondaryContainer">@color/m3_dark_secondaryContainer</item>
+		<item name="colorOnSecondaryContainer">@color/m3_dark_onSecondaryContainer</item>
+		<item name="colorSurface">@color/m3_dark_surface</item>
+		<item name="colorOnSurface">@color/m3_dark_onSurface</item>
+		<item name="colorSurfaceVariant">@color/m3_dark_surfaceVariant</item>
+		<item name="colorOnSurfaceVariant">@color/m3_dark_onSurfaceVariant</item>
+		<item name="colorSurfaceContainerLowest">@color/m3_dark_surfaceContainerLowest</item>
+		<item name="colorSurfaceContainerLow">@color/m3_dark_surfaceContainerLow</item>
+		<item name="colorSurfaceContainer">@color/m3_dark_surfaceContainer</item>
+		<item name="colorSurfaceContainerHigh">@color/m3_dark_surfaceContainerHigh</item>
+		<item name="colorSurfaceContainerHighest">@color/m3_dark_surfaceContainerHighest</item>
+		<item name="colorOutline">@color/m3_dark_outline</item>
+		<item name="colorOutlineVariant">@color/m3_dark_outlineVariant</item>
 		<item name="actionbarBackgroundColor">@color/lightPrimary</item>
         <item name="actionbarNowPlayingBackgroundColor">@color/lightPrimaryDark</item>
 		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
@@ -163,6 +199,10 @@
 		<item name="card_background">@color/background_material_dark</item>
 		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners</item>
 		<item name="android:windowBackground">@android:color/black</item>
+		<item name="colorSurface">@android:color/black</item>
+		<item name="colorSurfaceContainerLowest">@android:color/black</item>
+		<item name="colorSurfaceContainerLow">@color/m3_dark_surfaceContainerLowest</item>
+		<item name="colorSurfaceContainer">@color/m3_dark_surfaceContainerLow</item>
 	</style>
 	<style name="Theme.DSub2000.Black" parent="Theme.DSub2000.Black.Base">
 	</style>

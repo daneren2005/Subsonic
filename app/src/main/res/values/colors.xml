@@ -20,4 +20,43 @@
 
 	<color name="darkElement">#F8F8F8</color>
 
+	<!-- Material 3 roles; colorPrimary stays the legacy brand blue -->
+	<color name="m3_light_onPrimary">#FFFFFF</color>
+	<color name="m3_light_primaryContainer">#D3E4FF</color>
+	<color name="m3_light_onPrimaryContainer">#001C3A</color>
+	<color name="m3_light_secondary">#565F71</color>
+	<color name="m3_light_onSecondary">#FFFFFF</color>
+	<color name="m3_light_secondaryContainer">#DAE2F9</color>
+	<color name="m3_light_onSecondaryContainer">#131C2B</color>
+	<color name="m3_light_surface">#FDFBFF</color>
+	<color name="m3_light_onSurface">#1A1B20</color>
+	<color name="m3_light_surfaceVariant">#E1E2EC</color>
+	<color name="m3_light_onSurfaceVariant">#44474F</color>
+	<color name="m3_light_surfaceContainerLowest">#FFFFFF</color>
+	<color name="m3_light_surfaceContainerLow">#F3F3F9</color>
+	<color name="m3_light_surfaceContainer">#EEEDF4</color>
+	<color name="m3_light_surfaceContainerHigh">#E8E7EE</color>
+	<color name="m3_light_surfaceContainerHighest">#E2E2E9</color>
+	<color name="m3_light_outline">#74777F</color>
+	<color name="m3_light_outlineVariant">#C4C6D0</color>
+
+	<color name="m3_dark_onPrimary">#FFFFFF</color>
+	<color name="m3_dark_primaryContainer">#004A8F</color>
+	<color name="m3_dark_onPrimaryContainer">#D3E4FF</color>
+	<color name="m3_dark_secondary">#BDC7DC</color>
+	<color name="m3_dark_onSecondary">#273141</color>
+	<color name="m3_dark_secondaryContainer">#3E4759</color>
+	<color name="m3_dark_onSecondaryContainer">#DAE2F9</color>
+	<color name="m3_dark_surface">#121316</color>
+	<color name="m3_dark_onSurface">#E3E2E6</color>
+	<color name="m3_dark_surfaceVariant">#44474F</color>
+	<color name="m3_dark_onSurfaceVariant">#C4C6D0</color>
+	<color name="m3_dark_surfaceContainerLowest">#0D0E11</color>
+	<color name="m3_dark_surfaceContainerLow">#1A1B1F</color>
+	<color name="m3_dark_surfaceContainer">#1E1F23</color>
+	<color name="m3_dark_surfaceContainerHigh">#292A2E</color>
+	<color name="m3_dark_surfaceContainerHighest">#343539</color>
+	<color name="m3_dark_outline">#8E9099</color>
+	<color name="m3_dark_outlineVariant">#44474F</color>
+
 </resources>
