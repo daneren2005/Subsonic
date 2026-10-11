@@ -173,7 +173,8 @@ final class LocalPlayback {
 
     private Source source(DownloadFile file, String uri, float gain) {
         MediaItem item = SessionPlayer.mediaItem(file.getSong()).buildUpon()
-                .setUri(Uri.parse(uri)).setTag(file).build();
+                .setUri(uri.startsWith("/") ? Uri.fromFile(new java.io.File(uri)) : Uri.parse(uri))
+                .setTag(file).build();
         return new Source(file, gain, new ProgressiveMediaSource.Factory(file.isStream() ? radio : files)
                 .createMediaSource(item));
     }
