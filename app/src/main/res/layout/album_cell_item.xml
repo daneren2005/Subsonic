@@ -67,7 +67,7 @@
 						android:layout_width="0dp"
 						android:layout_weight="1"
 						android:layout_height="wrap_content"
-						android:textSize="12sp"
+						android:textAppearance="?attr/textAppearanceBodySmall"
 						android:textColor="?android:textColorSecondary"
 						android:singleLine="true"
 						android:text="@string/search.artists"

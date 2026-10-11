@@ -1252,7 +1252,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 			artistView.setSingleLine(false);
 			final int minLines = context.getResources().getInteger(R.integer.TextDescriptionLength);
 			artistView.setLines(minLines);
-			artistView.setTextAppearance(context, android.R.style.TextAppearance_Small);
+			artistView.setTextAppearance(context, R.style.TextAppearance_Material3_BodyMedium);
 
 			final Spanned spannedText = spanned;
 			artistView.setOnClickListener(new View.OnClickListener() {

@@ -15,7 +15,7 @@
             android:layout_centerVertical="true"
             android:paddingLeft="8dip"
             android:text="0:00"
-            android:textSize="12sp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
 			android:textColor="?android:textColorPrimary"
 			android:paddingBottom="4dip"/>
 
@@ -34,7 +34,7 @@
             android:layout_centerVertical="true"
             android:paddingRight="8dip"
             android:text="-:--"
-            android:textSize="12sp"
+            android:textAppearance="?attr/textAppearanceBodySmall"
 			android:textColor="?android:textColorPrimary"
 			android:paddingBottom="4dip"/>
 </RelativeLayout>

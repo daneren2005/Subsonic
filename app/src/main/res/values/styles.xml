@@ -4,6 +4,19 @@
 		<item name="labelBehavior">gone</item>
 		<item name="tickVisible">false</item>
 	</style>
+
+	<style name="TextAppearance.DSub2000.BarTitle" parent="TextAppearance.Material3.TitleLarge">
+		<item name="android:textColor">?android:attr/textColorPrimary</item>
+	</style>
+	<style name="TextAppearance.DSub2000.BarTitle.Inverse">
+		<item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+	</style>
+	<style name="TextAppearance.DSub2000.BarSubtitle" parent="TextAppearance.Material3.BodyLarge">
+		<item name="android:textColor">?android:attr/textColorSecondary</item>
+	</style>
+	<style name="TextAppearance.DSub2000.BarSubtitle.Inverse">
+		<item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
+	</style>
 	<style name="BasicButton">
 		<item name="android:background">?attr/selectableItemBackgroundBorderless</item>
 	</style>
@@ -81,7 +94,7 @@
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:textStyle">bold</item>
-		<item name="android:textSize">22sp</item>
+		<item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
 		<item name="android:paddingTop">4dip</item>
 		<item name="android:paddingBottom">4dip</item>
 		<item name="android:paddingRight">4dip</item>

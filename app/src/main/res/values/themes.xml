@@ -2,6 +2,9 @@
 <resources>
 	<style name="Theme.DSub2000.Light.Base" parent="Theme.Material3.Light">
 		<item name="sliderStyle">@style/Widget.DSub2000.Slider</item>
+		<item name="android:textAppearanceLarge">@style/TextAppearance.Material3.TitleLarge</item>
+		<item name="android:textAppearanceMedium">@style/TextAppearance.Material3.BodyLarge</item>
+		<item name="android:textAppearanceSmall">@style/TextAppearance.Material3.BodyMedium</item>
 		<item name="element_color">@color/lightElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>
@@ -81,13 +84,13 @@
 		<item name="colorOutlineVariant">@color/m3_light_outlineVariant</item>
 		<item name="actionbarBackgroundColor">@color/m3_light_bar</item>
 		<item name="actionbarNowPlayingBackgroundColor">@color/m3_light_primaryDeep</item>
-		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+		<item name="actionbarTitleStyle">@style/TextAppearance.DSub2000.BarTitle.Inverse</item>
+		<item name="actionbarSubtitleStyle">@style/TextAppearance.DSub2000.BarSubtitle.Inverse</item>
 		<item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Light</item>
 		<item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
 		<item name="android:spinnerItemStyle">@style/DarkSpinnerItem</item>
-		<item name="drawerTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-		<item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+		<item name="drawerTitleStyle">@style/TextAppearance.DSub2000.BarTitle.Inverse</item>
+		<item name="drawerSubtitleStyle">@style/TextAppearance.DSub2000.BarSubtitle.Inverse</item>
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/actionbarBackgroundColor</item>
 		<item name="card_background">@android:color/white</item>
@@ -96,6 +99,9 @@
     </style>
 	<style name="Theme.DSub2000.Dark.Base" parent="Theme.Material3.Dark">
 		<item name="sliderStyle">@style/Widget.DSub2000.Slider</item>
+		<item name="android:textAppearanceLarge">@style/TextAppearance.Material3.TitleLarge</item>
+		<item name="android:textAppearanceMedium">@style/TextAppearance.Material3.BodyLarge</item>
+		<item name="android:textAppearanceSmall">@style/TextAppearance.Material3.BodyMedium</item>
 		<item name="element_color">@color/darkElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>
@@ -175,12 +181,12 @@
 		<item name="colorOutlineVariant">@color/m3_dark_outlineVariant</item>
 		<item name="actionbarBackgroundColor">@color/m3_dark_bar</item>
 		<item name="actionbarNowPlayingBackgroundColor">@color/m3_dark_primaryDeep</item>
-		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
-		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
+		<item name="actionbarTitleStyle">@style/TextAppearance.DSub2000.BarTitle</item>
+		<item name="actionbarSubtitleStyle">@style/TextAppearance.DSub2000.BarSubtitle</item>
 		<item name="actionbarPopupStyle">@style/ThemeOverlay.AppCompat.Dark</item>
 		<item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-		<item name="drawerTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
-		<item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
+		<item name="drawerTitleStyle">@style/TextAppearance.DSub2000.BarTitle</item>
+		<item name="drawerSubtitleStyle">@style/TextAppearance.DSub2000.BarSubtitle</item>
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/actionbarBackgroundColor</item>
 		<item name="card_background">@android:color/black</item>
@@ -241,11 +247,11 @@
 		<item name="actionbarThemeStyle">@style/ThemeOverlay.AppCompat.ActionBar</item>
 		<item name="actionbarBackgroundColor">@android:color/transparent</item>
         <item name="actionbarNowPlayingBackgroundColor">@android:color/transparent</item>
-		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
-		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
+		<item name="actionbarTitleStyle">@style/TextAppearance.DSub2000.BarTitle</item>
+		<item name="actionbarSubtitleStyle">@style/TextAppearance.DSub2000.BarSubtitle</item>
 		<item name="android:spinnerItemStyle">@style/LightSpinnerItem</item>
-		<item name="drawerTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-		<item name="drawerSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+		<item name="drawerTitleStyle">@style/TextAppearance.DSub2000.BarTitle.Inverse</item>
+		<item name="drawerSubtitleStyle">@style/TextAppearance.DSub2000.BarSubtitle.Inverse</item>
 		<item name="actionbar_backward">@drawable/actionbar_media_backward</item>
 		<item name="actionbar_forward">@drawable/actionbar_media_forward</item>
 		<item name="actionbar_pause">@drawable/actionbar_media_pause</item>
@@ -305,8 +311,8 @@
 		<item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
 	</style>
 	<style name="LightActionMode" parent="@style/Widget.AppCompat.ActionMode">
-		<item name="titleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
-		<item name="subtitleTextStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
+		<item name="titleTextStyle">@style/TextAppearance.DSub2000.BarTitle.Inverse</item>
+		<item name="subtitleTextStyle">@style/TextAppearance.DSub2000.BarSubtitle.Inverse</item>
 	</style>
 	<style name="DarkCloseButton" parent="@style/Widget.AppCompat.ActionButton.CloseMode">
 		<item name="colorControlNormal">@android:color/black</item>

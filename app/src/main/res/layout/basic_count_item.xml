@@ -29,8 +29,7 @@
 		android:focusable="false"
 		android:gravity="center|center_vertical"
 		android:text="99"
-		android:textAppearance="?android:attr/textAppearanceSmallPopupMenu"
+		android:textAppearance="?attr/textAppearanceLabelSmall"
 		android:textColor="?android:textColorPrimary"
-		android:textSize="11sp"
 		android:visibility="gone" />
 </LinearLayout>
