@@ -2,7 +2,6 @@
 <resources>
 	<attr name="element_color" format="reference"/>
 	<attr name="actionbar_element_color" format="reference"/>
-	<attr name="card_background" format="reference"/>
   <attr name="offline_icon" format="reference"/>
   <attr name="media_button_backward" format="reference"/>
   <attr name="media_button_forward" format="reference"/>
@@ -67,7 +66,6 @@
     <attr name="actionbarNowPlayingBackgroundColor" format="reference"/>
 	<attr name="drawerTitleStyle" format="reference"/>
 	<attr name="drawerSubtitleStyle" format="reference"/>
-	<attr name="cardBackgroundDrawable" format="reference"/>
 	<attr name="drawerHeaderBackground" format="reference"/>
 
 	<declare-styleable name="SeekBarPreference">

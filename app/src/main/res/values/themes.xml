@@ -5,6 +5,9 @@
 		<item name="android:textAppearanceLarge">@style/TextAppearance.Material3.TitleLarge</item>
 		<item name="android:textAppearanceMedium">@style/TextAppearance.Material3.BodyLarge</item>
 		<item name="android:textAppearanceSmall">@style/TextAppearance.Material3.BodyMedium</item>
+		<item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.DSub2000.Small</item>
+		<item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.DSub2000.Medium</item>
+		<item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.DSub2000.Large</item>
 		<item name="element_color">@color/lightElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>
@@ -93,8 +96,6 @@
 		<item name="drawerSubtitleStyle">@style/TextAppearance.DSub2000.BarSubtitle.Inverse</item>
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/actionbarBackgroundColor</item>
-		<item name="card_background">@android:color/white</item>
-		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_light</item>
     </style>
 	<style name="Theme.DSub2000.Dark.Base" parent="Theme.Material3.Dark">
@@ -102,6 +103,9 @@
 		<item name="android:textAppearanceLarge">@style/TextAppearance.Material3.TitleLarge</item>
 		<item name="android:textAppearanceMedium">@style/TextAppearance.Material3.BodyLarge</item>
 		<item name="android:textAppearanceSmall">@style/TextAppearance.Material3.BodyMedium</item>
+		<item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.DSub2000.Small</item>
+		<item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.DSub2000.Medium</item>
+		<item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.DSub2000.Large</item>
 		<item name="element_color">@color/darkElement</item>
 		<item name="actionbar_element_color">@color/darkElement</item>
 		<item name="offline_icon">@drawable/main_offline</item>
@@ -189,8 +193,6 @@
 		<item name="drawerSubtitleStyle">@style/TextAppearance.DSub2000.BarSubtitle</item>
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">?attr/actionbarBackgroundColor</item>
-		<item name="card_background">@android:color/black</item>
-		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_dark</item>
     </style>
 	<style name="Theme.DSub2000.Light" parent="Theme.DSub2000.Light.Base">
@@ -198,8 +200,6 @@
 	<style name="Theme.DSub2000.Dark" parent="Theme.DSub2000.Dark.Base">
 	</style>
 	<style name="Theme.DSub2000.Black.Base" parent="Theme.DSub2000.Dark.Base">
-		<item name="card_background">@color/background_material_dark</item>
-		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners</item>
 		<item name="android:windowBackground">@android:color/black</item>
 		<item name="colorSurface">@android:color/black</item>
 		<item name="colorSurfaceContainerLowest">@android:color/black</item>
@@ -218,8 +218,6 @@
 		<item name="actionbarBackgroundColor">@color/holoBar</item>
 		<item name="actionbarNowPlayingBackgroundColor">@color/holoBarDeep</item>
 		<item name="drawerHeaderBackground">@drawable/drawer_header_holo</item>
-		<item name="card_background">@color/background_material_dark</item>
-		<item name="cardBackgroundDrawable">@drawable/card_rounded_corners</item>
 	</style>
 	<style name="Theme.DSub2000.Holo" parent="Theme.DSub2000.Holo.Base">
 	</style>
