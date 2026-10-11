@@ -17,6 +17,7 @@ package github.paroj.dsub2000.activity;
 
 import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -115,7 +116,7 @@ public class EditPlayActionActivity extends SubsonicActivity {
 						}
 						final List<String> finalNames = names;
 
-						AlertDialog.Builder builder = new AlertDialog.Builder(context);
+						AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 						builder.setTitle(R.string.shuffle_pick_genre)
 								.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int which) {

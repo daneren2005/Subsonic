@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -295,7 +296,7 @@ public class SelectPlaylistFragment extends SelectRecyclerFragment<Playlist> {
 			publicBox.setChecked(pub);
 		}
 
-		new AlertDialog.Builder(context)
+		new MaterialAlertDialogBuilder(context)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(R.string.playlist_update_info)
 			.setView(dialogView)

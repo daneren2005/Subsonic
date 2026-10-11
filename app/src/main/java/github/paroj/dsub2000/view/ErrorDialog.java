@@ -20,6 +20,7 @@ package github.paroj.dsub2000.view;
 
 import android.app.Activity;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
 import android.content.Intent;
 
@@ -38,7 +39,7 @@ public class ErrorDialog {
 
     public ErrorDialog(final Activity activity, String message, final boolean finishActivityOnClose) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(activity);
         builder.setIcon(android.R.drawable.ic_dialog_alert);
         builder.setTitle(R.string.error_label);
         builder.setMessage(message);

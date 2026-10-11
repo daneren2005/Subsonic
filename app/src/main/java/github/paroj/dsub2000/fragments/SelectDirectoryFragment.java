@@ -2,6 +2,7 @@ package github.paroj.dsub2000.fragments;
 
 import android.annotation.TargetApi;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -1047,7 +1048,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 	}
 
 	private void showDonationDialog(int trialDaysLeft, final LoadingTask onValid) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setIcon(android.R.drawable.ic_dialog_info);
 
 		if (trialDaysLeft == 0) {
@@ -1151,7 +1152,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 						return;
 					}
 
-					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 					ImageView fullScreenView = new ImageView(context);
 					imageLoader.loadImage(fullScreenView, url, true);
 					builder.setCancelable(true);
@@ -1177,7 +1178,7 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 						return;
 					}
 
-					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 					ImageView fullScreenView = new ImageView(context);
 					imageLoader.loadImage(fullScreenView, coverArtRep, true, true);
 					builder.setCancelable(true);

@@ -23,6 +23,7 @@ import android.app.SearchManager;
 import android.app.SearchableInfo;
 import androidx.core.view.MenuItemCompat;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -807,7 +808,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 							}
 							final List<String> finalNames = names;
 
-							AlertDialog.Builder builder = new AlertDialog.Builder(context);
+							AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 							builder.setTitle(R.string.shuffle_pick_genre)
 									.setItems(names.toArray(new CharSequence[names.size()]), new DialogInterface.OnClickListener() {
 										public void onClick(DialogInterface dialog, int which) {
@@ -847,7 +848,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 		genreBox.setText(oldGenre);
 		genreCombo.setText(oldGenre);
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.shuffle_title)
 				.setView(dialogView)
 				.setPositiveButton(R.string.common_ok, new DialogInterface.OnClickListener() {
@@ -1071,7 +1072,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 					}
 				};
 
-				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 				builder.setTitle(R.string.playlist_add_to)
 						.setAdapter(playlistAdapter, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
@@ -1177,7 +1178,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
             overwriteCheckBox.setVisibility(View.GONE);
 		}
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.download_playlist_title)
 				.setMessage(R.string.download_playlist_name)
 				.setView(layout)
@@ -1673,7 +1674,7 @@ public class SubsonicFragment extends Fragment implements SwipeRefreshLayout.OnR
 	protected void playBookmark(final List<Entry> songs, final Entry song, final String playlistName, final String playlistId) {
 		final Integer position = song.getBookmark().getPosition();
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
 		builder.setTitle(R.string.bookmark_resume_title)
 				.setMessage(getResources().getString(R.string.bookmark_resume, song.getTitle(), Util.formatDuration(position / 1000)))
 				.setPositiveButton(R.string.bookmark_action_resume, new DialogInterface.OnClickListener() {

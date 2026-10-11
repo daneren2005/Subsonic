@@ -24,6 +24,7 @@ import android.media.AudioFocusRequest;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.ClipboardManager;
 import android.content.ClipData;
 import android.content.ComponentName;
@@ -767,7 +768,7 @@ public final class Util {
 		Util.confirmDialog(context, context.getResources().getString(action).toLowerCase(), subject, onClick, onCancel);
 	}
 	public static void confirmDialog(Context context, String action, String subject, DialogInterface.OnClickListener onClick, DialogInterface.OnClickListener onCancel) {
-		new AlertDialog.Builder(context)
+		new MaterialAlertDialogBuilder(context)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle(R.string.common_confirm)
 			.setMessage(context.getResources().getString(R.string.common_confirm_message, action, subject))
@@ -1200,7 +1201,7 @@ public final class Util {
 			Linkify.addLinks(ss, Linkify.ALL);
 		}
 		
-		AlertDialog dialog = new AlertDialog.Builder(context)
+		AlertDialog dialog = new MaterialAlertDialogBuilder(context)
 			.setIcon(icon)
 			.setTitle(title)
 			.setMessage(ss)
@@ -1218,7 +1219,7 @@ public final class Util {
 		showHTMLDialog(context, title, context.getResources().getString(message));
 	}
 	public static void showHTMLDialog(Context context, int title, String message) {
-		AlertDialog dialog = new AlertDialog.Builder(context)
+		AlertDialog dialog = new MaterialAlertDialogBuilder(context)
 			.setIcon(android.R.drawable.ic_dialog_info)
 			.setTitle(title)
 			.setMessage(Html.fromHtml(message))
@@ -1270,7 +1271,7 @@ public final class Util {
 			}
 		});
 
-		new AlertDialog.Builder(context)
+		new MaterialAlertDialogBuilder(context)
 				// .setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(title)
 				.setView(listView)

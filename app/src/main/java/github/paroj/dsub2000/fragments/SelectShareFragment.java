@@ -16,6 +16,7 @@
 package github.paroj.dsub2000.fragments;
 
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -160,7 +161,7 @@ public class SelectShareFragment extends SelectRecyclerFragment<Share> {
 			}
 		});
 
-		new AlertDialog.Builder(context)
+		new MaterialAlertDialogBuilder(context)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.playlist_update_info)
 				.setView(dialogView)

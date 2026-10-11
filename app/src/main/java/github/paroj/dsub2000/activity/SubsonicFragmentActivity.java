@@ -35,6 +35,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -850,7 +851,7 @@ public class SubsonicFragmentActivity extends SubsonicActivity implements Downlo
 		}.execute();
 	}
 	private void promptRestoreFromRemoteQueue(final PlayerQueue remoteState) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
 		String message = getResources().getString(R.string.common_confirm_message, getResources().getString(R.string.download_restore_play_queue).toLowerCase(), Util.formatDate(remoteState.changed));
 		builder.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.common_confirm)
