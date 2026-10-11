@@ -41,7 +41,6 @@ import github.paroj.dsub2000.domain.PlayerState;
 import github.paroj.dsub2000.provider.DSubWidgetProvider;
 import github.paroj.dsub2000.service.DownloadFile;
 import github.paroj.dsub2000.service.DownloadService;
-import github.paroj.dsub2000.util.compat.RemoteControlClientLP;
 import github.paroj.dsub2000.view.UpdateView;
 
 public final class Notifications {
@@ -64,7 +63,8 @@ public final class Notifications {
 
 	private final static Pair<Integer, Integer> NOTIFICATION_TEXT_COLORS = new Pair<Integer, Integer>();
 
-	public static void showPlayingNotification(final Context context, final DownloadService downloadService, final Handler handler, MusicDirectory.Entry song, boolean usingMediaStyleNotification) {
+	@androidx.annotation.OptIn(markerClass = androidx.media3.common.util.UnstableApi.class)
+	public static Notification buildPlayingNotification(final Context context, final DownloadService downloadService, androidx.media3.session.MediaSession session, MusicDirectory.Entry song, boolean usingMediaStyleNotification) {
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			getPlayingNotificationChannel(context);
 		}
@@ -78,10 +78,8 @@ public final class Notifications {
 		boolean shouldFastForward = downloadService.shouldFastForward();
 
 		if (usingMediaStyleNotification) {
-			RemoteControlClientLP remoteControlClient = (RemoteControlClientLP) downloadService.getRemoteControlClient();
-
-			androidx.media.app.NotificationCompat.MediaStyle mediaStyle = new androidx.media.app.NotificationCompat.MediaStyle()
-					.setMediaSession(remoteControlClient.getMediaSession().getSessionToken());
+			androidx.media3.session.MediaStyleNotificationHelper.MediaStyle mediaStyle =
+					new androidx.media3.session.MediaStyleNotificationHelper.MediaStyle(session);
 
 			if (isSingle) {
 				mediaStyle.setShowActionsInCompactView(1);
@@ -173,51 +171,20 @@ public final class Notifications {
 		notificationIntent.putExtra(Constants.INTENT_EXTRA_NAME_DOWNLOAD, true);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		notification.contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, /* flags */ PendingIntent.FLAG_IMMUTABLE);
+		return notification;
+	}
 
-		playShowing = true;
-		if(downloadForeground && downloadShowing) {
+	/** Must run on the main looper before the session posts a playback notification. */
+	public static void playbackNotificationShowing(final Context context, final DownloadService downloadService, final Handler handler, boolean foreground) {
+		playShowing = foreground;
+		persistentPlayingShowing = !foreground;
+		if(foreground && downloadForeground && downloadShowing) {
+			// The playback notification takes over foreground; keep the download one as a plain notification.
 			downloadForeground = false;
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					stopForeground(downloadService, true);
-					showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
-
-					try {
-						startForeground(downloadService, NOTIFICATION_ID_PLAYING, notification);
-					} catch(Exception e) {
-						Log.e(TAG, "Failed to start notifications after stopping foreground download");
-					}
-				}
-			});
-		} else {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if (playing) {
-						try {
-							startForeground(downloadService, NOTIFICATION_ID_PLAYING, notification);
-						} catch(Exception e) {
-							Log.e(TAG, "Failed to start notifications while playing");
-						}
-					} else {
-						playShowing = false;
-						persistentPlayingShowing = true;
-						NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-						stopForeground(downloadService, false);
-
-						try {
-							notificationManager.notify(NOTIFICATION_ID_PLAYING, notification);
-						} catch(Exception e) {
-							Log.e(TAG, "Failed to start notifications while paused");
-						}
-					}
-				}
-			});
+			stopForeground(downloadService, true);
+			showDownloadingNotification(context, downloadService, handler, downloadService.getCurrentDownloading(), downloadService.getBackgroundDownloads().size());
 		}
-
-		// Update widget
-		DSubWidgetProvider.notifyInstances(context, downloadService, playing);
+		DSubWidgetProvider.notifyInstances(context, downloadService, foreground);
 	}
 
 	private static PendingIntent getMediaPendingIntent(String action, Context context) {
