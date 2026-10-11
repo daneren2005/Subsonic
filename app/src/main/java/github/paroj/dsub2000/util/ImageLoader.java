@@ -48,7 +48,7 @@ import github.paroj.dsub2000.domain.PodcastChannel;
 import github.paroj.dsub2000.domain.ServerInfo;
 import github.paroj.dsub2000.service.MusicService;
 import github.paroj.dsub2000.service.MusicServiceFactory;
-import github.paroj.dsub2000.util.compat.RemoteControlClientBase;
+import github.paroj.dsub2000.util.compat.RemoteControlClientLP;
 
 /**
  * Asynchronous loading of images, with caching.
@@ -293,7 +293,7 @@ public class ImageLoader {
 		return task;
 	}
 
-	public SilentBackgroundTask<Void> loadImage(Context context, RemoteControlClientBase remoteControl, MusicDirectory.Entry entry) {
+	public SilentBackgroundTask<Void> loadImage(Context context, RemoteControlClientLP remoteControl, MusicDirectory.Entry entry) {
 		Bitmap bitmap;
 		if (entry == null || entry.getCoverArt() == null) {
 			bitmap = getUnknownImage(entry, imageSizeLarge);
@@ -416,7 +416,7 @@ public class ImageLoader {
 	}
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	private void setImage(MusicDirectory.Entry entry, RemoteControlClientBase remoteControl, Drawable drawable) {
+	private void setImage(MusicDirectory.Entry entry, RemoteControlClientLP remoteControl, Drawable drawable) {
 		if(remoteControl != null && drawable != null) {
 			Bitmap origBitmap = ((BitmapDrawable)drawable).getBitmap();
 			if ( origBitmap != null && !origBitmap.isRecycled()) {
@@ -497,9 +497,9 @@ public class ImageLoader {
 	}
 
 	private class RemoteControlClientImageTask extends ImageTask {
-		private RemoteControlClientBase mRemoteControl;
+		private RemoteControlClientLP mRemoteControl;
 
-		public RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClientBase remoteControl) {
+		public RemoteControlClientImageTask(Context context, MusicDirectory.Entry entry, int size, int saveSize, boolean isNowPlaying, RemoteControlClientLP remoteControl) {
 			super(context, entry, size, saveSize, isNowPlaying);
 
 			mRemoteControl = remoteControl;
