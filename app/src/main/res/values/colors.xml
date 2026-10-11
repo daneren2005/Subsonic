@@ -18,9 +18,10 @@
 
 	<color name="darkElement">#F8F8F8</color>
 
-	<!-- Material 3 roles; primaryDeep is the darker shade used for the now-playing bar and status bar -->
+	<!-- Material 3 roles; bar/barDeep are the brighter action bar and darker now-playing/status bar shades -->
 	<color name="m3_light_primary">#0061A4</color>
-	<color name="m3_light_primaryDeep">#00325B</color>
+	<color name="m3_light_bar">#1E88E5</color>
+	<color name="m3_light_primaryDeep">#0D47A1</color>
 	<color name="m3_light_onPrimary">#FFFFFF</color>
 	<color name="m3_light_primaryContainer">#D3E4FF</color>
 	<color name="m3_light_onPrimaryContainer">#001C3A</color>
@@ -41,7 +42,8 @@
 	<color name="m3_light_outlineVariant">#C4C6D0</color>
 
 	<color name="m3_dark_primary">#A4C8FF</color>
-	<color name="m3_dark_primaryDeep">#00315C</color>
+	<color name="m3_dark_bar">#1565C0</color>
+	<color name="m3_dark_primaryDeep">#0A2F6B</color>
 	<color name="m3_dark_onPrimary">#00315C</color>
 	<color name="m3_dark_primaryContainer">#004A8F</color>
 	<color name="m3_dark_onPrimaryContainer">#D3E4FF</color>

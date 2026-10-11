@@ -79,7 +79,7 @@
 		<item name="colorSurfaceContainerHighest">@color/m3_light_surfaceContainerHighest</item>
 		<item name="colorOutline">@color/m3_light_outline</item>
 		<item name="colorOutlineVariant">@color/m3_light_outlineVariant</item>
-		<item name="actionbarBackgroundColor">@color/m3_light_primary</item>
+		<item name="actionbarBackgroundColor">@color/m3_light_bar</item>
 		<item name="actionbarNowPlayingBackgroundColor">@color/m3_light_primaryDeep</item>
 		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse</item>
 		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse</item>
@@ -173,7 +173,7 @@
 		<item name="colorSurfaceContainerHighest">@color/m3_dark_surfaceContainerHighest</item>
 		<item name="colorOutline">@color/m3_dark_outline</item>
 		<item name="colorOutlineVariant">@color/m3_dark_outlineVariant</item>
-		<item name="actionbarBackgroundColor">@color/m3_dark_primaryContainer</item>
+		<item name="actionbarBackgroundColor">@color/m3_dark_bar</item>
 		<item name="actionbarNowPlayingBackgroundColor">@color/m3_dark_primaryDeep</item>
 		<item name="actionbarTitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Title</item>
 		<item name="actionbarSubtitleStyle">@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle</item>
