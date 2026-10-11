@@ -20,7 +20,6 @@
 package github.paroj.dsub2000.service.sync;
 
 import android.accounts.Account;
-import android.annotation.TargetApi;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
@@ -57,7 +56,6 @@ public class SubsonicSyncAdapter extends AbstractThreadedSyncAdapter {
 		super(context, autoInitialize);
 		this.context = context;
 	}
-	@TargetApi(14)
 	public SubsonicSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 		this.context = context;

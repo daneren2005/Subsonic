@@ -19,7 +19,6 @@
 package github.paroj.dsub2000.audiofx;
 
 import android.content.Context;
-import android.os.Build;
 
 public class AudioEffectsController {
     private static final String TAG = AudioEffectsController.class.getSimpleName();
@@ -27,17 +26,13 @@ public class AudioEffectsController {
     private final Context context;
 	private int audioSessionId = 0;
 
-	private boolean available = false;
+	private boolean available = true;
 
 	private EqualizerController equalizerController;
 
     public AudioEffectsController(Context context, int audioSessionId) {
         this.context = context;
 		this.audioSessionId = audioSessionId;
-
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-			available = true;
-		}
     }
 
 	public boolean isAvailable() {

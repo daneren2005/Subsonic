@@ -426,7 +426,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					MenuUtil.hideMenuItems(context, menu, updateView);
 
 					mode.setTitle(context.getResources().getString(R.string.select_album_n_selected, selected.size()));
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
+					if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
 						TypedValue typedValue = new TypedValue();
 						Resources.Theme theme = context.getTheme();
 						theme.resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
@@ -466,7 +466,7 @@ public abstract class SectionAdapter<T> extends RecyclerView.Adapter<UpdateViewH
 					}
 					selectedViews.clear();
 
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
+					if (Util.getPreferences(context).getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true)) {
 						Window window = ((SubsonicFragmentActivity) context).getWindow();
 						window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 					}

@@ -1,7 +1,5 @@
 package github.paroj.dsub2000.fragments;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,7 +60,6 @@ public class SelectArtistFragment extends SelectRecyclerFragment<Serializable> i
         viewModel.setMusicFolders(musicFolders);
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
 		Bundle args = getArguments();

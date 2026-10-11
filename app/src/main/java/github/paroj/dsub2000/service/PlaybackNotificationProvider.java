@@ -1,7 +1,6 @@
 package github.paroj.dsub2000.service;
 
 import android.app.Notification;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.OptIn;
@@ -38,8 +37,7 @@ final class PlaybackNotificationProvider implements MediaNotification.Provider {
                     .setSmallIcon(R.drawable.stat_notify_playing).build();
         } else {
             boolean mediaStyle = Util.getPreferences(service)
-                    .getBoolean(Constants.PREFERENCES_KEY_MEDIA_STYLE_NOTIFICATION, true)
-                    && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+                    .getBoolean(Constants.PREFERENCES_KEY_MEDIA_STYLE_NOTIFICATION, true);
             notification = Notifications.buildPlayingNotification(service, service, session, current.getSong(), mediaStyle);
         }
         return new MediaNotification(Notifications.NOTIFICATION_ID_PLAYING, notification);

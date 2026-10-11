@@ -1,6 +1,5 @@
 package github.paroj.dsub2000.fragments;
 
-import android.annotation.TargetApi;
 import androidx.appcompat.app.AlertDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -8,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -1256,7 +1254,6 @@ public class SelectDirectoryFragment extends SubsonicFragment implements Section
 
 			final Spanned spannedText = spanned;
 			artistView.setOnClickListener(new View.OnClickListener() {
-				@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 				@Override
 				public void onClick(View v) {
 					if(artistView.getMaxLines() == minLines) {

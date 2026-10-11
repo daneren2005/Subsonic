@@ -18,10 +18,8 @@
  */
 package github.paroj.dsub2000.domain;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.os.Build;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
@@ -278,7 +276,6 @@ public class MusicDirectory implements Serializable {
 			this.linkedArtist = artist;
 		}
 		
-		@TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
 		public void loadMetadata(File file) {
 			MediaMetadataRetriever metadata = null;
 			try {

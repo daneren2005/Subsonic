@@ -23,7 +23,6 @@ import java.io.Serializable;
 import android.content.Context;
 import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
-import android.os.Build;
 import android.util.Log;
 import github.paroj.dsub2000.util.FileUtil;
 
@@ -54,10 +53,8 @@ public class EqualizerController {
 	private void init() {
 		equalizer = new Equalizer(0, audioSessionId);
 		bass = new BassBoost(0, audioSessionId);
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			loudnessAvailable = true;
-			loudnessEnhancerController = new LoudnessEnhancerController(context, audioSessionId);
-		}
+		loudnessAvailable = true;
+		loudnessEnhancerController = new LoudnessEnhancerController(context, audioSessionId);
 	}
 
 	public void saveSettings() {

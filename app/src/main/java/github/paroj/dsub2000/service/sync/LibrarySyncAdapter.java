@@ -17,7 +17,6 @@
 
 package github.paroj.dsub2000.service.sync;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.Log;
 
@@ -39,7 +38,6 @@ public class LibrarySyncAdapter extends SubsonicSyncAdapter {
 	public LibrarySyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
 	}
-	@TargetApi(14)
 	public LibrarySyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
 		super(context, autoInitialize, allowParallelSyncs);
 	}
