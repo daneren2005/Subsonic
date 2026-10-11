@@ -295,7 +295,7 @@ public abstract class UpdateView<T> extends LinearLayout {
 		View child = getChildAt(0);
 		if (checked && startBackgroundDrawable == null) {
 			startBackgroundDrawable = child.getBackground();
-			child.setBackgroundColor(DrawableTint.getColorRes(context, R.attr.colorPrimary));
+			child.setBackgroundColor(DrawableTint.getColorRes(context, R.attr.colorPrimaryContainer));
 		} else if (!checked && startBackgroundDrawable != null) {
 			child.setBackgroundDrawable(startBackgroundDrawable);
 			startBackgroundDrawable = null;

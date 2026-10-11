@@ -13,7 +13,7 @@
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:background="@android:color/transparent"
-		android:textColor="?attr/colorAccent"
+		android:textColor="?attr/colorPrimary"
 		android:textStyle="bold"
 		android:paddingTop="8dp"
 		android:paddingBottom="8dp"/>

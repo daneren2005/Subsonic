@@ -175,9 +175,9 @@ public class ColorPickerPreference extends DialogPreference {
         String theme = prefs.getString(Constants.PREFERENCES_KEY_THEME, null);
         int themeResId = ThemeUtil.getThemeRes(mContext, theme);
         if ("actionBarColorNowPlaying".equals(key)) {
-            return DrawableTint.getColorRes(mContext, R.attr.colorPrimaryDark, themeResId);
+            return DrawableTint.getColorRes(mContext, R.attr.actionbarNowPlayingBackgroundColor, themeResId);
         } else {
-            return DrawableTint.getColorRes(mContext, R.attr.colorPrimary, themeResId);
+            return DrawableTint.getColorRes(mContext, R.attr.actionbarBackgroundColor, themeResId);
         }
     }
 
