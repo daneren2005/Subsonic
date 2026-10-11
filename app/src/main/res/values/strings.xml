@@ -407,7 +407,7 @@
 	<string name="settings.persistent_title">Persistent Notification</string>
 	<string name="settings.persistent_summary">Show the notification even after pausing.  Press the stop button to clear it away.</string>
 	<string name="settings.gapless_playback">Gapless Playback</string>
-	<string name="settings.gapless_playback_summary">If you are seeing strange bugs during playback, turning this off may help.</string>
+	<string name="settings.gapless_playback_summary">Start the next song without a gap once it has finished downloading. If you are seeing strange bugs during playback, turning this off may help.</string>
 	<string name="settings.usb_dac_exclusive_title">Route to USB DAC</string>
 	<string name="settings.usb_dac_exclusive_summary">Send playback to a connected USB DAC when present. Applies on the next track. Android 9+.</string>
 	<string name="settings.chat_refresh">Chat Refresh Rate (Secs)</string>
@@ -481,7 +481,7 @@
 	<string name="settings.admin_enabled">Admin Enabled</string>
 	<string name="settings.admin_enabled_summary">Whether or not to display the admin listing in the pull out drawer</string>
 	<string name="settings.replay_gain">Replay Gain</string>
-	<string name="settings.replay_gain_summary">Whether or not to scale playback volume by track and album replay gain tags</string>
+	<string name="settings.replay_gain_summary">Lower playback volume according to track and album replay gain tags. Songs are never made louder than the normal maximum volume.</string>
 	<string name="settings.replay_gain_type">Read from tags</string>
 	<string name="settings.replay_gain_type.smart">Smart detection</string>
 	<string name="settings.replay_gain_type.album">Album tags</string>
