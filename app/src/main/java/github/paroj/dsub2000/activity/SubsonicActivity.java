@@ -27,11 +27,15 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -151,6 +155,7 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 
 		setUncaughtExceptionHandler();
 		applyTheme();
+		applyEdgeToEdge();
 		applyFullscreen();
 		super.onCreate(bundle);
 		DownloadService.startService(this);
@@ -1005,6 +1010,18 @@ public class SubsonicActivity extends AppCompatActivity implements OnItemSelecte
 		actionbarColored = prefs.getBoolean(Constants.PREFERENCES_KEY_COLOR_ACTION_BAR, true);
         actionbarCustomColor = prefs.getInt(Constants.PREFERENCES_KEY_ACTION_BAR_COLOR, -1);
         actionbarNowPlayingCustomColor = prefs.getInt(Constants.PREFERENCES_KEY_ACTION_BAR_NOW_PLAYING_COLOR, -1);
+	}
+	// The drawer layout paints colorPrimaryDark behind the status bar; fall back to the surface when it is transparent.
+	private void applyEdgeToEdge() {
+		int surface = MaterialColors.getColor(this, R.attr.colorSurface, Color.WHITE);
+		int statusColor = MaterialColors.getColor(this, R.attr.colorPrimaryDark, Color.TRANSPARENT);
+		if(Color.alpha(statusColor) == 0) {
+			statusColor = surface;
+		}
+		EdgeToEdge.enable(this, systemBarStyle(MaterialColors.isColorLight(statusColor)), systemBarStyle(MaterialColors.isColorLight(surface)));
+	}
+	private static SystemBarStyle systemBarStyle(boolean lightBackground) {
+		return lightBackground ? SystemBarStyle.light(Color.TRANSPARENT, 0x801B1B1B) : SystemBarStyle.dark(Color.TRANSPARENT);
 	}
 	private void applyFullscreen() {
 		fullScreen = Util.getPreferences(this).getBoolean(Constants.PREFERENCES_KEY_FULL_SCREEN, false);
